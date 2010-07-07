@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?><!--
+     Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
+     Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
+     http://www.jaspersoft.com
+     
+     Unless you have purchased a commercial license agreement from Jaspersoft,
+     the following license terms apply:
+     
+     This program is part of Jaspersoft Open Studio
+     
+     Jaspersoft Open Studio is free software: you can redistribute it and/or modify
+     it under the terms of the GNU Affero General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     
+     Jaspersoft Open Studio is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU Affero General Public License for more details.
+     
+     You should have received a copy of the GNU Affero General Public License
+     along with Jaspersoft Open Studio If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<plugin> 
+
+   <extension
+         id="xmlProblem"
+         name="XML Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.jaspersoft.studio.editor.JrxmlEditor"
+            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            extensions="jrxml"
+            icon="icons/jrxml_icon.png"
+            id="com.jaspersoft.studio.editor.JrxmlEditor"
+            name="JasperReports Designer">
+      </editor>
+   </extension>
+   <extension
+         id="com.jaspersoft.designer.property"
+         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+      <propertyContributor
+            contributorId="com.jaspersoft.studio.model.Report">
+         <propertyCategory category="jasperCategory"/>
+
+      </propertyContributor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.jaspersoft.studio.ReportDesignPerspective"
+            icon="icons/jr_icon.png"
+            id="com.jaspersoft.studio.ReportDesignPerspective"
+            name="Report Design">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="com.jaspersoft.studio.ReportDesignPerspective">
+         <view
+               id="org.eclipse.ui.views.ResourceNavigator"
+               minimized="false"
+               relationship="left"
+               relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               id="org.eclipse.ui.views.ContentOutline"
+               minimized="false"
+               ratio="0.5"
+               relationship="bottom"
+               relative="org.eclipse.ui.views.ResourceNavigator">
+         </view>
+         <view
+               id="org.eclipse.ui.views.ProblemView"
+               minimized="false"
+               ratio="0.33"
+               relationship="bottom"
+               relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               id="org.eclipse.ui.views.PropertySheet"
+               minimized="false"
+               relationship="stack"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+         <hiddenMenuItem
+               id="org.eclipse.search.menu">
+         </hiddenMenuItem>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            id="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            name="Jaspersoft Studio">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.DesignerPreferencePage"
+            id="com.jaspersoft.studio.preferences.DesignerPreferencePage"
+            name="Report Designer">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.jaspersoft.studio.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   
+
+</plugin>
