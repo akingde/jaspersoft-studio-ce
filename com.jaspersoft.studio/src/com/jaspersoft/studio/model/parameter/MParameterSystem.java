@@ -33,7 +33,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassnamePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -140,7 +140,7 @@ public class MParameterSystem extends APropertyNode implements IPropertySource {
 		nameD.setDescription("Name of the parameter.");
 		desc.add(nameD);
 
-		ClassnamePropertyDescriptor classD = new ClassnamePropertyDescriptor(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME,
+		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME,
 				"Class");
 		classD.setDescription("Class of the parameter values.");
 		desc.add(classD);

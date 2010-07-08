@@ -42,7 +42,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassnamePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
@@ -114,7 +114,7 @@ public class MImage extends MGraphicElement {
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ClassnamePropertyDescriptor expressionD = new ClassnamePropertyDescriptor(JRDesignImage.PROPERTY_EXPRESSION,
+		ClassTypePropertyDescriptor expressionD = new ClassTypePropertyDescriptor(JRDesignImage.PROPERTY_EXPRESSION,
 				"Expression");
 		expressionD.setDescription("Class of the image source.");
 		desc.add(expressionD);

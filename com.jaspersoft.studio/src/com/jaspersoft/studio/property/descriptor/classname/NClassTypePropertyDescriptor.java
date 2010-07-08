@@ -21,33 +21,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.jrQuery;
+package com.jaspersoft.studio.property.descriptor.classname;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import com.jaspersoft.studio.property.descriptor.NullEnum;
+public class NClassTypePropertyDescriptor extends ClassTypePropertyDescriptor {
 
-public class JRQueryPropertyDescriptor extends PropertyDescriptor {
-	private NullEnum canBeNull;
-
-	public JRQueryPropertyDescriptor(Object id, String displayName, NullEnum canBeNull) {
+	public NClassTypePropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
-		this.canBeNull = canBeNull;
 	}
 
-	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
-		return new JRQueryCellEditor(parent);
-	}
-
-	@Override
-	public ILabelProvider getLabelProvider() {
-		if (isLabelProviderSet()) {
-			return super.getLabelProvider();
-		}
-		return new JRQueryLabelProvider(canBeNull);
+		CellEditor editor = new ClassTypeCellEditor(parent);
+		editor.setValidator(ClassTypeCellEditorValidator.instance());
+		setValidator(NClassTypeCellEditorValidator.instance());
+		return editor;
 	}
 }

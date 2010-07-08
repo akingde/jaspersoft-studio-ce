@@ -44,7 +44,6 @@ public class FloatPropertyDescriptor extends TextPropertyDescriptor {
 	 */
 	public FloatPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
-
 	}
 
 	/**

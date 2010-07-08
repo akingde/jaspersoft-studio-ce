@@ -148,7 +148,11 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 
 		TextPropertyDescriptor conditionalExpressionD = new TextPropertyDescriptor(
 				JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION, "Conditional expression");
+		conditionalExpressionD.setCategory("Conditional Style");
+		conditionalExpressionD
+				.setDescription("A boolean expression which indicates if the style properties associated with it should be applied to the parent style.");
 		desc.add(conditionalExpressionD);
+
 	}
 
 	/*

@@ -52,6 +52,7 @@ import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -244,9 +245,35 @@ public class MStyle extends APropertyNode {
 				.setDescription("The default report style is used as base style for all the elements that do not explicitly reference a report style definition.");
 		desc.add(defaultD);
 
+		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP, "Markup",
+				ModelUtils.getMarkups());
+		markupD
+				.setDescription("Specifies the name of the markup language used to embed style information into the text content. Supported values are none (plain text), styled (styled text), rtf (RTF format) and html (HTML format), but any custom made markup language can be used as long as there is a net.sf.jasperreports.engine.util.MarkupProcessorFactory implementation specified using a net.sf.jasperreports.markup.processor.factory.{markup} configuration property.");
+		desc.add(markupD);
+
+		forecolorD.setCategory("Common");
+		backcolorD.setCategory("Common");
+		modeD.setCategory("Common");
+
+		halignD.setCategory("Graphic");
+		valignD.setCategory("Graphic");
+		radiusD.setCategory("Graphic");
+		scaleD.setCategory("Graphic");
+		fillD.setCategory("Graphic");
+
+		blankWhenNullD.setCategory("Text");
+		lineSpacingD.setCategory("Text");
+		rotationD.setCategory("Text");
+		markupD.setCategory("Text");
+
+		boldD.setCategory("Text Font");
+		italicD.setCategory("Text Font");
+		underlineD.setCategory("Text Font");
+		strikeThroughD.setCategory("Text Font");
+
 		defaultsMap.put(JRDesignStyle.PROPERTY_FORECOLOR, null);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BACKCOLOR, null);
-		
+
 		defaultsMap.put(JRDesignStyle.PROPERTY_FILL, null);
 		defaultsMap.put(JRDesignStyle.PROPERTY_SCALE_IMAGE, null);
 		defaultsMap.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
@@ -277,10 +304,13 @@ public class MStyle extends APropertyNode {
 				return jrstyle.getName();
 			if (id.equals(JRDesignStyle.PROPERTY_DEFAULT))
 				return new Boolean(jrstyle.isDefault());
+
 		}
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
-		if (id.equals(JRDesignStyle.PROPERTY_RADIUS))
+		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
 			return jrstyle.getOwnRadius();
+		if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
+			return jrstyle.getMarkup();
 		if (id.equals(JRDesignStyle.PROPERTY_FORECOLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrstyle.getOwnForecolor());
 		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))
@@ -328,10 +358,13 @@ public class MStyle extends APropertyNode {
 				jrstyle.setName((String) value);
 			else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT))
 				jrstyle.setDefault(((Boolean) value).booleanValue());
+
 		}
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
 		if (id.equals(JRDesignStyle.PROPERTY_RADIUS))
 			jrstyle.setRadius((Integer) value);
+		else if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
+			jrstyle.setMarkup((String) value);
 		else if (id.equals(JRDesignStyle.PROPERTY_FORECOLOR))
 			jrstyle.setForecolor(Colors.getAWT4SWTRGBColor((RGB) value));
 		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))

@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElementGroup;
@@ -54,7 +55,8 @@ import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassnamePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -135,14 +137,20 @@ public class MReport extends APropertyNode implements IGraphicElement {
 		nameD.setCategory("Report");
 		desc.add(nameD);
 
-		ClassnamePropertyDescriptor formatFactoryClassD = new ClassnamePropertyDescriptor(
+		NClassTypePropertyDescriptor formatFactoryClassD = new NClassTypePropertyDescriptor(
 				JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS, "Format Factory Class");
 		formatFactoryClassD
 				.setDescription("Specifies the name of the class implementing the net.sf.jasperreports.engine.util.FormatFactory interface to use with this report. If omitted, an instance of net.sf.jasperreports.engine.util.DefaultFormatFactory will be created.");
 		desc.add(formatFactoryClassD);
 
+		ImportDeclarationPropertyDescriptor importsD = new ImportDeclarationPropertyDescriptor(
+				JasperDesign.PROPERTY_IMPORTS, "Imports");
+		importsD
+				.setDescription("Translates into an import statement inside the expression class order to eliminate the need to use complete class names in the report expressions.");
+		desc.add(importsD);
+
 		// main dataset
-		ClassnamePropertyDescriptor scriptletD = new ClassnamePropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET + "/"
+		NClassTypePropertyDescriptor scriptletD = new NClassTypePropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET + "/"
 				+ JRDesignDataset.PROPERTY_SCRIPTLET_CLASS, "Scriptlet Class");
 		scriptletD
 				.setDescription("	Indicates which class implements the scriptlets functionality for this dataset. The specified class must be a subclass of JRAbstractScriptlet class. If omitted, an instance of JRDefaultScriptlet will be created.");
@@ -160,7 +168,7 @@ public class MReport extends APropertyNode implements IGraphicElement {
 		queryD.setDescription("Contains the SQL query that will be used to retrieve the data needed to fill the report.");
 		desc.add(queryD);
 		queryD.setCategory("Main Dataset");
-		
+
 		ComboBoxPropertyDescriptor whenResMissTypeD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET
 				+ "/" + JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, "When Resource Missing Type", EnumHelper
 				.getEnumNames(WhenResourceMissingTypeEnum.values(), NullEnum.NOTNULL));
@@ -174,35 +182,35 @@ public class MReport extends APropertyNode implements IGraphicElement {
 		// -------------------
 		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT, "Page Height");
 		heightD.setDescription("Page height.");
-		heightD.setCategory("Page size");
+		heightD.setCategory("Report Page");
 		desc.add(heightD);
 
 		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_WIDTH, "Page Width");
 		widthD.setDescription("Page width.");
-		widthD.setCategory("Page size");
+		widthD.setCategory("Report Page");
 		desc.add(widthD);
 
 		IntegerPropertyDescriptor rightMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_RIGHT_MARGIN,
 				"Right Margin");
 		rightMarginD.setDescription("Right margin.");
-		rightMarginD.setCategory("Margins");
+		rightMarginD.setCategory("Report Page");
 		desc.add(rightMarginD);
 
 		IntegerPropertyDescriptor leftMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_LEFT_MARGIN,
 				"Left Margin");
 		leftMarginD.setDescription("Left margin.");
-		leftMarginD.setCategory("Margins");
+		leftMarginD.setCategory("Report Page");
 		desc.add(leftMarginD);
 
 		IntegerPropertyDescriptor topMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_TOP_MARGIN, "Top margin");
 		topMarginD.setDescription("Top Margin.");
-		topMarginD.setCategory("Margins");
+		topMarginD.setCategory("Report Page");
 		desc.add(topMarginD);
 
 		IntegerPropertyDescriptor bottomMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_BOTTOM_MARGIN,
 				"Bottom Margin");
 		bottomMarginD.setDescription("Bottom margin.");
-		bottomMarginD.setCategory("Margins");
+		bottomMarginD.setCategory("Report Page");
 		desc.add(bottomMarginD);
 
 		IntegerPropertyDescriptor columnCountD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_COLUMN_COUNT,
@@ -232,13 +240,13 @@ public class MReport extends APropertyNode implements IGraphicElement {
 		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_ORIENTATION,
 				"Page Orientation", EnumHelper.getEnumNames(OrientationEnum.values(), NullEnum.NOTNULL));
 		orientationD.setDescription("Page printing orientation");
-		orientationD.setCategory("Report");
+		orientationD.setCategory("Report Page");
 		desc.add(orientationD);
 
 		ComboBoxPropertyDescriptor printOrderD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_PRINT_ORDER,
 				"Print Order", EnumHelper.getEnumNames(PrintOrderEnum.values(), NullEnum.NULL));
 		printOrderD.setDescription("Columns filling order.");
-		printOrderD.setCategory("Report");
+		printOrderD.setCategory("Columns");
 		desc.add(printOrderD);
 
 		ComboBoxPropertyDescriptor whenNoDataD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
@@ -312,6 +320,17 @@ public class MReport extends APropertyNode implements IGraphicElement {
 			return jrDesign.getName();
 		if (id.equals(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS))
 			return jrDesign.getFormatFactoryClass();
+		if (id.equals(JasperDesign.PROPERTY_IMPORTS)) {
+			String res = "";
+			String[] imports = jrDesign.getImports();
+			if (imports != null) {
+				int lenght = imports.length;
+				for (int i = 0; i < lenght; i++) {
+					res += imports[i] + ";";
+				}
+			}
+			return res;
+		}
 
 		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			return jrDesign.getScriptletClass();
@@ -370,60 +389,76 @@ public class MReport extends APropertyNode implements IGraphicElement {
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		JasperDesign value2 = (JasperDesign) getValue();
+		JasperDesign jrDesign = (JasperDesign) getValue();
 		if (id.equals(JasperDesign.PROPERTY_NAME))
-			value2.setName((String) value);
+			jrDesign.setName((String) value);
 		else if (id.equals(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS))
-			value2.setFormatFactoryClass((String) value);
+			jrDesign.setFormatFactoryClass((String) value);
+		else if (id.equals(JasperDesign.PROPERTY_IMPORTS)) {
+			String[] imports = jrDesign.getImports();
+			if (imports != null) {
+				int lenght = imports.length;
+				for (int i = 0; i < lenght; i++) {
+					jrDesign.removeImport(imports[i]);
+				}
+			}
+			if (value != null && value instanceof String) {
+				StringTokenizer st = new StringTokenizer((String) value, ";");
+				while (st.hasMoreTokens()) {
+					jrDesign.addImport(st.nextToken());
+				}
+			}
+		}
+
 		else if (id.equals(JasperDesign.PROPERTY_LANGUAGE))
-			value2.setLanguage(value == null ? null : ((String) value).toLowerCase());
+			jrDesign.setLanguage(value == null ? null : ((String) value).toLowerCase());
 
 		else if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
-			value2.setResourceBundle((String) value);
+			jrDesign.setResourceBundle((String) value);
 		else if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
-			value2.setScriptletClass((String) value);
+			jrDesign.setScriptletClass((String) value);
 		else if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
-			value2.setWhenResourceMissingType((WhenResourceMissingTypeEnum) EnumHelper.getSetValue(
+			jrDesign.setWhenResourceMissingType((WhenResourceMissingTypeEnum) EnumHelper.getSetValue(
 					WhenResourceMissingTypeEnum.values(), value, 1, false));
 
 		else if (id.equals(JasperDesign.PROPERTY_PAGE_HEIGHT))
-			value2.setPageHeight(((Integer) value).intValue());
+			jrDesign.setPageHeight(((Integer) value).intValue());
 		else if (id.equals(JasperDesign.PROPERTY_PAGE_WIDTH))
-			value2.setPageWidth(((Integer) value).intValue());
+			jrDesign.setPageWidth(((Integer) value).intValue());
 		else if (id.equals(JasperDesign.PROPERTY_RIGHT_MARGIN))
-			value2.setRightMargin(((Integer) value).intValue());
+			jrDesign.setRightMargin(((Integer) value).intValue());
 		else if (id.equals(JasperDesign.PROPERTY_LEFT_MARGIN))
-			value2.setLeftMargin(((Integer) value).intValue());
+			jrDesign.setLeftMargin(((Integer) value).intValue());
 		else if (id.equals(JasperDesign.PROPERTY_TOP_MARGIN))
-			value2.setTopMargin(((Integer) value).intValue());
+			jrDesign.setTopMargin(((Integer) value).intValue());
 		else if (id.equals(JasperDesign.PROPERTY_BOTTOM_MARGIN))
-			value2.setBottomMargin(((Integer) value).intValue());
+			jrDesign.setBottomMargin(((Integer) value).intValue());
 
 		else if (id.equals(JasperDesign.PROPERTY_COLUMN_COUNT))
-			value2.setColumnCount(((Integer) value).intValue());
+			jrDesign.setColumnCount(((Integer) value).intValue());
 		else if (id.equals(JasperDesign.PROPERTY_COLUMN_SPACING))
-			value2.setColumnSpacing(((Integer) value).intValue());
+			jrDesign.setColumnSpacing(((Integer) value).intValue());
 		else if (id.equals(JasperDesign.PROPERTY_COLUMN_WIDTH))
-			value2.setColumnWidth(((Integer) value).intValue());
+			jrDesign.setColumnWidth(((Integer) value).intValue());
 		// -- enums
 		else if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
-			value2.setOrientation((OrientationEnum) EnumHelper.getSetValue(OrientationEnum.values(), value, 1, false));
+			jrDesign.setOrientation((OrientationEnum) EnumHelper.getSetValue(OrientationEnum.values(), value, 1, false));
 		else if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER))
-			value2.setPrintOrder((PrintOrderEnum) EnumHelper.getSetValue(PrintOrderEnum.values(), value, 1, true));
+			jrDesign.setPrintOrder((PrintOrderEnum) EnumHelper.getSetValue(PrintOrderEnum.values(), value, 1, true));
 		else if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE))
-			value2.setWhenNoDataType((WhenNoDataTypeEnum) EnumHelper
-					.getSetValue(WhenNoDataTypeEnum.values(), value, 1, false));
+			jrDesign.setWhenNoDataType((WhenNoDataTypeEnum) EnumHelper.getSetValue(WhenNoDataTypeEnum.values(), value, 1,
+					false));
 		// -- booleans
 		else if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
-			value2.setTitleNewPage(((Boolean) value).booleanValue());
+			jrDesign.setTitleNewPage(((Boolean) value).booleanValue());
 		else if (id.equals(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE))
-			value2.setSummaryNewPage(((Boolean) value).booleanValue());
+			jrDesign.setSummaryNewPage(((Boolean) value).booleanValue());
 		else if (id.equals(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER))
-			value2.setSummaryWithPageHeaderAndFooter(((Boolean) value).booleanValue());
+			jrDesign.setSummaryWithPageHeaderAndFooter(((Boolean) value).booleanValue());
 		else if (id.equals(JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER))
-			value2.setFloatColumnFooter(((Boolean) value).booleanValue());
+			jrDesign.setFloatColumnFooter(((Boolean) value).booleanValue());
 		else if (id.equals(JasperDesign.PROPERTY_IGNORE_PAGINATION))
-			value2.setIgnorePagination(((Boolean) value).booleanValue());
+			jrDesign.setIgnorePagination(((Boolean) value).booleanValue());
 	}
 
 	/*

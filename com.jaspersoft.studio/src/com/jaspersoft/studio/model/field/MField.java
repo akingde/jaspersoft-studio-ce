@@ -35,7 +35,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassnamePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -141,12 +142,12 @@ public class MField extends APropertyNode implements IPropertySource {
 		nameD.setDescription("Name of the field.");
 		desc.add(nameD);
 
-		ClassnamePropertyDescriptor classD = new ClassnamePropertyDescriptor(JRDesignField.PROPERTY_VALUE_CLASS_NAME,
+		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignField.PROPERTY_VALUE_CLASS_NAME,
 				"Class");
 		classD.setDescription("Class of the field values.");
 		desc.add(classD);
 
-		TextPropertyDescriptor descriptionD = new TextPropertyDescriptor(JRDesignField.PROPERTY_DESCRIPTION, "Description");
+		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignField.PROPERTY_DESCRIPTION, "Description");
 		descriptionD
 				.setDescription("Can be used to specify a short text description for the field and is useful especially when creating special designed data sources and an extra information is needed in order to extract the value of the field.");
 		desc.add(descriptionD);

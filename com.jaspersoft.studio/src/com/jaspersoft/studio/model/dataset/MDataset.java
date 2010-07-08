@@ -38,7 +38,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.classname.ClassnamePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -147,7 +147,7 @@ public class MDataset extends APropertyNode implements IPropertySource {
 		nameD.setDescription("The name of the parameter that will be passed when iterating the subdataset.");
 		desc.add(nameD);
 
-		ClassnamePropertyDescriptor classD = new ClassnamePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
+		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
 				"Class");
 		classD
 				.setDescription("Indicates which class implements the scriptlets functionality for this report. The specified class must be a subclass of JRAbstractScriptlet class. If omitted, an instance of JRDefaultScriptlet will be created.");

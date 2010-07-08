@@ -23,14 +23,10 @@
  */
 package com.jaspersoft.studio.property.descriptor.classname;
 
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeHierarchy;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.internal.core.BinaryType;
-import org.eclipse.jdt.ui.IJavaElementSearchConstants;
+import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
+import org.eclipse.jdt.internal.core.JavaElement;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
@@ -41,42 +37,34 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 
 import com.jaspersoft.studio.property.descriptor.ATextDialogCellEditor;
 
-public class ClassTypeCellEditor extends ATextDialogCellEditor {
+public class ImportDeclarationCellEditor extends ATextDialogCellEditor {
 
-	public ClassTypeCellEditor(Composite parent) {
+	public ImportDeclarationCellEditor(Composite parent) {
 		super(parent);
 	}
 
-	public ClassTypeCellEditor(Composite parent, int style) {
+	public ImportDeclarationCellEditor(Composite parent, int style) {
 		super(parent, style);
 	}
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		Shell shell = cellEditorWindow.getShell();
-		try {
-			IJavaSearchScope searchScope = SearchEngine.createWorkspaceScope();
-			// JavaModelUtil.g
-			// searchScope.enclosingProjectsAndJars()[0].
-			//			
-			// SearchEngine.createHierarchyScope(IType. )
-			// IType focus = ...;
-			// IJavaProject project = ...;
-			// ITypeHierarchy hierarchy = focus.newTypeHierarchy(project, pm);
-			// IType[] subTypes = hierarchy.getAllSubTypes(focus);
-			// IJavaSearchScope scope = SearchEngine.createJavaSearchScope(subTypes);
 
-			SelectionDialog dialog = JavaUI.createTypeDialog(shell, new ProgressMonitorDialog(shell), searchScope,
-					IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false);
-			if (dialog.open() == Window.OK) {
-				if (dialog.getResult() != null && dialog.getResult().length > 0) {
-					BinaryType bt = (BinaryType) dialog.getResult()[0];
-					return bt.getFullyQualifiedName();
+		SelectionDialog dialog = JavaUI.createPackageDialog(shell, new ProgressMonitorDialog(shell), SearchEngine
+				.createWorkspaceScope(), true, true, null);
+		if (dialog.open() == Window.OK) {
+			if (dialog.getResult() != null && dialog.getResult().length > 0) {
+				String res = "";
+				for(int i=0;i<dialog.getResult().length;i++){
+					JavaElement jpf = (JavaElement)dialog.getResult()[i];
+					res += jpf.getElementName()+";";
 				}
+				return res;
 			}
-		} catch (JavaModelException e) {
-			e.printStackTrace();
 		}
+
 		return null;
 	}
+
 }
