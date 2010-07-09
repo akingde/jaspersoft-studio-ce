@@ -34,7 +34,7 @@ public class NClassTypePropertyDescriptor extends ClassTypePropertyDescriptor {
 
 	public CellEditor createPropertyEditor(Composite parent) {
 		CellEditor editor = new ClassTypeCellEditor(parent);
-		editor.setValidator(ClassTypeCellEditorValidator.instance());
+		editor.setValidator(NClassTypeCellEditorValidator.instance());
 		setValidator(NClassTypeCellEditorValidator.instance());
 		return editor;
 	}

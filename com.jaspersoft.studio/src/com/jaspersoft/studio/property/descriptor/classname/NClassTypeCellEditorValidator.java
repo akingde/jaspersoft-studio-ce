@@ -22,12 +22,14 @@ package com.jaspersoft.studio.property.descriptor.classname;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.jface.viewers.ICellEditorValidator;
+
 /**
  * The Class IntegerCellEditorValidator.
  * 
  * @author Chicu Veaceslav
  */
-public class NClassTypeCellEditorValidator extends ClassTypeCellEditorValidator {
+public class NClassTypeCellEditorValidator implements ICellEditorValidator {
 	/** The instance. */
 	private static NClassTypeCellEditorValidator instance;
 
@@ -48,9 +50,11 @@ public class NClassTypeCellEditorValidator extends ClassTypeCellEditorValidator 
 	 * @see org.eclipse.jface.viewers.ICellEditorValidator#isValid(java.lang.Object)
 	 */
 	public String isValid(Object value) {
+		if(value == null)
+			return null;
 		if (value instanceof String)
 			if (value != null) {
-				Pattern pattern = Pattern.compile(regexp);
+				Pattern pattern = Pattern.compile(ClassTypeCellEditorValidator.regexp);
 				Matcher matcher = pattern.matcher((String) value);
 				if (matcher.matches())
 					return null;
