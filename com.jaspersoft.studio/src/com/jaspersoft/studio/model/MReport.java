@@ -59,7 +59,7 @@ import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationProp
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.resource.NResourcePropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
@@ -157,7 +157,7 @@ public class MReport extends APropertyNode implements IGraphicElement {
 		desc.add(scriptletD);
 		scriptletD.setCategory("Main Dataset");
 
-		NTextPropertyDescriptor resBundleD = new NTextPropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET + "/"
+		NResourcePropertyDescriptor resBundleD = new NResourcePropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET + "/"
 				+ JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, "Resource Bundle");
 		resBundleD.setDescription("The base name of the dataset associated resource bundle.");
 		desc.add(resBundleD);

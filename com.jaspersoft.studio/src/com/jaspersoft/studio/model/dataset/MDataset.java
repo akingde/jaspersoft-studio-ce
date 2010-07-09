@@ -40,7 +40,7 @@ import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.resource.NResourcePropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -153,7 +153,7 @@ public class MDataset extends APropertyNode implements IPropertySource {
 				.setDescription("Indicates which class implements the scriptlets functionality for this report. The specified class must be a subclass of JRAbstractScriptlet class. If omitted, an instance of JRDefaultScriptlet will be created.");
 		desc.add(classD);
 
-		NTextPropertyDescriptor resBundleD = new NTextPropertyDescriptor(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE,
+		NResourcePropertyDescriptor resBundleD = new NResourcePropertyDescriptor(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE,
 				"Resource Bundle");
 		resBundleD.setDescription("The base name of the dataset associated resource bundle.");
 		desc.add(resBundleD);
@@ -184,7 +184,7 @@ public class MDataset extends APropertyNode implements IPropertySource {
 		JRDesignDataset jrDataset = (JRDesignDataset) getValue();
 		if (id.equals(JRDesignDataset.PROPERTY_NAME))
 			return jrDataset.getName();
-		
+
 		if (id.equals(JRDesignDataset.PROPERTY_QUERY))
 			return jrDataset.getQuery();
 		if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
@@ -193,7 +193,7 @@ public class MDataset extends APropertyNode implements IPropertySource {
 			return EnumHelper.getValue(jrDataset.getWhenResourceMissingTypeValue(), 1, false);
 		if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
 			return jrDataset.getResourceBundle();
-		
+
 		return null;
 	}
 

@@ -64,6 +64,8 @@ public class ClassTypeCellEditor extends ATextDialogCellEditor {
 
 			SelectionDialog dialog = JavaUI.createTypeDialog(shell, new ProgressMonitorDialog(shell), searchScope,
 					IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false);
+			dialog.setTitle("Open Type");
+			dialog.setMessage("Enter the name prefix or pattern (?, *, or camel case)");
 			if (dialog.open() == Window.OK) {
 				if (dialog.getResult() != null && dialog.getResult().length > 0) {
 					BinaryType bt = (BinaryType) dialog.getResult()[0];

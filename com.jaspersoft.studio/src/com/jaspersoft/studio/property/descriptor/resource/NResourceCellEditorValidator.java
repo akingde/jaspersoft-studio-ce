@@ -17,10 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.classname;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package com.jaspersoft.studio.property.descriptor.resource;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
@@ -29,18 +26,18 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
  * 
  * @author Chicu Veaceslav
  */
-public class NClassTypeCellEditorValidator implements ICellEditorValidator {
+public class NResourceCellEditorValidator implements ICellEditorValidator {
 	/** The instance. */
-	private static NClassTypeCellEditorValidator instance;
+	private static NResourceCellEditorValidator instance;
 
 	/**
 	 * Instance.
 	 * 
 	 * @return the integer cell editor validator
 	 */
-	public static NClassTypeCellEditorValidator instance() {
+	public static NResourceCellEditorValidator instance() {
 		if (instance == null)
-			instance = new NClassTypeCellEditorValidator();
+			instance = new NResourceCellEditorValidator();
 		return instance;
 	}
 
@@ -50,14 +47,16 @@ public class NClassTypeCellEditorValidator implements ICellEditorValidator {
 	 * @see org.eclipse.jface.viewers.ICellEditorValidator#isValid(java.lang.Object)
 	 */
 	public String isValid(Object value) {
-		if (value == null)
+		if(value == null)
 			return null;
-		if (value instanceof String) {
-			Pattern pattern = Pattern.compile(ClassTypeCellEditorValidator.regexp);
-			Matcher matcher = pattern.matcher((String) value);
-			if (matcher.matches())
+		if (value instanceof String)
+			if (value != null) {
+				// Pattern pattern = Pattern.compile(ClassTypeCellEditorValidator.regexp);
+				// Matcher matcher = pattern.matcher((String) value);
+				// if (matcher.matches())
+					return null;
+			} else
 				return null;
-		}
 		return "This is a not correct java Class";
 	}
 
