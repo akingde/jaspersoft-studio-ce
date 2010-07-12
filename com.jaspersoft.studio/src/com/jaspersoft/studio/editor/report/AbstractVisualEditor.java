@@ -219,6 +219,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 	/** The outline page. */
 	private JDReportOutlineView outlinePage;
+	private EditorContributor editorContributor;
 
 	/*
 	 * (non-Javadoc)
@@ -237,6 +238,12 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			}
 			return outlinePage;
 		}
+		if (type == EditorContributor.class) {
+			if (editorContributor == null)
+				editorContributor = new EditorContributor(getEditDomain());
+			return editorContributor;
+		}
+
 		return super.getAdapter(type);
 	}
 

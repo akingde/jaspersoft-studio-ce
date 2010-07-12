@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.report;
 
@@ -44,8 +40,8 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
 import com.jaspersoft.studio.model.ANode;
@@ -60,13 +56,13 @@ import com.jaspersoft.studio.property.JRPropertySheetEntry;
  * @author Chicu Veaceslav
  */
 public class ReportContainer extends MultiPageEditorPart implements ITabbedPropertySheetPageContributor {
-	
+
 	/** The model. */
 	private INode model = null;
-	
+
 	/** The editors. */
 	private List<AbstractVisualEditor> editors = new ArrayList<AbstractVisualEditor>();
-	
+
 	/** The parent. */
 	private EditorPart parent;
 
@@ -80,7 +76,9 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		this.parent = parent;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#getActiveEditor()
 	 */
 	@Override
@@ -88,7 +86,9 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		return super.getActiveEditor();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#createPages()
 	 */
 	@Override
@@ -104,7 +104,9 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
@@ -114,7 +116,9 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
 	 */
 	@Override
@@ -124,7 +128,9 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
 	 */
 	@Override
@@ -166,14 +172,14 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		return model;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#getAdapter(java.lang.Class)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class type) {
-		// if (type == IContentOutlinePage.class)
-		// return getOutlinePage();
 		if (type == IPropertySource.class)
 			return getPropertySheetPage();
 		if (type == IPropertySheetPage.class)
@@ -183,7 +189,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 
 	/** The property sheet page. */
 	private IPropertySheetPage propertySheetPage;
-	
+
 	/** The property sheet entry. */
 	private JRPropertySheetEntry propertySheetEntry;
 
@@ -194,25 +200,28 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
 		if (propertySheetPage == null) {
-			PropertySheetPage psp = new PropertySheetPage();
-			propertySheetEntry = new JRPropertySheetEntry(((ReportEditor) editors.get(0)).getEditDomain().getCommandStack(),
-					(ANode) getModel());
-			psp.setRootEntry(propertySheetEntry);
-			propertySheetPage = psp;
+//			PropertySheetPage psp = new PropertySheetPage();
+//			propertySheetEntry = new JRPropertySheetEntry(((ReportEditor) editors.get(0)).getEditDomain().getCommandStack(),
+//					(ANode) getModel());
+//			psp.setRootEntry(propertySheetEntry);
+//			propertySheetPage = psp;
 
-			// propertySheetPage = new TabbedPropertySheetPage(ReportContainer.this,
-			// true);
+			TabbedPropertySheetPage tpsp = new TabbedPropertySheetPage(ReportContainer.this, true);
+
+			propertySheetPage = tpsp;
 
 		}
 		return propertySheetPage;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor#getContributorId()
 	 */
 	@Override
 	public String getContributorId() {
-		return parent.getSite().getId();
+		return "com.jaspersoft.studio.editor.report.ReportContainer";
 	}
 
 	/** The outline view. */

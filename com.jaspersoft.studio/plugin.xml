@@ -48,15 +48,6 @@
       </editor>
    </extension>
    <extension
-         id="com.jaspersoft.designer.property"
-         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
-      <propertyContributor
-            contributorId="com.jaspersoft.studio.model.Report">
-         <propertyCategory category="jasperCategory"/>
-
-      </propertyContributor>
-   </extension>
-   <extension
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.jaspersoft.studio.ReportDesignPerspective"
@@ -119,6 +110,93 @@
       <initializer
             class="com.jaspersoft.studio.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         id="com.jaspersoft.designer.property"
+         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+      <propertyContributor
+            contributorId="com.jaspersoft.studio.editor.report.ReportContainer"
+            labelProvider="com.jaspersoft.studio.property.ElementLabelProvider"
+            typeMapper="com.jaspersoft.studio.property.ElementTypeMapper">
+         <propertyCategory
+               category="element">
+         </propertyCategory>
+         <propertyCategory
+               category="advanced">
+         </propertyCategory>
+         <propertyCategory
+               category="parameter">
+         </propertyCategory>
+         <propertyCategory
+               category="field">
+         </propertyCategory>
+
+      </propertyContributor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs
+            contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
+         <propertyTab
+               category="advanced"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab"
+               label="Advanced">
+         </propertyTab>
+         <propertyTab
+               category="element"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.Location"
+               label="Location">
+         </propertyTab>
+      </propertyTabs>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections
+            contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
+         <propertySection
+               class="com.jaspersoft.studio.property.section.LocationSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.LocationSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Location">
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElement">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.JDAdvancedSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab">
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElement">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.band.MBand">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.parameter.MParameterSystem">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.dataset.MDataset">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.group.MGroup">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.variable.MVariableSystem">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.field.MField">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.scriptlet.MScriptlet">
+            </input>
+         </propertySection>
+      </propertySections>
    </extension>
    
 
