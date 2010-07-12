@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.editor.gef.commands;
 
-import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRBand;
@@ -35,7 +34,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SetConstraintCommand.
  */
@@ -188,10 +186,11 @@ public class SetConstraintCommand extends Command {
 	public void undo() {
 		if (pBand != null && cBand != null)
 			pBand.removeElement(jrElement);
-		if (oldIndex < 0 || oldIndex > cBand.getElements().length)
-			cBand.addElement(jrElement);
-		else
-			cBand.addElement(oldIndex, jrElement);
+		if (cBand != null)
+			if (oldIndex < 0 || oldIndex > cBand.getElements().length)
+				cBand.addElement(jrElement);
+			else
+				cBand.addElement(oldIndex, jrElement);
 
 		jrElement.setWidth(oldBounds.width);
 		jrElement.setHeight(oldBounds.height);
