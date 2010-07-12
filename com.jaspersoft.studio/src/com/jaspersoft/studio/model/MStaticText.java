@@ -31,7 +31,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
+
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
 /**
  * The Class MStaticText.
@@ -97,7 +98,7 @@ public class MStaticText extends MTextElement {
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		TextPropertyDescriptor textD = new TextPropertyDescriptor(JRBaseStaticText.PROPERTY_TEXT, "Text");
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRBaseStaticText.PROPERTY_TEXT, "Text");
 		desc.add(textD);
 		textD.setCategory("StaticText Properties");
 	}
@@ -114,7 +115,7 @@ public class MStaticText extends MTextElement {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignStaticText jrElement = (JRDesignStaticText) getValue();
 
-		if (id.equals(JRDesignStyle.PROPERTY_NAME))
+		if (id.equals(JRBaseStaticText.PROPERTY_TEXT))
 			jrElement.setText((String) value);
 		else
 			super.setPropertyValue(id, value);
