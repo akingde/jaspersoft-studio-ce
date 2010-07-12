@@ -1,9 +1,31 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
+ * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of Jaspersoft Open Studio.
+ *
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.property.section;
 
 import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
@@ -33,29 +55,29 @@ public class LocationSection extends AbstractSection {
 	 */
 	private TextChangeHelper listener = new TextChangeHelper() {
 		public void textChanged(Control control) {
-			Point point = new Point();
-			point.x = Integer.parseInt(xText.getText());
-			point.y = Integer.parseInt(yText.getText());
-			getElement().setPropertyValue(JRBaseElement.PROPERTY_X, point.x);
-			getElement().setPropertyValue(JRDesignElement.PROPERTY_Y, point.y);
 
+			Integer x = Integer.parseInt(xText.getText());
+			Integer y = Integer.parseInt(yText.getText());
+			
 			CommandStack cs = getEditDomain().getCommandStack();
 
 			CompoundCommand cc = new CompoundCommand();
 
-			
-			SetValueCommand setCommand = new SetValueCommand(getElement().getDisplayText());
-			setCommand.setTarget(getElement());
-			setCommand.setPropertyId(JRBaseElement.PROPERTY_X);
-			setCommand.setPropertyValue(point.x);
-			cc.add(setCommand);
-
-			setCommand = new SetValueCommand(getElement().getDisplayText());
-			setCommand.setTarget(getElement());
-			setCommand.setPropertyId(JRDesignElement.PROPERTY_Y);
-			setCommand.setPropertyValue(point.y);
-			cc.add(setCommand);
-
+			Object oldX = getElement().getPropertyValue(JRBaseElement.PROPERTY_X);
+			if (!x.equals(oldX)) {
+				SetValueCommand setCommand = new SetValueCommand(getElement().getDisplayText());
+				setCommand.setTarget(getElement());
+				setCommand.setPropertyId(JRBaseElement.PROPERTY_X);
+				setCommand.setPropertyValue(x);
+				cc.add(setCommand);
+			}
+			if (!y.equals(getElement().getPropertyValue(JRDesignElement.PROPERTY_Y))) {
+				SetValueCommand setCommand = new SetValueCommand(getElement().getDisplayText());
+				setCommand.setTarget(getElement());
+				setCommand.setPropertyId(JRDesignElement.PROPERTY_Y);
+				setCommand.setPropertyValue(y);
+				cc.add(setCommand);
+			}
 			cs.execute(cc);
 		}
 	};
@@ -109,7 +131,6 @@ public class LocationSection extends AbstractSection {
 	public void refresh() {
 		listener.startNonUserChange();
 		try {
-			getElement().getPropertyValue(JRBaseElement.PROPERTY_X);
 			xText.setText(((Integer) getElement().getPropertyValue(JRBaseElement.PROPERTY_X)).toString());
 			yText.setText(getElement().getPropertyValue(JRDesignElement.PROPERTY_Y).toString());
 		} finally {
