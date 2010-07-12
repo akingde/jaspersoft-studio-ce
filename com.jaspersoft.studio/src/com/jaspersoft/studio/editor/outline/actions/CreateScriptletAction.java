@@ -55,7 +55,7 @@ public class CreateScriptletAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create scriptlet");
+		setText("Create Scriptlet");
 		setToolTipText("Creates scriptlet");
 		setId(CreateScriptletAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();

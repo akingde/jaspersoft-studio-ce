@@ -55,7 +55,7 @@ public class CreateDatasetAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create dataset");
+		setText("Create Dataset");
 		setToolTipText("Creates dataset");
 		setId(CreateDatasetAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();

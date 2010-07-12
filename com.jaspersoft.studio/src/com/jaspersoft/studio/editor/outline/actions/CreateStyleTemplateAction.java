@@ -55,7 +55,7 @@ public class CreateStyleTemplateAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create style template");
+		setText("Create Style Template");
 		setToolTipText("Creates style template");
 		setId(CreateStyleTemplateAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();

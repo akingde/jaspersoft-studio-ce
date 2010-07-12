@@ -55,7 +55,7 @@ public class CreateConditionalStyleAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create conditional style");
+		setText("Create Conditional Style");
 		setToolTipText("Creates conditional style");
 		setId(CreateConditionalStyleAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();

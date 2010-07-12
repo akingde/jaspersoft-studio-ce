@@ -55,7 +55,7 @@ public class CreateFieldAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create field");
+		setText("Create Field");
 		setToolTipText("Creates field");
 		setId(CreateFieldAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();

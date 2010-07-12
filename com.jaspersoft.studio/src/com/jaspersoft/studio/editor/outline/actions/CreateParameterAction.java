@@ -55,7 +55,7 @@ public class CreateParameterAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create parameter");
+		setText("Create Parameter");
 		setToolTipText("Creates parameters");
 		setId(CreateParameterAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();

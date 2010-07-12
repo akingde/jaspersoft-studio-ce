@@ -31,7 +31,6 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.band.MBand;
 
-// TODO: Auto-generated Javadoc
 /**
  * link nodes & together.
  * 

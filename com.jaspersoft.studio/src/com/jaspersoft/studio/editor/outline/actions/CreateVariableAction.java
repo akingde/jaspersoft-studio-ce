@@ -55,7 +55,7 @@ public class CreateVariableAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create variable");
+		setText("Create Variable");
 		setToolTipText("Creates variable");
 		setId(CreateVariableAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();

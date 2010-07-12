@@ -55,7 +55,7 @@ public class CreateStyleAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create style");
+		setText("Create Style");
 		setToolTipText("Creates style");
 		setId(CreateStyleAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();

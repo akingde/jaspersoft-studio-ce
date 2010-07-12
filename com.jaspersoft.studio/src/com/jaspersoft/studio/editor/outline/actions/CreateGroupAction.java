@@ -55,8 +55,8 @@ public class CreateGroupAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create group");
-		setToolTipText("Creates groups");
+		setText("Create Group");
+		setToolTipText("Create a group");
 		setId(CreateGroupAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
