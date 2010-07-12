@@ -26,7 +26,6 @@ import net.sf.jasperreports.engine.JRStaticText;
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
