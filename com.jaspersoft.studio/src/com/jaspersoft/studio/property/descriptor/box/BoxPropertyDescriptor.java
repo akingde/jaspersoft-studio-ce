@@ -17,28 +17,30 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.combo;
+package com.jaspersoft.studio.property.descriptor.box;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
-/**
- * @author Chicu Veaceslav
- * 
- */
-public class RWComboBoxLabelProvider extends LabelProvider {
-	private NullEnum canBeNull;
-	public RWComboBoxLabelProvider(String[] labels, NullEnum canBeNull) {
-		super();
-		this.canBeNull = canBeNull;
+public class BoxPropertyDescriptor extends NTextPropertyDescriptor {
+
+	public BoxPropertyDescriptor(Object id, String displayName) {
+		super(id, displayName);
+	}
+
+	public CellEditor createPropertyEditor(Composite parent) {
+		CellEditor editor = new BoxCellEditor(parent);
+		return editor;
 	}
 
 	@Override
-	public String getText(Object element) {
-		if(element == null)
-			return canBeNull.getName();
-		return element.toString();
+	public ILabelProvider getLabelProvider() {
+		if (isLabelProviderSet()) {
+			return super.getLabelProvider();
+		}
+		return new BoxLabelProvider();
 	}
-
 }

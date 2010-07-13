@@ -34,6 +34,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -139,8 +140,10 @@ public class MGroup extends APropertyNode implements IPropertySource {
 		nameD.setDescription("Name of the group.");
 		desc.add(nameD);
 
-		TextPropertyDescriptor expressionD = new TextPropertyDescriptor(JRDesignGroup.PROPERTY_EXPRESSION,
-				"Group expression");
+		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignGroup.PROPERTY_EXPRESSION,
+				"Expression");
+		expressionD
+				.setDescription("Specifies the expression that will be evaluated at runtime to determine the group ruptures.");
 		desc.add(expressionD);
 	}
 

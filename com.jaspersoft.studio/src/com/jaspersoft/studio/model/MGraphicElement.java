@@ -299,6 +299,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 		printWhenDetailOverflowsD
 				.setDescription("The element will be printed when the band overflows to a new page or a new column.");
 		desc.add(printWhenDetailOverflowsD);
+		
+		forecolorD.setCategory("Graphic");
+		backcolorD.setCategory("Graphic");
+		opaqueD.setCategory("Graphic");
+		
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);

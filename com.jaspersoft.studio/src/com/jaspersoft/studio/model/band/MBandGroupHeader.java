@@ -19,12 +19,17 @@
  */
 package com.jaspersoft.studio.model.band;
 
+import java.util.List;
+import java.util.Map;
+
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
@@ -36,7 +41,7 @@ import com.jaspersoft.studio.model.NodeIconDescriptor;
  * @author Chicu Veaceslav
  */
 public class MBandGroupHeader extends MBand {
-
+	private static final String MAIN_GROUP = "MAIN_GROUP";
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -110,6 +115,45 @@ public class MBandGroupHeader extends MBand {
 	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
+	}
+
+	private static IPropertyDescriptor[] descriptors;
+	private static Map<String, Object> defaultsMap;
+
+	@Override
+	public Map<String, Object> getDefaultsMap() {
+		return defaultsMap;
+	}
+
+	@Override
+	public IPropertyDescriptor[] getDescriptors() {
+		return descriptors;
+	}
+
+	@Override
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+		descriptors = descriptors1;
+		defaultsMap = defaultsMap1;
+	}
+
+	/**
+	 * Creates the property descriptors.
+	 * 
+	 * @param desc
+	 *          the desc
+	 */
+	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+		super.createPropertyDescriptors(desc, defaultsMap);
+
+		PropertyDescriptor groupD = new PropertyDescriptor(MAIN_GROUP, "Group");
+		desc.add(groupD);
+	}
+
+	@Override
+	public Object getPropertyValue(Object id) {
+		if (id.equals(MAIN_GROUP))
+			return new MGroupBand(getJrGroup());
+		return super.getPropertyValue(id);
 	}
 
 }

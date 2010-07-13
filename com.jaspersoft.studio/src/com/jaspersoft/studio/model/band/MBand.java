@@ -41,9 +41,11 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
@@ -190,13 +192,17 @@ public class MBand extends APropertyNode implements IGraphicElement {
 		splitStyleD.setDescription("Specifies the band split behavior.");
 		desc.add(splitStyleD);
 
-		// TextPropertyDescriptor expressionD = new
-		// TextPropertyDescriptor(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION,
-		// "Print when expression");
+		JRExpressionPropertyDescriptor printWhenExpD = new JRExpressionPropertyDescriptor(
+				JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, "Print When Expression");
+		printWhenExpD
+				.setDescription("Definition of a Boolean expression that will determine if the element or the band should be printed or not.");
+		desc.add(printWhenExpD);
 
 		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, new Integer(50));
 		defaultsMap.put(JRDesignBand.PROPERTY_SPLIT_TYPE, null);
 	}
+
+	private MExpression mExpression;
 
 	/*
 	 * (non-Javadoc)
@@ -210,7 +216,11 @@ public class MBand extends APropertyNode implements IGraphicElement {
 			return new Integer(jrband.getHeight());
 		if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
 			return EnumHelper.getValue(jrband.getSplitTypeValue(), 1, true);
-
+		if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrband.getPrintWhenExpression());
+			return mExpression;
+		}
 		return null;
 	}
 

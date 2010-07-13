@@ -41,25 +41,24 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.OrientationEnum;
 import net.sf.jasperreports.engine.type.PrintOrderEnum;
 import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
-import net.sf.jasperreports.engine.type.WhenResourceMissingTypeEnum;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
+import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.resource.NResourcePropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
@@ -125,6 +124,8 @@ public class MReport extends APropertyNode implements IGraphicElement {
 		defaultsMap = defaultsMap1;
 	}
 
+	private MDataset mDataset;
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -150,35 +151,10 @@ public class MReport extends APropertyNode implements IGraphicElement {
 		desc.add(importsD);
 
 		// main dataset
-		NClassTypePropertyDescriptor scriptletD = new NClassTypePropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET + "/"
-				+ JRDesignDataset.PROPERTY_SCRIPTLET_CLASS, "Scriptlet Class");
-		scriptletD
-				.setDescription("	Indicates which class implements the scriptlets functionality for this dataset. The specified class must be a subclass of JRAbstractScriptlet class. If omitted, an instance of JRDefaultScriptlet will be created.");
-		desc.add(scriptletD);
-		scriptletD.setCategory("Main Dataset");
+		PropertyDescriptor datasetD = new PropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET, "Main Dataset");
+		datasetD.setDescription("Main dataset for the report.");
+		desc.add(datasetD);
 
-		NResourcePropertyDescriptor resBundleD = new NResourcePropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET + "/"
-				+ JRDesignDataset.PROPERTY_RESOURCE_BUNDLE, "Resource Bundle");
-		resBundleD.setDescription("The base name of the dataset associated resource bundle.");
-		desc.add(resBundleD);
-		resBundleD.setCategory("Main Dataset");
-
-		JRQueryPropertyDescriptor queryD = new JRQueryPropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET + "/"
-				+ JRDesignDataset.PROPERTY_QUERY, "Query", NullEnum.NULL);
-		queryD.setDescription("Contains the SQL query that will be used to retrieve the data needed to fill the report.");
-		desc.add(queryD);
-		queryD.setCategory("Main Dataset");
-
-		ComboBoxPropertyDescriptor whenResMissTypeD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET
-				+ "/" + JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, "When Resource Missing Type", EnumHelper
-				.getEnumNames(WhenResourceMissingTypeEnum.values(), NullEnum.NOTNULL));
-		whenResMissTypeD
-				.setDescription("Allows customizing the way the engine deals with missing resources in the resource bundle.");
-		desc.add(whenResMissTypeD);
-		whenResMissTypeD.setCategory("Main Dataset");
-
-		defaultsMap.put(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
-				EnumHelper.getValue(WhenResourceMissingTypeEnum.NULL, 1, false));
 		// -------------------
 		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT, "Page Height");
 		heightD.setDescription("Page height.");
@@ -232,7 +208,7 @@ public class MReport extends APropertyNode implements IGraphicElement {
 		desc.add(columnSpaceD);
 
 		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
-				"Language", new String[] { "", "Java", "Groovy", "JavaScript", "bsh" });
+				"Language", new String[] { "", "Java", "Groovy", "JavaScript", "bsh" }, NullEnum.NOTNULL);
 		languageD.setDescription("Specifies the language used for the report expressions.");
 		languageD.setCategory("Report");
 		desc.add(languageD);
@@ -338,6 +314,11 @@ public class MReport extends APropertyNode implements IGraphicElement {
 			return EnumHelper.getValue(jrDesign.getWhenResourceMissingTypeValue(), 1, false);
 		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
 			return jrDesign.getResourceBundle();
+		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET)) {
+			if (mDataset == null)
+				mDataset = new MDataset((JRDesignDataset) jrDesign.getMainDataset());
+			return mDataset;
+		}
 
 		if (id.equals(JasperDesign.PROPERTY_PAGE_HEIGHT))
 			return new Integer(jrDesign.getPageHeight());
@@ -412,14 +393,6 @@ public class MReport extends APropertyNode implements IGraphicElement {
 
 		else if (id.equals(JasperDesign.PROPERTY_LANGUAGE))
 			jrDesign.setLanguage(value == null ? null : ((String) value).toLowerCase());
-
-		else if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
-			jrDesign.setResourceBundle((String) value);
-		else if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
-			jrDesign.setScriptletClass((String) value);
-		else if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
-			jrDesign.setWhenResourceMissingType((WhenResourceMissingTypeEnum) EnumHelper.getSetValue(
-					WhenResourceMissingTypeEnum.values(), value, 1, false));
 
 		else if (id.equals(JasperDesign.PROPERTY_PAGE_HEIGHT))
 			jrDesign.setPageHeight(((Integer) value).intValue());
@@ -796,11 +769,13 @@ public class MReport extends APropertyNode implements IGraphicElement {
 			List<?> groups = ((JRDesignDataset) ((JasperDesign) getValue()).getMainDataset()).getGroupsList();
 			for (Object obj : groups)
 				removeGroupListener((JRDesignGroup) obj);
+			mDataset.setValue(null);
 		} else if (value != null) {
 			List<?> groups = ((JRDesignDataset) ((JasperDesign) value).getMainDataset()).getGroupsList();
 			for (Object obj : groups)
 				addGroupListener((JRDesignGroup) obj);
 			((JRDesignSection) ((JasperDesign) value).getDetailSection()).getEventSupport().addPropertyChangeListener(this);
+			mDataset = null;
 		}
 		super.setValue(value);
 	}

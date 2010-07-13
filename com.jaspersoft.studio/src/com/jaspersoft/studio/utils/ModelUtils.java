@@ -532,4 +532,12 @@ public class ModelUtils {
 		}
 		return lst.toArray(new String[lst.size()]);
 	}
+
+	public static String[] getFontNames() {
+		return new String[] { "", "Arial", "Serif", "Sans Serif", "Verdana" };
+	}
+
+	public static String[] getFontSizes() {
+		return new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26" };
+	}
 }

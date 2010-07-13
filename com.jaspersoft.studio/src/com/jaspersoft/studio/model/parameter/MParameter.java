@@ -30,9 +30,13 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -116,8 +120,26 @@ public class MParameter extends MParameterSystem {
 				.setDescription("Optional flag that might be used by the parent application to prompt the user for the parameter value.");
 		desc.add(isForPromptingD);
 
+		JRExpressionPropertyDescriptor defValueExprD = new JRExpressionPropertyDescriptor(
+				JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION, "Default Value Expression");
+		defValueExprD
+				.setDescription("Specifies the parameter default value to use when not supplied by the parent application at runtime.");
+		desc.add(defValueExprD);
+
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, "Properties");
+		propertiesD.setDescription("Dataset properties");
+		desc.add(propertiesD);
+
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME,
+				"Nested Type Name");
+		classD.setDescription("Type of the nested elements, if the parameter's value is a collection");
+		desc.add(classD);
+
 		defaultsMap.put(JRDesignParameter.PROPERTY_FOR_PROMPTING, Boolean.TRUE);
 	}
+
+	private static final String PROPERTY_MAP = "PROPERTY_MAP";
+	private MExpression mExpression;
 
 	/*
 	 * (non-Javadoc)
@@ -131,6 +153,15 @@ public class MParameter extends MParameterSystem {
 			return jrParameter.getDescription();
 		if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING))
 			return new Boolean(jrParameter.isForPrompting());
+		if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrParameter.getDefaultValueExpression());
+			return mExpression;
+		}
+		if (id.equals(PROPERTY_MAP))
+			return jrParameter.getPropertiesMap();
+		if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME))
+			return jrParameter.getNestedTypeName();
 		return super.getPropertyValue(id);
 	}
 
@@ -146,6 +177,8 @@ public class MParameter extends MParameterSystem {
 			jrParameter.setDescription((String) value);
 		else if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING))
 			jrParameter.setForPrompting(((Boolean) value).booleanValue());
+		else if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME))
+			jrParameter.setNestedTypeName((String) value);
 		super.setPropertyValue(id, value);
 	}
 

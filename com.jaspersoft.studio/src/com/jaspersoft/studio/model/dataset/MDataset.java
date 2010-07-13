@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.WhenResourceMissingTypeEnum;
 
@@ -36,11 +35,16 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.resource.NResourcePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.sortfield.SortFieldPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -51,6 +55,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  */
 public class MDataset extends APropertyNode implements IPropertySource {
 
+	private static final String PROPERTY_MAP = "PROPERTY_MAP";
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -70,6 +75,11 @@ public class MDataset extends APropertyNode implements IPropertySource {
 	 */
 	public MDataset() {
 		super();
+	}
+
+	public MDataset(JRDesignDataset jrDataset) {
+		super();
+		setValue(jrDataset);
 	}
 
 	/**
@@ -147,6 +157,10 @@ public class MDataset extends APropertyNode implements IPropertySource {
 		nameD.setDescription("The name of the parameter that will be passed when iterating the subdataset.");
 		desc.add(nameD);
 
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, "Properties");
+		propertiesD.setDescription("Dataset properties");
+		desc.add(propertiesD);
+
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
 				"Class");
 		classD
@@ -160,8 +174,13 @@ public class MDataset extends APropertyNode implements IPropertySource {
 
 		JRQueryPropertyDescriptor queryD = new JRQueryPropertyDescriptor(JRDesignDataset.PROPERTY_QUERY, "Query",
 				NullEnum.NULL);
-		queryD.setDescription("Contains the SQL query that will be used to retrieve the data needed to fill the report.");
+		queryD.setDescription("Contains the query that will be used to retrieve the data needed to fill the report.");
 		desc.add(queryD);
+
+		SortFieldPropertyDescriptor sortFieldsD = new SortFieldPropertyDescriptor(JRDesignDataset.PROPERTY_SORT_FIELDS,
+				"Sort Fields");
+		sortFieldsD.setDescription("Introduces a field to use for sorting the data source.");
+		desc.add(sortFieldsD);
 
 		ComboBoxPropertyDescriptor whenResMissTypeD = new ComboBoxPropertyDescriptor(
 				JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, "When Resource Missing Type", EnumHelper.getEnumNames(
@@ -170,9 +189,17 @@ public class MDataset extends APropertyNode implements IPropertySource {
 				.setDescription("Allows customizing the way the engine deals with missing resources in the resource bundle.");
 		desc.add(whenResMissTypeD);
 
+		JRExpressionPropertyDescriptor filterExpression = new JRExpressionPropertyDescriptor(
+				JRDesignDataset.PROPERTY_FILTER_EXPRESSION, "Filter Expression");
+		filterExpression.setDescription("Boolean expression used to filter the rows of a data source. ");
+		desc.add(filterExpression);
+
 		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, EnumHelper.getValue(
 				WhenResourceMissingTypeEnum.NULL, 1, false));
 	}
+
+	private MQuery mQuery;
+	private MExpression mExpression;
 
 	/*
 	 * (non-Javadoc)
@@ -185,10 +212,22 @@ public class MDataset extends APropertyNode implements IPropertySource {
 		if (id.equals(JRDesignDataset.PROPERTY_NAME))
 			return jrDataset.getName();
 
-		if (id.equals(JRDesignDataset.PROPERTY_QUERY))
-			return jrDataset.getQuery();
+		if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
+			if (mQuery == null)
+				mQuery = new MQuery(jrDataset.getQuery());
+			return mQuery;
+		}
+		if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrDataset.getFilterExpression());
+			return mExpression;
+		}
 		if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			return jrDataset.getScriptletClass();
+		if (id.equals(PROPERTY_MAP))
+			return jrDataset.getPropertiesMap();
+		if (id.equals(JRDesignDataset.PROPERTY_SORT_FIELDS))
+			return jrDataset.getSortFieldsList();
 		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
 			return EnumHelper.getValue(jrDataset.getWhenResourceMissingTypeValue(), 1, false);
 		if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
@@ -211,11 +250,20 @@ public class MDataset extends APropertyNode implements IPropertySource {
 			jrDataset.setResourceBundle((String) value);
 		else if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			jrDataset.setScriptletClass((String) value);
+		else if (id.equals(JRDesignDataset.PROPERTY_SORT_FIELDS)) {
+			// TODO: ... SHOULD DO IN DIALOG
+		}
+
 		else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
 			jrDataset.setWhenResourceMissingType((WhenResourceMissingTypeEnum) EnumHelper.getSetValue(
 					WhenResourceMissingTypeEnum.values(), value, 1, false));
 		else if (id.equals(JRDesignDataset.PROPERTY_QUERY))
-			jrDataset.setQuery((JRDesignQuery) value);
+			;// jrDataset.setQuery((JRDesignQuery) value);
+	}
+
+	@Override
+	public String toString() {
+		return getDisplayText();
 	}
 
 	/**

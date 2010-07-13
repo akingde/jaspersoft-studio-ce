@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -42,17 +43,21 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -153,6 +158,9 @@ public class MStyle extends APropertyNode {
 		defaultsMap = defaultsMap1;
 	}
 
+	private static final String LINE_PEN = "LinePen";
+	private static final String LINE_BOX = "LineBox";
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -163,6 +171,15 @@ public class MStyle extends APropertyNode {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, "Name");
 		nameD.setDescription("Name of the report style definition.");
 		desc.add(nameD);
+
+		JRExpressionPropertyDescriptor linePenD = new JRExpressionPropertyDescriptor(LINE_PEN, "Line Pen");
+		linePenD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		desc.add(linePenD);
+
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, "Line Box");
+		lineBoxD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		desc.add(lineBoxD);
+		lineBoxD.setCategory("Graphic");
 
 		ColorPropertyDescriptor forecolorD = new ColorPropertyDescriptor(JRDesignStyle.PROPERTY_FORECOLOR, "Forecolor",
 				NullEnum.INHERITED);
@@ -246,16 +263,28 @@ public class MStyle extends APropertyNode {
 		desc.add(defaultD);
 
 		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP, "Markup",
-				ModelUtils.getMarkups());
+				ModelUtils.getMarkups(), NullEnum.INHERITED);
 		markupD
 				.setDescription("Specifies the name of the markup language used to embed style information into the text content. Supported values are none (plain text), styled (styled text), rtf (RTF format) and html (HTML format), but any custom made markup language can be used as long as there is a net.sf.jasperreports.engine.util.MarkupProcessorFactory implementation specified using a net.sf.jasperreports.markup.processor.factory.{markup} configuration property.");
 		desc.add(markupD);
+
+		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME,
+				"Font Name", ModelUtils.getFontNames(), NullEnum.INHERITED);
+		fontNameD.setDescription("Name of the font.");
+		desc.add(fontNameD);
+
+		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
+				"Font Size", ModelUtils.getFontSizes(), NullEnum.INHERITED);
+		fontSizeD.setDescription("Size of the font.");
+		fontSizeD.setValidator(new IntegerCellEditorValidator());
+		desc.add(fontSizeD);
 
 		forecolorD.setCategory("Common");
 		backcolorD.setCategory("Common");
 		modeD.setCategory("Common");
 
 		halignD.setCategory("Graphic");
+		linePenD.setCategory("Graphic");
 		valignD.setCategory("Graphic");
 		radiusD.setCategory("Graphic");
 		scaleD.setCategory("Graphic");
@@ -266,6 +295,8 @@ public class MStyle extends APropertyNode {
 		rotationD.setCategory("Text");
 		markupD.setCategory("Text");
 
+		fontNameD.setCategory("Text Font");
+		fontSizeD.setCategory("Text Font");
 		boldD.setCategory("Text Font");
 		italicD.setCategory("Text Font");
 		underlineD.setCategory("Text Font");
@@ -287,7 +318,11 @@ public class MStyle extends APropertyNode {
 		defaultsMap.put(JRDesignStyle.PROPERTY_UNDERLINE, Boolean.FALSE);
 		defaultsMap.put(JRDesignStyle.PROPERTY_ITALIC, Boolean.FALSE);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BOLD, Boolean.FALSE);
+		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_NAME, "SansSerif");
+		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_SIZE, "10");
 	}
+
+	private MLinePen linePen;
 
 	/*
 	 * (non-Javadoc)
@@ -307,10 +342,19 @@ public class MStyle extends APropertyNode {
 
 		}
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
+		if (id.equals(LINE_PEN)) {
+			if (linePen == null)
+				linePen = new MLinePen(jrstyle.getLinePen());
+			return linePen;
+		}
+		if (id.equals(LINE_BOX)) {
+			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
+			return jrGraphicElement.getLineBox();
+		}
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
 			return jrstyle.getOwnRadius();
 		if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
-			return jrstyle.getMarkup();
+			return jrstyle.getOwnMarkup();
 		if (id.equals(JRDesignStyle.PROPERTY_FORECOLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrstyle.getOwnForecolor());
 		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))
@@ -341,6 +385,10 @@ public class MStyle extends APropertyNode {
 			return jrstyle.isOwnItalic();
 		if (id.equals(JRDesignStyle.PROPERTY_BOLD))
 			return jrstyle.isOwnBold();
+		if (id.equals(JRDesignStyle.PROPERTY_FONT_NAME))
+			return jrstyle.getOwnFontName();
+		if (id.equals(JRDesignStyle.PROPERTY_FONT_SIZE))
+			return jrstyle.getOwnFontSize() != null ? jrstyle.getOwnFontSize().toString() : "";
 
 		return null;
 	}
@@ -397,6 +445,10 @@ public class MStyle extends APropertyNode {
 			jrstyle.setItalic((Boolean) value);
 		else if (id.equals(JRDesignStyle.PROPERTY_BOLD))
 			jrstyle.setBold((Boolean) value);
+		else if (id.equals(JRDesignStyle.PROPERTY_FONT_NAME))
+			jrstyle.setFontName((String) value);
+		else if (id.equals(JRDesignStyle.PROPERTY_FONT_SIZE))
+			jrstyle.setFontSize(new Integer((String) value));
 	}
 
 	/**

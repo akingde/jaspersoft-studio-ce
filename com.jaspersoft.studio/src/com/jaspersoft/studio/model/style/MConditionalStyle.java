@@ -31,11 +31,12 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 /**
  * The Class MConditionalStyle.
@@ -146,7 +147,7 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 		}
 		desc.removeAll(toRemove);
 
-		TextPropertyDescriptor conditionalExpressionD = new TextPropertyDescriptor(
+		JRExpressionPropertyDescriptor conditionalExpressionD = new JRExpressionPropertyDescriptor(
 				JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION, "Conditional expression");
 		conditionalExpressionD.setCategory("Conditional Style");
 		conditionalExpressionD
@@ -154,6 +155,8 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 		desc.add(conditionalExpressionD);
 
 	}
+
+	private MExpression mExpression;
 
 	/*
 	 * (non-Javadoc)
@@ -163,8 +166,11 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignConditionalStyle jrstyle = (JRDesignConditionalStyle) getValue();
-		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION))
-			return jrstyle.getConditionExpression();
+		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrstyle.getConditionExpression());
+			return mExpression;
+		}
 		return super.getPropertyValue(id);
 	}
 
@@ -177,7 +183,7 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignConditionalStyle jrstyle = (JRDesignConditionalStyle) getValue();
 		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION))
-			jrstyle.setConditionExpression(null);
+			;//jrstyle.setConditionExpression(null);
 		else
 			super.setPropertyValue(id, value);
 	}

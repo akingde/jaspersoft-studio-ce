@@ -141,7 +141,7 @@ public class MVariableSystem extends APropertyNode implements IPropertySource {
 		desc.add(nameD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,
-				"Class");
+				"Value Class Name");
 		classD.setDescription("Class of the variable values.");
 		desc.add(classD);
 		

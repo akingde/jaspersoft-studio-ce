@@ -42,7 +42,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 /**
  * The Class MChart.
  */
-public class MChart extends MGraphicElement {
+public class MChart extends MGraphicElementLineBox {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

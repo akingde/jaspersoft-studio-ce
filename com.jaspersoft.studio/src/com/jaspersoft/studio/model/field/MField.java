@@ -36,6 +36,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -131,6 +132,8 @@ public class MField extends APropertyNode implements IPropertySource {
 		defaultsMap = defaultsMap1;
 	}
 
+	private static final String PROPERTY_MAP = "PROPERTY_MAP";
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -138,6 +141,10 @@ public class MField extends APropertyNode implements IPropertySource {
 	 *          the desc
 	 */
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, "Properties");
+		propertiesD.setDescription("Dataset properties");
+		desc.add(propertiesD);
+
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignField.PROPERTY_NAME, "Name");
 		nameD.setDescription("Name of the field.");
 		desc.add(nameD);
@@ -147,7 +154,8 @@ public class MField extends APropertyNode implements IPropertySource {
 		classD.setDescription("Class of the field values.");
 		desc.add(classD);
 
-		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignField.PROPERTY_DESCRIPTION, "Description");
+		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignField.PROPERTY_DESCRIPTION,
+				"Description");
 		descriptionD
 				.setDescription("Can be used to specify a short text description for the field and is useful especially when creating special designed data sources and an extra information is needed in order to extract the value of the field.");
 		desc.add(descriptionD);
@@ -167,6 +175,8 @@ public class MField extends APropertyNode implements IPropertySource {
 			return jrField.getValueClassName();
 		if (id.equals(JRDesignField.PROPERTY_DESCRIPTION))
 			return jrField.getDescription();
+		if (id.equals(PROPERTY_MAP))
+			return jrField.getPropertiesMap();
 		return null;
 	}
 

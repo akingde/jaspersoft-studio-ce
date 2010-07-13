@@ -30,12 +30,14 @@ import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -109,11 +111,6 @@ public class MVariable extends MVariableSystem {
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		TextPropertyDescriptor descriptionD = new TextPropertyDescriptor(
-				JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, "Description");
-		descriptionD.setDescription("Description of variable.");
-		desc.add(descriptionD);
-
 		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_CALCULATION,
 				"Calculation", EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL));
 		calculationD
@@ -131,10 +128,31 @@ public class MVariable extends MVariableSystem {
 		incrementTypeD.setDescription("Increment level for variables that perform calculations.");
 		desc.add(incrementTypeD);
 
+		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(
+				JRDesignVariable.PROPERTY_EXPRESSION, "Expression");
+		expressionD
+				.setDescription("Definition of the expression associated with the variable. The value of this expression will be calculated at runtime and will represent the value of the corresponding variable or it will be used in calculation to obtain the value of the calculated variable.");
+		desc.add(expressionD);
+
+		JRExpressionPropertyDescriptor iniValExprD = new JRExpressionPropertyDescriptor(
+				JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION, "Initial Value Expression");
+		iniValExprD
+				.setDescription("Definition of the expression that will be used to calculate the initial value of the variable, before any calculations are made.");
+		desc.add(iniValExprD);
+
+		NClassTypePropertyDescriptor factoryClassName = new NClassTypePropertyDescriptor(
+				JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, "Incrementer Factory Class Name");
+		factoryClassName
+				.setDescription("The name of a class that implements the net.sf.jasperreports.engine.fill.JRIncrementerFactory interface to use when creating the incrementer instance for this variable. Incrementers are objects that implement the net.sf.jasperreports.engine.fill.JRIncrementer interface and handle the incremental calculation performed on the variable's current value with every iteration in the data source.");
+		desc.add(factoryClassName);
+
 		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, EnumHelper.getValue(CalculationEnum.NOTHING, 0, false));
 		defaultsMap.put(JRDesignVariable.PROPERTY_RESET_TYPE, EnumHelper.getValue(ResetTypeEnum.REPORT, 1, false));
 		defaultsMap.put(JRDesignVariable.PROPERTY_INCREMENT_TYPE, EnumHelper.getValue(IncrementTypeEnum.NONE, 1, false));
 	}
+
+	private MExpression mExpression;
+	private MExpression mIniValExpression;
 
 	/*
 	 * (non-Javadoc)
@@ -153,6 +171,18 @@ public class MVariable extends MVariableSystem {
 			return EnumHelper.getValue(jrVariable.getResetTypeValue(), 1, false);
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE))
 			return EnumHelper.getValue(jrVariable.getIncrementTypeValue(), 1, false);
+		if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
+			return jrVariable.getIncrementerFactoryClassName();
+		if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrVariable.getExpression());
+			return mExpression;
+		}
+		if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION)) {
+			if (mIniValExpression == null)
+				mIniValExpression = new MExpression(jrVariable.getInitialValueExpression());
+			return mIniValExpression;
+		}
 		return null;
 	}
 
@@ -167,11 +197,13 @@ public class MVariable extends MVariableSystem {
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
 		if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
 			jrVariable.setCalculation((CalculationEnum) EnumHelper.getSetValue(CalculationEnum.values(), value, 0, false));
-		if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE))
+		else if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE))
 			jrVariable.setResetType((ResetTypeEnum) EnumHelper.getSetValue(ResetTypeEnum.values(), value, 1, false));
-		if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE))
+		else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE))
 			jrVariable.setIncrementType((IncrementTypeEnum) EnumHelper.getSetValue(IncrementTypeEnum.values(), value, 1,
 					false));
+		else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
+			jrVariable.setIncrementerFactoryClassName((String) value);
 	}
 
 	/**

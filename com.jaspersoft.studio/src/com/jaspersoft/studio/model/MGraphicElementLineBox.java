@@ -22,29 +22,29 @@ package com.jaspersoft.studio.model;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 
 /**
  * The Class MGeneric.
  */
-public abstract class MGraphicElementLinePen extends MGraphicElement implements IGraphicElement {
+public abstract class MGraphicElementLineBox extends MGraphicElement implements IGraphicElement {
 
-	private static final String LINE_PEN = "LinePen";
+	private static final String LINE_BOX = "LineBox";
 
-	public MGraphicElementLinePen() {
+	public MGraphicElementLineBox() {
 		super();
 	}
 
-	public MGraphicElementLinePen(ANode parent, int newIndex) {
+	public MGraphicElementLineBox(ANode parent, int newIndex) {
 		super(parent, newIndex);
 	}
 
-	public MGraphicElementLinePen(ANode parent, JRDesignElement jrLine, int newIndex) {
+	public MGraphicElementLineBox(ANode parent, JRDesignElement jrLine, int newIndex) {
 		super(parent, jrLine, newIndex);
 	}
 
@@ -52,10 +52,10 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		JRExpressionPropertyDescriptor linePenD = new JRExpressionPropertyDescriptor(LINE_PEN, "Line Pen");
-		linePenD.setDescription("Groups the properties of the pen used to draw lines or borders.");
-		desc.add(linePenD);
-		linePenD.setCategory("Graphic");
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, "Line Box");
+		lineBoxD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		desc.add(lineBoxD);
+		lineBoxD.setCategory("Graphic");
 	}
 
 	private MLinePen linePen;
@@ -68,11 +68,9 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 	@Override
 	public Object getPropertyValue(Object id) {
 		// pen
-		if (id.equals(LINE_PEN)) {
-			JRDesignGraphicElement jrGraphicElement = (JRDesignGraphicElement) getValue();
-			if (linePen == null)
-				linePen = new MLinePen(jrGraphicElement.getLinePen());
-			return linePen;
+		if (id.equals(LINE_BOX)) {
+			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
+			return jrGraphicElement.getLineBox();
 		}
 		return super.getPropertyValue(id);
 	}
@@ -84,7 +82,7 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if (id.equals(LINE_PEN)) {
+		if (id.equals(LINE_BOX)) {
 			;
 		}
 		super.setPropertyValue(id, value);

@@ -17,28 +17,40 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.combo;
+package com.jaspersoft.studio.property.descriptor.properties;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.DialogCellEditor;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 
-import com.jaspersoft.studio.property.descriptor.NullEnum;
+public class JPropertiesCellEditor extends DialogCellEditor {
 
-/**
- * @author Chicu Veaceslav
- * 
- */
-public class RWComboBoxLabelProvider extends LabelProvider {
-	private NullEnum canBeNull;
-	public RWComboBoxLabelProvider(String[] labels, NullEnum canBeNull) {
-		super();
-		this.canBeNull = canBeNull;
+	public JPropertiesCellEditor(Composite parent) {
+		super(parent);
+	}
+
+	public JPropertiesCellEditor(Composite parent, int style) {
+		super(parent, style);
 	}
 
 	@Override
-	public String getText(Object element) {
-		if(element == null)
-			return canBeNull.getName();
-		return element.toString();
+	protected Object openDialogBox(Control cellEditorWindow) {
+		Shell shell = cellEditorWindow.getShell();
+		// TODO put a dialog here
+		return null;
 	}
 
+	private JPropertiesLabelProvider labelProvider;
+
+	@Override
+	protected void updateContents(Object value) {
+		if (getDefaultLabel() == null) {
+			return;
+		}
+		if (labelProvider == null)
+			labelProvider = new JPropertiesLabelProvider();
+		String text = labelProvider.getText(value);
+		getDefaultLabel().setText(text);
+	}
 }

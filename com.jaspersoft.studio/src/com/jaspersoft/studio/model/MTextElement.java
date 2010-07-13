@@ -34,13 +34,14 @@ import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public abstract class MTextElement extends MGraphicElement {
+public abstract class MTextElement extends MGraphicElementLineBox {
 
 	public MTextElement() {
 		super();
@@ -59,7 +60,7 @@ public abstract class MTextElement extends MGraphicElement {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP, "Markup",
-				ModelUtils.getMarkups());
+				ModelUtils.getMarkups(), NullEnum.INHERITED);
 		markupD
 				.setDescription("Specifies the name of the markup language used to embed style information into the text content. Supported values are none (plain text), styled (styled text), rtf (RTF format) and html (HTML format), but any custom made markup language can be used as long as there is a net.sf.jasperreports.engine.util.MarkupProcessorFactory implementation specified using a net.sf.jasperreports.markup.processor.factory.{markup} configuration property.");
 		desc.add(markupD);
@@ -104,15 +105,29 @@ public abstract class MTextElement extends MGraphicElement {
 		boldD.setDescription("Flag indicating if the font is bold.");
 		desc.add(boldD);
 
+		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME,
+				"Font Name", ModelUtils.getFontNames(), NullEnum.INHERITED);
+		fontNameD.setDescription("Name of the font.");
+		desc.add(fontNameD);
+
+		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
+				"Font Size", ModelUtils.getFontSizes(), NullEnum.INHERITED);
+		fontSizeD.setDescription("Size of the font.");
+		fontSizeD.setValidator(new IntegerCellEditorValidator());
+		desc.add(fontSizeD);
+
 		markupD.setCategory("Text Properties");
 		hAlignD.setCategory("Text Properties");
 		vAlignD.setCategory("Text Properties");
 		rotationD.setCategory("Text Properties");
 		lineSpacingD.setCategory("Text Properties");
-		strikeThroughD.setCategory("Text Properties");
-		underlineD.setCategory("Text Properties");
-		italicD.setCategory("Text Properties");
-		boldD.setCategory("Text Properties");
+
+		fontNameD.setCategory("Text Font");
+		fontSizeD.setCategory("Text Font");
+		boldD.setCategory("Text Font");
+		italicD.setCategory("Text Font");
+		underlineD.setCategory("Text Font");
+		strikeThroughD.setCategory("Text Font");
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
@@ -123,6 +138,8 @@ public abstract class MTextElement extends MGraphicElement {
 		defaultsMap.put(JRDesignStyle.PROPERTY_UNDERLINE, Boolean.FALSE);
 		defaultsMap.put(JRDesignStyle.PROPERTY_ITALIC, Boolean.FALSE);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BOLD, Boolean.FALSE);
+		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_NAME, "SansSerif");
+		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_SIZE, "10");
 	}
 
 	@Override
@@ -130,7 +147,7 @@ public abstract class MTextElement extends MGraphicElement {
 		JRDesignTextElement jrElement = (JRDesignTextElement) getValue();
 
 		if (id.equals(JRDesignStyle.PROPERTY_MARKUP))
-			return jrElement.getMarkup();
+			return jrElement.getOwnMarkup();
 
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
 			return EnumHelper.getValue(jrElement.getOwnHorizontalAlignmentValue(), 1, true);
@@ -149,7 +166,10 @@ public abstract class MTextElement extends MGraphicElement {
 			return jrElement.isOwnItalic();
 		if (id.equals(JRDesignStyle.PROPERTY_BOLD))
 			return jrElement.isOwnBold();
-
+		if (id.equals(JRDesignStyle.PROPERTY_FONT_NAME))
+			return jrElement.getOwnFontName();
+		if (id.equals(JRDesignStyle.PROPERTY_FONT_SIZE))
+			return jrElement.getOwnFontSize() != null ? jrElement.getOwnFontSize().toString() : "";
 		return super.getPropertyValue(id);
 	}
 
@@ -178,6 +198,10 @@ public abstract class MTextElement extends MGraphicElement {
 			jrElement.setItalic((Boolean) value);
 		else if (id.equals(JRDesignStyle.PROPERTY_BOLD))
 			jrElement.setBold((Boolean) value);
+		else if (id.equals(JRDesignStyle.PROPERTY_FONT_NAME))
+			jrElement.setFontName((String) value);
+		else if (id.equals(JRDesignStyle.PROPERTY_FONT_SIZE))
+			jrElement.setFontSize(new Integer((String) value));
 		else
 			super.setPropertyValue(id, value);
 	}

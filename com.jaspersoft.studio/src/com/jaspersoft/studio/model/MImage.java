@@ -48,7 +48,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 /**
  * The Class MImage.
  */
-public class MImage extends MGraphicElement {
+public class MImage extends MGraphicElementLineBox {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
