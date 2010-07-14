@@ -27,7 +27,7 @@ import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
 
 /**
  * The Class MGeneric.
@@ -52,7 +52,7 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		JRExpressionPropertyDescriptor linePenD = new JRExpressionPropertyDescriptor(LINE_PEN, "Line Pen");
+		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, "Line Pen");
 		linePenD.setDescription("Groups the properties of the pen used to draw lines or borders.");
 		desc.add(linePenD);
 		linePenD.setCategory("Graphic");

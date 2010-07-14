@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.variable;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.CalculationEnum;
@@ -35,8 +36,10 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
+import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -111,6 +114,11 @@ public class MVariable extends MVariableSystem {
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
+		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP, "Reset Group",
+				new String[] { "" }, NullEnum.NULL);
+		resetGroupD.setDescription("Reset group name.");
+		desc.add(resetGroupD);
+
 		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_CALCULATION,
 				"Calculation", EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL));
 		calculationD
@@ -153,6 +161,7 @@ public class MVariable extends MVariableSystem {
 
 	private MExpression mExpression;
 	private MExpression mIniValExpression;
+	private RWComboBoxPropertyDescriptor resetGroupD;
 
 	/*
 	 * (non-Javadoc)
@@ -165,6 +174,23 @@ public class MVariable extends MVariableSystem {
 		Object s = super.getPropertyValue(id);
 		if (s != null)
 			return s;
+		if (id.equals(JRDesignVariable.PROPERTY_RESET_GROUP)) {
+			if (jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP) && resetGroupD != null) {
+				JRDesignDataset jrDataset = getDataSet();
+				JRGroup[] groups = jrDataset.getGroups();
+				if (groups != null) {
+					String[] items = new String[groups.length + 1];
+					items[0] = "";
+					for (int j = 0; j < groups.length; j++) {
+						items[j + 1] = groups[j].getName();
+					}
+					resetGroupD.setItems(items);
+					if (jrVariable.getResetGroup() != null)
+						return jrVariable.getResetGroup().getName();
+				}
+			}
+			return "";
+		}
 		if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
 			return EnumHelper.getValue(jrVariable.getCalculationValue(), 0, false);
 		if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE))
@@ -195,15 +221,43 @@ public class MVariable extends MVariableSystem {
 	public void setPropertyValue(Object id, Object value) {
 		super.setPropertyValue(id, value);
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
-		if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
+		if (id.equals(JRDesignVariable.PROPERTY_RESET_GROUP)) {
+			if (!value.equals("") && jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP)) {
+				JRDesignDataset jrDataset = getDataSet();
+				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
+				jrVariable.setResetGroup(group);
+			}
+		} else if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
 			jrVariable.setCalculation((CalculationEnum) EnumHelper.getSetValue(CalculationEnum.values(), value, 0, false));
-		else if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE))
+		else if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE)) {
 			jrVariable.setResetType((ResetTypeEnum) EnumHelper.getSetValue(ResetTypeEnum.values(), value, 1, false));
-		else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE))
+			if (!jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP))
+				jrVariable.setResetGroup(null);
+		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE))
 			jrVariable.setIncrementType((IncrementTypeEnum) EnumHelper.getSetValue(IncrementTypeEnum.values(), value, 1,
 					false));
 		else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
 			jrVariable.setIncrementerFactoryClassName((String) value);
+	}
+
+	private JRDesignDataset dataset;
+
+	protected JRDesignDataset getDataSet() {
+		if (dataset != null)
+			return dataset;
+		ANode n = (ANode) getParent();
+		while (true) {
+			if (n == null)
+				break;
+			else if (n instanceof MDataset) {
+				dataset = (JRDesignDataset) ((MDataset) n).getValue();
+				break;
+			}
+			n = (ANode) n.getParent();
+		}
+		if (dataset == null)
+			dataset = getJasperDesign().getMainDesignDataset();
+		return dataset;
 	}
 
 	/**

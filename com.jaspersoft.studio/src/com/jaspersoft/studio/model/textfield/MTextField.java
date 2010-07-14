@@ -36,10 +36,13 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MTextElement;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
@@ -130,6 +133,17 @@ public class MTextField extends MTextElement {
 				.setDescription("	Instructs the report engine to allow the text field to stretch downwards in order to display all its text when it doesn't fit in the defined text field height.");
 		desc.add(stretchOverflowD);
 
+		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(JRDesignTextField.PROPERTY_EXPRESSION,
+				"Expression");
+		exprD.setDescription("Defines the expression to use for this textField.");
+		desc.add(exprD);
+
+		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN, "Pattern");
+		patternD.setDescription("Pattern to use when formatting the output of the text field expression.");
+		desc.add(patternD);
+
+		patternD.setCategory("TextField Properties");
+		exprD.setCategory("TextField Properties");
 		evaluationTimeD.setCategory("TextField Properties");
 		blankWhenNullD.setCategory("TextField Properties");
 		stretchOverflowD.setCategory("TextField Properties");
@@ -138,15 +152,24 @@ public class MTextField extends MTextElement {
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);
 	}
 
+	private MExpression mExpression;
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
+		if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrElement.getExpression());
+			return mExpression;
+		}
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(jrElement.getEvaluationTimeValue());
 		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrElement.isOwnBlankWhenNull();
 		if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
 			return new Boolean(jrElement.isStretchWithOverflow());
+		if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
+			return jrElement.getOwnPattern();
 		return super.getPropertyValue(id);
 	}
 
@@ -154,7 +177,9 @@ public class MTextField extends MTextElement {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 
-		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
+		if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
+			jrElement.setPattern((String) value);
+		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime(EvaluationTimeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
 		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrElement.setBlankWhenNull((Boolean) value);

@@ -29,6 +29,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor {
 	private String[] labels;
 	private NullEnum canBeNull;
+	private RWComboBoxCellEditor cellEditor;
 
 	public RWComboBoxPropertyDescriptor(Object id, String displayName, String[] labelsArray, NullEnum canBeNull) {
 		super(id, displayName, labelsArray);
@@ -38,11 +39,11 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor {
 
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
-		CellEditor editor = new RWComboBoxCellEditor(parent, labels);
+		cellEditor = new RWComboBoxCellEditor(parent, labels);
 		if (getValidator() != null) {
-			editor.setValidator(getValidator());
+			cellEditor.setValidator(getValidator());
 		}
-		return editor;
+		return cellEditor;
 	}
 
 	public ILabelProvider getLabelProvider() {
@@ -50,5 +51,11 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor {
 			return super.getLabelProvider();
 		}
 		return new RWComboBoxLabelProvider(labels, canBeNull);
+	}
+
+	public void setItems(String[] items) {
+		labels = items;
+		if (cellEditor != null)
+			cellEditor.setItems(items);
 	}
 }

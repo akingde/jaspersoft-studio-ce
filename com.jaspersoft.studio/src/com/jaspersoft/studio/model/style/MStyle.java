@@ -57,7 +57,8 @@ import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -161,6 +162,21 @@ public class MStyle extends APropertyNode {
 	private static final String LINE_PEN = "LinePen";
 	private static final String LINE_BOX = "LineBox";
 
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		if (styleD != null) {
+			JRDesignStyle jrElement = (JRDesignStyle) getValue();
+			JRStyle[] styles = getJasperDesign().getStyles();
+			String[] items = new String[styles.length];
+			items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : "";
+			for (int j = 0; j < styles.length; j++) {
+				if (jrElement != styles[j])
+					items[j + 1] = styles[j].getName();
+			}
+			styleD.setItems(items);
+		}
+	}
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -168,11 +184,17 @@ public class MStyle extends APropertyNode {
 	 *          the desc
 	 */
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, "Parent Style", new String[] { "" },
+				NullEnum.NULL);
+		styleD.setDescription("Name of the report level style to use as base style (see <style> element).");
+		desc.add(styleD);
+
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, "Name");
 		nameD.setDescription("Name of the report style definition.");
 		desc.add(nameD);
 
-		JRExpressionPropertyDescriptor linePenD = new JRExpressionPropertyDescriptor(LINE_PEN, "Line Pen");
+		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, "Line Pen");
 		linePenD.setDescription("Groups the properties of the pen used to draw lines or borders.");
 		desc.add(linePenD);
 
@@ -279,6 +301,10 @@ public class MStyle extends APropertyNode {
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
 
+		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN, "Pattern");
+		patternD.setDescription("Pattern to use when formatting the output of the text field expression.");
+		desc.add(patternD);
+
 		forecolorD.setCategory("Common");
 		backcolorD.setCategory("Common");
 		modeD.setCategory("Common");
@@ -290,6 +316,7 @@ public class MStyle extends APropertyNode {
 		scaleD.setCategory("Graphic");
 		fillD.setCategory("Graphic");
 
+		patternD.setCategory("Text");
 		blankWhenNullD.setCategory("Text");
 		lineSpacingD.setCategory("Text");
 		rotationD.setCategory("Text");
@@ -323,6 +350,7 @@ public class MStyle extends APropertyNode {
 	}
 
 	private MLinePen linePen;
+	private RWComboBoxPropertyDescriptor styleD;
 
 	/*
 	 * (non-Javadoc)
@@ -339,7 +367,13 @@ public class MStyle extends APropertyNode {
 				return jrstyle.getName();
 			if (id.equals(JRDesignStyle.PROPERTY_DEFAULT))
 				return new Boolean(jrstyle.isDefault());
-
+			if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
+				if (jrstyle.getStyleNameReference() != null)
+					return jrstyle.getStyleNameReference();
+				if (jrstyle.getStyle() != null)
+					return jrstyle.getStyle().getName();
+				return "";
+			}
 		}
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
 		if (id.equals(LINE_PEN)) {
@@ -347,10 +381,13 @@ public class MStyle extends APropertyNode {
 				linePen = new MLinePen(jrstyle.getLinePen());
 			return linePen;
 		}
+
 		if (id.equals(LINE_BOX)) {
 			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
 			return jrGraphicElement.getLineBox();
 		}
+		if (id.equals(JRBaseStyle.PROPERTY_PATTERN))
+			return jrstyle.getOwnPattern();
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
 			return jrstyle.getOwnRadius();
 		if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
@@ -404,9 +441,22 @@ public class MStyle extends APropertyNode {
 			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
 			if (id.equals(JRDesignStyle.PROPERTY_NAME))
 				jrstyle.setName((String) value);
+			if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
+				jrstyle.setPattern((String) value);
 			else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT))
 				jrstyle.setDefault(((Boolean) value).booleanValue());
-
+			else if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
+				if (!value.equals("")) {
+					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
+					if (style != null) {
+						jrstyle.setParentStyle(style);
+						jrstyle.setParentStyleNameReference(null);
+					} else {
+						jrstyle.setParentStyleNameReference((String) value);
+						jrstyle.setParentStyle(null);
+					}
+				}
+			}
 		}
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
 		if (id.equals(JRDesignStyle.PROPERTY_RADIUS))

@@ -42,7 +42,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
@@ -114,9 +114,10 @@ public class MImage extends MGraphicElementLineBox {
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ClassTypePropertyDescriptor expressionD = new ClassTypePropertyDescriptor(JRDesignImage.PROPERTY_EXPRESSION,
+		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignImage.PROPERTY_EXPRESSION,
 				"Expression");
-		expressionD.setDescription("Class of the image source.");
+		expressionD
+				.setDescription("Definition of the expression that will be used to determine the image to be displayed.");
 		desc.add(expressionD);
 
 		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, "Fill", EnumHelper
@@ -181,6 +182,8 @@ public class MImage extends MGraphicElementLineBox {
 		defaultsMap.put(JRBaseImage.PROPERTY_LAZY, Boolean.FALSE);
 	}
 
+	private MExpression mExpression;
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignImage jrElement = (JRDesignImage) getValue();
@@ -197,8 +200,11 @@ public class MImage extends MGraphicElementLineBox {
 			return EnumHelper.getValue(jrElement.getOnErrorTypeValue());
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(jrElement.getEvaluationTimeValue());
-		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
-			return jrElement.getExpression();
+		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrElement.getExpression());
+			return mExpression;
+		}
 
 		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
 			return jrElement.isOwnUsingCache();

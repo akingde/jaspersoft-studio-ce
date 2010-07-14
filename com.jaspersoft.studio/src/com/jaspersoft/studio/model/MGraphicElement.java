@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -44,6 +46,10 @@ import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -214,6 +220,31 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 		defaultsMap = defaultsMap1;
 	}
 
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		// initialize style
+		if (styleD != null) {
+			JRDesignElement jrElement = (JRDesignElement) getValue();
+			JRStyle[] styles = getJasperDesign().getStyles();
+			String[] items = new String[styles.length + 1];
+			items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : "";
+			for (int j = 0; j < styles.length; j++) {
+				items[j + 1] = styles[j].getName();
+			}
+			styleD.setItems(items);
+		}
+		// initialize groups
+		if (groupChangesD != null) {
+			JRGroup[] groups = getJasperDesign().getGroups();
+			String[] items = new String[groups.length + 1];
+			items[0] = "";
+			for (int j = 0; j < groups.length; j++) {
+				items[j + 1] = groups[j].getName();
+			}
+			groupChangesD.setItems(items);
+		}
+	}
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -221,6 +252,15 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 	 *          the desc
 	 */
 	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, "Parent Style",
+				new String[] { "" }, NullEnum.NULL);
+		styleD.setDescription("Name of the report level style to use as base style (see <style> element).");
+		desc.add(styleD);
+
+		groupChangesD = new RComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES,
+				"Print When Group Changes", new String[] { "" });
+		groupChangesD.setDescription("The element will be printed when the specified group changes.");
+		desc.add(groupChangesD);
 
 		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY, "Key");
 		keyD
@@ -299,12 +339,24 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 		printWhenDetailOverflowsD
 				.setDescription("The element will be printed when the band overflows to a new page or a new column.");
 		desc.add(printWhenDetailOverflowsD);
-		
+
+		JRExpressionPropertyDescriptor printWhenExprD = new JRExpressionPropertyDescriptor(
+				JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, "Print When Expression");
+		printWhenExprD
+				.setDescription("Definition of a Boolean expression that will determine if the element or the band should be printed or not.");
+		desc.add(printWhenExprD);
+
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(
+				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, "Property Expressions");
+		propertiesD
+				.setDescription("Allows the creation of a dynamic name-value pair property for a report element. The contents of this element is interpreted as a java.lang.String expression, which will be evaluated at fill time, the result being used as property value.");
+		desc.add(propertiesD);
+
 		forecolorD.setCategory("Graphic");
 		backcolorD.setCategory("Graphic");
 		opaqueD.setCategory("Graphic");
-		
 
+		defaultsMap.put(JRDesignElement.PROPERTY_PARENT_STYLE, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
 
@@ -318,6 +370,10 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, Boolean.FALSE);
 	}
 
+	private MExpression mExpression;
+	private RWComboBoxPropertyDescriptor styleD;
+	private RComboBoxPropertyDescriptor groupChangesD;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -328,6 +384,25 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 		JRDesignElement jrElement = (JRDesignElement) getValue();
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
 			return jrElement.getKey();
+		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrElement.getPrintWhenExpression());
+			return mExpression;
+		}
+		if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
+			if (jrElement.getStyleNameReference() != null)
+				return jrElement.getStyleNameReference();
+			if (jrElement.getStyle() != null)
+				return jrElement.getStyle().getName();
+			return "";
+		}
+		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
+			if (jrElement.getPrintWhenGroupChanges() != null)
+				return jrElement.getPrintWhenGroupChanges().getName();
+			return "";
+		}
+		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS))
+			return jrElement.getPropertyExpressions();
 		if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
 			return new Integer(jrElement.getHeight());
 		if (id.equals(JRDesignElement.PROPERTY_WIDTH))
@@ -371,7 +446,23 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 		JRDesignElement jrElement = (JRDesignElement) getValue();
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
 			jrElement.setKey((String) value);
-		else if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
+		else if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
+			if (!value.equals("")) {
+				JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
+				if (style != null) {
+					jrElement.setStyle(style);
+					jrElement.setStyleNameReference(null);
+				} else {
+					jrElement.setStyleNameReference((String) value);
+					jrElement.setStyle(null);
+				}
+			}
+		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
+			if (!value.equals("")) {
+				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
+				jrElement.setPrintWhenGroupChanges(group);
+			}
+		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
 			jrElement.setHeight(((Integer) value).intValue());
 		else if (id.equals(JRDesignElement.PROPERTY_WIDTH))
 			jrElement.setWidth(((Integer) value).intValue());

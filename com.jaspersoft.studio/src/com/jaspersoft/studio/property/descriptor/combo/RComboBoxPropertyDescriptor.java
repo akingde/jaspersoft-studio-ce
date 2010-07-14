@@ -19,27 +19,41 @@
  */
 package com.jaspersoft.studio.property.descriptor.combo;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 
-import com.jaspersoft.studio.property.descriptor.NullEnum;
+public class RComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor {
+	private String[] labels;
+	private ComboBoxCellEditor cellEditor;
 
-/**
- * @author Chicu Veaceslav
- * 
- */
-public class RWComboBoxLabelProvider extends LabelProvider {
-	private NullEnum canBeNull;
-
-	public RWComboBoxLabelProvider(String[] labels, NullEnum canBeNull) {
-		super();
-		this.canBeNull = canBeNull;
+	public RComboBoxPropertyDescriptor(Object id, String displayName, String[] labelsArray) {
+		super(id, displayName, labelsArray);
+		labels = labelsArray;
 	}
 
 	@Override
-	public String getText(Object element) {
-		if (element == null || element.equals(""))
-			return canBeNull.getName();
-		return element.toString();
+	public CellEditor createPropertyEditor(Composite parent) {
+		cellEditor = new RWComboBoxCellEditor(parent, labels, SWT.READ_ONLY);
+		if (getValidator() != null) {
+			cellEditor.setValidator(getValidator());
+		}
+		return cellEditor;
 	}
 
+	public ILabelProvider getLabelProvider() {
+		if (isLabelProviderSet()) {
+			return super.getLabelProvider();
+		}
+		return new RComboBoxLabelProvider(labels);
+	}
+
+	public void setItems(String[] items) {
+		labels = items;
+		if (cellEditor != null)
+			cellEditor.setItems(items);
+	}
 }

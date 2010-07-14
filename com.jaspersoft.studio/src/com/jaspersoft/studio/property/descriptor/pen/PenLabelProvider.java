@@ -17,29 +17,24 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.combo;
+package com.jaspersoft.studio.property.descriptor.pen;
 
 import org.eclipse.jface.viewers.LabelProvider;
-
-import com.jaspersoft.studio.property.descriptor.NullEnum;
 
 /**
  * @author Chicu Veaceslav
  * 
  */
-public class RWComboBoxLabelProvider extends LabelProvider {
-	private NullEnum canBeNull;
+public class PenLabelProvider extends LabelProvider {
 
-	public RWComboBoxLabelProvider(String[] labels, NullEnum canBeNull) {
+	public PenLabelProvider() {
 		super();
-		this.canBeNull = canBeNull;
 	}
 
 	@Override
 	public String getText(Object element) {
-		if (element == null || element.equals(""))
-			return canBeNull.getName();
-		return element.toString();
+		
+		return "";
 	}
 
 }

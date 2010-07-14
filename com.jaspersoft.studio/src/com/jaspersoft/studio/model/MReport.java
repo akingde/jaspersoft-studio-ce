@@ -308,12 +308,6 @@ public class MReport extends APropertyNode implements IGraphicElement {
 			return res;
 		}
 
-		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
-			return jrDesign.getScriptletClass();
-		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
-			return EnumHelper.getValue(jrDesign.getWhenResourceMissingTypeValue(), 1, false);
-		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET + "/" + JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
-			return jrDesign.getResourceBundle();
 		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET)) {
 			if (mDataset == null)
 				mDataset = new MDataset((JRDesignDataset) jrDesign.getMainDataset());
@@ -507,9 +501,13 @@ public class MReport extends APropertyNode implements IGraphicElement {
 			handleGroupChanged(evt);
 		}
 		PropertyChangeEvent newEvent = evt;
-		if (!(evt.getSource() instanceof MReport))
-			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-		getPropertyChangeSupport().firePropertyChange(newEvent);
+		if (evt.getSource() instanceof JRDesignElement) {
+
+		} else {
+			if (!(evt.getSource() instanceof MReport))
+				newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+			getPropertyChangeSupport().firePropertyChange(newEvent);
+		}
 	}
 
 	/**

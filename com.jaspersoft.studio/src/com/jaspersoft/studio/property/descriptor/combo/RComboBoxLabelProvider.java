@@ -27,18 +27,19 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
  * @author Chicu Veaceslav
  * 
  */
-public class RWComboBoxLabelProvider extends LabelProvider {
-	private NullEnum canBeNull;
+public class RComboBoxLabelProvider extends LabelProvider {
 
-	public RWComboBoxLabelProvider(String[] labels, NullEnum canBeNull) {
+	public RComboBoxLabelProvider(String[] labels) {
 		super();
-		this.canBeNull = canBeNull;
 	}
 
 	@Override
 	public String getText(Object element) {
-		if (element == null || element.equals(""))
-			return canBeNull.getName();
+		if (element instanceof String) {
+			if (element == null || element.equals(""))
+				return "";
+			return (String) element;
+		}
 		return element.toString();
 	}
 
