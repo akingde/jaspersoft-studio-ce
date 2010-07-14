@@ -99,8 +99,8 @@ public class FrameFigure extends GenericFigure {
 	protected Rectangle calcBorder(JRLineBox jrLineBox) {
 		int x = (int) Math.ceil(jrLineBox.getLeftPen().getLineWidth() / 2);
 		int y = (int) Math.ceil(jrLineBox.getTopPen().getLineWidth() / 2);
-		int w = (int) Math.ceil(jrLineBox.getRightPen().getLineWidth() / 2);
-		int h = (int) Math.ceil(jrLineBox.getBottomPen().getLineWidth() / 2);
+		int w = (int) Math.ceil(jrLineBox.getRightPen().getLineWidth() / 2) + 1;
+		int h = (int) Math.ceil(jrLineBox.getBottomPen().getLineWidth() / 2) + 1;
 		return new Rectangle(x, y, w, h);
 	}
 }
