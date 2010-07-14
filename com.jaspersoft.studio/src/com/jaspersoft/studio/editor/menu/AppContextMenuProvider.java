@@ -32,6 +32,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.dialogs.PropertyDialogAction;
 
 import com.jaspersoft.studio.editor.action.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.BringForwardAction;
@@ -186,6 +187,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_BOTTOM);
 		if (action.isEnabled())
 			submenu.add(action);
+		
 		//
 		// if (!submenu.isEmpty())
 		// menu.appendToGroup(GEFActionConstants.GROUP_REST, submenu);

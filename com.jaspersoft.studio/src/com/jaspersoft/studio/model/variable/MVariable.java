@@ -119,6 +119,12 @@ public class MVariable extends MVariableSystem {
 		resetGroupD.setDescription("Reset group name.");
 		desc.add(resetGroupD);
 
+		incrementGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_INCREMENT_GROUP, "Increment Group",
+				new String[] { "" }, NullEnum.NULL);
+		incrementGroupD
+				.setDescription("Name of the group at which the variable is incremented, when incrementType is \"Group\".");
+		desc.add(incrementGroupD);
+
 		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_CALCULATION,
 				"Calculation", EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL));
 		calculationD
@@ -162,6 +168,7 @@ public class MVariable extends MVariableSystem {
 	private MExpression mExpression;
 	private MExpression mIniValExpression;
 	private RWComboBoxPropertyDescriptor resetGroupD;
+	private RWComboBoxPropertyDescriptor incrementGroupD;
 
 	/*
 	 * (non-Javadoc)
@@ -187,6 +194,23 @@ public class MVariable extends MVariableSystem {
 					resetGroupD.setItems(items);
 					if (jrVariable.getResetGroup() != null)
 						return jrVariable.getResetGroup().getName();
+				}
+			}
+			return "";
+		}
+		if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
+			if (jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP) && incrementGroupD != null) {
+				JRDesignDataset jrDataset = getDataSet();
+				JRGroup[] groups = jrDataset.getGroups();
+				if (groups != null) {
+					String[] items = new String[groups.length + 1];
+					items[0] = "";
+					for (int j = 0; j < groups.length; j++) {
+						items[j + 1] = groups[j].getName();
+					}
+					incrementGroupD.setItems(items);
+					if (jrVariable.getIncrementGroup() != null)
+						return jrVariable.getIncrementGroup().getName();
 				}
 			}
 			return "";
@@ -227,16 +251,24 @@ public class MVariable extends MVariableSystem {
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setResetGroup(group);
 			}
+		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
+			if (!value.equals("") && jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP)) {
+				JRDesignDataset jrDataset = getDataSet();
+				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
+				jrVariable.setIncrementGroup(group);
+			}
 		} else if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
 			jrVariable.setCalculation((CalculationEnum) EnumHelper.getSetValue(CalculationEnum.values(), value, 0, false));
 		else if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE)) {
 			jrVariable.setResetType((ResetTypeEnum) EnumHelper.getSetValue(ResetTypeEnum.values(), value, 1, false));
 			if (!jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP))
 				jrVariable.setResetGroup(null);
-		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE))
+		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE)) {
 			jrVariable.setIncrementType((IncrementTypeEnum) EnumHelper.getSetValue(IncrementTypeEnum.values(), value, 1,
 					false));
-		else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
+			if (!jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP))
+				jrVariable.setIncrementGroup(null);
+		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
 			jrVariable.setIncrementerFactoryClassName((String) value);
 	}
 
