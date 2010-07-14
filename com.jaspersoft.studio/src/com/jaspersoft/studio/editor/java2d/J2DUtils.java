@@ -26,7 +26,6 @@ package com.jaspersoft.studio.editor.java2d;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class J2DUtils.
  */
