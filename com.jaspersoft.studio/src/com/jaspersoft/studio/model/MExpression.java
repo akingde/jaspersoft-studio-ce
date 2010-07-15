@@ -44,7 +44,7 @@ public class MExpression extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// pen
 		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRDesignExpression.PROPERTY_TEXT, "Text");
 		textD.setDescription("Expression text");

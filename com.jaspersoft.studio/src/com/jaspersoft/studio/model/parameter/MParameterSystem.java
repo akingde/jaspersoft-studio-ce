@@ -135,7 +135,7 @@ public class MParameterSystem extends APropertyNode implements IPropertySource {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, "Name");
 		nameD.setDescription("Name of the parameter.");
 		desc.add(nameD);

@@ -50,7 +50,7 @@ public abstract class APropertyNode extends ANode implements IPropertySource {
 	 * @param desc
 	 *          the desc
 	 */
-	protected abstract void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap);
+	public abstract void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap);
 
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 

@@ -136,7 +136,7 @@ public class MScriptlet extends APropertyNode implements IPropertySource {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignScriptlet.PROPERTY_NAME, "Name");
 		nameD.setDescription("Name of the scriptlet.");
 		desc.add(nameD);

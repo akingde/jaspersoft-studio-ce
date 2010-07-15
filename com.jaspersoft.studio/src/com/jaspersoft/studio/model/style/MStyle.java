@@ -184,7 +184,7 @@ public class MStyle extends APropertyNode {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 		styleD = new RWComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, "Parent Style", new String[] { "" },
 				NullEnum.NULL);

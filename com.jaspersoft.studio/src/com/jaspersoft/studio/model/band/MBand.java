@@ -182,7 +182,7 @@ public class MBand extends APropertyNode implements IGraphicElement {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT, "Height");
 		heightD.setDescription("Height of the band.");
 		desc.add(heightD);

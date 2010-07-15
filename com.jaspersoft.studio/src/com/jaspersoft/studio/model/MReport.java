@@ -132,7 +132,7 @@ public class MReport extends APropertyNode implements IGraphicElement {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JasperDesign.PROPERTY_NAME, "Report Name");
 		nameD.setDescription("Name of the report.");
 		nameD.setCategory("Report");

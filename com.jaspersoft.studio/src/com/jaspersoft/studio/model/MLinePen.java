@@ -50,7 +50,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// pen
 		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR, "Line Color",
 				NullEnum.INHERITED);

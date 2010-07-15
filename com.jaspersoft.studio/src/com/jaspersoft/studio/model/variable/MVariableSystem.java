@@ -135,7 +135,7 @@ public class MVariableSystem extends APropertyNode implements IPropertySource {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, "Name");
 		nameD.setDescription("Name of the variable.");
 		desc.add(nameD);

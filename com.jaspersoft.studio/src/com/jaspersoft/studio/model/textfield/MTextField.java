@@ -22,13 +22,16 @@ package com.jaspersoft.studio.model.textfield;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.base.JRBaseTextField;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -37,6 +40,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.MTextElement;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -111,7 +115,7 @@ public class MTextField extends MTextElement {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
@@ -142,6 +146,9 @@ public class MTextField extends MTextElement {
 		patternD.setDescription("Pattern to use when formatting the output of the text field expression.");
 		desc.add(patternD);
 
+		mHyperLink = new MHyperLink((JRHyperlink) getValue());
+		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
+
 		patternD.setCategory("TextField Properties");
 		exprD.setCategory("TextField Properties");
 		evaluationTimeD.setCategory("TextField Properties");
@@ -153,6 +160,7 @@ public class MTextField extends MTextElement {
 	}
 
 	private MExpression mExpression;
+	private MHyperLink mHyperLink;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -170,6 +178,11 @@ public class MTextField extends MTextElement {
 			return new Boolean(jrElement.isStretchWithOverflow());
 		if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
 			return jrElement.getOwnPattern();
+		if (mHyperLink == null)
+			mHyperLink = new MHyperLink((JRHyperlink) getValue());
+		Object val = mHyperLink.getPropertyValue(id);
+		if (val != null)
+			return val;
 		return super.getPropertyValue(id);
 	}
 
@@ -185,8 +198,12 @@ public class MTextField extends MTextElement {
 			jrElement.setBlankWhenNull((Boolean) value);
 		else if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
 			jrElement.setStretchWithOverflow(((Boolean) value).booleanValue());
-		else
-			super.setPropertyValue(id, value);
+		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
+			jrElement.setLinkTarget((String) value);
+		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
+			jrElement.setHyperlinkType((HyperlinkTypeEnum) EnumHelper
+					.getSetValue(HyperlinkTypeEnum.values(), value, 0, false));
+		super.setPropertyValue(id, value);
 	}
 
 	/*

@@ -40,7 +40,7 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING, "Padding");
 		paddingD.setDescription("The amount of empty space between the border and the element's content.");
 		desc.add(paddingD);

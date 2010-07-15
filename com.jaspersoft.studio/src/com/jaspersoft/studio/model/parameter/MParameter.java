@@ -106,7 +106,7 @@ public class MParameter extends MParameterSystem {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		TextPropertyDescriptor descriptionD = new TextPropertyDescriptor(JRDesignParameter.PROPERTY_DESCRIPTION,

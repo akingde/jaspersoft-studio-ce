@@ -101,7 +101,7 @@ public class MBreak extends MGraphicElement {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseBreak.PROPERTY_TYPE, "Type", EnumHelper

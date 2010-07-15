@@ -105,7 +105,7 @@ public class MChart extends MGraphicElementLineBox {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor titlePositionD = new ComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_TITLE_POSITION,

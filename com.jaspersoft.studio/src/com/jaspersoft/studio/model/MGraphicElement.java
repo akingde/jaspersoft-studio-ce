@@ -251,7 +251,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, "Parent Style",
 				new String[] { "" }, NullEnum.NULL);
 		styleD.setDescription("Name of the report level style to use as base style (see <style> element).");

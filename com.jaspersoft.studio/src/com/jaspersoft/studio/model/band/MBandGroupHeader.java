@@ -142,7 +142,7 @@ public class MBandGroupHeader extends MBand {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		PropertyDescriptor groupD = new PropertyDescriptor(MAIN_GROUP, "Group");

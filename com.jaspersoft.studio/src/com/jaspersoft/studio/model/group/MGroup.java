@@ -135,7 +135,7 @@ public class MGroup extends APropertyNode implements IPropertySource {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, "Name");
 		nameD.setDescription("Name of the group.");
 		desc.add(nameD);

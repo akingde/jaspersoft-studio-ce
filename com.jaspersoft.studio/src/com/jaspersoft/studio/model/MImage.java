@@ -23,14 +23,17 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.base.JRBaseImage;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.type.FillEnum;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
@@ -43,6 +46,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.hyperlink.HyperLinkPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
@@ -111,7 +115,7 @@ public class MImage extends MGraphicElementLineBox {
 	 * @param desc
 	 *          the desc
 	 */
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignImage.PROPERTY_EXPRESSION,
@@ -162,6 +166,9 @@ public class MImage extends MGraphicElementLineBox {
 		lazyD.setDescription("Gives control over when the images are retrieved from their specified location.");
 		desc.add(lazyD);
 
+		mHyperLink = new MHyperLink((JRHyperlink) getValue());
+		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
+
 		evaluationTimeD.setCategory("Image Properties");
 		onErrorTypeD.setCategory("Image Properties");
 		scaleImageD.setCategory("Image Properties");
@@ -183,6 +190,7 @@ public class MImage extends MGraphicElementLineBox {
 	}
 
 	private MExpression mExpression;
+	private MHyperLink mHyperLink;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -205,11 +213,15 @@ public class MImage extends MGraphicElementLineBox {
 				mExpression = new MExpression(jrElement.getExpression());
 			return mExpression;
 		}
-
 		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
 			return jrElement.isOwnUsingCache();
 		if (id.equals(JRBaseImage.PROPERTY_LAZY))
 			return new Boolean(jrElement.isLazy());
+		if (mHyperLink == null)
+			mHyperLink = new MHyperLink((JRHyperlink) getValue());
+		Object val = mHyperLink.getPropertyValue(id);
+		if (val != null)
+			return val;
 		return super.getPropertyValue(id);
 	}
 
@@ -236,6 +248,11 @@ public class MImage extends MGraphicElementLineBox {
 			jrElement.setUsingCache((Boolean) value);
 		else if (id.equals(JRBaseImage.PROPERTY_LAZY))
 			jrElement.setLazy(((Boolean) value).booleanValue());
+		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
+			jrElement.setLinkTarget((String) value);
+		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
+			jrElement.setHyperlinkType((HyperlinkTypeEnum) EnumHelper
+					.getSetValue(HyperlinkTypeEnum.values(), value, 0, false));
 		else
 			super.setPropertyValue(id, value);
 	}

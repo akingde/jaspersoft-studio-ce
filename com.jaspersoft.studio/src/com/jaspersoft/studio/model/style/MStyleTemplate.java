@@ -129,7 +129,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource {
 	}
 
 	@Override
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION,
 				"source expression");
 		descriptors = new IPropertyDescriptor[] { nameD };

@@ -49,7 +49,7 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 	}
 
 	@Override
-	protected void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, "Line Pen");
