@@ -58,7 +58,7 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		lineBoxD.setCategory("Graphic");
 	}
 
-	private MLinePen linePen;
+	private MLineBox lineBox;
 
 	/*
 	 * (non-Javadoc)
@@ -70,7 +70,9 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		// pen
 		if (id.equals(LINE_BOX)) {
 			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
-			return jrGraphicElement.getLineBox();
+			if (lineBox == null)
+				lineBox = new MLineBox(jrGraphicElement.getLineBox());
+			return lineBox;
 		}
 		return super.getPropertyValue(id);
 	}

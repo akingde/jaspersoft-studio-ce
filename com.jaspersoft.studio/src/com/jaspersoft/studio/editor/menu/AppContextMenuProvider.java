@@ -145,19 +145,19 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		
 		action = getActionRegistry().getAction(BringToFrontAction.ID);
 		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 		
 		action = getActionRegistry().getAction(BringForwardAction.ID);
 		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 
 		action = getActionRegistry().getAction(BringBackwardAction.ID);
 		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 
 		action = getActionRegistry().getAction(BringToBackAction.ID);
 		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 
 		// Alignment Actions
 		MenuManager submenu = new MenuManager("Alignement");

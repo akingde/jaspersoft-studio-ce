@@ -48,6 +48,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.model.ReportFactory;
@@ -350,6 +351,7 @@ public class MStyle extends APropertyNode {
 	}
 
 	private MLinePen linePen;
+	private MLineBox lineBox;
 	private RWComboBoxPropertyDescriptor styleD;
 
 	/*
@@ -381,7 +383,11 @@ public class MStyle extends APropertyNode {
 				linePen = new MLinePen(jrstyle.getLinePen());
 			return linePen;
 		}
-
+		if (id.equals(LINE_BOX)) {
+			if (lineBox == null)
+				lineBox = new MLineBox(jrstyle.getLineBox());
+			return lineBox;
+		}
 		if (id.equals(LINE_BOX)) {
 			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
 			return jrGraphicElement.getLineBox();
