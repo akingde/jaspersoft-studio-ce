@@ -17,39 +17,43 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.jrQuery;
+package com.jaspersoft.studio.property.descriptor.jrQuery.dialog;
 
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.model.MQuery;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
 
-/**
- * @author Chicu Veaceslav
- * 
- */
-public class JRQueryLabelProvider extends LabelProvider {
-	private NullEnum canBeNull;
+public class JRQueryEditor extends Wizard {
+	private MQuery mQuery;
+	private JRQueryPage page0;
 
-	public JRQueryLabelProvider(NullEnum canBeNull) {
+	public MQuery getValue() {
+		if (page0 != null)
+			return page0.getValue();
+		return mQuery;
+	}
+
+	public void setValue(MQuery value) {
+		if (page0 != null)
+			page0.setValue(value);
+		this.mQuery = value;
+	}
+
+	public JRQueryEditor() {
 		super();
-		this.canBeNull = canBeNull;
+		setWindowTitle("Query Editor");
 	}
 
 	@Override
-	public String getText(Object element) {
-		if (element != null && element instanceof MQuery) {
-			MQuery mQuery = (MQuery) element;
-			String lang = (String) mQuery.getPropertyValue(JRDesignQuery.PROPERTY_LANGUAGE);
-			String txt = (String) mQuery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT);
-			return lang + ":" + txt;
-		}
-		if (element == null || !(element instanceof JRDesignQuery))
-			return canBeNull.getName();
-		JRDesignQuery query = (JRDesignQuery) element;
-		return query.getText();
+	public void addPages() {
+		page0 = new JRQueryPage("jrquery.editor");
+		page0.setValue(mQuery);
+		addPage(page0);
+	}
+
+	@Override
+	public boolean performFinish() {
+		return true;
 	}
 
 }

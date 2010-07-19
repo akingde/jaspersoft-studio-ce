@@ -21,11 +21,12 @@ package com.jaspersoft.studio.property.descriptor.jrQuery;
 
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
@@ -35,7 +36,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 
+import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.jrQuery.dialog.JRQueryEditor;
 
 public class JRQueryCellEditor extends DialogCellEditor {
 
@@ -117,10 +120,14 @@ public class JRQueryCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		ValueHandler valueHandler = new ValueHandler();
-		JRQueryDialog dialog = new JRQueryDialog(cellEditorWindow.getShell(), "Query", "Query text",
-				(JRDesignQuery) getValue(), valueHandler);
-		return dialog.open() == Window.OK ? dialog.getValue() : null;
+		JRQueryEditor wizard = new JRQueryEditor();
+		wizard.setValue((MQuery) getValue());
+		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
+		dialog.create();
+		if (dialog.open() == Dialog.OK) {
+			return wizard.getValue();
+		}
+		return null;
 	}
 
 	private LabelProvider labelProvider;
