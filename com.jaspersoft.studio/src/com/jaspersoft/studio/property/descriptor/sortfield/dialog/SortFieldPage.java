@@ -1,0 +1,172 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
+ * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of Jaspersoft Open Studio.
+ *
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.jaspersoft.studio.property.descriptor.sortfield.dialog;
+
+import java.util.List;
+
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
+
+public class SortFieldPage extends WizardPage {
+	private List<?> list;
+
+	public List<?> getList() {
+		return list;
+	}
+
+	public void setList(List<?> list) {
+		this.list = list;
+	}
+
+	protected SortFieldPage(String pageName) {
+		super(pageName);
+		setTitle("Sort Field Editor");
+		setDescription("Dataset sort fields editor.");
+	}
+
+	@Override
+	public void createControl(Composite parent) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		// composite.setBackground(new Color(null, 125, 125, 125));
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		composite.setLayout(layout);
+		setControl(composite);
+
+		createTable(composite);
+		createButtons(composite);
+
+	}
+
+	private void createTable(Composite composite) {
+		Table table = new Table(composite, SWT.SINGLE | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+
+		GridData gridData = new GridData(GridData.FILL_BOTH | GridData.HORIZONTAL_ALIGN_BEGINNING
+				| GridData.VERTICAL_ALIGN_BEGINNING);
+		gridData.verticalSpan = 4;
+		gridData.grabExcessVerticalSpace = true;
+		table.setLayoutData(gridData);
+
+		TableColumn column = new TableColumn(table, SWT.CENTER);
+		column.setText("Field");
+		column.setWidth(100);
+		column.pack();
+
+		column = new TableColumn(table, SWT.CENTER);
+		column.setWidth(100);
+		column.setText("Order");
+		column.pack();
+
+		TableViewer tableViewer = new TableViewer(table);
+		tableViewer.setUseHashlookup(true);
+
+		CellEditor[] editors = new CellEditor[2];
+
+		ComboBoxCellEditor cbce = new ComboBoxCellEditor(table, new String[] { "BCDA", "ABCD" }, SWT.READ_ONLY);
+
+		TextCellEditor textEditor = new TextCellEditor(table);
+		((Text) textEditor.getControl()).setTextLimit(60);
+
+		editors[0] = cbce;
+		editors[1] = textEditor;
+
+		tableViewer.setCellEditors(editors);
+		// tableViewer.setContentProvider(new SortFieldContentProvider());
+		// tableViewer.setLabelProvider(new SortFieldLabelsProvider());
+		// // The input for the table viewer is the instance of ExampleTaskList
+		// tableViewer.setInput(getList());
+		// Set the cell modifier for the viewer
+		// tableViewer.setCellModifier(new ExampleCellModifier(this));
+	}
+
+	private void createButtons(Composite composite) {
+		GridData gridData;
+		Button add = new Button(composite, SWT.PUSH | SWT.CENTER);
+		add.setText("&Add");
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
+		gridData.widthHint = 80;
+		add.setLayoutData(gridData);
+		add.addSelectionListener(new SelectionAdapter() {
+
+			// Add a task to the ExampleTaskList and refresh the view
+			public void widgetSelected(SelectionEvent e) {
+				// taskList.addTask();
+			}
+		});
+
+		Button remove = new Button(composite, SWT.PUSH | SWT.CENTER);
+		remove.setText("R&emove");
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
+		gridData.widthHint = 80;
+		remove.setLayoutData(gridData);
+		remove.addSelectionListener(new SelectionAdapter() {
+
+			// Add a task to the ExampleTaskList and refresh the view
+			public void widgetSelected(SelectionEvent e) {
+				// taskList.remove();
+			}
+		});
+
+		Button up = new Button(composite, SWT.PUSH | SWT.CENTER);
+		up.setText("&Up");
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
+		gridData.widthHint = 80;
+		up.setLayoutData(gridData);
+		up.addSelectionListener(new SelectionAdapter() {
+
+			// Add a task to the ExampleTaskList and refresh the view
+			public void widgetSelected(SelectionEvent e) {
+				// taskList.addTask();
+			}
+		});
+
+		Button down = new Button(composite, SWT.PUSH | SWT.CENTER);
+		down.setText("&Down");
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
+		gridData.widthHint = 80;
+		down.setLayoutData(gridData);
+		down.addSelectionListener(new SelectionAdapter() {
+
+			// Add a task to the ExampleTaskList and refresh the view
+			public void widgetSelected(SelectionEvent e) {
+				// taskList.addTask();
+			}
+		});
+	}
+}

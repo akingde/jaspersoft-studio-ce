@@ -195,6 +195,9 @@
             <input
                   type="com.jaspersoft.studio.model.scriptlet.MScriptlet">
             </input>
+            <input
+                  type="com.jaspersoft.studio.model.sortfield.MSortField">
+            </input>
          </propertySection>
       </propertySections>
    </extension>

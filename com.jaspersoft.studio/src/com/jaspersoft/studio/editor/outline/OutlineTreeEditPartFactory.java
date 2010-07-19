@@ -82,6 +82,11 @@ import com.jaspersoft.studio.model.scriptlet.MScriptlets;
 import com.jaspersoft.studio.model.scriptlet.command.CreateScriptletCommand;
 import com.jaspersoft.studio.model.scriptlet.command.DeleteScriptletCommand;
 import com.jaspersoft.studio.model.scriptlet.command.ReorderScriptletCommand;
+import com.jaspersoft.studio.model.sortfield.MSortField;
+import com.jaspersoft.studio.model.sortfield.MSortFields;
+import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
+import com.jaspersoft.studio.model.sortfield.command.DeleteSortFieldCommand;
+import com.jaspersoft.studio.model.sortfield.command.ReorderSortFieldCommand;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
@@ -103,7 +108,6 @@ import com.jaspersoft.studio.model.variable.command.CreateVariableCommand;
 import com.jaspersoft.studio.model.variable.command.DeleteVariableCommand;
 import com.jaspersoft.studio.model.variable.command.ReorderVariableCommand;
 
-// TODO: Auto-generated Javadoc
 /**
  * A factory for creating OutlineTreeEditPart objects.
  */
@@ -136,6 +140,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			editPart = new AContainerTreeEditPart();
 		// fields
 		else if (model instanceof MFields)
+			editPart = new AContainerTreeEditPart();
+		else if (model instanceof MSortFields)
 			editPart = new AContainerTreeEditPart();
 		else if (model instanceof MGroups)
 			editPart = new AContainerTreeEditPart();
@@ -175,6 +181,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new DeleteParameterCommand((MParameters) parent, (MParameter) child);
 		} else if (child instanceof MField) {
 			return new DeleteFieldCommand((MFields) parent, (MField) child);
+		} else if (child instanceof MSortField) {
+			return new DeleteSortFieldCommand((MSortFields) parent, (MSortField) child);
 		} else if (child instanceof MGroup) {
 			return new DeleteGroupCommand((MGroups) parent, (MGroup) child);
 		} else if (child instanceof MVariable) {
@@ -292,6 +300,10 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MFields) {
 				return new ReorderFieldCommand((MField) child, (MFields) parent, newIndex);
 			}
+		} else if (child instanceof MSortField) {
+			if (parent instanceof MSortFields) {
+				return new ReorderSortFieldCommand((MSortField) child, (MSortFields) parent, newIndex);
+			}
 		} else if (child instanceof MGroup) {
 			if (parent instanceof MGroups) {
 				return new ReorderGroupCommand((MGroup) child, (MGroups) parent, newIndex);
@@ -368,6 +380,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		} else if (child instanceof MField) {
 			if (parent instanceof MFields)
 				return new CreateFieldCommand((MFields) parent, (MField) child, location, newIndex);
+		} else if (child instanceof MSortField) {
+			if (parent instanceof MSortFields)
+				return new CreateSortFieldCommand((MSortFields) parent, (MSortField) child, location, newIndex);
 		} else if (child instanceof MGroup) {
 			if (parent instanceof MGroups)
 				return new CreateGroupCommand((MGroups) parent, (MGroup) child, location, newIndex);

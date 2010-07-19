@@ -37,7 +37,7 @@ public class JPropertiesCellEditor extends DialogCellEditor {
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		Shell shell = cellEditorWindow.getShell();
-		// TODO put a dialog here
+
 		return null;
 	}
 

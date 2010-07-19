@@ -77,6 +77,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
@@ -363,6 +364,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new CreateFieldAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(CreateFieldAction.ID);
+
+		action = new CreateSortFieldAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateSortFieldAction.ID);
 
 		action = new CreateVariableAction(this);
 		registry.registerAction(action);

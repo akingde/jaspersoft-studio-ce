@@ -40,6 +40,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
@@ -86,6 +87,10 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		// menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 		action = getActionRegistry().getAction(CreateFieldAction.ID);
+		if (action != null && action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+		
+		action = getActionRegistry().getAction(CreateSortFieldAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 

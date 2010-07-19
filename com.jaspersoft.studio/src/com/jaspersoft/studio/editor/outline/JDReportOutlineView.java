@@ -62,6 +62,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
@@ -137,6 +138,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 
 		id = CreateFieldAction.ID;
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+
+		id = CreateSortFieldAction.ID;
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 
 		id = CreateVariableAction.ID;
