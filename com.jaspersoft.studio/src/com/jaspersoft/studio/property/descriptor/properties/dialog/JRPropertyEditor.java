@@ -17,29 +17,43 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.properties;
+package com.jaspersoft.studio.property.descriptor.properties.dialog;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.wizard.Wizard;
 
-/**
- * @author Chicu Veaceslav
- * 
- */
-public class JPropertiesLabelProvider extends LabelProvider {
+public class JRPropertyEditor extends Wizard {
+	private JRPropertiesMap value;
+	private JRPropertyPage page0;
 
-	public JPropertiesLabelProvider() {
+	public JRPropertiesMap getValue() {
+		if (page0 != null)
+			return page0.getValue();
+		return value;
+	}
+
+	public void setValue(JRPropertiesMap value) {
+		if (page0 != null)
+			page0.setValue(value);
+		this.value = value;
+	}
+
+	public JRPropertyEditor() {
 		super();
+		setWindowTitle("Properties");
 	}
 
 	@Override
-	public String getText(Object element) {
-		if (element == null)
-			return "";
-		if (element instanceof JRPropertiesMap)
-			return "[Properties: " + ((JRPropertiesMap) element).getPropertyNames().length + "]";
-		return element.toString();
+	public void addPages() {
+		page0 = new JRPropertyPage("jrproperties");
+		page0.setValue(value);
+		addPage(page0);
+	}
+
+	@Override
+	public boolean performFinish() {
+		return true;
 	}
 
 }

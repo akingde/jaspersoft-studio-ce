@@ -29,6 +29,7 @@ import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.ForwardUndoCompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -285,7 +286,27 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	 */
 	public CellEditor getEditor(Composite parent) {
 		editor = super.getEditor(parent);
+		if (editor != null)
+			editor.addListener(cellEditorListener);
 		return editor;
 	}
+
+	/**
+	 * Create the CellEditorListener for this entry. It listens for value changes in the CellEditor, and cancel and finish
+	 * requests.
+	 */
+	private ICellEditorListener cellEditorListener = new ICellEditorListener() {
+		public void editorValueChanged(boolean oldValidState, boolean newValidState) {
+
+		}
+
+		public void cancelEditor() {
+
+		}
+
+		public void applyEditorValue() {
+			JRPropertySheetEntry.this.applyEditorValue();
+		}
+	};
 
 }

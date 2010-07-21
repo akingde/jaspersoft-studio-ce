@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.dataset;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -243,8 +244,16 @@ public class MDataset extends APropertyNode implements IPropertySource {
 			jrDataset.setResourceBundle((String) value);
 		else if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			jrDataset.setScriptletClass((String) value);
-
-		else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
+		else if (id.equals(PROPERTY_MAP)) {
+			JRPropertiesMap v = (JRPropertiesMap) value;
+			String[] names = jrDataset.getPropertiesMap().getPropertyNames();
+			for (int i = 0; i < names.length; i++) {
+				jrDataset.getPropertiesMap().removeProperty(names[i]);
+			}
+			names = v.getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				jrDataset.setProperty(names[i], v.getProperty(names[i]));
+		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
 			jrDataset.setWhenResourceMissingType((WhenResourceMissingTypeEnum) EnumHelper.getSetValue(
 					WhenResourceMissingTypeEnum.values(), value, 1, false));
 		else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseElement;
 import net.sf.jasperreports.engine.base.JRBasePen;
@@ -401,8 +402,10 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 				return jrElement.getPrintWhenGroupChanges().getName();
 			return "";
 		}
-		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS))
-			return jrElement.getPropertyExpressions();
+		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			// FIXME: jrElement.getPropertyExpression(); same field
+			return jrElement.getPropertiesMap();
+		}
 		if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
 			return new Integer(jrElement.getHeight());
 		if (id.equals(JRDesignElement.PROPERTY_WIDTH))
@@ -462,6 +465,16 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setPrintWhenGroupChanges(group);
 			}
+		} else if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+			JRPropertiesMap v = (JRPropertiesMap) value;
+			JRPropertiesMap propertiesMap = jrElement.getPropertiesMap();
+			String[] names = propertiesMap.getPropertyNames();
+			for (int i = 0; i < names.length; i++) {
+				propertiesMap.removeProperty(names[i]);
+			}
+			names = v.getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				propertiesMap.setProperty(names[i], v.getProperty(names[i]));
 		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
 			jrElement.setHeight(((Integer) value).intValue());
 		else if (id.equals(JRDesignElement.PROPERTY_WIDTH))
