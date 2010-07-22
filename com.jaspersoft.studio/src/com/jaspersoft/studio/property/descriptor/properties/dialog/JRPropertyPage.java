@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -41,10 +40,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ControlEditor;
 import org.eclipse.swt.custom.TableCursor;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -63,7 +59,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.internal.help.WorkbenchHelpSystem;
 
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxCellEditor;
 
@@ -97,6 +93,15 @@ public class JRPropertyPage extends WizardPage {
 		return value;
 	}
 
+	/**
+	 * Displays the help
+	 */
+	public void performHelp() {
+		getShell().setData(WorkbenchHelpSystem.HELP_KEY, "ch.sahits.tutorial.help.firsthelp");
+
+		//PlatformUI.getWorkbench().getHelpSystem().displayHelp();//displayDynamicHelp();// displayHelp("net.sf.jasperreports.doc");
+	}
+
 	@Override
 	public void dispose() {
 		// clear all properties
@@ -122,6 +127,7 @@ public class JRPropertyPage extends WizardPage {
 		super(pageName);
 		setTitle("Properties");
 		setDescription("Properties.");
+
 	}
 
 	@Override

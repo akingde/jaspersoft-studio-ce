@@ -42,6 +42,7 @@ public class JRPropertyEditor extends Wizard {
 	public JRPropertyEditor() {
 		super();
 		setWindowTitle("Properties");
+		setNeedsProgressMonitor(false);
 	}
 
 	@Override
