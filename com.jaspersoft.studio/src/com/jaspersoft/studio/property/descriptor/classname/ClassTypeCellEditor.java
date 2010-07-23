@@ -19,9 +19,6 @@
  */
 package com.jaspersoft.studio.property.descriptor.classname;
 
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeHierarchy;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
@@ -52,6 +49,9 @@ public class ClassTypeCellEditor extends ATextDialogCellEditor {
 		Shell shell = cellEditorWindow.getShell();
 		try {
 			IJavaSearchScope searchScope = SearchEngine.createWorkspaceScope();
+
+			// FilteredTypesSelectionDialog a = new FilteredTypesSelectionDialog();
+			// a.
 			// JavaModelUtil.g
 			// searchScope.enclosingProjectsAndJars()[0].
 			//			
@@ -61,7 +61,13 @@ public class ClassTypeCellEditor extends ATextDialogCellEditor {
 			// ITypeHierarchy hierarchy = focus.newTypeHierarchy(project, pm);
 			// IType[] subTypes = hierarchy.getAllSubTypes(focus);
 			// IJavaSearchScope scope = SearchEngine.createJavaSearchScope(subTypes);
+			// SearchPattern sp = SearchPattern.createPattern("java.lang.String", IJavaSearchConstants.CLASS,
+			// IJavaSearchConstants.IMPLEMENTORS, SearchPattern.R_EXACT_MATCH);
+			// FilteredTypesSelectionDialog a = new FilteredTypesSelectionDialog(shell, false, new
+			// ProgressMonitorDialog(shell),
+			// searchScope, SearchPattern.R_EXACT_MATCH);
 
+			// ;
 			SelectionDialog dialog = JavaUI.createTypeDialog(shell, new ProgressMonitorDialog(shell), searchScope,
 					IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false);
 			dialog.setTitle("Open Type");

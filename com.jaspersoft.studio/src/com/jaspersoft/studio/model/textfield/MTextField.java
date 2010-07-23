@@ -196,6 +196,8 @@ public class MTextField extends MTextElement {
 			jrElement.setEvaluationTime(EvaluationTimeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
 		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrElement.setBlankWhenNull((Boolean) value);
+		else if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
+			jrElement.setPattern((String) value);
 		else if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
 			jrElement.setStretchWithOverflow(((Boolean) value).booleanValue());
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))

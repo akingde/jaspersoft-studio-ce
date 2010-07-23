@@ -17,25 +17,42 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.pattern;
+package com.jaspersoft.studio.property.descriptor.pattern.dialog;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.wizard.Wizard;
 
-/**
- * @author Chicu Veaceslav
- * 
- */
-public class PatternLabelProvider extends LabelProvider {
+public class PatternEditor extends Wizard {
+	private String value;
+	private PatternPage page0;
 
-	public PatternLabelProvider() {
+	public String getValue() {
+		if (page0 != null)
+			return page0.getValue();
+		return value;
+	}
+
+	public void setValue(String value) {
+		if (page0 != null)
+			page0.setValue(value);
+		this.value = value;
+	}
+
+	public PatternEditor() {
 		super();
+		setWindowTitle("Pattern");
+		setNeedsProgressMonitor(false);
 	}
 
 	@Override
-	public String getText(Object element) {
-		if (element != null && element instanceof String)
-			return (String) element;
-		return "";
+	public void addPages() {
+		page0 = new PatternPage("Pattern");
+		page0.setValue(value);
+		addPage(page0);
+	}
+
+	@Override
+	public boolean performFinish() {
+		return true;
 	}
 
 }

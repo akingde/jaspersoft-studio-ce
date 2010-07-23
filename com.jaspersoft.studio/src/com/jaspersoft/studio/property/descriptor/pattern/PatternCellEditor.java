@@ -19,12 +19,15 @@
  */
 package com.jaspersoft.studio.property.descriptor.pattern;
 
-import org.eclipse.jface.viewers.DialogCellEditor;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 
-public class PatternCellEditor extends DialogCellEditor {
+import com.jaspersoft.studio.property.descriptor.ATextDialogCellEditor;
+import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
+
+public class PatternCellEditor extends ATextDialogCellEditor {
 
 	public PatternCellEditor(Composite parent) {
 		super(parent);
@@ -36,21 +39,14 @@ public class PatternCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		Shell shell = cellEditorWindow.getShell();
-		// TODO put a dialog here
+		PatternEditor wizard = new PatternEditor();
+		wizard.setValue((String) getValue());
+		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
+		dialog.create();
+		if (dialog.open() == Dialog.OK) {
+			return wizard.getValue();
+		}
 		return null;
 	}
 
-	private PatternLabelProvider labelProvider;
-
-	@Override
-	protected void updateContents(Object value) {
-		if (getDefaultLabel() == null) {
-			return;
-		}
-		if (labelProvider == null)
-			labelProvider = new PatternLabelProvider();
-		String text = labelProvider.getText(value);
-		getDefaultLabel().setText(text);
-	}
 }
