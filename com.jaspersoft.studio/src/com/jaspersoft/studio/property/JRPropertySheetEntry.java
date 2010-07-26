@@ -77,7 +77,7 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	 *          the new model
 	 */
 	public void setModel(ANode model) {
-		if (this.model != null && listener != null)
+		if (listener != null && this.model != null)
 			this.model.getPropertyChangeSupport().removePropertyChangeListener(listener);
 		if (model != null) {
 			if (listener == null) {
@@ -92,7 +92,6 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 			}
 			model.getPropertyChangeSupport().addPropertyChangeListener(listener);
 		}
-		this.model = model;
 		this.model = model;
 	}
 

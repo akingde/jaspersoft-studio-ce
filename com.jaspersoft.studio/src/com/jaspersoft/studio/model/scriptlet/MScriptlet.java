@@ -36,6 +36,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -146,7 +147,7 @@ public class MScriptlet extends APropertyNode implements IPropertySource {
 		classD.setDescription("Class of the scriptlet.");
 		desc.add(classD);
 
-		TextPropertyDescriptor descriptionD = new TextPropertyDescriptor(JRDesignScriptlet.PROPERTY_DESCRIPTION,
+		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignScriptlet.PROPERTY_DESCRIPTION,
 				"description");
 		descriptionD.setDescription("Description of scriptlet");
 		desc.add(descriptionD);

@@ -144,8 +144,8 @@
          </propertyTab>
          <propertyTab
                category="element"
-               id="com.jaspersoft.studio.editor.JrxmlEditor.Location"
-               label="Location">
+               id="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               label="Appearance">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -154,9 +154,27 @@
       <propertySections
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
          <propertySection
-               class="com.jaspersoft.studio.property.section.LocationSection"
-               id="com.jaspersoft.studio.editor.JrxmlEditor.LocationSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Location">
+               class="com.jaspersoft.studio.property.section.graphic.LocationSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LocationSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElement">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LocationSection"
+               class="com.jaspersoft.studio.property.section.graphic.SizeSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.SizeSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElement">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.SizeSection"
+               class="com.jaspersoft.studio.property.section.graphic.ColorsSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.ColorSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
             <input
                   type="com.jaspersoft.studio.model.MGraphicElement">
             </input>

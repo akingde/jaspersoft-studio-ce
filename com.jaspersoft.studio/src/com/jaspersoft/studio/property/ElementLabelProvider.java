@@ -41,7 +41,6 @@ import com.jaspersoft.studio.model.MGraphicElement;
 /**
  * Label provider for the title bar for the tabbed property sheet page.
  * 
- * @author Anthony Hunter
  */
 public class ElementLabelProvider extends LabelProvider {
 

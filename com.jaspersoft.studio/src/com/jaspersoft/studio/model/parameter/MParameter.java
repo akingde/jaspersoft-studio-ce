@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
@@ -38,6 +37,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -110,7 +110,7 @@ public class MParameter extends MParameterSystem {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		TextPropertyDescriptor descriptionD = new TextPropertyDescriptor(JRDesignParameter.PROPERTY_DESCRIPTION,
+		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_DESCRIPTION,
 				"Description");
 		descriptionD.setDescription("Description of parameter");
 		desc.add(descriptionD);

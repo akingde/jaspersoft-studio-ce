@@ -28,7 +28,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.ITabDescriptor;
 import org.eclipse.ui.views.properties.tabbed.ITabDescriptorProvider;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PropertyTabDescriptorProvider.
  */

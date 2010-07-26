@@ -25,6 +25,7 @@ import java.beans.PropertyChangeListener;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
@@ -33,6 +34,7 @@ import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
  * Abstract class for a section in a tab in the properties view.
@@ -58,9 +60,12 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
 		if (provider != null)
 			setEditDomain(provider.getEditDomain());
-
-		this.element = (APropertyNode) model;
-		getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+		if (this.element != model) {
+			if (this.element != null)
+				this.element.getPropertyChangeSupport().removePropertyChangeListener(this);
+			this.element = (APropertyNode) model;
+			this.element.getPropertyChangeSupport().addPropertyChangeListener(this);
+		}
 	}
 
 	public EditDomain getEditDomain() {
@@ -75,14 +80,12 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeShown()
 	 */
 	public void aboutToBeShown() {
-		getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeHidden()
 	 */
 	public void aboutToBeHidden() {
-		getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
 	}
 
 	@Override
@@ -105,6 +108,25 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		// refresh();
+		isRefreshing = true;
+		refresh();
+		isRefreshing = false;
+	}
+
+	protected boolean isRefreshing = false;
+
+	public void changeProperty(String property, Object newValue) {
+		if (!isRefreshing) {
+			Object oldValue = getElement().getPropertyValue(property);
+			if (!newValue.equals(oldValue)) {
+				CommandStack cs = getEditDomain().getCommandStack();
+
+				SetValueCommand setCommand = new SetValueCommand(getElement().getDisplayText());
+				setCommand.setTarget(getElement());
+				setCommand.setPropertyId(property);
+				setCommand.setPropertyValue(newValue);
+				cs.execute(setCommand);
+			}
+		}
 	}
 }
