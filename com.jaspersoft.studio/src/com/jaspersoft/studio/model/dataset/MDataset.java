@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.dataset;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
@@ -244,7 +245,13 @@ public class MDataset extends APropertyNode implements IPropertySource {
 			jrDataset.setResourceBundle((String) value);
 		else if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			jrDataset.setScriptletClass((String) value);
-		else if (id.equals(PROPERTY_MAP)) {
+		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrDataset.setFilterExpression(expression);
+			}
+		} else if (id.equals(PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrDataset.getPropertiesMap().getPropertyNames();
 			for (int i = 0; i < names.length; i++) {
@@ -260,7 +267,6 @@ public class MDataset extends APropertyNode implements IPropertySource {
 			if (value instanceof MQuery) {
 				mQuery = (MQuery) value;
 				JRDesignQuery jrQuery = (JRDesignQuery) mQuery.getValue();
-				jrQuery.getText();
 				jrDataset.setQuery(jrQuery);
 
 			}

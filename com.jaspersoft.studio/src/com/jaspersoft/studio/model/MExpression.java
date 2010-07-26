@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model;
 
@@ -33,7 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
 public class MExpression extends APropertyNode implements IPropertySource {
@@ -50,12 +46,21 @@ public class MExpression extends APropertyNode implements IPropertySource {
 		textD.setDescription("Expression text");
 		desc.add(textD);
 
-		ClassTypePropertyDescriptor formatFactoryClassD = new ClassTypePropertyDescriptor(
-				JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "Value Class Name");
-		formatFactoryClassD.setDescription("Value class name.");
-		desc.add(formatFactoryClassD);
+		RComboBoxPropertyDescriptor languageD = new RComboBoxPropertyDescriptor(
+				JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "Value Class Name", new String[] { "java.lang.Boolean",
+						"java.lang.Byte", "java.util.Date", "java.sql.Timestamp", "java.sql.Time", "java.lang.Double",
+						"java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.math.BigDecimal",
+						"java.lang.Number", "java.lang.String" });
+		languageD.setDescription("Value class name.");
+		languageD.setCategory("Report");
+		desc.add(languageD);
 
-		defaultsMap.put(JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "java.lang.Boolean");
+		// ClassTypePropertyDescriptor formatFactoryClassD = new ClassTypePropertyDescriptor(
+		// JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "Value Class Name");
+		// formatFactoryClassD.setDescription("Value class name.");
+		// desc.add(formatFactoryClassD);
+
+		defaultsMap.put(JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "java.lang.String");
 	}
 
 	private static IPropertyDescriptor[] descriptors;

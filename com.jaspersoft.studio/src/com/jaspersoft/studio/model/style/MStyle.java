@@ -165,7 +165,7 @@ public class MStyle extends APropertyNode {
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
-		if (styleD != null) {
+		if (styleD != null && getValue() instanceof JRDesignStyle) {
 			JRDesignStyle jrElement = (JRDesignStyle) getValue();
 			JRStyle[] styles = getJasperDesign().getStyles();
 			String[] items = new String[styles.length];

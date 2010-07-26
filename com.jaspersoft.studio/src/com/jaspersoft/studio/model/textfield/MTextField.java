@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.textfield;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.base.JRBaseTextField;
@@ -194,7 +195,13 @@ public class MTextField extends MTextElement {
 			jrElement.setPattern((String) value);
 		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime(EvaluationTimeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
-		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
+		else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrElement.setExpression(expression);
+			}
+		} else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrElement.setBlankWhenNull((Boolean) value);
 		else if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
 			jrElement.setPattern((String) value);

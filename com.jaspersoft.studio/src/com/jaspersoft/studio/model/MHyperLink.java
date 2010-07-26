@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
@@ -164,6 +165,31 @@ public class MHyperLink extends APropertyNode implements IPropertySource {
 			else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 				hyperLink.setHyperlinkType((HyperlinkTypeEnum) EnumHelper.getSetValue(HyperlinkTypeEnum.values(), value, 0,
 						false));
+			else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
+				if (value instanceof MExpression) {
+					mAnchorExpression = (MExpression) value;
+					JRExpression expression = (JRExpression) mAnchorExpression.getValue();
+					hyperLink.setHyperlinkAnchorExpression(expression);
+				}
+			} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
+				if (value instanceof MExpression) {
+					mPageExpression = (MExpression) value;
+					JRExpression expression = (JRExpression) mPageExpression.getValue();
+					hyperLink.setHyperlinkPageExpression(expression);
+				}
+			} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
+				if (value instanceof MExpression) {
+					mReferenceExpression = (MExpression) value;
+					JRExpression expression = (JRExpression) mReferenceExpression.getValue();
+					hyperLink.setHyperlinkReferenceExpression(expression);
+				}
+			} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
+				if (value instanceof MExpression) {
+					mToolTipExpression = (MExpression) value;
+					JRExpression expression = (JRExpression) mToolTipExpression.getValue();
+					hyperLink.setHyperlinkTooltipExpression(expression);
+				}
+			}
 		}
 	}
 

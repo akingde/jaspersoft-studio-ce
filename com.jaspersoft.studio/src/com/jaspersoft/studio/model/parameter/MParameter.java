@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.parameter;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
@@ -179,6 +180,13 @@ public class MParameter extends MParameterSystem {
 			jrParameter.setForPrompting(((Boolean) value).booleanValue());
 		else if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME))
 			jrParameter.setNestedTypeName((String) value);
+		else if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrParameter.setDefaultValueExpression(expression);
+			}
+		}
 		super.setPropertyValue(id, value);
 	}
 

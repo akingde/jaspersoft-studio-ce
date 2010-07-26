@@ -19,10 +19,14 @@
  */
 package com.jaspersoft.studio.property.descriptor.expression;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
+
+import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
 public class JRExpressionCellEditor extends DialogCellEditor {
 
@@ -36,8 +40,13 @@ public class JRExpressionCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		Shell shell = cellEditorWindow.getShell();
-		// TODO put a dialog here
+		JRExpressionEditor wizard = new JRExpressionEditor();
+		wizard.setValue((MExpression) getValue());
+		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
+		dialog.create();
+		if (dialog.open() == Dialog.OK) {
+			return wizard.getValue();
+		}
 		return null;
 	}
 

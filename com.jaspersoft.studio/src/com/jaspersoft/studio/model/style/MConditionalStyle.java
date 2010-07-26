@@ -182,9 +182,13 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignConditionalStyle jrstyle = (JRDesignConditionalStyle) getValue();
-		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION))
-			;//jrstyle.setConditionExpression(null);
-		else
+		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrstyle.setConditionExpression(expression);
+			}
+		} else
 			super.setPropertyValue(id, value);
 	}
 

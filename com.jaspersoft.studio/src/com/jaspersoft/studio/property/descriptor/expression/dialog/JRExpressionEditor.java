@@ -17,33 +17,43 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.expression;
+package com.jaspersoft.studio.property.descriptor.expression.dialog;
 
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.model.MExpression;
 
-/**
- * @author Chicu Veaceslav
- * 
- */
-public class JRExpressionLabelProvider extends LabelProvider {
+public class JRExpressionEditor extends Wizard {
+	private MExpression mExpression;
+	private JRExpressionPage page0;
 
-	public JRExpressionLabelProvider() {
+	public MExpression getValue() {
+		if (page0 != null)
+			return page0.getValue();
+		return mExpression;
+	}
+
+	public void setValue(MExpression value) {
+		if (page0 != null)
+			page0.setValue(value);
+		this.mExpression = value;
+	}
+
+	public JRExpressionEditor() {
 		super();
+		setWindowTitle("Expression Editor");
 	}
 
 	@Override
-	public String getText(Object element) {
-		if (element != null && element instanceof MExpression) {
-			MExpression me = (MExpression) element;
-			JRDesignExpression jde = (JRDesignExpression) me.getValue();
-			if (jde != null)
-				return jde.getText();
-		}
-		return "";
+	public void addPages() {
+		page0 = new JRExpressionPage("jrquery.editor");
+		page0.setValue(mExpression);
+		addPage(page0);
+	}
+
+	@Override
+	public boolean performFinish() {
+		return true;
 	}
 
 }

@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.variable;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -250,6 +251,18 @@ public class MVariable extends MVariableSystem {
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setResetGroup(group);
+			}
+		} else if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrVariable.setExpression(expression);
+			}
+		} else if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mIniValExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mIniValExpression.getValue();
+				jrVariable.setInitialValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
 			if (!value.equals("") && jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP)) {

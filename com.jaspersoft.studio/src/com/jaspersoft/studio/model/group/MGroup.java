@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.group;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
@@ -33,6 +34,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -147,6 +149,8 @@ public class MGroup extends APropertyNode implements IPropertySource {
 		desc.add(expressionD);
 	}
 
+	private MExpression mExpression;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -157,8 +161,11 @@ public class MGroup extends APropertyNode implements IPropertySource {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
 			return jrGroup.getName();
-		if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
-			return jrGroup.getExpression();
+		if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrGroup.getExpression());
+			return mExpression;
+		}
 		return null;
 	}
 
@@ -172,8 +179,13 @@ public class MGroup extends APropertyNode implements IPropertySource {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
 			jrGroup.setName((String) value);
-		// else if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
-		// jrGroup.setExpression((String) value);
+		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrGroup.setExpression(expression);
+			}
+		}
 	}
 
 	/**

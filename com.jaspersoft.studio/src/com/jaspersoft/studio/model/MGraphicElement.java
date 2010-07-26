@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
@@ -459,6 +460,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 					jrElement.setStyleNameReference((String) value);
 					jrElement.setStyle(null);
 				}
+			}
+		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrElement.setPrintWhenExpression(expression);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
 			if (!value.equals("")) {

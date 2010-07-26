@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -236,6 +237,13 @@ public class MBand extends APropertyNode implements IGraphicElement {
 			jrband.setHeight(((Integer) value).intValue());
 		else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
 			jrband.setSplitType((SplitTypeEnum) EnumHelper.getSetValue(SplitTypeEnum.values(), value, 1, true));
+		else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrband.setPrintWhenExpression(expression);
+			}
+		}
 	}
 
 	/*
