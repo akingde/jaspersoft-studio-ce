@@ -178,12 +178,18 @@
             <input
                   type="com.jaspersoft.studio.model.MGraphicElement">
             </input>
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
          </propertySection>
          <propertySection
                afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.ColorSection"
                class="com.jaspersoft.studio.property.section.graphic.LinePenSection"
                id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
             <input
                   type="com.jaspersoft.studio.model.MGraphicElementLinePen">
             </input>

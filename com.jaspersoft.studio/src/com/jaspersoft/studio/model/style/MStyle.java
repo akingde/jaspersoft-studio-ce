@@ -172,7 +172,7 @@ public class MStyle extends APropertyNode {
 			items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : "";
 			for (int j = 0; j < styles.length; j++) {
 				if (jrElement != styles[j])
-					items[j + 1] = styles[j].getName();
+					items[j] = styles[j].getName();
 			}
 			styleD.setItems(items);
 		}
@@ -310,9 +310,8 @@ public class MStyle extends APropertyNode {
 		backcolorD.setCategory("Common");
 		modeD.setCategory("Common");
 
-		halignD.setCategory("Graphic");
 		linePenD.setCategory("Graphic");
-		valignD.setCategory("Graphic");
+
 		radiusD.setCategory("Graphic");
 		scaleD.setCategory("Graphic");
 		fillD.setCategory("Graphic");
@@ -322,6 +321,8 @@ public class MStyle extends APropertyNode {
 		lineSpacingD.setCategory("Text");
 		rotationD.setCategory("Text");
 		markupD.setCategory("Text");
+		halignD.setCategory("Text");
+		valignD.setCategory("Text");
 
 		fontNameD.setCategory("Text Font");
 		fontSizeD.setCategory("Text Font");

@@ -47,6 +47,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLinePen;
+import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -65,14 +66,13 @@ public class LinePenSection extends AbstractSection {
 	private Spinner lineWidth;
 
 	@Override
-	public void setInput(IWorkbenchPart part, ISelection selection) {
-		super.setInput(part, selection);
+	protected void setInputC(IWorkbenchPart part, ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		Object input = ((IStructuredSelection) selection).getFirstElement();
 		Assert.isTrue(input instanceof EditPart);
 		Object model = ((EditPart) input).getModel();
-		Assert.isTrue(model instanceof MGraphicElementLinePen);
-		model = ((MGraphicElementLinePen) model).getPropertyValue(MGraphicElementLinePen.LINE_PEN);
+		Assert.isTrue(model instanceof MGraphicElementLinePen || model instanceof MStyle);
+		model = ((APropertyNode) model).getPropertyValue(MGraphicElementLinePen.LINE_PEN);
 
 		EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
 		if (provider != null)
@@ -83,6 +83,7 @@ public class LinePenSection extends AbstractSection {
 			setElement((APropertyNode) model);
 			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
+
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class LinePenSection extends AbstractSection {
 		GridLayout layout = new GridLayout(6, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Color:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, "Pen Color:", SWT.RIGHT);
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -116,13 +117,13 @@ public class LinePenSection extends AbstractSection {
 		gd.widthHint = 30;
 		lineColor.setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(composite, "Style:");
+		getWidgetFactory().createCLabel(composite, "Pen Style:");
 		lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT);
 		lineStyle.setItems(EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
 		lineStyle.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, new Integer(lineStyle.getSelectionIndex()));
+				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, new Integer(lineStyle.getSelectionIndex() - 2));
 			}
 
 			@Override
@@ -131,15 +132,15 @@ public class LinePenSection extends AbstractSection {
 		});
 		lineStyle.setToolTipText("Line style");
 
-		label = getWidgetFactory().createCLabel(composite, "Size:", SWT.RIGHT);
+		label = getWidgetFactory().createCLabel(composite, "Pen Width:", SWT.RIGHT);
 
 		lineWidth = new Spinner(composite, SWT.BORDER);
-		lineWidth.setValues(0, 0, 100, 3, 1, 10);
+		lineWidth.setValues(0, 0, 5000, 1, 1, 100);
 		lineWidth.setToolTipText("width");
 		lineWidth.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, new Float(lineWidth.getSelection() / Math.pow(10, 3)));
+				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, new Float(lineWidth.getSelection() / Math.pow(10, 1)));
 			}
 		});
 	}
@@ -152,19 +153,22 @@ public class LinePenSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-		RGB backcolor = (RGB) element.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
-		if (backcolor != null)
-			lineColor.setImage(colorLabelProvider.getImage(backcolor));
-		else
-			lineColor.setImage(null);
+		if (element != null) {
+			RGB backcolor = (RGB) element.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
+			if (backcolor != null)
+				lineColor.setImage(colorLabelProvider.getImage(backcolor));
+			else
+				lineColor.setImage(null);
 
-		lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
-		Float propertyValue = (Float) element.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
-		if (propertyValue != null)
-			lineWidth.setSelection((int) (propertyValue.doubleValue() * Math.pow(10, 3)));
-		else
-			lineWidth.setSelection(0);
+			lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
+			Float propertyValue = (Float) element.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
+			if (propertyValue != null)
+				lineWidth.setSelection((int) (propertyValue.doubleValue() * Math.pow(10, 1)));
+			else
+				lineWidth.setSelection(0);
 
+			lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue() + 1);
+		}
 		isRefreshing = false;
 	}
 }
