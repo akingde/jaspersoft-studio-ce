@@ -311,9 +311,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 				"Position Type", EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
 		positionTypeD.setDescription("Specifies the object position when the report section is affected by stretch.");
 		desc.add(positionTypeD);
+		positionTypeD.setCategory("Location");
 
 		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE,
 				"Stretch Type", EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
+		stretchTypeD.setCategory("Size");
 		stretchTypeD
 				.setDescription("Specifies the graphic element stretch behavior when the report section is affected by stretch.");
 		desc.add(stretchTypeD);
