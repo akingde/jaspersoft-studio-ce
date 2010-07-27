@@ -103,7 +103,7 @@ public class ColorsSection extends AbstractSection {
 		foreButton.setLayoutData(gd);
 
 		getWidgetFactory().createCLabel(composite, "Transparency:");
-		modeType = new CCombo(composite, SWT.BORDER | SWT.FLAT);
+		modeType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		modeType.setItems(EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.NOTNULL));
 		modeType.addSelectionListener(new SelectionListener() {
 			@Override

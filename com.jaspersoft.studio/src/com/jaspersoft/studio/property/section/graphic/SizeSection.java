@@ -81,7 +81,7 @@ public class SizeSection extends AbstractSection {
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
-		stretchType = new CCombo(composite, SWT.BORDER | SWT.FLAT);
+		stretchType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		stretchType.setItems(EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
 		stretchType
 				.setToolTipText("Specifies the graphic element stretch behavior when the report section is affected by stretch.");
