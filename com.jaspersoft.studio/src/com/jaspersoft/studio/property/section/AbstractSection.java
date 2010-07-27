@@ -60,12 +60,16 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
 		if (provider != null)
 			setEditDomain(provider.getEditDomain());
-		if (this.element != model) {
-			if (this.element != null)
-				this.element.getPropertyChangeSupport().removePropertyChangeListener(this);
-			this.element = (APropertyNode) model;
-			this.element.getPropertyChangeSupport().addPropertyChangeListener(this);
+		if (getElement() != model) {
+			if (getElement() != null)
+				getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+			setElement((APropertyNode) model);
+			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
 		}
+	}
+
+	public void setElement(APropertyNode element) {
+		this.element = element;
 	}
 
 	public EditDomain getEditDomain() {

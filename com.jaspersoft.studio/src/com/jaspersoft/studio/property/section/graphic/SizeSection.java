@@ -83,6 +83,8 @@ public class SizeSection extends AbstractSection {
 
 		stretchType = new CCombo(composite, SWT.BORDER | SWT.FLAT);
 		stretchType.setItems(EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
+		stretchType
+				.setToolTipText("Specifies the graphic element stretch behavior when the report section is affected by stretch.");
 
 		widthText.addModifyListener(new ModifyListener() {
 			@Override

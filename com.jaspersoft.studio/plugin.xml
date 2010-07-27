@@ -180,6 +180,15 @@
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.ColorSection"
+               class="com.jaspersoft.studio.property.section.graphic.LinePenSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElementLinePen">
+            </input>
+         </propertySection>
+         <propertySection
                class="com.jaspersoft.studio.property.section.JDAdvancedSection"
                id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab">

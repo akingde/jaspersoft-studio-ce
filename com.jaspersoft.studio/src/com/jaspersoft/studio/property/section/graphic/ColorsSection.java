@@ -28,7 +28,6 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,6 +38,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -52,6 +52,7 @@ public class ColorsSection extends AbstractSection {
 	private Button backButton;
 	private Composite composite;
 	private Button foreButton;
+	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -70,7 +71,7 @@ public class ColorsSection extends AbstractSection {
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
-		backButton = new Button(composite, SWT.PUSH | SWT.FLAT);
+		backButton = new Button(composite, SWT.FLAT);
 		backButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(composite.getShell());
@@ -80,12 +81,13 @@ public class ColorsSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_BACKCOLOR, newColor);
 			}
 		});
+		backButton.setToolTipText("Element backcolor");
 		gd = new GridData();
 		gd.widthHint = 30;
 		backButton.setLayoutData(gd);
 		getWidgetFactory().createCLabel(composite, "ForeColor:", SWT.RIGHT);
 
-		foreButton = new Button(composite, SWT.PUSH | SWT.FLAT);
+		foreButton = new Button(composite, SWT.FLAT);
 		foreButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(composite.getShell());
@@ -95,7 +97,7 @@ public class ColorsSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_FORECOLOR, newColor);
 			}
 		});
-		foreButton.setGrayed(false);
+		foreButton.setToolTipText("Element forecolor");
 		gd = new GridData();
 		gd.widthHint = 30;
 		foreButton.setLayoutData(gd);
@@ -113,6 +115,7 @@ public class ColorsSection extends AbstractSection {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
+		modeType.setToolTipText("Specifies whether the background of an object is transparent or opaque.");
 	}
 
 	/**
@@ -122,11 +125,17 @@ public class ColorsSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		RGB backcolor = (RGB) element.getPropertyValue(JRBaseStyle.PROPERTY_BACKCOLOR);
+
 		if (backcolor != null)
-			backButton.setBackground(new Color(composite.getDisplay(), backcolor));
+			backButton.setImage(colorLabelProvider.getImage(backcolor));
+		else
+			backButton.setImage(null);
+
 		RGB foreColor = (RGB) element.getPropertyValue(JRBaseStyle.PROPERTY_FORECOLOR);
 		if (foreColor != null)
-			foreButton.setBackground(new Color(composite.getDisplay(), foreColor));
+			foreButton.setImage(colorLabelProvider.getImage(foreColor));
+		else
+			foreButton.setImage(null);
 		modeType.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_MODE)).intValue());
 		isRefreshing = false;
 	}

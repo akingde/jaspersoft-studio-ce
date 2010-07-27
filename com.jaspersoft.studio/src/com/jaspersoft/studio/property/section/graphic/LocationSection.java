@@ -82,6 +82,7 @@ public class LocationSection extends AbstractSection {
 
 		positionType = new CCombo(composite, SWT.BORDER | SWT.FLAT);
 		positionType.setItems(EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
+		positionType.setToolTipText("Specifies the object position when the report section is affected by stretch.");
 
 		xText.addModifyListener(new ModifyListener() {
 			@Override

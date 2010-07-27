@@ -34,7 +34,7 @@ import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
  */
 public abstract class MGraphicElementLinePen extends MGraphicElement implements IGraphicElement {
 
-	private static final String LINE_PEN = "LinePen";
+	public static final String LINE_PEN = "LinePen";
 
 	public MGraphicElementLinePen() {
 		super();
