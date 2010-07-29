@@ -380,13 +380,17 @@ public class MStyle extends APropertyNode {
 		}
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
 		if (id.equals(LINE_PEN)) {
-			if (linePen == null)
+			if (linePen == null) {
 				linePen = new MLinePen(jrstyle.getLinePen());
+				linePen.getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
 			return linePen;
 		}
 		if (id.equals(LINE_BOX)) {
-			if (lineBox == null)
+			if (lineBox == null) {
 				lineBox = new MLineBox(jrstyle.getLineBox());
+				lineBox.getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
 			return lineBox;
 		}
 		if (id.equals(LINE_BOX)) {

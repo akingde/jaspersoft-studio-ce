@@ -55,6 +55,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
@@ -135,13 +136,15 @@ public class BordersSection extends AbstractSection {
 
 		LightweightSystem lws = new LightweightSystem(square);
 		Figure f = new Figure();
-		lws.setContents(f);
 
 		f.setBackgroundColor(ColorConstants.white);
-		f.setLayoutManager(new BorderLayout());
+		BorderLayout manager = new BorderLayout();
+		manager.setHorizontalSpacing(5);
+		manager.setVerticalSpacing(5);
+		f.setLayoutManager(manager);
 
 		RectangleFigure rf = new RectangleFigure();
-		rf.setSize(100, 100);
+		rf.setPreferredSize(80, 80);
 		// rf.setLocation(new Point(5, 5));
 		LineBorder border = new LineBorder(ColorConstants.blue, 1);
 		rf.setBorder(border);
@@ -149,6 +152,7 @@ public class BordersSection extends AbstractSection {
 		f.add(rf);
 		f.setConstraint(rf, BorderLayout.CENTER);
 
+		lws.setContents(f);
 	}
 
 	private Control createStyle(Composite parent, final String property) {
@@ -307,7 +311,7 @@ public class BordersSection extends AbstractSection {
 	}
 
 	public void changeProperty(String prop, String property, Object newValue) {
-		MGraphicElementLineBox m = (MGraphicElementLineBox) getElement();
+		APropertyNode m = (APropertyNode) getElement();
 		MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 		if (prop.equals(property))
 			changeProperty(property, newValue, lb);
@@ -336,7 +340,7 @@ public class BordersSection extends AbstractSection {
 	 */
 	public void refresh() {
 		isRefreshing = true;
-		MGraphicElementLineBox m = (MGraphicElementLineBox) getElement();
+		APropertyNode m = (APropertyNode) getElement();
 		MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 		refreshPadding(lb);
 		refreshLinePen(lb, MLineBox.LINE_PEN, JRBaseLineBox.PROPERTY_PADDING);
