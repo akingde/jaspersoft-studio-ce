@@ -145,8 +145,7 @@ public class BordersSection extends AbstractSection {
 
 		RectangleFigure rf = new RectangleFigure();
 		rf.setPreferredSize(80, 80);
-		// rf.setLocation(new Point(5, 5));
-		LineBorder border = new LineBorder(ColorConstants.blue, 1);
+		LineBorder border = new LineBorder(ColorConstants.blue, 10);
 		rf.setBorder(border);
 
 		f.add(rf);

@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.editor.gef.figures.borders;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
@@ -60,13 +61,17 @@ public class CornerBorder extends LineBorder {
 		if (graphics instanceof J2DGraphics) {
 			Graphics2D g = ((J2DGraphics) graphics).getGraphics2D();
 			Stroke oldStroke = g.getStroke();
-			g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
+			BasicStroke invertedZoomedStroke = (BasicStroke) J2DUtils.getInvertedZoomedStroke(oldStroke, graphics
+					.getAbsoluteScale());
+
+			g.setStroke(new BasicStroke(1.0f));
 
 			if (getColor() != null)
 				g.setColor((J2DGraphics.toAWTColor(getColor())));
 
 			int bottom = bounds.y + bounds.height - 1;
 			int right = bounds.x + bounds.width - 1;
+
 			// top left
 			g.drawLine(bounds.x, bounds.y, bounds.x + o, bounds.y);
 			g.drawLine(bounds.x, bounds.y, bounds.x, bounds.y + o);
