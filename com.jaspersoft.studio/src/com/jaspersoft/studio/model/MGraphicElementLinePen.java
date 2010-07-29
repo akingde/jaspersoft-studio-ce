@@ -70,8 +70,10 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 		// pen
 		if (id.equals(LINE_PEN)) {
 			JRDesignGraphicElement jrGraphicElement = (JRDesignGraphicElement) getValue();
-			if (linePen == null)
+			if (linePen == null) {
 				linePen = new MLinePen(jrGraphicElement.getLinePen());
+				linePen.getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
 			return linePen;
 		}
 		return super.getPropertyValue(id);

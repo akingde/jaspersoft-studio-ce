@@ -21,8 +21,6 @@ package com.jaspersoft.studio.property.descriptor.combo;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-
 /**
  * @author Chicu Veaceslav
  * 

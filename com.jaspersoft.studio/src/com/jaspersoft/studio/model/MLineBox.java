@@ -93,11 +93,11 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 		desc.add(linePenRightD);
 	}
 
-	private static final String LINE_PEN = "LinePen";
-	private static final String LINE_PEN_TOP = "LinePen_TOP";
-	private static final String LINE_PEN_BOTTOM = "LinePen_BOTTOM";
-	private static final String LINE_PEN_LEFT = "LinePen_LEFT";
-	private static final String LINE_PEN_RIGHT = "LinePen_RIGHT";
+	public static final String LINE_PEN = "LinePen";
+	public static final String LINE_PEN_TOP = "LinePen_TOP";
+	public static final String LINE_PEN_BOTTOM = "LinePen_BOTTOM";
+	public static final String LINE_PEN_LEFT = "LinePen_LEFT";
+	public static final String LINE_PEN_RIGHT = "LinePen_RIGHT";
 
 	private MLinePen linePen;
 	private MLinePen linePenTop;
@@ -146,28 +146,38 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 				return lineBox.getOwnBottomPadding();
 			// ----------------------------------------------------
 			if (id.equals(LINE_PEN)) {
-				if (linePen == null)
+				if (linePen == null) {
 					linePen = new MLinePen(lineBox.getPen());
+					linePen.getPropertyChangeSupport().addPropertyChangeListener(this);
+				}
 				return linePen;
 			}
 			if (id.equals(LINE_PEN_TOP)) {
-				if (linePenTop == null)
+				if (linePenTop == null) {
 					linePenTop = new MLinePen(lineBox.getTopPen());
+					linePenTop.getPropertyChangeSupport().addPropertyChangeListener(this);
+				}
 				return linePenTop;
 			}
 			if (id.equals(LINE_PEN_BOTTOM)) {
-				if (linePenBottom == null)
+				if (linePenBottom == null) {
 					linePenBottom = new MLinePen(lineBox.getBottomPen());
+					linePenBottom.getPropertyChangeSupport().addPropertyChangeListener(this);
+				}
 				return linePenBottom;
 			}
 			if (id.equals(LINE_PEN_LEFT)) {
-				if (linePenLeft == null)
+				if (linePenLeft == null) {
 					linePenLeft = new MLinePen(lineBox.getLeftPen());
+					linePenLeft.getPropertyChangeSupport().addPropertyChangeListener(this);
+				}
 				return linePenLeft;
 			}
 			if (id.equals(LINE_PEN_RIGHT)) {
-				if (linePenRight == null)
+				if (linePenRight == null) {
 					linePenRight = new MLinePen(lineBox.getRightPen());
+					linePenRight.getPropertyChangeSupport().addPropertyChangeListener(this);
+				}
 				return linePenRight;
 			}
 		}

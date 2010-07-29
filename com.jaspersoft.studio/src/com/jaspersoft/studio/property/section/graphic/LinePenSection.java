@@ -118,12 +118,12 @@ public class LinePenSection extends AbstractSection {
 		lineColor.setLayoutData(gd);
 
 		getWidgetFactory().createCLabel(composite, "Pen Style:");
-		lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT);
+		lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		lineStyle.setItems(EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
 		lineStyle.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, new Integer(lineStyle.getSelectionIndex() - 2));
+				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, new Integer(lineStyle.getSelectionIndex()));
 			}
 
 			@Override
@@ -167,7 +167,7 @@ public class LinePenSection extends AbstractSection {
 			else
 				lineWidth.setSelection(0);
 
-			lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue() + 1);
+			lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
 		}
 		isRefreshing = false;
 	}

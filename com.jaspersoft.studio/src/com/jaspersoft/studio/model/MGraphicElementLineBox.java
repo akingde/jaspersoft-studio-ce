@@ -34,7 +34,7 @@ import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
  */
 public abstract class MGraphicElementLineBox extends MGraphicElement implements IGraphicElement {
 
-	private static final String LINE_BOX = "LineBox";
+	public static final String LINE_BOX = "LineBox";
 
 	public MGraphicElementLineBox() {
 		super();
@@ -70,8 +70,10 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		// pen
 		if (id.equals(LINE_BOX)) {
 			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
-			if (lineBox == null)
+			if (lineBox == null){
 				lineBox = new MLineBox(jrGraphicElement.getLineBox());
+				lineBox.getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
 			return lineBox;
 		}
 		return super.getPropertyValue(id);

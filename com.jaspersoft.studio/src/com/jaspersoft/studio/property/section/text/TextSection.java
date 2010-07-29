@@ -84,7 +84,7 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, HorizontalAlignEnum.LEFT);
 			}
 		});
-		alignLeftButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/align_left.png"));
+		alignLeftButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/left_align.gif"));
 		alignLeftButton.setToolTipText("Align left");
 
 		alignCenterButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
@@ -93,7 +93,7 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, HorizontalAlignEnum.CENTER);
 			}
 		});
-		alignCenterButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/align_center.png"));
+		alignCenterButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/center_align.gif"));
 		alignCenterButton.setToolTipText("Align center");
 
 		alignJustifiedButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
@@ -102,7 +102,7 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, HorizontalAlignEnum.JUSTIFIED);
 			}
 		});
-		alignJustifiedButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/align_justified.png"));
+		alignJustifiedButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/justified_align.gif"));
 		alignJustifiedButton.setToolTipText("Align justified");
 
 		alignRightButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
@@ -111,7 +111,7 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, HorizontalAlignEnum.RIGHT);
 			}
 		});
-		alignRightButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/align_right.png"));
+		alignRightButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/right_align.gif"));
 		alignRightButton.setToolTipText("Align right");
 
 		getWidgetFactory().createCLabel(composite, "", SWT.RIGHT);

@@ -33,7 +33,6 @@ import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
@@ -124,13 +123,17 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	protected boolean isRefreshing = false;
 
 	public void changeProperty(String property, Object newValue) {
+		changeProperty(property, newValue, getElement());
+	}
+
+	public void changeProperty(String property, Object newValue, APropertyNode el) {
 		if (!isRefreshing) {
 			Object oldValue = getElement().getPropertyValue(property);
 			if (!newValue.equals(oldValue)) {
 				CommandStack cs = getEditDomain().getCommandStack();
 
 				SetValueCommand setCommand = new SetValueCommand(getElement().getDisplayText());
-				setCommand.setTarget(getElement());
+				setCommand.setTarget(el);
 				setCommand.setPropertyId(property);
 				setCommand.setPropertyValue(newValue);
 				cs.execute(setCommand);

@@ -256,6 +256,49 @@
                   type="com.jaspersoft.studio.model.sortfield.MSortField">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.band.BandSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.band.BandSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.band.MBand">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.report.PageSizeSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.report.PageSizeSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.report.PageSizeSection"
+               class="com.jaspersoft.studio.property.section.report.PageMarginSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.report.PageMarginSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
+               class="com.jaspersoft.studio.property.section.graphic.PaddingSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.PaddingSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
+               class="com.jaspersoft.studio.property.section.graphic.BordersSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.BordersSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElementLineBox">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    
