@@ -25,9 +25,7 @@ package com.jaspersoft.studio.editor.java2d;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.draw2d.DeferredUpdateManager;
 import org.eclipse.draw2d.Graphics;

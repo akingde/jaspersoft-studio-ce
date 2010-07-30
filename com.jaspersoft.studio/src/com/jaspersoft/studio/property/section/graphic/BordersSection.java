@@ -19,20 +19,25 @@
  */
 package com.jaspersoft.studio.property.section.graphic;
 
+import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jasperreports.engine.JRBoxContainer;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRLineBox;
+import net.sf.jasperreports.engine.JRPrintElement;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
+import net.sf.jasperreports.engine.base.JRBasePrintText;
+import net.sf.jasperreports.engine.export.draw.BoxDrawer;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
-import org.eclipse.draw2d.BorderLayout;
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -53,6 +58,8 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
@@ -68,6 +75,13 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * @author Chicu Veaceslav
  */
 public class BordersSection extends AbstractSection {
+
+	private final class LineBoxDrawer extends BoxDrawer {
+
+		public void drawBox(Graphics2D graphics2d, JRLineBox box, JRPrintElement element) throws JRException {
+			drawBox(graphics2d, box, element, 0, 0);
+		}
+	}
 
 	private Button allBorder;
 	private Button topBorder;
@@ -132,24 +146,35 @@ public class BordersSection extends AbstractSection {
 		gd.widthHint = 120;
 		square.setLayoutData(gd);
 
-		LightweightSystem lws = new LightweightSystem(square);
-		Figure f = new Figure();
+		LightweightSystem lws = new J2DLightweightSystem();
+		lws.setControl(square);
 
-		f.setBackgroundColor(ColorConstants.white);
-		BorderLayout manager = new BorderLayout();
-		manager.setHorizontalSpacing(5);
-		manager.setVerticalSpacing(5);
-		f.setLayoutManager(manager);
+		borderPreview = new RectangleFigure() {
+			private LineBoxDrawer bd = new LineBoxDrawer();
 
-		RectangleFigure rf = new RectangleFigure();
-		rf.setPreferredSize(80, 80);
-		LineBorder border = new LineBorder(ColorConstants.blue, 1);
-		rf.setBorder(border);
+			@Override
+			public void paint(Graphics graphics) {
+				try {
+					Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
 
-		f.add(rf);
-		f.setConstraint(rf, BorderLayout.CENTER);
+					Rectangle b = getBounds();
 
-		lws.setContents(f);
+					JRPrintElement pe = new JRBasePrintText(null);
+					pe.setX(b.x + 10);
+					pe.setY(b.y + 10);
+					pe.setWidth(b.width - 20);
+					pe.setHeight(b.height - 20);
+
+					bd.drawBox(graphics2d, ((JRBoxContainer) getElement().getValue()).getLineBox(), pe);
+				} catch (Exception e) {
+					// when a font is missing exception is thrown by DrawVisitor
+					// FIXME: maybe draw something, else?
+					e.printStackTrace();
+				}
+			}
+		};
+
+		lws.setContents(borderPreview);
 	}
 
 	private Control createStyle(Composite parent, final String property) {
@@ -348,6 +373,9 @@ public class BordersSection extends AbstractSection {
 		refreshLinePen(lb, MLineBox.LINE_PEN_BOTTOM, JRBaseLineBox.PROPERTY_BOTTOM_PADDING);
 		refreshLinePen(lb, MLineBox.LINE_PEN_LEFT, JRBaseLineBox.PROPERTY_LEFT_PADDING);
 		refreshLinePen(lb, MLineBox.LINE_PEN_RIGHT, JRBaseLineBox.PROPERTY_RIGHT_PADDING);
+		//
+		// if (borderPreview != null)
+		// borderPreview.repaint();
 		isRefreshing = false;
 	}
 
@@ -391,5 +419,6 @@ public class BordersSection extends AbstractSection {
 	}
 
 	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);
+	private RectangleFigure borderPreview;
 
 }

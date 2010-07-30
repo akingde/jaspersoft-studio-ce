@@ -19,8 +19,10 @@
  */
 package com.jaspersoft.studio.utils;
 
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +41,7 @@ import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.util.JRFontUtil;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
@@ -534,7 +537,26 @@ public class ModelUtils {
 	}
 
 	public static String[] getFontNames() {
-		return new String[] { "", "Arial", "Serif", "Sans Serif", "Verdana" };
+		java.util.List<String> classes = new ArrayList<String>();
+		classes.add("");
+		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
+
+		Collection<?> extensionFonts = JRFontUtil.getFontFamilyNames();
+		for (Iterator<?> it = extensionFonts.iterator(); it.hasNext();) {
+			String fname = (String) it.next();
+			classes.add(fname);
+		}
+
+		Thread.currentThread().setContextClassLoader(oldCL);
+
+		String[] names = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		classes.add("______________");
+		for (int i = 0; i < names.length; i++) {
+			String name = names[i];
+			classes.add(name);
+		}
+
+		return classes.toArray(new String[classes.size()]);
 	}
 
 	public static String[] getFontSizes() {

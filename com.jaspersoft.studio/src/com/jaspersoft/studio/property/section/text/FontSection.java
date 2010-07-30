@@ -24,9 +24,10 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -34,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -71,30 +73,47 @@ public class FontSection extends AbstractSection {
 
 		fontName = new CCombo(composite, SWT.BORDER | SWT.FLAT);
 		fontName.setItems(ModelUtils.getFontNames());
-		fontName.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBaseStyle.PROPERTY_FONT_NAME, fontName.getText());
-			}
+		// fontName.addSelectionListener(new SelectionListener() {
+		// @Override
+		// public void widgetSelected(SelectionEvent e) {
+		// changeProperty(JRBaseStyle.PROPERTY_FONT_NAME, fontName.getText());
+		// }
+		//
+		// @Override
+		// public void widgetDefaultSelected(SelectionEvent e) {
+		// }
+		// });
+		fontName.addModifyListener(new ModifyListener() {
+			private int time = 0;
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void modifyText(ModifyEvent e) {
+				if (e.time - time > 100) {
+					String value = fontName.getText();
+					if (!value.equals("______________"))
+						changeProperty(JRBaseStyle.PROPERTY_FONT_NAME, value);
+				}
+				time = e.time;
 			}
 		});
 		fontName.setToolTipText("Font name");
 
 		fontSize = new CCombo(composite, SWT.BORDER | SWT.FLAT);
 		fontSize.setItems(ModelUtils.getFontSizes());
-		fontSize.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBaseStyle.PROPERTY_FONT_SIZE, fontSize.getText());
-			}
+		fontSize.addModifyListener(new ModifyListener() {
+			private int time = 0;
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void modifyText(ModifyEvent e) {
+				if (e.time - time > 100) {
+					String value = fontSize.getText();
+					if (IntegerCellEditorValidator.instance().isValid(value) == null)
+						changeProperty(JRBaseStyle.PROPERTY_FONT_SIZE, value);
+				}
+				time = e.time;
 			}
 		});
+
 		fontSize.setToolTipText("Font size");
 
 		boldButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);

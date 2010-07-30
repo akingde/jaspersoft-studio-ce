@@ -32,7 +32,6 @@ import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
-import com.jaspersoft.studio.editor.java2d.J2DUtils;
 
 /**
  * The Class ShadowBorder.
@@ -56,21 +55,18 @@ public class CornerBorder extends LineBorder {
 		Rectangle bounds = figure.getBounds();
 		if (figure instanceof HandleBounds)
 			bounds = ((HandleBounds) figure).getHandleBounds();
-		// tempRect.setBounds(bounds);
 
 		if (graphics instanceof J2DGraphics) {
 			Graphics2D g = ((J2DGraphics) graphics).getGraphics2D();
 			Stroke oldStroke = g.getStroke();
-			BasicStroke invertedZoomedStroke = (BasicStroke) J2DUtils.getInvertedZoomedStroke(oldStroke, graphics
-					.getAbsoluteScale());
 
-			g.setStroke(new BasicStroke(1.0f));
+			g.setStroke(new BasicStroke(0.1f));
 
 			if (getColor() != null)
 				g.setColor((J2DGraphics.toAWTColor(getColor())));
 
-			int bottom = bounds.y + bounds.height - 1;
-			int right = bounds.x + bounds.width - 1;
+			int bottom = bounds.y + bounds.height;
+			int right = bounds.x + bounds.width;
 
 			// top left
 			g.drawLine(bounds.x, bounds.y, bounds.x + o, bounds.y);
@@ -88,7 +84,6 @@ public class CornerBorder extends LineBorder {
 				g.drawLine(bounds.x + bounds.width / 2 - o / 2, bounds.y, bounds.x + bounds.width / 2 + o / 2, bounds.y);
 				g.drawLine(bounds.x + bounds.width / 2 - o / 2, bottom, bounds.x + bounds.width / 2 + o / 2, bottom);
 			}
-			// graphics.drawRectangle(tempRect);
 			g.setStroke(oldStroke);
 		}
 	}
