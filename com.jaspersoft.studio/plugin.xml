@@ -147,6 +147,12 @@
                id="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
                label="Appearance">
          </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               category="element"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               label="Borders">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -186,7 +192,7 @@
                afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.ColorSection"
                class="com.jaspersoft.studio.property.section.graphic.LinePenSection"
                id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Borders">
             <input
                   type="com.jaspersoft.studio.model.style.MStyle">
             </input>
@@ -291,7 +297,7 @@
                afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
                class="com.jaspersoft.studio.property.section.graphic.BordersSection"
                id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.BordersSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Borders">
             <input
                   type="com.jaspersoft.studio.model.style.MStyle">
             </input>
