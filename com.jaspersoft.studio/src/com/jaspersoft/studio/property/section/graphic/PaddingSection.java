@@ -27,8 +27,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -100,9 +100,8 @@ public class PaddingSection extends AbstractSection {
 		allPadding = new Spinner(composite, SWT.BORDER);
 		allPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		allPadding.setToolTipText("padding");
-		allPadding.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		allPadding.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_PADDING, new Integer(allPadding.getSelection()));
 			}
 		});
@@ -114,9 +113,8 @@ public class PaddingSection extends AbstractSection {
 		topPadding = new Spinner(composite, SWT.BORDER);
 		topPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		topPadding.setToolTipText("top padding");
-		topPadding.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		topPadding.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_TOP_PADDING, new Integer(topPadding.getSelection()));
 			}
 		});
@@ -128,9 +126,8 @@ public class PaddingSection extends AbstractSection {
 		bottomPadding = new Spinner(composite, SWT.BORDER);
 		bottomPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		bottomPadding.setToolTipText("bottom padding");
-		bottomPadding.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		bottomPadding.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, new Integer(bottomPadding.getSelection()));
 			}
 		});
@@ -142,9 +139,8 @@ public class PaddingSection extends AbstractSection {
 		leftPadding = new Spinner(composite, SWT.BORDER);
 		leftPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		leftPadding.setToolTipText("left padding");
-		leftPadding.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		leftPadding.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_LEFT_PADDING, new Integer(leftPadding.getSelection()));
 			}
 		});
@@ -156,9 +152,8 @@ public class PaddingSection extends AbstractSection {
 		rightPadding = new Spinner(composite, SWT.BORDER);
 		rightPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		rightPadding.setToolTipText("right padding");
-		rightPadding.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		rightPadding.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_RIGHT_PADDING, new Integer(rightPadding.getSelection()));
 			}
 		});

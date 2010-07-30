@@ -24,8 +24,6 @@ import net.sf.jasperreports.engine.type.OrientationEnum;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -71,9 +69,8 @@ public class PageSizeSection extends AbstractSection {
 		width = new Spinner(composite, SWT.BORDER);
 		width.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		width.setToolTipText("width");
-		width.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		width.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_PAGE_WIDTH, new Integer(width.getSelection()));
 			}
 		});
@@ -81,9 +78,8 @@ public class PageSizeSection extends AbstractSection {
 		height = new Spinner(composite, SWT.BORDER);
 		height.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		height.setToolTipText("height");
-		height.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		height.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_PAGE_HEIGHT, new Integer(height.getSelection()));
 			}
 		});

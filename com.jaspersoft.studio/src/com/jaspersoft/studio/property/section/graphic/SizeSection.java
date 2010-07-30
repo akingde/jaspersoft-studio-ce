@@ -25,8 +25,7 @@ import net.sf.jasperreports.engine.type.StretchTypeEnum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -86,15 +85,13 @@ public class SizeSection extends AbstractSection {
 		stretchType
 				.setToolTipText("Specifies the graphic element stretch behavior when the report section is affected by stretch.");
 
-		widthText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		widthText.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRDesignElement.PROPERTY_WIDTH, new Integer(widthText.getSelection()));
 			}
 		});
-		heightText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		heightText.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRDesignElement.PROPERTY_HEIGHT, new Integer(heightText.getSelection()));
 			}
 		});

@@ -29,8 +29,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -137,10 +135,12 @@ public class LinePenSection extends AbstractSection {
 		lineWidth = new Spinner(composite, SWT.BORDER);
 		lineWidth.setValues(0, 0, 5000, 1, 1, 100);
 		lineWidth.setToolTipText("width");
-		lineWidth.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, new Float(lineWidth.getSelection() / Math.pow(10, 1)));
+		lineWidth.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				int selection = lineWidth.getSelection();
+				int digits = lineWidth.getDigits();
+				Float newValue = new Float(selection / Math.pow(10, digits));
+				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, newValue);
 			}
 		});
 	}

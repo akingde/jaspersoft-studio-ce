@@ -37,8 +37,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -165,9 +163,8 @@ public class BordersSection extends AbstractSection {
 		final Spinner padding = new Spinner(composite, SWT.BORDER);
 		padding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		padding.setToolTipText("padding");
-		padding.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		padding.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(property, property, new Integer(padding.getSelection()));
 			}
 		});
@@ -210,12 +207,14 @@ public class BordersSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, "Pen Width:", SWT.RIGHT);
 
 		final Spinner lineWidth = new Spinner(composite, SWT.BORDER);
-		lineWidth.setValues(0, 0, 5000, 1, 1, 100);
+		lineWidth.setValues(0, 0, 5000, 1, 1, 1);
 		lineWidth.setToolTipText("width");
-		lineWidth.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				changeProperty(property, JRBasePen.PROPERTY_LINE_WIDTH, new Float(lineWidth.getSelection() / Math.pow(10, 1)));
+		lineWidth.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				int selection = lineWidth.getSelection();
+				int digits = lineWidth.getDigits();
+				Float newValue = new Float(selection / Math.pow(10, digits));
+				changeProperty(property, JRBasePen.PROPERTY_LINE_WIDTH, newValue);
 			}
 		});
 		lineWidthMap.put(property + "." + JRBasePen.PROPERTY_LINE_WIDTH, lineWidth);
@@ -310,26 +309,28 @@ public class BordersSection extends AbstractSection {
 	}
 
 	public void changeProperty(String prop, String property, Object newValue) {
-		APropertyNode m = (APropertyNode) getElement();
-		MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
-		if (prop.equals(property))
-			changeProperty(property, newValue, lb);
-		else {
-			if (prop.equals(JRBaseLineBox.PROPERTY_PADDING)) {
-				MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN);
-				changeProperty(property, newValue, lp);
-			} else if (prop.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)) {
-				MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
-				changeProperty(property, newValue, lp);
-			} else if (prop.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)) {
-				MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
-				changeProperty(property, newValue, lp);
-			} else if (prop.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)) {
-				MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
-				changeProperty(property, newValue, lp);
-			} else if (prop.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)) {
-				MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
-				changeProperty(property, newValue, lp);
+		if (!isRefreshing) {
+			APropertyNode m = (APropertyNode) getElement();
+			MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
+			if (prop.equals(property))
+				changeProperty(property, newValue, lb);
+			else {
+				if (prop.equals(JRBaseLineBox.PROPERTY_PADDING)) {
+					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN);
+					changeProperty(property, newValue, lp);
+				} else if (prop.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)) {
+					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
+					changeProperty(property, newValue, lp);
+				} else if (prop.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)) {
+					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
+					changeProperty(property, newValue, lp);
+				} else if (prop.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)) {
+					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
+					changeProperty(property, newValue, lp);
+				} else if (prop.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)) {
+					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
+					changeProperty(property, newValue, lp);
+				}
 			}
 		}
 	}

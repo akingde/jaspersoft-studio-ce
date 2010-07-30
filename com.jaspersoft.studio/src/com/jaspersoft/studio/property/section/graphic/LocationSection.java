@@ -25,8 +25,7 @@ import net.sf.jasperreports.engine.type.PositionTypeEnum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -84,15 +83,13 @@ public class LocationSection extends AbstractSection {
 		positionType.setItems(EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
 		positionType.setToolTipText("Specifies the object position when the report section is affected by stretch.");
 
-		xText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		xText.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRDesignElement.PROPERTY_X, new Integer(xText.getSelection()));
 			}
 		});
-		yText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		yText.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRDesignElement.PROPERTY_Y, new Integer(yText.getSelection()));
 			}
 		});

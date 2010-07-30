@@ -23,12 +23,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -71,9 +70,8 @@ public class PageMarginSection extends AbstractSection {
 		topMargin = new Spinner(composite, SWT.BORDER);
 		topMargin.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		topMargin.setToolTipText("top margin");
-		topMargin.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		topMargin.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_TOP_MARGIN, new Integer(topMargin.getSelection()));
 			}
 		});
@@ -85,9 +83,8 @@ public class PageMarginSection extends AbstractSection {
 		bottomMargin = new Spinner(composite, SWT.BORDER);
 		bottomMargin.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		bottomMargin.setToolTipText("bottom margin");
-		bottomMargin.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		bottomMargin.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_BOTTOM_MARGIN, new Integer(bottomMargin.getSelection()));
 			}
 		});
@@ -99,9 +96,8 @@ public class PageMarginSection extends AbstractSection {
 		leftMargin = new Spinner(composite, SWT.BORDER);
 		leftMargin.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		leftMargin.setToolTipText("left margin");
-		leftMargin.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		leftMargin.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_LEFT_MARGIN, new Integer(leftMargin.getSelection()));
 			}
 		});
@@ -113,9 +109,8 @@ public class PageMarginSection extends AbstractSection {
 		rightMargin = new Spinner(composite, SWT.BORDER);
 		rightMargin.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		rightMargin.setToolTipText("right margin");
-		rightMargin.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
+		rightMargin.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_RIGHT_MARGIN, new Integer(rightMargin.getSelection()));
 			}
 		});
