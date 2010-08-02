@@ -140,7 +140,7 @@ public class BordersSection extends AbstractSection {
 
 	private void createBorderPreview(Composite composite) {
 		GridData gd;
-		Canvas square = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
+		square = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
 		gd = new GridData(GridData.FILL_VERTICAL | GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER);
 		gd.horizontalSpan = 5;
 		gd.widthHint = 120;
@@ -374,8 +374,8 @@ public class BordersSection extends AbstractSection {
 		refreshLinePen(lb, MLineBox.LINE_PEN_LEFT, JRBaseLineBox.PROPERTY_LEFT_PADDING);
 		refreshLinePen(lb, MLineBox.LINE_PEN_RIGHT, JRBaseLineBox.PROPERTY_RIGHT_PADDING);
 		//
-		// if (borderPreview != null)
-		// borderPreview.repaint();
+		if (square != null)
+			square.redraw();
 		isRefreshing = false;
 	}
 
@@ -420,5 +420,6 @@ public class BordersSection extends AbstractSection {
 
 	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);
 	private RectangleFigure borderPreview;
+	private Canvas square;
 
 }
