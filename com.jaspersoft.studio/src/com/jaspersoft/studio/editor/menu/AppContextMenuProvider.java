@@ -33,6 +33,7 @@ import com.jaspersoft.studio.editor.action.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.BringForwardAction;
 import com.jaspersoft.studio.editor.action.BringToBackAction;
 import com.jaspersoft.studio.editor.action.BringToFrontAction;
+import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
@@ -89,7 +90,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		action = getActionRegistry().getAction(CreateFieldAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-		
+
 		action = getActionRegistry().getAction(CreateSortFieldAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
@@ -195,6 +196,10 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		//
 		// action = getActionRegistry().getAction(ActionFactory.SAVE.getId());
 		// menu.appendToGroup(GEFActionConstants.GROUP_SAVE, action);
+
+		action = getActionRegistry().getAction(ShowPropertyViewAction.ID);
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 	}
 
 	/**

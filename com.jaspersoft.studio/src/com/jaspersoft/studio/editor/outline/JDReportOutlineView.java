@@ -53,6 +53,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
 
+import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
@@ -168,6 +169,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 
 		id = CreateBandAction.ID;
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+
+		id = ShowPropertyViewAction.ID;
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 
 		bars.updateActionBars();

@@ -199,18 +199,15 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 * @return the property sheet page
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		if (propertySheetPage == null) {
-//			PropertySheetPage psp = new PropertySheetPage();
-//			propertySheetEntry = new JRPropertySheetEntry(((ReportEditor) editors.get(0)).getEditDomain().getCommandStack(),
-//					(ANode) getModel());
-//			psp.setRootEntry(propertySheetEntry);
-//			propertySheetPage = psp;
+		// PropertySheetPage psp = new PropertySheetPage();
+		// propertySheetEntry = new JRPropertySheetEntry(((ReportEditor) editors.get(0)).getEditDomain().getCommandStack(),
+		// (ANode) getModel());
+		// psp.setRootEntry(propertySheetEntry);
+		// propertySheetPage = psp;
 
-			TabbedPropertySheetPage tpsp = new TabbedPropertySheetPage(ReportContainer.this, true);
+		TabbedPropertySheetPage tpsp = new TabbedPropertySheetPage(ReportContainer.this, true);
+		propertySheetPage = tpsp;
 
-			propertySheetPage = tpsp;
-
-		}
 		return propertySheetPage;
 	}
 

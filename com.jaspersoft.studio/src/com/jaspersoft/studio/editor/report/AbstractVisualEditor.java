@@ -66,6 +66,7 @@ import com.jaspersoft.studio.editor.action.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.BringForwardAction;
 import com.jaspersoft.studio.editor.action.BringToBackAction;
 import com.jaspersoft.studio.editor.action.BringToFrontAction;
+import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.dnd.TextTransferDropTargetListener;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
@@ -233,10 +234,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		if (type == ZoomManager.class)
 			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
 		if (type == IContentOutlinePage.class) {
-			if (outlinePage == null) {
-				TreeViewer viewer = new TreeViewer();
-				outlinePage = new JDReportOutlineView(this, viewer);
-			}
+
+			TreeViewer viewer = new TreeViewer();
+			outlinePage = new JDReportOutlineView(this, viewer);
+
 			return outlinePage;
 		}
 		if (type == EditorContributor.class) {
@@ -455,5 +456,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.MIDDLE);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
+
+		action = new ShowPropertyViewAction((IWorkbenchPart) this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
 	}
 }
