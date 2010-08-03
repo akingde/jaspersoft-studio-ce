@@ -70,6 +70,7 @@ import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.order.BringForwardAction;
 import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
+import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.dnd.TextTransferDropTargetListener;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
@@ -476,6 +477,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		getSelectionActions().add(action.getId());
 
 		action = new MatchHeightAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new MatchSizeAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 

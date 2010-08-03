@@ -23,9 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.gef.ui.actions.AlignmentRetargetAction;
 import org.eclipse.gef.ui.actions.DeleteRetargetAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.MatchHeightRetargetAction;
@@ -63,10 +61,6 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
-import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
-import com.jaspersoft.studio.editor.action.order.BringForwardAction;
-import com.jaspersoft.studio.editor.action.order.BringToBackAction;
-import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 
 /**
@@ -123,17 +117,17 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		addRetargetAction(new RedoRetargetAction());
 		addRetargetAction(new DeleteRetargetAction());
 
-		addRetargetAction(new RetargetAction(BringToFrontAction.ID, "Bring To Front"));
-		addRetargetAction(new RetargetAction(BringForwardAction.ID, "Bring Forward"));
-		addRetargetAction(new RetargetAction(BringBackwardAction.ID, "Bring Backward"));
-		addRetargetAction(new RetargetAction(BringToBackAction.ID, "Bring To Back"));
-
-		addRetargetAction(new AlignmentRetargetAction(PositionConstants.LEFT));
-		addRetargetAction(new AlignmentRetargetAction(PositionConstants.CENTER));
-		addRetargetAction(new AlignmentRetargetAction(PositionConstants.RIGHT));
-		addRetargetAction(new AlignmentRetargetAction(PositionConstants.TOP));
-		addRetargetAction(new AlignmentRetargetAction(PositionConstants.MIDDLE));
-		addRetargetAction(new AlignmentRetargetAction(PositionConstants.BOTTOM));
+		// addRetargetAction(new RetargetAction(BringToFrontAction.ID, "Bring To Front"));
+		// addRetargetAction(new RetargetAction(BringForwardAction.ID, "Bring Forward"));
+		// addRetargetAction(new RetargetAction(BringBackwardAction.ID, "Bring Backward"));
+		// addRetargetAction(new RetargetAction(BringToBackAction.ID, "Bring To Back"));
+		//
+		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.LEFT));
+		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.CENTER));
+		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.RIGHT));
+		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.TOP));
+		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.MIDDLE));
+		// addRetargetAction(new AlignmentRetargetAction(PositionConstants.BOTTOM));
 
 		addRetargetAction(new ZoomInRetargetAction());
 		addRetargetAction(new ZoomOutRetargetAction());
@@ -289,18 +283,18 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		tbm.add(getAction(ActionFactory.UNDO.getId()));
 		tbm.add(getAction(ActionFactory.REDO.getId()));
 
-		tbm.add(new Separator());
-		tbm.add(getAction(GEFActionConstants.ALIGN_LEFT));
-		tbm.add(getAction(GEFActionConstants.ALIGN_CENTER));
-		tbm.add(getAction(GEFActionConstants.ALIGN_RIGHT));
-		tbm.add(new Separator());
-		tbm.add(getAction(GEFActionConstants.ALIGN_TOP));
-		tbm.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
-		tbm.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
-
-		tbm.add(new Separator());
-		tbm.add(getAction(GEFActionConstants.MATCH_WIDTH));
-		tbm.add(getAction(GEFActionConstants.MATCH_HEIGHT));
+		// tbm.add(new Separator());
+		// tbm.add(getAction(GEFActionConstants.ALIGN_LEFT));
+		// tbm.add(getAction(GEFActionConstants.ALIGN_CENTER));
+		// tbm.add(getAction(GEFActionConstants.ALIGN_RIGHT));
+		// tbm.add(new Separator());
+		// tbm.add(getAction(GEFActionConstants.ALIGN_TOP));
+		// tbm.add(getAction(GEFActionConstants.ALIGN_MIDDLE));
+		// tbm.add(getAction(GEFActionConstants.ALIGN_BOTTOM));
+		//
+		// tbm.add(new Separator());
+		// tbm.add(getAction(GEFActionConstants.MATCH_WIDTH));
+		// tbm.add(getAction(GEFActionConstants.MATCH_HEIGHT));
 
 		tbm.add(new Separator());
 		tbm.add(getAction(GEFActionConstants.ZOOM_IN));

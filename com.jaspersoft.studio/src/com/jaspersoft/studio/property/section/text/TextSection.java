@@ -122,7 +122,7 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, VerticalAlignEnum.TOP);
 			}
 		});
-		alignTopButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/align_top.png"));
+		alignTopButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-top.gif"));
 		alignTopButton.setToolTipText("Align top");
 
 		alignMiddleButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
@@ -131,7 +131,7 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, VerticalAlignEnum.MIDDLE);
 			}
 		});
-		alignMiddleButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/align_middle.png"));
+		alignMiddleButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-middle.gif"));
 		alignMiddleButton.setToolTipText("Align middle");
 
 		alignVJustifiedButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
@@ -140,7 +140,7 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, VerticalAlignEnum.JUSTIFIED);
 			}
 		});
-		alignVJustifiedButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/align_middle.png"));
+		alignVJustifiedButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-middle.gif"));
 		alignVJustifiedButton.setToolTipText("Align vertical justified");
 
 		alignBottomButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
@@ -149,7 +149,7 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, VerticalAlignEnum.BOTTOM);
 			}
 		});
-		alignBottomButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/align_bottom.png"));
+		alignBottomButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-bottom.gif"));
 		alignBottomButton.setToolTipText("Align bottom");
 
 		rotation = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);

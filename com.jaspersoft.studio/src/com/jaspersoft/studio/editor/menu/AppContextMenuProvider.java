@@ -34,6 +34,7 @@ import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.order.BringForwardAction;
 import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
+import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
@@ -177,24 +178,30 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		MenuManager submenu = new MenuManager("Align");
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_LEFT);
-		submenu.add(action);
+		if (action.isEnabled())
+			submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_CENTER);
-		submenu.add(action);
+		if (action.isEnabled())
+			submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_RIGHT);
-		submenu.add(action);
+		if (action.isEnabled())
+			submenu.add(action);
 
 		submenu.add(new Separator());
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_TOP);
-		submenu.add(action);
+		if (action.isEnabled())
+			submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_MIDDLE);
-		submenu.add(action);
+		if (action.isEnabled())
+			submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_BOTTOM);
-		submenu.add(action);
+		if (action.isEnabled())
+			submenu.add(action);
 
 		menu.insertAfter(BringToBackAction.ID, submenu);
 
@@ -202,10 +209,16 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		submenu = new MenuManager("Size");
 
 		action = getActionRegistry().getAction(GEFActionConstants.MATCH_WIDTH);
-		submenu.add(action);
+		if (action.isEnabled())
+			submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.MATCH_HEIGHT);
-		submenu.add(action);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		action = getActionRegistry().getAction(MatchSizeAction.ID);
+		if (action.isEnabled())
+			submenu.add(action);
 
 		menu.insertAfter(BringToBackAction.ID, submenu);
 		// ------------------------------
