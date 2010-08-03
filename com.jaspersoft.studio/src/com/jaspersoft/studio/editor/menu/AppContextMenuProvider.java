@@ -87,65 +87,65 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 
 		action = getActionRegistry().getAction(ActionFactory.CUT.getId());
 		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		action = getActionRegistry().getAction(ActionFactory.COPY.getId());
 		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		action = getActionRegistry().getAction(ActionFactory.PASTE.getId());
 		if (action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_COPY, action);
 
 		// -----------------------------------------------------------
 
 		action = getActionRegistry().getAction(CreateFieldAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateSortFieldAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateVariableAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateScriptletAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateParameterAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateGroupAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateDatasetAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateStyleAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateConditionalStyleAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateStyleTemplateAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(CreateBandAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(DeleteGroupReportAction.ID);
 		if (action != null && action.isEnabled())
-			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
 		action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
 		if (action != null && action.isEnabled())
@@ -174,40 +174,41 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_REST, action);
 
 		// Alignment Actions
-		MenuManager submenu = new MenuManager("Alignement");
+		MenuManager submenu = new MenuManager("Align");
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_LEFT);
-		if (action.isEnabled())
-			submenu.add(action);
+		submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_CENTER);
-		if (action.isEnabled())
-			submenu.add(action);
+		submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_RIGHT);
-		if (action.isEnabled())
-			submenu.add(action);
+		submenu.add(action);
 
 		submenu.add(new Separator());
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_TOP);
-		if (action.isEnabled())
-			submenu.add(action);
+		submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_MIDDLE);
-		if (action.isEnabled())
-			submenu.add(action);
+		submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_BOTTOM);
-		if (action.isEnabled())
-			submenu.add(action);
+		submenu.add(action);
 
-		//
-		// if (!submenu.isEmpty())
-		// menu.appendToGroup(GEFActionConstants.GROUP_REST, submenu);
-		//
-		// action = getActionRegistry().getAction(ActionFactory.SAVE.getId());
-		// menu.appendToGroup(GEFActionConstants.GROUP_SAVE, action);
+		menu.insertAfter(BringToBackAction.ID, submenu);
+
+		// match size Actions
+		submenu = new MenuManager("Size");
+
+		action = getActionRegistry().getAction(GEFActionConstants.MATCH_WIDTH);
+		submenu.add(action);
+
+		action = getActionRegistry().getAction(GEFActionConstants.MATCH_HEIGHT);
+		submenu.add(action);
+
+		menu.insertAfter(BringToBackAction.ID, submenu);
+		// ------------------------------
 
 		action = getActionRegistry().getAction(ShowPropertyViewAction.ID);
 		if (action.isEnabled())

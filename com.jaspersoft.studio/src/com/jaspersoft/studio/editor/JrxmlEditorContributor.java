@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor;
 
@@ -73,29 +69,27 @@ import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 
-// TODO: Auto-generated Javadoc
 /**
- * Manages the installation/deinstallation of global actions for multi-page
- * editors. Responsible for the redirection of global actions to the active
- * editor. Multi-page contributor replaces the contributors for the individual
- * editors in the multi-page editor.
+ * Manages the installation/deinstallation of global actions for multi-page editors. Responsible for the redirection of
+ * global actions to the active editor. Multi-page contributor replaces the contributors for the individual editors in
+ * the multi-page editor.
  * 
  * @author Chicu Veaceslav
  */
 public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor {
-	
+
 	/** The global action keys. */
 	private List<String> globalActionKeys = new ArrayList<String>();
-	
+
 	/** The retarget actions. */
 	private List<RetargetAction> retargetActions = new ArrayList<RetargetAction>();
-	
+
 	/** The registry. */
 	private ActionRegistry registry = new ActionRegistry();
 
 	/** The sample action. */
 	private Action sampleAction;
-	
+
 	/** The zoom combo. */
 	private RZoomComboContributionItem zoomCombo;
 
@@ -315,7 +309,9 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		tbm.add(zoomCombo);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(org.eclipse.jface.action.IMenuManager)
 	 */
 	public void contributeToMenu(IMenuManager manager) {
@@ -380,8 +376,11 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		return menu;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToStatusLine(org.eclipse.jface.action.IStatusLineManager)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.part.EditorActionBarContributor#contributeToStatusLine(org.eclipse.jface.action.IStatusLineManager)
 	 */
 	@Override
 	public void contributeToStatusLine(IStatusLineManager statusLineManager) {
@@ -389,10 +388,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	}
 
 	/**
-	 * Disposes the contributor. Removes all {@link RetargetAction}s that were
-	 * {@link org.eclipse.ui.IPartListener}s on the
-	 * {@link org.eclipse.ui.IWorkbenchPage} and disposes them. Also disposes the
-	 * action registry.
+	 * Disposes the contributor. Removes all {@link RetargetAction}s that were {@link org.eclipse.ui.IPartListener}s on
+	 * the {@link org.eclipse.ui.IWorkbenchPage} and disposes them. Also disposes the action registry.
 	 * <P>
 	 * Subclasses may extend this method to perform additional cleanup.
 	 * 
