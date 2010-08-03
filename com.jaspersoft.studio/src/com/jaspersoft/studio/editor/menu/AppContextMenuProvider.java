@@ -30,6 +30,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
+import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
 import com.jaspersoft.studio.editor.action.order.BringForwardAction;
 import com.jaspersoft.studio.editor.action.order.BringToBackAction;
@@ -200,6 +201,37 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 			submenu.add(action);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_BOTTOM);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		menu.insertAfter(BringToBackAction.ID, submenu);
+
+		// Alignment Actions
+		submenu = new MenuManager("Align To Border");
+
+		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_LEFT);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_CENTER);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_RIGHT);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		submenu.add(new Separator());
+
+		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_TOP);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_MIDDLE);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_BOTTOM);
 		if (action.isEnabled())
 			submenu.add(action);
 

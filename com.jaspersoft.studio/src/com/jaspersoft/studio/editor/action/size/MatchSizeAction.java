@@ -13,7 +13,7 @@ public class MatchSizeAction extends MatchHeightAction {
 		super(part);
 		setText("Match Size");
 		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/match-size.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/match-size_d.gif"));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/disabled/match-size.gif"));
 		setToolTipText("Match Size");
 		setId(ID);
 	}

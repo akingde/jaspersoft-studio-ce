@@ -63,6 +63,7 @@ import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
+import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.copy.CopyAction;
 import com.jaspersoft.studio.editor.action.copy.CutAction;
 import com.jaspersoft.studio.editor.action.copy.PasteAction;
@@ -470,6 +471,31 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
+		// ------------
+		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.LEFT);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.RIGHT);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.TOP);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.BOTTOM);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.CENTER);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.MIDDLE);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
 		// ---------------------
 
 		action = new MatchWidthAction(this);
@@ -485,6 +511,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		getSelectionActions().add(action.getId());
 
 		// -------------------
+
+		// ------------------
+
 		action = new ShowPropertyViewAction((IWorkbenchPart) this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
