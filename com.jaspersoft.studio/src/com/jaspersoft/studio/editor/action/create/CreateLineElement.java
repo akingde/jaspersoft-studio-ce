@@ -21,26 +21,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.create;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MSubreport;
+import com.jaspersoft.studio.model.MLine;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CreateSubreportElement.
+ * The Class CreateLineElement.
  */
-public class CreateSubreportElement extends CreateElementAction {
+public class CreateLineElement extends CreateElementAction {
 	
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MSubreport.getIconDescriptor();
+	private static IIconDescriptor iconDescriptor = MLine.getIconDescriptor();
 
 	/**
-	 * Instantiates a new creates the subreport element.
+	 * Instantiates a new creates the line element.
 	 */
-	public CreateSubreportElement() {
+	public CreateLineElement() {
 		super(getIconDescriptor());
 	}
 
@@ -59,8 +59,7 @@ public class CreateSubreportElement extends CreateElementAction {
 	@Override
 	public void run() {
 		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MSubreport(), getLocation(),
-				getIndex());
+		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MLine(), getLocation(), getIndex());
 		setCommand(newCmd);
 	}
 }

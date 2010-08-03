@@ -21,26 +21,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.create;
 
+import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.command.CreateElementCommand;
-import com.jaspersoft.studio.model.textfield.MTextField;
+import com.jaspersoft.studio.model.MEllipse;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CreateTextFieldElement.
+ * The Class CreateEllipseAction.
  */
-public class CreateTextFieldElement extends CreateElementAction {
+public class CreateEllipseAction extends CreateElementAction {
 	
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MTextField.getIconDescriptor();
+	private static IIconDescriptor iconDescriptor = MEllipse.getIconDescriptor();
 
 	/**
-	 * Instantiates a new creates the text field element.
+	 * Instantiates a new creates the ellipse action.
 	 */
-	public CreateTextFieldElement() {
+	public CreateEllipseAction() {
 		super(getIconDescriptor());
 	}
 
@@ -58,9 +58,7 @@ public class CreateTextFieldElement extends CreateElementAction {
 	 */
 	@Override
 	public void run() {
-		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MTextField(), getLocation(),
-				getIndex());
-		setCommand(newCmd);
+		setCommand(OutlineTreeEditPartFactory.getCreateCommand((ANode) getParent(), new MEllipse(), getLocation(),
+				getIndex()));
 	}
 }

@@ -21,7 +21,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.order;
 
 import java.util.List;
 
@@ -38,12 +38,12 @@ import com.jaspersoft.studio.model.MGraphicElement;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class BringBackwardAction.
+ * The Class BringToBackAction.
  */
-public class BringBackwardAction extends SelectionAction {
+public class BringToBackAction extends SelectionAction {
 	
 	/** The Constant ID. */
-	public static final String ID = "bring_backward";
+	public static final String ID = "bring_back";
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,7 +51,7 @@ public class BringBackwardAction extends SelectionAction {
 	 * @param part
 	 *          The part for this action
 	 */
-	public BringBackwardAction(IWorkbenchPart part) {
+	public BringToBackAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(false);
 	}
@@ -82,21 +82,16 @@ public class BringBackwardAction extends SelectionAction {
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 
-		if (objects.isEmpty())
-			return null;
-		if (!(objects.get(0) instanceof EditPart))
-			return null;
+		CompoundCommand compoundCmd = new CompoundCommand("Bring To Back");
 		int j = 0;
-		CompoundCommand compoundCmd = new CompoundCommand("Bring Backward");
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart part = (EditPart) objects.get(i);
 			Command cmd = null;
 			Object model = part.getModel();
 			if (model instanceof MGraphicElement) {
 				ANode parent = (ANode) ((MGraphicElement) model).getParent();
-				int newIndex = parent.getChildren().indexOf(model) - 1;
-				if (newIndex >= 0) {
-					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
+				if (parent.getChildren().indexOf(model) > 0) {
+					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, j);
 					j++;
 				} else
 					return null;
@@ -119,12 +114,11 @@ public class BringBackwardAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Bring Backward");
-		setToolTipText("Bring Backward");
-		setId(BringBackwardAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/sendbackward.png"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/sendbackward.png"));
+		setText("Bring To Back");
+		setToolTipText("Bring To Back");
+		setId(BringToBackAction.ID);
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/sendtoback.png"));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/sendtoback.png"));
 		setEnabled(false);
 	}
-
 }

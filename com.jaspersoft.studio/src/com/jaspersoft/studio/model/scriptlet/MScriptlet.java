@@ -33,8 +33,12 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.MElementGroup;
+import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
+import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -44,7 +48,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MScriptlet extends APropertyNode implements IPropertySource {
+public class MScriptlet extends APropertyNode implements IPropertySource, ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -198,5 +202,12 @@ public class MScriptlet extends APropertyNode implements IPropertySource {
 		jrScriptlet.setName(ModelUtils.getDefaultName(jrDataset.getScriptletsMap(), "Scriptlet_"));
 		return jrScriptlet;
 
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MScriptlets)
+			return true;
+		return false;
 	}
 }

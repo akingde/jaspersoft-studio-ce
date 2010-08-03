@@ -67,10 +67,10 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
-import com.jaspersoft.studio.editor.action.BringBackwardAction;
-import com.jaspersoft.studio.editor.action.BringForwardAction;
-import com.jaspersoft.studio.editor.action.BringToBackAction;
-import com.jaspersoft.studio.editor.action.BringToFrontAction;
+import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
+import com.jaspersoft.studio.editor.action.order.BringForwardAction;
+import com.jaspersoft.studio.editor.action.order.BringToBackAction;
+import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 
 // TODO: Auto-generated Javadoc

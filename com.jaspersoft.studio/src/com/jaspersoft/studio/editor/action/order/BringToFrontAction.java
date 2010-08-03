@@ -21,7 +21,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.order;
 
 import java.util.List;
 
@@ -38,12 +38,12 @@ import com.jaspersoft.studio.model.MGraphicElement;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class BringForwardAction.
+ * The Class BringToFrontAction.
  */
-public class BringForwardAction extends SelectionAction {
+public class BringToFrontAction extends SelectionAction {
 	
 	/** The Constant ID. */
-	public static final String ID = "bring_forward";
+	public static final String ID = "bring_front";
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,7 +51,7 @@ public class BringForwardAction extends SelectionAction {
 	 * @param part
 	 *          The part for this action
 	 */
-	public BringForwardAction(IWorkbenchPart part) {
+	public BringToFrontAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(false);
 	}
@@ -82,7 +82,7 @@ public class BringForwardAction extends SelectionAction {
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 
-		CompoundCommand compoundCmd = new CompoundCommand("Bring Forward");
+		CompoundCommand compoundCmd = new CompoundCommand("Bring To Front");
 		int j = 0;
 		for (int i = objects.size() - 1; i >= 0; i--) {
 			EditPart part = (EditPart) objects.get(i);
@@ -90,9 +90,10 @@ public class BringForwardAction extends SelectionAction {
 			Object model = part.getModel();
 			if (model instanceof MGraphicElement) {
 				ANode parent = (ANode) ((MGraphicElement) model).getParent();
-				int newIndex = parent.getChildren().indexOf(model) + 1;
-				if (newIndex < parent.getChildren().size()) {
-					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
+				int newIndex = parent.getChildren().size() - 1;
+				if (parent.getChildren().indexOf(model) < parent.getChildren().size() - 1) {
+					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex - j);
+					j++;
 				} else
 					return null;
 				if (cmd != null)
@@ -114,11 +115,11 @@ public class BringForwardAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Bring Forward");
-		setToolTipText("Bring Forward");
-		setId(BringForwardAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bringforward.png"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bringforward.png"));
+		setText("Bring To Front");
+		setToolTipText("Bring To Front");
+		setId(BringToFrontAction.ID);
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bringtofront.png"));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bringtofront.png"));
 		setEnabled(false);
 	}
 }

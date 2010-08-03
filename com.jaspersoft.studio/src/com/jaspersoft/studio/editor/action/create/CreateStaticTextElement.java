@@ -21,26 +21,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.create;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MRectangle;
+import com.jaspersoft.studio.model.MStaticText;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CreateRectangleElement.
+ * The Class CreateStaticTextElement.
  */
-public class CreateRectangleElement extends CreateElementAction {
+public class CreateStaticTextElement extends CreateElementAction {
 	
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MRectangle.getIconDescriptor();
+	private static IIconDescriptor iconDescriptor = MStaticText.getIconDescriptor();
 
 	/**
-	 * Instantiates a new creates the rectangle element.
+	 * Instantiates a new creates the static text element.
 	 */
-	public CreateRectangleElement() {
+	public CreateStaticTextElement() {
 		super(getIconDescriptor());
 	}
 
@@ -59,7 +59,7 @@ public class CreateRectangleElement extends CreateElementAction {
 	@Override
 	public void run() {
 		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MRectangle(), getLocation(),
+		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MStaticText(), getLocation(),
 				getIndex());
 		setCommand(newCmd);
 	}

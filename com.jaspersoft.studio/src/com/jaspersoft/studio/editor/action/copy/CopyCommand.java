@@ -21,45 +21,55 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.copy;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.ui.actions.Clipboard;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MBreak;
-import com.jaspersoft.studio.model.command.CreateElementCommand;
+import com.jaspersoft.studio.model.ICopyable;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class CreateBreakElement.
- */
-public class CreateBreakElement extends CreateElementAction {
-	
-	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MBreak.getIconDescriptor();
+public class CopyCommand extends Command {
+	private ArrayList<ANode> list = new ArrayList<ANode>();
 
-	/**
-	 * Instantiates a new creates the break element.
-	 */
-	public CreateBreakElement() {
-		super(getIconDescriptor());
+	public boolean addElement(ANode node) {
+		if (!list.contains(node)) {
+			return list.add(node);
+		}
+		return false;
 	}
 
-	/**
-	 * Gets the icon descriptor.
-	 * 
-	 * @return the icon descriptor
-	 */
-	public static IIconDescriptor getIconDescriptor() {
-		return iconDescriptor;
+	public boolean isCopyableNode(ANode node) {
+		if (node instanceof ICopyable)
+			return true;
+		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.action.Action#run()
-	 */
 	@Override
-	public void run() {
-		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MBreak(), getLocation(), getIndex());
-		setCommand(newCmd);
+	public boolean canUndo() {
+		return false;
 	}
+
+	@Override
+	public void execute() {
+		if (canExecute())
+			Clipboard.getDefault().setContents(list);
+	}
+
+	@Override
+	public boolean canExecute() {
+		if (list == null || list.isEmpty())
+			return false;
+		Iterator<ANode> it = list.iterator();
+		while (it.hasNext()) {
+			if (!isCopyableNode(it.next()))
+				return false;
+		}
+		return true;
+
+	}
+
 }

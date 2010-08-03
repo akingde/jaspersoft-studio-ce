@@ -42,6 +42,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
@@ -54,7 +55,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * 
  * @author Chicu Veaceslav
  */
-public class MBand extends APropertyNode implements IGraphicElement {
+public class MBand extends APropertyNode implements IGraphicElement, IPastable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

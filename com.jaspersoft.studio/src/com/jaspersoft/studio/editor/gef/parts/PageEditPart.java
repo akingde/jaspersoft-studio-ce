@@ -55,7 +55,6 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PageEditPart.
  * 

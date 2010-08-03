@@ -39,16 +39,16 @@ import org.eclipse.swt.graphics.Font;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.model.ReportFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MStyles.
  * 
  * @author Chicu Veaceslav
  */
-public class MStyles extends ANode {
+public class MStyles extends ANode implements IPastable{
 	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

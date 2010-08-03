@@ -37,9 +37,11 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MQuery;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
@@ -55,7 +57,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MDataset extends APropertyNode implements IPropertySource {
+public class MDataset extends APropertyNode implements IPropertySource, ICopyable {
 
 	private static final String PROPERTY_MAP = "PROPERTY_MAP";
 	/** The icon descriptor. */
@@ -289,6 +291,13 @@ public class MDataset extends APropertyNode implements IPropertySource {
 		JRDesignDataset jrDesignDataset = new JRDesignDataset(false);
 		jrDesignDataset.setName(ModelUtils.getDefaultName(jrDesign.getDatasetMap(), "Dataset"));
 		return jrDesignDataset;
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MReport)
+			return true;
+		return false;
 	}
 
 }

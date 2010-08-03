@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.field.command;
 
@@ -29,9 +25,12 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -40,13 +39,13 @@ import com.jaspersoft.studio.model.field.MFields;
  * @author Chicu Veaceslav
  */
 public class CreateFieldCommand extends Command {
-	
+
 	/** The jr field. */
 	private JRDesignField jrField;
-	
+
 	/** The jr data set. */
 	private JRDesignDataset jrDataSet;
-	
+
 	/** The index. */
 	private int index;
 
@@ -70,7 +69,9 @@ public class CreateFieldCommand extends Command {
 			this.jrField = (JRDesignField) srcNode.getValue();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -88,11 +89,22 @@ public class CreateFieldCommand extends Command {
 					jrDataSet.addField(index, jrField);
 			} catch (JRException e) {
 				e.printStackTrace();
+				if (e.getMessage().startsWith("Duplicate declaration")) {
+					String defaultName = ModelUtils.getDefaultName(jrDataSet.getFieldsMap(), "CopyOFField_");
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Field Name",
+							"Please, enter unique field name", defaultName, null);
+					if (dlg.open() == InputDialog.OK) {
+						jrField.setName(dlg.getValue());
+						execute();
+					}
+				}
 			}
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#canUndo()
 	 */
 	@Override
@@ -100,7 +112,9 @@ public class CreateFieldCommand extends Command {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override

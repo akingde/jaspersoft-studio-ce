@@ -21,26 +21,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.create;
 
-import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MEllipse;
+import com.jaspersoft.studio.model.MCrossTab;
+import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CreateEllipseAction.
+ * The Class CreateCrosstabElement.
  */
-public class CreateEllipseAction extends CreateElementAction {
+public class CreateCrosstabElement extends CreateElementAction {
 	
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MEllipse.getIconDescriptor();
+	private static IIconDescriptor iconDescriptor = MCrossTab.getIconDescriptor();
 
 	/**
-	 * Instantiates a new creates the ellipse action.
+	 * Instantiates a new creates the crosstab element.
 	 */
-	public CreateEllipseAction() {
+	public CreateCrosstabElement() {
 		super(getIconDescriptor());
 	}
 
@@ -58,7 +58,9 @@ public class CreateEllipseAction extends CreateElementAction {
 	 */
 	@Override
 	public void run() {
-		setCommand(OutlineTreeEditPartFactory.getCreateCommand((ANode) getParent(), new MEllipse(), getLocation(),
-				getIndex()));
+		// ask user questions
+		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MCrossTab(), getLocation(),
+				getIndex());
+		setCommand(newCmd);
 	}
 }

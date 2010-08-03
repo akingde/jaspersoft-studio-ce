@@ -21,26 +21,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.create;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MList;
+import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CreateListElement.
+ * The Class CreateBreakElement.
  */
-public class CreateListElement extends CreateElementAction {
+public class CreateBreakElement extends CreateElementAction {
 	
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MList.getIconDescriptor();
+	private static IIconDescriptor iconDescriptor = MBreak.getIconDescriptor();
 
 	/**
-	 * Instantiates a new creates the list element.
+	 * Instantiates a new creates the break element.
 	 */
-	public CreateListElement() {
+	public CreateBreakElement() {
 		super(getIconDescriptor());
 	}
 
@@ -59,7 +59,7 @@ public class CreateListElement extends CreateElementAction {
 	@Override
 	public void run() {
 		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MList(), getLocation(), getIndex());
+		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MBreak(), getLocation(), getIndex());
 		setCommand(newCmd);
 	}
 }

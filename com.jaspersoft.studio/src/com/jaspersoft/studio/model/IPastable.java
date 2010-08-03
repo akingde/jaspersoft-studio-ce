@@ -21,45 +21,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.model;
 
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MLine;
-import com.jaspersoft.studio.model.command.CreateElementCommand;
+public interface IPastable {
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class CreateLineElement.
- */
-public class CreateLineElement extends CreateElementAction {
-	
-	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MLine.getIconDescriptor();
-
-	/**
-	 * Instantiates a new creates the line element.
-	 */
-	public CreateLineElement() {
-		super(getIconDescriptor());
-	}
-
-	/**
-	 * Gets the icon descriptor.
-	 * 
-	 * @return the icon descriptor
-	 */
-	public static IIconDescriptor getIconDescriptor() {
-		return iconDescriptor;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.action.Action#run()
-	 */
-	@Override
-	public void run() {
-		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MLine(), getLocation(), getIndex());
-		setCommand(newCmd);
-	}
 }

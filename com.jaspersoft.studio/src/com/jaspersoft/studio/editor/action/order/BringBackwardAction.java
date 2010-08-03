@@ -21,7 +21,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.order;
 
 import java.util.List;
 
@@ -38,12 +38,12 @@ import com.jaspersoft.studio.model.MGraphicElement;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class BringToFrontAction.
+ * The Class BringBackwardAction.
  */
-public class BringToFrontAction extends SelectionAction {
+public class BringBackwardAction extends SelectionAction {
 	
 	/** The Constant ID. */
-	public static final String ID = "bring_front";
+	public static final String ID = "bring_backward";
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,7 +51,7 @@ public class BringToFrontAction extends SelectionAction {
 	 * @param part
 	 *          The part for this action
 	 */
-	public BringToFrontAction(IWorkbenchPart part) {
+	public BringBackwardAction(IWorkbenchPart part) {
 		super(part);
 		setLazyEnablementCalculation(false);
 	}
@@ -82,17 +82,21 @@ public class BringToFrontAction extends SelectionAction {
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 
-		CompoundCommand compoundCmd = new CompoundCommand("Bring To Front");
+		if (objects.isEmpty())
+			return null;
+		if (!(objects.get(0) instanceof EditPart))
+			return null;
 		int j = 0;
-		for (int i = objects.size() - 1; i >= 0; i--) {
+		CompoundCommand compoundCmd = new CompoundCommand("Bring Backward");
+		for (int i = 0; i < objects.size(); i++) {
 			EditPart part = (EditPart) objects.get(i);
 			Command cmd = null;
 			Object model = part.getModel();
 			if (model instanceof MGraphicElement) {
 				ANode parent = (ANode) ((MGraphicElement) model).getParent();
-				int newIndex = parent.getChildren().size() - 1;
-				if (parent.getChildren().indexOf(model) < parent.getChildren().size() - 1) {
-					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex - j);
+				int newIndex = parent.getChildren().indexOf(model) - 1;
+				if (newIndex >= 0) {
+					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
 					j++;
 				} else
 					return null;
@@ -115,11 +119,12 @@ public class BringToFrontAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Bring To Front");
-		setToolTipText("Bring To Front");
-		setId(BringToFrontAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bringtofront.png"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bringtofront.png"));
+		setText("Bring Backward");
+		setToolTipText("Bring Backward");
+		setId(BringBackwardAction.ID);
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/sendbackward.png"));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/sendbackward.png"));
 		setEnabled(false);
 	}
+
 }

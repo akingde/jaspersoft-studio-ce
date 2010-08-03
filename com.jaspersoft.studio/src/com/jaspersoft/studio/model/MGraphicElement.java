@@ -44,6 +44,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -59,7 +60,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 /**
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode implements IGraphicElement {
+public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -515,5 +516,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement {
 			jrElement.setPrintInFirstWholeBand(((Boolean) value).booleanValue());
 		else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS))
 			jrElement.setPrintWhenDetailOverflows(((Boolean) value).booleanValue());
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MBand || parent instanceof MFrame || parent instanceof MElementGroup)
+			return true;
+		return false;
 	}
 }

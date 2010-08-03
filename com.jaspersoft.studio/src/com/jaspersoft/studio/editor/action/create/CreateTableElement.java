@@ -21,26 +21,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.create;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MStaticText;
+import com.jaspersoft.studio.model.MTable;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CreateStaticTextElement.
+ * The Class CreateTableElement.
  */
-public class CreateStaticTextElement extends CreateElementAction {
+public class CreateTableElement extends CreateElementAction {
 	
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MStaticText.getIconDescriptor();
+	private static IIconDescriptor iconDescriptor = MTable.getIconDescriptor();
 
 	/**
-	 * Instantiates a new creates the static text element.
+	 * Instantiates a new creates the table element.
 	 */
-	public CreateStaticTextElement() {
+	public CreateTableElement() {
 		super(getIconDescriptor());
 	}
 
@@ -59,8 +59,7 @@ public class CreateStaticTextElement extends CreateElementAction {
 	@Override
 	public void run() {
 		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MStaticText(), getLocation(),
-				getIndex());
+		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MTable(), getLocation(), getIndex());
 		setCommand(newCmd);
 	}
 }

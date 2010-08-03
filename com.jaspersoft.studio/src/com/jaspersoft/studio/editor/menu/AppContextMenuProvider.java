@@ -29,11 +29,11 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.jaspersoft.studio.editor.action.BringBackwardAction;
-import com.jaspersoft.studio.editor.action.BringForwardAction;
-import com.jaspersoft.studio.editor.action.BringToBackAction;
-import com.jaspersoft.studio.editor.action.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
+import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
+import com.jaspersoft.studio.editor.action.order.BringForwardAction;
+import com.jaspersoft.studio.editor.action.order.BringToBackAction;
+import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
@@ -83,9 +83,21 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		action = getActionRegistry().getAction(ActionFactory.REDO.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
 
-		// action = getActionRegistry().getAction(ActionFactory.PASTE.getId());
-		// if (action.isEnabled())
-		// menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+		// ----------------------------------------
+
+		action = getActionRegistry().getAction(ActionFactory.CUT.getId());
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+		action = getActionRegistry().getAction(ActionFactory.COPY.getId());
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+		action = getActionRegistry().getAction(ActionFactory.PASTE.getId());
+		if (action.isEnabled())
+			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
+
+		// -----------------------------------------------------------
 
 		action = getActionRegistry().getAction(CreateFieldAction.ID);
 		if (action != null && action.isEnabled())

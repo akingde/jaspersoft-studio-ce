@@ -35,6 +35,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -47,7 +48,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * 
  * @author Chicu Veaceslav
  */
-public class MSortField extends APropertyNode implements IPropertySource {
+public class MSortField extends APropertyNode implements IPropertySource, ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -229,6 +230,13 @@ public class MSortField extends APropertyNode implements IPropertySource {
 	public static JRDesignSortField createJRSortField(JRDesignDataset jrDataset) {
 		JRDesignSortField jrDesignField = new JRDesignSortField();
 		return jrDesignField;
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MSortFields)
+			return true;
+		return false;
 	}
 
 }

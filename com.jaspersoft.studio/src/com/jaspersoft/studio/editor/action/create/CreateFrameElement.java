@@ -21,26 +21,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.create;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CreateGenericElement.
+ * The Class CreateFrameElement.
  */
-public class CreateGenericElement extends CreateElementAction {
+public class CreateFrameElement extends CreateElementAction {
 	
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MGraphicElement.getIconDescriptor();
+	private static IIconDescriptor iconDescriptor = MFrame.getIconDescriptor();
 
 	/**
-	 * Instantiates a new creates the generic element.
+	 * Instantiates a new creates the frame element.
 	 */
-	public CreateGenericElement() {
+	public CreateFrameElement() {
 		super(getIconDescriptor());
 	}
 
@@ -59,8 +59,7 @@ public class CreateGenericElement extends CreateElementAction {
 	@Override
 	public void run() {
 		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MGraphicElement(), getLocation(),
-				getIndex());
+		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MFrame(), getLocation(), getIndex());
 		setCommand(newCmd);
 	}
 }

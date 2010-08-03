@@ -62,11 +62,14 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.jaspersoft.studio.editor.action.BringBackwardAction;
-import com.jaspersoft.studio.editor.action.BringForwardAction;
-import com.jaspersoft.studio.editor.action.BringToBackAction;
-import com.jaspersoft.studio.editor.action.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
+import com.jaspersoft.studio.editor.action.copy.CopyAction;
+import com.jaspersoft.studio.editor.action.copy.CutAction;
+import com.jaspersoft.studio.editor.action.copy.PasteAction;
+import com.jaspersoft.studio.editor.action.order.BringBackwardAction;
+import com.jaspersoft.studio.editor.action.order.BringForwardAction;
+import com.jaspersoft.studio.editor.action.order.BringToBackAction;
+import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.dnd.TextTransferDropTargetListener;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
@@ -324,7 +327,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 			protected void hookPaletteViewer(PaletteViewer viewer) {
 				super.hookPaletteViewer(viewer);
-				final CopyTemplateAction copy = (CopyTemplateAction) getActionRegistry().getAction(ActionFactory.COPY.getId());
+				final CopyTemplateAction copy = new CopyTemplateAction(AbstractVisualEditor.this);
 				if (copy != null) {
 					viewer.addSelectionChangedListener(copy);
 				}
@@ -351,8 +354,17 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		ActionRegistry registry = getActionRegistry();
 		IAction action;
 
-		action = new CopyTemplateAction(this);
+		action = new CutAction(this);
 		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new CopyAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new PasteAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
 
 		action = new MatchWidthAction(this);
 		registry.registerAction(action);

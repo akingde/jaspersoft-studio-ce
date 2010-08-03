@@ -32,6 +32,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.model.ReportFactory;
 
@@ -40,7 +41,7 @@ import com.jaspersoft.studio.model.ReportFactory;
  * 
  * @author Chicu Veaceslav
  */
-public class MSortFields extends ANode {
+public class MSortFields extends ANode implements IPastable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

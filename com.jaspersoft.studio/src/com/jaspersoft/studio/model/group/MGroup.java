@@ -33,6 +33,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
@@ -44,7 +45,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MGroup extends APropertyNode implements IPropertySource {
+public class MGroup extends APropertyNode implements IPropertySource, ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -199,6 +200,13 @@ public class MGroup extends APropertyNode implements IPropertySource {
 		JRDesignGroup jrDesignGroup = new JRDesignGroup();
 		jrDesignGroup.setName(ModelUtils.getDefaultName(jrDataset.getGroupsMap(), "Group"));
 		return jrDesignGroup;
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MGroups)
+			return true;
+		return false;
 	}
 
 }

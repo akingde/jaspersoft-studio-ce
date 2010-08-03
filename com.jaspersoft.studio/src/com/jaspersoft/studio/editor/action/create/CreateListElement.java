@@ -21,26 +21,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.create;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MImage;
+import com.jaspersoft.studio.model.MList;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CreateImageElement.
+ * The Class CreateListElement.
  */
-public class CreateImageElement extends CreateElementAction {
+public class CreateListElement extends CreateElementAction {
 	
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MImage.getIconDescriptor();
+	private static IIconDescriptor iconDescriptor = MList.getIconDescriptor();
 
 	/**
-	 * Instantiates a new creates the image element.
+	 * Instantiates a new creates the list element.
 	 */
-	public CreateImageElement() {
+	public CreateListElement() {
 		super(getIconDescriptor());
 	}
 
@@ -59,7 +59,7 @@ public class CreateImageElement extends CreateElementAction {
 	@Override
 	public void run() {
 		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MImage(), getLocation(), getIndex());
+		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MList(), getLocation(), getIndex());
 		setCommand(newCmd);
 	}
 }

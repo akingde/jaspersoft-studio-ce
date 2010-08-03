@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
@@ -45,7 +46,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MParameter extends MParameterSystem {
+public class MParameter extends MParameterSystem implements ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -202,6 +203,13 @@ public class MParameter extends MParameterSystem {
 		jrDesignParameter.setSystemDefined(false);
 		jrDesignParameter.setName(ModelUtils.getDefaultName(jrDataset.getParametersMap(), "Parameter"));
 		return jrDesignParameter;
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MParameters)
+			return true;
+		return false;
 	}
 
 }

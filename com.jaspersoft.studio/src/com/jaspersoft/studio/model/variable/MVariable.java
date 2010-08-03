@@ -34,6 +34,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
@@ -50,7 +51,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MVariable extends MVariableSystem {
+public class MVariable extends MVariableSystem implements ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -317,6 +318,13 @@ public class MVariable extends MVariableSystem {
 		jrDesignVariable.setSystemDefined(false);
 		jrDesignVariable.setName(ModelUtils.getDefaultName(jrDataset.getVariablesMap(), "Variable_"));
 		return jrDesignVariable;
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MVariables)
+			return true;
+		return false;
 	}
 
 }

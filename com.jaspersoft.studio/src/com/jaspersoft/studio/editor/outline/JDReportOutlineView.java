@@ -129,7 +129,17 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		IActionBars bars = pageSite.getActionBars();
 		String id = ActionFactory.UNDO.getId();
 		bars.setGlobalActionHandler(id, registry.getAction(id));
+
 		id = ActionFactory.REDO.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+
+		id = ActionFactory.CUT.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+
+		id = ActionFactory.COPY.getId();
+		bars.setGlobalActionHandler(id, registry.getAction(id));
+
+		id = ActionFactory.PASTE.getId();
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 
 		id = ActionFactory.DELETE.getId();

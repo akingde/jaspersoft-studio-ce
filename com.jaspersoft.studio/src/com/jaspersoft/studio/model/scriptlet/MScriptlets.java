@@ -36,16 +36,16 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.model.ReportFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MScriptlets.
  * 
  * @author Chicu Veaceslav
  */
-public class MScriptlets extends ANode {
+public class MScriptlets extends ANode implements IPastable{
 	
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

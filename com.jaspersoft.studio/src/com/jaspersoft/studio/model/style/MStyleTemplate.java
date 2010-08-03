@@ -33,6 +33,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 
@@ -41,7 +42,7 @@ import com.jaspersoft.studio.model.NodeIconDescriptor;
  * 
  * @author Chicu Veaceslav
  */
-public class MStyleTemplate extends APropertyNode implements IPropertySource {
+public class MStyleTemplate extends APropertyNode implements IPropertySource, ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -168,6 +169,13 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource {
 	public static JRDesignReportTemplate createJRTemplate() {
 		JRDesignReportTemplate jrDesignReportTemplate = new JRDesignReportTemplate();
 		return jrDesignReportTemplate;
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MStyles)
+			return true;
+		return false;
 	}
 
 }

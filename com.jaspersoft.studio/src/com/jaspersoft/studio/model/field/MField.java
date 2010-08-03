@@ -33,6 +33,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
@@ -45,7 +46,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MField extends APropertyNode implements IPropertySource {
+public class MField extends APropertyNode implements IPropertySource, ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -207,6 +208,13 @@ public class MField extends APropertyNode implements IPropertySource {
 		JRDesignField jrDesignField = new JRDesignField();
 		jrDesignField.setName(ModelUtils.getDefaultName(jrDataset.getFieldsMap(), "Field_"));
 		return jrDesignField;
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MFields)
+			return true;
+		return false;
 	}
 
 }

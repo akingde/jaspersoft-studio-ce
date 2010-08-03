@@ -21,26 +21,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.editor.action.create;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MChart;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+import com.jaspersoft.studio.model.textfield.MTextField;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CreateChartElement.
+ * The Class CreateTextFieldElement.
  */
-public class CreateChartElement extends CreateElementAction {
+public class CreateTextFieldElement extends CreateElementAction {
 	
 	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MChart.getIconDescriptor();
+	private static IIconDescriptor iconDescriptor = MTextField.getIconDescriptor();
 
 	/**
-	 * Instantiates a new creates the chart element.
+	 * Instantiates a new creates the text field element.
 	 */
-	public CreateChartElement() {
+	public CreateTextFieldElement() {
 		super(getIconDescriptor());
 	}
 
@@ -59,7 +59,8 @@ public class CreateChartElement extends CreateElementAction {
 	@Override
 	public void run() {
 		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MChart(), getLocation(), getIndex());
+		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MTextField(), getLocation(),
+				getIndex());
 		setCommand(newCmd);
 	}
 }

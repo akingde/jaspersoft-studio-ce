@@ -201,4 +201,11 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 		JRDesignConditionalStyle jrDesignConditionalStyle = new JRDesignConditionalStyle();
 		return jrDesignConditionalStyle;
 	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MStyle)
+			return true;
+		return false;
+	}
 }

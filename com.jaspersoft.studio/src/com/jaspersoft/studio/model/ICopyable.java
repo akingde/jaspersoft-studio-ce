@@ -21,45 +21,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action;
+package com.jaspersoft.studio.model;
 
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MTable;
-import com.jaspersoft.studio.model.command.CreateElementCommand;
-
-// TODO: Auto-generated Javadoc
-/**
- * The Class CreateTableElement.
- */
-public class CreateTableElement extends CreateElementAction {
-	
-	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MTable.getIconDescriptor();
-
+public interface ICopyable {
 	/**
-	 * Instantiates a new creates the table element.
+	 * @param parent
+	 * @return true object is copyable to parent
 	 */
-	public CreateTableElement() {
-		super(getIconDescriptor());
-	}
-
-	/**
-	 * Gets the icon descriptor.
-	 * 
-	 * @return the icon descriptor
-	 */
-	public static IIconDescriptor getIconDescriptor() {
-		return iconDescriptor;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.action.Action#run()
-	 */
-	@Override
-	public void run() {
-		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MTable(), getLocation(), getIndex());
-		setCommand(newCmd);
-	}
+	public boolean isCopyable2(Object parent);
 }
