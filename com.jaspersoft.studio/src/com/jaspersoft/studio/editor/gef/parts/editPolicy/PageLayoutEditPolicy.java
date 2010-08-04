@@ -71,8 +71,11 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		// new location accordingly with the max and min band size.
 		IFigure figure = child.getFigure();
 		Rectangle bounds = figure.getBounds();
-		if (figure instanceof HandleBounds)
+		if (figure instanceof HandleBounds) {
 			bounds = ((HandleBounds) figure).getHandleBounds();
+			bounds.width = bounds.width - 1;
+			bounds.height = bounds.height - 1;
+		}
 		Rectangle rect = new PrecisionRectangle(bounds);
 		Rectangle original = rect.getCopy();
 		figure.translateToAbsolute(rect);
