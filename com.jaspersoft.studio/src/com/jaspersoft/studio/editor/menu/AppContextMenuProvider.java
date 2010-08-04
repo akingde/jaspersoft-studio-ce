@@ -36,6 +36,7 @@ import com.jaspersoft.studio.editor.action.order.BringForwardAction;
 import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
+import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
@@ -207,7 +208,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.insertAfter(BringToBackAction.ID, submenu);
 
 		// Alignment Actions
-		submenu = new MenuManager("Align To Border");
+		submenu = new MenuManager("Align in Container");
 
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_LEFT);
 		if (action.isEnabled())
@@ -249,6 +250,23 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 			submenu.add(action);
 
 		action = getActionRegistry().getAction(MatchSizeAction.ID);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		menu.insertAfter(BringToBackAction.ID, submenu);
+		// ------------------------------
+
+		submenu = new MenuManager("Size to Container");
+
+		action = getActionRegistry().getAction(Size2BorderAction.ID_SIZE_WIDTH);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		action = getActionRegistry().getAction(Size2BorderAction.ID_SIZE_HEIGHT);
+		if (action.isEnabled())
+			submenu.add(action);
+
+		action = getActionRegistry().getAction(Size2BorderAction.ID_SIZE_BOTH);
 		if (action.isEnabled())
 			submenu.add(action);
 
