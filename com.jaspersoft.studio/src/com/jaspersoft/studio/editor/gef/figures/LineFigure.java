@@ -26,7 +26,6 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LineFigure.
  */
@@ -83,8 +82,7 @@ public class LineFigure extends GenericFigure {
 	public Rectangle getHandleBounds() {
 		Rectangle b = getBounds();
 		int offset = calcBorder(getLinePen());
-		return new Rectangle(b.x + offset, b.y + offset, getJrElement().getWidth() + offset, getJrElement().getHeight()
-				+ offset);
+		return new Rectangle(b.x + offset, b.y + offset, getJrElement().getWidth() + 1, getJrElement().getHeight() + 1);
 	}
 
 	/**

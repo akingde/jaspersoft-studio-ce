@@ -85,7 +85,7 @@ public class FrameFigure extends GenericFigure {
 	public Rectangle getHandleBounds() {
 		Rectangle b = getBounds();
 		Rectangle o = calcBorder(getLineBox());
-		return new Rectangle(b.x + o.x, b.y + o.y, getJrElement().getWidth(), getJrElement().getHeight());
+		return new Rectangle(b.x + o.x, b.y + o.y, getJrElement().getWidth() + 1, getJrElement().getHeight() + 1);
 		// return new Rectangle(b.x + o.x, b.y + o.y, getJrElement().getWidth() + o.width - 1, getJrElement().getHeight()
 		// + o.height - 1);
 	}

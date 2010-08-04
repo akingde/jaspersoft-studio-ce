@@ -65,8 +65,8 @@ public class CornerBorder extends LineBorder {
 			if (getColor() != null)
 				g.setColor((J2DGraphics.toAWTColor(getColor())));
 
-			int bottom = bounds.y + bounds.height;
-			int right = bounds.x + bounds.width;
+			int bottom = bounds.y + bounds.height - 1;
+			int right = bounds.x + bounds.width - 1;
 
 			// top left
 			g.drawLine(bounds.x, bounds.y, bounds.x + o, bounds.y);

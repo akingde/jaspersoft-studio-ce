@@ -50,7 +50,7 @@ public class ElementLineBorder extends LineBorder {
 
 			if (getColor() != null)
 				g.setColor((J2DGraphics.toAWTColor(getColor())));
-			g.drawRect(tempRect.x, tempRect.y, tempRect.width, tempRect.height);
+			g.drawRect(tempRect.x, tempRect.y, tempRect.width - 1, tempRect.height - 1);
 
 			g.setStroke(oldStroke);
 		}
