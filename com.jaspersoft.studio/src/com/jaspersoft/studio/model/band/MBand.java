@@ -39,6 +39,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
@@ -55,7 +56,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * 
  * @author Chicu Veaceslav
  */
-public class MBand extends APropertyNode implements IGraphicElement, IPastable {
+public class MBand extends APropertyNode implements IGraphicElement, IPastable, IContainer {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

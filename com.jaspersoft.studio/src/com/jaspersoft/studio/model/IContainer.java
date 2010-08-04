@@ -21,28 +21,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action.size;
+package com.jaspersoft.studio.model;
 
-import org.eclipse.draw2d.geometry.PrecisionRectangle;
-import org.eclipse.gef.ui.actions.GEFActionConstants;
-import org.eclipse.gef.ui.actions.MatchHeightAction;
-import org.eclipse.ui.IWorkbenchPart;
+public interface IContainer {
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-
-public class MatchSizeAction extends MatchHeightAction {
-	public static final String ID = GEFActionConstants.MATCH_HEIGHT + GEFActionConstants.MATCH_WIDTH;
-	public MatchSizeAction(IWorkbenchPart part) {
-		super(part);
-		setText("Match Size");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/match-size.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/disabled/match-size.gif"));
-		setToolTipText("Match Size");
-		setId(ID);
-	}
-
-	@Override
-	protected double getPreciseWidthDelta(PrecisionRectangle precisePartBounds, PrecisionRectangle precisePrimaryBounds) {
-		return precisePrimaryBounds.preciseWidth - precisePartBounds.preciseWidth;
-	}
 }

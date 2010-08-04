@@ -1,3 +1,26 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
+ * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of Jaspersoft Open Studio.
+ *
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.editor.action.align;
 
 import java.util.ArrayList;
@@ -13,15 +36,14 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.internal.GEFMessages;
 import org.eclipse.gef.requests.AlignmentRequest;
 import org.eclipse.gef.tools.ToolUtilities;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.gef.commands.AlignCommand;
 
 public class Align2BorderAction extends SelectionAction {
 
@@ -56,18 +78,7 @@ public class Align2BorderAction extends SelectionAction {
 	public static final String ID_ALIGN_TOP = "band_" + GEFActionConstants.ALIGN_TOP;
 	private int alignment;
 
-	private List operationSet;
-
-	/**
-	 * @deprecated use AlignmentAction(IWorkbenchPart, int align)
-	 * @param editor
-	 *          the editor
-	 * @param align
-	 *          the alignment ID
-	 */
-	public Align2BorderAction(IEditorPart editor, int align) {
-		this((IWorkbenchPart) editor, align);
-	}
+	private List<?> operationSet;
 
 	/**
 	 * Constructs an AlignmentAction with the given part and alignment ID. The alignment ID must by one of:
@@ -99,7 +110,7 @@ public class Align2BorderAction extends SelectionAction {
 	 * @return the alignment rectangle
 	 */
 	protected Rectangle calculateAlignmentRectangle(Request request) {
-		List editparts = getOperationSet(request);
+		List<?> editparts = getOperationSet(request);
 		if (editparts == null || editparts.isEmpty())
 			return null;
 		GraphicalEditPart part = (GraphicalEditPart) editparts.get(editparts.size() - 1);
@@ -123,7 +134,7 @@ public class Align2BorderAction extends SelectionAction {
 		AlignmentRequest request = new AlignmentRequest(RequestConstants.REQ_ALIGN);
 		request.setAlignmentRectangle(calculateAlignmentRectangle(request));
 		request.setAlignment(alignment);
-		List editparts = getOperationSet(request);
+		List<?> editparts = getOperationSet(request);
 		if (editparts.isEmpty())
 			return null;
 
@@ -131,7 +142,8 @@ public class Align2BorderAction extends SelectionAction {
 		command.setDebugLabel(getText());
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
-			command.add(editpart.getCommand(request));
+			command.add(new AlignCommand(alignment, editpart));
+			// command.add(editpart.getCommand(request));
 		}
 		return command;
 	}
@@ -151,10 +163,10 @@ public class Align2BorderAction extends SelectionAction {
 	 *          the alignment request
 	 * @return the list of parts which will be aligned
 	 */
-	protected List getOperationSet(Request request) {
+	protected List<?> getOperationSet(Request request) {
 		if (operationSet != null)
 			return operationSet;
-		List editparts = new ArrayList(getSelectedObjects());
+		List<?> editparts = new ArrayList(getSelectedObjects());
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart))
 			return Collections.EMPTY_LIST;
 		Object primary = editparts.get(editparts.size() - 1);
@@ -178,8 +190,8 @@ public class Align2BorderAction extends SelectionAction {
 		switch (alignment) {
 		case PositionConstants.LEFT:
 			setId(ID_ALIGN_LEFT);
-			setText(GEFMessages.AlignLeftAction_Label);
-			setToolTipText(GEFMessages.AlignLeftAction_Tooltip);
+			setText("Align To Left");
+			setToolTipText("Align to left border");
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-left.gif"));
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
 					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-left.gif"));
@@ -187,8 +199,8 @@ public class Align2BorderAction extends SelectionAction {
 
 		case PositionConstants.RIGHT:
 			setId(ID_ALIGN_RIGHT);
-			setText(GEFMessages.AlignRightAction_Label);
-			setToolTipText(GEFMessages.AlignRightAction_Tooltip);
+			setText("Align To Right");
+			setToolTipText("Align to right border");
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-right.gif"));
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
 					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-right.gif"));
@@ -196,8 +208,8 @@ public class Align2BorderAction extends SelectionAction {
 
 		case PositionConstants.TOP:
 			setId(ID_ALIGN_TOP);
-			setText(GEFMessages.AlignTopAction_Label);
-			setToolTipText(GEFMessages.AlignTopAction_Tooltip);
+			setText("Align To Top");
+			setToolTipText("Align to top border");
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-top.gif"));
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
 					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-top.gif"));
@@ -205,8 +217,8 @@ public class Align2BorderAction extends SelectionAction {
 
 		case PositionConstants.BOTTOM:
 			setId(ID_ALIGN_BOTTOM);
-			setText(GEFMessages.AlignBottomAction_Label);
-			setToolTipText(GEFMessages.AlignBottomAction_Tooltip);
+			setText("Align To Bottom");
+			setToolTipText("Align to bottom border");
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-bottom.gif"));
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
 					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-bottom.gif"));
@@ -214,8 +226,8 @@ public class Align2BorderAction extends SelectionAction {
 
 		case PositionConstants.CENTER:
 			setId(ID_ALIGN_CENTER);
-			setText(GEFMessages.AlignCenterAction_Label);
-			setToolTipText(GEFMessages.AlignCenterAction_Tooltip);
+			setText("Align To Center");
+			setToolTipText("Align to center");
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-center.gif"));
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
 					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-center.gif"));
@@ -223,8 +235,8 @@ public class Align2BorderAction extends SelectionAction {
 
 		case PositionConstants.MIDDLE:
 			setId(ID_ALIGN_MIDDLE);
-			setText(GEFMessages.AlignMiddleAction_Label);
-			setToolTipText(GEFMessages.AlignMiddleAction_Tooltip);
+			setText("Align To Middle");
+			setToolTipText("Align to middle");
 			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-middle.gif"));
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
 					.getImageDescriptor("icons/resources/eclipse/disabled/align-band-middle.gif"));
