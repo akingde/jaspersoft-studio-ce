@@ -23,6 +23,8 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
@@ -73,6 +75,7 @@ import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
+import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.dnd.TextTransferDropTargetListener;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
@@ -195,11 +198,19 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		// Show Grid Action
 		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, true);
 		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, true);
+		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(10, 10));
+		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(10, 10));
+		graphicalViewer.setProperty(SnapToGuidesAction.ID, true);
+		
 		IAction showGrid = new ToggleGridAction(graphicalViewer);
 		getActionRegistry().registerAction(showGrid);
 		// snap to grid
 		IAction snapAction = new ToggleSnapToGeometryAction(graphicalViewer);
 		getActionRegistry().registerAction(snapAction);
+
+		snapAction = new SnapToGuidesAction(graphicalViewer);
+		getActionRegistry().registerAction(snapAction);
+
 		// show rullers
 		IAction showRulers = new ToggleRulerVisibilityAction(graphicalViewer);
 		getActionRegistry().registerAction(showRulers);

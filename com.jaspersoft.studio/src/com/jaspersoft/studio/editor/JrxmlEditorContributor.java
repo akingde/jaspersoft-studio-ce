@@ -23,11 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.DeleteRetargetAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
-import org.eclipse.gef.ui.actions.MatchHeightRetargetAction;
-import org.eclipse.gef.ui.actions.MatchWidthRetargetAction;
 import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomInRetargetAction;
@@ -61,6 +60,7 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
+import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 
 /**
@@ -132,14 +132,15 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		addRetargetAction(new ZoomInRetargetAction());
 		addRetargetAction(new ZoomOutRetargetAction());
 
-		addRetargetAction(new MatchWidthRetargetAction());
-		addRetargetAction(new MatchHeightRetargetAction());
+		// addRetargetAction(new MatchWidthRetargetAction());
+		// addRetargetAction(new MatchHeightRetargetAction());
 		// GEFMessages.ToggleRulerVisibility_Label
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY, "Toggle Ruler",
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY, "Show Ruler", IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID, "Snap To Guides", IAction.AS_CHECK_BOX));
+
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, "Show Grid", IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, "Snap To Grid",
 				IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, "Toggle Snap to",
-				IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, "Toggle Grid", IAction.AS_CHECK_BOX));
 	}
 
 	/**
@@ -320,11 +321,11 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
 		viewMenu.add(new Separator());
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY));
+		viewMenu.add(getAction(SnapToGuidesAction.ID));
+
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY));
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
-		viewMenu.add(new Separator());
-		viewMenu.add(getAction(GEFActionConstants.MATCH_WIDTH));
-		viewMenu.add(getAction(GEFActionConstants.MATCH_HEIGHT));
+
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 
 		IMenuManager menu = new MenuManager("Editor &Menu");

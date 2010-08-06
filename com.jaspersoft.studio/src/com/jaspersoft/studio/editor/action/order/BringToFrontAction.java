@@ -115,11 +115,11 @@ public class BringToFrontAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Bring To Front");
+		setText("Bring To &Front");
 		setToolTipText("Bring To Front");
 		setId(BringToFrontAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bringtofront.png"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bringtofront.png"));
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bring_to_front.gif"));
 		setEnabled(false);
 	}
 }

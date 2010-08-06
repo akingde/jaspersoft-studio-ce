@@ -138,29 +138,28 @@ public class Size2BorderAction extends SelectionAction {
 		switch (alignment) {
 		case WIDTH:
 			setId(ID_SIZE_WIDTH);
-			setText("Fit Width");
+			setText("Fit &Width");
 			setToolTipText("Fit width");
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/elem_vmaximise.png"));
+			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"));
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/formatting/elem_vmaximise.png"));
+					.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"));
 			break;
 
 		case HEIGHT:
 			setId(ID_SIZE_HEIGHT);
-			setText("Fit Height");
+			setText("Fit &Height");
 			setToolTipText("Fit height");
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/elem_hmaximise.png"));
+			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif"));
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/formatting/elem_hmaximise.png"));
+					.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif"));
 			break;
 
 		case BOTH:
 			setId(ID_SIZE_BOTH);
-			setText("Fit Size");
+			setText("Fit &Both");
 			setToolTipText("Fit size to container");
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/elem_maximise.png"));
-			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/resources/formatting/elem_maximise.png"));
+			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif"));
+			setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif"));
 			break;
 		}
 	}

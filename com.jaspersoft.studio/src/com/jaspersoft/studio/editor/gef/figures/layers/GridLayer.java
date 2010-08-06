@@ -6,8 +6,6 @@ import java.awt.Stroke;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
@@ -15,7 +13,7 @@ import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 	public GridLayer() {
 		super();
-		setSpacing(new Dimension(10, 10));
+		// setSpacing(new Dimension(10, 10));
 		setForegroundColor(ColorConstants.lightGray);
 	}
 
@@ -26,7 +24,7 @@ public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 
 		graphics2d.setStroke(new BasicStroke(0.1f));
 		Rectangle clip = getBounds();// g.getClip(Rectangle.SINGLETON);
-		origin = new Point(clip.x, clip.y);
+		// origin = new Point(clip.x, clip.y);
 		if (gridX > 0) {
 			if (origin.x >= clip.x)
 				while (origin.x - gridX >= clip.x)

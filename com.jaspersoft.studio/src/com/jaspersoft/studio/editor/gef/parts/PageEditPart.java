@@ -34,16 +34,22 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
+import org.eclipse.gef.SnapToGuides;
+import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
+import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
@@ -74,6 +80,35 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 			if (event.getProperty().equals(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE))
 				setPrefsBorder(getFigure());
 		}
+	}
+
+	@Override
+	public Object getAdapter(Class key) {
+		if (key == SnapToHelper.class) {
+			List<SnapToHelper> snapStrategies = new ArrayList<SnapToHelper>();
+			Boolean val = (Boolean) getViewer().getProperty(RulerProvider.PROPERTY_RULER_VISIBILITY);
+			Boolean stg = (Boolean) getViewer().getProperty(SnapToGuidesAction.ID);
+			if (val != null && val.booleanValue() && stg != null && stg.booleanValue())
+				snapStrategies.add(new SnapToGuides(this));
+			val = (Boolean) getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
+			if (val != null && val.booleanValue()) {
+				snapStrategies.add(new SnapToGeometry(this));
+				// val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);
+				// if (val != null && val.booleanValue())
+				snapStrategies.add(new SnapToGrid(this));
+			}
+
+			if (snapStrategies.size() == 0)
+				return null;
+			if (snapStrategies.size() == 1)
+				return snapStrategies.get(0);
+
+			SnapToHelper ss[] = new SnapToHelper[snapStrategies.size()];
+			for (int i = 0; i < snapStrategies.size(); i++)
+				ss[i] = (SnapToHelper) snapStrategies.get(i);
+			return new CompoundSnapToHelper(ss);
+		}
+		return super.getAdapter(key);
 	}
 
 	@Override

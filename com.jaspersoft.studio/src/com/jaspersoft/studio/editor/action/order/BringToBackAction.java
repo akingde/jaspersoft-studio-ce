@@ -114,11 +114,11 @@ public class BringToBackAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Bring To Back");
-		setToolTipText("Bring To Back");
+		setText("Send To &Back");
+		setToolTipText("Send To Back");
 		setId(BringToBackAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/sendtoback.png"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/sendtoback.png"));
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif"));
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif"));
 		setEnabled(false);
 	}
 }
