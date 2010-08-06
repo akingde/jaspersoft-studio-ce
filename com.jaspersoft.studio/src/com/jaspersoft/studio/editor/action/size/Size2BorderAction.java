@@ -19,6 +19,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.commands.ResizeCommand;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 public class Size2BorderAction extends SelectionAction {
 
@@ -90,7 +91,8 @@ public class Size2BorderAction extends SelectionAction {
 		command.setDebugLabel(getText());
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart editpart = (EditPart) editparts.get(i);
-			command.add(new ResizeCommand(alignment, editpart));
+			if (editpart.getModel() instanceof MGraphicElement)
+				command.add(new ResizeCommand(alignment, editpart));
 			// command.add(editpart.getCommand(request));
 		}
 		return command;
