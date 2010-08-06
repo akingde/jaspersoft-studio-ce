@@ -32,10 +32,14 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.SnapToGrid;
+import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
@@ -43,6 +47,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
+import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -94,6 +99,54 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 			rect.setBorder(new SimpleShadowBorder());
 	}
 
+	/**
+	 * Updates the {@link GridLayer grid} based on properties set on the {@link #getViewer() graphical viewer}:
+	 * {@link SnapToGrid#PROPERTY_GRID_VISIBLE}, {@link SnapToGrid#PROPERTY_GRID_SPACING}, and
+	 * {@link SnapToGrid#PROPERTY_GRID_ORIGIN}.
+	 * <p>
+	 * This method is invoked initially when the GridLayer is created, and when any of the above-mentioned properties are
+	 * changed on the viewer.
+	 */
+	protected void refreshGridLayer() {
+		boolean visible = false;
+		GridLayer grid = ((PageFigure) getFigure()).getGrid();
+		Boolean val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_VISIBLE);
+		if (val != null)
+			visible = val.booleanValue();
+		grid.setOrigin((Point) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ORIGIN));
+		grid.setSpacing((Dimension) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_SPACING));
+		grid.setVisible(visible);
+		getFigure().repaint();
+	}
+
+	/**
+	 * @see org.eclipse.gef.editparts.AbstractEditPart#register()
+	 */
+	protected void register() {
+		super.register();
+		// if (getLayer(GRID_LAYER) != null) {
+		getViewer().addPropertyChangeListener(gridListener);
+		refreshGridLayer();
+		// }
+	}
+
+	/**
+	 * @see AbstractEditPart#unregister()
+	 */
+	protected void unregister() {
+		getViewer().removePropertyChangeListener(gridListener);
+		super.unregister();
+	}
+
+	private PropertyChangeListener gridListener = new PropertyChangeListener() {
+		public void propertyChange(PropertyChangeEvent evt) {
+			String property = evt.getPropertyName();
+			if (property.equals(SnapToGrid.PROPERTY_GRID_ORIGIN) || property.equals(SnapToGrid.PROPERTY_GRID_SPACING)
+					|| property.equals(SnapToGrid.PROPERTY_GRID_VISIBLE))
+				refreshGridLayer();
+		}
+	};
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -139,8 +192,6 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		figure.setOpaque(false);
 		figure.setBackgroundColor(ColorConstants.white);
 		figure.setLayoutManager(new XYLayout());
-
-		// figure.add(gridLayer);
 
 		return figure;
 	}
@@ -261,10 +312,10 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 */
 	private void setupPageFigure(JasperDesign jasperDesign, PageFigure figure2) {
 		List<JRBand> bands = ModelUtils.getAllBands(jasperDesign);
-		int designHeight = ModelUtils.getDesignHeight(bands);
+		int designHeight = ModelUtils.getDesignHeight(bands) + jasperDesign.getTopMargin() + jasperDesign.getBottomMargin();
 
-		int w = jasperDesign.getPageWidth() + 1000;
-		int h = designHeight + 1000;
+		int w = jasperDesign.getPageWidth() + 20;
+		int h = designHeight + 80;
 
 		figure2.setBandNumber(bands.size());
 		figure2.setBandsHeight(designHeight);

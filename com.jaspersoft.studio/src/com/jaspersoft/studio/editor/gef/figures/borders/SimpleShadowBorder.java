@@ -33,7 +33,6 @@ import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ShadowBorder.
  */
@@ -59,7 +58,6 @@ public class SimpleShadowBorder extends AbstractBorder {
 	public void paint(IFigure figure, Graphics graphics, Insets insets) {
 
 		if (graphics instanceof J2DGraphics) {
-			Graphics2D gr = ((J2DGraphics) graphics).getGraphics2D();
 			org.eclipse.draw2d.geometry.Rectangle bounds = figure.getBounds();
 			if (figure instanceof HandleBounds)
 				bounds = ((HandleBounds) figure).getHandleBounds();

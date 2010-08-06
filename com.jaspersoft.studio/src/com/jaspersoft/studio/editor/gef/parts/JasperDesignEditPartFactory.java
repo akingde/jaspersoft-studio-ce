@@ -32,7 +32,6 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
 
-// TODO: Auto-generated Javadoc
 /**
  * A factory for creating JasperDesignEditPart objects.
  * 
