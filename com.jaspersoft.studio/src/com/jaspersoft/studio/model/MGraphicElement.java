@@ -226,25 +226,28 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		// initialize style
-		if (styleD != null) {
-			JRDesignElement jrElement = (JRDesignElement) getValue();
-			JRStyle[] styles = getJasperDesign().getStyles();
-			String[] items = new String[styles.length + 1];
-			items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : "";
-			for (int j = 0; j < styles.length; j++) {
-				items[j + 1] = styles[j].getName();
+		JasperDesign jasperDesign = getJasperDesign();
+		if (jasperDesign != null) {
+			if (styleD != null) {
+				JRDesignElement jrElement = (JRDesignElement) getValue();
+				JRStyle[] styles = jasperDesign.getStyles();
+				String[] items = new String[styles.length + 1];
+				items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : "";
+				for (int j = 0; j < styles.length; j++) {
+					items[j + 1] = styles[j].getName();
+				}
+				styleD.setItems(items);
 			}
-			styleD.setItems(items);
-		}
-		// initialize groups
-		if (groupChangesD != null) {
-			JRGroup[] groups = getJasperDesign().getGroups();
-			String[] items = new String[groups.length + 1];
-			items[0] = "";
-			for (int j = 0; j < groups.length; j++) {
-				items[j + 1] = groups[j].getName();
+			// initialize groups
+			if (groupChangesD != null) {
+				JRGroup[] groups = jasperDesign.getGroups();
+				String[] items = new String[groups.length + 1];
+				items[0] = "";
+				for (int j = 0; j < groups.length; j++) {
+					items[j + 1] = groups[j].getName();
+				}
+				groupChangesD.setItems(items);
 			}
-			groupChangesD.setItems(items);
 		}
 	}
 

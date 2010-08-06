@@ -297,6 +297,8 @@ public abstract class ANode implements INode {
 	 */
 	@Override
 	public JasperDesign getJasperDesign() {
-		return (JasperDesign) getRoot().getValue();
+		if (getRoot().getValue() instanceof JasperDesign)
+			return (JasperDesign) getRoot().getValue();
+		return null;
 	}
 }
