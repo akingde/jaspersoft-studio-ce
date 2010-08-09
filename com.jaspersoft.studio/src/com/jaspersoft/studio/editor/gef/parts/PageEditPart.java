@@ -349,7 +349,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		int designHeight = ModelUtils.getDesignHeight(bands) + jasperDesign.getTopMargin() + jasperDesign.getBottomMargin();
 
 		int w = jasperDesign.getPageWidth() + 20;
-		int h = designHeight + 80;
+		int h = designHeight + 10;
 
 		figure2.setBandNumber(bands.size());
 		figure2.setBandsHeight(designHeight);
