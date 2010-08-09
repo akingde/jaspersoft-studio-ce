@@ -93,8 +93,9 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 			val = (Boolean) getViewer().getProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED);
 			if (val != null && val.booleanValue()) {
 				snapStrategies.add(new SnapToGeometry(this));
-				// val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);
-				// if (val != null && val.booleanValue())
+			}
+			val = (Boolean) getViewer().getProperty(SnapToGrid.PROPERTY_GRID_ENABLED);
+			if (val != null && val.booleanValue()) {
 				snapStrategies.add(new SnapToGrid(this));
 			}
 
@@ -159,10 +160,8 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 */
 	protected void register() {
 		super.register();
-		// if (getLayer(GRID_LAYER) != null) {
 		getViewer().addPropertyChangeListener(gridListener);
 		refreshGridLayer();
-		// }
 	}
 
 	/**

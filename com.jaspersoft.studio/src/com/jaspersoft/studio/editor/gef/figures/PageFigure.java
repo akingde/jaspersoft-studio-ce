@@ -26,8 +26,8 @@ import java.awt.Stroke;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -42,7 +42,7 @@ import com.jaspersoft.studio.editor.java2d.J2DUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class PageFigure extends LayeredPane implements HandleBounds {
+public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 
 	/** The view margins. */
 	private boolean viewMargins = true;
@@ -143,6 +143,8 @@ public class PageFigure extends LayeredPane implements HandleBounds {
 			g.drawLine(topRight.x, topRight.y, bottomRight.x, bottomRight.y);
 			graphics2d.setStroke(oldStroke);
 		}
+		if (getBorder() != null)
+			getBorder().paint(this, g, NO_INSETS);
 	}
 
 	Point origin = new Point();
@@ -152,6 +154,11 @@ public class PageFigure extends LayeredPane implements HandleBounds {
 			grid.setBounds(clip);
 			grid.paint(g);
 		}
+	}
+
+	@Override
+	protected void paintBorder(Graphics graphics) {
+		// super.paintBorder(graphics);
 	}
 
 	/*

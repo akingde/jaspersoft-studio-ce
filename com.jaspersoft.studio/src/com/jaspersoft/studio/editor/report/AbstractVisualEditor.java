@@ -75,6 +75,8 @@ import com.jaspersoft.studio.editor.action.order.BringToBackAction;
 import com.jaspersoft.studio.editor.action.order.BringToFrontAction;
 import com.jaspersoft.studio.editor.action.size.MatchSizeAction;
 import com.jaspersoft.studio.editor.action.size.Size2BorderAction;
+import com.jaspersoft.studio.editor.action.snap.ShowGridAction;
+import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.dnd.TextTransferDropTargetListener;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
@@ -202,9 +204,13 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(10, 10));
 		graphicalViewer.setProperty(SnapToGuidesAction.ID, true);
 		
-		IAction showGrid = new ToggleGridAction(graphicalViewer);
+		IAction showGrid = new ShowGridAction(graphicalViewer);
 		getActionRegistry().registerAction(showGrid);
-		// snap to grid
+		
+		SnapToGridAction snapGridAction = new SnapToGridAction(graphicalViewer);
+		getActionRegistry().registerAction(snapGridAction);
+		
+		// snap to geometry
 		IAction snapAction = new ToggleSnapToGeometryAction(graphicalViewer);
 		getActionRegistry().registerAction(snapAction);
 

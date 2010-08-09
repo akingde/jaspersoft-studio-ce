@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.DeleteRetargetAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -60,6 +59,7 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
+import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 
@@ -139,8 +139,9 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID, "Snap To Guides", IAction.AS_CHECK_BOX));
 
 		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, "Show Grid", IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, "Snap To Grid",
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, "Snap To Geometry",
 				IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SnapToGridAction.ID, "Snap To Grid", IAction.AS_CHECK_BOX));
 	}
 
 	/**
