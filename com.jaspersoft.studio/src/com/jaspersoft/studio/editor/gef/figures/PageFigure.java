@@ -111,6 +111,8 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 
 		if (jrDesign != null && viewMargins) {
 			Rectangle clientArea = getClientArea();
+			clientArea.x -= dx;
+			clientArea.y -= dy;
 
 			int pageWidth = jrDesign.getPageWidth();
 			int pageHeight = bandsHeight + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
@@ -147,6 +149,17 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 			getBorder().paint(this, g, NO_INSETS);
 	}
 
+	int dx = 0;
+	int dy = 0;
+
+	@Override
+	protected void primTranslate(int dx, int dy) {
+		this.dx += dx;
+		this.dy += dy;
+		// TODO Auto-generated method stub
+		super.primTranslate(dx, dy);
+	}
+
 	Point origin = new Point();
 
 	private void paintGrid(Graphics g, Rectangle clip) {
@@ -169,6 +182,9 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 	@Override
 	public Rectangle getHandleBounds() {
 		Rectangle clientArea = getClientArea();
+		clientArea.x -= dx;
+		clientArea.y -= dy;
+		
 		int pageWidth = jrDesign.getPageWidth();
 		int pageHeight = bandsHeight + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
 		Insets insets = getInsets();
