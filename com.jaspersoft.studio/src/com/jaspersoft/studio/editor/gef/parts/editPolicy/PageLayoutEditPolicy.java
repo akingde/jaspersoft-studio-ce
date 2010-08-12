@@ -30,16 +30,21 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gef.rulers.RulerProvider;
 
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
+import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
+import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -50,6 +55,40 @@ import com.jaspersoft.studio.property.SetValueCommand;
  * The Class PageLayoutEditPolicy.
  */
 public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
+	protected Command chainGuideAttachmentCommand(Request request, MGraphicElement part, Command cmd, boolean horizontal) {
+		Command result = cmd;
+
+		// Attach to guide, if one is given
+		Integer guidePos = (Integer) request.getExtendedData().get(
+				horizontal ? SnapToGuides.KEY_HORIZONTAL_GUIDE : SnapToGuides.KEY_VERTICAL_GUIDE);
+		if (guidePos != null) {
+			int alignment = ((Integer) request.getExtendedData().get(
+					horizontal ? SnapToGuides.KEY_HORIZONTAL_ANCHOR : SnapToGuides.KEY_VERTICAL_ANCHOR)).intValue();
+			ChangeGuideCommand cgm = new ChangeGuideCommand(part, horizontal);
+			cgm.setNewGuide(findGuideAt(guidePos.intValue(), horizontal), alignment);
+			result = result.chain(cgm);
+		}
+
+		return result;
+	}
+
+	protected Command chainGuideDetachmentCommand(Request request, MGraphicElement part, Command cmd, boolean horizontal) {
+		Command result = cmd;
+
+		// Detach from guide, if none is given
+		Integer guidePos = (Integer) request.getExtendedData().get(
+				horizontal ? SnapToGuides.KEY_HORIZONTAL_GUIDE : SnapToGuides.KEY_VERTICAL_GUIDE);
+		if (guidePos == null)
+			result = result.chain(new ChangeGuideCommand(part, horizontal));
+
+		return result;
+	}
+
+	protected ReportRulerGuide findGuideAt(int pos, boolean horizontal) {
+		RulerProvider provider = ((RulerProvider) getHost().getViewer().getProperty(
+				horizontal ? RulerProvider.PROPERTY_VERTICAL_RULER : RulerProvider.PROPERTY_HORIZONTAL_RULER));
+		return (ReportRulerGuide) provider.getGuideAt(pos);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -110,6 +149,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
+		Command create = null;
 		System.out.println("DESIGNER CREATE COMMAND " + request);
 		if (request.getType() == REQ_MOVE) {
 			System.out.println("getCreateCommand " + request);
@@ -127,6 +167,9 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 						.getNewObject(), new Point(constraint.x, constraint.y), -1);
 			}
 		}
+
+		// Command cmd = chainGuideAttachmentCommand(request, newPart, create, true);
+		// return chainGuideAttachmentCommand(request, newPart, cmd, false);
 		return null;
 	}
 
@@ -154,7 +197,59 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		}
 		SetConstraintCommand cmd = new SetConstraintCommand();
 		cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), (Rectangle) constraint);
+
 		return cmd;
+	}
+
+	protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
+		Command result = createChangeConstraintCommand(child, constraint);
+		if (child instanceof BandEditPart)
+			return result;
+		MGraphicElement part = (MGraphicElement) child.getModel();
+
+		if ((request.getResizeDirection() & PositionConstants.NORTH_SOUTH) != 0) {
+			Integer guidePos = (Integer) request.getExtendedData().get(SnapToGuides.KEY_HORIZONTAL_GUIDE);
+			if (guidePos != null) {
+				result = chainGuideAttachmentCommand(request, part, result, true);
+			} else if (part.getHorizontalGuide() != null) {
+				// SnapToGuides didn't provide a horizontal guide, but this part is attached
+				// to a horizontal guide. Now we check to see if the part is attached to
+				// the guide along the edge being resized. If that is the case, we need to
+				// detach the part from the guide; otherwise, we leave it alone.
+				int alignment = part.getHorizontalGuide().getAlignment(part);
+				int edgeBeingResized = 0;
+				if ((request.getResizeDirection() & PositionConstants.NORTH) != 0)
+					edgeBeingResized = -1;
+				else
+					edgeBeingResized = 1;
+				if (alignment == edgeBeingResized)
+					result = result.chain(new ChangeGuideCommand(part, true));
+			}
+		}
+
+		if ((request.getResizeDirection() & PositionConstants.EAST_WEST) != 0) {
+			Integer guidePos = (Integer) request.getExtendedData().get(SnapToGuides.KEY_VERTICAL_GUIDE);
+			if (guidePos != null) {
+				result = chainGuideAttachmentCommand(request, part, result, false);
+			} else if (part.getVerticalGuide() != null) {
+				int alignment = part.getVerticalGuide().getAlignment(part);
+				int edgeBeingResized = 0;
+				if ((request.getResizeDirection() & PositionConstants.WEST) != 0)
+					edgeBeingResized = -1;
+				else
+					edgeBeingResized = 1;
+				if (alignment == edgeBeingResized)
+					result = result.chain(new ChangeGuideCommand(part, false));
+			}
+		}
+
+		if (request.getType().equals(REQ_MOVE_CHILDREN) || request.getType().equals(REQ_ALIGN_CHILDREN)) {
+			result = chainGuideAttachmentCommand(request, part, result, true);
+			result = chainGuideAttachmentCommand(request, part, result, false);
+			result = chainGuideDetachmentCommand(request, part, result, true);
+			result = chainGuideDetachmentCommand(request, part, result, false);
+		}
+		return result;
 	}
 
 	/*

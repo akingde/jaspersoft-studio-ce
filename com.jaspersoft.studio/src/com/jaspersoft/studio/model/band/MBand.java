@@ -309,7 +309,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 					break;
 				if (b instanceof MBand) {
 					if (b.getValue() != null)
-						h += ((JRDesignBand) b.getValue()).getHeight();
+						h += ((JRDesignBand) b.getValue()).getHeight()-1;
 				}
 			}
 			bounds.setLocation(parentBounds.x, h + getJasperDesign().getTopMargin());

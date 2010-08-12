@@ -22,5 +22,6 @@ Require-Bundle: org.eclipse.ui,
  net.sf.jasperreports,
  org.eclipse.ui.views.properties.tabbed;bundle-version="3.5.0"
 Bundle-ClassPath: .
+Bundle-NativeCode: libj2d-gtk-linux-i386-2.0.0.so; osname = Linux; processor = x86
 Import-Package: org.eclipse.ui,
  org.eclipse.ui.part

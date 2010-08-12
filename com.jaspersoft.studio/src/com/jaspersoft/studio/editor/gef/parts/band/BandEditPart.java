@@ -30,7 +30,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.Request;
 
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.PageFigure;
@@ -39,7 +38,6 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandContainerEditPolicy
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandMoveEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -99,6 +97,11 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener 
 		installEditPolicy(EditPolicy.CONTAINER_ROLE, new BandContainerEditPolicy());
 	}
 
+	@Override
+	public boolean isSelectable() {
+		return false;
+	}
+
 	/**
 	 * Class name.
 	 * 
@@ -126,9 +129,12 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener 
 	private void setupBandFigure(IFigure rect) {
 		JRDesignBand jrBand = getBand();
 		Rectangle bounds = ((MBand) getModel()).getBounds();
-		int width = getJasperDesign().getPageWidth() + 1;
+		JasperDesign jasperDesign = getJasperDesign();
+		// int width = jasperDesign.getPageWidth() + PageFigure.PAGE_BORDER.left + 1;
+		int width = jasperDesign.getPageWidth() + 1;
 		int height = jrBand != null ? jrBand.getHeight() : 0;
 		rect.setBounds(new Rectangle(PageFigure.PAGE_BORDER.left, bounds.y + PageFigure.PAGE_BORDER.top, width, height));
+		// rect.setBounds(new Rectangle(0, bounds.y + PageFigure.PAGE_BORDER.top, width, height));
 	}
 
 	/*

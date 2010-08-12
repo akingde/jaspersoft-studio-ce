@@ -44,17 +44,6 @@ public class BandResizeHandle2 extends ResizeHandle {
 		super(owner, direction);
 		setLocator(new BandResizeHandleLocator(owner.getFigure(), direction));
 		setPreferredSize(7, 7);
-		// setPreferredSize(new Dimension(getOwner().getFigure().getBounds().width - 10, 7));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.handles.SquareHandle#getBorderColor()
-	 */
-	@Override
-	protected Color getBorderColor() {
-		return super.getBorderColor();
 	}
 
 	/*

@@ -26,7 +26,6 @@ package com.jaspersoft.studio.editor.java2d;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Win32ImageRenderer.
  */

@@ -167,8 +167,6 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 	 * @see org.eclipse.gef.EditPolicy#understandsRequest(Request)
 	 */
 	public boolean understandsRequest(Request request) {
-		// if (REQ_MOVE.equals(request.getType()))
-		// return true;
 		if (REQ_RESIZE.equals(request.getType())) {
 			ChangeBoundsRequest r = (ChangeBoundsRequest) request;
 			if (r.getResizeDirection() == PositionConstants.SOUTH)

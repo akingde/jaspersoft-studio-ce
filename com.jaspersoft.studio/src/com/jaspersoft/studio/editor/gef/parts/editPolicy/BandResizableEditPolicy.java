@@ -56,9 +56,4 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		return list;
 	}
 
-	@Override
-	protected void showSelection() {
-		// TODO Auto-generated method stub
-		super.showSelection();
-	}
 }

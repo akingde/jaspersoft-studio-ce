@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.rulers;
 
@@ -32,7 +28,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.rulers.RulerChangeListener;
 import org.eclipse.gef.rulers.RulerProvider;
 
-// TODO: Auto-generated Javadoc
+import com.jaspersoft.studio.editor.gef.rulers.command.CreateGuideCommand;
+import com.jaspersoft.studio.editor.gef.rulers.command.DeleteGuideCommand;
+import com.jaspersoft.studio.editor.gef.rulers.command.MoveGuideCommand;
+
 /**
  * The Class ReportRulerProvider.
  * 
@@ -42,7 +41,7 @@ public class ReportRulerProvider extends RulerProvider {
 
 	/** The ruler. */
 	private ReportRuler ruler;
-	
+
 	/** The ruler listener. */
 	private PropertyChangeListener rulerListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent evt) {
@@ -63,7 +62,7 @@ public class ReportRulerProvider extends RulerProvider {
 			}
 		}
 	};
-	
+
 	/** The guide listener. */
 	private PropertyChangeListener guideListener = new PropertyChangeListener() {
 		public void propertyChange(PropertyChangeEvent evt) {
@@ -94,35 +93,45 @@ public class ReportRulerProvider extends RulerProvider {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#getAttachedModelObjects(java.lang.Object)
 	 */
 	public List<Object> getAttachedModelObjects(Object guide) {
 		return new ArrayList<Object>(((ReportRulerGuide) guide).getParts());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#getCreateGuideCommand(int)
 	 */
 	public Command getCreateGuideCommand(int position) {
 		return new CreateGuideCommand(ruler, position);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#getDeleteGuideCommand(java.lang.Object)
 	 */
 	public Command getDeleteGuideCommand(Object guide) {
-		return new DeleteGuideCommand((ReportGuide)guide, ruler);
+		return new DeleteGuideCommand((ReportRulerGuide) guide, ruler);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#getMoveGuideCommand(java.lang.Object, int)
 	 */
 	public Command getMoveGuideCommand(Object guide, int pDelta) {
-		return new MoveGuideCommand((ReportGuide)guide, pDelta);
+		return new MoveGuideCommand((ReportRulerGuide) guide, pDelta);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#getGuidePositions()
 	 */
 	public int[] getGuidePositions() {
@@ -134,35 +143,45 @@ public class ReportRulerProvider extends RulerProvider {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#getRuler()
 	 */
 	public Object getRuler() {
 		return ruler;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#getUnit()
 	 */
 	public int getUnit() {
 		return ruler.getUnit();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#setUnit(int)
 	 */
 	public void setUnit(int newUnit) {
 		ruler.setUnit(newUnit);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#getGuidePosition(java.lang.Object)
 	 */
 	public int getGuidePosition(Object guide) {
 		return ((ReportRulerGuide) guide).getPosition();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.rulers.RulerProvider#getGuides()
 	 */
 	public List<ReportRulerGuide> getGuides() {

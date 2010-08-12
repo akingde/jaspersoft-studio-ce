@@ -44,6 +44,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -61,6 +62,35 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * The Class MGeneric.
  */
 public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable {
+	private ReportRulerGuide verticalGuide, horizontalGuide;
+
+	public ReportRulerGuide getVerticalGuide() {
+		return verticalGuide;
+	}
+
+	public void setVerticalGuide(ReportRulerGuide verticalGuide) {
+		this.verticalGuide = verticalGuide;
+	}
+
+	public ReportRulerGuide getHorizontalGuide() {
+		return horizontalGuide;
+	}
+
+	public void setHorizontalGuide(ReportRulerGuide horizontalGuide) {
+		this.horizontalGuide = horizontalGuide;
+	}
+
+	@Override
+	public void setParent(ANode parent, int newIndex) {
+		if (parent instanceof MGraphicElement) {
+			MGraphicElement p = (MGraphicElement) parent;
+			if (p.getVerticalGuide() != null)
+				p.getVerticalGuide().detachPart(p);
+			if (p.getHorizontalGuide() != null)
+				p.getHorizontalGuide().detachPart(p);
+		}
+		super.setParent(parent, newIndex);
+	}
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

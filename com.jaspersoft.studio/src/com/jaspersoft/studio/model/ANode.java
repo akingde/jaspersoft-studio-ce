@@ -105,9 +105,8 @@ public abstract class ANode implements INode {
 	 *          the new index
 	 */
 	public ANode(ANode parent, int newIndex) {
-		if (parent != null) {
+		if (parent != null)
 			setParent(parent, newIndex);
-		}
 	}
 
 	/** The icon descriptor. */

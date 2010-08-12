@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -54,6 +55,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 
 // TODO: Auto-generated Javadoc
@@ -319,6 +321,19 @@ public class ModelUtils {
 		}
 
 		return yLocation;
+	}
+
+	public static Point getY4Element(MGraphicElement mge) {
+		JasperDesign jrDesign = mge.getJasperDesign();
+		JRDesignElement jrElement = (JRDesignElement) mge.getValue();
+		int y = jrElement.getY() + jrDesign.getTopMargin();
+		List<JRBand> bands = ModelUtils.getAllBands(jrDesign);
+		int pos = ModelUtils.getBand4Element(bands, jrElement);
+		for (int i = 0; i < pos; i++) {
+			y += bands.get(i).getHeight();
+		}
+		int x = jrElement.getX() + jrDesign.getLeftMargin();
+		return new Point(x, y);
 	}
 
 	/**

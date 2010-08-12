@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor;
 
@@ -75,14 +71,13 @@ import org.xml.sax.SAXParseException;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
-import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.ReportFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * An example showing how to create a multi-page editor. This example has 3
- * pages:
+ * An example showing how to create a multi-page editor. This example has 3 pages:
  * <ul>
  * <li>page 0 contains a nested text editor.
  * <li>page 1 allows you to change the font used in page 2
@@ -90,7 +85,7 @@ import com.jaspersoft.studio.model.MRoot;
  * </ul>
  */
 public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker {
-	
+
 	/**
 	 * The listener interface for receiving modelPropertyChange events. The class that is interested in processing a
 	 * modelPropertyChange event implements this interface, and the object created with that class is registered with a
@@ -101,8 +96,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @see ModelPropertyChangeEvent
 	 */
 	private final class ModelPropertyChangeListener implements PropertyChangeListener {
-		
-		/* (non-Javadoc)
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 		 */
 		@Override
@@ -119,13 +116,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	/** The Constant PAGE_DESIGNER. */
 	public static final int PAGE_DESIGNER = 0;
-	
+
 	/** The Constant PAGE_XMLEDITOR. */
 	public static final int PAGE_XMLEDITOR = 1;
-	
+
 	/** The Constant PAGE_PREVIEW. */
 	public static final int PAGE_PREVIEW = 2;
-	
+
 	/** The model. */
 	private INode model = null;
 
@@ -135,7 +132,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private XMLEditor xmlEditor;
 	/** Report preview used in page 2. */
 	private StyledText text;
-	
+
 	/** The model property change listener. */
 	private ModelPropertyChangeListener modelPropertyChangeListener;
 
@@ -148,8 +145,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 
 	/**
-	 * Creates page 1 of the multi-page editor, which allows you to change the
-	 * font used in page 2.
+	 * Creates page 1 of the multi-page editor, which allows you to change the font used in page 2.
 	 */
 	void createPage0() {
 		try {
@@ -214,9 +210,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 
 	/**
-	 * The <code>MultiPageEditorPart</code> implementation of this
-	 * <code>IWorkbenchPart</code> method disposes all nested editors. Subclasses
-	 * may extend.
+	 * The <code>MultiPageEditorPart</code> implementation of this <code>IWorkbenchPart</code> method disposes all nested
+	 * editors. Subclasses may extend.
 	 */
 	public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
@@ -250,9 +245,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 
 	/**
-	 * Saves the multi-page editor's document as another file. Also updates the
-	 * text for page 0's tab, and updates this multi-page editor's input to
-	 * correspond to the nested editor's.
+	 * Saves the multi-page editor's document as another file. Also updates the text for page 0's tab, and updates this
+	 * multi-page editor's input to correspond to the nested editor's.
 	 */
 	public void doSaveAs() {
 		SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
@@ -373,7 +367,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	/** The model fresh. */
 	private boolean modelFresh = true;
-	
+
 	/** The xml fresh. */
 	private boolean xmlFresh = true;
 

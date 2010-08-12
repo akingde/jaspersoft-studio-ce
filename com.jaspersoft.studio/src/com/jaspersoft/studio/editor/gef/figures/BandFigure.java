@@ -67,7 +67,10 @@ public class BandFigure extends RectangleFigure {
 			Stroke oldStroke = g.getStroke();
 			g.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, graphics.getAbsoluteScale()));
 
+			g.drawLine(b.x, b.y, b.x + b.width, b.y);
 			g.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
+
+			//g.fillRect(b.x, b.y, 5, b.height - 1);
 
 			g.setStroke(oldStroke);
 		} else

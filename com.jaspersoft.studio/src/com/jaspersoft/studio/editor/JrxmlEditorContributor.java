@@ -326,6 +326,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY));
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
+		viewMenu.add(getAction(SnapToGridAction.ID));
 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 

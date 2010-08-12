@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.report;
 
@@ -41,18 +37,15 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ReportEditor.
  * 
  * @author Chicu Veaceslav
  */
 public class ReportEditor extends AbstractVisualEditor {
-	
+
 	/** The Constant ID. */
 	public static final String ID = ReportEditor.class.getName();
-
-	// private RulerComposite rulerComp;
 
 	/**
 	 * Instantiates a new report editor.
@@ -64,8 +57,12 @@ public class ReportEditor extends AbstractVisualEditor {
 	/** The ruler comp. */
 	private RulerComposite rulerComp;
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette#createGraphicalViewer(org.eclipse.swt.widgets.Composite)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette#createGraphicalViewer(org.eclipse.swt.widgets
+	 * .Composite)
 	 */
 	@Override
 	protected void createGraphicalViewer(Composite parent) {
@@ -76,7 +73,9 @@ public class ReportEditor extends AbstractVisualEditor {
 
 	// FIXME: something wrong, I should not do that, order in initialisation is
 	// wrong
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getGraphicalControl()
 	 */
 	@Override
@@ -86,7 +85,9 @@ public class ReportEditor extends AbstractVisualEditor {
 		return super.getGraphicalControl();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#configureGraphicalViewer()
 	 */
 	@Override
@@ -102,17 +103,21 @@ public class ReportEditor extends AbstractVisualEditor {
 		graphicalViewer.setEditPartFactory(new JasperDesignEditPartFactory());
 
 		// set rulers providers
-		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true, PositionConstants.NORTH));
+		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true, RulerProvider.UNIT_PIXELS));
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
-		provider = new ReportRulerProvider(new ReportRuler(false, PositionConstants.WEST));
+		
+		provider = new ReportRulerProvider(new ReportRuler(false, RulerProvider.UNIT_PIXELS));
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
+		
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, new Boolean(true));
 
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(graphicalViewer));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getPaletteRoot()
 	 */
 	@Override

@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.rulers;
 
@@ -31,15 +27,16 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-// TODO: Auto-generated Javadoc
+import com.jaspersoft.studio.model.MGraphicElement;
+
 /**
  * Model object representing a guide.
  * <p>
- * In addition to maintaining information about which parts are attached to the
- * guide, LogicGuide also maintains information about the edge along which those
- * parts are attached. This information is useful during resize operations to
- * determine the attachment status of a part.
+ * In addition to maintaining information about which parts are attached to the guide, LogicGuide also maintains
+ * information about the edge along which those parts are attached. This information is useful during resize operations
+ * to determine the attachment status of a part.
  * 
  * @author Chicu Veaceslav
  */
@@ -47,7 +44,7 @@ public class ReportRulerGuide implements Serializable {
 
 	/** Property used to notify listeners when the parts attached to a guide are changed. */
 	public static final String PROPERTY_CHILDREN = "subparts changed"; //$NON-NLS-1$
-	
+
 	/** Property used to notify listeners when the guide is re-positioned. */
 	public static final String PROPERTY_POSITION = "position changed"; //$NON-NLS-1$
 
@@ -56,13 +53,13 @@ public class ReportRulerGuide implements Serializable {
 
 	/** The listeners. */
 	protected PropertyChangeSupport listeners = new PropertyChangeSupport(this);
-	
+
 	/** The map. */
-	private Map<Object, EditPart> map;
-	
+	private Map<MGraphicElement, Integer> map;
+
 	/** The position. */
 	private int position;
-	
+
 	/** The horizontal. */
 	private boolean horizontal;
 
@@ -100,9 +97,9 @@ public class ReportRulerGuide implements Serializable {
 	 * @return The Map containing all the parts attached to this guide, and their alignments; the keys are LogicSubparts
 	 *         and values are Integers
 	 */
-	public Map<Object, EditPart> getMap() {
+	public Map<MGraphicElement, Integer> getMap() {
 		if (map == null) {
-			map = new Hashtable<Object, EditPart>();
+			map = new Hashtable<MGraphicElement, Integer>();
 		}
 		return map;
 	}
@@ -113,7 +110,7 @@ public class ReportRulerGuide implements Serializable {
 	 * @return the set of all the parts attached to this guide; a set is used because a part can only be attached to a
 	 *         guide along one edge.
 	 */
-	public Set<Object> getParts() {
+	public Set<MGraphicElement> getParts() {
 		return getMap().keySet();
 	}
 
@@ -168,6 +165,68 @@ public class ReportRulerGuide implements Serializable {
 			position = offset;
 			listeners.firePropertyChange(PROPERTY_POSITION, new Integer(oldValue), new Integer(position));
 		}
+	}
+
+	/**
+	 * Attaches the given part along the given edge to this guide. The LogicSubpart is also updated to reflect this
+	 * attachment.
+	 * 
+	 * @param part
+	 *          The part that is to be attached to this guide; if the part is already attached, its alignment is updated
+	 * @param alignment
+	 *          -1 is left or top; 0, center; 1, right or bottom
+	 */
+	public void attachPart(MGraphicElement part, int alignment) {
+		if (getMap().containsKey(part) && getAlignment(part) == alignment)
+			return;
+
+		getMap().put(part, new Integer(alignment));
+		ReportRulerGuide parent = isHorizontal() ? part.getHorizontalGuide() : part.getVerticalGuide();
+		if (parent != null && parent != this) {
+			parent.detachPart(part);
+		}
+		if (isHorizontal()) {
+			part.setHorizontalGuide(this);
+		} else {
+			part.setVerticalGuide(this);
+		}
+		listeners.firePropertyChange(PROPERTY_CHILDREN, null, part);
+	}
+
+	/**
+	 * Detaches the given part from this guide. The LogicSubpart is also updated to reflect this change.
+	 * 
+	 * @param part
+	 *          the part that is to be detached from this guide
+	 */
+	public void detachPart(MGraphicElement part) {
+		if (getMap().containsKey(part)) {
+			getMap().remove(part);
+			if (isHorizontal()) {
+				part.setHorizontalGuide(null);
+			} else {
+				part.setVerticalGuide(null);
+			}
+			listeners.firePropertyChange(PROPERTY_CHILDREN, null, part);
+		}
+	}
+
+	/**
+	 * This methods returns the edge along which the given part is attached to this guide. This information is used by
+	 * {@link org.eclipse.gef.examples.logicdesigner.edit.LogicXYLayoutEditPolicy LogicXYLayoutEditPolicy} to determine
+	 * whether to attach or detach a part from a guide during resize operations.
+	 * 
+	 * @param part
+	 *          The part whose alignment has to be found
+	 * @return an int representing the edge along which the given part is attached to this guide; 1 is bottom or right; 0,
+	 *         center; -1, top or left; -2 if the part is not attached to this guide
+	 * @see org.eclipse.gef.examples.logicdesigner.edit.LogicXYLayoutEditPolicy#createChangeConstraintCommand(ChangeBoundsRequest,
+	 *      EditPart, Object)
+	 */
+	public int getAlignment(MGraphicElement part) {
+		if (getMap().get(part) != null)
+			return ((Integer) getMap().get(part)).intValue();
+		return -2;
 	}
 
 }
