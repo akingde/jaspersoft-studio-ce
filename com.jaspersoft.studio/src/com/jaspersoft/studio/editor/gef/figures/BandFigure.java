@@ -130,9 +130,11 @@ public class BandFigure extends RectangleFigure {
 			if (drawColumn) {
 				int x = marginLeft + PageFigure.PAGE_BORDER.left;
 				for (int i = 0; i < columnNumber; i++) {
-					g.drawLine(x, b.y, x, b.y + b.height + 1);
+					if (i > 0)
+						g.drawLine(x, b.y, x, b.y + b.height + 1);
 					x += columnWidth;
-					g.drawLine(x, b.y, x, b.y + b.height + 1);
+					if (i < columnNumber-1)
+						g.drawLine(x, b.y, x, b.y + b.height + 1);
 					x += columnSpacing;
 				}
 			}
