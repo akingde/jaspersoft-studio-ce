@@ -75,7 +75,6 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.ReportFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * An example showing how to create a multi-page editor. This example has 3 pages:
  * <ul>

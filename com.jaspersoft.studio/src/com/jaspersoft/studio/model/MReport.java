@@ -21,6 +21,7 @@ package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -67,6 +68,22 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * @author Chicu Veaceslav
  */
 public class MReport extends APropertyNode implements IGraphicElement {
+
+	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
+
+	public void register(ANode n) {
+		if (n.getValue() != null)
+			obj2Node.put(n.getValue(), n);
+	}
+
+	public void unregister(ANode n) {
+		if (n.getValue() != null)
+			obj2Node.remove(n.getValue());
+	}
+
+	public ANode getNode(Object obj) {
+		return obj2Node.get(obj);
+	}
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

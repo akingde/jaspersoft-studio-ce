@@ -30,9 +30,12 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * The Class SetConstraintCommand.
@@ -168,15 +171,50 @@ public class SetConstraintCommand extends Command {
 	 *          the band
 	 */
 	private void switchBands(JRDesignBand cBand, JRDesignBand pBand) {
+		// get guides
+		MGraphicElement n = (MGraphicElement) SelectionHelper.getNode(jrElement);
+		ReportRulerGuide vg = n.getVerticalGuide();
+		ReportRulerGuide hg = n.getHorizontalGuide();
+		int valign = 0;
+		int halign = 0;
+		if (hg != null) {
+			halign = hg.getAlignment(n);
+			hg.detachPart(n);
+		}
+		if (vg != null) {
+			valign = vg.getAlignment(n);
+			vg.detachPart(n);
+		}
+		boolean isSelected = false;
+		if (firstTime)
+			isSelected = SelectionHelper.isSelected(jrElement);
 		JRElement[] elements = cBand.getElements();
 		for (int i = 0; i < elements.length; i++) {
-			if (elements[i] == jrElement)
+			if (elements[i] == jrElement) {
 				oldIndex = i;
-			break;
+				break;
+			}
 		}
 		cBand.removeElement(jrElement);
 		pBand.addElement(jrElement);
+
+		if (vg != null || hg != null) {
+			n = (MGraphicElement) SelectionHelper.getNode(jrElement);
+			if (hg != null) {
+				hg.attachPart(n, halign);
+			}
+			if (vg != null) {
+				vg.attachPart(n, valign);
+			}
+		}
+		// set guides
+		if (firstTime && isSelected) {
+			SelectionHelper.setSelection(jrElement, true);
+			firstTime = false;
+		}
 	}
+
+	private boolean firstTime = true;
 
 	/*
 	 * (non-Javadoc)

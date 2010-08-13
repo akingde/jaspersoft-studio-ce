@@ -24,16 +24,18 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
-// TODO: Auto-generated Javadoc
+import org.eclipse.gef.EditPart;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+
 /**
  * The Class ANode.
  * 
@@ -149,10 +151,12 @@ public abstract class ANode implements INode {
 	 */
 	public void setParent(ANode parent, int newIndex) {
 		if (parent == null) {
+			unregister();
 			getPropertyChangeSupport().removePropertyChangeListener(parent);
 			this.parent.getChildren().remove(this);
 			this.parent = null;
 		} else {
+			register();
 			this.parent = parent;
 			if (newIndex >= 0 && newIndex < parent.getChildren().size())
 				parent.getChildren().add(newIndex, this);
@@ -284,9 +288,47 @@ public abstract class ANode implements INode {
 	public void setValue(Object value) {
 		if (this.value != null) {
 			((JRChangeEventsSupport) this.value).getEventSupport().removePropertyChangeListener(this);
-		} else if (value != null)
+			unregister();
+		} else if (value != null) {
 			((JRChangeEventsSupport) value).getEventSupport().addPropertyChangeListener(this);
+			this.value = value;
+			register();
+		}
 		this.value = value;
+	}
+
+	public void register() {
+		INode root = getRoot();
+		if (root instanceof MReport) {
+			MReport mRoot = (MReport) root;
+			if (mRoot != null)
+				mRoot.register(this);
+		}
+	}
+
+	public void unregister() {
+		INode root = getRoot();
+		if (root instanceof MReport) {
+			MReport mRoot = (MReport) getRoot();
+			if (mRoot != null)
+				mRoot.unregister(this);
+		}
+	}
+
+	public EditPart getFigureEditPart() {
+		for (Object o : propertyChangeSupport.getPropertyChangeListeners()) {
+			if (o instanceof FigureEditPart)
+				return (EditPart) o;
+		}
+		return null;
+	}
+
+	public ANode getNode(Object obj) {
+		INode root = getRoot();
+		if (root instanceof MReport) {
+			return ((MReport) root).getNode(obj);
+		}
+		return null;
 	}
 
 	/*
