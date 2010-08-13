@@ -37,14 +37,71 @@ import com.jaspersoft.studio.editor.java2d.J2DUtils;
  */
 public class BandFigure extends RectangleFigure {
 	private static Color marginsColor = new Color(null, 0, 0, 255);
+	private int columnNumber = 1;
+	private int columnSpacing = 0;
+	private int columnWidth = 0;
+
+	private int marginLeft = 0;
+	private int marginRight = 0;
+
+	private boolean drawColumn = false;
+
+	public static Color getMarginsColor() {
+		return marginsColor;
+	}
+
+	public static void setMarginsColor(Color marginsColor) {
+		BandFigure.marginsColor = marginsColor;
+	}
+
+	public int getColumnNumber() {
+		return columnNumber;
+	}
+
+	public void setColumnNumber(int columnNumber) {
+		this.columnNumber = columnNumber;
+	}
+
+	public int getColumnSpacing() {
+		return columnSpacing;
+	}
+
+	public void setColumnSpacing(int columnSpacing) {
+		this.columnSpacing = columnSpacing;
+	}
+
+	public int getColumnWidth() {
+		return columnWidth;
+	}
+
+	public void setColumnWidth(int columnWidth) {
+		this.columnWidth = columnWidth;
+	}
+
+	public int getMarginLeft() {
+		return marginLeft;
+	}
+
+	public void setMarginLeft(int marginLeft) {
+		this.marginLeft = marginLeft;
+	}
+
+	public int getMarginRight() {
+		return marginRight;
+	}
+
+	public void setMarginRight(int marginRight) {
+		this.marginRight = marginRight;
+	}
 
 	/**
 	 * Instantiates a new band figure.
 	 */
-	public BandFigure() {
+	public BandFigure(boolean drawColumn) {
 		super();
 		setLayoutManager(new FreeformLayout());
 		setOpaque(false);
+		this.drawColumn = drawColumn;
 	}
 
 	/*
@@ -70,7 +127,15 @@ public class BandFigure extends RectangleFigure {
 			g.drawLine(b.x, b.y, b.x + b.width, b.y);
 			g.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
 
-			//g.fillRect(b.x, b.y, 5, b.height - 1);
+			if (drawColumn) {
+				int x = marginLeft + PageFigure.PAGE_BORDER.left;
+				for (int i = 0; i < columnNumber; i++) {
+					g.drawLine(x, b.y, x, b.y + b.height + 1);
+					x += columnWidth;
+					g.drawLine(x, b.y, x, b.y + b.height + 1);
+					x += columnSpacing;
+				}
+			}
 
 			g.setStroke(oldStroke);
 		} else

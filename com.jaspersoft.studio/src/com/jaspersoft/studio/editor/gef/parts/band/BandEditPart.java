@@ -24,6 +24,7 @@ import java.beans.PropertyChangeListener;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
@@ -79,7 +80,13 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
 	 */
 	protected IFigure createFigure() {
-		BandFigure rect = new BandFigure();
+		JRDesignBand jrBand = getBand();
+		BandTypeEnum bandTypeValue = jrBand.getOrigin().getBandTypeValue();
+		boolean drawColumns = bandTypeValue.equals(BandTypeEnum.COLUMN_FOOTER)
+				|| bandTypeValue.equals(BandTypeEnum.COLUMN_HEADER) || bandTypeValue.equals(BandTypeEnum.GROUP_FOOTER)
+				|| bandTypeValue.equals(BandTypeEnum.COLUMN_HEADER) || bandTypeValue.equals(BandTypeEnum.DETAIL);
+
+		BandFigure rect = new BandFigure(drawColumns);
 		rect.setForegroundColor(ColorConstants.blue);
 		rect.setToolTip(new Label(((MBand) getModel()).getToolTip()));
 		setupBandFigure(rect);
@@ -130,6 +137,13 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener 
 		JRDesignBand jrBand = getBand();
 		Rectangle bounds = ((MBand) getModel()).getBounds();
 		JasperDesign jasperDesign = getJasperDesign();
+		BandFigure bfig = (BandFigure) rect;
+		bfig.setMarginLeft(jasperDesign.getLeftMargin());
+		bfig.setMarginRight(jasperDesign.getRightMargin());
+		bfig.setColumnNumber(jasperDesign.getColumnCount());
+		bfig.setColumnWidth(jasperDesign.getColumnWidth());
+		bfig.setColumnSpacing(jasperDesign.getColumnSpacing());
+
 		// int width = jasperDesign.getPageWidth() + PageFigure.PAGE_BORDER.left + 1;
 		int width = jasperDesign.getPageWidth() + 1;
 		int height = jrBand != null ? jrBand.getHeight() : 0;
