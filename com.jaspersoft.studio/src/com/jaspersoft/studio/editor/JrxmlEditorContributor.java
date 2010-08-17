@@ -59,6 +59,7 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
+import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
@@ -142,6 +143,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, "Snap To Geometry",
 				IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SnapToGridAction.ID, "Snap To Grid", IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SizeGridAction.ID, "Grid Size ..."));
 	}
 
 	/**
@@ -230,11 +232,11 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			bars.setGlobalActionHandler(ActionFactory.CUT.getId(), getAction(editor, ITextEditorActionConstants.CUT));
 			bars.setGlobalActionHandler(ActionFactory.COPY.getId(), getAction(editor, ITextEditorActionConstants.COPY));
 			bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), getAction(editor, ITextEditorActionConstants.PASTE));
-			bars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(), getAction(editor,
-					ITextEditorActionConstants.SELECT_ALL));
+			bars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(),
+					getAction(editor, ITextEditorActionConstants.SELECT_ALL));
 			bars.setGlobalActionHandler(ActionFactory.FIND.getId(), getAction(editor, ITextEditorActionConstants.FIND));
-			bars.setGlobalActionHandler(IDEActionFactory.BOOKMARK.getId(), getAction(editor, IDEActionFactory.BOOKMARK
-					.getId()));
+			bars.setGlobalActionHandler(IDEActionFactory.BOOKMARK.getId(),
+					getAction(editor, IDEActionFactory.BOOKMARK.getId()));
 		} else if (activeEditor instanceof IAdaptable) {
 			if (zoomCombo != null)
 				zoomCombo.setEnabled(true);
@@ -270,8 +272,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		};
 		sampleAction.setText("Sample Action");
 		sampleAction.setToolTipText("Sample Action tool tip");
-		sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-				IDE.SharedImages.IMG_OBJS_TASK_TSK));
+		sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
+				.getImageDescriptor(IDE.SharedImages.IMG_OBJS_TASK_TSK));
 	}
 
 	/**
@@ -323,10 +325,11 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		viewMenu.add(new Separator());
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY));
 		viewMenu.add(getAction(SnapToGuidesAction.ID));
-
+		viewMenu.add(new Separator());
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY));
-		viewMenu.add(getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
 		viewMenu.add(getAction(SnapToGridAction.ID));
+		viewMenu.add(getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
+		viewMenu.add(getAction(SizeGridAction.ID));
 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 

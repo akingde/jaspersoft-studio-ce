@@ -360,6 +360,9 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		getViewer().setProperty("RULER_VOFFSET", jd.getTopMargin() + PageFigure.PAGE_BORDER.top);
 		getViewer().setProperty("RULER_HEND", jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin());
 		getViewer().setProperty("RULER_VEND", dh - PageFigure.PAGE_BORDER.top);
+
+		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
+				new Point(PageFigure.PAGE_BORDER.left + jd.getLeftMargin(), PageFigure.PAGE_BORDER.top + jd.getTopMargin()));
 	}
 
 	/*
