@@ -104,6 +104,12 @@
             id="com.jaspersoft.studio.preferences.DesignerPreferencePage"
             name="Report Designer">
       </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.RulersGridPreferencePage"
+            id="com.jaspersoft.studio.preferences.GridRulerPreferencePage"
+            name="Rulers And Grid">
+      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

@@ -31,6 +31,7 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
@@ -55,6 +56,7 @@ import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -64,6 +66,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.copy.CopyAction;
@@ -97,6 +100,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.preferences.PreferenceConstants;
 
 /**
  * The Class AbstractVisualEditor.
@@ -187,8 +191,8 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	public KeyHandler getCommonKeyHandler() {
 		if (sharedKeyHandler == null) {
 			sharedKeyHandler = new KeyHandler();
-			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0), getActionRegistry().getAction(
-					GEFActionConstants.DIRECT_EDIT));
+			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
+					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
 		}
 		return sharedKeyHandler;
 	}
@@ -199,21 +203,31 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected void createAdditionalActions() {
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		// Show Grid Action
-		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, true);
-		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, true);
+		IPreferenceStore prefs = JaspersoftStudioPlugin.getDefault().getPreferenceStore();
+		Boolean isGridVisible = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID);
+		Boolean isSnapToGuides = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES);
+		Boolean isSnapToGrid = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID);
+		Boolean isSnapToGeometry = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGEOMETRY);
+
+		int gspaceX = prefs.getInt(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEX);
+		int gspaceY = prefs.getInt(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEY);
+
+		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, isSnapToGrid.booleanValue());
+		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, isGridVisible.booleanValue());
 		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(30, 30));
-		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(10, 10));
-		graphicalViewer.setProperty(SnapToGuidesAction.ID, true);
-		
+		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(gspaceX, gspaceY));
+		graphicalViewer.setProperty(SnapToGuidesAction.ID, isSnapToGuides);
+		graphicalViewer.setProperty(SnapToGeometry.PROPERTY_SNAP_ENABLED, isSnapToGeometry.booleanValue());
+
 		IAction showGrid = new ShowGridAction(graphicalViewer);
 		getActionRegistry().registerAction(showGrid);
-		
+
 		SnapToGridAction snapGridAction = new SnapToGridAction(graphicalViewer);
 		getActionRegistry().registerAction(snapGridAction);
-		
+
 		SizeGridAction sizeGridAction = new SizeGridAction(graphicalViewer);
 		getActionRegistry().registerAction(sizeGridAction);
-		
+
 		// snap to geometry
 		IAction snapAction = new ToggleSnapToGeometryAction(graphicalViewer);
 		getActionRegistry().registerAction(snapAction);

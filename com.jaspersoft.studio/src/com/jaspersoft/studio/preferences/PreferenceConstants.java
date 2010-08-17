@@ -27,17 +27,19 @@ package com.jaspersoft.studio.preferences;
  * Constant definitions for plug-in preferences
  */
 public class PreferenceConstants {
-
-	public static final String P_PATH = "pathPreference";
-
-	public static final String P_BOOLEAN = "booleanPreference";
-
-	public static final String P_CHOICE = "choicePreference";
-
-	public static final String P_STRING = "stringPreference";
-	
+		
 	public static final String P_ELEMENT_DESIGN_BORDER_STYLE = "elementDesignBorderStyle";
-	
 	public static final String P_PAGE_DESIGN_BORDER_STYLE = "pageDesignBorderStyle";
+	
+	public static final String P_PAGE_RULERGRID_SHOWRULER = "pageRulerGrid_SHOWRULER";
+	public static final String P_PAGE_RULERGRID_SNAPTOGUIDES = "pageRulerGrid_SNAPTOGUIDES";
+	
+	public static final String P_PAGE_RULERGRID_SHOWGRID = "pageRulerGrid_SHOWGRID";
+	public static final String P_PAGE_RULERGRID_SNAPTOGRID = "pageRulerGrid_SNAPTOGRID";
+	public static final String P_PAGE_RULERGRID_SNAPTOGEOMETRY = "pageRulerGrid_SNAPTOGEOMETRY";
+	public static final String P_PAGE_RULERGRID_GRIDSPACEX = "pageRulerGrid_GRIDSPACEX";
+	public static final String P_PAGE_RULERGRID_GRIDSPACEY = "pageRulerGrid_GRIDSPACEY";
+	
+	
 
 }

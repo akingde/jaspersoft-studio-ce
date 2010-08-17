@@ -19,12 +19,7 @@
  */
 package com.jaspersoft.studio.editor.report;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartListener;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.rulers.RulerProvider;
@@ -34,13 +29,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerComposite;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
-import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.preferences.PreferenceConstants;
 
 /**
  * The Class ReportEditor.
@@ -114,7 +110,9 @@ public class ReportEditor extends AbstractVisualEditor {
 		provider = new ReportRulerProvider(new ReportRuler(false, RulerProvider.UNIT_PIXELS));
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
 
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, new Boolean(true));
+		Boolean isRulerVisible = JaspersoftStudioPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER);
+		
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
 
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(graphicalViewer));

@@ -54,7 +54,7 @@ public class SizeGridAction extends Action {
 
 			mform.getForm().getBody().setLayout(new GridLayout(4, false));
 
-			toolkit.createLabel(mform.getForm().getBody(), "Space X:");
+			toolkit.createLabel(mform.getForm().getBody(), "Spacing X:");
 			final Spinner width = new Spinner(mform.getForm().getBody(), SWT.BORDER);
 			width.setValues(w, 0, Integer.MAX_VALUE, 0, 1, 10);
 			width.setToolTipText("Grid space width");
@@ -64,7 +64,7 @@ public class SizeGridAction extends Action {
 				}
 			});
 
-			toolkit.createLabel(mform.getForm().getBody(), "Space Y:");
+			toolkit.createLabel(mform.getForm().getBody(), "Spacing Y:");
 
 			final Spinner height = new Spinner(mform.getForm().getBody(), SWT.BORDER);
 			height.setValues(h, 0, Integer.MAX_VALUE, 0, 1, 10);
