@@ -51,7 +51,7 @@ public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 					origin.x += gridX;
 			int j = 0;
 			for (int i = origin.x; i < clip.x + clip.width; i += gridX) {
-				if (j > 10) {
+				if (j == 10) {
 					graphics2d.setStroke(new BasicStroke(0.5f));
 					j = 0;
 				} else
@@ -69,7 +69,7 @@ public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 					origin.y += gridY;
 			int j = 0;
 			for (int i = origin.y; i < clip.y + clip.height; i += gridY) {
-				if (j > 10) {
+				if (j == 10) {
 					graphics2d.setStroke(new BasicStroke(0.5f));
 					j = 0;
 				} else

@@ -339,21 +339,27 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	/**
 	 * Setup page figure.
 	 * 
-	 * @param jasperDesign
+	 * @param jd
 	 *          the jasper design
 	 * @param figure2
 	 *          the figure2
 	 */
-	private void setupPageFigure(JasperDesign jasperDesign, PageFigure figure2) {
-		List<JRBand> bands = ModelUtils.getAllBands(jasperDesign);
-		int designHeight = ModelUtils.getDesignHeight(bands) + jasperDesign.getTopMargin() + jasperDesign.getBottomMargin();
+	private void setupPageFigure(JasperDesign jd, PageFigure figure2) {
+		List<JRBand> bands = ModelUtils.getAllBands(jd);
+		int dh = ModelUtils.getDesignHeight(bands);
+		int designHeight = dh + jd.getTopMargin() + jd.getBottomMargin();
 
-		int w = jasperDesign.getPageWidth() + 20;
+		int w = jd.getPageWidth() + 20;
 		int h = designHeight + 10;
 
 		figure2.setBandNumber(bands.size());
 		figure2.setBandsHeight(designHeight);
 		figure2.setSize(w, h);
+
+		getViewer().setProperty("RULER_HOFFSET", jd.getLeftMargin() + PageFigure.PAGE_BORDER.left);
+		getViewer().setProperty("RULER_VOFFSET", jd.getTopMargin() + PageFigure.PAGE_BORDER.top);
+		getViewer().setProperty("RULER_HEND", jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin());
+		getViewer().setProperty("RULER_VEND", dh - PageFigure.PAGE_BORDER.top);
 	}
 
 	/*

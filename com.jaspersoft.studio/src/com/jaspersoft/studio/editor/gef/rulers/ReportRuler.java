@@ -40,6 +40,11 @@ public class ReportRuler implements Serializable {
 	/** The Constant PROPERTY_UNIT. */
 	public static final String PROPERTY_UNIT = "units changed"; //$NON-NLS-1$
 
+	public static final String PROPERTY_HOFFSET = "HOFFSET"; //$NON-NLS-1$
+	public static final String PROPERTY_VOFFSET = "VOFFSET"; //$NON-NLS-1$
+	public static final String PROPERTY_HEND = "HEND"; //$NON-NLS-1$
+	public static final String PROPERTY_VEND = "VEND"; //$NON-NLS-1$
+
 	/** The Constant serialVersionUID. */
 	static final long serialVersionUID = 1;
 
@@ -48,6 +53,8 @@ public class ReportRuler implements Serializable {
 
 	/** The unit. */
 	private int unit;
+
+	private int hoffset, voffset, hend, vend;
 
 	/** The horizontal. */
 	private boolean horizontal;
@@ -181,6 +188,54 @@ public class ReportRuler implements Serializable {
 			int oldUnit = unit;
 			unit = newUnit;
 			listeners.firePropertyChange(PROPERTY_UNIT, oldUnit, newUnit);
+		}
+	}
+
+	public int getHoffset() {
+		return hoffset;
+	}
+
+	public void setHoffset(int hoffset) {
+		if (this.hoffset != hoffset) {
+			int old = this.hoffset;
+			this.hoffset = hoffset;
+			listeners.firePropertyChange(PROPERTY_HOFFSET, old, hoffset);
+		}
+	}
+
+	public int getVoffset() {
+		return voffset;
+	}
+
+	public void setVoffset(int voffset) {
+		if (this.voffset != voffset) {
+			int old = this.voffset;
+			this.voffset = voffset;
+			listeners.firePropertyChange(PROPERTY_VOFFSET, old, voffset);
+		}
+	}
+
+	public int getHend() {
+		return hend;
+	}
+
+	public void setHend(int hend) {
+		if (this.hend != hend) {
+			int old = this.hend;
+			this.hend = hend;
+			listeners.firePropertyChange(PROPERTY_HEND, old, hend);
+		}
+	}
+
+	public int getVend() {
+		return vend;
+	}
+
+	public void setVend(int vend) {
+		if (this.vend != vend) {
+			int old = this.vend;
+			this.vend = vend;
+			listeners.firePropertyChange(PROPERTY_VEND, old, vend);
 		}
 	}
 

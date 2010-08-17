@@ -115,7 +115,7 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 			clientArea.y -= dy;
 
 			int pageWidth = jrDesign.getPageWidth();
-			int pageHeight = bandsHeight + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
+			int pageHeight = bandsHeight;// + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
 
 			int leftMargin = jrDesign.getLeftMargin();
 			int rightMargin = jrDesign.getRightMargin();
@@ -185,7 +185,7 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 		clientArea.y -= dy;
 
 		int pageWidth = jrDesign.getPageWidth();
-		int pageHeight = bandsHeight + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
+		int pageHeight = bandsHeight;// + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
 		Insets insets = getInsets();
 		return new Rectangle(clientArea.x - insets.right, clientArea.y - insets.top,
 				pageWidth + insets.left + insets.right, pageHeight + insets.top + insets.bottom);
