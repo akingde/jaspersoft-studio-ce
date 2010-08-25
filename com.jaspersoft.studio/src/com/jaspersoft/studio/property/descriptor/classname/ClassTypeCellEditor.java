@@ -54,7 +54,7 @@ public class ClassTypeCellEditor extends ATextDialogCellEditor {
 			// a.
 			// JavaModelUtil.g
 			// searchScope.enclosingProjectsAndJars()[0].
-			//			
+			//
 			// SearchEngine.createHierarchyScope(IType. )
 			// IType focus = ...;
 			// IJavaProject project = ...;
@@ -68,6 +68,18 @@ public class ClassTypeCellEditor extends ATextDialogCellEditor {
 			// searchScope, SearchPattern.R_EXACT_MATCH);
 
 			// ;
+			// -------------
+//			IProject project; // currently selected project
+//
+//			// get the java project and locate the interface type
+//			JavaProject javaProject = JavaCore.create(project);
+//			IType myInterface = javaProject.findType("MyInterface", "name.seller.rich");
+//
+//			// get the sub types from the interface's type hierarchy
+//			ITypeHierarchy hierarchy = myInterface.newTypeHierarchy(new NullProgressMonitor());
+//
+//			IType[] subTypes = hierarchy.getAllSubtypes(myInterface);
+
 			SelectionDialog dialog = JavaUI.createTypeDialog(shell, new ProgressMonitorDialog(shell), searchScope,
 					IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false);
 			dialog.setTitle("Open Type");

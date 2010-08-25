@@ -107,6 +107,18 @@ public abstract class APropertyNode extends ANode implements IPropertySource {
 		throw new Exception("Key not found");
 	}
 
+	public void initProperties() {
+		IPropertyDescriptor[] pd = getPropertyDescriptors();
+		for (int i = 0; i < pd.length; i++) {
+			try {
+				Object o = getPropertyDefaultValue((String) pd[i].getId());
+				setPropertyValue(pd[i].getId(), o);
+			} catch (Exception e) {
+			}
+		}
+
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

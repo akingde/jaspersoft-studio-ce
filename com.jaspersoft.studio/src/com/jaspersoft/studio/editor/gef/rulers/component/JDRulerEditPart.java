@@ -104,7 +104,7 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 	protected IFigure createFigure() {
 		JDRulerFigure ruler = new JDRulerFigure(isHorizontal(), getRulerProvider().getUnit());
 		if (ruler.getUnit() == RulerProvider.UNIT_PIXELS)
-			ruler.setInterval(100, 2);
+			ruler.setInterval(100, 10);
 		return ruler;
 	}
 
@@ -208,7 +208,7 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 	public void handleUnitsChanged(int newUnit) {
 		getRulerFigure().setUnit(newUnit);
 		if (newUnit == RulerProvider.UNIT_PIXELS)
-			getRulerFigure().setInterval(100, 2);
+			getRulerFigure().setInterval(100, 10);
 		else
 			getRulerFigure().setInterval(0, 0);
 	}

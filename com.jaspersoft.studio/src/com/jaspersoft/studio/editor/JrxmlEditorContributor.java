@@ -241,9 +241,10 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			if (zoomCombo != null)
 				zoomCombo.setEnabled(true);
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
-			for (String id : globalActionKeys) {
-				bars.setGlobalActionHandler(id, registry.getAction(id));
-			}
+			if (registry != null)
+				for (String id : globalActionKeys) {
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+				}
 		}
 		bars.updateActionBars();
 	}

@@ -313,6 +313,21 @@
          </propertySection>
       </propertySections>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="net.sf.jasperreports"
+            class="com.jaspersoft.studio.repository.RepositoryView"
+            icon="icons/jr_icon.png"
+            id="com.jaspersoft.studio.Repository"
+            name="Repository"
+            restorable="true">
+      </view>
+      <category
+            id="net.sf.jasperreports"
+            name="JasperSoft Studio">
+      </category>
+   </extension>
    
 
 </plugin>

@@ -193,8 +193,9 @@ public class MDataset extends APropertyNode implements IPropertySource, ICopyabl
 		filterExpression.setDescription("Boolean expression used to filter the rows of a data source. ");
 		desc.add(filterExpression);
 
-		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, EnumHelper.getValue(
-				WhenResourceMissingTypeEnum.NULL, 1, false));
+		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
+				EnumHelper.getValue(WhenResourceMissingTypeEnum.NULL, 1, false));
+		defaultsMap.put(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, null);
 	}
 
 	private MQuery mQuery;
@@ -248,6 +249,10 @@ public class MDataset extends APropertyNode implements IPropertySource, ICopyabl
 		else if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			jrDataset.setScriptletClass((String) value);
 		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
+			if (value == null) {
+				mExpression = null;
+				jrDataset.setFilterExpression(null);
+			}
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) mExpression.getValue();

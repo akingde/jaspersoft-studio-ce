@@ -78,7 +78,7 @@ public class JRExpressionPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl1 = new Label(composite, SWT.NONE);
-		lbl1.setText("Language:");
+		lbl1.setText("Value Class Name:");
 
 		valuleClassCombo = new Combo(composite, SWT.DROP_DOWN | SWT.FLAT | SWT.BORDER);
 		valuleClassCombo.setItems(new String[] { "java.lang.Boolean", "java.lang.Byte", "java.util.Date",
@@ -92,7 +92,7 @@ public class JRExpressionPage extends WizardPage {
 		});
 
 		Label lbl2 = new Label(composite, SWT.NONE);
-		lbl2.setText("Query:");
+		lbl2.setText("Expression:");
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		lbl2.setLayoutData(gd);

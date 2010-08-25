@@ -37,6 +37,7 @@ import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
+import net.sf.jasperreports.engine.type.StretchTypeEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -124,8 +125,8 @@ public class MImage extends MGraphicElementLineBox {
 				.setDescription("Definition of the expression that will be used to determine the image to be displayed.");
 		desc.add(expressionD);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, "Fill", EnumHelper
-				.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, "Fill",
+				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
 		fillD.setDescription("Type of the fill pattern used to fill objects.");
 		desc.add(fillD);
 
@@ -183,7 +184,7 @@ public class MImage extends MGraphicElementLineBox {
 		defaultsMap.put(JRBaseStyle.PROPERTY_SCALE_IMAGE, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
-		defaultsMap.put(JRBaseImage.PROPERTY_ON_ERROR_TYPE, EnumHelper.getValue(ModeEnum.OPAQUE, 1, true));
+		defaultsMap.put(JRBaseImage.PROPERTY_ON_ERROR_TYPE, EnumHelper.getValue(OnErrorTypeEnum.ERROR, 1, true));
 		defaultsMap.put(JRDesignImage.PROPERTY_EVALUATION_TIME, EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, true));
 		defaultsMap.put(JRDesignImage.PROPERTY_EXPRESSION, "java.lang.String");
 		defaultsMap.put(JRBaseImage.PROPERTY_LAZY, Boolean.FALSE);
@@ -196,18 +197,18 @@ public class MImage extends MGraphicElementLineBox {
 	public Object getPropertyValue(Object id) {
 		JRDesignImage jrElement = (JRDesignImage) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return EnumHelper.getValue(jrElement.getOwnFillValue());
+			return EnumHelper.getValue(jrElement.getOwnFillValue(), 1, true);
 
 		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			return EnumHelper.getValue(jrElement.getOwnScaleImageValue());
+			return EnumHelper.getValue(jrElement.getOwnScaleImageValue(), 1, true);
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			return EnumHelper.getValue(jrElement.getOwnHorizontalAlignmentValue());
+			return EnumHelper.getValue(jrElement.getOwnHorizontalAlignmentValue(), 1, true);
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			return EnumHelper.getValue(jrElement.getOwnVerticalAlignmentValue());
+			return EnumHelper.getValue(jrElement.getOwnVerticalAlignmentValue(), 1, true);
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
-			return EnumHelper.getValue(jrElement.getOnErrorTypeValue());
+			return EnumHelper.getValue(jrElement.getOnErrorTypeValue(), 1, true);
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrElement.getEvaluationTimeValue());
+			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, true);
 		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION)) {
 			if (mExpression == null)
 				mExpression = new MExpression(jrElement.getExpression());
@@ -229,18 +230,21 @@ public class MImage extends MGraphicElementLineBox {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignImage jrElement = (JRDesignImage) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			jrElement.setFill(FillEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
+			jrElement.setFill((FillEnum) EnumHelper.getSetValue(FillEnum.values(), value, 1, true));
 
 		else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
-			jrElement.setScaleImage(ScaleImageEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
+			jrElement.setScaleImage((ScaleImageEnum) EnumHelper.getSetValue(ScaleImageEnum.values(), value, 1, true));
 		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			jrElement.setHorizontalAlignment(HorizontalAlignEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
+			jrElement.setHorizontalAlignment((HorizontalAlignEnum) EnumHelper.getSetValue(HorizontalAlignEnum.values(),
+					value, 1, true));
 		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			jrElement.setVerticalAlignment(VerticalAlignEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
+			jrElement.setVerticalAlignment((VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), value, 1,
+					true));
 		else if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
-			jrElement.setOnErrorType(OnErrorTypeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
+			jrElement.setOnErrorType((OnErrorTypeEnum) EnumHelper.getSetValue(OnErrorTypeEnum.values(), value, 1, true));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime(EvaluationTimeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
+			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1,
+					true));
 		else if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
 			jrElement.setExpression((JRExpression) value);
 
@@ -251,8 +255,8 @@ public class MImage extends MGraphicElementLineBox {
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			jrElement.setLinkTarget((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
-			jrElement.setHyperlinkType((HyperlinkTypeEnum) EnumHelper
-					.getSetValue(HyperlinkTypeEnum.values(), value, 0, false));
+			jrElement
+					.setHyperlinkType((HyperlinkTypeEnum) EnumHelper.getSetValue(HyperlinkTypeEnum.values(), value, 0, false));
 		else
 			super.setPropertyValue(id, value);
 	}

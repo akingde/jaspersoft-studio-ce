@@ -32,7 +32,6 @@ import org.eclipse.swt.graphics.Image;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.INode;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ReportTreeLabelProvider.
  * 

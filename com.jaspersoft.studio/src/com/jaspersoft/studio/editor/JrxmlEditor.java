@@ -29,6 +29,7 @@ import java.io.InputStream;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -47,10 +48,6 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -69,6 +66,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.preview.PreviewEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.model.INode;
@@ -129,8 +127,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private ReportContainer reportContainer;
 	/** Xml editor used in page 1. */
 	private XMLEditor xmlEditor;
-	/** Report preview used in page 2. */
-	private StyledText text;
 
 	/** The model property change listener. */
 	private ModelPropertyChangeListener modelPropertyChangeListener;
@@ -153,8 +149,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			int index = addPage(reportContainer, getEditorInput());
 			setPageText(index, "Design");
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error creating nested visual editor", null, e
-					.getStatus());
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error creating nested visual editor", null,
+					e.getStatus());
 		}
 	}
 
@@ -166,8 +162,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			xmlEditor = new XMLEditor();
 			int index = addPage(xmlEditor, getEditorInput());
 			setPageText(index, "Source");
-			xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput()).addDocumentListener(
-					new IDocumentListener() {
+			xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput())
+					.addDocumentListener(new IDocumentListener() {
 
 						@Override
 						public void documentChanged(DocumentEvent event) {
@@ -180,8 +176,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						}
 					});
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error creating nested text editor", null, e
-					.getStatus());
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error creating nested text editor", null,
+					e.getStatus());
 		}
 	}
 
@@ -189,14 +185,15 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Creates page 2 of the multi-page editor, which shows the sorted text.
 	 */
 	void createPage2() {
-		Composite composite = new Composite(getContainer(), SWT.NONE);
-		FillLayout layout = new FillLayout();
-		composite.setLayout(layout);
-		text = new StyledText(composite, SWT.H_SCROLL | SWT.V_SCROLL);
-		text.setEditable(false);
+		previewEditor = new PreviewEditor();
+		try {
+			int index = addPage(previewEditor, getEditorInput());
+			setPageText(index, "Preview");
+		} catch (PartInitException e) {
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error creating nested visual editor", null,
+					e.getStatus());
+		}
 
-		int index = addPage(composite);
-		setPageText(index, "Preview");
 	}
 
 	/**
@@ -370,6 +367,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	/** The xml fresh. */
 	private boolean xmlFresh = true;
 
+	private PreviewEditor previewEditor;
+
 	/**
 	 * Calculates the contents of page 2 when the it is activated.
 	 * 
@@ -377,7 +376,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the new page index
 	 */
 	protected void pageChange(int newPageIndex) {
-		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR) {
+		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR || newPageIndex == PAGE_PREVIEW) {
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
 				if (!xmlFresh) {
@@ -396,6 +395,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					model2xml();
 					xmlFresh = true;
 				}
+				break;
+			case PAGE_PREVIEW:
+				model2preview();
 				break;
 			}
 		}
@@ -424,6 +426,14 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		IDocumentProvider dp = xmlEditor.getDocumentProvider();
 		IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 		doc.set(xml);
+	}
+
+	/**
+	 * Model2xml.
+	 */
+	private void model2preview() {
+		previewEditor.setJasperDesign((JasperDesign) ((MRoot) getModel()).getValue());
+		previewEditor.runReport(null);
 	}
 
 	/**

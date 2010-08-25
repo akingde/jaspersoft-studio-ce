@@ -431,7 +431,7 @@ public class MReport extends APropertyNode implements IGraphicElement {
 			jrDesign.setPrintOrder((PrintOrderEnum) EnumHelper.getSetValue(PrintOrderEnum.values(), value, 1, true));
 		else if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE))
 			jrDesign.setWhenNoDataType((WhenNoDataTypeEnum) EnumHelper.getSetValue(WhenNoDataTypeEnum.values(), value, 1,
-					false));
+					true));
 		// -- booleans
 		else if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
 			jrDesign.setTitleNewPage(((Boolean) value).booleanValue());

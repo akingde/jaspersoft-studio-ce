@@ -46,21 +46,24 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
 		super.setInput(part, selection);
+		if (selection instanceof IStructuredSelection) {
 
-		EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
-		if (provider != null)
-			setEditDomain(provider.getEditDomain());
+			EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
+			if (provider != null)
+				setEditDomain(provider.getEditDomain());
 
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
-		Assert.isTrue(input instanceof EditPart);
-		Object model = ((EditPart) input).getModel();
-		Assert.isTrue(model instanceof APropertyNode);
+			Assert.isTrue(selection instanceof IStructuredSelection);
+			Object input = ((IStructuredSelection) selection).getFirstElement();
+			Assert.isTrue(input instanceof EditPart);
+			Object model = ((EditPart) input).getModel();
+			Assert.isTrue(model instanceof APropertyNode);
 
-		JRPropertySheetEntry propertySheetEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(), (ANode) model);
-		page.setRootEntry(propertySheetEntry);
+			JRPropertySheetEntry propertySheetEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(),
+					(ANode) model);
+			page.setRootEntry(propertySheetEntry);
 
-		this.element = (APropertyNode) model;
+			this.element = (APropertyNode) model;
+		}
 	}
 
 	public EditDomain getEditDomain() {

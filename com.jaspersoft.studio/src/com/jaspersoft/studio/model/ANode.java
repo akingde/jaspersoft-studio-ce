@@ -133,7 +133,7 @@ public abstract class ANode implements INode {
 	 */
 	public INode getRoot() {
 		INode node = this;
-		while (!(node instanceof MReport)) {
+		while (!(node instanceof MReport) && !(node instanceof MRoot)) {
 			if (parent == null)
 				return this;
 			node = node.getParent();
@@ -287,10 +287,12 @@ public abstract class ANode implements INode {
 	@Override
 	public void setValue(Object value) {
 		if (this.value != null) {
-			((JRChangeEventsSupport) this.value).getEventSupport().removePropertyChangeListener(this);
+			if (this.value instanceof JRChangeEventsSupport)
+				((JRChangeEventsSupport) this.value).getEventSupport().removePropertyChangeListener(this);
 			unregister();
 		} else if (value != null) {
-			((JRChangeEventsSupport) value).getEventSupport().addPropertyChangeListener(this);
+			if (value instanceof JRChangeEventsSupport)
+				((JRChangeEventsSupport) value).getEventSupport().addPropertyChangeListener(this);
 			this.value = value;
 			register();
 		}

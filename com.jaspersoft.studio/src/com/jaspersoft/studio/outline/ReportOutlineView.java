@@ -30,7 +30,6 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.model.INode;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ReportOutlineView.
  * 

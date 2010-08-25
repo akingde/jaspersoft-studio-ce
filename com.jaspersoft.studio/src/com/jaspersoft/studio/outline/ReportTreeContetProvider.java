@@ -36,7 +36,6 @@ import org.eclipse.jface.viewers.Viewer;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ReportTreeContetProvider.
  * 
