@@ -42,6 +42,7 @@ public class SizeGridAction extends Action {
 
 		private SizeDialog(Shell shell, Dimension d) {
 			super(shell);
+			setText("Grid editor");
 			w = d.width;
 			h = d.height;
 		}
