@@ -100,8 +100,10 @@ public class BandSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-		height.setSelection(((Integer) element.getPropertyValue(JRDesignBand.PROPERTY_HEIGHT)).intValue());
-		splitType.select(((Integer) element.getPropertyValue(JRDesignBand.PROPERTY_SPLIT_TYPE)).intValue());
+		if (element != null) {
+			height.setSelection(((Integer) element.getPropertyValue(JRDesignBand.PROPERTY_HEIGHT)).intValue());
+			splitType.select(((Integer) element.getPropertyValue(JRDesignBand.PROPERTY_SPLIT_TYPE)).intValue());
+		}
 		isRefreshing = false;
 	}
 }

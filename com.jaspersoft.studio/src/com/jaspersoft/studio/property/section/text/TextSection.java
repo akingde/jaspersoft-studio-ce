@@ -187,38 +187,39 @@ public class TextSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-		rotation.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_ROTATION)).intValue());
-		lineSpace.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_LINE_SPACING)).intValue());
+		if (element != null) {
+			rotation.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_ROTATION)).intValue());
+			lineSpace.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_LINE_SPACING)).intValue());
 
-		Integer halign = (Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT);
-		if (halign != null) {
-			HorizontalAlignEnum val = (HorizontalAlignEnum) EnumHelper.getSetValue(HorizontalAlignEnum.values(), halign, 1,
-					true);
-			alignLeftButton.setSelection(HorizontalAlignEnum.LEFT.equals(val));
-			alignCenterButton.setSelection(HorizontalAlignEnum.CENTER.equals(val));
-			alignJustifiedButton.setSelection(HorizontalAlignEnum.JUSTIFIED.equals(val));
-			alignRightButton.setSelection(HorizontalAlignEnum.RIGHT.equals(val));
-		} else {
-			alignLeftButton.setSelection(false);
-			alignCenterButton.setSelection(false);
-			alignJustifiedButton.setSelection(false);
-			alignRightButton.setSelection(false);
+			Integer halign = (Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT);
+			if (halign != null) {
+				HorizontalAlignEnum val = (HorizontalAlignEnum) EnumHelper.getSetValue(HorizontalAlignEnum.values(), halign, 1,
+						true);
+				alignLeftButton.setSelection(HorizontalAlignEnum.LEFT.equals(val));
+				alignCenterButton.setSelection(HorizontalAlignEnum.CENTER.equals(val));
+				alignJustifiedButton.setSelection(HorizontalAlignEnum.JUSTIFIED.equals(val));
+				alignRightButton.setSelection(HorizontalAlignEnum.RIGHT.equals(val));
+			} else {
+				alignLeftButton.setSelection(false);
+				alignCenterButton.setSelection(false);
+				alignJustifiedButton.setSelection(false);
+				alignRightButton.setSelection(false);
+			}
+
+			Integer valign = (Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
+			if (valign != null) {
+				VerticalAlignEnum val = (VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), halign, 1, true);
+				alignTopButton.setSelection(VerticalAlignEnum.TOP.equals(val));
+				alignMiddleButton.setSelection(VerticalAlignEnum.MIDDLE.equals(val));
+				alignVJustifiedButton.setSelection(VerticalAlignEnum.JUSTIFIED.equals(val));
+				alignBottomButton.setSelection(VerticalAlignEnum.BOTTOM.equals(val));
+			} else {
+				alignTopButton.setSelection(false);
+				alignMiddleButton.setSelection(false);
+				alignVJustifiedButton.setSelection(false);
+				alignBottomButton.setSelection(false);
+			}
 		}
-
-		Integer valign = (Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
-		if (valign != null) {
-			VerticalAlignEnum val = (VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), halign, 1, true);
-			alignTopButton.setSelection(VerticalAlignEnum.TOP.equals(val));
-			alignMiddleButton.setSelection(VerticalAlignEnum.MIDDLE.equals(val));
-			alignVJustifiedButton.setSelection(VerticalAlignEnum.JUSTIFIED.equals(val));
-			alignBottomButton.setSelection(VerticalAlignEnum.BOTTOM.equals(val));
-		} else {
-			alignTopButton.setSelection(false);
-			alignMiddleButton.setSelection(false);
-			alignVJustifiedButton.setSelection(false);
-			alignBottomButton.setSelection(false);
-		}
-
 		isRefreshing = false;
 	}
 }

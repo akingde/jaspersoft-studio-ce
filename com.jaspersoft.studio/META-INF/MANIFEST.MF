@@ -21,7 +21,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.ecore;bundle-version="2.5.0",
  net.sf.jasperreports,
  org.eclipse.ui.views.properties.tabbed;bundle-version="3.5.0"
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/serializer.jar,
+ lib/xalan-2.7.1.jar,
+ lib/xercesImpl.jar,
+ lib/xml-apis.jar,
+ lib/xsltc.jar
 Bundle-NativeCode: libj2d-gtk-linux-i386-2.0.0.so; osname = Linux; processor = x86
 Import-Package: org.eclipse.ui,
  org.eclipse.ui.part

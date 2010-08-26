@@ -90,6 +90,9 @@ public class MJDBCDataSource extends AMDatasource {
 		NTextPropertyDescriptor passwordD = new NTextPropertyDescriptor(PROPERTY_PASSWORD, "Password");
 		desc.add(passwordD);
 
+		NTextPropertyDescriptor jarD = new NTextPropertyDescriptor(PROPERTY_JAR, "Jars(separated by ;): ");
+		desc.add(jarD);
+
 	}
 
 	public static final String PROPERTY_DRIVERCLASS = "PROPERTY_DRIVERCLASS";
@@ -104,10 +107,16 @@ public class MJDBCDataSource extends AMDatasource {
 	public static final String PROPERTY_PASSWORD = "PROPERTY_PASSWORD";
 	private String password;
 
+	public static final String PROPERTY_JAR = "PROPERTY_JAR";
+	private String jar;
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		if (id.equals(PROPERTY_DRIVERCLASS)) {
 			return driverclass;
+		}
+		if (id.equals(PROPERTY_JAR)) {
+			return jar;
 		}
 		if (id.equals(PROPERTY_JDBC_URL)) {
 			return jdbcURL;
@@ -129,6 +138,8 @@ public class MJDBCDataSource extends AMDatasource {
 			jdbcURL = (String) value;
 		} else if (id.equals(PROPERTY_USERNAME)) {
 			username = (String) value;
+		} else if (id.equals(PROPERTY_JAR)) {
+			jar = (String) value;
 		} else if (id.equals(PROPERTY_PASSWORD)) {
 			password = (String) value;
 		} else

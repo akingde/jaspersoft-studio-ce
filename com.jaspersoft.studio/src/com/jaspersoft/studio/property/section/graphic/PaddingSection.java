@@ -57,23 +57,24 @@ public class PaddingSection extends AbstractSection {
 
 	@Override
 	protected void setInputC(IWorkbenchPart part, ISelection selection) {
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
-		Assert.isTrue(input instanceof EditPart);
-		Object model = ((EditPart) input).getModel();
-		Assert.isTrue(model instanceof MGraphicElementLineBox || model instanceof MStyle);
-		model = ((APropertyNode) model).getPropertyValue(MGraphicElementLineBox.LINE_BOX);
+		if (selection instanceof IStructuredSelection) {
+			Assert.isTrue(selection instanceof IStructuredSelection);
+			Object input = ((IStructuredSelection) selection).getFirstElement();
+			Assert.isTrue(input instanceof EditPart);
+			Object model = ((EditPart) input).getModel();
+			Assert.isTrue(model instanceof MGraphicElementLineBox || model instanceof MStyle);
+			model = ((APropertyNode) model).getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 
-		EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
-		if (provider != null)
-			setEditDomain(provider.getEditDomain());
-		if (getElement() != model) {
-			if (getElement() != null)
-				getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
-			setElement((APropertyNode) model);
-			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+			EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
+			if (provider != null)
+				setEditDomain(provider.getEditDomain());
+			if (getElement() != model) {
+				if (getElement() != null)
+					getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+				setElement((APropertyNode) model);
+				getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
 		}
-
 	}
 
 	/**
@@ -166,18 +167,18 @@ public class PaddingSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-
-		Integer padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_PADDING);
-		allPadding.setSelection(padding != null ? padding : 0);
-		padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING);
-		bottomPadding.setSelection(padding != null ? padding : 0);
-		padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_TOP_PADDING);
-		topPadding.setSelection(padding != null ? padding : 0);
-		padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_LEFT_PADDING);
-		leftPadding.setSelection(padding != null ? padding : 0);
-		padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING);
-		rightPadding.setSelection(padding != null ? padding : 0);
-
+		if (element != null) {
+			Integer padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_PADDING);
+			allPadding.setSelection(padding != null ? padding : 0);
+			padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_BOTTOM_PADDING);
+			bottomPadding.setSelection(padding != null ? padding : 0);
+			padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_TOP_PADDING);
+			topPadding.setSelection(padding != null ? padding : 0);
+			padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_LEFT_PADDING);
+			leftPadding.setSelection(padding != null ? padding : 0);
+			padding = (Integer) element.getPropertyValue(JRBaseLineBox.PROPERTY_RIGHT_PADDING);
+			rightPadding.setSelection(padding != null ? padding : 0);
+		}
 		isRefreshing = false;
 	}
 }

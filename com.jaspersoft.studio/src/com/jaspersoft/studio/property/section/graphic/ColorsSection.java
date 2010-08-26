@@ -124,19 +124,21 @@ public class ColorsSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-		RGB backcolor = (RGB) element.getPropertyValue(JRBaseStyle.PROPERTY_BACKCOLOR);
+		if (element != null) {
+			RGB backcolor = (RGB) element.getPropertyValue(JRBaseStyle.PROPERTY_BACKCOLOR);
 
-		if (backcolor != null)
-			backButton.setImage(colorLabelProvider.getImage(backcolor));
-		else
-			backButton.setImage(null);
+			if (backcolor != null)
+				backButton.setImage(colorLabelProvider.getImage(backcolor));
+			else
+				backButton.setImage(null);
 
-		RGB foreColor = (RGB) element.getPropertyValue(JRBaseStyle.PROPERTY_FORECOLOR);
-		if (foreColor != null)
-			foreButton.setImage(colorLabelProvider.getImage(foreColor));
-		else
-			foreButton.setImage(null);
-		modeType.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_MODE)).intValue());
+			RGB foreColor = (RGB) element.getPropertyValue(JRBaseStyle.PROPERTY_FORECOLOR);
+			if (foreColor != null)
+				foreButton.setImage(colorLabelProvider.getImage(foreColor));
+			else
+				foreButton.setImage(null);
+			modeType.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_MODE)).intValue());
+		}
 		isRefreshing = false;
 	}
 }

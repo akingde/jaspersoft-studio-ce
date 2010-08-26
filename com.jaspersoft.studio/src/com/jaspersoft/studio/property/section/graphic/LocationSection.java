@@ -111,9 +111,11 @@ public class LocationSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-		xText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_X)).intValue());
-		yText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_Y)).intValue());
-		positionType.select(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_POSITION_TYPE)).intValue());
+		if (element != null) {
+			xText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_X)).intValue());
+			yText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_Y)).intValue());
+			positionType.select(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_POSITION_TYPE)).intValue());
+		}	
 		isRefreshing = false;
 	}
 }

@@ -123,12 +123,12 @@ public class PageMarginSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-
-		bottomMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_BOTTOM_MARGIN)).intValue());
-		topMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_TOP_MARGIN)).intValue());
-		leftMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_LEFT_MARGIN)).intValue());
-		rightMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_RIGHT_MARGIN)).intValue());
-
+		if (element != null) {
+			bottomMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_BOTTOM_MARGIN)).intValue());
+			topMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_TOP_MARGIN)).intValue());
+			leftMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_LEFT_MARGIN)).intValue());
+			rightMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_RIGHT_MARGIN)).intValue());
+		}
 		isRefreshing = false;
 	}
 }

@@ -54,20 +54,22 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	protected void setInputC(IWorkbenchPart part, ISelection selection) {
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
-		Assert.isTrue(input instanceof EditPart);
-		Object model = ((EditPart) input).getModel();
-		Assert.isTrue(model instanceof APropertyNode);
+		if (selection instanceof IStructuredSelection) {
+			Assert.isTrue(selection instanceof IStructuredSelection);
+			Object input = ((IStructuredSelection) selection).getFirstElement();
+			Assert.isTrue(input instanceof EditPart);
+			Object model = ((EditPart) input).getModel();
+			Assert.isTrue(model instanceof APropertyNode);
 
-		EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
-		if (provider != null)
-			setEditDomain(provider.getEditDomain());
-		if (getElement() != model) {
-			if (getElement() != null)
-				getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
-			setElement((APropertyNode) model);
-			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+			EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
+			if (provider != null)
+				setEditDomain(provider.getEditDomain());
+			if (getElement() != model) {
+				if (getElement() != null)
+					getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+				setElement((APropertyNode) model);
+				getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
 		}
 	}
 

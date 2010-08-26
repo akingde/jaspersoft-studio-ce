@@ -1,16 +1,5 @@
 package com.jaspersoft.studio.repository.wizzard;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.ITypeHierarchy;
-import org.eclipse.jdt.internal.core.BinaryType;
-import org.eclipse.jdt.internal.core.JavaProject;
-import org.eclipse.jdt.ui.IJavaElementSearchConstants;
-import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -18,12 +7,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.dialogs.SelectionDialog;
-import org.eclipse.ui.internal.Workbench;
 
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
@@ -34,6 +21,7 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 	private Text jdbcURLTxt;
 	private Text usernameTxt;
 	private Text passwordTxt;
+	private Text jarTxt;
 
 	protected JDBCDatasourcePage() {
 		super("jdbcdatasourceeditor");
@@ -48,6 +36,7 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 		value.setPropertyValue(MJDBCDataSource.PROPERTY_JDBC_URL, jdbcURLTxt.getText());
 		value.setPropertyValue(MJDBCDataSource.PROPERTY_USERNAME, usernameTxt.getText());
 		value.setPropertyValue(MJDBCDataSource.PROPERTY_PASSWORD, passwordTxt.getText());
+		value.setPropertyValue(MJDBCDataSource.PROPERTY_JAR, jarTxt.getText());
 		super.dispose();
 	}
 
@@ -123,6 +112,35 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 		passwordTxt = new Text(parent, SWT.PASSWORD | SWT.BORDER);
 		passwordTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		lbl1 = new Label(parent, SWT.NONE);
+		lbl1.setText("Jars(separated by ;):");
+
+		c = new Composite(parent, SWT.NONE);
+		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		layout = new GridLayout(2, false);
+		layout.marginWidth = 0;
+		c.setLayout(layout);
+
+		jarTxt = new Text(c, SWT.BORDER);
+		jarTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		Button copyButton = new Button(c, SWT.PUSH);
+		copyButton.setText("Br&owse ...");
+		copyButton.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.MULTI);
+				fd.setFileName(jarTxt.getText());
+				fd.setFilterExtensions(new String[] { "*.jar", "*.*" });
+				String selection = fd.open();
+				if (selection != null)
+					jarTxt.setText(selection);
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+
 	}
 
 	@Override
@@ -149,6 +167,11 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 			if (dsName == null)
 				dsName = "";
 			passwordTxt.setText(dsName);
+
+			dsName = (String) value.getPropertyValue(MJDBCDataSource.PROPERTY_JAR);
+			if (dsName == null)
+				dsName = "";
+			jarTxt.setText(dsName);
 		}
 	}
 

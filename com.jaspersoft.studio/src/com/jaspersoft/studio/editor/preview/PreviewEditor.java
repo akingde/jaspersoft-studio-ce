@@ -7,11 +7,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -20,8 +17,6 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.convert.ReportConverter;
-import net.sf.jasperreports.engine.data.JRCsvDataSource;
-import net.sf.jasperreports.engine.data.JRXmlDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
@@ -181,7 +176,10 @@ public class PreviewEditor extends EditorPart {
 							if (datasource instanceof MJDBCDataSource) {
 								Connection connection = RepositoryManager.establishConnection((MJDBCDataSource) datasource,
 										PreviewEditor.this);
-								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
+								if (connection != null)
+									fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
+								else
+									unsetReportDocument("Connection could not be established", true);
 							} else {
 								JRDataSource jrds = null;
 								if (datasource instanceof MEmptyDataSource) {
@@ -189,37 +187,9 @@ public class PreviewEditor extends EditorPart {
 								} else if (datasource instanceof AMFileDataSource) {
 									io = new FileInputStream((String) datasource.getPropertyValue(MFileDataSource.PROPERTY_FILENAME));
 									if (datasource instanceof MFileDataSource) {
-										jrds = new JRCsvDataSource(io);
-										String p = (String) datasource.getPropertyValue(MFileDataSource.PROPERTY_RECORDDELIMITER);
-										((JRCsvDataSource) jrds).setRecordDelimiter(p.replace("\\\\", "\\"));
-
-										char c = (Character) datasource.getPropertyValue(MFileDataSource.PROPERTY_COLUMNDELIMITER);
-										((JRCsvDataSource) jrds).setFieldDelimiter(c);
-
-										boolean b = (Boolean) datasource.getPropertyValue(MFileDataSource.PROPERTY_FIRSTROWASHEADER);
-										((JRCsvDataSource) jrds).setUseFirstRowAsHeader(b);
-
-										p = (String) datasource.getPropertyValue(MFileDataSource.PROPERTY_COLUMNNAMES);
-										if (p != null && !p.trim().equals("")) {
-											p = p.replaceAll(" ", "");
-											StringTokenizer st = new StringTokenizer(p, ",");
-											List<String> cols = new ArrayList<String>();
-											while (st.hasMoreTokens()) {
-												String nextToken = st.nextToken();
-												nextToken = nextToken.replace('"', ' ').trim();
-												cols.add(nextToken);
-											}
-											((JRCsvDataSource) jrds).setColumnNames(cols.toArray(new String[cols.size()]));
-											// ((JRCsvDataSource) jrds)
-											// .setColumnNames(new String[] { "city", "id", "name", "address", "state" });
-										}
-
+										jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource) datasource);
 									} else if (datasource instanceof MXMLDataSource) {
-										String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
-										if (select != null && !select.trim().endsWith(""))
-											jrds = new JRXmlDataSource(io, select);
-										else
-											jrds = new JRXmlDataSource(io);
+										jrds = RepositoryManager.createXMLDataSource(io, (MXMLDataSource) datasource);
 									}
 								}
 								if (jrds != null) {
@@ -236,6 +206,7 @@ public class PreviewEditor extends EditorPart {
 						PrintWriter printWriter = new PrintWriter(result);
 						e.printStackTrace(printWriter);
 						unsetReportDocument(result.toString(), true);
+						e.printStackTrace();
 					} finally {
 						if (io != null)
 							try {

@@ -111,19 +111,20 @@ public class PageSizeSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-		height.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_PAGE_HEIGHT)).intValue());
-		width.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_PAGE_WIDTH)).intValue());
+		if (element != null) {
+			height.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_PAGE_HEIGHT)).intValue());
+			width.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_PAGE_WIDTH)).intValue());
 
-		Integer orientation = (Integer) element.getPropertyValue(JasperDesign.PROPERTY_ORIENTATION);
-		if (orientation != null) {
-			OrientationEnum val = (OrientationEnum) EnumHelper.getSetValue(OrientationEnum.values(), orientation, 1, false);
-			portraitButton.setSelection(OrientationEnum.PORTRAIT.equals(val));
-			landscapeButton.setSelection(OrientationEnum.LANDSCAPE.equals(val));
-		} else {
-			portraitButton.setSelection(false);
-			landscapeButton.setSelection(false);
+			Integer orientation = (Integer) element.getPropertyValue(JasperDesign.PROPERTY_ORIENTATION);
+			if (orientation != null) {
+				OrientationEnum val = (OrientationEnum) EnumHelper.getSetValue(OrientationEnum.values(), orientation, 1, false);
+				portraitButton.setSelection(OrientationEnum.PORTRAIT.equals(val));
+				landscapeButton.setSelection(OrientationEnum.LANDSCAPE.equals(val));
+			} else {
+				portraitButton.setSelection(false);
+				landscapeButton.setSelection(false);
+			}
 		}
-
 		isRefreshing = false;
 	}
 }

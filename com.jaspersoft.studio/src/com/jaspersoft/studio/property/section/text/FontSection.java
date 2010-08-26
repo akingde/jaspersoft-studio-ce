@@ -159,35 +159,36 @@ public class FontSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-		String strfontname = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
-		fontName.setText(strfontname != null ? strfontname : "");
-		String[] items = fontName.getItems();
-		for (int i = 0; i < items.length; i++) {
-			if (items[i].equals(strfontname)) {
-				fontName.select(i);
-				break;
+		if (element != null) {
+			String strfontname = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
+			fontName.setText(strfontname != null ? strfontname : "");
+			String[] items = fontName.getItems();
+			for (int i = 0; i < items.length; i++) {
+				if (items[i].equals(strfontname)) {
+					fontName.select(i);
+					break;
+				}
 			}
-		}
 
-		String strfontsize = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
-		items = fontSize.getItems();
-		fontSize.setText(strfontsize != null ? strfontsize : "");
-		for (int i = 0; i < items.length; i++) {
-			if (items[i].equals(strfontsize)) {
-				fontSize.select(i);
-				break;
+			String strfontsize = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
+			items = fontSize.getItems();
+			fontSize.setText(strfontsize != null ? strfontsize : "");
+			for (int i = 0; i < items.length; i++) {
+				if (items[i].equals(strfontsize)) {
+					fontSize.select(i);
+					break;
+				}
 			}
+
+			Boolean b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_BOLD);
+			boldButton.setSelection(b != null ? b.booleanValue() : false);
+			b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_ITALIC);
+			italicButton.setSelection(b != null ? b.booleanValue() : false);
+			b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_UNDERLINE);
+			underlineButton.setSelection(b != null ? b.booleanValue() : false);
+			b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_STRIKE_THROUGH);
+			strikeTroughtButton.setSelection(b != null ? b.booleanValue() : false);
 		}
-
-		Boolean b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_BOLD);
-		boldButton.setSelection(b != null ? b.booleanValue() : false);
-		b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_ITALIC);
-		italicButton.setSelection(b != null ? b.booleanValue() : false);
-		b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_UNDERLINE);
-		underlineButton.setSelection(b != null ? b.booleanValue() : false);
-		b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_STRIKE_THROUGH);
-		strikeTroughtButton.setSelection(b != null ? b.booleanValue() : false);
-
 		isRefreshing = false;
 	}
 }

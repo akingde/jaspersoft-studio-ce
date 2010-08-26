@@ -114,9 +114,11 @@ public class SizeSection extends AbstractSection {
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-		widthText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_WIDTH)).intValue());
-		heightText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT)).intValue());
-		stretchType.select(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_STRETCH_TYPE)).intValue());
+		if (element != null) {
+			widthText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_WIDTH)).intValue());
+			heightText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT)).intValue());
+			stretchType.select(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_STRETCH_TYPE)).intValue());
+		}
 		isRefreshing = false;
 	}
 }

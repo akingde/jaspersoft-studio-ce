@@ -89,7 +89,8 @@ public class ElementLabelProvider extends LabelProvider {
 		}
 		final boolean multiple[] = { false };
 		final Object object = getObject(objects, multiple);
-		if (object == null || ((IStructuredSelection) objects).size() > 1) {
+		
+		if (object == null || (objects instanceof IStructuredSelection && ((IStructuredSelection) objects).size() > 1)) {
 			return ((IStructuredSelection) objects).size() + " items selected";//$NON-NLS-1$
 		} else {
 			String name = typeMapper.mapType(object).getName();
