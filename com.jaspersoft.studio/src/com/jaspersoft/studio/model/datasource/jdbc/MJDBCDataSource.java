@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.model.datasource.jdbc;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -90,8 +91,11 @@ public class MJDBCDataSource extends AMDatasource {
 		NTextPropertyDescriptor passwordD = new NTextPropertyDescriptor(PROPERTY_PASSWORD, "Password");
 		desc.add(passwordD);
 
-		NTextPropertyDescriptor jarD = new NTextPropertyDescriptor(PROPERTY_JAR, "Jars(separated by ;): ");
+		NTextPropertyDescriptor jarD = new NTextPropertyDescriptor(PROPERTY_JAR, "Classpath (separated by ;): ");
 		desc.add(jarD);
+
+		NTextPropertyDescriptor connectionD = new NTextPropertyDescriptor(PROPERTY_CONNECTION, "Connection ");
+		desc.add(connectionD);
 
 	}
 
@@ -110,6 +114,9 @@ public class MJDBCDataSource extends AMDatasource {
 	public static final String PROPERTY_JAR = "PROPERTY_JAR";
 	private String jar;
 
+	public static final String PROPERTY_CONNECTION = "PROPERTY_CONNECTION";
+	private Connection connection;
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		if (id.equals(PROPERTY_DRIVERCLASS)) {
@@ -127,6 +134,9 @@ public class MJDBCDataSource extends AMDatasource {
 		if (id.equals(PROPERTY_PASSWORD)) {
 			return password;
 		}
+		if (id.equals(PROPERTY_CONNECTION)) {
+			return connection;
+		}
 		return super.getPropertyValue(id);
 	}
 
@@ -142,6 +152,8 @@ public class MJDBCDataSource extends AMDatasource {
 			jar = (String) value;
 		} else if (id.equals(PROPERTY_PASSWORD)) {
 			password = (String) value;
+		} else if (id.equals(PROPERTY_CONNECTION)) {
+			connection = (Connection) value;
 		} else
 			super.setPropertyValue(id, value);
 	}

@@ -105,7 +105,7 @@ public class RepositoryManager {
 	private static Map<String, Driver> drivers = new java.util.Hashtable<String, Driver>();
 
 	public static Connection establishConnection(MJDBCDataSource d, IEditorPart editorPart) throws Exception {
-		Connection connection = (Connection) d.getValue();
+		Connection connection = (Connection) d.getPropertyValue(MJDBCDataSource.PROPERTY_CONNECTION);
 		if (connection == null || connection.isClosed()) {
 			// if (editorPart != null) {
 			String drvClass = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_DRIVERCLASS);
@@ -126,18 +126,22 @@ public class RepositoryManager {
 				Driver driver = drivers.get(drvClass);
 				if (driver == null) {
 					List<URL> urls = new ArrayList<URL>();
-					java.io.File jarFiles = new java.io.File(jars);
-					if (!jarFiles.exists()) {
-						throw new ClassNotFoundException(" not found");
+					StringTokenizer st = new StringTokenizer(jars, ";");
+					while (st.hasMoreElements()) {
+						String jar = st.nextToken();
+						java.io.File jarFiles = new java.io.File(jar);
+						if (!jarFiles.exists())
+							throw new ClassNotFoundException(jar + " not found");
+
+						urls.add(jarFiles.toURI().toURL());
 					}
-					urls.add(jarFiles.toURI().toURL());
 					ClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]));
 					Class<?> cl = loader.loadClass(drvClass);
-					if (!Driver.class.isAssignableFrom(cl)) {
+					if (!Driver.class.isAssignableFrom(cl))
 						throw new Exception("Connection failed. The specified driver class does not implement the "
 								+ Driver.class.getName() + " interface.");
-					}
 					driver = (Driver) cl.newInstance();
+					drivers.put(drvClass, driver);
 				}
 				Properties info = new Properties();
 				if (user != null)
@@ -150,7 +154,7 @@ public class RepositoryManager {
 				DriverManager.getConnection(url, user, pass);
 			}
 
-			d.setValue(connection);
+			d.setPropertyValue(MJDBCDataSource.PROPERTY_CONNECTION, connection);
 			// }
 		}
 		return connection;
