@@ -220,6 +220,9 @@ public class PreviewEditor extends EditorPart {
 							}
 						});
 						monitor.done();
+						if (datasource != null && datasource instanceof MJDBCDataSource) {
+							RepositoryManager.closeConnection((MJDBCDataSource) datasource);
+						}
 					}
 					return Status.OK_STATUS;
 

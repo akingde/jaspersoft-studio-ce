@@ -8,6 +8,7 @@ import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +104,17 @@ public class RepositoryManager {
 	}
 
 	private static Map<String, Driver> drivers = new java.util.Hashtable<String, Driver>();
+
+	public static void closeConnection(MJDBCDataSource d) {
+		Connection connection = (Connection) d.getPropertyValue(MJDBCDataSource.PROPERTY_CONNECTION);
+		try {
+			if (connection != null && !connection.isClosed()) {
+				connection.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static Connection establishConnection(MJDBCDataSource d, IEditorPart editorPart) throws Exception {
 		Connection connection = (Connection) d.getPropertyValue(MJDBCDataSource.PROPERTY_CONNECTION);
