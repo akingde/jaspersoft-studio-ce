@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.jaspersoft.studio_0.0.1.201008261742.jar" id="com.jaspersoft.studio" version="0.0.1.201008261742">
+      <category name="com.jaspersoft.studio.updatesite.category"/>
+   </feature>
+   <category-def name="com.jaspersoft.studio.updatesite.category" label="Jaspersoft Studio"/>
+</site>
