@@ -45,7 +45,7 @@ public class Startup implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("JOS_PROJECT");
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("JSS_PROJECT");
 		try
 		{
 			if (!project.exists())
@@ -55,7 +55,7 @@ public class Startup implements IStartup {
 			project.open(null);
 
 			IProjectDescription description = project.getDescription();
-			description.setName("JOS Project");
+			description.setName("JSS Project");
 			String[] ids = description.getNatureIds();
 			if (!Arrays.asList(ids).contains(JavaCore.NATURE_ID))
 			{

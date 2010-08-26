@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Jaspersoft Open Studio
+Bundle-Name: Jaspersoft Studio
 Bundle-SymbolicName: com.jaspersoft.studio;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 0.0.1
 Bundle-Activator: com.jaspersoft.studio.JaspersoftStudioPlugin
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Localization: plugin
