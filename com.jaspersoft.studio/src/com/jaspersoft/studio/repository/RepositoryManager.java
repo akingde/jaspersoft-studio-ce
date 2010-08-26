@@ -3,29 +3,23 @@ package com.jaspersoft.studio.repository;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
-import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -108,103 +102,65 @@ public class RepositoryManager {
 		return datasources;
 	}
 
-	public static Connection establishConnection(MJDBCDataSource d, IEditorPart editorPart)
-			throws ClassNotFoundException, SQLException, CoreException, MalformedURLException {
-		if (editorPart != null) {
-			IFileEditorInput input = (IFileEditorInput) editorPart.getEditorInput();
-			IFile file = input.getFile();
-			IProject activeProject = file.getProject();
+	private static Map<String, Driver> drivers = new java.util.Hashtable<String, Driver>();
 
-			IJavaProject javaProject = null;
-
-			if (activeProject.hasNature(JasperReportsBuilder.JAVA_NATURE)) {
-				javaProject = JavaCore.create(activeProject);
-			}
-
-			// ClassLoader cl = ReportPreviewUtil.createProjectClassLoader(activeProject);
-
-			// ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
-			//
-			// try {
-			// ClassLoader projectClassLoader = ReportPreviewUtil.createProjectClassLoader(activeProject);
-			// if (projectClassLoader != null) {
-			// Thread.currentThread().setContextClassLoader(projectClassLoader);
-			// }
-			//
-			// Class.forName("org.hsqldb.jdbcDriver", true, projectClassLoader);
-			// } catch (Exception e) {
-			// e.printStackTrace();
-			//
-			// } finally {
-			// Thread.currentThread().setContextClassLoader(oldClassLoader);
-			// }
-
-			String driver = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_DRIVERCLASS);
-			String jars = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_JAR);
-
-			List<URL> urls = new ArrayList<URL>();
-			// IClasspathEntry[] entries = javaProject.getRawClasspath();
-			// for (int i = 0; i < entries.length; i++) {
-			// IClasspathEntry entry = entries[i];
-			// switch (entry.getEntryKind()) {
-			// case IClasspathEntry.CPE_LIBRARSY: {
-			// try {
-			// JavaCore.
-			// urls.add(entry.getPath().toFile().toURI().toURL());
-			// } catch (MalformedURLException e) {
-			// e.printStackTrace();
-			// }
-			// break;
-			// }
-			// default: {
-			// }
-			// }
-			// }
-
-			// // Unfortunately nested jars are busted, so this wont work.
-			// urls.add(DynamicDriverManager.class.getResource(
-			// "chaperon.jar" // i.e. dynamicdriver/chaperon.jar
-			// ));
-			// java.io.File chaperonJar = new java.io.File(
-			// "/home/slavic/tmp/backupjasper/runtime-EclipseApplication/test/lib/hsqldb-1.8.0-10.jar");
-			java.io.File jarFiles = new java.io.File(jars);
-			if (!jarFiles.exists()) {
-				throw new ClassNotFoundException(" not found");
-			}
-			urls.add(jarFiles.toURI().toURL());
-
-			// urls.addAll(locations);
-			// Use bootclass loader as parent - don't use application classes.
-			ClassLoader loader = java.net.URLClassLoader.newInstance(urls.toArray(new URL[urls.size()]), null);
-			Thread.currentThread().setContextClassLoader(loader);
-
-			Class cl = Class.forName("org.hsqldb.jdbcDriver", true, loader);
-			try {
-				Object obj = cl.newInstance();
-				DriverManager.registerDriver((Driver) obj);
-
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+	public static Connection establishConnection(MJDBCDataSource d, IEditorPart editorPart) throws Exception {
+		Connection connection = (Connection) d.getValue();
+		if (connection == null || connection.isClosed()) {
+			// if (editorPart != null) {
+			String drvClass = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_DRIVERCLASS);
 			String url = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_JDBC_URL);
 			String user = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_USERNAME);
 			String pass = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_PASSWORD);
+			String jars = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_JAR);
+			if (jars != null && !jars.trim().equals("")) {
+				// IFileEditorInput input = (IFileEditorInput) editorPart.getEditorInput();
+				// IFile file = input.getFile();
+				// IProject activeProject = file.getProject();
+				//
+				// IJavaProject javaProject = null;
+				//
+				// if (activeProject.hasNature(JasperReportsBuilder.JAVA_NATURE)) {
+				// javaProject = JavaCore.create(activeProject);
+				// }
+				Driver driver = drivers.get(drvClass);
+				if (driver == null) {
+					List<URL> urls = new ArrayList<URL>();
+					java.io.File jarFiles = new java.io.File(jars);
+					if (!jarFiles.exists()) {
+						throw new ClassNotFoundException(" not found");
+					}
+					urls.add(jarFiles.toURI().toURL());
+					ClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]));
+					Class<?> cl = loader.loadClass(drvClass);
+					if (!Driver.class.isAssignableFrom(cl)) {
+						throw new Exception("Connection failed. The specified driver class does not implement the "
+								+ Driver.class.getName() + " interface.");
+					}
+					driver = (Driver) cl.newInstance();
+				}
+				Properties info = new Properties();
+				if (user != null)
+					info.put("user", user);
+				if (pass != null)
+					info.put("password", pass);
+				connection = driver.connect(url, info);
+			} else {
+				Class.forName(drvClass);
+				DriverManager.getConnection(url, user, pass);
+			}
 
-			return DriverManager.getConnection("jdbc:hsqldb:hsql://localhost", user, pass);
-
+			d.setValue(connection);
+			// }
 		}
-		return null;
+		return connection;
 	}
 
 	public static JRDataSource createFileDataSource(InputStream io, MFileDataSource datasource) {
 		JRCsvDataSource jrds = new JRCsvDataSource(io);
 		String p = (String) datasource.getPropertyValue(MFileDataSource.PROPERTY_RECORDDELIMITER);
-		jrds.setRecordDelimiter(p.replace("\\\\", "\\"));
+		String crlf = p.replace("\\r", "\r").replace("\\n", "\n").replace("\\t", "\t");
+		jrds.setRecordDelimiter(crlf);
 
 		char c = (Character) datasource.getPropertyValue(MFileDataSource.PROPERTY_COLUMNDELIMITER);
 		jrds.setFieldDelimiter(c);
