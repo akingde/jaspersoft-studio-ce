@@ -51,6 +51,7 @@ import com.jaspersoft.studio.repository.RepositoryManager;
 public class DatasourceComboItem extends ContributionItem implements PropertyChangeListener, IReportViewerListener,
 		Listener {
 	private List<AMDatasource> items;
+	private int selecteditem;
 	// private boolean forceSetText;
 	private CCombo combo;
 	private ToolItem toolitem;
@@ -90,14 +91,17 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 					AMDatasource d = null;
 					if (combo.getSelectionIndex() > 0)
 						d = items.get(combo.getSelectionIndex() - 1);
+					else if (items.size() > selecteditem)
+						d = items.get(selecteditem - 1);
 
 					items = RepositoryManager.getDatasources();
+
 					combo.setItems(getStringItems());
-					combo.select(0);
+					selectCombo(0);
 					if (d != null)
 						for (int i = 0; i < items.size(); i++)
 							if (items.get(i) == d) {
-								combo.select(i + 1);
+								selectCombo(i + 1);
 								break;
 							}
 
@@ -110,6 +114,10 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 			if (!SWT.getPlatform().equals("gtk")) //$NON-NLS-1$
 				throw exception;
 		}
+	}
+
+	private void selectCombo(int i) {
+		combo.select(i);
 	}
 
 	private String[] getStringItems() {
@@ -166,7 +174,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		// Initialize width of combo
 		items = RepositoryManager.getDatasources();
 		combo.setItems(getStringItems());
-		combo.select(0);
+		selectCombo(0);
 		toolitem.setWidth(computeWidth(combo));
 		refresh(true);
 
@@ -271,6 +279,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	}
 
 	private void onSelection() {
+		selecteditem = combo.getSelectionIndex();
 	}
 
 	@Override
