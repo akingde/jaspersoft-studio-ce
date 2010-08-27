@@ -1,8 +1,29 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of Jaspersoft Open Studio.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.repository;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Connection;
@@ -15,18 +36,34 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.ui.IEditorPart;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.MDatasources;
+import com.jaspersoft.studio.model.datasource.empty.MEmptyDataSource;
 import com.jaspersoft.studio.model.datasource.empty.MEmptyDatasources;
 import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
 import com.jaspersoft.studio.model.datasource.file.MFileDatasources;
@@ -83,24 +120,95 @@ public class RepositoryManager {
 	public static void saveResource(AMDatasource d) {
 		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(d, "DATASOURCE", null, d));
 		// save to disc
+		Preferences prefs = new InstanceScope().getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+		try {
+			String strDS = "<datasources>";
+			for (AMDatasource ds : getDatasources()) {
+				try {
+					strDS += ds.getToString();
+				} catch (ParserConfigurationException e) {
+					e.printStackTrace();
+				} catch (TransformerException e) {
+					e.printStackTrace();
+				}
+			}
+			prefs.put("REPOSITORYDATASOURCES", strDS + "</datasources>");
+
+			prefs.flush();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static MDatasources getDatasources(MRoot root) {
 		if (datasources == null) {
 			datasources = new MDatasources(root);
 			MJDBCDatasources jdbcds = new MJDBCDatasources(datasources);
-			MJDBCDataSource ds = new MJDBCDataSource(jdbcds, -1);
-			ds.setPropertyValue(AMDatasource.PROPERTY_NAME, "Simple datasource");
-
-			new MEmptyDatasources(datasources);
-
-			new MXMLDatasources(datasources);
-			new MFileDatasources(datasources);
+			MEmptyDatasources emptyds = new MEmptyDatasources(datasources);
+			MXMLDatasources xmlds = new MXMLDatasources(datasources);
+			MFileDatasources fileds = new MFileDatasources(datasources);
 
 			// new MODADatasources(datasources);
 			// new MDTPDatasources(datasources);
+			Preferences prefs = new InstanceScope().getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+
+			String dts = prefs.get("REPOSITORYDATASOURCES", "");
+			System.out.println(dts);
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder;
+			try {
+				builder = factory.newDocumentBuilder();
+				InputSource is = new InputSource(new StringReader(dts));
+				Document doc = builder.parse(is);
+				NodeList nl = doc.getElementsByTagName("DATASOURCE");
+				for (int i = 0; i < nl.getLength(); i++) {
+					Node n = nl.item(i);
+					NamedNodeMap nnm = n.getAttributes();
+					Node ntype = nnm.getNamedItem("type");
+					String type = ntype.getNodeValue();
+					AMDatasource m = null;
+					if (type.equals(MJDBCDataSource.class.getName()))
+						m = new MJDBCDataSource(jdbcds, -1);
+					if (type.equals(MEmptyDataSource.class.getName()))
+						m = new MEmptyDataSource(emptyds, -1);
+					if (type.equals(MFileDataSource.class.getName()))
+						m = new MFileDataSource(fileds, -1);
+					if (type.equals(MXMLDataSource.class.getName()))
+						m = new MXMLDataSource(xmlds, -1);
+
+					if (m != null)
+						fillProperties(n, m);
+				}
+
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 		return datasources;
+	}
+
+	private static void fillProperties(Node n, AMDatasource m) {
+		NodeList props = n.getChildNodes();
+		for (int j = 0; j < props.getLength(); j++) {
+			Node cn = props.item(j);
+			if (cn.getNodeType() == Node.ELEMENT_NODE) {
+				String nodeName = cn.getNodeName();
+				Object nodeValue = null;
+
+				NodeList fstNmElmnt = (NodeList) cn.getChildNodes();
+				for (int k = 0; k < fstNmElmnt.getLength(); k++) {
+					Node node = fstNmElmnt.item(k);
+					nodeValue = node.getNodeValue();
+				}
+
+				m.setPropertyValue(nodeName, nodeValue);
+			}
+		}
 	}
 
 	private static Map<String, Driver> drivers = new java.util.Hashtable<String, Driver>();
