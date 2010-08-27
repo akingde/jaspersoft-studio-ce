@@ -2,7 +2,9 @@ package com.jaspersoft.studio.editor.preview;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
@@ -71,9 +74,88 @@ public class ParametersDialog extends FormDialog {
 			} else if (p.getValueClass().equals(Double.class)) {
 				createNumeric(mform.getForm().getBody(), p, (int) Long.MIN_VALUE, (int) Long.MAX_VALUE, 4, 1, 1);
 			} else if (p.getValueClass().equals(Date.class)) {
-				toolkit.createText(mform.getForm(), "");
+				createDate(mform.getForm().getBody(), p);
 			}
 		}
+	}
+
+	private void createDate(Composite parent, final JRDesignParameter param) {
+		if (param.getValueClass().equals(java.sql.Date.class)) {
+			final DateTime date = new DateTime(parent, SWT.DATE | SWT.LONG | SWT.BORDER);
+			date.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					params.put(
+							param.getName(),
+							java.sql.Date.valueOf(String.format("%04d", date.getYear()) + "-"
+									+ String.format("%02d", date.getMonth()) + "-" + String.format("%02d", date.getDay())));
+				}
+			});
+			if (params.get(param.getName()) != null) {
+				Date d = (Date) params.get(param.getName());
+				GregorianCalendar cal = new GregorianCalendar();
+				cal.setTimeInMillis(d.getTime());
+
+				date.setYear(cal.get(Calendar.YEAR));
+				date.setMonth(cal.get(Calendar.MONTH) + 1);
+				date.setDay(cal.get(Calendar.DATE));
+			}
+		} else if (param.getValueClass().equals(java.sql.Time.class)) {
+			final DateTime time = new DateTime(parent, SWT.TIME | SWT.LONG | SWT.BORDER);
+			time.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					params.put(
+							param.getName(),
+							java.sql.Time.valueOf(String.format("%02d",
+									String.format("%02d", time.getHours()) + ":" + String.format("%02d", time.getMinutes()) + ":"
+											+ String.format("%02d", time.getSeconds()))));
+
+				}
+			});
+			if (params.get(param.getName()) != null) {
+				Date d = (Date) params.get(param.getName());
+				GregorianCalendar cal = new GregorianCalendar();
+				cal.setTimeInMillis(d.getTime());
+
+				time.setHours(cal.get(Calendar.HOUR));
+				time.setMinutes(cal.get(Calendar.MINUTE));
+				time.setSeconds(cal.get(Calendar.SECOND));
+			}
+		} else if (param.getValueClass().equals(java.sql.Timestamp.class)
+				|| param.getValueClass().equals(java.util.Date.class)) {
+			Composite c = new Composite(parent, SWT.NONE);
+			c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			GridLayout layout = new GridLayout(2, false);
+			layout.marginWidth = 0;
+			c.setLayout(layout);
+			c.setBackground(c.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
+			final DateTime date = new DateTime(c, SWT.DATE | SWT.LONG | SWT.BORDER);
+			final DateTime time = new DateTime(c, SWT.TIME | SWT.LONG | SWT.BORDER);
+			SelectionAdapter listener = new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					String timestamp = String.format("%04d", date.getYear()) + "-" + String.format("%02d", date.getMonth()) + "-"
+							+ String.format("%02d", date.getDay()) + " " + String.format("%02d", time.getHours()) + ":"
+							+ String.format("%02d", time.getMinutes()) + ":" + String.format("%02d", time.getSeconds());
+					params.put(param.getName(), java.sql.Timestamp.valueOf(timestamp));
+				}
+			};
+			date.addSelectionListener(listener);
+			time.addSelectionListener(listener);
+			if (params.get(param.getName()) != null) {
+				Date d = (Date) params.get(param.getName());
+				GregorianCalendar cal = new GregorianCalendar();
+				cal.setTimeInMillis(d.getTime());
+
+				date.setYear(cal.get(Calendar.YEAR));
+				date.setMonth(cal.get(Calendar.MONTH) + 1);
+				date.setDay(cal.get(Calendar.DATE));
+
+				time.setHours(cal.get(Calendar.HOUR));
+				time.setMinutes(cal.get(Calendar.MINUTE));
+				time.setSeconds(cal.get(Calendar.SECOND));
+			}
+		}
+
 	}
 
 	private void createText(IManagedForm mform, FormToolkit toolkit, final JRDesignParameter param) {

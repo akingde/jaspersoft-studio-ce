@@ -91,7 +91,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 					AMDatasource d = null;
 					if (combo.getSelectionIndex() > 0)
 						d = items.get(combo.getSelectionIndex() - 1);
-					else if (items.size() > selecteditem)
+					else if (selecteditem > 0 && items.size() > selecteditem)
 						d = items.get(selecteditem - 1);
 
 					items = RepositoryManager.getDatasources();
