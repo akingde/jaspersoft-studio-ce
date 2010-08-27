@@ -35,6 +35,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
@@ -116,7 +117,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		s[0] = "-- Select a DataSource --";
 		for (int i = 0; i < items.size(); i++) {
 			String displayText = items.get(i).getDisplayText();
-			if (displayText != null && !displayText.trim().equals(""))
+			if (displayText == null || displayText.trim().equals(""))
 				displayText = "empty";
 			s[i + 1] = displayText;
 		}
@@ -229,8 +230,12 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 */
 	private void handleWidgetDefaultSelected(SelectionEvent event) {
 		if (combo.getSelectionIndex() > 0) {
-			AMDatasource m = items.get(combo.getSelectionIndex() - 1);
-			editor.runReport(m);
+			final AMDatasource m = items.get(combo.getSelectionIndex() - 1);
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					editor.runReport(m);
+				}
+			});
 		}
 
 		refresh(false);

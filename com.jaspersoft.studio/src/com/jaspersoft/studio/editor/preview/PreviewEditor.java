@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.preview;
 
@@ -30,7 +26,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.Connection;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -39,7 +37,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.convert.ReportConverter;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
@@ -52,6 +50,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -162,6 +161,7 @@ public class PreviewEditor extends EditorPart {
 	}
 
 	private AMDatasource datasource;
+	private Map<String, Object> jasperParameter = new Hashtable<String, Object>();
 	private JasperPrint jasperPrint;
 	private boolean norun = true;
 	private Throwable fillError = null;
@@ -172,10 +172,22 @@ public class PreviewEditor extends EditorPart {
 		if (norun) {
 
 			String dsName = "";
-			if (d != null)
+			if (d != null) {
 				dsName = d.getDisplayText();
-			else if (datasource != null)
-				dsName = datasource.getDisplayText();
+				datasource = d;
+			} else {
+				if (datasource != null)
+					dsName = datasource.getDisplayText();
+				else {
+					unsetReportDocument("No datasource selected, please select a datasource to run report", true);
+					// jasperPrint = new ReportConverter(jasperDesign, false, true).getJasperPrint();
+					return;
+				}
+			}
+			int pdresult = askParameters();
+			if (pdresult != Window.OK)
+				return;
+
 			String jobName = "Preview: " + jasperDesign.getName() + " on [" + dsName + "]";
 			Job job = new Job(jobName) {
 
@@ -183,46 +195,38 @@ public class PreviewEditor extends EditorPart {
 				protected IStatus run(IProgressMonitor monitor) {
 					unsetReportDocument("Reloading ...", false);
 					monitor.beginTask("Starting ...", IProgressMonitor.UNKNOWN);
-
-					if (d != null)
-						datasource = d;
 					InputStream io = null;
 					fillError = null;
 					try {
 						jasperPrint = null;
-						if (datasource == null) {
-							jasperPrint = new ReportConverter(jasperDesign, false, true).getJasperPrint();
+						AsynchronousFillHandle fh = null;
+						JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+						if (datasource instanceof MJDBCDataSource) {
+							Connection connection = RepositoryManager.establishConnection((MJDBCDataSource) datasource,
+									PreviewEditor.this);
+							if (connection != null)
+								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
+							else
+								unsetReportDocument("Connection could not be established", true);
 						} else {
-							AsynchronousFillHandle fh = null;
-							JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-							Map<String, Object> jasperParameter = new HashMap<String, Object>();
-							if (datasource instanceof MJDBCDataSource) {
-								Connection connection = RepositoryManager.establishConnection((MJDBCDataSource) datasource,
-										PreviewEditor.this);
-								if (connection != null)
-									fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
-								else
-									unsetReportDocument("Connection could not be established", true);
-							} else {
-								JRDataSource jrds = null;
-								if (datasource instanceof MEmptyDataSource) {
-									jrds = new JREmptyDataSource((Integer) datasource.getPropertyValue(MEmptyDataSource.PROPERTY_SIZE));
-								} else if (datasource instanceof AMFileDataSource) {
-									io = new FileInputStream((String) datasource.getPropertyValue(MFileDataSource.PROPERTY_FILENAME));
-									if (datasource instanceof MFileDataSource) {
-										jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource) datasource);
-									} else if (datasource instanceof MXMLDataSource) {
-										jrds = RepositoryManager.createXMLDataSource(io, (MXMLDataSource) datasource);
-									}
-								}
-								if (jrds != null) {
-									fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, jrds);
+							JRDataSource jrds = null;
+							if (datasource instanceof MEmptyDataSource) {
+								jrds = new JREmptyDataSource((Integer) datasource.getPropertyValue(MEmptyDataSource.PROPERTY_SIZE));
+							} else if (datasource instanceof AMFileDataSource) {
+								io = new FileInputStream((String) datasource.getPropertyValue(MFileDataSource.PROPERTY_FILENAME));
+								if (datasource instanceof MFileDataSource) {
+									jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource) datasource);
+								} else if (datasource instanceof MXMLDataSource) {
+									jrds = RepositoryManager.createXMLDataSource(io, (MXMLDataSource) datasource);
 								}
 							}
-
-							if (fillReport(fh, monitor) == Status.CANCEL_STATUS)
-								return Status.CANCEL_STATUS;
+							if (jrds != null) {
+								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, jrds);
+							}
 						}
+						if (fillReport(fh, monitor) == Status.CANCEL_STATUS)
+							return Status.CANCEL_STATUS;
+
 						setReportDocument(true);
 					} catch (final Throwable e) {
 						Writer result = new StringWriter();
@@ -256,10 +260,25 @@ public class PreviewEditor extends EditorPart {
 		}
 	}
 
+	private int askParameters() {
+		List<JRDesignParameter> prompts = new ArrayList<JRDesignParameter>();
+		List<JRDesignParameter> params = jasperDesign.getParametersList();
+		for (JRDesignParameter jdp : params) {
+			if (jdp.isForPrompting() && !jdp.isSystemDefined()) {
+				prompts.add(jdp);
+			}
+		}
+		if (prompts.isEmpty())
+			return Window.OK;
+		ParametersDialog pd = new ParametersDialog(getEditorSite().getShell(), prompts, jasperParameter);
+		int pdresult = pd.open();
+		return pdresult;
+	}
+
 	public void setNorun(boolean norun) {
 		this.norun = norun;
 		tbManager.update(true);
-		dataSourceWidget.refresh(false);
+		dataSourceWidget.refresh(true);
 		reloadAction.setEnabled(norun);
 	}
 
