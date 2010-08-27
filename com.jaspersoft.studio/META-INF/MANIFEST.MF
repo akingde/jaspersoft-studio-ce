@@ -27,6 +27,5 @@ Bundle-ClassPath: .,
  lib/xercesImpl.jar,
  lib/xml-apis.jar,
  lib/xsltc.jar
-Bundle-NativeCode: libj2d-gtk-linux-i386-2.0.0.so; osname = Linux; processor = x86
 Import-Package: org.eclipse.ui,
  org.eclipse.ui.part
