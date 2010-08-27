@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.jaspersoft.studio"
+      id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio"
-      version="0.0.1.qualifier"
+      version="0.0.1"
       provider-name="Jaspersoft Corporation">
 
    <description url="http://jasperforge.org/projects/jaspersoftstudio">
