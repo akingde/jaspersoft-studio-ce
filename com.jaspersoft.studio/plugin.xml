@@ -328,6 +328,20 @@
             name="Jaspersoft Studio">
       </category>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.jaspersoft.studio"
+            name="Jaspersoft Studio">
+      </category>
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.wizards.ReportNewWizard"
+            icon="icons/jrxml_icon.png"
+            id="com.jaspersoft.studio.wizards.ReportNewWizard"
+            name="JasperReport">
+      </wizard>
+   </extension>
    
 
 </plugin>
