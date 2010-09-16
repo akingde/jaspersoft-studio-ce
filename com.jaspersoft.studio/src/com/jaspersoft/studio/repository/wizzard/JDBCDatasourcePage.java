@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
 import com.jaspersoft.studio.repository.RepositoryManager;
+import com.jaspersoft.studio.utils.ErrorUtil;
 
 public class JDBCDatasourcePage extends ADatasourcePage {
 
@@ -48,6 +49,7 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 	private Text usernameTxt;
 	private Text passwordTxt;
 	private Text jarTxt;
+	private Text errTxt;
 
 	protected JDBCDatasourcePage() {
 		super("jdbcdatasourceeditor");
@@ -139,21 +141,22 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
 							Connection c = RepositoryManager.establishConnection(datasource, null, monitor);
-							Display.getDefault().syncExec(new Runnable() {
-								public void run() {
-									setErrorMessage(null);
-									setMessage("Succes! Connection established.");
-								}
-							});
 							if (c != null)
 								c.close();
-							else
-								System.out.println("nice connection");
-						} catch (final Throwable e) {
-							final String msg = "Error: " + (e.getMessage() != null ? e.getMessage() : "");
+
+							final String msg = (c != null ? "Succes! Connection established." : "Connection is null");
 							Display.getDefault().syncExec(new Runnable() {
 								public void run() {
-									setErrorMessage(msg);
+									errTxt.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+									errTxt.setText(msg);
+								}
+							});
+						} catch (final Throwable e) {
+							final String msg = ErrorUtil.getStackTrace(e);
+							Display.getDefault().syncExec(new Runnable() {
+								public void run() {
+									errTxt.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+									errTxt.setText(msg);
 								}
 							});
 							e.printStackTrace();
@@ -169,9 +172,12 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		testButton.setLayoutData(gd);
+		testButton.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		errTxt = new Text(parent, SWT.MULTI | SWT.V_SCROLL);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.heightHint = 100;
+		errTxt.setLayoutData(gd);
 
 	}
 

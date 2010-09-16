@@ -84,6 +84,7 @@ import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 import com.jaspersoft.studio.repository.RepositoryManager;
+import com.jaspersoft.studio.utils.ErrorUtil;
 
 public class PreviewEditor extends EditorPart {
 
@@ -229,11 +230,7 @@ public class PreviewEditor extends EditorPart {
 
 						setReportDocument(true);
 					} catch (final Throwable e) {
-						Writer result = new StringWriter();
-						PrintWriter printWriter = new PrintWriter(result);
-						e.printStackTrace(printWriter);
-						unsetReportDocument(result.toString(), true);
-						e.printStackTrace();
+						unsetReportDocument(ErrorUtil.getStackTrace(e), true);
 					} finally {
 						if (io != null)
 							try {
