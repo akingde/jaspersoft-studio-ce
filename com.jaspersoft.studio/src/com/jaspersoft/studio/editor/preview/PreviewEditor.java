@@ -203,7 +203,7 @@ public class PreviewEditor extends EditorPart {
 						JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 						if (datasource instanceof MJDBCDataSource) {
 							Connection connection = RepositoryManager.establishConnection((MJDBCDataSource) datasource,
-									PreviewEditor.this);
+									PreviewEditor.this, monitor);
 							if (connection != null)
 								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
 							else

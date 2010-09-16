@@ -24,11 +24,11 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,13 +41,23 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
@@ -224,60 +234,95 @@ public class RepositoryManager {
 		}
 	}
 
-	public static Connection establishConnection(MJDBCDataSource d, IEditorPart editorPart) throws Exception {
+	public static Connection establishConnection(MJDBCDataSource d, IEditorPart editorPart, IProgressMonitor monitor)
+			throws Exception {
 		Connection connection = (Connection) d.getPropertyValue(MJDBCDataSource.PROPERTY_CONNECTION);
 		if (connection == null || connection.isClosed()) {
-			// if (editorPart != null) {
 			String drvClass = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_DRIVERCLASS);
 			String url = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_JDBC_URL);
 			String user = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_USERNAME);
 			String pass = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_PASSWORD);
 			String jars = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_JAR);
-			if (jars != null && !jars.trim().equals("")) {
-				// IFileEditorInput input = (IFileEditorInput) editorPart.getEditorInput();
-				// IFile file = input.getFile();
-				// IProject activeProject = file.getProject();
-				//
-				// IJavaProject javaProject = null;
-				//
-				// if (activeProject.hasNature(JasperReportsBuilder.JAVA_NATURE)) {
-				// javaProject = JavaCore.create(activeProject);
-				// }
+			if (drvClass != null && !drvClass.trim().equals("")) {
 				Driver driver = drivers.get(drvClass);
-				if (driver == null) {
-					List<URL> urls = new ArrayList<URL>();
-					StringTokenizer st = new StringTokenizer(jars, ";");
-					while (st.hasMoreElements()) {
-						String jar = st.nextToken();
-						java.io.File jarFiles = new java.io.File(jar);
-						if (!jarFiles.exists())
-							throw new ClassNotFoundException(jar + " not found");
-
-						urls.add(jarFiles.toURI().toURL());
-					}
-					ClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]));
-					Class<?> cl = loader.loadClass(drvClass);
-					if (!Driver.class.isAssignableFrom(cl))
-						throw new Exception("Connection failed. The specified driver class does not implement the "
-								+ Driver.class.getName() + " interface.");
-					driver = (Driver) cl.newInstance();
-					drivers.put(drvClass, driver);
-				}
+				if (driver == null)
+					driver = loadJDBCDriver(editorPart, monitor, drvClass, jars);
 				Properties info = new Properties();
 				if (user != null)
 					info.put("user", user);
 				if (pass != null)
 					info.put("password", pass);
-				connection = driver.connect(url, info);
-			} else {
-				Class.forName(drvClass);
-				DriverManager.getConnection(url, user, pass);
+				try {
+					connection = driver.connect(url, info);
+				} catch (NoClassDefFoundError e) {
+					driver = loadJDBCDriver(editorPart, monitor, drvClass, jars);
+					connection = driver.connect(url, info);
+				}
 			}
-
 			d.setPropertyValue(MJDBCDataSource.PROPERTY_CONNECTION, connection);
-			// }
 		}
 		return connection;
+	}
+
+	private static Driver loadJDBCDriver(IEditorPart editorPart, IProgressMonitor monitor, String drvClass, String jars)
+			throws MalformedURLException, CoreException, JavaModelException, ClassNotFoundException, Exception,
+			InstantiationException, IllegalAccessException {
+		Driver driver;
+		ClassLoader loader = null;
+		Class<?> cl = null;
+		if (jars != null && !jars.trim().equals("")) {
+			List<URL> urls = new ArrayList<URL>();
+			StringTokenizer st = new StringTokenizer(jars, ";");
+			while (st.hasMoreElements()) {
+				String jar = st.nextToken();
+				java.io.File jarFiles = new java.io.File(jar);
+				if (jarFiles.exists())
+					urls.add(jarFiles.toURI().toURL());
+			}
+			if (urls.size() > 0)
+				loader = new URLClassLoader(urls.toArray(new URL[urls.size()]));
+		}
+		if (loader == null) {
+			if (editorPart != null) {
+				IFileEditorInput input = (IFileEditorInput) editorPart.getEditorInput();
+				IFile file = input.getFile();
+				loader = getClassLoader4Project(monitor, file.getProject());
+			} else { // take all projects
+				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+				for (IProject project : projects) {
+					loader = getClassLoader4Project(monitor, project);
+					try {
+						cl = loader.loadClass(drvClass);
+						break;
+					} catch (ClassNotFoundException cnfe) {
+						cnfe.printStackTrace();
+					}
+				}
+			}
+		}
+		if (cl == null)
+			try {
+				cl = loader.loadClass(drvClass);
+			} catch (ClassNotFoundException cnfe) {
+				cl = Class.forName(drvClass);
+			}
+		if (!Driver.class.isAssignableFrom(cl))
+			throw new Exception("Connection failed. The specified driver class does not implement the "
+					+ Driver.class.getName() + " interface.");
+		driver = (Driver) cl.newInstance();
+		drivers.put(drvClass, driver);
+		return driver;
+	}
+
+	private static ClassLoader getClassLoader4Project(IProgressMonitor monitor, IProject activeProject)
+			throws CoreException, JavaModelException {
+		// loader = ReportPreviewUtil.createProjectClassLoader(activeProject);
+		if (activeProject.hasNature(JasperReportsBuilder.JAVA_NATURE)) {
+			IJavaProject javaProject = JavaCore.create(activeProject);
+			javaProject.open(monitor);
+			return new JavaProjectClassLoader(javaProject);
+		}
+		return null;
 	}
 
 	public static JRDataSource createFileDataSource(InputStream io, MFileDataSource datasource) {

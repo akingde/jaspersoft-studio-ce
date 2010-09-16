@@ -1,28 +1,30 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.repository.wizzard;
 
+import java.sql.Connection;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -37,6 +39,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
+import com.jaspersoft.studio.repository.RepositoryManager;
 
 public class JDBCDatasourcePage extends ADatasourcePage {
 
@@ -54,13 +57,18 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 
 	@Override
 	public void dispose() {
-		AMDatasource value = getValue();
+		getAMDatasource();
+		super.dispose();
+	}
+
+	private MJDBCDataSource getAMDatasource() {
+		MJDBCDataSource value = (MJDBCDataSource) getValue();
 		value.setPropertyValue(MJDBCDataSource.PROPERTY_DRIVERCLASS, driverClassTxt.getText());
 		value.setPropertyValue(MJDBCDataSource.PROPERTY_JDBC_URL, jdbcURLTxt.getText());
 		value.setPropertyValue(MJDBCDataSource.PROPERTY_USERNAME, usernameTxt.getText());
 		value.setPropertyValue(MJDBCDataSource.PROPERTY_PASSWORD, passwordTxt.getText());
 		value.setPropertyValue(MJDBCDataSource.PROPERTY_JAR, jarTxt.getText());
-		super.dispose();
+		return value;
 	}
 
 	@Override
@@ -75,53 +83,8 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 		lbl1 = new Label(parent, SWT.NONE);
 		lbl1.setText("JDBC URL:");
 
-		Composite c = new Composite(parent, SWT.NONE);
-		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		c.setLayout(layout);
-
-		jdbcURLTxt = new Text(c, SWT.BORDER);
+		jdbcURLTxt = new Text(parent, SWT.BORDER);
 		jdbcURLTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		// Button copyButton = new Button(c, SWT.PUSH);
-		// copyButton.setText("Br&owse ...");
-		// copyButton.addSelectionListener(new SelectionListener() {
-		//
-		// public void widgetSelected(SelectionEvent e) {
-		// IProject project; // currently selected project
-		// IEditorPart editorPart = Workbench.getInstance().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		// if (editorPart != null) {
-		// IFileEditorInput input = (IFileEditorInput) editorPart.getEditorInput();
-		// IFile file = input.getFile();
-		// IProject activeProject = file.getProject();
-		// if (activeProject instanceof JavaProject) {
-		// IType myInterface = ((JavaProject) activeProject).findType("MyInterface", "name.seller.rich");
-		//
-		// // get the sub types from the interface's type hierarchy
-		// ITypeHierarchy hierarchy = myInterface.newTypeHierarchy(new NullProgressMonitor());
-		//
-		// IType[] subTypes = hierarchy.getAllSubtypes(myInterface);
-		//
-		// SelectionDialog dialog = JavaUI.createTypeDialog(shell, new ProgressMonitorDialog(shell), searchScope,
-		// IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false);
-		// dialog.setTitle("Open Type");
-		// dialog.setMessage("Enter the name prefix or pattern (?, *, or camel case)");
-		// if (dialog.open() == Window.OK) {
-		// if (dialog.getResult() != null && dialog.getResult().length > 0) {
-		// BinaryType bt = (BinaryType) dialog.getResult()[0];
-		//
-		// return bt.getFullyQualifiedName();
-		// }
-		// }
-		// }
-		// }
-		//
-		// }
-		//
-		// public void widgetDefaultSelected(SelectionEvent e) {
-		// }
-		// });
 
 		lbl1 = new Label(parent, SWT.NONE);
 		lbl1.setText("Username:");
@@ -136,11 +99,11 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 		passwordTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Jars(separated by ;):");
+		lbl1.setText("Jars(separated by \";\"):");
 
-		c = new Composite(parent, SWT.NONE);
+		Composite c = new Composite(parent, SWT.NONE);
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		layout = new GridLayout(2, false);
+		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;
 		c.setLayout(layout);
 
@@ -163,6 +126,52 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
+
+		Button testButton = new Button(parent, SWT.PUSH);
+		testButton.setText("Test Connection");
+		testButton.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				final MJDBCDataSource datasource = getAMDatasource();
+				Job job = new Job("TestConnection") {
+
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							Connection c = RepositoryManager.establishConnection(datasource, null, monitor);
+							Display.getDefault().syncExec(new Runnable() {
+								public void run() {
+									setErrorMessage(null);
+									setMessage("Succes! Connection established.");
+								}
+							});
+							if (c != null)
+								c.close();
+							else
+								System.out.println("nice connection");
+						} catch (final Throwable e) {
+							final String msg = "Error: " + (e.getMessage() != null ? e.getMessage() : "");
+							Display.getDefault().syncExec(new Runnable() {
+								public void run() {
+									setErrorMessage(msg);
+								}
+							});
+							e.printStackTrace();
+							return Status.OK_STATUS;
+						}
+						return Status.OK_STATUS;
+					}
+				};
+				job.setPriority(Job.LONG);
+				job.schedule();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		testButton.setLayoutData(gd);
 
 	}
 
