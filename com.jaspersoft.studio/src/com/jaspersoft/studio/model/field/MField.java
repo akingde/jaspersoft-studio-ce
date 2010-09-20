@@ -89,7 +89,6 @@ public class MField extends APropertyNode implements IPropertySource, ICopyable 
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return ((JRDesignField) getValue()).getName();
 	}
@@ -99,7 +98,6 @@ public class MField extends APropertyNode implements IPropertySource, ICopyable 
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -167,7 +165,6 @@ public class MField extends APropertyNode implements IPropertySource, ICopyable 
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignField jrField = (JRDesignField) getValue();
 		if (id.equals(JRDesignField.PROPERTY_NAME))
@@ -186,7 +183,6 @@ public class MField extends APropertyNode implements IPropertySource, ICopyable 
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignField jrField = (JRDesignField) getValue();
 		if (id.equals(JRDesignParameter.PROPERTY_NAME))
@@ -210,7 +206,6 @@ public class MField extends APropertyNode implements IPropertySource, ICopyable 
 		return jrDesignField;
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MFields)
 			return true;

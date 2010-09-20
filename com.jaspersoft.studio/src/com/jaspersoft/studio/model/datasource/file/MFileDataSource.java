@@ -60,7 +60,6 @@ public class MFileDataSource extends AMFileDataSource {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}

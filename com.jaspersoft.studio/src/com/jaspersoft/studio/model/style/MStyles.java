@@ -75,8 +75,7 @@ public class MStyles extends ANode implements IPastable {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
-	 */
-	@Override
+	 */ 
 	public String getDisplayText() {
 		return getIconDescriptor().getTitle();
 	}
@@ -85,8 +84,7 @@ public class MStyles extends ANode implements IPastable {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
-	 */
-	@Override
+	 */ 
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}

@@ -160,7 +160,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getDefaultHeight()
 	 */
-	@Override
 	public int getDefaultHeight() {
 		return 30;
 	}
@@ -170,7 +169,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getDefaultWidth()
 	 */
-	@Override
 	public int getDefaultWidth() {
 		return 100;
 	}
@@ -180,7 +178,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
-	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		return new JRDesignGenericElement(jasperDesign);
 	}
@@ -190,7 +187,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return getIconDescriptor().getTitle();
 	}
@@ -200,7 +196,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -220,7 +215,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getBounds()
 	 */
-	@Override
 	public Rectangle getBounds() {
 		JRElement jr = (JRElement) getValue();
 		INode node = getParent();
@@ -299,8 +293,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(groupChangesD);
 
 		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY, "Key");
-		keyD
-				.setDescription("This attribute is used to identify band elements by their \"key\" when wanting to alter their settings at runtime. The key value must be unique for elements within report band.");
+		keyD.setDescription("This attribute is used to identify band elements by their \"key\" when wanting to alter their settings at runtime. The key value must be unique for elements within report band.");
 		desc.add(keyD);
 
 		// bounds
@@ -336,8 +329,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				.setDescription("Fore color to use when drawing the object. Hexadecimal formatted values preceded by the # character or decimal values are accepted along with the following predefined color values: black, blue, cyan, darkGray, gray, green, lightGray, magenta, orange, pink, red, yellow, white.");
 		desc.add(forecolorD);
 		// opacity
-		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, "Opaque", EnumHelper
-				.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
+		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, "Opaque",
+				EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
 		opaqueD.setDescription("Specifies whether the background of an object is transparent or opaque.");
 		desc.add(opaqueD);
 
@@ -399,8 +392,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, EnumHelper.getValue(ModeEnum.OPAQUE, 1, true));
-		defaultsMap.put(JRDesignElement.PROPERTY_POSITION_TYPE, EnumHelper.getValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP,
-				1, false));
+		defaultsMap.put(JRDesignElement.PROPERTY_POSITION_TYPE,
+				EnumHelper.getValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP, 1, false));
 		defaultsMap.put(JRDesignElement.PROPERTY_STRETCH_TYPE, EnumHelper.getValue(StretchTypeEnum.NO_STRETCH, 0, false));
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, Boolean.TRUE);
 		defaultsMap.put(JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, Boolean.FALSE);
@@ -417,7 +410,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignElement jrElement = (JRDesignElement) getValue();
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
@@ -481,7 +473,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignElement jrElement = (JRDesignElement) getValue();
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
@@ -551,7 +542,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			jrElement.setPrintWhenDetailOverflows(((Boolean) value).booleanValue());
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MBand || parent instanceof MFrame || parent instanceof MElementGroup)
 			return true;

@@ -156,7 +156,6 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * 
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
 	}

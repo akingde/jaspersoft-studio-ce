@@ -90,7 +90,6 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		// pen
 		JRPen linePen = (JRPen) getValue();
@@ -110,7 +109,6 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRPen linePen = (JRPen) getValue();
 		if (linePen != null) {
@@ -124,12 +122,10 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		}
 	}
 
-	@Override
 	public String getDisplayText() {
 		return null;
 	}
 
-	@Override
 	public ImageDescriptor getImagePath() {
 		return null;
 	}

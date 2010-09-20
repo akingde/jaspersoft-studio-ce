@@ -128,7 +128,6 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 	 * 
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
 

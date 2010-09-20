@@ -85,7 +85,6 @@ public class MVariableSystem extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return ((JRDesignVariable) getValue()).getName();
 	}
@@ -95,7 +94,6 @@ public class MVariableSystem extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -144,7 +142,7 @@ public class MVariableSystem extends APropertyNode implements IPropertySource {
 				"Value Class Name");
 		classD.setDescription("Class of the variable values.");
 		desc.add(classD);
-		
+
 		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, "java.lang.String");
 	}
 
@@ -153,7 +151,6 @@ public class MVariableSystem extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
 		if (id.equals(JRDesignVariable.PROPERTY_NAME))
@@ -168,7 +165,6 @@ public class MVariableSystem extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
 		if (id.equals(JRDesignVariable.PROPERTY_NAME))

@@ -106,7 +106,6 @@ public class MDataset extends APropertyNode implements IPropertySource, ICopyabl
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return ((JRDesignDataset) getValue()).getName();
 	}
@@ -116,7 +115,6 @@ public class MDataset extends APropertyNode implements IPropertySource, ICopyabl
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -206,7 +204,6 @@ public class MDataset extends APropertyNode implements IPropertySource, ICopyabl
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignDataset jrDataset = (JRDesignDataset) getValue();
 		if (id.equals(JRDesignDataset.PROPERTY_NAME))
@@ -239,7 +236,6 @@ public class MDataset extends APropertyNode implements IPropertySource, ICopyabl
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignDataset jrDataset = (JRDesignDataset) getValue();
 		if (id.equals(JRDesignDataset.PROPERTY_NAME))
@@ -298,7 +294,6 @@ public class MDataset extends APropertyNode implements IPropertySource, ICopyabl
 		return jrDesignDataset;
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MReport)
 			return true;

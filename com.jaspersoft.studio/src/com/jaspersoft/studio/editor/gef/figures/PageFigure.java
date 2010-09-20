@@ -178,7 +178,6 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 	 * 
 	 * @see org.eclipse.gef.handles.HandleBounds#getHandleBounds()
 	 */
-	@Override
 	public Rectangle getHandleBounds() {
 		Rectangle clientArea = getClientArea();
 		clientArea.x -= dx;

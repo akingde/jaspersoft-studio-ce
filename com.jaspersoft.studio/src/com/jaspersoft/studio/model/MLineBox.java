@@ -129,7 +129,6 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		// pen
 		JRLineBox lineBox = (JRLineBox) getValue();
@@ -189,7 +188,6 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRLineBox lineBox = (JRLineBox) getValue();
 		if (lineBox != null) {
@@ -207,12 +205,10 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 		}
 	}
 
-	@Override
 	public String getDisplayText() {
 		return null;
 	}
 
-	@Override
 	public ImageDescriptor getImagePath() {
 		return null;
 	}

@@ -155,12 +155,11 @@ public class TextSection extends AbstractSection {
 		rotation = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		rotation.setItems(EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
 		rotation.addSelectionListener(new SelectionListener() {
-			@Override
+
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseStyle.PROPERTY_ROTATION, new Integer(rotation.getSelectionIndex()));
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
@@ -169,12 +168,11 @@ public class TextSection extends AbstractSection {
 		lineSpace = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		lineSpace.setItems(EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
 		lineSpace.addSelectionListener(new SelectionListener() {
-			@Override
+
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseStyle.PROPERTY_LINE_SPACING, new Integer(lineSpace.getSelectionIndex()));
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});

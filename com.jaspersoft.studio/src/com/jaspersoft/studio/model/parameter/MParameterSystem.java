@@ -85,7 +85,6 @@ public class MParameterSystem extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -95,7 +94,6 @@ public class MParameterSystem extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return ((JRDesignParameter) getValue()).getName();
 	}
@@ -153,7 +151,6 @@ public class MParameterSystem extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignParameter jrParameter = (JRDesignParameter) getValue();
 		if (id.equals(JRDesignParameter.PROPERTY_NAME))
@@ -168,7 +165,6 @@ public class MParameterSystem extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignParameter jrParameter = (JRDesignParameter) getValue();
 		if (id.equals(JRDesignParameter.PROPERTY_NAME))

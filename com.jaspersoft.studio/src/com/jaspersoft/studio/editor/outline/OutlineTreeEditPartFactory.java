@@ -118,7 +118,6 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 * 
 	 * @see org.eclipse.gef.EditPartFactory#createEditPart(org.eclipse.gef.EditPart, java.lang.Object)
 	 */
-	@Override
 	public EditPart createEditPart(EditPart context, Object model) {
 		EditPart editPart = null;
 		if (model instanceof MBand)

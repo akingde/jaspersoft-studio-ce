@@ -205,7 +205,6 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		return jrDesignParameter;
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MParameters)
 			return true;

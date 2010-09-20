@@ -83,7 +83,6 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 			if (listener == null) {
 				listener = new PropertyChangeListener() {
 
-					@Override
 					public void propertyChange(PropertyChangeEvent evt) {
 						if (evt.getSource() instanceof IPropertySource)
 							JRPropertySheetEntry.this.setValues(new Object[] { evt.getSource() });

@@ -107,8 +107,7 @@ public class GenericFigure extends RectangleFigure implements HandleBounds {
 	 * (non-Javadoc)
 	 * 
 	 * @see org.eclipse.gef.handles.HandleBounds#getHandleBounds()
-	 */
-	@Override
+	 */ 
 	public Rectangle getHandleBounds() {
 		Rectangle handleBounds = getBounds();
 		return handleBounds;

@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model;
 
@@ -34,19 +30,19 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
  * @author Chicu Veaceslav
  */
 public class NodeIconDescriptor implements IIconDescriptor {
-	
+
 	/** The ICO n_ title. */
 	private String ICON_TITLE = "Unknown element";
-	
+
 	/** The ICO n_ description. */
 	private String ICON_DESCRIPTION = "Unknown element";
-	
+
 	/** The ICO n_ tooltip. */
 	private String ICON_TOOLTIP = "Unknown element";
-	
+
 	/** The ICO n_16. */
 	private String ICON_16 = "icons/resources/genericelement-16.png";
-	
+
 	/** The ICO n_32. */
 	private String ICON_32 = "icons/resources/genericelement-32.png";
 
@@ -104,58 +100,65 @@ public class NodeIconDescriptor implements IIconDescriptor {
 		this.ICON_32 = icon32;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getDescription()
 	 */
-	@Override
 	public String getDescription() {
 		return this.ICON_DESCRIPTION;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getIcon16()
 	 */
-	@Override
 	public ImageDescriptor getIcon16() {
 		return JaspersoftStudioPlugin.getImageDescriptor(ICON_16);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getIcon16Path()
 	 */
-	@Override
 	public String getIcon16Path() {
 		return this.ICON_16;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getIcon32()
 	 */
-	@Override
 	public ImageDescriptor getIcon32() {
 		return JaspersoftStudioPlugin.getImageDescriptor(ICON_32);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getIcon32Path()
 	 */
-	@Override
 	public String getIcon32Path() {
 		return this.ICON_32;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getTitle()
 	 */
-	@Override
 	public String getTitle() {
 		return this.ICON_TITLE;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getToolTip()
 	 */
-	@Override
 	public String getToolTip() {
 		return this.ICON_TOOLTIP;
 	}

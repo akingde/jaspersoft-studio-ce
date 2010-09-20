@@ -88,7 +88,6 @@ public class MGroup extends APropertyNode implements IPropertySource, ICopyable 
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return ((JRDesignGroup) getValue()).getName();
 	}
@@ -98,7 +97,6 @@ public class MGroup extends APropertyNode implements IPropertySource, ICopyable 
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -157,7 +155,6 @@ public class MGroup extends APropertyNode implements IPropertySource, ICopyable 
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
@@ -175,7 +172,6 @@ public class MGroup extends APropertyNode implements IPropertySource, ICopyable 
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
@@ -202,7 +198,6 @@ public class MGroup extends APropertyNode implements IPropertySource, ICopyable 
 		return jrDesignGroup;
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MGroups)
 			return true;

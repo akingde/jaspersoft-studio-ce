@@ -218,7 +218,8 @@ public class PreviewEditor extends EditorPart {
 								if (datasource instanceof MFileDataSource) {
 									jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource) datasource);
 								} else if (datasource instanceof MXMLDataSource) {
-									jrds = RepositoryManager.createXMLDataSource(io, (MXMLDataSource) datasource);
+									jrds = RepositoryManager.createXMLDataSource(PreviewEditor.this, monitor, io,
+											(MXMLDataSource) datasource);
 								}
 							}
 							if (jrds != null) {
@@ -374,17 +375,14 @@ public class PreviewEditor extends EditorPart {
 
 				fh.addListener(new AsynchronousFilllListener() {
 
-					@Override
 					public void reportFinished(JasperPrint jPrint) {
 						jasperPrint = jPrint;
 					}
 
-					@Override
 					public void reportFillError(Throwable t) {
 						fillError = t;
 					}
 
-					@Override
 					public void reportCancelled() {
 						unsetReportDocument("Report fill Canceled", true);
 					}

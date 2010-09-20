@@ -69,7 +69,6 @@ public class JRExpressionPage extends WizardPage {
 		setDescription("Expression editor.");
 	}
 
-	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();

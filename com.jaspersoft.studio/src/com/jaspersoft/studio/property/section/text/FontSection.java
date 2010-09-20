@@ -86,7 +86,6 @@ public class FontSection extends AbstractSection {
 		fontName.addModifyListener(new ModifyListener() {
 			private int time = 0;
 
-			@Override
 			public void modifyText(ModifyEvent e) {
 				if (e.time - time > 100) {
 					String value = fontName.getText();
@@ -103,7 +102,6 @@ public class FontSection extends AbstractSection {
 		fontSize.addModifyListener(new ModifyListener() {
 			private int time = 0;
 
-			@Override
 			public void modifyText(ModifyEvent e) {
 				if (e.time - time > 100) {
 					String value = fontSize.getText();

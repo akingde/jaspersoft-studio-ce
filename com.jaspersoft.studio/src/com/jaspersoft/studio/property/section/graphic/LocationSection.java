@@ -94,12 +94,10 @@ public class LocationSection extends AbstractSection {
 			}
 		});
 		positionType.addSelectionListener(new SelectionListener() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRDesignElement.PROPERTY_POSITION_TYPE, new Integer(positionType.getSelectionIndex()));
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
@@ -115,7 +113,7 @@ public class LocationSection extends AbstractSection {
 			xText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_X)).intValue());
 			yText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_Y)).intValue());
 			positionType.select(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_POSITION_TYPE)).intValue());
-		}	
+		}
 		isRefreshing = false;
 	}
 }

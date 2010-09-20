@@ -97,7 +97,6 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		return element;
 	}
 
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (getElement() != evt.getSource())
 			refresh();

@@ -25,7 +25,6 @@ package com.jaspersoft.studio.property;
 
 import org.eclipse.ui.views.properties.tabbed.ITypeMapper;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PropertyTypeMaper.
  */
@@ -34,7 +33,6 @@ public class PropertyTypeMaper implements ITypeMapper {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.views.properties.tabbed.ITypeMapper#mapType(java.lang.Object)
 	 */
-	@Override
 	public Class mapType(Object object) {
 		return object.getClass();
 	}

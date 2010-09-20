@@ -353,9 +353,31 @@ public class RepositoryManager {
 		return jrds;
 	}
 
-	public static JRDataSource createXMLDataSource(InputStream io, MXMLDataSource datasource) throws JRException {
+	public static JRDataSource createXMLDataSource(IEditorPart editorPart, IProgressMonitor monitor, InputStream io,
+			MXMLDataSource datasource) throws JRException {
 		JRXmlDataSource jrds = null;
 		String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
+
+		// ClassLoader loader = null;
+		// try {
+		// if (editorPart != null) {
+		// IFileEditorInput input = (IFileEditorInput) editorPart.getEditorInput();
+		// IFile file = input.getFile();
+		// loader = getClassLoader4Project(monitor, file.getProject());
+		// } else { // take all projects
+		// IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		// for (IProject project : projects) {
+		// loader = getClassLoader4Project(monitor, project);
+		// }
+		// }
+		// if (loader != null)
+		// Thread.currentThread().setContextClassLoader(loader);
+		// } catch (JavaModelException e) {
+		// e.printStackTrace();
+		// } catch (CoreException e) {
+		// e.printStackTrace();
+		// }
+
 		if (select != null && !select.trim().endsWith(""))
 			jrds = new JRXmlDataSource(io, select);
 		else

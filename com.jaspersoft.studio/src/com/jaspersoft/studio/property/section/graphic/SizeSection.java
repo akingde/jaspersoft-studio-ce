@@ -96,12 +96,11 @@ public class SizeSection extends AbstractSection {
 			}
 		});
 		stretchType.addSelectionListener(new SelectionListener() {
-			@Override
+
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRDesignElement.PROPERTY_STRETCH_TYPE, new Integer(stretchType.getSelectionIndex()));
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});

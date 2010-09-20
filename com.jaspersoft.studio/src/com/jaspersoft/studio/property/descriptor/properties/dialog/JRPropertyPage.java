@@ -66,12 +66,10 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxCellEditor;
 public class JRPropertyPage extends WizardPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
 		}
 
-		@Override
 		public String getColumnText(Object element, int columnIndex) {
 			switch (columnIndex) {
 			case 0:
@@ -99,7 +97,8 @@ public class JRPropertyPage extends WizardPage {
 	public void performHelp() {
 		getShell().setData(WorkbenchHelpSystem.HELP_KEY, "ch.sahits.tutorial.help.firsthelp");
 
-		//PlatformUI.getWorkbench().getHelpSystem().displayHelp();//displayDynamicHelp();// displayHelp("net.sf.jasperreports.doc");
+		// PlatformUI.getWorkbench().getHelpSystem().displayHelp();//displayDynamicHelp();//
+		// displayHelp("net.sf.jasperreports.doc");
 	}
 
 	@Override
@@ -130,7 +129,6 @@ public class JRPropertyPage extends WizardPage {
 
 	}
 
-	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
@@ -286,14 +284,12 @@ public class JRPropertyPage extends WizardPage {
 		}
 		table.addSelectionListener(new SelectionListener() {
 
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (e.item instanceof TableItem) {
 					setMessage(getDescription(((TableItem) e.item)));
 				}
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});

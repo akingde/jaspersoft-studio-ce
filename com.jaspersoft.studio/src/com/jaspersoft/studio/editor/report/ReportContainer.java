@@ -216,7 +216,6 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 * 
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor#getContributorId()
 	 */
-	@Override
 	public String getContributorId() {
 		return "com.jaspersoft.studio.editor.report.ReportContainer";
 	}
@@ -235,7 +234,6 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 
 			getSite().getPage().addSelectionListener(new ISelectionListener() {
 
-				@Override
 				public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 
 					if (selection instanceof StructuredSelection) {

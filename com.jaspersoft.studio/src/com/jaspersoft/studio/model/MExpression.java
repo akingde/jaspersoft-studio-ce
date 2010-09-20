@@ -87,7 +87,6 @@ public class MExpression extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignExpression jrExpression = (JRDesignExpression) getValue();
 		if (jrExpression != null) {
@@ -104,7 +103,6 @@ public class MExpression extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignExpression jrExpression = (JRDesignExpression) getValue();
 		if (jrExpression != null) {
@@ -120,12 +118,10 @@ public class MExpression extends APropertyNode implements IPropertySource {
 		return getDisplayText();
 	}
 
-	@Override
 	public String getDisplayText() {
 		return ((JRDesignExpression) getValue()).getText();
 	}
 
-	@Override
 	public ImageDescriptor getImagePath() {
 		return null;
 	}

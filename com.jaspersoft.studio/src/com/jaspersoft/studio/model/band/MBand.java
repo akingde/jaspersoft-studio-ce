@@ -114,7 +114,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		JRDesignBand value = (JRDesignBand) getValue();
 		if (bandType.equals(BandTypeEnum.DETAIL)) {
@@ -145,7 +144,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -212,7 +210,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignBand jrband = (JRDesignBand) getValue();
 		if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
@@ -232,7 +229,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignBand jrband = (JRDesignBand) getValue();
 		if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
@@ -253,7 +249,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getDefaultHeight()
 	 */
-	@Override
 	public int getDefaultHeight() {
 		return 50;
 	}
@@ -263,7 +258,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getDefaultWidth()
 	 */
-	@Override
 	public int getDefaultWidth() {
 		return 800;
 	}
@@ -273,7 +267,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
-	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		return null;
 	}
@@ -294,7 +287,6 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getBounds()
 	 */
-	@Override
 	public Rectangle getBounds() {
 		INode parent = getParent();
 		Rectangle parentBounds = ((IGraphicElement) parent).getBounds();
@@ -309,7 +301,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 					break;
 				if (b instanceof MBand) {
 					if (b.getValue() != null)
-						h += ((JRDesignBand) b.getValue()).getHeight()-1;
+						h += ((JRDesignBand) b.getValue()).getHeight() - 1;
 				}
 			}
 			bounds.setLocation(parentBounds.x, h + getJasperDesign().getTopMargin());

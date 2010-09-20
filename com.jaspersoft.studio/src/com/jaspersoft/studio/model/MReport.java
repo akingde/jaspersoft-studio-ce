@@ -306,7 +306,6 @@ public class MReport extends APropertyNode implements IGraphicElement {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java .lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JasperDesign jrDesign = (JasperDesign) getValue();
 		if (id.equals(JasperDesign.PROPERTY_NAME))
@@ -379,7 +378,6 @@ public class MReport extends APropertyNode implements IGraphicElement {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JasperDesign jrDesign = (JasperDesign) getValue();
 		if (id.equals(JasperDesign.PROPERTY_NAME))
@@ -468,7 +466,6 @@ public class MReport extends APropertyNode implements IGraphicElement {
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getDefaultHeight()
 	 */
-	@Override
 	public int getDefaultHeight() {
 		return 800;
 	}
@@ -478,7 +475,6 @@ public class MReport extends APropertyNode implements IGraphicElement {
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getDefaultWidth()
 	 */
-	@Override
 	public int getDefaultWidth() {
 		return 800;
 	}
@@ -488,7 +484,6 @@ public class MReport extends APropertyNode implements IGraphicElement {
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
-	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		return null;
 	}
@@ -822,7 +817,6 @@ public class MReport extends APropertyNode implements IGraphicElement {
 	 * 
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getBounds()
 	 */
-	@Override
 	public Rectangle getBounds() {
 		JasperDesign jd = getJasperDesign();
 		return new Rectangle(jd.getLeftMargin(), jd.getTopMargin(), jd.getPageWidth() - jd.getLeftMargin()

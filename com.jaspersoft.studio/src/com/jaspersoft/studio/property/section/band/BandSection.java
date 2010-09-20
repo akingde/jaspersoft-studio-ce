@@ -71,7 +71,7 @@ public class BandSection extends AbstractSection {
 		height.setToolTipText("height");
 
 		height.addModifyListener(new ModifyListener() {
-			@Override
+
 			public void modifyText(ModifyEvent e) {
 				changeProperty(JRDesignBand.PROPERTY_HEIGHT, new Integer(height.getSelection()));
 			}
@@ -83,12 +83,11 @@ public class BandSection extends AbstractSection {
 		splitType.setItems(EnumHelper.getEnumNames(SplitTypeEnum.values(), NullEnum.NULL));
 		splitType.setToolTipText("Split type.");
 		splitType.addSelectionListener(new SelectionListener() {
-			@Override
+
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRDesignBand.PROPERTY_SPLIT_TYPE, new Integer(splitType.getSelectionIndex()));
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});

@@ -23,7 +23,6 @@ import java.text.MessageFormat;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.ui.views.properties.IPropertySource2;
 
 /**
  * The Class SetValueCommand.

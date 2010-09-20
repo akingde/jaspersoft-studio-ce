@@ -29,7 +29,6 @@ import java.io.InputStream;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -99,7 +98,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		 * 
 		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 		 */
-		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			getSite().getWorkbenchWindow().getShell().getDisplay().asyncExec(new Runnable() {
 				public void run() {
@@ -165,12 +163,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput())
 					.addDocumentListener(new IDocumentListener() {
 
-						@Override
 						public void documentChanged(DocumentEvent event) {
 							xmlFresh = false;
 						}
 
-						@Override
 						public void documentAboutToBeChanged(DocumentEvent event) {
 
 						}

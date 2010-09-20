@@ -91,7 +91,6 @@ public class MSortField extends APropertyNode implements IPropertySource, ICopya
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return ((JRDesignSortField) getValue()).getName();
 	}
@@ -101,7 +100,6 @@ public class MSortField extends APropertyNode implements IPropertySource, ICopya
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -194,7 +192,6 @@ public class MSortField extends APropertyNode implements IPropertySource, ICopya
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignSortField jrField = (JRDesignSortField) getValue();
 		if (id.equals(JRDesignSortField.PROPERTY_NAME))
@@ -209,7 +206,6 @@ public class MSortField extends APropertyNode implements IPropertySource, ICopya
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignSortField jrField = (JRDesignSortField) getValue();
 		if (id.equals(JRDesignSortField.PROPERTY_NAME)) {
@@ -232,7 +228,6 @@ public class MSortField extends APropertyNode implements IPropertySource, ICopya
 		return jrDesignField;
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MSortFields)
 			return true;

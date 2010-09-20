@@ -87,7 +87,6 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 
 	}
 
-	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
@@ -139,7 +138,6 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 
 		list.addSelectionListener(new SelectionListener() {
 
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String[] sel = list.getSelection();
 				if (sel.length > 0) {
@@ -153,14 +151,12 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 				}
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				e.getSource();
 			}
 		});
 		patternText.addModifyListener(new ModifyListener() {
 
-			@Override
 			public void modifyText(ModifyEvent e) {
 				APattern pa = getPattern();
 				pa.setPattern(patternText.getText());
@@ -202,7 +198,6 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		}
 	}
 
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		APattern p = (APattern) evt.getSource();
 		APattern pa = getPattern();

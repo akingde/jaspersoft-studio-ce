@@ -118,7 +118,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return ((JRStyle) getValue()).getName();
 	}
@@ -128,7 +127,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -220,8 +218,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable {
 		radiusD.setDescription("Radius");
 		desc.add(radiusD);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_FILL, "Fill", EnumHelper
-				.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_FILL, "Fill",
+				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
 		fillD.setDescription("Type of the fill pattern used to fill objects.");
 		desc.add(fillD);
 
@@ -250,8 +248,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable {
 		lineSpacingD.setDescription("Type of line spacing for the text object.");
 		desc.add(lineSpacingD);
 
-		ComboBoxPropertyDescriptor modeD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_MODE, "Mode", EnumHelper
-				.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
+		ComboBoxPropertyDescriptor modeD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_MODE, "Mode",
+				EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
 		modeD.setDescription("Specifies whether the background of an object is transparent or opaque.");
 		desc.add(modeD);
 
@@ -362,7 +360,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		if (getValue() == null)
 			return null;
@@ -448,7 +445,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		if (getValue() instanceof JRDesignStyle) {
 			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
@@ -564,7 +560,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable {
 		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MStyles)
 			return true;

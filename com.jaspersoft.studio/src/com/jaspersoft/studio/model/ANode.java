@@ -212,7 +212,6 @@ public abstract class ANode implements INode {
 	 * 
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
 			if (evt.getSource() == getValue()) {
@@ -255,7 +254,6 @@ public abstract class ANode implements INode {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getChildren()
 	 */
-	@Override
 	public List<INode> getChildren() {
 		return children;
 	}
@@ -265,7 +263,6 @@ public abstract class ANode implements INode {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getParent()
 	 */
-	@Override
 	public INode getParent() {
 		return parent;
 	}
@@ -275,7 +272,6 @@ public abstract class ANode implements INode {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getValue()
 	 */
-	@Override
 	public Object getValue() {
 		return value;
 	}
@@ -285,7 +281,6 @@ public abstract class ANode implements INode {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#setValue(java.lang.Object)
 	 */
-	@Override
 	public void setValue(Object value) {
 		if (this.value != null) {
 			if (this.value instanceof JRChangeEventsSupport)
@@ -339,7 +334,6 @@ public abstract class ANode implements INode {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getJasperDesign()
 	 */
-	@Override
 	public JasperDesign getJasperDesign() {
 		if (getRoot().getValue() instanceof JasperDesign)
 			return (JasperDesign) getRoot().getValue();

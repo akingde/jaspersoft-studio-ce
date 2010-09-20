@@ -119,12 +119,11 @@ public class LinePenSection extends AbstractSection {
 		lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		lineStyle.setItems(EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
 		lineStyle.addSelectionListener(new SelectionListener() {
-			@Override
+
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBasePen.PROPERTY_LINE_STYLE, new Integer(lineStyle.getSelectionIndex()));
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});

@@ -319,8 +319,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		jrDesignVariable.setName(ModelUtils.getDefaultName(jrDataset.getVariablesMap(), "Variable_"));
 		return jrDesignVariable;
 	}
-
-	@Override
+ 
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MVariables)
 			return true;

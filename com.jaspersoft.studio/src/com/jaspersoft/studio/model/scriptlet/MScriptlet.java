@@ -91,7 +91,6 @@ public class MScriptlet extends APropertyNode implements IPropertySource, ICopya
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return ((JRScriptlet) getValue()).getName();
 	}
@@ -101,7 +100,6 @@ public class MScriptlet extends APropertyNode implements IPropertySource, ICopya
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -162,7 +160,6 @@ public class MScriptlet extends APropertyNode implements IPropertySource, ICopya
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignScriptlet jrField = (JRDesignScriptlet) getValue();
 		if (id.equals(JRDesignScriptlet.PROPERTY_NAME))
@@ -179,7 +176,6 @@ public class MScriptlet extends APropertyNode implements IPropertySource, ICopya
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignScriptlet jrField = (JRDesignScriptlet) getValue();
 		if (id.equals(JRDesignScriptlet.PROPERTY_NAME))
@@ -204,7 +200,6 @@ public class MScriptlet extends APropertyNode implements IPropertySource, ICopya
 
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MScriptlets)
 			return true;

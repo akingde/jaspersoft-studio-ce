@@ -23,6 +23,8 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -31,7 +33,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.xerces.dom.DocumentImpl;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -53,7 +54,6 @@ public abstract class AMDatasource extends APropertyNode {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return (String) getPropertyValue(AMDatasource.PROPERTY_NAME);
 	}
@@ -89,7 +89,6 @@ public abstract class AMDatasource extends APropertyNode {
 	public static final String PROPERTY_NAME = "PROPERTY_NAME";
 	private String name;
 
-	@Override
 	public Object getPropertyValue(Object id) {
 		if (id.equals(PROPERTY_NAME)) {
 			return name;
@@ -97,7 +96,6 @@ public abstract class AMDatasource extends APropertyNode {
 		return null;
 	}
 
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		if (id.equals(PROPERTY_NAME)) {
 			name = (String) value;
@@ -122,10 +120,10 @@ public abstract class AMDatasource extends APropertyNode {
 	}
 
 	public String getToString() throws ParserConfigurationException, TransformerException {
-		// DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-		// DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 		// DOMImplementation impl = docBuilder.getDOMImplementation();
-		Document doc = new DocumentImpl();
+		Document doc = docBuilder.newDocument();// new DocumentImpl();
 		Element root = doc.createElement("DATASOURCE");
 		root.setAttributeNS(null, "type", this.getClass().getName());
 

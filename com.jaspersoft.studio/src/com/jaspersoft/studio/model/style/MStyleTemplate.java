@@ -85,7 +85,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
 		return iconDescriptor.getTitle();
 	}
@@ -95,7 +94,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -141,7 +139,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
 		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION))
@@ -154,7 +151,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
 		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION))
@@ -171,7 +167,6 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 		return jrDesignReportTemplate;
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MStyles)
 			return true;

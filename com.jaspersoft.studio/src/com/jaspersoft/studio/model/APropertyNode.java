@@ -61,7 +61,6 @@ public abstract class APropertyNode extends ANode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyDescriptors()
 	 */
-	@Override
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		if (getValue() == null)
 			return new IPropertyDescriptor[0];
@@ -84,7 +83,6 @@ public abstract class APropertyNode extends ANode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#isPropertySet(java.lang.Object)
 	 */
-	@Override
 	public boolean isPropertySet(Object id) {
 		try {
 			Object def = getPropertyDefaultValue((String) id);
@@ -124,7 +122,6 @@ public abstract class APropertyNode extends ANode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#resetPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public void resetPropertyValue(Object id) {
 		try {
 			setPropertyValue(id, getPropertyDefaultValue((String) id));
@@ -137,7 +134,6 @@ public abstract class APropertyNode extends ANode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getEditableValue()
 	 */
-	@Override
 	public Object getEditableValue() {
 		return this;
 	}

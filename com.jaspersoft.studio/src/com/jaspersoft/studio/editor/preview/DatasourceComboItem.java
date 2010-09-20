@@ -258,7 +258,6 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		// forceSetText = false;
 	}
 
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh(true);
 	}
@@ -282,7 +281,6 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		selecteditem = combo.getSelectionIndex();
 	}
 
-	@Override
 	public void viewerStateChanged(ReportViewerEvent evt) {
 		refresh(false);
 	}

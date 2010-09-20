@@ -70,7 +70,6 @@ public class JRQueryPage extends WizardPage {
 		setDescription("Query editor.");
 	}
 
-	@Override
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();

@@ -56,7 +56,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	private PreferenceListener preferenceListener;
 
 	private final class PreferenceListener implements IPropertyChangeListener {
-		@Override
+
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			if (event.getProperty().equals(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE))
 				setPrefsBorder(getFigure());
@@ -161,7 +161,6 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 * 
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
-	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
 		refreshC((ANode) getModel());

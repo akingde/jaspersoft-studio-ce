@@ -43,7 +43,6 @@ public class SimpleShadowBorder extends AbstractBorder {
 	 * 
 	 * @see org.eclipse.draw2d.Border#getInsets(org.eclipse.draw2d.IFigure)
 	 */
-	@Override
 	public Insets getInsets(IFigure figure) {
 		return new Insets(PageFigure.PAGE_BORDER.top);
 	}
@@ -54,7 +53,6 @@ public class SimpleShadowBorder extends AbstractBorder {
 	 * @see org.eclipse.draw2d.Border#paint(org.eclipse.draw2d.IFigure, org.eclipse.draw2d.Graphics,
 	 * org.eclipse.draw2d.geometry.Insets)
 	 */
-	@Override
 	public void paint(IFigure figure, Graphics graphics, Insets insets) {
 
 		if (graphics instanceof J2DGraphics) {

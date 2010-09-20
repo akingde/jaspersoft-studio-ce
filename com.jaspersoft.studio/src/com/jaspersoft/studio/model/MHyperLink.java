@@ -118,7 +118,6 @@ public class MHyperLink extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
 		// pen
 		JRHyperlink hyperLink = (JRHyperlink) getValue();
@@ -156,7 +155,6 @@ public class MHyperLink extends APropertyNode implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignHyperlink hyperLink = (JRDesignHyperlink) getValue();
 		if (hyperLink != null) {
@@ -193,12 +191,10 @@ public class MHyperLink extends APropertyNode implements IPropertySource {
 		}
 	}
 
-	@Override
 	public String getDisplayText() {
 		return null;
 	}
 
-	@Override
 	public ImageDescriptor getImagePath() {
 		return null;
 	}

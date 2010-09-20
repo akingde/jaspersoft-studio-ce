@@ -75,7 +75,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	private PreferenceListener preferenceListener;
 
 	private final class PreferenceListener implements IPropertyChangeListener {
-		@Override
+
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
 			if (event.getProperty().equals(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE))
 				setPrefsBorder(getFigure());
