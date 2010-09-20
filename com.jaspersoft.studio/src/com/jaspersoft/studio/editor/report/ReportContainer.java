@@ -49,7 +49,6 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportOutlineView;
 import com.jaspersoft.studio.property.JRPropertySheetEntry;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ReportContainer.
  * 

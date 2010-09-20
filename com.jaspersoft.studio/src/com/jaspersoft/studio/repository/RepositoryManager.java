@@ -358,6 +358,9 @@ public class RepositoryManager {
 		JRXmlDataSource jrds = null;
 		String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
 
+//		com.jaspersoft.studio.runtime.datasource.ExecuteReport re = new com.jaspersoft.studio.runtime.datasource.ExecuteReport();
+//		re.execute();
+
 		// ClassLoader loader = null;
 		// try {
 		// if (editorPart != null) {

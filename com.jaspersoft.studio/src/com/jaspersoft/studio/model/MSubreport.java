@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
@@ -32,6 +33,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 /**
  * The Class MSubreport.
@@ -116,29 +118,103 @@ public class MSubreport extends MGraphicElement {
 				.setDescription("If true, tells the report engine to cache the report definition objects that are loaded from the same location.");
 		desc.add(useCacheD);
 
+		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(JRDesignSubreport.PROPERTY_EXPRESSION,
+				"Expression");
+		exprD.setDescription("The subreport expression.");
+		desc.add(exprD);
+
+		JRExpressionPropertyDescriptor paramExprD = new JRExpressionPropertyDescriptor(
+				JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION, "Parameters Map Expression");
+		paramExprD.setDescription("The parameters map expression.");
+		desc.add(paramExprD);
+
+		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(
+				JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, "Connection Expression");
+		connExprD.setDescription("The connection expression.");
+		desc.add(connExprD);
+
+		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(
+				JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION, "Datasource Expression");
+		dsExprD.setDescription("The datasource expression.");
+		desc.add(dsExprD);
+
+		dsExprD.setCategory("Subreport Properties");
+		connExprD.setCategory("Subreport Properties");
+		paramExprD.setCategory("Subreport Properties");
+		exprD.setCategory("Subreport Properties");
+		useCacheD.setCategory("Subreport Properties");
 		runToBottomD.setCategory("Subreport Properties");
 
 	}
 
+	private MExpression mExpression;
+	private MExpression pmExpression;
+	private MExpression cnExpression;
+	private MExpression dsExpression;
+
 	@Override
 	public Object getPropertyValue(Object id) {
-		JRBaseSubreport jrElement = (JRBaseSubreport) getValue();
+		JRDesignSubreport jrElement = (JRDesignSubreport) getValue();
 		if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
 			return jrElement.isRunToBottom();
 		if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE))
 			return jrElement.isOwnUsingCache();
+		if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION)) {
+			if (mExpression == null)
+				mExpression = new MExpression(jrElement.getExpression());
+			return mExpression;
+		}
+		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
+			if (pmExpression == null)
+				pmExpression = new MExpression(jrElement.getParametersMapExpression());
+			return pmExpression;
+		}
+		if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION)) {
+			if (cnExpression == null)
+				cnExpression = new MExpression(jrElement.getConnectionExpression());
+			return cnExpression;
+		}
+		if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION)) {
+			if (dsExpression == null)
+				dsExpression = new MExpression(jrElement.getDataSourceExpression());
+			return dsExpression;
+		}
 		return super.getPropertyValue(id);
 	}
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		JRBaseSubreport jrElement = (JRBaseSubreport) getValue();
+		JRDesignSubreport jrElement = (JRDesignSubreport) getValue();
 		if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
 			jrElement.setRunToBottom((Boolean) value);
 		else if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
 			jrElement.setUsingCache((Boolean) value);
-		else
-			super.setPropertyValue(id, value);
+		else if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrElement.setExpression(expression);
+			}
+		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				pmExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) pmExpression.getValue();
+				jrElement.setParametersMapExpression(expression);
+			}
+		} else if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				cnExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) cnExpression.getValue();
+				jrElement.setConnectionExpression(expression);
+			}
+		} else if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				dsExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) dsExpression.getValue();
+				jrElement.setDataSourceExpression(expression);
+			}
+		}
+		super.setPropertyValue(id, value);
 	}
 
 	/*
