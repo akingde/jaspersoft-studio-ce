@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.editor.preview;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,13 +28,16 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -41,7 +45,10 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
+import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
+import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -60,6 +67,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
@@ -199,9 +207,23 @@ public class PreviewEditor extends EditorPart {
 					InputStream io = null;
 					fillError = null;
 					try {
+						// set project classloader?
+						IFileEditorInput input = (IFileEditorInput) getEditorInput();
+						IFile file = input.getFile();
+						ClassLoader cl = RepositoryManager.getClassLoader4Project(monitor, file.getProject());
+						Thread.currentThread().setContextClassLoader(cl);
+
 						jasperPrint = null;
 						AsynchronousFillHandle fh = null;
 						JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+						SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
+								new File(file.getParent().getLocationURI()), new File("."),
+								new File(file.getProject().getLocationURI()) }));
+						fileResolver.setResolveAbsolutePath(true);
+
+						jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
+
 						if (datasource instanceof MJDBCDataSource) {
 							Connection connection = RepositoryManager.establishConnection((MJDBCDataSource) datasource,
 									PreviewEditor.this, monitor);
@@ -220,6 +242,10 @@ public class PreviewEditor extends EditorPart {
 								} else if (datasource instanceof MXMLDataSource) {
 									jrds = RepositoryManager.createXMLDataSource(PreviewEditor.this, monitor, io,
 											(MXMLDataSource) datasource);
+									jasperParameter.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, "yyyy-MM-dd");
+									jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, "#,##0.##");
+									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
+									jasperParameter.put(JRParameter.REPORT_LOCALE, Locale.US);
 								}
 							}
 							if (jrds != null) {

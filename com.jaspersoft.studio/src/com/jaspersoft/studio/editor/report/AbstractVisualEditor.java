@@ -44,7 +44,6 @@ import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.MatchHeightAction;
 import org.eclipse.gef.ui.actions.MatchWidthAction;
-import org.eclipse.gef.ui.actions.ToggleGridAction;
 import org.eclipse.gef.ui.actions.ToggleRulerVisibilityAction;
 import org.eclipse.gef.ui.actions.ToggleSnapToGeometryAction;
 import org.eclipse.gef.ui.actions.ZoomInAction;

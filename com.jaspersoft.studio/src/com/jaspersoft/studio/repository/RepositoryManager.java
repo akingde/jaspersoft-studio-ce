@@ -46,6 +46,8 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -314,13 +316,13 @@ public class RepositoryManager {
 		return driver;
 	}
 
-	private static ClassLoader getClassLoader4Project(IProgressMonitor monitor, IProject activeProject)
+	public static ClassLoader getClassLoader4Project(IProgressMonitor monitor, IProject activeProject)
 			throws CoreException, JavaModelException {
 		// loader = ReportPreviewUtil.createProjectClassLoader(activeProject);
 		if (activeProject.hasNature(JasperReportsBuilder.JAVA_NATURE)) {
 			IJavaProject javaProject = JavaCore.create(activeProject);
 			javaProject.open(monitor);
-			return new JavaProjectClassLoader(javaProject);
+			return new JavaProjectClassLoader(javaProject, Thread.currentThread().getContextClassLoader());
 		}
 		return null;
 	}
@@ -357,34 +359,12 @@ public class RepositoryManager {
 			MXMLDataSource datasource) throws JRException {
 		JRXmlDataSource jrds = null;
 		String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
-
-//		com.jaspersoft.studio.runtime.datasource.ExecuteReport re = new com.jaspersoft.studio.runtime.datasource.ExecuteReport();
-//		re.execute();
-
-		// ClassLoader loader = null;
-		// try {
-		// if (editorPart != null) {
-		// IFileEditorInput input = (IFileEditorInput) editorPart.getEditorInput();
-		// IFile file = input.getFile();
-		// loader = getClassLoader4Project(monitor, file.getProject());
-		// } else { // take all projects
-		// IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		// for (IProject project : projects) {
-		// loader = getClassLoader4Project(monitor, project);
-		// }
-		// }
-		// if (loader != null)
-		// Thread.currentThread().setContextClassLoader(loader);
-		// } catch (JavaModelException e) {
-		// e.printStackTrace();
-		// } catch (CoreException e) {
-		// e.printStackTrace();
-		// }
+		Document document = JRXmlUtils.parse(io);
 
 		if (select != null && !select.trim().endsWith(""))
-			jrds = new JRXmlDataSource(io, select);
+			jrds = new JRXmlDataSource(document, select);
 		else
-			jrds = new JRXmlDataSource(io);
+			jrds = new JRXmlDataSource(document);
 		return jrds;
 	}
 }
