@@ -22,6 +22,7 @@ package com.jaspersoft.studio.editor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,8 +30,11 @@ import java.io.InputStream;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.resources.IFile;
@@ -278,15 +282,27 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		setPartName(editorInput.getName());
 		InputStream in = null;
 		try {
+			String fileExtention = "";
 			if (editorInput instanceof FileStoreEditorInput) {
 				FileStoreEditorInput fsei = (FileStoreEditorInput) editorInput;
 				in = new FileInputStream(fsei.getURI().getPath());
 			} else if (editorInput instanceof IFileEditorInput) {
+				fileExtention = ((IFileEditorInput) editorInput).getFile().getFileExtension();
 				in = ((IFileEditorInput) editorInput).getFile().getContents();
 			} else {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput");
 			}
-			JasperDesign jd = JRXmlLoader.load(in);
+			JasperDesign jd = null;
+			if (fileExtention.equals("jasper")) {
+				JasperReport report = (JasperReport) JRLoader.loadObject(in);
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				JRXmlWriter.writeReport(report, outputStream, "UTF-8");
+
+				jd = JRXmlLoader.load(new ByteArrayInputStream(outputStream.toByteArray()));
+				
+			} else {
+				jd = JRXmlLoader.load(in);
+			}
 			setModel(ReportFactory.createReport(jd));
 		} catch (JRException e) {
 			setModel(null);

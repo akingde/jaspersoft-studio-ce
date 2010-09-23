@@ -20,8 +20,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.common;bundle-version="2.5.0",
  org.eclipse.emf.ecore;bundle-version="2.5.0",
  net.sf.jasperreports,
- org.eclipse.ui.views.properties.tabbed;bundle-version="3.5.0",
- com.jaspersoft.studio.runtime;bundle-version="1.0.0"
+ org.eclipse.ui.views.properties.tabbed;bundle-version="3.5.0"
 Bundle-ClassPath: .,
  lib/serializer.jar,
  lib/xalan.jar,

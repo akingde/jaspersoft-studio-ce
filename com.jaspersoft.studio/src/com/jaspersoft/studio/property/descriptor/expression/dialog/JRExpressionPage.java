@@ -82,7 +82,7 @@ public class JRExpressionPage extends WizardPage {
 		valuleClassCombo = new Combo(composite, SWT.DROP_DOWN | SWT.FLAT | SWT.BORDER);
 		valuleClassCombo.setItems(new String[] { "java.lang.Boolean", "java.lang.Byte", "java.util.Date",
 				"java.sql.Timestamp", "java.sql.Time", "java.lang.Double", "java.lang.Float", "java.lang.Integer",
-				"java.lang.Long", "java.lang.Short", "java.math.BigDecimal", "java.lang.Number", "java.lang.String" });
+				"java.lang.Long", "java.lang.Short", "java.math.BigDecimal", "java.lang.Number", "java.lang.String", "java.lang.Object" });
 		valuleClassCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				// set value into the MQuery, attention, thru commands!

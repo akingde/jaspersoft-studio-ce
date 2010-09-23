@@ -19,13 +19,19 @@
  */
 package com.jaspersoft.studio.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRSubreportReturnValue;
 import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -34,6 +40,9 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.subreport.parameter.SubreportPropertiesPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.RVPropertyDescriptor;
 
 /**
  * The Class MSubreport.
@@ -138,6 +147,18 @@ public class MSubreport extends MGraphicElement {
 		dsExprD.setDescription("The datasource expression.");
 		desc.add(dsExprD);
 
+		SubreportPropertiesPropertyDescriptor propertiesD = new SubreportPropertiesPropertyDescriptor(
+				JRDesignSubreport.PROPERTY_PARAMETERS, "Parameters");
+		propertiesD.setDescription("The datasource expression.");
+		desc.add(propertiesD);
+
+		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES,
+				"Return Values");
+		returnValuesD.setDescription("Return Values.");
+		desc.add(returnValuesD);
+
+		returnValuesD.setCategory("Subreport Properties");
+		propertiesD.setCategory("Subreport Properties");
 		dsExprD.setCategory("Subreport Properties");
 		connExprD.setCategory("Subreport Properties");
 		paramExprD.setCategory("Subreport Properties");
@@ -179,6 +200,11 @@ public class MSubreport extends MGraphicElement {
 				dsExpression = new MExpression(jrElement.getDataSourceExpression());
 			return dsExpression;
 		}
+		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS))
+			return jrElement.getParametersMap();
+		if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES))
+			return jrElement.getReturnValuesList();
+
 		return super.getPropertyValue(id);
 	}
 
@@ -212,6 +238,27 @@ public class MSubreport extends MGraphicElement {
 				dsExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) dsExpression.getValue();
 				jrElement.setDataSourceExpression(expression);
+			}
+		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
+			if (value instanceof Map) {
+				Map<String, JRDesignSubreportParameter> v = (Map<String, JRDesignSubreportParameter>) value;
+				Set<String> names = new HashSet<String>(jrElement.getParametersMap().keySet());
+				for (String name : names)
+					jrElement.removeParameter(name);
+
+				for (JRDesignSubreportParameter param : v.values())
+					try {
+						jrElement.addParameter(param);
+					} catch (JRException e) {
+						e.printStackTrace();
+					}
+			}
+		} else if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
+			if (value instanceof List) {
+				List<JRSubreportReturnValue> list = (List<JRSubreportReturnValue>) value;
+				jrElement.getReturnValuesList().clear();
+				for (JRSubreportReturnValue j : list)
+					jrElement.addReturnValue(j);
 			}
 		}
 		super.setPropertyValue(id, value);

@@ -41,7 +41,7 @@
       <editor
             class="com.jaspersoft.studio.editor.JrxmlEditor"
             contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
-            extensions="jrxml"
+            extensions="jrxml,jasper"
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.editor.JrxmlEditor"
             name="JasperReports Designer">
