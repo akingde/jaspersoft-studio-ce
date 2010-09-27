@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
@@ -222,16 +223,25 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the monitor
 	 */
 	public void doSave(IProgressMonitor monitor) {
+		IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
 		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
 			model2xml();
 		} else {
 			try { // just go thru the model, to look what happend with our markers
 				xml2model();
-				IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
 				resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 			} catch (JRException e) {
 				handleJRException(getEditorInput(), e, true);
 			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		if (getFileExtension(getEditorInput()).equals("")) {
+			// save binary
+			try {
+				new JasperReportsBuilder().compileJRXML(resource, monitor);
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -280,19 +290,15 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		setPartName(editorInput.getName());
 		InputStream in = null;
 		try {
-			String fileExtention = "";
 			if (editorInput instanceof FileStoreEditorInput) {
-				String path = ((FileStoreEditorInput) editorInput).getURI().getPath();
-				in = new FileInputStream(path);
-				fileExtention = path.substring(path.lastIndexOf(".") + 1, path.length());
+				in = new FileInputStream(((FileStoreEditorInput) editorInput).getURI().getPath());
 			} else if (editorInput instanceof IFileEditorInput) {
-				fileExtention = ((IFileEditorInput) editorInput).getFile().getFileExtension();
 				in = ((IFileEditorInput) editorInput).getFile().getContents();
 			} else {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput");
 			}
 			JasperDesign jd = null;
-			in = JrxmlEditor.getXML(editorInput, "UTF-8", in, fileExtention);
+			in = JrxmlEditor.getXML(editorInput, "UTF-8", in);
 			jd = JRXmlLoader.load(in);
 			setModel(ReportFactory.createReport(jd));
 		} catch (JRException e) {
@@ -315,8 +321,19 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 	}
 
-	public static InputStream getXML(IEditorInput editorInput, String encoding, InputStream in, String fileExtension)
-			throws JRException {
+	public static String getFileExtension(IEditorInput editorInput) {
+		String fileExtention = "";
+		if (editorInput instanceof FileStoreEditorInput) {
+			String path = ((FileStoreEditorInput) editorInput).getURI().getPath();
+			fileExtention = path.substring(path.lastIndexOf(".") + 1, path.length());
+		} else if (editorInput instanceof IFileEditorInput) {
+			fileExtention = ((IFileEditorInput) editorInput).getFile().getFileExtension();
+		}
+		return fileExtention;
+	}
+
+	public static InputStream getXML(IEditorInput editorInput, String encoding, InputStream in) throws JRException {
+		String fileExtension = getFileExtension(editorInput);
 		if (fileExtension.equals("jasper")) {
 			JasperReport report = (JasperReport) JRLoader.loadObject(in);
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

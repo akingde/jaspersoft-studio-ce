@@ -55,6 +55,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
@@ -245,7 +246,7 @@ public class PreviewEditor extends EditorPart {
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, "#,##0.##");
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
 									jasperParameter.put(JRParameter.REPORT_LOCALE, Locale.US);
-									
+
 									String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
 									if (select != null && !select.trim().endsWith("")) {
 										jrds = RepositoryManager.createXMLDataSource(PreviewEditor.this, io, select);
@@ -357,9 +358,13 @@ public class PreviewEditor extends EditorPart {
 		tbManager.add(new ZoomFitPageAction(reportViewer));
 		tbManager.add(new ZoomFitPageWidthAction(reportViewer));
 		tbManager.add(new Separator());
-		tbManager.add(new ZoomOutAction(reportViewer));
+		ZoomOutAction zoomOutAction = new ZoomOutAction(reportViewer);
+		zoomOutAction.setImageDescriptor(InternalImages.DESC_ZOOM_OUT);
+		tbManager.add(zoomOutAction);
 		tbManager.add(new ZoomComboContributionItem(reportViewer));
-		tbManager.add(new ZoomInAction(reportViewer));
+		ZoomInAction zoomInAction = new ZoomInAction(reportViewer);
+		zoomInAction.setImageDescriptor(InternalImages.DESC_ZOOM_IN);
+		tbManager.add(zoomInAction);
 
 		tbManager.update(true);
 	}

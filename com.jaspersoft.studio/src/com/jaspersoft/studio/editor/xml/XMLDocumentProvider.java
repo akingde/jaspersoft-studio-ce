@@ -94,18 +94,18 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 			throws CoreException {
 		InputStream stream = null;
 		try {
+
 			if (editorInput instanceof FileStoreEditorInput) {
 				String path = ((FileStoreEditorInput) editorInput).getURI().getPath();
 				stream = new FileInputStream(path);
-				String fileExtention = path.substring(path.lastIndexOf(".") + 1, path.length());
-				setDocumentContent(document, JrxmlEditor.getXML(editorInput, encoding, stream, fileExtention), encoding);
+				setDocumentContent(document, JrxmlEditor.getXML(editorInput, encoding, stream), encoding);
 				return true;
 			} else if (editorInput instanceof IFileEditorInput) {
-				String fileExtention = ((IFileEditorInput) editorInput).getFile().getFileExtension();
+				String fileExtention = JrxmlEditor.getFileExtension(editorInput);
 				if (fileExtention.equals("jasper")) {
 					IFile file = ((IFileEditorInput) editorInput).getFile();
 					stream = file.getContents(false);
-					setDocumentContent(document, JrxmlEditor.getXML(editorInput, encoding, stream, fileExtention), encoding);
+					setDocumentContent(document, JrxmlEditor.getXML(editorInput, encoding, stream), encoding);
 				} else
 					return super.setDocumentContent(document, editorInput, encoding);
 			}
@@ -133,8 +133,10 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	@Override
 	protected void doSaveDocument(IProgressMonitor monitor, Object element, IDocument document, boolean overwrite)
 			throws CoreException {
+		if (JrxmlEditor.getFileExtension((IEditorInput) element).equals("jasper")) {
+			return; // do not save .jasper files, they are binary
+		}
 		if (element instanceof FileStoreEditorInput) {
-
 			FileStoreEditorInput input = (FileStoreEditorInput) element;
 			String encoding = null;
 

@@ -46,6 +46,14 @@
             id="com.jaspersoft.studio.editor.JrxmlEditor"
             name="JasperReports Designer">
       </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.JRPrintEditor"
+            default="false"
+            extensions="jrprint"
+            icon="icons/jr_icon.png"
+            id="com.jaspersoft.studio.editor.JRPrintEditor"
+            name="JasperPrint Viewer">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
