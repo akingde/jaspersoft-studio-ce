@@ -61,6 +61,7 @@ public class JRPrintEditor extends EditorPart {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
+		setPartName(input.getName());
 		InputStream in = null;
 		try {
 			if (input instanceof FileStoreEditorInput) {
@@ -70,7 +71,7 @@ public class JRPrintEditor extends EditorPart {
 			} else {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput");
 			}
-			jasperPrint = (JasperPrint) JRLoader.loadObject(in);
+			jasperPrint = loadJRObject(in);
 			setReportDocument(true);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -79,6 +80,10 @@ public class JRPrintEditor extends EditorPart {
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected JasperPrint loadJRObject(InputStream in) throws JRException {
+		return (JasperPrint) JRLoader.loadObject(in);
 	}
 
 	@Override

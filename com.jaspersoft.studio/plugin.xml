@@ -54,6 +54,14 @@
             id="com.jaspersoft.studio.editor.JRPrintEditor"
             name="JasperPrint Viewer">
       </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.JRPxmlEditor"
+            default="false"
+            extensions="jrpxml"
+            icon="icons/jr_icon.png"
+            id="com.jaspersoft.studio.JRPxmlEditor"
+            name="JasperJRPxml Viewer">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
