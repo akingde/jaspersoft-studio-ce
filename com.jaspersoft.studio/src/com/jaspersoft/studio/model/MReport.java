@@ -633,10 +633,10 @@ public class MReport extends APropertyNode implements IGraphicElement {
 					index = getChildren().indexOf(firstBand) + ((CollectionElementAddedEvent) evt).getAddedIndex();
 				}
 				if (firstBand instanceof MBandGroupHeader) {
-					firstBand = new MBandGroupHeader(this, (JRDesignGroup) ((MBandGroupHeader) firstBand).getJrGroup(),
+					firstBand = new MBandGroupHeader(this, ((MBandGroupHeader) firstBand).getJrGroup(),
 							(JRBand) evt.getNewValue(), index);
 				} else if (firstBand instanceof MBandGroupFooter) {
-					firstBand = new MBandGroupFooter(this, (JRDesignGroup) ((MBandGroupFooter) firstBand).getJrGroup(),
+					firstBand = new MBandGroupFooter(this, ((MBandGroupFooter) firstBand).getJrGroup(),
 							(JRBand) evt.getNewValue(), index);
 				} else
 					firstBand = (MBand) ReportFactory.createNode(this, evt.getNewValue(), index);

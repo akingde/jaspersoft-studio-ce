@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.java2d;
 
@@ -28,10 +24,9 @@ import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 
 // TODO: Auto-generated Javadoc
 /**
- * A J2DScalableFreeformLayeredPane behaves like a ScalableFreeformLayeredPane except that
- * no intermediaite ScaledGraphics is created: the scale factor is directly applied to the
- * Graphics object because java2D will compute and apply the correct transformation for
- * subsequent calls.
+ * A J2DScalableFreeformLayeredPane behaves like a ScalableFreeformLayeredPane except that no intermediaite
+ * ScaledGraphics is created: the scale factor is directly applied to the Graphics object because java2D will compute
+ * and apply the correct transformation for subsequent calls.
  * 
  * @author Christophe Avare
  * @version $Revision: 1.5.4.1.2.1 $
@@ -59,7 +54,7 @@ public class J2DScalableFreeformLayeredPane extends ScalableFreeformLayeredPane 
 			super.paintClientArea(graphics);
 		} else {
 			double scale = getScale();
-			if (scale == 1.0) {
+			if (Double.compare(scale, 1.0) == 0) {
 				// Hopefully this will have the same effet
 				// on the inherited code!
 				super.paintClientArea(graphics);
@@ -75,4 +70,3 @@ public class J2DScalableFreeformLayeredPane extends ScalableFreeformLayeredPane 
 		}
 	}
 }
-

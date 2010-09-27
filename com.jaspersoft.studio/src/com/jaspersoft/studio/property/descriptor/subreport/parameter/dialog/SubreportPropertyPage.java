@@ -90,7 +90,8 @@ public class SubreportPropertyPage extends WizardPage {
 	private Map<String, JRSubreportParameter> value;
 	private Table table;
 	private TableViewer tableViewer;
-	private TableCursor cursor;
+
+	// private TableCursor cursor;
 
 	public Map<String, JRSubreportParameter> getValue() {
 		return value;
@@ -166,7 +167,7 @@ public class SubreportPropertyPage extends WizardPage {
 				list.add(p);
 				tableViewer.add(p);
 				tableViewer.setSelection(new StructuredSelection(p));
-				cursor.setSelection(table.getSelectionIndex(), 0);
+				// cursor.setSelection(table.getSelectionIndex(), 0);
 				tableViewer.refresh();
 				table.setFocus();
 			}
@@ -198,7 +199,7 @@ public class SubreportPropertyPage extends WizardPage {
 
 					if (sp != null) {
 						tableViewer.setSelection(new StructuredSelection(sp));
-						cursor.setSelection(table.getSelectionIndex(), 0);
+						// cursor.setSelection(table.getSelectionIndex(), 0);
 					} else
 						setMessage("Table is empty");
 				}
@@ -212,58 +213,7 @@ public class SubreportPropertyPage extends WizardPage {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
-		cursor = new TableCursor(table, SWT.NONE);
-		//
-		// final ControlEditor editor = new ControlEditor(cursor);
-		// editor.grabHorizontal = true;
-		// editor.grabVertical = true;
-		//
-		// cursor.addSelectionListener(new SelectionAdapter() {
-		// // This is called as the user navigates around the table
-		// public void widgetSelected(SelectionEvent event) {
-		// // Select the row in the table where the TableCursor is
-		// table.setSelection(new TableItem[] { cursor.getRow() });
-		// }
-		//
-		// // This is called when the user hits Enter
-		// public void widgetDefaultSelected(SelectionEvent event) {
-		// CellEditor cellEditor = tableViewer.getCellEditors()[cursor.getColumn()];
-		// // tableViewer.cancelEditing();
-		// if (cellEditor != null) {
-		// cellEditor.deactivate();
-		// }
-		// // set cursor-selection to mark whole row
-		// tableViewer.setSelection(new StructuredSelection(cursor.getRow()), true);
-		// // set selection of table separatly; viewer does incorrectly.
-		// table.setSelection(new TableItem[] { cursor.getRow() });
-		// // editCell(tableViewer, cursor);
-		//
-		// }
-		// });
-		// cursor.addKeyListener(new KeyAdapter() {
-		// public void keyPressed(KeyEvent e) {
-		// // Hide the TableCursor when the user hits the "CTRL" or "SHIFT" key.
-		// // This alows the user to select multiple items in the table.
-		// if ((e.keyCode == SWT.CTRL || e.keyCode == SWT.SHIFT)
-		// || (((e.stateMask & SWT.CONTROL) != 0 || (e.stateMask & SWT.SHIFT) != 0) && ((e.keyCode & SWT.ARROW) != 0))) {
-		// cursor.setVisible(false);
-		// } else
-		// // ENTER to open editor
-		// if ((e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) && e.stateMask == 0) {
-		// editCell(tableViewer, cursor);
-		// } else
-		// // any character
-		// if ((e.keyCode < 0x10000 || e.character != '\0') && e.keyCode > 0x1f && e.keyCode != 127 || e.keyCode == 0x00
-		// && (e.stateMask == 0 || e.stateMask == SWT.SHIFT)) {
-		// editCell(tableViewer, cursor);
-		// if (tableViewer.getCellEditors()[cursor.getColumn()] instanceof TextCellEditor) {
-		// TextCellEditor editor = ((TextCellEditor) tableViewer.getCellEditors()[cursor.getColumn()]);
-		// editor.setValue(String.valueOf(e.character));
-		// ((Text) editor.getControl()).setSelection(1);
-		// }
-		// }
-		// }
-		// });
+		// cursor = new TableCursor(table, SWT.NONE);
 
 		tableViewer = new TableViewer(table);
 		attachContentProvider(tableViewer);
@@ -314,7 +264,7 @@ public class SubreportPropertyPage extends WizardPage {
 	private void attachContentProvider(TableViewer viewer) {
 		viewer.setContentProvider(new IStructuredContentProvider() {
 			public Object[] getElements(Object inputElement) {
-				return (Object[]) ((List<SubreportPropertyDTO>) inputElement).toArray();
+				return ((List<SubreportPropertyDTO>) inputElement).toArray();
 			}
 
 			public void dispose() {

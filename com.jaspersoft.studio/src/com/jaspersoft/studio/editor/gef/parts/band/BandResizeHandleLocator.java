@@ -67,7 +67,7 @@ public class BandResizeHandleLocator extends RelativeLocator {
 
 		Dimension targetSize = target.getPreferredSize();
 
-		targetBounds.x += (int) 7;
+		targetBounds.x += 7;
 
 		targetBounds.y += (int) (targetBounds.height * relativeY - ((targetSize.height + 1) / 2));
 		targetBounds.setSize(targetBounds.width - 14, 7);

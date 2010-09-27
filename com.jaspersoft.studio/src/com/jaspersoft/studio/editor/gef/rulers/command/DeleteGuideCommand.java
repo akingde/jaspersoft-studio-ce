@@ -88,7 +88,7 @@ public class DeleteGuideCommand extends Command {
 	public void undo() {
 		parent.addGuide(guide);
 		for (MGraphicElement part : guide.getParts()) {
-			guide.attachPart(part, ((Integer) oldParts.get(part)).intValue());
+			guide.attachPart(part, ( oldParts.get(part)).intValue());
 		}
 	}
 }

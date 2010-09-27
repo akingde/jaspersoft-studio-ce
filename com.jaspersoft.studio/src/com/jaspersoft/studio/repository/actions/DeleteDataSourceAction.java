@@ -31,9 +31,6 @@ import org.eclipse.ui.internal.WorkbenchMessages;
 
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
-import com.jaspersoft.studio.model.datasource.IDatasource;
-import com.jaspersoft.studio.model.datasource.MDatasources;
-import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
 
 public class DeleteDataSourceAction extends Action {
 	private TreeViewer treeViewer;

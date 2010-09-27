@@ -22,7 +22,6 @@ package com.jaspersoft.studio.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.DeleteRetargetAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -237,7 +236,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			bars.setGlobalActionHandler(ActionFactory.FIND.getId(), getAction(editor, ITextEditorActionConstants.FIND));
 			bars.setGlobalActionHandler(IDEActionFactory.BOOKMARK.getId(),
 					getAction(editor, IDEActionFactory.BOOKMARK.getId()));
-		} else if (activeEditor instanceof IAdaptable) {
+		} else {
 			if (zoomCombo != null)
 				zoomCombo.setEnabled(true);
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
@@ -398,7 +397,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	public void dispose() {
 		for (int i = 0; i < retargetActions.size(); i++) {
-			RetargetAction action = (RetargetAction) retargetActions.get(i);
+			RetargetAction action = retargetActions.get(i);
 			getPage().removePartListener(action);
 			action.dispose();
 		}

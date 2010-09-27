@@ -74,6 +74,7 @@ public class NodeIconDescriptor implements IIconDescriptor {
 		try {
 			res = JaspersoftStudioPlugin.getResourceBundleIcons().getString(key);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return res;
 	}

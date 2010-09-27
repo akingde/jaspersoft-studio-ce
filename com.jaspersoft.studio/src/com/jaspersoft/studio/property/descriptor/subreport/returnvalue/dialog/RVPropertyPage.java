@@ -20,11 +20,14 @@
 package com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -60,7 +63,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.model.JReportsDTO;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class RVPropertyPage extends WizardPage {
@@ -85,10 +90,25 @@ public class RVPropertyPage extends WizardPage {
 		}
 	}
 
+	private JReportsDTO dto;
+
+	public JReportsDTO getDto() {
+		dto.setValue(getValue());
+		return dto;
+	}
+
+	public void setDto(JReportsDTO dto) {
+		this.dto = dto;
+		value = (List<JRDesignSubreportReturnValue>) dto.getValue();
+		toVariables = null;
+	}
+
 	private List<JRDesignSubreportReturnValue> value;
 	private Table table;
 	private TableViewer tableViewer;
-	private TableCursor cursor;
+	private String[] toVariables;
+
+	// private TableCursor cursor;
 
 	public List<JRDesignSubreportReturnValue> getValue() {
 		return value;
@@ -131,7 +151,7 @@ public class RVPropertyPage extends WizardPage {
 		gd.grabExcessVerticalSpace = true;
 		gd.verticalSpan = 2;
 		gd.heightHint = 400;
-		gd.widthHint = 600;
+		gd.widthHint = 700;
 		table.setLayoutData(gd);
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
@@ -146,15 +166,31 @@ public class RVPropertyPage extends WizardPage {
 				List<JRDesignSubreportReturnValue> list = (List<JRDesignSubreportReturnValue>) tableViewer.getInput();
 				JRDesignSubreportReturnValue p = new JRDesignSubreportReturnValue();
 				p.setSubreportVariable("new_subreport_variable");
-				p.setToVariable("new_to_variable");
-				p.setCalculation(CalculationEnum.NOTHING);
-				p.setIncrementerFactoryClassName(" ");
-				list.add(p);
-				tableViewer.add(p);
-				tableViewer.setSelection(new StructuredSelection(p));
-				cursor.setSelection(table.getSelectionIndex(), 0);
-				tableViewer.refresh();
-				table.setFocus();
+
+				// get toVariable from list
+				String[] toV = getToVariables();
+				for (int i = 0; i < toV.length; i++) {
+					boolean vExists = false;
+					for (JRDesignSubreportReturnValue v : list)
+						if (toV[i].equals(v.getToVariable())) {
+							vExists = true;
+							break;
+						}
+					if (!vExists) {
+						p.setToVariable(toV[i]);
+						p.setCalculation(CalculationEnum.NOTHING);
+						p.setIncrementerFactoryClassName(" ");
+						list.add(p);
+						tableViewer.add(p);
+						tableViewer.setSelection(new StructuredSelection(p));
+						// cursor.setSelection(table.getSelectionIndex(), 0);
+						tableViewer.refresh();
+						table.setFocus();
+						return;
+					}
+				}
+				// should I have a message? or just disable the button if it's not possible
+				MessageDialog.openError(getShell(), "Error", "All report variables are allready used, you can't add more");
 			}
 		});
 
@@ -184,7 +220,8 @@ public class RVPropertyPage extends WizardPage {
 
 					if (sp != null) {
 						tableViewer.setSelection(new StructuredSelection(sp));
-						cursor.setSelection(table.getSelectionIndex(), 0);
+						// cursor.setSelection(table.getSelectionIndex(), 0);
+						validate();
 					} else
 						setMessage("Table is empty");
 				}
@@ -198,58 +235,7 @@ public class RVPropertyPage extends WizardPage {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
-		cursor = new TableCursor(table, SWT.NONE);
-		//
-		// final ControlEditor editor = new ControlEditor(cursor);
-		// editor.grabHorizontal = true;
-		// editor.grabVertical = true;
-		//
-		// cursor.addSelectionListener(new SelectionAdapter() {
-		// // This is called as the user navigates around the table
-		// public void widgetSelected(SelectionEvent event) {
-		// // Select the row in the table where the TableCursor is
-		// table.setSelection(new TableItem[] { cursor.getRow() });
-		// }
-		//
-		// // This is called when the user hits Enter
-		// public void widgetDefaultSelected(SelectionEvent event) {
-		// CellEditor cellEditor = tableViewer.getCellEditors()[cursor.getColumn()];
-		// // tableViewer.cancelEditing();
-		// if (cellEditor != null) {
-		// cellEditor.deactivate();
-		// }
-		// // set cursor-selection to mark whole row
-		// tableViewer.setSelection(new StructuredSelection(cursor.getRow()), true);
-		// // set selection of table separatly; viewer does incorrectly.
-		// table.setSelection(new TableItem[] { cursor.getRow() });
-		// // editCell(tableViewer, cursor);
-		//
-		// }
-		// });
-		// cursor.addKeyListener(new KeyAdapter() {
-		// public void keyPressed(KeyEvent e) {
-		// // Hide the TableCursor when the user hits the "CTRL" or "SHIFT" key.
-		// // This alows the user to select multiple items in the table.
-		// if ((e.keyCode == SWT.CTRL || e.keyCode == SWT.SHIFT)
-		// || (((e.stateMask & SWT.CONTROL) != 0 || (e.stateMask & SWT.SHIFT) != 0) && ((e.keyCode & SWT.ARROW) != 0))) {
-		// cursor.setVisible(false);
-		// } else
-		// // ENTER to open editor
-		// if ((e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) && e.stateMask == 0) {
-		// editCell(tableViewer, cursor);
-		// } else
-		// // any character
-		// if ((e.keyCode < 0x10000 || e.character != '\0') && e.keyCode > 0x1f && e.keyCode != 127 || e.keyCode == 0x00
-		// && (e.stateMask == 0 || e.stateMask == SWT.SHIFT)) {
-		// editCell(tableViewer, cursor);
-		// if (tableViewer.getCellEditors()[cursor.getColumn()] instanceof TextCellEditor) {
-		// TextCellEditor editor = ((TextCellEditor) tableViewer.getCellEditors()[cursor.getColumn()]);
-		// editor.setValue(String.valueOf(e.character));
-		// ((Text) editor.getControl()).setSelection(1);
-		// }
-		// }
-		// }
-		// });
+		// cursor = new TableCursor(table, SWT.NONE);
 
 		tableViewer = new TableViewer(table);
 		attachContentProvider(tableViewer);
@@ -308,7 +294,7 @@ public class RVPropertyPage extends WizardPage {
 	private void attachContentProvider(TableViewer viewer) {
 		viewer.setContentProvider(new IStructuredContentProvider() {
 			public Object[] getElements(Object inputElement) {
-				return (Object[]) ((List<JRDesignSubreportReturnValue>) inputElement).toArray();
+				return ((List<JRDesignSubreportReturnValue>) inputElement).toArray();
 			}
 
 			public void dispose() {
@@ -342,8 +328,13 @@ public class RVPropertyPage extends WizardPage {
 				JRDesignSubreportReturnValue prop = (JRDesignSubreportReturnValue) element;
 				if ("SUBREPORTVARIABLE".equals(property))
 					return prop.getSubreportVariable();
-				if ("TOVARIABLE".equals(property))
-					return prop.getToVariable();
+				if ("TOVARIABLE".equals(property)) {
+					String[] toV = getToVariables();
+					for (int i = 0; i < toV.length; i++) {
+						if (toV[i].equals(prop.getToVariable()))
+							return i;
+					}
+				}
 				if ("CALCULATIONTYPE".equals(property))
 					return EnumHelper.getValue(prop.getCalculationValue(), 0, false);
 				if ("INCREMENTERFACTORYCLASS".equals(property))
@@ -359,22 +350,57 @@ public class RVPropertyPage extends WizardPage {
 				if ("SUBREPORTVARIABLE".equals(property)) {
 					data.setSubreportVariable((String) value);
 				} else if ("TOVARIABLE".equals(property)) {
-					data.setToVariable((String) value);
+					String[] tv = getToVariables();
+					int val = (Integer) value;
+					if (val >= 0 && val < tv.length)
+						data.setToVariable(tv[val]);
 				} else if ("CALCULATIONTYPE".equals(property)) {
 					data.setCalculation((CalculationEnum) EnumHelper.getSetValue(CalculationEnum.values(), value, 0, false));
 				} else if ("INCREMENTERFACTORYCLASS".equals(property)) {
 					data.setIncrementerFactoryClassName((String) value);
 				}
+				validate();
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new TextCellEditor(parent),
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
+				new ComboBoxCellEditor(parent, getToVariables()),
 				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL)),
-				new TextCellEditor(parent) });
+				new ClassTypeCellEditor(parent) });
 		viewer.setColumnProperties(new String[] { "SUBREPORTVARIABLE", "TOVARIABLE", "CALCULATIONTYPE",
 				"INCREMENTERFACTORYCLASS" });
+	}
+
+	public void validate() {
+		// validate toVariable is unique
+		List<String> lto = new ArrayList<String>();
+		List<JRDesignSubreportReturnValue> input = (List<JRDesignSubreportReturnValue>) tableViewer.getInput();
+		for (JRDesignSubreportReturnValue d : input)
+			lto.add(d.getToVariable());
+		int size = lto.size();
+		int setSize = new HashSet<String>(lto).size();
+		if (size != setSize) {
+			setErrorMessage("Your Rerurn Variables contains duplicate ToVariable values.");
+			setPageComplete(false);
+		} else {
+			setErrorMessage(null);
+			setPageComplete(true);
+		}
+
+	}
+
+	public String[] getToVariables() {
+		if (toVariables == null) {
+			List<String> res = new ArrayList<String>();
+			for (Object o : dto.getJasperDesign().getVariablesList()) {
+				JRDesignVariable jdVar = (JRDesignVariable) o;
+				res.add(jdVar.getName());
+			}
+			toVariables = res.toArray(new String[res.size()]);
+		}
+		return toVariables;
 	}
 
 	private void fillTable(Table table) {

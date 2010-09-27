@@ -132,9 +132,8 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 			}
 			// Nothing element found
 			String[] newListItems = new String[items.length + 1];
-			for (int i = 0; i < items.length; i++) {
-				newListItems[i] = items[i];
-			}
+			System.arraycopy(items, 0, newListItems, 0, items.length);
+			
 			newListItems[items.length] = (String) value;
 			setItems(newListItems);
 		}

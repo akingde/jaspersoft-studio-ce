@@ -58,7 +58,7 @@ public class CreateStyleTemplateCommand extends Command {
 	 */
 	public CreateStyleTemplateCommand(MStyles destNode, MStyleTemplate srcNode, Point position, int index) {
 		super();
-		this.jrDesign = (JasperDesign) destNode.getJasperDesign();
+		this.jrDesign =  destNode.getJasperDesign();
 		this.index = index;
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrTemplate = (JRDesignReportTemplate) srcNode.getValue();

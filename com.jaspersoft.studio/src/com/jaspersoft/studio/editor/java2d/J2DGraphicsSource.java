@@ -92,10 +92,10 @@ public final class J2DGraphicsSource implements GraphicsSource
 		
 	    if (this.c != null) {
 	      Point localObject = this.c.getSize();
-	      this.e = new org.eclipse.draw2d.geometry.Rectangle(0, 0, ((org.eclipse.swt.graphics.Point)localObject).x, ((org.eclipse.swt.graphics.Point)localObject).y);
+	      this.e = new org.eclipse.draw2d.geometry.Rectangle(0, 0, (localObject).x, (localObject).y);
 	    } else {
 	      Rectangle localObject = this.graphicsContext.getClipping();
-	      this.e = new org.eclipse.draw2d.geometry.Rectangle(((org.eclipse.swt.graphics.Rectangle)localObject).x, ((org.eclipse.swt.graphics.Rectangle)localObject).y, ((org.eclipse.swt.graphics.Rectangle)localObject).width, ((org.eclipse.swt.graphics.Rectangle)localObject).height);
+	      this.e = new org.eclipse.draw2d.geometry.Rectangle((localObject).x, (localObject).y, (localObject).width, (localObject).height);
 	    }
 
 	    this.e.intersect(paramRectangle);
@@ -112,11 +112,11 @@ public final class J2DGraphicsSource implements GraphicsSource
 	    Graphics localObject =  new J2DGraphics( this.graphicsContext, this.graphics2d);
 	    
 	    
-	    ((Graphics)localObject).translate(this.e.getLocation().negate());
-	    ((Graphics)localObject).setClip(paramRectangle);
+	    (localObject).translate(this.e.getLocation().negate());
+	    (localObject).setClip(paramRectangle);
 
-	    ((Graphics)localObject).clipRect(this.e.getCopy());
-	    return ((Graphics)localObject);
+	    (localObject).clipRect(this.e.getCopy());
+	    return (localObject);
 	  }
 
 	  /* (non-Javadoc)

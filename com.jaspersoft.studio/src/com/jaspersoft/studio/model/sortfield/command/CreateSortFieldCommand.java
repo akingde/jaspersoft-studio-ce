@@ -88,12 +88,14 @@ public class CreateSortFieldCommand extends Command {
 						setSortField();
 						break;
 					} catch (JRException e) {
+						e.printStackTrace();
 					}
 				}
 			} else {
 				try {
 					setSortField();
 				} catch (JRException e) {
+					e.printStackTrace();
 				}
 			}
 		}

@@ -149,11 +149,11 @@ public class JRQueryCellEditor extends DialogCellEditor {
 		}
 
 		public String isValid(Object object) {
-			try {
-				;
-			} catch (Exception exception) {
-				return "error";
-			}
+			// try {
+			// ;
+			// } catch (Exception exception) {
+			// return "error";
+			// }
 			return null;
 		}
 

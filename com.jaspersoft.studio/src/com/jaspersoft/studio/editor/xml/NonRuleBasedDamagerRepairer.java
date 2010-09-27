@@ -140,6 +140,7 @@ public class NonRuleBasedDamagerRepairer
 				return new Region(start, end - start);
 
 			} catch (BadLocationException x) {
+				x.printStackTrace();
 			}
 		}
 

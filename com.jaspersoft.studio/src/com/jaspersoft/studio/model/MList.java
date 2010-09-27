@@ -31,7 +31,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MList.
  */

@@ -460,74 +460,74 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		getSelectionActions().add(DeleteGroupReportAction.ID);
 
 		// ------------
-		action = new DirectEditAction((IWorkbenchPart) this);
+		action = new DirectEditAction( this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
 		// ------------
-		action = new BringForwardAction((IWorkbenchPart) this);
+		action = new BringForwardAction( this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new BringToFrontAction((IWorkbenchPart) this);
+		action = new BringToFrontAction( this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new BringToBackAction((IWorkbenchPart) this);
+		action = new BringToBackAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new BringBackwardAction((IWorkbenchPart) this);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
-
-		// ------------
-		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.LEFT);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
-
-		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.RIGHT);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
-
-		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.TOP);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
-
-		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.BOTTOM);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
-
-		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.CENTER);
-		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
-
-		action = new AlignmentAction((IWorkbenchPart) this, PositionConstants.MIDDLE);
+		action = new BringBackwardAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
 		// ------------
-		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.LEFT);
+		action = new AlignmentAction(this, PositionConstants.LEFT);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.RIGHT);
+		action = new AlignmentAction(this, PositionConstants.RIGHT);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.TOP);
+		action = new AlignmentAction(this, PositionConstants.TOP);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.BOTTOM);
+		action = new AlignmentAction(this, PositionConstants.BOTTOM);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.CENTER);
+		action = new AlignmentAction(this, PositionConstants.CENTER);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new Align2BorderAction((IWorkbenchPart) this, PositionConstants.MIDDLE);
+		action = new AlignmentAction(this, PositionConstants.MIDDLE);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		// ------------
+		action = new Align2BorderAction(this, PositionConstants.LEFT);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction(this, PositionConstants.RIGHT);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction(this, PositionConstants.TOP);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction(this, PositionConstants.BOTTOM);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction(this, PositionConstants.CENTER);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new Align2BorderAction(this, PositionConstants.MIDDLE);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
@@ -561,7 +561,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		// ------------------
 
-		action = new ShowPropertyViewAction((IWorkbenchPart) this);
+		action = new ShowPropertyViewAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 

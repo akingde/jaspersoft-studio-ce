@@ -70,7 +70,7 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		// pen
 		if (id.equals(LINE_BOX)) {
 			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
-			if (lineBox == null){
+			if (lineBox == null) {
 				lineBox = new MLineBox(jrGraphicElement.getLineBox());
 				lineBox.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
@@ -79,16 +79,4 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		return super.getPropertyValue(id);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
-	 */
-	@Override
-	public void setPropertyValue(Object id, Object value) {
-		if (id.equals(LINE_BOX)) {
-			;
-		}
-		super.setPropertyValue(id, value);
-	}
 }

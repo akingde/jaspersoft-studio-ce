@@ -165,8 +165,4 @@ public class NumericPattern extends APattern {
 		return dList;
 	}
 
-	@Override
-	protected void formatChanged() {
-		super.formatChanged();
-	}
 }

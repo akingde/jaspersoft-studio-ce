@@ -111,7 +111,7 @@ public class ReportFactory {
 		}
 		if (jd.getStyles() != null) {
 			for (Iterator<JRDesignStyle> it = jd.getStylesList().iterator(); it.hasNext();) {
-				JRDesignStyle jrstyle = (JRDesignStyle) it.next();
+				JRDesignStyle jrstyle = it.next();
 				ANode mstyle = createNode(nStyle, jrstyle, -1);
 				if (jrstyle.getConditionalStyleList() != null) {
 					for (Object jrc : jrstyle.getConditionalStyleList()) {
@@ -125,7 +125,7 @@ public class ReportFactory {
 
 		if (jd.getDatasetsList() != null) {
 			for (Iterator<JRDesignDataset> it = jd.getDatasetsList().iterator(); it.hasNext();) {
-				JRDesignDataset jrDataset = (JRDesignDataset) it.next();
+				JRDesignDataset jrDataset = it.next();
 				createDataset(new MDataset(report, jrDataset, -1), jrDataset, true);
 			}
 
@@ -237,21 +237,21 @@ public class ReportFactory {
 		ANode nParameters = new MParameters(nDataset, dataSet);
 		if (dataSet.getParameters() != null) {
 			for (Iterator<JRDesignParameter> it = dataSet.getParametersList().iterator(); it.hasNext();) {
-				createNode(nParameters, (JRDesignParameter) it.next(), -1);
+				createNode(nParameters, it.next(), -1);
 			}
 		}
 		// create fields
 		ANode nFields = new MFields(nDataset, dataSet);
 		if (dataSet.getFields() != null) {
 			for (Iterator<JRDesignField> it = dataSet.getFieldsList().iterator(); it.hasNext();) {
-				createNode(nFields, (JRDesignField) it.next(), -1);
+				createNode(nFields, it.next(), -1);
 			}
 		}
 		// create sort fields
 		ANode nSortFields = new MSortFields(nDataset, dataSet);
 		if (dataSet.getSortFields() != null) {
 			for (Iterator<JRDesignSortField> it = dataSet.getSortFieldsList().iterator(); it.hasNext();) {
-				createNode(nFields, (JRDesignSortField) it.next(), -1);
+				createNode(nFields,   it.next(), -1);
 			}
 		}
 		// create variables
@@ -265,7 +265,7 @@ public class ReportFactory {
 		ANode nScriptlets = new MScriptlets(nDataset, dataSet);
 		if (dataSet.getScriptlets() != null) {
 			for (Iterator<JRDesignScriptlet> it = dataSet.getScriptletsList().iterator(); it.hasNext();) {
-				createNode(nScriptlets, (JRDesignScriptlet) it.next(), -1);
+				createNode(nScriptlets,   it.next(), -1);
 			}
 		}
 
@@ -274,7 +274,7 @@ public class ReportFactory {
 			ANode nGroups = new MGroups(nDataset, dataSet);
 			if (dataSet.getGroups() != null) {
 				for (Iterator<JRDesignGroup> it = dataSet.getGroupsList().iterator(); it.hasNext();) {
-					createNode(nGroups, (JRDesignGroup) it.next(), -1);
+					createNode(nGroups,   it.next(), -1);
 				}
 			}
 		}

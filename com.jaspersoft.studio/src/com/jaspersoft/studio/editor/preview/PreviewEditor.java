@@ -46,6 +46,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.resources.IFile;
@@ -240,17 +241,23 @@ public class PreviewEditor extends EditorPart {
 								if (datasource instanceof MFileDataSource) {
 									jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource) datasource);
 								} else if (datasource instanceof MXMLDataSource) {
-									jrds = RepositoryManager.createXMLDataSource(PreviewEditor.this, monitor, io,
-											(MXMLDataSource) datasource);
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, "yyyy-MM-dd");
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, "#,##0.##");
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
 									jasperParameter.put(JRParameter.REPORT_LOCALE, Locale.US);
+									
+									String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
+									if (select != null && !select.trim().endsWith("")) {
+										jrds = RepositoryManager.createXMLDataSource(PreviewEditor.this, io, select);
+									} else {
+										jasperParameter.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, JRXmlUtils.parse(io));
+									}
 								}
 							}
 							if (jrds != null) {
 								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, jrds);
-							}
+							} else
+								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter);
 						}
 						if (fillReport(fh, monitor) == Status.CANCEL_STATUS)
 							return Status.CANCEL_STATUS;

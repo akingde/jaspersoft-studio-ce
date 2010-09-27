@@ -59,7 +59,6 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
@@ -70,7 +69,6 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
@@ -284,8 +282,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			String fileExtention = "";
 			if (editorInput instanceof FileStoreEditorInput) {
-				FileStoreEditorInput fsei = (FileStoreEditorInput) editorInput;
-				in = new FileInputStream(fsei.getURI().getPath());
+				String path = ((FileStoreEditorInput) editorInput).getURI().getPath();
+				in = new FileInputStream(path);
+				fileExtention = path.substring(path.lastIndexOf(".") + 1, path.length());
 			} else if (editorInput instanceof IFileEditorInput) {
 				fileExtention = ((IFileEditorInput) editorInput).getFile().getFileExtension();
 				in = ((IFileEditorInput) editorInput).getFile().getContents();
@@ -293,16 +292,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput");
 			}
 			JasperDesign jd = null;
-			if (fileExtention.equals("jasper")) {
-				JasperReport report = (JasperReport) JRLoader.loadObject(in);
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-				JRXmlWriter.writeReport(report, outputStream, "UTF-8");
-
-				jd = JRXmlLoader.load(new ByteArrayInputStream(outputStream.toByteArray()));
-				
-			} else {
-				jd = JRXmlLoader.load(in);
-			}
+			in = JrxmlEditor.getXML(editorInput, "UTF-8", in, fileExtention);
+			jd = JRXmlLoader.load(in);
 			setModel(ReportFactory.createReport(jd));
 		} catch (JRException e) {
 			setModel(null);
@@ -322,7 +313,17 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					throw new PartInitException("error closing input stream", e);
 				}
 		}
+	}
 
+	public static InputStream getXML(IEditorInput editorInput, String encoding, InputStream in, String fileExtension)
+			throws JRException {
+		if (fileExtension.equals("jasper")) {
+			JasperReport report = (JasperReport) JRLoader.loadObject(in);
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			JRXmlWriter.writeReport(report, outputStream, encoding);
+			return new ByteArrayInputStream(outputStream.toByteArray());
+		} else
+			return in;
 	}
 
 	/**

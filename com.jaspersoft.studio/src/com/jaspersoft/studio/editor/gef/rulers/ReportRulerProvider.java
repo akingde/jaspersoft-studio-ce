@@ -89,7 +89,7 @@ public class ReportRulerProvider extends RulerProvider {
 		this.ruler.addPropertyChangeListener(rulerListener);
 		List<ReportRulerGuide> guides = getGuides();
 		for (int i = 0; i < guides.size(); i++) {
-			((ReportRulerGuide) guides.get(i)).addPropertyChangeListener(guideListener);
+			(guides.get(i)).addPropertyChangeListener(guideListener);
 		}
 	}
 
@@ -138,7 +138,7 @@ public class ReportRulerProvider extends RulerProvider {
 		List<ReportRulerGuide> guides = getGuides();
 		int[] result = new int[guides.size()];
 		for (int i = 0; i < guides.size(); i++) {
-			result[i] = ((ReportRulerGuide) guides.get(i)).getPosition();
+			result[i] = (guides.get(i)).getPosition();
 		}
 		return result;
 	}

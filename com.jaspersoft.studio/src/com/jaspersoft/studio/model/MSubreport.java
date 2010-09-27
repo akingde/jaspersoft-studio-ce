@@ -26,7 +26,6 @@ import java.util.Set;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRSubreportReturnValue;
 import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -40,7 +39,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.SubreportPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.RVPropertyDescriptor;
 
@@ -84,7 +82,7 @@ public class MSubreport extends MGraphicElement {
 		super(parent, newIndex);
 		setValue(jrSubreport);
 		if (jrSubreport != null)
-			((JRDesignSubreport) jrSubreport).getEventSupport().addPropertyChangeListener(this);
+			(jrSubreport).getEventSupport().addPropertyChangeListener(this);
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -173,6 +171,8 @@ public class MSubreport extends MGraphicElement {
 	private MExpression cnExpression;
 	private MExpression dsExpression;
 
+	private JReportsDTO returnValuesDTO;
+
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignSubreport jrElement = (JRDesignSubreport) getValue();
@@ -202,8 +202,15 @@ public class MSubreport extends MGraphicElement {
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS))
 			return jrElement.getParametersMap();
-		if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES))
-			return jrElement.getReturnValuesList();
+		if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
+			if (returnValuesDTO == null) {
+				returnValuesDTO = new JReportsDTO();
+				returnValuesDTO.setJasperDesign(getJasperDesign());
+				returnValuesDTO.setValue(jrElement.getReturnValuesList());
+			}
+			return returnValuesDTO;
+
+		}
 
 		return super.getPropertyValue(id);
 	}
@@ -254,8 +261,9 @@ public class MSubreport extends MGraphicElement {
 					}
 			}
 		} else if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
-			if (value instanceof List) {
-				List<JRSubreportReturnValue> list = (List<JRSubreportReturnValue>) value;
+			returnValuesDTO = (JReportsDTO) value;
+			if (returnValuesDTO.getValue() instanceof List) {
+				List<JRSubreportReturnValue> list = (List<JRSubreportReturnValue>) returnValuesDTO.getValue();
 				jrElement.getReturnValuesList().clear();
 				for (JRSubreportReturnValue j : list)
 					jrElement.addReturnValue(j);

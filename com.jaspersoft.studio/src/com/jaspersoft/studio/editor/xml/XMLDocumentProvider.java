@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.xml;
 
@@ -39,6 +35,9 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnmappableCharacterException;
 import java.nio.charset.UnsupportedCharsetException;
 
+import net.sf.jasperreports.engine.JRException;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,9 +47,12 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.eclipse.ui.ide.FileStoreEditorInput;
+
+import com.jaspersoft.studio.editor.JrxmlEditor;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -58,7 +60,9 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
  */
 public class XMLDocumentProvider extends FileDocumentProvider {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.editors.text.StorageDocumentProvider#createDocument(java.lang.Object)
 	 */
 	protected IDocument createDocument(Object element) throws CoreException {
@@ -88,31 +92,43 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	 */
 	protected boolean setDocumentContent(IDocument document, IEditorInput editorInput, String encoding)
 			throws CoreException {
-		if (editorInput instanceof FileStoreEditorInput) {
-			InputStream stream = null;
-			try {
-				FileStoreEditorInput fsei = (FileStoreEditorInput) editorInput;
-				stream = new FileInputStream(fsei.getURI().getPath());
-				setDocumentContent(document, stream, encoding);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
-				try {
-					if (stream != null)
-						stream.close();
-				} catch (IOException x) {
-					x.printStackTrace();
-				}
+		InputStream stream = null;
+		try {
+			if (editorInput instanceof FileStoreEditorInput) {
+				String path = ((FileStoreEditorInput) editorInput).getURI().getPath();
+				stream = new FileInputStream(path);
+				String fileExtention = path.substring(path.lastIndexOf(".") + 1, path.length());
+				setDocumentContent(document, JrxmlEditor.getXML(editorInput, encoding, stream, fileExtention), encoding);
+				return true;
+			} else if (editorInput instanceof IFileEditorInput) {
+				String fileExtention = ((IFileEditorInput) editorInput).getFile().getFileExtension();
+				if (fileExtention.equals("jasper")) {
+					IFile file = ((IFileEditorInput) editorInput).getFile();
+					stream = file.getContents(false);
+					setDocumentContent(document, JrxmlEditor.getXML(editorInput, encoding, stream, fileExtention), encoding);
+				} else
+					return super.setDocumentContent(document, editorInput, encoding);
 			}
-			return true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (JRException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stream != null)
+					stream.close();
+			} catch (IOException x) {
+				x.printStackTrace();
+			}
 		}
-		return super.setDocumentContent(document, editorInput, encoding);
-
+		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.editors.text.FileDocumentProvider#doSaveDocument(org.eclipse.core.runtime.IProgressMonitor, java.lang.Object, org.eclipse.jface.text.IDocument, boolean)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.editors.text.FileDocumentProvider#doSaveDocument(org.eclipse.core.runtime.IProgressMonitor,
+	 * java.lang.Object, org.eclipse.jface.text.IDocument, boolean)
 	 */
 	@Override
 	protected void doSaveDocument(IProgressMonitor monitor, Object element, IDocument document, boolean overwrite)

@@ -19,14 +19,7 @@
  */
 package com.jaspersoft.studio.property.descriptor.sortfield;
 
-import java.awt.Color;
-
-import net.sf.jasperreports.engine.JRPen;
-
 import org.eclipse.jface.viewers.LabelProvider;
-
-import com.jaspersoft.studio.model.MLinePen;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
 
 /**
  * @author Chicu Veaceslav

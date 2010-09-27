@@ -58,8 +58,7 @@ public class BandHandleLocator implements Locator {
 	 *          the target
 	 */
 	public void relocate(IFigure target) {
-		Rectangle bounds;
-		bounds = getReference().getBounds().getCopy();
+		Rectangle bounds = getReference().getBounds().getCopy();
 		bounds.y = bounds.y + bounds.height - bandHandleOffset - 1;
 
 		bounds.height = bandHandleOffset;

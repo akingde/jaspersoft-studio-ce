@@ -58,6 +58,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  */
 public class MBand extends APropertyNode implements IGraphicElement, IPastable, IContainer {
 
+	private static final Integer CONST_HEIGHT = new Integer(50);
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -199,7 +200,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 				.setDescription("Definition of a Boolean expression that will determine if the element or the band should be printed or not.");
 		desc.add(printWhenExpD);
 
-		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, new Integer(50));
+		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, CONST_HEIGHT);
 		defaultsMap.put(JRDesignBand.PROPERTY_SPLIT_TYPE, null);
 	}
 

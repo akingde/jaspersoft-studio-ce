@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.java2d;
 
@@ -53,78 +49,62 @@ import org.eclipse.swt.graphics.LineAttributes;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 // TODO: Auto-generated Javadoc
-//import org.holongate.j2d.Graphics2DFactory;
-//import org.holongate.j2d.J2DRegistry;
-//import org.holongate.j2d.J2DUtilities;
+// import org.holongate.j2d.Graphics2DFactory;
+// import org.holongate.j2d.J2DRegistry;
+// import org.holongate.j2d.J2DUtilities;
 
 /**
- * A J2DGraphics is a draw2d Graphics that delegates all its calls to a Java2D Graphics2D
- * object. All the draw2d behavior can be reproduced except for the following methods
- * where a 'best effort' policy is only available:
+ * A J2DGraphics is a draw2d Graphics that delegates all its calls to a Java2D Graphics2D object. All the draw2d
+ * behavior can be reproduced except for the following methods where a 'best effort' policy is only available:
  * <ul>
- * <li><b>xxxText() </b>: not implemented, call is directed to the corresponding
- * xxxString()</li>
- * <li><b>drawImage() </b>: SWT Image are converted into BufferedImages prior to display.
- * The method used is not optimized as a pixel by pixel conversion is performed. The only
- * speedup available is that once converted an image is stored in a hash map indexed by
- * the original Image: this behavior is consistent with the fact that many images are used
- * multiple times and of small size.</li>
- * <li><b>Fonts </b>: SWT and Java2D fonts are not handled the same way, and some
- * platform diffeences may occur. The Java2D font is derived from the name/style/size of
- * the SWT font. The original SWT font is retained so that the correct font metrics are
- * computed.</li>
- * <li><b>Line style </b>: exact dash pattern is not known and not specified by SWT:
- * Visually equivalent patterns have been chosen but may not match each platform/window
- * system combination.</li>
+ * <li><b>xxxText() </b>: not implemented, call is directed to the corresponding xxxString()</li>
+ * <li><b>drawImage() </b>: SWT Image are converted into BufferedImages prior to display. The method used is not
+ * optimized as a pixel by pixel conversion is performed. The only speedup available is that once converted an image is
+ * stored in a hash map indexed by the original Image: this behavior is consistent with the fact that many images are
+ * used multiple times and of small size.</li>
+ * <li><b>Fonts </b>: SWT and Java2D fonts are not handled the same way, and some platform diffeences may occur. The
+ * Java2D font is derived from the name/style/size of the SWT font. The original SWT font is retained so that the
+ * correct font metrics are computed.</li>
+ * <li><b>Line style </b>: exact dash pattern is not known and not specified by SWT: Visually equivalent patterns have
+ * been chosen but may not match each platform/window system combination.</li>
  * </ul>
- * <li><b>Colors </b>: SWT Colors are converted exactly into opaque AWT ones.</li>
- * <li><b>XOR mode </b>: SWT operates on a binary representation of pixel, while AWT
- * performs a logical permutation of colors. To achieve a decent SWT XOR effect a light
- * grey with 50% transparency is used as the alternate AWT color.</li>
- * <li><b>Line width </b>: While Java2D can use any real value as a line width, the SWT
- * behavior is kept: line width is always rounded to an integer value and if a scale
- * factor is defined the line width / scale value is actually used (draw2d does not scale
- * line width).</li>
- * <li><b>Gradients </b>: A GradientPaint is used, with the correct orientation.</li>
- * </ul>
- * The Java2D rendering hints are initialized by calling J2DRegistry.initGraphics(), so
- * you can put your own hints that are globally available there too. If the -Dj2d.debug
- * system property is set, a warning is printed if the state stack is not empty when
- * dispose() is called. To benefits from all the Java2D capabilities, the
- * createGraphics2D() method returns a new Graphics2D initialized with the current
- * Graphics state.
+ * <li><b>Colors </b>: SWT Colors are converted exactly into opaque AWT ones.</li> <li><b>XOR mode </b>: SWT operates on
+ * a binary representation of pixel, while AWT performs a logical permutation of colors. To achieve a decent SWT XOR
+ * effect a light grey with 50% transparency is used as the alternate AWT color.</li> <li><b>Line width </b>: While
+ * Java2D can use any real value as a line width, the SWT behavior is kept: line width is always rounded to an integer
+ * value and if a scale factor is defined the line width / scale value is actually used (draw2d does not scale line
+ * width).</li> <li><b>Gradients </b>: A GradientPaint is used, with the correct orientation.</li> </ul> The Java2D
+ * rendering hints are initialized by calling J2DRegistry.initGraphics(), so you can put your own hints that are
+ * globally available there too. If the -Dj2d.debug system property is set, a warning is printed if the state stack is
+ * not empty when dispose() is called. To benefits from all the Java2D capabilities, the createGraphics2D() method
+ * returns a new Graphics2D initialized with the current Graphics state.
  * 
  * @author Christophe Avare
  * @version $Revision: 1.3.4.3.2.2 $
  */
 public class J2DGraphics extends Graphics {
-	
+
 	/** The Constant hints. */
 	private static final Map<Key, Object> hints = new HashMap<Key, Object>();
-	
+
 	static {
 		// Activate AA by default
-		hints.put(
-			RenderingHints.KEY_ANTIALIASING,
-			RenderingHints.VALUE_ANTIALIAS_ON);
-		hints.put(
-			RenderingHints.KEY_INTERPOLATION,
-			RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		hints.put(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 	}
-	
-	
+
 	/** The Constant KEY_USE_JAVA2D. */
 	public static final J2DKey KEY_USE_JAVA2D = new J2DKey(1);
-	
+
 	/** The Constant KEY_FIXED_LINEWIDTH. */
 	public static final J2DKey KEY_FIXED_LINEWIDTH = new J2DKey(2);
-	
+
 	/**
 	 * The Class J2DKey.
 	 */
 	private static class J2DKey extends RenderingHints.Key {
-		
+
 		/**
 		 * Instantiates a new j2 d key.
 		 * 
@@ -135,7 +115,9 @@ public class J2DGraphics extends Graphics {
 			super(privatekey);
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.awt.RenderingHints.Key#isCompatibleValue(java.lang.Object)
 		 */
 		public boolean isCompatibleValue(Object val) {
@@ -144,63 +126,63 @@ public class J2DGraphics extends Graphics {
 	}
 
 	/** A cache for the converted SWT Images. */
-	private static final HashMap<Image, BufferedImage> IMAGE_CACHE = new HashMap<Image, BufferedImage>(10);
+	private static final Map<Image,BufferedImage> IMAGE_CACHE = new HashMap<Image, BufferedImage>(10);
 
 	/** An approxmation dash pattern for the DOT_ARRAY style. */
-	private static final float[] DOT_ARRAY = {2, 2};
-	
+	private static final float[] DOT_ARRAY = { 2, 2 };
+
 	/** An approxmation dash pattern for the DASH_ARRAY style. */
-	private static final float[] DASH_ARRAY = {3, 3};
-	
+	private static final float[] DASH_ARRAY = { 3, 3 };
+
 	/** An approxmation dash pattern for the DASHDOT_ARRAY style. */
-	private static final float[] DASHDOT_ARRAY = {4, 2, 1, 2};
-	
+	private static final float[] DASHDOT_ARRAY = { 4, 2, 1, 2 };
+
 	/** An approxmation dash pattern for the DASHDOTDOT_ARRAY style. */
-	private static final float[] DASHDOTDOT_ARRAY = {4, 2, 1, 2, 1, 2};
-	
+	private static final float[] DASHDOTDOT_ARRAY = { 4, 2, 1, 2, 1, 2 };
+
 	/** The color used to simulate the SWT XOR paint mode. */
-	private static final java.awt.Color TRANSPARENT = new java.awt.Color(0.3f, 0.3f,
-		0.3f, 0.5f);
+	private static final java.awt.Color TRANSPARENT = new java.awt.Color(0.3f, 0.3f, 0.3f, 0.5f);
 
 	/** The value of the screen DPI, used to compute the actual font size. */
 	private double _dpi = 0;
-	
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.draw2d.Graphics#setAlpha(int)
 	 */
 	@Override
 	public void setAlpha(int alpha) {
-		getGraphics2D().setComposite( AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(alpha/255.0f)));
+		getGraphics2D().setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (alpha / 255.0f)));
 	}
 
 	/** Current XOR mode. */
 	private boolean _xor = false;
-	
+
 	/** Current line style. */
 	private int _lineStyle = LINE_SOLID;
-	
+
 	/** Current line width. */
 	private int _lineWidth = 1;
-	
+
 	/** Current SWT background color. */
 	private Color _bg;
-	
+
 	/** Current SWT foreground color. */
 	private Color _fg;
-	
+
 	/** AWT cached background color. */
 	private java.awt.Color _awtBg;
-	
+
 	/** AWT cached foreground color. */
 	private java.awt.Color _awtFg;
-	
+
 	/** Current font object. */
 	private Font _font;
 
 	/** The Graphics2D object against which the drawing primitives are performed. */
 	private Graphics2D _g2d;
-	
+
 	/** The GC where the graphics will ultimetely be displayed. */
 	private GC gc;
 
@@ -208,36 +190,35 @@ public class J2DGraphics extends Graphics {
 	private Stack<State> _stack = new Stack<State>();
 
 	/**
-	 * An internal class to store the Graphics context. Because some information is lost
-	 * when a Graphics2D copy is made (like the draw2d line style), some information is
-	 * stored along with a copy of the Graphics2D object to avoid complex and unecessary
-	 * conversions between SWt and ava2D.
+	 * An internal class to store the Graphics context. Because some information is lost when a Graphics2D copy is made
+	 * (like the draw2d line style), some information is stored along with a copy of the Graphics2D object to avoid
+	 * complex and unecessary conversions between SWt and ava2D.
 	 * 
 	 * @author Christophe Avare
 	 */
 	private class State {
-		
+
 		/** The xor. */
 		boolean xor;
-		
+
 		/** The line style. */
 		int lineStyle;
-		
+
 		/** The line width. */
 		int lineWidth;
-		
+
 		/** The bg. */
 		Color bg;
-		
+
 		/** The fg. */
 		Color fg;
-		//Graphics2D g;
+		// Graphics2D g;
 		/** The f. */
 		Font f;
-		
+
 		/** The clip. */
 		Shape clip;
-		
+
 		/** The t. */
 		AffineTransform t;
 
@@ -245,7 +226,7 @@ public class J2DGraphics extends Graphics {
 		 * Instantiates a new state.
 		 */
 		public State() {
-			//this.g = J2DGraphics.this._g2d;
+			// this.g = J2DGraphics.this._g2d;
 			this.xor = J2DGraphics.this._xor;
 			this.lineStyle = J2DGraphics.this._lineStyle;
 			this.lineWidth = J2DGraphics.this._lineWidth;
@@ -262,9 +243,9 @@ public class J2DGraphics extends Graphics {
 		 * @return the state
 		 */
 		public State restore() {
-			//Graphics2D old = J2DGraphics.this._g2d;
-			//J2DGraphics.this._g2d = this.g; //(Graphics2D) this.g.create();
-			//old.dispose();
+			// Graphics2D old = J2DGraphics.this._g2d;
+			// J2DGraphics.this._g2d = this.g; //(Graphics2D) this.g.create();
+			// old.dispose();
 			J2DGraphics.this._xor = this.xor;
 			J2DGraphics.this._lineStyle = this.lineStyle;
 			J2DGraphics.this._lineWidth = this.lineWidth;
@@ -282,11 +263,10 @@ public class J2DGraphics extends Graphics {
 		}
 
 		/**
-		 * The old Graphics2D object is disposed when the State object is removed from the
-		 * stack.
+		 * The old Graphics2D object is disposed when the State object is removed from the stack.
 		 */
 		public void dispose() {
-			//this.g.dispose();
+			// this.g.dispose();
 		}
 	}
 
@@ -302,58 +282,53 @@ public class J2DGraphics extends Graphics {
 	 */
 	public J2DGraphics(GC gc, Graphics2D g2d) {
 		super();
-		if (gc != null)
-		{
+		if (gc != null) {
 			_dpi = gc.getDevice().getDPI().x / 72.0;
 			this.gc = gc;
 			_fg = gc.getForeground();
 			_bg = gc.getBackground();
 			_font = gc.getFont();
-		}
-		else
-		{
+		} else {
 			_fg = toSWTColor(g2d.getColor());
 			_bg = toSWTColor(g2d.getBackground());
 		}
 		_g2d = g2d;
-		
+
 		g2d.setRenderingHints(hints);
 
-			
-		//J2DRegistry.initGraphics(_g2d);
+		// J2DRegistry.initGraphics(_g2d);
 		updateStroke();
 		updateColors();
 		updateFont();
 	}
 
-
 	/**
-	 * Returns a new Graphics2D initialized with the current state. Caller must call the
-	 * dispose() method of the returned object, once the work on it is done.
+	 * Returns a new Graphics2D initialized with the current state. Caller must call the dispose() method of the returned
+	 * object, once the work on it is done.
 	 * 
 	 * @return A copy of the current underlying Graphics2D object
 	 */
 	public Graphics2D createGraphics2D() {
 		return (Graphics2D) _g2d.create();
 	}
-	
+
 	/**
 	 * Original copy of the Graphics2D.
 	 * 
 	 * @return the current underlying Graphics2D object
 	 */
 	public Graphics2D getGraphics2D() {
-		return (Graphics2D)_g2d;
+		return _g2d;
 	}
 
 	/**
-	 * Computes a Java2D font equivalent to the current SWT font. Because Java2D does not
-	 * properly scale fonts if the screen DPI is not 72 (which means the font size in
-	 * points is not correct), we actually create a font of size SWT-font-size *
-	 * screen-DPI. The SWT font name is used as-is.
+	 * Computes a Java2D font equivalent to the current SWT font. Because Java2D does not properly scale fonts if the
+	 * screen DPI is not 72 (which means the font size in points is not correct), we actually create a font of size
+	 * SWT-font-size * screen-DPI. The SWT font name is used as-is.
 	 */
 	protected void updateFont() {
-		if (_font == null) return;
+		if (_font == null)
+			return;
 		FontData fd = _font.getFontData()[0];
 		int style = fd.getStyle();
 		int awtStyle = java.awt.Font.PLAIN;
@@ -363,16 +338,15 @@ public class J2DGraphics extends Graphics {
 		if ((style & SWT.ITALIC) == SWT.ITALIC) {
 			awtStyle |= java.awt.Font.ITALIC;
 		}
-		//System.err.println("SWT Font = " + fd);
-		java.awt.Font awtFont = new java.awt.Font(fd.getName(), awtStyle, (int) Math
-			.round(fd.getHeight() * _dpi));
+		// System.err.println("SWT Font = " + fd);
+		java.awt.Font awtFont = new java.awt.Font(fd.getName(), awtStyle, (int) Math.round(fd.getHeight() * _dpi));
 		_g2d.setFont(awtFont);
-		//System.err.println("AWT Font = " + awtFont);
+		// System.err.println("AWT Font = " + awtFont);
 	}
 
 	/**
-	 * Computes the AWT colors given the SWT ones. Depending on the XOR mode flag, the
-	 * setXORMode() or setPaintMode() method is called.
+	 * Computes the AWT colors given the SWT ones. Depending on the XOR mode flag, the setXORMode() or setPaintMode()
+	 * method is called.
 	 */
 	protected void updateColors() {
 		if (_awtBg == null) {
@@ -391,10 +365,9 @@ public class J2DGraphics extends Graphics {
 	}
 
 	/**
-	 * Compute a Java2D BasicStroke object given the SWT line width and style. The Java2D
-	 * linecap is set to CAP_SQUARE, and the join miter angle to 10 (their defaults). If
-	 * you need to use different values, first create a new Graphics2D and set your own
-	 * Stroke object on it.
+	 * Compute a Java2D BasicStroke object given the SWT line width and style. The Java2D linecap is set to CAP_SQUARE,
+	 * and the join miter angle to 10 (their defaults). If you need to use different values, first create a new Graphics2D
+	 * and set your own Stroke object on it.
 	 */
 	protected void updateStroke() {
 		BasicStroke stroke = null;
@@ -403,25 +376,20 @@ public class J2DGraphics extends Graphics {
 			lw /= _g2d.getTransform().getScaleX();
 		}
 		switch (_lineStyle) {
-			case LINE_DOT :
-				stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE,
-					BasicStroke.JOIN_MITER, 10, DOT_ARRAY, 1);
-				break;
-			case LINE_DASH :
-				stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE,
-					BasicStroke.JOIN_MITER, 10, DASH_ARRAY, 0);
-				break;
-			case LINE_DASHDOT :
-				stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE,
-					BasicStroke.JOIN_MITER, 10, DASHDOT_ARRAY, 2);
-				break;
-			case LINE_DASHDOTDOT :
-				stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE,
-					BasicStroke.JOIN_MITER, 10, DASHDOTDOT_ARRAY, 2);
-				break;
-			default :
-				stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE,
-					BasicStroke.JOIN_MITER, 10, null, 0);
+		case LINE_DOT:
+			stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, DOT_ARRAY, 1);
+			break;
+		case LINE_DASH:
+			stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, DASH_ARRAY, 0);
+			break;
+		case LINE_DASHDOT:
+			stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, DASHDOT_ARRAY, 2);
+			break;
+		case LINE_DASHDOTDOT:
+			stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, DASHDOTDOT_ARRAY, 2);
+			break;
+		default:
+			stroke = new BasicStroke(lw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, null, 0);
 		}
 		_g2d.setStroke(stroke);
 	}
@@ -432,7 +400,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#clipRect(org.eclipse.draw2d.geometry.Rectangle)
 	 */
 	public void clipRect(Rectangle r) {
-		//System.err.println("clipRect ("+r+")");
+		// System.err.println("clipRect ("+r+")");
 		if (r == null) {
 			_g2d.setClip(null);
 		} else {
@@ -441,19 +409,18 @@ public class J2DGraphics extends Graphics {
 	}
 
 	/**
-	 * EMits a warning if the state stack is not empty when this method is called (and the
-	 * j2d.debug property is set).
+	 * EMits a warning if the state stack is not empty when this method is called (and the j2d.debug property is set).
 	 * 
 	 * @see org.eclipse.draw2d.Graphics#dispose()
 	 */
 	public void dispose() {
 		_g2d.dispose();
 		_g2d = null;
-		//if (!_stack.isEmpty() && J2DRegistry.DEBUG) {
-		//	J2DRegistry.printMessage("Unbalanced pushState() / popState() detected.",
-		//		"J2DGraphics.dispose() called with " + _stack.size()
-		//			+ " remaining pushed states!");
-		//}
+		// if (!_stack.isEmpty() && J2DRegistry.DEBUG) {
+		// J2DRegistry.printMessage("Unbalanced pushState() / popState() detected.",
+		// "J2DGraphics.dispose() called with " + _stack.size()
+		// + " remaining pushed states!");
+		// }
 		_stack.removeAllElements();
 		_stack = null;
 	}
@@ -473,7 +440,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#drawFocus(int, int, int, int)
 	 */
 	public void drawFocus(int x, int y, int w, int h) {
-		//System.err.println("drawFocus("+x+","+y+","+w+","+h+")");
+		// System.err.println("drawFocus("+x+","+y+","+w+","+h+")");
 		int ls = _lineStyle;
 		setLineStyle(LINE_DOT);
 		_g2d.drawRect(x, y, w, h);
@@ -481,16 +448,15 @@ public class J2DGraphics extends Graphics {
 	}
 
 	/**
-	 * Converts an SWT Image into a BufferedImage. Conversion is performed on a pixel by
-	 * pixel basis. Transparency information is currently not used. The converted image is
-	 * cached to accelerate multiple calls.
+	 * Converts an SWT Image into a BufferedImage. Conversion is performed on a pixel by pixel basis. Transparency
+	 * information is currently not used. The converted image is cached to accelerate multiple calls.
 	 * 
 	 * @param src
-	 *            An SWT Image
+	 *          An SWT Image
 	 * @return An equivalent BufferedImage
 	 */
 	protected BufferedImage convertSWTImage(Image src) {
-		BufferedImage dst = (BufferedImage) IMAGE_CACHE.get(src);
+		BufferedImage dst = IMAGE_CACHE.get(src);
 		if (dst != null) {
 			return dst;
 		}
@@ -499,8 +465,8 @@ public class J2DGraphics extends Graphics {
 		ImageData mask = data.getTransparencyMask();
 		RGB[] rgbs = data.getRGBs();
 		for (int yy = 0; yy < data.height; yy++) {
-			//FIX by Daniel Mazurek
-			//for (int xx = 0; xx < data.height; xx++) {
+			// FIX by Daniel Mazurek
+			// for (int xx = 0; xx < data.height; xx++) {
 			for (int xx = 0; xx < data.width; xx++) {
 				int a = mask.getPixel(xx, yy);
 				int rgb = data.getPixel(xx, yy);
@@ -509,8 +475,7 @@ public class J2DGraphics extends Graphics {
 				}
 				if (rgbs != null) {
 					RGB p = rgbs[rgb];
-					dst.setRGB(xx, yy, (a << 24) | (p.red << 16) | (p.green << 8)
-						| p.blue);
+					dst.setRGB(xx, yy, (a << 24) | (p.red << 16) | (p.green << 8) | p.blue);
 				} else {
 					dst.setRGB(xx, yy, (a << 24) | rgb);
 				}
@@ -523,12 +488,10 @@ public class J2DGraphics extends Graphics {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.draw2d.Graphics#drawImage(org.eclipse.swt.graphics.Image, int,
-	 *      int, int, int, int, int, int, int)
+	 * @see org.eclipse.draw2d.Graphics#drawImage(org.eclipse.swt.graphics.Image, int, int, int, int, int, int, int, int)
 	 */
-	public void drawImage(Image srcImage, int x1, int y1, int w1, int h1, int x2, int y2,
-		int w2, int h2) {
-		//System.err.println("drawImage");
+	public void drawImage(Image srcImage, int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
+		// System.err.println("drawImage");
 		BufferedImage dst = convertSWTImage(srcImage);
 		_g2d.drawImage(dst, x1, y1, x1 + w1, y1 + h1, x2, y2, x2 + w2, y2 + h2, null);
 	}
@@ -536,11 +499,10 @@ public class J2DGraphics extends Graphics {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.draw2d.Graphics#drawImage(org.eclipse.swt.graphics.Image, int,
-	 *      int)
+	 * @see org.eclipse.draw2d.Graphics#drawImage(org.eclipse.swt.graphics.Image, int, int)
 	 */
 	public void drawImage(Image srcImage, int x, int y) {
-		//System.err.println("drawImage(" + x + "," + y + ")");
+		// System.err.println("drawImage(" + x + "," + y + ")");
 		BufferedImage dst = convertSWTImage(srcImage);
 		_g2d.drawImage(dst, null, x, y);
 	}
@@ -551,7 +513,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#drawLine(int, int, int, int)
 	 */
 	public void drawLine(int x1, int y1, int x2, int y2) {
-		//System.err.println("drawLine("+x1+","+y1+","+x2+","+y2+")");
+		// System.err.println("drawLine("+x1+","+y1+","+x2+","+y2+")");
 		_g2d.drawLine(x1, y1, x2, y2);
 	}
 
@@ -561,7 +523,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#drawOval(int, int, int, int)
 	 */
 	public void drawOval(int x, int y, int w, int h) {
-		//System.err.println("drawOval("+x+","+y+","+w+","+h+")");
+		// System.err.println("drawOval("+x+","+y+","+w+","+h+")");
 		_g2d.drawOval(x, y, w, h);
 	}
 
@@ -607,15 +569,14 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#drawRectangle(int, int, int, int)
 	 */
 	public void drawRectangle(int x, int y, int width, int height) {
-		//System.err.println("drawRectangle ("+x+","+y+","+width+","+height+")");
+		// System.err.println("drawRectangle ("+x+","+y+","+width+","+height+")");
 		_g2d.drawRect(x, y, width, height);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.draw2d.Graphics#drawRoundRectangle(org.eclipse.draw2d.geometry.Rectangle,
-	 *      int, int)
+	 * @see org.eclipse.draw2d.Graphics#drawRoundRectangle(org.eclipse.draw2d.geometry.Rectangle, int, int)
 	 */
 	public void drawRoundRectangle(Rectangle r, int arcWidth, int arcHeight) {
 		_g2d.drawRoundRect(r.x, r.y, r.width, r.height, arcWidth, arcHeight);
@@ -627,13 +588,13 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#drawString(java.lang.String, int, int)
 	 */
 	public void drawString(String s, int x, int y) {
-		//System.err.println("drawString(" + s + "," + x + "," + y + ")");
+		// System.err.println("drawString(" + s + "," + x + "," + y + ")");
 		java.awt.FontMetrics fm = _g2d.getFontMetrics();
 		int dy = fm.getAscent();
-		//Shape clip = g2d.getClip();
-		//g2d.setClip(null);
+		// Shape clip = g2d.getClip();
+		// g2d.setClip(null);
 		_g2d.drawString(s, x, y + dy);
-		//g2d.setClip(clip);
+		// g2d.setClip(clip);
 	}
 
 	/*
@@ -642,7 +603,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#drawText(java.lang.String, int, int)
 	 */
 	public void drawText(String s, int x, int y) {
-		//System.err.println("drawText(" + s + "," + x + "," + y + ") ?");
+		// System.err.println("drawText(" + s + "," + x + "," + y + ") ?");
 		drawString(s, x, y);
 	}
 
@@ -663,7 +624,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#fillGradient(int, int, int, int, boolean)
 	 */
 	public void fillGradient(int x, int y, int w, int h, boolean vertical) {
-		//System.err.println("fillGradient ?");
+		// System.err.println("fillGradient ?");
 		GradientPaint p = null;
 		if (vertical) {
 			p = new GradientPaint(x, y, _awtFg, x, y + h, _awtBg);
@@ -692,7 +653,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#fillPolygon(org.eclipse.draw2d.geometry.PointList)
 	 */
 	public void fillPolygon(PointList points) {
-		//System.err.println("fillPolygon("+points.size()+")");
+		// System.err.println("fillPolygon("+points.size()+")");
 		Point p = new Point();
 		int n = points.size();
 		int[] xc = new int[n];
@@ -713,7 +674,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#fillRectangle(int, int, int, int)
 	 */
 	public void fillRectangle(int x, int y, int width, int height) {
-		//System.err.println("fillRectangle ("+x+","+y+","+width+","+height+")");
+		// System.err.println("fillRectangle ("+x+","+y+","+width+","+height+")");
 		_g2d.setColor(_awtBg);
 		_g2d.fillRect(x, y, width, height);
 		_g2d.setColor(_awtFg);
@@ -722,11 +683,10 @@ public class J2DGraphics extends Graphics {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.draw2d.Graphics#fillRoundRectangle(org.eclipse.draw2d.geometry.Rectangle,
-	 *      int, int)
+	 * @see org.eclipse.draw2d.Graphics#fillRoundRectangle(org.eclipse.draw2d.geometry.Rectangle, int, int)
 	 */
 	public void fillRoundRectangle(Rectangle r, int arcWidth, int arcHeight) {
-		//System.err.println("fillRoundRectangle ("+r+","+arcWidth+","+arcHeight+")");
+		// System.err.println("fillRoundRectangle ("+r+","+arcWidth+","+arcHeight+")");
 		_g2d.setColor(_awtBg);
 		_g2d.fillRoundRect(r.x, r.y, r.width, r.height, arcWidth, arcHeight);
 		_g2d.setColor(_awtFg);
@@ -738,7 +698,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#fillString(java.lang.String, int, int)
 	 */
 	public void fillString(String s, int x, int y) {
-		//System.err.println("fillString ?");
+		// System.err.println("fillString ?");
 		_g2d.drawString(s, x, y);
 	}
 
@@ -748,7 +708,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#fillText(java.lang.String, int, int)
 	 */
 	public void fillText(String s, int x, int y) {
-		//System.err.println("fillText(" + s + "," + x + "," + y + ") ?");
+		// System.err.println("fillText(" + s + "," + x + "," + y + ") ?");
 		_g2d.drawString(s, x, y);
 	}
 
@@ -796,10 +756,10 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#getFontMetrics()
 	 */
 	public FontMetrics getFontMetrics() {
-		//System.err.println("getFontMetrics");
-		//gc.setFont(_font);
+		// System.err.println("getFontMetrics");
+		// gc.setFont(_font);
 		FontMetrics fm = gc.getFontMetrics();
-		
+
 		return fm;
 	}
 
@@ -845,8 +805,8 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#popState()
 	 */
 	public void popState() {
-		//System.err.println("--> popState: " + _stack.size());
-		((State) _stack.pop()).restore().dispose();
+		// System.err.println("--> popState: " + _stack.size());
+		_stack.pop().restore().dispose();
 	}
 
 	/*
@@ -856,7 +816,7 @@ public class J2DGraphics extends Graphics {
 	 */
 	public void pushState() {
 		_stack.push(new State());
-		//System.err.println("--> pushState: " + _stack.size());
+		// System.err.println("--> pushState: " + _stack.size());
 	}
 
 	/*
@@ -865,8 +825,8 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#restoreState()
 	 */
 	public void restoreState() {
-		//System.err.println("--> restoreState");
-		((State) _stack.peek()).restore();
+		// System.err.println("--> restoreState");
+		(_stack.peek()).restore();
 	}
 
 	/*
@@ -875,8 +835,8 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#scale(double)
 	 */
 	public void scale(double amount) {
-		//System.err.println("scale(" + amount + ")");
-		_g2d.scale(amount,amount);
+		// System.err.println("scale(" + amount + ")");
+		_g2d.scale(amount, amount);
 		updateStroke();
 	}
 
@@ -886,7 +846,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#setBackgroundColor(org.eclipse.swt.graphics.Color)
 	 */
 	public void setBackgroundColor(Color rgb) {
-		//System.err.println("setBackgroundColor("+rgb+")");
+		// System.err.println("setBackgroundColor("+rgb+")");
 		_bg = rgb;
 		_awtBg = null;
 		updateColors();
@@ -898,7 +858,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#setClip(org.eclipse.draw2d.geometry.Rectangle)
 	 */
 	public void setClip(Rectangle r) {
-		//System.err.println("setClip ("+r+")");
+		// System.err.println("setClip ("+r+")");
 		_g2d.setClip(r.x, r.y, r.width, r.height);
 	}
 
@@ -918,7 +878,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#setForegroundColor(org.eclipse.swt.graphics.Color)
 	 */
 	public void setForegroundColor(Color rgb) {
-		//System.err.println("setForegroundColor("+rgb+")");
+		// System.err.println("setForegroundColor("+rgb+")");
 		_fg = rgb;
 		_awtFg = null;
 		updateColors();
@@ -930,7 +890,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#setLineStyle(int)
 	 */
 	public void setLineStyle(int style) {
-		//System.err.println("setLineStyle("+style+")");
+		// System.err.println("setLineStyle("+style+")");
 		_lineStyle = style;
 		updateStroke();
 	}
@@ -941,7 +901,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#setLineWidth(int)
 	 */
 	public void setLineWidth(int width) {
-		//System.err.println("setLineWidth("+width+")");
+		// System.err.println("setLineWidth("+width+")");
 		_lineWidth = width;
 		updateStroke();
 	}
@@ -952,7 +912,7 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#setXORMode(boolean)
 	 */
 	public void setXORMode(boolean b) {
-		//System.err.println("setXORMode("+b+")");
+		// System.err.println("setXORMode("+b+")");
 		_xor = b;
 		updateColors();
 	}
@@ -963,20 +923,19 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#translate(int, int)
 	 */
 	public void translate(int dx, int dy) {
-		//System.err.println("translate(" + dx + "," + dy + ")");
+		// System.err.println("translate(" + dx + "," + dy + ")");
 		_g2d.translate(dx, dy);
 	}
 
 	/**
-	 * Flush the image cache by removing all the entries whose SWT image is disposed.
-	 * Normally only called by the J2DGraphicsSource.flushGraphics method but does not
-	 * harm if called by another client.
+	 * Flush the image cache by removing all the entries whose SWT image is disposed. Normally only called by the
+	 * J2DGraphicsSource.flushGraphics method but does not harm if called by another client.
 	 */
 	synchronized public static void flushImageCache() {
-		//System.err.println("flushImageCache()");
+		// System.err.println("flushImageCache()");
 		Iterator<Image> keys = IMAGE_CACHE.keySet().iterator();
 		while (keys.hasNext()) {
-			Image img = (Image) keys.next();
+			Image img = keys.next();
 			if (img.isDisposed()) {
 				keys.remove();
 			}
@@ -984,11 +943,11 @@ public class J2DGraphics extends Graphics {
 	}
 
 	/**
-	 * Converts an AWT Rectangle into a draw2d one. Do we really need all those Rectangle
-	 * definitions? Hopefully, coordinate systems are the same.
+	 * Converts an AWT Rectangle into a draw2d one. Do we really need all those Rectangle definitions? Hopefully,
+	 * coordinate systems are the same.
 	 * 
 	 * @param r
-	 *            The AWT Rectangle to convert
+	 *          The AWT Rectangle to convert
 	 * @return A draw2d equivalent
 	 */
 	public static Rectangle toDraw2D(java.awt.Rectangle r) {
@@ -996,23 +955,22 @@ public class J2DGraphics extends Graphics {
 	}
 
 	/**
-	 * Converts a draw2d Rectangle into an AWT one. Do we really need all those Rectangle
-	 * definitions? Hopefully, coordinate systems are the same.
+	 * Converts a draw2d Rectangle into an AWT one. Do we really need all those Rectangle definitions? Hopefully,
+	 * coordinate systems are the same.
 	 * 
 	 * @param r
-	 *            The draw2d Rectangle to convert
+	 *          The draw2d Rectangle to convert
 	 * @return An AWT equivalent
 	 */
 	public static java.awt.Rectangle toJava2D(Rectangle r) {
 		return new java.awt.Rectangle(r.x, r.y, r.width, r.height);
 	}
-	
-	
+
 	/**
 	 * A utility method to convert an SWT Color to an AWT one.
 	 * 
 	 * @param c
-	 *            The SWT Color
+	 *          The SWT Color
 	 * @return An equivalent AWT Color
 	 */
 	public static java.awt.Color toAWTColor(Color c) {
@@ -1020,73 +978,82 @@ public class J2DGraphics extends Graphics {
 	}
 
 	/**
-	 * A utility method to convert an AWT Color to an SWT one.
-	 * The default display is used.
-	 * Resource disposal should be performed by the caller.
+	 * A utility method to convert an AWT Color to an SWT one. The default display is used. Resource disposal should be
+	 * performed by the caller.
 	 * 
 	 * @param c
-	 *            The AWT Color
+	 *          The AWT Color
 	 * @return An equivalent SWT Color
 	 */
 	public static Color toSWTColor(java.awt.Color c) {
-		return new Color(Display.getDefault(),c.getRed(), c.getGreen(), c.getBlue());
+		return new Color(Display.getDefault(), c.getRed(), c.getGreen(), c.getBlue());
 	}
-	
-	
+
 	// 3.5 compatibility methods -------------------------------
-	  
-	  /* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.draw2d.Graphics#setLineAttributes(org.eclipse.swt.graphics.LineAttributes)
 	 */
 	public void setLineAttributes(LineAttributes paramLineAttributes) {
-		    setLineWidthFloat(paramLineAttributes.width);
-		    setLineStyle(paramLineAttributes.style);
-		  }
+		setLineWidthFloat(paramLineAttributes.width);
+		setLineStyle(paramLineAttributes.style);
+	}
 
-		  /* (non-Javadoc)
-  		 * @see org.eclipse.draw2d.Graphics#getLineAttributes()
-  		 */
-  		public LineAttributes getLineAttributes()
-		  {
-		    LineAttributes localLineAttributes;
-		    (
-		      localLineAttributes = new LineAttributes(getLineWidthFloat())).style = 
-		      getLineStyle();
-		    return localLineAttributes;
-		  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.draw2d.Graphics#getLineAttributes()
+	 */
+	public LineAttributes getLineAttributes() {
+		LineAttributes localLineAttributes;
+		(localLineAttributes = new LineAttributes(getLineWidthFloat())).style = getLineStyle();
+		return localLineAttributes;
+	}
 
-		  /* (non-Javadoc)
-  		 * @see org.eclipse.draw2d.Graphics#getLineWidthFloat()
-  		 */
-  		public float getLineWidthFloat() {
-		    return getLineWidth();
-		  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.draw2d.Graphics#getLineWidthFloat()
+	 */
+	public float getLineWidthFloat() {
+		return getLineWidth();
+	}
 
-		  /* (non-Javadoc)
-  		 * @see org.eclipse.draw2d.Graphics#setLineMiterLimit(float)
-  		 */
-  		public void setLineMiterLimit(float paramFloat) {
-		  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.draw2d.Graphics#setLineMiterLimit(float)
+	 */
+	public void setLineMiterLimit(float paramFloat) {
+	}
 
-		  /* (non-Javadoc)
-  		 * @see org.eclipse.draw2d.Graphics#setLineWidthFloat(float)
-  		 */
-  		public void setLineWidthFloat(float paramFloat) {
-		    setLineWidth((int)paramFloat);
-		  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.draw2d.Graphics#setLineWidthFloat(float)
+	 */
+	public void setLineWidthFloat(float paramFloat) {
+		setLineWidth((int) paramFloat);
+	}
 
-		  /* (non-Javadoc)
-  		 * @see org.eclipse.draw2d.Graphics#setAdvanced(boolean)
-  		 */
-  		public void setAdvanced(boolean paramBoolean) {
-		  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.draw2d.Graphics#setAdvanced(boolean)
+	 */
+	public void setAdvanced(boolean paramBoolean) {
+	}
 
-		  /* (non-Javadoc)
-  		 * @see org.eclipse.draw2d.Graphics#getAdvanced()
-  		 */
-  		public boolean getAdvanced() {
-		    return false;
-		  }
-		  
-		  // End 3.5 compatibility methods -------------------------------
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.draw2d.Graphics#getAdvanced()
+	 */
+	public boolean getAdvanced() {
+		return false;
+	}
+
+	// End 3.5 compatibility methods -------------------------------
 }

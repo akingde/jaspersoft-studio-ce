@@ -308,7 +308,7 @@ public class JRPropertyPage extends WizardPage {
 	private void attachContentProvider(TableViewer viewer) {
 		viewer.setContentProvider(new IStructuredContentProvider() {
 			public Object[] getElements(Object inputElement) {
-				return (Object[]) ((List<PropertyDTO>) inputElement).toArray();
+				return ((List<PropertyDTO>) inputElement).toArray();
 			}
 
 			public void dispose() {
@@ -338,7 +338,7 @@ public class JRPropertyPage extends WizardPage {
 				PropertyDTO prop = (PropertyDTO) element;
 				if ("VALUE".equals(property))
 					return prop.getValue();
-				;
+
 				if ("NAME".equals(property)) {
 					return prop.getProperty();
 				}

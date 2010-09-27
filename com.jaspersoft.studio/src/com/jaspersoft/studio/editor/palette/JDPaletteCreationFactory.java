@@ -53,8 +53,10 @@ public class JDPaletteCreationFactory implements CreationFactory {
 		try {
 			return template.newInstance();
 		} catch (InstantiationException e) {
+			e.printStackTrace();
 			return null;
 		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

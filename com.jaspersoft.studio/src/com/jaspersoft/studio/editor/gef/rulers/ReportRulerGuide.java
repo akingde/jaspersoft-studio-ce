@@ -225,7 +225,7 @@ public class ReportRulerGuide implements Serializable {
 	 */
 	public int getAlignment(MGraphicElement part) {
 		if (getMap().get(part) != null)
-			return ((Integer) getMap().get(part)).intValue();
+			return ( getMap().get(part)).intValue();
 		return -2;
 	}
 

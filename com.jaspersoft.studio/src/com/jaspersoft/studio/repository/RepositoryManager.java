@@ -46,8 +46,6 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -212,7 +210,7 @@ public class RepositoryManager {
 				String nodeName = cn.getNodeName();
 				Object nodeValue = null;
 
-				NodeList fstNmElmnt = (NodeList) cn.getChildNodes();
+				NodeList fstNmElmnt = cn.getChildNodes();
 				for (int k = 0; k < fstNmElmnt.getLength(); k++) {
 					Node node = fstNmElmnt.item(k);
 					nodeValue = node.getNodeValue();
@@ -355,16 +353,8 @@ public class RepositoryManager {
 		return jrds;
 	}
 
-	public static JRDataSource createXMLDataSource(IEditorPart editorPart, IProgressMonitor monitor, InputStream io,
-			MXMLDataSource datasource) throws JRException {
-		JRXmlDataSource jrds = null;
-		String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
-		Document document = JRXmlUtils.parse(io);
-
-		if (select != null && !select.trim().endsWith(""))
-			jrds = new JRXmlDataSource(document, select);
-		else
-			jrds = new JRXmlDataSource(document);
-		return jrds;
+	public static JRDataSource createXMLDataSource(IEditorPart editorPart, InputStream io, String select)
+			throws JRException {
+		return new JRXmlDataSource(io, select);
 	}
 }

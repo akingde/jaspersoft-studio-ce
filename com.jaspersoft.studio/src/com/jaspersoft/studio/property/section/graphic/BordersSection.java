@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRBoxContainer;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPrintElement;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
@@ -78,7 +77,7 @@ public class BordersSection extends AbstractSection {
 
 	private final class LineBoxDrawer extends BoxDrawer {
 
-		public void drawBox(Graphics2D graphics2d, JRLineBox box, JRPrintElement element) throws JRException {
+		public void drawBox(Graphics2D graphics2d, JRLineBox box, JRPrintElement element) {
 			drawBox(graphics2d, box, element, 0, 0);
 		}
 	}
@@ -334,7 +333,7 @@ public class BordersSection extends AbstractSection {
 
 	public void changeProperty(String prop, String property, Object newValue) {
 		if (!isRefreshing) {
-			APropertyNode m = (APropertyNode) getElement();
+			APropertyNode m = getElement();
 			MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 			if (prop.equals(property))
 				changeProperty(property, newValue, lb);
@@ -364,7 +363,7 @@ public class BordersSection extends AbstractSection {
 	 */
 	public void refresh() {
 		isRefreshing = true;
-		APropertyNode m = (APropertyNode) getElement();
+		APropertyNode m = getElement();
 		MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
 		refreshPadding(lb);
 		refreshLinePen(lb, MLineBox.LINE_PEN, JRBaseLineBox.PROPERTY_PADDING);

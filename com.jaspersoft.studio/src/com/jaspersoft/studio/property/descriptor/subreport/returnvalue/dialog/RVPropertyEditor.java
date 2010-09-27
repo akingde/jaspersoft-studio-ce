@@ -19,25 +19,23 @@
  */
 package com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;
 
-import java.util.List;
-
-import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
-
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.model.JReportsDTO;
+
 public class RVPropertyEditor extends Wizard {
-	private List<JRDesignSubreportReturnValue> value;
+	private JReportsDTO value;
 	private RVPropertyPage page0;
 
-	public List<JRDesignSubreportReturnValue> getValue() {
+	public JReportsDTO getValue() {
 		if (page0 != null)
-			return page0.getValue();
+			return page0.getDto();
 		return value;
 	}
 
-	public void setValue(List<JRDesignSubreportReturnValue> value) {
+	public void setValue(JReportsDTO value) {
 		if (page0 != null)
-			page0.setValue(value);
+			page0.setDto(value);
 		this.value = value;
 	}
 
@@ -50,7 +48,7 @@ public class RVPropertyEditor extends Wizard {
 	@Override
 	public void addPages() {
 		page0 = new RVPropertyPage("subreportproperties");
-		page0.setValue(value);
+		page0.setDto(value);
 		addPage(page0);
 	}
 

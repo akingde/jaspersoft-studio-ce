@@ -62,12 +62,6 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 	 * Displays the help
 	 */
 	public void performHelp() {
-		;
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
 	}
 
 	public void setValue(String value) {

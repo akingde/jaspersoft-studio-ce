@@ -62,7 +62,7 @@ public class CreateStyleCommand extends Command {
 	 */
 	public CreateStyleCommand(MStyles destNode, MStyle srcNode, Point position, int index) {
 		super();
-		this.jrDesign = (JasperDesign) destNode.getJasperDesign();
+		this.jrDesign = destNode.getJasperDesign();
 		this.index = index;
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrStyle = (JRDesignStyle) srcNode.getValue();

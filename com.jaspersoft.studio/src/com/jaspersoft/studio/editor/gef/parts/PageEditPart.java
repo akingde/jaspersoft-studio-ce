@@ -106,7 +106,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 
 			SnapToHelper ss[] = new SnapToHelper[snapStrategies.size()];
 			for (int i = 0; i < snapStrategies.size(); i++)
-				ss[i] = (SnapToHelper) snapStrategies.get(i);
+				ss[i] = snapStrategies.get(i);
 			return new CompoundSnapToHelper(ss);
 		}
 		return super.getAdapter(key);
@@ -190,7 +190,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	public Object getModel() {
 		Object model = super.getModel();
 		if (model instanceof MRoot)
-			return (MReport) ((MRoot) model).getChildren().get(0);
+			return ((MRoot) model).getChildren().get(0);
 		return model;
 	}
 

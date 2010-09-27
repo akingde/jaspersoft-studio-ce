@@ -171,7 +171,7 @@ public class JDRulerFigure extends Figure {
 		 * for horizontal and vertical rulers that are of the same height, the number of units per major mark is the same.
 		 */
 		int unitsPerMajorMark = (int) (minPixelsBetweenMajorMarks / dotsPerUnit);
-		if (minPixelsBetweenMajorMarks % dotsPerUnit != 0.0) {
+		if (Float.compare((float) ((float)minPixelsBetweenMajorMarks % dotsPerUnit), 0.0f) != 0) {
 			unitsPerMajorMark++;
 		}
 		if (interval > 0) {

@@ -79,16 +79,4 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 		return super.getPropertyValue(id);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
-	 */
-	@Override
-	public void setPropertyValue(Object id, Object value) {
-		if (id.equals(LINE_PEN)) {
-			;
-		}
-		super.setPropertyValue(id, value);
-	}
 }

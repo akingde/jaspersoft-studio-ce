@@ -63,7 +63,7 @@ public class EnumHelper {
 	public static byte getSetValue(Integer value, int offset) {
 		if (value == null)
 			return 0;
-		return (byte) (((Integer) value).intValue() + 1);
+		return (byte) (value.intValue() + 1);
 	}
 
 	public static Object getSetValue(JREnum[] values, Object value, int offset, boolean isNull) {

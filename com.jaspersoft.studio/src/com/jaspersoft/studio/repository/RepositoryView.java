@@ -24,6 +24,7 @@
 package com.jaspersoft.studio.repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -113,13 +114,13 @@ public class RepositoryView extends ViewPart {
 		if (memento != null) {
 			IMemento descriptors[] = memento.getChildren("descriptor");
 			if (descriptors.length > 0) {
-				ArrayList<IMemento> objList = new ArrayList<IMemento>(descriptors.length);
-				for (int nX = 0; nX < descriptors.length; nX++) {
+				List<IMemento> objList = new ArrayList<IMemento>(descriptors.length);
+//				for (int nX = 0; nX < descriptors.length; nX++) {
 					// String id = descriptors[nX].getID();
 					// Word word = input.find(id);
 					// if (word != null)
 					// objList.add(word);
-				}
+//				}
 				treeViewer.setSelection(new StructuredSelection(objList));
 			}
 		}

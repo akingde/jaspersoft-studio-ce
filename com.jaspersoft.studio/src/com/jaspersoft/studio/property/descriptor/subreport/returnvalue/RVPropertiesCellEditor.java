@@ -19,10 +19,6 @@
  */
 package com.jaspersoft.studio.property.descriptor.subreport.returnvalue;
 
-import java.util.List;
-
-import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -30,6 +26,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.model.JReportsDTO;
 import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog.RVPropertyEditor;
 
 public class RVPropertiesCellEditor extends DialogCellEditor {
@@ -45,7 +42,7 @@ public class RVPropertiesCellEditor extends DialogCellEditor {
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		RVPropertyEditor wizard = new RVPropertyEditor();
-		wizard.setValue((List<JRDesignSubreportReturnValue>) getValue());
+		wizard.setValue((JReportsDTO) getValue());
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {

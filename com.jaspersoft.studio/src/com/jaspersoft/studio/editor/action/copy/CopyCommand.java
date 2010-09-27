@@ -25,6 +25,7 @@ package com.jaspersoft.studio.editor.action.copy;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
@@ -33,7 +34,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 
 public class CopyCommand extends Command {
-	private ArrayList<ANode> list = new ArrayList<ANode>();
+	private List<ANode> list = new ArrayList<ANode>();
 
 	public boolean addElement(ANode node) {
 		if (!list.contains(node)) {

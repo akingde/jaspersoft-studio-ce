@@ -112,8 +112,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 	protected void updateAutoexposeHelper() {
 		if (exposeHelper != null)
 			return;
-		AutoexposeHelper.Search search;
-		search = new AutoexposeHelper.Search(getLocation());
+		AutoexposeHelper.Search search = new AutoexposeHelper.Search(getLocation());
 
 		getCurrentViewer().findObjectAtExcluding(getLocation(), Collections.EMPTY_LIST, search);
 
@@ -184,13 +183,12 @@ public class BandResizeTracker extends SimpleDragTracker {
 	 * 
 	 * @see org.eclipse.gef.tools.AbstractTool#createOperationSet()
 	 */
-	@SuppressWarnings("unchecked")
 	protected List createOperationSet() {
-		List editparts;
+		List<EditPart> editparts = null;
 		if (editpart == null) {
 			editparts = Collections.EMPTY_LIST;
 		} else {
-			editparts = new ArrayList();
+			editparts = new ArrayList<EditPart>();
 			editparts.add(editpart);
 			ToolUtilities.filterEditPartsUnderstanding(editparts, getSourceRequest());
 		}
@@ -203,8 +201,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 	 * @see org.eclipse.gef.tools.SimpleDragTracker#createSourceRequest()
 	 */
 	protected Request createSourceRequest() {
-		ChangeBoundsRequest request;
-		request = new ChangeBoundsRequest(REQ_RESIZE);
+		ChangeBoundsRequest request = new ChangeBoundsRequest(REQ_RESIZE);
 		// request.setResizeDirection(PositionConstants.NORTH_SOUTH);
 		return request;
 	}
@@ -236,7 +233,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 	@SuppressWarnings("unchecked")
 	protected Command getCommand() {
 		List editparts = getOperationSet();
-		EditPart part;
+		EditPart part = null;
 		CompoundCommand command = new CompoundCommand();
 		command.setDebugLabel("Move Section Handle Tracker"); //$NON-NLS-1$
 		for (int i = 0; i < editparts.size(); i++) {

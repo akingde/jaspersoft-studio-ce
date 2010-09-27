@@ -32,7 +32,7 @@ public class PropertyLabelProvider extends LabelProvider {
 	 * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
 	 */
 	public String getText(Object element) {
-		if (element instanceof Object)
+		if (element != null)
 			return element.toString();
 		return "NULL";
 	}

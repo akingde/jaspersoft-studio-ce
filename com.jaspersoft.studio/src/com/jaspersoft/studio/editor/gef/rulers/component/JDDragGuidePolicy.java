@@ -99,12 +99,12 @@ public class JDDragGuidePolicy extends GraphicalEditPolicy {
 	}
 
 	public Command getCommand(Request request) {
-		Command cmd;
+		Command cmd = null;
 		final ChangeBoundsRequest req = (ChangeBoundsRequest) request;
 		if (isDeleteRequest(req)) {
 			cmd = getGuideEditPart().getRulerProvider().getDeleteGuideCommand(getHost().getModel());
 		} else {
-			int pDelta;
+			int pDelta = 0;
 			if (getGuideEditPart().isHorizontal()) {
 				pDelta = req.getMoveDelta().y;
 			} else {
@@ -142,7 +142,7 @@ public class JDDragGuidePolicy extends GraphicalEditPolicy {
 	}
 
 	protected boolean isDeleteRequest(ChangeBoundsRequest req) {
-		int pos, max, min;
+		int pos, max, min = 0;
 		if (getGuideEditPart().isHorizontal()) {
 			pos = req.getLocation().x;
 			Rectangle zone = getHostFigure().getBounds().getExpanded(JDGuideEditPart.DELETE_THRESHOLD, 0);

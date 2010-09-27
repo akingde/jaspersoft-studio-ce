@@ -167,9 +167,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 */
 	public static Command getDeleteCommand(ANode parent, ANode child) {
 		if (child instanceof MGraphicElement) {
-			return new DeleteElementCommand((ANode) parent, (MGraphicElement) child);
+			return new DeleteElementCommand(parent, (MGraphicElement) child);
 		} else if (child instanceof MElementGroup) {
-			return new DeleteElementGroupCommand((ANode) parent, (MElementGroup) child);
+			return new DeleteElementGroupCommand(parent, (MElementGroup) child);
 		} else if (child instanceof MConditionalStyle) {
 			return new DeleteConditionalStyleCommand((MStyle) parent, (MConditionalStyle) child);
 		} else if (child instanceof MStyle) {
@@ -262,9 +262,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					return new ReorderBandCommand((MBand) child, (MReport) parent, newIndex - minIndex);
 			}
 		} else if (child instanceof MGraphicElement) {
-			return new ReorderElementCommand((MGraphicElement) child, (ANode) parent, newIndex);
+			return new ReorderElementCommand((MGraphicElement) child, parent, newIndex);
 		} else if (child instanceof MElementGroup) {
-			return new ReorderElementGroupCommand((MElementGroup) child, (ANode) parent, newIndex);
+			return new ReorderElementGroupCommand((MElementGroup) child, parent, newIndex);
 		} else if (child instanceof MConditionalStyle) {
 			if (parent instanceof MStyle)
 				return new ReorderConditionalStyleCommand((MConditionalStyle) child, (MStyle) parent, newIndex);
@@ -344,7 +344,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MFrame)
 				return new CreatePageXofYCommand((MFrame) parent, (MPageXofY) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreatePageXofYCommand((ANode) parent, (MPageXofY) child, location, newIndex);
+				return new CreatePageXofYCommand(parent, (MPageXofY) child, location, newIndex);
 		} else if (child instanceof MGraphicElement) {
 			if (parent instanceof MElementGroup)
 				return new CreateElementCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
@@ -353,7 +353,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MFrame)
 				return new CreateElementCommand((MFrame) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreateElementCommand((ANode) parent, (MGraphicElement) child, location, newIndex);
+				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
 		} else if (child instanceof MElementGroup) {
 			if (parent instanceof MElementGroup)
 				return new CreateElementGroupCommand(parent, (MElementGroup) child, newIndex);

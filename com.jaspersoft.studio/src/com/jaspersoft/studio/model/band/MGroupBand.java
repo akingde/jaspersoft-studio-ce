@@ -38,6 +38,8 @@ import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MGroupBand extends MGroup implements IPropertySource {
 
+	private static final Integer CONST_MIN_HEIGHT = new Integer(0);
+
 	public MGroupBand(JRDesignGroup jrDesignGroup) {
 		super();
 		setValue(jrDesignGroup);
@@ -87,7 +89,7 @@ public class MGroupBand extends MGroup implements IPropertySource {
 				.setDescription("Minimum amount of vertically space needed at the bottom of the column in order to place the group header on the current column.");
 		desc.add(minHeightD);
 
-		defaultsMap.put(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, new Integer(0));
+		defaultsMap.put(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, CONST_MIN_HEIGHT);
 		defaultsMap.put(JRDesignGroup.PROPERTY_FOOTER_POSITION, FooterPositionEnum.NORMAL);
 		defaultsMap.put(JRDesignGroup.PROPERTY_KEEP_TOGETHER, Boolean.FALSE);
 		defaultsMap.put(JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, Boolean.FALSE);

@@ -103,13 +103,6 @@ public abstract class ACreateAction extends SelectionAction {
 	}
 
 	/**
-	 * Initializes this action's text and images.
-	 */
-	protected void init() {
-		super.init();
-	}
-
-	/**
 	 * Performs the create action on the selected objects.
 	 */
 	public void run() {

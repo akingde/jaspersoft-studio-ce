@@ -26,6 +26,7 @@ package com.jaspersoft.studio.editor.action.copy;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRCloneable;
 
@@ -39,7 +40,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IPastable;
 
 public class PasteCommand extends Command {
-	private HashMap<ANode, Command> list = new HashMap<ANode, Command>();
+	private Map<ANode,Command> list = new HashMap<ANode, Command>();
 	private IPastable parent;
 
 	public PasteCommand(IPastable parent) {
@@ -77,7 +78,7 @@ public class PasteCommand extends Command {
 
 		Iterator<ANode> it = list.keySet().iterator();
 		while (it.hasNext()) {
-			ANode node = (ANode) it.next();
+			ANode node = it.next();
 			// create new Node put, clone into it
 			try {
 				Object value = node.getValue();

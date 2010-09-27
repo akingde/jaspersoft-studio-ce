@@ -227,6 +227,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 * @param index
 	 *          Index
 	 */
+	@Override
 	public void fill(ToolBar parent, int index) {
 		toolitem = new ToolItem(parent, SWT.SEPARATOR, index);
 		Control control = createControl(parent);

@@ -21,18 +21,11 @@ package com.jaspersoft.studio.repository.wizzard;
 
 import org.eclipse.jface.wizard.Wizard;
 
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
-import com.jaspersoft.studio.model.datasource.dtp.MDTPDatasources;
 import com.jaspersoft.studio.model.datasource.empty.MEmptyDataSource;
-import com.jaspersoft.studio.model.datasource.empty.MEmptyDatasources;
 import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
-import com.jaspersoft.studio.model.datasource.file.MFileDatasources;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
-import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDatasources;
-import com.jaspersoft.studio.model.datasource.oda.MODADatasources;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
-import com.jaspersoft.studio.model.datasource.xml.MXMLDatasources;
 
 public class DatasourceEditor extends Wizard {
 	private AMDatasource value;

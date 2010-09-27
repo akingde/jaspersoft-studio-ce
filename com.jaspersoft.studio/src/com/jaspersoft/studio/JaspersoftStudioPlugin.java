@@ -65,18 +65,6 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * This method is called upon plug-in activation.
-	 * 
-	 * @param context
-	 *          the context
-	 * @throws Exception
-	 *           the exception
-	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-	}
-
-	/**
 	 * This method is called when the plug-in is stopped.
 	 * 
 	 * @param context

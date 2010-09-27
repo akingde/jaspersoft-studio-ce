@@ -26,6 +26,7 @@ package com.jaspersoft.studio.editor.java2d;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.draw2d.DeferredUpdateManager;
 import org.eclipse.draw2d.Graphics;
@@ -36,7 +37,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class J2DUpdateManager.
  */
@@ -129,7 +129,7 @@ public final class J2DUpdateManager extends DeferredUpdateManager {
 				 * is being painted. Otherwise, notification already occurs in repairDamage().
 				 */
 				Rectangle rect2 = graphics.getClip(new Rectangle());
-				HashMap<IFigure,Rectangle> map = new HashMap<IFigure,Rectangle>();
+				Map<IFigure,Rectangle> map = new HashMap<IFigure,Rectangle>();
 				map.put(rootFigure, rect2);
 				firePainting(rect, map);
 			}
@@ -174,7 +174,7 @@ public final class J2DUpdateManager extends DeferredUpdateManager {
 			validating = true;
 			fireValidating();
 			for (int i = 0; i < invalidFigures.size(); i++) {
-				fig = (IFigure) invalidFigures.get(i);
+				fig = invalidFigures.get(i);
 				invalidFigures.set(i, null);
 				fig.validate();
 			}
