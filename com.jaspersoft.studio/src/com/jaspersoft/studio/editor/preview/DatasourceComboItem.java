@@ -73,7 +73,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 
 	@Override
 	public boolean isEnabled() {
-		return super.isEnabled() && editor.isNorun();// .canChangeZoom();
+		return super.isEnabled() && editor.isNotRunning();// .canChangeZoom();
 	}
 
 	public void refresh(boolean repopulateCombo) {

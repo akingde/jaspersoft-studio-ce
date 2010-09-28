@@ -23,9 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +47,7 @@ import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -58,20 +56,13 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 
 import com.jasperassistant.designer.viewer.ReportViewer;
 import com.jasperassistant.designer.viewer.actions.FirstPageAction;
@@ -86,6 +77,7 @@ import com.jasperassistant.designer.viewer.actions.ZoomFitPageAction;
 import com.jasperassistant.designer.viewer.actions.ZoomFitPageWidthAction;
 import com.jasperassistant.designer.viewer.actions.ZoomInAction;
 import com.jasperassistant.designer.viewer.actions.ZoomOutAction;
+import com.jaspersoft.studio.editor.JRPrintEditor;
 import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.AMFileDataSource;
@@ -96,15 +88,7 @@ import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 import com.jaspersoft.studio.repository.RepositoryManager;
 import com.jaspersoft.studio.utils.ErrorUtil;
 
-public class PreviewEditor extends EditorPart {
-
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-	}
-
-	@Override
-	public void doSaveAs() {
-	}
+public class PreviewEditor extends JRPrintEditor {
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
@@ -112,75 +96,25 @@ public class PreviewEditor extends EditorPart {
 		setInput(input);
 	}
 
-	@Override
-	public boolean isDirty() {
-		return false;
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
-	private ReportViewer reportViewer = new ReportViewer(SWT.BORDER | SWT.NO_FOCUS);
 	private JasperDesign jasperDesign;
-
-	public ReportViewer getReportViewer() {
-		return reportViewer;
-	}
-
-	private Control reportViewerControl;
-	private IToolBarManager tbManager;
-
-	@Override
-	public void createPartControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(1, false);
-		layout.marginWidth = layout.marginHeight = 0;
-		container.setLayout(layout);
-
-		initToolBar(container);
-
-		reportViewerControl = reportViewer.createControl(container);
-		reportViewerControl.setLayoutData(new GridData(GridData.FILL_BOTH));
-	}
 
 	public void setJasperDesign(JasperDesign jasperDesign) {
 		this.jasperDesign = jasperDesign;
 	}
 
-	@Override
-	public void setFocus() {
-		if (reportViewerControl != null)
-			reportViewerControl.setFocus();
-	}
-
-	public void initToolBar(Composite parent) {
-		ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
-		GridData gd = new GridData();
-		toolBar.setLayoutData(gd);
-
-		tbManager = new ToolBarManager(toolBar);
-
-		refreshToolbar();
-
-		toolBar.update();
-	}
-
-	public boolean isNorun() {
-		return norun;
+	public JasperDesign getJasperDesign() {
+		return jasperDesign;
 	}
 
 	private AMDatasource datasource;
 	private Map<String, Object> jasperParameter = new Hashtable<String, Object>();
-	private JasperPrint jasperPrint;
-	private boolean norun = true;
+
 	private Throwable fillError = null;
 	private DatasourceComboItem dataSourceWidget;
 	private ReloadAction reloadAction;
 
 	public void runReport(final AMDatasource d) {
-		if (norun) {
+		if (isNotRunning()) {
 
 			String dsName = "";
 			if (d != null) {
@@ -215,7 +149,7 @@ public class PreviewEditor extends EditorPart {
 						ClassLoader cl = RepositoryManager.getClassLoader4Project(monitor, file.getProject());
 						Thread.currentThread().setContextClassLoader(cl);
 
-						jasperPrint = null;
+						setJasperPrint(null);
 						AsynchronousFillHandle fh = null;
 						JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
@@ -275,7 +209,7 @@ public class PreviewEditor extends EditorPart {
 							}
 						Display.getDefault().syncExec(new Runnable() {
 							public void run() {
-								setNorun(true);
+								setNotRunning(true);
 							}
 						});
 						monitor.done();
@@ -307,18 +241,15 @@ public class PreviewEditor extends EditorPart {
 		return pdresult;
 	}
 
-	public void setNorun(boolean norun) {
-		this.norun = norun;
-		tbManager.update(true);
+	public void setNotRunning(boolean norun) {
+		super.setNotRunning(norun);
 		dataSourceWidget.refresh(true);
 		reloadAction.setEnabled(norun);
 	}
 
-	public JasperDesign getJasperDesign() {
-		return jasperDesign;
-	}
-
-	private void refreshToolbar() {
+	protected void refreshToolbar() {
+		IToolBarManager tbManager = getTbManager();
+		ReportViewer reportViewer = getReportViewer();
 		tbManager.removeAll();
 		// ExportMenuAction exportMenu = new ExportMenuAction(reportViewer);
 		// IAction pdfAction = null;
@@ -369,77 +300,46 @@ public class PreviewEditor extends EditorPart {
 		tbManager.update(true);
 	}
 
-	void unsetReportDocument(final String msg, final boolean noRun) {
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				reportViewer.unsetDocument(msg);
-				setNorun(noRun);
-			}
-		});
-	}
-
-	void setReportDocument(final boolean noRun) {
-		if (jasperPrint != null) {
-			Display.getDefault().syncExec(new Runnable() {
-				public void run() {
-					if (jasperPrint != null) {
-						try {
-							reportViewer.setDocument(jasperPrint);
-						} catch (Exception e) {
-							unsetReportDocument(e2string(e), true);
-						}
-					}
-					setNorun(noRun);
-				}
-
-				private String e2string(Exception e) {
-					Writer result = new StringWriter();
-					PrintWriter printWriter = new PrintWriter(result);
-					e.printStackTrace(printWriter);
-					return result.toString();
-				}
-			});
-		}
-	}
-
-	IStatus fillReport(AsynchronousFillHandle fh, IProgressMonitor monitor) throws JRException, InterruptedException {
+	private IStatus fillReport(AsynchronousFillHandle fh, IProgressMonitor monitor) throws JRException,
+			InterruptedException {
+		Assert.isTrue(fh != null);
 		IProgressMonitor sm = new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN,
 				SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
 		try {
-			sm.beginTask("filling report", IProgressMonitor.UNKNOWN);
-			if (fh != null) {
-				sm.setTaskName("filling report");
-				sm.worked(50);
+			sm.beginTask("Fill report", IProgressMonitor.UNKNOWN);
+			fh.addListener(new AsynchronousFilllListener() {
 
-				fh.addListener(new AsynchronousFilllListener() {
-
-					public void reportFinished(JasperPrint jPrint) {
-						jasperPrint = jPrint;
-					}
-
-					public void reportFillError(Throwable t) {
-						fillError = t;
-					}
-
-					public void reportCancelled() {
-						unsetReportDocument("Report fill Canceled", true);
-					}
-				});
-				fh.startFill();
-				while (true && jasperPrint == null && fillError == null) {
-					if (sm.isCanceled()) {
-						fh.cancellFill();
-						return Status.CANCEL_STATUS;
-					}
-					Thread.sleep(500);
-					sm.worked(10);
+				public void reportFinished(JasperPrint jPrint) {
+					setJasperPrint(jPrint);
 				}
-				if (fillError != null)
-					throw new JRException(fillError);
+
+				public void reportFillError(Throwable t) {
+					handleFillException(t);
+				}
+
+				public void reportCancelled() {
+					unsetReportDocument("Report fill Canceled", true);
+				}
+			});
+			fh.startFill();
+			while (true && getJasperPrint() == null && fillError == null) {
+				if (sm.isCanceled()) {
+					fh.cancellFill();
+					return Status.CANCEL_STATUS;
+				}
+				Thread.sleep(500);
+				sm.worked(10);
 			}
+			if (fillError != null)
+				throw new JRException(fillError);
+
 		} finally {
 			sm.done();
 		}
 		return Status.OK_STATUS;
+	}
+
+	private void handleFillException(Throwable t) {
+		fillError = t;
 	}
 }

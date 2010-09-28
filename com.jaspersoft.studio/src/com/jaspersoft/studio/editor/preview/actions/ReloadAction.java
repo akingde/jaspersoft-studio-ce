@@ -45,7 +45,7 @@ public class ReloadAction extends Action {
 
 	@Override
 	public boolean isEnabled() {
-		return super.isEnabled() && editor.isNorun();
+		return super.isEnabled() && editor.isNotRunning();
 	}
 
 	@Override

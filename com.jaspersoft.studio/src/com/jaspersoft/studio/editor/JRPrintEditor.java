@@ -3,9 +3,6 @@ package com.jaspersoft.studio.editor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -44,6 +41,7 @@ import com.jasperassistant.designer.viewer.actions.ZoomFitPageAction;
 import com.jasperassistant.designer.viewer.actions.ZoomFitPageWidthAction;
 import com.jasperassistant.designer.viewer.actions.ZoomInAction;
 import com.jasperassistant.designer.viewer.actions.ZoomOutAction;
+import com.jaspersoft.studio.utils.ErrorUtil;
 
 public class JRPrintEditor extends EditorPart {
 
@@ -54,7 +52,6 @@ public class JRPrintEditor extends EditorPart {
 
 	@Override
 	public void doSaveAs() {
-
 	}
 
 	@Override
@@ -99,6 +96,26 @@ public class JRPrintEditor extends EditorPart {
 	private ReportViewer reportViewer = new ReportViewer(SWT.BORDER | SWT.NO_FOCUS);
 	private Control reportViewerControl;
 
+	public ReportViewer getReportViewer() {
+		return reportViewer;
+	}
+
+	public void setJasperPrint(JasperPrint jasperPrint) {
+		this.jasperPrint = jasperPrint;
+	}
+
+	public Control getReportViewerControl() {
+		return reportViewerControl;
+	}
+
+	public IToolBarManager getTbManager() {
+		return tbManager;
+	}
+
+	public JasperPrint getJasperPrint() {
+		return jasperPrint;
+	}
+
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
@@ -132,7 +149,7 @@ public class JRPrintEditor extends EditorPart {
 		toolBar.update();
 	}
 
-	private void refreshToolbar() {
+	protected void refreshToolbar() {
 		tbManager.removeAll();
 		// ExportMenuAction exportMenu = new ExportMenuAction(reportViewer);
 		// IAction pdfAction = null;
@@ -180,36 +197,42 @@ public class JRPrintEditor extends EditorPart {
 	}
 
 	private JasperPrint jasperPrint;
+	private boolean notRunning = true;
 
-	void setReportDocument(final boolean noRun) {
-		if (jasperPrint != null) {
+	public boolean isNotRunning() {
+		return notRunning;
+	}
+
+	public void setNotRunning(boolean norun) {
+		this.notRunning = norun;
+		if (tbManager != null)
+			tbManager.update(true);
+	}
+
+	protected void unsetReportDocument(final String msg, final boolean noRun) {
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				getReportViewer().unsetDocument(msg);
+				setNotRunning(noRun);
+			}
+		});
+	}
+
+	protected void setReportDocument(final boolean noRun) {
+		if (getJasperPrint() != null) {
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
-					if (jasperPrint != null) {
+					if (getJasperPrint() != null) {
 						try {
-							reportViewer.setDocument(jasperPrint);
+							getReportViewer().setDocument(getJasperPrint());
 						} catch (Exception e) {
-							unsetReportDocument(e2string(e), true);
+							unsetReportDocument(ErrorUtil.getStackTrace(e), true);
 						}
 					}
-				}
-
-				private String e2string(Exception e) {
-					Writer result = new StringWriter();
-					PrintWriter printWriter = new PrintWriter(result);
-					e.printStackTrace(printWriter);
-					return result.toString();
+					setNotRunning(noRun);
 				}
 			});
 		}
-	}
-
-	void unsetReportDocument(final String msg, final boolean noRun) {
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				reportViewer.unsetDocument(msg);
-			}
-		});
 	}
 
 }
