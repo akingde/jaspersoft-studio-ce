@@ -65,7 +65,7 @@ public class RZoomComboContributionItem extends ZoomComboContributionItem {
 	 *          the new enabled
 	 */
 	public void setEnabled(boolean enabled) {
-		if (combo != null)
+		if (combo != null && !combo.isDisposed())
 			combo.setEnabled(enabled);
 	}
 

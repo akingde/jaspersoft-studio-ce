@@ -47,11 +47,16 @@ public final class RendererFactory {
 	 * @return the image renderer
 	 */
 	private static ImageRenderer createRenderer() {
-		if ((Platform.getOS().equals(Platform.OS_WIN32)) && (Platform.getOSArch().equals(Platform.ARCH_X86))) {
-			return new Win32ImageRenderer();
-		} else if ((Platform.getOS().equals(Platform.OS_LINUX)) && (Platform.getWS().equals(Platform.WS_GTK))) {
-			return new GenericImageRenderer();
-			// return new LinuxImageRenderer();
+		try {
+			if ((Platform.getOS().equals(Platform.OS_WIN32)) && (Platform.getOSArch().equals(Platform.ARCH_X86))) {
+				return new Win32ImageRenderer();
+			} else if ((Platform.getOS().equals(Platform.OS_LINUX)) && (Platform.getWS().equals(Platform.WS_GTK))) {
+				return new LinuxImageRenderer();
+			}
+		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
+		} catch (UnsatisfiedLinkError e) {
+			e.printStackTrace();
 		}
 		return new GenericImageRenderer();
 	}
