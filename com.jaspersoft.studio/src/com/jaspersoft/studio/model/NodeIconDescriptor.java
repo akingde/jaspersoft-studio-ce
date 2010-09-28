@@ -55,7 +55,7 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	public NodeIconDescriptor(String name) {
 		this.ICON_TITLE = getFromBundle(name + ".title", ICON_TITLE);
 		this.ICON_DESCRIPTION = getFromBundle(name + ".description", ICON_DESCRIPTION);
-		this.ICON_TOOLTIP = getFromBundle(name + ".tooltip", ICON_TOOLTIP);
+		this.ICON_TOOLTIP = getFromBundle(name + ".description", ICON_TOOLTIP);
 		this.ICON_16 = getFromBundle(name + ".icon16", ICON_16);
 		this.ICON_32 = getFromBundle(name + ".icon32", ICON_32);
 	}
