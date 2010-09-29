@@ -59,10 +59,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.PartInitException;
 
 import com.jasperassistant.designer.viewer.ReportViewer;
 import com.jasperassistant.designer.viewer.actions.FirstPageAction;
@@ -90,10 +87,8 @@ import com.jaspersoft.studio.utils.ErrorUtil;
 
 public class PreviewEditor extends JRPrintEditor {
 
-	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		setSite(site);
-		setInput(input);
+	protected JasperPrint loadJRObject(InputStream in) throws JRException {
+		return getJasperPrint();
 	}
 
 	private JasperDesign jasperDesign;
@@ -248,54 +243,14 @@ public class PreviewEditor extends JRPrintEditor {
 	}
 
 	protected void refreshToolbar() {
+		super.refreshToolbar();
 		IToolBarManager tbManager = getTbManager();
-		ReportViewer reportViewer = getReportViewer();
-		tbManager.removeAll();
-		// ExportMenuAction exportMenu = new ExportMenuAction(reportViewer);
-		// IAction pdfAction = null;
-		// exportMenu.getMenuManager().add(
-		// pdfAction = new ExportAsPdfAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsRtfAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsJasperReportsAction(reportViewer));
-		// exportMenu.getMenuManager().add(new ExportAsHtmlAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsSingleXlsAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsMultiXlsAction(reportViewer));
-		// exportMenu.getMenuManager().add(new ExportAsCsvAction(reportViewer));
-		// exportMenu.getMenuManager().add(new ExportAsXmlAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsXmlWithImagesAction(reportViewer));
-		// exportMenu.setDefaultAction(pdfAction);
-		//
-		// tbManager.add(exportMenu);
-		tbManager.add(new PrintAction(reportViewer));
+		
+		tbManager.add(new Separator());
 		reloadAction = new ReloadAction(this);
-		tbManager.add(reloadAction);
-		tbManager.add(new Separator());
-		tbManager.add(new FirstPageAction(reportViewer));
-		tbManager.add(new PreviousPageAction(reportViewer));
-		if (SWT.getPlatform().equals("win32")) //$NON-NLS-1$
-			tbManager.add(new PageNumberContributionItem(reportViewer));
-		tbManager.add(new NextPageAction(reportViewer));
-		tbManager.add(new LastPageAction(reportViewer));
-		tbManager.add(new Separator());
+		tbManager.appendToGroup("DATASOURCEGROUP", reloadAction);
 		dataSourceWidget = new DatasourceComboItem(this);
-		tbManager.add(dataSourceWidget);
-		tbManager.add(new Separator());
-		tbManager.add(new ZoomActualSizeAction(reportViewer));
-		tbManager.add(new ZoomFitPageAction(reportViewer));
-		tbManager.add(new ZoomFitPageWidthAction(reportViewer));
-		tbManager.add(new Separator());
-		ZoomOutAction zoomOutAction = new ZoomOutAction(reportViewer);
-		zoomOutAction.setImageDescriptor(InternalImages.DESC_ZOOM_OUT);
-		tbManager.add(zoomOutAction);
-		tbManager.add(new ZoomComboContributionItem(reportViewer));
-		ZoomInAction zoomInAction = new ZoomInAction(reportViewer);
-		zoomInAction.setImageDescriptor(InternalImages.DESC_ZOOM_IN);
-		tbManager.add(zoomInAction);
+		tbManager.appendToGroup("DATASOURCEGROUP", dataSourceWidget);
 
 		tbManager.update(true);
 	}

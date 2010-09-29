@@ -8,9 +8,17 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.util.JRLoader;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.internal.InternalImages;
+import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
@@ -24,11 +32,25 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.FileEditorInput;
 
 import com.jasperassistant.designer.viewer.ReportViewer;
+import com.jasperassistant.designer.viewer.actions.ExportAsCsvAction;
+import com.jasperassistant.designer.viewer.actions.ExportAsHtmlAction;
+import com.jasperassistant.designer.viewer.actions.ExportAsJasperReportsAction;
+import com.jasperassistant.designer.viewer.actions.ExportAsMultiXlsAction;
+import com.jasperassistant.designer.viewer.actions.ExportAsPdfAction;
+import com.jasperassistant.designer.viewer.actions.ExportAsRtfAction;
+import com.jasperassistant.designer.viewer.actions.ExportAsSingleXlsAction;
+import com.jasperassistant.designer.viewer.actions.ExportAsXmlAction;
+import com.jasperassistant.designer.viewer.actions.ExportAsXmlWithImagesAction;
+import com.jasperassistant.designer.viewer.actions.ExportMenuAction;
 import com.jasperassistant.designer.viewer.actions.FirstPageAction;
 import com.jasperassistant.designer.viewer.actions.LastPageAction;
 import com.jasperassistant.designer.viewer.actions.NextPageAction;
@@ -45,20 +67,115 @@ import com.jaspersoft.studio.utils.ErrorUtil;
 
 public class JRPrintEditor extends EditorPart {
 
-	@Override
-	public void doSave(IProgressMonitor monitor) {
+	class ResourceTracker implements IResourceChangeListener, IResourceDeltaVisitor {
+		public void resourceChanged(IResourceChangeEvent event) {
+			IResourceDelta delta = event.getDelta();
+			try {
+				if (delta != null)
+					delta.accept(this);
+			} catch (CoreException exception) {
+				// What should be done here?
+			}
+		}
 
+		public boolean visit(IResourceDelta delta) {
+			if (delta == null || !delta.getResource().equals(((IFileEditorInput) getEditorInput()).getFile()))
+				return true;
+
+			if (delta.getKind() == IResourceDelta.REMOVED) {
+				Display display = getSite().getShell().getDisplay();
+				if ((IResourceDelta.MOVED_TO & delta.getFlags()) == 0) { // if the file was deleted
+					// NOTE: The case where an open, unsaved file is deleted is being handled by the
+					// PartListener added to the Workbench in the initialize() method.
+					display.asyncExec(new Runnable() {
+						public void run() {
+							if (!isDirty())
+								getSite().getPage().closeEditor(JRPrintEditor.this, false);
+						}
+					});
+				} else { // else if it was moved or renamed
+					final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedToPath());
+					display.asyncExec(new Runnable() {
+						public void run() {
+							superSetInput(new FileEditorInput(newFile));
+						}
+					});
+				}
+			} else if (delta.getKind() == IResourceDelta.CHANGED) {
+				// the file was overwritten somehow (could have been replaced by another
+				// version in the respository)
+				final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getFullPath());
+				Display display = getSite().getShell().getDisplay();
+				display.asyncExec(new Runnable() {
+					public void run() {
+						setInput(new FileEditorInput(newFile));
+					}
+				});
+
+			}
+			return false;
+		}
+	}
+
+	private IPartListener partListener = new IPartListener() {
+		// If an open, unsaved file was deleted, query the user to either do a "Save As"
+		// or close the editor.
+		public void partActivated(IWorkbenchPart part) {
+			if (part != JRPrintEditor.this)
+				return;
+			if (!((IFileEditorInput) getEditorInput()).getFile().exists())
+				getSite().getPage().closeEditor(JRPrintEditor.this, false);
+		}
+
+		public void partBroughtToTop(IWorkbenchPart part) {
+		}
+
+		public void partClosed(IWorkbenchPart part) {
+		}
+
+		public void partDeactivated(IWorkbenchPart part) {
+		}
+
+		public void partOpened(IWorkbenchPart part) {
+		}
+	};
+	private ResourceTracker resourceListener = new ResourceTracker();
+
+	@Override
+	public void dispose() {
+		getSite().getWorkbenchWindow().getPartService().removePartListener(partListener);
+		partListener = null;
+		((IFileEditorInput) getEditorInput()).getFile().getWorkspace().removeResourceChangeListener(resourceListener);
+		super.dispose();
+	}
+
+	protected void superSetInput(IEditorInput input) {
+		// The workspace never changes for an editor. So, removing and re-adding the
+		// resourceListener is not necessary. But it is being done here for the sake
+		// of proper implementation. Plus, the resourceListener needs to be added
+		// to the workspace the first time around.
+		if (getEditorInput() != null) {
+			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+			file.getWorkspace().removeResourceChangeListener(resourceListener);
+		}
+
+		super.setInput(input);
+
+		if (getEditorInput() != null) {
+			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+			file.getWorkspace().addResourceChangeListener(resourceListener);
+			setPartName(file.getName());
+		}
+	}
+
+	protected void setSite(IWorkbenchPartSite site) {
+		super.setSite(site);
+		getSite().getWorkbenchWindow().getPartService().addPartListener(partListener);
 	}
 
 	@Override
-	public void doSaveAs() {
-	}
-
-	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		setSite(site);
-		setInput(input);
-		setPartName(input.getName());
+	protected void setInput(IEditorInput input) {
+		superSetInput(input);
 		InputStream in = null;
 		try {
 			if (input instanceof FileStoreEditorInput) {
@@ -77,6 +194,23 @@ public class JRPrintEditor extends EditorPart {
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
+	}
+
+	// ------------------------------
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+
+	}
+
+	@Override
+	public void doSaveAs() {
+	}
+
+	@Override
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		setSite(site);
+		setPartName(input.getName());
+		setInput(input);
 	}
 
 	protected JasperPrint loadJRObject(InputStream in) throws JRException {
@@ -151,27 +285,23 @@ public class JRPrintEditor extends EditorPart {
 
 	protected void refreshToolbar() {
 		tbManager.removeAll();
-		// ExportMenuAction exportMenu = new ExportMenuAction(reportViewer);
-		// IAction pdfAction = null;
-		// exportMenu.getMenuManager().add(
-		// pdfAction = new ExportAsPdfAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsRtfAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsJasperReportsAction(reportViewer));
-		// exportMenu.getMenuManager().add(new ExportAsHtmlAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsSingleXlsAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsMultiXlsAction(reportViewer));
-		// exportMenu.getMenuManager().add(new ExportAsCsvAction(reportViewer));
-		// exportMenu.getMenuManager().add(new ExportAsXmlAction(reportViewer));
-		// exportMenu.getMenuManager().add(
-		// new ExportAsXmlWithImagesAction(reportViewer));
-		// exportMenu.setDefaultAction(pdfAction);
-		//
-		// tbManager.add(exportMenu);
+		ExportMenuAction exportMenu = new ExportMenuAction(reportViewer);
+		IAction pdfAction = null;
+		exportMenu.getMenuManager().add(pdfAction = new ExportAsPdfAction(reportViewer));
+		exportMenu.getMenuManager().add(new ExportAsRtfAction(reportViewer));
+		exportMenu.getMenuManager().add(new ExportAsJasperReportsAction(reportViewer));
+		exportMenu.getMenuManager().add(new ExportAsHtmlAction(reportViewer));
+		exportMenu.getMenuManager().add(new ExportAsSingleXlsAction(reportViewer));
+		exportMenu.getMenuManager().add(new ExportAsMultiXlsAction(reportViewer));
+		exportMenu.getMenuManager().add(new ExportAsCsvAction(reportViewer));
+		exportMenu.getMenuManager().add(new ExportAsXmlAction(reportViewer));
+		exportMenu.getMenuManager().add(new ExportAsXmlWithImagesAction(reportViewer));
+		exportMenu.setDefaultAction(pdfAction);
+
+		tbManager.add(exportMenu);
+
 		tbManager.add(new PrintAction(reportViewer));
+		tbManager.add(new GroupMarker("DATASOURCEGROUP"));
 
 		tbManager.add(new Separator());
 		tbManager.add(new FirstPageAction(reportViewer));
