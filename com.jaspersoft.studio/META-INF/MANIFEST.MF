@@ -30,7 +30,8 @@ Bundle-ClassPath: .,
  lib/xalan.jar,
  lib/xercesImpl.jar,
  lib/xml-apis.jar,
- lib/xsltc.jar
+ lib/xsltc.jar,
+ lib/jxl-2.6.10.jar
 Import-Package: org.eclipse.ui,
  org.eclipse.ui.part
 Eclipse-RegisterBuddy: net.sf.jasperreports

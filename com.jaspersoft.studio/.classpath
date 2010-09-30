@@ -9,5 +9,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xsltc.jar"/>
+	<classpathentry kind="lib" path="lib/jxl-2.6.10.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

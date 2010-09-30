@@ -25,6 +25,7 @@ import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.empty.MEmptyDataSource;
 import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
+import com.jaspersoft.studio.model.datasource.xls.MXLSDataSource;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 
 public class DatasourceEditor extends Wizard {
@@ -60,6 +61,8 @@ public class DatasourceEditor extends Wizard {
 			// page0 = new DTPDatasourcePage();
 		} else if (value instanceof MXMLDataSource) {
 			page0 = new XMLDatasourcePage();
+		} else if (value instanceof MXLSDataSource) {
+			page0 = new XLSDatasourcePage();
 		}
 		page0.setValue(value);
 		addPage(page0);

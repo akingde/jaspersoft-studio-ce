@@ -24,6 +24,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import jxl.write.NumberFormat;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -38,6 +41,8 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRCsvDataSource;
+import net.sf.jasperreports.engine.data.JRXlsDataSource;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
@@ -53,27 +58,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
-import com.jasperassistant.designer.viewer.ReportViewer;
-import com.jasperassistant.designer.viewer.actions.FirstPageAction;
-import com.jasperassistant.designer.viewer.actions.LastPageAction;
-import com.jasperassistant.designer.viewer.actions.NextPageAction;
-import com.jasperassistant.designer.viewer.actions.PageNumberContributionItem;
-import com.jasperassistant.designer.viewer.actions.PreviousPageAction;
-import com.jasperassistant.designer.viewer.actions.PrintAction;
-import com.jasperassistant.designer.viewer.actions.ZoomActualSizeAction;
-import com.jasperassistant.designer.viewer.actions.ZoomComboContributionItem;
-import com.jasperassistant.designer.viewer.actions.ZoomFitPageAction;
-import com.jasperassistant.designer.viewer.actions.ZoomFitPageWidthAction;
-import com.jasperassistant.designer.viewer.actions.ZoomInAction;
-import com.jasperassistant.designer.viewer.actions.ZoomOutAction;
 import com.jaspersoft.studio.editor.JRPrintEditor;
 import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
@@ -81,6 +71,7 @@ import com.jaspersoft.studio.model.datasource.AMFileDataSource;
 import com.jaspersoft.studio.model.datasource.empty.MEmptyDataSource;
 import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
+import com.jaspersoft.studio.model.datasource.xls.MXLSDataSource;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 import com.jaspersoft.studio.repository.RepositoryManager;
 import com.jaspersoft.studio.utils.ErrorUtil;
@@ -168,13 +159,26 @@ public class PreviewEditor extends JRPrintEditor {
 								jrds = new JREmptyDataSource((Integer) datasource.getPropertyValue(MEmptyDataSource.PROPERTY_SIZE));
 							} else if (datasource instanceof AMFileDataSource) {
 								io = new FileInputStream((String) datasource.getPropertyValue(MFileDataSource.PROPERTY_FILENAME));
+								String df = (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT);
+								if (df == null || df.trim().equals(""))
+									df = new SimpleDateFormat().toPattern();
+								String nf = (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT);
+								if (nf == null || nf.trim().equals(""))
+									nf = new DecimalFormat().toPattern();
+
 								if (datasource instanceof MFileDataSource) {
 									jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource) datasource);
+									((JRCsvDataSource) jrds).setDateFormat(new SimpleDateFormat(df));
+									((JRCsvDataSource) jrds).setNumberFormat(new DecimalFormat(nf));
+								} else if (datasource instanceof MXLSDataSource) {
+									jrds = new JRXlsDataSource(io);
+									((JRXlsDataSource) jrds).setDateFormat(new SimpleDateFormat(df));
+									((JRXlsDataSource) jrds).setNumberFormat(new DecimalFormat(nf));
 								} else if (datasource instanceof MXMLDataSource) {
-									jasperParameter.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, "yyyy-MM-dd");
-									jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, "#,##0.##");
-									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
-									jasperParameter.put(JRParameter.REPORT_LOCALE, Locale.US);
+									jasperParameter.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, df);
+									jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, nf);
+									// jasperParameter.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, Locale.ENGLISH);
+									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.US);
 
 									String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
 									if (select != null && !select.trim().endsWith("")) {
@@ -184,6 +188,8 @@ public class PreviewEditor extends JRPrintEditor {
 									}
 								}
 							}
+							jasperParameter.put(JRParameter.REPORT_LOCALE, Locale.US);
+
 							if (jrds != null) {
 								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, jrds);
 							} else
@@ -245,7 +251,7 @@ public class PreviewEditor extends JRPrintEditor {
 	protected void refreshToolbar() {
 		super.refreshToolbar();
 		IToolBarManager tbManager = getTbManager();
-		
+
 		tbManager.add(new Separator());
 		reloadAction = new ReloadAction(this);
 		tbManager.appendToGroup("DATASOURCEGROUP", reloadAction);

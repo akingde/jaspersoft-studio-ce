@@ -159,17 +159,49 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		});
 	}
 
+	private boolean datePatterns = true;
+	private boolean numberPatterns = true;
+
+	public boolean isDatePatterns() {
+		return datePatterns;
+	}
+
+	public void setDatePatterns(boolean datePatterns) {
+		this.datePatterns = datePatterns;
+	}
+
+	public boolean isNumberPatterns() {
+		return numberPatterns;
+	}
+
+	public void setNumberPatterns(boolean numberPatterns) {
+		this.numberPatterns = numberPatterns;
+	}
+
 	public void createPatterns(Composite parent) {
 		map = new HashMap<String, APattern>();
-		map.put("Date", new DatePattern(parent));
-		map.put("Time", new TimePattern(parent));
-		map.put("Number", new NumericPattern(parent));
-		map.put("Currency", new CurrencyPattern(parent));
-		map.put("Percentage", new PercentagePattern(parent));
-		map.put("Scientific", new ScientificPattern(parent));
+		createDatePatterns(parent);
+
+		createNumberPatterns(parent);
 
 		for (String key : map.keySet()) {
 			map.get(key).getPropertyChangeSupport().addPropertyChangeListener(this);
+		}
+	}
+
+	private void createNumberPatterns(Composite parent) {
+		if (numberPatterns) {
+			map.put("Number", new NumericPattern(parent));
+			map.put("Currency", new CurrencyPattern(parent));
+			map.put("Percentage", new PercentagePattern(parent));
+			map.put("Scientific", new ScientificPattern(parent));
+		}
+	}
+
+	private void createDatePatterns(Composite parent) {
+		if (datePatterns) {
+			map.put("Date", new DatePattern(parent));
+			map.put("Time", new TimePattern(parent));
 		}
 	}
 

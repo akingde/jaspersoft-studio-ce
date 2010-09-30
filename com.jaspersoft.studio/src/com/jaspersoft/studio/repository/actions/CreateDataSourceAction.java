@@ -41,6 +41,8 @@ import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
 import com.jaspersoft.studio.model.datasource.file.MFileDatasources;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDatasources;
+import com.jaspersoft.studio.model.datasource.xls.MXLSDataSource;
+import com.jaspersoft.studio.model.datasource.xls.MXLSDatasources;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDatasources;
 import com.jaspersoft.studio.repository.RepositoryManager;
@@ -78,7 +80,10 @@ public class CreateDataSourceAction extends Action {
 				value = new MJDBCDataSource(null, -1);
 			} else if (parent instanceof MXMLDatasources) {
 				value = new MXMLDataSource(null, -1);
-			} else if (parent instanceof MFileDatasources) {
+			} else if (parent instanceof MXLSDatasources) {
+				value = new MXLSDataSource(null, -1);
+			}
+			else if (parent instanceof MFileDatasources) {
 				value = new MFileDataSource(null, -1);
 			} else if (parent instanceof MEmptyDatasources) {
 				value = new MEmptyDataSource(null, -1);

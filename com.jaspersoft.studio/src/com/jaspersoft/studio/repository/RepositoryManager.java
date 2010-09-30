@@ -80,6 +80,8 @@ import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
 import com.jaspersoft.studio.model.datasource.file.MFileDatasources;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDatasources;
+import com.jaspersoft.studio.model.datasource.xls.MXLSDataSource;
+import com.jaspersoft.studio.model.datasource.xls.MXLSDatasources;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDatasources;
 
@@ -158,6 +160,7 @@ public class RepositoryManager {
 			MEmptyDatasources emptyds = new MEmptyDatasources(datasources);
 			MXMLDatasources xmlds = new MXMLDatasources(datasources);
 			MFileDatasources fileds = new MFileDatasources(datasources);
+			MXLSDatasources xlsds = new MXLSDatasources(datasources);
 
 			// new MODADatasources(datasources);
 			// new MDTPDatasources(datasources);
@@ -186,6 +189,8 @@ public class RepositoryManager {
 						m = new MFileDataSource(fileds, -1);
 					if (type.equals(MXMLDataSource.class.getName()))
 						m = new MXMLDataSource(xmlds, -1);
+					if (type.equals(MXLSDataSource.class.getName()))
+						m = new MXLSDataSource(xlsds, -1);
 
 					if (m != null)
 						fillProperties(n, m);

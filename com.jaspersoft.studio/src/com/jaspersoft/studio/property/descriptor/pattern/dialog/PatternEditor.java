@@ -47,6 +47,8 @@ public class PatternEditor extends Wizard {
 	public void addPages() {
 		page0 = new PatternPage("Pattern");
 		page0.setValue(value);
+		page0.setDatePatterns(datePatterns);
+		page0.setNumberPatterns(numberPatterns);
 		addPage(page0);
 	}
 
@@ -55,4 +57,22 @@ public class PatternEditor extends Wizard {
 		return true;
 	}
 
+	private boolean datePatterns = true;
+	private boolean numberPatterns = true;
+
+	public boolean isDatePatterns() {
+		return datePatterns;
+	}
+
+	public void setDatePatterns(boolean datePatterns) {
+		this.datePatterns = datePatterns;
+	}
+
+	public boolean isNumberPatterns() {
+		return numberPatterns;
+	}
+
+	public void setNumberPatterns(boolean numberPatterns) {
+		this.numberPatterns = numberPatterns;
+	}
 }
