@@ -85,7 +85,8 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeHidden()
 	 */
 	public void aboutToBeHidden() {
-		getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+		if (getElement() != null)
+			getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
 	}
 
 	/**

@@ -32,6 +32,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -128,11 +129,9 @@ public class PreviewEditor extends JRPrintEditor {
 					InputStream io = null;
 					fillError = null;
 					try {
-						// set project classloader?
-						IFileEditorInput input = (IFileEditorInput) getEditorInput();
-						IFile file = input.getFile();
-						ClassLoader cl = RepositoryManager.getClassLoader4Project(monitor, file.getProject());
-						Thread.currentThread().setContextClassLoader(cl);
+						IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+						Thread.currentThread().setContextClassLoader(
+								RepositoryManager.getClassLoader4Project(monitor, file.getProject()));
 
 						setJasperPrint(null);
 						AsynchronousFillHandle fh = null;
@@ -176,8 +175,14 @@ public class PreviewEditor extends JRPrintEditor {
 								} else if (datasource instanceof MXMLDataSource) {
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, df);
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, nf);
-//									jasperParameter.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, Locale.ENGLISH);
-									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
+									TimeZone tz = (TimeZone) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE);
+									if (tz == null)
+										tz = (TimeZone) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE);
+									jasperParameter.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, tz);
+									Locale locale = (Locale) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHLOCALE);
+									if (locale == null)
+										locale = (Locale) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHLOCALE);
+									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, locale);
 
 									String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
 									if (select != null && !select.trim().endsWith("")) {
@@ -302,4 +307,5 @@ public class PreviewEditor extends JRPrintEditor {
 	private void handleFillException(Throwable t) {
 		fillError = t;
 	}
+
 }

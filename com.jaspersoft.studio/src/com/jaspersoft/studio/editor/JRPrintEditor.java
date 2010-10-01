@@ -79,7 +79,6 @@ import com.jasperassistant.designer.viewer.actions.LastPageAction;
 import com.jasperassistant.designer.viewer.actions.NextPageAction;
 import com.jasperassistant.designer.viewer.actions.PageNumberContributionItem;
 import com.jasperassistant.designer.viewer.actions.PreviousPageAction;
-import com.jasperassistant.designer.viewer.actions.PrintAction;
 import com.jasperassistant.designer.viewer.actions.ZoomActualSizeAction;
 import com.jasperassistant.designer.viewer.actions.ZoomComboContributionItem;
 import com.jasperassistant.designer.viewer.actions.ZoomFitPageAction;
@@ -323,7 +322,7 @@ public class JRPrintEditor extends EditorPart {
 
 		tbManager.add(exportMenu);
 
-		tbManager.add(new PrintAction(reportViewer));
+//		tbManager.add(new PrintAction(reportViewer));
 		tbManager.add(new GroupMarker("DATASOURCEGROUP"));
 
 		tbManager.add(new Separator());

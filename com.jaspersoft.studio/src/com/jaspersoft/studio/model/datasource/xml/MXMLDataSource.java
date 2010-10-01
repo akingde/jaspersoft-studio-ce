@@ -20,7 +20,9 @@
 package com.jaspersoft.studio.model.datasource.xml;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -98,16 +100,34 @@ public class MXMLDataSource extends AMFileDataSource {
 
 		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_XPATHSELECT, "XPath Select");
 		desc.add(jdbcURLD);
+
+		NTextPropertyDescriptor timeZoneD = new NTextPropertyDescriptor(PROPERTY_XPATHTIMEZONE, "XPath TimeZone");
+		desc.add(timeZoneD);
+
+		NTextPropertyDescriptor localeD = new NTextPropertyDescriptor(PROPERTY_XPATHLOCALE, "XPath Locale");
+		desc.add(localeD);
+
+		defaultsMap.put(PROPERTY_XPATHTIMEZONE, TimeZone.getDefault());
+		defaultsMap.put(PROPERTY_XPATHLOCALE, Locale.getDefault());
 	}
 
 	public static final String PROPERTY_XPATHSELECT = "PROPERTY_XPATHSELECT";
 	private String xpathselect;
 
+	public static final String PROPERTY_XPATHLOCALE = "PROPERTY_XPATHLOCALE";
+	private Locale xpathlocale;
+
+	public static final String PROPERTY_XPATHTIMEZONE = "PROPERTY_XPATHTIMEZONE";
+	private TimeZone xpathTimeZone;
+
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (id.equals(PROPERTY_XPATHSELECT)) {
+		if (id.equals(PROPERTY_XPATHSELECT))
 			return xpathselect;
-		}
+		if (id.equals(PROPERTY_XPATHLOCALE))
+			return xpathlocale;
+		if (id.equals(PROPERTY_XPATHTIMEZONE))
+			return xpathTimeZone;
 		return super.getPropertyValue(id);
 	}
 
@@ -115,6 +135,10 @@ public class MXMLDataSource extends AMFileDataSource {
 	public void setPropertyValue(Object id, Object value) {
 		if (id.equals(PROPERTY_XPATHSELECT)) {
 			xpathselect = (String) value;
+		} else if (id.equals(PROPERTY_XPATHLOCALE)) {
+			xpathlocale = (Locale) value;
+		} else if (id.equals(PROPERTY_XPATHTIMEZONE)) {
+			xpathTimeZone = (TimeZone) value;
 		} else
 			super.setPropertyValue(id, value);
 	}

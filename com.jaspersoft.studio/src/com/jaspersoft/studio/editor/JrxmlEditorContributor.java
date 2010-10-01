@@ -62,6 +62,7 @@ import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
+import com.jaspersoft.studio.editor.report.ReportContainer;
 
 /**
  * Manages the installation/deinstallation of global actions for multi-page editors. Responsible for the redirection of
@@ -217,13 +218,10 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 *          The active editor
 	 */
 	public void setActivePage(IEditorPart activeEditor) {
-
 		IActionBars bars = getActionBars();
-		if (zoomCombo != null)
-			zoomCombo.setEnabled(false);
+		removeZoom(bars.getToolBarManager());
 		bars.clearGlobalActionHandlers();
 		if (activeEditor instanceof ITextEditor) {
-
 			ITextEditor editor = (ITextEditor) activeEditor;
 			bars.setGlobalActionHandler(ActionFactory.DELETE.getId(), getAction(editor, ITextEditorActionConstants.DELETE));
 			bars.setGlobalActionHandler(ActionFactory.UNDO.getId(), getAction(editor, ITextEditorActionConstants.UNDO));
@@ -236,9 +234,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			bars.setGlobalActionHandler(ActionFactory.FIND.getId(), getAction(editor, ITextEditorActionConstants.FIND));
 			bars.setGlobalActionHandler(IDEActionFactory.BOOKMARK.getId(),
 					getAction(editor, IDEActionFactory.BOOKMARK.getId()));
-		} else {
-			if (zoomCombo != null)
-				zoomCombo.setEnabled(true);
+		} else if (activeEditor instanceof ReportContainer) {
+			addZoom(bars.getToolBarManager());
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
 			if (registry != null)
 				for (String id : globalActionKeys) {
@@ -299,12 +296,27 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		// tbm.add(new Separator());
 		// tbm.add(getAction(GEFActionConstants.MATCH_WIDTH));
 		// tbm.add(getAction(GEFActionConstants.MATCH_HEIGHT));
-
 		tbm.add(new Separator());
+
+		addZoom(tbm);
+	}
+
+	private void addZoom(IToolBarManager tbm) {
 		tbm.add(getAction(GEFActionConstants.ZOOM_IN));
 		tbm.add(getAction(GEFActionConstants.ZOOM_OUT));
-		zoomCombo = new RZoomComboContributionItem(getPage());
+		if (zoomCombo == null)
+			zoomCombo = new RZoomComboContributionItem(getPage());
+		zoomCombo.setEnabled(true);
 		tbm.add(zoomCombo);
+		tbm.update(true);
+	}
+
+	private void removeZoom(IToolBarManager tbm) {
+		tbm.remove(GEFActionConstants.ZOOM_IN);
+		tbm.remove(GEFActionConstants.ZOOM_OUT);
+		tbm.remove(zoomCombo.getId());
+		zoomCombo.setEnabled(false);
+		tbm.update(true);
 	}
 
 	/*

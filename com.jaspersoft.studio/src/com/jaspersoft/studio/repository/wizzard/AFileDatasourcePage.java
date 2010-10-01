@@ -182,12 +182,12 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 
 			dsName = (String) value.getPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT);
 			if (dsName == null)
-				dsName = "";
+				dsName = "#,##0.##";
 			numberFormat.setText(dsName);
 
 			dsName = (String) value.getPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT);
 			if (dsName == null)
-				dsName = "";
+				dsName = "yyyy-MM-dd";
 			dateFormat.setText(dsName);
 
 		}
