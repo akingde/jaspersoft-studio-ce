@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.preview;
 
@@ -29,7 +25,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
@@ -38,6 +36,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -48,6 +47,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+
+import com.jaspersoft.studio.swt.widgets.WLocale;
+import com.jaspersoft.studio.swt.widgets.WTimeZone;
 
 public class ParametersDialog extends FormDialog {
 	private List<JRDesignParameter> prompts;
@@ -72,7 +74,8 @@ public class ParametersDialog extends FormDialog {
 		mform.getForm().getBody().setLayout(new GridLayout(2, false));
 
 		for (JRDesignParameter p : prompts) {
-			if (!(String.class.isAssignableFrom(p.getValueClass()) || Number.class.isAssignableFrom(p.getValueClass()) || Date.class
+			if (!(String.class.isAssignableFrom(p.getValueClass()) || Number.class.isAssignableFrom(p.getValueClass())
+					|| Date.class.isAssignableFrom(p.getValueClass()) || Locale.class.isAssignableFrom(p.getValueClass()) || TimeZone.class
 					.isAssignableFrom(p.getValueClass())))
 				continue;
 
@@ -80,6 +83,10 @@ public class ParametersDialog extends FormDialog {
 
 			if (p.getValueClass().equals(String.class)) {
 				createText(mform, toolkit, p);
+			} else if (p.getValueClass().equals(Locale.class)) {
+				createLocale(mform, toolkit, p);
+			} else if (p.getValueClass().equals(TimeZone.class)) {
+				createTimeZone(mform, toolkit, p);
 			} else if (p.getValueClass().equals(Integer.class)) {
 				createNumeric(mform.getForm().getBody(), p, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
 			} else if (p.getValueClass().equals(Long.class)) {
@@ -231,5 +238,44 @@ public class ParametersDialog extends FormDialog {
 			}
 		});
 		return num;
+	}
+
+	private void createLocale(IManagedForm mform, FormToolkit toolkit, final JRDesignParameter param) {
+		final WLocale txt = new WLocale(mform.getForm().getBody(), SWT.DROP_DOWN | SWT.BORDER);
+		txt.setToolTipText(param.getDescription());
+		txt.setBackground(txt.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		if (params.get(param.getName()) != null)
+			txt.setSelection((Locale) params.get(param.getName()));
+		txt.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				params.put(param.getName(), txt.getLocale());
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createTimeZone(IManagedForm mform, FormToolkit toolkit, final JRDesignParameter param) {
+		final WTimeZone txt = new WTimeZone(mform.getForm().getBody(), SWT.DROP_DOWN | SWT.BORDER);
+		txt.setBackground(txt.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		txt.setToolTipText(param.getDescription());
+		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		if (params.get(param.getName()) != null)
+			txt.setSelection((TimeZone) params.get(param.getName()));
+		txt.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				params.put(param.getName(), txt.getTimeZone());
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+
 	}
 }

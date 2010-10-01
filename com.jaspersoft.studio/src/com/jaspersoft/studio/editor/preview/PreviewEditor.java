@@ -177,11 +177,19 @@ public class PreviewEditor extends JRPrintEditor {
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, nf);
 									TimeZone tz = (TimeZone) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE);
 									if (tz == null)
-										tz = (TimeZone) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE);
+										try {
+											tz = (TimeZone) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE);
+										} catch (Exception ex) {
+											tz = TimeZone.getDefault();
+										}
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, tz);
 									Locale locale = (Locale) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHLOCALE);
 									if (locale == null)
-										locale = (Locale) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHLOCALE);
+										try {
+											locale = (Locale) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHLOCALE);
+										} catch (Exception ex) {
+											locale = Locale.getDefault();
+										}
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, locale);
 
 									String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
