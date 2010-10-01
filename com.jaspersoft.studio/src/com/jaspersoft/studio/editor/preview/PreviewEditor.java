@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import jxl.write.NumberFormat;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -161,10 +160,10 @@ public class PreviewEditor extends JRPrintEditor {
 								io = new FileInputStream((String) datasource.getPropertyValue(MFileDataSource.PROPERTY_FILENAME));
 								String df = (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT);
 								if (df == null || df.trim().equals(""))
-									df = new SimpleDateFormat().toPattern();
+									df = "yyyy-MM-dd";
 								String nf = (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT);
 								if (nf == null || nf.trim().equals(""))
-									nf = new DecimalFormat().toPattern();
+									nf = "#,##0.##";
 
 								if (datasource instanceof MFileDataSource) {
 									jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource) datasource);
@@ -177,8 +176,8 @@ public class PreviewEditor extends JRPrintEditor {
 								} else if (datasource instanceof MXMLDataSource) {
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, df);
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, nf);
-									// jasperParameter.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, Locale.ENGLISH);
-									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.US);
+//									jasperParameter.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, Locale.ENGLISH);
+									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
 
 									String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
 									if (select != null && !select.trim().endsWith("")) {

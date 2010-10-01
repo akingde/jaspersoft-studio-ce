@@ -22,6 +22,8 @@ package com.jaspersoft.studio.repository.wizzard;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -39,6 +41,8 @@ import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 
 public abstract class AFileDatasourcePage extends ADatasourcePage {
 	private Text fileNameTxt;
+	private Text dateFormat;
+	private Text numberFormat;
 
 	protected AFileDatasourcePage(String pageName) {
 		super(pageName);
@@ -48,6 +52,8 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 	public void dispose() {
 		AMDatasource value = getValue();
 		value.setPropertyValue(AMFileDataSource.PROPERTY_FILENAME, fileNameTxt.getText());
+		value.setPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT, numberFormat.getText());
+		value.setPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT, dateFormat.getText());
 		super.dispose();
 	}
 
@@ -91,8 +97,14 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		layout.marginWidth = 0;
 		c.setLayout(layout);
 
-		final Text numberFormat = new Text(c, SWT.BORDER);
+		numberFormat = new Text(c, SWT.BORDER);
 		numberFormat.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		numberFormat.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				getValue().setPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT, numberFormat.getText());
+			}
+		});
 
 		Button numberFormatButton = new Button(c, SWT.PUSH);
 		numberFormatButton.setText("...");
@@ -125,8 +137,14 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		layout.marginWidth = 0;
 		c.setLayout(layout);
 
-		final Text dateFormat = new Text(c, SWT.BORDER);
+		dateFormat = new Text(c, SWT.BORDER);
 		dateFormat.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		dateFormat.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				getValue().setPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT, dateFormat.getText());
+			}
+		});
 
 		Button dateFormatButton = new Button(c, SWT.PUSH);
 		dateFormatButton.setText("...");
@@ -161,6 +179,16 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 			if (dsName == null)
 				dsName = "";
 			fileNameTxt.setText(dsName);
+
+			dsName = (String) value.getPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT);
+			if (dsName == null)
+				dsName = "";
+			numberFormat.setText(dsName);
+
+			dsName = (String) value.getPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT);
+			if (dsName == null)
+				dsName = "";
+			dateFormat.setText(dsName);
 
 		}
 	}

@@ -156,6 +156,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	@Override
 	public String getToolTip() {
+		if (getValue() != null)
+			return "Band: " + getDisplayText() + " 	";
+
 		return getIconDescriptor().getToolTip();
 	}
 
