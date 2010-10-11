@@ -37,7 +37,7 @@ public class StudioPreferencePage extends FieldEditorPreferencePage implements I
 
 	public StudioPreferencePage() {
 		super(GRID);
-		setPreferenceStore(JaspersoftStudioPlugin.getDefault().getPreferenceStore());
+		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
 		// setDescription("A demonstration of a preference page implementation");
 	}
 

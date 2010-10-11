@@ -23,7 +23,8 @@
      along with Jaspersoft Open Studio If not, see <http://www.gnu.org/licenses/>.
  -->
 
-<plugin> 
+<plugin>
+   <extension-point id="components" name="Components" schema="schema/components.exsd"/> 
 
    <extension
          id="xmlProblem"

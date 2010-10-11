@@ -110,8 +110,9 @@ public class ReportEditor extends AbstractVisualEditor {
 		provider = new ReportRulerProvider(new ReportRuler(false, RulerProvider.UNIT_PIXELS));
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
 
-		Boolean isRulerVisible = JaspersoftStudioPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER);
-		
+		Boolean isRulerVisible = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+				.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER);
+
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
 
 		createAdditionalActions();

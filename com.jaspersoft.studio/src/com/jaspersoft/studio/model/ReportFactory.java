@@ -58,6 +58,8 @@ import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
+import com.jaspersoft.studio.ExtensionManager;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
@@ -82,7 +84,6 @@ import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.model.variable.MVariables;
 
-// TODO: Auto-generated Javadoc
 /**
  * A factory for creating Report objects.
  * 
@@ -168,8 +169,10 @@ public class ReportFactory {
 				for (int k = 0; k < bandsList.length; k++) {
 					if (bandsList[k] != null) {
 						MBand band = new MBand(report, bandsList[k], BandTypeEnum.DETAIL, -1);
-						for (JRElement element : bandsList[k].getElements())
-							createNode(band, element, -1);
+						createElementsForBand(band, bandsList[k].getChildren());
+						//
+						// for (JRElement element : bandsList[k].getElements())
+						//	createNode(band, element, -1);
 					}
 				}
 		} else {
@@ -251,7 +254,7 @@ public class ReportFactory {
 		ANode nSortFields = new MSortFields(nDataset, dataSet);
 		if (dataSet.getSortFields() != null) {
 			for (Iterator<JRDesignSortField> it = dataSet.getSortFieldsList().iterator(); it.hasNext();) {
-				createNode(nFields,   it.next(), -1);
+				createNode(nFields, it.next(), -1);
 			}
 		}
 		// create variables
@@ -265,7 +268,7 @@ public class ReportFactory {
 		ANode nScriptlets = new MScriptlets(nDataset, dataSet);
 		if (dataSet.getScriptlets() != null) {
 			for (Iterator<JRDesignScriptlet> it = dataSet.getScriptletsList().iterator(); it.hasNext();) {
-				createNode(nScriptlets,   it.next(), -1);
+				createNode(nScriptlets, it.next(), -1);
 			}
 		}
 
@@ -274,7 +277,7 @@ public class ReportFactory {
 			ANode nGroups = new MGroups(nDataset, dataSet);
 			if (dataSet.getGroups() != null) {
 				for (Iterator<JRDesignGroup> it = dataSet.getGroupsList().iterator(); it.hasNext();) {
-					createNode(nGroups,   it.next(), -1);
+					createNode(nGroups, it.next(), -1);
 				}
 			}
 		}
@@ -291,7 +294,11 @@ public class ReportFactory {
 	public static void createElementsForBand(ANode band, List<?> list) {
 		for (Object element : list) {
 			ANode node = createNode(band, element, -1);
-			if (element instanceof JRDesignFrame) {
+			ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+			List<?> children = m.getChildren4Element(element);
+			if (children != null) {
+				createElementsForBand(node, children);
+			} else if (element instanceof JRDesignFrame) {
 				JRDesignFrame frame = (JRDesignFrame) element;
 				createElementsForBand(node, frame.getChildren());
 			} else if (element instanceof JRElementGroup) {
@@ -315,7 +322,11 @@ public class ReportFactory {
 	 * @return the a node
 	 */
 	public static ANode createNode(ANode parent, Object jrObject, int newIndex) {
-		if (jrObject instanceof JRDesignBand) {
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		ANode n = m.createNode(parent, jrObject, newIndex);
+		if (n != null)
+			return n;
+		else if (jrObject instanceof JRDesignBand) {
 			return new MBand(parent, (JRDesignBand) jrObject, ((JRDesignBand) jrObject).getOrigin().getBandTypeValue(),
 					newIndex);
 		} else if (jrObject instanceof JRFrame) {
@@ -366,9 +377,8 @@ public class ReportFactory {
 		} else if (jrObject instanceof JRDesignParameter) {
 			JRDesignParameter jrParameter = (JRDesignParameter) jrObject;
 			if (jrParameter.isSystemDefined())
-				new MParameterSystem(parent, jrParameter, newIndex);
-			else
-				new MParameter(parent, jrParameter, newIndex);
+				return new MParameterSystem(parent, jrParameter, newIndex);
+			return new MParameter(parent, jrParameter, newIndex);
 		} else if (jrObject instanceof JRDesignField) {
 			return new MField(parent, (JRDesignField) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignSortField) {

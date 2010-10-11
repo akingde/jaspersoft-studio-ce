@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.textfield.command;
 
@@ -50,7 +46,7 @@ import com.jaspersoft.studio.model.textfield.MTotalPages;
  * @author Chicu Veaceslav
  */
 public class CreatePageXofYCommand extends CreateElementCommand {
-	
+
 	/** The jr design. */
 	private JasperDesign jrDesign;
 
@@ -112,8 +108,11 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 		super(destNode, srcNode, position, index);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.model.command.CreateElementCommand#setContext(com.jaspersoft.studio.model.ANode, com.jaspersoft.studio.model.MGeneric, int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.command.CreateElementCommand#setContext(com.jaspersoft.studio.model.ANode,
+	 * com.jaspersoft.studio.model.MGeneric, int)
 	 */
 	@Override
 	protected void setContext(ANode destNode, MGraphicElement srcNode, int index) {
@@ -124,7 +123,7 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 	/**
 	 * Creates the object.
 	 */
-	private void createObject() {
+	protected void createObject() {
 		Point location = getLocation();
 		if (location == null)
 			location = new Point(0, 0);
@@ -173,7 +172,9 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 			((JRDesignFrame) jrGroup).addElement(index + 1, tfPageTotal);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.command.CreateElementCommand#execute()
 	 */
 	@Override
@@ -181,7 +182,9 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 		createObject();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.command.CreateElementCommand#canUndo()
 	 */
 	@Override

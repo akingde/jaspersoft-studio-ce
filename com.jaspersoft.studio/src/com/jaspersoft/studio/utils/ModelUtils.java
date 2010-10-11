@@ -344,7 +344,7 @@ public class ModelUtils {
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		JaspersoftStudioPlugin.getDefault();
+		JaspersoftStudioPlugin.getInstance();
 		return JaspersoftStudioPlugin.getImageDescriptor(path);
 	}
 

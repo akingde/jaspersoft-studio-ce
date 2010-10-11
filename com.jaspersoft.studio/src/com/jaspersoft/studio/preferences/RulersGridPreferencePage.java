@@ -38,7 +38,7 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 
 	public RulersGridPreferencePage() {
 		super(GRID);
-		setPreferenceStore(JaspersoftStudioPlugin.getDefault().getPreferenceStore());
+		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
 		setDescription("How new editors are initialized");
 	}
 

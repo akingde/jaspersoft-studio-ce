@@ -36,8 +36,8 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.FigureFactory;
-import com.jaspersoft.studio.editor.gef.figures.GenericFigure;
 import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.CornerBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
@@ -67,18 +67,17 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	public void activate() {
 		super.activate();
 		preferenceListener = new PreferenceListener();
-		JaspersoftStudioPlugin.getDefault().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(preferenceListener);
 	}
 
 	@Override
 	public void deactivate() {
-		JaspersoftStudioPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(preferenceListener);
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(preferenceListener);
 		super.deactivate();
 	}
 
 	@Override
 	public void setModel(Object model) {
-		// TODO Auto-generated method stub
 		super.setModel(model);
 		if (model != null && model instanceof ANode)
 			drawVisitor = new DrawVisitor(((ANode) model).getJasperDesign(), null);
@@ -146,13 +145,12 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
 			int x = bounds.x + PageFigure.PAGE_BORDER.left;
 			int y = bounds.y + PageFigure.PAGE_BORDER.top;
-			if (rect instanceof GenericFigure && drawVisitor != null) {
-				GenericFigure f = (GenericFigure) rect;
+			if (rect instanceof ComponentFigure && drawVisitor != null) {
+				ComponentFigure f = (ComponentFigure) rect;
 				f.setLocation(new Point(x, y));
 				f.setJRElement(jrElement, drawVisitor);
 			} else
 				rect.setBounds(new Rectangle(x, y, jrElement.getWidth(), jrElement.getHeight()));
-
 		}
 	}
 

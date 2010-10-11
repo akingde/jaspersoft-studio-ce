@@ -1,28 +1,25 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.palette;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +31,9 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.PaletteToolbar;
 import org.eclipse.gef.palette.SelectionToolEntry;
 
+import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MBarcode;
 import com.jaspersoft.studio.model.MBreak;
@@ -56,12 +55,11 @@ import com.jaspersoft.studio.model.textfield.MTextField;
 import com.jaspersoft.studio.model.textfield.MTime;
 import com.jaspersoft.studio.model.textfield.MTotalPages;
 
-// TODO: Auto-generated Javadoc
 /**
  * A factory for creating JDPalette objects.
  */
 public class JDPaletteFactory {
-	
+
 	/**
 	 * Creates a new JDPalette object.
 	 * 
@@ -97,8 +95,8 @@ public class JDPaletteFactory {
 	 *          the palette root
 	 */
 	public static void createElements(PaletteRoot paletteRoot) {
-		PaletteDrawer drawer = new PaletteDrawer("Elements", JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/elementgroup-16.png"));
+		PaletteDrawer drawer = new PaletteDrawer("Elements",
+				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/elementgroup-16.png"));
 		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
 
 		entries.add(createJDEntry(MEllipse.getIconDescriptor(), MEllipse.class));
@@ -115,6 +113,27 @@ public class JDPaletteFactory {
 		entries.add(createJDEntry(MSubreport.getIconDescriptor(), MSubreport.class));
 		entries.add(createJDEntry(MGraphicElement.getIconDescriptor(), MGraphicElement.class));
 
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		List<Class<?>> lp = m.getPaletteEntries();
+		for (Class<?> mn : lp) {
+			if (ANode.class.isAssignableFrom(mn)) {
+				try {
+					entries.add(createJDEntry(
+							(IIconDescriptor) mn.getDeclaredMethod("getIconDescriptor", new Class[0]).invoke(mn, new Object[0]), mn));
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		drawer.addAll(entries);
 		paletteRoot.add(drawer);
 	}
@@ -126,34 +145,16 @@ public class JDPaletteFactory {
 	 *          the palette root
 	 */
 	public static void createFields(PaletteRoot paletteRoot) {
-		PaletteDrawer drawer = new PaletteDrawer("Fields", JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/fields-16.png"));
+		PaletteDrawer drawer = new PaletteDrawer("Fields",
+				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/fields-16.png"));
 		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
 		entries.add(createJDEntry(MPageNumber.getIconDescriptor(), MPageNumber.class));
 		entries.add(createJDEntry(MTotalPages.getIconDescriptor(), MTotalPages.class));
 		entries.add(createJDEntry(MDate.getIconDescriptor(), MDate.class));
 		entries.add(createJDEntry(MTime.getIconDescriptor(), MTime.class));
-		// entries.add(new CreationToolEntry("Date & Time", "Date & Time", new
-		// JDPaletteCreationFactory(MBand.class), null,
-		// null));
 		entries.add(createJDEntry(MPercentage.getIconDescriptor(), MPercentage.class));
 		entries.add(createJDEntry(MPageXofY.getIconDescriptor(), MPageXofY.class));
 
-		// entries.add(new CreationToolEntry("Record Number", "Record Number", new
-		// JDPaletteCreationFactory(MBand.class),
-		// null, null));
-		// entries.add(new CreationToolEntry("Total Records", "Total Records", new
-		// JDPaletteCreationFactory(MBand.class),
-		// null, null));
-		// entries.add(new CreationToolEntry("Column Number", "Column Number", new
-		// JDPaletteCreationFactory(MBand.class),
-		// null, null));
-		// entries.add(new CreationToolEntry("Page Record Number",
-		// "Page Record Number", new JDPaletteCreationFactory(
-		// MBand.class), null, null));
-		// entries.add(new CreationToolEntry("Column Record Number",
-		// "Column Record Number", new JDPaletteCreationFactory(
-		// MBand.class), null, null));
 		drawer.addAll(entries);
 		paletteRoot.add(drawer);
 	}

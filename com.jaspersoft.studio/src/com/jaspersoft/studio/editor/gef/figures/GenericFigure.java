@@ -19,76 +19,22 @@
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
-import java.awt.Graphics2D;
-
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRGenericElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class GenericFigure.
  */
-public class GenericFigure extends RectangleFigure implements HandleBounds {
-
-	/** The jr element. */
-	private JRElement jrElement;
-
-	/** The draw visitor. */
-	private DrawVisitor drawVisitor;
+public class GenericFigure extends ComponentFigure implements HandleBounds {
 
 	/**
 	 * Instantiates a new generic figure.
 	 */
 	public GenericFigure() {
 		super();
-	}
-
-	/**
-	 * Sets the jr element.
-	 * 
-	 * @param jrElement
-	 *          the jr element
-	 * @param drawVisitor
-	 *          the draw visitor
-	 */
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
-		this.drawVisitor = drawVisitor;
-		this.jrElement = jrElement;
-		setSize(jrElement.getWidth(), jrElement.getHeight());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.draw2d.Figure#paint(org.eclipse.draw2d.Graphics)
-	 */
-	@Override
-	public void paint(Graphics graphics) {
-		Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
-
-		Rectangle b = getHandleBounds();
-		// Graphics2D newGraphics = (Graphics2D) graphics2d.create(b.x, b.y, b.width, b.height);
-		try {
-			graphics2d.translate(b.x, b.y);
-
-			drawVisitor.setGraphics2D(graphics2d);
-			draw(drawVisitor, jrElement);
-		} catch (Exception e) {
-			// when a font is missing exception is thrown by DrawVisitor
-			// FIXME: maybe draw something, else?
-			e.printStackTrace();
-		} finally {
-			graphics2d.translate(-b.x, -b.y);
-		}
-		paintBorder(graphics);
 	}
 
 	/**
@@ -100,26 +46,8 @@ public class GenericFigure extends RectangleFigure implements HandleBounds {
 	 *          the jr element
 	 */
 	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitGenericElement((JRGenericElement) jrElement);
+		if (jrElement instanceof JRGenericElement)
+			drawVisitor.visitGenericElement((JRGenericElement) jrElement);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.handles.HandleBounds#getHandleBounds()
-	 */ 
-	public Rectangle getHandleBounds() {
-		Rectangle handleBounds = getBounds();
-		return handleBounds;
-
-	}
-
-	/**
-	 * Gets the jr element.
-	 * 
-	 * @return the jr element
-	 */
-	public JRElement getJrElement() {
-		return jrElement;
-	}
 }

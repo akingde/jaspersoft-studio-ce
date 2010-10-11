@@ -161,9 +161,10 @@ public class CreateElementCommand extends Command {
 	/**
 	 * Creates the object.
 	 */
-	private void createObject() {
+	protected void createObject() {
 		if (jrElement == null) {
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+					
 			if (jrElement != null) {
 				if (location == null)
 					location = new Point(0, 0);
@@ -173,6 +174,10 @@ public class CreateElementCommand extends Command {
 				jrElement.setHeight(srcNode.getDefaultHeight());
 			}
 		}
+	}
+
+	public void setJrGroup(JRElementGroup jrGroup) {
+		this.jrGroup = jrGroup;
 	}
 
 	/*

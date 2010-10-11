@@ -19,16 +19,8 @@
  */
 package com.jaspersoft.studio;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
-
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -42,6 +34,8 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @version $Id: JasperCompileManager.java 1229 2006-04-19 13:27:35 +0300 (Wed, 19 Apr 2006) teodord $
  */
 public class JaspersoftStudioPlugin extends AbstractUIPlugin {
+
+	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components";
 
 	// The shared instance.
 	/** The plugin. */
@@ -78,18 +72,6 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns the shared instance.
-	 * 
-	 * @return the default
-	 */
-	public static JaspersoftStudioPlugin getDefault() {
-		return plugin;
-	}
-
-	/** The image cache. */
-	private static Map<ImageDescriptor, Image> imageCache = new HashMap<ImageDescriptor, Image>(11);
-
-	/**
 	 * Gets the image.
 	 * 
 	 * @param descriptor
@@ -99,13 +81,14 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 	public static Image getImage(ImageDescriptor descriptor) {
 		if (descriptor == null)
 			descriptor = ModelUtils.getImageDescriptor("icons/report.png");
-		Image image = imageCache.get(descriptor);
+		ImageRegistry imageRegistry = getInstance().getImageRegistry();
+		Image image = imageRegistry.get(descriptor.toString());
 		if (image == null) {
 			image = descriptor.createImage();
 			if (image != null)
-				imageCache.put(descriptor, image);
+				imageRegistry.put(descriptor.toString(), image);
 			else
-				image = imageCache.get(ModelUtils.getImageDescriptor("icons/report.png"));
+				image = imageRegistry.get("icons/report.png");
 		}
 		return image;
 	}
@@ -135,37 +118,6 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		return AbstractUIPlugin.imageDescriptorFromPlugin(UNIQUE_ID, path);
 	}
 
-	/** The resource bundle icons. */
-	private static ResourceBundle resourceBundleIcons;
-
-	/**
-	 * Gets the resource bundle icons.
-	 * 
-	 * @return the resource bundle icons
-	 */
-	public static ResourceBundle getResourceBundleIcons() {
-		if (resourceBundleIcons == null) {
-			String resourceName = getDefault().getBundle().getEntry("/").toString() + "resources/icons.properties";
-			InputStream inputStream = null;
-			try {
-				inputStream = new URL(resourceName).openStream();
-				return new PropertyResourceBundle(new URL(resourceName).openStream());
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					if (inputStream != null)
-						inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return resourceBundleIcons;
-	}
-
 	/** The Constant UNIQUE_ID. */
 	private static final String UNIQUE_ID = "com.jaspersoft.studio";
 
@@ -176,6 +128,16 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 	 */
 	public static String getUniqueIdentifier() {
 		return UNIQUE_ID;
+	}
+
+	private static ExtensionManager extensionManager;
+
+	public static ExtensionManager getExtensionManager() {
+		if (extensionManager == null) {
+			extensionManager = new ExtensionManager();
+			extensionManager.init();
+		}
+		return extensionManager;
 	}
 
 }

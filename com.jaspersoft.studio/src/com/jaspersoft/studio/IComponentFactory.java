@@ -21,45 +21,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.action.create;
+package com.jaspersoft.studio;
+
+import java.util.List;
+
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MList;
-import com.jaspersoft.studio.model.command.CreateElementCommand;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class CreateListElement.
- */
-public class CreateListElement extends CreateElementAction {
-	
-	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor = MList.getIconDescriptor();
+public interface IComponentFactory {
+	public ANode createNode(ANode parent, Object jrObject, int newIndex);
 
-	/**
-	 * Instantiates a new creates the list element.
-	 */
-	public CreateListElement() {
-		super(getIconDescriptor());
-	}
+	public List<?> getChildren4Element(Object jrObject);
 
-	/**
-	 * Gets the icon descriptor.
-	 * 
-	 * @return the icon descriptor
-	 */
-	public static IIconDescriptor getIconDescriptor() {
-		return iconDescriptor;
-	}
+	public List<Class<?>> getPaletteEntries();
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.action.Action#run()
-	 */
-	@Override
-	public void run() {
-		// ask user questions
-		CreateElementCommand newCmd = new CreateElementCommand((ANode) getParent(), new MList(), getLocation(), getIndex());
-		setCommand(newCmd);
-	}
+	public IFigure createFigure(final ANode node);
+
+	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex);
+
 }

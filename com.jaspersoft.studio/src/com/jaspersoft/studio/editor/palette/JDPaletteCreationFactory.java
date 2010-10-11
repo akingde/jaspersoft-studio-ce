@@ -21,7 +21,6 @@ package com.jaspersoft.studio.editor.palette;
 
 import org.eclipse.gef.requests.CreationFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * A factory for creating JDPaletteCreation objects.
  * 

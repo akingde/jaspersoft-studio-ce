@@ -19,11 +19,17 @@
  */
 package com.jaspersoft.studio.model;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class NodeIconDescriptor.
  * 
@@ -45,6 +51,7 @@ public class NodeIconDescriptor implements IIconDescriptor {
 
 	/** The ICO n_32. */
 	private String ICON_32 = "icons/resources/genericelement-32.png";
+	private AbstractUIPlugin plugin;
 
 	/**
 	 * Instantiates a new node icon descriptor.
@@ -53,11 +60,55 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	 *          the name
 	 */
 	public NodeIconDescriptor(String name) {
+		this(name, JaspersoftStudioPlugin.getInstance());
+	}
+
+	public NodeIconDescriptor(String name, AbstractUIPlugin plugin) {
+		this.plugin = plugin;
+
 		this.ICON_TITLE = getFromBundle(name + ".title", ICON_TITLE);
 		this.ICON_DESCRIPTION = getFromBundle(name + ".description", ICON_DESCRIPTION);
 		this.ICON_TOOLTIP = getFromBundle(name + ".description", ICON_TOOLTIP);
 		this.ICON_16 = getFromBundle(name + ".icon16", ICON_16);
 		this.ICON_32 = getFromBundle(name + ".icon32", ICON_32);
+	}
+
+	/** The resource bundle icons. */
+	private static ResourceBundle resourceBundleIcons;
+
+	public ResourceBundle getResourceBundleIcons() {
+		return resourceBundleIcons;
+	}
+
+	public void setResourceBundleIcons(ResourceBundle resourceBundleIcons) {
+		NodeIconDescriptor.resourceBundleIcons = resourceBundleIcons;
+	}
+
+	/**
+	 * Gets the resource bundle icons.
+	 * 
+	 * @return the resource bundle icons
+	 */
+	public ResourceBundle getResourceBundle(AbstractUIPlugin plugin) {
+		if (getResourceBundleIcons() == null) {
+			InputStream inputStream = null;
+			try {
+				inputStream = plugin.getBundle().getResource("resources/icons.properties").openStream();
+				setResourceBundleIcons(new PropertyResourceBundle(inputStream));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (inputStream != null)
+						inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return getResourceBundleIcons();
 	}
 
 	/**
@@ -72,7 +123,7 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	private String getFromBundle(String key, String def) {
 		String res = def;
 		try {
-			res = JaspersoftStudioPlugin.getResourceBundleIcons().getString(key);
+			res = getResourceBundle(plugin).getString(key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -116,7 +167,8 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getIcon16()
 	 */
 	public ImageDescriptor getIcon16() {
-		return JaspersoftStudioPlugin.getImageDescriptor(ICON_16);
+		// return JaspersoftStudioPlugin.getImageDescriptor(ICON_16);
+		return AbstractUIPlugin.imageDescriptorFromPlugin(plugin.getBundle().getSymbolicName(), ICON_16);
 	}
 
 	/*
@@ -134,7 +186,7 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getIcon32()
 	 */
 	public ImageDescriptor getIcon32() {
-		return JaspersoftStudioPlugin.getImageDescriptor(ICON_32);
+		return AbstractUIPlugin.imageDescriptorFromPlugin(plugin.getBundle().getSymbolicName(), ICON_32);
 	}
 
 	/*

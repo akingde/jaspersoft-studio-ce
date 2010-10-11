@@ -33,6 +33,8 @@ import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.UnexecutableCommand;
 
+import com.jaspersoft.studio.ExtensionManager;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -336,6 +338,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 * @return the creates the command
 	 */
 	public static Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		Command c = m.getCreateCommand(parent, child, location, newIndex);
+		if (c != null)
+			return c;
+
 		if (child instanceof MPageXofY) {
 			if (parent instanceof MElementGroup)
 				return new CreatePageXofYCommand((MElementGroup) parent, (MPageXofY) child, newIndex);

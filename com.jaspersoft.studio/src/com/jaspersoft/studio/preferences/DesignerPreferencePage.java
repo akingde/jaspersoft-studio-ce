@@ -31,7 +31,7 @@ public class DesignerPreferencePage extends FieldEditorPreferencePage implements
 
 	public DesignerPreferencePage() {
 		super(GRID);
-		setPreferenceStore(JaspersoftStudioPlugin.getDefault().getPreferenceStore());
+		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
 		setDescription("General editor appearance");
 	}
 

@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
+import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
@@ -70,9 +71,10 @@ public class FigureFactory {
 			return new CrosstabFigure();
 		} else if (node instanceof MSubreport) {
 			return new SubreportFigure();
-		} else {
-			return new GenericFigure();
-		}
+		} else if (node.getValue() instanceof JRComponentElement) {
+			return new ComponentFigure();
+		} else
+			return new RectangleFigure();
 	}
 
 	/**

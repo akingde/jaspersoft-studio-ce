@@ -202,7 +202,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	protected void createAdditionalActions() {
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		// Show Grid Action
-		IPreferenceStore prefs = JaspersoftStudioPlugin.getDefault().getPreferenceStore();
+		IPreferenceStore prefs = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
 		Boolean isGridVisible = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID);
 		Boolean isSnapToGuides = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES);
 		Boolean isSnapToGrid = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID);
@@ -460,16 +460,16 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		getSelectionActions().add(DeleteGroupReportAction.ID);
 
 		// ------------
-		action = new DirectEditAction( this);
+		action = new DirectEditAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
 		// ------------
-		action = new BringForwardAction( this);
+		action = new BringForwardAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new BringToFrontAction( this);
+		action = new BringToFrontAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 

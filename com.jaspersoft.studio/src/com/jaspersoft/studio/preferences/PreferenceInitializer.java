@@ -35,7 +35,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
 	 */
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = JaspersoftStudioPlugin.getDefault().getPreferenceStore();
+		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
 		store.setDefault(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, "shadow");
 		store.setDefault(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle");
 
