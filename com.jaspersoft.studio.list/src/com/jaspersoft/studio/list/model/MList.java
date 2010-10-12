@@ -1,0 +1,419 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of iReport.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+package com.jaspersoft.studio.list.model;
+
+import java.beans.PropertyChangeEvent;
+import java.util.List;
+import java.util.Map;
+
+import net.sf.jasperreports.components.list.DesignListContents;
+import net.sf.jasperreports.components.list.StandardListComponent;
+import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
+import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
+import net.sf.jasperreports.engine.type.PrintOrderEnum;
+
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+import com.jaspersoft.studio.list.ListNodeIconDescriptor;
+import com.jaspersoft.studio.list.property.descriptor.PropertiesPropertyDescriptor;
+import com.jaspersoft.studio.list.property.descriptor.dialog.PropertyDTO;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.ReportFactory;
+import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.utils.EnumHelper;
+
+public class MList extends MGraphicElement implements IPastable, IContainer, IContainerEditPart, IGroupElement {
+
+	/** The icon descriptor. */
+	private static IIconDescriptor iconDescriptor;
+
+	/**
+	 * Gets the icon descriptor.
+	 * 
+	 * @return the icon descriptor
+	 */
+	public static IIconDescriptor getIconDescriptor() {
+		if (iconDescriptor == null)
+			iconDescriptor = new ListNodeIconDescriptor("list");
+		return iconDescriptor;
+	}
+
+	/**
+	 * Instantiates a new m list.
+	 */
+	public MList() {
+		super();
+	}
+
+	/**
+	 * Instantiates a new m list.
+	 * 
+	 * @param parent
+	 *          the parent
+	 * @param jrList
+	 *          the jr line
+	 * @param newIndex
+	 *          the new index
+	 */
+	public MList(ANode parent, JRDesignComponentElement jrList, int newIndex) {
+		super(parent, newIndex);
+		setValue(jrList);
+	}
+
+	private static IPropertyDescriptor[] descriptors;
+	private static Map<String, Object> defaultsMap;
+
+	@Override
+	public Map<String, Object> getDefaultsMap() {
+		return defaultsMap;
+	}
+
+	@Override
+	public IPropertyDescriptor[] getDescriptors() {
+		return descriptors;
+	}
+
+	@Override
+	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+		descriptors = descriptors1;
+		defaultsMap = defaultsMap1;
+	}
+
+	/**
+	 * Creates the property descriptors.
+	 * 
+	 * @param desc
+	 *          the desc
+	 */
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+		super.createPropertyDescriptors(desc, defaultsMap);
+
+		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(
+				StandardListComponent.PROPERTY_PRINT_ORDER, "Print Order", EnumHelper.getEnumNames(PrintOrderEnum.values(),
+						NullEnum.NOTNULL));
+		stretchTypeD
+				.setDescription("Specifies the graphic element stretch behavior when the report section is affected by stretch.");
+		desc.add(stretchTypeD);
+		stretchTypeD.setCategory("List Properties");
+
+		CheckBoxPropertyDescriptor ignoreWidthD = new CheckBoxPropertyDescriptor(
+				StandardListComponent.PROPERTY_IGNORE_WIDTH, "Ignore Width");
+		ignoreWidthD.setDescription("Ignore Width.");
+		desc.add(ignoreWidthD);
+		ignoreWidthD.setCategory("List Properties");
+
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(PREFIX + DesignListContents.PROPERTY_HEIGHT,
+				"Cell Height");
+		heightD.setCategory("List Properties");
+		heightD.setDescription("Height of the cell.");
+		desc.add(heightD);
+
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(PREFIX + DesignListContents.PROPERTY_WIDTH,
+				"Cell Width");
+		widthD.setCategory("List Properties");
+		widthD.setDescription("Width of the cell.");
+		desc.add(widthD);
+
+		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(PREFIX
+				+ PROPERTY_CONNECTION_EXPRESSION, "Connection Expression");
+		connExprD.setDescription("The connection expression.");
+		desc.add(connExprD);
+
+		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(
+				PREFIX + PROPERTY_DATASOURCE_EXPRESSION, "Datasource Expression");
+		dsExprD.setDescription("The datasource expression.");
+		desc.add(dsExprD);
+
+		JRExpressionPropertyDescriptor paramExprD = new JRExpressionPropertyDescriptor(PREFIX
+				+ PROPERTY_PARAMETERS_MAP_EXPRESSION, "Parameters Map Expression");
+		paramExprD.setDescription("The parameters map expression.");
+		desc.add(paramExprD);
+
+		PropertiesPropertyDescriptor propertiesD = new PropertiesPropertyDescriptor(PREFIX + PROPERTY_PARAMETERS,
+				"Parameters");
+		propertiesD.setDescription("The datasource expression.");
+		desc.add(propertiesD);
+
+		paramExprD.setCategory("Dataset Run");
+		propertiesD.setCategory("Dataset Run");
+		connExprD.setCategory("Dataset Run");
+		dsExprD.setCategory("Dataset Run");
+
+		defaultsMap.put(StandardListComponent.PROPERTY_IGNORE_WIDTH, new Boolean(false));
+		defaultsMap.put(StandardListComponent.PROPERTY_PRINT_ORDER, PrintOrderEnum.HORIZONTAL);
+	}
+
+	private static final String PREFIX = "CONTENTS.";
+	private static final String PROPERTY_CONNECTION_EXPRESSION = "PROPERTY_CONNECTION_EXPRESSION";
+	private static final String PROPERTY_DATASOURCE_EXPRESSION = "PROPERTY_DATASOURCE_EXPRESSION";
+	private static final String PROPERTY_PARAMETERS = "PROPERTY_PARAMETERS";
+	private static final String PROPERTY_PARAMETERS_MAP_EXPRESSION = "PROPERTY_PARAMETERS_MAP_EXPRESSION";
+
+	private MExpression cnExpression;
+	private MExpression dsExpression;
+	private MExpression pmExpression;
+
+	private PropertyDTO propertyDTO;
+
+	@Override
+	public Object getPropertyValue(Object id) {
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
+		JRDatasetRun jrDataSetRun = jrList.getDatasetRun();
+
+		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
+			return jrList.getIgnoreWidth();
+		if (id.equals(StandardListComponent.PROPERTY_PRINT_ORDER))
+			return EnumHelper.getValue(jrList.getPrintOrderValue(), 1, false);
+
+		if (id.equals(PREFIX + DesignListContents.PROPERTY_HEIGHT))
+			return jrList.getContents().getHeight();
+		if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
+			return jrList.getContents().getWidth();
+		if (id.equals(PREFIX + PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
+			if (pmExpression == null)
+				pmExpression = new MExpression(jrDataSetRun.getParametersMapExpression());
+			return pmExpression;
+		}
+		if (id.equals(PREFIX + PROPERTY_CONNECTION_EXPRESSION)) {
+			if (cnExpression == null)
+				cnExpression = new MExpression(jrDataSetRun.getConnectionExpression());
+			return cnExpression;
+		}
+		if (id.equals(PREFIX + PROPERTY_DATASOURCE_EXPRESSION)) {
+			if (dsExpression == null)
+				dsExpression = new MExpression(jrDataSetRun.getDataSourceExpression());
+			return dsExpression;
+		}
+		if (id.equals(PREFIX + PROPERTY_PARAMETERS)) {
+			if (propertyDTO == null) {
+				propertyDTO = new PropertyDTO();
+				propertyDTO.setJasperDesign(getJasperDesign());
+				propertyDTO.setValue(jrDataSetRun.getParameters());
+			}
+			return propertyDTO;
+		}
+
+		return super.getPropertyValue(id);
+	}
+
+	@Override
+	public void setPropertyValue(Object id, Object value) {
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
+		JRDesignDatasetRun jrDataSetRun = (JRDesignDatasetRun) jrList.getDatasetRun();
+
+		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
+			jrList.setIgnoreWidth((Boolean) value);
+		else if (id.equals(StandardListComponent.PROPERTY_PRINT_ORDER))
+			jrList.setPrintOrderValue((PrintOrderEnum) EnumHelper.getSetValue(PrintOrderEnum.values(), value, 1, false));
+		else if (id.equals(PREFIX + DesignListContents.PROPERTY_HEIGHT))
+			((DesignListContents) jrList.getContents()).setHeight((Integer) value);
+		else if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
+			((DesignListContents) jrList.getContents()).setWidth((Integer) value);
+		else if (id.equals(PREFIX + PROPERTY_CONNECTION_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				cnExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) cnExpression.getValue();
+				jrDataSetRun.setConnectionExpression(expression);
+			}
+		} else if (id.equals(PREFIX + PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				pmExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) pmExpression.getValue();
+				jrDataSetRun.setParametersMapExpression(expression);
+			}
+		} else if (id.equals(PREFIX + PROPERTY_DATASOURCE_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				dsExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) dsExpression.getValue();
+				jrDataSetRun.setDataSourceExpression(expression);
+			}
+		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
+			if (value instanceof Map) {
+				// Map<String, JRDesignSubreportParameter> v = (Map<String, JRDesignSubreportParameter>) value;
+				// Set<String> names = new HashSet<String>(jrDataSetRun.getParameters());
+				// for (String name : names)
+				// jrDataSetRun.removeParameter(name);
+				//
+				// for (JRDesignSubreportParameter param : v.values())
+				// try {
+				// jrDataSetRun.addParameter(param);
+				// } catch (JRException e) {
+				// e.printStackTrace();
+				// }
+			}
+		} else
+			super.setPropertyValue(id, value);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
+	 */
+	@Override
+	public int getDefaultHeight() {
+		return 30;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
+	 */
+	@Override
+	public int getDefaultWidth() {
+		return 100;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	 */
+	@Override
+	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
+		JRDesignComponentElement el = new JRDesignComponentElement();
+		StandardListComponent component = new StandardListComponent();
+		component.setContents(new DesignListContents());
+		el.setComponent(component);
+
+		return el;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getDisplayText()
+	 */
+	@Override
+	public String getDisplayText() {
+		return getIconDescriptor().getTitle();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getImagePath()
+	 */
+	@Override
+	public ImageDescriptor getImagePath() {
+		return getIconDescriptor().getIcon16();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getToolTip()
+	 */
+	@Override
+	public String getToolTip() {
+		return getIconDescriptor().getToolTip();
+	}
+
+	public JRElementGroup getJRElementGroup() {
+		return getJRElementGroup(getValue());
+	}
+
+	private JRElementGroup getJRElementGroup(Object value) {
+		JRElementGroup res = null;
+		if (value != null) {
+			JRDesignComponentElement jrElement = (JRDesignComponentElement) value;
+			StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
+			res = jrList.getContents();
+		}
+		return res;
+	}
+
+	@Override
+	public void setValue(Object value) {
+		if (getValue() != null) {
+			if (getJRElementGroup() instanceof JRChangeEventsSupport)
+				((JRChangeEventsSupport) getJRElementGroup()).getEventSupport().removePropertyChangeListener(this);
+		} else if (value != null) {
+			JRElementGroup elementGroup = getJRElementGroup(value);
+			if (value instanceof JRChangeEventsSupport)
+				((JRChangeEventsSupport) elementGroup).getEventSupport().addPropertyChangeListener(this);
+			super.setValue(value);
+			return;
+		}
+		super.setValue(value);
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
+			if (evt.getSource() == getJRElementGroup()) {
+				if (evt.getOldValue() == null && evt.getNewValue() != null) {
+					int newIndex = -1;
+					if (evt instanceof CollectionElementAddedEvent) {
+						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+					}
+					// add the node to this parent
+					ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
+					if (evt.getNewValue() instanceof JRElementGroup) {
+						JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
+						ReportFactory.createElementsForBand(n, jrFrame.getChildren());
+					}
+				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+					// delete
+					for (INode n : getChildren()) {
+						if (n.getValue() == evt.getOldValue()) {
+							removeChild((ANode) n);
+							break;
+						}
+					}
+				} else {
+					// changed
+					for (INode n : getChildren()) {
+						if (n.getValue() == evt.getOldValue())
+							n.setValue(evt.getNewValue());
+					}
+				}
+			}
+		}
+		PropertyChangeEvent newEvent = evt;
+		if (!(evt.getSource() instanceof ANode))
+			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		getPropertyChangeSupport().firePropertyChange(newEvent);
+	}
+
+}
