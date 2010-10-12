@@ -31,7 +31,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * 
  * @author Chicu Veaceslav
  */
-public class MElementGroup extends ANode {
+public class MElementGroup extends ANode implements IContainerEditPart{
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

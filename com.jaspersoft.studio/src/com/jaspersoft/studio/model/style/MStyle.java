@@ -46,6 +46,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
@@ -71,7 +72,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MStyle extends APropertyNode implements ICopyable, IPastable {
+public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

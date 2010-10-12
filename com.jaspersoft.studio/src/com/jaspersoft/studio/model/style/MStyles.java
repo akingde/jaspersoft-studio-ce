@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
@@ -42,7 +43,7 @@ import com.jaspersoft.studio.model.ReportFactory;
  * 
  * @author Chicu Veaceslav
  */
-public class MStyles extends ANode implements IPastable {
+public class MStyles extends ANode implements IPastable, IContainerEditPart {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -73,7 +74,7 @@ public class MStyles extends ANode implements IPastable {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
-	 */ 
+	 */
 	public String getDisplayText() {
 		return getIconDescriptor().getTitle();
 	}
@@ -82,7 +83,7 @@ public class MStyles extends ANode implements IPastable {
 	 * (non-Javadoc)
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
-	 */ 
+	 */
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}

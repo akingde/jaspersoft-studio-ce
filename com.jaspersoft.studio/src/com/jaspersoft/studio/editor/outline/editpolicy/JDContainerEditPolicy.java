@@ -35,7 +35,6 @@ import org.eclipse.gef.requests.GroupRequest;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class JDContainerEditPolicy.
  * 

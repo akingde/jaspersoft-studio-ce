@@ -38,7 +38,6 @@ import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class JDTreeContainerEditPolicy.
  */

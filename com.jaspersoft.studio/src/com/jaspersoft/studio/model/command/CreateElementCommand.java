@@ -28,6 +28,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -116,7 +117,10 @@ public class CreateElementCommand extends Command {
 	 */
 	public CreateElementCommand(ANode destNode, MGraphicElement srcNode, Point position, int index) {
 		super();
-		setContext(fixPosition(destNode, srcNode, position), srcNode, index);
+		if (destNode instanceof IGroupElement)
+			setContext(destNode, srcNode, index);
+		else
+			setContext(fixPosition(destNode, srcNode, position), srcNode, index);
 	}
 
 	/**
@@ -132,7 +136,10 @@ public class CreateElementCommand extends Command {
 	protected void setContext(ANode destNode, MGraphicElement srcNode, int index) {
 		this.srcNode = srcNode;
 		this.jrElement = (JRDesignElement) srcNode.getValue();
-		this.jrGroup = (JRElementGroup) destNode.getValue();
+		if (destNode instanceof IGroupElement)
+			this.jrGroup = ((IGroupElement) destNode).getJRElementGroup();
+		else
+			this.jrGroup = (JRElementGroup) destNode.getValue();
 		this.index = index;
 	}
 
@@ -164,7 +171,7 @@ public class CreateElementCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
-					
+
 			if (jrElement != null) {
 				if (location == null)
 					location = new Point(0, 0);

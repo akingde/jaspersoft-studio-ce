@@ -36,6 +36,8 @@ import org.eclipse.gef.commands.UnexecutableCommand;
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
@@ -122,34 +124,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 */
 	public EditPart createEditPart(EditPart context, Object model) {
 		EditPart editPart = null;
-		if (model instanceof MBand)
-			editPart = new AContainerTreeEditPart();
-		else if (model instanceof MFrame)
-			editPart = new AContainerTreeEditPart();
-		else if (model instanceof MElementGroup)
-			editPart = new AContainerTreeEditPart();
-		// styles
-		else if (model instanceof MStyles)
-			editPart = new AContainerTreeEditPart();
-		else if (model instanceof MStyle)
-			editPart = new AContainerTreeEditPart();
-		// parameters
-		else if (model instanceof MParameters)
-			editPart = new AContainerTreeEditPart();
-		// variables
-		else if (model instanceof MVariables)
-			editPart = new AContainerTreeEditPart();
-		// fields
-		else if (model instanceof MFields)
-			editPart = new AContainerTreeEditPart();
-		else if (model instanceof MSortFields)
-			editPart = new AContainerTreeEditPart();
-		else if (model instanceof MGroups)
-			editPart = new AContainerTreeEditPart();
-		// scriptlets
-		else if (model instanceof MScriptlets)
-			editPart = new AContainerTreeEditPart();
-		else if (model instanceof MReport)
+		if (model instanceof IContainerEditPart)
 			editPart = new AContainerTreeEditPart();
 		else
 			editPart = new ATreeEditPart();
@@ -361,6 +336,10 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new CreateElementCommand((MFrame) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MReport)
 				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+			
+			if(parent instanceof IGroupElement){
+				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+			}
 		} else if (child instanceof MElementGroup) {
 			if (parent instanceof MElementGroup)
 				return new CreateElementGroupCommand(parent, (MElementGroup) child, newIndex);

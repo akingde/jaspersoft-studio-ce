@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
@@ -41,7 +42,7 @@ import com.jaspersoft.studio.model.ReportFactory;
  * 
  * @author Chicu Veaceslav
  */
-public class MVariables extends ANode implements IPastable {
+public class MVariables extends ANode implements IPastable, IContainerEditPart {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

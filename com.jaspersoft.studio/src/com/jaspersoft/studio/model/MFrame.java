@@ -29,7 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 /**
  * The Class MFrame.
  */
-public class MFrame extends MGraphicElementLineBox implements IPastable, IContainer {
+public class MFrame extends MGraphicElementLineBox implements IPastable, IContainer, IContainerEditPart {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

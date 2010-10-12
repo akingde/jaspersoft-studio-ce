@@ -291,6 +291,7 @@ public abstract class ANode implements INode {
 				((JRChangeEventsSupport) value).getEventSupport().addPropertyChangeListener(this);
 			this.value = value;
 			register();
+			return;
 		}
 		this.value = value;
 	}

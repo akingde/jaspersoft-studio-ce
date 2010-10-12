@@ -67,7 +67,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * 
  * @author Chicu Veaceslav
  */
-public class MReport extends APropertyNode implements IGraphicElement {
+public class MReport extends APropertyNode implements IGraphicElement, IContainerEditPart {
 
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 

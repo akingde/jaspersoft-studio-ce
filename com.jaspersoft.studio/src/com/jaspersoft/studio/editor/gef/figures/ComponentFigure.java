@@ -35,7 +35,7 @@ import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 /**
  * The Class GenericFigure.
  */
-public class ComponentFigure extends RectangleFigure implements HandleBounds {
+public class ComponentFigure extends RectangleFigure {
 
 	/** The jr element. */
 	private JRElement jrElement;
@@ -73,7 +73,7 @@ public class ComponentFigure extends RectangleFigure implements HandleBounds {
 	public void paint(Graphics graphics) {
 		Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
 
-		Rectangle b = getHandleBounds();
+		Rectangle b = (this instanceof HandleBounds) ? ((HandleBounds) this).getHandleBounds() : this.getBounds();
 		// Graphics2D newGraphics = (Graphics2D) graphics2d.create(b.x, b.y, b.width, b.height);
 		try {
 			graphics2d.translate(b.x, b.y);
@@ -101,17 +101,6 @@ public class ComponentFigure extends RectangleFigure implements HandleBounds {
 	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
 		if (jrElement instanceof JRComponentElement)
 			drawVisitor.visitComponentElement((JRComponentElement) jrElement);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.handles.HandleBounds#getHandleBounds()
-	 */
-	public Rectangle getHandleBounds() {
-		Rectangle handleBounds = getBounds();
-		return handleBounds;
-
 	}
 
 	/**

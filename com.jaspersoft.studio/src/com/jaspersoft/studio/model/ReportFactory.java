@@ -27,7 +27,6 @@ import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRChart;
-import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRReportTemplate;
@@ -172,7 +171,7 @@ public class ReportFactory {
 						createElementsForBand(band, bandsList[k].getChildren());
 						//
 						// for (JRElement element : bandsList[k].getElements())
-						//	createNode(band, element, -1);
+						// createNode(band, element, -1);
 					}
 				}
 		} else {
@@ -304,8 +303,6 @@ public class ReportFactory {
 			} else if (element instanceof JRElementGroup) {
 				JRElementGroup group = (JRElementGroup) element;
 				createElementsForBand(node, group.getChildren());
-			} else {
-				list.size();
 			}
 		}
 	}

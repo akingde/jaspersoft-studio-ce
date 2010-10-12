@@ -56,6 +56,7 @@ import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -372,8 +373,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 */
 	public void propertyChange(PropertyChangeEvent arg0) {
 		Object source = arg0.getSource();
-		if (source instanceof MBand || source instanceof MReport || source instanceof MFrame
-				|| source instanceof MElementGroup) {
+		if (source instanceof IContainerEditPart) {
 			refreshChildren();
 			refreshVisuals();
 		}

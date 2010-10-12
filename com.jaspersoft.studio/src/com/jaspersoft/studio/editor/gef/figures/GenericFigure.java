@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRGenericElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
 /**
@@ -48,6 +49,17 @@ public class GenericFigure extends ComponentFigure implements HandleBounds {
 	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
 		if (jrElement instanceof JRGenericElement)
 			drawVisitor.visitGenericElement((JRGenericElement) jrElement);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.handles.HandleBounds#getHandleBounds()
+	 */
+	public Rectangle getHandleBounds() {
+		Rectangle handleBounds = getBounds();
+		return handleBounds;
+
 	}
 
 }
