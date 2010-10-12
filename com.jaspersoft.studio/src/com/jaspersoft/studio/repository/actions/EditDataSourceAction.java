@@ -34,7 +34,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.repository.RepositoryManager;
-import com.jaspersoft.studio.repository.wizzard.DatasourceEditor;
+import com.jaspersoft.studio.repository.wizard.DatasourceEditor;
 
 public class EditDataSourceAction extends Action {
 	public static final String ID = "editdatasourceaction";

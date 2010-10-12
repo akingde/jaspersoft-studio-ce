@@ -46,7 +46,7 @@ import com.jaspersoft.studio.model.datasource.xls.MXLSDatasources;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDatasources;
 import com.jaspersoft.studio.repository.RepositoryManager;
-import com.jaspersoft.studio.repository.wizzard.DatasourceEditor;
+import com.jaspersoft.studio.repository.wizard.DatasourceEditor;
 
 public class CreateDataSourceAction extends Action {
 	public static final String ID = "createdatasourceaction";
