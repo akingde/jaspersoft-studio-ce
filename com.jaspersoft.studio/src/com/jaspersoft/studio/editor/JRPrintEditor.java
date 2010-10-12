@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor;
 
@@ -46,6 +42,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -283,6 +281,18 @@ public class JRPrintEditor extends EditorPart {
 
 		reportViewerControl = reportViewer.createControl(container);
 		reportViewerControl.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		reportViewerControl.addKeyListener(new KeyListener() {
+
+			public void keyReleased(KeyEvent e) {
+				e.getSource();
+			}
+
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	@Override
@@ -322,7 +332,7 @@ public class JRPrintEditor extends EditorPart {
 
 		tbManager.add(exportMenu);
 
-//		tbManager.add(new PrintAction(reportViewer));
+		// tbManager.add(new PrintAction(reportViewer));
 		tbManager.add(new GroupMarker("DATASOURCEGROUP"));
 
 		tbManager.add(new Separator());
@@ -338,11 +348,13 @@ public class JRPrintEditor extends EditorPart {
 		tbManager.add(new ZoomFitPageWidthAction(reportViewer));
 		tbManager.add(new Separator());
 		ZoomOutAction zoomOutAction = new ZoomOutAction(reportViewer);
+		zoomOutAction.setAccelerator(SWT.CTRL + '-');
 		zoomOutAction.setImageDescriptor(InternalImages.DESC_ZOOM_OUT);
 		tbManager.add(zoomOutAction);
 		tbManager.add(new ZoomComboContributionItem(reportViewer));
 		ZoomInAction zoomInAction = new ZoomInAction(reportViewer);
 		zoomInAction.setImageDescriptor(InternalImages.DESC_ZOOM_IN);
+		zoomInAction.setAccelerator(SWT.CTRL + '+');
 		tbManager.add(zoomInAction);
 
 		tbManager.update(true);
