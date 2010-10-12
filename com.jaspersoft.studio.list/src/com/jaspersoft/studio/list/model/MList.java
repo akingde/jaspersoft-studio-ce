@@ -25,8 +25,11 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
@@ -57,6 +60,7 @@ import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -172,6 +176,12 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 		propertiesD.setDescription("The datasource expression.");
 		desc.add(propertiesD);
 
+		subdatasetnameD = new RWComboBoxPropertyDescriptor(PREFIX + PROPERTY_DATASET_NAME, "Subdataset Name",
+				new String[] { "" }, NullEnum.NOTNULL);
+		subdatasetnameD.setDescription("Subdataset name.");
+		desc.add(subdatasetnameD);
+
+		subdatasetnameD.setCategory("Dataset Run");
 		paramExprD.setCategory("Dataset Run");
 		propertiesD.setCategory("Dataset Run");
 		connExprD.setCategory("Dataset Run");
@@ -186,12 +196,14 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 	private static final String PROPERTY_DATASOURCE_EXPRESSION = "PROPERTY_DATASOURCE_EXPRESSION";
 	private static final String PROPERTY_PARAMETERS = "PROPERTY_PARAMETERS";
 	private static final String PROPERTY_PARAMETERS_MAP_EXPRESSION = "PROPERTY_PARAMETERS_MAP_EXPRESSION";
+	private static final String PROPERTY_DATASET_NAME = "PROPERTY_DATASET_NAME";
 
 	private MExpression cnExpression;
 	private MExpression dsExpression;
 	private MExpression pmExpression;
 
 	private PropertyDTO propertyDTO;
+	private RWComboBoxPropertyDescriptor subdatasetnameD;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -231,6 +243,16 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 			}
 			return propertyDTO;
 		}
+		if (id.equals(PREFIX + PROPERTY_DATASET_NAME)) {
+			JasperDesign jd = getJasperDesign();
+			List<JRDataset> datasets = jd.getDatasetsList();
+			String[] sds = new String[datasets.size()];
+			for (int i = 0; i < sds.length; i++) {
+				sds[i] = datasets.get(i).getName();
+			}
+			subdatasetnameD.setItems(sds);
+			return jrDataSetRun.getDatasetName();
+		}
 
 		return super.getPropertyValue(id);
 	}
@@ -268,19 +290,24 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 				jrDataSetRun.setDataSourceExpression(expression);
 			}
 		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
-			if (value instanceof Map) {
-				// Map<String, JRDesignSubreportParameter> v = (Map<String, JRDesignSubreportParameter>) value;
-				// Set<String> names = new HashSet<String>(jrDataSetRun.getParameters());
-				// for (String name : names)
-				// jrDataSetRun.removeParameter(name);
-				//
-				// for (JRDesignSubreportParameter param : v.values())
-				// try {
-				// jrDataSetRun.addParameter(param);
-				// } catch (JRException e) {
-				// e.printStackTrace();
-				// }
+			if (value instanceof PropertyDTO) {
+				PropertyDTO v = (PropertyDTO) value;
+
+				for (JRDatasetParameter prm : propertyDTO.getValue())
+					jrDataSetRun.removeParameter(prm);
+
+				for (JRDatasetParameter param : v.getValue())
+					try {
+						jrDataSetRun.addParameter(param);
+					} catch (JRException e) {
+						e.printStackTrace();
+					}
+				propertyDTO = v;
 			}
+		} else if (id.equals(PREFIX + PROPERTY_DATASET_NAME)) {
+			if (!value.equals(""))
+				jrDataSetRun.setDatasetName((String) value);
+
 		} else
 			super.setPropertyValue(id, value);
 	}

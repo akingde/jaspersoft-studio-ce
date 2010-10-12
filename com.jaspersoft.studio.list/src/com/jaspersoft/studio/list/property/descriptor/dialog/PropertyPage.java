@@ -147,18 +147,16 @@ public class PropertyPage extends WizardPage {
 
 			// Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
-				List<PropertyDTO> list = (List<PropertyDTO>) tableViewer.getInput();
-				for (PropertyDTO dto : list) {
-					if (dto.getProperty() == null || dto.getProperty().trim().equals(""))
+				List<JRDatasetParameter> list = (List<JRDatasetParameter>) tableViewer.getInput();
+				for (JRDatasetParameter dto : list) {
+					if (dto.getName() == null || dto.getName().trim().equals("NEW PARAMETER"))
 						return;
 				}
-				PropertyDTO p = new PropertyDTO();
-				JRDesignDatasetParameter value2 = new JRDesignDatasetParameter();
+				JRDesignDatasetParameter p = new JRDesignDatasetParameter();
 				JRDesignExpression expression = new JRDesignExpression();
 				expression.setValueClassName("java.lang.String");
-				value2.setExpression(expression);
-				// value2.setName("NEW PARAMETER");
-				// p.setValue(value2);
+				p.setExpression(expression);
+				p.setName("NEW PARAMETER");
 				list.add(p);
 				tableViewer.add(p);
 				tableViewer.setSelection(new StructuredSelection(p));
@@ -178,7 +176,7 @@ public class PropertyPage extends WizardPage {
 			// Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
 				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
-				PropertyDTO property = (PropertyDTO) iStructuredSelection.getFirstElement();
+				JRDatasetParameter property = (JRDatasetParameter) iStructuredSelection.getFirstElement();
 				Object input = tableViewer.getInput();
 				if (input instanceof List<?>) {
 					List<?> list = (List<?>) input;
@@ -300,22 +298,22 @@ public class PropertyPage extends WizardPage {
 				TableItem tableItem = (TableItem) element;
 				setErrorMessage(null);
 				setMessage(getDescription(tableItem));
-				PropertyDTO data = (PropertyDTO) tableItem.getData();
+				JRDesignDatasetParameter data = (JRDesignDatasetParameter) tableItem.getData();
 				if ("VALUE".equals(property)) {
 					if (value instanceof MExpression) {
 						JRExpression e = (JRExpression) ((MExpression) value).getValue();
-						// data.getValue().setExpression(e);
+						data.setExpression(e);
 					}
 				}
 				if ("NAME".equals(property)) {
-					List<PropertyDTO> plist = (List<PropertyDTO>) tableViewer.getInput();
-					for (PropertyDTO p : plist) {
-						if (p != data && p.getProperty() != null && p.getProperty().equals(value)) {
+					List<JRDesignDatasetParameter> plist = (List<JRDesignDatasetParameter>) tableViewer.getInput();
+					for (JRDesignDatasetParameter p : plist) {
+						if (p != data && p.getName() != null && p.getName().equals(value)) {
 							setErrorMessage("Properties are unique, you can't put duplicate values");
 							return;
 						}
 					}
-					data.setProperty((String) value);
+					data.setName((String) value);
 				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
