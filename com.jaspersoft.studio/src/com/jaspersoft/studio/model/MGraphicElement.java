@@ -263,16 +263,19 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				styleD.setItems(items);
 			}
 			// initialize groups
-			if (groupChangesD != null) {
-				JRGroup[] groups = jasperDesign.getGroups();
-				String[] items = new String[groups.length + 1];
-				items[0] = "";
-				for (int j = 0; j < groups.length; j++) {
-					items[j + 1] = groups[j].getName();
-				}
-				groupChangesD.setItems(items);
+			JRGroup[] groups = jasperDesign.getGroups();
+			String[] items = new String[groups.length + 1];
+			items[0] = "";
+			for (int j = 0; j < groups.length; j++) {
+				items[j + 1] = groups[j].getName();
 			}
+			setGroupItems(items);
 		}
+	}
+
+	protected void setGroupItems(String[] items) {
+		if (groupChangesD != null)
+			groupChangesD.setItems(items);
 	}
 
 	/**

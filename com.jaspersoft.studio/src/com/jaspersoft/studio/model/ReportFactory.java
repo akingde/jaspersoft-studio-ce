@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRFrame;
+import net.sf.jasperreports.engine.JRGenericElement;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.JRVariable;
@@ -40,6 +41,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignEllipse;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignLine;
@@ -65,6 +67,7 @@ import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
+import com.jaspersoft.studio.model.genericElement.MGenericElement;
 import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.group.MGroups;
 import com.jaspersoft.studio.model.parameter.MParameter;
@@ -78,7 +81,8 @@ import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
-import com.jaspersoft.studio.model.textfield.MTextField;
+import com.jaspersoft.studio.model.text.MStaticText;
+import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.model.variable.MVariables;
@@ -337,7 +341,6 @@ public class ReportFactory {
 			return new MSubreport(parent, (JRDesignSubreport) jrObject, newIndex);
 		} else if (jrObject instanceof JRCrosstab) {
 			return new MCrossTab(parent, (JRDesignCrosstab) jrObject, newIndex);
-
 		} else if (jrObject instanceof JRDesignEllipse) {
 			return new MEllipse(parent, (JRDesignEllipse) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignRectangle) {
@@ -358,6 +361,9 @@ public class ReportFactory {
 			return new MChart(parent, (JRDesignChart) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignTextField) {
 			return new MTextField(parent, (JRDesignTextField) jrObject, newIndex);
+		} else if (jrObject instanceof JRGenericElement) {
+			return new MGenericElement(parent, (JRDesignGenericElement) jrObject, newIndex);
+
 			// styles
 		} else if (jrObject instanceof JRDesignStyle) {
 			if (newIndex != -1) {

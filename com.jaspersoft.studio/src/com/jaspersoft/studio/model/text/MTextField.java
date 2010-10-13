@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.model.textfield;
+package com.jaspersoft.studio.model.text;
 
 import java.util.List;
 import java.util.Map;
@@ -42,7 +42,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
-import com.jaspersoft.studio.model.MTextElement;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;

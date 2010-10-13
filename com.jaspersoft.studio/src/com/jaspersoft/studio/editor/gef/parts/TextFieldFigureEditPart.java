@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.model.MExpression;
-import com.jaspersoft.studio.model.textfield.MTextField;
+import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 

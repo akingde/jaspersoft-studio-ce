@@ -45,13 +45,13 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MImage;
 import com.jaspersoft.studio.model.MLine;
 import com.jaspersoft.studio.model.MRectangle;
-import com.jaspersoft.studio.model.MStaticText;
 import com.jaspersoft.studio.model.MSubreport;
+import com.jaspersoft.studio.model.text.MStaticText;
+import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.model.textfield.MDate;
 import com.jaspersoft.studio.model.textfield.MPageNumber;
 import com.jaspersoft.studio.model.textfield.MPageXofY;
 import com.jaspersoft.studio.model.textfield.MPercentage;
-import com.jaspersoft.studio.model.textfield.MTextField;
 import com.jaspersoft.studio.model.textfield.MTime;
 import com.jaspersoft.studio.model.textfield.MTotalPages;
 

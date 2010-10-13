@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
+import net.sf.jasperreports.engine.JRCommonGraphicElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRLine;
 import net.sf.jasperreports.engine.JRPen;
@@ -29,7 +30,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 /**
  * The Class LineFigure.
  */
-public class LineFigure extends GenericFigure {
+public class LineFigure extends AHandleBoundsFigure {
 	/**
 	 * Instantiates a new line figure.
 	 */
@@ -70,7 +71,7 @@ public class LineFigure extends GenericFigure {
 	 * @return the line pen
 	 */
 	protected JRPen getLinePen() {
-		return ((JRLine) getJrElement()).getLinePen();
+		return ((JRCommonGraphicElement) getJrElement()).getLinePen();
 	}
 
 	/*

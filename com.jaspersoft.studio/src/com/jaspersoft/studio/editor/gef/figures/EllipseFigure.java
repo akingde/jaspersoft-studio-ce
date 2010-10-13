@@ -41,13 +41,4 @@ public class EllipseFigure extends LineFigure {
 		drawVisitor.visitEllipse((JREllipse) jrElement);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.editor.gef.figures.LineFigure#getLinePen()
-	 */
-	@Override
-	protected JRPen getLinePen() {
-		return ((JREllipse) getJrElement()).getLinePen();
-	}
 }

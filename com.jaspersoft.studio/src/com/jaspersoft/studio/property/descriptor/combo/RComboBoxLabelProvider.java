@@ -33,6 +33,8 @@ public class RComboBoxLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element) {
+		if (element == null)
+			return "";
 		if (element instanceof String) {
 			if (element == null || element.equals(""))
 				return "";

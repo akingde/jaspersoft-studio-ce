@@ -232,7 +232,7 @@
                   type="com.jaspersoft.studio.model.style.MStyle">
             </input>
             <input
-                  type="com.jaspersoft.studio.model.MTextElement">
+                  type="com.jaspersoft.studio.model.text.MTextElement">
             </input>
          </propertySection>
          <propertySection
@@ -244,7 +244,7 @@
                   type="com.jaspersoft.studio.model.style.MStyle">
             </input>
             <input
-                  type="com.jaspersoft.studio.model.MTextElement">
+                  type="com.jaspersoft.studio.model.text.MTextElement">
             </input>
          </propertySection>
          <propertySection

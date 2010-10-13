@@ -32,9 +32,10 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MImage;
 import com.jaspersoft.studio.model.MLine;
 import com.jaspersoft.studio.model.MRectangle;
-import com.jaspersoft.studio.model.MStaticText;
 import com.jaspersoft.studio.model.MSubreport;
-import com.jaspersoft.studio.model.textfield.MTextField;
+import com.jaspersoft.studio.model.genericElement.MGenericElement;
+import com.jaspersoft.studio.model.text.MStaticText;
+import com.jaspersoft.studio.model.text.MTextField;
 
 /**
  * A factory for creating Figure objects.
@@ -71,10 +72,12 @@ public class FigureFactory {
 			return new CrosstabFigure();
 		} else if (node instanceof MSubreport) {
 			return new SubreportFigure();
+		} else if (node instanceof MGenericElement) {
+			return new GenericElementFigure();
 		} else if (node.getValue() instanceof JRComponentElement) {
 			return new ComponentFigure();
 		} else
-			return new RectangleFigure();
+			return new org.eclipse.draw2d.RectangleFigure();
 	}
 
 	/**

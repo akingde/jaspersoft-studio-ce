@@ -17,49 +17,42 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.gef.figures;
+package com.jaspersoft.studio.property.descriptor.genericElement.dialog;
 
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRGenericElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import org.eclipse.jface.wizard.Wizard;
 
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.handles.HandleBounds;
+public class ParameterEditor extends Wizard {
+	private ParameterDTO value;
+	private ParameterPage page0;
 
-/**
- * The Class GenericFigure.
- */
-public class GenericFigure extends ComponentFigure implements HandleBounds {
+	public ParameterDTO getValue() {
+		if (page0 != null)
+			return page0.getValue();
+		return value;
+	}
 
-	/**
-	 * Instantiates a new generic figure.
-	 */
-	public GenericFigure() {
+	public void setValue(ParameterDTO value) {
+		if (page0 != null)
+			page0.setValue(value);
+		this.value = value;
+	}
+
+	public ParameterEditor() {
 		super();
+		setWindowTitle("Properties");
+		setNeedsProgressMonitor(false);
 	}
 
-	/**
-	 * Draw.
-	 * 
-	 * @param drawVisitor
-	 *          the draw visitor
-	 * @param jrElement
-	 *          the jr element
-	 */
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		if (jrElement instanceof JRGenericElement)
-			drawVisitor.visitGenericElement((JRGenericElement) jrElement);
+	@Override
+	public void addPages() {
+		page0 = new ParameterPage("Datasetparameters");
+		page0.setValue(value);
+		addPage(page0);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.handles.HandleBounds#getHandleBounds()
-	 */
-	public Rectangle getHandleBounds() {
-		Rectangle handleBounds = getBounds();
-		return handleBounds;
-
+	@Override
+	public boolean performFinish() {
+		return true;
 	}
 
 }

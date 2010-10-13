@@ -19,32 +19,30 @@
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRStaticText;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.handles.HandleBounds;
 
 /**
- * The Class StaticTextFigure.
+ * The Class GenericFigure.
  */
-public class StaticTextFigure extends FrameFigure {
+public abstract class AHandleBoundsFigure extends ComponentFigure implements HandleBounds {
 
 	/**
-	 * Instantiates a new static text figure.
+	 * Instantiates a new generic figure.
 	 */
-	public StaticTextFigure() {
+	public AHandleBoundsFigure() {
 		super();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.GenericFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
+	 * @see org.eclipse.gef.handles.HandleBounds#getHandleBounds()
 	 */
-	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitStaticText((JRStaticText) jrElement);
+	public Rectangle getHandleBounds() {
+		Rectangle handleBounds = getBounds();
+		return handleBounds;
+
 	}
 
 }

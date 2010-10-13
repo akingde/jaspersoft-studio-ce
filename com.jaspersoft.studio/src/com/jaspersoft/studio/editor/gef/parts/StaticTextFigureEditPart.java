@@ -34,7 +34,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.jaspersoft.studio.model.MStaticText;
+import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**

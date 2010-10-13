@@ -25,8 +25,8 @@ package com.jaspersoft.studio.editor.action.create;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MStaticText;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+import com.jaspersoft.studio.model.text.MStaticText;
 
 // TODO: Auto-generated Javadoc
 /**

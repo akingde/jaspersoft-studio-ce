@@ -17,34 +17,31 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.gef.figures;
+package com.jaspersoft.studio.property.descriptor.genericElement;
 
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRStaticText;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import org.eclipse.jface.viewers.LabelProvider;
+
+import com.jaspersoft.studio.property.descriptor.genericElement.dialog.ParameterDTO;
 
 /**
- * The Class StaticTextFigure.
+ * @author Chicu Veaceslav
+ * 
  */
-public class StaticTextFigure extends FrameFigure {
+public class ParameterLabelProvider extends LabelProvider {
 
-	/**
-	 * Instantiates a new static text figure.
-	 */
-	public StaticTextFigure() {
+	public ParameterLabelProvider() {
 		super();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.GenericFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
-	 */
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitStaticText((JRStaticText) jrElement);
+	public String getText(Object element) {
+		if (element == null)
+			return "";
+		if (element.getClass().isArray())
+			return "[Parameters: " + ((Object[]) element).length + "]";
+		if (element instanceof ParameterDTO)
+			return "[Parameters: " + ((ParameterDTO) element).getValue().length + "]";
+		return element.toString();
 	}
 
 }

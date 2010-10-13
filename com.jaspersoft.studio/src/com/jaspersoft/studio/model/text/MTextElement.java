@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.model;
+package com.jaspersoft.studio.model.text;
 
 import java.util.List;
 import java.util.Map;
@@ -35,6 +35,8 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;

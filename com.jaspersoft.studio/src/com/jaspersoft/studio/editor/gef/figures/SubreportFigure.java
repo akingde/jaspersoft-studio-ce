@@ -32,7 +32,7 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
  * 
  * @author Chicu Veaceslav
  */
-public class SubreportFigure extends GenericFigure {
+public class SubreportFigure extends ComponentFigure {
 
 	/**
 	 * Instantiates a crosstab figure.
@@ -41,12 +41,9 @@ public class SubreportFigure extends GenericFigure {
 		super();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.GenericFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
+	
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor, net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
 	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {

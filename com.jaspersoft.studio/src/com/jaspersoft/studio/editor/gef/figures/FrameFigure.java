@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
+import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRLineBox;
@@ -31,7 +32,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
  * 
  * @author Chicu Veaceslav
  */
-public class FrameFigure extends GenericFigure {
+public class FrameFigure extends AHandleBoundsFigure {
 
 	/**
 	 * Instantiates a new text field figure.
@@ -73,7 +74,7 @@ public class FrameFigure extends GenericFigure {
 	 * @return the line box
 	 */
 	protected JRLineBox getLineBox() {
-		return ((JRFrame) getJrElement()).getLineBox();
+		return ((JRBoxContainer) getJrElement()).getLineBox();
 	}
 
 	/*

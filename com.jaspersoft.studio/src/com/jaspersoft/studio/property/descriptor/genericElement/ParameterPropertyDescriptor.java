@@ -17,34 +17,30 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.gef.figures;
+package com.jaspersoft.studio.property.descriptor.genericElement;
 
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRStaticText;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.swt.widgets.Composite;
 
-/**
- * The Class StaticTextFigure.
- */
-public class StaticTextFigure extends FrameFigure {
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
-	/**
-	 * Instantiates a new static text figure.
-	 */
-	public StaticTextFigure() {
-		super();
+public class ParameterPropertyDescriptor extends NTextPropertyDescriptor {
+
+	public ParameterPropertyDescriptor(Object id, String displayName) {
+		super(id, displayName);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.GenericFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
-	 */
+	public CellEditor createPropertyEditor(Composite parent) {
+		CellEditor editor = new ParameterCellEditor(parent);
+		return editor;
+	}
+
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitStaticText((JRStaticText) jrElement);
+	public ILabelProvider getLabelProvider() {
+		if (isLabelProviderSet()) {
+			return super.getLabelProvider();
+		}
+		return new ParameterLabelProvider();
 	}
-
 }

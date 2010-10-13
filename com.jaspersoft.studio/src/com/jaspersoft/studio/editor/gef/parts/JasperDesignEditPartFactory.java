@@ -26,9 +26,9 @@ import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.MStaticText;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.textfield.MTextField;
+import com.jaspersoft.studio.model.text.MStaticText;
+import com.jaspersoft.studio.model.text.MTextField;
 
 /**
  * A factory for creating JasperDesignEditPart objects.

@@ -17,32 +17,61 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.gef.figures;
+package com.jaspersoft.studio.property.descriptor.genericElement.dialog;
 
-import net.sf.jasperreports.crosstabs.JRCrosstab;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import net.sf.jasperreports.engine.JRGenericElementParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 /**
- * The Class FrameFigure.
- * 
  * @author Chicu Veaceslav
+ * 
  */
-public class CrosstabFigure extends ComponentFigure {
-
-	/**
-	 * Instantiates a crosstab figure.
-	 */
-	public CrosstabFigure() {
+public class ParameterDTO {
+	public ParameterDTO() {
 		super();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor, net.sf.jasperreports.engine.JRElement)
-	 */
-	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitCrosstab((JRCrosstab) jrElement);
+	public ParameterDTO(String property, String description) {
+		super();
+		this.property = property;
+		this.description = description;
 	}
+
+	private String property;
+	private String description;
+	private JRGenericElementParameter[] value;
+	private JasperDesign jd;
+
+	public void setJasperDesign(JasperDesign jd) {
+		this.jd = jd;
+	}
+
+	public JasperDesign getJasperDesign() {
+		return jd;
+	}
+
+	public JRGenericElementParameter[] getValue() {
+		return value;
+	}
+
+	public void setValue(JRGenericElementParameter[] value) {
+		this.value = value;
+	}
+
+	public String getProperty() {
+		return property;
+	}
+
+	public void setProperty(String property) {
+		this.property = property;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

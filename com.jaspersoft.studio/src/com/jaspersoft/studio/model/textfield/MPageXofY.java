@@ -25,6 +25,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
+import com.jaspersoft.studio.model.text.MTextField;
 
 // TODO: Auto-generated Javadoc
 /**
