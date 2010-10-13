@@ -45,8 +45,8 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.list.ListNodeIconDescriptor;
-import com.jaspersoft.studio.list.property.descriptor.PropertiesPropertyDescriptor;
-import com.jaspersoft.studio.list.property.descriptor.dialog.PropertyDTO;
+import com.jaspersoft.studio.list.property.descriptor.ParameterPropertyDescriptor;
+import com.jaspersoft.studio.list.property.descriptor.dialog.ParameterDTO;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -171,9 +171,9 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 		paramExprD.setDescription("The parameters map expression.");
 		desc.add(paramExprD);
 
-		PropertiesPropertyDescriptor propertiesD = new PropertiesPropertyDescriptor(PREFIX + PROPERTY_PARAMETERS,
+		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(PREFIX + PROPERTY_PARAMETERS,
 				"Parameters");
-		propertiesD.setDescription("The datasource expression.");
+		propertiesD.setDescription("Parameters.");
 		desc.add(propertiesD);
 
 		subdatasetnameD = new RWComboBoxPropertyDescriptor(PREFIX + PROPERTY_DATASET_NAME, "Subdataset Name",
@@ -202,7 +202,7 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 	private MExpression dsExpression;
 	private MExpression pmExpression;
 
-	private PropertyDTO propertyDTO;
+	private ParameterDTO propertyDTO;
 	private RWComboBoxPropertyDescriptor subdatasetnameD;
 
 	@Override
@@ -237,7 +237,7 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 		}
 		if (id.equals(PREFIX + PROPERTY_PARAMETERS)) {
 			if (propertyDTO == null) {
-				propertyDTO = new PropertyDTO();
+				propertyDTO = new ParameterDTO();
 				propertyDTO.setJasperDesign(getJasperDesign());
 				propertyDTO.setValue(jrDataSetRun.getParameters());
 			}
@@ -290,8 +290,8 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 				jrDataSetRun.setDataSourceExpression(expression);
 			}
 		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
-			if (value instanceof PropertyDTO) {
-				PropertyDTO v = (PropertyDTO) value;
+			if (value instanceof ParameterDTO) {
+				ParameterDTO v = (ParameterDTO) value;
 
 				for (JRDatasetParameter prm : propertyDTO.getValue())
 					jrDataSetRun.removeParameter(prm);
@@ -312,21 +312,11 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 			super.setPropertyValue(id, value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultHeight()
-	 */
 	@Override
 	public int getDefaultHeight() {
 		return 30;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getDefaultWidth()
-	 */
 	@Override
 	public int getDefaultWidth() {
 		return 100;

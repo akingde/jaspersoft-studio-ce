@@ -19,29 +19,28 @@
  */
 package com.jaspersoft.studio.list.property.descriptor;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.list.property.descriptor.dialog.PropertyDTO;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
-/**
- * @author Chicu Veaceslav
- * 
- */
-public class PropertiesLabelProvider extends LabelProvider {
+public class ParameterPropertyDescriptor extends NTextPropertyDescriptor {
 
-	public PropertiesLabelProvider() {
-		super();
+	public ParameterPropertyDescriptor(Object id, String displayName) {
+		super(id, displayName);
+	}
+
+	public CellEditor createPropertyEditor(Composite parent) {
+		CellEditor editor = new ParameterCellEditor(parent);
+		return editor;
 	}
 
 	@Override
-	public String getText(Object element) {
-		if (element == null)
-			return "";
-		if (element.getClass().isArray())
-			return "[Properties: " + ((Object[]) element).length + "]";
-		if (element instanceof PropertyDTO)
-			return "[Properties: " + ((PropertyDTO) element).getValue().length + "]";
-		return element.toString();
+	public ILabelProvider getLabelProvider() {
+		if (isLabelProviderSet()) {
+			return super.getLabelProvider();
+		}
+		return new ParameterLabelProvider();
 	}
-
 }

@@ -19,40 +19,59 @@
  */
 package com.jaspersoft.studio.list.property.descriptor.dialog;
 
-import org.eclipse.jface.wizard.Wizard;
+import net.sf.jasperreports.engine.JRDatasetParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
-public class PropertyEditor extends Wizard {
-	private PropertyDTO value;
-	private PropertyPage page0;
+/**
+ * @author Chicu Veaceslav
+ * 
+ */
+public class ParameterDTO {
+	public ParameterDTO() {
+		super();
+	}
 
-	public PropertyDTO getValue() {
-		if (page0 != null)
-			return page0.getValue();
+	public ParameterDTO(String property, String description) {
+		super();
+		this.property = property;
+		this.description = description;
+	}
+
+	private String property;
+	private String description;
+	private JRDatasetParameter[] value;
+	private JasperDesign jd;
+
+	public void setJasperDesign(JasperDesign jd) {
+		this.jd = jd;
+	}
+
+	public JasperDesign getJasperDesign() {
+		return jd;
+	}
+
+	public JRDatasetParameter[] getValue() {
 		return value;
 	}
 
-	public void setValue(PropertyDTO value) {
-		if (page0 != null)
-			page0.setValue(value);
+	public void setValue(JRDatasetParameter[] value) {
 		this.value = value;
 	}
 
-	public PropertyEditor() {
-		super();
-		setWindowTitle("Properties");
-		setNeedsProgressMonitor(false);
+	public String getProperty() {
+		return property;
 	}
 
-	@Override
-	public void addPages() {
-		page0 = new PropertyPage("Datasetparameters");
-		page0.setValue(value);
-		addPage(page0);
+	public void setProperty(String property) {
+		this.property = property;
 	}
 
-	@Override
-	public boolean performFinish() {
-		return true;
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

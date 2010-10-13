@@ -25,6 +25,10 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 
+/**
+ * @author Chicu Veaceslav
+ * @version $Id$
+ */
 public class ListFigure extends ComponentFigure {
 
 	/**
@@ -38,24 +42,12 @@ public class ListFigure extends ComponentFigure {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.GenericFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
+	 * com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override
 	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
 		drawVisitor.visitComponentElement((JRComponentElement) jrElement);
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.editor.gef.figures.GenericFigure#setJRElement(net.sf.jasperreports.engine.JRElement,
-	 * net.sf.jasperreports.engine.export.draw.DrawVisitor)
-	 */
-	@Override
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
-		super.setJRElement(jrElement, drawVisitor);
 	}
 
 }

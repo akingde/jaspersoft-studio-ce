@@ -65,7 +65,7 @@ import org.eclipse.swt.widgets.TableItem;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 
-public class PropertyPage extends WizardPage {
+public class ParameterPage extends WizardPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -85,13 +85,13 @@ public class PropertyPage extends WizardPage {
 		}
 	}
 
-	private PropertyDTO value;
+	private ParameterDTO value;
 	private Table table;
 	private TableViewer tableViewer;
 
 	// private TableCursor cursor;
 
-	public PropertyDTO getValue() {
+	public ParameterDTO getValue() {
 		return value;
 	}
 
@@ -104,16 +104,16 @@ public class PropertyPage extends WizardPage {
 		super.dispose();
 	}
 
-	public void setValue(PropertyDTO value) {
+	public void setValue(ParameterDTO value) {
 		this.value = value;
 		if (value == null) {
-			value = new PropertyDTO();
+			value = new ParameterDTO();
 		}
 		if (table != null)
 			fillTable(table);
 	}
 
-	protected PropertyPage(String pageName) {
+	protected ParameterPage(String pageName) {
 		super(pageName);
 		setTitle("Dataset Parameters");
 		setDescription("Dataset Parameters.");

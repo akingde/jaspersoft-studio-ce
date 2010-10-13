@@ -26,23 +26,23 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.jaspersoft.studio.list.property.descriptor.dialog.PropertyDTO;
-import com.jaspersoft.studio.list.property.descriptor.dialog.PropertyEditor;
+import com.jaspersoft.studio.list.property.descriptor.dialog.ParameterDTO;
+import com.jaspersoft.studio.list.property.descriptor.dialog.ParameterEditor;
 
-public class PropertiesCellEditor extends DialogCellEditor {
+public class ParameterCellEditor extends DialogCellEditor {
 
-	public PropertiesCellEditor(Composite parent) {
+	public ParameterCellEditor(Composite parent) {
 		super(parent);
 	}
 
-	public PropertiesCellEditor(Composite parent, int style) {
+	public ParameterCellEditor(Composite parent, int style) {
 		super(parent, style);
 	}
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		PropertyEditor wizard = new PropertyEditor();
-		wizard.setValue((PropertyDTO) getValue());
+		ParameterEditor wizard = new ParameterEditor();
+		wizard.setValue((ParameterDTO) getValue());
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
@@ -59,7 +59,7 @@ public class PropertiesCellEditor extends DialogCellEditor {
 			return;
 		}
 		if (labelProvider == null)
-			labelProvider = new PropertiesLabelProvider();
+			labelProvider = new ParameterLabelProvider();
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
 	}
