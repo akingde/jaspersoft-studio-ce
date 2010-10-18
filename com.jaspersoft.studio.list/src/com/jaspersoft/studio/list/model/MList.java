@@ -312,20 +312,9 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 			super.setPropertyValue(id, value);
 	}
 
-	@Override
-	public int getDefaultHeight() {
-		return 30;
-	}
-
-	@Override
-	public int getDefaultWidth() {
-		return 100;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
+	
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.model.MGraphicElement#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
