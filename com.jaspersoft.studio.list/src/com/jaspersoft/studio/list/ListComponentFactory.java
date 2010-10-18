@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.list;
 
@@ -39,6 +35,13 @@ import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.list.figure.ListFigure;
 import com.jaspersoft.studio.list.model.MList;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.MElementGroup;
+import com.jaspersoft.studio.model.MFrame;
+import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 public class ListComponentFactory implements IComponentFactory {
 
@@ -73,6 +76,20 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
+		if (child instanceof MList) {
+			if (parent instanceof MElementGroup)
+				return new CreateElementCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MBand)
+				return new CreateElementCommand((MBand) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MFrame)
+				return new CreateElementCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MReport)
+				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+
+			if (parent instanceof IGroupElement) {
+				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+			}
+		}
 		return null;
 	}
 
