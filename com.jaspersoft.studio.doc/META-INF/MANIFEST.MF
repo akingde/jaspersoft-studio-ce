@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jaspersoft Studio Documentation
+Bundle-SymbolicName: com.jaspersoft.studio.doc; singleton:=true
+Bundle-Version: 0.0.3
+Bundle-Vendor: Jaspersoft Corporation
