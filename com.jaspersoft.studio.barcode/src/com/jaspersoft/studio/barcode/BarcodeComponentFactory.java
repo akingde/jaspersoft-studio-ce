@@ -45,6 +45,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.barcode.command.CreateElementCommand;
+import com.jaspersoft.studio.barcode.model.MBarcode;
 import com.jaspersoft.studio.barcode.model.MBarcodeBarbecue;
 import com.jaspersoft.studio.barcode.model.barcode4j.MBarcode4j;
 import com.jaspersoft.studio.barcode.model.barcode4j.MCodabar;
@@ -126,7 +127,7 @@ public class BarcodeComponentFactory implements IComponentFactory {
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
-		if (child instanceof MGraphicElement) {
+		if (child instanceof MBarcode) {
 			if (parent instanceof MElementGroup)
 				return new CreateElementCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MBand)
