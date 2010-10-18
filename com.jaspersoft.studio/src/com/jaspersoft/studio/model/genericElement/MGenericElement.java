@@ -151,6 +151,7 @@ public class MGenericElement extends MGraphicElement {
 		evaluationTimeD.setCategory("GenericElement Properties");
 		evaluationGroupNameD.setCategory("GenericElement Properties");
 
+		defaultsMap.put(JRDesignGenericElement.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}
 
 	public static final String PROPERTY_NAME = "NAME";

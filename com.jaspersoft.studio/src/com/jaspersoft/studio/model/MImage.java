@@ -242,10 +242,13 @@ public class MImage extends MGraphicElementLineBox {
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1,
 					true));
-		else if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
-			jrElement.setExpression((JRExpression) value);
-
-		else if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
+		else if (id.equals(JRDesignImage.PROPERTY_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrElement.setExpression(expression);
+			}
+		} else if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
 			jrElement.setUsingCache((Boolean) value);
 		else if (id.equals(JRBaseImage.PROPERTY_LAZY))
 			jrElement.setLazy(((Boolean) value).booleanValue());

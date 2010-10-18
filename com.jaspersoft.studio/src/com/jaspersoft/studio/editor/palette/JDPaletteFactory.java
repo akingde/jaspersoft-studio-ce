@@ -35,7 +35,6 @@ import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MBarcode;
 import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.MChart;
 import com.jaspersoft.studio.model.MCrossTab;
@@ -108,7 +107,6 @@ public class JDPaletteFactory {
 		entries.add(createJDEntry(MChart.getIconDescriptor(), MChart.class));
 		entries.add(createJDEntry(MFrame.getIconDescriptor(), MFrame.class));
 		entries.add(createJDEntry(MBreak.getIconDescriptor(), MBreak.class));
-		entries.add(createJDEntry(MBarcode.getIconDescriptor(), MBarcode.class));
 		entries.add(createJDEntry(MCrossTab.getIconDescriptor(), MCrossTab.class));
 		entries.add(createJDEntry(MSubreport.getIconDescriptor(), MSubreport.class));
 		entries.add(createJDEntry(MGraphicElement.getIconDescriptor(), MGraphicElement.class));
