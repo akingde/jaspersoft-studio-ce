@@ -30,14 +30,13 @@ import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public class MHyperLink extends APropertyNode implements IPropertySource {
+public class MHyperLink extends APropertyNode {
 
 	public MHyperLink(JRHyperlink hyperLink) {
 		super();

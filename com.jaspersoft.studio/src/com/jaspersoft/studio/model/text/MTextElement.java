@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.text;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -34,11 +35,9 @@ import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -87,36 +86,9 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		lineSpacingD.setDescription("Type of line spacing for the text object.");
 		desc.add(lineSpacingD);
 
-		CheckBoxPropertyDescriptor strikeThroughD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_STRIKE_THROUGH,
-				"Strike Through", NullEnum.INHERITED);
-		strikeThroughD.setDescription("Flag indicating if the font is strikethrough.");
-		desc.add(strikeThroughD);
-
-		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_UNDERLINE,
-				"Underline", NullEnum.INHERITED);
-		underlineD.setDescription("Flag indicating if the font is underlined.");
-		desc.add(underlineD);
-
-		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ITALIC, "Italic",
-				NullEnum.INHERITED);
-		italicD.setDescription("Flag indicating if the font is italic.");
-		desc.add(italicD);
-
-		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BOLD, "Bold",
-				NullEnum.INHERITED);
-		boldD.setDescription("Flag indicating if the font is bold.");
-		desc.add(boldD);
-
-		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME,
-				"Font Name", ModelUtils.getFontNames(), NullEnum.INHERITED);
-		fontNameD.setDescription("Name of the font.");
-		desc.add(fontNameD);
-
-		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
-				"Font Size", ModelUtils.getFontSizes(), NullEnum.INHERITED);
-		fontSizeD.setDescription("Size of the font.");
-		fontSizeD.setValidator(new IntegerCellEditorValidator());
-		desc.add(fontSizeD);
+		if (tFont == null)
+			tFont = new MFont((JRFont) getValue());
+		tFont.createPropertyDescriptors(desc, defaultsMap);
 
 		markupD.setCategory("Text Properties");
 		hAlignD.setCategory("Text Properties");
@@ -124,25 +96,13 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		rotationD.setCategory("Text Properties");
 		lineSpacingD.setCategory("Text Properties");
 
-		fontNameD.setCategory("Text Font");
-		fontSizeD.setCategory("Text Font");
-		boldD.setCategory("Text Font");
-		italicD.setCategory("Text Font");
-		underlineD.setCategory("Text Font");
-		strikeThroughD.setCategory("Text Font");
-
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_LINE_SPACING, null);
-
-		defaultsMap.put(JRDesignStyle.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_UNDERLINE, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_ITALIC, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_BOLD, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_NAME, "SansSerif");
-		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_SIZE, "10");
 	}
+
+	private MFont tFont;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -160,18 +120,12 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		if (id.equals(JRBaseStyle.PROPERTY_LINE_SPACING))
 			return EnumHelper.getValue(jrElement.getOwnLineSpacingValue(), 0, true);
 
-		if (id.equals(JRDesignStyle.PROPERTY_STRIKE_THROUGH))
-			return jrElement.isOwnStrikeThrough();
-		if (id.equals(JRDesignStyle.PROPERTY_UNDERLINE))
-			return jrElement.isOwnUnderline();
-		if (id.equals(JRDesignStyle.PROPERTY_ITALIC))
-			return jrElement.isOwnItalic();
-		if (id.equals(JRDesignStyle.PROPERTY_BOLD))
-			return jrElement.isOwnBold();
-		if (id.equals(JRDesignStyle.PROPERTY_FONT_NAME))
-			return jrElement.getOwnFontName();
-		if (id.equals(JRDesignStyle.PROPERTY_FONT_SIZE))
-			return jrElement.getOwnFontSize() != null ? jrElement.getOwnFontSize().toString() : "";
+		if (tFont != null) {
+			Object val = tFont.getPropertyValue(id);
+			if (val != null)
+				return val;
+		}
+
 		return super.getPropertyValue(id);
 	}
 
@@ -192,19 +146,10 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		else if (id.equals(JRBaseStyle.PROPERTY_LINE_SPACING))
 			jrElement.setLineSpacing((LineSpacingEnum) EnumHelper.getSetValue(LineSpacingEnum.values(), value, 0, true));
 
-		else if (id.equals(JRDesignStyle.PROPERTY_STRIKE_THROUGH))
-			jrElement.setStrikeThrough((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_UNDERLINE))
-			jrElement.setUnderline((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_ITALIC))
-			jrElement.setItalic((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_BOLD))
-			jrElement.setBold((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_FONT_NAME))
-			jrElement.setFontName((String) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_FONT_SIZE))
-			jrElement.setFontSize(new Integer((String) value));
-		else
-			super.setPropertyValue(id, value);
+		if (tFont != null) {
+			tFont.setPropertyValue(id, value);
+		}
+
+		super.setPropertyValue(id, value);
 	}
 }

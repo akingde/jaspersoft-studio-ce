@@ -23,6 +23,7 @@ import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -63,6 +64,8 @@ import com.jaspersoft.studio.model.band.MBand;
  * The Class ModelUtils.
  */
 public class ModelUtils {
+
+	private static Map<String, String> mp = new HashMap<String, String>();
 
 	/**
 	 * Return the ordered list of bands available in the current report.
@@ -572,6 +575,85 @@ public class ModelUtils {
 		}
 
 		return classes.toArray(new String[classes.size()]);
+	}
+
+	public static String[] getPDFFontNames() {
+		java.util.List<String> classes = new ArrayList<String>();
+		classes.add("");
+		classes.add("Helvetica");
+		classes.add("Helvetica-Bold");
+		classes.add("Helvetica-BoldOblique");
+		classes.add("Helvetica-Oblique");
+		classes.add("Courier");
+		classes.add("Courier-Bold");
+		classes.add("Courier-BoldOblique");
+		classes.add("Courier-Oblique");
+		classes.add("Symbol");
+		classes.add("Times-Roman");
+		classes.add("Times-Bold");
+		classes.add("Times-BoldItalic");
+		classes.add("Times-Italic");
+		classes.add("ZapfDingbats");
+		classes.add("STSong-Light");
+		classes.add("MHei-Medium");
+		classes.add("MSung-Light");
+		classes.add("HeiseiKakuGo-W5");
+		classes.add("HeiseiMin-W3");
+		classes.add("HYGoThic-Medium");
+		classes.add("HYSMyeongJo-Medium");
+
+		return classes.toArray(new String[classes.size()]);
+	}
+
+	public static String[] getPDFEncodings() {
+		java.util.List<String> encodings = new ArrayList<String>();
+		encodings.add("");
+
+		mp.put("Cp1250", "CP1250 (Central European)");
+		mp.put("Cp1251", "CP1251 (Cyrillic)");
+		mp.put("Cp1252", "CP1252 (Western European ANSI aka WinAnsi)");
+		mp.put("Cp1253", "CP1253 (Greek)");
+		mp.put("Cp1254", "CP1254 (Turkish)");
+		mp.put("Cp1255", "CP1255 (Hebrew)");
+		mp.put("Cp1256", "CP1256 (Arabic)");
+		mp.put("Cp1257", "CP1257 (Baltic)");
+		mp.put("Cp1258", "CP1258 (Vietnamese)");
+		mp.put("UniGB-UCS2-H", "UniGB-UCS2-H (Chinese Simplified)");
+		mp.put("UniGB-UCS2-V", "UniGB-UCS2-V (Chinese Simplified)");
+		mp.put("UniCNS-UCS2-H", "UniCNS-UCS2-H (Chinese traditional)");
+		mp.put("UniCNS-UCS2-V", "UniCNS-UCS2-V (Chinese traditional)");
+		mp.put("UniJIS-UCS2-H", "UniJIS-UCS2-H (Japanese)");
+		mp.put("UniJIS-UCS2-V", "UniJIS-UCS2-V (Japanese)");
+		mp.put("UniJIS-UCS2-HW-H", "UniJIS-UCS2-HW-H (Japanese)");
+		mp.put("UniJIS-UCS2-HW-V", "UniJIS-UCS2-HW-V (Japanese)");
+		mp.put("UniKS-UCS2-H", "UniKS-UCS2-H (Korean)");
+		mp.put("UniKS-UCS2-V", "UniKS-UCS2-V (Korean)");
+		mp.put("Identity-H", "Identity-H (Unicode with horizontal writing)");
+		mp.put("Identity-V", "Identity-V (Unicode with vertical writing)");
+
+		encodings.addAll(mp.values());
+
+		return encodings.toArray(new String[encodings.size()]);
+	}
+
+	public static String getKey4PDFEncoding(String enc) {
+		if (enc != null) {
+			String res = mp.get(enc);
+			if (res != null)
+				return res;
+		}
+		return enc;
+	}
+
+	public static String getPDFEncoding2key(String key) {
+		if (key != null) {
+			for (String k : mp.keySet()) {
+				String v = mp.get(k);
+				if (v.equals(key))
+					return v;
+			}
+		}
+		return key;
 	}
 
 	public static String[] getFontSizes() {

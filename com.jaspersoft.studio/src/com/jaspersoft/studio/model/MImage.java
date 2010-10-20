@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.base.JRBaseImage;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -164,7 +163,8 @@ public class MImage extends MGraphicElementLineBox {
 		lazyD.setDescription("Gives control over when the images are retrieved from their specified location.");
 		desc.add(lazyD);
 
-		mHyperLink = new MHyperLink((JRHyperlink) getValue());
+		if (mHyperLink == null)
+			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
 		evaluationTimeD.setCategory("Image Properties");
@@ -189,6 +189,11 @@ public class MImage extends MGraphicElementLineBox {
 
 	private MExpression mExpression;
 	private MHyperLink mHyperLink;
+
+	private MExpression mAnchorExpression;
+	private MExpression mPageExpression;
+	private MExpression mReferenceExpression;
+	private MExpression mToolTipExpression;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -215,11 +220,31 @@ public class MImage extends MGraphicElementLineBox {
 			return jrElement.isOwnUsingCache();
 		if (id.equals(JRBaseImage.PROPERTY_LAZY))
 			return new Boolean(jrElement.isLazy());
-		if (mHyperLink == null)
-			mHyperLink = new MHyperLink((JRHyperlink) getValue());
-		Object val = mHyperLink.getPropertyValue(id);
-		if (val != null)
-			return val;
+		// hyperlink --------------------------------------
+		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
+			return jrElement.getLinkTarget();
+		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
+			return EnumHelper.getValue(jrElement.getHyperlinkTypeValue(), 0, false);
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
+			if (mAnchorExpression == null)
+				mAnchorExpression = new MExpression(jrElement.getHyperlinkAnchorExpression());
+			return mAnchorExpression;
+		}
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
+			if (mPageExpression == null)
+				mPageExpression = new MExpression(jrElement.getHyperlinkPageExpression());
+			return mPageExpression;
+		}
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
+			if (mReferenceExpression == null)
+				mReferenceExpression = new MExpression(jrElement.getHyperlinkReferenceExpression());
+			return mReferenceExpression;
+		}
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
+			if (mToolTipExpression == null)
+				mToolTipExpression = new MExpression(jrElement.getHyperlinkTooltipExpression());
+			return mToolTipExpression;
+		}
 		return super.getPropertyValue(id);
 	}
 
@@ -257,7 +282,31 @@ public class MImage extends MGraphicElementLineBox {
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			jrElement
 					.setHyperlinkType((HyperlinkTypeEnum) EnumHelper.getSetValue(HyperlinkTypeEnum.values(), value, 0, false));
-		else
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mAnchorExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mAnchorExpression.getValue();
+				jrElement.setHyperlinkAnchorExpression(expression);
+			}
+		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mPageExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mPageExpression.getValue();
+				jrElement.setHyperlinkPageExpression(expression);
+			}
+		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mReferenceExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mReferenceExpression.getValue();
+				jrElement.setHyperlinkReferenceExpression(expression);
+			}
+		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mToolTipExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mToolTipExpression.getValue();
+				jrElement.setHyperlinkTooltipExpression(expression);
+			}
+		} else
 			super.setPropertyValue(id, value);
 	}
 

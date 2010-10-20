@@ -24,8 +24,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
 
+import com.jaspersoft.studio.ExtensionManager;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MChart;
 import com.jaspersoft.studio.model.MCrossTab;
 import com.jaspersoft.studio.model.MEllipse;
 import com.jaspersoft.studio.model.MFrame;
@@ -52,6 +53,10 @@ public class FigureFactory {
 	 * @return the i figure
 	 */
 	public static IFigure createFigure(final ANode node) {
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		IFigure f = m.createFigure(node);
+		if (f != null)
+			return f;
 		if (node instanceof MEllipse) {
 			return new EllipseFigure();
 		} else if (node instanceof MRectangle) {
@@ -64,8 +69,6 @@ public class FigureFactory {
 			return new LineFigure();
 		} else if (node instanceof MFrame) {
 			return new FrameFigure();
-		} else if (node instanceof MChart) {
-			return new ChartFigure();
 		} else if (node instanceof MImage) {
 			return new ImageFigure();
 		} else if (node instanceof MCrossTab) {

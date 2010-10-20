@@ -26,7 +26,6 @@ import java.util.ListIterator;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBand;
-import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRGenericElement;
@@ -35,7 +34,6 @@ import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignBreak;
-import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignEllipse;
@@ -334,9 +332,6 @@ public class ReportFactory {
 			return new MFrame(parent, (JRDesignFrame) jrObject, newIndex);
 		} else if (jrObject instanceof JRElementGroup) {
 			return new MElementGroup(parent, (JRElementGroup) jrObject, newIndex);
-
-		} else if (jrObject instanceof JRChart) {
-			return new MChart(parent, (JRDesignChart) jrObject, newIndex);
 		} else if (jrObject instanceof JRSubreport) {
 			return new MSubreport(parent, (JRDesignSubreport) jrObject, newIndex);
 		} else if (jrObject instanceof JRCrosstab) {
@@ -357,8 +352,6 @@ public class ReportFactory {
 			return new MBreak(parent, (JRDesignBreak) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignCrosstab) {
 			return new MCrossTab(parent, (JRDesignCrosstab) jrObject, newIndex);
-		} else if (jrObject instanceof JRDesignChart) {
-			return new MChart(parent, (JRDesignChart) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignTextField) {
 			return new MTextField(parent, (JRDesignTextField) jrObject, newIndex);
 		} else if (jrObject instanceof JRGenericElement) {
