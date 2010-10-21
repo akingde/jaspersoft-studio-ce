@@ -21,27 +21,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with iReport. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.chart.property.descriptor;
+package com.jaspersoft.studio.chart.model;
 
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.ui.views.properties.PropertyDescriptor;
+public class MTimeSeriesPlot extends MChartPlot {
 
-public class PlotPropertyDescriptor extends PropertyDescriptor {
-	public PlotPropertyDescriptor(Object id, String displayName) {
-		super(id, displayName);
-	}
-
-	@Override
-	public ILabelProvider getLabelProvider() {
-		if (isLabelProviderSet()) {
-			return super.getLabelProvider();
-		}
-		return new LabelProvider() {
-			@Override
-			public String getText(Object element) {
-				return "";
-			}
-		};
-	}
 }

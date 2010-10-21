@@ -1,21 +1,25 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
- * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
+ * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of iReport.
+ *
+ * iReport is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iReport is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with iReport. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.chart.model;
 
@@ -23,14 +27,18 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.type.EdgeEnum;
+import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.base.JRBaseChart;
+import net.sf.jasperreports.engine.base.JRBaseChartPlot;
+import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
@@ -210,10 +218,11 @@ public class MChart extends MGraphicElementLineBox {
 		desc.add(legendFontD);
 
 		PlotPropertyDescriptor plotD = new PlotPropertyDescriptor("PLOTPROPERTY", "Plot");
-		plotD.setDescription("Font.");
+		plotD.setDescription("Plot.");
 		desc.add(plotD);
 
-		mHyperLink = new MHyperLink((JRHyperlink) getValue());
+		if (mHyperLink == null)
+			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
 		titleFontD.setCategory("Common Chart Properties");
@@ -261,18 +270,24 @@ public class MChart extends MGraphicElementLineBox {
 	private MFont tFont;
 	private MFont stFont;
 	private MFont lFont;
+
 	private MHyperLink mHyperLink;
+
+	private MExpression mAnchorExpression;
+	private MExpression mPageExpression;
+	private MExpression mReferenceExpression;
+	private MExpression mToolTipExpression;
 
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
 
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
-			return EnumHelper.getValue(jrElement.getTitlePositionValue());
+			return EnumHelper.getValue(jrElement.getTitlePositionValue(), 0, true);
 		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))
-			return EnumHelper.getValue(jrElement.getLegendPositionValue());
+			return EnumHelper.getValue(jrElement.getLegendPositionValue(), 0, true);
 		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrElement.getEvaluationTimeValue());
+			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, true);
 		if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE))
 			return jrElement.getRenderType();
 		if (id.equals(JRBaseChart.PROPERTY_THEME))
@@ -297,14 +312,35 @@ public class MChart extends MGraphicElementLineBox {
 		if (id.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS))
 			return jrElement.getCustomizerClass();
 
-		if (mHyperLink == null)
-			mHyperLink = new MHyperLink(jrElement);
-		Object val = mHyperLink.getPropertyValue(id);
-		if (val != null)
-			return val;
+		// hyperlink --------------------------------------
+		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
+			return jrElement.getLinkTarget();
+		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
+			return EnumHelper.getValue(jrElement.getHyperlinkTypeValue(), 0, false);
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
+			if (mAnchorExpression == null)
+				mAnchorExpression = new MExpression(jrElement.getHyperlinkAnchorExpression());
+			return mAnchorExpression;
+		}
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
+			if (mPageExpression == null)
+				mPageExpression = new MExpression(jrElement.getHyperlinkPageExpression());
+			return mPageExpression;
+		}
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
+			if (mReferenceExpression == null)
+				mReferenceExpression = new MExpression(jrElement.getHyperlinkReferenceExpression());
+			return mReferenceExpression;
+		}
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
+			if (mToolTipExpression == null)
+				mToolTipExpression = new MExpression(jrElement.getHyperlinkTooltipExpression());
+			return mToolTipExpression;
+		}
+
 		if (id.equals("PLOTPROPERTY")) {
 			if (mChartPlot == null)
-				mChartPlot = new MChartPlot(jrElement.getPlot());
+				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
 			return mChartPlot;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
@@ -341,11 +377,12 @@ public class MChart extends MGraphicElementLineBox {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
-			jrElement.setTitlePosition(EdgeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
+			jrElement.setTitlePosition((EdgeEnum) EnumHelper.getSetValue(EdgeEnum.values(), value, 0, true));
 		else if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))
-			jrElement.setLegendPosition(EdgeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
+			jrElement.setLegendPosition((EdgeEnum) EnumHelper.getSetValue(EdgeEnum.values(), value, 0, true));
 		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime(EvaluationTimeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
+			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1,
+					true));
 		else if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
 			jrElement.setShowLegend((Boolean) value);
 		else if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE))
@@ -384,6 +421,35 @@ public class MChart extends MGraphicElementLineBox {
 				subtitleExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) subtitleExpression.getValue();
 				jrElement.setSubtitleExpression(expression);
+			}
+		} else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
+			jrElement.setLinkTarget((String) value);
+		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
+			jrElement
+					.setHyperlinkType((HyperlinkTypeEnum) EnumHelper.getSetValue(HyperlinkTypeEnum.values(), value, 0, false));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mAnchorExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mAnchorExpression.getValue();
+				jrElement.setHyperlinkAnchorExpression(expression);
+			}
+		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mPageExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mPageExpression.getValue();
+				jrElement.setHyperlinkPageExpression(expression);
+			}
+		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mReferenceExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mReferenceExpression.getValue();
+				jrElement.setHyperlinkReferenceExpression(expression);
+			}
+		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mToolTipExpression = (MExpression) value;
+				JRExpression expression = (JRExpression) mToolTipExpression.getValue();
+				jrElement.setHyperlinkTooltipExpression(expression);
 			}
 		} else
 			super.setPropertyValue(id, value);
@@ -450,4 +516,23 @@ public class MChart extends MGraphicElementLineBox {
 		return getIconDescriptor().getToolTip();
 	}
 
+	@Override
+	public void setValue(Object value) {
+		JRChart oldObject = (JRChart) getValue();
+		JRChart newObject = (JRChart) value;
+
+		if (oldObject != null) {
+			((JRBaseChartPlot) oldObject.getPlot()).getEventSupport().removePropertyChangeListener(this);
+			((JRBaseFont) oldObject.getLegendFont()).getEventSupport().removePropertyChangeListener(this);
+			((JRBaseFont) oldObject.getSubtitleFont()).getEventSupport().removePropertyChangeListener(this);
+			((JRBaseFont) oldObject.getTitleFont()).getEventSupport().removePropertyChangeListener(this);
+		}
+		if (newObject != null) {
+			((JRBaseChartPlot) newObject.getPlot()).getEventSupport().addPropertyChangeListener(this);
+			((JRBaseFont) newObject.getLegendFont()).getEventSupport().addPropertyChangeListener(this);
+			((JRBaseFont) newObject.getSubtitleFont()).getEventSupport().addPropertyChangeListener(this);
+			((JRBaseFont) newObject.getTitleFont()).getEventSupport().addPropertyChangeListener(this);
+		}
+		super.setValue(value);
+	}
 }
