@@ -1,33 +1,31 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.chart.model;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.base.JRBaseChart;
@@ -35,8 +33,10 @@ import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
@@ -46,12 +46,19 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
+import com.jaspersoft.studio.chart.model.plot.MChartPlot;
+import com.jaspersoft.studio.chart.model.plot.PlotFactory;
 import com.jaspersoft.studio.chart.property.descriptor.PlotPropertyDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MHyperLink;
+import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -67,7 +74,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 /**
  * The Class MChart.
  */
-public class MChart extends MGraphicElementLineBox {
+public class MChart extends MGraphicElementLineBox implements IPastable, IContainer, IContainerEditPart {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -90,6 +97,10 @@ public class MChart extends MGraphicElementLineBox {
 		super();
 	}
 
+	public MChart(ANode parent, int newIndex) {
+		super(parent, newIndex);
+	}
+
 	/**
 	 * Instantiates a new m chart.
 	 * 
@@ -100,7 +111,7 @@ public class MChart extends MGraphicElementLineBox {
 	 * @param newIndex
 	 *          the new index
 	 */
-	public MChart(ANode parent, JRDesignChart jrChart, int newIndex) {
+	public MChart(ANode parent, JRChart jrChart, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrChart);
 	}
@@ -258,7 +269,8 @@ public class MChart extends MGraphicElementLineBox {
 		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME, EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, true));
 	}
 
-	protected void setGroupItems(String[] items) {
+	@Override
+	public void setGroupItems(String[] items) {
 		if (evaluationGroupD != null)
 			evaluationGroupD.setItems(items);
 	}
@@ -475,14 +487,8 @@ public class MChart extends MGraphicElementLineBox {
 		return 200;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
-	 */
-	@Override
-	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
-		JRDesignElement jrDesignElement = new JRDesignChart(jasperDesign, JRDesignChart.CHART_TYPE_PIE);
+	public JRDesignElement createJRElement(JasperDesign jasperDesign, byte chartType) {
+		JRDesignElement jrDesignElement = new JRDesignChart(jasperDesign, chartType);
 		return jrDesignElement;
 	}
 
@@ -534,5 +540,71 @@ public class MChart extends MGraphicElementLineBox {
 			((JRBaseFont) newObject.getTitleFont()).getEventSupport().addPropertyChangeListener(this);
 		}
 		super.setValue(value);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
+			if (evt.getSource() == getValue()) {
+				if (evt.getOldValue() == null && evt.getNewValue() != null) {
+					int newIndex = -1;
+					if (evt instanceof CollectionElementAddedEvent) {
+						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+					}
+					// add the node to this parent
+					ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
+					if (evt.getNewValue() instanceof JRElementGroup) {
+						JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
+						ReportFactory.createElementsForBand(n, jrFrame.getChildren());
+					}
+				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+					// delete
+					for (INode n : getChildren()) {
+						if (n.getValue() == evt.getOldValue()) {
+							removeChild((ANode) n);
+							break;
+						}
+					}
+				} else {
+					// changed
+					for (INode n : getChildren()) {
+						if (n.getValue() == evt.getOldValue())
+							n.setValue(evt.getNewValue());
+					}
+				}
+			}
+		} else if (evt.getPropertyName().equals("axes")) {
+			if (evt.getOldValue() == null && evt.getNewValue() != null) {
+				int newIndex = -2;
+				if (evt instanceof CollectionElementAddedEvent) {
+					newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+				}
+				// add the node to this parent
+				ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
+				// if (evt.getNewValue() instanceof JRElementGroup) {
+				// JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
+				// ReportFactory.createElementsForBand(n, jrFrame.getChildren());
+				// }
+			} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+				// delete
+				for (INode n : getChildren()) {
+					if (n.getValue() == evt.getOldValue()) {
+						removeChild((ANode) n);
+						break;
+					}
+				}
+			} else {
+				// changed
+				for (INode n : getChildren()) {
+					if (n.getValue() == evt.getOldValue())
+						n.setValue(evt.getNewValue());
+				}
+			}
+
+		}
+		PropertyChangeEvent newEvent = evt;
+		if (!(evt.getSource() instanceof ANode))
+			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
 }
