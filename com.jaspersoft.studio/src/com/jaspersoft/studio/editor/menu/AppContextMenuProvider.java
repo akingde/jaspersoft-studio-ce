@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.editor.menu;
 
+import java.util.List;
+
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.internal.InternalImages;
@@ -30,6 +32,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
@@ -148,6 +151,14 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
 
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		List<String> lst = m.getActionIDs();
+		for (String ids : lst) {
+			action = getActionRegistry().getAction(ids);
+			if (action != null && action.isEnabled())
+				menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
+		}
+
 		action = getActionRegistry().getAction(DeleteGroupReportAction.ID);
 		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_ADD, action);
@@ -161,8 +172,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 		// position actions
-		MenuManager submenu = new MenuManager("&Order", JaspersoftStudioPlugin
-				.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID);
+		MenuManager submenu = new MenuManager("&Order",
+				JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID);
 
 		action = getActionRegistry().getAction(BringToFrontAction.ID);
 		if (action.isEnabled())
@@ -214,8 +225,9 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 
 		// Alignment Actions
-		submenu = new MenuManager("Align in Container", JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/eclipse/align-band-left.gif"), Align2BorderAction.ID_ALIGN_LEFT);
+		submenu = new MenuManager("Align in Container",
+				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-left.gif"),
+				Align2BorderAction.ID_ALIGN_LEFT);
 
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_LEFT);
 		if (action.isEnabled())
@@ -263,8 +275,9 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 		// ------------------------------
 
-		submenu = new MenuManager("S&ize to Container", JaspersoftStudioPlugin
-				.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"), Size2BorderAction.ID_SIZE_WIDTH);
+		submenu = new MenuManager("S&ize to Container",
+				JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"),
+				Size2BorderAction.ID_SIZE_WIDTH);
 
 		action = getActionRegistry().getAction(Size2BorderAction.ID_SIZE_WIDTH);
 		if (action.isEnabled())

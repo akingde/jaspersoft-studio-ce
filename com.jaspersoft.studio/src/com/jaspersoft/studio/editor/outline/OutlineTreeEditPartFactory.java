@@ -143,6 +143,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 * @return the delete command
 	 */
 	public static Command getDeleteCommand(ANode parent, ANode child) {
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		Command c = m.getDeleteCommand(parent, child);
+		if (c != null)
+			return c;
+
 		if (child instanceof MGraphicElement) {
 			return new DeleteElementCommand(parent, (MGraphicElement) child);
 		} else if (child instanceof MElementGroup) {
@@ -193,6 +198,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 * @return the reorder command
 	 */
 	public static Command getReorderCommand(ANode child, ANode parent, int newIndex) {
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		Command c = m.getReorderCommand(child, parent, newIndex);
+		if (c != null)
+			return c;
+
 		if (child instanceof MBand) {
 			int minIndex = 0;
 			int maxIndex = 0;
@@ -336,8 +346,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new CreateElementCommand((MFrame) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MReport)
 				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
-			
-			if(parent instanceof IGroupElement){
+
+			if (parent instanceof IGroupElement) {
 				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
 			}
 		} else if (child instanceof MElementGroup) {

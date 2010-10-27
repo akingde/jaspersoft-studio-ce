@@ -28,6 +28,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.action.Action;
+import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.model.ANode;
 
@@ -85,6 +87,24 @@ public class ExtensionManager {
 		return null;
 	}
 
+	public Command getDeleteCommand(ANode parent, ANode child) {
+		for (IComponentFactory f : nodeFactory) {
+			Command c = f.getDeleteCommand(parent, child);
+			if (c != null)
+				return c;
+		}
+		return null;
+	}
+
+	public Command getReorderCommand(ANode parent, ANode child, int newIndex) {
+		for (IComponentFactory f : nodeFactory) {
+			Command c = f.getReorderCommand(child, parent, newIndex);
+			if (c != null)
+				return c;
+		}
+		return null;
+	}
+
 	public IFigure createFigure(ANode node) {
 		for (IComponentFactory f : nodeFactory) {
 			IFigure c = f.createFigure(node);
@@ -92,5 +112,25 @@ public class ExtensionManager {
 				return c;
 		}
 		return null;
+	}
+
+	public List<Action> getActions(WorkbenchPart part) {
+		List<Action> lst = new ArrayList<Action>();
+		for (IComponentFactory f : nodeFactory) {
+			List<Action> l = f.getActions(part);
+			if (l != null && !l.isEmpty())
+				lst.addAll(l);
+		}
+		return lst;
+	}
+
+	public List<String> getActionIDs() {
+		List<String> lst = new ArrayList<String>();
+		for (IComponentFactory f : nodeFactory) {
+			List<String> l = f.getActionsID();
+			if (l != null && !l.isEmpty())
+				lst.addAll(l);
+		}
+		return lst;
 	}
 }

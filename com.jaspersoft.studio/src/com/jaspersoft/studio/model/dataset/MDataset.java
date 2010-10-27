@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.type.WhenResourceMissingTypeEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
@@ -57,7 +56,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MDataset extends APropertyNode implements IPropertySource, ICopyable {
+public class MDataset extends APropertyNode implements ICopyable {
 
 	private static final String PROPERTY_MAP = "PROPERTY_MAP";
 	/** The icon descriptor. */

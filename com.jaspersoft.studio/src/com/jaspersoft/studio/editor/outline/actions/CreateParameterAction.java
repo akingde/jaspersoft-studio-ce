@@ -30,7 +30,6 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.model.parameter.MParameter;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CreateParameterAction.
  */

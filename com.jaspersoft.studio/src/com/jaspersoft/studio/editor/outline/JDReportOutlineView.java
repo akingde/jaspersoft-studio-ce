@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.editor.outline;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
@@ -53,6 +55,8 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
 
+import com.jaspersoft.studio.ExtensionManager;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
@@ -180,6 +184,13 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 
 		id = CreateBandAction.ID;
 		bars.setGlobalActionHandler(id, registry.getAction(id));
+
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		List<String> lst = m.getActionIDs();
+		for (String ids : lst) {
+			id = ids;
+			bars.setGlobalActionHandler(id, registry.getAction(id));
+		}
 
 		id = ShowPropertyViewAction.ID;
 		bars.setGlobalActionHandler(id, registry.getAction(id));

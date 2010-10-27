@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.editor.report;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
@@ -52,6 +54,7 @@ import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.gef.ui.parts.TreeViewer;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -65,6 +68,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
@@ -454,6 +458,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new CreateBandAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(CreateBandAction.ID);
+
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		List<Action> lst = m.getActions(this);
+		for (Action act : lst) {
+			action = act;
+			registry.registerAction(action);
+			getSelectionActions().add(act.getId());
+		}
 
 		action = new DeleteGroupReportAction(this);
 		registry.registerAction(action);
