@@ -280,6 +280,9 @@ public class PreviewEditor extends JRPrintEditor {
 				SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
 		try {
 			sm.beginTask("Fill report", IProgressMonitor.UNKNOWN);
+			org.mozilla.javascript.Context.enter();
+
+			
 			fh.addListener(new AsynchronousFilllListener() {
 
 				public void reportFinished(JasperPrint jPrint) {
@@ -308,6 +311,7 @@ public class PreviewEditor extends JRPrintEditor {
 
 		} finally {
 			sm.done();
+			org.mozilla.javascript.Context.exit();
 		}
 		return Status.OK_STATUS;
 	}

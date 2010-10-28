@@ -378,6 +378,7 @@ public class JRPrintEditor extends EditorPart {
 			public void run() {
 				getReportViewer().unsetDocument(msg);
 				setNotRunning(noRun);
+				System.out.println(msg);
 			}
 		});
 	}

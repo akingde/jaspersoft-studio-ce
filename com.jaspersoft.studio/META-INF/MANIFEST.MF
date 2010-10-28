@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio
 Bundle-SymbolicName: com.jaspersoft.studio;singleton:=true
-Bundle-Version: 0.0.3
+Bundle-Version: 0.0.4
 Bundle-Activator: com.jaspersoft.studio.JaspersoftStudioPlugin
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Localization: plugin
@@ -31,7 +31,10 @@ Bundle-ClassPath: .,
  lib/xercesImpl.jar,
  lib/xml-apis.jar,
  lib/xsltc.jar,
- lib/jxl-2.6.10.jar
+ lib/jxl-2.6.10.jar,
+ lib/groovy-all-1.7.5.jar,
+ lib/bsh-2.0b4.jar,
+ lib/rhino-1.7R1.jar
 Import-Package: org.eclipse.ui,
  org.eclipse.ui.part
 Eclipse-RegisterBuddy: net.sf.jasperreports
