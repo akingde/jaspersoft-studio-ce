@@ -25,16 +25,11 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
-import net.sf.jasperreports.engine.JRDataset;
-import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
@@ -45,8 +40,6 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.list.ListNodeIconDescriptor;
-import com.jaspersoft.studio.list.property.descriptor.ParameterPropertyDescriptor;
-import com.jaspersoft.studio.list.property.descriptor.dialog.ParameterDTO;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -54,14 +47,13 @@ import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
-import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.model.MDatasetRun;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MList extends MGraphicElement implements IPastable, IContainer, IContainerEditPart, IGroupElement {
@@ -156,60 +148,23 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 		widthD.setDescription("Width of the cell.");
 		desc.add(widthD);
 
-		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(PREFIX
-				+ PROPERTY_CONNECTION_EXPRESSION, "Connection Expression");
-		connExprD.setDescription("The connection expression.");
-		desc.add(connExprD);
-
-		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(
-				PREFIX + PROPERTY_DATASOURCE_EXPRESSION, "Datasource Expression");
-		dsExprD.setDescription("The datasource expression.");
-		desc.add(dsExprD);
-
-		JRExpressionPropertyDescriptor paramExprD = new JRExpressionPropertyDescriptor(PREFIX
-				+ PROPERTY_PARAMETERS_MAP_EXPRESSION, "Parameters Map Expression");
-		paramExprD.setDescription("The parameters map expression.");
-		desc.add(paramExprD);
-
-		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(PREFIX + PROPERTY_PARAMETERS,
-				"Parameters");
-		propertiesD.setDescription("Parameters.");
-		desc.add(propertiesD);
-
-		subdatasetnameD = new RWComboBoxPropertyDescriptor(PREFIX + PROPERTY_DATASET_NAME, "Subdataset Name",
-				new String[] { "" }, NullEnum.NOTNULL);
-		subdatasetnameD.setDescription("Subdataset name.");
-		desc.add(subdatasetnameD);
-
-		subdatasetnameD.setCategory("Dataset Run");
-		paramExprD.setCategory("Dataset Run");
-		propertiesD.setCategory("Dataset Run");
-		connExprD.setCategory("Dataset Run");
-		dsExprD.setCategory("Dataset Run");
+		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(PREFIX + "DATASET_RUN", "Dataset Run");
+		datasetRunD.setDescription("Dataset run.");
+		datasetRunD.setCategory("List Properties");
+		desc.add(datasetRunD);
 
 		defaultsMap.put(StandardListComponent.PROPERTY_IGNORE_WIDTH, new Boolean(false));
 		defaultsMap.put(StandardListComponent.PROPERTY_PRINT_ORDER, PrintOrderEnum.HORIZONTAL);
 	}
 
 	private static final String PREFIX = "CONTENTS.";
-	private static final String PROPERTY_CONNECTION_EXPRESSION = "PROPERTY_CONNECTION_EXPRESSION";
-	private static final String PROPERTY_DATASOURCE_EXPRESSION = "PROPERTY_DATASOURCE_EXPRESSION";
-	private static final String PROPERTY_PARAMETERS = "PROPERTY_PARAMETERS";
-	private static final String PROPERTY_PARAMETERS_MAP_EXPRESSION = "PROPERTY_PARAMETERS_MAP_EXPRESSION";
-	private static final String PROPERTY_DATASET_NAME = "PROPERTY_DATASET_NAME";
 
-	private MExpression cnExpression;
-	private MExpression dsExpression;
-	private MExpression pmExpression;
-
-	private ParameterDTO propertyDTO;
-	private RWComboBoxPropertyDescriptor subdatasetnameD;
+	private MDatasetRun mDatasetRun;
 
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
-		JRDatasetRun jrDataSetRun = jrList.getDatasetRun();
 
 		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
 			return jrList.getIgnoreWidth();
@@ -220,38 +175,16 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 			return jrList.getContents().getHeight();
 		if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
 			return jrList.getContents().getWidth();
-		if (id.equals(PREFIX + PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (pmExpression == null)
-				pmExpression = new MExpression(jrDataSetRun.getParametersMapExpression());
-			return pmExpression;
-		}
-		if (id.equals(PREFIX + PROPERTY_CONNECTION_EXPRESSION)) {
-			if (cnExpression == null)
-				cnExpression = new MExpression(jrDataSetRun.getConnectionExpression());
-			return cnExpression;
-		}
-		if (id.equals(PREFIX + PROPERTY_DATASOURCE_EXPRESSION)) {
-			if (dsExpression == null)
-				dsExpression = new MExpression(jrDataSetRun.getDataSourceExpression());
-			return dsExpression;
-		}
-		if (id.equals(PREFIX + PROPERTY_PARAMETERS)) {
-			if (propertyDTO == null) {
-				propertyDTO = new ParameterDTO();
-				propertyDTO.setJasperDesign(getJasperDesign());
-				propertyDTO.setValue(jrDataSetRun.getParameters());
+
+		if (id.equals(PREFIX + "DATASET_RUN")) {
+			if (mDatasetRun == null) {
+				JRDatasetRun j = jrList.getDatasetRun();
+				if (j == null)
+					j = new JRDesignDatasetRun();
+				mDatasetRun = new MDatasetRun(j, getJasperDesign());
 			}
-			return propertyDTO;
-		}
-		if (id.equals(PREFIX + PROPERTY_DATASET_NAME)) {
-			JasperDesign jd = getJasperDesign();
-			List<JRDataset> datasets = jd.getDatasetsList();
-			String[] sds = new String[datasets.size()];
-			for (int i = 0; i < sds.length; i++) {
-				sds[i] = datasets.get(i).getName();
-			}
-			subdatasetnameD.setItems(sds);
-			return jrDataSetRun.getDatasetName();
+			return mDatasetRun;
+
 		}
 
 		return super.getPropertyValue(id);
@@ -271,49 +204,14 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 			((DesignListContents) jrList.getContents()).setHeight((Integer) value);
 		else if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
 			((DesignListContents) jrList.getContents()).setWidth((Integer) value);
-		else if (id.equals(PREFIX + PROPERTY_CONNECTION_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				cnExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) cnExpression.getValue();
-				jrDataSetRun.setConnectionExpression(expression);
-			}
-		} else if (id.equals(PREFIX + PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				pmExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) pmExpression.getValue();
-				jrDataSetRun.setParametersMapExpression(expression);
-			}
-		} else if (id.equals(PREFIX + PROPERTY_DATASOURCE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				dsExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) dsExpression.getValue();
-				jrDataSetRun.setDataSourceExpression(expression);
-			}
-		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
-			if (value instanceof ParameterDTO) {
-				ParameterDTO v = (ParameterDTO) value;
 
-				for (JRDatasetParameter prm : propertyDTO.getValue())
-					jrDataSetRun.removeParameter(prm);
-
-				for (JRDatasetParameter param : v.getValue())
-					try {
-						jrDataSetRun.addParameter(param);
-					} catch (JRException e) {
-						e.printStackTrace();
-					}
-				propertyDTO = v;
-			}
-		} else if (id.equals(PREFIX + PROPERTY_DATASET_NAME)) {
-			if (!value.equals(""))
-				jrDataSetRun.setDatasetName((String) value);
-
-		} else
+		else
 			super.setPropertyValue(id, value);
 	}
 
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.model.MGraphicElement#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
 	@Override
