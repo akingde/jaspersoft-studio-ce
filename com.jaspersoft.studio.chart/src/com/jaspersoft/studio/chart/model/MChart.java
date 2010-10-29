@@ -232,6 +232,10 @@ public class MChart extends MGraphicElementLineBox implements IPastable, IContai
 		plotD.setDescription("Plot.");
 		desc.add(plotD);
 
+		PlotPropertyDescriptor datasetD = new PlotPropertyDescriptor(JRDesignChart.PROPERTY_DATASET, "Dataset");
+		datasetD.setDescription("Dataset.");
+		desc.add(datasetD);
+
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
@@ -239,6 +243,8 @@ public class MChart extends MGraphicElementLineBox implements IPastable, IContai
 		titleFontD.setCategory("Common Chart Properties");
 		subtitleFontD.setCategory("Common Chart Properties");
 		legendFontD.setCategory("Common Chart Properties");
+
+		datasetD.setCategory("Common Chart Properties");
 
 		plotD.setCategory("Common Chart Properties");
 		evaluationGroupD.setCategory("Common Chart Properties");
@@ -273,7 +279,11 @@ public class MChart extends MGraphicElementLineBox implements IPastable, IContai
 	public void setGroupItems(String[] items) {
 		if (evaluationGroupD != null)
 			evaluationGroupD.setItems(items);
+		if (mChartDataset != null)
+			mChartDataset.setGroupItems(items);
 	}
+
+	private MChartDataset mChartDataset;
 
 	private RComboBoxPropertyDescriptor evaluationGroupD;
 	private MExpression titleExpression;
@@ -354,6 +364,11 @@ public class MChart extends MGraphicElementLineBox implements IPastable, IContai
 			if (mChartPlot == null)
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
 			return mChartPlot;
+		}
+		if (id.equals(JRDesignChart.PROPERTY_DATASET)) {
+			if (mChartDataset == null)
+				mChartDataset = new MChartDataset(jrElement.getDataset(), getJasperDesign());
+			return mChartDataset;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
 			if (tFont == null)
