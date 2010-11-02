@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Crosstab Component
+Bundle-SymbolicName: com.jaspersoft.studio.crosstab;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.jaspersoft.studio.crosstab.Activator
+Bundle-Vendor: Jaspersoft Corporation
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.jaspersoft.studio;bundle-version="0.0.4",
+ net.sf.jasperreports;bundle-version="0.0.2",
+ org.eclipse.gef;bundle-version="3.5.1",
+ org.eclipse.ui.views.properties.tabbed;bundle-version="3.5.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
