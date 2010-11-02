@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio"
-      version="0.0.3"
+      version="0.0.4"
       provider-name="Jaspersoft Corporation">
 
    <description url="http://jasperforge.org/projects/jaspersoftstudio">
@@ -719,6 +719,20 @@ Public License instead of this License.  But first, please read
 
    <plugin
          id="com.jaspersoft.studio.doc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.chart"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.crosstab"
          download-size="0"
          install-size="0"
          version="0.0.0"
