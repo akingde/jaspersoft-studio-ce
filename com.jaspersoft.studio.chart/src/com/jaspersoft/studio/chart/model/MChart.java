@@ -60,6 +60,7 @@ import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
@@ -232,7 +233,7 @@ public class MChart extends MGraphicElementLineBox implements IPastable, IContai
 		plotD.setDescription("Plot.");
 		desc.add(plotD);
 
-		PlotPropertyDescriptor datasetD = new PlotPropertyDescriptor(JRDesignChart.PROPERTY_DATASET, "Dataset");
+		JRPropertyDescriptor datasetD = new JRPropertyDescriptor(JRDesignChart.PROPERTY_DATASET, "Dataset");
 		datasetD.setDescription("Dataset.");
 		desc.add(datasetD);
 
@@ -595,7 +596,7 @@ public class MChart extends MGraphicElementLineBox implements IPastable, IContai
 					newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
 				}
 				// add the node to this parent
-				ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
+				ReportFactory.createNode(this, evt.getNewValue(), newIndex);
 				// if (evt.getNewValue() instanceof JRElementGroup) {
 				// JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
 				// ReportFactory.createElementsForBand(n, jrFrame.getChildren());
