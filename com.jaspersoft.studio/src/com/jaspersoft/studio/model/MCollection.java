@@ -17,77 +17,26 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.model.field;
+package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeEvent;
 
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-
-import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IContainerEditPart;
-import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.IPastable;
-import com.jaspersoft.studio.model.NodeIconDescriptor;
-import com.jaspersoft.studio.model.ReportFactory;
-
 /**
- * The Class MFields.
+ * The Class MParameters.
  * 
  * @author Chicu Veaceslav
  */
-public class MFields extends ANode implements IPastable, IContainerEditPart {
+public abstract class MCollection extends ANode implements IPastable, IContainerEditPart {
 
-	/** The icon descriptor. */
-	private static IIconDescriptor iconDescriptor;
+	private String PROPERTY_PARAMETERS = JRDesignDataset.PROPERTY_PARAMETERS;
 
-	/**
-	 * Gets the icon descriptor.
-	 * 
-	 * @return the icon descriptor
-	 */
-	public static IIconDescriptor getIconDescriptor() {
-		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("fields");
-		return iconDescriptor;
-	}
-
-	/** The descriptors. */
-	protected static IPropertyDescriptor[] descriptors;
-
-	/**
-	 * Instantiates a new m fields.
-	 * 
-	 * @param parent
-	 *          the parent
-	 * @param jrDataset
-	 *          the jr dataset
-	 */
-	public MFields(ANode parent, JRDesignDataset jrDataset) {
+	public MCollection(ANode parent, Object value, String property) {
 		super(parent, -1);
-		setValue(jrDataset);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
-	 */
-	public String getDisplayText() {
-		return getIconDescriptor().getTitle();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.INode#getImagePath()
-	 */
-	public ImageDescriptor getImagePath() {
-		return getIconDescriptor().getIcon16();
+		setValue(value);
+		PROPERTY_PARAMETERS = property;
 	}
 
 	/*
@@ -98,7 +47,7 @@ public class MFields extends ANode implements IPastable, IContainerEditPart {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		PropertyChangeEvent newEvent = evt;
-		if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_FIELDS) && evt.getSource() == getValue()) {
+		if (evt.getPropertyName().equals(PROPERTY_PARAMETERS) && evt.getSource() == getValue()) {
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
 				int newIndex = -1;
 				if (evt instanceof CollectionElementAddedEvent) {
@@ -126,4 +75,5 @@ public class MFields extends ANode implements IPastable, IContainerEditPart {
 			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
+
 }

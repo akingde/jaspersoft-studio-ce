@@ -27,7 +27,6 @@ import org.eclipse.draw2d.IFigure;
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MCrossTab;
 import com.jaspersoft.studio.model.MEllipse;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MImage;
@@ -71,8 +70,6 @@ public class FigureFactory {
 			return new FrameFigure();
 		} else if (node instanceof MImage) {
 			return new ImageFigure();
-		} else if (node instanceof MCrossTab) {
-			return new CrosstabFigure();
 		} else if (node instanceof MSubreport) {
 			return new SubreportFigure();
 		} else if (node instanceof MGenericElement) {

@@ -19,30 +19,20 @@
  */
 package com.jaspersoft.studio.model.parameter;
 
-import java.beans.PropertyChangeEvent;
-
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
-
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
-import com.jaspersoft.studio.model.ReportFactory;
 
 /**
  * The Class MParameters.
  * 
  * @author Chicu Veaceslav
  */
-public class MParameters extends ANode implements IPastable, IContainerEditPart {
+public class MParameters extends MCollection {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -61,28 +51,8 @@ public class MParameters extends ANode implements IPastable, IContainerEditPart 
 	/** The descriptors. */
 	protected static IPropertyDescriptor[] descriptors;
 
-	/**
-	 * Instantiates a new m parameters.
-	 * 
-	 * @param parent
-	 *          the parent
-	 * @param jrDataset
-	 *          the jr dataset
-	 */
-	public MParameters(ANode parent, JRDesignDataset jrDataset) {
-		super(parent, -1);
-		setValue(jrDataset);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.INode#getBackground()
-	 */
-	@Override
-	public Color getBackground() {
-		// TODO Auto-generated method stub
-		return null;
+	public MParameters(ANode parent, Object value, String property) {
+		super(parent, -1, property);
 	}
 
 	/*
@@ -97,79 +67,10 @@ public class MParameters extends ANode implements IPastable, IContainerEditPart 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.jaspersoft.studio.model.INode#getFont()
-	 */
-	@Override
-	public Font getFont() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.INode#getForeground()
-	 */
-	@Override
-	public Color getForeground() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.INode#getToolTip()
-	 */
-	@Override
-	public String getToolTip() {
-		return getIconDescriptor().getToolTip();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.ANode#propertyChange(java.beans.PropertyChangeEvent)
-	 */
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		PropertyChangeEvent newEvent = evt;
-		if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_PARAMETERS) && evt.getSource() == getValue()) {
-			if (evt.getOldValue() == null && evt.getNewValue() != null) {
-				int newIndex = -1;
-				if (evt instanceof CollectionElementAddedEvent) {
-					newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
-				}
-				// add the node to this parent
-				ReportFactory.createNode(this, evt.getNewValue(), newIndex);
-			} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
-				// delete
-				for (INode n : getChildren()) {
-					if (n.getValue() == evt.getOldValue()) {
-						removeChild((ANode) n);
-						break;
-					}
-				}
-			} else {
-				// changed
-				for (INode n : getChildren()) {
-					if (n.getValue() == evt.getOldValue())
-						n.setValue(evt.getNewValue());
-				}
-			}
-		}
-		if (!(evt.getSource() instanceof ANode))
-			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
 
 }

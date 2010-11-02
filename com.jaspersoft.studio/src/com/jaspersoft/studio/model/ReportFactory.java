@@ -23,8 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import net.sf.jasperreports.crosstabs.JRCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRFrame;
@@ -238,7 +236,7 @@ public class ReportFactory {
 	 */
 	public static void createDataset(ANode nDataset, JRDesignDataset dataSet, boolean showGroups) {
 		// create parameters
-		ANode nParameters = new MParameters(nDataset, dataSet);
+		ANode nParameters = new MParameters(nDataset, dataSet, JRDesignDataset.PROPERTY_PARAMETERS);
 		if (dataSet.getParameters() != null) {
 			for (Iterator<JRDesignParameter> it = dataSet.getParametersList().iterator(); it.hasNext();) {
 				createNode(nParameters, it.next(), -1);
@@ -334,8 +332,6 @@ public class ReportFactory {
 			return new MElementGroup(parent, (JRElementGroup) jrObject, newIndex);
 		} else if (jrObject instanceof JRSubreport) {
 			return new MSubreport(parent, (JRDesignSubreport) jrObject, newIndex);
-		} else if (jrObject instanceof JRCrosstab) {
-			return new MCrossTab(parent, (JRDesignCrosstab) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignEllipse) {
 			return new MEllipse(parent, (JRDesignEllipse) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignRectangle) {
@@ -350,8 +346,7 @@ public class ReportFactory {
 			return new MStaticText(parent, (JRDesignStaticText) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignBreak) {
 			return new MBreak(parent, (JRDesignBreak) jrObject, newIndex);
-		} else if (jrObject instanceof JRDesignCrosstab) {
-			return new MCrossTab(parent, (JRDesignCrosstab) jrObject, newIndex);
+
 		} else if (jrObject instanceof JRDesignTextField) {
 			return new MTextField(parent, (JRDesignTextField) jrObject, newIndex);
 		} else if (jrObject instanceof JRGenericElement) {
