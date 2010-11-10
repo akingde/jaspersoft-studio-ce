@@ -51,14 +51,15 @@ public class ClassTypeCellEditorValidator implements ICellEditorValidator {
 	 * @see org.eclipse.jface.viewers.ICellEditorValidator#isValid(java.lang.Object)
 	 */
 	public String isValid(Object value) {
-		if (value instanceof String)
+		if (value instanceof String) {
 			if (value != null) {
 				Pattern pattern = Pattern.compile(regexp);
 				Matcher matcher = pattern.matcher((String) value);
 				if (matcher.matches())
 					return null;
-			} else
-				return "Value should be not null";
+			}
+			return "Value should be not null";
+		}
 		return "This is a not correct java Class";
 	}
 

@@ -546,7 +546,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	}
 
 	public boolean isCopyable2(Object parent) {
-		if (parent instanceof MBand || parent instanceof MFrame || parent instanceof MElementGroup)
+		if (parent instanceof MElementGroup || parent instanceof IPastableGraphic)
 			return true;
 		return false;
 	}

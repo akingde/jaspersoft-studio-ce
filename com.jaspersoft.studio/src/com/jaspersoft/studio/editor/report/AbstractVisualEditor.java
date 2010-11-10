@@ -310,7 +310,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 */
 	@Override
 	protected void initializeGraphicalViewer() {
-		// TODO Auto-generated method stub
 		super.initializeGraphicalViewer();
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		graphicalViewer.addDropTargetListener(new TemplateTransferDropTargetListener(graphicalViewer) {

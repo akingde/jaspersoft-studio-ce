@@ -17,19 +17,60 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IContainer;
+import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MDatasetRun;
 import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public class MElementDataset extends APropertyNode {
+public class MElementDataset extends APropertyNode implements IContainer, IContainerEditPart {
+	private static IIconDescriptor iconDescriptor;
+
+	/**
+	 * Gets the icon descriptor.
+	 * 
+	 * @return the icon descriptor
+	 */
+	public static IIconDescriptor getIconDescriptor() {
+		if (iconDescriptor == null)
+			iconDescriptor = new NodeIconDescriptor("dataset");
+		return iconDescriptor;
+	}
+
+	public ImageDescriptor getImagePath() {
+		return getIconDescriptor().getIcon16();
+	}
+
+	public String getDisplayText() {
+		return getIconDescriptor().getTitle();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.INode#getToolTip()
+	 */
+	@Override
+	public String getToolTip() {
+		return getIconDescriptor().getToolTip();
+	}
 
 	public MElementDataset(JRElementDataset value, JasperDesign jasperDesign) {
 		super();
+		setValue(value);
+		this.jasperDesign = jasperDesign;
+	}
+
+	public MElementDataset(ANode parent, JRElementDataset value, JasperDesign jasperDesign) {
+		super(parent, -1);
 		setValue(value);
 		this.jasperDesign = jasperDesign;
 	}
@@ -176,14 +217,6 @@ public class MElementDataset extends APropertyNode {
 				jrElement.setResetGroup(group);
 			}
 		}
-	}
-
-	public ImageDescriptor getImagePath() {
-		return null;
-	}
-
-	public String getDisplayText() {
-		return null;
 	}
 
 }

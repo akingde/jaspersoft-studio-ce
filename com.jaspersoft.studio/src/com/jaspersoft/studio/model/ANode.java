@@ -191,7 +191,14 @@ public abstract class ANode implements INode {
 	 * Removes the children.
 	 */
 	public void removeChildren() {
-		Object[] array = getChildren().toArray();
+		removeChildren(getChildren());
+	}
+
+	/**
+	 * Removes the children.
+	 */
+	public void removeChildren(List<INode> children) {
+		Object[] array = children.toArray();
 		for (int i = 0; i < array.length; i++)
 			removeChild((ANode) array[i]);
 	}

@@ -52,7 +52,7 @@ public class MParameters extends MCollection {
 	protected static IPropertyDescriptor[] descriptors;
 
 	public MParameters(ANode parent, Object value, String property) {
-		super(parent, -1, property);
+		super(parent, value, property);
 	}
 
 	/*

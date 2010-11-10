@@ -139,7 +139,7 @@ public class Size2BorderAction extends SelectionAction {
 	protected List<?> getOperationSet(Request request) {
 		if (operationSet != null)
 			return operationSet;
-		List<?> editparts = new ArrayList(getSelectedObjects());
+		List<?> editparts = new ArrayList<Object>(getSelectedObjects());
 		if (editparts.isEmpty() || !(editparts.get(0) instanceof GraphicalEditPart))
 			return Collections.EMPTY_LIST;
 		Object primary = editparts.get(editparts.size() - 1);

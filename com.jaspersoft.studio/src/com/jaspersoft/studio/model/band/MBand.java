@@ -45,6 +45,7 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
@@ -57,7 +58,8 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * 
  * @author Chicu Veaceslav
  */
-public class MBand extends APropertyNode implements IGraphicElement, IPastable, IContainer, IContainerEditPart {
+public class MBand extends APropertyNode implements IGraphicElement, IPastable, IPastableGraphic, IContainer,
+		IContainerEditPart {
 
 	private static final Integer CONST_HEIGHT = new Integer(50);
 	/** The icon descriptor. */
@@ -217,14 +219,16 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignBand jrband = (JRDesignBand) getValue();
-		if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
-			return new Integer(jrband.getHeight());
-		if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
-			return EnumHelper.getValue(jrband.getSplitTypeValue(), 1, true);
-		if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			if (mExpression == null)
-				mExpression = new MExpression(jrband.getPrintWhenExpression());
-			return mExpression;
+		if (jrband != null) {
+			if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
+				return new Integer(jrband.getHeight());
+			if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
+				return EnumHelper.getValue(jrband.getSplitTypeValue(), 1, true);
+			if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
+				if (mExpression == null)
+					mExpression = new MExpression(jrband.getPrintWhenExpression());
+				return mExpression;
+			}
 		}
 		return null;
 	}
@@ -236,15 +240,17 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignBand jrband = (JRDesignBand) getValue();
-		if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
-			jrband.setHeight(((Integer) value).intValue());
-		else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
-			jrband.setSplitType((SplitTypeEnum) EnumHelper.getSetValue(SplitTypeEnum.values(), value, 1, true));
-		else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrband.setPrintWhenExpression(expression);
+		if (jrband != null) {
+			if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
+				jrband.setHeight(((Integer) value).intValue());
+			else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
+				jrband.setSplitType((SplitTypeEnum) EnumHelper.getSetValue(SplitTypeEnum.values(), value, 1, true));
+			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
+				if (value instanceof MExpression) {
+					mExpression = (MExpression) value;
+					JRExpression expression = (JRExpression) mExpression.getValue();
+					jrband.setPrintWhenExpression(expression);
+				}
 			}
 		}
 	}

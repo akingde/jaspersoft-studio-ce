@@ -59,7 +59,6 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ModelUtils.
  */

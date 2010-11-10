@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -42,7 +41,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MParameterSystem extends APropertyNode implements IPropertySource {
+public class MParameterSystem extends APropertyNode {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

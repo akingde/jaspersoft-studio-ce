@@ -47,16 +47,17 @@ public class NResourceCellEditorValidator implements ICellEditorValidator {
 	 * @see org.eclipse.jface.viewers.ICellEditorValidator#isValid(java.lang.Object)
 	 */
 	public String isValid(Object value) {
-		if(value == null)
+		if (value == null)
 			return null;
-		if (value instanceof String)
-			if (value != null) {
-				// Pattern pattern = Pattern.compile(ClassTypeCellEditorValidator.regexp);
-				// Matcher matcher = pattern.matcher((String) value);
-				// if (matcher.matches())
-					return null;
-			} else
-				return null;
+		if (value instanceof String) {
+			// if (value != null) {
+			// // Pattern pattern = Pattern.compile(ClassTypeCellEditorValidator.regexp);
+			// // Matcher matcher = pattern.matcher((String) value);
+			// // if (matcher.matches())
+			// return null;
+			// }
+			return null;
+		}
 		return "This is a not correct java Class";
 	}
 

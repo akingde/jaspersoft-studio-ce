@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
@@ -45,7 +44,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MGroup extends APropertyNode implements IPropertySource, ICopyable {
+public class MGroup extends APropertyNode implements ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

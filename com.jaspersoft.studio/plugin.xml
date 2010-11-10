@@ -252,37 +252,7 @@
                id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab">
             <input
-                  type="com.jaspersoft.studio.model.MGraphicElement">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.band.MBand">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.MReport">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.parameter.MParameterSystem">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.dataset.MDataset">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.group.MGroup">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.variable.MVariableSystem">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.style.MStyle">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.field.MField">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.scriptlet.MScriptlet">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.sortfield.MSortField">
+                  type="com.jaspersoft.studio.model.APropertyNode">
             </input>
          </propertySection>
          <propertySection

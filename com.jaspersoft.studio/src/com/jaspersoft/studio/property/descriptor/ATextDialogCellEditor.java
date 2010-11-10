@@ -439,9 +439,7 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 		Object typedValue = value;
 		boolean oldValidState = isValueValid();
 		boolean newValidState = isCorrect(typedValue);
-		if (typedValue == null && newValidState) {
-			Assert.isTrue(false, "Validator isn't limiting the cell editor's type range");//$NON-NLS-1$
-		}
+
 		if (!newValidState) {
 			// try to insert the current value into the error message.
 			setErrorMessage(MessageFormat.format(getErrorMessage(), new Object[] { value }));

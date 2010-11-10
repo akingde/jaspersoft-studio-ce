@@ -45,7 +45,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MScriptlet extends APropertyNode implements IPropertySource, ICopyable {
+public class MScriptlet extends APropertyNode implements ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

@@ -48,7 +48,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * 
  * @author Chicu Veaceslav
  */
-public class MSortField extends APropertyNode implements IPropertySource, ICopyable {
+public class MSortField extends APropertyNode implements ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

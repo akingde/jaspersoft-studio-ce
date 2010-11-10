@@ -21,29 +21,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.outline;
+package com.jaspersoft.studio.model;
 
-import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.RootEditPart;
-import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+public interface IPastableGraphic {
 
-import com.jaspersoft.studio.editor.outline.editpolicy.JDContainerEditPolicy;
-import com.jaspersoft.studio.editor.outline.editpolicy.JDTreeContainerEditPolicy;
-
-/**
- * The Class AContainerTreeEditPart.
- */
-public class AContainerTreeEditPart extends ATreeEditPart {
-
-	/**
-	 * Creates and installs pertinent EditPolicies.
-	 */
-	protected void createEditPolicies() {
-		super.createEditPolicies();
-		installEditPolicy(EditPolicy.CONTAINER_ROLE, new JDContainerEditPolicy());
-		installEditPolicy(EditPolicy.TREE_CONTAINER_ROLE, new JDTreeContainerEditPolicy());
-		// If this editpart is the contents of the viewer, then it is not deletable!
-		if (getParent() instanceof RootEditPart)
-			installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-	}
 }

@@ -1,28 +1,25 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.Assert;
@@ -58,25 +55,39 @@ public class ElementLabelProvider extends LabelProvider {
 	 * @see org.eclipse.jface.viewers.ILabelProvider#getImage(java.lang.Object)
 	 */
 	public Image getImage(Object objects) {
-		if (objects == null || objects.equals(StructuredSelection.EMPTY)) {
+		if (objects == null || objects.equals(StructuredSelection.EMPTY))
 			return null;
-		}
 		final boolean multiple[] = { false };
 		Object object = getObject(objects, multiple);
 		IIconDescriptor icon = null;
-		if (object == null) {
+		if (object == null)
 			icon = MGraphicElement.getIconDescriptor();
-		} else {
+		else {
+			ANode element = null;
 			if (object instanceof EditPart) {
-				ANode element = (ANode) ((EditPart) object).getModel();
-				icon = element.getIconDescriptor();
+				element = (ANode) ((EditPart) object).getModel();
 			} else if (object instanceof ANode) {
-				ANode element = (ANode) object;
-				icon = element.getIconDescriptor();
+				element = (ANode) object;
+			}
+			if (element != null) {
+				try {
+					icon = (IIconDescriptor) element.getClass().getMethod("getIconDescriptor", new Class<?>[] {})
+							.invoke(null, new Object[] {});
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		if (icon != null)
-			return JaspersoftStudioPlugin.getImage(icon.getIcon32());
+			return JaspersoftStudioPlugin.getImage(icon.getIcon16());
 		return null;
 	}
 
@@ -89,7 +100,7 @@ public class ElementLabelProvider extends LabelProvider {
 		}
 		final boolean multiple[] = { false };
 		final Object object = getObject(objects, multiple);
-		
+
 		if (object == null || (objects instanceof IStructuredSelection && ((IStructuredSelection) objects).size() > 1)) {
 			return ((IStructuredSelection) objects).size() + " items selected";//$NON-NLS-1$
 		} else {
@@ -127,12 +138,12 @@ public class ElementLabelProvider extends LabelProvider {
 			}
 			// multiple elements selected
 			multiple[0] = true;
-			Class firstClass = typeMapper.mapType(object);
+			Class<?> firstClass = typeMapper.mapType(object);
 			// determine if all the objects in the selection are the same type
 			if (selection.size() > 1) {
-				for (Iterator i = selection.iterator(); i.hasNext();) {
+				for (Iterator<?> i = selection.iterator(); i.hasNext();) {
 					Object next = i.next();
-					Class nextClass = typeMapper.mapType(next);
+					Class<?> nextClass = typeMapper.mapType(next);
 					if (!nextClass.equals(firstClass)) {
 						// two elements not equal == multiple selected unequal
 						multiple[0] = false;

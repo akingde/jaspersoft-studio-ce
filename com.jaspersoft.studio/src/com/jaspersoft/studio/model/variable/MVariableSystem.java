@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
@@ -42,7 +41,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * 
  * @author Chicu Veaceslav
  */
-public class MVariableSystem extends APropertyNode implements IPropertySource {
+public class MVariableSystem extends APropertyNode {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

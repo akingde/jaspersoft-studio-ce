@@ -29,7 +29,6 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.widgets.Display;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GenericImageRenderer.
  */

@@ -475,7 +475,7 @@ public class JDRulerComposite extends Composite {
 		 * @see org.eclipse.gef.GraphicalViewer#findHandleAt(org.eclipse.draw2d.geometry.Point)
 		 */
 		public Handle findHandleAt(org.eclipse.draw2d.geometry.Point p) {
-			final GraphicalEditPart gep = (GraphicalEditPart) findObjectAtExcluding(p, new ArrayList());
+			final GraphicalEditPart gep = (GraphicalEditPart) findObjectAtExcluding(p, new ArrayList<Object>());
 			if (gep == null || !(gep instanceof GuideEditPart))
 				return null;
 			return new Handle() {

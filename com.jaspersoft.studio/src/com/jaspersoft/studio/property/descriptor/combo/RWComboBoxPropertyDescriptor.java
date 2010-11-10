@@ -55,7 +55,7 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor {
 
 	public void setItems(String[] items) {
 		labels = items;
-		if (cellEditor != null)
+		if (cellEditor != null && !cellEditor.getComboBox().isDisposed())
 			cellEditor.setItems(items);
 	}
 }

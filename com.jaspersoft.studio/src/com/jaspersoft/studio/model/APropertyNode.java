@@ -26,8 +26,9 @@ import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertySource2;
 
-public abstract class APropertyNode extends ANode implements IPropertySource {
+public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
 	/** The descriptors. */
 
 	public APropertyNode() {
@@ -36,6 +37,10 @@ public abstract class APropertyNode extends ANode implements IPropertySource {
 
 	public APropertyNode(ANode parent, int newIndex) {
 		super(parent, newIndex);
+	}
+
+	public boolean isPropertyResettable(Object id) {
+		return true;
 	}
 
 	public abstract Map<String, Object> getDefaultsMap();
