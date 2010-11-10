@@ -1,3 +1,26 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
+ * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of iReport.
+ *
+ * iReport is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iReport is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.crosstab.model;
 
 import java.util.List;
@@ -13,6 +36,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -76,7 +100,6 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-
 		ComboBoxPropertyDescriptor totalPositionD = new ComboBoxPropertyDescriptor(
 				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, "Total Position", EnumHelper.getEnumNames(
 						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL));
@@ -87,7 +110,13 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 		nameD.setDescription("Name");
 		desc.add(nameD);
 
+		JRPropertyDescriptor bucketD = new JRPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_BUCKET, "Bucket");
+		bucketD.setDescription("Bucket.");
+		desc.add(bucketD);
+
 	}
+
+	private MBucket mBucket;
 
 	/*
 	 * (non-Javadoc)
@@ -100,7 +129,11 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 			return jrField.getName();
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION))
 			return EnumHelper.getValue(jrField.getTotalPositionValue(), 0, false);
-
+		if (id.equals(JRDesignCrosstabGroup.PROPERTY_BUCKET)) {
+			if (mBucket == null)
+				mBucket = new MBucket(jrField.getBucket());
+			return mBucket;
+		}
 		return null;
 	}
 

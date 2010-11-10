@@ -19,11 +19,14 @@
  */
 package com.jaspersoft.studio.crosstab.model;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.crosstabs.JRCellContents;
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
@@ -35,13 +38,15 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
+import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
@@ -51,7 +56,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public class MCrosstab extends MGraphicElement implements IPastable, IContainer, IContainerEditPart, IGroupElement {
+public class MCrosstab extends MGraphicElement implements IContainer, IContainerEditPart, IGroupElement {
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -162,18 +167,6 @@ public class MCrosstab extends MGraphicElement implements IPastable, IContainer,
 		runDirectionD.setCategory("Crosstab Properties");
 		paramMapExprD.setCategory("Crosstab Properties");
 
-		//
-		// defaultsMap.put(JRBaseChart.PROPERTY_THEME, null);
-		// defaultsMap.put(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS, null);
-		// defaultsMap.put(JRBaseChart.PROPERTY_SHOW_LEGEND, new Boolean(true));
-		// defaultsMap.put(JRBaseChart.PROPERTY_TITLE_COLOR, null);
-		// defaultsMap.put(JRBaseChart.PROPERTY_SUBTITLE_COLOR, null);
-		// defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_COLOR, null);
-		// defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, null);
-		//
-		// defaultsMap.put(JRBaseChart.PROPERTY_TITLE_POSITION, null);
-		// defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_POSITION, null);
-		// defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME, EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, true));
 	}
 
 	@Override
@@ -296,22 +289,52 @@ public class MCrosstab extends MGraphicElement implements IPastable, IContainer,
 
 	@Override
 	public void setValue(Object value) {
-		// JRChart oldObject = (JRChart) getValue();
-		// JRChart newObject = (JRChart) value;
-		//
-		// if (oldObject != null) {
-		// ((JRBaseChartPlot) oldObject.getPlot()).getEventSupport().removePropertyChangeListener(this);
-		// ((JRBaseFont) oldObject.getLegendFont()).getEventSupport().removePropertyChangeListener(this);
-		// ((JRBaseFont) oldObject.getSubtitleFont()).getEventSupport().removePropertyChangeListener(this);
-		// ((JRBaseFont) oldObject.getTitleFont()).getEventSupport().removePropertyChangeListener(this);
-		// }
-		// if (newObject != null) {
-		// ((JRBaseChartPlot) newObject.getPlot()).getEventSupport().addPropertyChangeListener(this);
-		// ((JRBaseFont) newObject.getLegendFont()).getEventSupport().addPropertyChangeListener(this);
-		// ((JRBaseFont) newObject.getSubtitleFont()).getEventSupport().addPropertyChangeListener(this);
-		// ((JRBaseFont) newObject.getTitleFont()).getEventSupport().addPropertyChangeListener(this);
-		// }
+		JRCrosstab oldObject = (JRCrosstab) getValue();
+		JRCrosstab newObject = (JRCrosstab) value;
+
+		if (oldObject != null) {
+			JRCellContents headerCell = oldObject.getHeaderCell();
+			if (headerCell != null)
+				((JRDesignCellContents) headerCell).getEventSupport().removePropertyChangeListener(this);
+		}
+		if (newObject != null) {
+
+			JRCellContents headerCell = newObject.getHeaderCell();
+			if (headerCell != null)
+				((JRDesignCellContents) headerCell).getEventSupport().addPropertyChangeListener(this);
+		}
 		super.setValue(value);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {
+			if (evt.getSource() == getValue()) {
+				if (evt.getOldValue() != null && evt.getNewValue() == null) {
+					List<INode> child = this.getChildren();
+					for (INode n : child) {
+						if (n instanceof MCrosstabHeader)
+							((MCrosstabHeader) n).setValue(null);
+					}
+				} else {
+					// add the node to this parent
+					List<INode> child = this.getChildren();
+					for (INode n : child) {
+						if (n instanceof MCrosstabHeader) {
+							((MCrosstabHeader) n).setValue(evt.getNewValue());
+							break;
+						}
+					}
+				}
+			}
+		} else if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_CELLS)) {
+			if (evt.getSource() == getValue() && getValue() != null) {
+				CrosstabComponentFactory crosstabComponentFactory = new CrosstabComponentFactory();
+				crosstabComponentFactory.deleteCellNodes(this);
+				crosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), this);
+			}
+		}
+		super.propertyChange(evt);
 	}
 
 	public JRElementGroup getJRElementGroup() {
