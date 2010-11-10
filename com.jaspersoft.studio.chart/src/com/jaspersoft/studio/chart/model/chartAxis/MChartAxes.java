@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.chart.model.chartAxis;
 
@@ -31,7 +27,6 @@ import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import net.sf.jasperreports.charts.type.AxisPositionEnum;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -42,13 +37,13 @@ import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.chart.model.MChart;
 import com.jaspersoft.studio.chart.model.plot.PlotFactory;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MGraphicElementLineBox;
+import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public class MChartAxes extends MGraphicElementLineBox implements ICopyable {
+public class MChartAxes extends APropertyNode {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -112,20 +107,22 @@ public class MChartAxes extends MGraphicElementLineBox implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
+		// super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor positionD = new ComboBoxPropertyDescriptor(JRDesignChartAxis.PROPERTY_POSITION,
 				"Position", EnumHelper.getEnumNames(AxisPositionEnum.values(), NullEnum.NOTNULL));
 		positionD.setDescription("Position.");
 		desc.add(positionD);
 
-		if (mChart == null) {
-			mChart = new MChart();
-			mChart.setValue(((JRChartAxis) getValue()).getChart());
-		}
-		mChart.createPropertyDescriptors(desc, defaultsMap);
-
-		positionD.setCategory("Common Chart Axis Properties");
+		JRPropertyDescriptor chartD = new JRPropertyDescriptor(JRDesignChartAxis.PROPERTY_CHART, "Chart");
+		chartD.setDescription("Chart");
+		desc.add(chartD);
+		//
+		// if (mChart == null) {
+		// mChart = new MChart();
+		// mChart.setValue(((JRChartAxis) getValue()).getChart());
+		// }
+		// mChart.createPropertyDescriptors(desc, defaultsMap);
 
 	}
 
@@ -158,14 +155,21 @@ public class MChartAxes extends MGraphicElementLineBox implements ICopyable {
 		if (id.equals(JRDesignChartAxis.PROPERTY_POSITION))
 			return EnumHelper.getValue(jrElement.getPositionValue(), 1, false);
 
-		if (mChart == null) {
-			mChart = new MChart();
-			mChart.setValue(((JRChartAxis) getValue()).getChart());
+		if (id.equals(JRDesignChartAxis.PROPERTY_CHART)) {
+			if (mChart == null)
+				mChart = new MChart();
+			mChart.setValue(jrElement.getChart());
+			return mChart;
 		}
 
-		Object val = mChart.getPropertyValue(id);
-		if (val != null)
-			return val;
+		// if (mChart == null) {
+		// mChart = new MChart();
+		// mChart.setValue(((JRChartAxis) getValue()).getChart());
+		// }
+		//
+		// Object val = mChart.getPropertyValue(id);
+		// if (val != null)
+		// return val;
 
 		return null;
 	}
@@ -193,14 +197,4 @@ public class MChartAxes extends MGraphicElementLineBox implements ICopyable {
 		super.setValue(value);
 	}
 
-	public boolean isCopyable2(Object parent) {
-		if (parent instanceof MChart)
-			return true;
-		return false;
-	}
-
-	@Override
-	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
-		return super.createJRElement(jasperDesign);
-	}
 }

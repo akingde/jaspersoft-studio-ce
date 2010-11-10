@@ -17,32 +17,25 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.chart.model.chartAxis.command;
+package com.jaspersoft.studio.chart.model.series.pie.command;
 
-import net.sf.jasperreports.charts.design.JRDesignChartAxis;
-import net.sf.jasperreports.charts.design.JRDesignMultiAxisPlot;
-import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.charts.design.JRDesignPieDataset;
+import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.chart.model.MChart;
-import com.jaspersoft.studio.chart.model.chartAxis.MChartAxes;
+import com.jaspersoft.studio.chart.model.dataset.MChartDataset;
+import com.jaspersoft.studio.chart.model.series.pie.MPieSeries;
 
 /**
  * link nodes & together.
  * 
  * @author Chicu Veaceslav
  */
-public class CreateChartAxesCommand extends Command {
+public class CreatePieSeriesCommand extends Command {
 
-	private MChartAxes srcNode;
-
-	private JRDesignChartAxis jrElement;
-
-	private JRDesignMultiAxisPlot jrChart;
+	private JRDesignPieSeries jrElement;
+	private JRDesignPieDataset jrDataset;
 
 	private int index;
 
@@ -56,11 +49,10 @@ public class CreateChartAxesCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateChartAxesCommand(MChart destNode, MChartAxes srcNode, int newIndex) {
+	public CreatePieSeriesCommand(MChartDataset destNode, MPieSeries srcNode, int newIndex) {
 		super();
-		this.srcNode = srcNode;
-		this.jrElement = (JRDesignChartAxis) srcNode.getValue();
-		this.jrChart = (JRDesignMultiAxisPlot) ((JRDesignChart) destNode.getValue()).getPlot();
+		this.jrElement = (JRDesignPieSeries) srcNode.getValue();
+		this.jrDataset = (JRDesignPieDataset) destNode.getValue();
 		this.index = newIndex;
 	}
 
@@ -70,14 +62,7 @@ public class CreateChartAxesCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard
-			ChartAxesWizard wizard = new ChartAxesWizard();
-			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-			dialog.create();
-			if (dialog.open() == Dialog.OK) {
-				byte type = wizard.getChartAxis();
-				jrElement = new JRDesignChartAxis((JRDesignChart) jrChart.getChart());
-				jrElement.setChart(new JRDesignChart(srcNode.getJasperDesign(), type));
-			}
+			jrElement = new JRDesignPieSeries();
 		}
 	}
 
@@ -90,7 +75,7 @@ public class CreateChartAxesCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
-			jrChart.addAxis(jrElement);
+			jrDataset.addPieSeries(jrElement);
 		}
 	}
 
@@ -101,7 +86,7 @@ public class CreateChartAxesCommand extends Command {
 	 */
 	@Override
 	public boolean canUndo() {
-		if (jrChart == null || jrElement == null)
+		if (jrDataset == null || jrElement == null)
 			return false;
 		return true;
 	}
@@ -113,12 +98,7 @@ public class CreateChartAxesCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		// jrChart.getAxes().remove(jrElemSent);
-
-		jrChart.getAxes().remove(jrElement);
-		JRDesignChartAxis axis0 = (JRDesignChartAxis) jrChart.getAxes().get(0);
-		((JRDesignChart) jrChart.getChart()).setDataset(axis0.getChart().getDataset());
-		jrChart.getEventSupport().firePropertyChange(JRDesignMultiAxisPlot.PROPERTY_AXES, jrElement, null);
+		jrDataset.removePieSeries(jrElement);
 	}
 
 }

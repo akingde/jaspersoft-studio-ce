@@ -54,13 +54,11 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.model.text.MFont;
-import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
@@ -75,7 +73,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 /**
  * The Class MChart.
  */
-public class MChart extends MGraphicElementLineBox implements IPastable, IContainer, IContainerEditPart {
+public class MChart extends MGraphicElementLineBox implements IContainer, IContainerEditPart {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -233,34 +231,34 @@ public class MChart extends MGraphicElementLineBox implements IPastable, IContai
 		plotD.setDescription("Plot.");
 		desc.add(plotD);
 
-		JRPropertyDescriptor datasetD = new JRPropertyDescriptor(JRDesignChart.PROPERTY_DATASET, "Dataset");
-		datasetD.setDescription("Dataset.");
-		desc.add(datasetD);
-
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
-		titleFontD.setCategory("Common Chart Properties");
-		subtitleFontD.setCategory("Common Chart Properties");
-		legendFontD.setCategory("Common Chart Properties");
+		titleFontD.setCategory("Chart Title");
+		titleColorD.setCategory("Chart Title");
+		titlePositionD.setCategory("Chart Title");
+		titleExprD.setCategory("Chart Title");
 
-		datasetD.setCategory("Common Chart Properties");
+		subtitleFontD.setCategory("Chart Subtitle");
+		subtitleExprD.setCategory("Chart Subtitle");
+		subtitleColorD.setCategory("Chart Subtitle");
 
 		plotD.setCategory("Common Chart Properties");
+
 		evaluationGroupD.setCategory("Common Chart Properties");
 		themeD.setCategory("Common Chart Properties");
-		titleExprD.setCategory("Common Chart Properties");
-		subtitleExprD.setCategory("Common Chart Properties");
+
 		classD.setCategory("Common Chart Properties");
-		legendBackColorD.setCategory("Common Chart Properties");
-		legendColorD.setCategory("Common Chart Properties");
-		subtitleColorD.setCategory("Common Chart Properties");
-		titleColorD.setCategory("Common Chart Properties");
-		titlePositionD.setCategory("Common Chart Properties");
-		legendPositionD.setCategory("Common Chart Properties");
+
+		legendFontD.setCategory("Chart Legend");
+		legendBackColorD.setCategory("Chart Legend");
+		legendColorD.setCategory("Chart Legend");
+		legendPositionD.setCategory("Chart Legend");
+		showLegendD.setCategory("Chart Legend");
+
 		evaluationTimeD.setCategory("Common Chart Properties");
-		showLegendD.setCategory("Common Chart Properties");
+
 		rendererTypeD.setCategory("Common Chart Properties");
 
 		defaultsMap.put(JRBaseChart.PROPERTY_THEME, null);
@@ -280,11 +278,7 @@ public class MChart extends MGraphicElementLineBox implements IPastable, IContai
 	public void setGroupItems(String[] items) {
 		if (evaluationGroupD != null)
 			evaluationGroupD.setItems(items);
-		if (mChartDataset != null)
-			mChartDataset.setGroupItems(items);
 	}
-
-	private MChartDataset mChartDataset;
 
 	private RComboBoxPropertyDescriptor evaluationGroupD;
 	private MExpression titleExpression;
@@ -365,11 +359,6 @@ public class MChart extends MGraphicElementLineBox implements IPastable, IContai
 			if (mChartPlot == null)
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
 			return mChartPlot;
-		}
-		if (id.equals(JRDesignChart.PROPERTY_DATASET)) {
-			if (mChartDataset == null)
-				mChartDataset = new MChartDataset(jrElement.getDataset(), getJasperDesign());
-			return mChartDataset;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
 			if (tFont == null)

@@ -179,6 +179,17 @@ public class MAreaPlot extends MChartPlot {
 		catAxisTickLabelRotation.setDescription("Category Axis Tick Label Rotation.");
 		desc.add(catAxisTickLabelRotation);
 
+		catAxisLabelColorD.setCategory("Category Axis");
+		catAxisTickLabelMaskD.setCategory("Category Axis");
+		catAxisVertTickLabelD.setCategory("Category Axis");
+		catAxisLineColorD.setCategory("Category Axis");
+		catAxisLabelColorD.setCategory("Category Axis");
+		catAxisLabelExprD.setCategory("Category Axis");
+		catAxisLabelFontD.setCategory("Category Axis");
+		catAxisTickLabelColorD.setCategory("Category Axis");
+		catAxisTickLabelFontD.setCategory("Category Axis");
+		catAxisTickLabelRotation.setCategory("Category Axis");
+
 	}
 
 	private MExpression ceAnchorExpression;
