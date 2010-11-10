@@ -37,6 +37,7 @@ import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.list.figure.ListFigure;
 import com.jaspersoft.studio.list.model.MList;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
@@ -92,6 +93,11 @@ public class ListComponentFactory implements IComponentFactory {
 				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
 			}
 		}
+		if (child instanceof MGraphicElement && child.getValue() != null)
+			if (parent instanceof MList)
+				return new com.jaspersoft.studio.list.commands.element.CreateElementCommand((MList) parent,
+						(MGraphicElement) child, newIndex);
+
 		return null;
 	}
 

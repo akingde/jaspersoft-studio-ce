@@ -43,10 +43,12 @@ import com.jaspersoft.studio.list.ListNodeIconDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MDatasetRun;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.ReportFactory;
@@ -56,7 +58,8 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public class MList extends MGraphicElement implements IPastable, IContainer, IContainerEditPart, IGroupElement {
+public class MList extends MGraphicElement implements IPastable, IPastableGraphic, IContainer, IContainerEditPart,
+		IGroupElement, ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -194,7 +197,7 @@ public class MList extends MGraphicElement implements IPastable, IContainer, ICo
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		StandardListComponent jrList = (StandardListComponent) jrElement.getComponent();
-		JRDesignDatasetRun jrDataSetRun = (JRDesignDatasetRun) jrList.getDatasetRun();
+		// JRDesignDatasetRun jrDataSetRun = (JRDesignDatasetRun) jrList.getDatasetRun();
 
 		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
 			jrList.setIgnoreWidth((Boolean) value);
