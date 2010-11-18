@@ -30,7 +30,6 @@ import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.Pair;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -109,8 +108,8 @@ public class CreateColumnGroupCommand extends Command {
 			JRDesignTextField tf = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
 			tf.setX(0);
 			tf.setY(0);
-			tf.setWidth(headerCell.getWidth());
-			tf.setHeight(headerCell.getHeight());
+			tf.setWidth(60);
+			tf.setHeight(20);
 			if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) {
 				tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text"));
 			}

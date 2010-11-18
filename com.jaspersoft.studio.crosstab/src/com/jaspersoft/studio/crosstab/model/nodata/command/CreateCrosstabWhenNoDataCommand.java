@@ -17,45 +17,43 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.crosstab.model.rowgroup.command;
+package com.jaspersoft.studio.crosstab.model.nodata.command;
 
-import java.util.List;
-
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
-import net.sf.jasperreports.engine.JRException;
 
 import org.eclipse.gef.commands.Command;
 
-import com.jaspersoft.studio.crosstab.model.rowgroup.MRowGroup;
-import com.jaspersoft.studio.crosstab.model.rowgroup.MRowGroups;
+import com.jaspersoft.studio.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoData;
 
 /**
  * link nodes & together.
  * 
  * @author Chicu Veaceslav
  */
-public class DeleteRowGroupCommand extends Command {
+public class CreateCrosstabWhenNoDataCommand extends Command {
 
+	private JRDesignCellContents jrCell;
 	private JRDesignCrosstab jrCrosstab;
-	private JRDesignCrosstabRowGroup jrRowGroup;
-
-	/** The element position. */
-	private int elementPosition = 0;
 
 	/**
-	 * Instantiates a new delete parameter command.
+	 * Instantiates a new creates the parameter command.
 	 * 
 	 * @param destNode
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
+	 * @param position
+	 *          the position
+	 * @param index
+	 *          the index
 	 */
-	public DeleteRowGroupCommand(MRowGroups destNode, MRowGroup srcNode) {
+	public CreateCrosstabWhenNoDataCommand(MCrosstab destNode, MCrosstabWhenNoData srcNode) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
-		this.jrRowGroup = (JRDesignCrosstabRowGroup) srcNode.getValue();
+		if (srcNode != null && srcNode.getValue() != null)
+			this.jrCell = (JRDesignCellContents) srcNode.getValue();
 	}
 
 	/*
@@ -65,29 +63,12 @@ public class DeleteRowGroupCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		elementPosition = jrCrosstab.getRowGroupsList().indexOf(jrRowGroup);
-		removeRowGroup(jrCrosstab, jrRowGroup);
-
-	}
-
-	public static void removeRowGroup(JRDesignCrosstab jrCross, JRDesignCrosstabRowGroup jrRowGr) {
-		String name = jrRowGr.getName();
-
-		List<?> cells = jrCross.getCellsList();
-		jrCross.removeRowGroup(jrRowGr);
-
-		for (int i = 0; i < cells.size(); ++i) {
-			JRDesignCrosstabCell cell = (JRDesignCrosstabCell) cells.get(i);
-			if (cell != null) {
-				String totalGroup = cell.getColumnTotalGroup();
-				if (totalGroup != null && totalGroup.equals(name)) {
-					jrCross.removeCell(cell);
-					i--;
-				}
-			}
+		if (jrCell == null) {
+			this.jrCell = new JRDesignCellContents();
 		}
-
-		jrCross.preprocess();
+		if (jrCell != null) {
+			jrCrosstab.setWhenNoDataCell(jrCell);
+		}
 	}
 
 	/*
@@ -97,8 +78,6 @@ public class DeleteRowGroupCommand extends Command {
 	 */
 	@Override
 	public boolean canUndo() {
-		if (jrCrosstab == null || jrRowGroup == null)
-			return false;
 		return true;
 	}
 
@@ -109,10 +88,6 @@ public class DeleteRowGroupCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		try {
-			CreateRowGroupCommand.addRowGroup(jrCrosstab, jrRowGroup);
-		} catch (JRException e) {
-			e.printStackTrace();
-		}
+		jrCrosstab.setWhenNoDataCell(null);
 	}
 }

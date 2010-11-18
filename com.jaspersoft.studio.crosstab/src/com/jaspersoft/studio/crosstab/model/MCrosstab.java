@@ -35,12 +35,15 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.crosstab.CrosstabComponentFactory;
+import com.jaspersoft.studio.crosstab.CrosstabManager;
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeader;
+import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoData;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -78,8 +81,15 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 		super();
 	}
 
-	public MCrosstab(ANode parent, int newIndex) {
+	public MCrosstab(ANode parent, int newIndex, CrosstabManager ctManager) {
 		super(parent, newIndex);
+		this.ctManager = ctManager;
+	}
+
+	private CrosstabManager ctManager;
+
+	public CrosstabManager getCrosstabManager() {
+		return ctManager;
 	}
 
 	/**
@@ -87,14 +97,15 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 	 * 
 	 * @param parent
 	 *          the parent
-	 * @param jrChart
+	 * @param jrCrosstab
 	 *          the jr chart
 	 * @param newIndex
 	 *          the new index
 	 */
-	public MCrosstab(ANode parent, JRCrosstab jrChart, int newIndex) {
+	public MCrosstab(ANode parent, JRCrosstab jrCrosstab, int newIndex, CrosstabManager ctManager) {
 		super(parent, newIndex);
-		setValue(jrChart);
+		setValue(jrCrosstab);
+		this.ctManager = ctManager;
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -307,7 +318,7 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() != null && evt.getNewValue() == null) {
@@ -327,15 +338,43 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 					}
 				}
 			}
+		} else if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_WHEN_NO_DATA_CELL)) {
+			if (evt.getSource() == getValue()) {
+				if (evt.getOldValue() != null && evt.getNewValue() == null) {
+					List<INode> child = this.getChildren();
+					for (INode n : child) {
+						if (n instanceof MCrosstabWhenNoData)
+							((MCrosstabWhenNoData) n).setValue(null);
+					}
+				} else {
+					// add the node to this parent
+					List<INode> child = this.getChildren();
+					for (INode n : child) {
+						if (n instanceof MCrosstabWhenNoData) {
+							((MCrosstabWhenNoData) n).setValue(evt.getNewValue());
+							break;
+						}
+					}
+				}
+			}
 		} else if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_CELLS)) {
-			if (evt.getSource() == getValue() && getValue() != null) {
-				CrosstabComponentFactory crosstabComponentFactory = new CrosstabComponentFactory();
-				crosstabComponentFactory.deleteCellNodes(this);
-				crosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), this);
+			if (evt.getSource() == getValue() && getValue() != null && !flagRefreshCells) {
+				flagRefreshCells = true;
+				final CrosstabComponentFactory crosstabComponentFactory = new CrosstabComponentFactory();
+				crosstabComponentFactory.deleteCellNodes(MCrosstab.this);
+				Display.getCurrent().asyncExec(new Runnable() {
+					public void run() {
+						crosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), MCrosstab.this);
+						flagRefreshCells = false;
+						MCrosstab.super.propertyChange(evt);
+					}
+				});
 			}
 		}
 		super.propertyChange(evt);
 	}
+
+	private boolean flagRefreshCells = false;
 
 	public JRElementGroup getJRElementGroup() {
 		// TODO Auto-generated method stub

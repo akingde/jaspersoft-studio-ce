@@ -108,8 +108,8 @@ public class CreateRowGroupCommand extends Command {
 			JRDesignTextField tf = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
 			tf.setX(0);
 			tf.setY(0);
-			tf.setWidth(headerCell.getWidth());
-			tf.setHeight(headerCell.getHeight());
+			tf.setWidth(60);
+			tf.setHeight(20);
 			if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) {
 				tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text"));
 			}

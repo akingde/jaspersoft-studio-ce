@@ -102,7 +102,7 @@ public class DeleteColumnGroupCommand extends Command {
 	public static void removeColumnGroup(JRDesignCrosstab jrCross, JRDesignCrosstabColumnGroup jrRowGr) {
 		jrCross.removeColumnGroup(jrRowGr);
 
-		List cells = jrCross.getCellsList();
+		List<?> cells = jrCross.getCellsList();
 
 		String name = jrRowGr.getName();
 
@@ -111,7 +111,7 @@ public class DeleteColumnGroupCommand extends Command {
 			if (cell != null) {
 				String totalGroup = cell.getRowTotalGroup();
 				if (totalGroup != null && totalGroup.equals(name)) {
-					cells.remove(cell);
+					jrCross.removeCell(cell);
 					i--;
 				}
 			}
