@@ -154,17 +154,21 @@ public class BordersSection extends AbstractSection {
 			@Override
 			public void paint(Graphics graphics) {
 				try {
-					Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
+					if (graphics instanceof J2DGraphics) {
+						Graphics2D graphics2d = ((J2DGraphics) graphics).getGraphics2D();
 
-					Rectangle b = getBounds();
+						Rectangle b = getBounds();
 
-					JRPrintElement pe = new JRBasePrintText(null);
-					pe.setX(b.x + 10);
-					pe.setY(b.y + 10);
-					pe.setWidth(b.width - 20);
-					pe.setHeight(b.height - 20);
+						JRPrintElement pe = new JRBasePrintText(null);
+						pe.setX(b.x + 10);
+						pe.setY(b.y + 10);
+						pe.setWidth(b.width - 20);
+						pe.setHeight(b.height - 20);
 
-					bd.drawBox(graphics2d, ((JRBoxContainer) getElement().getValue()).getLineBox(), pe);
+						bd.drawBox(graphics2d, ((JRBoxContainer) getElement().getValue()).getLineBox(), pe);
+					} else {
+						graphics.drawRectangle(0, 0, 100, 100);
+					}
 				} catch (Exception e) {
 					// when a font is missing exception is thrown by DrawVisitor
 					// FIXME: maybe draw something, else?
@@ -383,10 +387,12 @@ public class BordersSection extends AbstractSection {
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
 	 */
 	public void refreshPadding(MLineBox lb) {
-		Set<String> keys = pMap.keySet();
-		for (String key : keys) {
-			Integer padding = (Integer) lb.getPropertyValue(key);
-			pMap.get(key).setSelection(padding != null ? padding : 0);
+		if (lb != null) {
+			Set<String> keys = pMap.keySet();
+			for (String key : keys) {
+				Integer padding = (Integer) lb.getPropertyValue(key);
+				pMap.get(key).setSelection(padding != null ? padding : 0);
+			}
 		}
 	}
 
@@ -395,25 +401,26 @@ public class BordersSection extends AbstractSection {
 	private Map<String, Button> lineColorMap = new HashMap<String, Button>();
 
 	public void refreshLinePen(MLineBox lb, String property, String mapProperty) {
-		MLinePen lp = (MLinePen) lb.getPropertyValue(property);
+		if (lb != null) {
+			MLinePen lp = (MLinePen) lb.getPropertyValue(property);
 
-		Float propertyValue = (Float) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
-		Spinner lineWidth = lineWidthMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_WIDTH);
-		if (propertyValue != null)
-			lineWidth.setSelection((int) (propertyValue.doubleValue() * Math.pow(10, 1)));
-		else
-			lineWidth.setSelection(0);
+			Float propertyValue = (Float) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
+			Spinner lineWidth = lineWidthMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_WIDTH);
+			if (propertyValue != null)
+				lineWidth.setSelection((int) (propertyValue.doubleValue() * Math.pow(10, 1)));
+			else
+				lineWidth.setSelection(0);
 
-		CCombo lineStyle = lineStyleMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_STYLE);
-		lineStyle.select(((Integer) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
+			CCombo lineStyle = lineStyleMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_STYLE);
+			lineStyle.select(((Integer) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
 
-		RGB backcolor = (RGB) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
-		Button lineColor = lineColorMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_COLOR);
-		if (backcolor != null)
-			lineColor.setImage(colorLabelProvider.getImage(backcolor));
-		else
-			lineColor.setImage(null);
-
+			RGB backcolor = (RGB) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
+			Button lineColor = lineColorMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_COLOR);
+			if (backcolor != null)
+				lineColor.setImage(colorLabelProvider.getImage(backcolor));
+			else
+				lineColor.setImage(null);
+		}
 	}
 
 	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);

@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 /**
@@ -129,25 +128,6 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	@Override
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.MGeneric#getBounds()
-	 */
-	@Override
-	public Rectangle getBounds() {
-		INode node = getParent();
-		JRDesignFrame jr = (JRDesignFrame) getValue();
-		while (node != null) {
-			if (node instanceof IGraphicElement) {
-				Rectangle b = ((IGraphicElement) node).getBounds();
-				return new Rectangle(b.x + jr.getX(), b.y + jr.getY(), jr.getWidth(), jr.getHeight());
-			}
-			node = node.getParent();
-		}
-		return new Rectangle(0, 0, jr.getWidth(), jr.getHeight());
 	}
 
 }

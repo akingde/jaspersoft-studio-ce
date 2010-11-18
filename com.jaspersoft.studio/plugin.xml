@@ -295,7 +295,7 @@
                   type="com.jaspersoft.studio.model.style.MStyle">
             </input>
             <input
-                  type="com.jaspersoft.studio.model.MGraphicElementLineBox">
+                  type="com.jaspersoft.studio.model.ILineBox">
             </input>
          </propertySection>
       </propertySections>

@@ -78,8 +78,11 @@ public class ComponentFigure extends RectangleFigure {
 		try {
 			graphics2d.translate(b.x, b.y);
 
-			drawVisitor.setGraphics2D(graphics2d);
-			draw(drawVisitor, jrElement);
+			if (drawVisitor != null) {
+				drawVisitor.setGraphics2D(graphics2d);
+				draw(drawVisitor, jrElement);
+			} else
+				graphics2d.drawRect(b.x, b.y, b.width, b.height);
 		} catch (Exception e) {
 			// when a font is missing exception is thrown by DrawVisitor
 			// FIXME: maybe draw something, else?

@@ -71,7 +71,10 @@ public class LineFigure extends AHandleBoundsFigure {
 	 * @return the line pen
 	 */
 	protected JRPen getLinePen() {
-		return ((JRCommonGraphicElement) getJrElement()).getLinePen();
+		JRCommonGraphicElement jrElement = (JRCommonGraphicElement) getJrElement();
+		if (jrElement == null)
+			return null;
+		return jrElement.getLinePen();
 	}
 
 	/*
@@ -83,7 +86,10 @@ public class LineFigure extends AHandleBoundsFigure {
 	public Rectangle getHandleBounds() {
 		Rectangle b = getBounds();
 		int offset = calcBorder(getLinePen());
-		return new Rectangle(b.x + offset, b.y + offset, getJrElement().getWidth() + 1, getJrElement().getHeight() + 1);
+		JRElement jrElement = getJrElement();
+		if (jrElement == null)
+			return new Rectangle(b.x + offset, b.y + offset, 0, 0);
+		return new Rectangle(b.x + offset, b.y + offset, jrElement.getWidth() + 1, jrElement.getHeight() + 1);
 	}
 
 	/**
@@ -94,6 +100,8 @@ public class LineFigure extends AHandleBoundsFigure {
 	 * @return the int
 	 */
 	protected int calcBorder(JRPen jrPen) {
+		if (jrPen == null)
+			return 0;
 		int offset = (int) Math.ceil(((double) jrPen.getLineWidth()) / 2);
 		return offset;
 	}

@@ -140,17 +140,21 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 */
 	private void setupFigure(IFigure rect) {
 		ANode model = (ANode) getModel();
-		if (model instanceof IGraphicElement && model.getValue() != null && model.getValue() instanceof JRDesignElement) {
-			JRDesignElement jrElement = (JRDesignElement) model.getValue();
+		if (model instanceof IGraphicElement && model.getValue() != null) {
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
 			int x = bounds.x + PageFigure.PAGE_BORDER.left;
 			int y = bounds.y + PageFigure.PAGE_BORDER.top;
-			if (rect instanceof ComponentFigure && drawVisitor != null) {
-				ComponentFigure f = (ComponentFigure) rect;
-				f.setLocation(new Point(x, y));
-				f.setJRElement(jrElement, drawVisitor);
-			} else
-				rect.setBounds(new Rectangle(x, y, jrElement.getWidth(), jrElement.getHeight()));
+			if (model.getValue() instanceof JRDesignElement) {
+				JRDesignElement jrElement = (JRDesignElement) model.getValue();
+				if (rect instanceof ComponentFigure && drawVisitor != null) {
+					ComponentFigure f = (ComponentFigure) rect;
+					f.setLocation(new Point(x, y));
+					f.setJRElement(jrElement, drawVisitor);
+				} else
+					rect.setBounds(new Rectangle(x, y, jrElement.getWidth(), jrElement.getHeight()));
+			} else {
+				rect.setBounds(new Rectangle(x, y, bounds.width, bounds.height));
+			}
 		}
 	}
 

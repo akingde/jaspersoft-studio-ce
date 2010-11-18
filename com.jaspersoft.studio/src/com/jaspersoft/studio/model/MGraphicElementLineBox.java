@@ -32,7 +32,7 @@ import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 /**
  * The Class MGeneric.
  */
-public abstract class MGraphicElementLineBox extends MGraphicElement implements IGraphicElement {
+public abstract class MGraphicElementLineBox extends MGraphicElement implements IGraphicElement, ILineBox {
 
 	public static final String LINE_BOX = "LineBox";
 
