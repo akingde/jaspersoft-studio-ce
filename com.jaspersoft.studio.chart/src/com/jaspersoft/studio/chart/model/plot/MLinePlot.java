@@ -54,7 +54,7 @@ public class MLinePlot extends MChartPlot {
 	}
 
 	public String getDisplayText() {
-		return "Line Plot";
+		return Messages.MLinePlot_line_plot;
 	}
 
 	@Override
@@ -73,119 +73,119 @@ public class MLinePlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, "Category Axis Label Color", NullEnum.NULL);
-		catAxisLabelColorD.setDescription("Category axis label color.");
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, Messages.MLinePlot_category_axis_label_color, NullEnum.NULL);
+		catAxisLabelColorD.setDescription(Messages.MLinePlot_category_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor catAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION, "Category Axis Label Expression");
-		catAxisLabelExprD.setDescription("Category axis label expression.");
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION, Messages.MLinePlot_category_axis_label_expression);
+		catAxisLabelExprD.setDescription(Messages.MLinePlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, "Category Axis Label Font");
-		catAxisLabelFontD.setDescription("Category Axis Label Font.");
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, Messages.MLinePlot_category_axis_label_font);
+		catAxisLabelFontD.setDescription(Messages.MLinePlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, "Category Axis Tick Label Color", NullEnum.NULL);
-		catAxisTickLabelColorD.setDescription("Category axis tick label color.");
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.MLinePlot_category_axis_tick_label_color, NullEnum.NULL);
+		catAxisTickLabelColorD.setDescription(Messages.MLinePlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
 		FontPropertyDescriptor catAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, "Category Axis Tick Label Font");
-		catAxisTickLabelFontD.setDescription("Category Axis Tick Label Font.");
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, Messages.MLinePlot_category_axis_tick_label_font);
+		catAxisTickLabelFontD.setDescription(Messages.MLinePlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, "Category Axis Line Color", NullEnum.NULL);
-		catAxisLineColorD.setDescription("Category axis line color.");
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, Messages.MLinePlot_category_axis_line_color, NullEnum.NULL);
+		catAxisLineColorD.setDescription(Messages.MLinePlot_category_axis_line_color_description);
 		desc.add(catAxisLineColorD);
 
 		ColorPropertyDescriptor valAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, "Value Axis Label Color", NullEnum.NULL);
-		valAxisLabelColorD.setDescription("Value axis label color.");
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.MLinePlot_value_axis_label_color, NullEnum.NULL);
+		valAxisLabelColorD.setDescription(Messages.MLinePlot_value_axis_label_color_description);
 		desc.add(valAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor valAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, "Category Value Axis Label Expression");
-		valAxisLabelExprD.setDescription("Category value axis label expression.");
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, Messages.MLinePlot_category_value_axis_label_expression);
+		valAxisLabelExprD.setDescription(Messages.MLinePlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_FONT, "Value Axis Label Font");
-		valAxisLabelFontD.setDescription("Value Axis Label Font.");
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_FONT, Messages.MLinePlot_value_axis_label_font);
+		valAxisLabelFontD.setDescription(Messages.MLinePlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, "Value Axis Tick Label Color", NullEnum.INHERITED);
-		valAxisTickLabelColorD.setDescription("Value axis tick label color.");
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MLinePlot_value_axis_tick_label_color, NullEnum.INHERITED);
+		valAxisTickLabelColorD.setDescription(Messages.MLinePlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
 		FontPropertyDescriptor valAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, "Value Axis Tick Label Font");
-		valAxisTickLabelFontD.setDescription("Value Axis Tick Label Font.");
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, Messages.MLinePlot_value_axis_tick_label_font);
+		valAxisTickLabelFontD.setDescription(Messages.MLinePlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LINE_COLOR, "Value Axis Line Color", NullEnum.INHERITED);
-		valAxisLineColorD.setDescription("Value axis line color.");
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LINE_COLOR, Messages.MLinePlot_value_axis_line_color, NullEnum.INHERITED);
+		valAxisLineColorD.setDescription(Messages.MLinePlot_value_axis_line_color_description);
 		desc.add(valAxisLineColorD);
 
 		JRExpressionPropertyDescriptor rangeAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, "Range Axis Minvalue Expression");
-		rangeAxisMinExprD.setDescription("Range axis minvalue expression.");
+				JRDesignLinePlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, Messages.MLinePlot_range_axis_minvalue_expression);
+		rangeAxisMinExprD.setDescription(Messages.MLinePlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, "Range Axis Maxvalue Expression");
-		rangeAxisMaxExprD.setDescription("Range axis maxvalue expression.");
+				JRDesignLinePlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, Messages.MLinePlot_range_axis_maxvalue_expression);
+		rangeAxisMaxExprD.setDescription(Messages.MLinePlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, "Domain Axis Minvalue Expression");
-		domainAxisMinExprD.setDescription("Domain axis minvalue expression.");
+				JRDesignLinePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.MLinePlot_domain_axis_minvalue_expression);
+		domainAxisMinExprD.setDescription(Messages.MLinePlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, "Domain Axis Maxvalue Expression");
-		domainAxisMaxExprD.setDescription("Domain axis maxvalue expression.");
+				JRDesignLinePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.MLinePlot_domain_axis_maxvalue_expression);
+		domainAxisMaxExprD.setDescription(Messages.MLinePlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS, "Category Axis Vertical Tick Labels",
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS, Messages.MLinePlot_category_axis_vertical_tick_labels,
 				NullEnum.NOTNULL);
-		catAxisVertTickLabelD.setDescription("Category Axis Vertical Tick Labels.");
+		catAxisVertTickLabelD.setDescription(Messages.MLinePlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, "Value Axis Vertical Tick Labels", NullEnum.NULL);
-		valAxisVertTickLabelD.setDescription("Value Axis Vertical Tick Labels.");
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MLinePlot_value_axis_vertical_tick_labels, NullEnum.NULL);
+		valAxisVertTickLabelD.setDescription(Messages.MLinePlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor showLinesD = new CheckBoxPropertyDescriptor(JRDesignLinePlot.PROPERTY_SHOW_LINES,
-				"Show Lines", NullEnum.NOTNULL);
-		showLinesD.setDescription("Show Lines.");
+				Messages.MLinePlot_show_lines, NullEnum.NOTNULL);
+		showLinesD.setDescription(Messages.MLinePlot_show_lines_description);
 		desc.add(showLinesD);
 
 		CheckBoxPropertyDescriptor showShapesD = new CheckBoxPropertyDescriptor(JRDesignLinePlot.PROPERTY_SHOW_SHAPES,
-				"Show Shapes", NullEnum.NOTNULL);
-		showShapesD.setDescription("Show shapes.");
+				Messages.MLinePlot_show_shapes, NullEnum.NOTNULL);
+		showShapesD.setDescription(Messages.MLinePlot_show_shapes_description);
 		desc.add(showShapesD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK, "Category Axis Tick Label Mask");
-		catAxisTickLabelMaskD.setDescription("Category Axis Tick Label Mask");
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK, Messages.MLinePlot_category_axis_tick_label_mask);
+		catAxisTickLabelMaskD.setDescription(Messages.MLinePlot_category_axis_tick_label_mask_description);
 		desc.add(catAxisTickLabelMaskD);
 
 		NTextPropertyDescriptor valAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, "Value Axis Tick Label Mask");
-		valAxisTickLabelMaskD.setDescription("Value Axis Tick Label Mask");
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, Messages.MLinePlot_value_axis_tick_label_mask);
+		valAxisTickLabelMaskD.setDescription(Messages.MLinePlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
 		DoublePropertyDescriptor catAxisTickLabelRotation = new DoublePropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, "Category Axis Tick Label Rotation");
-		catAxisTickLabelRotation.setDescription("Category Axis Tick Label Rotation.");
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, Messages.MLinePlot_category_axis_tick_label_rotation);
+		catAxisTickLabelRotation.setDescription(Messages.MLinePlot_category_axis_tick_label_rotation_description);
 		desc.add(catAxisTickLabelRotation);
 
 	}

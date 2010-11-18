@@ -38,7 +38,7 @@ public class MPiePlot extends MChartPlot {
 		super(value);
 	}
 	public String getDisplayText() {
-		return "Pie Plot";
+		return Messages.MPiePlot_pie_plot;
 	}
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
@@ -63,28 +63,28 @@ public class MPiePlot extends MChartPlot {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignPiePlot.PROPERTY_ITEM_LABEL, "Item Label");
-		itemLabelD.setDescription("Item Label.");
+		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignPiePlot.PROPERTY_ITEM_LABEL, Messages.MPiePlot_item_label);
+		itemLabelD.setDescription(Messages.MPiePlot_item_label_description);
 		desc.add(itemLabelD);
 
 		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(JRDesignPiePlot.PROPERTY_SHOW_LABELS,
-				"Show Labels", NullEnum.NULL);
-		showLabelsD.setDescription("Show Labels.");
+				Messages.MPiePlot_show_labels, NullEnum.NULL);
+		showLabelsD.setDescription(Messages.MPiePlot_show_labels_description);
 		desc.add(showLabelsD);
 
 		CheckBoxPropertyDescriptor circularD = new CheckBoxPropertyDescriptor(JRDesignPiePlot.PROPERTY_CIRCULAR,
-				"Circular", NullEnum.NULL);
-		circularD.setDescription("Circular.");
+				Messages.MPiePlot_circular, NullEnum.NULL);
+		circularD.setDescription(Messages.MPiePlot_circular_description);
 		desc.add(circularD);
 
 		NTextPropertyDescriptor legendLabelFormatD = new NTextPropertyDescriptor(
-				JRDesignPiePlot.PROPERTY_LEGEND_LABEL_FORMAT, "Legend Label Format");
-		legendLabelFormatD.setDescription("Legend Label Format");
+				JRDesignPiePlot.PROPERTY_LEGEND_LABEL_FORMAT, Messages.MPiePlot_legend_label_format);
+		legendLabelFormatD.setDescription(Messages.MPiePlot_legend_label_format_description);
 		desc.add(legendLabelFormatD);
 
 		NTextPropertyDescriptor labelFormatD = new NTextPropertyDescriptor(JRDesignPiePlot.PROPERTY_LABEL_FORMAT,
-				"Label Format");
-		labelFormatD.setDescription("Label Format.");
+				Messages.MPiePlot_label_format);
+		labelFormatD.setDescription(Messages.MPiePlot_label_format_description);
 		desc.add(labelFormatD);
 
 	}

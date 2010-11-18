@@ -44,7 +44,7 @@ public class MCandlestickPlot extends MChartPlot {
 		super(value);
 	}
 	public String getDisplayText() {
-		return "Candlestick Plot";
+		return Messages.MCandlestickPlot_candlestick_plot;
 	}
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
@@ -70,111 +70,111 @@ public class MCandlestickPlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_COLOR, "Category Axis Label Color", NullEnum.NULL);
-		catAxisLabelColorD.setDescription("Category axis label color.");
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_COLOR, Messages.MCandlestickPlot_category_axis_label_color, NullEnum.NULL);
+		catAxisLabelColorD.setDescription(Messages.MCandlestickPlot_category_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor catAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION, "Category Axis Label Expression");
-		catAxisLabelExprD.setDescription("Category axis label expression.");
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION, Messages.MCandlestickPlot_category_axis_label_expression);
+		catAxisLabelExprD.setDescription(Messages.MCandlestickPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_FONT, "Category Axis Label Font");
-		catAxisLabelFontD.setDescription("Category Axis Label Font.");
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_FONT, Messages.MCandlestickPlot_category_axis_label_font);
+		catAxisLabelFontD.setDescription(Messages.MCandlestickPlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR, "Category Axis Tick Label Color",
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR, Messages.MCandlestickPlot_category_axis_tick_label_color,
 				NullEnum.INHERITED);
-		catAxisTickLabelColorD.setDescription("Category axis tick label color.");
+		catAxisTickLabelColorD.setDescription(Messages.MCandlestickPlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
 		FontPropertyDescriptor catAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT, "Category Axis Tick Label Font");
-		catAxisTickLabelFontD.setDescription("Category Axis Tick Label Font.");
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT, Messages.MCandlestickPlot_category_axis_tick_label_font);
+		catAxisTickLabelFontD.setDescription(Messages.MCandlestickPlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LINE_COLOR, "Category Axis Line Color", NullEnum.NULL);
-		catAxisLineColorD.setDescription("Category axis line color.");
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LINE_COLOR, Messages.MCandlestickPlot_category_axis_line_color, NullEnum.NULL);
+		catAxisLineColorD.setDescription(Messages.MCandlestickPlot_category_axis_line_color_description);
 		desc.add(catAxisLineColorD);
 
 		ColorPropertyDescriptor valAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, "Value Axis Label Color", NullEnum.NULL);
-		valAxisLabelColorD.setDescription("Value axis label color.");
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.MCandlestickPlot_value_axis_label_color, NullEnum.NULL);
+		valAxisLabelColorD.setDescription(Messages.MCandlestickPlot_value_axis_label_color_description);
 		desc.add(valAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor valAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, "Category Value Axis Label Expression");
-		valAxisLabelExprD.setDescription("Category value axis label expression.");
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, Messages.MCandlestickPlot_category_value_axis_label_expression);
+		valAxisLabelExprD.setDescription(Messages.MCandlestickPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, "Value Axis Label Font");
-		valAxisLabelFontD.setDescription("Value Axis Label Font.");
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, Messages.MCandlestickPlot_value_axis_label_font);
+		valAxisLabelFontD.setDescription(Messages.MCandlestickPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, "Value Axis Tick Label Color", NullEnum.NULL);
-		valAxisTickLabelColorD.setDescription("Value axis tick label color.");
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MCandlestickPlot_value_axis_tick_label_color, NullEnum.NULL);
+		valAxisTickLabelColorD.setDescription(Messages.MCandlestickPlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
 		FontPropertyDescriptor valAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, "Value Axis Tick Label Font");
-		valAxisTickLabelFontD.setDescription("Value Axis Tick Label Font.");
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, Messages.MCandlestickPlot_value_axis_tick_label_font);
+		valAxisTickLabelFontD.setDescription(Messages.MCandlestickPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, "Value Axis Line Color", NullEnum.NULL);
-		valAxisLineColorD.setDescription("Value axis line color.");
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, Messages.MCandlestickPlot_value_axis_line_color, NullEnum.NULL);
+		valAxisLineColorD.setDescription(Messages.MCandlestickPlot_value_axis_line_color_description);
 		desc.add(valAxisLineColorD);
 
 		JRExpressionPropertyDescriptor rangeAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, "Range Axis Minvalue Expression");
-		rangeAxisMinExprD.setDescription("Range axis minvalue expression.");
+				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, Messages.MCandlestickPlot_range_axis_minvalue_expression);
+		rangeAxisMinExprD.setDescription(Messages.MCandlestickPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, "Range Axis Maxvalue Expression");
-		rangeAxisMaxExprD.setDescription("Range axis maxvalue expression.");
+				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, Messages.MCandlestickPlot_range_axis_maxvalue_expression);
+		rangeAxisMaxExprD.setDescription(Messages.MCandlestickPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, "Domain Axis Minvalue Expression");
-		domainAxisMinExprD.setDescription("Domain axis minvalue expression.");
+				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.MCandlestickPlot_domain_axis_minvalue_expression);
+		domainAxisMinExprD.setDescription(Messages.MCandlestickPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, "Domain Axis Maxvalue Expression");
-		domainAxisMaxExprD.setDescription("Domain axis maxvalue expression.");
+				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.MCandlestickPlot_domain_axis_maxvalue_expression);
+		domainAxisMaxExprD.setDescription(Messages.MCandlestickPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS, "Category Axis Vertical Tick Labels",
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS, Messages.MCandlestickPlot_category_axis_vertical_tick_labels,
 				NullEnum.NOTNULL);
-		catAxisVertTickLabelD.setDescription("Category Axis Vertical Tick Labels.");
+		catAxisVertTickLabelD.setDescription(Messages.MCandlestickPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, "Value Axis Vertical Tick Labels",
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MCandlestickPlot_value_axis_vertical_tick_labels,
 				NullEnum.NOTNULL);
-		valAxisVertTickLabelD.setDescription("Value Axis Vertical Tick Labels.");
+		valAxisVertTickLabelD.setDescription(Messages.MCandlestickPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_MASK, "Category Axis Tick Label Mask");
-		catAxisTickLabelMaskD.setDescription("Category Axis Tick Label Mask");
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_MASK, Messages.MCandlestickPlot_category_axis_tick_label_mask);
+		catAxisTickLabelMaskD.setDescription(Messages.MCandlestickPlot_category_axis_tick_label_mask_description);
 		desc.add(catAxisTickLabelMaskD);
 
 		NTextPropertyDescriptor valAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, "Value Axis Tick Label Mask");
-		valAxisTickLabelMaskD.setDescription("Value Axis Tick Label Mask");
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, Messages.MCandlestickPlot_value_axis_tick_label_mask);
+		valAxisTickLabelMaskD.setDescription(Messages.MCandlestickPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
 		CheckBoxPropertyDescriptor showVolumeD = new CheckBoxPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_SHOW_VOLUME, "Show Volume", NullEnum.NOTNULL);
-		showVolumeD.setDescription("Show volume.");
+				JRDesignCandlestickPlot.PROPERTY_SHOW_VOLUME, Messages.MCandlestickPlot_show_volume, NullEnum.NOTNULL);
+		showVolumeD.setDescription(Messages.MCandlestickPlot_show_volume_description);
 		desc.add(showVolumeD);
 
 	}

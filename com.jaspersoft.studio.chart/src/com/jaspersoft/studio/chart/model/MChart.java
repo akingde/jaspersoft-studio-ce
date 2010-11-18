@@ -85,7 +85,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ChartNodeIconDescriptor("chart");
+			iconDescriptor = new ChartNodeIconDescriptor("chart"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -144,122 +144,122 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor titlePositionD = new ComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_TITLE_POSITION,
-				"Title Position", EnumHelper.getEnumNames(EdgeEnum.values(), NullEnum.NULL));
-		titlePositionD.setDescription("Title position.");
+				Messages.MChart_title_position, EnumHelper.getEnumNames(EdgeEnum.values(), NullEnum.NULL));
+		titlePositionD.setDescription(Messages.MChart_title_position_description);
 		desc.add(titlePositionD);
 
 		ComboBoxPropertyDescriptor legendPositionD = new ComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_LEGEND_POSITION,
-				"Legend Position", EnumHelper.getEnumNames(EdgeEnum.values(), NullEnum.NULL));
-		legendPositionD.setDescription("Legend position.");
+				Messages.MChart_legend_position, EnumHelper.getEnumNames(EdgeEnum.values(), NullEnum.NULL));
+		legendPositionD.setDescription(Messages.MChart_legend_position_description);
 		desc.add(legendPositionD);
 
-		ColorPropertyDescriptor titleColorD = new ColorPropertyDescriptor(JRBaseChart.PROPERTY_TITLE_COLOR, "Title Color",
+		ColorPropertyDescriptor titleColorD = new ColorPropertyDescriptor(JRBaseChart.PROPERTY_TITLE_COLOR, Messages.MChart_title_color,
 				NullEnum.INHERITED);
-		titleColorD.setDescription("Color of the title text");
+		titleColorD.setDescription(Messages.MChart_title_color_description);
 		desc.add(titleColorD);
 
 		JRExpressionPropertyDescriptor titleExprD = new JRExpressionPropertyDescriptor(
-				JRDesignChart.PROPERTY_TITLE_EXPRESSION, "Title Expression");
-		titleExprD.setDescription("The title expression.");
+				JRDesignChart.PROPERTY_TITLE_EXPRESSION, Messages.MChart_title_expression);
+		titleExprD.setDescription(Messages.MChart_title_expression_description);
 		desc.add(titleExprD);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(JRDesignChart.PROPERTY_EVALUATION_TIME,
-				"Evaluation Time", EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NULL));
+				Messages.MChart_evaluation_time, EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NULL));
 		evaluationTimeD
-				.setDescription("The chart to be printed is supplied by the associated expression. This expression can be evaluated at a specified moment. This could be useful, for example, when we want to have on the first page a chart that will be generated only after fetching all the data source rows.");
+				.setDescription(Messages.MChart_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
 		ColorPropertyDescriptor subtitleColorD = new ColorPropertyDescriptor(JRBaseChart.PROPERTY_SUBTITLE_COLOR,
-				"Subtitle Color", NullEnum.INHERITED);
-		subtitleColorD.setDescription("Color of the subtitle text");
+				Messages.MChart_subtitle_color, NullEnum.INHERITED);
+		subtitleColorD.setDescription(Messages.MChart_subtitle_color_description);
 		desc.add(subtitleColorD);
 
 		JRExpressionPropertyDescriptor subtitleExprD = new JRExpressionPropertyDescriptor(
-				JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION, "Subtitle Expression");
-		subtitleExprD.setDescription("The subtitle expression.");
+				JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION, Messages.MChart_subtitle_expression);
+		subtitleExprD.setDescription(Messages.MChart_subtitle_expression_description);
 		desc.add(subtitleExprD);
 
 		ColorPropertyDescriptor legendColorD = new ColorPropertyDescriptor(JRBaseChart.PROPERTY_LEGEND_COLOR,
-				"Legend Color", NullEnum.INHERITED);
-		legendColorD.setDescription("The color of the text in the legend.");
+				Messages.MChart_legend_color, NullEnum.INHERITED);
+		legendColorD.setDescription(Messages.MChart_legend_color_description);
 		desc.add(legendColorD);
 
 		ColorPropertyDescriptor legendBackColorD = new ColorPropertyDescriptor(
-				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, "Legend Background Color", NullEnum.INHERITED);
-		legendBackColorD.setDescription("The color of the background of the legend.");
+				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, Messages.MChart_legend_background_color, NullEnum.INHERITED);
+		legendBackColorD.setDescription(Messages.MChart_legend_background_color_description);
 		desc.add(legendBackColorD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS,
-				"Customizer Class");
-		classD.setDescription("Customizer class.");
+				Messages.MChart_customizer_class);
+		classD.setDescription(Messages.MChart_customizer_class_description);
 		desc.add(classD);
 
 		CheckBoxPropertyDescriptor showLegendD = new CheckBoxPropertyDescriptor(JRBaseChart.PROPERTY_SHOW_LEGEND,
-				"Show Legend", NullEnum.NULL);
-		showLegendD.setDescription("Show the legend.");
+				Messages.MChart_show_legend, NullEnum.NULL);
+		showLegendD.setDescription(Messages.MChart_show_legend_description);
 		desc.add(showLegendD);
 
 		RWComboBoxPropertyDescriptor rendererTypeD = new RWComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_RENDER_TYPE,
-				"Renderer Type", new String[] { "", "draw", "image", "svg" }, NullEnum.NULL);
-		rendererTypeD.setDescription("Renderer type.");
+				Messages.MChart_renderer_type, new String[] { "", "draw", "image", "svg" }, NullEnum.NULL); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		rendererTypeD.setDescription(Messages.MChart_renderer_type_description);
 		desc.add(rendererTypeD);
 
-		RWComboBoxPropertyDescriptor themeD = new RWComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_THEME, "Theme",
-				new String[] { "", "aegian", "default", "default.spring", "generic", "eye.candy.sixties" }, NullEnum.NULL);
-		themeD.setDescription("Chart theme.");
+		RWComboBoxPropertyDescriptor themeD = new RWComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_THEME, Messages.MChart_theme,
+				new String[] { "", "aegian", "default", "default.spring", "generic", "eye.candy.sixties" }, NullEnum.NULL); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+		themeD.setDescription(Messages.MChart_theme_description);
 		desc.add(themeD);
 
-		evaluationGroupD = new RComboBoxPropertyDescriptor(JRDesignChart.PROPERTY_EVALUATION_GROUP, "Evaluation Group",
-				new String[] { "" });
-		evaluationGroupD.setDescription("Evaluation Group.");
+		evaluationGroupD = new RComboBoxPropertyDescriptor(JRDesignChart.PROPERTY_EVALUATION_GROUP, Messages.MChart_evaluation_group,
+				new String[] { "" }); //$NON-NLS-1$
+		evaluationGroupD.setDescription(Messages.MChart_evaluation_group_description);
 		desc.add(evaluationGroupD);
 
-		FontPropertyDescriptor titleFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_TITLE_FONT, "Title Font");
-		titleFontD.setDescription("Title Font.");
+		FontPropertyDescriptor titleFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_TITLE_FONT, Messages.MChart_title_font);
+		titleFontD.setDescription(Messages.MChart_title_font_description);
 		desc.add(titleFontD);
 
 		FontPropertyDescriptor subtitleFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_SUBTITLE_FONT,
-				"Subtitle Font");
-		subtitleFontD.setDescription("Subtitle Font.");
+				Messages.MChart_subtitle_font);
+		subtitleFontD.setDescription(Messages.MChart_subtitle_font_description);
 		desc.add(subtitleFontD);
 
-		FontPropertyDescriptor legendFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_LEGEND_FONT, "Legend Font");
-		legendFontD.setDescription("Legend Font.");
+		FontPropertyDescriptor legendFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_LEGEND_FONT, Messages.MChart_legend_font);
+		legendFontD.setDescription(Messages.MChart_legend_font_description);
 		desc.add(legendFontD);
 
-		PlotPropertyDescriptor plotD = new PlotPropertyDescriptor("PLOTPROPERTY", "Plot");
-		plotD.setDescription("Plot.");
+		PlotPropertyDescriptor plotD = new PlotPropertyDescriptor("PLOTPROPERTY", Messages.MChart_plot); //$NON-NLS-1$
+		plotD.setDescription(Messages.MChart_plot_description);
 		desc.add(plotD);
 
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
-		titleFontD.setCategory("Chart Title");
-		titleColorD.setCategory("Chart Title");
-		titlePositionD.setCategory("Chart Title");
-		titleExprD.setCategory("Chart Title");
+		titleFontD.setCategory(Messages.MChart_chart_title);
+		titleColorD.setCategory(Messages.MChart_chart_title);
+		titlePositionD.setCategory(Messages.MChart_chart_title);
+		titleExprD.setCategory(Messages.MChart_chart_title);
 
-		subtitleFontD.setCategory("Chart Subtitle");
-		subtitleExprD.setCategory("Chart Subtitle");
-		subtitleColorD.setCategory("Chart Subtitle");
+		subtitleFontD.setCategory(Messages.MChart_chart_subtitle);
+		subtitleExprD.setCategory(Messages.MChart_chart_subtitle);
+		subtitleColorD.setCategory(Messages.MChart_chart_subtitle);
 
-		plotD.setCategory("Common Chart Properties");
+		plotD.setCategory(Messages.MChart_common_chart_properties);
 
-		evaluationGroupD.setCategory("Common Chart Properties");
-		themeD.setCategory("Common Chart Properties");
+		evaluationGroupD.setCategory(Messages.MChart_common_chart_properties);
+		themeD.setCategory(Messages.MChart_common_chart_properties);
 
-		classD.setCategory("Common Chart Properties");
+		classD.setCategory(Messages.MChart_common_chart_properties);
 
-		legendFontD.setCategory("Chart Legend");
-		legendBackColorD.setCategory("Chart Legend");
-		legendColorD.setCategory("Chart Legend");
-		legendPositionD.setCategory("Chart Legend");
-		showLegendD.setCategory("Chart Legend");
+		legendFontD.setCategory(Messages.MChart_chart_legend);
+		legendBackColorD.setCategory(Messages.MChart_chart_legend);
+		legendColorD.setCategory(Messages.MChart_chart_legend);
+		legendPositionD.setCategory(Messages.MChart_chart_legend);
+		showLegendD.setCategory(Messages.MChart_chart_legend);
 
-		evaluationTimeD.setCategory("Common Chart Properties");
+		evaluationTimeD.setCategory(Messages.MChart_common_chart_properties);
 
-		rendererTypeD.setCategory("Common Chart Properties");
+		rendererTypeD.setCategory(Messages.MChart_common_chart_properties);
 
 		defaultsMap.put(JRBaseChart.PROPERTY_THEME, null);
 		defaultsMap.put(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS, null);
@@ -312,7 +312,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_GROUP)) {
 			if (jrElement.getEvaluationGroup() != null)
 				return jrElement.getEvaluationGroup().getName();
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR))
@@ -355,7 +355,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			return mToolTipExpression;
 		}
 
-		if (id.equals("PLOTPROPERTY")) {
+		if (id.equals("PLOTPROPERTY")) { //$NON-NLS-1$
 			if (mChartPlot == null)
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
 			return mChartPlot;
@@ -407,7 +407,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		else if (id.equals(JRBaseChart.PROPERTY_THEME))
 			jrElement.setTheme((String) value);
 		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_GROUP)) {
-			if (!value.equals("")) {
+			if (!value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setEvaluationGroup(group);
 			}
@@ -578,7 +578,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 					}
 				}
 			}
-		} else if (evt.getPropertyName().equals("axes")) {
+		} else if (evt.getPropertyName().equals("axes")) { //$NON-NLS-1$
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
 				int newIndex = -2;
 				if (evt instanceof CollectionElementAddedEvent) {

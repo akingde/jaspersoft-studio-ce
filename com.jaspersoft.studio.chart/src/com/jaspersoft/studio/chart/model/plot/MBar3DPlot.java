@@ -47,7 +47,7 @@ public class MBar3DPlot extends MChartPlot {
 		super(value);
 	}
 	public String getDisplayText() {
-		return "Bar3D Plot";
+		return Messages.MBar3DPlot_bar3d_plot; 
 	}
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
@@ -73,126 +73,126 @@ public class MBar3DPlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, "Category Axis Label Color", NullEnum.NULL);
-		catAxisLabelColorD.setDescription("Category axis label color.");
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, Messages.MBar3DPlot_category_axis_label_color, NullEnum.NULL);
+		catAxisLabelColorD.setDescription(Messages.MBar3DPlot_category_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor catAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION, "Category Axis Label Expression");
-		catAxisLabelExprD.setDescription("Category axis label expression.");
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION, Messages.MBar3DPlot_category_axis_label_expression);
+		catAxisLabelExprD.setDescription(Messages.MBar3DPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, "Category Axis Label Font");
-		catAxisLabelFontD.setDescription("Category Axis Label Font.");
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, Messages.MBar3DPlot_category_axis_label_font);
+		catAxisLabelFontD.setDescription(Messages.MBar3DPlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, "Category Axis Tick Label Color", NullEnum.NULL);
-		catAxisTickLabelColorD.setDescription("Category axis tick label color.");
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.MBar3DPlot_category_axis_tick_label_color, NullEnum.NULL);
+		catAxisTickLabelColorD.setDescription(Messages.MBar3DPlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
 		FontPropertyDescriptor catAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, "Category Axis Tick Label Font");
-		catAxisTickLabelFontD.setDescription("Category Axis Tick Label Font.");
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, Messages.MBar3DPlot_category_axis_tick_label_font);
+		catAxisTickLabelFontD.setDescription(Messages.MBar3DPlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, "Category Axis Line Color", NullEnum.NULL);
-		catAxisLineColorD.setDescription("Category axis line color.");
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, Messages.MBar3DPlot_category_axis_line_color, NullEnum.NULL);
+		catAxisLineColorD.setDescription(Messages.MBar3DPlot_category_axis_line_color_description);
 		desc.add(catAxisLineColorD);
 
 		ColorPropertyDescriptor valAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, "Value Axis Label Color", NullEnum.NULL);
-		valAxisLabelColorD.setDescription("Value axis label color.");
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.MBar3DPlot_value_axis_label_color, NullEnum.NULL);
+		valAxisLabelColorD.setDescription(Messages.MBar3DPlot_value_axis_label_color_description);
 		desc.add(valAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor valAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, "Category Value Axis Label Expression");
-		valAxisLabelExprD.setDescription("Category value axis label expression.");
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, Messages.MBar3DPlot_value_axis_label_expression);
+		valAxisLabelExprD.setDescription(Messages.MBar3DPlot_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, "Value Axis Label Font");
-		valAxisLabelFontD.setDescription("Value Axis Label Font.");
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, Messages.MBar3DPlot_value_axis_label_font);
+		valAxisLabelFontD.setDescription(Messages.MBar3DPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, "Value Axis Tick Label Color", NullEnum.NULL);
-		valAxisTickLabelColorD.setDescription("Value axis tick label color.");
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MBar3DPlot_value_axis_tick_label_color, NullEnum.NULL);
+		valAxisTickLabelColorD.setDescription(Messages.MBar3DPlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
 		FontPropertyDescriptor valAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, "Value Axis Tick Label Font");
-		valAxisTickLabelFontD.setDescription("Value Axis Tick Label Font.");
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, Messages.MBar3DPlot_value_axis_tick_label_font);
+		valAxisTickLabelFontD.setDescription(Messages.MBar3DPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
 
-		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignBar3DPlot.PROPERTY_ITEM_LABEL, "Item Label");
-		itemLabelD.setDescription("Item Label.");
+		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignBar3DPlot.PROPERTY_ITEM_LABEL, Messages.MBar3DPlot_item_label);
+		itemLabelD.setDescription(Messages.MBar3DPlot_item_label_description);
 		desc.add(itemLabelD);
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, "Value Axis Line Color", NullEnum.NULL);
-		valAxisLineColorD.setDescription("Value axis line color.");
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, Messages.MBar3DPlot_value_axis_line_color, NullEnum.NULL);
+		valAxisLineColorD.setDescription(Messages.MBar3DPlot_value_axis_line_color_description);
 		desc.add(valAxisLineColorD);
 
 		JRExpressionPropertyDescriptor rangeAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, "Range Axis Minvalue Expression");
-		rangeAxisMinExprD.setDescription("Range axis minvalue expression.");
+				JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, Messages.MBar3DPlot_range_axis_minvalue_expression);
+		rangeAxisMinExprD.setDescription(Messages.MBar3DPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, "Range Axis Maxvalue Expression");
-		rangeAxisMaxExprD.setDescription("Range axis maxvalue expression.");
+				JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, Messages.MBar3DPlot_range_axis_maxvalue_expression);
+		rangeAxisMaxExprD.setDescription(Messages.MBar3DPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, "Domain Axis Minvalue Expression");
-		domainAxisMinExprD.setDescription("Domain axis minvalue expression.");
+				JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.MBar3DPlot_domain_axis_minvalue_expression);
+		domainAxisMinExprD.setDescription(Messages.MBar3DPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, "Domain Axis Maxvalue Expression");
-		domainAxisMaxExprD.setDescription("Domain axis maxvalue expression.");
+				JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.MBar3DPlot_domain_axis_maxvalue_expression);
+		domainAxisMaxExprD.setDescription(Messages.MBar3DPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS, "Category Axis Vertical Tick Labels",
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS, Messages.MBar3DPlot_category_axis_vertical_tick_labels,
 				NullEnum.NOTNULL);
-		catAxisVertTickLabelD.setDescription("Category Axis Vertical Tick Labels.");
+		catAxisVertTickLabelD.setDescription(Messages.MBar3DPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, "Value Axis Vertical Tick Labels", NullEnum.NOTNULL);
-		valAxisVertTickLabelD.setDescription("Value Axis Vertical Tick Labels.");
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MBar3DPlot_value_axis_vertical_tick_labels, NullEnum.NOTNULL);
+		valAxisVertTickLabelD.setDescription(Messages.MBar3DPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(JRDesignBar3DPlot.PROPERTY_SHOW_LABELS,
-				"Show Labels", NullEnum.NULL);
-		showLabelsD.setDescription("Show Labels.");
+				Messages.MBar3DPlot_show_labels, NullEnum.NULL);
+		showLabelsD.setDescription(Messages.MBar3DPlot_show_labels_description);
 		desc.add(showLabelsD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK, "Category Axis Tick Label Mask");
-		catAxisTickLabelMaskD.setDescription("Category Axis Tick Label Mask");
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK, Messages.MBar3DPlot_category_axis_tick_label_mask);
+		catAxisTickLabelMaskD.setDescription(Messages.MBar3DPlot_category_axis_tick_label_mask_description);
 		desc.add(catAxisTickLabelMaskD);
 
 		NTextPropertyDescriptor valAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, "Value Axis Tick Label Mask");
-		valAxisTickLabelMaskD.setDescription("Value Axis Tick Label Mask");
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, Messages.MBar3DPlot_value_axis_tick_label_mask);
+		valAxisTickLabelMaskD.setDescription(Messages.MBar3DPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
 		DoublePropertyDescriptor catAxisTickLabelRotation = new DoublePropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, "Category Axis Tick Label Rotation");
-		catAxisTickLabelRotation.setDescription("Category Axis Tick Label Rotation.");
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, Messages.MBar3DPlot_category_axis_tick_label_rotation);
+		catAxisTickLabelRotation.setDescription(Messages.MBar3DPlot_category_axis_tick_label_rotation_description);
 		desc.add(catAxisTickLabelRotation);
 
-		DoublePropertyDescriptor xoffsetD = new DoublePropertyDescriptor(JRDesignBar3DPlot.PROPERTY_X_OFFSET, "X Offset");
-		xoffsetD.setDescription("X offset.");
+		DoublePropertyDescriptor xoffsetD = new DoublePropertyDescriptor(JRDesignBar3DPlot.PROPERTY_X_OFFSET, Messages.MBar3DPlot_x_offset);
+		xoffsetD.setDescription(Messages.MBar3DPlot_x_offset_description);
 		desc.add(xoffsetD);
 
-		DoublePropertyDescriptor yoffsetD = new DoublePropertyDescriptor(JRDesignBar3DPlot.PROPERTY_Y_OFFSET, "Y Offset");
-		yoffsetD.setDescription("Y offset.");
+		DoublePropertyDescriptor yoffsetD = new DoublePropertyDescriptor(JRDesignBar3DPlot.PROPERTY_Y_OFFSET, Messages.MBar3DPlot_y_offset);
+		yoffsetD.setDescription(Messages.MBar3DPlot_y_offset_description);
 		desc.add(yoffsetD);
 
 	}

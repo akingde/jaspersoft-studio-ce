@@ -26,6 +26,6 @@ public class MMultiAxisPlot extends MChartPlot {
 		super(value);
 	}
 	public String getDisplayText() {
-		return "MultiAxis Plot";
+		return Messages.MMultiAxisPlot_multi_axis_plot;
 	}
 }

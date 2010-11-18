@@ -44,7 +44,7 @@ public class MTimeSeriesPlot extends MChartPlot {
 		super(value);
 	}
 	public String getDisplayText() {
-		return "TimeSeries Plot";
+		return Messages.MTimeSeriesPlot_timeseries_plot;
 	}
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
@@ -70,115 +70,115 @@ public class MTimeSeriesPlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_COLOR, "Time Axis Label Color", NullEnum.NULL);
-		catAxisLabelColorD.setDescription("Time Axis label color.");
+				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_COLOR, Messages.MTimeSeriesPlot_time_axis_label_color, NullEnum.NULL);
+		catAxisLabelColorD.setDescription(Messages.MTimeSeriesPlot_time_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor catAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION, "Time Axis Label Expression");
-		catAxisLabelExprD.setDescription("Time Axis label expression.");
+				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION, Messages.MTimeSeriesPlot_time_axis_label_expression);
+		catAxisLabelExprD.setDescription(Messages.MTimeSeriesPlot_time_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_FONT, "Time Axis Label Font");
-		catAxisLabelFontD.setDescription("Time Axis Label Font.");
+				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_FONT, Messages.MTimeSeriesPlot_time_axis_label_font);
+		catAxisLabelFontD.setDescription(Messages.MTimeSeriesPlot_time_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR, "Time Axis Tick Label Color", NullEnum.NULL);
-		catAxisTickLabelColorD.setDescription("Time Axis tick label color.");
+				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR, Messages.MTimeSeriesPlot_time_axis_tick_label_color, NullEnum.NULL);
+		catAxisTickLabelColorD.setDescription(Messages.MTimeSeriesPlot_time_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
 		FontPropertyDescriptor catAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT, "Time Axis Tick Label Font");
-		catAxisTickLabelFontD.setDescription("Time Axis Tick Label Font.");
+				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT, Messages.MTimeSeriesPlot_time_axis_tick_label_font);
+		catAxisTickLabelFontD.setDescription(Messages.MTimeSeriesPlot_time_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LINE_COLOR, "Time Axis Line Color", NullEnum.NULL);
-		catAxisLineColorD.setDescription("Time Axis line color.");
+				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LINE_COLOR, Messages.MTimeSeriesPlot_time_axis_line_color, NullEnum.NULL);
+		catAxisLineColorD.setDescription(Messages.MTimeSeriesPlot_time_axis_line_color_description);
 		desc.add(catAxisLineColorD);
 
 		ColorPropertyDescriptor valAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, "Value Axis Label Color", NullEnum.NULL);
-		valAxisLabelColorD.setDescription("Value axis label color.");
+				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.MTimeSeriesPlot_value_axis_label_color, NullEnum.NULL);
+		valAxisLabelColorD.setDescription(Messages.MTimeSeriesPlot_value_axis_label_color_description);
 		desc.add(valAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor valAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, "Category Value Axis Label Expression");
-		valAxisLabelExprD.setDescription("Category value axis label expression.");
+				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, Messages.MTimeSeriesPlot_category_value_axis_label_expression);
+		valAxisLabelExprD.setDescription(Messages.MTimeSeriesPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, "Value Axis Label Font");
-		valAxisLabelFontD.setDescription("Value Axis Label Font.");
+				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, Messages.MTimeSeriesPlot_value_axis_label_font);
+		valAxisLabelFontD.setDescription(Messages.MTimeSeriesPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, "Value Axis Tick Label Color", NullEnum.NULL);
-		valAxisTickLabelColorD.setDescription("Value axis tick label color.");
+				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MTimeSeriesPlot_value_axis_tick_label_color, NullEnum.NULL);
+		valAxisTickLabelColorD.setDescription(Messages.MTimeSeriesPlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
 		FontPropertyDescriptor valAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, "Value Axis Tick Label Font");
-		valAxisTickLabelFontD.setDescription("Value Axis Tick Label Font.");
+				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, Messages.MTimeSeriesPlot_value_axis_tick_label_font);
+		valAxisTickLabelFontD.setDescription(Messages.MTimeSeriesPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, "Value Axis Line Color", NullEnum.NULL);
-		valAxisLineColorD.setDescription("Value axis line color.");
+				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, Messages.MTimeSeriesPlot_value_axis_line_color, NullEnum.NULL);
+		valAxisLineColorD.setDescription(Messages.MTimeSeriesPlot_value_axis_line_color_description);
 		desc.add(valAxisLineColorD);
 
 		JRExpressionPropertyDescriptor rangeAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, "Range Axis Minvalue Expression");
-		rangeAxisMinExprD.setDescription("Range axis minvalue expression.");
+				JRDesignTimeSeriesPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, Messages.MTimeSeriesPlot_range_axis_minvalue_expression);
+		rangeAxisMinExprD.setDescription(Messages.MTimeSeriesPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, "Range Axis Maxvalue Expression");
-		rangeAxisMaxExprD.setDescription("Range axis maxvalue expression.");
+				JRDesignTimeSeriesPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, Messages.MTimeSeriesPlot_range_axis_maxvalue_expression);
+		rangeAxisMaxExprD.setDescription(Messages.MTimeSeriesPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, "Domain Axis Minvalue Expression");
-		domainAxisMinExprD.setDescription("Domain axis minvalue expression.");
+				JRDesignTimeSeriesPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.MTimeSeriesPlot_domain_axis_minvalue_expression);
+		domainAxisMinExprD.setDescription(Messages.MTimeSeriesPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, "Domain Axis Maxvalue Expression");
-		domainAxisMaxExprD.setDescription("Domain axis maxvalue expression.");
+				JRDesignTimeSeriesPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.MTimeSeriesPlot_domain_axis_maxvalue_expression);
+		domainAxisMaxExprD.setDescription(Messages.MTimeSeriesPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS, "Time Axis Vertical Tick Labels",
+				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS, Messages.MTimeSeriesPlot_time_axis_vertical_tick_labels,
 				NullEnum.NOTNULL);
-		catAxisVertTickLabelD.setDescription("Time Axis Vertical Tick Labels.");
+		catAxisVertTickLabelD.setDescription(Messages.MTimeSeriesPlot_time_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, "Value Axis Vertical Tick Labels",
+				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MTimeSeriesPlot_value_axis_vertical_tick_labels,
 				NullEnum.NOTNULL);
-		valAxisVertTickLabelD.setDescription("Value Axis Vertical Tick Labels.");
+		valAxisVertTickLabelD.setDescription(Messages.MTimeSeriesPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor showShapesD = new CheckBoxPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_SHOW_SHAPES, "Show Shapes", NullEnum.NULL);
-		showShapesD.setDescription("Show shapes.");
+				JRDesignTimeSeriesPlot.PROPERTY_SHOW_SHAPES, Messages.MTimeSeriesPlot_show_shapes, NullEnum.NULL);
+		showShapesD.setDescription(Messages.MTimeSeriesPlot_show_shapes_description);
 		desc.add(showShapesD);
 
 		CheckBoxPropertyDescriptor showLinesD = new CheckBoxPropertyDescriptor(JRDesignTimeSeriesPlot.PROPERTY_SHOW_LINES,
-				"Show Lines", NullEnum.NULL);
-		showLinesD.setDescription("Show lines.");
+				Messages.MTimeSeriesPlot_show_lines, NullEnum.NULL);
+		showLinesD.setDescription(Messages.MTimeSeriesPlot_show_lines_description);
 		desc.add(showLinesD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_TICK_LABEL_MASK, "Time Axis Tick Label Mask");
-		catAxisTickLabelMaskD.setDescription("Time Axis Tick Label Mask");
+				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_TICK_LABEL_MASK, Messages.MTimeSeriesPlot_time_axis_tick_label_mask);
+		catAxisTickLabelMaskD.setDescription(Messages.MTimeSeriesPlot_time_axis_tick_label_mask_description);
 		desc.add(catAxisTickLabelMaskD);
 
 		NTextPropertyDescriptor valAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, "Value Axis Tick Label Mask");
-		valAxisTickLabelMaskD.setDescription("Value Axis Tick Label Mask");
+				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, Messages.MTimeSeriesPlot_value_axis_tick_label_mask);
+		valAxisTickLabelMaskD.setDescription(Messages.MTimeSeriesPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
 	}

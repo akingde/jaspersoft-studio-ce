@@ -48,7 +48,7 @@ public class MThermometerPlot extends MChartPlot {
 		super(value);
 	}
 	public String getDisplayText() {
-		return "Thermometer Plot";
+		return Messages.MThermometerPlot_thermometer_plot;
 	}
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
@@ -74,77 +74,77 @@ public class MThermometerPlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor mercuryColorD = new ColorPropertyDescriptor(JRDesignThermometerPlot.PROPERTY_MERCURY_COLOR,
-				"Mercury Color", NullEnum.NULL);
-		mercuryColorD.setDescription("Mercury color.");
+				Messages.MThermometerPlot_mercury_color, NullEnum.NULL);
+		mercuryColorD.setDescription(Messages.MThermometerPlot_mercury_color_description);
 		desc.add(mercuryColorD);
 
 		ColorPropertyDescriptor valueColorD = new ColorPropertyDescriptor(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY
-				+ "." + JRDesignValueDisplay.PROPERTY_COLOR, "Value Color", NullEnum.NULL);
-		valueColorD.setDescription("Value color.");
+				+ "." + JRDesignValueDisplay.PROPERTY_COLOR, Messages.MThermometerPlot_value_color, NullEnum.NULL); //$NON-NLS-1$
+		valueColorD.setDescription(Messages.MThermometerPlot_value_color_description);
 		desc.add(valueColorD);
 
-		FontPropertyDescriptor valueFontD = new FontPropertyDescriptor(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "."
-				+ JRDesignValueDisplay.PROPERTY_FONT, "Value Font");
-		valueFontD.setDescription("Value Font.");
+		FontPropertyDescriptor valueFontD = new FontPropertyDescriptor(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
+				+ JRDesignValueDisplay.PROPERTY_FONT, Messages.MThermometerPlot_value_font);
+		valueFontD.setDescription(Messages.MThermometerPlot_value_font_description);
 		desc.add(valueFontD);
 
-		NTextPropertyDescriptor maskD = new NTextPropertyDescriptor(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "."
-				+ JRDesignValueDisplay.PROPERTY_MASK, "Value Mask");
-		maskD.setDescription("Units");
+		NTextPropertyDescriptor maskD = new NTextPropertyDescriptor(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
+				+ JRDesignValueDisplay.PROPERTY_MASK, Messages.MThermometerPlot_value_mask);
+		maskD.setDescription(Messages.MThermometerPlot_value_mask_description);
 		desc.add(maskD);
 
 		JRExpressionPropertyDescriptor dataRangeHighExprD = new JRExpressionPropertyDescriptor(
-				JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION,
-				"Data Range High Expression");
-		dataRangeHighExprD.setDescription("Data range high expression.");
+				JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION, //$NON-NLS-1$
+				Messages.MThermometerPlot_data_range_high_expression);
+		dataRangeHighExprD.setDescription(Messages.MThermometerPlot_data_range_high_expression_description);
 		desc.add(dataRangeHighExprD);
 
 		JRExpressionPropertyDescriptor dataRangeLowExprD = new JRExpressionPropertyDescriptor(
-				JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION,
-				"Data Range Low Expression");
-		dataRangeLowExprD.setDescription("Data range low expression.");
+				JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION, //$NON-NLS-1$
+				Messages.MThermometerPlot_data_range_low_expression);
+		dataRangeLowExprD.setDescription(Messages.MThermometerPlot_data_range_low_expression_description);
 		desc.add(dataRangeLowExprD);
 
 		JRExpressionPropertyDescriptor highRangeHighExprD = new JRExpressionPropertyDescriptor(
-				JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION,
-				"High Range High Expression");
-		highRangeHighExprD.setDescription("High range high expression.");
+				JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION, //$NON-NLS-1$
+				Messages.MThermometerPlot_high_range_high_expression);
+		highRangeHighExprD.setDescription(Messages.MThermometerPlot_high_range_high_expression_description);
 		desc.add(highRangeHighExprD);
 
 		JRExpressionPropertyDescriptor highRangeLowExprD = new JRExpressionPropertyDescriptor(
-				JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION,
-				"High Range Low Expression");
-		highRangeLowExprD.setDescription("High range low expression.");
+				JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION, //$NON-NLS-1$
+				Messages.MThermometerPlot_high_range_low_expression);
+		highRangeLowExprD.setDescription(Messages.MThermometerPlot_high_range_low_expression_description);
 		desc.add(highRangeLowExprD);
 
 		JRExpressionPropertyDescriptor lowRangeHighExprD = new JRExpressionPropertyDescriptor(
-				JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION,
-				"Low Range High Expression");
-		lowRangeHighExprD.setDescription("Low range high expression.");
+				JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION, //$NON-NLS-1$
+				Messages.MThermometerPlot_low_range_high_expression);
+		lowRangeHighExprD.setDescription(Messages.MThermometerPlot_low_range_high_expression_description);
 		desc.add(lowRangeHighExprD);
 
 		JRExpressionPropertyDescriptor lowRangeLowExprD = new JRExpressionPropertyDescriptor(
-				JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION,
-				"Low Range Low Expression");
-		lowRangeLowExprD.setDescription("Low range low expression.");
+				JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION, //$NON-NLS-1$
+				Messages.MThermometerPlot_low_range_low_expression);
+		lowRangeLowExprD.setDescription(Messages.MThermometerPlot_low_range_low_expression_description);
 		desc.add(lowRangeLowExprD);
 
 		JRExpressionPropertyDescriptor medRangeHighExprD = new JRExpressionPropertyDescriptor(
-				JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION,
-				"Medium Range High Expression");
-		medRangeHighExprD.setDescription("Medium range high expression.");
+				JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION, //$NON-NLS-1$
+				Messages.MThermometerPlot_medium_range_high_expression);
+		medRangeHighExprD.setDescription(Messages.MThermometerPlot_medium_range_high_expression_description);
 		desc.add(medRangeHighExprD);
 
 		JRExpressionPropertyDescriptor medRangeLowExprD = new JRExpressionPropertyDescriptor(
-				JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION,
-				"Medium Range Low Expression");
-		medRangeLowExprD.setDescription("Medium range low expression.");
+				JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION, //$NON-NLS-1$
+				Messages.MThermometerPlot_medium_range_low_expression);
+		medRangeLowExprD.setDescription(Messages.MThermometerPlot_medium_range_low_expression_description);
 		desc.add(medRangeLowExprD);
 
 		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignThermometerPlot.PROPERTY_VALUE_LOCATION, "Value Location", EnumHelper.getEnumNames(
+				JRDesignThermometerPlot.PROPERTY_VALUE_LOCATION, Messages.MThermometerPlot_value_location, EnumHelper.getEnumNames(
 						ValueLocationEnum.values(), NullEnum.NOTNULL));
-		positionTypeD.setDescription("Value Location.");
+		positionTypeD.setDescription(Messages.MThermometerPlot_value_location_description);
 		desc.add(positionTypeD);
 
 	}
@@ -167,56 +167,56 @@ public class MThermometerPlot extends MChartPlot {
 		JRDesignThermometerPlot jrElement = (JRDesignThermometerPlot) getValue();
 		if (id.equals(JRDesignThermometerPlot.PROPERTY_MERCURY_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getMercuryColor());
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR))
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR)) //$NON-NLS-1$
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueDisplay().getColor());
 
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_MASK))
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_MASK)) //$NON-NLS-1$
 			return jrElement.getValueDisplay().getMask();
 		if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_LOCATION))
 			return EnumHelper.getValue(jrElement.getValueLocationValue(), 0, false);
 
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) {
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
 			if (drhAnchorExpression == null)
 				drhAnchorExpression = new MExpression(jrElement.getDataRange().getHighExpression());
 			return drhAnchorExpression;
 		}
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) {
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
 			if (drlAnchorExpression == null)
 				drlAnchorExpression = new MExpression(jrElement.getDataRange().getLowExpression());
 			return drlAnchorExpression;
 		}
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) {
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
 			if (hrhAnchorExpression == null)
 				hrhAnchorExpression = new MExpression(jrElement.getHighRange().getHighExpression());
 			return hrhAnchorExpression;
 		}
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) {
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
 			if (hrlAnchorExpression == null)
 				hrlAnchorExpression = new MExpression(jrElement.getHighRange().getLowExpression());
 			return hrlAnchorExpression;
 		}
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) {
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
 			if (lrhAnchorExpression == null)
 				lrhAnchorExpression = new MExpression(jrElement.getLowRange().getHighExpression());
 			return lrhAnchorExpression;
 		}
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) {
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
 			if (lrlAnchorExpression == null)
 				lrlAnchorExpression = new MExpression(jrElement.getLowRange().getLowExpression());
 			return lrlAnchorExpression;
 		}
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) {
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
 			if (mrhAnchorExpression == null)
 				mrhAnchorExpression = new MExpression(jrElement.getMediumRange().getHighExpression());
 			return mrhAnchorExpression;
 		}
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) {
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
 			if (mrlAnchorExpression == null)
 				mrlAnchorExpression = new MExpression(jrElement.getMediumRange().getLowExpression());
 			return mrlAnchorExpression;
 		}
 
-		if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_FONT)) {
+		if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
 			if (vtFont == null)
 				vtFont = new MFont(jrElement.getValueDisplay().getFont());
 			return vtFont;
@@ -236,7 +236,7 @@ public class MThermometerPlot extends MChartPlot {
 		JRDesignThermometerPlot jrElement = (JRDesignThermometerPlot) getValue();
 		if (id.equals(JRDesignThermometerPlot.PROPERTY_MERCURY_COLOR) && value instanceof RGB)
 			jrElement.setMercuryColor(Colors.getAWT4SWTRGBColor((RGB) value));
-		else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR)
+		else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR) //$NON-NLS-1$
 				&& value instanceof RGB) {
 			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(jrElement.getValueDisplay(),
 					jrElement.getChart());
@@ -245,7 +245,7 @@ public class MThermometerPlot extends MChartPlot {
 
 		}
 
-		else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_MASK)) {
+		else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_MASK)) { //$NON-NLS-1$
 			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(jrElement.getValueDisplay(),
 					jrElement.getChart());
 			jrDesignValueDisplay.setMask((String) value);
@@ -254,56 +254,56 @@ public class MThermometerPlot extends MChartPlot {
 			jrElement
 					.setValueLocation((ValueLocationEnum) EnumHelper.getSetValue(ValueLocationEnum.values(), value, 0, false));
 
-		else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "."
+		else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." //$NON-NLS-1$
 				+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION))) {
 			if (value instanceof MExpression) {
 				drhAnchorExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) drhAnchorExpression.getValue();
 				((JRDesignDataRange) jrElement.getDataRange()).setHighExpression(expression);
 			}
-		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "."
+		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." //$NON-NLS-1$
 				+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION))) {
 			if (value instanceof MExpression) {
 				drlAnchorExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) drlAnchorExpression.getValue();
 				((JRDesignDataRange) jrElement.getDataRange()).setLowExpression(expression);
 			}
-		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "."
+		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." //$NON-NLS-1$
 				+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION))) {
 			if (value instanceof MExpression) {
 				hrhAnchorExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) hrhAnchorExpression.getValue();
 				((JRDesignDataRange) jrElement.getHighRange()).setHighExpression(expression);
 			}
-		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "."
+		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "." //$NON-NLS-1$
 				+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION))) {
 			if (value instanceof MExpression) {
 				hrlAnchorExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) hrlAnchorExpression.getValue();
 				((JRDesignDataRange) jrElement.getHighRange()).setLowExpression(expression);
 			}
-		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "."
+		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." //$NON-NLS-1$
 				+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION))) {
 			if (value instanceof MExpression) {
 				lrhAnchorExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) lrhAnchorExpression.getValue();
 				((JRDesignDataRange) jrElement.getLowRange()).setHighExpression(expression);
 			}
-		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "."
+		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "." //$NON-NLS-1$
 				+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION))) {
 			if (value instanceof MExpression) {
 				lrlAnchorExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) lrlAnchorExpression.getValue();
 				((JRDesignDataRange) jrElement.getLowRange()).setLowExpression(expression);
 			}
-		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "."
+		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." //$NON-NLS-1$
 				+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION))) {
 			if (value instanceof MExpression) {
 				mrhAnchorExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) mrhAnchorExpression.getValue();
 				((JRDesignDataRange) jrElement.getMediumRange()).setHighExpression(expression);
 			}
-		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "."
+		} else if (id.equals(id.equals(JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "." //$NON-NLS-1$
 				+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION))) {
 			if (value instanceof MExpression) {
 				mrlAnchorExpression = (MExpression) value;

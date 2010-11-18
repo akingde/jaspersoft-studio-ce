@@ -51,7 +51,7 @@ public class MMeterPlot extends MChartPlot {
 		super(value);
 	}
 	public String getDisplayText() {
-		return "Meter Plot";
+		return Messages.MMeterPlot_meter_plot;
 	}
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
@@ -77,69 +77,69 @@ public class MMeterPlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor meterBackgroundColorD = new ColorPropertyDescriptor(
-				JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR, "Meter Background Color", NullEnum.NULL);
-		meterBackgroundColorD.setDescription("Meter background color.");
+				JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR, Messages.MMeterPlot_meter_background_color, NullEnum.NULL);
+		meterBackgroundColorD.setDescription(Messages.MMeterPlot_meter_background_color_description);
 		desc.add(meterBackgroundColorD);
 
 		ColorPropertyDescriptor tickColorD = new ColorPropertyDescriptor(JRDesignMeterPlot.PROPERTY_TICK_COLOR,
-				"Tick Color", NullEnum.NULL);
-		tickColorD.setDescription("Tick color.");
+				Messages.MMeterPlot_tick_color, NullEnum.NULL);
+		tickColorD.setDescription(Messages.MMeterPlot_tick_color_description);
 		desc.add(tickColorD);
 
 		ColorPropertyDescriptor needleColorD = new ColorPropertyDescriptor(JRDesignMeterPlot.PROPERTY_NEEDLE_COLOR,
-				"Needle Color", NullEnum.NULL);
-		needleColorD.setDescription("Needle color.");
+				Messages.MMeterPlot_needle_color, NullEnum.NULL);
+		needleColorD.setDescription(Messages.MMeterPlot_needle_color_description);
 		desc.add(needleColorD);
 
-		ColorPropertyDescriptor valueColorD = new ColorPropertyDescriptor(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "."
-				+ JRDesignValueDisplay.PROPERTY_COLOR, "Value Color", NullEnum.NULL);
-		valueColorD.setDescription("Value color.");
+		ColorPropertyDescriptor valueColorD = new ColorPropertyDescriptor(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
+				+ JRDesignValueDisplay.PROPERTY_COLOR, Messages.MMeterPlot_value_color, NullEnum.NULL);
+		valueColorD.setDescription(Messages.MMeterPlot_value_color_description);
 		desc.add(valueColorD);
 
 		FontPropertyDescriptor tickLabelFontD = new FontPropertyDescriptor(JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT,
-				"Tick Label Font");
-		tickLabelFontD.setDescription("Tick Label Font.");
+				Messages.MMeterPlot_tick_label_font);
+		tickLabelFontD.setDescription(Messages.MMeterPlot_tick_label_font_description);
 		desc.add(tickLabelFontD);
 
-		FontPropertyDescriptor valueFontD = new FontPropertyDescriptor(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "."
-				+ JRDesignValueDisplay.PROPERTY_FONT, "Value Font");
-		valueFontD.setDescription("Value Font.");
+		FontPropertyDescriptor valueFontD = new FontPropertyDescriptor(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
+				+ JRDesignValueDisplay.PROPERTY_FONT, Messages.MMeterPlot_value_font);
+		valueFontD.setDescription(Messages.MMeterPlot_value_font_description);
 		desc.add(valueFontD);
 
 		IntegerPropertyDescriptor meterAngleD = new IntegerPropertyDescriptor(JRDesignMeterPlot.PROPERTY_METER_ANGLE,
-				"Meter Angle");
-		meterAngleD.setDescription("Meter angle.");
+				Messages.MMeterPlot_meter_angle);
+		meterAngleD.setDescription(Messages.MMeterPlot_meter_angle_description);
 		desc.add(meterAngleD);
 
 		DoublePropertyDescriptor tickIntervalD = new DoublePropertyDescriptor(JRDesignMeterPlot.PROPERTY_TICK_INTERVAL,
-				"Tick Interval");
-		tickIntervalD.setDescription("Tick Interval.");
+				Messages.MMeterPlot_tick_interval);
+		tickIntervalD.setDescription(Messages.MMeterPlot_tick_interval_description);
 		desc.add(tickIntervalD);
 
 		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(JRDesignMeterPlot.PROPERTY_SHAPE,
-				"Shape", EnumHelper.getEnumNames(MeterShapeEnum.values(), NullEnum.NOTNULL));
-		positionTypeD.setDescription("Shape.");
+				Messages.MMeterPlot_shape, EnumHelper.getEnumNames(MeterShapeEnum.values(), NullEnum.NOTNULL));
+		positionTypeD.setDescription(Messages.MMeterPlot_shape_description);
 		desc.add(positionTypeD);
 
 		JRExpressionPropertyDescriptor dataRangeHighExprD = new JRExpressionPropertyDescriptor(
-				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION,
-				"Data Range High Expression");
-		dataRangeHighExprD.setDescription("Data Range High Expression.");
+				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION, //$NON-NLS-1$
+				Messages.MMeterPlot_data_range_high_expression);
+		dataRangeHighExprD.setDescription(Messages.MMeterPlot_data_range_high_expression_description);
 		desc.add(dataRangeHighExprD);
 
 		JRExpressionPropertyDescriptor dataRangeLowExprD = new JRExpressionPropertyDescriptor(
-				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION,
-				"Data Range Low Expression");
-		dataRangeLowExprD.setDescription("Data Range Low Expression.");
+				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION, //$NON-NLS-1$
+				Messages.MMeterPlot_data_range_low_expression);
+		dataRangeLowExprD.setDescription(Messages.MMeterPlot_data_range_low_expression_description);
 		desc.add(dataRangeLowExprD);
 
-		NTextPropertyDescriptor unitsD = new NTextPropertyDescriptor(JRDesignMeterPlot.PROPERTY_UNITS, "Units");
-		unitsD.setDescription("Units");
+		NTextPropertyDescriptor unitsD = new NTextPropertyDescriptor(JRDesignMeterPlot.PROPERTY_UNITS, Messages.MMeterPlot_units);
+		unitsD.setDescription(Messages.MMeterPlot_units_description);
 		desc.add(unitsD);
 
-		NTextPropertyDescriptor maskD = new NTextPropertyDescriptor(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "."
-				+ JRDesignValueDisplay.PROPERTY_MASK, "Value Mask");
-		maskD.setDescription("Units");
+		NTextPropertyDescriptor maskD = new NTextPropertyDescriptor(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
+				+ JRDesignValueDisplay.PROPERTY_MASK, Messages.MMeterPlot_value_mask);
+		maskD.setDescription(Messages.MMeterPlot_value_mask_description);
 		desc.add(maskD);
 
 	}
@@ -160,7 +160,7 @@ public class MMeterPlot extends MChartPlot {
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getTickColor());
 		if (id.equals(JRDesignMeterPlot.PROPERTY_NEEDLE_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getNeedleColor());
-		if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR))
+		if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR)) //$NON-NLS-1$
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getValueDisplay().getColor());
 
 		if (id.equals(JRDesignMeterPlot.PROPERTY_METER_ANGLE))
@@ -172,15 +172,15 @@ public class MMeterPlot extends MChartPlot {
 			return EnumHelper.getValue(jrElement.getShapeValue(), 0, false);
 		if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
 			return jrElement.getUnits();
-		if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_MASK))
+		if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_MASK)) //$NON-NLS-1$
 			return jrElement.getValueDisplay().getMask();
 
-		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) {
+		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
 			if (drhaExpression == null)
 				drhaExpression = new MExpression(jrElement.getDataRange().getHighExpression());
 			return drhaExpression;
 		}
-		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) {
+		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
 			if (drlExpression == null)
 				drlExpression = new MExpression(jrElement.getDataRange().getLowExpression());
 			return drlExpression;
@@ -190,7 +190,7 @@ public class MMeterPlot extends MChartPlot {
 				tlFont = new MFont(jrElement.getTickLabelFont());
 			return tlFont;
 		}
-		if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_FONT)) {
+		if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
 			if (vdFont == null)
 				vdFont = new MFont(jrElement.getValueDisplay().getFont());
 			return vdFont;
@@ -214,7 +214,7 @@ public class MMeterPlot extends MChartPlot {
 			jrElement.setTickColor(Colors.getAWT4SWTRGBColor((RGB) value));
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_NEEDLE_COLOR) && value instanceof RGB)
 			jrElement.setNeedleColor(Colors.getAWT4SWTRGBColor((RGB) value));
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR)
+		else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_COLOR) //$NON-NLS-1$
 				&& value instanceof RGB) {
 			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(jrElement.getValueDisplay(),
 					jrElement.getChart());
@@ -233,7 +233,7 @@ public class MMeterPlot extends MChartPlot {
 			}
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
 			jrElement.setUnits((String) value);
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_MASK)) {
+		else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_MASK)) { //$NON-NLS-1$
 			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(jrElement.getValueDisplay(),
 					jrElement.getChart());
 			jrDesignValueDisplay.setMask((String) value);
@@ -245,13 +245,13 @@ public class MMeterPlot extends MChartPlot {
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
 			jrElement.setUnits((String) value);
 
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) {
+		else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
 			if (value instanceof MExpression) {
 				drhaExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) drhaExpression.getValue();
 				((JRDesignDataRange) jrElement.getDataRange()).setHighExpression(expression);
 			}
-		} else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) {
+		} else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
 			if (value instanceof MExpression) {
 				drlExpression = (MExpression) value;
 				JRExpression expression = (JRExpression) drlExpression.getValue();

@@ -47,7 +47,7 @@ public class MBubblePlot extends MChartPlot {
 		super(value);
 	}
 	public String getDisplayText() {
-		return "Bubble Plot";
+		return Messages.MBubblePlot_bubble_plot;
 	}
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
@@ -73,108 +73,108 @@ public class MBubblePlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_COLOR, "Category Axis Label Color", NullEnum.NULL);
-		catAxisLabelColorD.setDescription("Category axis label color.");
+				JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_COLOR, Messages.MBubblePlot_category_axis_label_color, NullEnum.NULL);
+		catAxisLabelColorD.setDescription(Messages.MBubblePlot_category_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor catAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_EXPRESSION, "Category Axis Label Expression");
-		catAxisLabelExprD.setDescription("Category axis label expression.");
+				JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_EXPRESSION, Messages.MBubblePlot_category_axis_label_expression);
+		catAxisLabelExprD.setDescription(Messages.MBubblePlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_FONT, "Category Axis Label Font");
-		catAxisLabelFontD.setDescription("Category Axis Label Font.");
+				JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_FONT, Messages.MBubblePlot_category_axis_label_font);
+		catAxisLabelFontD.setDescription(Messages.MBubblePlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR, "Category Axis Tick Label Color", NullEnum.NULL);
-		catAxisTickLabelColorD.setDescription("Category axis tick label color.");
+				JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR, Messages.MBubblePlot_category_axis_tick_label_color, NullEnum.NULL);
+		catAxisTickLabelColorD.setDescription(Messages.MBubblePlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
 		FontPropertyDescriptor catAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_FONT, "Category Axis Tick Label Font");
-		catAxisTickLabelFontD.setDescription("Category Axis Tick Label Font.");
+				JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_FONT, Messages.MBubblePlot_category_axis_tick_label_font);
+		catAxisTickLabelFontD.setDescription(Messages.MBubblePlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_LINE_COLOR, "Category Axis Line Color", NullEnum.NULL);
-		catAxisLineColorD.setDescription("Category axis line color.");
+				JRDesignBubblePlot.PROPERTY_X_AXIS_LINE_COLOR, Messages.MBubblePlot_category_axis_line_color, NullEnum.NULL);
+		catAxisLineColorD.setDescription(Messages.MBubblePlot_category_axis_line_color_description);
 		desc.add(catAxisLineColorD);
 
 		ColorPropertyDescriptor valAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_COLOR, "Value Axis Label Color", NullEnum.NULL);
-		valAxisLabelColorD.setDescription("Value axis label color.");
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_COLOR, Messages.MBubblePlot_value_axis_label_color, NullEnum.NULL);
+		valAxisLabelColorD.setDescription(Messages.MBubblePlot_value_axis_label_color_description);
 		desc.add(valAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor valAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_EXPRESSION, "Category Value Axis Label Expression");
-		valAxisLabelExprD.setDescription("Category value axis label expression.");
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_EXPRESSION, Messages.MBubblePlot_category_value_axis_label_expression);
+		valAxisLabelExprD.setDescription(Messages.MBubblePlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_FONT, "Value Axis Label Font");
-		valAxisLabelFontD.setDescription("Value Axis Label Font.");
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_FONT, Messages.MBubblePlot_value_axis_label_font);
+		valAxisLabelFontD.setDescription(Messages.MBubblePlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR, "Value Axis Tick Label Color", NullEnum.NULL);
-		valAxisTickLabelColorD.setDescription("Value axis tick label color.");
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR, Messages.MBubblePlot_value_axis_tick_label_color, NullEnum.NULL);
+		valAxisTickLabelColorD.setDescription(Messages.MBubblePlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
 		FontPropertyDescriptor valAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_FONT, "Value Axis Tick Label Font");
-		valAxisTickLabelFontD.setDescription("Value Axis Tick Label Font.");
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_FONT, Messages.MBubblePlot_value_axis_tick_label_font);
+		valAxisTickLabelFontD.setDescription(Messages.MBubblePlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_LINE_COLOR, "Value Axis Line Color", NullEnum.NULL);
-		valAxisLineColorD.setDescription("Value axis line color.");
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_LINE_COLOR, Messages.MBubblePlot_value_axis_line_color, NullEnum.NULL);
+		valAxisLineColorD.setDescription(Messages.MBubblePlot_value_axis_line_color_description);
 		desc.add(valAxisLineColorD);
 
 		JRExpressionPropertyDescriptor rangeAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, "Range Axis Minvalue Expression");
-		rangeAxisMinExprD.setDescription("Range axis minvalue expression.");
+				JRDesignBubblePlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, Messages.MBubblePlot_range_axis_minvalue_expression);
+		rangeAxisMinExprD.setDescription(Messages.MBubblePlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, "Range Axis Maxvalue Expression");
-		rangeAxisMaxExprD.setDescription("Range axis maxvalue expression.");
+				JRDesignBubblePlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, Messages.MBubblePlot_range_axis_maxvalue_expression);
+		rangeAxisMaxExprD.setDescription(Messages.MBubblePlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, "Domain Axis Minvalue Expression");
-		domainAxisMinExprD.setDescription("Domain axis minvalue expression.");
+				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.MBubblePlot_domain_axis_minvalue_expression);
+		domainAxisMinExprD.setDescription(Messages.MBubblePlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, "Domain Axis Maxvalue Expression");
-		domainAxisMaxExprD.setDescription("Domain axis maxvalue expression.");
+				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.MBubblePlot_domain_axis_maxvalue_expression);
+		domainAxisMaxExprD.setDescription(Messages.MBubblePlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS, "Category Axis Vertical Tick Labels", NullEnum.NOTNULL);
-		catAxisVertTickLabelD.setDescription("Category Axis Vertical Tick Labels.");
+				JRDesignBubblePlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS, Messages.MBubblePlot_category_axis_vertical_tick_labels, NullEnum.NOTNULL);
+		catAxisVertTickLabelD.setDescription(Messages.MBubblePlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_VERTICAL_TICK_LABELS, "Value Axis Vertical Tick Labels", NullEnum.NOTNULL);
-		valAxisVertTickLabelD.setDescription("Value Axis Vertical Tick Labels.");
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_VERTICAL_TICK_LABELS, Messages.MBubblePlot_value_axis_vertical_tick_labels, NullEnum.NOTNULL);
+		valAxisVertTickLabelD.setDescription(Messages.MBubblePlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_MASK, "Category Axis Tick Label Mask");
-		catAxisTickLabelMaskD.setDescription("Category Axis Tick Label Mask");
+				JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_MASK, Messages.MBubblePlot_category_axis_tick_label_mask);
+		catAxisTickLabelMaskD.setDescription(Messages.MBubblePlot_category_axis_tick_label_mask_description);
 		desc.add(catAxisTickLabelMaskD);
 
 		NTextPropertyDescriptor valAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_MASK, "Value Axis Tick Label Mask");
-		valAxisTickLabelMaskD.setDescription("Value Axis Tick Label Mask");
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_MASK, Messages.MBubblePlot_value_axis_tick_label_mask);
+		valAxisTickLabelMaskD.setDescription(Messages.MBubblePlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
 		ComboBoxPropertyDescriptor scaleType = new ComboBoxPropertyDescriptor(JRDesignBubblePlot.PROPERTY_SCALE_TYPE,
-				"Scale Type", EnumHelper.getEnumNames(ScaleTypeEnum.values(), NullEnum.NOTNULL));
-		scaleType.setDescription("Scale type.");
+				Messages.MBubblePlot_scale_type, EnumHelper.getEnumNames(ScaleTypeEnum.values(), NullEnum.NOTNULL));
+		scaleType.setDescription(Messages.MBubblePlot_scale_type_description);
 		desc.add(scaleType);
 	}
 

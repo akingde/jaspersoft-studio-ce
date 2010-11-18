@@ -51,34 +51,34 @@ public class MChartPlot extends APropertyNode {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseChartPlot.PROPERTY_BACKCOLOR, "Backcolor",
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseChartPlot.PROPERTY_BACKCOLOR, Messages.MChartPlot_backcolor,
 				NullEnum.INHERITED);
-		backcolorD.setDescription("The plot backcolor.");
+		backcolorD.setDescription(Messages.MChartPlot_backcolor_description);
 		desc.add(backcolorD);
 
 		FloatPropertyDescriptor backAlphaD = new FloatPropertyDescriptor(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA,
-				"Background Alpha (%)");
-		backAlphaD.setDescription("Background Alpha (%).");
+				Messages.MChartPlot_background_alpha_percent);
+		backAlphaD.setDescription(Messages.MChartPlot_background_alpha_percent_description);
 		desc.add(backAlphaD);
 
 		FloatPropertyDescriptor foreAlphaD = new FloatPropertyDescriptor(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA,
-				"Foreground Alpha (%)");
-		foreAlphaD.setDescription("Foreground Alpha (%).");
+				Messages.MChartPlot_foreground_alpha_percent);
+		foreAlphaD.setDescription(Messages.MChartPlot_foreground_alpha_percent_description);
 		desc.add(foreAlphaD);
 
 		DoublePropertyDescriptor labelRotationD = new DoublePropertyDescriptor(JRBaseChartPlot.PROPERTY_LABEL_ROTATION,
-				"Label Rotation");
-		labelRotationD.setDescription("Label Rotation.");
+				Messages.MChartPlot_label_rotation);
+		labelRotationD.setDescription(Messages.MChartPlot_label_rotation_description);
 		desc.add(labelRotationD);
 
 		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(JRBaseChartPlot.PROPERTY_ORIENTATION,
-				"Orientation", new String[] { "horizontal", "vertical" });
-		orientationD.setDescription("Orientation.");
+				Messages.MChartPlot_orientation, new String[] { "horizontal", "vertical" }); //$NON-NLS-2$ //$NON-NLS-3$
+		orientationD.setDescription(Messages.MChartPlot_orientation_description);
 		desc.add(orientationD);
 
 		SeriesColorPropertyDescriptor scpd = new SeriesColorPropertyDescriptor(JRBaseChartPlot.PROPERTY_SERIES_COLORS,
-				"Series Colors");
-		scpd.setDescription("Series colors");
+				Messages.MChartPlot_series_colors);
+		scpd.setDescription(Messages.MChartPlot_series_colors_description);
 		desc.add(scpd);
 
 		defaultsMap.put(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA, null);

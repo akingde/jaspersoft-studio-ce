@@ -50,17 +50,17 @@ public class MChartItemLabel extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR,
-				"Background Color", NullEnum.NULL);
-		backcolorD.setDescription("The background color.");
+				Messages.MChartItemLabel_background_color, NullEnum.NULL);
+		backcolorD.setDescription(Messages.MChartItemLabel_background_color_description);
 		desc.add(backcolorD);
 
-		ColorPropertyDescriptor colorD = new ColorPropertyDescriptor(JRDesignItemLabel.PROPERTY_COLOR, "Color",
+		ColorPropertyDescriptor colorD = new ColorPropertyDescriptor(JRDesignItemLabel.PROPERTY_COLOR, Messages.MChartItemLabel_color,
 				NullEnum.NULL);
-		colorD.setDescription("The color.");
+		colorD.setDescription(Messages.MChartItemLabel_color_description);
 		desc.add(colorD);
 
-		FontPropertyDescriptor fontD = new FontPropertyDescriptor(JRDesignItemLabel.PROPERTY_FONT, "Font");
-		fontD.setDescription("Font.");
+		FontPropertyDescriptor fontD = new FontPropertyDescriptor(JRDesignItemLabel.PROPERTY_FONT, Messages.MChartItemLabel_font);
+		fontD.setDescription(Messages.MChartItemLabel_font_description);
 		desc.add(fontD);
 
 	}
