@@ -30,6 +30,7 @@ import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -121,26 +122,40 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	private ANode createColumnGroup(ANode mcg, JRCrosstabColumnGroup p, int newIndex) {
-		ANode rg = new MColumnGroup(mcg, p, newIndex);
+		MColumnGroup rg = new MColumnGroup(mcg, p, newIndex);
 
+		createColumnGroupCells(rg, p);
+		return rg;
+	}
+
+	public static void createColumnGroupCells(MColumnGroup rg, JRCrosstabColumnGroup p) {
 		MCell mc = new MCell(rg, p.getHeader(), "Header: " + p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
-		mc = new MCell(rg, p.getTotalHeader(), "Total: " + p.getName());
-		ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
-		return rg;
+
+		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
+			mc = new MCell(rg, p.getTotalHeader(), "Total: " + p.getName());
+			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
+		}
 	}
 
 	private ANode createRowGroup(ANode mrg, JRCrosstabRowGroup p, int newIndex) {
-		ANode rg = new MRowGroup(mrg, p, newIndex);
+		MRowGroup rg = new MRowGroup(mrg, p, newIndex);
 
-		MCell mc = new MCell(rg, p.getHeader(), "Header: " + p.getName());
-		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
-		mc = new MCell(rg, p.getTotalHeader(), "Total: " + p.getName());
-		ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
+		createRowGroupCells(rg, p);
 		return rg;
 	}
 
-	public void createCellNodes(JRDesignCrosstab ct, MCrosstab mCrosstab) {
+	public static void createRowGroupCells(MRowGroup rg, JRCrosstabRowGroup p) {
+		MCell mc = new MCell(rg, p.getHeader(), "Header: " + p.getName());
+		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
+
+		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
+			mc = new MCell(rg, p.getTotalHeader(), "Total: " + p.getName());
+			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
+		}
+	}
+
+	public static void createCellNodes(JRDesignCrosstab ct, MCrosstab mCrosstab) {
 		MCell mc = new MCrosstabHeader(mCrosstab, ct.getHeaderCell());
 		if (ct.getHeaderCell() != null)
 			ReportFactory.createElementsForBand(mc, ct.getHeaderCell().getChildren());
@@ -148,31 +163,55 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		for (Iterator<?> it = ct.getCellsList().iterator(); it.hasNext();) {
 			JRDesignCrosstabCell c = (JRDesignCrosstabCell) it.next();
 
+			boolean hide = false;
 			String colname = c.getColumnTotalGroup();
 			if (colname == null)
 				colname = "Detail";
+			else {
+				// get total Column Group and look into total position
+				for (Object obj : ct.getColumnGroupsList()) {
+					JRCrosstabColumnGroup rg = (JRCrosstabColumnGroup) obj;
+					if (rg.getName().equals(colname) && rg.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
+						hide = true;
+						break;
+					}
+				}
+			}
 			String rowname = c.getRowTotalGroup();
 			if (rowname == null)
 				rowname = "Detail";
-			mc = new MCell(mCrosstab, c.getContents(), colname + "/" + rowname);
-			ReportFactory.createElementsForBand(mc, c.getContents().getChildren());
+			else {
+
+				// get total Row Group and look into total position
+				for (Object obj : ct.getRowGroupsList()) {
+					JRCrosstabRowGroup rg = (JRCrosstabRowGroup) obj;
+					if (rg.getName().equals(rowname) && rg.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
+						hide = true;
+						break;
+					}
+				}
+			}
+			if (!hide) {
+				mc = new MCell(mCrosstab, c.getContents(), colname + "/" + rowname);
+				ReportFactory.createElementsForBand(mc, c.getContents().getChildren());
+			}
 		}
 
 		mc = new MCrosstabWhenNoData(mCrosstab, ct.getWhenNoDataCell());
 		if (ct.getWhenNoDataCell() != null) {
 			ReportFactory.createElementsForBand(mc, ct.getWhenNoDataCell().getChildren());
 		}
-		mCrosstab.getCrosstabManager().init((JRDesignCrosstab) mCrosstab.getValue());
+		mCrosstab.getCrosstabManager().refresh();
 	}
 
-	public void deleteCellNodes(MCrosstab mCrosstab) {
+	public static void deleteCellNodes(MCrosstab mCrosstab) {
 		List<INode> nodes = new ArrayList<INode>();
 		for (INode n : mCrosstab.getChildren()) {
 			if (n instanceof MCell)
 				nodes.add(n);
 		}
 		mCrosstab.removeChildren(nodes);
-		mCrosstab.getCrosstabManager().init((JRDesignCrosstab) mCrosstab.getValue());
+		mCrosstab.getCrosstabManager().refresh();
 	}
 
 	public IFigure createFigure(ANode node) {

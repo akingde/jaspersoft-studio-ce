@@ -19,18 +19,23 @@
  */
 package com.jaspersoft.studio.crosstab.model.columngroup;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabColumnPositionEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
+import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.crosstab.model.MCrosstabGroup;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -154,6 +159,18 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 					value, 0, false));
 
 		super.setPropertyValue(id, value);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
+			this.removeChildren();
+			CrosstabComponentFactory.createColumnGroupCells(this, (JRCrosstabColumnGroup) getValue());
+			MCrosstab mCrosstab = getMCrosstab();
+			CrosstabComponentFactory.deleteCellNodes(mCrosstab);
+			CrosstabComponentFactory.createCellNodes((JRDesignCrosstab) mCrosstab.getValue(), mCrosstab);
+		}
+		super.propertyChange(evt);
 	}
 
 	public boolean isCopyable2(Object parent) {

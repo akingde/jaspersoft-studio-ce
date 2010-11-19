@@ -37,7 +37,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.crosstab.CrosstabManager;
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;

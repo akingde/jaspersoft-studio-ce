@@ -28,6 +28,7 @@ import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -231,9 +232,13 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 			jrElement.setIgnoreWidth((Boolean) value);
 		else if (id.equals(JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET))
 			jrElement.setColumnBreakOffset((Integer) value);
-		if (id.equals(JRBaseCrosstab.PROPERTY_RUN_DIRECTION))
+		if (id.equals(JRBaseCrosstab.PROPERTY_RUN_DIRECTION)) {
 			jrElement.setRunDirection((RunDirectionEnum) EnumHelper.getSetValue(RunDirectionEnum.values(), value, 0, false));
-		else if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
+
+			getCrosstabManager().refresh();
+			getPropertyChangeSupport().firePropertyChange(
+					new PropertyChangeEvent(this, JRBaseCrosstab.PROPERTY_RUN_DIRECTION, null, value));
+		} else if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				prmMapExpr = (MExpression) value;
 				JRExpression expression = (JRExpression) prmMapExpr.getValue();

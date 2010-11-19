@@ -1,28 +1,25 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.crosstab.model;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +33,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -146,9 +144,26 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 		JRDesignCrosstabGroup jrField = (JRDesignCrosstabGroup) getValue();
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_NAME))
 			jrField.setName((String) value);
-		else if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION))
+		else if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
 			jrField.setTotalPosition((CrosstabTotalPositionEnum) EnumHelper.getSetValue(CrosstabTotalPositionEnum.values(),
 					value, 0, false));
+			MCrosstab cross = getMCrosstab();
+			cross.getCrosstabManager().refresh();
+			getPropertyChangeSupport().firePropertyChange(
+					new PropertyChangeEvent(this, JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, null, value));
+
+		}
+	}
+
+	public MCrosstab getMCrosstab() {
+		INode node = getParent();
+		while (node != null) {
+			if (node instanceof MCrosstab) {
+				return (MCrosstab) node;
+			}
+			node = node.getParent();
+		}
+		return null;
 	}
 
 }
