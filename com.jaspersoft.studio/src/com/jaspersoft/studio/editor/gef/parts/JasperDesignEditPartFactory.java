@@ -22,6 +22,8 @@ package com.jaspersoft.studio.editor.gef.parts;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
+import com.jaspersoft.studio.ExtensionManager;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MReport;
@@ -43,19 +45,22 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 	 * @see org.eclipse.gef.EditPartFactory#createEditPart(org.eclipse.gef.EditPart, java.lang.Object)
 	 */
 	public EditPart createEditPart(EditPart context, Object model) {
-		EditPart editPart = null;
-		if (model instanceof MRoot) {
-			editPart = new PageEditPart();
-		} else if (model instanceof MReport) {
-			editPart = new PageEditPart();
-		} else if (model instanceof MBand) {
-			editPart = new BandEditPart();
-		} else if (model instanceof MStaticText) {
-			editPart = new StaticTextFigureEditPart();
-		} else if (model instanceof MTextField) {
-			editPart = new TextFieldFigureEditPart();
-		} else if (model instanceof IGraphicElement) {
-			editPart = new FigureEditPart();
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		EditPart editPart = m.createEditPart(context, model);
+		if (editPart == null) {
+			if (model instanceof MRoot) {
+				editPart = new PageEditPart();
+			} else if (model instanceof MReport) {
+				editPart = new PageEditPart();
+			} else if (model instanceof MBand) {
+				editPart = new BandEditPart();
+			} else if (model instanceof MStaticText) {
+				editPart = new StaticTextFigureEditPart();
+			} else if (model instanceof MTextField) {
+				editPart = new TextFieldFigureEditPart();
+			} else if (model instanceof IGraphicElement) {
+				editPart = new FigureEditPart();
+			}
 		}
 		if (editPart != null)
 			editPart.setModel(model);

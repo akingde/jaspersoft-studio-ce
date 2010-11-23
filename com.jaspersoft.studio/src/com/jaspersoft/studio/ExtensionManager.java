@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
@@ -108,6 +109,15 @@ public class ExtensionManager {
 	public IFigure createFigure(ANode node) {
 		for (IComponentFactory f : nodeFactory) {
 			IFigure c = f.createFigure(node);
+			if (c != null)
+				return c;
+		}
+		return null;
+	}
+
+	public EditPart createEditPart(EditPart context, Object model) {
+		for (IComponentFactory f : nodeFactory) {
+			EditPart c = f.createEditPart(context, model);
 			if (c != null)
 				return c;
 		}

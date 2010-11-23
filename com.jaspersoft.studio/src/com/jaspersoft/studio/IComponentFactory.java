@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
@@ -37,6 +38,8 @@ public interface IComponentFactory {
 	public List<Class<?>> getPaletteEntries();
 
 	public IFigure createFigure(final ANode node);
+	
+	public EditPart createEditPart(EditPart context, Object model);
 
 	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex);
 
