@@ -47,6 +47,7 @@ import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
@@ -285,6 +286,10 @@ public class ChartComponentFactory implements IComponentFactory {
 		lst.add(CreateXYAction.ID);
 		lst.add(CreateXYZAction.ID);
 		return lst;
+	}
+
+	public EditPart createEditPart(EditPart context, Object model) {
+		return null;
 	}
 
 }
