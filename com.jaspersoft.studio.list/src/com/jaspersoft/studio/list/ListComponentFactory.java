@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
@@ -37,7 +38,6 @@ import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.list.figure.ListFigure;
 import com.jaspersoft.studio.list.model.MList;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
@@ -114,6 +114,10 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	public List<String> getActionsID() {
+		return null;
+	}
+
+	public EditPart createEditPart(EditPart context, Object model) {
 		return null;
 	}
 
