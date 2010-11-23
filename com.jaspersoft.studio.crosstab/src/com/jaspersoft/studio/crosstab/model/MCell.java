@@ -19,11 +19,14 @@
  */
 package com.jaspersoft.studio.crosstab.model;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.JRCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -189,10 +192,10 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		styleD.setDescription("Name of the report level style to use as base style (see <style> element).");
 		desc.add(styleD);
 
-		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor("WIDTH", "Width");
+		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_WIDTH, "Width");
 		desc.add(wD);
 
-		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor("HEIGHT", "Height");
+		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_HEIGHT, "Height");
 		desc.add(hD);
 
 		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, "Line Box");
@@ -226,9 +229,9 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 					return jrElement.getStyle().getName();
 				return "";
 			}
-			if (id.equals("WIDTH"))
+			if (id.equals(JRDesignCrosstabCell.PROPERTY_WIDTH))
 				return jrElement.getWidth();
-			if (id.equals("HEIGHT"))
+			if (id.equals(JRDesignCrosstabCell.PROPERTY_HEIGHT))
 				return jrElement.getHeight();
 			if (id.equals(LINE_BOX)) {
 				JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
@@ -265,7 +268,26 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 						jrElement.setStyle(null);
 					}
 				}
+			} else if (id.equals(JRDesignCrosstabCell.PROPERTY_WIDTH)) {
+				MCrosstab cross = getMCrosstab();
+
+				cross.getCrosstabManager().setWidth(jrElement, (Integer) value);
+
+				cross.getCrosstabManager().refresh();
+				getPropertyChangeSupport().firePropertyChange(
+						new PropertyChangeEvent(this, JRDesignCrosstabCell.PROPERTY_WIDTH, null, value));
+
+			} else if (id.equals(JRDesignCrosstabCell.PROPERTY_HEIGHT)) {
+				MCrosstab cross = getMCrosstab();
+
+				cross.getCrosstabManager().setHeight(jrElement, (Integer) value);
+
+				cross.getCrosstabManager().refresh();
+				getPropertyChangeSupport().firePropertyChange(
+						new PropertyChangeEvent(this, JRDesignCrosstabCell.PROPERTY_HEIGHT, null, value));
+
 			}
+
 		}
 	}
 

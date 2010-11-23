@@ -111,6 +111,9 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 		JRPropertyDescriptor bucketD = new JRPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_BUCKET, "Bucket");
 		bucketD.setDescription("Bucket.");
 		desc.add(bucketD);
+		
+		
+		
 
 	}
 
@@ -151,7 +154,6 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 			cross.getCrosstabManager().refresh();
 			getPropertyChangeSupport().firePropertyChange(
 					new PropertyChangeEvent(this, JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, null, value));
-
 		}
 	}
 

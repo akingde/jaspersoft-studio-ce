@@ -40,6 +40,7 @@ import com.jaspersoft.studio.crosstab.model.MCrosstabGroup;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -133,6 +134,11 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 		columnPositionD.setDescription("Column Position.");
 		desc.add(columnPositionD);
 
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT,
+				"Height");
+		heightD.setDescription("Height");
+		desc.add(heightD);
+
 	}
 
 	/*
@@ -144,6 +150,8 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 		JRDesignCrosstabColumnGroup jrField = (JRDesignCrosstabColumnGroup) getValue();
 		if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_POSITION))
 			return EnumHelper.getValue(jrField.getPositionValue(), 0, false);
+		if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT))
+			return jrField.getHeight();
 		return super.getPropertyValue(id);
 	}
 
@@ -157,8 +165,14 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 		if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_POSITION))
 			jrField.setPosition((CrosstabColumnPositionEnum) EnumHelper.getSetValue(CrosstabColumnPositionEnum.values(),
 					value, 0, false));
-
-		super.setPropertyValue(id, value);
+		else if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT)) {
+			jrField.setHeight((Integer) value);
+			MCrosstab cross = getMCrosstab();
+			cross.getCrosstabManager().refresh();
+			getPropertyChangeSupport().firePropertyChange(
+					new PropertyChangeEvent(this, JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT, null, value));
+		} else
+			super.setPropertyValue(id, value);
 	}
 
 	@Override

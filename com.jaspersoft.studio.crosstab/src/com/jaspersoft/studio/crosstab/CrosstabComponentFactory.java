@@ -34,6 +34,7 @@ import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
@@ -167,30 +168,15 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			String colname = c.getColumnTotalGroup();
 			if (colname == null)
 				colname = "Detail";
-			else {
-				// get total Column Group and look into total position
-				for (Object obj : ct.getColumnGroupsList()) {
-					JRCrosstabColumnGroup rg = (JRCrosstabColumnGroup) obj;
-					if (rg.getName().equals(colname) && rg.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-						hide = true;
-						break;
-					}
-				}
-			}
+			else
+				hide = isColumnGroupTotal(ct, colname);
+
 			String rowname = c.getRowTotalGroup();
 			if (rowname == null)
 				rowname = "Detail";
-			else {
+			else
+				hide = hide || isRowGroupTotal(ct, rowname);
 
-				// get total Row Group and look into total position
-				for (Object obj : ct.getRowGroupsList()) {
-					JRCrosstabRowGroup rg = (JRCrosstabRowGroup) obj;
-					if (rg.getName().equals(rowname) && rg.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-						hide = true;
-						break;
-					}
-				}
-			}
 			if (!hide) {
 				mc = new MCell(mCrosstab, c.getContents(), colname + "/" + rowname);
 				ReportFactory.createElementsForBand(mc, c.getContents().getChildren());
@@ -202,6 +188,24 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			ReportFactory.createElementsForBand(mc, ct.getWhenNoDataCell().getChildren());
 		}
 		mCrosstab.getCrosstabManager().refresh();
+	}
+
+	private static boolean isRowGroupTotal(JRDesignCrosstab ct, String rowname) {
+		for (Object obj : ct.getRowGroupsList()) {
+			JRCrosstabRowGroup rg = (JRCrosstabRowGroup) obj;
+			if (rg.getName().equals(rowname))
+				return rg.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE);
+		}
+		return false;
+	}
+
+	private static boolean isColumnGroupTotal(JRDesignCrosstab ct, String colname) {
+		for (Object obj : ct.getColumnGroupsList()) {
+			JRCrosstabColumnGroup rg = (JRCrosstabColumnGroup) obj;
+			if (rg.getName().equals(colname))
+				return rg.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE);
+		}
+		return false;
 	}
 
 	public static void deleteCellNodes(MCrosstab mCrosstab) {
@@ -340,6 +344,12 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		lst.add(CreateCrosstabHeaderAction.ID);
 		lst.add(CreateCrosstabWhenNoDataAction.ID);
 		return lst;
+	}
+
+	public EditPart createEditPart(EditPart context, Object model) {
+//		if (model instanceof MCell)
+//			return new CrosstabCellEditPart();
+		return null;
 	}
 
 }
