@@ -49,7 +49,7 @@ public class ReorderXYSeriesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderXYSeriesCommand(MXYSeries child, MChartDataset parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderXYSeriesCommand_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignXySeries) child.getValue();
 		this.jrGroup = (JRDesignXyDataset) parent.getValue();

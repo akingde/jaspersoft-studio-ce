@@ -37,7 +37,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 public class CreateChartAxisAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_chartaxis";
+	public static final String ID = "create_chartaxis"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -55,8 +55,8 @@ public class CreateChartAxisAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create ChartAxis");
-		setToolTipText("Create chart axis");
+		setText(Messages.CreateChartAxisAction_create_chartaxis);
+		setToolTipText(Messages.CreateChartAxisAction_create_chartaxis_tool_tip);
 		setId(CreateChartAxisAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

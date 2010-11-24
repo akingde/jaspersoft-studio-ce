@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 public class CreateTimePeriodAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_timeperiod";
+	public static final String ID = "create_timeperiod"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,8 +51,8 @@ public class CreateTimePeriodAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Time Period Series");
-		setToolTipText("Create Time Period Series");
+		setText(Messages.CreateTimePeriodAction_create_time_period_series);
+		setToolTipText(Messages.CreateTimePeriodAction_create_time_period_series_tool_tip);
 		setId(CreateTimePeriodAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

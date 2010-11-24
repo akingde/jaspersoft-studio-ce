@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 public class CreatePieAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_pie";
+	public static final String ID = "create_pie"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,8 +51,8 @@ public class CreatePieAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Pie Series");
-		setToolTipText("Create Pie Series");
+		setText(Messages.CreatePieAction_create_pie_series);
+		setToolTipText(Messages.CreatePieAction_create_pie_series_tool_tip);
 		setId(CreatePieAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

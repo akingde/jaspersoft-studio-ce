@@ -64,7 +64,7 @@ public class DeleteGanttSeriesCommand extends Command {
 		elementPosition = jrGroup.getSeriesList().indexOf(jrElement);
 
 		jrGroup.removeGanttSeries(jrElement);
-		jrGroup.getEventSupport().fireCollectionElementRemovedEvent("ganttSeries", jrElement, elementPosition);
+		jrGroup.getEventSupport().fireCollectionElementRemovedEvent("ganttSeries", jrElement, elementPosition); //$NON-NLS-1$
 	}
 
 	/*
@@ -87,7 +87,7 @@ public class DeleteGanttSeriesCommand extends Command {
 	@Override
 	public void undo() {
 		jrGroup.addGanttSeries(jrElement);
-		jrGroup.getEventSupport().fireCollectionElementAddedEvent("ganttSeries", jrElement,
+		jrGroup.getEventSupport().fireCollectionElementAddedEvent("ganttSeries", jrElement, //$NON-NLS-1$
 				jrGroup.getSeriesList().size() - 1);
 	}
 }

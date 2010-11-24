@@ -49,7 +49,7 @@ public class ReorderTimeSeriesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderTimeSeriesCommand(MTimeSeries child, MChartDataset parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderTimeSeriesCommand_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignTimeSeries) child.getValue();
 		this.jrGroup = (JRDesignTimeSeriesDataset) parent.getValue();

@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 public class CreateGanttAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_gantt";
+	public static final String ID = "create_gantt"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,8 +51,8 @@ public class CreateGanttAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Gantt Series");
-		setToolTipText("Create Gantt Series");
+		setText(Messages.CreateGanttAction_create_gantt_series);
+		setToolTipText(Messages.CreateGanttAction_create_gantt_series_tool_tip);
 		setId(CreateGanttAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

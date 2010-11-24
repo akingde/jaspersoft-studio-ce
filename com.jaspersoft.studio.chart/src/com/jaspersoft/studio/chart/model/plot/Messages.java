@@ -242,12 +242,14 @@ public class Messages extends NLS {
 	public static String MChartPlot_background_alpha_percent_description;
 	public static String MChartPlot_foreground_alpha_percent;
 	public static String MChartPlot_foreground_alpha_percent_description;
+	public static String MChartPlot_horizontal;
 	public static String MChartPlot_label_rotation;
 	public static String MChartPlot_label_rotation_description;
 	public static String MChartPlot_orientation;
 	public static String MChartPlot_orientation_description;
 	public static String MChartPlot_series_colors;
 	public static String MChartPlot_series_colors_description;
+	public static String MChartPlot_vertical;
 	public static String MHighLowPlot_category_axis_label_color;
 	public static String MHighLowPlot_category_axis_label_color_description;
 	public static String MHighLowPlot_category_axis_label_expression;

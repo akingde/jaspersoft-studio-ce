@@ -48,11 +48,11 @@ public class MChartValueDataset extends MChartDataset {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor valExpD = new JRExpressionPropertyDescriptor(
-				JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION, "Value Expression");
-		valExpD.setDescription("Value expression.");
+				JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION, Messages.MChartValueDataset_value_expression);
+		valExpD.setDescription(Messages.MChartValueDataset_value_expression_description);
 		desc.add(valExpD);
 
-		valExpD.setCategory("Chart Value Dataset");
+		valExpD.setCategory(Messages.MChartValueDataset_chart_value_dataset_category);
 
 		defaultsMap.put(JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION, null);
 

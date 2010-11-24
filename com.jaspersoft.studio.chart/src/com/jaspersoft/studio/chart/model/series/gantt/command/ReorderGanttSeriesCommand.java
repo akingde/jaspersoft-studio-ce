@@ -49,7 +49,7 @@ public class ReorderGanttSeriesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderGanttSeriesCommand(MGanttSeries child, MChartDataset parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderGanttSeriesCommand_reorder_elements); 
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignGanttSeries) child.getValue();
 		this.jrGroup = (JRDesignGanttDataset) parent.getValue();
@@ -64,10 +64,10 @@ public class ReorderGanttSeriesCommand extends Command {
 		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 
 		jrGroup.addGanttSeries(jrElement);
-		jrGroup.getEventSupport().fireCollectionElementAddedEvent("ganttSeries", jrElement,
+		jrGroup.getEventSupport().fireCollectionElementAddedEvent("ganttSeries", jrElement, //$NON-NLS-1$
 				jrGroup.getSeriesList().size() - 1);
 		jrGroup.removeGanttSeries(jrElement);
-		jrGroup.getEventSupport().fireCollectionElementRemovedEvent("ganttSeries", jrElement, newIndex);
+		jrGroup.getEventSupport().fireCollectionElementRemovedEvent("ganttSeries", jrElement, newIndex); //$NON-NLS-1$
 	}
 
 	/*
@@ -77,10 +77,10 @@ public class ReorderGanttSeriesCommand extends Command {
 	 */
 	public void undo() {
 		jrGroup.removeGanttSeries(jrElement);
-		jrGroup.getEventSupport().fireCollectionElementRemovedEvent("ganttSeries", jrElement, newIndex);
+		jrGroup.getEventSupport().fireCollectionElementRemovedEvent("ganttSeries", jrElement, newIndex); //$NON-NLS-1$
 
 		jrGroup.addGanttSeries(jrElement);
-		jrGroup.getEventSupport().fireCollectionElementAddedEvent("ganttSeries", jrElement,
+		jrGroup.getEventSupport().fireCollectionElementAddedEvent("ganttSeries", jrElement, //$NON-NLS-1$
 				jrGroup.getSeriesList().size() - 1);
 	}
 

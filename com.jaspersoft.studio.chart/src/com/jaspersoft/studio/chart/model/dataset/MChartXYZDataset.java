@@ -18,7 +18,7 @@ public class MChartXYZDataset extends MChartDataset {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("xyzSeries")) {
+		if (evt.getPropertyName().equals("xyzSeries")) { //$NON-NLS-1$
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;

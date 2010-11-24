@@ -18,7 +18,7 @@ public class MChartTimePeriodDataset extends MChartDataset {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("timePeriodSeries")) {
+		if (evt.getPropertyName().equals("timePeriodSeries")) { //$NON-NLS-1$
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;

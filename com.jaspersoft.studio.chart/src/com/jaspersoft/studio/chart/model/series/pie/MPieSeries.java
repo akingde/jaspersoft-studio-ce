@@ -32,7 +32,7 @@ public class MPieSeries extends APropertyNode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ChartNodeIconDescriptor("pieseries");
+			iconDescriptor = new ChartNodeIconDescriptor("pieseries"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -73,23 +73,23 @@ public class MPieSeries extends APropertyNode {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor keyExpD = new JRExpressionPropertyDescriptor(
-				JRDesignPieSeries.PROPERTY_KEY_EXPRESSION, "Key Expression");
-		keyExpD.setDescription("Key Expression.");
+				JRDesignPieSeries.PROPERTY_KEY_EXPRESSION, Messages.MPieSeries_key_expression);
+		keyExpD.setDescription(Messages.MPieSeries_key_expression_description);
 		desc.add(keyExpD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION, "Label Expression");
-		lblExprD.setDescription("Label expression.");
+				JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION, Messages.MPieSeries_label_expression);
+		lblExprD.setDescription(Messages.MPieSeries_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor valExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION, "Value Expression");
-		valExprD.setDescription("Valule expression.");
+				JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION, Messages.MPieSeries_value_expression);
+		valExprD.setDescription(Messages.MPieSeries_value_expression_description);
 		desc.add(valExprD);
 
 		JRPropertyDescriptor sectionHyperLinkD = new JRPropertyDescriptor(JRDesignPieSeries.PROPERTY_SECTION_HYPERLINK,
-				"Section Hyperlink");
-		sectionHyperLinkD.setDescription("Section Hyperlink");
+				Messages.MPieSeries_section_hyperlink);
+		sectionHyperLinkD.setDescription(Messages.MPieSeries_section_hyperlink_description);
 		desc.add(sectionHyperLinkD);
 
 		defaultsMap.put(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION, null);

@@ -4,10 +4,10 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.chart.model.messages"; //$NON-NLS-1$
-	public static String MChart_chart_legend;
-	public static String MChart_chart_subtitle;
-	public static String MChart_chart_title;
-	public static String MChart_common_chart_properties;
+	public static String MChart_chart_legend_category;
+	public static String MChart_chart_subtitle_category;
+	public static String MChart_chart_title_category;
+	public static String MChart_common_chart_properties_category;
 	public static String MChart_customizer_class;
 	public static String MChart_customizer_class_description;
 	public static String MChart_dataset;

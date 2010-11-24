@@ -32,7 +32,7 @@ public class MGanttSeries extends APropertyNode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ChartNodeIconDescriptor("ganttseries");
+			iconDescriptor = new ChartNodeIconDescriptor("ganttseries"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -73,43 +73,43 @@ public class MGanttSeries extends APropertyNode {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor endDateExpD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION, "End Date Expression");
-		endDateExpD.setDescription("End Date Expression.");
+				JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION, Messages.MGanttSeries_end_date_expression);
+		endDateExpD.setDescription(Messages.MGanttSeries_end_date_expression_description);
 		desc.add(endDateExpD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION, "Label Expression");
-		lblExprD.setDescription("Label expression.");
+				JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION, Messages.MGanttSeries_label_expression);
+		lblExprD.setDescription(Messages.MGanttSeries_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION, "Series Expression");
-		seriesExprD.setDescription("Series expression.");
+				JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION, Messages.MGanttSeries_series_expression);
+		seriesExprD.setDescription(Messages.MGanttSeries_series_expression_description);
 		desc.add(seriesExprD);
 
 		JRExpressionPropertyDescriptor percExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_PERCENT_EXPRESSION, "Percent Expression");
-		percExprD.setDescription("Percent expression.");
+				JRDesignGanttSeries.PROPERTY_PERCENT_EXPRESSION, Messages.MGanttSeries_percent_expression);
+		percExprD.setDescription(Messages.MGanttSeries_percent_expression_description);
 		desc.add(percExprD);
 
 		JRExpressionPropertyDescriptor startDateExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION, "Start Date Expression");
-		startDateExprD.setDescription("Start date expression.");
+				JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION, Messages.MGanttSeries_start_date_expression);
+		startDateExprD.setDescription(Messages.MGanttSeries_start_date_expression_description);
 		desc.add(startDateExprD);
 
 		JRExpressionPropertyDescriptor subtaskExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_SUBTASK_EXPRESSION, "Subtask Expression");
-		subtaskExprD.setDescription("Subtask expression.");
+				JRDesignGanttSeries.PROPERTY_SUBTASK_EXPRESSION, Messages.MGanttSeries_subtask_expression);
+		subtaskExprD.setDescription(Messages.MGanttSeries_subtask_expression_description);
 		desc.add(subtaskExprD);
 
 		JRExpressionPropertyDescriptor taskExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION, "Task Expression");
-		taskExprD.setDescription("Task expression.");
+				JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION, Messages.MGanttSeries_task_expression);
+		taskExprD.setDescription(Messages.MGanttSeries_task_expression_description);
 		desc.add(taskExprD);
 
 		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignGanttSeries.PROPERTY_ITEM_HYPERLINK,
-				"Item Hyperlink");
-		itemHyperLinkD.setDescription("Item Hyperlink");
+				Messages.MGanttSeries_item_hyperlink);
+		itemHyperLinkD.setDescription(Messages.MGanttSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 
 		defaultsMap.put(JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION, null);

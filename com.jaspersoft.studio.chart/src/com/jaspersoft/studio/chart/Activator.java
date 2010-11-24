@@ -99,7 +99,7 @@ public class Activator extends AbstractUIPlugin {
 			if (image != null)
 				imageRegistry.put(path, image);
 			else
-				image = imageRegistry.get("icons/barcode.png");
+				image = imageRegistry.get("icons/barcode.png"); //$NON-NLS-1$
 		}
 		return image;
 	}

@@ -32,7 +32,7 @@ public class MTimePeriodSeries extends APropertyNode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ChartNodeIconDescriptor("timeperiodseries");
+			iconDescriptor = new ChartNodeIconDescriptor("timeperiodseries"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -73,33 +73,33 @@ public class MTimePeriodSeries extends APropertyNode {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor startDateExpD = new JRExpressionPropertyDescriptor(
-				JRDesignTimePeriodSeries.PROPERTY_START_DATE_EXPRESSION, "Start Date Expression");
-		startDateExpD.setDescription("Start Date Expression.");
+				JRDesignTimePeriodSeries.PROPERTY_START_DATE_EXPRESSION, Messages.MTimePeriodSeries_start_date_expression);
+		startDateExpD.setDescription(Messages.MTimePeriodSeries_start_date_expression_description);
 		desc.add(startDateExpD);
 
 		JRExpressionPropertyDescriptor endDateExpD = new JRExpressionPropertyDescriptor(
-				JRDesignTimePeriodSeries.PROPERTY_END_DATE_EXPRESSION, "End Date Expression");
-		endDateExpD.setDescription("End Date Expression.");
+				JRDesignTimePeriodSeries.PROPERTY_END_DATE_EXPRESSION, Messages.MTimePeriodSeries_end_date_expression);
+		endDateExpD.setDescription(Messages.MTimePeriodSeries_end_date_expression_description);
 		desc.add(endDateExpD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimePeriodSeries.PROPERTY_LABEL_EXPRESSION, "Label Expression");
-		lblExprD.setDescription("Label expression.");
+				JRDesignTimePeriodSeries.PROPERTY_LABEL_EXPRESSION, Messages.MTimePeriodSeries_label_expression);
+		lblExprD.setDescription(Messages.MTimePeriodSeries_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimePeriodSeries.PROPERTY_SERIES_EXPRESSION, "Series Expression");
-		seriesExprD.setDescription("Series expression.");
+				JRDesignTimePeriodSeries.PROPERTY_SERIES_EXPRESSION, Messages.MTimePeriodSeries_series_expression);
+		seriesExprD.setDescription(Messages.MTimePeriodSeries_series_expression_description);
 		desc.add(seriesExprD);
 
 		JRExpressionPropertyDescriptor valExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimePeriodSeries.PROPERTY_VALUE_EXPRESSION, "Value Expression");
-		valExprD.setDescription("Valule expression.");
+				JRDesignTimePeriodSeries.PROPERTY_VALUE_EXPRESSION, Messages.MTimePeriodSeries_value_expression);
+		valExprD.setDescription(Messages.MTimePeriodSeries_value_expression_description);
 		desc.add(valExprD);
 
 		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignTimePeriodSeries.PROPERTY_ITEM_HYPERLINK,
-				"Item Hyperlink");
-		itemHyperLinkD.setDescription("Item Hyperlink");
+				Messages.MTimePeriodSeries_item_hyperlink);
+		itemHyperLinkD.setDescription(Messages.MTimePeriodSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 
 		defaultsMap.put(JRDesignTimePeriodSeries.PROPERTY_START_DATE_EXPRESSION, null);

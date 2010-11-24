@@ -32,7 +32,7 @@ public class MXYZSeries extends APropertyNode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ChartNodeIconDescriptor("xyzseries");
+			iconDescriptor = new ChartNodeIconDescriptor("xyzseries"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -73,28 +73,28 @@ public class MXYZSeries extends APropertyNode {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor xValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION, "X Value Expression");
-		xValueExpD.setDescription("X Value Expression.");
+				JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION, Messages.MXYZSeries_x_value_expression);
+		xValueExpD.setDescription(Messages.MXYZSeries_x_value_expression_description);
 		desc.add(xValueExpD);
 
 		JRExpressionPropertyDescriptor yValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION, "Y Value Expression");
-		yValueExpD.setDescription("Y Value Expression.");
+				JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION, Messages.MXYZSeries_y_value_expression);
+		yValueExpD.setDescription(Messages.MXYZSeries_y_value_expression_description);
 		desc.add(yValueExpD);
 
 		JRExpressionPropertyDescriptor zValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION, "Z Value Expression");
-		zValueExpD.setDescription("Z Value expression.");
+				JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION, Messages.MXYZSeries_z_value_expression);
+		zValueExpD.setDescription(Messages.MXYZSeries_z_value_expression_description);
 		desc.add(zValueExpD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION, "Series Expression");
-		seriesExprD.setDescription("Series expression.");
+				JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION, Messages.MXYZSeries_series_expression);
+		seriesExprD.setDescription(Messages.MXYZSeries_series_expression_description);
 		desc.add(seriesExprD);
 
 		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignXyzSeries.PROPERTY_ITEM_HYPERLINK,
-				"Item Hyperlink");
-		itemHyperLinkD.setDescription("Item Hyperlink");
+				Messages.MXYZSeries_item_hyperlink);
+		itemHyperLinkD.setDescription(Messages.MXYZSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 
 		defaultsMap.put(JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION, null);

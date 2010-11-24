@@ -55,7 +55,7 @@ public class MChartAxes extends APropertyNode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ChartNodeIconDescriptor("chartaxis");
+			iconDescriptor = new ChartNodeIconDescriptor("chartaxis"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -110,12 +110,12 @@ public class MChartAxes extends APropertyNode {
 		// super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor positionD = new ComboBoxPropertyDescriptor(JRDesignChartAxis.PROPERTY_POSITION,
-				"Position", EnumHelper.getEnumNames(AxisPositionEnum.values(), NullEnum.NOTNULL));
-		positionD.setDescription("Position.");
+				Messages.MChartAxes_position, EnumHelper.getEnumNames(AxisPositionEnum.values(), NullEnum.NOTNULL));
+		positionD.setDescription(Messages.MChartAxes_position_description);
 		desc.add(positionD);
 
-		JRPropertyDescriptor chartD = new JRPropertyDescriptor(JRDesignChartAxis.PROPERTY_CHART, "Chart");
-		chartD.setDescription("Chart");
+		JRPropertyDescriptor chartD = new JRPropertyDescriptor(JRDesignChartAxis.PROPERTY_CHART, Messages.MChartAxes_chart);
+		chartD.setDescription(Messages.MChartAxes_chart_description);
 		desc.add(chartD);
 		//
 		// if (mChart == null) {
@@ -134,7 +134,7 @@ public class MChartAxes extends APropertyNode {
 			// initialize groups
 			JRGroup[] groups = jasperDesign.getGroups();
 			String[] items = new String[groups.length + 1];
-			items[0] = "";
+			items[0] = ""; //$NON-NLS-1$
 			for (int j = 0; j < groups.length; j++) {
 				items[j + 1] = groups[j].getName();
 			}

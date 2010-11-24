@@ -45,9 +45,9 @@ public class ChartAxesWizardPage extends WizardPage {
 	}
 
 	protected ChartAxesWizardPage() {
-		super("chartaxiswizard");
-		setTitle("ChartAxis Wizard");
-		setDescription("Select the chart axis you want.");
+		super("chartaxiswizard"); //$NON-NLS-1$
+		setTitle(Messages.ChartAxesWizardPage_chartaxis_wizard);
+		setDescription(Messages.ChartAxesWizardPage_chartaxis_wizard_description);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class ChartAxesWizardPage extends WizardPage {
 
 		TableColumn[] column2 = new TableColumn[1];
 		column2[0] = new TableColumn(chartTable, SWT.NONE);
-		column2[0].setText("Name");
+		column2[0].setText(Messages.ChartAxesWizardPage_name);
 
 		fillTableb4j(chartTable);
 		column2[0].pack();
@@ -87,68 +87,68 @@ public class ChartAxesWizardPage extends WizardPage {
 		table.setRedraw(false);
 
 		TableItem ti = new TableItem(table, SWT.NONE);
-		ti.setText("Line Chart");
-		ti.setImage(Activator.getImage("/icons/line.png"));
+		ti.setText(Messages.ChartAxesWizardPage_line_chart);
+		ti.setImage(Activator.getImage("/icons/line.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_LINE);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Area Chart");
-		ti.setImage(Activator.getImage("/icons/area.png"));
+		ti.setText(Messages.ChartAxesWizardPage_area_chart);
+		ti.setImage(Activator.getImage("/icons/area.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_AREA);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Bar Chart");
-		ti.setImage(Activator.getImage("/icons/bar.png"));
+		ti.setText(Messages.ChartAxesWizardPage_bar_chart);
+		ti.setImage(Activator.getImage("/icons/bar.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_BAR);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Bar3D Chart");
-		ti.setImage(Activator.getImage("/icons/bar3d.png"));
+		ti.setText(Messages.ChartAxesWizardPage_bar3d_chart);
+		ti.setImage(Activator.getImage("/icons/bar3d.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_BAR3D);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Bubble Chart");
-		ti.setImage(Activator.getImage("/icons/bubble.png"));
+		ti.setText(Messages.ChartAxesWizardPage_bubble_chart);
+		ti.setImage(Activator.getImage("/icons/bubble.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_BUBBLE);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Candlestick Chart");
-		ti.setImage(Activator.getImage("/icons/candlestick.png"));
+		ti.setText(Messages.ChartAxesWizardPage_candlestick_chart);
+		ti.setImage(Activator.getImage("/icons/candlestick.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_CANDLESTICK);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("HighLow Chart");
-		ti.setImage(Activator.getImage("/icons/highlow.png"));
+		ti.setText(Messages.ChartAxesWizardPage_highlow_chart);
+		ti.setImage(Activator.getImage("/icons/highlow.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_HIGHLOW);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Meter Chart");
-		ti.setImage(Activator.getImage("/icons/meter.png"));
+		ti.setText(Messages.ChartAxesWizardPage_meter_chart);
+		ti.setImage(Activator.getImage("/icons/meter.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_METER);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Pie3D Chart");
-		ti.setImage(Activator.getImage("/icons/pie3d.png"));
+		ti.setText(Messages.ChartAxesWizardPage_pie3d_chart);
+		ti.setImage(Activator.getImage("/icons/pie3d.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_PIE3D);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Pie Chart");
-		ti.setImage(Activator.getImage("/icons/pie.png"));
+		ti.setText(Messages.ChartAxesWizardPage_pie_chart);
+		ti.setImage(Activator.getImage("/icons/pie.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_PIE);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Scatter Chart");
-		ti.setImage(Activator.getImage("/icons/scatter.png"));
+		ti.setText(Messages.ChartAxesWizardPage_scatter_chart);
+		ti.setImage(Activator.getImage("/icons/scatter.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_SCATTER);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("Thermometer Chart");
-		ti.setImage(Activator.getImage("/icons/thermometer.png"));
+		ti.setText(Messages.ChartAxesWizardPage_thermometer_chart);
+		ti.setImage(Activator.getImage("/icons/thermometer.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_THERMOMETER);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText("TimeSeries Chart");
-		ti.setImage(Activator.getImage("/icons/timeseries.png"));
+		ti.setText(Messages.ChartAxesWizardPage_timeseries_chart);
+		ti.setImage(Activator.getImage("/icons/timeseries.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_TIMESERIES);
 
 		table.setRedraw(true);

@@ -57,7 +57,7 @@ public class ReorderChartAxesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderChartAxesCommand(MChartAxes child, ANode parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderChartAxesCommand_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignChartAxis) child.getValue();
 		this.jrGroup = (JRDesignMultiAxisPlot) ((JRDesignChart) parent.getValue()).getPlot();

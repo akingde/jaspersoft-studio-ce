@@ -58,60 +58,60 @@ public class MChartPieDataset extends MChartDataset {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor keyExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_KEY_EXPRESSION, "Key Expression");
-		keyExprD.setDescription("Key Expression.");
+				JRDesignPieDataset.PROPERTY_KEY_EXPRESSION, Messages.MChartPieDataset_key_expression);
+		keyExprD.setDescription(Messages.MChartPieDataset_key_expression_description);
 		desc.add(keyExprD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION, "Label Expression");
-		lblExprD.setDescription("Label expression.");
+				JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION, Messages.MChartPieDataset_label_expression);
+		lblExprD.setDescription(Messages.MChartPieDataset_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor oKeyExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION, "Other Key Expression");
-		oKeyExprD.setDescription("Other Key expression.");
+				JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION, Messages.MChartPieDataset_other_key_expression);
+		oKeyExprD.setDescription(Messages.MChartPieDataset_other_key_expression_description);
 		desc.add(oKeyExprD);
 
 		JRExpressionPropertyDescriptor oLblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION, "Other Label Expression");
-		oLblExprD.setDescription("Other Label expression.");
+				JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION, Messages.MChartPieDataset_other_label_expression);
+		oLblExprD.setDescription(Messages.MChartPieDataset_other_label_expression_description);
 		desc.add(oLblExprD);
 
 		JRExpressionPropertyDescriptor valExpD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION, "Value Expression");
-		valExpD.setDescription("Value expression.");
+				JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION, Messages.MChartPieDataset_value_expression);
+		valExpD.setDescription(Messages.MChartPieDataset_value_expression_description);
 		desc.add(valExpD);
 
 		JRPropertyDescriptor oSectHyperLD = new JRPropertyDescriptor(JRDesignPieDataset.PROPERTY_OTHER_SECTION_HYPERLINK,
-				"Other Section Hyperlink");
-		oSectHyperLD.setDescription("Other Section Hyperlink");
+				Messages.MChartPieDataset_other_section_hyperlink);
+		oSectHyperLD.setDescription(Messages.MChartPieDataset_other_section_hyperlink_description);
 		desc.add(oSectHyperLD);
 
 		JRPropertyDescriptor sectHyperLD = new JRPropertyDescriptor(JRDesignPieDataset.PROPERTY_SECTION_HYPERLINK,
-				"Section Hyperlink");
-		sectHyperLD.setDescription("Section Hyperlink");
+				Messages.MChartPieDataset_section_hyperlink);
+		sectHyperLD.setDescription(Messages.MChartPieDataset_section_hyperlink_description);
 		desc.add(sectHyperLD);
 
 		IntegerPropertyDescriptor maxCountD = new IntegerPropertyDescriptor(JRDesignPieDataset.PROPERTY_MAX_COUNT,
-				"Max Count");
-		maxCountD.setDescription("Max Count");
+				Messages.MChartPieDataset_max_count);
+		maxCountD.setDescription(Messages.MChartPieDataset_max_count_description);
 		desc.add(maxCountD);
 
 		FloatPropertyDescriptor minPercD = new FloatPropertyDescriptor(JRDesignPieDataset.PROPERTY_MIN_PERCENTAGE,
-				"Min Percentage");
-		minPercD.setDescription("Min percentage");
+				Messages.MChartPieDataset_min_percentage);
+		minPercD.setDescription(Messages.MChartPieDataset_min_percentage_description);
 		desc.add(minPercD);
 
-		keyExprD.setCategory("Chart Pie Dataset");
-		lblExprD.setCategory("Chart Pie Dataset");
-		oKeyExprD.setCategory("Chart Pie Dataset");
-		oLblExprD.setCategory("Chart Pie Dataset");
-		valExpD.setCategory("Chart Pie Dataset");
-		oSectHyperLD.setCategory("Chart Pie Dataset");
-		sectHyperLD.setCategory("Chart Pie Dataset");
+		keyExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		lblExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		oKeyExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		oLblExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		valExpD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		oSectHyperLD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		sectHyperLD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
 
-		maxCountD.setCategory("Chart Pie Dataset");
-		minPercD.setCategory("Chart Pie Dataset");
+		maxCountD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		minPercD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
 
 		defaultsMap.put(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION, null);
 		defaultsMap.put(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION, null);
@@ -225,7 +225,7 @@ public class MChartPieDataset extends MChartDataset {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("pieSeries")) {
+		if (evt.getPropertyName().equals("pieSeries")) { //$NON-NLS-1$
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;

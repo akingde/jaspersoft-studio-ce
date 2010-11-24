@@ -49,7 +49,7 @@ public class ReorderPieSeriesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderPieSeriesCommand(MPieSeries child, MChartDataset parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderPieSeriesCommand_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignPieSeries) child.getValue();
 		this.jrGroup = (JRDesignPieDataset) parent.getValue();

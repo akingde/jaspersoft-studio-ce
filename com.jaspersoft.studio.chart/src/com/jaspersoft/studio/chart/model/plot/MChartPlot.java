@@ -72,7 +72,7 @@ public class MChartPlot extends APropertyNode {
 		desc.add(labelRotationD);
 
 		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(JRBaseChartPlot.PROPERTY_ORIENTATION,
-				Messages.MChartPlot_orientation, new String[] { "horizontal", "vertical" }); //$NON-NLS-2$ //$NON-NLS-3$
+				Messages.MChartPlot_orientation, new String[] { Messages.MChartPlot_horizontal, Messages.MChartPlot_vertical });
 		orientationD.setDescription(Messages.MChartPlot_orientation_description);
 		desc.add(orientationD);
 

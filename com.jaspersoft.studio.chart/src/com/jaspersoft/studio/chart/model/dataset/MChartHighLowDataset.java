@@ -52,53 +52,53 @@ public class MChartHighLowDataset extends MChartDataset {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor closeExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowDataset.PROPERTY_CLOSE_EXPRESSION, "Close Expression");
-		closeExprD.setDescription("Close expression.");
+				JRDesignHighLowDataset.PROPERTY_CLOSE_EXPRESSION, Messages.MChartHighLowDataset_close_expression);
+		closeExprD.setDescription(Messages.MChartHighLowDataset_close_expression_description);
 		desc.add(closeExprD);
 
 		JRExpressionPropertyDescriptor dateExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowDataset.PROPERTY_DATE_EXPRESSION, "Date Expression");
-		dateExprD.setDescription("Date expression.");
+				JRDesignHighLowDataset.PROPERTY_DATE_EXPRESSION, Messages.MChartHighLowDataset_data_expression);
+		dateExprD.setDescription(Messages.MChartHighLowDataset_data_expression_description);
 		desc.add(dateExprD);
 
 		JRExpressionPropertyDescriptor highExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowDataset.PROPERTY_HIGH_EXPRESSION, "High Expression");
-		highExprD.setDescription("High expression.");
+				JRDesignHighLowDataset.PROPERTY_HIGH_EXPRESSION, Messages.MChartHighLowDataset_high_expression);
+		highExprD.setDescription(Messages.MChartHighLowDataset_high_expression_description);
 		desc.add(highExprD);
 
 		JRExpressionPropertyDescriptor lowExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowDataset.PROPERTY_LOW_EXPRESSION, "Low Expression");
-		lowExprD.setDescription("Low expression.");
+				JRDesignHighLowDataset.PROPERTY_LOW_EXPRESSION, Messages.MChartHighLowDataset_low_expression);
+		lowExprD.setDescription(Messages.MChartHighLowDataset_low_expression_description);
 		desc.add(lowExprD);
 
 		JRExpressionPropertyDescriptor openExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowDataset.PROPERTY_OPEN_EXPRESSION, "Open Expression");
-		openExprD.setDescription("Open expression.");
+				JRDesignHighLowDataset.PROPERTY_OPEN_EXPRESSION, Messages.MChartHighLowDataset_open_expression);
+		openExprD.setDescription(Messages.MChartHighLowDataset_open_expression_description);
 		desc.add(openExprD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowDataset.PROPERTY_SERIES_EXPRESSION, "Series Expression");
-		seriesExprD.setDescription("Series expression.");
+				JRDesignHighLowDataset.PROPERTY_SERIES_EXPRESSION, Messages.MChartHighLowDataset_series_expression);
+		seriesExprD.setDescription(Messages.MChartHighLowDataset_series_expression_description);
 		desc.add(seriesExprD);
 
 		JRExpressionPropertyDescriptor volumeExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowDataset.PROPERTY_VOLUME_EXPRESSION, "Volume Expression");
-		volumeExprD.setDescription("Volume expression.");
+				JRDesignHighLowDataset.PROPERTY_VOLUME_EXPRESSION, Messages.MChartHighLowDataset_volume_expression);
+		volumeExprD.setDescription(Messages.MChartHighLowDataset_volume_expression_description);
 		desc.add(volumeExprD);
 
 		JRPropertyDescriptor hyperLinkD = new JRPropertyDescriptor(JRDesignHighLowDataset.PROPERTY_ITEM_HYPERLINK,
-				"Item Hyperlink");
-		hyperLinkD.setDescription("Item Hyperlink");
+				Messages.MChartHighLowDataset_item_hyperlink);
+		hyperLinkD.setDescription(Messages.MChartHighLowDataset_item_hyperlink_description);
 		desc.add(hyperLinkD);
 
-		closeExprD.setCategory("Chart HighLow Dataset");
-		dateExprD.setCategory("Chart HighLow Dataset");
-		highExprD.setCategory("Chart HighLow Dataset");
-		lowExprD.setCategory("Chart HighLow Dataset");
-		openExprD.setCategory("Chart HighLow Dataset");
-		seriesExprD.setCategory("Chart HighLow Dataset");
-		volumeExprD.setCategory("Chart HighLow Dataset");
-		hyperLinkD.setCategory("Chart HighLow Dataset");
+		closeExprD.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
+		dateExprD.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
+		highExprD.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
+		lowExprD.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
+		openExprD.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
+		seriesExprD.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
+		volumeExprD.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
+		hyperLinkD.setCategory(Messages.MChartHighLowDataset_chart_highlow_dataset_category);
 
 		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_CLOSE_EXPRESSION, null);
 		defaultsMap.put(JRDesignHighLowDataset.PROPERTY_DATE_EXPRESSION, null);

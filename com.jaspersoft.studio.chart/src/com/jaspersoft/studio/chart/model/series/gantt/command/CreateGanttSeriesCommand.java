@@ -76,7 +76,7 @@ public class CreateGanttSeriesCommand extends Command {
 		createObject();
 		if (jrElement != null) {
 			jrDataset.addGanttSeries(jrElement);
-			jrDataset.getEventSupport().fireCollectionElementAddedEvent("ganttSeries", jrElement,
+			jrDataset.getEventSupport().fireCollectionElementAddedEvent("ganttSeries", jrElement, //$NON-NLS-1$
 					jrDataset.getSeriesList().size() - 1);
 		}
 	}
@@ -101,7 +101,7 @@ public class CreateGanttSeriesCommand extends Command {
 	@Override
 	public void undo() {
 		jrDataset.removeGanttSeries(jrElement);
-		jrDataset.getEventSupport().fireCollectionElementRemovedEvent("ganttSeries", jrElement, index);
+		jrDataset.getEventSupport().fireCollectionElementRemovedEvent("ganttSeries", jrElement, index); //$NON-NLS-1$
 	}
 
 }

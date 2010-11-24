@@ -31,7 +31,7 @@ public class ChartAxesWizard extends Wizard {
 
 	public ChartAxesWizard() {
 		super();
-		setWindowTitle("ChartAxis Wizard");
+		setWindowTitle(Messages.ChartAxesWizard_window_title);
 	}
 
 	@Override

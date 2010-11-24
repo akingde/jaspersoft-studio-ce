@@ -52,11 +52,11 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ClassTypePropertyDescriptor timePeriodD = new ClassTypePropertyDescriptor(
-				JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD, "Time Period");
-		timePeriodD.setDescription("Time Period.");
+				JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD, Messages.MChartTimeSeriesDataset_time_period);
+		timePeriodD.setDescription(Messages.MChartTimeSeriesDataset_time_period_description);
 		desc.add(timePeriodD);
 
-		timePeriodD.setCategory("Chart Time Period Dataset");
+		timePeriodD.setCategory(Messages.MChartTimeSeriesDataset_chart_time_period_dataset_category);
 
 		defaultsMap.put(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD, null);
 	}
@@ -91,7 +91,7 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("timeSeries")) {
+		if (evt.getPropertyName().equals("timeSeries")) { //$NON-NLS-1$
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;

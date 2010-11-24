@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 public class CreateXYZAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_xyz";
+	public static final String ID = "create_xyz"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,8 +51,8 @@ public class CreateXYZAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create XYZ Series");
-		setToolTipText("Create XYZ Series");
+		setText(Messages.CreateXYZAction_create_xyz_series);
+		setToolTipText(Messages.CreateXYZAction_create_xyz_series_description);
 		setId(CreateXYZAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

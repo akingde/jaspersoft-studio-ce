@@ -200,7 +200,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		desc.add(showLegendD);
 
 		RWComboBoxPropertyDescriptor rendererTypeD = new RWComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_RENDER_TYPE,
-				Messages.MChart_renderer_type, new String[] { "", "draw", "image", "svg" }, NullEnum.NULL); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				Messages.MChart_renderer_type, new String[] { "", "draw", "image", "svg" }, NullEnum.NULL);  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		rendererTypeD.setDescription(Messages.MChart_renderer_type_description);
 		desc.add(rendererTypeD);
 
@@ -235,31 +235,31 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
-		titleFontD.setCategory(Messages.MChart_chart_title);
-		titleColorD.setCategory(Messages.MChart_chart_title);
-		titlePositionD.setCategory(Messages.MChart_chart_title);
-		titleExprD.setCategory(Messages.MChart_chart_title);
+		titleFontD.setCategory(Messages.MChart_chart_title_category);
+		titleColorD.setCategory(Messages.MChart_chart_title_category);
+		titlePositionD.setCategory(Messages.MChart_chart_title_category);
+		titleExprD.setCategory(Messages.MChart_chart_title_category);
 
-		subtitleFontD.setCategory(Messages.MChart_chart_subtitle);
-		subtitleExprD.setCategory(Messages.MChart_chart_subtitle);
-		subtitleColorD.setCategory(Messages.MChart_chart_subtitle);
+		subtitleFontD.setCategory(Messages.MChart_chart_subtitle_category);
+		subtitleExprD.setCategory(Messages.MChart_chart_subtitle_category);
+		subtitleColorD.setCategory(Messages.MChart_chart_subtitle_category);
 
-		plotD.setCategory(Messages.MChart_common_chart_properties);
+		plotD.setCategory(Messages.MChart_common_chart_properties_category);
 
-		evaluationGroupD.setCategory(Messages.MChart_common_chart_properties);
-		themeD.setCategory(Messages.MChart_common_chart_properties);
+		evaluationGroupD.setCategory(Messages.MChart_common_chart_properties_category);
+		themeD.setCategory(Messages.MChart_common_chart_properties_category);
 
-		classD.setCategory(Messages.MChart_common_chart_properties);
+		classD.setCategory(Messages.MChart_common_chart_properties_category);
 
-		legendFontD.setCategory(Messages.MChart_chart_legend);
-		legendBackColorD.setCategory(Messages.MChart_chart_legend);
-		legendColorD.setCategory(Messages.MChart_chart_legend);
-		legendPositionD.setCategory(Messages.MChart_chart_legend);
-		showLegendD.setCategory(Messages.MChart_chart_legend);
+		legendFontD.setCategory(Messages.MChart_chart_legend_category);
+		legendBackColorD.setCategory(Messages.MChart_chart_legend_category);
+		legendColorD.setCategory(Messages.MChart_chart_legend_category);
+		legendPositionD.setCategory(Messages.MChart_chart_legend_category);
+		showLegendD.setCategory(Messages.MChart_chart_legend_category);
 
-		evaluationTimeD.setCategory(Messages.MChart_common_chart_properties);
+		evaluationTimeD.setCategory(Messages.MChart_common_chart_properties_category);
 
-		rendererTypeD.setCategory(Messages.MChart_common_chart_properties);
+		rendererTypeD.setCategory(Messages.MChart_common_chart_properties_category);
 
 		defaultsMap.put(JRBaseChart.PROPERTY_THEME, null);
 		defaultsMap.put(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS, null);
