@@ -59,8 +59,6 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MElementGroup;
-import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;

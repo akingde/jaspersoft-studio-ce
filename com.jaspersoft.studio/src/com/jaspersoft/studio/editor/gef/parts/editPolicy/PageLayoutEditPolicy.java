@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
-import net.sf.jasperreports.engine.design.JRDesignBand;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -42,14 +40,12 @@ import org.eclipse.gef.rulers.RulerProvider;
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
-import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
+import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
  * The Class PageLayoutEditPolicy.
@@ -99,11 +95,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
 		System.out.println("Constraint request:  " + request.getMoveDelta());
-		if (child instanceof BandEditPart) {
-			if (request.getResizeDirection() == PositionConstants.SOUTH
-					|| request.getResizeDirection() == PositionConstants.NORTH)
-				System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection());
-			return new Rectangle(0, 0, 0, request.getSizeDelta().height);
+		if (child instanceof IContainerPart) {
+			return ((IContainerPart) child).getConstraintFor(request, child);
 		}
 		// If we are dragging a band, we need to check the bounds and suggest a
 		// proper
@@ -182,18 +175,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	@Override
 	protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
-		if (child instanceof BandEditPart) {
-			MBand model = (MBand) child.getModel();
-			JRDesignBand jrdesign = (JRDesignBand) model.getValue();
-			int height = jrdesign.getHeight() + ((Rectangle) constraint).height;
-			if (height < 0)
-				height = 0;
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setTarget(model);
-			setCommand.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
-			setCommand.setPropertyValue(height);
-			return setCommand;
-
+		if (child instanceof IContainerPart) {
+			return ((IContainerPart) child).createChangeConstraintCommand(child, constraint);
 		}
 		SetConstraintCommand cmd = new SetConstraintCommand();
 		cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), (Rectangle) constraint);
@@ -203,7 +186,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 		Command result = createChangeConstraintCommand(child, constraint);
-		if (child instanceof BandEditPart)
+		if (child instanceof IContainerPart)
 			return result;
 		if (child.getModel() instanceof MGraphicElement) {
 			MGraphicElement part = (MGraphicElement) child.getModel();
@@ -261,8 +244,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
-		if (child instanceof BandEditPart) {
-			return new BandResizableEditPolicy();
+		if (child instanceof IContainerPart) {
+			return ((IContainerPart) child).getEditPolicy();
 		}
 		return super.createChildEditPolicy(child);
 	}

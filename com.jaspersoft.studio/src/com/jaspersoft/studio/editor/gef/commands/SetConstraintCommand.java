@@ -78,9 +78,11 @@ public class SetConstraintCommand extends Command {
 	 */
 	public void setContext(ANode parent, ANode child, Rectangle constraint) {
 		jrDesign = child.getJasperDesign();
-		jrElement = (JRDesignElement) child.getValue();
-		newBounds = constraint;
-		parentBounds = ((IGraphicElement) child).getBounds();
+		if (child.getValue() instanceof JRDesignElement) {
+			jrElement = (JRDesignElement) child.getValue();
+			newBounds = constraint;
+			parentBounds = ((IGraphicElement) child).getBounds();
+		}
 	}
 
 	/*
@@ -89,17 +91,19 @@ public class SetConstraintCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	public void execute() {
-		oldBounds = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
-		// check position,
-		// if top-left corner outside the bottom bar bands, move to bottom band
-		// if bottom-left corner outside the top bar, move to top band
-		int y = jrElement.getY() + newBounds.y - parentBounds.y;
-		if (cBand == null && pBand == null)
-			y = setBand(y);
-		jrElement.setX(jrElement.getX() + newBounds.x - parentBounds.x);
-		jrElement.setY(y);
-		jrElement.setWidth(newBounds.width);
-		jrElement.setHeight(newBounds.height);
+		if (jrElement != null) {
+			oldBounds = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
+			// check position,
+			// if top-left corner outside the bottom bar bands, move to bottom band
+			// if bottom-left corner outside the top bar, move to top band
+			int y = jrElement.getY() + newBounds.y - parentBounds.y;
+			if (cBand == null && pBand == null)
+				y = setBand(y);
+			jrElement.setX(jrElement.getX() + newBounds.x - parentBounds.x);
+			jrElement.setY(y);
+			jrElement.setWidth(newBounds.width);
+			jrElement.setHeight(newBounds.height);
+		}
 	}
 
 	/**
@@ -222,18 +226,20 @@ public class SetConstraintCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	public void undo() {
-		if (pBand != null && cBand != null)
-			pBand.removeElement(jrElement);
-		if (cBand != null)
-			if (oldIndex < 0 || oldIndex > cBand.getElements().length)
-				cBand.addElement(jrElement);
-			else
-				cBand.addElement(oldIndex, jrElement);
+		if (jrElement != null) {
+			if (pBand != null && cBand != null)
+				pBand.removeElement(jrElement);
+			if (cBand != null)
+				if (oldIndex < 0 || oldIndex > cBand.getElements().length)
+					cBand.addElement(jrElement);
+				else
+					cBand.addElement(oldIndex, jrElement);
 
-		jrElement.setWidth(oldBounds.width);
-		jrElement.setHeight(oldBounds.height);
-		jrElement.setX(oldBounds.x);
-		jrElement.setY(oldBounds.y);
+			jrElement.setWidth(oldBounds.width);
+			jrElement.setHeight(oldBounds.height);
+			jrElement.setX(oldBounds.x);
+			jrElement.setY(oldBounds.y);
+		}
 	}
 
 	/*
@@ -242,7 +248,7 @@ public class SetConstraintCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#getLabel()
 	 */
 	public String getLabel() {
-		if (oldBounds.x != newBounds.x || oldBounds.y != newBounds.y)
+		if (oldBounds != null && (oldBounds.x != newBounds.x || oldBounds.y != newBounds.y))
 			return "set location";
 		return "resize";
 	}

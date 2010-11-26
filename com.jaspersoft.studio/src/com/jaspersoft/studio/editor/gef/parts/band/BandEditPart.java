@@ -29,16 +29,24 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
+import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandContainerEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandMoveEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -49,7 +57,7 @@ import com.jaspersoft.studio.model.band.MBand;
  * @author Chicu Veaceslav, Giulio Toffoli
  * 
  */
-public class BandEditPart extends AJDEditPart implements PropertyChangeListener {
+public class BandEditPart extends AJDEditPart implements PropertyChangeListener, IContainerPart {
 
 	/**
 	 * Gets the band.
@@ -158,6 +166,30 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener 
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
+	}
+
+	public EditPolicy getEditPolicy() {
+		return new BandResizableEditPolicy();
+	}
+
+	public Command createChangeConstraintCommand(EditPart child, Object constraint) {
+		MBand model = (MBand) child.getModel();
+		JRDesignBand jrdesign = (JRDesignBand) model.getValue();
+		int height = jrdesign.getHeight() + ((Rectangle) constraint).height;
+		if (height < 0)
+			height = 0;
+		SetValueCommand setCommand = new SetValueCommand();
+		setCommand.setTarget(model);
+		setCommand.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
+		setCommand.setPropertyValue(height);
+		return setCommand;
+	}
+
+	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
+		if (request.getResizeDirection() == PositionConstants.SOUTH
+				|| request.getResizeDirection() == PositionConstants.NORTH)
+			System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection());
+		return new Rectangle(0, 0, 0, request.getSizeDelta().height);
 	}
 
 }
