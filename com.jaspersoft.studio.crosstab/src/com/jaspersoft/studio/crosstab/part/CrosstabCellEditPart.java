@@ -19,17 +19,26 @@
  */
 package com.jaspersoft.studio.crosstab.part;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 
-import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.crosstab.figure.CellFigure;
+import com.jaspersoft.studio.crosstab.model.MCell;
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellContainerEditPolicy;
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellMoveEditPolicy;
-import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
+import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellResizableEditPolicy;
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -40,19 +49,7 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
  * @author Chicu Veaceslav, Giulio Toffoli
  * 
  */
-public class CrosstabCellEditPart extends AJDEditPart implements PropertyChangeListener {
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
-	 */
-	protected IFigure createFigure() {
-		CellFigure rect = new CellFigure();
-		// rect.setForegroundColor(ColorConstants.blue);
-		// rect.setToolTip(new Label(((MBand) getModel()).getToolTip()));
-		return rect;
-	}
+public class CrosstabCellEditPart extends FigureEditPart implements IContainerPart {
 
 	/*
 	 * (non-Javadoc)
@@ -67,16 +64,49 @@ public class CrosstabCellEditPart extends AJDEditPart implements PropertyChangeL
 
 	@Override
 	public boolean isSelectable() {
-		return false;
+		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-	 */
-	public void propertyChange(PropertyChangeEvent evt) {
-		refresh();
+	public EditPolicy getEditPolicy() {
+		return new CrosstabCellResizableEditPolicy();
+	}
+
+	public Command createChangeConstraintCommand(EditPart child, Object constraint) {
+		MCell model = (MCell) child.getModel();
+		JRDesignCellContents jrdesign = (JRDesignCellContents) model.getValue();
+		Rectangle delta = (Rectangle) constraint;
+		int height = jrdesign.getHeight() + delta.height;
+		if (height < 0)
+			height = 0;
+
+		int width = jrdesign.getWidth() + delta.width;
+		if (width < 0)
+			width = 0;
+
+		CompoundCommand c = new CompoundCommand("Change Cell Size");
+		if (delta.height != 0) {
+			SetValueCommand setCommand = new SetValueCommand();
+			setCommand.setTarget(model);
+			setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_HEIGHT);
+			setCommand.setPropertyValue(height);
+			c.add(setCommand);
+		}
+		if (delta.width != 0) {
+			SetValueCommand setCommand = new SetValueCommand();
+			setCommand.setTarget(model);
+			setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_WIDTH);
+			setCommand.setPropertyValue(width);
+			c.add(setCommand);
+		}
+		return c;
+	}
+
+	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
+		if (request.getResizeDirection() == PositionConstants.SOUTH
+				|| request.getResizeDirection() == PositionConstants.NORTH
+				|| request.getResizeDirection() == PositionConstants.EAST)
+			System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection());
+		return new Rectangle(0, 0, request.getSizeDelta().width, request.getSizeDelta().height);
 	}
 
 }

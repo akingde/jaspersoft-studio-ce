@@ -20,28 +20,19 @@
 package com.jaspersoft.studio.crosstab.part.editpolicy;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.PrecisionRectangle;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.crosstab.model.MCell;
 import com.jaspersoft.studio.editor.gef.parts.band.BandResizeHandle;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
@@ -56,80 +47,6 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 
 	/** The handle. */
 	private IFigure handle;
-
-	/** The original y location. */
-	private int originalYLocation;
-
-	/**
-	 * This figure represents the new bottom margin of the band It should turn red when the margin is at the maximum of
-	 * its possibilities or when it raches the bottom of the previous band (which is when the new band height would become
-	 * 0. The figure is just a line at the X coordinates. The figure width is the width of the BandPart we are going to
-	 * move.
-	 * 
-	 * @author gtoffoli
-	 * 
-	 */
-	private static class CellMoveFeedbackFigure extends Figure {
-
-		/** The x label pos. */
-		private int xLabelPos = 0;
-
-		/** The band height. */
-		private int bandHeight = 0;
-
-		/**
-		 * This is the X position for the label.
-		 * 
-		 * @param xpos
-		 *          the new label position
-		 */
-		public void setLabelPosition(int xpos) {
-			this.xLabelPos = xpos;
-		}
-
-		/**
-		 * The is the new value temporary value of the band height. It is defined in pixel, so it may be converted to a
-		 * different unit It is used to print a label in this feedback figure.
-		 * 
-		 * @param bandHeight
-		 *          the new band height
-		 */
-		public void setBandHeight(int bandHeight) {
-			this.bandHeight = bandHeight;
-		}
-
-		/**
-		 * Instantiates a new band move feedback figure.
-		 */
-		public CellMoveFeedbackFigure() {
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.eclipse.draw2d.IFigure#paint(Graphics)
-		 */
-		public void paint(Graphics g) {
-			// g.setForegroundColor(ColorConstants.green);
-			Rectangle currentBounds = getBounds();
-			// draw the line
-			g.setForegroundColor(this.getForegroundColor());
-			g.drawLine(currentBounds.x, currentBounds.y, currentBounds.x + currentBounds.width, currentBounds.y);
-
-			// Draw the label...
-			g.setAlpha(128);
-			String text = bandHeight + " px";
-			Label label = new Label(text);
-			label.setFont(g.getFont());
-			Rectangle textBounds = label.getTextBounds();
-			g.setBackgroundColor(ColorConstants.gray);
-			g.fillRoundRectangle(new Rectangle(xLabelPos, currentBounds.y, textBounds.width + 20, textBounds.height + 8), 10,
-					10);
-			g.setForegroundColor(ColorConstants.white);
-			g.drawText(text, xLabelPos + 10, currentBounds.y);
-		}
-
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -165,131 +82,9 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * @see org.eclipse.gef.EditPolicy#understandsRequest(Request)
 	 */
 	public boolean understandsRequest(Request request) {
-		if (REQ_RESIZE.equals(request.getType())) {
-			ChangeBoundsRequest r = (ChangeBoundsRequest) request;
-			if (r.getResizeDirection() == PositionConstants.SOUTH || r.getResizeDirection() == PositionConstants.EAST)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Gets the drag source feedback figure.
-	 * 
-	 * @param mouseLocation
-	 *          the mouse location
-	 * @return the drag source feedback figure
-	 */
-	protected IFigure getDragSourceFeedbackFigure(Point mouseLocation) {
-		if (feedback == null) {
-
-			feedback = new CellMoveFeedbackFigure();
-			feedback.setOpaque(false);
-			Rectangle bounds = ((GraphicalEditPart) getHost()).getFigure().getBounds().getCopy();
-
-			((GraphicalEditPart) getHost()).getFigure().translateToAbsolute(bounds);
-			bounds.height = 20;
-
-			// We need to translate the bounds of the band figure to the bounds of
-			// the feedback layer.
-			getFeedbackLayer().translateToRelative(bounds);
-			getFeedbackLayer().translateToRelative(mouseLocation);
-			feedback.setBounds(bounds);
-			((CellMoveFeedbackFigure) feedback).setLabelPosition(mouseLocation.x + 10);
-			Rectangle bounds2 = bounds.getCopy();
-			feedback.translateToRelative(bounds2);
-			originalYLocation = feedback.getBounds().y;
-			addFeedback(feedback);
-		}
-		return feedback;
-	}
-
-	/**
-	 * Show change bounds feedback.
-	 * 
-	 * @param request
-	 *          the request
-	 */
-	protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
-		if (REQ_RESIZE.equals(request.getType())) {
-			IFigure feedbackFigure = getDragSourceFeedbackFigure(request.getLocation());
-
-			Point moveDelta = request.getLocation().getCopy();
-
-			// The delta here is the mouse delta, but the viewport may have been
-			// scrolled
-			// so let's calculate the REAL delta...
-
-			getFeedbackLayer().translateToRelative(moveDelta);
-
-			moveDelta.y = moveDelta.y - originalYLocation;
-			moveDelta.x = 0;
-
-			// The request delta is in absolute coordinates. We need to translate the
-			// mouse width in
-			// model coordinates...
-			PrecisionRectangle rect = new PrecisionRectangle(new Rectangle(0, 0, moveDelta.x, moveDelta.y));
-			getHostFigure().translateToRelative(rect);
-			moveDelta.x = rect.width;
-			moveDelta.y = rect.height;
-
-			// JRBand b = ((BandEditPart) getHost()).getBand();
-			// JasperDesign jd = ((BandEditPart) getHost()).getJasperDesign();
-
-			/*
-			 * if (!reversOrder && b.getHeight() == 0) { // Look for the right band... List<JRBand> bands =
-			 * ModelUtils.getBands(jd); JRBand rightBand = bands.get(0); for (JRBand tmpBand : bands) { if (tmpBand == b)
-			 * break; if (tmpBand.getHeight() == 0) continue; rightBand = tmpBand; } b = rightBand; }
-			 */
-
-			// y must be between the bottom of the previous band and max design height
-			// +
-			// band height + current band height
-
-			// int bLocation = ModelUtils.getBandLocation(b, jd);
-			// int maxDelta = ModelUtils.getMaxBandHeight((JRDesignBand) b, jd) - b.getHeight();
-			//
-			// feedbackFigure.setForegroundColor(ColorConstants.black);
-			//
-			// if (b.getHeight() + moveDelta.y <= 0) {
-			// System.out.println(moveDelta.y + " set to" + (-b.getHeight()));
-			//
-			// moveDelta.y = -b.getHeight();
-			// feedbackFigure.setForegroundColor(ColorConstants.blue);
-			// } else if (moveDelta.y > maxDelta) {
-			// // moveDelta.x = 0;
-			// moveDelta.y = maxDelta;
-			// feedbackFigure.setForegroundColor(ColorConstants.red);
-			// }
-			//
-			// ((CellMoveFeedbackFigure) feedbackFigure).setBandHeight(b.getHeight() + moveDelta.y);
-			// Convert the delta size to scene size...
-			rect = new PrecisionRectangle(new Rectangle(0, 0, moveDelta.x, moveDelta.y));
-			getHostFigure().translateToAbsolute(rect);
-			moveDelta.x = rect.width;
-			moveDelta.y = rect.height;
-
-			// request.setMoveDelta(moveDelta);
-
-			// ensureVisibility(request.getLocation());
-
-			// request.setSizeDelta(new Dimension(0, 0));
-
-			// feedbackFigure.setLocation(new Point(feedbackFigure.getBounds().x,
-			// request.getMoveDelta().y + originalYLocation));
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.EditPolicy#showSourceFeedback(Request)
-	 */
-	public void showSourceFeedback(Request request) {
-		if (REQ_MOVE.equals(request.getType()))
-			showChangeBoundsFeedback((ChangeBoundsRequest) request);
 		if (REQ_RESIZE.equals(request.getType()))
-			showChangeBoundsFeedback((ChangeBoundsRequest) request);
+			return true;
+		return false;
 	}
 
 	/**
@@ -303,7 +98,6 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 			removeFeedback(feedback);
 		}
 		feedback = null;
-		originalYLocation = 0;
 	}
 
 	/*
@@ -312,8 +106,6 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * @see org.eclipse.gef.EditPolicy#eraseSourceFeedback(Request)
 	 */
 	public void eraseSourceFeedback(Request request) {
-		if (REQ_MOVE.equals(request.getType()))
-			eraseChangeBoundsFeedback((ChangeBoundsRequest) request);
 		if (REQ_RESIZE.equals(request.getType()))
 			eraseChangeBoundsFeedback((ChangeBoundsRequest) request);
 	}
@@ -324,12 +116,9 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * @see org.eclipse.gef.EditPolicy#getCommand(Request)
 	 */
 	public Command getCommand(Request request) {
-		Command command = null;
-		if (REQ_MOVE.equals(request.getType())) {
-			// command = getResizeCommand((ChangeBoundsRequest) request);
-		} else if (REQ_RESIZE.equals(request.getType()))
-			command = getResizeCommand((ChangeBoundsRequest) request);
-		return command;
+		if (REQ_RESIZE.equals(request.getType()))
+			return getResizeCommand((ChangeBoundsRequest) request);
+		return null;
 	}
 
 	/**
@@ -340,36 +129,38 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * @return the resize command
 	 */
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
-		if (request.getResizeDirection() == PositionConstants.SOUTH
-				|| request.getResizeDirection() == PositionConstants.NORTH) {
-			MCell mBand = (MCell) getHost().getModel();
-			if (request.getResizeDirection() == PositionConstants.NORTH) {
-				// change band upper
-				int pos = mBand.getParent().getChildren().indexOf(mBand);
-				for (int i = pos - 1; i > 0; i--) {
-					INode pBand = mBand.getParent().getChildren().get(i);
-					if (pBand instanceof MBand && pBand.getValue() != null) {
-						mBand = (MCell) pBand;
-						break;
-					}
-				}
-			} else if (request.getResizeDirection() == PositionConstants.NORTH) {
-				if (request.getMoveDelta().y < 0)
-					return null;
-			}
-			JRDesignCellContents jrdesign = (JRDesignCellContents) mBand.getValue();
-			int height = jrdesign.getHeight() + request.getMoveDelta().y;
-			if (height < 0)
-				height = 0;
+		// if (request.getResizeDirection() == PositionConstants.SOUTH
+		// || request.getResizeDirection() == PositionConstants.EAST) {
+		MCell mBand = (MCell) getHost().getModel();
 
+		JRDesignCellContents jrdesign = (JRDesignCellContents) mBand.getValue();
+		int height = jrdesign.getHeight() + request.getSizeDelta().height;
+		if (height < 0)
+			height = 0;
+
+		int width = jrdesign.getWidth() + request.getSizeDelta().width;
+		if (width < 0)
+			width = 0;
+
+		CompoundCommand c = new CompoundCommand("Change Cell Size");
+
+		if (request.getSizeDelta().width != 0) {
 			SetValueCommand setCommand = new SetValueCommand();
 			setCommand.setTarget(mBand);
-			setCommand.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
-			setCommand.setPropertyValue(height);
-			System.out.println("RESIZE COMMAND: " + request.getResizeDirection() + " " + request.getSizeDelta());
-			return setCommand;
+			setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_WIDTH);
+			setCommand.setPropertyValue(width);
+			c.add(setCommand);
 		}
-		return null;
+		if (request.getSizeDelta().height != 0) {
+			SetValueCommand setCommand = new SetValueCommand();
+			setCommand.setTarget(mBand);
+			setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_HEIGHT);
+			setCommand.setPropertyValue(height);
+			c.add(setCommand);
+		}
+		return c;
+		// }
+		// return null;
 	}
 
 	/**

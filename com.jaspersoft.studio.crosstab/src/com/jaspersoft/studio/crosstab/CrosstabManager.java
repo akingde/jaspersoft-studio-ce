@@ -8,9 +8,12 @@ import java.util.Map;
 import net.sf.jasperreports.crosstabs.JRCrosstabCell;
 import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.design.JRCrosstabOrigin;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 
@@ -200,32 +203,192 @@ public class CrosstabManager {
 
 	public void setWidth(JRDesignCellContents cell, int width) {
 		JRCrosstabCell[][] cells = crosstab.getCells();
-		for (int i = cells.length - 1; i >= 0; i--) {
-			for (int j = cells[i].length - 1; j >= 0; j--) {
-				JRDesignCrosstabCell jrCrosstabCell = (JRDesignCrosstabCell) cells[i][j];
-				if (jrCrosstabCell.getContents() == cell) {
-					jrCrosstabCell.setWidth(width);
+		List<?> colGroupsList = crosstab.getColumnGroupsList();
+		List<?> rowGroupsList = crosstab.getRowGroupsList();
+		String rowGroupName = cell.getOrigin().getRowGroupName();
+		switch (cell.getOrigin().getType()) {
+		case JRCrosstabOrigin.TYPE_DATA_CELL:
+			for (int i = cells.length - 1; i >= 0; i--) {
+				for (int j = cells[i].length - 1; j >= 0; j--) {
+					JRDesignCrosstabCell jrCrosstabCell = (JRDesignCrosstabCell) cells[i][j];
+					if (jrCrosstabCell.getContents() == cell) {
+						jrCrosstabCell.setWidth(width);
 
-					for (int k = 0; k < cells.length; k++) {
-						if (cells[k][j] != null) {
-							((JRDesignCrosstabCell) cells[k][j]).setWidth(width);
-							// contents.setWidth(crossCells[i][k].getContents().getWidth());
-							// break;
+						for (int k = 0; k < cells.length; k++) {
+							if (cells[k][j] != null) {
+								((JRDesignCrosstabCell) cells[k][j]).setWidth(width);
+							}
 						}
 					}
-
 				}
 			}
+			break;
+		case JRCrosstabOrigin.TYPE_HEADER_CELL:
+			if (!rowGroupsList.isEmpty()) {
+				JRDesignCrosstabRowGroup p = (JRDesignCrosstabRowGroup) rowGroupsList.get(rowGroupsList.size() - 1);
+				int delta = width - cell.getWidth();
+				setCellWidth(p, p.getWidth(), p.getWidth() + delta);
+			}
+			break;
+		case JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER:
+			for (int i = 0; i < rowGroupsList.size(); i++) {
+				JRDesignCrosstabRowGroup p = (JRDesignCrosstabRowGroup) rowGroupsList.get(i);
+				if (p.getName().equals(rowGroupName)) {
+					setCellWidth(p, p.getWidth(), width);
+					break;
+				}
+			}
+			break;
+		case JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER:
+			rowGroupsList = crosstab.getRowGroupsList();
+			for (int i = 0; i < rowGroupsList.size(); i++) {
+				JRDesignCrosstabRowGroup p = (JRDesignCrosstabRowGroup) rowGroupsList.get(i);
+				if (p.getName().equals(rowGroupName)) {
+					int delta = width - cell.getWidth();
+					setCellWidth(p, p.getWidth(), width = p.getWidth() + delta);
+					break;
+				}
+			}
+			break;
+		case JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER:
+			boolean calculated = false;
+			String colGroupName = cell.getOrigin().getColumnGroupName();
+			for (int i = cells.length - 1; i >= 0; i--) {
+				for (int j = cells[i].length - 1; j >= 0; j--) {
+					JRDesignCrosstabCell jrCrosstabCell = (JRDesignCrosstabCell) cells[i][j];
+					if (jrCrosstabCell.getColumnTotalGroup() != null && colGroupName != null
+							&& jrCrosstabCell.getColumnTotalGroup().equals(colGroupName)) {
+						if (!calculated) {
+							width = jrCrosstabCell.getWidth() + width - cell.getWidth();
+							calculated = true;
+						}
+						if (width >= 0)
+							jrCrosstabCell.setWidth(width);
+						else
+							return;
+					}
+				}
+			}
+			break;
+		case JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER:
+			colGroupName = cell.getOrigin().getColumnGroupName();
+			for (int i = 0; i < colGroupsList.size(); i++) {
+				JRDesignCrosstabColumnGroup rg = (JRDesignCrosstabColumnGroup) colGroupsList.get(i);
+				if (rg.getName().equals(colGroupName)) {
+					if (i == colGroupsList.size() - 1) {
+						setWidth((JRDesignCellContents) cells[cells.length - 1][cells[i].length - 1], width);
+					} else {
+						int delta = width - cell.getWidth();
+						JRDesignCrosstabColumnGroup rgNext = (JRDesignCrosstabColumnGroup) colGroupsList.get(i + 1);
+						if (rgNext.getTotalPositionValue().equals(CrosstabTotalPositionEnum.END)) {
+							JRDesignCellContents totalHeader = (JRDesignCellContents) rgNext.getTotalHeader();
+							setWidth(totalHeader, totalHeader.getWidth() + delta);
+						} else {
+							JRDesignCellContents header = (JRDesignCellContents) rgNext.getHeader();
+							setWidth(header, header.getWidth() + delta);
+						}
+						break;
+					}
+				}
+			}
+			break;
 		}
 	}
 
 	public void setHeight(JRDesignCellContents cell, int height) {
 		JRCrosstabCell[][] cells = crosstab.getCells();
-		for (int i = cells.length - 1; i >= 0; i--) {
-			for (int j = cells[i].length - 1; j >= 0; j--) {
-				JRDesignCrosstabCell jrCrosstabCell = (JRDesignCrosstabCell) cells[i][j];
-				jrCrosstabCell.setHeight(height);
+		List<?> colGroupsList = crosstab.getColumnGroupsList();
+		List<?> rowGroupsList = crosstab.getRowGroupsList();
+		String columnGroupName = cell.getOrigin().getColumnGroupName();
+		switch (cell.getOrigin().getType()) {
+		case JRCrosstabOrigin.TYPE_DATA_CELL:
+			if (height >= 0)
+				for (int i = cells.length - 1; i >= 0; i--) {
+					for (int j = cells[i].length - 1; j >= 0; j--) {
+						((JRDesignCrosstabCell) cells[i][j]).setHeight(height);
+					}
+				}
+			break;
+		case JRCrosstabOrigin.TYPE_HEADER_CELL:
+			if (!colGroupsList.isEmpty()) {
+				JRDesignCrosstabColumnGroup p = (JRDesignCrosstabColumnGroup) colGroupsList.get(colGroupsList.size() - 1);
+				setCellHeight(p, p.getHeight(), p.getHeight() + height - cell.getHeight());
 			}
+			break;
+		case JRCrosstabOrigin.TYPE_COLUMN_GROUP_HEADER:
+			for (int i = 0; i < colGroupsList.size(); i++) {
+				JRDesignCrosstabColumnGroup p = (JRDesignCrosstabColumnGroup) colGroupsList.get(i);
+				if (p.getName().equals(columnGroupName)) {
+					setCellHeight(p, p.getHeight(), height);
+					break;
+				}
+			}
+			break;
+		case JRCrosstabOrigin.TYPE_COLUMN_GROUP_TOTAL_HEADER:
+			for (int i = 0; i < colGroupsList.size(); i++) {
+				JRDesignCrosstabColumnGroup p = (JRDesignCrosstabColumnGroup) colGroupsList.get(i);
+				if (p.getName().equals(columnGroupName)) {
+					setCellHeight(p, p.getHeight(), p.getHeight() + height - cell.getHeight());
+					break;
+				}
+			}
+			break;
+		case JRCrosstabOrigin.TYPE_ROW_GROUP_TOTAL_HEADER:
+			boolean calculated = false;
+			String rowGroupName = cell.getOrigin().getRowGroupName();
+			for (int i = cells.length - 1; i >= 0; i--) {
+				for (int j = cells[i].length - 1; j >= 0; j--) {
+					JRDesignCrosstabCell jrCrosstabCell = (JRDesignCrosstabCell) cells[i][j];
+					if (jrCrosstabCell.getRowTotalGroup() != null && rowGroupName != null
+							&& jrCrosstabCell.getRowTotalGroup().equals(rowGroupName)) {
+						if (!calculated) {
+							height = jrCrosstabCell.getHeight() + height - cell.getHeight();
+							calculated = true;
+						}
+						if (height >= 0)
+							jrCrosstabCell.setHeight(height);
+						else
+							return;
+					}
+				}
+			}
+			break;
+		case JRCrosstabOrigin.TYPE_ROW_GROUP_HEADER:
+			rowGroupName = cell.getOrigin().getRowGroupName();
+			for (int i = 0; i < rowGroupsList.size(); i++) {
+				JRDesignCrosstabRowGroup rg = (JRDesignCrosstabRowGroup) rowGroupsList.get(i);
+				if (rg.getName().equals(rowGroupName)) {
+					if (i == rowGroupsList.size() - 1) {
+						setHeight((JRDesignCellContents) cells[cells.length - 1][cells[i].length - 1].getContents(), height);
+					} else {
+						int delta = height - cell.getHeight();
+						JRDesignCrosstabRowGroup rgNext = (JRDesignCrosstabRowGroup) rowGroupsList.get(i + 1);
+						if (rgNext.getTotalPositionValue().equals(CrosstabTotalPositionEnum.END)) {
+							JRDesignCellContents totalHeader = (JRDesignCellContents) rgNext.getTotalHeader();
+							setHeight(totalHeader, totalHeader.getHeight() + delta);
+						} else {
+							JRDesignCellContents header = (JRDesignCellContents) rgNext.getHeader();
+							setHeight(header, header.getHeight() + delta);
+						}
+						break;
+					}
+				}
+			}
+			break;
+		}
+	}
+
+	private void setCellWidth(JRDesignCrosstabRowGroup p, int oldValue, int width) {
+		if (width > 0) {
+			p.setWidth(width);
+			p.getEventSupport().firePropertyChange(JRDesignCrosstabRowGroup.PROPERTY_WIDTH, oldValue, width);
+		}
+	}
+
+	private void setCellHeight(JRDesignCrosstabColumnGroup p, int oldValue, int height) {
+		if (height >= 0) {
+			p.setHeight(height);
+			p.getEventSupport().firePropertyChange(JRDesignCrosstabColumnGroup.PROPERTY_HEIGHT, oldValue, height);
 		}
 	}
 

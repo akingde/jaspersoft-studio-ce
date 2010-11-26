@@ -71,6 +71,8 @@ import com.jaspersoft.studio.crosstab.model.rowgroup.MRowGroups;
 import com.jaspersoft.studio.crosstab.model.rowgroup.action.CreateRowGroupAction;
 import com.jaspersoft.studio.crosstab.model.rowgroup.command.CreateRowGroupCommand;
 import com.jaspersoft.studio.crosstab.model.rowgroup.command.DeleteRowGroupCommand;
+import com.jaspersoft.studio.crosstab.part.CrosstabCellEditPart;
+import com.jaspersoft.studio.crosstab.part.CrosstabEditPart;
 import com.jaspersoft.studio.editor.gef.figures.CrosstabFigure;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -228,7 +230,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public List<?> getChildren4Element(Object jrObject) {
 		if (jrObject instanceof JRCrosstab) {
-			JRCrosstab ct = (JRCrosstab) jrObject;
+			// JRCrosstab ct = (JRCrosstab) jrObject;
 			List<Object> lst = new ArrayList<Object>();
 
 			// lst.add(ct.getParameters());
@@ -347,8 +349,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
-//		if (model instanceof MCell)
-//			return new CrosstabCellEditPart();
+		if (model instanceof MCrosstab)
+			return new CrosstabEditPart();
+		if (model instanceof MCell)
+			return new CrosstabCellEditPart();
 		return null;
 	}
 
