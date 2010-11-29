@@ -94,7 +94,6 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	@Override
 	protected Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
-		System.out.println("Constraint request:  " + request.getMoveDelta());
 		if (child instanceof IContainerPart) {
 			return ((IContainerPart) child).getConstraintFor(request, child);
 		}
@@ -142,10 +141,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
-		// Command create = null;
-		System.out.println("DESIGNER CREATE COMMAND " + request);
 		if (request.getType() == REQ_MOVE) {
-			System.out.println("getCreateCommand " + request);
+			// System.out.println("getCreateCommand " + request);
 		} else if (request.getType() == REQ_CREATE && getHost() instanceof AJDEditPart) {
 
 			Rectangle constraint = (Rectangle) getConstraintFor(request);

@@ -97,7 +97,6 @@ public class BandResizeTracker extends SimpleDragTracker {
 	 *          the new autoexpose helper or <code>null</code>
 	 */
 	protected void setAutoexposeHelper(AutoexposeHelper helper) {
-		// TODO add debug output System.out.println(this.getClass().getName() + "setAutoexposeHelper: " + helper);
 		exposeHelper = helper;
 		if (exposeHelper == null)
 			return;
@@ -230,9 +229,8 @@ public class BandResizeTracker extends SimpleDragTracker {
 	 * 
 	 * @see org.eclipse.gef.tools.AbstractTool#getCommand()
 	 */
-	@SuppressWarnings("unchecked")
 	protected Command getCommand() {
-		List editparts = getOperationSet();
+		List<?> editparts = getOperationSet();
 		EditPart part = null;
 		CompoundCommand command = new CompoundCommand();
 		command.setDebugLabel("Move Section Handle Tracker"); //$NON-NLS-1$
@@ -252,15 +250,6 @@ public class BandResizeTracker extends SimpleDragTracker {
 		boolean b = super.handleDragInProgress();
 		updateAutoexposeHelper();
 		return b;
-	}
-
-	/**
-	 * Gets the autoexpose helper.
-	 * 
-	 * @return the autoexpose helper
-	 */
-	private AutoexposeHelper getAutoexposeHelper() {
-		return exposeHelper;
 	}
 
 }
