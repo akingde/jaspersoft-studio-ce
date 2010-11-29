@@ -3,7 +3,6 @@ package com.jaspersoft.studio.crosstab.part;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 
-import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellResizableEditPolicy;
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabLayoutEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;

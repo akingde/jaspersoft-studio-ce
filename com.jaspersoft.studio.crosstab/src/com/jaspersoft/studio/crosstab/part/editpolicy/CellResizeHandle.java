@@ -19,15 +19,17 @@
  */
 package com.jaspersoft.studio.crosstab.part.editpolicy;
 
-import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Cursors;
+import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.RelativeLocator;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.handles.ResizeHandle;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.gef.handles.AbstractHandle;
 
 /**
- * The Class BandResizeHandle2.
+ * The Class BandResizeHandle.
  */
-public class CellResizeHandle2 extends ResizeHandle {
+public class CellResizeHandle extends AbstractHandle {
 
 	/** The tracker. */
 	CellResizeTracker tracker = null;
@@ -37,25 +39,39 @@ public class CellResizeHandle2 extends ResizeHandle {
 	 * 
 	 * @param owner
 	 *          the owner
-	 * @param direction
-	 *          the direction
 	 */
-	public CellResizeHandle2(GraphicalEditPart owner, int direction) {
-		super(owner, direction);
-		setLocator(new CellResizeHandleLocator(owner.getFigure(), direction));
-		setPreferredSize(7, 7);
+	public CellResizeHandle(GraphicalEditPart owner, int position) {
+		super(owner, new CellHandleLocator(owner.getFigure(), position));
+		initialize();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.handles.SquareHandle#getFillColor()
+	 * @see org.eclipse.gef.handles.AbstractHandle#createDragTracker()
 	 */
-	@Override
-	protected Color getFillColor() {
-		if (getOwner().getFigure().getBounds().height == 0)
-			return ColorConstants.red;
-		return super.getFillColor();
+	protected DragTracker createDragTracker() {
+		if (tracker == null) {
+			tracker = new CellResizeTracker(getOwner());
+		}
+		return tracker;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.handles.AbstractHandle#getDragTracker()
+	 */
+	public DragTracker getDragTracker() {
+		return createDragTracker();
+	}
+
+	/**
+	 * Initializes the handle. Sets the {@link DragTracker} and DragCursor.
+	 */
+	protected void initialize() {
+		setOpaque(false);
+		setCursor(Cursors.SIZES);
 	}
 
 }

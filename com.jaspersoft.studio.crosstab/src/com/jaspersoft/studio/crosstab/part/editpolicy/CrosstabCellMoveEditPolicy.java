@@ -23,6 +23,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
@@ -32,7 +33,6 @@ import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.crosstab.model.MCell;
-import com.jaspersoft.studio.editor.gef.parts.band.BandResizeHandle;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
@@ -55,7 +55,8 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 */
 	public void activate() {
 		super.activate();
-		setHandle(new BandResizeHandle((GraphicalEditPart) getHost()));
+		// setHandle(new CellResizeHandle((GraphicalEditPart) getHost()));
+		setHandle(new CellResizeHandle((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
 		getLayer(LayerConstants.HANDLE_LAYER).add(getHandle());
 	}
 
@@ -129,38 +130,38 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * @return the resize command
 	 */
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
-		// if (request.getResizeDirection() == PositionConstants.SOUTH
-		// || request.getResizeDirection() == PositionConstants.EAST) {
-		MCell mBand = (MCell) getHost().getModel();
+		if (request.getResizeDirection() == PositionConstants.SOUTH
+				|| request.getResizeDirection() == PositionConstants.EAST) {
+			MCell mBand = (MCell) getHost().getModel();
 
-		JRDesignCellContents jrdesign = (JRDesignCellContents) mBand.getValue();
-		int height = jrdesign.getHeight() + request.getSizeDelta().height;
-		if (height < 0)
-			height = 0;
+			JRDesignCellContents jrdesign = (JRDesignCellContents) mBand.getValue();
+			int height = jrdesign.getHeight() + request.getSizeDelta().height;
+			if (height < 0)
+				height = 0;
 
-		int width = jrdesign.getWidth() + request.getSizeDelta().width;
-		if (width < 0)
-			width = 0;
+			int width = jrdesign.getWidth() + request.getSizeDelta().width;
+			if (width < 0)
+				width = 0;
 
-		CompoundCommand c = new CompoundCommand("Change Cell Size");
+			CompoundCommand c = new CompoundCommand("Change Cell Size");
 
-		if (request.getSizeDelta().width != 0) {
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setTarget(mBand);
-			setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_WIDTH);
-			setCommand.setPropertyValue(width);
-			c.add(setCommand);
+			if (request.getSizeDelta().width != 0) {
+				SetValueCommand setCommand = new SetValueCommand();
+				setCommand.setTarget(mBand);
+				setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_WIDTH);
+				setCommand.setPropertyValue(width);
+				c.add(setCommand);
+			}
+			if (request.getSizeDelta().height != 0) {
+				SetValueCommand setCommand = new SetValueCommand();
+				setCommand.setTarget(mBand);
+				setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_HEIGHT);
+				setCommand.setPropertyValue(height);
+				c.add(setCommand);
+			}
+			return c;
 		}
-		if (request.getSizeDelta().height != 0) {
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setTarget(mBand);
-			setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_HEIGHT);
-			setCommand.setPropertyValue(height);
-			c.add(setCommand);
-		}
-		return c;
-		// }
-		// return null;
+		return null;
 	}
 
 	/**

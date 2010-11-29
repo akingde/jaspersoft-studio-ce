@@ -104,7 +104,8 @@ public class CrosstabCellEditPart extends FigureEditPart implements IContainerPa
 	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
 		if (request.getResizeDirection() == PositionConstants.SOUTH
 				|| request.getResizeDirection() == PositionConstants.NORTH
-				|| request.getResizeDirection() == PositionConstants.EAST)
+				|| request.getResizeDirection() == PositionConstants.EAST
+				|| request.getResizeDirection() == PositionConstants.WEST)
 			System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection());
 		return new Rectangle(0, 0, request.getSizeDelta().width, request.getSizeDelta().height);
 	}
