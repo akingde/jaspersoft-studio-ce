@@ -41,6 +41,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.crosstab.figure.CellFigure;
+import com.jaspersoft.studio.crosstab.figure.CrosstabFigure;
 import com.jaspersoft.studio.crosstab.model.MCell;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroup;
@@ -73,7 +74,6 @@ import com.jaspersoft.studio.crosstab.model.rowgroup.command.CreateRowGroupComma
 import com.jaspersoft.studio.crosstab.model.rowgroup.command.DeleteRowGroupCommand;
 import com.jaspersoft.studio.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.crosstab.part.CrosstabEditPart;
-import com.jaspersoft.studio.editor.gef.figures.CrosstabFigure;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.ReportFactory;

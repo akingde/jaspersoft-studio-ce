@@ -28,7 +28,6 @@ import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -312,12 +311,19 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 			JRCellContents headerCell = oldObject.getHeaderCell();
 			if (headerCell != null)
 				((JRDesignCellContents) headerCell).getEventSupport().removePropertyChangeListener(this);
+			JRCellContents wndCell = oldObject.getWhenNoDataCell();
+			if (wndCell != null)
+				((JRDesignCellContents) wndCell).getEventSupport().removePropertyChangeListener(this);
+
 		}
 		if (newObject != null) {
 
 			JRCellContents headerCell = newObject.getHeaderCell();
 			if (headerCell != null)
 				((JRDesignCellContents) headerCell).getEventSupport().addPropertyChangeListener(this);
+			JRCellContents wndCell = newObject.getWhenNoDataCell();
+			if (wndCell != null)
+				((JRDesignCellContents) wndCell).getEventSupport().addPropertyChangeListener(this);
 		}
 		super.setValue(value);
 	}
