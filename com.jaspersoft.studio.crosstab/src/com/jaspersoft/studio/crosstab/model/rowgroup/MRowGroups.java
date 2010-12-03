@@ -41,7 +41,7 @@ public class MRowGroups extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new CrosstabNodeIconDescriptor("rowgroups");
+			iconDescriptor = new CrosstabNodeIconDescriptor("rowgroups"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

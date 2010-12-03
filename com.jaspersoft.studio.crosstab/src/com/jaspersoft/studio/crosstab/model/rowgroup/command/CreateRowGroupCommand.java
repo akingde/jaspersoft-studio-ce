@@ -84,12 +84,12 @@ public class CreateRowGroupCommand extends Command {
 	public void execute() {
 		if (jrGroup == null) {
 			this.jrGroup = new JRDesignCrosstabRowGroup();
-			this.jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(), "Row Group"));
+			this.jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(), Messages.CreateRowGroupCommand_row_group));
 			this.jrGroup.setWidth(100);
 
 			JRDesignExpression exp = new JRDesignExpression();
-			exp.setValueClassName("java.lang.String");
-			exp.setText("");
+			exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
+			exp.setText(""); //$NON-NLS-1$
 			JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
 			bucket.setExpression(exp);
 			this.jrGroup.setBucket(bucket);
@@ -102,16 +102,16 @@ public class CreateRowGroupCommand extends Command {
 					: ((baseCell.getContents() != null) ? baseCell.getContents().getHeight() : 30);
 
 			exp = new JRDesignExpression();
-			exp.setValueClassName("java.lang.String");
-			exp.setText("$V{" + jrGroup.getName() + "}");
+			exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
+			exp.setText("$V{" + jrGroup.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			JRDesignTextField tf = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
 			tf.setX(0);
 			tf.setY(0);
 			tf.setWidth(60);
 			tf.setHeight(20);
-			if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) {
-				tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text"));
+			if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) { //$NON-NLS-1$ //$NON-NLS-2$
+				tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text")); //$NON-NLS-1$
 			}
 			tf.setExpression(exp);
 
@@ -123,10 +123,10 @@ public class CreateRowGroupCommand extends Command {
 				addRowGroup(jrCrosstab, jrGroup);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) {
-					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(), "CopyOFRowGroup_");
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Row Group Name",
-							"Please, enter unique Row Group name", defaultName, null);
+				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(), "CopyOFRowGroup_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateRowGroupCommand_row_group_name,
+							Messages.CreateRowGroupCommand_row_group_text_dialog, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());
 						execute();

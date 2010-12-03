@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 public class CreateRowGroupAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_rowgroup";
+	public static final String ID = "create_rowgroup"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,8 +51,8 @@ public class CreateRowGroupAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Row Group");
-		setToolTipText("Create row group");
+		setText(Messages.CreateRowGroupAction_create_row_group);
+		setToolTipText(Messages.CreateRowGroupAction_create_row_group_tool_tip);
 		setId(CreateRowGroupAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

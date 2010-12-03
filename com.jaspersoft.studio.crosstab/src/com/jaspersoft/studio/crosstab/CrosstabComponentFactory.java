@@ -132,11 +132,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createColumnGroupCells(MColumnGroup rg, JRCrosstabColumnGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), "Header: " + p.getName());
+		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), "Total: " + p.getName());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}
@@ -149,11 +149,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createRowGroupCells(MRowGroup rg, JRCrosstabRowGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), "Header: " + p.getName());
+		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), "Total: " + p.getName());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}
@@ -169,18 +169,18 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			boolean hide = false;
 			String colname = c.getColumnTotalGroup();
 			if (colname == null)
-				colname = "Detail";
+				colname = Messages.CrosstabComponentFactory_detail;
 			else
 				hide = isColumnGroupTotal(ct, colname);
 
 			String rowname = c.getRowTotalGroup();
 			if (rowname == null)
-				rowname = "Detail";
+				rowname = Messages.CrosstabComponentFactory_detail;
 			else
 				hide = hide || isRowGroupTotal(ct, rowname);
 
 			if (!hide) {
-				mc = new MCell(mCrosstab, c.getContents(), colname + "/" + rowname);
+				mc = new MCell(mCrosstab, c.getContents(), colname + "/" + rowname); //$NON-NLS-1$
 				ReportFactory.createElementsForBand(mc, c.getContents().getChildren());
 			}
 		}

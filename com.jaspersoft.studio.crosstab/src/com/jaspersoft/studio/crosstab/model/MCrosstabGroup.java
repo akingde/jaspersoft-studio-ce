@@ -99,17 +99,17 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		ComboBoxPropertyDescriptor totalPositionD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, "Total Position", EnumHelper.getEnumNames(
+				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.MCrosstabGroup_total_position, EnumHelper.getEnumNames(
 						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL));
-		totalPositionD.setDescription("Total Position.");
+		totalPositionD.setDescription(Messages.MCrosstabGroup_total_position_description);
 		desc.add(totalPositionD);
 
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_NAME, "Name");
-		nameD.setDescription("Name");
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_NAME, Messages.MCrosstabGroup_name);
+		nameD.setDescription(Messages.MCrosstabGroup_name_description);
 		desc.add(nameD);
 
-		JRPropertyDescriptor bucketD = new JRPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_BUCKET, "Bucket");
-		bucketD.setDescription("Bucket.");
+		JRPropertyDescriptor bucketD = new JRPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_BUCKET, Messages.MCrosstabGroup_bucket);
+		bucketD.setDescription(Messages.MCrosstabGroup_bucket_description);
 		desc.add(bucketD);
 		
 		

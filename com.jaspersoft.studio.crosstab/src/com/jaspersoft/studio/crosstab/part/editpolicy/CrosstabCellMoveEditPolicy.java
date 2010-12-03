@@ -143,7 +143,7 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 			if (width < 0)
 				width = 0;
 
-			CompoundCommand c = new CompoundCommand("Change Cell Size");
+			CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
 
 			if (request.getSizeDelta().width != 0) {
 				SetValueCommand setCommand = new SetValueCommand();

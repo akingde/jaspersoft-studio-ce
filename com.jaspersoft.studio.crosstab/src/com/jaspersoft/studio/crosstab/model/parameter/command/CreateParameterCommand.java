@@ -81,7 +81,7 @@ public class CreateParameterCommand extends Command {
 		if (jrParameter == null) {
 			this.jrParameter = new JRDesignCrosstabParameter();
 			this.jrParameter.setSystemDefined(false);
-			this.jrParameter.setName(ModelUtils.getDefaultName(jrCrosstab.getParametersMap(), "Parameter"));
+			this.jrParameter.setName(ModelUtils.getDefaultName(jrCrosstab.getParametersMap(), Messages.CreateParameterCommand_parameter));
 		}
 		if (jrParameter != null) {
 			try {
@@ -92,10 +92,10 @@ public class CreateParameterCommand extends Command {
 				// jrCrosstab.addParameter(index, jrParameter);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) {
-					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getParametersMap(), "CopyOFParameter_");
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Parameter Name",
-							"Please, enter unique parameter name", defaultName, null);
+				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getParametersMap(), "CopyOFParameter_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateParameterCommand_parameter_name,
+							Messages.CreateParameterCommand_parameter_text_dialog, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrParameter.setName(dlg.getValue());
 						execute();

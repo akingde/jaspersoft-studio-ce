@@ -65,7 +65,7 @@ public class MBucket extends APropertyNode {
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
 	public String getDisplayText() {
-		return "Bucket";
+		return Messages.MBucket_bucket;
 	}
 
 	/*
@@ -113,24 +113,24 @@ public class MBucket extends APropertyNode {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignCrosstabBucket.PROPERTY_ORDER, "Order",
+		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignCrosstabBucket.PROPERTY_ORDER, Messages.MBucket_order,
 				EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
-		orderD.setDescription("Order.");
+		orderD.setDescription(Messages.MBucket_order_description);
 		desc.add(orderD);
 
 		JRExpressionPropertyDescriptor orderByExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION, "Order By Expression");
-		orderByExprD.setDescription("Order by expression.");
+				JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION, Messages.MBucket_order_by_expression);
+		orderByExprD.setDescription(Messages.MBucket_order_by_expression_description);
 		desc.add(orderByExprD);
 
 		JRExpressionPropertyDescriptor compExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION, "Comparator Expression");
-		compExprD.setDescription("Comparator expression.");
+				JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION, Messages.MBucket_comparator_expression);
+		compExprD.setDescription(Messages.MBucket_comparator_expression_description);
 		desc.add(compExprD);
 
 		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(
-				JRDesignCrosstabBucket.PROPERTY_EXPRESSION, "Expression");
-		exprD.setDescription("Expression.");
+				JRDesignCrosstabBucket.PROPERTY_EXPRESSION, Messages.MBucket_expression);
+		exprD.setDescription(Messages.MBucket_expression_description);
 		desc.add(exprD);
 	}
 

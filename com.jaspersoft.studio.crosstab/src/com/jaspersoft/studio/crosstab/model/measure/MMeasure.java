@@ -60,7 +60,7 @@ public class MMeasure extends APropertyNode implements ICopyable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new CrosstabNodeIconDescriptor("measure");
+			iconDescriptor = new CrosstabNodeIconDescriptor("measure"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -140,40 +140,40 @@ public class MMeasure extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabMeasure.PROPERTY_NAME, "Name");
-		nameD.setDescription("Name");
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabMeasure.PROPERTY_NAME, Messages.MMeasure_name);
+		nameD.setDescription(Messages.MMeasure_name_description);
 		desc.add(nameD);
 
 		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_CALCULATION, "Calculation", EnumHelper.getEnumNames(CalculationEnum.values(),
+				JRDesignCrosstabMeasure.PROPERTY_CALCULATION, Messages.MMeasure_calculation, EnumHelper.getEnumNames(CalculationEnum.values(),
 						NullEnum.NOTNULL));
-		calculationD.setDescription("Calculation.");
+		calculationD.setDescription(Messages.MMeasure_calculation_description);
 		desc.add(calculationD);
 
 		ComboBoxPropertyDescriptor percentOfTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE, "Percentage Of Type", EnumHelper.getEnumNames(
+				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE, Messages.MMeasure_percentage_of_type, EnumHelper.getEnumNames(
 						CrosstabPercentageEnum.values(), NullEnum.NOTNULL));
-		percentOfTypeD.setDescription("Percentage Of Type.");
+		percentOfTypeD.setDescription(Messages.MMeasure_percentage_of_type_description);
 		desc.add(percentOfTypeD);
 
 		JRExpressionPropertyDescriptor valueExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION, "Value Expression");
-		valueExprD.setDescription("Value Expression.");
+				JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION, Messages.MMeasure_value_expression);
+		valueExprD.setDescription(Messages.MMeasure_value_expression_description);
 		desc.add(valueExprD);
 
 		ClassTypePropertyDescriptor valueClassD = new ClassTypePropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS, "Value Class");
-		valueClassD.setDescription("Value class.");
+				JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS, Messages.MMeasure_value_class);
+		valueClassD.setDescription(Messages.MMeasure_value_class_desription);
 		desc.add(valueClassD);
 
 		ClassTypePropertyDescriptor incFactClassD = new ClassTypePropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, "Incrementer Factory Class Name");
-		incFactClassD.setDescription("Incrementer Factory Class Name.");
+				JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, Messages.MMeasure_increment_factory_class_name);
+		incFactClassD.setDescription(Messages.MMeasure_increment_factory_class_name_description);
 		desc.add(incFactClassD);
 
 		ClassTypePropertyDescriptor percCalcClassD = new ClassTypePropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME, "Percentage Calculation Class Name");
-		percCalcClassD.setDescription("Percentage Calculation Class Name.");
+				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME, Messages.MMeasure_percentage_calculation_class_name);
+		percCalcClassD.setDescription(Messages.MMeasure_percentage_calculation_class_name_description);
 		desc.add(percCalcClassD);
 	}
 

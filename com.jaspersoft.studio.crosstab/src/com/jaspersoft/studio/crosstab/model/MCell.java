@@ -72,7 +72,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new CrosstabNodeIconDescriptor("cell");
+			iconDescriptor = new CrosstabNodeIconDescriptor("cell"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -157,7 +157,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 				JRDesignCellContents jrElement = (JRDesignCellContents) getValue();
 				JRStyle[] styles = jasperDesign.getStyles();
 				String[] items = new String[styles.length + 1];
-				items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : "";
+				items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
 				for (int j = 0; j < styles.length; j++) {
 					items[j + 1] = styles[j].getName();
 				}
@@ -175,30 +175,30 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, "Opaque",
+		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MCell_opaque,
 				EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.NOTNULL));
-		opaqueD.setDescription("Specifies whether the background of an object is transparent or opaque.");
+		opaqueD.setDescription(Messages.MCell_opaque_description);
 		desc.add(opaqueD);
 
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR, "Backcolor",
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR, Messages.MCell_backcolor,
 				NullEnum.INHERITED);
 		backcolorD
-				.setDescription("Back color to use when drawing the object. Hexadecimal formatted values preceded by the # character or decimal values are accepted along with the following predefined color values: black, blue, cyan, darkGray, gray, green, lightGray, magenta, orange, pink, red, yellow, white.");
+				.setDescription(Messages.MCell_backcolor_description);
 		desc.add(backcolorD);
 
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignCellContents.PROPERTY_STYLE, "Parent Style", new String[] { "" },
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignCellContents.PROPERTY_STYLE, Messages.MCell_parent_style, new String[] { "" }, //$NON-NLS-1$
 				NullEnum.NULL);
-		styleD.setDescription("Name of the report level style to use as base style (see <style> element).");
+		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
 
-		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_WIDTH, "Width");
+		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_WIDTH, Messages.MCell_width);
 		desc.add(wD);
 
-		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_HEIGHT, "Height");
+		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_HEIGHT, Messages.MCell_height);
 		desc.add(hD);
 
-		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, "Line Box");
-		lineBoxD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MCell_line_box);
+		lineBoxD.setDescription(Messages.MCell_line_box_description);
 		desc.add(lineBoxD);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, EnumHelper.getValue(ModeEnum.OPAQUE, 1, false));
@@ -206,7 +206,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		defaultsMap.put(JRDesignCellContents.PROPERTY_STYLE, null);
 	}
 
-	public static final String LINE_BOX = "LineBox";
+	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
 	private MLineBox lineBox;
 
 	/*
@@ -226,7 +226,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 					return jrElement.getStyleNameReference();
 				if (jrElement.getStyle() != null)
 					return jrElement.getStyle().getName();
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 			if (id.equals(JRDesignCrosstabCell.PROPERTY_WIDTH))
 				return jrElement.getWidth();
@@ -257,7 +257,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 			else if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR)) {
 				jrElement.setBackcolor(Colors.getAWT4SWTRGBColor((RGB) value));
 			} else if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
-				if (!value.equals("")) {
+				if (!value.equals("")) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
 						jrElement.setStyle(style);

@@ -84,12 +84,12 @@ public class CreateColumnGroupCommand extends Command {
 	public void execute() {
 		if (jrGroup == null) {
 			this.jrGroup = new JRDesignCrosstabColumnGroup();
-			this.jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab.getColumnGroupIndicesMap(), "Column Group"));
+			this.jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab.getColumnGroupIndicesMap(), Messages.CreateColumnGroupCommand_column_group));
 			this.jrGroup.setHeight(100);
 
 			JRDesignExpression exp = new JRDesignExpression();
-			exp.setValueClassName("java.lang.String");
-			exp.setText("");
+			exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
+			exp.setText(""); //$NON-NLS-1$
 			JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
 			bucket.setExpression(exp);
 			this.jrGroup.setBucket(bucket);
@@ -102,16 +102,16 @@ public class CreateColumnGroupCommand extends Command {
 			// : ((baseCell.getContents() != null) ? baseCell.getContents().getHeight() : 30);
 
 			exp = new JRDesignExpression();
-			exp.setValueClassName("java.lang.String");
-			exp.setText("$V{" + jrGroup.getName() + "}");
+			exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
+			exp.setText("$V{" + jrGroup.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			JRDesignTextField tf = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
 			tf.setX(0);
 			tf.setY(0);
 			tf.setWidth(60);
 			tf.setHeight(20);
-			if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) {
-				tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text"));
+			if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) { //$NON-NLS-1$ //$NON-NLS-2$
+				tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text")); //$NON-NLS-1$
 			}
 			tf.setExpression(exp);
 
@@ -125,10 +125,10 @@ public class CreateColumnGroupCommand extends Command {
 
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) {
-					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getColumnGroupIndicesMap(), "CopyOFColumnGroup_");
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Column Group Name",
-							"Please, enter unique Column Group name", defaultName, null);
+				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getColumnGroupIndicesMap(), "CopyOFColumnGroup_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateColumnGroupCommand_column_group_name,
+							Messages.CreateColumnGroupCommand_column_group_text_dialog, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());
 						execute();

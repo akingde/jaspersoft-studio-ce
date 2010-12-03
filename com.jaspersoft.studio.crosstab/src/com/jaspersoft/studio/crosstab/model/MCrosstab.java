@@ -70,7 +70,7 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new CrosstabNodeIconDescriptor("crosstab");
+			iconDescriptor = new CrosstabNodeIconDescriptor("crosstab"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -137,46 +137,46 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor runDirectionD = new ComboBoxPropertyDescriptor(JRBaseCrosstab.PROPERTY_RUN_DIRECTION,
-				"Run Direction", EnumHelper.getEnumNames(RunDirectionEnum.values(), NullEnum.NOTNULL));
-		runDirectionD.setDescription("Run direction.");
+				Messages.MCrosstab_run_direction, EnumHelper.getEnumNames(RunDirectionEnum.values(), NullEnum.NOTNULL));
+		runDirectionD.setDescription(Messages.MCrosstab_run_direction_description);
 		desc.add(runDirectionD);
 
 		JRExpressionPropertyDescriptor paramMapExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION, "Parameters Map Expression");
-		paramMapExprD.setDescription("Parameters map expression.");
+				JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.MCrosstab_parameter_map_expression);
+		paramMapExprD.setDescription(Messages.MCrosstab_parameter_map_expression_description);
 		desc.add(paramMapExprD);
 
 		CheckBoxPropertyDescriptor repeatColumnHeadersD = new CheckBoxPropertyDescriptor(
-				JRDesignCrosstab.PROPERTY_REPEAT_COLUMN_HEADERS, "Repeat Column Headers", NullEnum.NOTNULL);
-		repeatColumnHeadersD.setDescription("Repeat column headers.");
+				JRDesignCrosstab.PROPERTY_REPEAT_COLUMN_HEADERS, Messages.MCrosstab_repeat_column_headers, NullEnum.NOTNULL);
+		repeatColumnHeadersD.setDescription(Messages.MCrosstab_repeat_column_headers_description);
 		desc.add(repeatColumnHeadersD);
 
 		CheckBoxPropertyDescriptor repeatRowHeadersD = new CheckBoxPropertyDescriptor(
-				JRDesignCrosstab.PROPERTY_REPEAT_ROW_HEADERS, "Repeat Row Headers", NullEnum.NOTNULL);
-		repeatRowHeadersD.setDescription("Repeat row headers.");
+				JRDesignCrosstab.PROPERTY_REPEAT_ROW_HEADERS, Messages.MCrosstab_repeat_row_headers, NullEnum.NOTNULL);
+		repeatRowHeadersD.setDescription(Messages.MCrosstab_repeat_row_headers_description);
 		desc.add(repeatRowHeadersD);
 
 		CheckBoxPropertyDescriptor ignoreWidthD = new CheckBoxPropertyDescriptor(JRDesignCrosstab.PROPERTY_IGNORE_WIDTH,
-				"Ignore Width", NullEnum.NULL);
-		ignoreWidthD.setDescription("Ignore width.");
+				Messages.MCrosstab_ignore_witdh, NullEnum.NULL);
+		ignoreWidthD.setDescription(Messages.MCrosstab_ignore_witdh_description);
 		desc.add(ignoreWidthD);
 
 		IntegerPropertyDescriptor columnBreakOffsetD = new IntegerPropertyDescriptor(
-				JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET, "Column Break Offset");
-		columnBreakOffsetD.setDescription("Column break offset");
+				JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET, Messages.MCrosstab_column_break_offset);
+		columnBreakOffsetD.setDescription(Messages.MCrosstab_column_break_offset_description);
 		desc.add(columnBreakOffsetD);
 
-		JRPropertyDescriptor datasetD = new JRPropertyDescriptor(JRDesignCrosstab.PROPERTY_DATASET, "Dataset");
-		datasetD.setDescription("Dataset.");
+		JRPropertyDescriptor datasetD = new JRPropertyDescriptor(JRDesignCrosstab.PROPERTY_DATASET, Messages.MCrosstab_dataset);
+		datasetD.setDescription(Messages.MCrosstab_dataset_description);
 		desc.add(datasetD);
 
-		datasetD.setCategory("Crosstab Properties");
-		repeatColumnHeadersD.setCategory("Crosstab Properties");
-		repeatRowHeadersD.setCategory("Crosstab Properties");
-		ignoreWidthD.setCategory("Crosstab Properties");
-		columnBreakOffsetD.setCategory("Crosstab Properties");
-		runDirectionD.setCategory("Crosstab Properties");
-		paramMapExprD.setCategory("Crosstab Properties");
+		datasetD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		repeatColumnHeadersD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		repeatRowHeadersD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		ignoreWidthD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		columnBreakOffsetD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		runDirectionD.setCategory(Messages.MCrosstab_crosstab_properties_category);
+		paramMapExprD.setCategory(Messages.MCrosstab_crosstab_properties_category);
 
 	}
 

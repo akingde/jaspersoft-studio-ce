@@ -49,13 +49,13 @@ public class CrosstabLayoutEditPolicy extends PageLayoutEditPolicy {
 	 */
 	@Override
 	protected Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
-		System.out.println("Constraint request:  " + request.getMoveDelta());
+		System.out.println("Constraint request:  " + request.getMoveDelta()); //$NON-NLS-1$
 		if (child instanceof CrosstabCellEditPart) {
 			if (request.getResizeDirection() == PositionConstants.SOUTH
 					|| request.getResizeDirection() == PositionConstants.NORTH
 					|| request.getResizeDirection() == PositionConstants.EAST
 					|| request.getResizeDirection() == PositionConstants.WEST)
-				System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection());
+				System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection()); //$NON-NLS-1$ //$NON-NLS-2$
 			return new Rectangle(0, 0, request.getSizeDelta().width, request.getSizeDelta().height);
 		}
 		return super.getConstraintFor(request, child);
@@ -82,7 +82,7 @@ public class CrosstabLayoutEditPolicy extends PageLayoutEditPolicy {
 			if (width < 0)
 				width = 0;
 
-			CompoundCommand c = new CompoundCommand("Change Cell Size");
+			CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
 			if (constraintR.height > 0) {
 				SetValueCommand setCommand = new SetValueCommand();
 				setCommand.setTarget(model);

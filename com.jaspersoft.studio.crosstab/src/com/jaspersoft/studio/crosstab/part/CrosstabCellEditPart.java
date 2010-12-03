@@ -83,7 +83,7 @@ public class CrosstabCellEditPart extends FigureEditPart implements IContainerPa
 		if (width < 0)
 			width = 0;
 
-		CompoundCommand c = new CompoundCommand("Change Cell Size");
+		CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
 		if (delta.height != 0) {
 			SetValueCommand setCommand = new SetValueCommand();
 			setCommand.setTarget(model);
@@ -106,7 +106,7 @@ public class CrosstabCellEditPart extends FigureEditPart implements IContainerPa
 				|| request.getResizeDirection() == PositionConstants.NORTH
 				|| request.getResizeDirection() == PositionConstants.EAST
 				|| request.getResizeDirection() == PositionConstants.WEST)
-			System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection());
+			System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection()); //$NON-NLS-1$ //$NON-NLS-2$
 		return new Rectangle(0, 0, request.getSizeDelta().width, request.getSizeDelta().height);
 	}
 

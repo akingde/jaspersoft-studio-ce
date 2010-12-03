@@ -67,8 +67,8 @@ public class MCrosstabDataset extends MElementDataset {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		CheckBoxPropertyDescriptor repeatColumnHeadersD = new CheckBoxPropertyDescriptor(
-				JRDesignCrosstabDataset.PROPERTY_DATA_PRE_SORTED, "Data Pre Sorted", NullEnum.NOTNULL);
-		repeatColumnHeadersD.setDescription("Data presorted.");
+				JRDesignCrosstabDataset.PROPERTY_DATA_PRE_SORTED, Messages.MCrosstabDataset_data_presorted, NullEnum.NOTNULL);
+		repeatColumnHeadersD.setDescription(Messages.MCrosstabDataset_data_presorted_description);
 		desc.add(repeatColumnHeadersD);
 
 	}

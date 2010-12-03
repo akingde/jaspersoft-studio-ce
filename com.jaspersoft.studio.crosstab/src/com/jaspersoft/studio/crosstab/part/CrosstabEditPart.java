@@ -18,7 +18,7 @@ public class CrosstabEditPart extends FigureEditPart {
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new CrosstabLayoutEditPolicy());
-		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy());
+		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$
 	}
 
 }

@@ -37,7 +37,7 @@ public class MCrosstabHeader extends MCell {
 	}
 
 	public MCrosstabHeader(ANode parent, JRCellContents jfRield) {
-		super(parent, jfRield, "Crosstab Header");
+		super(parent, jfRield, Messages.MCrosstabHeader_crosstab_header);
 	}
 
 	@Override

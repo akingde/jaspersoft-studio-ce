@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 public class CreateCrosstabHeaderAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_crosstabheader";
+	public static final String ID = "create_crosstabheader"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,8 +51,8 @@ public class CreateCrosstabHeaderAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Crosstab Header");
-		setToolTipText("Create crosstab header");
+		setText(Messages.CreateCrosstabHeaderAction_create_crosstab_header);
+		setToolTipText(Messages.CreateCrosstabHeaderAction_create_crosstab_header_too_tip);
 		setId(CreateCrosstabHeaderAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

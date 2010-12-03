@@ -56,7 +56,7 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new CrosstabNodeIconDescriptor("rowgroup");
+			iconDescriptor = new CrosstabNodeIconDescriptor("rowgroup"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -129,13 +129,13 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor columnPositionD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabRowGroup.PROPERTY_POSITION, "Row Position", EnumHelper.getEnumNames(
+				JRDesignCrosstabRowGroup.PROPERTY_POSITION, Messages.MRowGroup_row_position, EnumHelper.getEnumNames(
 						CrosstabRowPositionEnum.values(), NullEnum.NOTNULL));
-		columnPositionD.setDescription("Row Position.");
+		columnPositionD.setDescription(Messages.MRowGroup_row_position_description);
 		desc.add(columnPositionD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRDesignCrosstabRowGroup.PROPERTY_WIDTH, "Width");
-		widthD.setDescription("Width");
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRDesignCrosstabRowGroup.PROPERTY_WIDTH, Messages.MRowGroup_width);
+		widthD.setDescription(Messages.MRowGroup_width_description);
 		desc.add(widthD);
 
 	}

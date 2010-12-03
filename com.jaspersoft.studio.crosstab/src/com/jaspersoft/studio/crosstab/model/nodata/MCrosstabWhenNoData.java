@@ -37,7 +37,7 @@ public class MCrosstabWhenNoData extends MCell {
 	}
 
 	public MCrosstabWhenNoData(ANode parent, JRCellContents jfRield) {
-		super(parent, jfRield, "When No Data");
+		super(parent, jfRield, Messages.MCrosstabWhenNoData_when_no_data);
 	}
 
 	@Override

@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 public class CreateMeasureAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_measure";
+	public static final String ID = "create_measure"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -51,8 +51,8 @@ public class CreateMeasureAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Measure");
-		setToolTipText("Create measure");
+		setText(Messages.CreateMeasureAction_create_measure);
+		setToolTipText(Messages.CreateMeasureAction_create_measure_tool_tip);
 		setId(CreateMeasureAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

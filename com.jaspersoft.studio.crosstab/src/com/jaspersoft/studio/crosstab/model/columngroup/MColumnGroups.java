@@ -45,7 +45,7 @@ public class MColumnGroups extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new CrosstabNodeIconDescriptor("columngroups");
+			iconDescriptor = new CrosstabNodeIconDescriptor("columngroups"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

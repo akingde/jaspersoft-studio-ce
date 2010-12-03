@@ -45,7 +45,7 @@ public class MMeasures extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new CrosstabNodeIconDescriptor("measures");
+			iconDescriptor = new CrosstabNodeIconDescriptor("measures"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
