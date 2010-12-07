@@ -41,7 +41,7 @@ public class MTableColumnFooter extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablecolumnfooter");
+			iconDescriptor = new TableNodeIconDescriptor("tablecolumnfooter"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

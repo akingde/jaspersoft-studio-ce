@@ -41,7 +41,7 @@ public class MTableDetail extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tabledetail");
+			iconDescriptor = new TableNodeIconDescriptor("tabledetail"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
