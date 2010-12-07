@@ -71,7 +71,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new ListNodeIconDescriptor("list");
+			iconDescriptor = new ListNodeIconDescriptor("list"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -126,41 +126,41 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(
-				StandardListComponent.PROPERTY_PRINT_ORDER, "Print Order", EnumHelper.getEnumNames(PrintOrderEnum.values(),
+				StandardListComponent.PROPERTY_PRINT_ORDER, Messages.MList_print_order, EnumHelper.getEnumNames(PrintOrderEnum.values(),
 						NullEnum.NOTNULL));
 		stretchTypeD
-				.setDescription("Specifies the graphic element stretch behavior when the report section is affected by stretch.");
+				.setDescription(Messages.MList_print_order_description);
 		desc.add(stretchTypeD);
-		stretchTypeD.setCategory("List Properties");
+		stretchTypeD.setCategory(Messages.MList_properties_category);
 
 		CheckBoxPropertyDescriptor ignoreWidthD = new CheckBoxPropertyDescriptor(
-				StandardListComponent.PROPERTY_IGNORE_WIDTH, "Ignore Width");
-		ignoreWidthD.setDescription("Ignore Width.");
+				StandardListComponent.PROPERTY_IGNORE_WIDTH, Messages.MList_ignore_width);
+		ignoreWidthD.setDescription(Messages.MList_ignore_width_description);
 		desc.add(ignoreWidthD);
-		ignoreWidthD.setCategory("List Properties");
+		ignoreWidthD.setCategory(Messages.MList_properties_category);
 
 		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(PREFIX + DesignListContents.PROPERTY_HEIGHT,
-				"Cell Height");
-		heightD.setCategory("List Properties");
-		heightD.setDescription("Height of the cell.");
+				Messages.MList_cell_height);
+		heightD.setCategory(Messages.MList_properties_category);
+		heightD.setDescription(Messages.MList_cell_height_description);
 		desc.add(heightD);
 
 		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(PREFIX + DesignListContents.PROPERTY_WIDTH,
-				"Cell Width");
-		widthD.setCategory("List Properties");
-		widthD.setDescription("Width of the cell.");
+				Messages.MList_cell_width);
+		widthD.setCategory(Messages.MList_properties_category);
+		widthD.setDescription(Messages.MList_cell_width_description);
 		desc.add(widthD);
 
-		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(PREFIX + "DATASET_RUN", "Dataset Run");
-		datasetRunD.setDescription("Dataset run.");
-		datasetRunD.setCategory("List Properties");
+		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(PREFIX + "DATASET_RUN", Messages.MList_dataset_run); //$NON-NLS-1$
+		datasetRunD.setDescription(Messages.MList_dataset_run_description);
+		datasetRunD.setCategory(Messages.MList_properties_category);
 		desc.add(datasetRunD);
 
 		defaultsMap.put(StandardListComponent.PROPERTY_IGNORE_WIDTH, new Boolean(false));
 		defaultsMap.put(StandardListComponent.PROPERTY_PRINT_ORDER, PrintOrderEnum.HORIZONTAL);
 	}
 
-	private static final String PREFIX = "CONTENTS.";
+	private static final String PREFIX = "CONTENTS."; //$NON-NLS-1$
 
 	private MDatasetRun mDatasetRun;
 
@@ -179,7 +179,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
 			return jrList.getContents().getWidth();
 
-		if (id.equals(PREFIX + "DATASET_RUN")) {
+		if (id.equals(PREFIX + "DATASET_RUN")) { //$NON-NLS-1$
 			if (mDatasetRun == null) {
 				JRDatasetRun j = jrList.getDatasetRun();
 				if (j == null)

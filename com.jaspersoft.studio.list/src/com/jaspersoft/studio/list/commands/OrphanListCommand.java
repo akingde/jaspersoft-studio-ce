@@ -58,7 +58,7 @@ public class OrphanListCommand extends Command {
 	 *          the child
 	 */
 	public OrphanListCommand(ANode parent, MElementGroup child) {
-		super("orphan child");
+		super(Messages.OrphanListCommand_orphan_child);
 		this.jrElement = (JRDesignElementGroup) child.getValue();
 		this.jrGroup = (JRElementGroup) parent.getValue();
 	}

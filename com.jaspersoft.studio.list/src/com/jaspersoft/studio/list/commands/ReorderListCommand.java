@@ -58,7 +58,7 @@ public class ReorderListCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderListCommand(MElementGroup child, ANode parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderListCommand_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignElementGroup) child.getValue();
 		this.jrGroup = jrElement.getElementGroup();
