@@ -61,7 +61,7 @@ public class MBarcode4j extends MBarcode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new BarcodeNodeIconDescriptor("barcode");
+			iconDescriptor = new BarcodeNodeIconDescriptor("barcode"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -153,41 +153,41 @@ public class MBarcode4j extends MBarcode {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(BarcodeComponent.PROPERTY_ORIENTATION,
-				"Orientation", Orientation.getItems());
-		orientationD.setDescription("Orientation.");
+				Messages.MBarcode4j_orientation, Orientation.getItems());
+		orientationD.setDescription(Messages.MBarcode4j_orientation_description);
 		desc.add(orientationD);
 
 		JRExpressionPropertyDescriptor patternExprD = new JRExpressionPropertyDescriptor(
-				BarcodeComponent.PROPERTY_PATTERN_EXPRESSION, "Pattern Expression");
-		patternExprD.setDescription("The pattern expression.");
+				BarcodeComponent.PROPERTY_PATTERN_EXPRESSION, Messages.MBarcode4j_pattern_expression);
+		patternExprD.setDescription(Messages.MBarcode4j_pattern_expression_description);
 		desc.add(patternExprD);
 
 		ComboBoxPropertyDescriptor textPositionD = new ComboBoxPropertyDescriptor(BarcodeComponent.PROPERTY_TEXT_POSITION,
-				"Text Position", TextPosition.getItems());
-		textPositionD.setDescription("Text position.");
+				Messages.MBarcode4j_text_position, TextPosition.getItems());
+		textPositionD.setDescription(Messages.MBarcode4j_text_position_description);
 		desc.add(textPositionD);
 
 		DoublePropertyDescriptor quiteZoneD = new DoublePropertyDescriptor(BarcodeComponent.PROPERTY_QUIET_ZONE,
-				"Quiet Zone");
-		quiteZoneD.setDescription("Quiet Zone.");
+				Messages.MBarcode4j_quiet_zone);
+		quiteZoneD.setDescription(Messages.MBarcode4j_quiet_zone_description);
 		desc.add(quiteZoneD);
 
 		DoublePropertyDescriptor moduleWidthD = new DoublePropertyDescriptor(BarcodeComponent.PROPERTY_MODULE_WIDTH,
-				"Module Width");
-		moduleWidthD.setDescription("Module Width.");
+				Messages.MBarcode4j_module_width);
+		moduleWidthD.setDescription(Messages.MBarcode4j_module_width_description);
 		desc.add(moduleWidthD);
 
 		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
-				BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE, "Vertical Quiet Zone");
-		vertQuietZoneD.setDescription("Vertical Quiet Zone.");
+				BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
+		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
 		desc.add(vertQuietZoneD);
 
-		vertQuietZoneD.setCategory("Barcode Properties");
-		moduleWidthD.setCategory("Barcode Properties");
-		quiteZoneD.setCategory("Barcode Properties");
-		orientationD.setCategory("Barcode Properties");
-		patternExprD.setCategory("Barcode Properties");
-		textPositionD.setCategory("Barcode Properties");
+		vertQuietZoneD.setCategory(Messages.MBarcode4j_properties_category);
+		moduleWidthD.setCategory(Messages.MBarcode4j_properties_category);
+		quiteZoneD.setCategory(Messages.MBarcode4j_properties_category);
+		orientationD.setCategory(Messages.MBarcode4j_properties_category);
+		patternExprD.setCategory(Messages.MBarcode4j_properties_category);
+		textPositionD.setCategory(Messages.MBarcode4j_properties_category);
 
 	}
 

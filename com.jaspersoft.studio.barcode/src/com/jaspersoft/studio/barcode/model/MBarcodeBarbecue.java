@@ -62,7 +62,7 @@ public class MBarcodeBarbecue extends MBarcode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new BarcodeNodeIconDescriptor("barcode");
+			iconDescriptor = new BarcodeNodeIconDescriptor("barcode"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -93,8 +93,8 @@ public class MBarcodeBarbecue extends MBarcode {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		StandardBarbecueComponent component = new StandardBarbecueComponent();
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setValueClassName("java.lang.String");
-		exp.setText("\"1234\"");
+		exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
+		exp.setText("\"1234\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
 		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr",
@@ -161,44 +161,44 @@ public class MBarcodeBarbecue extends MBarcode {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(StandardBarbecueComponent.PROPERTY_BAR_WIDTH,
-				"Bar Width");
-		widthD.setDescription("Width of the bar.");
+				Messages.MBarcodeBarbecue_bar_width);
+		widthD.setDescription(Messages.MBarcodeBarbecue_bar_width_description);
 		desc.add(widthD);
 
 		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH,
-				"Bar Height");
-		heightD.setDescription("Height of the bar.");
+				Messages.MBarcodeBarbecue_bar_height);
+		heightD.setDescription(Messages.MBarcodeBarbecue_bar_height_description);
 		desc.add(heightD);
 
 		JRExpressionPropertyDescriptor appIDexprD = new JRExpressionPropertyDescriptor(
-				StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION, "Application Identifier Expression");
-		appIDexprD.setDescription("The application identifier expression.");
+				StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION, Messages.MBarcodeBarbecue_application_identifier_expression);
+		appIDexprD.setDescription(Messages.MBarcodeBarbecue_application_identifier_expression_description);
 		desc.add(appIDexprD);
 
 		RComboBoxPropertyDescriptor typeD = new RComboBoxPropertyDescriptor(StandardBarbecueComponent.PROPERTY_TYPE,
-				"Type", new String[] { "2of7", "3of9", "Bookland", "Codabar", "Code128", "Code128A", "Code128B", "Code128C",
-						"Code39", "Code39 (Extended)", "EAN128", "EAN13", "GlobalTradeItemNumber", "Int2of5", "Monarch", "NW7",
-						"PDF417", "PostNet", "RandomWeightUPCA", "SCC14ShippingCode", "ShipmentIdentificationNumber", "SSCC18",
-						"Std2of5", "UCC128", "UPCA", "USD3", "USD4", "USPS" });
-		typeD.setDescription("The type of barcode.");
+				Messages.MBarcodeBarbecue_type, new String[] { "2of7", "3of9", "Bookland", "Codabar", "Code128", "Code128A", "Code128B", "Code128C", //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+						"Code39", "Code39 (Extended)", "EAN128", "EAN13", "GlobalTradeItemNumber", "Int2of5", "Monarch", "NW7", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+						"PDF417", "PostNet", "RandomWeightUPCA", "SCC14ShippingCode", "ShipmentIdentificationNumber", "SSCC18", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+						"Std2of5", "UCC128", "UPCA", "USD3", "USD4", "USPS" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+		typeD.setDescription(Messages.MBarcodeBarbecue_type_description);
 		desc.add(typeD);
 
 		CheckBoxPropertyDescriptor checksumRequiredD = new CheckBoxPropertyDescriptor(
-				StandardBarbecueComponent.PROPERTY_CHECKSUM_REQUIRED, "Checksum Required");
-		checksumRequiredD.setDescription("Checksum is required.");
+				StandardBarbecueComponent.PROPERTY_CHECKSUM_REQUIRED, Messages.MBarcodeBarbecue_checksum_required);
+		checksumRequiredD.setDescription(Messages.MBarcodeBarbecue_checksum_required_description);
 		desc.add(checksumRequiredD);
 
 		CheckBoxPropertyDescriptor drawTextD = new CheckBoxPropertyDescriptor(StandardBarbecueComponent.PROPERTY_DRAW_TEXT,
-				"Draw Text");
-		drawTextD.setDescription("Draw text.");
+				Messages.MBarcodeBarbecue_draw_text);
+		drawTextD.setDescription(Messages.MBarcodeBarbecue_draw_text_description);
 		desc.add(drawTextD);
 
-		widthD.setCategory("Barcode Properties");
-		typeD.setCategory("Barcode Properties");
-		drawTextD.setCategory("Barcode Properties");
-		checksumRequiredD.setCategory("Barcode Properties");
-		heightD.setCategory("Barcode Properties");
-		appIDexprD.setCategory("Barcode Properties");
+		widthD.setCategory(Messages.MBarcodeBarbecue_properties_category);
+		typeD.setCategory(Messages.MBarcodeBarbecue_properties_category);
+		drawTextD.setCategory(Messages.MBarcodeBarbecue_properties_category);
+		checksumRequiredD.setCategory(Messages.MBarcodeBarbecue_properties_category);
+		heightD.setCategory(Messages.MBarcodeBarbecue_properties_category);
+		appIDexprD.setCategory(Messages.MBarcodeBarbecue_properties_category);
 
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}

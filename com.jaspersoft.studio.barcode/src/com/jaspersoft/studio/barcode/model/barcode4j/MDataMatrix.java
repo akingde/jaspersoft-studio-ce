@@ -82,12 +82,12 @@ public class MDataMatrix extends MBarcode4j {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor shapeD = new ComboBoxPropertyDescriptor(DataMatrixComponent.PROPERTY_SHAPE, "Shape",
+		ComboBoxPropertyDescriptor shapeD = new ComboBoxPropertyDescriptor(DataMatrixComponent.PROPERTY_SHAPE, Messages.MDataMatrix_shape,
 				Orientation.getItems());
-		shapeD.setDescription("Shape.");
+		shapeD.setDescription(Messages.MDataMatrix_shape_description);
 		desc.add(shapeD);
 
-		shapeD.setCategory("Barcode Properties, DataMatrix");
+		shapeD.setCategory(Messages.MDataMatrix_properties_category);
 	}
 
 	@Override

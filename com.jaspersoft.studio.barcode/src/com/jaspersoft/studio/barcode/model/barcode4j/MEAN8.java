@@ -82,11 +82,11 @@ public class MEAN8 extends MBarcode4j {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(EAN8Component.PROPERTY_CHECKSUM_MODE,
-				"Checksum Mode", ChecksumMode.getItems());
-		checksumModeD.setDescription("Checksum mode.");
+				Messages.MEAN8_checksum_mode, ChecksumMode.getItems());
+		checksumModeD.setDescription(Messages.MEAN8_checksum_mode_description);
 		desc.add(checksumModeD);
 
-		checksumModeD.setCategory("Barcode Properties, EAN8");
+		checksumModeD.setCategory(Messages.MEAN8_properties_category);
 	}
 
 	@Override

@@ -63,42 +63,42 @@ public class BarcodeWizardPage extends WizardPage {
 	}
 
 	protected BarcodeWizardPage() {
-		super("barcodepage");
-		setTitle("Barcode Wizard");
-		setDescription("JasperReports provide two different components to create barcodes. The first one is Barbecue, the second is Barcode4j, both opensource.\n" +
-				"Please, select one type of barcode from a list.");
+		super("barcodepage"); //$NON-NLS-1$
+		setTitle(Messages.BarcodeWizardPage_barcode_wizard);
+		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a +
+				Messages.BarcodeWizardPage_barcode_wizard_description_b);
 	}
 
 	@Override
 	public void dispose() {
 		if (b4jCode != null) {
-			if (b4jCode.equals("Codabar"))
+			if (b4jCode.equals("Codabar")) //$NON-NLS-1$
 				barcode = new MCodabar();
-			else if (b4jCode.equals("Code128"))
+			else if (b4jCode.equals("Code128")) //$NON-NLS-1$
 				barcode = new MCode128();
-			else if (b4jCode.equals("Code39"))
+			else if (b4jCode.equals("Code39")) //$NON-NLS-1$
 				barcode = new MCode39();
-			else if (b4jCode.equals("EAN128"))
+			else if (b4jCode.equals("EAN128")) //$NON-NLS-1$
 				barcode = new MCode128();
-			else if (b4jCode.equals("EAN13"))
+			else if (b4jCode.equals("EAN13")) //$NON-NLS-1$
 				barcode = new MEAN13();
-			else if (b4jCode.equals("EAN8"))
+			else if (b4jCode.equals("EAN8")) //$NON-NLS-1$
 				barcode = new MEAN8();
-			else if (b4jCode.equals("PDF417"))
+			else if (b4jCode.equals("PDF417")) //$NON-NLS-1$
 				barcode = new MPDF417();
-			else if (b4jCode.equals("DataMatrix"))
+			else if (b4jCode.equals("DataMatrix")) //$NON-NLS-1$
 				barcode = new MDataMatrix();
-			else if (b4jCode.equals("Int2of5"))
+			else if (b4jCode.equals("Int2of5")) //$NON-NLS-1$
 				barcode = new MInterleaved2Of5();
-			else if (b4jCode.equals("RoyalMailCustomer"))
+			else if (b4jCode.equals("RoyalMailCustomer")) //$NON-NLS-1$
 				barcode = new MRoyalMail();
-			else if (b4jCode.equals("UPCA"))
+			else if (b4jCode.equals("UPCA")) //$NON-NLS-1$
 				barcode = new MUPCA();
-			else if (b4jCode.equals("UPCE"))
+			else if (b4jCode.equals("UPCE")) //$NON-NLS-1$
 				barcode = new MUPCE();
-			else if (b4jCode.equals("USPS"))
+			else if (b4jCode.equals("USPS")) //$NON-NLS-1$
 				barcode = new MUSPSIntelligent();
-			else if (b4jCode.equals("PostNet"))
+			else if (b4jCode.equals("PostNet")) //$NON-NLS-1$
 				barcode = new MPOSTNET();
 		} else if (bbcCode != null) {
 			barcode = new MBarcodeBarbecue();
@@ -117,10 +117,10 @@ public class BarcodeWizardPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText("Barbecue types");
+		lbl.setText(Messages.BarcodeWizardPage_barbecue_types);
 
 		lbl = new Label(composite, SWT.NONE);
-		lbl.setText("Barcode4J types");
+		lbl.setText(Messages.BarcodeWizardPage_barcode4j_types);
 
 		final Table table = new Table(composite, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -132,7 +132,7 @@ public class BarcodeWizardPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[1];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Name");
+		column[0].setText(Messages.BarcodeWizardPage_name);
 
 		fillTableBarbecue(table);
 		column[0].pack();
@@ -147,7 +147,7 @@ public class BarcodeWizardPage extends WizardPage {
 
 		TableColumn[] column2 = new TableColumn[1];
 		column2[0] = new TableColumn(table2, SWT.NONE);
-		column2[0].setText("Name");
+		column2[0].setText(Messages.BarcodeWizardPage_name);
 
 		fillTableb4j(table2);
 		column2[0].pack();
@@ -192,12 +192,12 @@ public class BarcodeWizardPage extends WizardPage {
 	private void fillTableb4j(Table table) {
 		table.setRedraw(false);
 
-		String[] items = new String[] { "Codabar", "Code128", "Code39", "EAN128", "EAN13", "EAN8", "PDF417", "PostNet",
-				"DataMatrix", "Int2of5", "RoyalMailCustomer", "UPCA", "UPCE", "USPS" };
+		String[] items = new String[] { "Codabar", "Code128", "Code39", "EAN128", "EAN13", "EAN8", "PDF417", "PostNet", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+				"DataMatrix", "Int2of5", "RoyalMailCustomer", "UPCA", "UPCE", "USPS" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		for (int i = 0; i < items.length; i++) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(items[i]);
-			ti.setImage(Activator.getImage("/icons/resources/" + items[i] + ".png"));
+			ti.setImage(Activator.getImage("/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		table.setRedraw(true);
@@ -206,14 +206,14 @@ public class BarcodeWizardPage extends WizardPage {
 	private void fillTableBarbecue(Table table) {
 		table.setRedraw(false);
 
-		String[] items = new String[] { "2of7", "3of9", "Bookland", "Codabar", "Code128", "Code128A", "Code128B",
-				"Code128C", "Code39", "Code39_extended", "EAN128", "EAN13", "GlobalTradeItemNumber", "Int2of5", "Monarch",
-				"NW7", "PDF417", "PostNet", "RandomWeightUPCA", "SCC14ShippingCode", "ShipmentIdentificationNumber", "SSCC18",
-				"Std2of5", "UCC128", "UPCA", "USD3", "USD4", "USPS" };
+		String[] items = new String[] { "2of7", "3of9", "Bookland", "Codabar", "Code128", "Code128A", "Code128B", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+				"Code128C", "Code39", "Code39_extended", "EAN128", "EAN13", "GlobalTradeItemNumber", "Int2of5", "Monarch", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+				"NW7", "PDF417", "PostNet", "RandomWeightUPCA", "SCC14ShippingCode", "ShipmentIdentificationNumber", "SSCC18", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+				"Std2of5", "UCC128", "UPCA", "USD3", "USD4", "USPS" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		for (int i = 0; i < items.length; i++) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(items[i]);
-			ti.setImage(Activator.getImage("/icons/resources/" + items[i] + ".png"));
+			ti.setImage(Activator.getImage("/icons/resources/" + items[i] + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		table.setRedraw(true);

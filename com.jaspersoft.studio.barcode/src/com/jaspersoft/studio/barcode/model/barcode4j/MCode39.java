@@ -84,41 +84,41 @@ public class MCode39 extends MBarcode4j {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 		DoublePropertyDescriptor wideFactorD = new DoublePropertyDescriptor(Code39Component.PROPERTY_WIDE_FACTOR,
-				"Wide Factor");
-		wideFactorD.setDescription("Wide Factor.");
+				Messages.MCode39_wide_factor);
+		wideFactorD.setDescription(Messages.MCode39_wide_factor_description);
 		desc.add(wideFactorD);
 
 		DoublePropertyDescriptor intercharD = new DoublePropertyDescriptor(Code39Component.PROPERTY_INTERCHAR_GAP_WIDTH,
-				"Interchar Gap Width");
-		intercharD.setDescription("Interchar gap width.");
+				Messages.MCode39_interchar_gap_witdh);
+		intercharD.setDescription(Messages.MCode39_interchar_gap_witdh_description);
 		desc.add(intercharD);
 
 		CheckBoxPropertyDescriptor displayChecksumD = new CheckBoxPropertyDescriptor(
-				Code39Component.PROPERTY_DISPLAY_CHECKSUM, "Display Checksum", NullEnum.NULL);
-		displayChecksumD.setDescription("Display Checksum.");
+				Code39Component.PROPERTY_DISPLAY_CHECKSUM, Messages.MCode39_display_checksum, NullEnum.NULL);
+		displayChecksumD.setDescription(Messages.MCode39_display_checksum_description);
 		desc.add(displayChecksumD);
 
 		CheckBoxPropertyDescriptor displayStartStopD = new CheckBoxPropertyDescriptor(
-				Code39Component.PROPERTY_DISPLAY_START_STOP, "Display Start Stop", NullEnum.NULL);
-		displayStartStopD.setDescription("Display start stop.");
+				Code39Component.PROPERTY_DISPLAY_START_STOP, Messages.MCode39_display_start_stop, NullEnum.NULL);
+		displayStartStopD.setDescription(Messages.MCode39_display_start_stop_description);
 		desc.add(displayStartStopD);
 
 		CheckBoxPropertyDescriptor extendedCharsetD = new CheckBoxPropertyDescriptor(
-				Code39Component.PROPERTY_EXTENDED_CHARSET_ENABLED, "Extended Charset Enabled", NullEnum.NULL);
-		extendedCharsetD.setDescription("Extended charset enabled.");
+				Code39Component.PROPERTY_EXTENDED_CHARSET_ENABLED, Messages.MCode39_extended_charset_enabled, NullEnum.NULL);
+		extendedCharsetD.setDescription(Messages.MCode39_extended_charset_enabled_description);
 		desc.add(extendedCharsetD);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(Code39Component.PROPERTY_CHECKSUM_MODE,
-				"Checksum Mode", ChecksumMode.getItems());
-		checksumModeD.setDescription("Checksum mode.");
+				Messages.MCode39_checksum_mode, ChecksumMode.getItems());
+		checksumModeD.setDescription(Messages.MCode39_checksum_mode_description);
 		desc.add(checksumModeD);
 
-		checksumModeD.setCategory("Barcode Properties, Code39");
-		extendedCharsetD.setCategory("Barcode Properties, Code39");
-		displayChecksumD.setCategory("Barcode Properties, Code39");
-		displayStartStopD.setCategory("Barcode Properties, Code39");
-		wideFactorD.setCategory("Barcode Properties, Code39");
-		intercharD.setCategory("Barcode Properties, Code39");
+		checksumModeD.setCategory(Messages.MCode39_properties_category);
+		extendedCharsetD.setCategory(Messages.MCode39_properties_category);
+		displayChecksumD.setCategory(Messages.MCode39_properties_category);
+		displayStartStopD.setCategory(Messages.MCode39_properties_category);
+		wideFactorD.setCategory(Messages.MCode39_properties_category);
+		intercharD.setCategory(Messages.MCode39_properties_category);
 	}
 
 	@Override

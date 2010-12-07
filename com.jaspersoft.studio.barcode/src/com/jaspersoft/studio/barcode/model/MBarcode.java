@@ -76,24 +76,24 @@ public abstract class MBarcode extends MGraphicElement {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor codeExprD = new JRExpressionPropertyDescriptor(
-				StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION, "Code Expression");
-		codeExprD.setDescription("The code expression.");
+				StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION, Messages.MBarcode_code_expression);
+		codeExprD.setDescription(Messages.MBarcode_code_expression_description);
 		desc.add(codeExprD);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
-				StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, "Evaluation Time", EnumHelper.getEnumNames(
+				StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, Messages.MBarcode_evaluation_time, EnumHelper.getEnumNames(
 						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
-		evaluationTimeD.setDescription("When the element expression should be evaluated.");
+		evaluationTimeD.setDescription(Messages.MBarcode_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
 		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP,
-				"Evaluation Group", new String[] { "" });
-		evaluationGroupNameD.setDescription("The element will be evaluated when the specified group changes.");
+				Messages.MBarcode_evaluation_group, new String[] { "" }); //$NON-NLS-2$
+		evaluationGroupNameD.setDescription(Messages.MBarcode_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
-		evaluationTimeD.setCategory("Barcode Properties");
-		evaluationGroupNameD.setCategory("Barcode Properties");
-		codeExprD.setCategory("Barcode Properties");
+		evaluationTimeD.setCategory(Messages.MBarcode_properties_category);
+		evaluationGroupNameD.setCategory(Messages.MBarcode_properties_category);
+		codeExprD.setCategory(Messages.MBarcode_properties_category);
 
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}

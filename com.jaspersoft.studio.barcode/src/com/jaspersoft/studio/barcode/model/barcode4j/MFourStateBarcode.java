@@ -73,29 +73,29 @@ public class MFourStateBarcode extends MBarcode4j {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE, "Checksum Mode", ChecksumMode.getItems());
-		checksumModeD.setDescription("Checksum mode.");
+				FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE, Messages.MFourStateBarcode_checksum_mode, ChecksumMode.getItems());
+		checksumModeD.setDescription(Messages.MFourStateBarcode_checksum_mode_description);
 		desc.add(checksumModeD);
 
 		DoublePropertyDescriptor intercharD = new DoublePropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH, "Interchar Gap Width");
-		intercharD.setDescription("Interchar gap width.");
+				FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH, Messages.MFourStateBarcode_interchar_gap_width);
+		intercharD.setDescription(Messages.MFourStateBarcode_interchar_gap_width_description);
 		desc.add(intercharD);
 
 		DoublePropertyDescriptor ascenderHeightD = new DoublePropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_ASCENDER_HEIGHT, "Ascender Height");
-		ascenderHeightD.setDescription("Interchar gap width.");
+				FourStateBarcodeComponent.PROPERTY_ASCENDER_HEIGHT, Messages.MFourStateBarcode_ascender_height);
+		ascenderHeightD.setDescription(Messages.MFourStateBarcode_ascender_height_description);
 		desc.add(ascenderHeightD);
 
 		DoublePropertyDescriptor trackHeightD = new DoublePropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_TRACK_HEIGHT, "Track Height");
-		trackHeightD.setDescription("Interchar gap width.");
+				FourStateBarcodeComponent.PROPERTY_TRACK_HEIGHT, Messages.MFourStateBarcode_track_height);
+		trackHeightD.setDescription(Messages.MFourStateBarcode_track_height_description);
 		desc.add(trackHeightD);
 
-		checksumModeD.setCategory("Barcode Properties");
-		intercharD.setCategory("Barcode Properties");
-		ascenderHeightD.setCategory("Barcode Properties");
-		trackHeightD.setCategory("Barcode Properties");
+		checksumModeD.setCategory(Messages.MFourStateBarcode_properties_category);
+		intercharD.setCategory(Messages.MFourStateBarcode_properties_category);
+		ascenderHeightD.setCategory(Messages.MFourStateBarcode_properties_category);
+		trackHeightD.setCategory(Messages.MFourStateBarcode_properties_category);
 	}
 
 	@Override

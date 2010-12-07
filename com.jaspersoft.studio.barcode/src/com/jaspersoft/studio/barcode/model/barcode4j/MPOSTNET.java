@@ -86,35 +86,35 @@ public class MPOSTNET extends MBarcode4j {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		DoublePropertyDescriptor shortBarHeightD = new DoublePropertyDescriptor(POSTNETComponent.PROPERTY_SHORT_BAR_HEIGHT,
-				"Short Bar Height");
-		shortBarHeightD.setDescription("Short bar height.");
+				Messages.MPOSTNET_short_bar_height);
+		shortBarHeightD.setDescription(Messages.MPOSTNET_short_bar_height_description);
 		desc.add(shortBarHeightD);
 
 		DoublePropertyDescriptor intercharD = new DoublePropertyDescriptor(POSTNETComponent.PROPERTY_INTERCHAR_GAP_WIDTH,
-				"Interchar Gap Width");
-		intercharD.setDescription("Interchar gap width.");
+				Messages.MPOSTNET_interchar_gap_width);
+		intercharD.setDescription(Messages.MPOSTNET_interchar_gap_width_description);
 		desc.add(intercharD);
 
 		CheckBoxPropertyDescriptor displayChecksumD = new CheckBoxPropertyDescriptor(
-				POSTNETComponent.PROPERTY_DISPLAY_CHECKSUM, "Display Checksum", NullEnum.NULL);
-		displayChecksumD.setDescription("Display Checksum.");
+				POSTNETComponent.PROPERTY_DISPLAY_CHECKSUM, Messages.MPOSTNET_display_checksum, NullEnum.NULL);
+		displayChecksumD.setDescription(Messages.MPOSTNET_display_checksum_description);
 		desc.add(displayChecksumD);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(POSTNETComponent.PROPERTY_CHECKSUM_MODE,
-				"Checksum Mode", ChecksumMode.getItems());
-		checksumModeD.setDescription("Checksum mode.");
+				Messages.MPOSTNET_checksum_mode, ChecksumMode.getItems());
+		checksumModeD.setDescription(Messages.MPOSTNET_checksum_mode_description);
 		desc.add(checksumModeD);
 
 		ComboBoxPropertyDescriptor baselinePositionD = new ComboBoxPropertyDescriptor(
-				POSTNETComponent.PROPERTY_BASELINE_POSITION, "Baseline Position", BaselinePosition.getItems());
-		baselinePositionD.setDescription("Baseline Position.");
+				POSTNETComponent.PROPERTY_BASELINE_POSITION, Messages.MPOSTNET_baseline_position, BaselinePosition.getItems());
+		baselinePositionD.setDescription(Messages.MPOSTNET_baseline_position_description);
 		desc.add(baselinePositionD);
 
-		shortBarHeightD.setCategory("Barcode Properties, POSTNET");
-		baselinePositionD.setCategory("Barcode Properties, POSTNET");
-		checksumModeD.setCategory("Barcode Properties, POSTNET");
-		displayChecksumD.setCategory("Barcode Properties, POSTNET");
-		intercharD.setCategory("Barcode Properties, POSTNET");
+		shortBarHeightD.setCategory(Messages.MPOSTNET_properties_category);
+		baselinePositionD.setCategory(Messages.MPOSTNET_properties_category);
+		checksumModeD.setCategory(Messages.MPOSTNET_properties_category);
+		displayChecksumD.setCategory(Messages.MPOSTNET_properties_category);
+		intercharD.setCategory(Messages.MPOSTNET_properties_category);
 	}
 
 	@Override
