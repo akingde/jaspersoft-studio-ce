@@ -20,11 +20,19 @@
 package com.jaspersoft.studio.table;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -36,11 +44,19 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.ReportFactory;
+import com.jaspersoft.studio.table.figure.CellFigure;
+import com.jaspersoft.studio.table.model.MCell;
+import com.jaspersoft.studio.table.model.MColumn;
+import com.jaspersoft.studio.table.model.MColumnGroup;
+import com.jaspersoft.studio.table.model.MColumnGroupCell;
 import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.model.MTableColumnFooter;
 import com.jaspersoft.studio.table.model.MTableColumnHeader;
 import com.jaspersoft.studio.table.model.MTableDetail;
 import com.jaspersoft.studio.table.model.MTableFooter;
+import com.jaspersoft.studio.table.model.MTableGroupFooter;
+import com.jaspersoft.studio.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.table.model.MTableHeader;
 
 public class TableComponentFactory implements IComponentFactory {
@@ -49,13 +65,36 @@ public class TableComponentFactory implements IComponentFactory {
 		if (jrObject instanceof JRDesignComponentElement) {
 			JRDesignComponentElement tbl = (JRDesignComponentElement) jrObject;
 			if (tbl.getComponent() instanceof StandardTable) {
-				TableManager tblManager = new TableManager(tbl);
+				StandardTable table = (StandardTable) tbl.getComponent();
+				JasperDesign jasperDesign = parent.getJasperDesign();
+
+				TableManager tblManager = new TableManager(tbl, jasperDesign);
 				MTable mt = new MTable(parent, tbl, newIndex, tblManager);
-				new MTableHeader(mt, tbl, StandardColumn.PROPERTY_TABLE_HEADER);
-				new MTableColumnHeader(mt, tbl, StandardColumn.PROPERTY_COLUMN_HEADER);
-				new MTableDetail(mt, tbl, StandardColumn.PROPERTY_DETAIL);
-				new MTableColumnFooter(mt, tbl, StandardColumn.PROPERTY_COLUMN_FOOTER);
-				new MTableFooter(mt, tbl, StandardColumn.PROPERTY_TABLE_FOOTER);
+				MTableHeader mth = new MTableHeader(mt, tbl, StandardColumn.PROPERTY_TABLE_HEADER);
+				MTableColumnHeader mch = new MTableColumnHeader(mt, tbl, StandardColumn.PROPERTY_COLUMN_HEADER);
+
+				List<?> groupsList = tblManager.getGroupList();
+				List<MTableGroupHeader> grHeaders = new ArrayList<MTableGroupHeader>();
+				List<MTableGroupFooter> grFooters = new ArrayList<MTableGroupFooter>();
+
+				if (groupsList != null)
+					for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
+						JRDesignGroup jrGroup = (JRDesignGroup) it.next();
+						grHeaders.add(new MTableGroupHeader(mt, jrGroup, ""));
+					}
+
+				MTableDetail mtd = new MTableDetail(mt, tbl, StandardColumn.PROPERTY_DETAIL);
+
+				if (groupsList != null)
+					for (ListIterator<?> it = groupsList.listIterator(groupsList.size()); it.hasPrevious();) {
+						JRDesignGroup jrGroup = (JRDesignGroup) it.previous();
+						grFooters.add(new MTableGroupFooter(mt, jrGroup, ""));
+					}
+
+				MTableColumnFooter mtcf = new MTableColumnFooter(mt, tbl, StandardColumn.PROPERTY_COLUMN_FOOTER);
+				MTableFooter mtf = new MTableFooter(mt, tbl, StandardColumn.PROPERTY_TABLE_FOOTER);
+
+				createColumns(mt, table.getColumns(), mth, mch, mtd, mtcf, mtf, grHeaders, grFooters);
 
 				return mt;
 			}
@@ -63,11 +102,166 @@ public class TableComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	public void createColumns(ANode parent, List<BaseColumn> columns, MTableHeader mth, MTableColumnHeader mch,
+			MTableDetail mtd, MTableColumnFooter mcf, MTableFooter mtf, List<MTableGroupHeader> grHeaders,
+			List<MTableGroupFooter> grFooter) {
+		int i = 1;
+		for (BaseColumn bc : columns) {
+			createCellTableHeader(mth, bc, i);
+
+			createCellColumnHeader(mch, bc, i);
+
+			for (MTableGroupHeader mtgh : grHeaders)
+				createCellGroupHeader(mtgh, bc, i, ((JRDesignGroup) mtgh.getValue()).getName());
+
+			createCellDetail(mtd, bc, i);
+
+			for (MTableGroupFooter mtgh : grFooter)
+				createCellGroupFooter(mtgh, bc, i, ((JRDesignGroup) mtgh.getValue()).getName());
+
+			createCellColumnFooter(mcf, bc, i);
+
+			createCellTableHeader(mtf, bc, i);
+
+			i++;
+		}
+	}
+
+	public int createCellGroupHeader(ANode mth, BaseColumn bc, int i, String grName) {
+		if (bc instanceof StandardColumnGroup) {
+			StandardColumnGroup scg = (StandardColumnGroup) bc;
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getGroupHeader(grName), i);
+			for (BaseColumn bcg : scg.getColumns())
+				i = createCellGroupHeader(mcg, bcg, i, grName);
+		} else {
+			if (bc.getGroupHeader(grName) != null) {
+				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getGroupHeader(grName), "Column" + i);
+				ReportFactory.createElementsForBand(mc, bc.getGroupHeader(grName).getChildren());
+			} else
+				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			return ++i;
+		}
+		return i;
+	}
+
+	public int createCellGroupFooter(ANode mth, BaseColumn bc, int i, String grName) {
+		if (bc instanceof StandardColumnGroup) {
+			StandardColumnGroup scg = (StandardColumnGroup) bc;
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getGroupFooter(grName), i);
+			for (BaseColumn bcg : scg.getColumns())
+				i = createCellGroupFooter(mcg, bcg, i, grName);
+		} else {
+			if (bc.getGroupFooter(grName) != null) {
+				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getGroupFooter(grName), "Column" + i);
+				ReportFactory.createElementsForBand(mc, bc.getGroupFooter(grName).getChildren());
+			} else
+				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			return ++i;
+		}
+		return i;
+	}
+
+	public int createCellDetail(ANode mth, BaseColumn bc, int i) {
+		if (bc instanceof StandardColumnGroup) {
+			StandardColumnGroup scg = (StandardColumnGroup) bc;
+			for (BaseColumn bcg : scg.getColumns())
+				i = createCellDetail(mth, bcg, i);
+		} else {
+			if (((StandardColumn) bc).getDetailCell() != null) {
+				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) ((StandardColumn) bc).getDetailCell(), "Column"
+						+ i);
+				ReportFactory.createElementsForBand(mc, ((StandardColumn) bc).getDetailCell().getChildren());
+			} else
+				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			return ++i;
+		}
+		return i;
+	}
+
+	public int createCellColumnHeader(ANode mth, BaseColumn bc, int i) {
+		if (bc instanceof StandardColumnGroup) {
+			StandardColumnGroup scg = (StandardColumnGroup) bc;
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getColumnHeader(), i);
+			for (BaseColumn bcg : scg.getColumns())
+				i = createCellColumnHeader(mcg, bcg, i);
+		} else {
+			if (bc.getColumnHeader() != null) {
+				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getColumnHeader(), "Column" + i);
+				ReportFactory.createElementsForBand(mc, bc.getColumnHeader().getChildren());
+			} else
+				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			return ++i;
+		}
+		return i;
+	}
+
+	public int createCellColumnFooter(ANode mth, BaseColumn bc, int i) {
+		if (bc instanceof StandardColumnGroup) {
+			StandardColumnGroup scg = (StandardColumnGroup) bc;
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getColumnFooter(), i);
+			for (BaseColumn bcg : scg.getColumns())
+				i = createCellColumnFooter(mcg, bcg, i);
+		} else {
+			if (bc.getColumnFooter() != null) {
+				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getColumnFooter(), "Column" + i);
+				ReportFactory.createElementsForBand(mc, bc.getColumnFooter().getChildren());
+			} else
+				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			return ++i;
+		}
+		return i;
+	}
+
+	public int createCellTableHeader(ANode mth, BaseColumn bc, int i) {
+		if (bc instanceof StandardColumnGroup) {
+			StandardColumnGroup scg = (StandardColumnGroup) bc;
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getTableHeader(), i);
+			for (BaseColumn bcg : scg.getColumns())
+				i = createCellTableHeader(mcg, bcg, i);
+		} else {
+			if (bc.getTableHeader() != null) {
+				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getTableHeader(), "Column" + i);
+				ReportFactory.createElementsForBand(mc, bc.getTableHeader().getChildren());
+			} else
+				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			return ++i;
+		}
+		return i;
+	}
+
+	public int createCellTableFooter(ANode mth, BaseColumn bc, int i) {
+		if (bc instanceof StandardColumnGroup) {
+			StandardColumnGroup scg = (StandardColumnGroup) bc;
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getTableFooter(), i);
+			for (BaseColumn bcg : scg.getColumns())
+				i = createCellTableFooter(mcg, bcg, i);
+		} else {
+			if (bc.getTableHeader() != null) {
+				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getTableFooter(), "Column" + i);
+				ReportFactory.createElementsForBand(mc, bc.getTableFooter().getChildren());
+			} else
+				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			return ++i;
+		}
+		return i;
+	}
+
+	public MColumn getColumnGroup(ANode mth, StandardColumnGroup scg, DesignCell cell, int i) {
+		String name = "Columns " + i + "-" + (i + scg.getColumns().size() - 1);
+		MColumn mcg = null;
+		if (cell != null) {
+			mcg = new MColumnGroupCell(mth, scg, cell, name);
+			ReportFactory.createElementsForBand(mcg, cell.getChildren());
+		} else
+			mcg = new MColumnGroup(mth, scg, name);
+		return mcg;
+	}
+
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MTable)
 			return new ComponentFigure();
-		// if (node instanceof MCell)
-		// return new CellFigure();
+//		if (node instanceof MCell)
+//			return new CellFigure();
 		return null;
 	}
 
