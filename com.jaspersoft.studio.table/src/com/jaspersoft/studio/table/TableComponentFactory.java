@@ -45,7 +45,6 @@ import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ReportFactory;
-import com.jaspersoft.studio.table.figure.CellFigure;
 import com.jaspersoft.studio.table.model.MCell;
 import com.jaspersoft.studio.table.model.MColumn;
 import com.jaspersoft.studio.table.model.MColumnGroup;
@@ -58,6 +57,8 @@ import com.jaspersoft.studio.table.model.MTableFooter;
 import com.jaspersoft.studio.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.table.model.MTableHeader;
+import com.jaspersoft.studio.table.part.TableCellEditPart;
+import com.jaspersoft.studio.table.part.TableEditPart;
 
 public class TableComponentFactory implements IComponentFactory {
 
@@ -260,8 +261,8 @@ public class TableComponentFactory implements IComponentFactory {
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MTable)
 			return new ComponentFigure();
-//		if (node instanceof MCell)
-//			return new CellFigure();
+		// if (node instanceof MCell)
+		// return new CellFigure();
 		return null;
 	}
 
@@ -386,10 +387,10 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
-		// if (model instanceof MCrosstab)
-		// return new CrosstabEditPart();
-		// if (model instanceof MCell)
-		// return new CrosstabCellEditPart();
+		if (model instanceof MTable)
+			return new TableEditPart();
+		if (model instanceof MCell)
+			return new TableCellEditPart();
 		return null;
 	}
 
