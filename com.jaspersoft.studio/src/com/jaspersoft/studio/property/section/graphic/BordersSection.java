@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPrintElement;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
@@ -60,6 +59,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
@@ -164,8 +164,8 @@ public class BordersSection extends AbstractSection {
 						pe.setY(b.y + 10);
 						pe.setWidth(b.width - 20);
 						pe.setHeight(b.height - 20);
-
-						bd.drawBox(graphics2d, ((JRBoxContainer) getElement().getValue()).getLineBox(), pe);
+						if (getElement() instanceof ILineBox)
+							bd.drawBox(graphics2d, ((ILineBox) getElement()).getBoxContainer().getLineBox(), pe);
 					} else {
 						graphics.drawRectangle(0, 0, 100, 100);
 					}

@@ -187,5 +187,4 @@ public class MStaticText extends MTextElement {
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
 	}
-
 }

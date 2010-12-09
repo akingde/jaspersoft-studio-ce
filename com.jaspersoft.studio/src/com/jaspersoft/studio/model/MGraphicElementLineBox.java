@@ -79,4 +79,7 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 		return super.getPropertyValue(id);
 	}
 
+	public JRBoxContainer getBoxContainer() {
+		return (JRBoxContainer) getValue();
+	}
 }
