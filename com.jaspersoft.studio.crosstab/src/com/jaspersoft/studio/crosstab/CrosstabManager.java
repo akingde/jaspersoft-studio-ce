@@ -1,6 +1,5 @@
 package com.jaspersoft.studio.crosstab;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +21,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 public class CrosstabManager {
 
 	private JRDesignCrosstab crosstab;
-
-	private List<JRDesignCellContents> rowCells = new ArrayList<JRDesignCellContents>();
-	private List<JRDesignCellContents> colCells = new ArrayList<JRDesignCellContents>();
 
 	private Map<JRDesignCellContents, Rectangle> boundsMap = new HashMap<JRDesignCellContents, Rectangle>();
 
@@ -55,7 +51,6 @@ public class CrosstabManager {
 			for (JRCrosstabRowGroup p : rowGroups) {
 				JRDesignCellContents ch = (JRDesignCellContents) p.getHeader();
 				JRDesignCellContents ct = (JRDesignCellContents) p.getTotalHeader();
-				colCells.add(cp, ch);
 
 				if (p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.START)) {
 					boundsMap.put(ct, new Rectangle(tx, ty, ct.getWidth(), ct.getHeight()));
@@ -80,7 +75,6 @@ public class CrosstabManager {
 			for (JRCrosstabColumnGroup p : colGroups) {
 				JRDesignCellContents ch = (JRDesignCellContents) p.getHeader();
 				JRDesignCellContents ct = (JRDesignCellContents) p.getTotalHeader();
-				rowCells.add(rp, ch);
 
 				if (p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.START)) {
 					boundsMap.put(ct, new Rectangle(tx, ty, ct.getWidth(), ct.getHeight()));
@@ -155,7 +149,7 @@ public class CrosstabManager {
 		if (crosstab.getRunDirectionValue().equals(RunDirectionEnum.RTL)) {
 			int cwidth = crosstab.getWidth();
 			for (Rectangle r : boundsMap.values()) {
-				r.setLocation(cwidth - r.x - r.width, r.y);
+				r.setLocation(cwidth - r.x - r.width + crosstab.getX(), r.y);
 			}
 		}
 	}

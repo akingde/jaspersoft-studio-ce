@@ -96,7 +96,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	public MCell(ANode parent, JRCellContents jfRield, String name) {
 		super(parent, -1);
 		setValue(jfRield);
-		this.name = name;
+		setName(name);
 	}
 
 	private String name;
@@ -108,6 +108,14 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public String getDisplayText() {
 		return name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/*
@@ -334,5 +342,9 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		}
 
 		return rect;
+	}
+
+	public JRBoxContainer getBoxContainer() {
+		return (JRBoxContainer) getValue();
 	}
 }

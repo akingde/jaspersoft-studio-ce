@@ -20,16 +20,12 @@
 package com.jaspersoft.studio.crosstab.model.header;
 
 import net.sf.jasperreports.crosstabs.JRCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.crosstab.model.MCell;
-import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
 
 public class MCrosstabHeader extends MCell {
 	public MCrosstabHeader() {
@@ -45,29 +41,6 @@ public class MCrosstabHeader extends MCell {
 		if (getValue() == null)
 			return ColorConstants.lightGray;
 		return ColorConstants.black;
-	}
-
-	@Override
-	public Rectangle getBounds() {
-		int w = 0;
-		int h = 0;
-		Rectangle rect = null;
-		if (getValue() != null) {
-			JRDesignCellContents c = (JRDesignCellContents) getValue();
-			w = c.getWidth();
-			h = c.getHeight();
-		}
-
-		INode node = getParent();
-		while (node != null) {
-			if (node instanceof MCrosstab) {
-				Rectangle b = ((MCrosstab) node).getBounds();
-				return new Rectangle(b.x, b.y, w, h);
-			}
-			node = node.getParent();
-		}
-
-		return rect;
 	}
 
 }
