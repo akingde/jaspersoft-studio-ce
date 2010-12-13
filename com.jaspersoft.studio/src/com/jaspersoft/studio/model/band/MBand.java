@@ -312,11 +312,13 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 					break;
 				if (b instanceof MBand) {
 					if (b.getValue() != null)
-						h += ((JRDesignBand) b.getValue()).getHeight() - 1;
+						h += ((JRDesignBand) b.getValue()).getHeight() + BAND_GAP;
 				}
 			}
 			bounds.setLocation(parentBounds.x, h + getJasperDesign().getTopMargin());
 		}
 		return bounds;
 	}
+
+	private static int BAND_GAP = 0;
 }

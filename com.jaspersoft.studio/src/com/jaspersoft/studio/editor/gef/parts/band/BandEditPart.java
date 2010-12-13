@@ -154,7 +154,7 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener,
 
 		// int width = jasperDesign.getPageWidth() + PageFigure.PAGE_BORDER.left + 1;
 		int width = jasperDesign.getPageWidth() + 1;
-		int height = jrBand != null ? jrBand.getHeight() : 0;
+		int height = jrBand != null ? jrBand.getHeight() + 1 : 0;
 		rect.setBounds(new Rectangle(PageFigure.PAGE_BORDER.left, bounds.y + PageFigure.PAGE_BORDER.top, width, height));
 		// rect.setBounds(new Rectangle(0, bounds.y + PageFigure.PAGE_BORDER.top, width, height));
 	}
