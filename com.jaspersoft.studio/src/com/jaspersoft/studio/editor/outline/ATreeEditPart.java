@@ -93,7 +93,7 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 			if (node.getBackground() != null)
 				image.setBackground(node.getBackground());
 			else {
-				if (item.getParent() != null && item.getParent().getBackground() != null)
+				if (item != null && item.getParent() != null && item.getParent().getBackground() != null)
 					image.setBackground(item.getParent().getBackground());
 			}
 			setWidgetImage(image);
