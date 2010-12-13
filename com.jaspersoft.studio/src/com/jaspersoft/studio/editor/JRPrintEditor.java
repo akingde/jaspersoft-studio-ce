@@ -182,9 +182,12 @@ public class JRPrintEditor extends EditorPart {
 		super.setInput(input);
 
 		if (getEditorInput() != null) {
-			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-			file.getWorkspace().addResourceChangeListener(resourceListener);
-			setPartName(file.getName());
+			if (getEditorInput() instanceof IFileEditorInput) {
+				IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+				file.getWorkspace().addResourceChangeListener(resourceListener);
+				setPartName(file.getName());
+			} else if (getEditorInput() instanceof FileStoreEditorInput) {
+			}
 		}
 	}
 
