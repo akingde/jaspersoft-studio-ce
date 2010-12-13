@@ -55,7 +55,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablecell");
+			iconDescriptor = new TableNodeIconDescriptor("tablecell"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -139,16 +139,16 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		JRExpressionPropertyDescriptor printWhenExprD = new JRExpressionPropertyDescriptor(
-				StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION, "Print When Expression");
+				StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MColumn_print_when_expression);
 		printWhenExprD
-				.setDescription("Definition of a Boolean expression that will determine if the element or the band should be printed or not.");
+				.setDescription(Messages.MColumn_print_when_expression_description);
 		desc.add(printWhenExprD);
 
-		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(StandardBaseColumn.PROPERTY_WIDTH, "Column Width");
+		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(StandardBaseColumn.PROPERTY_WIDTH, Messages.MColumn_column_width);
 		desc.add(wD);
 
-		printWhenExprD.setCategory("Column Properties");
-		wD.setCategory("Column Properties");
+		printWhenExprD.setCategory(Messages.MColumn_properties_category);
+		wD.setCategory(Messages.MColumn_properties_category);
 	}
 
 	private MExpression mExpression;

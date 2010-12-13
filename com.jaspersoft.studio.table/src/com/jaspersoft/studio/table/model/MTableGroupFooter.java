@@ -41,7 +41,7 @@ public class MTableGroupFooter extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablegroupfooter");
+			iconDescriptor = new TableNodeIconDescriptor("tablegroupfooter"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -58,7 +58,7 @@ public class MTableGroupFooter extends MCollection {
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
 	public String getDisplayText() {
-		return "Group Footer: " + ((JRDesignGroup) getValue()).getName();
+		return Messages.MTableGroupFooter_group_footer + ((JRDesignGroup) getValue()).getName();
 	}
 
 	/*

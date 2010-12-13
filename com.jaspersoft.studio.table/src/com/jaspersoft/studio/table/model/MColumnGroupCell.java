@@ -41,7 +41,7 @@ public class MColumnGroupCell extends MCell {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablecolumngroup");
+			iconDescriptor = new TableNodeIconDescriptor("tablecolumngroup"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

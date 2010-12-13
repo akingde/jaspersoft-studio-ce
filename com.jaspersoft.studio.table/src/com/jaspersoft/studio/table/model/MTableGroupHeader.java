@@ -41,7 +41,7 @@ public class MTableGroupHeader extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablegroupheader");
+			iconDescriptor = new TableNodeIconDescriptor("tablegroupheader"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -53,7 +53,7 @@ public class MTableGroupHeader extends MCollection {
 	}
 
 	public String getDisplayText() {
-		return "Group Header: " + ((JRDesignGroup) getValue()).getName();
+		return Messages.MTableGroupHeader_group_header + ((JRDesignGroup) getValue()).getName();
 	}
 
 	/*
