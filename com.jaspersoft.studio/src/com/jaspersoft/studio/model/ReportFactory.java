@@ -295,7 +295,7 @@ public class ReportFactory {
 			ANode node = createNode(band, element, -1);
 			ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 			List<?> children = m.getChildren4Element(element);
-			if (children != null) {
+			if (children != null && !children.isEmpty()) {
 				createElementsForBand(node, children);
 			} else if (element instanceof JRDesignFrame) {
 				JRDesignFrame frame = (JRDesignFrame) element;
