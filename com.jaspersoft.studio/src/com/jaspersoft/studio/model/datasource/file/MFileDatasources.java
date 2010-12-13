@@ -37,7 +37,7 @@ public class MFileDatasources extends ANode implements IDatasource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasources.file");
+			iconDescriptor = new NodeIconDescriptor("datasources.file"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

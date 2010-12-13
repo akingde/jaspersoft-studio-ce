@@ -46,8 +46,8 @@ public class NumericPattern extends APattern {
 	}
 
 	public NumericPattern(Composite parent, Format formatter) {
-		super(parent, formatter, new BigDecimal("-10023.1234567654"));
-		setDescription("Number format is used to display numerical values.");
+		super(parent, formatter, new BigDecimal("-10023.1234567654")); //$NON-NLS-1$
+		setDescription(Messages.NumericPattern_description);
 	}
 
 	@Override
@@ -56,10 +56,10 @@ public class NumericPattern extends APattern {
 		container.setLayout(new GridLayout(2, true));
 
 		Label lab = new Label(container, SWT.NONE | SWT.CENTER);
-		lab.setText("Leading &zeroes");
+		lab.setText(Messages.NumericPattern_leading_zeroes);
 
 		lab = new Label(container, SWT.NONE | SWT.CENTER);
-		lab.setText("&Decimal places:");
+		lab.setText(Messages.NumericPattern_decimal_places);
 
 		final Spinner zeroes = new Spinner(container, SWT.BORDER);
 		zeroes.setMinimum(0);
@@ -78,7 +78,7 @@ public class NumericPattern extends APattern {
 		decimals.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		final Button sep = new Button(container, SWT.CHECK);
-		sep.setText("Use 1000 separator");
+		sep.setText(Messages.NumericPattern_use_1000_sperator);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		sep.setLayoutData(gd);
@@ -155,11 +155,11 @@ public class NumericPattern extends APattern {
 	protected java.util.List<String> getDefaults() {
 		if (dList == null) {
 			dList = new ArrayList<String>();
-			dList.add("#,##0.###;#,-##0.###");
-			dList.add("#,##0.###;#,##0.###-");
-			dList.add("#,##0.###;(#,##0.###)");
-			dList.add("#,##0.###;(-#,##0.###)");
-			dList.add("#,##0.###;(#,##0.###-)");
+			dList.add("#,##0.###;#,-##0.###"); //$NON-NLS-1$
+			dList.add("#,##0.###;#,##0.###-"); //$NON-NLS-1$
+			dList.add("#,##0.###;(#,##0.###)"); //$NON-NLS-1$
+			dList.add("#,##0.###;(-#,##0.###)"); //$NON-NLS-1$
+			dList.add("#,##0.###;(#,##0.###-)"); //$NON-NLS-1$
 			setPattern(dList.get(0));
 		}
 		return dList;

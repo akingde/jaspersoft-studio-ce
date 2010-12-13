@@ -43,7 +43,7 @@ public class MJDBCDataSource extends AMDatasource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasourceJDBC");
+			iconDescriptor = new NodeIconDescriptor("datasourceJDBC"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -97,42 +97,42 @@ public class MJDBCDataSource extends AMDatasource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor driverClassD = new NTextPropertyDescriptor(PROPERTY_DRIVERCLASS, "Driver Class");
+		NTextPropertyDescriptor driverClassD = new NTextPropertyDescriptor(PROPERTY_DRIVERCLASS, Messages.MJDBCDataSource_driver_class);
 		desc.add(driverClassD);
 
-		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_JDBC_URL, "JDBC URL");
+		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_JDBC_URL, Messages.MJDBCDataSource_jdbc_url);
 		desc.add(jdbcURLD);
 
-		NTextPropertyDescriptor usernameD = new NTextPropertyDescriptor(PROPERTY_USERNAME, "Username");
+		NTextPropertyDescriptor usernameD = new NTextPropertyDescriptor(PROPERTY_USERNAME, Messages.MJDBCDataSource_username);
 		desc.add(usernameD);
 
-		NTextPropertyDescriptor passwordD = new NTextPropertyDescriptor(PROPERTY_PASSWORD, "Password");
+		NTextPropertyDescriptor passwordD = new NTextPropertyDescriptor(PROPERTY_PASSWORD, Messages.MJDBCDataSource_password);
 		desc.add(passwordD);
 
-		NTextPropertyDescriptor jarD = new NTextPropertyDescriptor(PROPERTY_JAR, "Classpath (separated by ;): ");
+		NTextPropertyDescriptor jarD = new NTextPropertyDescriptor(PROPERTY_JAR, Messages.MJDBCDataSource_classpath);
 		desc.add(jarD);
 
-		NTextPropertyDescriptor connectionD = new NTextPropertyDescriptor(PROPERTY_CONNECTION, "Connection ");
+		NTextPropertyDescriptor connectionD = new NTextPropertyDescriptor(PROPERTY_CONNECTION, Messages.MJDBCDataSource_connection);
 		desc.add(connectionD);
 
 	}
 
-	public static final String PROPERTY_DRIVERCLASS = "PROPERTY_DRIVERCLASS";
+	public static final String PROPERTY_DRIVERCLASS = "PROPERTY_DRIVERCLASS"; //$NON-NLS-1$
 	private String driverclass;
 
-	public static final String PROPERTY_JDBC_URL = "PROPERTY_JDBC_URL";
+	public static final String PROPERTY_JDBC_URL = "PROPERTY_JDBC_URL"; //$NON-NLS-1$
 	private String jdbcURL;
 
-	public static final String PROPERTY_USERNAME = "PROPERTY_USERNAME";
+	public static final String PROPERTY_USERNAME = "PROPERTY_USERNAME"; //$NON-NLS-1$
 	private String username;
 
-	public static final String PROPERTY_PASSWORD = "PROPERTY_PASSWORD";
+	public static final String PROPERTY_PASSWORD = "PROPERTY_PASSWORD"; //$NON-NLS-1$
 	private String password;
 
-	public static final String PROPERTY_JAR = "PROPERTY_JAR";
+	public static final String PROPERTY_JAR = "PROPERTY_JAR"; //$NON-NLS-1$
 	private String jar;
 
-	public static final String PROPERTY_CONNECTION = "PROPERTY_CONNECTION";
+	public static final String PROPERTY_CONNECTION = "PROPERTY_CONNECTION"; //$NON-NLS-1$
 	private Connection connection;
 
 	@Override

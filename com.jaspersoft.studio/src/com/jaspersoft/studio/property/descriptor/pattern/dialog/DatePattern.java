@@ -37,7 +37,7 @@ public class DatePattern extends APattern {
 
 	public DatePattern(Composite parent) {
 		super(parent, new SimpleDateFormat(), new Date());
-		setDescription("Date format is used to display date and time part of date values. Use time \nformat to display only time portion.");
+		setDescription(Messages.DatePattern_description);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class DatePattern extends APattern {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout());
 		Label l = new Label(container, SWT.NONE);
-		l.setText("Template Formats");
+		l.setText(Messages.DatePattern_template_formats);
 
 		list = new List(container, SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -77,12 +77,12 @@ public class DatePattern extends APattern {
 	protected java.util.List<String> getDefaults() {
 		if (dList == null) {
 			dList = new ArrayList<String>();
-			dList.add("M/d/yy");
-			dList.add("MMM d, yyyy");
-			dList.add("MMMM d, yyyy");
-			dList.add("M/d/yy h:mm a");
-			dList.add("MMM d, yyyy h:mm:ss a");
-			dList.add("MMM d, yyyy h:mm:ss a z");
+			dList.add("M/d/yy"); //$NON-NLS-1$
+			dList.add("MMM d, yyyy"); //$NON-NLS-1$
+			dList.add("MMMM d, yyyy"); //$NON-NLS-1$
+			dList.add("M/d/yy h:mm a"); //$NON-NLS-1$
+			dList.add("MMM d, yyyy h:mm:ss a"); //$NON-NLS-1$
+			dList.add("MMM d, yyyy h:mm:ss a z"); //$NON-NLS-1$
 			setPattern(dList.get(0));
 		}
 		return dList;

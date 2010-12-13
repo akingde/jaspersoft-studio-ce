@@ -107,10 +107,10 @@ public class CreateGroupCommand extends Command {
 					jrDataSet.addGroup(index, jrGroup);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) {
-					String defaultName = ModelUtils.getDefaultName(jrDataSet.getGroupsMap(), "CopyOFGroup_");
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Group Name",
-							"Please, enter unique group name", defaultName, null);
+				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+					String defaultName = ModelUtils.getDefaultName(jrDataSet.getGroupsMap(), "CopyOFGroup_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateGroupCommand_group_name,
+							Messages.CreateGroupCommand_group_name_dialog, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());
 						execute();

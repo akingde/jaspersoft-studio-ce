@@ -41,63 +41,63 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING, "Padding");
-		paddingD.setDescription("The amount of empty space between the border and the element's content.");
+		IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING, Messages.MLineBox_padding);
+		paddingD.setDescription(Messages.MLineBox_padding_description);
 		desc.add(paddingD);
 
 		IntegerPropertyDescriptor paddingLeftD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_LEFT_PADDING,
-				"Left Padding");
-		paddingLeftD.setDescription("The amount of empty space between the left border and the element's content.");
+				Messages.MLineBox_left_padding);
+		paddingLeftD.setDescription(Messages.MLineBox_left_padding_description);
 		desc.add(paddingLeftD);
 
 		IntegerPropertyDescriptor paddingRightD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_RIGHT_PADDING,
-				"Right Padding");
-		paddingRightD.setDescription("The amount of empty space between the right border and the element's content.");
+				Messages.MLineBox_right_padding);
+		paddingRightD.setDescription(Messages.MLineBox_right_padding_description);
 		desc.add(paddingRightD);
 
 		IntegerPropertyDescriptor paddingTopD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_TOP_PADDING,
-				"Top Padding");
-		paddingTopD.setDescription("The amount of empty space between the top border and the element's content.");
+				Messages.MLineBox_top_padding);
+		paddingTopD.setDescription(Messages.MLineBox_top_padding_description);
 		desc.add(paddingTopD);
 
 		IntegerPropertyDescriptor paddingBottomD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_BOTTOM_PADDING,
-				"Bottom Padding");
-		paddingBottomD.setDescription("The amount of empty space between the bottom border and the element's content.");
+				Messages.MLineBox_bottom_padding);
+		paddingBottomD.setDescription(Messages.MLineBox_bottom_padding_description);
 		desc.add(paddingBottomD);
 
-		paddingD.setCategory("Padding");
-		paddingBottomD.setCategory("Padding");
-		paddingTopD.setCategory("Padding");
-		paddingLeftD.setCategory("Padding");
-		paddingRightD.setCategory("Padding");
+		paddingD.setCategory(Messages.MLineBox_padding_category);
+		paddingBottomD.setCategory(Messages.MLineBox_padding_category);
+		paddingTopD.setCategory(Messages.MLineBox_padding_category);
+		paddingLeftD.setCategory(Messages.MLineBox_padding_category);
+		paddingRightD.setCategory(Messages.MLineBox_padding_category);
 		// --------------------------------------------------------------------------------------------------------------
 		// pen
-		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, "Line Pen");
-		linePenD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, Messages.MLineBox_line_pen);
+		linePenD.setDescription(Messages.MLineBox_line_pen_description);
 		desc.add(linePenD);
 
-		PenPropertyDescriptor linePenTopD = new PenPropertyDescriptor(LINE_PEN_TOP, "Line Pen Top");
-		linePenTopD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		PenPropertyDescriptor linePenTopD = new PenPropertyDescriptor(LINE_PEN_TOP, Messages.MLineBox_line_pen_top);
+		linePenTopD.setDescription(Messages.MLineBox_line_pen_top_description);
 		desc.add(linePenTopD);
 
-		PenPropertyDescriptor linePenBottomD = new PenPropertyDescriptor(LINE_PEN_BOTTOM, "Line Pen Bottom");
-		linePenBottomD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		PenPropertyDescriptor linePenBottomD = new PenPropertyDescriptor(LINE_PEN_BOTTOM, Messages.MLineBox_line_pen_bottom);
+		linePenBottomD.setDescription(Messages.MLineBox_line_pen_bottom_description);
 		desc.add(linePenBottomD);
 
-		PenPropertyDescriptor linePenLeftD = new PenPropertyDescriptor(LINE_PEN_LEFT, "Line Pen Left");
-		linePenLeftD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		PenPropertyDescriptor linePenLeftD = new PenPropertyDescriptor(LINE_PEN_LEFT, Messages.MLineBox_line_pen_left);
+		linePenLeftD.setDescription(Messages.MLineBox_line_pen_left_description);
 		desc.add(linePenLeftD);
 
-		PenPropertyDescriptor linePenRightD = new PenPropertyDescriptor(LINE_PEN_RIGHT, "Line Pen Right");
-		linePenRightD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		PenPropertyDescriptor linePenRightD = new PenPropertyDescriptor(LINE_PEN_RIGHT, Messages.MLineBox_line_pen_right);
+		linePenRightD.setDescription(Messages.MLineBox_line_pen_right_description);
 		desc.add(linePenRightD);
 	}
 
-	public static final String LINE_PEN = "LinePen";
-	public static final String LINE_PEN_TOP = "LinePen_TOP";
-	public static final String LINE_PEN_BOTTOM = "LinePen_BOTTOM";
-	public static final String LINE_PEN_LEFT = "LinePen_LEFT";
-	public static final String LINE_PEN_RIGHT = "LinePen_RIGHT";
+	public static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
+	public static final String LINE_PEN_TOP = "LinePen_TOP"; //$NON-NLS-1$
+	public static final String LINE_PEN_BOTTOM = "LinePen_BOTTOM"; //$NON-NLS-1$
+	public static final String LINE_PEN_LEFT = "LinePen_LEFT"; //$NON-NLS-1$
+	public static final String LINE_PEN_RIGHT = "LinePen_RIGHT"; //$NON-NLS-1$
 
 	private MLinePen linePen;
 	private MLinePen linePenTop;

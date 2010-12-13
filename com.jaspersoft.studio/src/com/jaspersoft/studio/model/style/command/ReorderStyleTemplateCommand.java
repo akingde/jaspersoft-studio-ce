@@ -53,7 +53,7 @@ public class ReorderStyleTemplateCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderStyleTemplateCommand(MStyleTemplate child, MStyles parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderStyleTemplateCommand_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrDesign = parent.getJasperDesign();
 		this.jrTemplate = (JRDesignReportTemplate) child.getValue();

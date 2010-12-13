@@ -34,7 +34,7 @@ public class PenLabelProvider extends LabelProvider {
 	@Override
 	public String getText(Object element) {
 		
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 }

@@ -55,7 +55,7 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("style");
+			iconDescriptor = new NodeIconDescriptor("style"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -148,10 +148,10 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 		desc.removeAll(toRemove);
 
 		JRExpressionPropertyDescriptor conditionalExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION, "Conditional expression");
-		conditionalExpressionD.setCategory("Conditional Style");
+				JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION, Messages.MConditionalStyle_conditional_expression);
+		conditionalExpressionD.setCategory(Messages.MConditionalStyle_properties_category);
 		conditionalExpressionD
-				.setDescription("A boolean expression which indicates if the style properties associated with it should be applied to the parent style.");
+				.setDescription(Messages.MConditionalStyle_conditional_expression_description);
 		desc.add(conditionalExpressionD);
 
 	}

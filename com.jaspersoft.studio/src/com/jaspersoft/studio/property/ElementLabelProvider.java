@@ -71,7 +71,7 @@ public class ElementLabelProvider extends LabelProvider {
 			}
 			if (element != null) {
 				try {
-					icon = (IIconDescriptor) element.getClass().getMethod("getIconDescriptor", new Class<?>[] {})
+					icon = (IIconDescriptor) element.getClass().getMethod("getIconDescriptor", new Class<?>[] {}) //$NON-NLS-1$
 							.invoke(null, new Object[] {});
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
@@ -107,7 +107,7 @@ public class ElementLabelProvider extends LabelProvider {
 			String name = typeMapper.mapType(object).getName();
 			if (object instanceof EditPart) {
 				ANode element = (ANode) ((EditPart) object).getModel();
-				return name.substring(name.lastIndexOf('.') + 2) + ": " + element.getDisplayText();
+				return name.substring(name.lastIndexOf('.') + 2) + ": " + element.getDisplayText(); //$NON-NLS-1$
 			}
 			return name.substring(name.lastIndexOf('.') + 1);
 		}

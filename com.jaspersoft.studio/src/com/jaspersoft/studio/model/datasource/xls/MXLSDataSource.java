@@ -41,7 +41,7 @@ public class MXLSDataSource extends AMFileDataSource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasourceXLS");
+			iconDescriptor = new NodeIconDescriptor("datasourceXLS"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

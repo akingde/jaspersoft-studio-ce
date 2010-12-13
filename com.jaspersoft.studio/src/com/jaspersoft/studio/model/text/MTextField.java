@@ -63,7 +63,7 @@ public class MTextField extends MTextElement {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("textfield");
+			iconDescriptor = new NodeIconDescriptor("textfield"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -118,42 +118,42 @@ public class MTextField extends MTextElement {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
-				JRDesignTextField.PROPERTY_EVALUATION_TIME, "Evaluation Time", EnumHelper.getEnumNames(
+				JRDesignTextField.PROPERTY_EVALUATION_TIME, Messages.MTextField_evaluation_time, EnumHelper.getEnumNames(
 						EvaluationTimeEnum.values(), NullEnum.NULL));
 		evaluationTimeD
-				.setDescription("The text to be printed is supplied by the associated expression. This expression can be evaluated at a specified moment. This could be useful, for example, when we want to have on the first page a text that will be generated only after fetching all the data source rows.");
+				.setDescription(Messages.MTextField_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
 		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,
-				"Blank When NULL", NullEnum.INHERITED);
+				Messages.MTextField_blank_when_null, NullEnum.INHERITED);
 		blankWhenNullD
-				.setDescription("Specifies that the text field should display a blank character instead of \"null\" when the text field expression evaluates to null.");
+				.setDescription(Messages.MTextField_blank_when_null_description);
 		desc.add(blankWhenNullD);
 
 		CheckBoxPropertyDescriptor stretchOverflowD = new CheckBoxPropertyDescriptor(
-				JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, "Stretch With Overflow", NullEnum.NOTNULL);
+				JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Messages.MTextField_stretch_with_overflow, NullEnum.NOTNULL);
 		stretchOverflowD
-				.setDescription("	Instructs the report engine to allow the text field to stretch downwards in order to display all its text when it doesn't fit in the defined text field height.");
+				.setDescription(Messages.MTextField_stretch_with_overflow_description);
 		desc.add(stretchOverflowD);
 
 		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(JRDesignTextField.PROPERTY_EXPRESSION,
-				"Expression");
-		exprD.setDescription("Defines the expression to use for this textField.");
+				Messages.MTextField_expression);
+		exprD.setDescription(Messages.MTextField_expression_description);
 		desc.add(exprD);
 
-		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN, "Pattern");
-		patternD.setDescription("Pattern to use when formatting the output of the text field expression.");
+		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN, Messages.MTextField_pattern);
+		patternD.setDescription(Messages.MTextField_pattern_description);
 		desc.add(patternD);
 
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
-		patternD.setCategory("TextField Properties");
-		exprD.setCategory("TextField Properties");
-		evaluationTimeD.setCategory("TextField Properties");
-		blankWhenNullD.setCategory("TextField Properties");
-		stretchOverflowD.setCategory("TextField Properties");
+		patternD.setCategory(Messages.MTextField_textfield_category);
+		exprD.setCategory(Messages.MTextField_textfield_category);
+		evaluationTimeD.setCategory(Messages.MTextField_textfield_category);
+		blankWhenNullD.setCategory(Messages.MTextField_textfield_category);
+		stretchOverflowD.setCategory(Messages.MTextField_textfield_category);
 
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);

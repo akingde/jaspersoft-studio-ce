@@ -43,13 +43,13 @@ public class SubreportPropertyEditor extends Wizard {
 
 	public SubreportPropertyEditor() {
 		super();
-		setWindowTitle("Properties");
+		setWindowTitle(Messages.SubreportPropertyEditor_properties);
 		setNeedsProgressMonitor(false);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new SubreportPropertyPage("subreportproperties");
+		page0 = new SubreportPropertyPage("subreportproperties"); //$NON-NLS-1$
 		page0.setValue(value);
 		addPage(page0);
 	}

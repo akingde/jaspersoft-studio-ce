@@ -51,7 +51,7 @@ public class MStaticText extends MTextElement {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("statictext");
+			iconDescriptor = new NodeIconDescriptor("statictext"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -100,9 +100,9 @@ public class MStaticText extends MTextElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRBaseStaticText.PROPERTY_TEXT, "Text");
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRBaseStaticText.PROPERTY_TEXT, Messages.MStaticText_text);
 		desc.add(textD);
-		textD.setCategory("StaticText Properties");
+		textD.setCategory(Messages.MStaticText_text_description);
 	}
 
 	@Override

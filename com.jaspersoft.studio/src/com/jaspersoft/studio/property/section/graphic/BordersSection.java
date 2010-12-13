@@ -107,7 +107,7 @@ public class BordersSection extends AbstractSection {
 		GridLayout layout = new GridLayout(7, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Box:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.BordersSection_box+":", SWT.RIGHT); //$NON-NLS-2$
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.verticalSpan = 2;
 		gd.widthHint = 100;
@@ -116,7 +116,7 @@ public class BordersSection extends AbstractSection {
 		createBorderPreview(composite);
 
 		rightPanel = new Group(composite, SWT.NONE);
-		rightPanel.setText("Border && Padding");
+		rightPanel.setText(Messages.BordersSection_border_and_padding);
 		rightPanel.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gd.verticalSpan = 2;
@@ -186,11 +186,11 @@ public class BordersSection extends AbstractSection {
 		GridLayout layout = new GridLayout(2, false);
 		composite.setLayout(layout);
 
-		getWidgetFactory().createCLabel(composite, "Padding:", SWT.RIGHT);
+		getWidgetFactory().createCLabel(composite, Messages.BordersSection_padding+":", SWT.RIGHT); //$NON-NLS-2$
 
 		final Spinner padding = new Spinner(composite, SWT.BORDER);
 		padding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		padding.setToolTipText("padding");
+		padding.setToolTipText(Messages.BordersSection_padding_tool_tip);
 		padding.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(property, property, new Integer(padding.getSelection()));
@@ -198,13 +198,13 @@ public class BordersSection extends AbstractSection {
 		});
 		pMap.put(property, padding);
 
-		getWidgetFactory().createCLabel(composite, "Pen Color:", SWT.RIGHT);
+		getWidgetFactory().createCLabel(composite, Messages.BordersSection_pen_color+":", SWT.RIGHT); //$NON-NLS-2$
 
 		Button lineColor = new Button(composite, SWT.FLAT);
 		lineColor.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(composite.getShell());
-				cd.setText("Line color");
+				cd.setText(Messages.BordersSection_line_color);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR));
 				RGB newColor = cd.open();
 				changeProperty(property, JRBasePen.PROPERTY_LINE_COLOR, newColor);
@@ -213,9 +213,9 @@ public class BordersSection extends AbstractSection {
 		GridData gd = new GridData();
 		gd.widthHint = 30;
 		lineColor.setLayoutData(gd);
-		lineColorMap.put(property + "." + JRBasePen.PROPERTY_LINE_COLOR, lineColor);
+		lineColorMap.put(property + "." + JRBasePen.PROPERTY_LINE_COLOR, lineColor); //$NON-NLS-1$
 
-		getWidgetFactory().createCLabel(composite, "Pen Style:");
+		getWidgetFactory().createCLabel(composite, Messages.BordersSection_pen_style+":"); //$NON-NLS-2$
 
 		final CCombo lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		lineStyle.setItems(EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
@@ -228,14 +228,14 @@ public class BordersSection extends AbstractSection {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		lineStyle.setToolTipText("Line style");
-		lineStyleMap.put(property + "." + JRBasePen.PROPERTY_LINE_STYLE, lineStyle);
+		lineStyle.setToolTipText(Messages.BordersSection_line_style);
+		lineStyleMap.put(property + "." + JRBasePen.PROPERTY_LINE_STYLE, lineStyle); //$NON-NLS-1$
 
-		getWidgetFactory().createCLabel(composite, "Pen Width:", SWT.RIGHT);
+		getWidgetFactory().createCLabel(composite, Messages.BordersSection_pen_width+":", SWT.RIGHT); //$NON-NLS-2$
 
 		final Spinner lineWidth = new Spinner(composite, SWT.BORDER);
 		lineWidth.setValues(0, 0, 5000, 1, 1, 1);
-		lineWidth.setToolTipText("width");
+		lineWidth.setToolTipText(Messages.BordersSection_width_tool_tip);
 		lineWidth.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				int selection = lineWidth.getSelection();
@@ -244,7 +244,7 @@ public class BordersSection extends AbstractSection {
 				changeProperty(property, JRBasePen.PROPERTY_LINE_WIDTH, newValue);
 			}
 		});
-		lineWidthMap.put(property + "." + JRBasePen.PROPERTY_LINE_WIDTH, lineWidth);
+		lineWidthMap.put(property + "." + JRBasePen.PROPERTY_LINE_WIDTH, lineWidth); //$NON-NLS-1$
 		return composite;
 	}
 
@@ -263,8 +263,8 @@ public class BordersSection extends AbstractSection {
 				}
 			}
 		});
-		allBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_frame.gif"));
-		allBorder.setToolTipText("all borders");
+		allBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_frame.gif")); //$NON-NLS-1$
+		allBorder.setToolTipText(Messages.BordersSection_all_borders_tool_tip);
 
 		topBorder = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		topBorder.addSelectionListener(new SelectionAdapter() {
@@ -280,8 +280,8 @@ public class BordersSection extends AbstractSection {
 				}
 			}
 		});
-		topBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_top.gif"));
-		topBorder.setToolTipText("top border");
+		topBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_top.gif")); //$NON-NLS-1$
+		topBorder.setToolTipText(Messages.BordersSection_top_border_tool_tip);
 
 		bottomBorder = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		bottomBorder.addSelectionListener(new SelectionAdapter() {
@@ -297,8 +297,8 @@ public class BordersSection extends AbstractSection {
 				}
 			}
 		});
-		bottomBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_bottom.gif"));
-		bottomBorder.setToolTipText("bottom border");
+		bottomBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_bottom.gif")); //$NON-NLS-1$
+		bottomBorder.setToolTipText(Messages.BordersSection_bottom_border_tool_tip);
 
 		leftBorder = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		leftBorder.addSelectionListener(new SelectionAdapter() {
@@ -314,8 +314,8 @@ public class BordersSection extends AbstractSection {
 				}
 			}
 		});
-		leftBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_left.gif"));
-		leftBorder.setToolTipText("left border");
+		leftBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_left.gif")); //$NON-NLS-1$
+		leftBorder.setToolTipText(Messages.BordersSection_left_border_tool_tip);
 
 		rightBorder = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		rightBorder.addSelectionListener(new SelectionAdapter() {
@@ -331,8 +331,8 @@ public class BordersSection extends AbstractSection {
 				}
 			}
 		});
-		rightBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_right.gif"));
-		rightBorder.setToolTipText("right border");
+		rightBorder.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_right.gif")); //$NON-NLS-1$
+		rightBorder.setToolTipText(Messages.BordersSection_right_border_tool_tip);
 	}
 
 	public void changeProperty(String prop, String property, Object newValue) {
@@ -405,17 +405,17 @@ public class BordersSection extends AbstractSection {
 			MLinePen lp = (MLinePen) lb.getPropertyValue(property);
 
 			Float propertyValue = (Float) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
-			Spinner lineWidth = lineWidthMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_WIDTH);
+			Spinner lineWidth = lineWidthMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_WIDTH); //$NON-NLS-1$
 			if (propertyValue != null)
 				lineWidth.setSelection((int) (propertyValue.doubleValue() * Math.pow(10, 1)));
 			else
 				lineWidth.setSelection(0);
 
-			CCombo lineStyle = lineStyleMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_STYLE);
+			CCombo lineStyle = lineStyleMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_STYLE); //$NON-NLS-1$
 			lineStyle.select(((Integer) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
 
 			RGB backcolor = (RGB) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
-			Button lineColor = lineColorMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_COLOR);
+			Button lineColor = lineColorMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_COLOR); //$NON-NLS-1$
 			if (backcolor != null)
 				lineColor.setImage(colorLabelProvider.getImage(backcolor));
 			else

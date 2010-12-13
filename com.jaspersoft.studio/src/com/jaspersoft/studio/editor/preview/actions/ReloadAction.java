@@ -29,18 +29,18 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
 
 public class ReloadAction extends Action {
-	public static final String ID = "PREVIEWRELOADACTION";
+	public static final String ID = "PREVIEWRELOADACTION"; //$NON-NLS-1$
 	private PreviewEditor editor;
 
 	public ReloadAction(PreviewEditor editor) {
 		super();
 		this.editor = editor;
 		setId(ID);
-		setText("Reload");
-		setDescription("Reload");
-		setToolTipText("Reload");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseicons/reload.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseicons/reloadd.gif"));
+		setText(Messages.ReloadAction_reload);
+		setDescription(Messages.ReloadAction_reload_description);
+		setToolTipText(Messages.ReloadAction_reload_tool_tip);
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseicons/reload.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseicons/reloadd.gif")); //$NON-NLS-1$
 	}
 
 	@Override

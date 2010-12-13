@@ -110,7 +110,7 @@ public class PreviewEditor extends JRPrintEditor {
 				if (datasource != null)
 					dsName = datasource.getDisplayText();
 				else {
-					unsetReportDocument("No datasource selected, please select a datasource to run report", true);
+					unsetReportDocument(Messages.PreviewEditor_no_datasource, true);
 					// jasperPrint = new ReportConverter(jasperDesign, false, true).getJasperPrint();
 					return;
 				}
@@ -119,13 +119,13 @@ public class PreviewEditor extends JRPrintEditor {
 			if (pdresult != Window.OK)
 				return;
 
-			String jobName = "Preview: " + jasperDesign.getName() + " on [" + dsName + "]";
+			String jobName = Messages.PreviewEditor_preview_a + jasperDesign.getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]";
 			Job job = new Job(jobName) {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					unsetReportDocument("Reloading ...", false);
-					monitor.beginTask("Starting ...", IProgressMonitor.UNKNOWN);
+					unsetReportDocument(Messages.PreviewEditor_reloading, false);
+					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
 					InputStream io = null;
 					fillError = null;
 					try {
@@ -150,7 +150,7 @@ public class PreviewEditor extends JRPrintEditor {
 							if (connection != null)
 								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
 							else
-								unsetReportDocument("Connection could not be established", true);
+								unsetReportDocument(Messages.PreviewEditor_connection_could_not_be_established, true);
 						} else {
 							JRDataSource jrds = null;
 							if (datasource instanceof MEmptyDataSource) {
@@ -266,9 +266,9 @@ public class PreviewEditor extends JRPrintEditor {
 
 		tbManager.add(new Separator());
 		reloadAction = new ReloadAction(this);
-		tbManager.appendToGroup("DATASOURCEGROUP", reloadAction);
+		tbManager.appendToGroup("DATASOURCEGROUP", reloadAction); //$NON-NLS-1$
 		dataSourceWidget = new DatasourceComboItem(this);
-		tbManager.appendToGroup("DATASOURCEGROUP", dataSourceWidget);
+		tbManager.appendToGroup("DATASOURCEGROUP", dataSourceWidget); //$NON-NLS-1$
 
 		tbManager.update(true);
 	}
@@ -279,7 +279,7 @@ public class PreviewEditor extends JRPrintEditor {
 		IProgressMonitor sm = new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN,
 				SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
 		try {
-			sm.beginTask("Fill report", IProgressMonitor.UNKNOWN);
+			sm.beginTask(Messages.PreviewEditor_fill_report, IProgressMonitor.UNKNOWN);
 			org.mozilla.javascript.Context.enter();
 
 			
@@ -294,7 +294,7 @@ public class PreviewEditor extends JRPrintEditor {
 				}
 
 				public void reportCancelled() {
-					unsetReportDocument("Report fill Canceled", true);
+					unsetReportDocument(Messages.PreviewEditor_report_fill_canceled, true);
 				}
 			});
 			fh.startFill();

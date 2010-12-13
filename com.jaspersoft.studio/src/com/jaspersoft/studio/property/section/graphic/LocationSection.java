@@ -61,27 +61,27 @@ public class LocationSection extends AbstractSection {
 		GridLayout layout = new GridLayout(5, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Position:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.LocationSection_position+":", SWT.RIGHT); //$NON-NLS-2$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
 		xText = new Spinner(composite, SWT.BORDER);
 		xText.setValues(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
-		xText.setToolTipText("X position");
+		xText.setToolTipText(Messages.LocationSection_x_position_tool_tip);
 
 		yText = new Spinner(composite, SWT.BORDER);
 		yText.setValues(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
-		yText.setToolTipText("Y position");
+		yText.setToolTipText(Messages.LocationSection_y_position_tool_tip);
 
-		label = getWidgetFactory().createCLabel(composite, "Position Type:");
+		label = getWidgetFactory().createCLabel(composite, Messages.LocationSection_position_type+":"); //$NON-NLS-2$
 		gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
 		positionType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		positionType.setItems(EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
-		positionType.setToolTipText("Specifies the object position when the report section is affected by stretch.");
+		positionType.setToolTipText(Messages.LocationSection_position_type_tool_tip);
 
 		xText.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

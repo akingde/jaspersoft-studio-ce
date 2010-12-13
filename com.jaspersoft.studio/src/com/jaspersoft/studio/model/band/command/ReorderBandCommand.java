@@ -57,7 +57,7 @@ public class ReorderBandCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderBandCommand(MBandGroupHeader child, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderBandCommand_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDesignSection = (JRDesignSection) child.getJrGroup().getGroupHeaderSection();
@@ -73,7 +73,7 @@ public class ReorderBandCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderBandCommand(MBandGroupFooter child, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderBandCommand_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDesignSection = (JRDesignSection) child.getJrGroup().getGroupFooterSection();
@@ -91,7 +91,7 @@ public class ReorderBandCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderBandCommand(MBand child, MReport parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderBandCommand_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDesignSection = (JRDesignSection) parent.getJasperDesign().getDetailSection();

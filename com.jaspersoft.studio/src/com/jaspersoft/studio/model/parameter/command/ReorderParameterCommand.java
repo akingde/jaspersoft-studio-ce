@@ -58,7 +58,7 @@ public class ReorderParameterCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderParameterCommand(MParameter child, MParameters parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderParameterCommand_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDataset = (JRDesignDataset) parent.getValue();

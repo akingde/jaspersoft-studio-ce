@@ -83,7 +83,7 @@ public class SubreportPropertyPage extends WizardPage {
 				if (value2 != null && value2.getExpression() != null)
 					return value2.getExpression().getText();
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 
@@ -103,7 +103,7 @@ public class SubreportPropertyPage extends WizardPage {
 		value = new HashMap<String, JRSubreportParameter>();
 		List<SubreportPropertyDTO> props = (List<SubreportPropertyDTO>) tableViewer.getInput();
 		for (SubreportPropertyDTO p : props) {
-			if (p.getProperty() != null && !p.getProperty().equals(""))
+			if (p.getProperty() != null && !p.getProperty().equals("")) //$NON-NLS-1$
 				value.put(p.getProperty(), p.getValue());
 		}
 		super.dispose();
@@ -120,8 +120,8 @@ public class SubreportPropertyPage extends WizardPage {
 
 	protected SubreportPropertyPage(String pageName) {
 		super(pageName);
-		setTitle("Subreport Parameters");
-		setDescription("Subreport Parameters.");
+		setTitle(Messages.SubreportPropertyPage_subreport_parameters);
+		setDescription(Messages.SubreportPropertyPage_description);
 
 	}
 
@@ -144,7 +144,7 @@ public class SubreportPropertyPage extends WizardPage {
 		table.setLayoutData(gd);
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText("&add");
+		addB.setText(Messages.SubreportPropertyPage_add);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		addB.setLayoutData(gridData);
@@ -154,15 +154,15 @@ public class SubreportPropertyPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				List<SubreportPropertyDTO> list = (List<SubreportPropertyDTO>) tableViewer.getInput();
 				for (SubreportPropertyDTO dto : list) {
-					if (dto.getProperty() == null || dto.getProperty().trim().equals(""))
+					if (dto.getProperty() == null || dto.getProperty().trim().equals("")) //$NON-NLS-1$
 						return;
 				}
 				SubreportPropertyDTO p = new SubreportPropertyDTO();
 				JRDesignSubreportParameter value2 = new JRDesignSubreportParameter();
 				JRDesignExpression expression = new JRDesignExpression();
-				expression.setValueClassName("java.lang.String");
+				expression.setValueClassName("java.lang.String"); //$NON-NLS-1$
 				value2.setExpression(expression);
-				value2.setName("NEW PARAMETER");
+				value2.setName("NEW PARAMETER"); //$NON-NLS-1$
 				p.setValue(value2);
 				list.add(p);
 				tableViewer.add(p);
@@ -174,7 +174,7 @@ public class SubreportPropertyPage extends WizardPage {
 		});
 
 		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText("&delete");
+		delB.setText(Messages.SubreportPropertyPage_delete);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		delB.setLayoutData(gridData);
@@ -201,7 +201,7 @@ public class SubreportPropertyPage extends WizardPage {
 						tableViewer.setSelection(new StructuredSelection(sp));
 						// cursor.setSelection(table.getSelectionIndex(), 0);
 					} else
-						setMessage("Table is empty");
+						setMessage(Messages.SubreportPropertyPage_table_is_empty);
 				}
 			}
 		});
@@ -229,10 +229,10 @@ public class SubreportPropertyPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Name");
+		column[0].setText(Messages.SubreportPropertyPage_name);
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Expression");
+		column[1].setText(Messages.SubreportPropertyPage_expression);
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++) {
@@ -283,22 +283,22 @@ public class SubreportPropertyPage extends WizardPage {
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
-				if (property.equals("VALUE"))
+				if (property.equals("VALUE")) //$NON-NLS-1$
 					return true;
-				if (property.equals("NAME"))
+				if (property.equals("NAME")) //$NON-NLS-1$
 					return true;
 				return false;
 			}
 
 			public Object getValue(Object element, String property) {
 				SubreportPropertyDTO prop = (SubreportPropertyDTO) element;
-				if ("VALUE".equals(property))
+				if ("VALUE".equals(property)) //$NON-NLS-1$
 					if (prop.getValue() != null)
 						return new MExpression(prop.getValue().getExpression());
-				if ("NAME".equals(property)) {
+				if ("NAME".equals(property)) { //$NON-NLS-1$
 					return prop.getProperty();
 				}
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 			public void modify(Object element, String property, Object value) {
@@ -306,13 +306,13 @@ public class SubreportPropertyPage extends WizardPage {
 				setErrorMessage(null);
 				setMessage(getDescription(tableItem));
 				SubreportPropertyDTO data = (SubreportPropertyDTO) tableItem.getData();
-				if ("VALUE".equals(property)) {
+				if ("VALUE".equals(property)) { //$NON-NLS-1$
 					if (value instanceof MExpression) {
 						JRExpression e = (JRExpression) ((MExpression) value).getValue();
 						data.getValue().setExpression(e);
 					}
 				}
-				if ("NAME".equals(property)) {
+				if ("NAME".equals(property)) { //$NON-NLS-1$
 					List<SubreportPropertyDTO> plist = (List<SubreportPropertyDTO>) tableViewer.getInput();
 					for (SubreportPropertyDTO p : plist) {
 						if (p != data && p.getProperty() != null && p.getProperty().equals(value)) {
@@ -328,7 +328,7 @@ public class SubreportPropertyPage extends WizardPage {
 		});
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new JRExpressionCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE" });
+		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private void fillTable(Table table) {
@@ -351,7 +351,7 @@ public class SubreportPropertyPage extends WizardPage {
 				switch (event.type) {
 				case SWT.MouseDown:
 					Event e = new Event();
-					e.item = (TableItem) label.getData("_TABLEITEM");
+					e.item = (TableItem) label.getData("_TABLEITEM"); //$NON-NLS-1$
 					// Assuming table is single select, set the selection as if
 					// the mouse down event went through to the table
 					table.setSelection(new TableItem[] { (TableItem) e.item });
@@ -384,7 +384,7 @@ public class SubreportPropertyPage extends WizardPage {
 				case SWT.MouseHover: {
 					TableItem item = table.getItem(new Point(event.x, event.y));
 					String description = getDescription(item);
-					if (item != null && !description.equals("")) {
+					if (item != null && !description.equals("")) { //$NON-NLS-1$
 
 						if (tip != null && !tip.isDisposed())
 							tip.dispose();
@@ -393,7 +393,7 @@ public class SubreportPropertyPage extends WizardPage {
 						label = new Label(tip, SWT.NONE);
 						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-						label.setData("_TABLEITEM", item);
+						label.setData("_TABLEITEM", item); //$NON-NLS-1$
 
 						label.setText(description);
 						label.addListener(SWT.MouseExit, labelListener);
@@ -421,6 +421,6 @@ public class SubreportPropertyPage extends WizardPage {
 		// if (p.getProperty().equals(key))
 		// return p.getDescription();
 		// }
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }

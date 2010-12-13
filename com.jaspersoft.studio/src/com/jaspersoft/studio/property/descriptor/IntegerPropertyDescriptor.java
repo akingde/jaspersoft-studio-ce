@@ -63,7 +63,7 @@ public class IntegerPropertyDescriptor extends TextPropertyDescriptor {
 			@Override
 			protected Object doGetValue() {
 				String value = (String) super.doGetValue();
-				if (value == null || value.equals(""))
+				if (value == null || value.equals("")) //$NON-NLS-1$
 					return (Integer) null;
 				return new Integer(value);
 			}
@@ -71,7 +71,7 @@ public class IntegerPropertyDescriptor extends TextPropertyDescriptor {
 			@Override
 			protected void doSetValue(Object value) {
 				if (value == null)
-					super.doSetValue("");
+					super.doSetValue(""); //$NON-NLS-1$
 				else {
 					Assert.isTrue(text != null && (value instanceof Integer));
 					super.doSetValue(((Integer) value).toString());

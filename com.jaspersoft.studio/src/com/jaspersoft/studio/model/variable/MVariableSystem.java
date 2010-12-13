@@ -53,7 +53,7 @@ public class MVariableSystem extends APropertyNode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("variable");
+			iconDescriptor = new NodeIconDescriptor("variable"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -133,16 +133,16 @@ public class MVariableSystem extends APropertyNode {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, "Name");
-		nameD.setDescription("Name of the variable.");
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.MVariableSystem_name);
+		nameD.setDescription(Messages.MVariableSystem_name_description);
 		desc.add(nameD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,
-				"Value Class Name");
-		classD.setDescription("Class of the variable values.");
+				Messages.MVariableSystem_value_class_name);
+		classD.setDescription(Messages.MVariableSystem_value_class_name_description);
 		desc.add(classD);
 
-		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, "java.lang.String");
+		defaultsMap.put(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
 	}
 
 	/*

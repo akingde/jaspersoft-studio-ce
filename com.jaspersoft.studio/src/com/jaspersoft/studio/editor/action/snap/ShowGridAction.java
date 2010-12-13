@@ -39,9 +39,9 @@ public class ShowGridAction extends Action {
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
 	public ShowGridAction(GraphicalViewer diagramViewer) {
-		super("Show grid", AS_CHECK_BOX);
+		super(Messages.ShowGridAction_show_grid, AS_CHECK_BOX);
 		this.diagramViewer = diagramViewer;
-		setToolTipText("Show grid");
+		setToolTipText(Messages.ShowGridAction_show_grid_tool_tip);
 		setId(GEFActionConstants.TOGGLE_GRID_VISIBILITY);
 		setActionDefinitionId(GEFActionConstants.TOGGLE_GRID_VISIBILITY);
 		setChecked(isChecked());

@@ -36,7 +36,7 @@ public class MDTPDatasources extends ANode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasources.dtp");
+			iconDescriptor = new NodeIconDescriptor("datasources.dtp"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

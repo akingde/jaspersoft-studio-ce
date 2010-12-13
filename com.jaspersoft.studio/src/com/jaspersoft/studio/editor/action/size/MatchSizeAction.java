@@ -34,10 +34,10 @@ public class MatchSizeAction extends MatchHeightAction {
 	public static final String ID = GEFActionConstants.MATCH_HEIGHT + GEFActionConstants.MATCH_WIDTH;
 	public MatchSizeAction(IWorkbenchPart part) {
 		super(part);
-		setText("Match Size");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/match-size.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/disabled/match-size.gif"));
-		setToolTipText("Match Size");
+		setText(Messages.MatchSizeAction_match_size);
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/match-size.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/disabled/match-size.gif")); //$NON-NLS-1$
+		setToolTipText(Messages.MatchSizeAction_match_size_tool_tip);
 		setId(ID);
 	}
 

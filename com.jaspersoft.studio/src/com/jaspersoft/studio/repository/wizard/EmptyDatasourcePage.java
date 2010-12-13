@@ -36,9 +36,9 @@ public class EmptyDatasourcePage extends ADatasourcePage {
 	private Spinner sizeTxt;
 
 	protected EmptyDatasourcePage() {
-		super("emptydatasourceeditor");
-		setTitle("Empty Datasource");
-		setDescription("Creates an empty datasource.");
+		super("emptydatasourceeditor"); //$NON-NLS-1$
+		setTitle(Messages.EmptyDatasourcePage_empty_datasource);
+		setDescription(Messages.EmptyDatasourcePage_description);
 	}
 
 	@Override
@@ -51,11 +51,11 @@ public class EmptyDatasourcePage extends ADatasourcePage {
 	@Override
 	protected void createMoreControls(Composite parent) {
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Size:");
+		lbl1.setText(Messages.EmptyDatasourcePage_size+":"); //$NON-NLS-1$
 
 		sizeTxt = new Spinner(parent, SWT.BORDER);
 		sizeTxt.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		sizeTxt.setToolTipText("Number of empty source records");
+		sizeTxt.setToolTipText(Messages.EmptyDatasourcePage_size_tool_tip);
 	}
 
 	@Override

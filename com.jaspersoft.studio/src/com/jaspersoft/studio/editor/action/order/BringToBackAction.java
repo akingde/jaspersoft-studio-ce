@@ -43,7 +43,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 public class BringToBackAction extends SelectionAction {
 	
 	/** The Constant ID. */
-	public static final String ID = "bring_back";
+	public static final String ID = "bring_back"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -82,7 +82,7 @@ public class BringToBackAction extends SelectionAction {
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 
-		CompoundCommand compoundCmd = new CompoundCommand("Bring To Back");
+		CompoundCommand compoundCmd = new CompoundCommand("Bring To Back"); //$NON-NLS-1$
 		int j = 0;
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart part = (EditPart) objects.get(i);
@@ -114,11 +114,11 @@ public class BringToBackAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Send To &Back");
-		setToolTipText("Send To Back");
+		setText(Messages.BringToBackAction_send_to_back);
+		setToolTipText(Messages.BringToBackAction_send_to_back_tool_tip);
 		setId(BringToBackAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif"));
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_to_back.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 }

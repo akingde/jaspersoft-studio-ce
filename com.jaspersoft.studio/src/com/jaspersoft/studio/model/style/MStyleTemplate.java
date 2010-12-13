@@ -54,7 +54,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("styletemplate");
+			iconDescriptor = new NodeIconDescriptor("styletemplate"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

@@ -60,7 +60,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("sortfield");
+			iconDescriptor = new NodeIconDescriptor("sortfield"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -175,13 +175,13 @@ public class MSortField extends APropertyNode implements ICopyable {
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
-		nameD = new RComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_NAME, "Name", new String[] { "" });
-		nameD.setDescription("Name of the report field to use for sorting.");
+		nameD = new RComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_NAME, Messages.MSortField_name, new String[] { "" }); //$NON-NLS-2$
+		nameD.setDescription(Messages.MSortField_name_description);
 		desc.add(nameD);
 
-		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, "Order",
+		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, Messages.MSortField_order,
 				EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
-		orderD.setDescription("The sort order for the field.");
+		orderD.setDescription(Messages.MSortField_order_description);
 		desc.add(orderD);
 
 		defaultsMap.put(JRDesignSortField.PROPERTY_ORDER, EnumHelper.getValue(SortOrderEnum.ASCENDING, 1, false));
@@ -209,7 +209,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignSortField jrField = (JRDesignSortField) getValue();
 		if (id.equals(JRDesignSortField.PROPERTY_NAME)) {
-			if (!value.equals("")) {
+			if (!value.equals("")) { //$NON-NLS-1$
 				jrField.setName((String) value);
 			}
 		} else if (id.equals(JasperDesign.PROPERTY_ORIENTATION))

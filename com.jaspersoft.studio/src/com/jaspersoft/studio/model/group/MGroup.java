@@ -56,7 +56,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("group");
+			iconDescriptor = new NodeIconDescriptor("group"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -136,14 +136,14 @@ public class MGroup extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, "Name");
-		nameD.setDescription("Name of the group.");
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.MGroup_name);
+		nameD.setDescription(Messages.MGroup_name_description);
 		desc.add(nameD);
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignGroup.PROPERTY_EXPRESSION,
-				"Expression");
+				Messages.MGroup_expression);
 		expressionD
-				.setDescription("Specifies the expression that will be evaluated at runtime to determine the group ruptures.");
+				.setDescription(Messages.MGroup_expression_description);
 		desc.add(expressionD);
 	}
 

@@ -32,7 +32,7 @@ import com.jaspersoft.studio.model.field.MField;
 public class CreateFieldAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_field";
+	public static final String ID = "create_field"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -50,8 +50,8 @@ public class CreateFieldAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Field");
-		setToolTipText("Creates field");
+		setText(Messages.CreateFieldAction_create_field);
+		setToolTipText(Messages.CreateFieldAction_create_field_tool_tip);
 		setId(CreateFieldAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

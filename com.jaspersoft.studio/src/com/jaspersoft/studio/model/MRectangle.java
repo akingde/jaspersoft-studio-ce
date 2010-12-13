@@ -51,7 +51,7 @@ public class MRectangle extends MGraphicElementLinePen {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("rectangle");
+			iconDescriptor = new NodeIconDescriptor("rectangle"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -105,14 +105,14 @@ public class MRectangle extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, "Fill", EnumHelper
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.MRectangle_fill, EnumHelper
 				.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
-		fillD.setDescription("Type of the fill pattern used to fill objects.");
+		fillD.setDescription(Messages.MRectangle_fill_description);
 		desc.add(fillD);
 
-		IntegerPropertyDescriptor rD = new IntegerPropertyDescriptor(JRBaseStyle.PROPERTY_RADIUS, "Radius");
-		rD.setCategory("Rectangle Properties");
-		rD.setDescription("The radius of the arc corner.");
+		IntegerPropertyDescriptor rD = new IntegerPropertyDescriptor(JRBaseStyle.PROPERTY_RADIUS, Messages.MRectangle_radius);
+		rD.setCategory(Messages.MRectangle_rectangle_category);
+		rD.setDescription(Messages.MRectangle_radius_description);
 		desc.add(rD);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);

@@ -41,7 +41,7 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("frame");
+			iconDescriptor = new NodeIconDescriptor("frame"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

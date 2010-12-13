@@ -43,7 +43,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 public class BringToFrontAction extends SelectionAction {
 	
 	/** The Constant ID. */
-	public static final String ID = "bring_front";
+	public static final String ID = "bring_front"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -82,7 +82,7 @@ public class BringToFrontAction extends SelectionAction {
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 
-		CompoundCommand compoundCmd = new CompoundCommand("Bring To Front");
+		CompoundCommand compoundCmd = new CompoundCommand("Bring To Front"); //$NON-NLS-1$
 		int j = 0;
 		for (int i = objects.size() - 1; i >= 0; i--) {
 			EditPart part = (EditPart) objects.get(i);
@@ -115,11 +115,11 @@ public class BringToFrontAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Bring To &Front");
-		setToolTipText("Bring To Front");
+		setText(Messages.BringToFrontAction_bring_to_front);
+		setToolTipText(Messages.BringToFrontAction_bring_to_front_tool_tip);
 		setId(BringToFrontAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bring_to_front.gif"));
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/formatting/bring_to_front.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 }

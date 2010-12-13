@@ -41,7 +41,7 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("dataset");
+			iconDescriptor = new NodeIconDescriptor("dataset"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -97,34 +97,34 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		ComboBoxPropertyDescriptor resetTypeD = new ComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_TYPE,
-				"Reset Type", EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
-		resetTypeD.setDescription("Reset type.");
+				Messages.MElementDataset_reset_type, EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
+		resetTypeD.setDescription(Messages.MElementDataset_reset_type_description);
 		desc.add(resetTypeD);
 
 		ComboBoxPropertyDescriptor inctypeD = new ComboBoxPropertyDescriptor(
-				JRDesignElementDataset.PROPERTY_INCREMENT_TYPE, "Increment Type", EnumHelper.getEnumNames(
+				JRDesignElementDataset.PROPERTY_INCREMENT_TYPE, Messages.MElementDataset_increment_type, EnumHelper.getEnumNames(
 						IncrementTypeEnum.values(), NullEnum.NOTNULL));
-		inctypeD.setDescription("Increment type.");
+		inctypeD.setDescription(Messages.MElementDataset_increment_type_description);
 		desc.add(inctypeD);
 
 		JRExpressionPropertyDescriptor incWhenExprD = new JRExpressionPropertyDescriptor(
-				JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION, "Increment When Expression");
-		incWhenExprD.setDescription("Increment When Expression.");
+				JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION, Messages.MElementDataset_increment_when_expression);
+		incWhenExprD.setDescription(Messages.MElementDataset_increment_when_expression_description);
 		desc.add(incWhenExprD);
 
-		resetGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP, "Reset Group",
-				new String[] { "" });
-		resetGroupD.setDescription("Reset Group.");
+		resetGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP, Messages.MElementDataset_reset_group,
+				new String[] { "" }); //$NON-NLS-1$
+		resetGroupD.setDescription(Messages.MElementDataset_reset_group_description);
 		desc.add(resetGroupD);
 
-		incGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP, "Increment Group",
-				new String[] { "" });
-		incGroupD.setDescription("Increment Group.");
+		incGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP, Messages.MElementDataset_increment_group,
+				new String[] { "" }); //$NON-NLS-1$
+		incGroupD.setDescription(Messages.MElementDataset_increment_group_description);
 		desc.add(incGroupD);
 
 		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(JRDesignElementDataset.PROPERTY_DATASET_RUN,
-				"Dataset Run");
-		datasetRunD.setDescription("Dataset run.");
+				Messages.MElementDataset_dataset_run);
+		datasetRunD.setDescription(Messages.MElementDataset_dataset_run_description);
 		desc.add(datasetRunD);
 
 	}
@@ -157,12 +157,12 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_GROUP)) {
 			if (jrElement.getResetGroup() != null)
 				return jrElement.getResetGroup().getName();
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP)) {
 			if (jrElement.getIncrementGroup() != null)
 				return jrElement.getIncrementGroup().getName();
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			if (mDatasetRun == null) {
@@ -207,12 +207,12 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				jrElement.setIncrementWhenExpression(expression);
 			}
 		} else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP)) {
-			if (!value.equals("")) {
+			if (!value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setIncrementGroup(group);
 			}
 		} else if (id.equals(JRDesignElementDataset.PROPERTY_RESET_GROUP)) {
-			if (!value.equals("")) {
+			if (!value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setResetGroup(group);
 			}

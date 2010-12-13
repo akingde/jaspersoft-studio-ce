@@ -52,7 +52,7 @@ public class MFields extends ANode implements IPastable, IContainerEditPart {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("fields");
+			iconDescriptor = new NodeIconDescriptor("fields"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

@@ -73,7 +73,7 @@ public class TextSection extends AbstractSection {
 		GridLayout layout = new GridLayout(50, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Text:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.TextSection_text+":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -84,8 +84,8 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, HorizontalAlignEnum.LEFT);
 			}
 		});
-		alignLeftButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/left_align.gif"));
-		alignLeftButton.setToolTipText("Align left");
+		alignLeftButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/left_align.gif")); //$NON-NLS-1$
+		alignLeftButton.setToolTipText(Messages.TextSection_align_left_tool_tip);
 
 		alignCenterButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		alignCenterButton.addSelectionListener(new SelectionAdapter() {
@@ -93,8 +93,8 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, HorizontalAlignEnum.CENTER);
 			}
 		});
-		alignCenterButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/center_align.gif"));
-		alignCenterButton.setToolTipText("Align center");
+		alignCenterButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/center_align.gif")); //$NON-NLS-1$
+		alignCenterButton.setToolTipText(Messages.TextSection_align_center_tool_tip);
 
 		alignJustifiedButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		alignJustifiedButton.addSelectionListener(new SelectionAdapter() {
@@ -102,8 +102,8 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, HorizontalAlignEnum.JUSTIFIED);
 			}
 		});
-		alignJustifiedButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/justified_align.gif"));
-		alignJustifiedButton.setToolTipText("Align justified");
+		alignJustifiedButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/justified_align.gif")); //$NON-NLS-1$
+		alignJustifiedButton.setToolTipText(Messages.TextSection_align_justified_tool_tip);
 
 		alignRightButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		alignRightButton.addSelectionListener(new SelectionAdapter() {
@@ -111,10 +111,10 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, HorizontalAlignEnum.RIGHT);
 			}
 		});
-		alignRightButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/right_align.gif"));
-		alignRightButton.setToolTipText("Align right");
+		alignRightButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/right_align.gif")); //$NON-NLS-1$
+		alignRightButton.setToolTipText(Messages.TextSection_align_right_tool_tip);
 
-		getWidgetFactory().createCLabel(composite, "", SWT.RIGHT);
+		getWidgetFactory().createCLabel(composite, "", SWT.RIGHT); //$NON-NLS-1$
 
 		alignTopButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		alignTopButton.addSelectionListener(new SelectionAdapter() {
@@ -122,8 +122,8 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, VerticalAlignEnum.TOP);
 			}
 		});
-		alignTopButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-top.gif"));
-		alignTopButton.setToolTipText("Align top");
+		alignTopButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-top.gif")); //$NON-NLS-1$
+		alignTopButton.setToolTipText(Messages.TextSection_align_top_tool_tip);
 
 		alignMiddleButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		alignMiddleButton.addSelectionListener(new SelectionAdapter() {
@@ -131,8 +131,8 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, VerticalAlignEnum.MIDDLE);
 			}
 		});
-		alignMiddleButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-middle.gif"));
-		alignMiddleButton.setToolTipText("Align middle");
+		alignMiddleButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-middle.gif")); //$NON-NLS-1$
+		alignMiddleButton.setToolTipText(Messages.TextSection_align_middle_tool_tip);
 
 		alignVJustifiedButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		alignVJustifiedButton.addSelectionListener(new SelectionAdapter() {
@@ -140,8 +140,8 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, VerticalAlignEnum.JUSTIFIED);
 			}
 		});
-		alignVJustifiedButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-middle.gif"));
-		alignVJustifiedButton.setToolTipText("Align vertical justified");
+		alignVJustifiedButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-middle.gif")); //$NON-NLS-1$
+		alignVJustifiedButton.setToolTipText(Messages.TextSection_align_vertical_justified_tool_tip);
 
 		alignBottomButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		alignBottomButton.addSelectionListener(new SelectionAdapter() {
@@ -149,8 +149,8 @@ public class TextSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, VerticalAlignEnum.BOTTOM);
 			}
 		});
-		alignBottomButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-bottom.gif"));
-		alignBottomButton.setToolTipText("Align bottom");
+		alignBottomButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-text-bottom.gif")); //$NON-NLS-1$
+		alignBottomButton.setToolTipText(Messages.TextSection_align_bottom_tool_tip);
 
 		rotation = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		rotation.setItems(EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
@@ -163,7 +163,7 @@ public class TextSection extends AbstractSection {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		rotation.setToolTipText("Rotation");
+		rotation.setToolTipText(Messages.TextSection_rotation_tool_tip);
 
 		lineSpace = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		lineSpace.setItems(EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
@@ -176,7 +176,7 @@ public class TextSection extends AbstractSection {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		lineSpace.setToolTipText("Line spacing");
+		lineSpace.setToolTipText(Messages.TextSection_line_spacing_tool_tip);
 	}
 
 	/**

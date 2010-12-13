@@ -54,7 +54,7 @@ public class MScriptlets extends ANode implements IPastable, IContainerEditPart 
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("scriptlets");
+			iconDescriptor = new NodeIconDescriptor("scriptlets"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

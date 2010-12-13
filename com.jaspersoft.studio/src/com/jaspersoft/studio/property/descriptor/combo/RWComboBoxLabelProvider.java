@@ -37,7 +37,7 @@ public class RWComboBoxLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element == null || element.equals(""))
+		if (element == null || element.equals("")) //$NON-NLS-1$
 			return canBeNull.getName();
 		return element.toString();
 	}

@@ -62,20 +62,20 @@ public class SizeSection extends AbstractSection {
 		GridLayout layout = new GridLayout(5, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Size:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.SizeSection_size+":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
 		widthText = new Spinner(composite, SWT.BORDER);
 		widthText.setValues(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
-		widthText.setToolTipText("width");
+		widthText.setToolTipText(Messages.SizeSection_width_tool_tip);
 
 		heightText = new Spinner(composite, SWT.BORDER);
 		heightText.setValues(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
-		heightText.setToolTipText("height");
+		heightText.setToolTipText(Messages.SizeSection_height_tool_tip);
 
-		label = getWidgetFactory().createCLabel(composite, "Stretch Type:");
+		label = getWidgetFactory().createCLabel(composite, Messages.SizeSection_stretch_type+":"); //$NON-NLS-1$
 		gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -83,7 +83,7 @@ public class SizeSection extends AbstractSection {
 		stretchType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		stretchType.setItems(EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
 		stretchType
-				.setToolTipText("Specifies the graphic element stretch behavior when the report section is affected by stretch.");
+				.setToolTipText(Messages.SizeSection_stretch_type_tool_tip);
 
 		widthText.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

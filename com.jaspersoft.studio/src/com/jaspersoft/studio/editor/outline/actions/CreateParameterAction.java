@@ -36,7 +36,7 @@ import com.jaspersoft.studio.model.parameter.MParameter;
 public class CreateParameterAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_parameter";
+	public static final String ID = "create_parameter"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -54,8 +54,8 @@ public class CreateParameterAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Parameter");
-		setToolTipText("Creates parameters");
+		setText(Messages.CreateParameterAction_create_parameter);
+		setToolTipText(Messages.CreateParameterAction_create_parameter_tool_tip);
 		setId(CreateParameterAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

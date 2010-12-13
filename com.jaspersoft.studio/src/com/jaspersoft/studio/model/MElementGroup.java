@@ -43,7 +43,7 @@ public class MElementGroup extends ANode implements IContainerEditPart{
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("elementGroup");
+			iconDescriptor = new NodeIconDescriptor("elementGroup"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

@@ -51,7 +51,7 @@ public class ResetValueCommand extends Command {
 	 * @since 3.1
 	 */
 	public ResetValueCommand() {
-		super("Restore Default Value");
+		super(Messages.ResetValueCommand_restore_default_value);
 	}
 
 	/**

@@ -42,7 +42,7 @@ public class MEmptyDataSource extends AMDatasource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasourceJDBC");
+			iconDescriptor = new NodeIconDescriptor("datasourceJDBC"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -96,11 +96,11 @@ public class MEmptyDataSource extends AMDatasource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		IntegerPropertyDescriptor driverClassD = new IntegerPropertyDescriptor(PROPERTY_SIZE, "Size");
+		IntegerPropertyDescriptor driverClassD = new IntegerPropertyDescriptor(PROPERTY_SIZE, Messages.MEmptyDataSource_size);
 		desc.add(driverClassD);
 	}
 
-	public static final String PROPERTY_SIZE = "PROPERTY_SIZE";
+	public static final String PROPERTY_SIZE = "PROPERTY_SIZE"; //$NON-NLS-1$
 	private Integer size;
 
 	@Override

@@ -74,7 +74,7 @@ public class ReportTreeLabelProvider extends CellLabelProvider {
 	public String getText(Object element) {
 		if (element instanceof INode)
 			return ((INode) element).getDisplayText();
-		return "UNKNOWN ELEMENT";
+		return "UNKNOWN ELEMENT"; //$NON-NLS-1$
 	}
 
 	/**

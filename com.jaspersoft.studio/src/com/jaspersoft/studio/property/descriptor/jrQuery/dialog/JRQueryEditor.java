@@ -41,12 +41,12 @@ public class JRQueryEditor extends Wizard {
 
 	public JRQueryEditor() {
 		super();
-		setWindowTitle("Query Editor");
+		setWindowTitle(Messages.JRQueryEditor_query_editor);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new JRQueryPage("jrquery.editor");
+		page0 = new JRQueryPage("jrquery.editor"); //$NON-NLS-1$
 		page0.setValue(mQuery);
 		addPage(page0);
 	}

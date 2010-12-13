@@ -52,7 +52,7 @@ public class MPageNumber extends MTextField {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("pagenumber");
+			iconDescriptor = new NodeIconDescriptor("pagenumber"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -84,9 +84,9 @@ public class MPageNumber extends MTextField {
 	public JRDesignTextField createJRElement(JasperDesign jasperDesign) {
 		JRDesignTextField jrDesignTextField = new JRDesignTextField();
 		JRDesignExpression expression = new JRDesignExpression();
-		expression.setText("$V{PAGE_NUMBER}");
+		expression.setText("$V{PAGE_NUMBER}"); //$NON-NLS-1$
 		expression.setValueClass(Integer.class);
-		expression.setValueClassName("java.lang.Integer");
+		expression.setValueClassName("java.lang.Integer"); //$NON-NLS-1$
 		jrDesignTextField.setExpression(expression);
 		jrDesignTextField.setEvaluationTime(EvaluationTimeEnum.NOW);
 		return jrDesignTextField;

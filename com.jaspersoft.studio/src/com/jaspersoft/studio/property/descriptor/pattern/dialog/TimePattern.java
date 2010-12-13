@@ -32,19 +32,19 @@ public class TimePattern extends DatePattern {
 
 	public TimePattern(Composite parent) {
 		super(parent);
-		setDescription("Time format is used to display the time portion of date values. Use date \nformat to display also the date portion.");
+		setDescription(Messages.TimePattern_description);
 	}
 
 	@Override
 	protected List<String> getDefaults() {
 		if (dList == null) {
 			dList = new ArrayList<String>();
-			dList.add("h:mm a");
-			dList.add("h:mm:ss a");
-			dList.add("h:mm:ss a z");
-			dList.add("HH:mm a");
-			dList.add("HH:mm:ss a");
-			dList.add("HH:mm:ss zzzz");
+			dList.add("h:mm a"); //$NON-NLS-1$
+			dList.add("h:mm:ss a"); //$NON-NLS-1$
+			dList.add("h:mm:ss a z"); //$NON-NLS-1$
+			dList.add("HH:mm a"); //$NON-NLS-1$
+			dList.add("HH:mm:ss a"); //$NON-NLS-1$
+			dList.add("HH:mm:ss zzzz"); //$NON-NLS-1$
 			setPattern(dList.get(0));
 		}
 		return dList;

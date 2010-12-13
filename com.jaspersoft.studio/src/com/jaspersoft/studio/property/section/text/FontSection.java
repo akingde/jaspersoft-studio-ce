@@ -66,7 +66,7 @@ public class FontSection extends AbstractSection {
 		GridLayout layout = new GridLayout(7, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Font:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.FontSection_font+":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -89,13 +89,13 @@ public class FontSection extends AbstractSection {
 			public void modifyText(ModifyEvent e) {
 				if (e.time - time > 100) {
 					String value = fontName.getText();
-					if (!value.equals("______________"))
+					if (!value.equals("______________")) //$NON-NLS-1$
 						changeProperty(JRBaseStyle.PROPERTY_FONT_NAME, value);
 				}
 				time = e.time;
 			}
 		});
-		fontName.setToolTipText("Font name");
+		fontName.setToolTipText(Messages.FontSection_font_name_tool_tip);
 
 		fontSize = new CCombo(composite, SWT.BORDER | SWT.FLAT);
 		fontSize.setItems(ModelUtils.getFontSizes());
@@ -112,7 +112,7 @@ public class FontSection extends AbstractSection {
 			}
 		});
 
-		fontSize.setToolTipText("Font size");
+		fontSize.setToolTipText(Messages.FontSection_font_size_tool_tip);
 
 		boldButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		boldButton.addSelectionListener(new SelectionAdapter() {
@@ -120,8 +120,8 @@ public class FontSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_BOLD, new Boolean(boldButton.getSelection()));
 			}
 		});
-		boldButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/bold.png"));
-		boldButton.setToolTipText("Bold");
+		boldButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/bold.png")); //$NON-NLS-1$
+		boldButton.setToolTipText(Messages.FontSection_bold_tool_tip);
 
 		italicButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		italicButton.addSelectionListener(new SelectionAdapter() {
@@ -129,8 +129,8 @@ public class FontSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_ITALIC, new Boolean(italicButton.getSelection()));
 			}
 		});
-		italicButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/italic.png"));
-		italicButton.setToolTipText("Italic");
+		italicButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/italic.png")); //$NON-NLS-1$
+		italicButton.setToolTipText(Messages.FontSection_italic_tool_tip);
 
 		underlineButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		underlineButton.addSelectionListener(new SelectionAdapter() {
@@ -138,8 +138,8 @@ public class FontSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_UNDERLINE, new Boolean(underlineButton.getSelection()));
 			}
 		});
-		underlineButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/underline.png"));
-		underlineButton.setToolTipText("Underline");
+		underlineButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/underline.png")); //$NON-NLS-1$
+		underlineButton.setToolTipText(Messages.FontSection_underline_tool_tip);
 
 		strikeTroughtButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		strikeTroughtButton.addSelectionListener(new SelectionAdapter() {
@@ -147,8 +147,8 @@ public class FontSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_STRIKE_THROUGH, new Boolean(strikeTroughtButton.getSelection()));
 			}
 		});
-		strikeTroughtButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/strikethrought.png"));
-		strikeTroughtButton.setToolTipText("StrikeThrought");
+		strikeTroughtButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/strikethrought.png")); //$NON-NLS-1$
+		strikeTroughtButton.setToolTipText(Messages.FontSection_strike_through_tool_tip);
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class FontSection extends AbstractSection {
 		APropertyNode element = getElement();
 		if (element != null) {
 			String strfontname = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
-			fontName.setText(strfontname != null ? strfontname : "");
+			fontName.setText(strfontname != null ? strfontname : ""); //$NON-NLS-1$
 			String[] items = fontName.getItems();
 			for (int i = 0; i < items.length; i++) {
 				if (items[i].equals(strfontname)) {
@@ -170,7 +170,7 @@ public class FontSection extends AbstractSection {
 
 			String strfontsize = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
 			items = fontSize.getItems();
-			fontSize.setText(strfontsize != null ? strfontsize : "");
+			fontSize.setText(strfontsize != null ? strfontsize : ""); //$NON-NLS-1$
 			for (int i = 0; i < items.length; i++) {
 				if (items[i].equals(strfontsize)) {
 					fontSize.select(i);

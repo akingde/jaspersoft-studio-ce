@@ -52,9 +52,9 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 	private Text errTxt;
 
 	protected JDBCDatasourcePage() {
-		super("jdbcdatasourceeditor");
-		setTitle("JDBC Datasource");
-		setDescription("Creates a JDBC datasource.");
+		super("jdbcdatasourceeditor"); //$NON-NLS-1$
+		setTitle(Messages.JDBCDatasourcePage_jdbc_datasource);
+		setDescription(Messages.JDBCDatasourcePage_description);
 	}
 
 	@Override
@@ -77,31 +77,31 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 	protected void createMoreControls(Composite parent) {
 
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Driver Class:");
+		lbl1.setText(Messages.JDBCDatasourcePage_driver_class+":"); //$NON-NLS-1$
 
 		driverClassTxt = new Text(parent, SWT.BORDER);
 		driverClassTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("JDBC URL:");
+		lbl1.setText(Messages.JDBCDatasourcePage_jdbc_url+":"); //$NON-NLS-1$
 
 		jdbcURLTxt = new Text(parent, SWT.BORDER);
 		jdbcURLTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Username:");
+		lbl1.setText(Messages.JDBCDatasourcePage_username+":"); //$NON-NLS-1$
 
 		usernameTxt = new Text(parent, SWT.BORDER);
 		usernameTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Password:");
+		lbl1.setText(Messages.JDBCDatasourcePage_password+":"); //$NON-NLS-1$
 
 		passwordTxt = new Text(parent, SWT.PASSWORD | SWT.BORDER);
 		passwordTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Jars(separated by \";\"):");
+		lbl1.setText(Messages.JDBCDatasourcePage_jars+":"); //$NON-NLS-1$
 
 		Composite c = new Composite(parent, SWT.NONE);
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -113,13 +113,13 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 		jarTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button copyButton = new Button(c, SWT.PUSH);
-		copyButton.setText("Br&owse ...");
+		copyButton.setText(Messages.JDBCDatasourcePage_browse);
 		copyButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.MULTI);
 				fd.setFileName(jarTxt.getText());
-				fd.setFilterExtensions(new String[] { "*.jar", "*.*" });
+				fd.setFilterExtensions(new String[] { "*.jar", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
 				if (selection != null)
 					jarTxt.setText(selection);
@@ -130,12 +130,12 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 		});
 
 		Button testButton = new Button(parent, SWT.PUSH);
-		testButton.setText("Test Connection");
+		testButton.setText(Messages.JDBCDatasourcePage_test_connection);
 		testButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				final MJDBCDataSource datasource = getAMDatasource();
-				Job job = new Job("TestConnection") {
+				Job job = new Job("TestConnection") { //$NON-NLS-1$
 
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
@@ -144,7 +144,7 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 							if (c != null)
 								c.close();
 
-							final String msg = (c != null ? "Succes! Connection established." : "Connection is null");
+							final String msg = (c != null ? Messages.JDBCDatasourcePage_connection_established_message : Messages.JDBCDatasourcePage_connection_is_null_message);
 							Display.getDefault().syncExec(new Runnable() {
 								public void run() {
 									errTxt.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
@@ -188,27 +188,27 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 		if (value != null) {
 			String dsName = (String) value.getPropertyValue(MJDBCDataSource.PROPERTY_DRIVERCLASS);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			driverClassTxt.setText(dsName);
 
 			dsName = (String) value.getPropertyValue(MJDBCDataSource.PROPERTY_JDBC_URL);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			jdbcURLTxt.setText(dsName);
 
 			dsName = (String) value.getPropertyValue(MJDBCDataSource.PROPERTY_USERNAME);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			usernameTxt.setText(dsName);
 
 			dsName = (String) value.getPropertyValue(MJDBCDataSource.PROPERTY_PASSWORD);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			passwordTxt.setText(dsName);
 
 			dsName = (String) value.getPropertyValue(MJDBCDataSource.PROPERTY_JAR);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			jarTxt.setText(dsName);
 		}
 	}

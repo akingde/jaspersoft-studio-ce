@@ -42,34 +42,34 @@ public class SizeGridAction extends Action {
 
 		private SizeDialog(Shell shell, Dimension d) {
 			super(shell);
-			setText("Grid editor");
+			setText(Messages.SizeGridAction_grid_editor);
 			w = d.width;
 			h = d.height;
 		}
 
 		@Override
 		protected void createFormContent(IManagedForm mform) {
-			mform.getForm().setText("Grid Size");
+			mform.getForm().setText(Messages.SizeGridAction_grid_size);
 
 			FormToolkit toolkit = mform.getToolkit();
 
 			mform.getForm().getBody().setLayout(new GridLayout(4, false));
 
-			toolkit.createLabel(mform.getForm().getBody(), "Spacing X:");
+			toolkit.createLabel(mform.getForm().getBody(), Messages.SizeGridAction_spacing_x);
 			final Spinner width = new Spinner(mform.getForm().getBody(), SWT.BORDER);
 			width.setValues(w, 0, Integer.MAX_VALUE, 0, 1, 10);
-			width.setToolTipText("Grid space width");
+			width.setToolTipText(Messages.SizeGridAction_grid_space_width_tool_tip);
 			width.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					w = width.getSelection();
 				}
 			});
 
-			toolkit.createLabel(mform.getForm().getBody(), "Spacing Y:");
+			toolkit.createLabel(mform.getForm().getBody(), Messages.SizeGridAction_spacing_y);
 
 			final Spinner height = new Spinner(mform.getForm().getBody(), SWT.BORDER);
 			height.setValues(h, 0, Integer.MAX_VALUE, 0, 1, 10);
-			height.setToolTipText("Grid space height");
+			height.setToolTipText(Messages.SizeGridAction_grid_space_height_tool_tip);
 			height.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					h = height.getSelection();
@@ -86,7 +86,7 @@ public class SizeGridAction extends Action {
 		}
 	}
 
-	public static final String ID = "sizegridaction";
+	public static final String ID = "sizegridaction"; //$NON-NLS-1$
 	private GraphicalViewer diagramViewer;
 
 	/**
@@ -96,9 +96,9 @@ public class SizeGridAction extends Action {
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
 	public SizeGridAction(GraphicalViewer diagramViewer) {
-		super("Grid Size ...");
+		super(Messages.SizeGridAction_set_grid_size);
 		this.diagramViewer = diagramViewer;
-		setToolTipText("Set grid size");
+		setToolTipText(Messages.SizeGridAction_set_grid_size_tool_tip);
 		setId(ID);
 		setActionDefinitionId(ID);
 	}

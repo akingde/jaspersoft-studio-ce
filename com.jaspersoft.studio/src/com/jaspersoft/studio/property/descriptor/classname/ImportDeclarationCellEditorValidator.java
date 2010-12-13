@@ -30,7 +30,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
  * @author Chicu Veaceslav
  */
 public class ImportDeclarationCellEditorValidator implements ICellEditorValidator {
-	public static String regexp = "^(([A-Za-z0-9_])+.)+[A-Z]([A-Za-z0-9])+$";
+	public static String regexp = "^(([A-Za-z0-9_])+.)+[A-Z]([A-Za-z0-9])+$"; //$NON-NLS-1$
 	/** The instance. */
 	private static ImportDeclarationCellEditorValidator instance;
 

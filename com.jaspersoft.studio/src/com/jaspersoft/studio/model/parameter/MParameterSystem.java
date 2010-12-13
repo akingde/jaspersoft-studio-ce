@@ -53,7 +53,7 @@ public class MParameterSystem extends APropertyNode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("parameter");
+			iconDescriptor = new NodeIconDescriptor("parameter"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -133,16 +133,16 @@ public class MParameterSystem extends APropertyNode {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, "Name");
-		nameD.setDescription("Name of the parameter.");
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, Messages.MParameterSystem_name);
+		nameD.setDescription(Messages.MParameterSystem_name_description);
 		desc.add(nameD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME,
-				"Class");
-		classD.setDescription("Class of the parameter values.");
+				Messages.MParameterSystem_class);
+		classD.setDescription(Messages.MParameterSystem_class_description);
 		desc.add(classD);
 
-		defaultsMap.put(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, "java.lang.String");
+		defaultsMap.put(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
 	}
 
 	/*

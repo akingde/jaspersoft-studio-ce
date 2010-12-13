@@ -36,8 +36,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, "shadow");
-		store.setDefault(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle");
+		store.setDefault(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, "shadow"); //$NON-NLS-1$
+		store.setDefault(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
 
 		store.setDefault(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER, new Boolean(true));
 		store.setDefault(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES, new Boolean(true));

@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.scriptlet.MScriptlet;
 public class CreateScriptletAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_scriptlet";
+	public static final String ID = "create_scriptlet"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -55,8 +55,8 @@ public class CreateScriptletAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Scriptlet");
-		setToolTipText("Creates scriptlet");
+		setText(Messages.CreateScriptletAction_create_scriptlet);
+		setToolTipText(Messages.CreateScriptletAction_create_scriptlet_tool_tip);
 		setId(CreateScriptletAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

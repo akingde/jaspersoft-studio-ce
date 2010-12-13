@@ -57,7 +57,7 @@ public class MSubreport extends MGraphicElement {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("subreport");
+			iconDescriptor = new NodeIconDescriptor("subreport"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -114,55 +114,55 @@ public class MSubreport extends MGraphicElement {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		CheckBoxPropertyDescriptor runToBottomD = new CheckBoxPropertyDescriptor(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM,
-				"Run To Bottom", NullEnum.NULL);
+				Messages.MSubreport_run_to_bottom, NullEnum.NULL);
 		runToBottomD
-				.setDescription("Flag to specify if the subreport should consume all the available space on the current page. When this flag is set, the subreport would consume the entire vertical space available on the master page, and its column and page footers will be printed at the bottom of this space.");
+				.setDescription(Messages.MSubreport_run_to_bottom_description);
 		desc.add(runToBottomD);
 
 		CheckBoxPropertyDescriptor useCacheD = new CheckBoxPropertyDescriptor(JRBaseSubreport.PROPERTY_USING_CACHE,
-				"Using Cache", NullEnum.INHERITED);
+				Messages.MSubreport_using_cache, NullEnum.INHERITED);
 		useCacheD
-				.setDescription("If true, tells the report engine to cache the report definition objects that are loaded from the same location.");
+				.setDescription(Messages.MSubreport_using_cache_description);
 		desc.add(useCacheD);
 
 		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(JRDesignSubreport.PROPERTY_EXPRESSION,
-				"Expression");
-		exprD.setDescription("The subreport expression.");
+				Messages.MSubreport_expression);
+		exprD.setDescription(Messages.MSubreport_expression_description);
 		desc.add(exprD);
 
 		JRExpressionPropertyDescriptor paramExprD = new JRExpressionPropertyDescriptor(
-				JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION, "Parameters Map Expression");
-		paramExprD.setDescription("The parameters map expression.");
+				JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.MSubreport_parameters_map_expression);
+		paramExprD.setDescription(Messages.MSubreport_parameters_map_expression_description);
 		desc.add(paramExprD);
 
 		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(
-				JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, "Connection Expression");
-		connExprD.setDescription("The connection expression.");
+				JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, Messages.MSubreport_connection_expression);
+		connExprD.setDescription(Messages.MSubreport_connection_expression_description);
 		desc.add(connExprD);
 
 		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(
-				JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION, "Datasource Expression");
-		dsExprD.setDescription("The datasource expression.");
+				JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION, Messages.MSubreport_datasource_expression);
+		dsExprD.setDescription(Messages.MSubreport_datasource_expression_description);
 		desc.add(dsExprD);
 
 		SubreportPropertiesPropertyDescriptor propertiesD = new SubreportPropertiesPropertyDescriptor(
-				JRDesignSubreport.PROPERTY_PARAMETERS, "Parameters");
-		propertiesD.setDescription("The datasource expression.");
+				JRDesignSubreport.PROPERTY_PARAMETERS, Messages.MSubreport_parameters);
+		propertiesD.setDescription(Messages.MSubreport_parameters_description);
 		desc.add(propertiesD);
 
 		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES,
-				"Return Values");
-		returnValuesD.setDescription("Return Values.");
+				Messages.MSubreport_return_values);
+		returnValuesD.setDescription(Messages.MSubreport_return_values_description);
 		desc.add(returnValuesD);
 
-		returnValuesD.setCategory("Subreport Properties");
-		propertiesD.setCategory("Subreport Properties");
-		dsExprD.setCategory("Subreport Properties");
-		connExprD.setCategory("Subreport Properties");
-		paramExprD.setCategory("Subreport Properties");
-		exprD.setCategory("Subreport Properties");
-		useCacheD.setCategory("Subreport Properties");
-		runToBottomD.setCategory("Subreport Properties");
+		returnValuesD.setCategory(Messages.MSubreport_subreport_category);
+		propertiesD.setCategory(Messages.MSubreport_subreport_category);
+		dsExprD.setCategory(Messages.MSubreport_subreport_category);
+		connExprD.setCategory(Messages.MSubreport_subreport_category);
+		paramExprD.setCategory(Messages.MSubreport_subreport_category);
+		exprD.setCategory(Messages.MSubreport_subreport_category);
+		useCacheD.setCategory(Messages.MSubreport_subreport_category);
+		runToBottomD.setCategory(Messages.MSubreport_subreport_category);
 
 	}
 

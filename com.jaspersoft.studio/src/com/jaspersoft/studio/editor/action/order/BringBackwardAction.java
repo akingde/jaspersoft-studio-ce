@@ -39,7 +39,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 public class BringBackwardAction extends SelectionAction {
 
 	/** The Constant ID. */
-	public static final String ID = "bring_backward";
+	public static final String ID = "bring_backward"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -83,7 +83,7 @@ public class BringBackwardAction extends SelectionAction {
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 		int j = 0;
-		CompoundCommand compoundCmd = new CompoundCommand("Bring Backward");
+		CompoundCommand compoundCmd = new CompoundCommand("Bring Backward"); //$NON-NLS-1$
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart part = (EditPart) objects.get(i);
 			Command cmd = null;
@@ -115,11 +115,11 @@ public class BringBackwardAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Send B&ackward");
-		setToolTipText("Send Backward");
+		setText(Messages.BringBackwardAction_send_backward);
+		setToolTipText(Messages.BringBackwardAction_send_backward_tool_tip);
 		setId(BringBackwardAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_backward.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_backward.gif"));
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_backward.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/send_backward.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 

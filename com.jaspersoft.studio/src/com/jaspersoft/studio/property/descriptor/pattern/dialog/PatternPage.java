@@ -76,8 +76,8 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 
 	protected PatternPage(String pageName) {
 		super(pageName);
-		setTitle("Format Pattern");
-		setDescription("Specify format pattern, in java style.");
+		setTitle(Messages.PatternPage_format_pattern);
+		setDescription(Messages.PatternPage_description);
 
 	}
 
@@ -102,7 +102,7 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		patternGroup.setLayout(new GridLayout(1, true));
 
 		patternText = new Text(patternGroup, SWT.SINGLE | SWT.BORDER);
-		patternText.setText(getValue() != null ? getValue() : "");
+		patternText.setText(getValue() != null ? getValue() : ""); //$NON-NLS-1$
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		patternText.setLayoutData(gd);
 
@@ -137,7 +137,7 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 				if (sel.length > 0) {
 					APattern p = map.get(sel[0]);
 
-					descriptionLabel.setText(p.getDescription() != null ? p.getDescription() : "");
+					descriptionLabel.setText(p.getDescription() != null ? p.getDescription() : ""); //$NON-NLS-1$
 					descriptionLabel.pack();
 
 					stackLayout.topControl = p.getControl();

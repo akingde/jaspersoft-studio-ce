@@ -58,18 +58,18 @@ public class PageMarginSection extends AbstractSection {
 		GridLayout layout = new GridLayout(10, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Margin:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.PageMarginSection_margin+":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
 		CLabel l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_top.gif"));
+		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_top.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		topMargin = new Spinner(composite, SWT.BORDER);
 		topMargin.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		topMargin.setToolTipText("top margin");
+		topMargin.setToolTipText(Messages.PageMarginSection_top_margin_tool_tip);
 		topMargin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_TOP_MARGIN, new Integer(topMargin.getSelection()));
@@ -77,12 +77,12 @@ public class PageMarginSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_bottom.png"));
+		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_bottom.png")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		bottomMargin = new Spinner(composite, SWT.BORDER);
 		bottomMargin.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		bottomMargin.setToolTipText("bottom margin");
+		bottomMargin.setToolTipText(Messages.PageMarginSection_bottom_margin_tool_tip);
 		bottomMargin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_BOTTOM_MARGIN, new Integer(bottomMargin.getSelection()));
@@ -90,12 +90,12 @@ public class PageMarginSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_left.gif"));
+		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_left.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		leftMargin = new Spinner(composite, SWT.BORDER);
 		leftMargin.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		leftMargin.setToolTipText("left margin");
+		leftMargin.setToolTipText(Messages.PageMarginSection_left_margin_tool_tip);
 		leftMargin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_LEFT_MARGIN, new Integer(leftMargin.getSelection()));
@@ -103,12 +103,12 @@ public class PageMarginSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_right.gif"));
+		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_right.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		rightMargin = new Spinner(composite, SWT.BORDER);
 		rightMargin.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		rightMargin.setToolTipText("right margin");
+		rightMargin.setToolTipText(Messages.PageMarginSection_right_margin_tool_tip);
 		rightMargin.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_RIGHT_MARGIN, new Integer(rightMargin.getSelection()));

@@ -44,7 +44,7 @@ public class MXMLDataSource extends AMFileDataSource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasourceJDBC");
+			iconDescriptor = new NodeIconDescriptor("datasourceJDBC"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -98,26 +98,26 @@ public class MXMLDataSource extends AMFileDataSource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_XPATHSELECT, "XPath Select");
+		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_XPATHSELECT, Messages.MXMLDataSource_xpath_select);
 		desc.add(jdbcURLD);
 
-		NTextPropertyDescriptor timeZoneD = new NTextPropertyDescriptor(PROPERTY_XPATHTIMEZONE, "XPath TimeZone");
+		NTextPropertyDescriptor timeZoneD = new NTextPropertyDescriptor(PROPERTY_XPATHTIMEZONE, Messages.MXMLDataSource_xpath_timezone);
 		desc.add(timeZoneD);
 
-		NTextPropertyDescriptor localeD = new NTextPropertyDescriptor(PROPERTY_XPATHLOCALE, "XPath Locale");
+		NTextPropertyDescriptor localeD = new NTextPropertyDescriptor(PROPERTY_XPATHLOCALE, Messages.MXMLDataSource_xpath_locale);
 		desc.add(localeD);
 
 		defaultsMap.put(PROPERTY_XPATHTIMEZONE, TimeZone.getDefault());
 		defaultsMap.put(PROPERTY_XPATHLOCALE, Locale.getDefault());
 	}
 
-	public static final String PROPERTY_XPATHSELECT = "PROPERTY_XPATHSELECT";
+	public static final String PROPERTY_XPATHSELECT = "PROPERTY_XPATHSELECT"; //$NON-NLS-1$
 	private String xpathselect;
 
-	public static final String PROPERTY_XPATHLOCALE = "PROPERTY_XPATHLOCALE";
+	public static final String PROPERTY_XPATHLOCALE = "PROPERTY_XPATHLOCALE"; //$NON-NLS-1$
 	private Locale xpathlocale;
 
-	public static final String PROPERTY_XPATHTIMEZONE = "PROPERTY_XPATHTIMEZONE";
+	public static final String PROPERTY_XPATHTIMEZONE = "PROPERTY_XPATHTIMEZONE"; //$NON-NLS-1$
 	private TimeZone xpathTimeZone;
 
 	@Override

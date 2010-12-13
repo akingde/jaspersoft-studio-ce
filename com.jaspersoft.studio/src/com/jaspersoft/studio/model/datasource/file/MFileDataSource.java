@@ -43,7 +43,7 @@ public class MFileDataSource extends AMFileDataSource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasourceJDBC");
+			iconDescriptor = new NodeIconDescriptor("datasourceJDBC"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -97,35 +97,35 @@ public class MFileDataSource extends AMFileDataSource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor recordDelimiter = new NTextPropertyDescriptor(PROPERTY_RECORDDELIMITER, "Record Delimiter");
+		NTextPropertyDescriptor recordDelimiter = new NTextPropertyDescriptor(PROPERTY_RECORDDELIMITER, Messages.MFileDataSource_record_delimiter);
 		desc.add(recordDelimiter);
 
-		NTextPropertyDescriptor columnDelimiter = new NTextPropertyDescriptor(PROPERTY_COLUMNDELIMITER, "Field Delimiter");
+		NTextPropertyDescriptor columnDelimiter = new NTextPropertyDescriptor(PROPERTY_COLUMNDELIMITER, Messages.MFileDataSource_field_delimiter);
 		desc.add(columnDelimiter);
 
-		NTextPropertyDescriptor columnNames = new NTextPropertyDescriptor(PROPERTY_COLUMNNAMES, "Column Names");
+		NTextPropertyDescriptor columnNames = new NTextPropertyDescriptor(PROPERTY_COLUMNNAMES, Messages.MFileDataSource_column_names);
 		desc.add(columnNames);
 
 		CheckBoxPropertyDescriptor firstRowHeaderD = new CheckBoxPropertyDescriptor(PROPERTY_FIRSTROWASHEADER,
-				"First Row As Header");
-		firstRowHeaderD.setDescription("First row as header");
+				Messages.MFileDataSource_first_row_as_header);
+		firstRowHeaderD.setDescription(Messages.MFileDataSource_first_row_as_header_description);
 		desc.add(firstRowHeaderD);
 
 		defaultsMap.put(PROPERTY_COLUMNDELIMITER, ',');
-		defaultsMap.put(PROPERTY_RECORDDELIMITER, "\\r\\n");
+		defaultsMap.put(PROPERTY_RECORDDELIMITER, "\\r\\n"); //$NON-NLS-1$
 		defaultsMap.put(PROPERTY_FIRSTROWASHEADER, false);
 	}
 
-	public static final String PROPERTY_RECORDDELIMITER = "PROPERTY_RECORDDELIMITER";
+	public static final String PROPERTY_RECORDDELIMITER = "PROPERTY_RECORDDELIMITER"; //$NON-NLS-1$
 	protected String recorddelimiter;
 
-	public static final String PROPERTY_COLUMNDELIMITER = "PROPERTY_COLUMNDELIMITER";
+	public static final String PROPERTY_COLUMNDELIMITER = "PROPERTY_COLUMNDELIMITER"; //$NON-NLS-1$
 	protected char columndelimiter;
 
-	public static final String PROPERTY_FIRSTROWASHEADER = "PROPERTY_FIRSTROWASHEADER";
+	public static final String PROPERTY_FIRSTROWASHEADER = "PROPERTY_FIRSTROWASHEADER"; //$NON-NLS-1$
 	protected boolean firstRowHeader;
 
-	public static final String PROPERTY_COLUMNNAMES = "PROPERTY_COLUMNNAMES";
+	public static final String PROPERTY_COLUMNNAMES = "PROPERTY_COLUMNNAMES"; //$NON-NLS-1$
 	protected String columnnames;
 
 	@Override

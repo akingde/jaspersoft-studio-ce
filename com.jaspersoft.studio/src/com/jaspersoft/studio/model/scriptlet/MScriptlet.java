@@ -57,7 +57,7 @@ public class MScriptlet extends APropertyNode implements ICopyable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("scriptlet");
+			iconDescriptor = new NodeIconDescriptor("scriptlet"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -137,18 +137,18 @@ public class MScriptlet extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignScriptlet.PROPERTY_NAME, "Name");
-		nameD.setDescription("Name of the scriptlet.");
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignScriptlet.PROPERTY_NAME, Messages.MScriptlet_name);
+		nameD.setDescription(Messages.MScriptlet_name_description);
 		desc.add(nameD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME,
-				"Class");
-		classD.setDescription("Class of the scriptlet.");
+				Messages.MScriptlet_class);
+		classD.setDescription(Messages.MScriptlet_class_description);
 		desc.add(classD);
 
 		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignScriptlet.PROPERTY_DESCRIPTION,
-				"description");
-		descriptionD.setDescription("Description of scriptlet");
+				Messages.MScriptlet_description);
+		descriptionD.setDescription(Messages.MScriptlet_description_description);
 		desc.add(descriptionD);
 	}
 

@@ -39,7 +39,7 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 	public RulersGridPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("How new editors are initialized");
+		setDescription(Messages.RulersGridPreferencePage_description);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 	 */
 	public void createFieldEditors() {
 		Group group = new Group(getFieldEditorParent(), SWT.NONE);
-		group.setText("Ruler options");
+		group.setText(Messages.RulersGridPreferencePage_ruler_options);
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -55,14 +55,14 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalSpan = 2;
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER, "Show &Rulers", group));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES, "Snap To Guides", group));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER, Messages.RulersGridPreferencePage_show_rulers, group));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES, Messages.RulersGridPreferencePage_snap_to_guides, group));
 
 		group.setLayoutData(gridData);
 		group.setLayout(gridLayout);
 
 		group = new Group(getFieldEditorParent(), SWT.NONE);
-		group.setText("Grid options");
+		group.setText(Messages.RulersGridPreferencePage_grid_options);
 
 		gridLayout = new GridLayout(2, false);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -70,14 +70,14 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalSpan = 2;
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID, "Show &Grid", group));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID, "Snap To Grid", group));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGEOMETRY, "Snap To Geometry", group));
-		IntegerFieldEditor spaceX = new IntegerFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEX, "Grid Spacing X",
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID, Messages.RulersGridPreferencePage_show_grid, group));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID, Messages.RulersGridPreferencePage_snap_to_grid, group));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGEOMETRY, Messages.RulersGridPreferencePage_snape_to_geometry, group));
+		IntegerFieldEditor spaceX = new IntegerFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEX, Messages.RulersGridPreferencePage_grid_spacing_x,
 				group);
 		spaceX.setValidRange(2, 100);
 		addField(spaceX);
-		IntegerFieldEditor spaceY = new IntegerFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEY, "Grid Spacing Y",
+		IntegerFieldEditor spaceY = new IntegerFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEY, Messages.RulersGridPreferencePage_grid_spacing_y,
 				group);
 		spaceY.setValidRange(2, 100);
 		addField(spaceY);

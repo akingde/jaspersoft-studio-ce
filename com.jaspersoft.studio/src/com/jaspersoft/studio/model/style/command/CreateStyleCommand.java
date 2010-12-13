@@ -86,10 +86,10 @@ public class CreateStyleCommand extends Command {
 					jrDesign.addStyle(index, jrStyle);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) {
-					String defaultName = ModelUtils.getDefaultName(jrDesign.getStylesMap(), "CopyOFStyle_");
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Style Name",
-							"Please, enter unique style name", defaultName, null);
+				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+					String defaultName = ModelUtils.getDefaultName(jrDesign.getStylesMap(), "CopyOFStyle_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateStyleCommand_style_name,
+							Messages.CreateStyleCommand_style_name_dialog, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrStyle.setName(dlg.getValue());
 						execute();

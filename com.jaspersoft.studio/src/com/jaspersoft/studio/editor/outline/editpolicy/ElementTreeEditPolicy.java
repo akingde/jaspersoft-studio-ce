@@ -53,7 +53,7 @@ public class ElementTreeEditPolicy extends AbstractEditPolicy {
 	 * @return the move command
 	 */
 	protected Command getMoveCommand(ChangeBoundsRequest req) {
-		System.out.println("Move " + getHost());
+		System.out.println("Move " + getHost()); //$NON-NLS-1$
 		EditPart parent = getHost().getParent();
 		if (parent != null) {
 			ChangeBoundsRequest request = new ChangeBoundsRequest(REQ_MOVE_CHILDREN);

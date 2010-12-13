@@ -84,7 +84,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("style");
+			iconDescriptor = new NodeIconDescriptor("style"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -161,8 +161,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap = defaultsMap1;
 	}
 
-	private static final String LINE_PEN = "LinePen";
-	private static final String LINE_BOX = "LineBox";
+	private static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
+	private static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
@@ -170,7 +170,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			JRDesignStyle jrElement = (JRDesignStyle) getValue();
 			JRStyle[] styles = getJasperDesign().getStyles();
 			String[] items = new String[styles.length];
-			items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : "";
+			items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
 			for (int j = 0; j < styles.length; j++) {
 				if (jrElement != styles[j])
 					items[j] = styles[j].getName();
@@ -187,150 +187,150 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, "Parent Style", new String[] { "" },
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.MStyle_parent_style, new String[] { "" }, //$NON-NLS-2$
 				NullEnum.NULL);
-		styleD.setDescription("Name of the report level style to use as base style (see <style> element).");
+		styleD.setDescription(Messages.MStyle_parent_style_description);
 		desc.add(styleD);
 
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, "Name");
-		nameD.setDescription("Name of the report style definition.");
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, Messages.MStyle_name);
+		nameD.setDescription(Messages.MStyle_name_description);
 		desc.add(nameD);
 
-		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, "Line Pen");
-		linePenD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, Messages.MStyle_line_pen);
+		linePenD.setDescription(Messages.MStyle_line_pen_description);
 		desc.add(linePenD);
 
-		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, "Line Box");
-		lineBoxD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MStyle_line_box);
+		lineBoxD.setDescription(Messages.MStyle_line_box_description);
 		desc.add(lineBoxD);
-		lineBoxD.setCategory("Graphic");
+		lineBoxD.setCategory(Messages.MStyle_graphic_category);
 
-		ColorPropertyDescriptor forecolorD = new ColorPropertyDescriptor(JRDesignStyle.PROPERTY_FORECOLOR, "Forecolor",
+		ColorPropertyDescriptor forecolorD = new ColorPropertyDescriptor(JRDesignStyle.PROPERTY_FORECOLOR, Messages.MStyle_forecolor,
 				NullEnum.INHERITED);
-		forecolorD.setDescription("Forecolor");
+		forecolorD.setDescription(Messages.MStyle_forecolor_description);
 		desc.add(forecolorD);
 
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRDesignStyle.PROPERTY_BACKCOLOR, "Backcolor",
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRDesignStyle.PROPERTY_BACKCOLOR, Messages.MStyle_backcolor,
 				NullEnum.INHERITED);
-		backcolorD.setDescription("Backcolor");
+		backcolorD.setDescription(Messages.MStyle_backcolor_description);
 		desc.add(backcolorD);
 
-		IntegerPropertyDescriptor radiusD = new IntegerPropertyDescriptor(JRDesignStyle.PROPERTY_RADIUS, "Radius");
-		radiusD.setDescription("Radius");
+		IntegerPropertyDescriptor radiusD = new IntegerPropertyDescriptor(JRDesignStyle.PROPERTY_RADIUS, Messages.MStyle_radius);
+		radiusD.setDescription(Messages.MStyle_radius_description);
 		desc.add(radiusD);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_FILL, "Fill",
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_FILL, Messages.MStyle_fill,
 				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
-		fillD.setDescription("Type of the fill pattern used to fill objects.");
+		fillD.setDescription(Messages.MStyle_fill_description);
 		desc.add(fillD);
 
-		ComboBoxPropertyDescriptor scaleD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_SCALE_IMAGE, "Scale",
+		ComboBoxPropertyDescriptor scaleD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_SCALE_IMAGE, Messages.MStyle_scale,
 				EnumHelper.getEnumNames(ScaleImageEnum.values(), NullEnum.INHERITED));
-		scaleD.setDescription("Image displaying type.");
+		scaleD.setDescription(Messages.MStyle_scale_description);
 		desc.add(scaleD);
 
 		ComboBoxPropertyDescriptor halignD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				"Horizontal alignment", EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
-		halignD.setDescription("Horizontal image alignment.");
+				Messages.MStyle_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
+		halignD.setDescription(Messages.MStyle_horizontal_alignment_description);
 		desc.add(halignD);
 
 		ComboBoxPropertyDescriptor valignD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				"Vertical alignment", EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
-		valignD.setDescription("Vertical image alignment.");
+				Messages.MStyle_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
+		valignD.setDescription(Messages.MStyle_vertical_alignment_description);
 		desc.add(valignD);
 
-		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ROTATION, "Rotation",
+		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ROTATION, Messages.MStyle_rotation,
 				EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
-		rotationD.setDescription("Type of rotation for the object.");
+		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
 		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_LINE_SPACING,
-				"Line Spacing", EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
-		lineSpacingD.setDescription("Type of line spacing for the text object.");
+				Messages.MStyle_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
+		lineSpacingD.setDescription(Messages.MStyle_line_spacing_description);
 		desc.add(lineSpacingD);
 
-		ComboBoxPropertyDescriptor modeD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_MODE, "Mode",
+		ComboBoxPropertyDescriptor modeD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_MODE, Messages.MStyle_mode,
 				EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
-		modeD.setDescription("Specifies whether the background of an object is transparent or opaque.");
+		modeD.setDescription(Messages.MStyle_mode_description);
 		desc.add(modeD);
 
 		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,
-				"Blank When NULL", NullEnum.INHERITED);
+				Messages.MStyle_blank_when_null, NullEnum.INHERITED);
 		blankWhenNullD
-				.setDescription("Specifies that the text field should display a blank character instead of \"null\" when the text field expression evaluates to null.");
+				.setDescription(Messages.MStyle_blank_when_null_description);
 		desc.add(blankWhenNullD);
 
 		CheckBoxPropertyDescriptor strikeThroughD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_STRIKE_THROUGH,
-				"Strike Through", NullEnum.INHERITED);
-		strikeThroughD.setDescription("Flag indicating if the font is strikethrough.");
+				Messages.MStyle_strike_trough, NullEnum.INHERITED);
+		strikeThroughD.setDescription(Messages.MStyle_strike_trough_description);
 		desc.add(strikeThroughD);
 
 		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_UNDERLINE,
-				"Underline", NullEnum.INHERITED);
-		underlineD.setDescription("Flag indicating if the font is underlined.");
+				Messages.MStyle_underline, NullEnum.INHERITED);
+		underlineD.setDescription(Messages.MStyle_underline_description);
 		desc.add(underlineD);
 
-		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ITALIC, "Italic",
+		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ITALIC, Messages.MStyle_italic,
 				NullEnum.INHERITED);
-		italicD.setDescription("Flag indicating if the font is italic.");
+		italicD.setDescription(Messages.MStyle_italic_description);
 		desc.add(italicD);
 
-		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BOLD, "Bold",
+		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BOLD, Messages.MStyle_bold,
 				NullEnum.INHERITED);
-		boldD.setDescription("Flag indicating if the font is bold.");
+		boldD.setDescription(Messages.MStyle_bold_description);
 		desc.add(boldD);
 
 		CheckBoxPropertyDescriptor defaultD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_DEFAULT,
-				"Default Style");
+				Messages.MStyle_default_style);
 		defaultD
-				.setDescription("The default report style is used as base style for all the elements that do not explicitly reference a report style definition.");
+				.setDescription(Messages.MStyle_default_style_description);
 		desc.add(defaultD);
 
-		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP, "Markup",
+		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP, Messages.MStyle_markup,
 				ModelUtils.getMarkups(), NullEnum.INHERITED);
 		markupD
-				.setDescription("Specifies the name of the markup language used to embed style information into the text content. Supported values are none (plain text), styled (styled text), rtf (RTF format) and html (HTML format), but any custom made markup language can be used as long as there is a net.sf.jasperreports.engine.util.MarkupProcessorFactory implementation specified using a net.sf.jasperreports.markup.processor.factory.{markup} configuration property.");
+				.setDescription(Messages.MStyle_markup_description);
 		desc.add(markupD);
 
 		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME,
-				"Font Name", ModelUtils.getFontNames(), NullEnum.INHERITED);
-		fontNameD.setDescription("Name of the font.");
+				Messages.MStyle_font_name, ModelUtils.getFontNames(), NullEnum.INHERITED);
+		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
 
 		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
-				"Font Size", ModelUtils.getFontSizes(), NullEnum.INHERITED);
-		fontSizeD.setDescription("Size of the font.");
+				Messages.MStyle_font_size, ModelUtils.getFontSizes(), NullEnum.INHERITED);
+		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
 
-		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN, "Pattern");
-		patternD.setDescription("Pattern to use when formatting the output of the text field expression.");
+		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN, Messages.MStyle_pattern);
+		patternD.setDescription(Messages.MStyle_pattern_description);
 		desc.add(patternD);
 
-		forecolorD.setCategory("Common");
-		backcolorD.setCategory("Common");
-		modeD.setCategory("Common");
+		forecolorD.setCategory(Messages.MStyle_common_category);
+		backcolorD.setCategory(Messages.MStyle_common_category);
+		modeD.setCategory(Messages.MStyle_common_category);
 
-		linePenD.setCategory("Graphic");
+		linePenD.setCategory(Messages.MStyle_graphic_category);
 
-		radiusD.setCategory("Graphic");
-		scaleD.setCategory("Graphic");
-		fillD.setCategory("Graphic");
+		radiusD.setCategory(Messages.MStyle_graphic_category);
+		scaleD.setCategory(Messages.MStyle_graphic_category);
+		fillD.setCategory(Messages.MStyle_graphic_category);
 
-		patternD.setCategory("Text");
-		blankWhenNullD.setCategory("Text");
-		lineSpacingD.setCategory("Text");
-		rotationD.setCategory("Text");
-		markupD.setCategory("Text");
-		halignD.setCategory("Text");
-		valignD.setCategory("Text");
+		patternD.setCategory(Messages.MStyle_text_category);
+		blankWhenNullD.setCategory(Messages.MStyle_text_category);
+		lineSpacingD.setCategory(Messages.MStyle_text_category);
+		rotationD.setCategory(Messages.MStyle_text_category);
+		markupD.setCategory(Messages.MStyle_text_category);
+		halignD.setCategory(Messages.MStyle_text_category);
+		valignD.setCategory(Messages.MStyle_text_category);
 
-		fontNameD.setCategory("Text Font");
-		fontSizeD.setCategory("Text Font");
-		boldD.setCategory("Text Font");
-		italicD.setCategory("Text Font");
-		underlineD.setCategory("Text Font");
-		strikeThroughD.setCategory("Text Font");
+		fontNameD.setCategory(Messages.MStyle_text_font_category);
+		fontSizeD.setCategory(Messages.MStyle_text_font_category);
+		boldD.setCategory(Messages.MStyle_text_font_category);
+		italicD.setCategory(Messages.MStyle_text_font_category);
+		underlineD.setCategory(Messages.MStyle_text_font_category);
+		strikeThroughD.setCategory(Messages.MStyle_text_font_category);
 
 		defaultsMap.put(JRDesignStyle.PROPERTY_FORECOLOR, null);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BACKCOLOR, null);
@@ -348,8 +348,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRDesignStyle.PROPERTY_UNDERLINE, Boolean.FALSE);
 		defaultsMap.put(JRDesignStyle.PROPERTY_ITALIC, Boolean.FALSE);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BOLD, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_NAME, "SansSerif");
-		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_SIZE, "10");
+		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
+		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
 	}
 
 	private MLinePen linePen;
@@ -375,7 +375,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 					return jrstyle.getStyleNameReference();
 				if (jrstyle.getStyle() != null)
 					return jrstyle.getStyle().getName();
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 		}
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
@@ -436,7 +436,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(JRDesignStyle.PROPERTY_FONT_NAME))
 			return jrstyle.getOwnFontName();
 		if (id.equals(JRDesignStyle.PROPERTY_FONT_SIZE))
-			return jrstyle.getOwnFontSize() != null ? jrstyle.getOwnFontSize().toString() : "";
+			return jrstyle.getOwnFontSize() != null ? jrstyle.getOwnFontSize().toString() : ""; //$NON-NLS-1$
 
 		return null;
 	}
@@ -456,7 +456,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			else if (id.equals(JRDesignStyle.PROPERTY_DEFAULT))
 				jrstyle.setDefault(((Boolean) value).booleanValue());
 			else if (id.equals(JRDesignStyle.PROPERTY_PARENT_STYLE)) {
-				if (!value.equals("")) {
+				if (!value.equals("")) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
 						jrstyle.setParentStyle(style);

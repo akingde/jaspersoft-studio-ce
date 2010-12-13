@@ -61,7 +61,7 @@ public class MImage extends MGraphicElementLineBox {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("image");
+			iconDescriptor = new NodeIconDescriptor("image"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -116,66 +116,66 @@ public class MImage extends MGraphicElementLineBox {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignImage.PROPERTY_EXPRESSION,
-				"Expression");
+				Messages.MImage_expression);
 		expressionD
-				.setDescription("Definition of the expression that will be used to determine the image to be displayed.");
+				.setDescription(Messages.MImage_expression_description);
 		desc.add(expressionD);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, "Fill",
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.MImage_fill,
 				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
-		fillD.setDescription("Type of the fill pattern used to fill objects.");
+		fillD.setDescription(Messages.MImage_fill_description);
 		desc.add(fillD);
 
 		ComboBoxPropertyDescriptor scaleImageD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_SCALE_IMAGE,
-				"Scale Image", EnumHelper.getEnumNames(ScaleImageEnum.values(), NullEnum.INHERITED));
-		scaleImageD.setDescription("Image displaying type.");
+				Messages.MImage_scale_image, EnumHelper.getEnumNames(ScaleImageEnum.values(), NullEnum.INHERITED));
+		scaleImageD.setDescription(Messages.MImage_scale_image_description);
 		desc.add(scaleImageD);
 
 		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				"Horizontal Alignment", EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
-		hAlignD.setDescription("Horizontal image alignment.");
+				Messages.MImage_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
+		hAlignD.setDescription(Messages.MImage_horizontal_alignment_description);
 		desc.add(hAlignD);
 
 		ComboBoxPropertyDescriptor vAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				"Vertical Alignment", EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
-		vAlignD.setDescription("Vertical image alignment.");
+				Messages.MImage_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
+		vAlignD.setDescription(Messages.MImage_vertical_alignment_description);
 		desc.add(vAlignD);
 
 		ComboBoxPropertyDescriptor onErrorTypeD = new ComboBoxPropertyDescriptor(JRBaseImage.PROPERTY_ON_ERROR_TYPE,
-				"On Error Type", EnumHelper.getEnumNames(OnErrorTypeEnum.values(), NullEnum.NULL));
-		onErrorTypeD.setDescription("Controls the behavior of the engine in case the image is not available.");
+				Messages.MImage_on_error_type, EnumHelper.getEnumNames(OnErrorTypeEnum.values(), NullEnum.NULL));
+		onErrorTypeD.setDescription(Messages.MImage_on_error_type_description);
 		desc.add(onErrorTypeD);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(JRDesignImage.PROPERTY_EVALUATION_TIME,
-				"Evaluation Time", EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NULL));
+				Messages.MImage_evaluation_type, EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NULL));
 		evaluationTimeD
-				.setDescription("The image to be printed is supplied by the associated expression. This expression can be evaluated at a specified moment. This could be useful, for example, when we want to have on the first page a chart that will be generated only after fetching all the data source rows.");
+				.setDescription(Messages.MImage_evaluation_type_description);
 		desc.add(evaluationTimeD);
 
 		CheckBoxPropertyDescriptor usingCacheD = new CheckBoxPropertyDescriptor(JRBaseImage.PROPERTY_USING_CACHE,
-				"Using Cache", NullEnum.INHERITED);
+				Messages.MImage_using_cache, NullEnum.INHERITED);
 		usingCacheD
-				.setDescription("If true, tells the report engine to cache the images that are loaded from the same location.");
+				.setDescription(Messages.MImage_using_cache_description);
 		desc.add(usingCacheD);
 
-		CheckBoxPropertyDescriptor lazyD = new CheckBoxPropertyDescriptor(JRBaseImage.PROPERTY_LAZY, "Lazy",
+		CheckBoxPropertyDescriptor lazyD = new CheckBoxPropertyDescriptor(JRBaseImage.PROPERTY_LAZY, Messages.MImage_lazy,
 				NullEnum.NOTNULL);
-		lazyD.setDescription("Gives control over when the images are retrieved from their specified location.");
+		lazyD.setDescription(Messages.MImage_lazy_description);
 		desc.add(lazyD);
 
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
-		evaluationTimeD.setCategory("Image Properties");
-		onErrorTypeD.setCategory("Image Properties");
-		scaleImageD.setCategory("Image Properties");
-		expressionD.setCategory("Image Properties");
+		evaluationTimeD.setCategory(Messages.MImage_image_category);
+		onErrorTypeD.setCategory(Messages.MImage_image_category);
+		scaleImageD.setCategory(Messages.MImage_image_category);
+		expressionD.setCategory(Messages.MImage_image_category);
 
-		hAlignD.setCategory("Image Properties");
-		vAlignD.setCategory("Image Properties");
-		usingCacheD.setCategory("Image Properties");
-		lazyD.setCategory("Image Properties");
+		hAlignD.setCategory(Messages.MImage_image_category);
+		vAlignD.setCategory(Messages.MImage_image_category);
+		usingCacheD.setCategory(Messages.MImage_image_category);
+		lazyD.setCategory(Messages.MImage_image_category);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_SCALE_IMAGE, null);
@@ -183,7 +183,7 @@ public class MImage extends MGraphicElementLineBox {
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseImage.PROPERTY_ON_ERROR_TYPE, EnumHelper.getValue(OnErrorTypeEnum.ERROR, 1, true));
 		defaultsMap.put(JRDesignImage.PROPERTY_EVALUATION_TIME, EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, true));
-		defaultsMap.put(JRDesignImage.PROPERTY_EXPRESSION, "java.lang.String");
+		defaultsMap.put(JRDesignImage.PROPERTY_EXPRESSION, "java.lang.String"); //$NON-NLS-1$
 		defaultsMap.put(JRBaseImage.PROPERTY_LAZY, Boolean.FALSE);
 	}
 

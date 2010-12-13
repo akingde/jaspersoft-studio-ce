@@ -96,7 +96,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		try {
 			ReportEditor reportEditor = new ReportEditor();
 			int index = addPage(reportEditor, getEditorInput());
-			setPageText(index, "Main Report");
+			setPageText(index, Messages.ReportContainer_main_report);
 			editors.add(reportEditor);
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(), "Error creating nested visual editor", null, e.getStatus());
@@ -216,7 +216,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor#getContributorId()
 	 */
 	public String getContributorId() {
-		return "com.jaspersoft.studio.editor.report.ReportContainer";
+		return "com.jaspersoft.studio.editor.report.ReportContainer"; //$NON-NLS-1$
 	}
 
 	/** The outline view. */

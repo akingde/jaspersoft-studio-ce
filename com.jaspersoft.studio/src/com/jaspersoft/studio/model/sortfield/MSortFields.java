@@ -54,7 +54,7 @@ public class MSortFields extends ANode implements IPastable, IContainerEditPart 
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("sortfields");
+			iconDescriptor = new NodeIconDescriptor("sortfields"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

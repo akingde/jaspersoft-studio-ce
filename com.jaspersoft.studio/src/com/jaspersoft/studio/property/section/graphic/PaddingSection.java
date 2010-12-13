@@ -89,18 +89,18 @@ public class PaddingSection extends AbstractSection {
 		GridLayout layout = new GridLayout(14, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Padding:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.PaddingSection_padding+":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
 		CLabel l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_frame.gif"));
+		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_frame.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		allPadding = new Spinner(composite, SWT.BORDER);
 		allPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		allPadding.setToolTipText("padding");
+		allPadding.setToolTipText(Messages.PaddingSection_all_padding_tool_tip);
 		allPadding.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_PADDING, new Integer(allPadding.getSelection()));
@@ -108,12 +108,12 @@ public class PaddingSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_top.gif"));
+		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_top.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		topPadding = new Spinner(composite, SWT.BORDER);
 		topPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		topPadding.setToolTipText("top padding");
+		topPadding.setToolTipText(Messages.PaddingSection_top_padding_tool_tip);
 		topPadding.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_TOP_PADDING, new Integer(topPadding.getSelection()));
@@ -121,12 +121,12 @@ public class PaddingSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_bottom.png"));
+		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_bottom.png")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		bottomPadding = new Spinner(composite, SWT.BORDER);
 		bottomPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		bottomPadding.setToolTipText("bottom padding");
+		bottomPadding.setToolTipText(Messages.PaddingSection_bottom_padding_tool_tip);
 		bottomPadding.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, new Integer(bottomPadding.getSelection()));
@@ -134,12 +134,12 @@ public class PaddingSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_left.gif"));
+		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_left.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		leftPadding = new Spinner(composite, SWT.BORDER);
 		leftPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		leftPadding.setToolTipText("left padding");
+		leftPadding.setToolTipText(Messages.PaddingSection_left_padding_tool_tip);
 		leftPadding.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_LEFT_PADDING, new Integer(leftPadding.getSelection()));
@@ -147,12 +147,12 @@ public class PaddingSection extends AbstractSection {
 		});
 
 		l = new CLabel(composite, SWT.RIGHT);
-		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_right.gif"));
+		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_right.gif")); //$NON-NLS-1$
 		l.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		rightPadding = new Spinner(composite, SWT.BORDER);
 		rightPadding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		rightPadding.setToolTipText("right padding");
+		rightPadding.setToolTipText(Messages.PaddingSection_right_padding_tool_tip);
 		rightPadding.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JRBaseLineBox.PROPERTY_RIGHT_PADDING, new Integer(rightPadding.getSelection()));

@@ -136,14 +136,14 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		// addRetargetAction(new MatchWidthRetargetAction());
 		// addRetargetAction(new MatchHeightRetargetAction());
 		// GEFMessages.ToggleRulerVisibility_Label
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY, "Show Ruler", IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID, "Snap To Guides", IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_show_ruler, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_guides, IAction.AS_CHECK_BOX));
 
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, "Show Grid", IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, "Snap To Geometry",
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_show_grid, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_geometry,
 				IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SnapToGridAction.ID, "Snap To Grid", IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SizeGridAction.ID, "Grid Size ..."));
+		addRetargetAction(new RetargetAction(SnapToGridAction.ID, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_grid, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SizeGridAction.ID, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_grid_size));
 	}
 
 	/**
@@ -264,11 +264,11 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	private void createActions() {
 		sampleAction = new Action() {
 			public void run() {
-				MessageDialog.openInformation(null, "Jasper Studio", "Sample Action Executed");
+				MessageDialog.openInformation(null, "Jasper Studio", com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action_executed); //$NON-NLS-1$
 			}
 		};
-		sampleAction.setText("Sample Action");
-		sampleAction.setToolTipText("Sample Action tool tip");
+		sampleAction.setText(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action);
+		sampleAction.setToolTipText(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action_tool_tip);
 		sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(IDE.SharedImages.IMG_OBJS_TASK_TSK));
 	}
@@ -331,7 +331,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			manager.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);
 		}
 
-		MenuManager viewMenu = new MenuManager("View");
+		MenuManager viewMenu = new MenuManager(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_view);
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
 		viewMenu.add(new Separator());
@@ -345,7 +345,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 
-		IMenuManager menu = new MenuManager("Editor &Menu");
+		IMenuManager menu = new MenuManager(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_editor_menu);
 		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
 		menu.add(sampleAction);
 
@@ -396,7 +396,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	@Override
 	public void contributeToStatusLine(IStatusLineManager statusLineManager) {
-		statusLineManager.setMessage("hello");
+		statusLineManager.setMessage("hello"); //$NON-NLS-1$
 	}
 
 	/**

@@ -36,7 +36,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 public class ShowPropertyViewAction extends SelectionAction {
 
 	/** The Constant ID. */
-	public static final String ID = "show_property_view";
+	public static final String ID = "show_property_view"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -77,11 +77,11 @@ public class ShowPropertyViewAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Show Properties");
-		setToolTipText("Show properties");
+		setText(Messages.ShowPropertyViewAction_show_properties);
+		setToolTipText(Messages.ShowPropertyViewAction_show_properties_tool_tip);
 		setId(ShowPropertyViewAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/properties_view.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/properties_view.gif"));
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/properties_view.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 

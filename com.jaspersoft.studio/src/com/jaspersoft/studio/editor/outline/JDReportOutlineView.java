@@ -223,7 +223,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		};
 		showOutlineAction
 				.setImageDescriptor(ImageDescriptor.createFromFile(JDReportOutlineView.class, "icons/outline.gif")); //$NON-NLS-1$
-		showOutlineAction.setToolTipText("Show outline");
+		showOutlineAction.setToolTipText(Messages.JDReportOutlineView_show_outline_tool_tip);
 		tbm.add(showOutlineAction);
 		showOverviewAction = new Action() {
 			public void run() {
@@ -232,7 +232,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		};
 		showOverviewAction.setImageDescriptor(ImageDescriptor.createFromFile(JDReportOutlineView.class,
 				"icons/overview.gif")); //$NON-NLS-1$
-		showOverviewAction.setToolTipText("Show overview");
+		showOverviewAction.setToolTipText(Messages.JDReportOutlineView_show_overview_tool_tip);
 		tbm.add(showOverviewAction);
 		showPage(ID_OUTLINE);
 	}

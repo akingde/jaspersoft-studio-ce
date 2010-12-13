@@ -172,8 +172,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 		// position actions
-		MenuManager submenu = new MenuManager("&Order",
-				JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID);
+		MenuManager submenu = new MenuManager(Messages.AppContextMenuProvider_order,
+				JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_to_front.gif"), BringToFrontAction.ID); //$NON-NLS-1$
 
 		action = getActionRegistry().getAction(BringToFrontAction.ID);
 		if (action.isEnabled())
@@ -194,7 +194,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 
 		// Alignment Actions
-		submenu = new MenuManager("Align Components", InternalImages.DESC_HORZ_ALIGN_LEFT, GEFActionConstants.ALIGN_LEFT);
+		submenu = new MenuManager(Messages.AppContextMenuProvider_align_components, InternalImages.DESC_HORZ_ALIGN_LEFT, GEFActionConstants.ALIGN_LEFT);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_LEFT);
 		if (action.isEnabled())
@@ -225,8 +225,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 
 		// Alignment Actions
-		submenu = new MenuManager("Align in Container",
-				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-left.gif"),
+		submenu = new MenuManager(Messages.AppContextMenuProvider_align_to_container,
+				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/align-band-left.gif"), //$NON-NLS-1$
 				Align2BorderAction.ID_ALIGN_LEFT);
 
 		action = getActionRegistry().getAction(Align2BorderAction.ID_ALIGN_LEFT);
@@ -258,7 +258,7 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 
 		// match size Actions
-		submenu = new MenuManager("&Size Components", InternalImages.DESC_MATCH_WIDTH, GEFActionConstants.MATCH_WIDTH);
+		submenu = new MenuManager(Messages.AppContextMenuProvider_size_components, InternalImages.DESC_MATCH_WIDTH, GEFActionConstants.MATCH_WIDTH);
 
 		action = getActionRegistry().getAction(GEFActionConstants.MATCH_WIDTH);
 		if (action.isEnabled())
@@ -275,8 +275,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 		// ------------------------------
 
-		submenu = new MenuManager("S&ize to Container",
-				JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"),
+		submenu = new MenuManager(Messages.AppContextMenuProvider_size_to_container,
+				JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"), //$NON-NLS-1$
 				Size2BorderAction.ID_SIZE_WIDTH);
 
 		action = getActionRegistry().getAction(Size2BorderAction.ID_SIZE_WIDTH);

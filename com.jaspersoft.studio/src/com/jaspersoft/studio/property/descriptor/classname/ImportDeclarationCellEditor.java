@@ -49,10 +49,10 @@ public class ImportDeclarationCellEditor extends ATextDialogCellEditor {
 				SearchEngine.createWorkspaceScope(), true, true, null);
 		if (dialog.open() == Window.OK) {
 			if (dialog.getResult() != null && dialog.getResult().length > 0) {
-				String res = "";
+				String res = ""; //$NON-NLS-1$
 				for (int i = 0; i < dialog.getResult().length; i++) {
 					JavaElement jpf = (JavaElement) dialog.getResult()[i];
-					res += jpf.getElementName() + ";";
+					res += jpf.getElementName() + ";"; //$NON-NLS-1$
 				}
 				return res;
 			}

@@ -57,7 +57,7 @@ public class MField extends APropertyNode implements ICopyable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("field");
+			iconDescriptor = new NodeIconDescriptor("field"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -130,7 +130,7 @@ public class MField extends APropertyNode implements ICopyable {
 		defaultsMap = defaultsMap1;
 	}
 
-	private static final String PROPERTY_MAP = "PROPERTY_MAP";
+	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 
 	/**
 	 * Creates the property descriptors.
@@ -139,23 +139,23 @@ public class MField extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, "Properties");
-		propertiesD.setDescription("Dataset properties");
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, Messages.MField_properties);
+		propertiesD.setDescription(Messages.MField_properties_description);
 		desc.add(propertiesD);
 
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignField.PROPERTY_NAME, "Name");
-		nameD.setDescription("Name of the field.");
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignField.PROPERTY_NAME, Messages.MField_name);
+		nameD.setDescription(Messages.MField_name_description);
 		desc.add(nameD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignField.PROPERTY_VALUE_CLASS_NAME,
-				"Class");
-		classD.setDescription("Class of the field values.");
+				Messages.MField_class);
+		classD.setDescription(Messages.MField_class_description);
 		desc.add(classD);
 
 		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignField.PROPERTY_DESCRIPTION,
-				"Description");
+				Messages.MField_description);
 		descriptionD
-				.setDescription("Can be used to specify a short text description for the field and is useful especially when creating special designed data sources and an extra information is needed in order to extract the value of the field.");
+				.setDescription(Messages.MField_description_description);
 		desc.add(descriptionD);
 	}
 

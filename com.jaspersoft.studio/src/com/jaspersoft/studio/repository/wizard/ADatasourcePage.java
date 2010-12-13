@@ -49,8 +49,8 @@ public abstract class ADatasourcePage extends WizardPage {
 
 	protected ADatasourcePage(String pageName) {
 		super(pageName);
-		setTitle("DataSource Editor");
-		setDescription("DataSource editor.");
+		setTitle(Messages.ADatasourcePage_datasource_editor);
+		setDescription(Messages.ADatasourcePage_datasource_editor_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -59,7 +59,7 @@ public abstract class ADatasourcePage extends WizardPage {
 		setControl(composite);
 
 		Label lbl1 = new Label(composite, SWT.NONE);
-		lbl1.setText("Datasource Name:");
+		lbl1.setText(Messages.ADatasourcePage_datasource_name+":"); //$NON-NLS-1$
 
 		datasourceNameTxt = new Text(composite, SWT.BORDER);
 		datasourceNameTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -76,7 +76,7 @@ public abstract class ADatasourcePage extends WizardPage {
 		if (value != null) {
 			String dsName = (String) value.getPropertyValue(AMDatasource.PROPERTY_NAME);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			datasourceNameTxt.setText(dsName);
 		}
 	}

@@ -37,18 +37,18 @@ import com.jaspersoft.studio.repository.RepositoryManager;
 import com.jaspersoft.studio.repository.wizard.DatasourceEditor;
 
 public class EditDataSourceAction extends Action {
-	public static final String ID = "editdatasourceaction";
+	public static final String ID = "editdatasourceaction"; //$NON-NLS-1$
 	private TreeViewer treeViewer;
 
 	public EditDataSourceAction(TreeViewer treeViewer) {
 		super();
 		this.treeViewer = treeViewer;
 		setId(ID);
-		setText("Edit ...");
-		setDescription("Edit Datasource");
-		setToolTipText("Edi datasource");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source.gif"));
+		setText(Messages.EditDataSourceAction_edit);
+		setDescription(Messages.EditDataSourceAction_description);
+		setToolTipText(Messages.EditDataSourceAction_tool_tip);
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source.gif")); //$NON-NLS-1$
 
 	}
 

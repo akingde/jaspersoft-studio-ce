@@ -72,7 +72,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("band");
+			iconDescriptor = new NodeIconDescriptor("band"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -191,19 +191,19 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT, "Height");
-		heightD.setDescription("Height of the band.");
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT, Messages.MBand_height);
+		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);
 
 		ComboBoxPropertyDescriptor splitStyleD = new ComboBoxPropertyDescriptor(JRDesignBand.PROPERTY_SPLIT_TYPE,
-				"Split Type", EnumHelper.getEnumNames(SplitTypeEnum.values(), NullEnum.NULL));
-		splitStyleD.setDescription("Specifies the band split behavior.");
+				Messages.MBand_split_type, EnumHelper.getEnumNames(SplitTypeEnum.values(), NullEnum.NULL));
+		splitStyleD.setDescription(Messages.MBand_split_type_dscription);
 		desc.add(splitStyleD);
 
 		JRExpressionPropertyDescriptor printWhenExpD = new JRExpressionPropertyDescriptor(
-				JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, "Print When Expression");
+				JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MBand_print_when_expression);
 		printWhenExpD
-				.setDescription("Definition of a Boolean expression that will determine if the element or the band should be printed or not.");
+				.setDescription(Messages.MBand_print_when_expression_desription);
 		desc.add(printWhenExpD);
 
 		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, CONST_HEIGHT);

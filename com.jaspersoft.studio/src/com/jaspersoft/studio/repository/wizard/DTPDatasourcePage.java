@@ -28,9 +28,9 @@ import org.eclipse.swt.widgets.Composite;
 public class DTPDatasourcePage extends ADatasourcePage {
 
 	protected DTPDatasourcePage() {
-		super("dtpdatasourceeditor");
-		setTitle("DTP Datasource");
-		setDescription("Creates a DTP datasource.");
+		super("dtpdatasourceeditor"); //$NON-NLS-1$
+		setTitle(Messages.DTPDatasourcePage_dtp_datasource);
+		setDescription(Messages.DTPDatasourcePage_description);
 	}
 
 	@Override

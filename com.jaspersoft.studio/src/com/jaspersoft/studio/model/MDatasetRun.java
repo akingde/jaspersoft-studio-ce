@@ -52,29 +52,29 @@ public class MDatasetRun extends APropertyNode {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		subdatasetnameD = new RWComboBoxPropertyDescriptor(JRDesignDatasetRun.PROPERTY_DATASET_NAME, "Dataset Name",
-				new String[] { "" }, NullEnum.NOTNULL);
-		subdatasetnameD.setDescription("Dataset name.");
+		subdatasetnameD = new RWComboBoxPropertyDescriptor(JRDesignDatasetRun.PROPERTY_DATASET_NAME, Messages.MDatasetRun_dataset_name,
+				new String[] { "" }, NullEnum.NOTNULL); //$NON-NLS-1$
+		subdatasetnameD.setDescription(Messages.MDatasetRun_dataset_name_description);
 		desc.add(subdatasetnameD);
 
 		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(
-				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, "Connection Expression");
-		connExprD.setDescription("Connection expression.");
+				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, Messages.MDatasetRun_connection_expression);
+		connExprD.setDescription(Messages.MDatasetRun_connection_expression_description);
 		desc.add(connExprD);
 
 		JRExpressionPropertyDescriptor dsExprD = new JRExpressionPropertyDescriptor(
-				JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, "Data Source Expression");
-		dsExprD.setDescription("Data Source expression.");
+				JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, Messages.MDatasetRun_data_source_expression);
+		dsExprD.setDescription(Messages.MDatasetRun_data_source_expression_description);
 		desc.add(dsExprD);
 
 		JRExpressionPropertyDescriptor pmExprD = new JRExpressionPropertyDescriptor(
-				JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION, "Parameters Map Expression");
-		pmExprD.setDescription("Data Source expression.");
+				JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.MDatasetRun_parameters_map_expression);
+		pmExprD.setDescription(Messages.MDatasetRun_parameters_map_expression_description);
 		desc.add(pmExprD);
 
 		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(JRDesignDatasetRun.PROPERTY_PARAMETERS,
-				"Parameters");
-		propertiesD.setDescription("Parameters.");
+				Messages.MDatasetRun_parameters);
+		propertiesD.setDescription(Messages.MDatasetRun_parameters_description);
 		desc.add(propertiesD);
 
 	}
@@ -122,7 +122,7 @@ public class MDatasetRun extends APropertyNode {
 				sds[i] = datasets.get(i).getName();
 			}
 			subdatasetnameD.setItems(sds);
-			return jrElement.getDatasetName() != null ? jrElement.getDatasetName() : "";
+			return jrElement.getDatasetName() != null ? jrElement.getDatasetName() : ""; //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -171,7 +171,7 @@ public class MDatasetRun extends APropertyNode {
 				propertyDTO = v;
 			}
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
-			if (!value.equals(""))
+			if (!value.equals("")) //$NON-NLS-1$
 				jrElement.setDatasetName((String) value);
 
 		}

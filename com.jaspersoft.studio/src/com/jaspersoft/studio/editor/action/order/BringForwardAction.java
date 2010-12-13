@@ -39,7 +39,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 public class BringForwardAction extends SelectionAction {
 
 	/** The Constant ID. */
-	public static final String ID = "bring_forward";
+	public static final String ID = "bring_forward"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -78,7 +78,7 @@ public class BringForwardAction extends SelectionAction {
 		if (!(objects.get(0) instanceof EditPart))
 			return null;
 
-		CompoundCommand compoundCmd = new CompoundCommand("Bring Forward");
+		CompoundCommand compoundCmd = new CompoundCommand("Bring Forward"); //$NON-NLS-1$
 		for (int i = objects.size() - 1; i >= 0; i--) {
 			EditPart part = (EditPart) objects.get(i);
 			Command cmd = null;
@@ -109,11 +109,11 @@ public class BringForwardAction extends SelectionAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Bring F&orward");
-		setToolTipText("Bring Forward");
+		setText(Messages.BringForwardAction_bring_forward);
+		setToolTipText(Messages.BringForwardAction_bring_forward_tool_tip);
 		setId(BringForwardAction.ID);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_forward.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/dlcl16/bring_forward.gif"));
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/elcl16/bring_forward.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/dlcl16/bring_forward.gif")); //$NON-NLS-1$
 		setEnabled(false);
 	}
 }

@@ -36,7 +36,7 @@ import com.jaspersoft.studio.model.sortfield.MSortField;
 public class CreateSortFieldAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_sort_field";
+	public static final String ID = "create_sort_field"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -54,8 +54,8 @@ public class CreateSortFieldAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create SortField");
-		setToolTipText("Creates sortfield");
+		setText(Messages.CreateSortFieldAction_create_sortfield);
+		setToolTipText(Messages.CreateSortFieldAction_create_sortfield_tool_tip);
 		setId(CreateSortFieldAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

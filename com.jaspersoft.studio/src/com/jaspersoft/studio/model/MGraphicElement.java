@@ -101,7 +101,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("generic");
+			iconDescriptor = new NodeIconDescriptor("generic"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -255,7 +255,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				JRDesignElement jrElement = (JRDesignElement) getValue();
 				JRStyle[] styles = jasperDesign.getStyles();
 				String[] items = new String[styles.length + 1];
-				items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : "";
+				items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
 				for (int j = 0; j < styles.length; j++) {
 					items[j + 1] = styles[j].getName();
 				}
@@ -264,7 +264,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			// initialize groups
 			JRGroup[] groups = jasperDesign.getGroups();
 			String[] items = new String[groups.length + 1];
-			items[0] = "";
+			items[0] = ""; //$NON-NLS-1$
 			for (int j = 0; j < groups.length; j++) {
 				items[j + 1] = groups[j].getName();
 			}
@@ -284,110 +284,110 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, "Parent Style",
-				new String[] { "" }, NullEnum.NULL);
-		styleD.setDescription("Name of the report level style to use as base style (see <style> element).");
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.MGraphicElement_parent_style,
+				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
 		desc.add(styleD);
 
 		groupChangesD = new RComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES,
-				"Print When Group Changes", new String[] { "" });
-		groupChangesD.setDescription("The element will be printed when the specified group changes.");
+				Messages.MGraphicElement_print_when_group_changes, new String[] { "" }); //$NON-NLS-2$
+		groupChangesD.setDescription(Messages.MGraphicElement_print_when_group_changes_description);
 		desc.add(groupChangesD);
 
-		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY, "Key");
-		keyD.setDescription("This attribute is used to identify band elements by their \"key\" when wanting to alter their settings at runtime. The key value must be unique for elements within report band.");
+		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY, Messages.MGraphicElement_key);
+		keyD.setDescription(Messages.MGraphicElement_key_description);
 		desc.add(keyD);
 
 		// bounds
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT, "Height");
-		heightD.setCategory("Size");
-		heightD.setDescription("Height of the object.");
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT, Messages.MGraphicElement_height);
+		heightD.setCategory(Messages.MGraphicElement_size_category);
+		heightD.setDescription(Messages.MGraphicElement_height_description);
 		desc.add(heightD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH, "Width");
-		widthD.setCategory("Size");
-		widthD.setDescription("Width of the object.");
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH, Messages.MGraphicElement_width);
+		widthD.setCategory(Messages.MGraphicElement_size_category);
+		widthD.setDescription(Messages.MGraphicElement_width_description);
 		desc.add(widthD);
 
-		IntegerPropertyDescriptor xD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_X, "Left");
-		xD.setCategory("Location");
-		xD.setDescription("Specifies the x coordinate for the object within the band.");
+		IntegerPropertyDescriptor xD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_X, Messages.MGraphicElement_left);
+		xD.setCategory(Messages.MGraphicElement_location_category);
+		xD.setDescription(Messages.MGraphicElement_left_description);
 		desc.add(xD);
 
-		IntegerPropertyDescriptor yD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_Y, "Top");
-		yD.setCategory("Location");
-		yD.setDescription("Specifies the y coordinate for the object within the band.");
+		IntegerPropertyDescriptor yD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_Y, Messages.MGraphicElement_top);
+		yD.setCategory(Messages.MGraphicElement_location_category);
+		yD.setDescription(Messages.MGraphicElement_top_description);
 		desc.add(yD);
 		// colors
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR, "Backcolor",
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR, Messages.MGraphicElement_backcolor,
 				NullEnum.INHERITED);
 		backcolorD
-				.setDescription("Back color to use when drawing the object. Hexadecimal formatted values preceded by the # character or decimal values are accepted along with the following predefined color values: black, blue, cyan, darkGray, gray, green, lightGray, magenta, orange, pink, red, yellow, white.");
+				.setDescription(Messages.MGraphicElement_backcolor_description);
 		desc.add(backcolorD);
 
-		ColorPropertyDescriptor forecolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_FORECOLOR, "Forecolor",
+		ColorPropertyDescriptor forecolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_FORECOLOR, Messages.MGraphicElement_forecolor,
 				NullEnum.INHERITED);
 		forecolorD
-				.setDescription("Fore color to use when drawing the object. Hexadecimal formatted values preceded by the # character or decimal values are accepted along with the following predefined color values: black, blue, cyan, darkGray, gray, green, lightGray, magenta, orange, pink, red, yellow, white.");
+				.setDescription(Messages.MGraphicElement_forecolor_description);
 		desc.add(forecolorD);
 		// opacity
-		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, "Opaque",
+		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MGraphicElement_opaque,
 				EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
-		opaqueD.setDescription("Specifies whether the background of an object is transparent or opaque.");
+		opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueD);
 
 		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
-				"Position Type", EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
-		positionTypeD.setDescription("Specifies the object position when the report section is affected by stretch.");
+				Messages.MGraphicElement_position_type, EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
+		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
 		desc.add(positionTypeD);
-		positionTypeD.setCategory("Location");
+		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
 
 		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE,
-				"Stretch Type", EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
-		stretchTypeD.setCategory("Size");
+				Messages.MGraphicElement_stretch_type, EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
+		stretchTypeD.setCategory(Messages.MGraphicElement_size_category);
 		stretchTypeD
-				.setDescription("Specifies the graphic element stretch behavior when the report section is affected by stretch.");
+				.setDescription(Messages.MGraphicElement_stretch_type_description);
 		desc.add(stretchTypeD);
 
 		CheckBoxPropertyDescriptor printRVAlueD = new CheckBoxPropertyDescriptor(
-				JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, "Print Repeated Values");
+				JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, Messages.MGraphicElement_print_repeated_values);
 		printRVAlueD
-				.setDescription("This flag allows suppressing the repeating values for the dynamic elements such as text fields and image fields and to fully customize the behavior of the static elements like rectangles, lines, ellipses and static texts.");
+				.setDescription(Messages.MGraphicElement_print_repeated_values_description);
 		desc.add(printRVAlueD);
 
 		CheckBoxPropertyDescriptor rmLineWBlankD = new CheckBoxPropertyDescriptor(
-				JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, "Remove Line When Blank");
+				JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, Messages.MGraphicElement_remove_line_when_blank);
 		rmLineWBlankD
-				.setDescription("Collapses the band if the element is not printing and no other element is occupying the same horizontal space.");
+				.setDescription(Messages.MGraphicElement_remove_line_when_blank_description);
 		desc.add(rmLineWBlankD);
 
 		CheckBoxPropertyDescriptor printInFirstWholeBandD = new CheckBoxPropertyDescriptor(
-				JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, "Print In First Whole Band");
+				JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, Messages.MGraphicElement_print_in_first_whole_band);
 		printInFirstWholeBandD
-				.setDescription("The element gets printed in the first band of a new page or column that is not an overflow from a previous page or column.");
+				.setDescription(Messages.MGraphicElement_print_in_first_whole_band_description);
 		desc.add(printInFirstWholeBandD);
 
 		CheckBoxPropertyDescriptor printWhenDetailOverflowsD = new CheckBoxPropertyDescriptor(
-				JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, "Print When Detail Overflows");
+				JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, Messages.MGraphicElement_print_when_detail_overflows);
 		printWhenDetailOverflowsD
-				.setDescription("The element will be printed when the band overflows to a new page or a new column.");
+				.setDescription(Messages.MGraphicElement_print_when_detail_overflows_desription);
 		desc.add(printWhenDetailOverflowsD);
 
 		JRExpressionPropertyDescriptor printWhenExprD = new JRExpressionPropertyDescriptor(
-				JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, "Print When Expression");
+				JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MGraphicElement_print_when_expression);
 		printWhenExprD
-				.setDescription("Definition of a Boolean expression that will determine if the element or the band should be printed or not.");
+				.setDescription(Messages.MGraphicElement_print_when_expression_description);
 		desc.add(printWhenExprD);
 
 		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(
-				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, "Property Expressions");
+				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, Messages.MGraphicElement_property_expressions);
 		propertiesD
-				.setDescription("Allows the creation of a dynamic name-value pair property for a report element. The contents of this element is interpreted as a java.lang.String expression, which will be evaluated at fill time, the result being used as property value.");
+				.setDescription(Messages.MGraphicElement_property_expressions_description);
 		desc.add(propertiesD);
 
-		forecolorD.setCategory("Graphic");
-		backcolorD.setCategory("Graphic");
-		opaqueD.setCategory("Graphic");
+		forecolorD.setCategory(Messages.MGraphicElement_graphic_category);
+		backcolorD.setCategory(Messages.MGraphicElement_graphic_category);
+		opaqueD.setCategory(Messages.MGraphicElement_graphic_category);
 
 		defaultsMap.put(JRDesignElement.PROPERTY_PARENT_STYLE, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);
@@ -426,12 +426,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				return jrElement.getStyleNameReference();
 			if (jrElement.getStyle() != null)
 				return jrElement.getStyle().getName();
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
 			if (jrElement.getPrintWhenGroupChanges() != null)
 				return jrElement.getPrintWhenGroupChanges().getName();
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
 			// FIXME: jrElement.getPropertyExpression(); same field
@@ -480,7 +480,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
 			jrElement.setKey((String) value);
 		else if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
-			if (!value.equals("")) {
+			if (!value.equals("")) { //$NON-NLS-1$
 				JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 				if (style != null) {
 					jrElement.setStyle(style);
@@ -497,7 +497,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				jrElement.setPrintWhenExpression(expression);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
-			if (!value.equals("")) {
+			if (!value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setPrintWhenGroupChanges(group);
 			}

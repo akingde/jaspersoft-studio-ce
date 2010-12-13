@@ -40,7 +40,7 @@ public class NTextPropertyDescriptor extends TextPropertyDescriptor {
 			@Override
 			protected Object doGetValue() {
 				String doGetValue = (String) super.doGetValue();
-				if (doGetValue.equals(""))
+				if (doGetValue.equals("")) //$NON-NLS-1$
 					doGetValue = null;
 				else
 					doGetValue.trim();
@@ -50,7 +50,7 @@ public class NTextPropertyDescriptor extends TextPropertyDescriptor {
 			@Override
 			protected void doSetValue(Object value) {
 				if (value == null)
-					value = "";
+					value = ""; //$NON-NLS-1$
 				else
 					value = ((String) value).trim();
 				super.doSetValue(value);

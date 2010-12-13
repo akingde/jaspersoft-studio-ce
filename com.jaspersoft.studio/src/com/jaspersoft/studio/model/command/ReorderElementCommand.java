@@ -58,7 +58,7 @@ public class ReorderElementCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderElementCommand(MGraphicElement child, ANode parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderElementCommand_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignElement) child.getValue();
 		this.jrGroup = jrElement.getElementGroup();

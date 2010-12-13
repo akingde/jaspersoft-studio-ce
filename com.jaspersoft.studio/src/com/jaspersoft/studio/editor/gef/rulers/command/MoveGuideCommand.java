@@ -55,7 +55,7 @@ public class MoveGuideCommand extends Command {
 	 *          the position delta
 	 */
 	public MoveGuideCommand(ReportRulerGuide guide, int positionDelta) {
-		super("Move guide");
+		super(Messages.MoveGuideCommand_move_guide);
 		this.guide = guide;
 		pDelta = positionDelta;
 	}

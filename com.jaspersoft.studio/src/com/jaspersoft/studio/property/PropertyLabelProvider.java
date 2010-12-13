@@ -34,7 +34,7 @@ public class PropertyLabelProvider extends LabelProvider {
 	public String getText(Object element) {
 		if (element != null)
 			return element.toString();
-		return "NULL";
+		return "NULL"; //$NON-NLS-1$
 	}
 
 }

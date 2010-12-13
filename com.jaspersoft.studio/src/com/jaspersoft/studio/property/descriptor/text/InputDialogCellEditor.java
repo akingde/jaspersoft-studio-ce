@@ -101,7 +101,7 @@ public class InputDialogCellEditor extends DialogCellEditor {
 	 */
 	public InputDialogCellEditor(Composite parent, int style, String title) {
 		super(parent, style);
-		doSetValue("");
+		doSetValue(""); //$NON-NLS-1$
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public class InputDialogCellEditor extends DialogCellEditor {
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		ValueHandler valueHandler = new ValueHandler();
-		InputDialog dialog = new InputDialog(cellEditorWindow.getShell(), title, "", (String) getValue(), valueHandler);
+		InputDialog dialog = new InputDialog(cellEditorWindow.getShell(), title, "", (String) getValue(), valueHandler); //$NON-NLS-1$
 		return dialog.open() == Window.OK ? dialog.getValue() : null;
 	}
 
@@ -128,7 +128,7 @@ public class InputDialogCellEditor extends DialogCellEditor {
 		String jrQuery = (String) value;
 		// XXX: We don't have a value the first time this method is called".
 		if (jrQuery == null) {
-			jrQuery = "";
+			jrQuery = ""; //$NON-NLS-1$
 		}
 
 		textLabel.setText(jrQuery);

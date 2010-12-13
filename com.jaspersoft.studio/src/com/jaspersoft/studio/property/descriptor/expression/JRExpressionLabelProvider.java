@@ -43,7 +43,7 @@ public class JRExpressionLabelProvider extends LabelProvider {
 			if (jde != null)
 				return jde.getText();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 }

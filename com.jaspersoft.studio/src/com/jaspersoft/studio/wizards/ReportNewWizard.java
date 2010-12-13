@@ -100,7 +100,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 			return false;
 		} catch (InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
+			MessageDialog.openError(getShell(), "Error", realException.getMessage()); //$NON-NLS-1$
 			return false;
 		}
 		return true;
@@ -118,11 +118,11 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		IProgressMonitor monitor)
 		throws CoreException {
 		// create a sample file
-		monitor.beginTask("Creating " + fileName, 2);
+		monitor.beginTask("Creating " + fileName, 2); //$NON-NLS-1$
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
 		if (!resource.exists() || !(resource instanceof IContainer)) {
-			throwCoreException("Container \"" + containerName + "\" does not exist.");
+			throwCoreException("Container \"" + containerName + "\" does not exist."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		IContainer container = (IContainer) resource;
 		final IFile file = container.getFile(new Path(fileName));
@@ -140,7 +140,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 			e.printStackTrace();
 		}
 		monitor.worked(1);
-		monitor.setTaskName("Opening file for editing...");
+		monitor.setTaskName("Opening file for editing..."); //$NON-NLS-1$
 		getShell().getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				IWorkbenchPage page =
@@ -167,7 +167,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		jd.setBottomMargin(30);
 		jd.setLeftMargin(25);
 		jd.setRightMargin(25);
-		jd.setName("New Report");
+		jd.setName(Messages.ReportNewWizard_new_report);
 		
 		JRDesignBand jb  = new JRDesignBand();
 		jb.setHeight(100);
@@ -187,7 +187,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status =
-			new Status(IStatus.ERROR, "com.jaspersoft.studio", IStatus.OK, message, null);
+			new Status(IStatus.ERROR, "com.jaspersoft.studio", IStatus.OK, message, null); //$NON-NLS-1$
 		throw new CoreException(status);
 	}
 

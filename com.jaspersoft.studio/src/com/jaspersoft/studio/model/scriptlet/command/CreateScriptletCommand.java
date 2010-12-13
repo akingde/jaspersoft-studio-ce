@@ -88,10 +88,10 @@ public class CreateScriptletCommand extends Command {
 					jrDataset.addScriptlet(index, jrScriptlet);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) {
-					String defaultName = ModelUtils.getDefaultName(jrDataset.getScriptletsMap(), "CopyOFScriptlet_");
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Scriptlet Name",
-							"Please, enter unique scriptlet name", defaultName, null);
+				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+					String defaultName = ModelUtils.getDefaultName(jrDataset.getScriptletsMap(), "CopyOFScriptlet_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateScriptletCommand_scriptlet_name,
+							Messages.CreateScriptletCommand_scriptlet_name_dialog, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrScriptlet.setName(dlg.getValue());
 						execute();

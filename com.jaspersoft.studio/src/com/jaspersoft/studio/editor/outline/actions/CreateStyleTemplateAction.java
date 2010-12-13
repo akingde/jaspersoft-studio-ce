@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.style.MStyleTemplate;
 public class CreateStyleTemplateAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_style_template";
+	public static final String ID = "create_style_template"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -55,8 +55,8 @@ public class CreateStyleTemplateAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Style Template");
-		setToolTipText("Creates style template");
+		setText(Messages.CreateStyleTemplateAction_create_style_template);
+		setToolTipText(Messages.CreateStyleTemplateAction_create_style_template_tool_tip);
 		setId(CreateStyleTemplateAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

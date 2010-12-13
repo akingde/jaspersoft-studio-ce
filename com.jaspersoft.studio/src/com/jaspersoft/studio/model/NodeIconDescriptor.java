@@ -47,10 +47,10 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	private String ICON_TOOLTIP = "Unknown element";
 
 	/** The ICO n_16. */
-	private String ICON_16 = "icons/resources/genericelement-16.png";
+	private String ICON_16 = "icons/resources/genericelement-16.png"; //$NON-NLS-1$
 
 	/** The ICO n_32. */
-	private String ICON_32 = "icons/resources/genericelement-32.png";
+	private String ICON_32 = "icons/resources/genericelement-32.png"; //$NON-NLS-1$
 	private AbstractUIPlugin plugin;
 
 	/**
@@ -66,11 +66,11 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	public NodeIconDescriptor(String name, AbstractUIPlugin plugin) {
 		this.plugin = plugin;
 
-		this.ICON_TITLE = getFromBundle(name + ".title", ICON_TITLE);
-		this.ICON_DESCRIPTION = getFromBundle(name + ".description", ICON_DESCRIPTION);
-		this.ICON_TOOLTIP = getFromBundle(name + ".description", ICON_TOOLTIP);
-		this.ICON_16 = getFromBundle(name + ".icon16", ICON_16);
-		this.ICON_32 = getFromBundle(name + ".icon32", ICON_32);
+		this.ICON_TITLE = getFromBundle(name + ".title", ICON_TITLE); //$NON-NLS-1$
+		this.ICON_DESCRIPTION = getFromBundle(name + ".description", ICON_DESCRIPTION); //$NON-NLS-1$
+		this.ICON_TOOLTIP = getFromBundle(name + ".description", ICON_TOOLTIP); //$NON-NLS-1$
+		this.ICON_16 = getFromBundle(name + ".icon16", ICON_16); //$NON-NLS-1$
+		this.ICON_32 = getFromBundle(name + ".icon32", ICON_32); //$NON-NLS-1$
 	}
 
 	/** The resource bundle icons. */
@@ -93,7 +93,7 @@ public class NodeIconDescriptor implements IIconDescriptor {
 		if (getResourceBundleIcons() == null) {
 			InputStream inputStream = null;
 			try {
-				inputStream = plugin.getBundle().getResource("resources/icons.properties").openStream();
+				inputStream = plugin.getBundle().getResource("resources/icons.properties").openStream(); //$NON-NLS-1$
 				setResourceBundleIcons(new PropertyResourceBundle(inputStream));
 			} catch (MalformedURLException e) {
 				e.printStackTrace();

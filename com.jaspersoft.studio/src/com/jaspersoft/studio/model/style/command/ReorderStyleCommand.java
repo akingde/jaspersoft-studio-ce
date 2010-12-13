@@ -54,7 +54,7 @@ public class ReorderStyleCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderStyleCommand(MStyle child, MStyles parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderStyleCommand_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDesign = parent.getJasperDesign();

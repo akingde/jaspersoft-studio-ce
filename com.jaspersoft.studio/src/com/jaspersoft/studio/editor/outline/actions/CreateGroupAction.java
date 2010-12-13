@@ -36,7 +36,7 @@ import com.jaspersoft.studio.model.group.MGroup;
 public class CreateGroupAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_group";
+	public static final String ID = "create_group"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -54,8 +54,8 @@ public class CreateGroupAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Group");
-		setToolTipText("Create a group");
+		setText(Messages.CreateGroupAction_create_group);
+		setToolTipText(Messages.CreateGroupAction_create_group_tool_tip);
 		setId(CreateGroupAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

@@ -49,10 +49,10 @@ public class BoxLabelProvider extends LabelProvider {
 			Color rgb = pen.getOwnLineColor();
 			String lineColor = NullEnum.INHERITED.getName();
 			if (rgb != null)
-				lineColor = "RGB (" + rgb.getRed() + "," + rgb.getGreen() + "," + rgb.getBlue() + ")";
-			return "[" + lineStyle + "," + lineWidth + "," + lineColor + "]";
+				lineColor = "RGB (" + rgb.getRed() + "," + rgb.getGreen() + "," + rgb.getBlue() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			return "[" + lineStyle + "," + lineWidth + "," + lineColor + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 }

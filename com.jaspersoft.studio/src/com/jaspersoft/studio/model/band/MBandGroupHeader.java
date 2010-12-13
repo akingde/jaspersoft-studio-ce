@@ -41,7 +41,7 @@ import com.jaspersoft.studio.model.NodeIconDescriptor;
  * @author Chicu Veaceslav
  */
 public class MBandGroupHeader extends MBand {
-	private static final String MAIN_GROUP = "MAIN_GROUP";
+	private static final String MAIN_GROUP = "MAIN_GROUP"; //$NON-NLS-1$
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -52,7 +52,7 @@ public class MBandGroupHeader extends MBand {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("groupheader");
+			iconDescriptor = new NodeIconDescriptor("groupheader"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -145,7 +145,7 @@ public class MBandGroupHeader extends MBand {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		PropertyDescriptor groupD = new PropertyDescriptor(MAIN_GROUP, "Group");
+		PropertyDescriptor groupD = new PropertyDescriptor(MAIN_GROUP, Messages.MBandGroupHeader_group);
 		desc.add(groupD);
 	}
 

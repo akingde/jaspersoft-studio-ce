@@ -36,7 +36,7 @@ public class CustomPattern extends APattern {
 	public CustomPattern(Composite parent, String pattern, Format formatter, Object sample) {
 		super(parent, formatter, sample);
 		setPattern(pattern);
-		setDescription("Type the format pattern, using one of the existing formats as a starting point.");
+		setDescription(Messages.CustomPattern_description);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class CustomPattern extends APattern {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout());
 		Label l = new Label(container, SWT.NONE);
-		l.setText("Formats");
+		l.setText(Messages.CustomPattern_Formats);
 		return container;
 	}
 

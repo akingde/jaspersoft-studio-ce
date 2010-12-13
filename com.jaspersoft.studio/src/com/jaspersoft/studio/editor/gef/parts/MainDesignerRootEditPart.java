@@ -41,13 +41,13 @@ import com.jaspersoft.studio.editor.java2d.J2DScalableFreeformLayeredPane;
 public class MainDesignerRootEditPart extends ScalableFreeformRootEditPart {
 
 	/** The Constant REPORT_LAYER. */
-	public static final String REPORT_LAYER = "REPORT_LAYER";
+	public static final String REPORT_LAYER = "REPORT_LAYER"; //$NON-NLS-1$
 
 	/** The Constant SECTIONS_LAYER. */
-	public static final String SECTIONS_LAYER = "SECTIONS_LAYER";
+	public static final String SECTIONS_LAYER = "SECTIONS_LAYER"; //$NON-NLS-1$
 
 	/** The Constant ELEMENTS_LAYER. */
-	public static final String ELEMENTS_LAYER = "ELEMENTS_LAYER";
+	public static final String ELEMENTS_LAYER = "ELEMENTS_LAYER"; //$NON-NLS-1$
 
 	/**
 	 * Instantiates a new main designer root edit part.

@@ -45,8 +45,8 @@ public class ResourceCellEditor extends ATextDialogCellEditor {
 		Shell shell = cellEditorWindow.getShell();
 		FilteredResourcesSelectionDialog dialog = new FilteredResourcesSelectionDialog(shell, false, ResourcesPlugin
 				.getWorkspace().getRoot(), IResource.FILE);
-		dialog.setTitle("Open Resource");
-		dialog.setInitialPattern("*.properties");
+		dialog.setTitle(Messages.ResourceCellEditor_open_resource);
+		dialog.setInitialPattern("*.properties"); //$NON-NLS-1$
 		// dialog.setMessage("Please choose the Resource bundle:");
 		// dialog.setMessage("Enter the name prefix or pattern (?, *, or camel case)");
 		if (dialog.open() == Window.OK) {

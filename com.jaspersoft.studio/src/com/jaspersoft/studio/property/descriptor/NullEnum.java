@@ -24,7 +24,7 @@
 package com.jaspersoft.studio.property.descriptor;
 
 public enum NullEnum {
-	NOTNULL((byte) 1, ""), NULL((byte) 2, "<NULL>"), INHERITED((byte) 3, "<INHERITED>");
+	NOTNULL((byte) 1, ""), NULL((byte) 2, "<NULL>"), INHERITED((byte) 3, "<INHERITED>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	private final transient byte value;
 	private final transient String name;

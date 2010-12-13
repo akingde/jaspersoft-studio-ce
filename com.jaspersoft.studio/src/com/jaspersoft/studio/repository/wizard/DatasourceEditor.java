@@ -44,7 +44,7 @@ public class DatasourceEditor extends Wizard {
 
 	public DatasourceEditor() {
 		super();
-		setWindowTitle("Datasource Editor");
+		setWindowTitle(Messages.DatasourceEditor_datasource_editor);
 	}
 
 	@Override

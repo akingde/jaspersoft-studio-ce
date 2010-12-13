@@ -58,7 +58,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("parameter");
+			iconDescriptor = new NodeIconDescriptor("parameter"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -112,35 +112,35 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_DESCRIPTION,
-				"Description");
-		descriptionD.setDescription("Description of parameter");
+				Messages.MParameter_description);
+		descriptionD.setDescription(Messages.MParameter_description_description);
 		desc.add(descriptionD);
 
 		CheckBoxPropertyDescriptor isForPromptingD = new CheckBoxPropertyDescriptor(
-				JRDesignParameter.PROPERTY_FOR_PROMPTING, "Is For Prompting", NullEnum.NOTNULL);
+				JRDesignParameter.PROPERTY_FOR_PROMPTING, Messages.MParameter_is_for_prompting, NullEnum.NOTNULL);
 		isForPromptingD
-				.setDescription("Optional flag that might be used by the parent application to prompt the user for the parameter value.");
+				.setDescription(Messages.MParameter_is_for_prompting_description);
 		desc.add(isForPromptingD);
 
 		JRExpressionPropertyDescriptor defValueExprD = new JRExpressionPropertyDescriptor(
-				JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION, "Default Value Expression");
+				JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION, Messages.MParameter_default_value_expression);
 		defValueExprD
-				.setDescription("Specifies the parameter default value to use when not supplied by the parent application at runtime.");
+				.setDescription(Messages.MParameter_default_value_expression_description);
 		desc.add(defValueExprD);
 
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, "Properties");
-		propertiesD.setDescription("Dataset properties");
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, Messages.MParameter_properties);
+		propertiesD.setDescription(Messages.MParameter_properties_description);
 		desc.add(propertiesD);
 
 		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME,
-				"Nested Type Name");
-		classD.setDescription("Type of the nested elements, if the parameter's value is a collection");
+				Messages.MParameter_nested_type_name);
+		classD.setDescription(Messages.MParameter_nested_type_name_description);
 		desc.add(classD);
 
 		defaultsMap.put(JRDesignParameter.PROPERTY_FOR_PROMPTING, Boolean.TRUE);
 	}
 
-	private static final String PROPERTY_MAP = "PROPERTY_MAP";
+	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	private MExpression mExpression;
 
 	/*

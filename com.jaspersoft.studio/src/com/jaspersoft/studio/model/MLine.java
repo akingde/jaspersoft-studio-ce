@@ -52,7 +52,7 @@ public class MLine extends MGraphicElementLinePen {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("line");
+			iconDescriptor = new NodeIconDescriptor("line"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -106,16 +106,16 @@ public class MLine extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor directionD = new ComboBoxPropertyDescriptor(JRBaseLine.PROPERTY_DIRECTION, "Direction",
+		ComboBoxPropertyDescriptor directionD = new ComboBoxPropertyDescriptor(JRBaseLine.PROPERTY_DIRECTION, Messages.MLine_direction,
 				EnumHelper.getEnumNames(LineDirectionEnum.values(), NullEnum.NULL));
 		directionD
-				.setDescription("Lines are drawn as diagonals of the rectangle defined by the report element properties. This attribute specifies which of the two diagonals should be drawn.");
-		directionD.setCategory("Line Properties");
+				.setDescription(Messages.MLine_direction_description);
+		directionD.setCategory(Messages.MLine_line_category);
 		desc.add(directionD);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, "Fill", EnumHelper
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.MLine_fill, EnumHelper
 				.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
-		fillD.setDescription("Type of the fill pattern used to fill objects.");
+		fillD.setDescription(Messages.MLine_fill_description);
 		desc.add(fillD);
 
 		defaultsMap.put(JRBaseLine.PROPERTY_DIRECTION, EnumHelper.getValue(LineDirectionEnum.TOP_DOWN, 1, true));

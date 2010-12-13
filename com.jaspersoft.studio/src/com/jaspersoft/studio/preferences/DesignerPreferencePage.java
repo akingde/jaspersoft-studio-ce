@@ -32,16 +32,16 @@ public class DesignerPreferencePage extends FieldEditorPreferencePage implements
 	public DesignerPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("General editor appearance");
+		setDescription(Messages.DesignerPreferencePage_description);
 	}
 
 	/**
 	 *
 	 */
 	public void createFieldEditors() {
-		addField(new ComboFieldEditor(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "Element Design Border Style",
+		addField(new ComboFieldEditor(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_element_design_border_style,
 				new String[][] { { "Corners", "corners" }, { "Rectangle", "rectangle" } }, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, "Page Border Style", new String[][] {
+		addField(new ComboFieldEditor(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_page_border_style, new String[][] {
 				{ "Fancy Shadow", "shadow" }, { "Simple Shadow", "rectangle" } }, getFieldEditorParent()));
 	}
 

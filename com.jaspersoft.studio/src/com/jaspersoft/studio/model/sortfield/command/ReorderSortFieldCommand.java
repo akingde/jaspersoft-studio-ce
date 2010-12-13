@@ -53,7 +53,7 @@ public class ReorderSortFieldCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderSortFieldCommand(MSortField child, MSortFields parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderSortFieldCommand_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDataset = (JRDesignDataset) parent.getValue();

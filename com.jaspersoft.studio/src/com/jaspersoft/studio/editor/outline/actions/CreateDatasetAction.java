@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 public class CreateDatasetAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_dataset";
+	public static final String ID = "create_dataset"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -55,8 +55,8 @@ public class CreateDatasetAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Dataset");
-		setToolTipText("Creates dataset");
+		setText(Messages.CreateDatasetAction_create_dataset);
+		setToolTipText(Messages.CreateDatasetAction_create_dataset_tool_tip);
 		setId(CreateDatasetAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

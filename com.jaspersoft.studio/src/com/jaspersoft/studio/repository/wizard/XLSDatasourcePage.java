@@ -22,14 +22,14 @@ package com.jaspersoft.studio.repository.wizard;
 public class XLSDatasourcePage extends AFileDatasourcePage {
 
 	protected XLSDatasourcePage() {
-		super("xlsdatasourceeditor");
-		setTitle("XLS Datasource");
-		setDescription("Creates a XLS datasource.");
+		super("xlsdatasourceeditor"); //$NON-NLS-1$
+		setTitle(Messages.XLSDatasourcePage_xls_datasource);
+		setDescription(Messages.XLSDatasourcePage_description);
 	}
 
 	@Override
 	protected String[] getFilterExt() {
-		return new String[] { "*.xls", "*.*" };
+		return new String[] { "*.xls", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

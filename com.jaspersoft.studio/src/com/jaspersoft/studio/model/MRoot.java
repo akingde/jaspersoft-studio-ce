@@ -43,7 +43,7 @@ public class MRoot extends ANode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("root");
+			iconDescriptor = new NodeIconDescriptor("root"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

@@ -36,7 +36,7 @@ public class MDatasources extends ANode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasources");
+			iconDescriptor = new NodeIconDescriptor("datasources"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

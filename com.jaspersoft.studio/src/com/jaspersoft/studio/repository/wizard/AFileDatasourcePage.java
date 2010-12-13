@@ -60,7 +60,7 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 	@Override
 	protected void createMoreControls(Composite parent) {
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("File Name:");
+		lbl1.setText(Messages.AFileDatasourcePage_file_name+":"); //$NON-NLS-1$
 
 		Composite c = new Composite(parent, SWT.NONE);
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -72,7 +72,7 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		fileNameTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button copyButton = new Button(c, SWT.PUSH);
-		copyButton.setText("Br&owse ...");
+		copyButton.setText(Messages.AFileDatasourcePage_browse);
 		copyButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -89,7 +89,7 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		});
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Number Format:");
+		lbl1.setText(Messages.AFileDatasourcePage_number_format+":"); //$NON-NLS-1$
 
 		c = new Composite(parent, SWT.NONE);
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -107,7 +107,7 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		});
 
 		Button numberFormatButton = new Button(c, SWT.PUSH);
-		numberFormatButton.setText("...");
+		numberFormatButton.setText("..."); //$NON-NLS-1$
 		numberFormatButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -129,7 +129,7 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		});
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Date Format:");
+		lbl1.setText(Messages.AFileDatasourcePage_date_format+":"); //$NON-NLS-1$
 
 		c = new Composite(parent, SWT.NONE);
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -147,7 +147,7 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		});
 
 		Button dateFormatButton = new Button(c, SWT.PUSH);
-		dateFormatButton.setText("...");
+		dateFormatButton.setText("..."); //$NON-NLS-1$
 		dateFormatButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -177,17 +177,17 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		if (value != null) {
 			String dsName = (String) value.getPropertyValue(AMFileDataSource.PROPERTY_FILENAME);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			fileNameTxt.setText(dsName);
 
 			dsName = (String) value.getPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT);
 			if (dsName == null)
-				dsName = "#,##0.##";
+				dsName = "#,##0.##"; //$NON-NLS-1$
 			numberFormat.setText(dsName);
 
 			dsName = (String) value.getPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT);
 			if (dsName == null)
-				dsName = "yyyy-MM-dd";
+				dsName = "yyyy-MM-dd"; //$NON-NLS-1$
 			dateFormat.setText(dsName);
 
 		}

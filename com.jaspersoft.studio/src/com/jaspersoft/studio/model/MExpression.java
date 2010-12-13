@@ -42,17 +42,17 @@ public class MExpression extends APropertyNode implements IPropertySource {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// pen
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRDesignExpression.PROPERTY_TEXT, "Text");
-		textD.setDescription("Expression text");
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRDesignExpression.PROPERTY_TEXT, Messages.MExpression_text);
+		textD.setDescription(Messages.MExpression_text_description);
 		desc.add(textD);
 
 		RComboBoxPropertyDescriptor languageD = new RComboBoxPropertyDescriptor(
-				JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "Value Class Name", new String[] { "java.lang.Boolean",
-						"java.lang.Byte", "java.util.Date", "java.sql.Timestamp", "java.sql.Time", "java.lang.Double",
-						"java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.math.BigDecimal",
-						"java.lang.Number", "java.lang.String" });
-		languageD.setDescription("Value class name.");
-		languageD.setCategory("Report");
+				JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, Messages.MExpression_value_class_name, new String[] { "java.lang.Boolean", //$NON-NLS-2$
+						"java.lang.Byte", "java.util.Date", "java.sql.Timestamp", "java.sql.Time", "java.lang.Double", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						"java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.math.BigDecimal", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						"java.lang.Number", "java.lang.String" }); //$NON-NLS-1$ //$NON-NLS-2$
+		languageD.setDescription(Messages.MExpression_value_class_name_description);
+		languageD.setCategory(Messages.MExpression_report_category);
 		desc.add(languageD);
 
 		// ClassTypePropertyDescriptor formatFactoryClassD = new ClassTypePropertyDescriptor(
@@ -60,7 +60,7 @@ public class MExpression extends APropertyNode implements IPropertySource {
 		// formatFactoryClassD.setDescription("Value class name.");
 		// desc.add(formatFactoryClassD);
 
-		defaultsMap.put(JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "java.lang.String");
+		defaultsMap.put(JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
 	}
 
 	private static IPropertyDescriptor[] descriptors;

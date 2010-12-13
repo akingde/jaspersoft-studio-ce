@@ -60,41 +60,41 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP, "Markup",
+		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP, Messages.MTextElement_markup,
 				ModelUtils.getMarkups(), NullEnum.INHERITED);
 		markupD
-				.setDescription("Specifies the name of the markup language used to embed style information into the text content. Supported values are none (plain text), styled (styled text), rtf (RTF format) and html (HTML format), but any custom made markup language can be used as long as there is a net.sf.jasperreports.engine.util.MarkupProcessorFactory implementation specified using a net.sf.jasperreports.markup.processor.factory.{markup} configuration property.");
+				.setDescription(Messages.MTextElement_markup_description);
 		desc.add(markupD);
 
 		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				"Horizontal Alignment", EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
-		hAlignD.setDescription("Horizontal image alignment.");
+				Messages.MTextElement_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
+		hAlignD.setDescription(Messages.MTextElement_horizontal_alignment_description);
 		desc.add(hAlignD);
 
 		ComboBoxPropertyDescriptor vAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				"Vertical Alignment", EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
-		vAlignD.setDescription("Vertical image alignment.");
+				Messages.MTextElement_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
+		vAlignD.setDescription(Messages.MTextElement_vertical_alignment_description);
 		desc.add(vAlignD);
 
-		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION, "Rotation",
+		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION, Messages.MTextElement_rotation,
 				EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
-		rotationD.setDescription("Type of rotation for the text object.");
+		rotationD.setDescription(Messages.MTextElement_rotation_description);
 		desc.add(rotationD);
 
 		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_LINE_SPACING,
-				"Line Spacing", EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
-		lineSpacingD.setDescription("Type of line spacing for the text object.");
+				Messages.MTextElement_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
+		lineSpacingD.setDescription(Messages.MTextElement_line_spacing_description);
 		desc.add(lineSpacingD);
 
 		if (tFont == null)
 			tFont = new MFont((JRFont) getValue());
 		tFont.createPropertyDescriptors(desc, defaultsMap);
 
-		markupD.setCategory("Text Properties");
-		hAlignD.setCategory("Text Properties");
-		vAlignD.setCategory("Text Properties");
-		rotationD.setCategory("Text Properties");
-		lineSpacingD.setCategory("Text Properties");
+		markupD.setCategory(Messages.MTextElement_text_category);
+		hAlignD.setCategory(Messages.MTextElement_text_category);
+		vAlignD.setCategory(Messages.MTextElement_text_category);
+		rotationD.setCategory(Messages.MTextElement_text_category);
+		lineSpacingD.setCategory(Messages.MTextElement_text_category);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);

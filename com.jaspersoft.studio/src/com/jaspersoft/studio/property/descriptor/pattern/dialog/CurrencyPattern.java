@@ -32,18 +32,18 @@ public class CurrencyPattern extends NumericPattern {
 
 	public CurrencyPattern(Composite parent) {
 		super(parent, NumberFormat.getCurrencyInstance());
-		setDescription("Currency format is used to display monetary values.");
+		setDescription(Messages.CurrencyPattern_description);
 	}
 
 	@Override
 	protected java.util.List<String> getDefaults() {
 		if (dList == null) {
 			dList = new ArrayList<String>();
-			dList.add("¤#,##0.###;¤-##0.###");
-			dList.add("#,##0.### ¤;#,##0.###- ¤");
-			dList.add("#,##0.### ¤;(#,##0.###) ¤");
-			dList.add("¤#,##0.###;¤(-#,##0.###)");
-			dList.add("¤#,##0.###;¤(#,##0.###-)");
+			dList.add("¤#,##0.###;¤-##0.###"); //$NON-NLS-1$
+			dList.add("#,##0.### ¤;#,##0.###- ¤"); //$NON-NLS-1$
+			dList.add("#,##0.### ¤;(#,##0.###) ¤"); //$NON-NLS-1$
+			dList.add("¤#,##0.###;¤(-#,##0.###)"); //$NON-NLS-1$
+			dList.add("¤#,##0.###;¤(#,##0.###-)"); //$NON-NLS-1$
 			setPattern(dList.get(0));
 		}
 		return dList;

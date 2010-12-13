@@ -43,7 +43,7 @@ public class MPageXofY extends MTextField {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("pagexofy");
+			iconDescriptor = new NodeIconDescriptor("pagexofy"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

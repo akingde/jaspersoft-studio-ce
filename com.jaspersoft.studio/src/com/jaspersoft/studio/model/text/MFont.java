@@ -56,67 +56,67 @@ public class MFont extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_NAME,
-				"Font Name", ModelUtils.getFontNames(), NullEnum.INHERITED);
-		fontNameD.setDescription("Name of the font.");
+				Messages.MFont_font_name, ModelUtils.getFontNames(), NullEnum.INHERITED);
+		fontNameD.setDescription(Messages.MFont_font_name_description);
 		desc.add(fontNameD);
 
 		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_SIZE,
-				"Font Size", ModelUtils.getFontSizes(), NullEnum.INHERITED);
-		fontSizeD.setDescription("Size of the font.");
+				Messages.MFont_font_size, ModelUtils.getFontSizes(), NullEnum.INHERITED);
+		fontSizeD.setDescription(Messages.MFont_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
 
 		RWComboBoxPropertyDescriptor pdfFontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_FONT_NAME,
-				"PDF Font Name", ModelUtils.getPDFFontNames(), NullEnum.INHERITED);
-		pdfFontNameD.setDescription("Name of the PDF font.");
+				Messages.MFont_pdf_font_name, ModelUtils.getPDFFontNames(), NullEnum.INHERITED);
+		pdfFontNameD.setDescription(Messages.MFont_pdf_font_name_description);
 		desc.add(pdfFontNameD);
 
 		RWComboBoxPropertyDescriptor pdfEncodingD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_ENCODING,
-				"PDF Encoding", ModelUtils.getPDFEncodings(), NullEnum.INHERITED);
-		pdfEncodingD.setDescription("PDF encoding.");
+				Messages.MFont_pdf_encoding, ModelUtils.getPDFEncodings(), NullEnum.INHERITED);
+		pdfEncodingD.setDescription(Messages.MFont_pdf_encoding_description);
 		desc.add(pdfEncodingD);
 
-		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_BOLD, "Bold",
+		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_BOLD, Messages.MFont_bold,
 				NullEnum.INHERITED);
-		boldD.setDescription("Flag indicating if the font is bold.");
+		boldD.setDescription(Messages.MFont_bold_description);
 		desc.add(boldD);
 
-		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_ITALIC, "Italic",
+		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_ITALIC, Messages.MFont_italic,
 				NullEnum.INHERITED);
-		italicD.setDescription("Flag indicating if the font is italic.");
+		italicD.setDescription(Messages.MFont_italic_description);
 		desc.add(italicD);
 
-		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_UNDERLINE, "Underline",
+		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_UNDERLINE, Messages.MFont_underline,
 				NullEnum.INHERITED);
-		underlineD.setDescription("Flag indicating if the font is underlined.");
+		underlineD.setDescription(Messages.MFont_underline_description);
 		desc.add(underlineD);
 
 		CheckBoxPropertyDescriptor strikeTroughD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_STRIKE_THROUGH,
-				"Strike Through", NullEnum.INHERITED);
-		strikeTroughD.setDescription("Flag indicating if the font is strikethrough.");
+				Messages.MFont_strike_trough, NullEnum.INHERITED);
+		strikeTroughD.setDescription(Messages.MFont_strike_trough_description);
 		desc.add(strikeTroughD);
 
 		CheckBoxPropertyDescriptor pdfEmbedD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_PDF_EMBEDDED,
-				"PDF Embedded", NullEnum.INHERITED);
-		pdfEmbedD.setDescription("PDF embedded.");
+				Messages.MFont_pdf_embedded, NullEnum.INHERITED);
+		pdfEmbedD.setDescription(Messages.MFont_pdf_embedded_description);
 		desc.add(pdfEmbedD);
 
 		defaultsMap.put(JRBaseFont.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
 		defaultsMap.put(JRBaseFont.PROPERTY_UNDERLINE, Boolean.FALSE);
 		defaultsMap.put(JRBaseFont.PROPERTY_ITALIC, Boolean.FALSE);
 		defaultsMap.put(JRBaseFont.PROPERTY_BOLD, Boolean.FALSE);
-		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, "SansSerif");
-		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, "10");
+		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
+		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
 
-		fontNameD.setCategory("Font");
-		fontSizeD.setCategory("Font");
-		pdfFontNameD.setCategory("Font");
-		pdfEncodingD.setCategory("Font");
-		boldD.setCategory("Font");
-		italicD.setCategory("Font");
-		underlineD.setCategory("Font");
-		strikeTroughD.setCategory("Font");
-		pdfEmbedD.setCategory("Font");
+		fontNameD.setCategory(Messages.MFont_font_category);
+		fontSizeD.setCategory(Messages.MFont_font_category);
+		pdfFontNameD.setCategory(Messages.MFont_font_category);
+		pdfEncodingD.setCategory(Messages.MFont_font_category);
+		boldD.setCategory(Messages.MFont_font_category);
+		italicD.setCategory(Messages.MFont_font_category);
+		underlineD.setCategory(Messages.MFont_font_category);
+		strikeTroughD.setCategory(Messages.MFont_font_category);
+		pdfEmbedD.setCategory(Messages.MFont_font_category);
 
 	}
 
@@ -163,7 +163,7 @@ public class MFont extends APropertyNode {
 		if (id.equals(JRBaseFont.PROPERTY_PDF_ENCODING))
 			return ModelUtils.getKey4PDFEncoding(jrElement.getOwnPdfEncoding());
 		if (id.equals(JRBaseFont.PROPERTY_FONT_SIZE))
-			return jrElement.getOwnFontSize() != null ? jrElement.getOwnFontSize().toString() : "";
+			return jrElement.getOwnFontSize() != null ? jrElement.getOwnFontSize().toString() : ""; //$NON-NLS-1$
 		return null;
 	}
 

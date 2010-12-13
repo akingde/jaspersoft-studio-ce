@@ -44,17 +44,17 @@ public class MQuery extends APropertyNode implements IPropertySource {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// pen
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRDesignQuery.PROPERTY_TEXT, "Text");
-		textD.setDescription("Query text");
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRDesignQuery.PROPERTY_TEXT, Messages.MQuery_text);
+		textD.setDescription(Messages.MQuery_text_description);
 		desc.add(textD);
 
 		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JRDesignQuery.PROPERTY_LANGUAGE,
-				"Language", ModelUtils.getQueryLanguages(), NullEnum.NOTNULL);
-		languageD.setDescription("Specifies the query language. ");
-		languageD.setCategory("Report");
+				Messages.MQuery_language, ModelUtils.getQueryLanguages(), NullEnum.NOTNULL);
+		languageD.setDescription(Messages.MQuery_language_description);
+		languageD.setCategory(Messages.MQuery_report_category);
 		desc.add(languageD);
 
-		defaultsMap.put(JRDesignQuery.PROPERTY_LANGUAGE, "SQL");
+		defaultsMap.put(JRDesignQuery.PROPERTY_LANGUAGE, "SQL"); //$NON-NLS-1$
 	}
 
 	private static IPropertyDescriptor[] descriptors;

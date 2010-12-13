@@ -66,7 +66,7 @@ public class ColorsSection extends AbstractSection {
 		GridLayout layout = new GridLayout(6, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "BackColor:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.ColorsSection_backcolor+":", SWT.RIGHT); //$NON-NLS-2$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -75,34 +75,34 @@ public class ColorsSection extends AbstractSection {
 		backButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(composite.getShell());
-				cd.setText("Element BackColor");
+				cd.setText(Messages.ColorsSection_element_backcolor);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBaseStyle.PROPERTY_BACKCOLOR));
 				RGB newColor = cd.open();
 				changeProperty(JRBaseStyle.PROPERTY_BACKCOLOR, newColor);
 			}
 		});
-		backButton.setToolTipText("Element backcolor");
+		backButton.setToolTipText(Messages.ColorsSection_element_backcolor_tool_tip);
 		gd = new GridData();
 		gd.widthHint = 30;
 		backButton.setLayoutData(gd);
-		getWidgetFactory().createCLabel(composite, "ForeColor:", SWT.RIGHT);
+		getWidgetFactory().createCLabel(composite, Messages.ColorsSection_forecolor+":", SWT.RIGHT); //$NON-NLS-2$
 
 		foreButton = new Button(composite, SWT.FLAT);
 		foreButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(composite.getShell());
-				cd.setText("Element ForeColor");
+				cd.setText(Messages.ColorsSection_element_forecolor);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBaseStyle.PROPERTY_FORECOLOR));
 				RGB newColor = cd.open();
 				changeProperty(JRBaseStyle.PROPERTY_FORECOLOR, newColor);
 			}
 		});
-		foreButton.setToolTipText("Element forecolor");
+		foreButton.setToolTipText(Messages.ColorsSection_element_forecolor_tool_tip);
 		gd = new GridData();
 		gd.widthHint = 30;
 		foreButton.setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(composite, "Transparency:");
+		getWidgetFactory().createCLabel(composite, Messages.ColorsSection_transparency+":"); //$NON-NLS-2$
 		modeType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		modeType.setItems(EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
 		modeType.addSelectionListener(new SelectionListener() {
@@ -114,7 +114,7 @@ public class ColorsSection extends AbstractSection {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		modeType.setToolTipText("Specifies whether the background of an object is transparent or opaque.");
+		modeType.setToolTipText(Messages.ColorsSection_transparency_tool_tip);
 	}
 
 	/**

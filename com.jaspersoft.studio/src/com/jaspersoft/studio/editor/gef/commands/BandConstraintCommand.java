@@ -53,7 +53,7 @@ public class BandConstraintCommand extends Command {
 		this.newBounds = constraint;
 		this.oldBounds = new Rectangle(editPart.getFigure().getBounds());
 		this.newBounds.setSize( oldBounds.getSize());
-		setLabel("Band resized");
+		setLabel(Messages.BandConstraintCommand_band_resized);
 	}
 
 	/* (non-Javadoc)

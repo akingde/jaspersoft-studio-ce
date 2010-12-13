@@ -47,7 +47,7 @@ public class JDContainerEditPolicy extends ContainerEditPolicy {
 	 */
 	public Command getOrphanChildrenCommand(GroupRequest request) {
 		List<?> parts = request.getEditParts();
-		CompoundCommand result = new CompoundCommand("orphans");
+		CompoundCommand result = new CompoundCommand("orphans"); //$NON-NLS-1$
 		for (int i = 0; i < parts.size(); i++) {
 			result.add(OutlineTreeEditPartFactory.getOrphanCommand((ANode) getHost().getModel(), (ANode) ((EditPart) parts
 					.get(i)).getModel()));

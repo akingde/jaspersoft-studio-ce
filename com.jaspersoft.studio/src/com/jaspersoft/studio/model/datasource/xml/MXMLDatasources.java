@@ -37,7 +37,7 @@ public class MXMLDatasources extends ANode implements IDatasource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasources.xml");
+			iconDescriptor = new NodeIconDescriptor("datasources.xml"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

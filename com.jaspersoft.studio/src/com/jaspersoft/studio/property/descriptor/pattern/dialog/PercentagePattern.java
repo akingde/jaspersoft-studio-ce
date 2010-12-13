@@ -32,18 +32,18 @@ public class PercentagePattern extends NumericPattern {
 
 	public PercentagePattern(Composite parent) {
 		super(parent, NumberFormat.getPercentInstance());
-		setDescription("Percent format multiplies numerical values by 100 and displays the result \nwith a percent symbol.");
+		setDescription(Messages.PercentagePattern_description);
 	}
 
 	@Override
 	protected java.util.List<String> getDefaults() {
 		if (dList == null) {
 			dList = new ArrayList<String>();
-			dList.add("#,##0.### %");
-			dList.add("#,##0.### \u2030");
-			dList.add("#,##0.### %;(#,##0.###) %");
-			dList.add("#,##0.### %;(-#,##0.###) %");
-			dList.add("#,##0.### %;(#,##0.###-) %");
+			dList.add("#,##0.### %"); //$NON-NLS-1$
+			dList.add("#,##0.### \u2030"); //$NON-NLS-1$
+			dList.add("#,##0.### %;(#,##0.###) %"); //$NON-NLS-1$
+			dList.add("#,##0.### %;(-#,##0.###) %"); //$NON-NLS-1$
+			dList.add("#,##0.### %;(#,##0.###-) %"); //$NON-NLS-1$
 			setPattern(dList.get(0));
 		}
 		return dList;

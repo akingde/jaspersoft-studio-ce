@@ -80,13 +80,13 @@ public abstract class AMDatasource extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(PROPERTY_NAME, "Datasource Name");
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(PROPERTY_NAME, Messages.AMDatasource_datasource_name);
 		desc.add(textD);
 
 		defaultsMap.put(PROPERTY_NAME, RepositoryManager.checkDataSourceName("DataSource"));
 	}
 
-	public static final String PROPERTY_NAME = "PROPERTY_NAME";
+	public static final String PROPERTY_NAME = "PROPERTY_NAME"; //$NON-NLS-1$
 	private String name;
 
 	public Object getPropertyValue(Object id) {
@@ -124,8 +124,8 @@ public abstract class AMDatasource extends APropertyNode {
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 		// DOMImplementation impl = docBuilder.getDOMImplementation();
 		Document doc = docBuilder.newDocument();// new DocumentImpl();
-		Element root = doc.createElement("DATASOURCE");
-		root.setAttributeNS(null, "type", this.getClass().getName());
+		Element root = doc.createElement("DATASOURCE"); //$NON-NLS-1$
+		root.setAttributeNS(null, "type", this.getClass().getName()); //$NON-NLS-1$
 
 		IPropertyDescriptor[] desc = getPropertyDescriptors();
 		for (int i = 0; i < desc.length; i++) {
@@ -143,9 +143,9 @@ public abstract class AMDatasource extends APropertyNode {
 
 		StringWriter out = new StringWriter();
 		Transformer serializer = TransformerFactory.newInstance().newTransformer();
-		serializer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
-		serializer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+		serializer.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1"); //$NON-NLS-1$
+		serializer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); //$NON-NLS-1$
+		serializer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
 		serializer.transform(new DOMSource(doc), new StreamResult(out));
 		String res = out.toString();
 		return res;

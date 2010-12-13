@@ -77,7 +77,7 @@ public class JRPropertyPage extends WizardPage {
 			case 1:
 				return ((PropertyDTO) element).getValue();
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 
@@ -95,7 +95,7 @@ public class JRPropertyPage extends WizardPage {
 	 * Displays the help
 	 */
 	public void performHelp() {
-		getShell().setData(WorkbenchHelpSystem.HELP_KEY, "ch.sahits.tutorial.help.firsthelp");
+		getShell().setData(WorkbenchHelpSystem.HELP_KEY, "ch.sahits.tutorial.help.firsthelp"); //$NON-NLS-1$
 
 		// PlatformUI.getWorkbench().getHelpSystem().displayHelp();//displayDynamicHelp();//
 		// displayHelp("net.sf.jasperreports.doc");
@@ -107,7 +107,7 @@ public class JRPropertyPage extends WizardPage {
 		value = new JRPropertiesMap();
 		List<PropertyDTO> props = (List<PropertyDTO>) tableViewer.getInput();
 		for (PropertyDTO p : props) {
-			if (p.getProperty() != null && !p.getProperty().equals(""))
+			if (p.getProperty() != null && !p.getProperty().equals("")) //$NON-NLS-1$
 				value.setProperty(p.getProperty(), p.getValue());
 		}
 		super.dispose();
@@ -124,8 +124,8 @@ public class JRPropertyPage extends WizardPage {
 
 	protected JRPropertyPage(String pageName) {
 		super(pageName);
-		setTitle("Properties");
-		setDescription("Properties.");
+		setTitle(Messages.JRPropertyPage_properties);
+		setDescription(Messages.JRPropertyPage_description);
 
 	}
 
@@ -148,7 +148,7 @@ public class JRPropertyPage extends WizardPage {
 		table.setLayoutData(gd);
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText("&add");
+		addB.setText(Messages.JRPropertyPage_add);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		addB.setLayoutData(gridData);
@@ -170,7 +170,7 @@ public class JRPropertyPage extends WizardPage {
 		});
 
 		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText("&delete");
+		delB.setText("&delete"); //$NON-NLS-1$
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		delB.setLayoutData(gridData);
@@ -195,7 +195,7 @@ public class JRPropertyPage extends WizardPage {
 					tableViewer.setSelection(new StructuredSelection(sp));
 					cursor.setSelection(table.getSelectionIndex(), 0);
 				} else
-					setMessage("Table is empty");
+					setMessage(Messages.JRPropertyPage_table_is_empty);
 			}
 		});
 	}
@@ -273,10 +273,10 @@ public class JRPropertyPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Name");
+		column[0].setText(Messages.JRPropertyPage_name);
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Value");
+		column[1].setText(Messages.JRPropertyPage_value);
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++) {
@@ -327,22 +327,22 @@ public class JRPropertyPage extends WizardPage {
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
-				if (property.equals("VALUE"))
+				if (property.equals("VALUE")) //$NON-NLS-1$
 					return true;
-				if (property.equals("NAME"))
+				if (property.equals("NAME")) //$NON-NLS-1$
 					return true;
 				return false;
 			}
 
 			public Object getValue(Object element, String property) {
 				PropertyDTO prop = (PropertyDTO) element;
-				if ("VALUE".equals(property))
+				if ("VALUE".equals(property)) //$NON-NLS-1$
 					return prop.getValue();
 
-				if ("NAME".equals(property)) {
+				if ("NAME".equals(property)) { //$NON-NLS-1$
 					return prop.getProperty();
 				}
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 			public void modify(Object element, String property, Object value) {
@@ -350,10 +350,10 @@ public class JRPropertyPage extends WizardPage {
 				setErrorMessage(null);
 				setMessage(getDescription(tableItem));
 				PropertyDTO data = (PropertyDTO) tableItem.getData();
-				if ("VALUE".equals(property)) {
+				if ("VALUE".equals(property)) { //$NON-NLS-1$
 					data.setValue((String) value);
 				}
-				if ("NAME".equals(property)) {
+				if ("NAME".equals(property)) { //$NON-NLS-1$
 					List<PropertyDTO> plist = (List<PropertyDTO>) tableViewer.getInput();
 					for (PropertyDTO p : plist) {
 						if (p != data && p.getProperty() != null && p.getProperty().equals(value)) {
@@ -385,7 +385,7 @@ public class JRPropertyPage extends WizardPage {
 		};
 
 		viewer.setCellEditors(new CellEditor[] { comboBoxCellEditor, new TextCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE" });
+		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private void fillTable(Table table) {
@@ -408,7 +408,7 @@ public class JRPropertyPage extends WizardPage {
 				switch (event.type) {
 				case SWT.MouseDown:
 					Event e = new Event();
-					e.item = (TableItem) label.getData("_TABLEITEM");
+					e.item = (TableItem) label.getData("_TABLEITEM"); //$NON-NLS-1$
 					// Assuming table is single select, set the selection as if
 					// the mouse down event went through to the table
 					table.setSelection(new TableItem[] { (TableItem) e.item });
@@ -441,7 +441,7 @@ public class JRPropertyPage extends WizardPage {
 				case SWT.MouseHover: {
 					TableItem item = table.getItem(new Point(event.x, event.y));
 					String description = getDescription(item);
-					if (item != null && !description.equals("")) {
+					if (item != null && !description.equals("")) { //$NON-NLS-1$
 
 						if (tip != null && !tip.isDisposed())
 							tip.dispose();
@@ -450,7 +450,7 @@ public class JRPropertyPage extends WizardPage {
 						label = new Label(tip, SWT.NONE);
 						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-						label.setData("_TABLEITEM", item);
+						label.setData("_TABLEITEM", item); //$NON-NLS-1$
 
 						label.setText(description);
 						label.addListener(SWT.MouseExit, labelListener);
@@ -487,7 +487,7 @@ public class JRPropertyPage extends WizardPage {
 				isDTO = true;
 			}
 		}
-		l.add(0, isDTO ? "" : dto);
+		l.add(0, isDTO ? "" : dto); //$NON-NLS-1$
 		// default - exclude existing
 		return l.toArray(new String[l.size()]);
 	}
@@ -514,6 +514,6 @@ public class JRPropertyPage extends WizardPage {
 			if (p.getProperty().equals(key))
 				return p.getDescription();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }

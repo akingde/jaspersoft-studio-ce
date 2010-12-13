@@ -57,7 +57,7 @@ public class MGenericElement extends MGraphicElement {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("generic");
+			iconDescriptor = new NodeIconDescriptor("generic"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -143,42 +143,42 @@ public class MGenericElement extends MGraphicElement {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
-				JRDesignGenericElement.PROPERTY_EVALUATION_TIME, "Evaluation Time", EnumHelper.getEnumNames(
+				JRDesignGenericElement.PROPERTY_EVALUATION_TIME, Messages.MGenericElement_evaluation_time, EnumHelper.getEnumNames(
 						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
-		evaluationTimeD.setDescription("When the element expression should be evaluated.");
+		evaluationTimeD.setDescription(Messages.MGenericElement_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
 		evaluationGroupNameD = new RComboBoxPropertyDescriptor(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME,
-				"Evaluation Group Name", new String[] { "" });
-		evaluationGroupNameD.setDescription("The element will be evaluated when the specified group changes.");
+				Messages.MGenericElement_evaluation_group_name, new String[] { "" }); //$NON-NLS-2$
+		evaluationGroupNameD.setDescription(Messages.MGenericElement_evaluation_group_name_description);
 		desc.add(evaluationGroupNameD);
 
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignGenericElement.PROPERTY_GENERIC_TYPE
-				+ PROPERTY_NAME, "Generic Type Name");
-		nameD.setDescription("Generic type name.");
+				+ PROPERTY_NAME, Messages.MGenericElement_generic_type_name);
+		nameD.setDescription(Messages.MGenericElement_generic_type_name_description);
 		desc.add(nameD);
 
 		NTextPropertyDescriptor nameSpaceD = new NTextPropertyDescriptor(JRDesignGenericElement.PROPERTY_GENERIC_TYPE
-				+ PROPERTY_NAMESPACE, "Generic Type Namespace");
-		nameSpaceD.setDescription("Generic type namespace.");
+				+ PROPERTY_NAMESPACE, Messages.MGenericElement_generic_type_namespace);
+		nameSpaceD.setDescription(Messages.MGenericElement_generic_type_namespace_description);
 		desc.add(nameSpaceD);
 
 		ParameterPropertyDescriptor parametersD = new ParameterPropertyDescriptor(
-				JRDesignGenericElement.PROPERTY_PARAMETERS, "Parameters");
-		parametersD.setDescription("The datasource expression.");
+				JRDesignGenericElement.PROPERTY_PARAMETERS, Messages.MGenericElement_parameters);
+		parametersD.setDescription(Messages.MGenericElement_parameters_description);
 		desc.add(parametersD);
 
-		parametersD.setCategory("GenericElement Properties");
-		nameD.setCategory("GenericElement Properties");
-		nameSpaceD.setCategory("GenericElement Properties");
-		evaluationTimeD.setCategory("GenericElement Properties");
-		evaluationGroupNameD.setCategory("GenericElement Properties");
+		parametersD.setCategory(Messages.MGenericElement_properties_category);
+		nameD.setCategory(Messages.MGenericElement_properties_category);
+		nameSpaceD.setCategory(Messages.MGenericElement_properties_category);
+		evaluationTimeD.setCategory(Messages.MGenericElement_properties_category);
+		evaluationGroupNameD.setCategory(Messages.MGenericElement_properties_category);
 
 		defaultsMap.put(JRDesignGenericElement.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}
 
-	public static final String PROPERTY_NAME = "NAME";
-	public static final String PROPERTY_NAMESPACE = "NAMESPACE";
+	public static final String PROPERTY_NAME = "NAME"; //$NON-NLS-1$
+	public static final String PROPERTY_NAMESPACE = "NAMESPACE"; //$NON-NLS-1$
 	private ParameterDTO propertyDTO;
 
 	@Override

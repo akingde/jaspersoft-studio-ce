@@ -58,7 +58,7 @@ public class ReorderScriptletCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderScriptletCommand(MScriptlet child, MScriptlets parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderScriptletCommand_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDataset = (JRDesignDataset) parent.getValue();

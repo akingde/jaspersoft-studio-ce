@@ -61,14 +61,14 @@ public class PageSizeSection extends AbstractSection {
 		GridLayout layout = new GridLayout(5, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Page Size:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.PageSizeSection_page_size+":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
 		width = new Spinner(composite, SWT.BORDER);
 		width.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		width.setToolTipText("width");
+		width.setToolTipText(Messages.PageSizeSection_width_tool_tip);
 		width.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_PAGE_WIDTH, new Integer(width.getSelection()));
@@ -77,7 +77,7 @@ public class PageSizeSection extends AbstractSection {
 
 		height = new Spinner(composite, SWT.BORDER);
 		height.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		height.setToolTipText("height");
+		height.setToolTipText(Messages.PageSizeSection_height_tool_tip);
 		height.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_PAGE_HEIGHT, new Integer(height.getSelection()));
@@ -90,9 +90,9 @@ public class PageSizeSection extends AbstractSection {
 				changeProperty(JasperDesign.PROPERTY_ORIENTATION, OrientationEnum.PORTRAIT);
 			}
 		});
-		portraitButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/portrait16.png"));
-		portraitButton.setText("Portrait");
-		portraitButton.setToolTipText("Portrait");
+		portraitButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/portrait16.png")); //$NON-NLS-1$
+		portraitButton.setText(Messages.PageSizeSection_portrait);
+		portraitButton.setToolTipText(Messages.PageSizeSection_portrait_tool_tip);
 
 		landscapeButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
 		landscapeButton.addSelectionListener(new SelectionAdapter() {
@@ -100,9 +100,9 @@ public class PageSizeSection extends AbstractSection {
 				changeProperty(JasperDesign.PROPERTY_ORIENTATION, OrientationEnum.LANDSCAPE);
 			}
 		});
-		landscapeButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/landscape16.png"));
-		landscapeButton.setText("Landscape");
-		landscapeButton.setToolTipText("Landscape");
+		landscapeButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/landscape16.png")); //$NON-NLS-1$
+		landscapeButton.setText(Messages.PageSizeSection_landscape);
+		landscapeButton.setToolTipText(Messages.PageSizeSection_landscape_tool_tip);
 	}
 
 	/**

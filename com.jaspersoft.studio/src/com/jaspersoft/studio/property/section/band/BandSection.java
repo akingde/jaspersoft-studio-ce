@@ -61,14 +61,14 @@ public class BandSection extends AbstractSection {
 		GridLayout layout = new GridLayout(5, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, "Height:", SWT.RIGHT);
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.BandSection_height+":", SWT.RIGHT); //$NON-NLS-2$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
 		height = new Spinner(composite, SWT.BORDER);
 		height.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		height.setToolTipText("height");
+		height.setToolTipText(Messages.BandSection_height_tool_tip);
 
 		height.addModifyListener(new ModifyListener() {
 
@@ -77,11 +77,11 @@ public class BandSection extends AbstractSection {
 			}
 		});
 
-		getWidgetFactory().createCLabel(composite, "Split Type:", SWT.RIGHT);
+		getWidgetFactory().createCLabel(composite, Messages.BandSection_split_type+":", SWT.RIGHT); //$NON-NLS-2$
 
 		splitType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		splitType.setItems(EnumHelper.getEnumNames(SplitTypeEnum.values(), NullEnum.NULL));
-		splitType.setToolTipText("Split type.");
+		splitType.setToolTipText(Messages.BandSection_split_type_tool_tip);
 		splitType.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

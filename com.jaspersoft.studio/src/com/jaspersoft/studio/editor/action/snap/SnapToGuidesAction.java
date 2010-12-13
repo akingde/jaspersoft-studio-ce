@@ -27,14 +27,14 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.action.Action;
 
 public class SnapToGuidesAction extends Action {
-	public static final String ID = "PROPERTY_SNAP_TO_GUIDES_ENABLED";
+	public static final String ID = "PROPERTY_SNAP_TO_GUIDES_ENABLED"; //$NON-NLS-1$
 	private GraphicalViewer diagramViewer;
 
 	public SnapToGuidesAction(GraphicalViewer diagramViewer) {
-		super("Show Grid", AS_CHECK_BOX);
+		super(Messages.SnapToGuidesAction_show_grid, AS_CHECK_BOX);
 		this.diagramViewer = diagramViewer;
-		setText("Show Grid");
-		setToolTipText("Show Grid");
+		setText(Messages.SnapToGuidesAction_show_grid);
+		setToolTipText(Messages.SnapToGuidesAction_show_grid_tool_tip);
 		setId(ID);
 		setActionDefinitionId(ID);
 		setChecked(isChecked());

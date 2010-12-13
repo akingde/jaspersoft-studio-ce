@@ -146,7 +146,7 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 			((JRDesignFrame) jrGroup).addElement(index, tfPageNumber);
 		// CREATE STATIC FIELD SEPARATOR
 		JRDesignStaticText tfStaticText = new JRDesignStaticText(jrDesign);
-		tfStaticText.setText("/");
+		tfStaticText.setText("/"); //$NON-NLS-1$
 		tfStaticText.setHorizontalAlignment(HorizontalAlignEnum.CENTER);
 		tfStaticText.setX(location.x + tfPageNumber.getWidth());
 		tfStaticText.setY(location.y);

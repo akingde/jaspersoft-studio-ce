@@ -40,9 +40,9 @@ public class XMLDatasourcePage extends AFileDatasourcePage {
 	private WTimeZone timezoneC;
 
 	protected XMLDatasourcePage() {
-		super("xmldatasourceeditor");
-		setTitle("XML Datasource");
-		setDescription("Creates a XML datasource.");
+		super("xmldatasourceeditor"); //$NON-NLS-1$
+		setTitle(Messages.XMLDatasourcePage_xml_datasource);
+		setDescription(Messages.XMLDatasourcePage_description);
 	}
 
 	@Override
@@ -59,19 +59,19 @@ public class XMLDatasourcePage extends AFileDatasourcePage {
 		super.createMoreControls(parent);
 
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("XPath Select:");
+		lbl1.setText(Messages.XMLDatasourcePage_xpath_select+":"); //$NON-NLS-1$
 
 		xpathselectTXT = new Text(parent, SWT.BORDER);
 		xpathselectTXT.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("XPath TimeZone:");
+		lbl1.setText(Messages.XMLDatasourcePage_xpath_timezone+":"); //$NON-NLS-1$
 
 		timezoneC = new WTimeZone(parent, SWT.DROP_DOWN | SWT.BORDER);
 		timezoneC.setSelection(TimeZone.getDefault());
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("XPath Locale:");
+		lbl1.setText(Messages.XMLDatasourcePage_xpath_locale+":"); //$NON-NLS-1$
 
 		localeC = new WLocale(parent, SWT.DROP_DOWN | SWT.BORDER);
 		localeC.setSelection(Locale.getDefault());
@@ -84,7 +84,7 @@ public class XMLDatasourcePage extends AFileDatasourcePage {
 		if (value != null) {
 			String dsName = (String) value.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			xpathselectTXT.setText(dsName);
 			try {
 				Locale locale = (Locale) value.getPropertyValue(MXMLDataSource.PROPERTY_XPATHLOCALE);
@@ -104,7 +104,7 @@ public class XMLDatasourcePage extends AFileDatasourcePage {
 
 	@Override
 	protected String[] getFilterExt() {
-		return new String[] { "*.xml", "*.*" };
+		return new String[] { "*.xml", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

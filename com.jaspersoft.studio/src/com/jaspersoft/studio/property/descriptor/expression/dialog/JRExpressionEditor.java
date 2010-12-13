@@ -41,12 +41,12 @@ public class JRExpressionEditor extends Wizard {
 
 	public JRExpressionEditor() {
 		super();
-		setWindowTitle("Expression Editor");
+		setWindowTitle(Messages.JRExpressionEditor_expression_editor);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new JRExpressionPage("jrquery.editor");
+		page0 = new JRExpressionPage("jrquery.editor"); //$NON-NLS-1$
 		page0.setValue(mExpression);
 		addPage(page0);
 	}

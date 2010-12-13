@@ -95,7 +95,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("report");
+			iconDescriptor = new NodeIconDescriptor("report"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -150,133 +150,133 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JasperDesign.PROPERTY_NAME, "Report Name");
-		nameD.setDescription("Name of the report.");
-		nameD.setCategory("Report");
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JasperDesign.PROPERTY_NAME, Messages.MReport_report_name);
+		nameD.setDescription(Messages.MReport_report_name_description);
+		nameD.setCategory(Messages.MReport_report_category);
 		desc.add(nameD);
 
 		NClassTypePropertyDescriptor formatFactoryClassD = new NClassTypePropertyDescriptor(
-				JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS, "Format Factory Class");
+				JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS, Messages.MReport_format_factory_class);
 		formatFactoryClassD
-				.setDescription("Specifies the name of the class implementing the net.sf.jasperreports.engine.util.FormatFactory interface to use with this report. If omitted, an instance of net.sf.jasperreports.engine.util.DefaultFormatFactory will be created.");
+				.setDescription(Messages.MReport_format_factory_class_description);
 		desc.add(formatFactoryClassD);
 
 		ImportDeclarationPropertyDescriptor importsD = new ImportDeclarationPropertyDescriptor(
-				JasperDesign.PROPERTY_IMPORTS, "Imports");
+				JasperDesign.PROPERTY_IMPORTS, Messages.MReport_imports);
 		importsD
-				.setDescription("Translates into an import statement inside the expression class order to eliminate the need to use complete class names in the report expressions.");
+				.setDescription(Messages.MReport_imports_description);
 		desc.add(importsD);
 
 		// main dataset
-		PropertyDescriptor datasetD = new PropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET, "Main Dataset");
-		datasetD.setDescription("Main dataset for the report.");
+		PropertyDescriptor datasetD = new PropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET, Messages.MReport_main_dataset);
+		datasetD.setDescription(Messages.MReport_main_dataset_description);
 		desc.add(datasetD);
 
 		// -------------------
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT, "Page Height");
-		heightD.setDescription("Page height.");
-		heightD.setCategory("Report Page");
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT, Messages.MReport_page_height);
+		heightD.setDescription(Messages.MReport_page_height_description);
+		heightD.setCategory(Messages.MReport_report_page_category);
 		desc.add(heightD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_WIDTH, "Page Width");
-		widthD.setDescription("Page width.");
-		widthD.setCategory("Report Page");
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_WIDTH, Messages.MReport_page_width);
+		widthD.setDescription(Messages.MReport_page_width_description);
+		widthD.setCategory(Messages.MReport_report_page_category);
 		desc.add(widthD);
 
 		IntegerPropertyDescriptor rightMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_RIGHT_MARGIN,
-				"Right Margin");
-		rightMarginD.setDescription("Right margin.");
-		rightMarginD.setCategory("Report Page");
+				Messages.MReport_right_margin);
+		rightMarginD.setDescription(Messages.MReport_right_margin_description);
+		rightMarginD.setCategory(Messages.MReport_report_page_category);
 		desc.add(rightMarginD);
 
 		IntegerPropertyDescriptor leftMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_LEFT_MARGIN,
-				"Left Margin");
-		leftMarginD.setDescription("Left margin.");
-		leftMarginD.setCategory("Report Page");
+				Messages.MReport_left_margin);
+		leftMarginD.setDescription(Messages.MReport_left_margin_description);
+		leftMarginD.setCategory(Messages.MReport_report_page_category);
 		desc.add(leftMarginD);
 
-		IntegerPropertyDescriptor topMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_TOP_MARGIN, "Top margin");
-		topMarginD.setDescription("Top Margin.");
-		topMarginD.setCategory("Report Page");
+		IntegerPropertyDescriptor topMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_TOP_MARGIN, Messages.MReport_top_margin);
+		topMarginD.setDescription(Messages.MReport_top_margin_description);
+		topMarginD.setCategory(Messages.MReport_report_page_category);
 		desc.add(topMarginD);
 
 		IntegerPropertyDescriptor bottomMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_BOTTOM_MARGIN,
-				"Bottom Margin");
-		bottomMarginD.setDescription("Bottom margin.");
-		bottomMarginD.setCategory("Report Page");
+				Messages.MReport_bottom_margin);
+		bottomMarginD.setDescription(Messages.MReport_bottom_margin_description);
+		bottomMarginD.setCategory(Messages.MReport_report_page_category);
 		desc.add(bottomMarginD);
 
 		IntegerPropertyDescriptor columnCountD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_COLUMN_COUNT,
-				"Column Count");
-		columnCountD.setDescription("Number of columns on the report.");
-		columnCountD.setCategory("Columns");
+				Messages.MReport_column_count);
+		columnCountD.setDescription(Messages.MReport_column_count_description);
+		columnCountD.setCategory(Messages.MReport_columns_category);
 		desc.add(columnCountD);
 
 		IntegerPropertyDescriptor columnWidthD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_COLUMN_WIDTH,
-				"Column Width");
-		columnWidthD.setDescription("Column width.");
-		columnWidthD.setCategory("Columns");
+				Messages.MReport_column_width);
+		columnWidthD.setDescription(Messages.MReport_column_width_description);
+		columnWidthD.setCategory(Messages.MReport_columns_category);
 		desc.add(columnWidthD);
 
 		IntegerPropertyDescriptor columnSpaceD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_COLUMN_SPACING,
-				"Column Space");
-		columnSpaceD.setDescription("Space between columns.");
-		columnSpaceD.setCategory("Columns");
+				Messages.MReport_column_space);
+		columnSpaceD.setDescription(Messages.MReport_column_space_description);
+		columnSpaceD.setCategory(Messages.MReport_columns_category);
 		desc.add(columnSpaceD);
 
 		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
-				"Language", new String[] { "", "Java", "Groovy", "JavaScript", "bsh" }, NullEnum.NOTNULL);
-		languageD.setDescription("Specifies the language used for the report expressions.");
-		languageD.setCategory("Report");
+				Messages.MReport_language, new String[] { "", "Java", "Groovy", "JavaScript", "bsh" }, NullEnum.NOTNULL); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+		languageD.setDescription(Messages.MReport_language_description);
+		languageD.setCategory(Messages.MReport_report_category);
 		desc.add(languageD);
 
 		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_ORIENTATION,
-				"Page Orientation", EnumHelper.getEnumNames(OrientationEnum.values(), NullEnum.NOTNULL));
-		orientationD.setDescription("Page printing orientation");
-		orientationD.setCategory("Report Page");
+				Messages.MReport_page_orientation, EnumHelper.getEnumNames(OrientationEnum.values(), NullEnum.NOTNULL));
+		orientationD.setDescription(Messages.MReport_page_orientation_description);
+		orientationD.setCategory(Messages.MReport_report_page_category);
 		desc.add(orientationD);
 
 		ComboBoxPropertyDescriptor printOrderD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_PRINT_ORDER,
-				"Print Order", EnumHelper.getEnumNames(PrintOrderEnum.values(), NullEnum.NULL));
-		printOrderD.setDescription("Columns filling order.");
-		printOrderD.setCategory("Columns");
+				Messages.MReport_print_order, EnumHelper.getEnumNames(PrintOrderEnum.values(), NullEnum.NULL));
+		printOrderD.setDescription(Messages.MReport_print_order_description);
+		printOrderD.setCategory(Messages.MReport_columns_category);
 		desc.add(printOrderD);
 
 		ComboBoxPropertyDescriptor whenNoDataD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
-				"When No Data Type", EnumHelper.getEnumNames(WhenNoDataTypeEnum.values(), NullEnum.NULL));
+				Messages.MReport_when_no_data_type, EnumHelper.getEnumNames(WhenNoDataTypeEnum.values(), NullEnum.NULL));
 		whenNoDataD
-				.setDescription("Allows users to customize the behavior of the reporting engine when there are now rows in the data source.");
-		whenNoDataD.setCategory("Report");
+				.setDescription(Messages.MReport_when_no_data_type_description);
+		whenNoDataD.setCategory(Messages.MReport_report_category);
 		desc.add(whenNoDataD);
 
 		// checkboxes
 		CheckBoxPropertyDescriptor titleNewPageD = new CheckBoxPropertyDescriptor(JasperDesign.PROPERTY_TITLE_NEW_PAGE,
-				"Title On A New Page");
+				Messages.MReport_title_on_a_new_page);
 		titleNewPageD
-				.setDescription("Flag used to specify if the title section should be printed on a separate initial page.");
+				.setDescription(Messages.MReport_title_on_a_new_page_description);
 		desc.add(titleNewPageD);
 
 		CheckBoxPropertyDescriptor summaryNewPageD = new CheckBoxPropertyDescriptor(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE,
-				"Summary On A New Page");
+				Messages.MReport_summary_on_a_new_page);
 		summaryNewPageD
-				.setDescription("Flag used to specify if the summary section should be printed on a separate last page.");
+				.setDescription(Messages.MReport_summary_on_a_new_page_description);
 		desc.add(summaryNewPageD);
 
 		CheckBoxPropertyDescriptor summaryWHFD = new CheckBoxPropertyDescriptor(
-				JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, "Summary With Page Header And Footer");
+				JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, Messages.MReport_summary_with_page_header_and_footer);
 		summaryWHFD
-				.setDescription("Flag used to specify if the summary section should be accompanied by the page header and footer.");
+				.setDescription(Messages.MReport_summary_with_page_header_and_footer_description);
 		desc.add(summaryWHFD);
 
 		CheckBoxPropertyDescriptor floatColumnFooterD = new CheckBoxPropertyDescriptor(
-				JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, "Float Column Footer");
+				JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, Messages.MReport_float_column_footer);
 		floatColumnFooterD
-				.setDescription("Flag used to specify if the column footer section should be printed at the bottom of the column or if it should immediately follow the last detail or group footer printed on the current column.");
+				.setDescription(Messages.MReport_float_column_footer_description);
 		desc.add(floatColumnFooterD);
 
 		CheckBoxPropertyDescriptor ignorePaginationD = new CheckBoxPropertyDescriptor(
-				JasperDesign.PROPERTY_IGNORE_PAGINATION, "Ignore Pagination");
-		ignorePaginationD.setDescription("Flag used to specify whether to use pagination. ");
+				JasperDesign.PROPERTY_IGNORE_PAGINATION, Messages.MReport_ignore_pagination);
+		ignorePaginationD.setDescription(Messages.MReport_ignore_pagination_description);
 		desc.add(ignorePaginationD);
 
 		defaultsMap.put(JasperDesign.PROPERTY_PAGE_WIDTH, new Integer(595));
@@ -286,7 +286,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		defaultsMap.put(JasperDesign.PROPERTY_LEFT_MARGIN, new Integer(20));
 		defaultsMap.put(JasperDesign.PROPERTY_RIGHT_MARGIN, new Integer(20));
 
-		defaultsMap.put(JasperDesign.PROPERTY_LANGUAGE, "Java");
+		defaultsMap.put(JasperDesign.PROPERTY_LANGUAGE, "Java"); //$NON-NLS-1$
 
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_COUNT, new Integer(1));
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_WIDTH, new Integer(555));
@@ -313,12 +313,12 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		if (id.equals(JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS))
 			return jrDesign.getFormatFactoryClass();
 		if (id.equals(JasperDesign.PROPERTY_IMPORTS)) {
-			String res = "";
+			String res = ""; //$NON-NLS-1$
 			String[] imports = jrDesign.getImports();
 			if (imports != null) {
 				int lenght = imports.length;
 				for (int i = 0; i < lenght; i++) {
-					res += imports[i] + ";";
+					res += imports[i] + ";"; //$NON-NLS-1$
 				}
 			}
 			return res;
@@ -393,7 +393,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 				}
 			}
 			if (value != null && value instanceof String) {
-				StringTokenizer st = new StringTokenizer((String) value, ";");
+				StringTokenizer st = new StringTokenizer((String) value, ";"); //$NON-NLS-1$
 				while (st.hasMoreTokens()) {
 					jrDesign.addImport(st.nextToken());
 				}
@@ -580,7 +580,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 						ReportFactory.createElementsForBand(mBand, ((JRDesignBand) evt.getNewValue()).getChildren());
 					else
 						mBand.removeChildren();
-					mBand.propertyChange(new PropertyChangeEvent(mBand, "VALUE", evt.getOldValue(), evt.getNewValue()));
+					mBand.propertyChange(new PropertyChangeEvent(mBand, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 					break;
 				}
 			}
@@ -642,13 +642,13 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 					firstBand = (MBand) ReportFactory.createNode(this, evt.getNewValue(), index);
 			}
 			ReportFactory.createElementsForBand(firstBand, ((JRDesignBand) evt.getNewValue()).getChildren());
-			firstBand.propertyChange(new PropertyChangeEvent(firstBand, "VALUE", evt.getOldValue(), evt.getNewValue()));
+			firstBand.propertyChange(new PropertyChangeEvent(firstBand, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 		} else {
 			// delete
 			if (firstBand != null && firstBand.equals(lastBand)) {
 				firstBand.setValue(evt.getNewValue());
 				firstBand.removeChildren();
-				firstBand.propertyChange(new PropertyChangeEvent(firstBand, "VALUE", evt.getOldValue(), evt.getNewValue()));
+				firstBand.propertyChange(new PropertyChangeEvent(firstBand, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 			} else {
 				for (INode n : getChildren()) {
 					if (n.getValue() == evt.getOldValue()) {
@@ -714,14 +714,14 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 				if (grhBands != null) {
 					if (grhBands.isEmpty()) {
 						MBand b = new MBandGroupHeader(this, group, null, position);
-						b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue()));
+						b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 					} else {
 						int j = 0;
 						for (Iterator<?> it = grhBands.iterator(); it.hasNext(); j++) {
 							JRDesignBand jrDB = (JRDesignBand) it.next();
 							MBandGroupHeader b = new MBandGroupHeader(this, group, jrDB, position + j);
 							ReportFactory.createElementsForBand(b, jrDB.getChildren());
-							b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue()));
+							b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 						}
 					}
 				}
@@ -750,14 +750,14 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 				if (grhBands != null) {
 					if (grhBands.isEmpty()) {
 						MBand b = new MBandGroupFooter(this, group, null, position);
-						b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue()));
+						b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 					} else {
 						int j = 0;
 						for (Iterator<?> it = grhBands.iterator(); it.hasNext(); j++) {
 							JRDesignBand jrDB = (JRDesignBand) it.next();
 							MBandGroupFooter b = new MBandGroupFooter(this, group, jrDB, position + j);
 							ReportFactory.createElementsForBand(b, jrDB.getChildren());
-							b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue()));
+							b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 						}
 					}
 				}

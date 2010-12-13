@@ -85,7 +85,7 @@ public class ParameterPage extends WizardPage {
 				if (value2 != null && value2.getExpression() != null)
 					return value2.getExpression().getText();
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 
@@ -119,8 +119,8 @@ public class ParameterPage extends WizardPage {
 
 	protected ParameterPage(String pageName) {
 		super(pageName);
-		setTitle("Dataset Parameters");
-		setDescription("Dataset Parameters.");
+		setTitle(Messages.ParameterPage_dataset_parameters);
+		setDescription(Messages.ParameterPage_description);
 
 	}
 
@@ -143,7 +143,7 @@ public class ParameterPage extends WizardPage {
 		table.setLayoutData(gd);
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText("&add");
+		addB.setText(Messages.ParameterPage_add);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		addB.setLayoutData(gridData);
@@ -153,14 +153,14 @@ public class ParameterPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				List<JRDatasetParameter> list = (List<JRDatasetParameter>) tableViewer.getInput();
 				for (JRDatasetParameter dto : list) {
-					if (dto.getName() == null || dto.getName().trim().equals("NEW PARAMETER"))
+					if (dto.getName() == null || dto.getName().trim().equals("NEW PARAMETER")) //$NON-NLS-1$
 						return;
 				}
 				JRDesignDatasetParameter p = new JRDesignDatasetParameter();
 				JRDesignExpression expression = new JRDesignExpression();
-				expression.setValueClassName("java.lang.String");
+				expression.setValueClassName("java.lang.String"); //$NON-NLS-1$
 				p.setExpression(expression);
-				p.setName("NEW PARAMETER");
+				p.setName("NEW PARAMETER"); //$NON-NLS-1$
 				list.add(p);
 				tableViewer.add(p);
 				tableViewer.setSelection(new StructuredSelection(p));
@@ -171,7 +171,7 @@ public class ParameterPage extends WizardPage {
 		});
 
 		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText("&delete");
+		delB.setText(Messages.ParameterPage_delete);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		delB.setLayoutData(gridData);
@@ -198,7 +198,7 @@ public class ParameterPage extends WizardPage {
 						tableViewer.setSelection(new StructuredSelection(sp));
 						// cursor.setSelection(table.getSelectionIndex(), 0);
 					} else
-						setMessage("Table is empty");
+						setMessage(Messages.ParameterPage_table_is_empty);
 				}
 			}
 		});
@@ -206,7 +206,7 @@ public class ParameterPage extends WizardPage {
 
 	private void buildTable(Composite composite) {
 		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
-		table.setToolTipText("");
+		table.setToolTipText(""); //$NON-NLS-1$
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -226,10 +226,10 @@ public class ParameterPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Parameter");
+		column[0].setText(Messages.ParameterPage_parameter);
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("Expression");
+		column[1].setText(Messages.ParameterPage_expression);
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++) {
@@ -280,22 +280,22 @@ public class ParameterPage extends WizardPage {
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
-				if (property.equals("VALUE"))
+				if (property.equals("VALUE")) //$NON-NLS-1$
 					return true;
-				if (property.equals("NAME"))
+				if (property.equals("NAME")) //$NON-NLS-1$
 					return true;
 				return false;
 			}
 
 			public Object getValue(Object element, String property) {
 				JRDatasetParameter prop = (JRDatasetParameter) element;
-				if ("VALUE".equals(property))
+				if ("VALUE".equals(property)) //$NON-NLS-1$
 					if (prop.getExpression() != null)
 						return new MExpression(prop.getExpression());
-				if ("NAME".equals(property)) {
+				if ("NAME".equals(property)) { //$NON-NLS-1$
 					return prop.getName();
 				}
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 			public void modify(Object element, String property, Object value) {
@@ -303,13 +303,13 @@ public class ParameterPage extends WizardPage {
 				setErrorMessage(null);
 				setMessage(getDescription(tableItem));
 				JRDesignDatasetParameter data = (JRDesignDatasetParameter) tableItem.getData();
-				if ("VALUE".equals(property)) {
+				if ("VALUE".equals(property)) { //$NON-NLS-1$
 					if (value instanceof MExpression) {
 						JRExpression e = (JRExpression) ((MExpression) value).getValue();
 						data.setExpression(e);
 					}
 				}
-				if ("NAME".equals(property)) {
+				if ("NAME".equals(property)) { //$NON-NLS-1$
 					List<JRDesignDatasetParameter> plist = (List<JRDesignDatasetParameter>) tableViewer.getInput();
 					for (JRDesignDatasetParameter p : plist) {
 						if (p != data && p.getName() != null && p.getName().equals(value)) {
@@ -325,7 +325,7 @@ public class ParameterPage extends WizardPage {
 		});
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new JRExpressionCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE" });
+		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private void fillTable(Table table) {
@@ -341,7 +341,7 @@ public class ParameterPage extends WizardPage {
 				switch (event.type) {
 				case SWT.MouseDown:
 					Event e = new Event();
-					e.item = (TableItem) label.getData("_TABLEITEM");
+					e.item = (TableItem) label.getData("_TABLEITEM"); //$NON-NLS-1$
 					// Assuming table is single select, set the selection as if
 					// the mouse down event went through to the table
 					table.setSelection(new TableItem[] { (TableItem) e.item });
@@ -374,7 +374,7 @@ public class ParameterPage extends WizardPage {
 				case SWT.MouseHover: {
 					TableItem item = table.getItem(new Point(event.x, event.y));
 					String description = getDescription(item);
-					if (item != null && !description.equals("")) {
+					if (item != null && !description.equals("")) { //$NON-NLS-1$
 
 						if (tip != null && !tip.isDisposed())
 							tip.dispose();
@@ -383,7 +383,7 @@ public class ParameterPage extends WizardPage {
 						label = new Label(tip, SWT.NONE);
 						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-						label.setData("_TABLEITEM", item);
+						label.setData("_TABLEITEM", item); //$NON-NLS-1$
 
 						label.setText(description);
 						label.addListener(SWT.MouseExit, labelListener);
@@ -411,6 +411,6 @@ public class ParameterPage extends WizardPage {
 		// if (p.getProperty().equals(key))
 		// return p.getDescription();
 		// }
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }

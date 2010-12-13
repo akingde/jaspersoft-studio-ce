@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.band.MBand;
 public class CreateBandAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_band";
+	public static final String ID = "create_band"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -55,8 +55,8 @@ public class CreateBandAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Band");
-		setToolTipText("Creates band");
+		setText(Messages.CreateBandAction_create_band);
+		setToolTipText(Messages.CreateBandAction_create_band_tool_tip);
 		setId(CreateBandAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

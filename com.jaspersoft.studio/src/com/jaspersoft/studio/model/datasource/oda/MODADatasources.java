@@ -36,7 +36,7 @@ public class MODADatasources extends ANode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasources.oda");
+			iconDescriptor = new NodeIconDescriptor("datasources.oda"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

@@ -39,7 +39,7 @@ public class PatternEditor extends Wizard {
 
 	public PatternEditor() {
 		super();
-		setWindowTitle("Pattern");
+		setWindowTitle(Messages.PatternEditor_pattern);
 		setNeedsProgressMonitor(false);
 	}
 

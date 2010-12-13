@@ -65,8 +65,8 @@ public class JRExpressionPage extends WizardPage {
 
 	protected JRExpressionPage(String pageName) {
 		super(pageName);
-		setTitle("Expression Editor");
-		setDescription("Expression editor.");
+		setTitle(Messages.JRExpressionPage_expression_editor);
+		setDescription(Messages.JRExpressionPage_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -77,12 +77,12 @@ public class JRExpressionPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl1 = new Label(composite, SWT.NONE);
-		lbl1.setText("Value Class Name:");
+		lbl1.setText(Messages.JRExpressionPage_value_class_name);
 
 		valuleClassCombo = new Combo(composite, SWT.DROP_DOWN | SWT.FLAT | SWT.BORDER);
-		valuleClassCombo.setItems(new String[] { "java.lang.Boolean", "java.lang.Byte", "java.util.Date",
-				"java.sql.Timestamp", "java.sql.Time", "java.lang.Double", "java.lang.Float", "java.lang.Integer",
-				"java.lang.Long", "java.lang.Short", "java.math.BigDecimal", "java.lang.Number", "java.lang.String", "java.lang.Object" });
+		valuleClassCombo.setItems(new String[] { "java.lang.Boolean", "java.lang.Byte", "java.util.Date", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				"java.sql.Timestamp", "java.sql.Time", "java.lang.Double", "java.lang.Float", "java.lang.Integer", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				"java.lang.Long", "java.lang.Short", "java.math.BigDecimal", "java.lang.Number", "java.lang.String", "java.lang.Object" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		valuleClassCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				// set value into the MQuery, attention, thru commands!
@@ -91,7 +91,7 @@ public class JRExpressionPage extends WizardPage {
 		});
 
 		Label lbl2 = new Label(composite, SWT.NONE);
-		lbl2.setText("Expression:");
+		lbl2.setText(Messages.JRExpressionPage_expression);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		lbl2.setLayoutData(gd);
@@ -120,7 +120,7 @@ public class JRExpressionPage extends WizardPage {
 		}
 		String text = (String) value.getPropertyValue(JRDesignExpression.PROPERTY_TEXT);
 		if (text == null)
-			text = "";
+			text = ""; //$NON-NLS-1$
 		queryText.setText(text);
 	}
 

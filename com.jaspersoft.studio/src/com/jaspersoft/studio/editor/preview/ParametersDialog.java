@@ -67,7 +67,7 @@ public class ParametersDialog extends FormDialog {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		mform.getForm().setText("Report parameters");
+		mform.getForm().setText(Messages.ParametersDialog_report_parameters);
 
 		FormToolkit toolkit = mform.getToolkit();
 

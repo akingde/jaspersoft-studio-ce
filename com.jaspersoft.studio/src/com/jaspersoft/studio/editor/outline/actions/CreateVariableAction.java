@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.variable.MVariable;
 public class CreateVariableAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_variable";
+	public static final String ID = "create_variable"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -55,8 +55,8 @@ public class CreateVariableAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Variable");
-		setToolTipText("Creates variable");
+		setText(Messages.CreateVariableAction_create_variable);
+		setToolTipText(Messages.CreateVariableAction_create_variable_tool_tip);
 		setId(CreateVariableAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

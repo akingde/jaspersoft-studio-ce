@@ -35,7 +35,7 @@ public class PatternLabelProvider extends LabelProvider {
 	public String getText(Object element) {
 		if (element != null && element instanceof String)
 			return (String) element;
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 }

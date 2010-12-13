@@ -34,26 +34,26 @@ public abstract class AMFileDataSource extends AMDatasource {
 		super(parent, index);
 	}
 
-	public static final String PROPERTY_FILENAME = "PROPERTY_FILENAME";
+	public static final String PROPERTY_FILENAME = "PROPERTY_FILENAME"; //$NON-NLS-1$
 	protected String filename;
 
-	public static final String PROPERTY_NUMBERFORMAT = "PROPERTY_NUMBERFORMAT";
+	public static final String PROPERTY_NUMBERFORMAT = "PROPERTY_NUMBERFORMAT"; //$NON-NLS-1$
 	protected String numberformat;
 
-	public static final String PROPERTY_DATEFORMAT = "PROPERTY_DATEFORMAT";
+	public static final String PROPERTY_DATEFORMAT = "PROPERTY_DATEFORMAT"; //$NON-NLS-1$
 	protected String dateformat;
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor driverClassD = new NTextPropertyDescriptor(PROPERTY_FILENAME, "File Name");
+		NTextPropertyDescriptor driverClassD = new NTextPropertyDescriptor(PROPERTY_FILENAME, Messages.AMFileDataSource_fine_name);
 		desc.add(driverClassD);
 
-		PatternPropertyDescriptor numberFormatD = new PatternPropertyDescriptor(PROPERTY_NUMBERFORMAT, "Number Format");
+		PatternPropertyDescriptor numberFormatD = new PatternPropertyDescriptor(PROPERTY_NUMBERFORMAT, Messages.AMFileDataSource_number_format);
 		desc.add(numberFormatD);
 
-		PatternPropertyDescriptor dateFormatD = new PatternPropertyDescriptor(PROPERTY_DATEFORMAT, "Date Format");
+		PatternPropertyDescriptor dateFormatD = new PatternPropertyDescriptor(PROPERTY_DATEFORMAT, Messages.AMFileDataSource_date_format);
 		desc.add(dateFormatD);
 	}
 

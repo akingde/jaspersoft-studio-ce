@@ -35,7 +35,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  */
 public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 
-	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components";
+	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components"; //$NON-NLS-1$
 
 	// The shared instance.
 	/** The plugin. */
@@ -80,7 +80,7 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 	 */
 	public static Image getImage(ImageDescriptor descriptor) {
 		if (descriptor == null)
-			descriptor = ModelUtils.getImageDescriptor("icons/report.png");
+			descriptor = ModelUtils.getImageDescriptor("icons/report.png"); //$NON-NLS-1$
 		ImageRegistry imageRegistry = getInstance().getImageRegistry();
 		Image image = imageRegistry.get(descriptor.toString());
 		if (image == null) {
@@ -88,7 +88,7 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 			if (image != null)
 				imageRegistry.put(descriptor.toString(), image);
 			else
-				image = imageRegistry.get("icons/report.png");
+				image = imageRegistry.get("icons/report.png"); //$NON-NLS-1$
 		}
 		return image;
 	}
@@ -119,7 +119,7 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 	}
 
 	/** The Constant UNIQUE_ID. */
-	private static final String UNIQUE_ID = "com.jaspersoft.studio";
+	private static final String UNIQUE_ID = "com.jaspersoft.studio"; //$NON-NLS-1$
 
 	/**
 	 * Gets the unique identifier.

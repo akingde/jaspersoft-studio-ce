@@ -48,7 +48,7 @@ public class StudioPreferencePage extends FieldEditorPreferencePage implements I
 	public void createFieldEditors() {
 		// addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, "&Directory preference:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID,
-				"&An example of a boolean preference", getFieldEditorParent()));
+				Messages.StudioPreferencePage_example_text, getFieldEditorParent()));
 
 		// addField(new RadioGroupFieldEditor(PreferenceConstants.P_CHOICE, "An example of a multiple-choice preference", 1,
 		// new String[][] { { "&Choice 1", "choice1" }, { "C&hoice 2", "choice2" } }, getFieldEditorParent()));

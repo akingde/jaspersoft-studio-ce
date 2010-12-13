@@ -32,14 +32,14 @@ public class ScientificPattern extends NumericPattern {
 
 	public ScientificPattern(Composite parent) {
 		super(parent, NumberFormat.getNumberInstance());
-		setDescription("Scientific format is used to display numerical values in scientific notation.");
+		setDescription(Messages.ScientificPattern_description);
 	}
 
 	@Override
 	protected java.util.List<String> getDefaults() {
 		if (dList == null) {
 			dList = new ArrayList<String>();
-			dList.add("0.0##E0");
+			dList.add("0.0##E0"); //$NON-NLS-1$
 
 			setPattern(dList.get(0));
 		}

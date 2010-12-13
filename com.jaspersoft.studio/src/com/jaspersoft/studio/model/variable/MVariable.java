@@ -63,7 +63,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("variable");
+			iconDescriptor = new NodeIconDescriptor("variable"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -116,50 +116,50 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP, "Reset Group",
-				new String[] { "" }, NullEnum.NULL);
-		resetGroupD.setDescription("Reset group name.");
+		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP, Messages.MVariable_reset_group,
+				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		resetGroupD.setDescription(Messages.MVariable_reset_group_description);
 		desc.add(resetGroupD);
 
-		incrementGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_INCREMENT_GROUP, "Increment Group",
-				new String[] { "" }, NullEnum.NULL);
+		incrementGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_INCREMENT_GROUP, Messages.MVariable_increment_group,
+				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		incrementGroupD
-				.setDescription("Name of the group at which the variable is incremented, when incrementType is \"Group\".");
+				.setDescription(Messages.MVariable_increment_group_description);
 		desc.add(incrementGroupD);
 
 		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_CALCULATION,
-				"Calculation", EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL));
+				Messages.MVariable_calculation, EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL));
 		calculationD
-				.setDescription("Calculation to perform on the master report variable when returning the value from the subreport.");
+				.setDescription(Messages.MVariable_calculation_description);
 		desc.add(calculationD);
 
 		ComboBoxPropertyDescriptor resetTypeD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_TYPE,
-				"Reset type", EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
-		resetTypeD.setDescription("Reset level for variables that perform calculations.");
+				Messages.MVariable_reset_type, EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
+		resetTypeD.setDescription(Messages.MVariable_reset_type_description);
 		desc.add(resetTypeD);
 
 		ComboBoxPropertyDescriptor incrementTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignVariable.PROPERTY_INCREMENT_TYPE, "Increment type", EnumHelper.getEnumNames(IncrementTypeEnum.values(),
+				JRDesignVariable.PROPERTY_INCREMENT_TYPE, Messages.MVariable_increment_type, EnumHelper.getEnumNames(IncrementTypeEnum.values(),
 						NullEnum.NOTNULL));
-		incrementTypeD.setDescription("Increment level for variables that perform calculations.");
+		incrementTypeD.setDescription(Messages.MVariable_increment_type_description);
 		desc.add(incrementTypeD);
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(
-				JRDesignVariable.PROPERTY_EXPRESSION, "Expression");
+				JRDesignVariable.PROPERTY_EXPRESSION, Messages.MVariable_expression);
 		expressionD
-				.setDescription("Definition of the expression associated with the variable. The value of this expression will be calculated at runtime and will represent the value of the corresponding variable or it will be used in calculation to obtain the value of the calculated variable.");
+				.setDescription(Messages.MVariable_expression_description);
 		desc.add(expressionD);
 
 		JRExpressionPropertyDescriptor iniValExprD = new JRExpressionPropertyDescriptor(
-				JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION, "Initial Value Expression");
+				JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION, Messages.MVariable_initial_value_expression);
 		iniValExprD
-				.setDescription("Definition of the expression that will be used to calculate the initial value of the variable, before any calculations are made.");
+				.setDescription(Messages.MVariable_initial_value_expression_description);
 		desc.add(iniValExprD);
 
 		NClassTypePropertyDescriptor factoryClassName = new NClassTypePropertyDescriptor(
-				JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, "Incrementer Factory Class Name");
+				JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, Messages.MVariable_incrementer_factory_class_name);
 		factoryClassName
-				.setDescription("The name of a class that implements the net.sf.jasperreports.engine.fill.JRIncrementerFactory interface to use when creating the incrementer instance for this variable. Incrementers are objects that implement the net.sf.jasperreports.engine.fill.JRIncrementer interface and handle the incremental calculation performed on the variable's current value with every iteration in the data source.");
+				.setDescription(Messages.MVariable_incrementer_factory_class_name_description);
 		desc.add(factoryClassName);
 
 		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, EnumHelper.getValue(CalculationEnum.NOTHING, 0, false));
@@ -189,7 +189,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 				JRGroup[] groups = jrDataset.getGroups();
 				if (groups != null) {
 					String[] items = new String[groups.length + 1];
-					items[0] = "";
+					items[0] = ""; //$NON-NLS-1$
 					for (int j = 0; j < groups.length; j++) {
 						items[j + 1] = groups[j].getName();
 					}
@@ -198,7 +198,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 						return jrVariable.getResetGroup().getName();
 				}
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
 			if (jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP) && incrementGroupD != null) {
@@ -206,7 +206,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 				JRGroup[] groups = jrDataset.getGroups();
 				if (groups != null) {
 					String[] items = new String[groups.length + 1];
-					items[0] = "";
+					items[0] = ""; //$NON-NLS-1$
 					for (int j = 0; j < groups.length; j++) {
 						items[j + 1] = groups[j].getName();
 					}
@@ -215,7 +215,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 						return jrVariable.getIncrementGroup().getName();
 				}
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
 			return EnumHelper.getValue(jrVariable.getCalculationValue(), 0, false);
@@ -248,7 +248,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		super.setPropertyValue(id, value);
 		JRDesignVariable jrVariable = (JRDesignVariable) getValue();
 		if (id.equals(JRDesignVariable.PROPERTY_RESET_GROUP)) {
-			if (!value.equals("") && jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP)) {
+			if (!value.equals("") && jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP)) { //$NON-NLS-1$
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setResetGroup(group);
@@ -266,7 +266,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 				jrVariable.setInitialValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
-			if (!value.equals("") && jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP)) {
+			if (!value.equals("") && jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP)) { //$NON-NLS-1$
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setIncrementGroup(group);

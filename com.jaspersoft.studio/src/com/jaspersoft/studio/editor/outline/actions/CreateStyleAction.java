@@ -32,7 +32,7 @@ import com.jaspersoft.studio.model.style.MStyle;
 public class CreateStyleAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_style";
+	public static final String ID = "create_style"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -50,8 +50,8 @@ public class CreateStyleAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Style");
-		setToolTipText("Creates style");
+		setText(Messages.CreateStyleAction_create_style);
+		setToolTipText(Messages.CreateStyleAction_create_style_tool_type);
 		setId(CreateStyleAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

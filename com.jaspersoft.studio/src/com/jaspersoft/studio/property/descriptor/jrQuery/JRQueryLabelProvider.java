@@ -44,7 +44,7 @@ public class JRQueryLabelProvider extends LabelProvider {
 			MQuery mQuery = (MQuery) element;
 			String lang = (String) mQuery.getPropertyValue(JRDesignQuery.PROPERTY_LANGUAGE);
 			String txt = (String) mQuery.getPropertyValue(JRDesignQuery.PROPERTY_TEXT);
-			return lang + ":" + txt;
+			return lang + ":" + txt; //$NON-NLS-1$
 		}
 		if (element == null || !(element instanceof JRDesignQuery))
 			return canBeNull.getName();

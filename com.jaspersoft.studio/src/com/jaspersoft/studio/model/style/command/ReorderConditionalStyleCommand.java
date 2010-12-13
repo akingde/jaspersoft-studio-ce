@@ -57,7 +57,7 @@ public class ReorderConditionalStyleCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderConditionalStyleCommand(MConditionalStyle child, MStyle parent, int newIndex) {
-		super("Reorder elements");
+		super(Messages.ReorderConditionalStyleCommand_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrStyle = (JRDesignStyle) parent.getValue();
 		this.jrConditionalStyle = (JRDesignConditionalStyle) child.getValue();

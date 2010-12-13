@@ -53,7 +53,7 @@ public class DeleteGuideCommand extends Command {
 	 *          the parent
 	 */
 	public DeleteGuideCommand(ReportRulerGuide guide, ReportRuler parent) {
-		super("delete guide");
+		super(Messages.DeleteGuideCommand_delete_guide);
 		this.guide = guide;
 		this.parent = parent;
 	}

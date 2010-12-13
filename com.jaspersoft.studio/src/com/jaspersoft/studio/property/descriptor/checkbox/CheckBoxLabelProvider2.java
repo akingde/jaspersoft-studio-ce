@@ -37,8 +37,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class CheckBoxLabelProvider2 extends LabelProvider {
 
-	private static final String CHECKED_KEY = "CHECKED";
-	private static final String UNCHECK_KEY = "UNCHECKED";
+	private static final String CHECKED_KEY = "CHECKED"; //$NON-NLS-1$
+	private static final String UNCHECK_KEY = "UNCHECKED"; //$NON-NLS-1$
 
 	public CheckBoxLabelProvider2() {
 		if (JFaceResources.getImageRegistry().getDescriptor(CHECKED_KEY) == null) {

@@ -124,7 +124,7 @@ public class ColorCellEditor extends DialogCellEditor {
 		RGB rgb = (RGB) value;
 		// XXX: We don't have a value the first time this method is called".
 		if (rgb == null) {
-			rgbLabel.setText("");
+			rgbLabel.setText(""); //$NON-NLS-1$
 			// rgb = new RGB(0, 0, 0);
 		} else
 			rgbLabel.setText("RGB (" + rgb.red + "," + rgb.green + "," + rgb.blue + ")");//$NON-NLS-4$//$NON-NLS-3$//$NON-NLS-2$//$NON-NLS-1$

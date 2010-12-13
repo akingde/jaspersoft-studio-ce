@@ -48,19 +48,19 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// pen
-		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR, "Line Color",
+		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR, Messages.MLinePen_line_color,
 				NullEnum.INHERITED);
 		penLineColorD
-				.setDescription("Line color for the pen. Hexadecimal formatted values preceded by the # character or decimal values are accepted along with the following predefined color values: black, blue, cyan, darkGray, gray, green, lightGray, magenta, orange, pink, red, yellow, white.");
+				.setDescription(Messages.MLinePen_line_color_description);
 		desc.add(penLineColorD);
 
-		FloatPropertyDescriptor penLineWidthD = new FloatPropertyDescriptor(JRBasePen.PROPERTY_LINE_WIDTH, "Line Width");
-		penLineWidthD.setDescription("The line width of the pen.");
+		FloatPropertyDescriptor penLineWidthD = new FloatPropertyDescriptor(JRBasePen.PROPERTY_LINE_WIDTH, Messages.MLinePen_line_width);
+		penLineWidthD.setDescription(Messages.MLinePen_line_width_description);
 		desc.add(penLineWidthD);
 
 		ComboBoxPropertyDescriptor penLineStyleD = new ComboBoxPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE,
-				"Line Style", EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
-		penLineStyleD.setDescription("The line style of the pen.");
+				Messages.MLinePen_line_style, EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
+		penLineStyleD.setDescription(Messages.MLinePen_line_style_description);
 		desc.add(penLineStyleD);
 
 		defaultsMap.put(JRBasePen.PROPERTY_LINE_STYLE, null);

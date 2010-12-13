@@ -28,7 +28,7 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.jface.action.Action;
 
 public class SnapToGridAction extends Action {
-	public static String ID = "ID_SNAP_TO_GRID";
+	public static String ID = "ID_SNAP_TO_GRID"; //$NON-NLS-1$
 	private GraphicalViewer diagramViewer;
 
 	/**
@@ -38,9 +38,9 @@ public class SnapToGridAction extends Action {
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
 	public SnapToGridAction(GraphicalViewer diagramViewer) {
-		super("Snap To Grid", AS_CHECK_BOX);
+		super(Messages.SnapToGridAction_snap_to_grid, AS_CHECK_BOX);
 		this.diagramViewer = diagramViewer;
-		setToolTipText("Snap To Grid");
+		setToolTipText(Messages.SnapToGridAction_snap_to_grid_tool_tip);
 		setId(ID);
 		setActionDefinitionId(ID);
 		setChecked(isChecked());

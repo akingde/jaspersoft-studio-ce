@@ -51,7 +51,7 @@ public class MEllipse extends MGraphicElementLinePen {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("ellipse");
+			iconDescriptor = new NodeIconDescriptor("ellipse"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -90,9 +90,9 @@ public class MEllipse extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, "Fill",
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.MEllipse_fill,
 				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
-		fillD.setDescription("Type of the fill pattern used to fill objects.");
+		fillD.setDescription(Messages.MEllipse_fill_description);
 		desc.add(fillD);
 	}
 

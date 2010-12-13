@@ -50,8 +50,8 @@ public class SortFieldPage extends WizardPage {
 
 	protected SortFieldPage(String pageName) {
 		super(pageName);
-		setTitle("Sort Field Editor");
-		setDescription("Dataset sort fields editor.");
+		setTitle(Messages.SortFieldPage_sort_field_editor);
+		setDescription(Messages.SortFieldPage_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -79,13 +79,13 @@ public class SortFieldPage extends WizardPage {
 		table.setLayoutData(gridData);
 
 		TableColumn column = new TableColumn(table, SWT.CENTER);
-		column.setText("Field");
+		column.setText(Messages.SortFieldPage_field);
 		column.setWidth(100);
 		column.pack();
 
 		column = new TableColumn(table, SWT.CENTER);
 		column.setWidth(100);
-		column.setText("Order");
+		column.setText(Messages.SortFieldPage_order);
 		column.pack();
 
 		TableViewer tableViewer = new TableViewer(table);
@@ -93,7 +93,7 @@ public class SortFieldPage extends WizardPage {
 
 		CellEditor[] editors = new CellEditor[2];
 
-		ComboBoxCellEditor cbce = new ComboBoxCellEditor(table, new String[] { "BCDA", "ABCD" }, SWT.READ_ONLY);
+		ComboBoxCellEditor cbce = new ComboBoxCellEditor(table, new String[] { "BCDA", "ABCD" }, SWT.READ_ONLY); //$NON-NLS-1$ //$NON-NLS-2$
 
 		TextCellEditor textEditor = new TextCellEditor(table);
 		((Text) textEditor.getControl()).setTextLimit(60);
@@ -113,7 +113,7 @@ public class SortFieldPage extends WizardPage {
 	private void createButtons(Composite composite) {
 		GridData gridData;
 		Button add = new Button(composite, SWT.PUSH | SWT.CENTER);
-		add.setText("&Add");
+		add.setText(Messages.SortFieldPage_add);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		add.setLayoutData(gridData);
@@ -126,7 +126,7 @@ public class SortFieldPage extends WizardPage {
 		});
 
 		Button remove = new Button(composite, SWT.PUSH | SWT.CENTER);
-		remove.setText("R&emove");
+		remove.setText(Messages.SortFieldPage_remove);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		remove.setLayoutData(gridData);
@@ -139,7 +139,7 @@ public class SortFieldPage extends WizardPage {
 		});
 
 		Button up = new Button(composite, SWT.PUSH | SWT.CENTER);
-		up.setText("&Up");
+		up.setText(Messages.SortFieldPage_up);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		up.setLayoutData(gridData);
@@ -152,7 +152,7 @@ public class SortFieldPage extends WizardPage {
 		});
 
 		Button down = new Button(composite, SWT.PUSH | SWT.CENTER);
-		down.setText("&Down");
+		down.setText(Messages.SortFieldPage_down);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		down.setLayoutData(gridData);

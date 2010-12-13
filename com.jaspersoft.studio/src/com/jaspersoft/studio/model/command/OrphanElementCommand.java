@@ -56,7 +56,7 @@ public class OrphanElementCommand extends Command {
 	 *          the child
 	 */
 	public OrphanElementCommand(ANode parent, MGraphicElement child) {
-		super("orphan child");
+		super(Messages.OrphanElementCommand_orphan_child);
 		this.jrElement = (JRDesignElement) child.getValue();
 		if (parent instanceof IGroupElement)
 			this.jrGroup = ((IGroupElement) parent).getJRElementGroup();

@@ -89,10 +89,10 @@ public class CreateFieldCommand extends Command {
 					jrDataSet.addField(index, jrField);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) {
-					String defaultName = ModelUtils.getDefaultName(jrDataSet.getFieldsMap(), "CopyOFField_");
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Field Name",
-							"Please, enter unique field name", defaultName, null);
+				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+					String defaultName = ModelUtils.getDefaultName(jrDataSet.getFieldsMap(), "CopyOFField_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateFieldCommand_field_name,
+							Messages.CreateFieldCommand_field_name_dialog, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrField.setName(dlg.getValue());
 						execute();

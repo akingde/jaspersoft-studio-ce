@@ -34,7 +34,7 @@ import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
  */
 public abstract class MGraphicElementLineBox extends MGraphicElement implements IGraphicElement, ILineBox {
 
-	public static final String LINE_BOX = "LineBox";
+	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
 
 	public MGraphicElementLineBox() {
 		super();
@@ -52,10 +52,10 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, "Line Box");
-		lineBoxD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MGraphicElementLineBox_line_box);
+		lineBoxD.setDescription(Messages.MGraphicElementLineBox_line_box_description);
 		desc.add(lineBoxD);
-		lineBoxD.setCategory("Graphic");
+		lineBoxD.setCategory(Messages.MGraphicElementLineBox_graphic_category);
 	}
 
 	private MLineBox lineBox;

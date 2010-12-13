@@ -39,13 +39,13 @@ public class ParameterEditor extends Wizard {
 
 	public ParameterEditor() {
 		super();
-		setWindowTitle("Properties");
+		setWindowTitle(Messages.ParameterEditor_properties);
 		setNeedsProgressMonitor(false);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new ParameterPage("Datasetparameters");
+		page0 = new ParameterPage("Datasetparameters"); //$NON-NLS-1$
 		page0.setValue(value);
 		addPage(page0);
 	}

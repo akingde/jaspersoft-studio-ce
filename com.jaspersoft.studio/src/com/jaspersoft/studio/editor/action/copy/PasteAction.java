@@ -44,7 +44,7 @@ public class PasteAction extends SelectionAction {
 		super.init();
 
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText("Paste");
+		setText(Messages.PasteAction_paste);
 		setId(ActionFactory.PASTE.getId());
 		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));

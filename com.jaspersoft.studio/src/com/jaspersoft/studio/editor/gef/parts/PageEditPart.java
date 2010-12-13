@@ -127,9 +127,9 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 
 	private void setPrefsBorder(IFigure rect) {
 		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
-				PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, "shadow", null);
+				PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, "shadow", null); //$NON-NLS-1$
 
-		if (pref.equals("shadow"))
+		if (pref.equals("shadow")) //$NON-NLS-1$
 			rect.setBorder(new ShadowBorder());
 		else
 			rect.setBorder(new SimpleShadowBorder());
@@ -237,7 +237,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 */
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy());
-		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy());
+		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$
 	}
 
 	/*
@@ -356,10 +356,10 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		figure2.setBandsHeight(designHeight);
 		figure2.setSize(w, h);
 
-		getViewer().setProperty("RULER_HOFFSET", jd.getLeftMargin() + PageFigure.PAGE_BORDER.left);
-		getViewer().setProperty("RULER_VOFFSET", jd.getTopMargin() + PageFigure.PAGE_BORDER.top);
-		getViewer().setProperty("RULER_HEND", jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin());
-		getViewer().setProperty("RULER_VEND", dh - PageFigure.PAGE_BORDER.top);
+		getViewer().setProperty("RULER_HOFFSET", jd.getLeftMargin() + PageFigure.PAGE_BORDER.left); //$NON-NLS-1$
+		getViewer().setProperty("RULER_VOFFSET", jd.getTopMargin() + PageFigure.PAGE_BORDER.top); //$NON-NLS-1$
+		getViewer().setProperty("RULER_HEND", jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin()); //$NON-NLS-1$
+		getViewer().setProperty("RULER_VEND", dh - PageFigure.PAGE_BORDER.top); //$NON-NLS-1$
 
 		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
 				new Point(PageFigure.PAGE_BORDER.left + jd.getLeftMargin(), PageFigure.PAGE_BORDER.top + jd.getTopMargin()));

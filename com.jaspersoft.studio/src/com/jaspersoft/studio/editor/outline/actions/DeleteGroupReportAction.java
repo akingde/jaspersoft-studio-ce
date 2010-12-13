@@ -45,7 +45,7 @@ import com.jaspersoft.studio.model.group.command.DeleteGroupCommand;
 public class DeleteGroupReportAction extends DeleteAction {
 
 	/** The Constant ID. */
-	public static final String ID = "delete_group_report";
+	public static final String ID = "delete_group_report"; //$NON-NLS-1$
 
 	/**
 	 * Instantiates a new delete group report action.
@@ -65,8 +65,8 @@ public class DeleteGroupReportAction extends DeleteAction {
 	@Override
 	protected void init() {
 		super.init();
-		setText("Delete Group");
-		setToolTipText("Delete Reports Group");
+		setText(Messages.DeleteGroupReportAction_delete_group);
+		setToolTipText(Messages.DeleteGroupReportAction_delete_group_tool_tip);
 		setId(DeleteGroupReportAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
@@ -89,7 +89,7 @@ public class DeleteGroupReportAction extends DeleteAction {
 		GroupRequest deleteReq = new GroupRequest(RequestConstants.REQ_DELETE);
 		deleteReq.setEditParts(objects);
 
-		CompoundCommand compoundCmd = new CompoundCommand("Delete Report Group");
+		CompoundCommand compoundCmd = new CompoundCommand("Delete Report Group"); //$NON-NLS-1$
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart part = (EditPart) objects.get(i);
 			Command cmd = null;

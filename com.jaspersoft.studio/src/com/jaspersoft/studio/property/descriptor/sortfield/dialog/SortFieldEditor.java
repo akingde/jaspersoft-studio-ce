@@ -43,12 +43,12 @@ public class SortFieldEditor extends Wizard {
 
 	public SortFieldEditor() {
 		super();
-		setWindowTitle("Sort Field Editor");
+		setWindowTitle(Messages.SortFieldEditor_sort_field_editor);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new SortFieldPage("sort.field.editor");
+		page0 = new SortFieldPage("sort.field.editor"); //$NON-NLS-1$
 		page0.setList(getList());
 		addPage(page0);
 	}

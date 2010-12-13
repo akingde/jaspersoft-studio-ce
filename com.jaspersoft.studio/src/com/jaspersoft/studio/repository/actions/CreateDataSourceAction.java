@@ -49,18 +49,18 @@ import com.jaspersoft.studio.repository.RepositoryManager;
 import com.jaspersoft.studio.repository.wizard.DatasourceEditor;
 
 public class CreateDataSourceAction extends Action {
-	public static final String ID = "createdatasourceaction";
+	public static final String ID = "createdatasourceaction"; //$NON-NLS-1$
 	private TreeViewer treeViewer;
 
 	public CreateDataSourceAction(TreeViewer treeViewer) {
 		super();
 		this.treeViewer = treeViewer;
 		setId(ID);
-		setText("Create ...");
-		setDescription("Create Datasource");
-		setToolTipText("Creates datasource");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.gif"));
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.gif"));
+		setText(Messages.CreateDataSourceAction_create);
+		setDescription(Messages.CreateDataSourceAction_description);
+		setToolTipText(Messages.CreateDataSourceAction_tool_tip);
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.gif")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.gif")); //$NON-NLS-1$
 
 	}
 

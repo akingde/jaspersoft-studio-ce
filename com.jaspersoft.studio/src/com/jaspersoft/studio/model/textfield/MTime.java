@@ -54,7 +54,7 @@ public class MTime extends MTextField {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("time");
+			iconDescriptor = new NodeIconDescriptor("time"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -86,9 +86,9 @@ public class MTime extends MTextField {
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignTextField jrDesignTextField = new JRDesignTextField();
 		JRDesignExpression expression = new JRDesignExpression();
-		expression.setText("new java.util.Date()");
+		expression.setText("new java.util.Date()"); //$NON-NLS-1$
 		expression.setValueClass(Date.class);
-		expression.setValueClassName("java.util.Date");
+		expression.setValueClassName("java.util.Date"); //$NON-NLS-1$
 		jrDesignTextField.setExpression(expression);
 		return jrDesignTextField;
 	}

@@ -62,7 +62,7 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor {
 			@Override
 			protected Object doGetValue() {
 				String value = (String) super.doGetValue();
-				if (value == null || value.equals(""))
+				if (value == null || value.equals("")) //$NON-NLS-1$
 					return (Double) null;
 				return new Double(value);
 			}
@@ -70,7 +70,7 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor {
 			@Override
 			protected void doSetValue(Object value) {
 				if (value == null)
-					super.doSetValue("");
+					super.doSetValue(""); //$NON-NLS-1$
 				else {
 					Assert.isTrue(text != null && (value instanceof Double));
 					super.doSetValue(((Double) value).toString());

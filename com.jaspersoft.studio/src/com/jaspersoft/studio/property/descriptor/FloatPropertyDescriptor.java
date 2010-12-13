@@ -62,7 +62,7 @@ public class FloatPropertyDescriptor extends TextPropertyDescriptor {
 			@Override
 			protected Object doGetValue() {
 				String value = (String) super.doGetValue();
-				if (value == null || value.equals(""))
+				if (value == null || value.equals("")) //$NON-NLS-1$
 					return (Float) null;
 				return new Float(value);
 			}
@@ -70,7 +70,7 @@ public class FloatPropertyDescriptor extends TextPropertyDescriptor {
 			@Override
 			protected void doSetValue(Object value) {
 				if (value == null)
-					super.doSetValue("");
+					super.doSetValue(""); //$NON-NLS-1$
 				else {
 					Assert.isTrue(text != null && (value instanceof Float));
 					super.doSetValue(((Float) value).toString());

@@ -41,9 +41,9 @@ public class FileDatasourcePage extends AFileDatasourcePage {
 	private Text columnNamesTxt;
 
 	protected FileDatasourcePage() {
-		super("fiedatasourceeditor");
-		setTitle("File Datasource");
-		setDescription("Creates a file datasource.");
+		super("fiedatasourceeditor"); //$NON-NLS-1$
+		setTitle(Messages.FileDatasourcePage_file_datasource);
+		setDescription(Messages.FileDatasourcePage_description);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class FileDatasourcePage extends AFileDatasourcePage {
 		super.createMoreControls(parent);
 
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Record Delimiter:");
+		lbl1.setText(Messages.FileDatasourcePage_record_delimiter+":"); //$NON-NLS-1$
 
 		recordDelimiterTxt = new Text(parent, SWT.BORDER);
 		recordDelimiterTxt.setTextLimit(10);
@@ -74,7 +74,7 @@ public class FileDatasourcePage extends AFileDatasourcePage {
 		recordDelimiterTxt.setLayoutData(gd);
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Field Delimiter:");
+		lbl1.setText(Messages.FileDatasourcePage_field_delimiter+":"); //$NON-NLS-1$
 
 		columnDelimiterTxt = new Text(parent, SWT.BORDER);
 		columnDelimiterTxt.setTextLimit(1);
@@ -83,12 +83,12 @@ public class FileDatasourcePage extends AFileDatasourcePage {
 		columnDelimiterTxt.setLayoutData(gd);
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Use First Row As Header:");
+		lbl1.setText(Messages.FileDatasourcePage_use_first_row_as_header+":"); //$NON-NLS-1$
 
 		firstRowHeaderTxt = new Button(parent, SWT.CHECK);
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText("Column Names:");
+		lbl1.setText(Messages.FileDatasourcePage_column_names+":"); //$NON-NLS-1$
 
 		columnNamesTxt = new Text(parent, SWT.BORDER);
 		columnNamesTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -96,7 +96,7 @@ public class FileDatasourcePage extends AFileDatasourcePage {
 
 	@Override
 	protected String[] getFilterExt() {
-		return new String[] { "*.csv", "*.txt", "*.*" };
+		return new String[] { "*.csv", "*.txt", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
@@ -106,12 +106,12 @@ public class FileDatasourcePage extends AFileDatasourcePage {
 		if (value != null) {
 			String dsName = (String) value.getPropertyValue(MFileDataSource.PROPERTY_RECORDDELIMITER);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			recordDelimiterTxt.setText(dsName);
 
 			dsName = (String) value.getPropertyValue(MFileDataSource.PROPERTY_COLUMNNAMES);
 			if (dsName == null)
-				dsName = "";
+				dsName = ""; //$NON-NLS-1$
 			columnNamesTxt.setText(dsName);
 
 			Character c = (Character) value.getPropertyValue(MFileDataSource.PROPERTY_COLUMNDELIMITER);

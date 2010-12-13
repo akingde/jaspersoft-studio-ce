@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.style.MConditionalStyle;
 public class CreateConditionalStyleAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_conditional_style";
+	public static final String ID = "create_conditional_style"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -55,8 +55,8 @@ public class CreateConditionalStyleAction extends ACreateAction {
 	 */
 	protected void init() {
 		super.init();
-		setText("Create Conditional Style");
-		setToolTipText("Creates conditional style");
+		setText(Messages.CreateConditionalStyleAction_create_conditional_style);
+		setToolTipText(Messages.CreateConditionalStyleAction_create_conditional_style_tool_tip);
 		setId(CreateConditionalStyleAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

@@ -86,7 +86,7 @@ public class RVPropertyPage extends WizardPage {
 			case 3:
 				return ((JRDesignSubreportReturnValue) element).getIncrementerFactoryClassName();
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 
@@ -131,8 +131,8 @@ public class RVPropertyPage extends WizardPage {
 
 	protected RVPropertyPage(String pageName) {
 		super(pageName);
-		setTitle("Subreport Parameters");
-		setDescription("Subreport Parameters.");
+		setTitle(Messages.RVPropertyPage_subreport_parameters);
+		setDescription(Messages.RVPropertyPage_description);
 
 	}
 
@@ -155,7 +155,7 @@ public class RVPropertyPage extends WizardPage {
 		table.setLayoutData(gd);
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText("&add");
+		addB.setText(Messages.RVPropertyPage_add);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		addB.setLayoutData(gridData);
@@ -165,7 +165,7 @@ public class RVPropertyPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				List<JRDesignSubreportReturnValue> list = (List<JRDesignSubreportReturnValue>) tableViewer.getInput();
 				JRDesignSubreportReturnValue p = new JRDesignSubreportReturnValue();
-				p.setSubreportVariable("new_subreport_variable");
+				p.setSubreportVariable("new_subreport_variable"); //$NON-NLS-1$
 
 				// get toVariable from list
 				String[] toV = getToVariables();
@@ -179,7 +179,7 @@ public class RVPropertyPage extends WizardPage {
 					if (!vExists) {
 						p.setToVariable(toV[i]);
 						p.setCalculation(CalculationEnum.NOTHING);
-						p.setIncrementerFactoryClassName(" ");
+						p.setIncrementerFactoryClassName(" "); //$NON-NLS-1$
 						list.add(p);
 						tableViewer.add(p);
 						tableViewer.setSelection(new StructuredSelection(p));
@@ -195,7 +195,7 @@ public class RVPropertyPage extends WizardPage {
 		});
 
 		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText("&delete");
+		delB.setText(Messages.RVPropertyPage_delete);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		delB.setLayoutData(gridData);
@@ -223,7 +223,7 @@ public class RVPropertyPage extends WizardPage {
 						// cursor.setSelection(table.getSelectionIndex(), 0);
 						validate();
 					} else
-						setMessage("Table is empty");
+						setMessage(Messages.RVPropertyPage_table_is_empty);
 				}
 			}
 		});
@@ -253,16 +253,16 @@ public class RVPropertyPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[4];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Subresport Variable");
+		column[0].setText(Messages.RVPropertyPage_subreport_variable);
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText("To Variable");
+		column[1].setText(Messages.RVPropertyPage_to_variable);
 
 		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText("Calculation Type");
+		column[2].setText(Messages.RVPropertyPage_calculation_type);
 
 		column[3] = new TableColumn(table, SWT.NONE);
-		column[3].setText("Incrementer Factory Class");
+		column[3].setText(Messages.RVPropertyPage_incrementer_factory_class);
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++) {
@@ -313,33 +313,33 @@ public class RVPropertyPage extends WizardPage {
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
-				if (property.equals("SUBREPORTVARIABLE"))
+				if (property.equals("SUBREPORTVARIABLE")) //$NON-NLS-1$
 					return true;
-				if (property.equals("TOVARIABLE"))
+				if (property.equals("TOVARIABLE")) //$NON-NLS-1$
 					return true;
-				if (property.equals("CALCULATIONTYPE"))
+				if (property.equals("CALCULATIONTYPE")) //$NON-NLS-1$
 					return true;
-				if (property.equals("INCREMENTERFACTORYCLASS"))
+				if (property.equals("INCREMENTERFACTORYCLASS")) //$NON-NLS-1$
 					return true;
 				return false;
 			}
 
 			public Object getValue(Object element, String property) {
 				JRDesignSubreportReturnValue prop = (JRDesignSubreportReturnValue) element;
-				if ("SUBREPORTVARIABLE".equals(property))
+				if ("SUBREPORTVARIABLE".equals(property)) //$NON-NLS-1$
 					return prop.getSubreportVariable();
-				if ("TOVARIABLE".equals(property)) {
+				if ("TOVARIABLE".equals(property)) { //$NON-NLS-1$
 					String[] toV = getToVariables();
 					for (int i = 0; i < toV.length; i++) {
 						if (toV[i].equals(prop.getToVariable()))
 							return i;
 					}
 				}
-				if ("CALCULATIONTYPE".equals(property))
+				if ("CALCULATIONTYPE".equals(property)) //$NON-NLS-1$
 					return EnumHelper.getValue(prop.getCalculationValue(), 0, false);
-				if ("INCREMENTERFACTORYCLASS".equals(property))
+				if ("INCREMENTERFACTORYCLASS".equals(property)) //$NON-NLS-1$
 					return prop.getIncrementerFactoryClassName();
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 			public void modify(Object element, String property, Object value) {
@@ -347,16 +347,16 @@ public class RVPropertyPage extends WizardPage {
 				setErrorMessage(null);
 				setMessage(getDescription(tableItem));
 				JRDesignSubreportReturnValue data = (JRDesignSubreportReturnValue) tableItem.getData();
-				if ("SUBREPORTVARIABLE".equals(property)) {
+				if ("SUBREPORTVARIABLE".equals(property)) { //$NON-NLS-1$
 					data.setSubreportVariable((String) value);
-				} else if ("TOVARIABLE".equals(property)) {
+				} else if ("TOVARIABLE".equals(property)) { //$NON-NLS-1$
 					String[] tv = getToVariables();
 					int val = (Integer) value;
 					if (val >= 0 && val < tv.length)
 						data.setToVariable(tv[val]);
-				} else if ("CALCULATIONTYPE".equals(property)) {
+				} else if ("CALCULATIONTYPE".equals(property)) { //$NON-NLS-1$
 					data.setCalculation((CalculationEnum) EnumHelper.getSetValue(CalculationEnum.values(), value, 0, false));
-				} else if ("INCREMENTERFACTORYCLASS".equals(property)) {
+				} else if ("INCREMENTERFACTORYCLASS".equals(property)) { //$NON-NLS-1$
 					data.setIncrementerFactoryClassName((String) value);
 				}
 				validate();
@@ -369,8 +369,8 @@ public class RVPropertyPage extends WizardPage {
 				new ComboBoxCellEditor(parent, getToVariables()),
 				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL)),
 				new ClassTypeCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "SUBREPORTVARIABLE", "TOVARIABLE", "CALCULATIONTYPE",
-				"INCREMENTERFACTORYCLASS" });
+		viewer.setColumnProperties(new String[] { "SUBREPORTVARIABLE", "TOVARIABLE", "CALCULATIONTYPE", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				"INCREMENTERFACTORYCLASS" }); //$NON-NLS-1$
 	}
 
 	public void validate() {
@@ -418,7 +418,7 @@ public class RVPropertyPage extends WizardPage {
 				switch (event.type) {
 				case SWT.MouseDown:
 					Event e = new Event();
-					e.item = (TableItem) label.getData("_TABLEITEM");
+					e.item = (TableItem) label.getData("_TABLEITEM"); //$NON-NLS-1$
 					// Assuming table is single select, set the selection as if
 					// the mouse down event went through to the table
 					table.setSelection(new TableItem[] { (TableItem) e.item });
@@ -451,7 +451,7 @@ public class RVPropertyPage extends WizardPage {
 				case SWT.MouseHover: {
 					TableItem item = table.getItem(new Point(event.x, event.y));
 					String description = getDescription(item);
-					if (item != null && !description.equals("")) {
+					if (item != null && !description.equals("")) { //$NON-NLS-1$
 
 						if (tip != null && !tip.isDisposed())
 							tip.dispose();
@@ -460,7 +460,7 @@ public class RVPropertyPage extends WizardPage {
 						label = new Label(tip, SWT.NONE);
 						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-						label.setData("_TABLEITEM", item);
+						label.setData("_TABLEITEM", item); //$NON-NLS-1$
 
 						label.setText(description);
 						label.addListener(SWT.MouseExit, labelListener);
@@ -488,6 +488,6 @@ public class RVPropertyPage extends WizardPage {
 		// if (p.getProperty().equals(key))
 		// return p.getDescription();
 		// }
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }

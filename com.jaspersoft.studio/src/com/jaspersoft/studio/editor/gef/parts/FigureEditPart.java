@@ -124,9 +124,9 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 
 	private void setPrefsBorder(IFigure rect) {
 		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
-				PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null);
+				PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
 
-		if (pref.equals("rectangle"))
+		if (pref.equals("rectangle")) //$NON-NLS-1$
 			rect.setBorder(new ElementLineBorder(ColorConstants.lightGray));
 		else
 			rect.setBorder(new CornerBorder(ColorConstants.black, 5));

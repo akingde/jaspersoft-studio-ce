@@ -41,13 +41,13 @@ public class RVPropertyEditor extends Wizard {
 
 	public RVPropertyEditor() {
 		super();
-		setWindowTitle("Properties");
+		setWindowTitle(Messages.RVPropertyEditor_properties);
 		setNeedsProgressMonitor(false);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new RVPropertyPage("subreportproperties");
+		page0 = new RVPropertyPage("subreportproperties"); //$NON-NLS-1$
 		page0.setDto(value);
 		addPage(page0);
 	}

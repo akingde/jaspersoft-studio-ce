@@ -28,9 +28,9 @@ import org.eclipse.swt.widgets.Composite;
 public class ODADatasourcePage extends ADatasourcePage {
 
 	protected ODADatasourcePage() {
-		super("odadatasourceeditor");
-		setTitle("ODA Datasource");
-		setDescription("Creates an ODA datasource.");
+		super("odadatasourceeditor"); //$NON-NLS-1$
+		setTitle(Messages.ODADatasourcePage_oda_datasource);
+		setDescription(Messages.ODADatasourcePage_description);
 	}
 
 	@Override

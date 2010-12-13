@@ -46,46 +46,46 @@ public class MHyperLink extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		JRExpressionPropertyDescriptor anchorExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION, "Hyperlink Anchor Expression");
+				JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION, Messages.MHyperLink_hyperlink_anchor_expression);
 		anchorExpressionD
-				.setDescription("The current hyperlink points to a local anchor specified by the corresponding <hyperlinkAnchorExpression> element.");
+				.setDescription(Messages.MHyperLink_hyperlink_anchor_expression_description);
 		desc.add(anchorExpressionD);
 
 		JRExpressionPropertyDescriptor pageExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION, "Hyperlink Page Expression");
+				JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION, Messages.MHyperLink_hyperlink_page_expression);
 		pageExpressionD
-				.setDescription("The current hyperlink points to a 1 based page index within the current document specified by the corresponding <hyperlinkPageExpression> element.");
+				.setDescription(Messages.MHyperLink_hyperlink_page_expression_description);
 		desc.add(pageExpressionD);
 
 		JRExpressionPropertyDescriptor referenceExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION, "Hyperlink Reference Expression");
+				JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION, Messages.MHyperLink_hyperlink_reference_expression);
 		referenceExpressionD
-				.setDescription("The current hyperlink points to an external resource specified by the corresponding <hyperlinkReferenceExpression> element, usually an URL.");
+				.setDescription(Messages.MHyperLink_hyperlink_reference_expression_description);
 		desc.add(referenceExpressionD);
 
 		JRExpressionPropertyDescriptor toolTipExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, "Hyperlink Tooltip Expression");
+				JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, Messages.MHyperLink_hyperlink_tooltip_expression);
 		toolTipExpressionD
-				.setDescription("Used in hyperlink elements to generate a tooltip for the hyperlink. The type of the expression should be java.lang.String.");
+				.setDescription(Messages.MHyperLink_hyperlink_tooltip_expression_description);
 		desc.add(toolTipExpressionD);
 
 		NTextPropertyDescriptor linkTargetD = new NTextPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TARGET,
-				"Link Target");
-		linkTargetD.setDescription("Indicates the target of the hyperlink.");
+				Messages.MHyperLink_link_target);
+		linkTargetD.setDescription(Messages.MHyperLink_link_target_description);
 		desc.add(linkTargetD);
 
 		ComboBoxPropertyDescriptor linkTypeD = new ComboBoxPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TYPE,
-				"Link Type", EnumHelper.getEnumNames(HyperlinkTypeEnum.values(), NullEnum.NOTNULL));
-		linkTypeD.setDescription("Indicates the type of the hyperlink element. ");
+				Messages.MHyperLink_link_type, EnumHelper.getEnumNames(HyperlinkTypeEnum.values(), NullEnum.NOTNULL));
+		linkTypeD.setDescription(Messages.MHyperLink_link_type_description);
 		desc.add(linkTypeD);
 
-		anchorExpressionD.setCategory("Hyperlink");
-		pageExpressionD.setCategory("Hyperlink");
-		referenceExpressionD.setCategory("Hyperlink");
-		toolTipExpressionD.setCategory("Hyperlink");
+		anchorExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
+		pageExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
+		referenceExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
+		toolTipExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
 
-		linkTargetD.setCategory("Hyperlink");
-		linkTypeD.setCategory("Hyperlink");
+		linkTargetD.setCategory(Messages.MHyperLink_hyperlink_category);
+		linkTypeD.setCategory(Messages.MHyperLink_hyperlink_category);
 	}
 
 	private static IPropertyDescriptor[] descriptors;

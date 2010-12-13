@@ -58,7 +58,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  */
 public class MDataset extends APropertyNode implements ICopyable {
 
-	private static final String PROPERTY_MAP = "PROPERTY_MAP";
+	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -69,7 +69,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("dataset");
+			iconDescriptor = new NodeIconDescriptor("dataset"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -154,40 +154,40 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME, "Name");
-		nameD.setDescription("The name of the parameter that will be passed when iterating the subdataset.");
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME, Messages.MDataset_name);
+		nameD.setDescription(Messages.MDataset_name_description);
 		desc.add(nameD);
 
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, "Properties");
-		propertiesD.setDescription("Dataset properties");
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, Messages.MDataset_properties);
+		propertiesD.setDescription(Messages.MDataset_properties_description);
 		desc.add(propertiesD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
-				"Class");
+				Messages.MDataset_class);
 		classD
-				.setDescription("Indicates which class implements the scriptlets functionality for this report. The specified class must be a subclass of JRAbstractScriptlet class. If omitted, an instance of JRDefaultScriptlet will be created.");
+				.setDescription(Messages.MDataset_class_description);
 		desc.add(classD);
 
 		NResourcePropertyDescriptor resBundleD = new NResourcePropertyDescriptor(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE,
-				"Resource Bundle");
-		resBundleD.setDescription("The base name of the dataset associated resource bundle.");
+				Messages.MDataset_resource_bundle);
+		resBundleD.setDescription(Messages.MDataset_resource_bundle_description);
 		desc.add(resBundleD);
 
-		JRQueryPropertyDescriptor queryD = new JRQueryPropertyDescriptor(JRDesignDataset.PROPERTY_QUERY, "Query",
+		JRQueryPropertyDescriptor queryD = new JRQueryPropertyDescriptor(JRDesignDataset.PROPERTY_QUERY, Messages.MDataset_query,
 				NullEnum.NULL);
-		queryD.setDescription("Contains the query that will be used to retrieve the data needed to fill the report.");
+		queryD.setDescription(Messages.MDataset_query_description);
 		desc.add(queryD);
 
 		ComboBoxPropertyDescriptor whenResMissTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, "When Resource Missing Type", EnumHelper.getEnumNames(
+				JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, Messages.MDataset_when_resource_missing_type, EnumHelper.getEnumNames(
 						WhenResourceMissingTypeEnum.values(), NullEnum.NOTNULL));
 		whenResMissTypeD
-				.setDescription("Allows customizing the way the engine deals with missing resources in the resource bundle.");
+				.setDescription(Messages.MDataset_when_resource_missing_type_description);
 		desc.add(whenResMissTypeD);
 
 		JRExpressionPropertyDescriptor filterExpression = new JRExpressionPropertyDescriptor(
-				JRDesignDataset.PROPERTY_FILTER_EXPRESSION, "Filter Expression");
-		filterExpression.setDescription("Boolean expression used to filter the rows of a data source. ");
+				JRDesignDataset.PROPERTY_FILTER_EXPRESSION, Messages.MDataset_filter_expression);
+		filterExpression.setDescription(Messages.MDataset_filter_expression_description);
 		desc.add(filterExpression);
 
 		defaultsMap.put(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,

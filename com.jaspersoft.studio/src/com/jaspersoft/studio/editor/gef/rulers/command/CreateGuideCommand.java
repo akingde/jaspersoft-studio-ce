@@ -49,7 +49,7 @@ public class CreateGuideCommand extends Command {
 	 *          the position
 	 */
 	public CreateGuideCommand(ReportRuler parent, int position) {
-		super("create command");
+		super(Messages.CreateGuideCommand_create_guide);
 		this.parent = parent;
 		this.position = position;
 	}

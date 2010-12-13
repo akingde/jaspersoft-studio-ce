@@ -49,17 +49,17 @@ public class Size2BorderAction extends SelectionAction {
 	/**
 	 * Indicates that the bottom edges should be aligned.
 	 */
-	public static final String ID_SIZE_WIDTH = "band_WIDTH";
+	public static final String ID_SIZE_WIDTH = "band_WIDTH"; //$NON-NLS-1$
 
 	/**
 	 * Indicates that the horizontal centers should be aligned.
 	 */
-	public static final String ID_SIZE_HEIGHT = "band_HEIGHT";
+	public static final String ID_SIZE_HEIGHT = "band_HEIGHT"; //$NON-NLS-1$
 
 	/**
 	 * Indicates that the left edges should be aligned.
 	 */
-	public static final String ID_SIZE_BOTH = "band_BOTH";
+	public static final String ID_SIZE_BOTH = "band_BOTH"; //$NON-NLS-1$
 
 	public final static int WIDTH = 0;
 	public final static int HEIGHT = 1;
@@ -163,28 +163,28 @@ public class Size2BorderAction extends SelectionAction {
 		switch (alignment) {
 		case WIDTH:
 			setId(ID_SIZE_WIDTH);
-			setText("Fit &Width");
-			setToolTipText("Fit width");
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"));
+			setText(Messages.Size2BorderAction_fit_width);
+			setToolTipText(Messages.Size2BorderAction_fit_width_tool_tip);
+			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif"));
+					.getImageDescriptor("icons/eclipseapps/size_to_control_width.gif")); //$NON-NLS-1$
 			break;
 
 		case HEIGHT:
 			setId(ID_SIZE_HEIGHT);
-			setText("Fit &Height");
-			setToolTipText("Fit height");
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif"));
+			setText(Messages.Size2BorderAction_fit_height);
+			setToolTipText(Messages.Size2BorderAction_fit_height_tool_tip);
+			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif")); //$NON-NLS-1$
 			setDisabledImageDescriptor(JaspersoftStudioPlugin
-					.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif"));
+					.getImageDescriptor("icons/eclipseapps/size_to_control_height.gif")); //$NON-NLS-1$
 			break;
 
 		case BOTH:
 			setId(ID_SIZE_BOTH);
-			setText("Fit &Both");
-			setToolTipText("Fit size to container");
-			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif"));
-			setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif"));
+			setText(Messages.Size2BorderAction_fit_both);
+			setToolTipText(Messages.Size2BorderAction_fit_both_tool_tip);
+			setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif")); //$NON-NLS-1$
+			setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/eclipseapps/size_to_control.gif")); //$NON-NLS-1$
 			break;
 		}
 	}

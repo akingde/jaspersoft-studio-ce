@@ -40,7 +40,7 @@ public class JRPropertyDescriptor extends PropertyDescriptor {
 		return new LabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 		};
 	}

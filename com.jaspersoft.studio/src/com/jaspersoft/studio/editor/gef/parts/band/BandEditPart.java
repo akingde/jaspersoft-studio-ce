@@ -188,7 +188,7 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener,
 	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
 		if (request.getResizeDirection() == PositionConstants.SOUTH
 				|| request.getResizeDirection() == PositionConstants.NORTH)
-			System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection());
+			System.out.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection()); //$NON-NLS-1$ //$NON-NLS-2$
 		return new Rectangle(0, 0, 0, request.getSizeDelta().height);
 	}
 

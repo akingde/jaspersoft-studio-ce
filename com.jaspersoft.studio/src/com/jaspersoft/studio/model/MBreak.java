@@ -50,7 +50,7 @@ public class MBreak extends MGraphicElement {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("break");
+			iconDescriptor = new NodeIconDescriptor("break"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -104,11 +104,11 @@ public class MBreak extends MGraphicElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseBreak.PROPERTY_TYPE, "Type", EnumHelper
+		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseBreak.PROPERTY_TYPE, Messages.MBreak_type, EnumHelper
 				.getEnumNames(BreakTypeEnum.values(), NullEnum.NULL));
-		hAlignD.setDescription("Specifies the type of the break element.");
+		hAlignD.setDescription(Messages.MBreak_type_description);
 		desc.add(hAlignD);
-		hAlignD.setCategory("Break Properties");
+		hAlignD.setCategory(Messages.MBreak_break_category);
 
 		defaultsMap.put(JRBaseBreak.PROPERTY_TYPE, EnumHelper.getValue(BreakTypeEnum.PAGE, 1, true));
 	}

@@ -37,7 +37,7 @@ public class MJDBCDatasources extends ANode implements IDatasource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("datasources.jdbc");
+			iconDescriptor = new NodeIconDescriptor("datasources.jdbc"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

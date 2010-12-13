@@ -41,13 +41,13 @@ public class JRPropertyEditor extends Wizard {
 
 	public JRPropertyEditor() {
 		super();
-		setWindowTitle("Properties");
+		setWindowTitle(Messages.JRPropertyEditor_properties);
 		setNeedsProgressMonitor(false);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new JRPropertyPage("jrproperties");
+		page0 = new JRPropertyPage("jrproperties"); //$NON-NLS-1$
 		page0.setValue(value);
 		addPage(page0);
 	}

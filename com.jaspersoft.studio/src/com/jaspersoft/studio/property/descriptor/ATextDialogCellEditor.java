@@ -79,7 +79,7 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 	 */
 	public ATextDialogCellEditor(Composite parent) {
 		this(parent, SWT.NONE);
-		setValue("");
+		setValue(""); //$NON-NLS-1$
 	}
 
 	/**
@@ -93,7 +93,7 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 	 */
 	public ATextDialogCellEditor(Composite parent, int style) {
 		super(parent, style);
-		doSetValue("");
+		doSetValue(""); //$NON-NLS-1$
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 		String txt = (String) value;
 		// XXX: We don't have a value the first time this method is called".
 		if (txt == null) {
-			txt = "";
+			txt = ""; //$NON-NLS-1$
 		}
 
 		text.removeModifyListener(getModifyListener());
@@ -455,7 +455,7 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 	 */
 	protected Object doGetValue() {
 		String tmpstr = text.getText().trim();
-		if (tmpstr.equals(""))
+		if (tmpstr.equals("")) //$NON-NLS-1$
 			tmpstr = null;
 		return tmpstr;
 	}
@@ -469,7 +469,7 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 	 */
 	protected void doSetValue(Object value) {
 		if (value == null)
-			value = "";
+			value = ""; //$NON-NLS-1$
 		super.doSetValue(value);
 		Assert.isTrue(text != null && (value instanceof String));
 		text.removeModifyListener(getModifyListener());

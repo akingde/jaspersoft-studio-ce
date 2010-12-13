@@ -50,43 +50,43 @@ public class MGroupBand extends MGroup implements IPropertySource {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		CheckBoxPropertyDescriptor startNewColumnD = new CheckBoxPropertyDescriptor(
-				JRDesignGroup.PROPERTY_START_NEW_COLUMN, "Start New Column");
-		startNewColumnD.setDescription("Flag that signals if the group header should be printed always on a new column.");
+				JRDesignGroup.PROPERTY_START_NEW_COLUMN, Messages.MGroupBand_start_new_column);
+		startNewColumnD.setDescription(Messages.MGroupBand_start_new_column_description);
 		desc.add(startNewColumnD);
 
 		CheckBoxPropertyDescriptor startNewPageD = new CheckBoxPropertyDescriptor(JRDesignGroup.PROPERTY_START_NEW_PAGE,
-				"Start New Page");
-		startNewPageD.setDescription("Flag that signals if the group header should be printed always on a new page.");
+				Messages.MGroupBand_start_new_page);
+		startNewPageD.setDescription(Messages.MGroupBand_start_new_page_description);
 		desc.add(startNewPageD);
 
 		CheckBoxPropertyDescriptor reprintHeaderD = new CheckBoxPropertyDescriptor(
-				JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, "Reprint Header On Each Page");
+				JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, Messages.MGroupBand_reprint_header_on_each_page);
 		reprintHeaderD
-				.setDescription("Flag that signals if the group header should be reprinted at the beginning of each page.");
+				.setDescription(Messages.MGroupBand_reprint_header_on_each_page_description);
 		desc.add(reprintHeaderD);
 
 		CheckBoxPropertyDescriptor resetPageNumberD = new CheckBoxPropertyDescriptor(
-				JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, "Reset Page Number");
+				JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, Messages.MGroupBand_reset_page_number);
 		resetPageNumberD
-				.setDescription("Flag that signals if the group header should be printed always on a new page, along with the re-initialization of the page number.");
+				.setDescription(Messages.MGroupBand_reset_page_number_description);
 		desc.add(resetPageNumberD);
 
 		CheckBoxPropertyDescriptor keepTogetherD = new CheckBoxPropertyDescriptor(JRDesignGroup.PROPERTY_KEEP_TOGETHER,
-				"Keep together");
+				Messages.MGroupBand_keep_together);
 		keepTogetherD
-				.setDescription("Flag that prevents the group from splitting on two separate pages/columns, but only on the first break attempt.");
+				.setDescription(Messages.MGroupBand_keep_together_description);
 		desc.add(keepTogetherD);
 
 		ComboBoxPropertyDescriptor footerPositionD = new ComboBoxPropertyDescriptor(JRDesignGroup.PROPERTY_FOOTER_POSITION,
-				"Footer Position", EnumHelper.getEnumNames(FooterPositionEnum.values(), NullEnum.NULL));
+				Messages.MGroupBand_footer_position, EnumHelper.getEnumNames(FooterPositionEnum.values(), NullEnum.NULL));
 		footerPositionD
-				.setDescription("Specifies how the group footer section behaves with regards to its position on the current page.");
+				.setDescription(Messages.MGroupBand_footer_position_description);
 		desc.add(footerPositionD);
 
 		IntegerPropertyDescriptor minHeightD = new IntegerPropertyDescriptor(
-				JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, "Min Height To Start New Page");
+				JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, Messages.MGroupBand_min_height_to_start_new_page);
 		minHeightD
-				.setDescription("Minimum amount of vertically space needed at the bottom of the column in order to place the group header on the current column.");
+				.setDescription(Messages.MGroupBand_min_height_to_start_new_page_description);
 		desc.add(minHeightD);
 
 		defaultsMap.put(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, CONST_MIN_HEIGHT);
