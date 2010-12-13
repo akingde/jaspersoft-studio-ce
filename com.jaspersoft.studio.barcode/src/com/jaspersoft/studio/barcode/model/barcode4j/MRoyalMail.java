@@ -43,8 +43,8 @@ public class MRoyalMail extends MFourStateBarcode {
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		el.setComponent(new RoyalMailCustomerComponent());
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr",
-				"RoyalMailCustomer"));
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
+				"RoyalMailCustomer")); //$NON-NLS-1$
 		return el;
 	}
 }

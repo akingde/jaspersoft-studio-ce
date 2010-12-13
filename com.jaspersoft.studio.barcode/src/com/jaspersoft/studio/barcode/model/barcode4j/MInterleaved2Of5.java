@@ -53,8 +53,8 @@ public class MInterleaved2Of5 extends MBarcode4j {
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		el.setComponent(new Interleaved2Of5Component());
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr",
-				"Interleaved2Of5"));
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
+				"Interleaved2Of5")); //$NON-NLS-1$
 		return el;
 	}
 

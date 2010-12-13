@@ -4,6 +4,10 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.barcode.model.barcode4j.messages"; //$NON-NLS-1$
+	public static String DataMatrixShape_default;
+	public static String DataMatrixShape_force_none;
+	public static String DataMatrixShape_force_rectangle;
+	public static String DataMatrixShape_force_square;
 	public static String MBarcode4j_module_width;
 	public static String MBarcode4j_module_width_description;
 	public static String MBarcode4j_orientation;
@@ -91,6 +95,14 @@ public class Messages extends NLS {
 	public static String MUPCE_checksum_mode;
 	public static String MUPCE_checksum_mode_description;
 	public static String MUPCE_properties_category;
+	public static String Orientation_down;
+	public static String Orientation_left;
+	public static String Orientation_right;
+	public static String Orientation_up;
+	public static String TextPosition_bottom;
+	public static String TextPosition_default;
+	public static String TextPosition_none;
+	public static String TextPosition_top;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

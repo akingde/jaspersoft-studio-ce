@@ -21,18 +21,18 @@ package com.jaspersoft.studio.barcode.model.barcode4j;
 
 public class TextPosition {
 	public static String[] getItems() {
-		return new String[] { "<Default>", "None", "Bottom", "Top" };
+		return new String[] { Messages.TextPosition_default, Messages.TextPosition_none, Messages.TextPosition_bottom, Messages.TextPosition_top };
 	}
 
 	public static int getPos4TextPosition(String textPosition) {
 		if (textPosition != null) {
-			if (textPosition.equals(""))
+			if (textPosition.equals("")) //$NON-NLS-1$
 				return 0;
-			if (textPosition.equals("none"))
+			if (textPosition.equals("none")) //$NON-NLS-1$
 				return 1;
-			if (textPosition.equals("bottom"))
+			if (textPosition.equals("bottom")) //$NON-NLS-1$
 				return 2;
-			if (textPosition.equals("top"))
+			if (textPosition.equals("top")) //$NON-NLS-1$
 				return 3;
 		}
 		return 0;
@@ -41,14 +41,14 @@ public class TextPosition {
 	public static String getTextPosition4Pos(int pos) {
 		switch (pos) {
 		case 0:
-			return "";
+			return ""; //$NON-NLS-1$
 		case 1:
-			return "none";
+			return "none"; //$NON-NLS-1$
 		case 2:
-			return "bottom";
+			return "bottom"; //$NON-NLS-1$
 		case 3:
-			return "top";
+			return "top"; //$NON-NLS-1$
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }

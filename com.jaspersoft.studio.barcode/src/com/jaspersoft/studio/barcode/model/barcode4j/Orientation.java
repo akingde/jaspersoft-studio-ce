@@ -27,7 +27,7 @@ import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
 
 public class Orientation {
 	public static String[] getItems() {
-		return new String[] { "up", "left", "down", "right" };
+		return new String[] { Messages.Orientation_up, Messages.Orientation_left, Messages.Orientation_down, Messages.Orientation_right };
 	}
 
 	public static int getPos4Orientation(int orientation) {

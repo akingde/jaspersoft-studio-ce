@@ -11,6 +11,7 @@ public class Messages extends NLS {
 	public static String MBarcode_evaluation_time;
 	public static String MBarcode_evaluation_time_description;
 	public static String MBarcode_properties_category;
+	public static String MBarcodeBarbecue_3;
 	public static String MBarcodeBarbecue_application_identifier_expression;
 	public static String MBarcodeBarbecue_application_identifier_expression_description;
 	public static String MBarcodeBarbecue_bar_height;

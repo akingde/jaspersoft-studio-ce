@@ -21,18 +21,18 @@ package com.jaspersoft.studio.barcode.model.barcode4j;
 
 public class DataMatrixShape {
 	public static String[] getItems() {
-		return new String[] { "<Default>", "Force None", "Force Square", "Force Rectangle" };
+		return new String[] { Messages.DataMatrixShape_default, Messages.DataMatrixShape_force_none, Messages.DataMatrixShape_force_square, Messages.DataMatrixShape_force_rectangle };
 	}
 
 	public static int getPos4Shape(String pos4shape) {
 		if (pos4shape != null) {
-			if (pos4shape.equals(""))
+			if (pos4shape.equals("")) //$NON-NLS-1$
 				return 0;
-			if (pos4shape.equals("force-none"))
+			if (pos4shape.equals("force-none")) //$NON-NLS-1$
 				return 1;
-			if (pos4shape.equals("force-square"))
+			if (pos4shape.equals("force-square")) //$NON-NLS-1$
 				return 2;
-			if (pos4shape.equals("force-rectangle"))
+			if (pos4shape.equals("force-rectangle")) //$NON-NLS-1$
 				return 3;
 		}
 		return 0;
@@ -41,14 +41,14 @@ public class DataMatrixShape {
 	public static String getShape4Pos(int pos) {
 		switch (pos) {
 		case 0:
-			return "";
+			return ""; //$NON-NLS-1$
 		case 1:
-			return "force-none";
+			return "force-none"; //$NON-NLS-1$
 		case 2:
-			return "force-square";
+			return "force-square"; //$NON-NLS-1$
 		case 3:
-			return "force-rectangle";
+			return "force-rectangle"; //$NON-NLS-1$
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }
