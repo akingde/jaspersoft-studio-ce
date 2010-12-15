@@ -98,10 +98,12 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 			}
 			setWidgetImage(image);
 		}
-		if (node.getBackground() != null)
-			item.setBackground(node.getBackground());
-		if (node.getForeground() != null)
-			item.setForeground(node.getForeground());
+		if (item != null) {
+			if (node.getBackground() != null)
+				item.setBackground(node.getBackground());
+			if (node.getForeground() != null)
+				item.setForeground(node.getForeground());
+		}
 		String displayText = node.getDisplayText();
 		if (displayText.length() > 30)
 			displayText = displayText.substring(0, 30) + " ...";

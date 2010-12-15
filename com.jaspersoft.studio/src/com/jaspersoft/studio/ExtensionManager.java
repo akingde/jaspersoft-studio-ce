@@ -106,6 +106,15 @@ public class ExtensionManager {
 		return null;
 	}
 
+	public Command getOrphanCommand(ANode parent, ANode child) {
+		for (IComponentFactory f : nodeFactory) {
+			Command c = f.getOrphanCommand(parent, child);
+			if (c != null)
+				return c;
+		}
+		return null;
+	}
+
 	public IFigure createFigure(ANode node) {
 		for (IComponentFactory f : nodeFactory) {
 			IFigure c = f.createFigure(node);

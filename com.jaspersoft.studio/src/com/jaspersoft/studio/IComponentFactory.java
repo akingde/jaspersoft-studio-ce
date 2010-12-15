@@ -38,7 +38,7 @@ public interface IComponentFactory {
 	public List<Class<?>> getPaletteEntries();
 
 	public IFigure createFigure(final ANode node);
-	
+
 	public EditPart createEditPart(EditPart context, Object model);
 
 	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex);
@@ -46,6 +46,8 @@ public interface IComponentFactory {
 	public Command getReorderCommand(ANode parent, ANode child, int newIndex);
 
 	public Command getDeleteCommand(ANode parent, ANode child);
+
+	public Command getOrphanCommand(ANode parent, ANode child);
 
 	public List<Action> getActions(WorkbenchPart part);
 

@@ -570,21 +570,22 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	 *          the evt
 	 */
 	private void handleBandChanged(PropertyChangeEvent evt) {
-		for (Iterator<?> it = getChildren().iterator(); it.hasNext();) {
-			ANode node = (ANode) it.next();
-			if (node instanceof MBand) {
-				MBand mBand = (MBand) node;
-				if (evt.getPropertyName().equals(mBand.getBandType().getName())) {
-					mBand.setValue(evt.getNewValue());
-					if (evt.getNewValue() != null)
-						ReportFactory.createElementsForBand(mBand, ((JRDesignBand) evt.getNewValue()).getChildren());
-					else
-						mBand.removeChildren();
-					mBand.propertyChange(new PropertyChangeEvent(mBand, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
-					break;
+		if (evt.getNewValue() instanceof JRDesignBand)
+			for (Iterator<?> it = getChildren().iterator(); it.hasNext();) {
+				ANode node = (ANode) it.next();
+				if (node instanceof MBand) {
+					MBand mBand = (MBand) node;
+					if (evt.getPropertyName().equals(mBand.getBandType().getName())) {
+						mBand.setValue(evt.getNewValue());
+						if (evt.getNewValue() != null)
+							ReportFactory.createElementsForBand(mBand, ((JRDesignBand) evt.getNewValue()).getChildren());
+						else
+							mBand.removeChildren();
+						mBand.propertyChange(new PropertyChangeEvent(mBand, "VALUE", evt.getOldValue(), evt.getNewValue()));
+						break;
+					}
 				}
 			}
-		}
 	}
 
 	/**

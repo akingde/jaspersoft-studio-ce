@@ -419,6 +419,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 * @return the orphan command
 	 */
 	public static Command getOrphanCommand(ANode parent, ANode child) {
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		Command c = m.getOrphanCommand(parent, child);
+		if (c != null)
+			return c;
+		
 		if (child instanceof MGraphicElement)
 			return new OrphanElementCommand(parent, (MGraphicElement) child);
 		if (child instanceof MElementGroup)
