@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.table.model;
 
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -26,10 +28,10 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MCollection;
+import com.jaspersoft.studio.table.TableComponentFactory;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
 
-public class MTableHeader extends MCollection {
+public class MTableHeader extends AMCollection {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -41,7 +43,7 @@ public class MTableHeader extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tableheader"); //$NON-NLS-1$
+			iconDescriptor = new TableNodeIconDescriptor("tableheader");
 		return iconDescriptor;
 	}
 
@@ -68,6 +70,16 @@ public class MTableHeader extends MCollection {
 	 */
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
+	}
+
+	@Override
+	public String getCellEvent() {
+		return StandardBaseColumn.PROPERTY_TABLE_HEADER;
+	}
+
+	@Override
+	public void createColumn(ANode mth, BaseColumn bc, int i, int index) {
+		TableComponentFactory.createCellTableHeader(mth, bc, i, index);
 	}
 
 }

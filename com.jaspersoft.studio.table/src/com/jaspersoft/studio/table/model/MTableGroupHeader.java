@@ -19,6 +19,9 @@
  */
 package com.jaspersoft.studio.table.model;
 
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -26,10 +29,10 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MCollection;
+import com.jaspersoft.studio.table.TableComponentFactory;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
 
-public class MTableGroupHeader extends MCollection {
+public class MTableGroupHeader extends AMCollection {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -41,19 +44,27 @@ public class MTableGroupHeader extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablegroupheader"); //$NON-NLS-1$
+			iconDescriptor = new TableNodeIconDescriptor("tablegroupheader");
 		return iconDescriptor;
 	}
 
 	/** The descriptors. */
 	protected static IPropertyDescriptor[] descriptors;
 
-	public MTableGroupHeader(ANode parent, JRDesignGroup jrDataset, String property) {
+	public MTableGroupHeader(ANode parent, JRDesignComponentElement jrDataset, JRDesignGroup jrDesignGroup,
+			String property) {
 		super(parent, jrDataset, property);
+		this.jrDesignGroup = jrDesignGroup;
+	}
+
+	private JRDesignGroup jrDesignGroup;
+
+	public JRDesignGroup getJrDesignGroup() {
+		return jrDesignGroup;
 	}
 
 	public String getDisplayText() {
-		return Messages.MTableGroupHeader_group_header + ((JRDesignGroup) getValue()).getName();
+		return "Group Header: " + jrDesignGroup.getName();
 	}
 
 	/*
@@ -63,6 +74,16 @@ public class MTableGroupHeader extends MCollection {
 	 */
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
+	}
+
+	@Override
+	public String getCellEvent() {
+		return StandardBaseColumn.PROPERTY_GROUP_HEADERS;
+	}
+
+	@Override
+	public void createColumn(ANode mth, BaseColumn bc, int i, int index) {
+		TableComponentFactory.createCellGroupHeader(mth, bc, i, jrDesignGroup.getName(), index);
 	}
 
 }

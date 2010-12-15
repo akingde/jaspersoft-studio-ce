@@ -56,7 +56,7 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("table"); //$NON-NLS-1$
+			iconDescriptor = new TableNodeIconDescriptor("table");
 		return iconDescriptor;
 	}
 
@@ -122,9 +122,9 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(StandardTable.PROPERTY_DATASET_RUN, Messages.MTable_dataset_run);
-		datasetRunD.setDescription(Messages.MTable_dataset_run_description);
-		datasetRunD.setCategory(Messages.MTable_properties_category);
+		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(StandardTable.PROPERTY_DATASET_RUN, "Dataset Run");
+		datasetRunD.setDescription("Dataset run.");
+		datasetRunD.setCategory("Table Properties");
 		desc.add(datasetRunD);
 
 	}
@@ -156,34 +156,6 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		return super.getPropertyValue(id);
 	}
 
-	@Override
-	public void setPropertyValue(Object id, Object value) {
-		// JRDesignCrosstab jrElement = (JRDesignCrosstab) getValue();
-		//
-		// if (id.equals(JRDesignCrosstab.PROPERTY_REPEAT_COLUMN_HEADERS))
-		// jrElement.setRepeatColumnHeaders((Boolean) value);
-		// else if (id.equals(JRDesignCrosstab.PROPERTY_REPEAT_ROW_HEADERS))
-		// jrElement.setRepeatRowHeaders((Boolean) value);
-		// else if (id.equals(JRDesignCrosstab.PROPERTY_IGNORE_WIDTH))
-		// jrElement.setIgnoreWidth((Boolean) value);
-		// else if (id.equals(JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET))
-		// jrElement.setColumnBreakOffset((Integer) value);
-		// if (id.equals(JRBaseCrosstab.PROPERTY_RUN_DIRECTION)) {
-		// jrElement.setRunDirection((RunDirectionEnum) EnumHelper.getSetValue(RunDirectionEnum.values(), value, 0, false));
-		//
-		// getTableManager().refresh();
-		// getPropertyChangeSupport().firePropertyChange(
-		// new PropertyChangeEvent(this, JRBaseCrosstab.PROPERTY_RUN_DIRECTION, null, value));
-		// } else if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-		// if (value instanceof MExpression) {
-		// prmMapExpr = (MExpression) value;
-		// JRExpression expression = (JRExpression) prmMapExpr.getValue();
-		// jrElement.setParametersMapExpression(expression);
-		// }
-		// } else
-		super.setPropertyValue(id, value);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -205,8 +177,6 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	}
 
 	public JRDesignElement createJRElement(JasperDesign jasperDesign, byte chartType) {
-		// JRDesignElement jrDesignElement = new JRDesignCrosstab(jasperDesign);
-		// return jrDesignElement;
 		return null;
 	}
 
@@ -240,86 +210,13 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		return getIconDescriptor().getToolTip();
 	}
 
-	@Override
-	public void setValue(Object value) {
-		// JRCrosstab oldObject = (JRCrosstab) getValue();
-		// JRCrosstab newObject = (JRCrosstab) value;
-		//
-		// if (oldObject != null) {
-		// JRCellContents headerCell = oldObject.getHeaderCell();
-		// if (headerCell != null)
-		// ((JRDesignCellContents) headerCell).getEventSupport().removePropertyChangeListener(this);
-		// }
-		// if (newObject != null) {
-		//
-		// JRCellContents headerCell = newObject.getHeaderCell();
-		// if (headerCell != null)
-		// ((JRDesignCellContents) headerCell).getEventSupport().addPropertyChangeListener(this);
-		// }
-		super.setValue(value);
-	}
-
-	@Override
-	public void propertyChange(final PropertyChangeEvent evt) {
-		// if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {
-		// if (evt.getSource() == getValue()) {
-		// if (evt.getOldValue() != null && evt.getNewValue() == null) {
-		// List<INode> child = this.getChildren();
-		// for (INode n : child) {
-		// if (n instanceof MCrosstabHeader)
-		// ((MCrosstabHeader) n).setValue(null);
-		// }
-		// } else {
-		// // add the node to this parent
-		// List<INode> child = this.getChildren();
-		// for (INode n : child) {
-		// if (n instanceof MCrosstabHeader) {
-		// ((MCrosstabHeader) n).setValue(evt.getNewValue());
-		// break;
-		// }
-		// }
-		// }
-		// }
-		// } else if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_WHEN_NO_DATA_CELL)) {
-		// if (evt.getSource() == getValue()) {
-		// if (evt.getOldValue() != null && evt.getNewValue() == null) {
-		// List<INode> child = this.getChildren();
-		// for (INode n : child) {
-		// if (n instanceof MCrosstabWhenNoData)
-		// ((MCrosstabWhenNoData) n).setValue(null);
-		// }
-		// } else {
-		// // add the node to this parent
-		// List<INode> child = this.getChildren();
-		// for (INode n : child) {
-		// if (n instanceof MCrosstabWhenNoData) {
-		// ((MCrosstabWhenNoData) n).setValue(evt.getNewValue());
-		// break;
-		// }
-		// }
-		// }
-		// }
-		// } else if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_CELLS)) {
-		// if (evt.getSource() == getValue() && getValue() != null && !flagRefreshCells) {
-		// flagRefreshCells = true;
-		// final CrosstabComponentFactory crosstabComponentFactory = new CrosstabComponentFactory();
-		// crosstabComponentFactory.deleteCellNodes(MTable.this);
-		// Display.getCurrent().asyncExec(new Runnable() {
-		// public void run() {
-		// crosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), MTable.this);
-		// flagRefreshCells = false;
-		// MTable.super.propertyChange(evt);
-		// }
-		// });
-		// }
-		// }
-		super.propertyChange(evt);
-	}
-
-	private boolean flagRefreshCells = false;
-
 	public JRElementGroup getJRElementGroup() {
 		return null;
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		getTableManager().refresh();
+		super.propertyChange(evt);
+	}
 }

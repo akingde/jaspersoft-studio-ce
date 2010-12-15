@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.table.model;
 
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -26,10 +28,10 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MCollection;
+import com.jaspersoft.studio.table.TableComponentFactory;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
 
-public class MTableDetail extends MCollection {
+public class MTableDetail extends AMCollection {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -41,7 +43,7 @@ public class MTableDetail extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tabledetail"); //$NON-NLS-1$
+			iconDescriptor = new TableNodeIconDescriptor("tabledetail");
 		return iconDescriptor;
 	}
 
@@ -68,6 +70,16 @@ public class MTableDetail extends MCollection {
 	 */
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
+	}
+
+	@Override
+	public String getCellEvent() {
+		return StandardColumn.PROPERTY_DETAIL;
+	}
+
+	@Override
+	public void createColumn(ANode mth, BaseColumn bc, int i, int index) {
+		TableComponentFactory.createCellDetail(mth, bc, i, index);
 	}
 
 }

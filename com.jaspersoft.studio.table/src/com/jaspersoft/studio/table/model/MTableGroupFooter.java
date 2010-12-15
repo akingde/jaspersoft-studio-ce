@@ -19,6 +19,10 @@
  */
 package com.jaspersoft.studio.table.model;
 
+import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -26,10 +30,10 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.MCollection;
+import com.jaspersoft.studio.table.TableComponentFactory;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
 
-public class MTableGroupFooter extends MCollection {
+public class MTableGroupFooter extends AMCollection {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -41,15 +45,23 @@ public class MTableGroupFooter extends MCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablegroupfooter"); //$NON-NLS-1$
+			iconDescriptor = new TableNodeIconDescriptor("tablegroupfooter");
 		return iconDescriptor;
 	}
 
 	/** The descriptors. */
 	protected static IPropertyDescriptor[] descriptors;
 
-	public MTableGroupFooter(ANode parent, JRDesignGroup jrDataset, String property) {
+	public MTableGroupFooter(ANode parent, JRDesignComponentElement jrDataset, JRDesignGroup jrDesignGroup,
+			String property) {
 		super(parent, jrDataset, property);
+		this.jrDesignGroup = jrDesignGroup;
+	}
+
+	private JRDesignGroup jrDesignGroup;
+
+	public JRDesignGroup getJrDesignGroup() {
+		return jrDesignGroup;
 	}
 
 	/*
@@ -58,7 +70,7 @@ public class MTableGroupFooter extends MCollection {
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
 	public String getDisplayText() {
-		return Messages.MTableGroupFooter_group_footer + ((JRDesignGroup) getValue()).getName();
+		return "Group Footer: " + jrDesignGroup.getName();
 	}
 
 	/*
@@ -68,6 +80,16 @@ public class MTableGroupFooter extends MCollection {
 	 */
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
+	}
+
+	@Override
+	public String getCellEvent() {
+		return StandardBaseColumn.PROPERTY_GROUP_FOOTERS;
+	}
+
+	@Override
+	public void createColumn(ANode mth, BaseColumn bc, int i, int index) {
+		TableComponentFactory.createCellGroupFooter(mth, bc, i, jrDesignGroup.getName(), index);
 	}
 
 }
