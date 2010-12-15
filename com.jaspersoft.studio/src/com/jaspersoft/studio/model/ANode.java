@@ -134,7 +134,7 @@ public abstract class ANode implements INode {
 	public INode getRoot() {
 		INode node = this;
 		while (!(node instanceof MReport) && !(node instanceof MRoot)) {
-			if (parent == null)
+			if (parent == null || node == null)
 				return this;
 			node = node.getParent();
 		}
