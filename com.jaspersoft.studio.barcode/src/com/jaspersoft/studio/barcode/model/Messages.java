@@ -25,6 +25,8 @@ public class Messages extends NLS {
 	public static String MBarcodeBarbecue_properties_category;
 	public static String MBarcodeBarbecue_type;
 	public static String MBarcodeBarbecue_type_description;
+	public static String MBarcodeBarbecue_rotation;
+	public static String MBarcodeBarbecue_rotation_description;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

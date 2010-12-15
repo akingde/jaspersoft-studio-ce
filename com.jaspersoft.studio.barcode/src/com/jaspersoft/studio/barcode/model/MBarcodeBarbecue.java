@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.barcode.model;
 
@@ -33,8 +29,10 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
+import net.sf.jasperreports.engine.type.RotationEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.barcode.BarcodeNodeIconDescriptor;
@@ -42,6 +40,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
@@ -97,8 +96,8 @@ public class MBarcodeBarbecue extends MBarcode {
 		exp.setText("\"1234\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
-				"barbecue")); //$NON-NLS-1$
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr",
+				"barbecue"));
 		return el;
 	}
 
@@ -176,7 +175,8 @@ public class MBarcodeBarbecue extends MBarcode {
 		desc.add(appIDexprD);
 
 		RComboBoxPropertyDescriptor typeD = new RComboBoxPropertyDescriptor(StandardBarbecueComponent.PROPERTY_TYPE,
-				Messages.MBarcodeBarbecue_type, new String[] { Messages.MBarcodeBarbecue_3, "3of9", "Bookland", "Codabar", "Code128", "Code128A", "Code128B", "Code128C", //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+				Messages.MBarcodeBarbecue_type, new String[] {
+						"2of7", "3of9", "Bookland", "Codabar", "Code128", "Code128A", "Code128B", "Code128C", //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
 						"Code39", "Code39 (Extended)", "EAN128", "EAN13", "GlobalTradeItemNumber", "Int2of5", "Monarch", "NW7", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 						"PDF417", "PostNet", "RandomWeightUPCA", "SCC14ShippingCode", "ShipmentIdentificationNumber", "SSCC18", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 						"Std2of5", "UCC128", "UPCA", "USD3", "USD4", "USPS" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
@@ -193,6 +193,12 @@ public class MBarcodeBarbecue extends MBarcode {
 		drawTextD.setDescription(Messages.MBarcodeBarbecue_draw_text_description);
 		desc.add(drawTextD);
 
+		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(StandardBarbecueComponent.PROPERTY_ROTATION,
+				Messages.MBarcodeBarbecue_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
+		rotationD.setDescription(Messages.MBarcodeBarbecue_rotation_description);
+		desc.add(rotationD);
+
+		rotationD.setCategory(Messages.MBarcodeBarbecue_properties_category);
 		widthD.setCategory(Messages.MBarcodeBarbecue_properties_category);
 		typeD.setCategory(Messages.MBarcodeBarbecue_properties_category);
 		drawTextD.setCategory(Messages.MBarcodeBarbecue_properties_category);
@@ -201,6 +207,7 @@ public class MBarcodeBarbecue extends MBarcode {
 		appIDexprD.setCategory(Messages.MBarcodeBarbecue_properties_category);
 
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
+		defaultsMap.put(StandardBarbecueComponent.PROPERTY_ROTATION, null);
 	}
 
 	private MExpression codeExpression;
@@ -232,6 +239,8 @@ public class MBarcodeBarbecue extends MBarcode {
 				codeExpression = new MExpression(jrList.getCodeExpression());
 			return codeExpression;
 		}
+		if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
+			return EnumHelper.getValue(jrList.getOwnRotation(), 0, true);
 		if (id.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION)) {
 			if (appidExpression == null)
 				appidExpression = new MExpression(jrList.getApplicationIdentifierExpression());
@@ -256,6 +265,8 @@ public class MBarcodeBarbecue extends MBarcode {
 			jrList.setDrawText(((Boolean) value).booleanValue());
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_TYPE))
 			jrList.setType((String) value);
+		else if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
+			jrList.setRotation((RotationEnum) EnumHelper.getSetValue(RotationEnum.values(), value, 0, true));
 
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_HEIGTH))
 			jrList.setBarHeight((Integer) value);
