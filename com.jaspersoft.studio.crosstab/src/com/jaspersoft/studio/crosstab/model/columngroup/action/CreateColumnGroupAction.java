@@ -33,7 +33,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 public class CreateColumnGroupAction extends ACreateAction {
 
 	/** The Constant ID. */
-	public static final String ID = "create_columngroup"; //$NON-NLS-1$
+	public static final String ID = "create_crosstab_columngroup"; //$NON-NLS-1$
 
 	/**
 	 * Constructs a <code>CreateAction</code> using the specified part.
@@ -52,7 +52,7 @@ public class CreateColumnGroupAction extends ACreateAction {
 	protected void init() {
 		super.init();
 		setText(Messages.CreateColumnGroupAction_create_column_group);
-		setToolTipText(Messages.CreateColumnGroupAction_create_column_group_tool_tip);
+		setToolTipText(Messages.CreateColumnAction_create_column_group_tool_tip);
 		setId(CreateColumnGroupAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
