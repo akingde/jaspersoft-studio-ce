@@ -34,13 +34,13 @@ public class TableManager {
 	}
 
 	public void refresh() {
-		// table.preprocess();
 		init(table);
 	}
 
 	public void init(StandardTable table) {
 		boundsMap.clear();
 
+		List<BaseColumn> allColumns = getAllColumns(table.getColumns());
 		int y = 0;
 		int h = 0;
 		Rectangle r = new Rectangle(0, 0, 0, 0);
@@ -78,7 +78,7 @@ public class TableManager {
 		y += h;
 		r = new Rectangle(0, y, 0, 0);
 		h = 0;
-		for (BaseColumn bc : getAllColumns(table.getColumns())) {
+		for (BaseColumn bc : allColumns) {
 			r = initDetail(r, bc);
 			r.setLocation(r.x, y);
 			if (h < r.height)
@@ -232,7 +232,8 @@ public class TableManager {
 		if (bc != null && bc instanceof StandardColumn) {
 			Cell c = ((StandardColumn) bc).getDetailCell();
 			w = bc.getWidth();
-			h = c.getHeight();
+			if (c != null)
+				h = c.getHeight();
 			boundsMap.put(c, new Rectangle(p.x, p.y, w, h));
 		}
 		return new Rectangle(p.x + w, p.y, w, h);
@@ -297,11 +298,15 @@ public class TableManager {
 	}
 
 	public List<?> getGroupList() {
+		return getGroupList(table, jasperDesign);
+	}
+
+	public static List<?> getGroupList(StandardTable stable, JasperDesign jd) {
 		List<?> groupsList = null;
-		JRDatasetRun datasetRun = table.getDatasetRun();
+		JRDatasetRun datasetRun = stable.getDatasetRun();
 		if (datasetRun != null) {
 			String dataSetName = datasetRun.getDatasetName();
-			JRDesignDataset ds = (JRDesignDataset) jasperDesign.getDatasetMap().get(dataSetName);
+			JRDesignDataset ds = (JRDesignDataset) jd.getDatasetMap().get(dataSetName);
 			groupsList = (ds != null ? ds.getGroupsList() : null);
 		}
 		return groupsList;

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
@@ -44,11 +45,9 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.ReportFactory;
-import com.jaspersoft.studio.table.model.MCell;
-import com.jaspersoft.studio.table.model.MColumn;
-import com.jaspersoft.studio.table.model.MColumnGroup;
-import com.jaspersoft.studio.table.model.MColumnGroupCell;
+import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.model.MTableColumnFooter;
 import com.jaspersoft.studio.table.model.MTableColumnHeader;
@@ -57,6 +56,25 @@ import com.jaspersoft.studio.table.model.MTableFooter;
 import com.jaspersoft.studio.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.table.model.MTableHeader;
+import com.jaspersoft.studio.table.model.column.MCell;
+import com.jaspersoft.studio.table.model.column.MColumn;
+import com.jaspersoft.studio.table.model.column.action.CreateColumnAction;
+import com.jaspersoft.studio.table.model.column.action.CreateColumnCellAction;
+import com.jaspersoft.studio.table.model.column.command.CreateColumnCellCommand;
+import com.jaspersoft.studio.table.model.column.command.CreateColumnCommand;
+import com.jaspersoft.studio.table.model.column.command.CreateColumnFromGroupCommand;
+import com.jaspersoft.studio.table.model.column.command.DeleteColumnCellCommand;
+import com.jaspersoft.studio.table.model.column.command.DeleteColumnCommand;
+import com.jaspersoft.studio.table.model.column.command.DeleteColumnFromGroupCommand;
+import com.jaspersoft.studio.table.model.column.command.OrphanColumn4GroupCommand;
+import com.jaspersoft.studio.table.model.column.command.OrphanColumnCommand;
+import com.jaspersoft.studio.table.model.column.command.ReorderColumnCommand;
+import com.jaspersoft.studio.table.model.columngroup.MColumnGroup;
+import com.jaspersoft.studio.table.model.columngroup.MColumnGroupCell;
+import com.jaspersoft.studio.table.model.columngroup.action.CreateColumnGroupAction;
+import com.jaspersoft.studio.table.model.columngroup.command.CreateColumnGroupCommand;
+import com.jaspersoft.studio.table.model.columngroup.command.CreateColumnGroupFromGroupCommand;
+import com.jaspersoft.studio.table.model.columngroup.command.ReorderColumnGroupCommand;
 import com.jaspersoft.studio.table.part.TableCellEditPart;
 import com.jaspersoft.studio.table.part.TableEditPart;
 
@@ -66,195 +84,184 @@ public class TableComponentFactory implements IComponentFactory {
 		if (jrObject instanceof JRDesignComponentElement) {
 			JRDesignComponentElement tbl = (JRDesignComponentElement) jrObject;
 			if (tbl.getComponent() instanceof StandardTable) {
-				StandardTable table = (StandardTable) tbl.getComponent();
-				JasperDesign jasperDesign = parent.getJasperDesign();
 
+				JasperDesign jasperDesign = parent.getJasperDesign();
 				TableManager tblManager = new TableManager(tbl, jasperDesign);
 				MTable mt = new MTable(parent, tbl, newIndex, tblManager);
-				MTableHeader mth = new MTableHeader(mt, tbl, StandardColumn.PROPERTY_TABLE_HEADER);
-				MTableColumnHeader mch = new MTableColumnHeader(mt, tbl, StandardColumn.PROPERTY_COLUMN_HEADER);
-
-				List<?> groupsList = tblManager.getGroupList();
-				List<MTableGroupHeader> grHeaders = new ArrayList<MTableGroupHeader>();
-				List<MTableGroupFooter> grFooters = new ArrayList<MTableGroupFooter>();
-
-				if (groupsList != null)
-					for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
-						JRDesignGroup jrGroup = (JRDesignGroup) it.next();
-						grHeaders.add(new MTableGroupHeader(mt, jrGroup, ""));
-					}
-
-				MTableDetail mtd = new MTableDetail(mt, tbl, StandardColumn.PROPERTY_DETAIL);
-
-				if (groupsList != null)
-					for (ListIterator<?> it = groupsList.listIterator(groupsList.size()); it.hasPrevious();) {
-						JRDesignGroup jrGroup = (JRDesignGroup) it.previous();
-						grFooters.add(new MTableGroupFooter(mt, jrGroup, ""));
-					}
-
-				MTableColumnFooter mtcf = new MTableColumnFooter(mt, tbl, StandardColumn.PROPERTY_COLUMN_FOOTER);
-				MTableFooter mtf = new MTableFooter(mt, tbl, StandardColumn.PROPERTY_TABLE_FOOTER);
-
-				createColumns(mt, table.getColumns(), mth, mch, mtd, mtcf, mtf, grHeaders, grFooters);
-
-				return mt;
+				return createTable(mt);
 			}
 		}
 		return null;
 	}
 
-	public void createColumns(ANode parent, List<BaseColumn> columns, MTableHeader mth, MTableColumnHeader mch,
+	public static void refreshTable(MTable mt) {
+		mt.removeChildren();
+		createTable(mt);
+	}
+
+	public static ANode createTable(MTable mt) {
+		JRDesignComponentElement tbl = (JRDesignComponentElement) mt.getValue();
+		StandardTable table = (StandardTable) tbl.getComponent();
+		MTableHeader mth = new MTableHeader(mt, tbl, StandardColumn.PROPERTY_TABLE_HEADER);
+		MTableColumnHeader mch = new MTableColumnHeader(mt, tbl, StandardColumn.PROPERTY_COLUMN_HEADER);
+
+		List<?> groupsList = mt.getTableManager().getGroupList();
+		List<MTableGroupHeader> grHeaders = new ArrayList<MTableGroupHeader>();
+		List<MTableGroupFooter> grFooters = new ArrayList<MTableGroupFooter>();
+
+		if (groupsList != null)
+			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
+				JRDesignGroup jrGroup = (JRDesignGroup) it.next();
+				grHeaders.add(new MTableGroupHeader(mt, tbl, jrGroup, ""));
+			}
+
+		MTableDetail mtd = new MTableDetail(mt, tbl, StandardColumn.PROPERTY_DETAIL);
+
+		if (groupsList != null)
+			for (ListIterator<?> it = groupsList.listIterator(groupsList.size()); it.hasPrevious();) {
+				JRDesignGroup jrGroup = (JRDesignGroup) it.previous();
+				grFooters.add(new MTableGroupFooter(mt, tbl, jrGroup, ""));
+			}
+
+		MTableColumnFooter mtcf = new MTableColumnFooter(mt, tbl, StandardColumn.PROPERTY_COLUMN_FOOTER);
+		MTableFooter mtf = new MTableFooter(mt, tbl, StandardColumn.PROPERTY_TABLE_FOOTER);
+
+		createColumns(mt, table.getColumns(), mth, mch, mtd, mtcf, mtf, grHeaders, grFooters);
+
+		return mt;
+	}
+
+	public static void createColumns(ANode parent, List<BaseColumn> columns, MTableHeader mth, MTableColumnHeader mch,
 			MTableDetail mtd, MTableColumnFooter mcf, MTableFooter mtf, List<MTableGroupHeader> grHeaders,
 			List<MTableGroupFooter> grFooter) {
-		int i = 1;
-		for (BaseColumn bc : columns) {
-			createCellTableHeader(mth, bc, i);
+		for (int i = 0; i < columns.size(); i++) {
+			BaseColumn bc = columns.get(i);
+			createCellTableHeader(mth, bc, i + 1, i);
 
-			createCellColumnHeader(mch, bc, i);
+			createCellColumnHeader(mch, bc, i + 1, i);
 
 			for (MTableGroupHeader mtgh : grHeaders)
-				createCellGroupHeader(mtgh, bc, i, ((JRDesignGroup) mtgh.getValue()).getName());
+				createCellGroupHeader(mtgh, bc, i + 1, mtgh.getJrDesignGroup().getName(), i);
 
-			createCellDetail(mtd, bc, i);
+			createCellDetail(mtd, bc, i + 1, i);
 
 			for (MTableGroupFooter mtgh : grFooter)
-				createCellGroupFooter(mtgh, bc, i, ((JRDesignGroup) mtgh.getValue()).getName());
+				createCellGroupFooter(mtgh, bc, i + 1, mtgh.getJrDesignGroup().getName(), i);
 
-			createCellColumnFooter(mcf, bc, i);
+			createCellColumnFooter(mcf, bc, i + 1, i);
 
-			createCellTableHeader(mtf, bc, i);
-
-			i++;
+			createCellTableHeader(mtf, bc, i + 1, i);
 		}
 	}
 
-	public int createCellGroupHeader(ANode mth, BaseColumn bc, int i, String grName) {
+	public static int createCellGroupHeader(ANode mth, BaseColumn bc, int i, String grName, int index) {
 		if (bc instanceof StandardColumnGroup) {
 			StandardColumnGroup scg = (StandardColumnGroup) bc;
-			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getGroupHeader(grName), i);
-			for (BaseColumn bcg : scg.getColumns())
-				i = createCellGroupHeader(mcg, bcg, i, grName);
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getGroupHeader(grName), i, index);
+			for (int j = 0; j < scg.getColumns().size(); j++)
+				i = createCellGroupHeader(mcg, scg.getColumns().get(j), i, grName, j);
 		} else {
-			if (bc.getGroupHeader(grName) != null) {
-				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getGroupHeader(grName), "Column" + i);
-				ReportFactory.createElementsForBand(mc, bc.getGroupHeader(grName).getChildren());
-			} else
-				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			createColumnCell(mth, bc, i, bc.getGroupHeader(grName), index);
 			return ++i;
 		}
 		return i;
 	}
 
-	public int createCellGroupFooter(ANode mth, BaseColumn bc, int i, String grName) {
+	public static int createCellGroupFooter(ANode mth, BaseColumn bc, int i, String grName, int index) {
 		if (bc instanceof StandardColumnGroup) {
 			StandardColumnGroup scg = (StandardColumnGroup) bc;
-			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getGroupFooter(grName), i);
-			for (BaseColumn bcg : scg.getColumns())
-				i = createCellGroupFooter(mcg, bcg, i, grName);
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getGroupFooter(grName), i, index);
+			for (int j = 0; j < scg.getColumns().size(); j++)
+				i = createCellGroupFooter(mcg, scg.getColumns().get(j), i, grName, j);
 		} else {
-			if (bc.getGroupFooter(grName) != null) {
-				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getGroupFooter(grName), "Column" + i);
-				ReportFactory.createElementsForBand(mc, bc.getGroupFooter(grName).getChildren());
-			} else
-				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			createColumnCell(mth, bc, i, bc.getGroupFooter(grName), index);
 			return ++i;
 		}
 		return i;
 	}
 
-	public int createCellDetail(ANode mth, BaseColumn bc, int i) {
+	public static int createCellDetail(ANode mth, BaseColumn bc, int i, int index) {
 		if (bc instanceof StandardColumnGroup) {
 			StandardColumnGroup scg = (StandardColumnGroup) bc;
 			for (BaseColumn bcg : scg.getColumns())
-				i = createCellDetail(mth, bcg, i);
+				i = createCellDetail(mth, bcg, i, index);
 		} else {
-			if (((StandardColumn) bc).getDetailCell() != null) {
-				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) ((StandardColumn) bc).getDetailCell(), "Column"
-						+ i);
-				ReportFactory.createElementsForBand(mc, ((StandardColumn) bc).getDetailCell().getChildren());
-			} else
-				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			createColumnCell(mth, bc, i, ((StandardColumn) bc).getDetailCell(), index);
 			return ++i;
 		}
 		return i;
 	}
 
-	public int createCellColumnHeader(ANode mth, BaseColumn bc, int i) {
+	public static int createCellColumnHeader(ANode mth, BaseColumn bc, int i, int index) {
 		if (bc instanceof StandardColumnGroup) {
 			StandardColumnGroup scg = (StandardColumnGroup) bc;
-			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getColumnHeader(), i);
-			for (BaseColumn bcg : scg.getColumns())
-				i = createCellColumnHeader(mcg, bcg, i);
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getColumnHeader(), i, index);
+			for (int j = 0; j < scg.getColumns().size(); j++)
+				i = createCellColumnHeader(mcg, scg.getColumns().get(j), i, j);
 		} else {
-			if (bc.getColumnHeader() != null) {
-				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getColumnHeader(), "Column" + i);
-				ReportFactory.createElementsForBand(mc, bc.getColumnHeader().getChildren());
-			} else
-				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			createColumnCell(mth, bc, i, bc.getColumnHeader(), index);
 			return ++i;
 		}
 		return i;
 	}
 
-	public int createCellColumnFooter(ANode mth, BaseColumn bc, int i) {
+	public static int createCellColumnFooter(ANode mth, BaseColumn bc, int i, int index) {
 		if (bc instanceof StandardColumnGroup) {
 			StandardColumnGroup scg = (StandardColumnGroup) bc;
-			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getColumnFooter(), i);
-			for (BaseColumn bcg : scg.getColumns())
-				i = createCellColumnFooter(mcg, bcg, i);
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getColumnFooter(), i, index);
+			for (int j = 0; j < scg.getColumns().size(); j++)
+				i = createCellColumnFooter(mcg, scg.getColumns().get(j), i, j);
 		} else {
-			if (bc.getColumnFooter() != null) {
-				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getColumnFooter(), "Column" + i);
-				ReportFactory.createElementsForBand(mc, bc.getColumnFooter().getChildren());
-			} else
-				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			createColumnCell(mth, bc, i, bc.getColumnFooter(), index);
 			return ++i;
 		}
 		return i;
 	}
 
-	public int createCellTableHeader(ANode mth, BaseColumn bc, int i) {
+	public static int createCellTableHeader(ANode mth, BaseColumn bc, int i, int index) {
 		if (bc instanceof StandardColumnGroup) {
 			StandardColumnGroup scg = (StandardColumnGroup) bc;
-			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getTableHeader(), i);
-			for (BaseColumn bcg : scg.getColumns())
-				i = createCellTableHeader(mcg, bcg, i);
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getTableHeader(), i, index);
+			for (int j = 0; j < scg.getColumns().size(); j++)
+				i = createCellTableHeader(mcg, scg.getColumns().get(j), i, j);
 		} else {
-			if (bc.getTableHeader() != null) {
-				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getTableHeader(), "Column" + i);
-				ReportFactory.createElementsForBand(mc, bc.getTableHeader().getChildren());
-			} else
-				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			createColumnCell(mth, bc, i, bc.getTableHeader(), index);
 			return ++i;
 		}
 		return i;
 	}
 
-	public int createCellTableFooter(ANode mth, BaseColumn bc, int i) {
+	public static int createCellTableFooter(ANode mth, BaseColumn bc, int i, int index) {
 		if (bc instanceof StandardColumnGroup) {
 			StandardColumnGroup scg = (StandardColumnGroup) bc;
-			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getTableFooter(), i);
-			for (BaseColumn bcg : scg.getColumns())
-				i = createCellTableFooter(mcg, bcg, i);
+			MColumn mcg = getColumnGroup(mth, scg, (DesignCell) scg.getTableFooter(), i, index);
+			for (int j = 0; j < scg.getColumns().size(); j++)
+				i = createCellTableFooter(mcg, scg.getColumns().get(j), i, j);
 		} else {
-			if (bc.getTableHeader() != null) {
-				MCell mc = new MCell(mth, (StandardBaseColumn) bc, (DesignCell) bc.getTableFooter(), "Column" + i);
-				ReportFactory.createElementsForBand(mc, bc.getTableFooter().getChildren());
-			} else
-				new MColumn(mth, (StandardBaseColumn) bc, "Column" + i);
+			createColumnCell(mth, bc, i, bc.getTableFooter(), index);
 			return ++i;
 		}
 		return i;
 	}
 
-	public MColumn getColumnGroup(ANode mth, StandardColumnGroup scg, DesignCell cell, int i) {
+	public static ANode createColumnCell(ANode parent, BaseColumn bc, int i, Cell grHeader, int index) {
+		String name = "Column" + i;
+		if (grHeader != null) {
+			MCell mc = new MCell(parent, (StandardBaseColumn) bc, (DesignCell) grHeader, name, index);
+			ReportFactory.createElementsForBand(mc, grHeader.getChildren());
+			return mc;
+		}
+		return new MColumn(parent, (StandardBaseColumn) bc, name, index);
+	}
+
+	public static MColumn getColumnGroup(ANode mth, StandardColumnGroup scg, DesignCell cell, int i, int index) {
 		String name = "Columns " + i + "-" + (i + scg.getColumns().size() - 1);
 		MColumn mcg = null;
 		if (cell != null) {
-			mcg = new MColumnGroupCell(mth, scg, cell, name);
+			mcg = new MColumnGroupCell(mth, scg, cell, name, index);
 			ReportFactory.createElementsForBand(mcg, cell.getChildren());
 		} else
-			mcg = new MColumnGroup(mth, scg, name);
+			mcg = new MColumnGroup(mth, scg, name, index);
 		return mcg;
 	}
 
@@ -267,19 +274,6 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public List<?> getChildren4Element(Object jrObject) {
-		// if (jrObject instanceof JRCrosstab) {
-		// // JRCrosstab ct = (JRCrosstab) jrObject;
-		// List<Object> lst = new ArrayList<Object>();
-		//
-		// // lst.add(ct.getParameters());
-		// // lst.add(ct.getRowGroups());
-		// // lst.add(ct.getColumnGroups());
-		// // lst.add(ct.getMeasures());
-		//
-		// // lst.add(Arrays.asList(ct.getHeaderCell()));
-		//
-		// return lst;
-		// }
 		return null;
 	}
 
@@ -290,99 +284,104 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
-		// if (child instanceof MParameter) {
-		// if (parent instanceof MCrosstabParameters)
-		// return new CreateParameterCommand((MCrosstabParameters) parent, (MParameter) child, newIndex);
-		// }
-		// if (child instanceof MMeasure) {
-		// if (parent instanceof MMeasures)
-		// return new CreateMeasureCommand((MMeasures) parent, (MMeasure) child, newIndex);
-		// }
-		// if (child instanceof MColumnGroup) {
-		// if (parent instanceof MColumnGroups)
-		// return new CreateColumnGroupCommand((MColumnGroups) parent, (MColumnGroup) child, newIndex);
-		// }
-		// if (child instanceof MRowGroup) {
-		// if (parent instanceof MRowGroups)
-		// return new CreateRowGroupCommand((MRowGroups) parent, (MRowGroup) child, newIndex);
-		// }
-		// if (child instanceof MCrosstabHeader) {
-		// if (parent instanceof MCrosstabHeader && ((MCrosstabHeader) parent).getValue() == null)
-		// return new CreateCrosstabHeaderCommand((MCrosstab) parent.getParent(), (MCrosstabHeader) child);
-		// }
-		// if (child instanceof MCrosstabWhenNoData) {
-		// if (parent instanceof MCrosstabWhenNoData && ((MCrosstabWhenNoData) parent).getValue() == null)
-		// return new CreateCrosstabWhenNoDataCommand((MCrosstab) parent.getParent(), (MCrosstabWhenNoData) child);
-		// }
+		if (child instanceof MCell) {
+			if (parent instanceof MColumnGroup && !(parent instanceof MCell))
+				return new CreateColumnCellCommand(((MColumn) parent).getSection(), (MColumn) parent);
+			if (parent instanceof MColumn && !(parent instanceof MCell))
+				return new CreateColumnCellCommand(((MColumn) parent).getSection(), (MColumn) parent);
 
+		} else if (child instanceof MColumnGroup) {
+			if (parent instanceof AMCollection)
+				return new CreateColumnGroupCommand((AMCollection) parent, (MColumnGroup) child, newIndex);
+
+			if (parent instanceof MColumnGroupCell)
+				return new CreateColumnGroupFromGroupCommand((MColumnGroupCell) parent, (MColumnGroup) child, newIndex);
+			if (parent instanceof MColumnGroup)
+				return new CreateColumnGroupFromGroupCommand((MColumnGroup) parent, (MColumnGroup) child, newIndex);
+
+			if (parent.getParent() instanceof MColumnGroupCell)
+				return new CreateColumnGroupFromGroupCommand((MColumnGroupCell) parent.getParent(), (MColumnGroup) child,
+						newIndex);
+			if (parent.getParent() instanceof MColumnGroup)
+				return new CreateColumnGroupFromGroupCommand((MColumnGroup) parent.getParent(), (MColumnGroup) child, newIndex);
+
+			if (parent instanceof MColumn)
+				return new CreateColumnGroupCommand((MColumn) parent, (MColumnGroup) child, newIndex);
+
+		} else if (child instanceof MColumn) {
+			if (parent instanceof MTableGroupHeader)
+				return new CreateColumnCommand((MTableGroupHeader) parent, (MColumn) child, newIndex);
+			if (parent instanceof MTableGroupFooter)
+				return new CreateColumnCommand((MTableGroupFooter) parent, (MColumn) child, newIndex);
+			if (parent instanceof AMCollection)
+				return new CreateColumnCommand((AMCollection) parent, (MColumn) child, newIndex);
+
+			if (parent instanceof MColumnGroupCell)
+				return new CreateColumnFromGroupCommand((MColumnGroupCell) parent, (MColumn) child, newIndex);
+			if (parent instanceof MColumnGroup)
+				return new CreateColumnFromGroupCommand((MColumnGroup) parent, (MColumn) child, newIndex);
+
+			if (parent.getParent() instanceof MColumnGroupCell)
+				return new CreateColumnFromGroupCommand((MColumnGroupCell) parent.getParent(), (MColumn) child, newIndex);
+			if (parent.getParent() instanceof MColumnGroup)
+				return new CreateColumnFromGroupCommand((MColumnGroup) parent.getParent(), (MColumn) child, newIndex);
+
+			if (parent instanceof MColumn)
+				return new CreateColumnCommand((MColumn) parent, (MColumn) child, newIndex);
+		}
 		return null;
 	}
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
-		// if (child instanceof MParameter) {
-		// if (parent instanceof MCrosstabParameters)
-		// return new DeleteParameterCommand((MCrosstabParameters) parent, (MParameter) child);
-		// }
-		// if (child instanceof MMeasure) {
-		// if (parent instanceof MMeasures)
-		// return new DeleteMeasureCommand((MMeasures) parent, (MMeasure) child);
-		// }
-		// if (child instanceof MColumnGroup) {
-		// if (parent instanceof MColumnGroups)
-		// return new DeleteColumnGroupCommand((MColumnGroups) parent, (MColumnGroup) child);
-		// }
-		// if (child instanceof MRowGroup) {
-		// if (parent instanceof MRowGroups)
-		// return new DeleteRowGroupCommand((MRowGroups) parent, (MRowGroup) child);
-		// }
-		// if (child instanceof MCrosstabHeader && ((MCrosstabHeader) child).getValue() != null) {
-		// if (parent instanceof MCrosstab)
-		// return new DeleteCrosstabHeaderCommand((MCrosstab) parent, (MCrosstabHeader) child);
-		// }
-		// if (child instanceof MCrosstabWhenNoData && ((MCrosstabWhenNoData) child).getValue() != null) {
-		// if (parent instanceof MCrosstab)
-		// return new DeleteCrosstabWhenNoDataCommand((MCrosstab) parent, (MCrosstabWhenNoData) child);
-		// }
+		if (child instanceof MCell) {
+			if (parent instanceof MColumnGroup && !(parent instanceof MCell))
+				return new DeleteColumnCellCommand((ANode) parent.getParent(), (MCell) child);
+			if (parent instanceof MColumn && !(parent instanceof MCell))
+				return new DeleteColumnCellCommand((ANode) parent.getParent(), (MCell) child);
+			if (parent instanceof AMCollection)
+				return new DeleteColumnCellCommand((ANode) parent, (MCell) child);
+		} else if (child instanceof MColumn) {
+			if (parent instanceof MTableGroupHeader)
+				return new DeleteColumnCommand((MTableGroupHeader) parent, (MColumn) child);
+			if (parent instanceof MTableGroupFooter)
+				return new DeleteColumnCommand((MTableGroupFooter) parent, (MColumn) child);
+			if (parent instanceof AMCollection)
+				return new DeleteColumnCommand((AMCollection) parent, (MColumn) child);
+
+			if (parent instanceof MColumnGroup)
+				return new DeleteColumnFromGroupCommand((MColumnGroup) parent, (MColumn) child);
+			if (parent instanceof MColumnGroupCell)
+				return new DeleteColumnFromGroupCommand((MColumnGroupCell) parent, (MColumn) child);
+		}
 		return null;
 	}
 
 	public Command getReorderCommand(ANode parent, ANode child, int newIndex) {
-		// if (child instanceof MParameter) {
-		// if (parent instanceof MCrosstabParameters)
-		// return new ReorderParameterCommand((MParameter) child, (MCrosstabParameters) parent, newIndex);
-		// }
-		// if (child instanceof MMeasure) {
-		// if (parent instanceof MMeasures)
-		// return new ReorderMeasureCommand((MMeasure) child, (MMeasures) parent, newIndex);
-		// }
-		// if (child instanceof MColumnGroup) {
-		// if (parent instanceof MColumnGroups)
-		// return new ReorderColumnGroupCommand((MColumnGroup) child, (MColumnGroups) parent, newIndex);
-		// }
-		// if (child instanceof MRowGroup) {
-		// if (parent instanceof MRowGroups)
-		// return new ReorderRowGroupCommand((MRowGroup) child, (MRowGroups) parent, newIndex);
-		// }
+		if (child instanceof MColumn) {
+			if (parent instanceof MCollection)
+				return new ReorderColumnCommand((MColumn) child, (MTable) parent.getParent(), newIndex);
+			if (parent instanceof MColumnGroupCell)
+				return new ReorderColumnGroupCommand((MColumn) child, (MColumnGroupCell) parent, newIndex);
+			if (parent instanceof MColumnGroup)
+				return new ReorderColumnGroupCommand((MColumn) child, (MColumnGroup) parent, newIndex);
+
+		}
 		return null;
 	}
 
 	public List<Action> getActions(WorkbenchPart part) {
 		List<Action> lst = new ArrayList<Action>();
-		// lst.add(new CreateMeasureAction(part));
-		// lst.add(new CreateColumnGroupAction(part));
-		// lst.add(new CreateRowGroupAction(part));
-		// lst.add(new CreateCrosstabHeaderAction(part));
-		// lst.add(new CreateCrosstabWhenNoDataAction(part));
+		lst.add(new CreateColumnAction(part));
+		lst.add(new CreateColumnGroupAction(part));
+		lst.add(new CreateColumnCellAction(part));
 		return lst;
 	}
 
 	public List<String> getActionsID() {
 		List<String> lst = new ArrayList<String>();
-		// lst.add(CreateMeasureAction.ID);
-		// lst.add(CreateColumnGroupAction.ID);
-		// lst.add(CreateRowGroupAction.ID);
-		// lst.add(CreateCrosstabHeaderAction.ID);
-		// lst.add(CreateCrosstabWhenNoDataAction.ID);
+		lst.add(CreateColumnAction.ID);
+		lst.add(CreateColumnGroupAction.ID);
+		lst.add(CreateColumnCellAction.ID);
 		return lst;
 	}
 
@@ -391,6 +390,18 @@ public class TableComponentFactory implements IComponentFactory {
 			return new TableEditPart();
 		if (model instanceof MCell)
 			return new TableCellEditPart();
+		return null;
+	}
+
+	public Command getOrphanCommand(ANode parent, ANode child) {
+		if (child instanceof MColumn) {
+			if (parent instanceof AMCollection)
+				return new OrphanColumnCommand((AMCollection) parent, (MColumn) child);
+			if (parent instanceof MColumnGroupCell)
+				return new OrphanColumn4GroupCommand((MColumnGroupCell) parent, (MColumn) child);
+			if (parent instanceof MColumnGroup)
+				return new OrphanColumn4GroupCommand((MColumnGroup) parent, (MColumn) child);
+		}
 		return null;
 	}
 

@@ -33,8 +33,8 @@ import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.table.model.MCell;
-import com.jaspersoft.studio.table.model.MColumn;
+import com.jaspersoft.studio.table.model.column.MCell;
+import com.jaspersoft.studio.table.model.column.MColumn;
 
 /**
  * The Class BandMoveEditPolicy.
