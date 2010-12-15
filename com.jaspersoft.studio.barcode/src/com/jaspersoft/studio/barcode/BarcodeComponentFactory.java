@@ -167,4 +167,9 @@ public class BarcodeComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	public Command getOrphanCommand(ANode parent, ANode child) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
