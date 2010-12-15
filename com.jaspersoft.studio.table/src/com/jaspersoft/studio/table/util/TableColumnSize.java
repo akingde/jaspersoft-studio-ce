@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
@@ -37,6 +38,23 @@ public class TableColumnSize {
 				int hg = getGroupHeigh2Top(((StandardColumnGroup) bc).getColumns(), scg, type, grName);
 				if (hg >= 0) {
 					return Math.max(0, getCellHeight(bc, type, grName)) + hg;
+				}
+			}
+		}
+		return -1;
+	}
+
+	public static int setGroupWidth2Top(List<BaseColumn> cols, StandardColumnGroup scg, int delta) {
+		for (BaseColumn bc : cols) {
+			if (bc == scg) {
+				((StandardBaseColumn) bc).setWidth(bc.getWidth() + delta);
+				return 0;
+			}
+			if (bc instanceof StandardColumnGroup) {
+				int hg = setGroupWidth2Top(((StandardColumnGroup) bc).getColumns(), scg, delta);
+				if (hg == 0) {
+					((StandardBaseColumn) bc).setWidth(bc.getWidth() + delta);
+					return 0;
 				}
 			}
 		}
@@ -101,4 +119,5 @@ public class TableColumnSize {
 			return cell.getHeight();
 		return -1;
 	}
+
 }

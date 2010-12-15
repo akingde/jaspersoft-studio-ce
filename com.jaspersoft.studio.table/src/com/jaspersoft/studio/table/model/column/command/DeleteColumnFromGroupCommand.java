@@ -21,12 +21,14 @@ package com.jaspersoft.studio.table.model.column.command;
 
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
 
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.table.model.column.MColumn;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroupCell;
+import com.jaspersoft.studio.table.util.TableColumnSize;
 
 /**
  * link nodes & together.
@@ -37,6 +39,7 @@ public class DeleteColumnFromGroupCommand extends Command {
 
 	private StandardColumnGroup jrGroup;
 	private StandardBaseColumn jrColumn;
+	private StandardTable jrTable;
 
 	/** The element position. */
 	private int elementPosition = 0;
@@ -45,12 +48,14 @@ public class DeleteColumnFromGroupCommand extends Command {
 		super();
 		this.jrGroup = (StandardColumnGroup) destNode.getValue();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
+		this.jrTable = CreateColumnCommand.getTable(destNode.getMTable());
 	}
 
 	public DeleteColumnFromGroupCommand(MColumnGroupCell destNode, MColumn srcNode) {
 		super();
 		this.jrGroup = (StandardColumnGroup) destNode.getValue();
 		this.jrColumn = (StandardBaseColumn) srcNode.getValue();
+		this.jrTable = CreateColumnCommand.getTable(destNode.getMTable());
 	}
 
 	/*
@@ -63,7 +68,7 @@ public class DeleteColumnFromGroupCommand extends Command {
 		elementPosition = jrGroup.getColumns().indexOf(jrColumn);
 
 		jrGroup.removeColumn(jrColumn);
-		jrGroup.setWidth(jrGroup.getWidth() - jrColumn.getWidth());
+		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, -jrColumn.getWidth());
 	}
 
 	/*
@@ -90,6 +95,7 @@ public class DeleteColumnFromGroupCommand extends Command {
 		else
 			jrGroup.addColumn(jrColumn);
 		jrGroup.setWidth(jrGroup.getWidth() + jrColumn.getWidth());
+		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, jrColumn.getWidth());
 	}
 
 }

@@ -126,7 +126,7 @@ public class CreateColumnFromGroupCommand extends Command {
 			jrGroup.addColumn(index, jrColumn);
 		else
 			jrGroup.addColumn(jrColumn);
-		jrGroup.setWidth(jrGroup.getWidth() + jrColumn.getWidth());
+		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, jrColumn.getWidth());
 	}
 
 	/*
@@ -148,6 +148,6 @@ public class CreateColumnFromGroupCommand extends Command {
 	public void undo() {
 		index = jrGroup.getColumns().indexOf(jrColumn);
 		jrGroup.removeColumn(jrColumn);
-		jrGroup.setWidth(jrGroup.getWidth() - jrColumn.getWidth());
+		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, -jrColumn.getWidth());
 	}
 }

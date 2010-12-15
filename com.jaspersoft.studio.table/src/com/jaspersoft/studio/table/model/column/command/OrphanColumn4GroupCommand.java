@@ -21,12 +21,14 @@ package com.jaspersoft.studio.table.model.column.command;
 
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
 
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.table.model.column.MColumn;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroupCell;
+import com.jaspersoft.studio.table.util.TableColumnSize;
 
 /**
  * The Class OrphanElementGroupCommand.
@@ -39,6 +41,7 @@ public class OrphanColumn4GroupCommand extends Command {
 	private int index;
 
 	private StandardBaseColumn jrColumn;
+	protected StandardTable jrTable;
 	private StandardColumnGroup jrGroup;
 
 	/**
@@ -53,12 +56,14 @@ public class OrphanColumn4GroupCommand extends Command {
 		super("Orphan element");
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();
+		this.jrTable = CreateColumnCommand.getTable(parent.getMTable());
 	}
 
 	public OrphanColumn4GroupCommand(MColumnGroupCell parent, MColumn child) {
 		super("Orphan element");
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();
+		this.jrTable = CreateColumnCommand.getTable(parent.getMTable());
 	}
 
 	/*
@@ -69,7 +74,7 @@ public class OrphanColumn4GroupCommand extends Command {
 	public void execute() {
 		index = jrGroup.getColumns().indexOf(jrColumn);
 		jrGroup.removeColumn(jrColumn);
-		jrGroup.setWidth(jrGroup.getWidth() - jrColumn.getWidth());
+		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, -jrColumn.getWidth());
 	}
 
 	/*
@@ -82,6 +87,6 @@ public class OrphanColumn4GroupCommand extends Command {
 			jrGroup.addColumn(index, jrColumn);
 		else
 			jrGroup.addColumn(jrColumn);
-		jrGroup.setWidth(jrGroup.getWidth() + jrColumn.getWidth());
+		TableColumnSize.setGroupWidth2Top(jrTable.getColumns(), jrGroup, jrColumn.getWidth());
 	}
 }
