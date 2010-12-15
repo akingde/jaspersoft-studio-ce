@@ -127,7 +127,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 				PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
 
 		if (pref.equals("rectangle")) //$NON-NLS-1$
-			rect.setBorder(new ElementLineBorder(ColorConstants.lightGray));
+			rect.setBorder(new ElementLineBorder(ColorConstants.black));
 		else
 			rect.setBorder(new CornerBorder(ColorConstants.black, 5));
 	}
