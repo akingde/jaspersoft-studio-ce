@@ -138,6 +138,7 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 						n.setValue(evt.getNewValue());
 				}
 			}
+			// REFRESH EDIT PARTS
 		}
 		if (!(evt.getSource() instanceof ANode))
 			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
