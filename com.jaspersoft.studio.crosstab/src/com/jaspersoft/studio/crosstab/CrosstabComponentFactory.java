@@ -42,8 +42,15 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.crosstab.figure.CrosstabFigure;
-import com.jaspersoft.studio.crosstab.model.MCell;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.crosstab.model.cell.command.CreateElementCommand;
+import com.jaspersoft.studio.crosstab.model.cell.command.DeleteElementCommand;
+import com.jaspersoft.studio.crosstab.model.cell.command.DeleteElementGroupCommand;
+import com.jaspersoft.studio.crosstab.model.cell.command.OrphanElementCommand;
+import com.jaspersoft.studio.crosstab.model.cell.command.OrphanElementGroupCommand;
+import com.jaspersoft.studio.crosstab.model.cell.command.ReorderElementCommand;
+import com.jaspersoft.studio.crosstab.model.cell.command.ReorderElementGroupCommand;
 import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroups;
 import com.jaspersoft.studio.crosstab.model.columngroup.action.CreateColumnGroupAction;
@@ -78,6 +85,8 @@ import com.jaspersoft.studio.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.crosstab.part.CrosstabEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MElementGroup;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.model.parameter.MParameter;
 
@@ -282,7 +291,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			if (parent instanceof MCrosstabWhenNoData)
 				return new CreateCrosstabWhenNoDataCommand((MCrosstab) parent.getParent(), (MCrosstabWhenNoData) child);
 		}
-
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, newIndex);
 		return null;
 	}
 
@@ -311,6 +321,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			if (parent instanceof MCrosstab)
 				return new DeleteCrosstabWhenNoDataCommand((MCrosstab) parent, (MCrosstabWhenNoDataCell) child);
 		}
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new DeleteElementCommand((MCell) parent, (MGraphicElement) child);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new DeleteElementGroupCommand((MCell) parent, (MElementGroup) child);
 		return null;
 	}
 
@@ -331,6 +345,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		// if (parent instanceof MRowGroups)
 		// return new ReorderRowGroupCommand((MRowGroup) child, (MRowGroups) parent, newIndex);
 		// }
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new ReorderElementCommand((MGraphicElement) child, (MCell) parent, newIndex);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new ReorderElementGroupCommand((MElementGroup) child, (MCell) parent, newIndex);
 		return null;
 	}
 
@@ -363,7 +381,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public Command getOrphanCommand(ANode parent, ANode child) {
-		// TODO Auto-generated method stub
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new OrphanElementCommand((MCell) parent, (MGraphicElement) child);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new OrphanElementGroupCommand((MCell) parent, (MElementGroup) child);
 		return null;
 	}
 

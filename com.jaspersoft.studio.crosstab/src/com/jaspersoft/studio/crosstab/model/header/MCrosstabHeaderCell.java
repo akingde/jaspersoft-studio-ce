@@ -24,7 +24,7 @@ import net.sf.jasperreports.crosstabs.JRCellContents;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.Color;
 
-import com.jaspersoft.studio.crosstab.model.MCell;
+import com.jaspersoft.studio.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.model.ANode;
 
 public class MCrosstabHeaderCell extends MCell {

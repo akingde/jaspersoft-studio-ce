@@ -31,7 +31,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.crosstab.model.MCell;
+import com.jaspersoft.studio.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.property.SetValueCommand;

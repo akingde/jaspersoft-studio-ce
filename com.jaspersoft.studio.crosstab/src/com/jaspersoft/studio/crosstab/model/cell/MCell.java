@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.crosstab.model;
+package com.jaspersoft.studio.crosstab.model.cell;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
@@ -40,6 +40,8 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
+import com.jaspersoft.studio.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.crosstab.model.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
