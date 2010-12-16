@@ -43,7 +43,9 @@ import com.jaspersoft.studio.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.crosstab.CrosstabManager;
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeader;
+import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoData;
+import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoDataCell;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -166,7 +168,8 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 		columnBreakOffsetD.setDescription(Messages.MCrosstab_column_break_offset_description);
 		desc.add(columnBreakOffsetD);
 
-		JRPropertyDescriptor datasetD = new JRPropertyDescriptor(JRDesignCrosstab.PROPERTY_DATASET, Messages.MCrosstab_dataset);
+		JRPropertyDescriptor datasetD = new JRPropertyDescriptor(JRDesignCrosstab.PROPERTY_DATASET,
+				Messages.MCrosstab_dataset);
 		datasetD.setDescription(Messages.MCrosstab_dataset_description);
 		desc.add(datasetD);
 
@@ -334,17 +337,21 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() != null && evt.getNewValue() == null) {
 					List<INode> child = this.getChildren();
-					for (INode n : child) {
-						if (n instanceof MCrosstabHeader)
-							((MCrosstabHeader) n).setValue(null);
+					for (int i = 0; i < child.size(); i++) {
+						INode n = child.get(i);
+						if (n instanceof MCrosstabHeaderCell) {
+							removeChild((ANode) n);
+							new MCrosstabHeader(this, i);
+						}
 					}
 				} else {
 					// add the node to this parent
 					List<INode> child = this.getChildren();
-					for (INode n : child) {
+					for (int i = 0; i < child.size(); i++) {
+						INode n = child.get(i);
 						if (n instanceof MCrosstabHeader) {
-							((MCrosstabHeader) n).setValue(evt.getNewValue());
-							break;
+							removeChild((ANode) n);
+							new MCrosstabHeaderCell(this, (JRCellContents) evt.getNewValue(), i);
 						}
 					}
 				}
@@ -353,17 +360,21 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() != null && evt.getNewValue() == null) {
 					List<INode> child = this.getChildren();
-					for (INode n : child) {
-						if (n instanceof MCrosstabWhenNoData)
-							((MCrosstabWhenNoData) n).setValue(null);
+					for (int i = 0; i < child.size(); i++) {
+						INode n = child.get(i);
+						if (n instanceof MCrosstabWhenNoDataCell) {
+							removeChild((ANode) n);
+							new MCrosstabWhenNoData(this, i);
+						}
 					}
 				} else {
 					// add the node to this parent
 					List<INode> child = this.getChildren();
-					for (INode n : child) {
+					for (int i = 0; i < child.size(); i++) {
+						INode n = child.get(i);
 						if (n instanceof MCrosstabWhenNoData) {
-							((MCrosstabWhenNoData) n).setValue(evt.getNewValue());
-							break;
+							removeChild((ANode) n);
+							new MCrosstabWhenNoDataCell(this, (JRCellContents) evt.getNewValue(), i);
 						}
 					}
 				}

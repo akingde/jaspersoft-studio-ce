@@ -23,7 +23,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoData;
+import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoDataCell;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 
@@ -43,7 +43,7 @@ public class CreateCrosstabWhenNoDataAction extends ACreateAction {
 	 */
 	public CreateCrosstabWhenNoDataAction(IWorkbenchPart part) {
 		super(part);
-		setCreationFactory(new JDPaletteCreationFactory(MCrosstabWhenNoData.class));
+		setCreationFactory(new JDPaletteCreationFactory(MCrosstabWhenNoDataCell.class));
 	}
 
 	/**

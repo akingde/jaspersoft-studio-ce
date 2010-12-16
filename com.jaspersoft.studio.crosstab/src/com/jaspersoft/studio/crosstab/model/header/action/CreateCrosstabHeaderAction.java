@@ -23,7 +23,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeader;
+import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 
@@ -43,7 +43,7 @@ public class CreateCrosstabHeaderAction extends ACreateAction {
 	 */
 	public CreateCrosstabHeaderAction(IWorkbenchPart part) {
 		super(part);
-		setCreationFactory(new JDPaletteCreationFactory(MCrosstabHeader.class));
+		setCreationFactory(new JDPaletteCreationFactory(MCrosstabHeaderCell.class));
 	}
 
 	/**

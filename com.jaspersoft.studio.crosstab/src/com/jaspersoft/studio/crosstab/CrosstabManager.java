@@ -270,7 +270,7 @@ public class CrosstabManager {
 				JRDesignCrosstabColumnGroup rg = (JRDesignCrosstabColumnGroup) colGroupsList.get(i);
 				if (rg.getName().equals(colGroupName)) {
 					if (i == colGroupsList.size() - 1) {
-						setWidth((JRDesignCellContents) cells[cells.length - 1][cells[i].length - 1], width);
+						setWidth((JRDesignCellContents) cells[cells.length - 1][cells[i].length - 1].getContents(), width);
 					} else {
 						int delta = width - cell.getWidth();
 						JRDesignCrosstabColumnGroup rgNext = (JRDesignCrosstabColumnGroup) colGroupsList.get(i + 1);

@@ -25,7 +25,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeader;
+import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeaderCell;
 
 /**
  * link nodes & together.
@@ -45,7 +45,7 @@ public class DeleteCrosstabHeaderCommand extends Command {
 	 * @param srcNode
 	 *          the src node
 	 */
-	public DeleteCrosstabHeaderCommand(MCrosstab destNode, MCrosstabHeader srcNode) {
+	public DeleteCrosstabHeaderCommand(MCrosstab destNode, MCrosstabHeaderCell srcNode) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
 		if (srcNode != null && srcNode.getValue() != null)

@@ -83,6 +83,12 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		super();
 	}
 
+	public MCell(ANode parent, JRCellContents jfRield, String name) {
+		super(parent, -1);
+		setValue(jfRield);
+		setName(name);
+	}
+
 	/**
 	 * Instantiates a new m field.
 	 * 
@@ -93,8 +99,8 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	 * @param newIndex
 	 *          the new index
 	 */
-	public MCell(ANode parent, JRCellContents jfRield, String name) {
-		super(parent, -1);
+	public MCell(ANode parent, JRCellContents jfRield, String name, int index) {
+		super(parent, index);
 		setValue(jfRield);
 		setName(name);
 	}
@@ -183,26 +189,28 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MCell_opaque,
-				EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.NOTNULL));
+		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
+				Messages.MCell_opaque, EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.NOTNULL));
 		opaqueD.setDescription(Messages.MCell_opaque_description);
 		desc.add(opaqueD);
 
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR, Messages.MCell_backcolor,
-				NullEnum.INHERITED);
-		backcolorD
-				.setDescription(Messages.MCell_backcolor_description);
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR,
+				Messages.MCell_backcolor, NullEnum.INHERITED);
+		backcolorD.setDescription(Messages.MCell_backcolor_description);
 		desc.add(backcolorD);
 
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignCellContents.PROPERTY_STYLE, Messages.MCell_parent_style, new String[] { "" }, //$NON-NLS-1$
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignCellContents.PROPERTY_STYLE, Messages.MCell_parent_style,
+				new String[] { "" }, //$NON-NLS-1$
 				NullEnum.NULL);
 		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
 
-		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_WIDTH, Messages.MCell_width);
+		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_WIDTH,
+				Messages.MCell_width);
 		desc.add(wD);
 
-		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_HEIGHT, Messages.MCell_height);
+		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_HEIGHT,
+				Messages.MCell_height);
 		desc.add(hD);
 
 		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MCell_line_box);

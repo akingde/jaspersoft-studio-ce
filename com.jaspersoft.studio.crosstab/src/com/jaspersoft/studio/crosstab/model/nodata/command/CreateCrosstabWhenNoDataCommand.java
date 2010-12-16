@@ -52,8 +52,6 @@ public class CreateCrosstabWhenNoDataCommand extends Command {
 	public CreateCrosstabWhenNoDataCommand(MCrosstab destNode, MCrosstabWhenNoData srcNode) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
-		if (srcNode != null && srcNode.getValue() != null)
-			this.jrCell = (JRDesignCellContents) srcNode.getValue();
 	}
 
 	/*

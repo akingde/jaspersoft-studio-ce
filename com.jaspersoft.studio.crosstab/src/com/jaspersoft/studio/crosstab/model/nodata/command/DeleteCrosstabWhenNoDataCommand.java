@@ -25,7 +25,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoData;
+import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoDataCell;
 
 /**
  * link nodes & together.
@@ -45,7 +45,7 @@ public class DeleteCrosstabWhenNoDataCommand extends Command {
 	 * @param srcNode
 	 *          the src node
 	 */
-	public DeleteCrosstabWhenNoDataCommand(MCrosstab destNode, MCrosstabWhenNoData srcNode) {
+	public DeleteCrosstabWhenNoDataCommand(MCrosstab destNode, MCrosstabWhenNoDataCell srcNode) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
 		if (srcNode != null && srcNode.getValue() != null)

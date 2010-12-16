@@ -17,36 +17,29 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.crosstab.figure;
+package com.jaspersoft.studio.crosstab.model.nodata;
 
-import org.eclipse.draw2d.XYLayout;
+import net.sf.jasperreports.crosstabs.JRCellContents;
 
-import net.sf.jasperreports.crosstabs.JRCrosstab;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.swt.graphics.Color;
 
-import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+import com.jaspersoft.studio.crosstab.model.MCell;
+import com.jaspersoft.studio.model.ANode;
 
-public class CrosstabFigure extends ComponentFigure {
-
-	/**
-	 * Instantiates a new text field figure.
-	 */
-	public CrosstabFigure() {
+public class MCrosstabWhenNoDataCell extends MCell {
+	public MCrosstabWhenNoDataCell() {
 		super();
-		setLayoutManager(new XYLayout());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
-	 */
+	public MCrosstabWhenNoDataCell(ANode parent, JRCellContents jfRield, int index) {
+		super(parent, jfRield, Messages.MCrosstabWhenNoData_when_no_data, index);
+	}
+
 	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitCrosstab((JRCrosstab) jrElement);
+	public Color getForeground() {
+		if (getValue() == null)
+			return ColorConstants.lightGray;
+		return ColorConstants.black;
 	}
-
 }

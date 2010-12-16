@@ -50,6 +50,7 @@ import com.jaspersoft.studio.crosstab.model.columngroup.action.CreateColumnGroup
 import com.jaspersoft.studio.crosstab.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.crosstab.model.columngroup.command.DeleteColumnGroupCommand;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeader;
+import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.crosstab.model.header.action.CreateCrosstabHeaderAction;
 import com.jaspersoft.studio.crosstab.model.header.command.CreateCrosstabHeaderCommand;
 import com.jaspersoft.studio.crosstab.model.header.command.DeleteCrosstabHeaderCommand;
@@ -60,6 +61,7 @@ import com.jaspersoft.studio.crosstab.model.measure.command.CreateMeasureCommand
 import com.jaspersoft.studio.crosstab.model.measure.command.DeleteMeasureCommand;
 import com.jaspersoft.studio.crosstab.model.measure.command.ReorderMeasureCommand;
 import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoData;
+import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoDataCell;
 import com.jaspersoft.studio.crosstab.model.nodata.action.CreateCrosstabWhenNoDataAction;
 import com.jaspersoft.studio.crosstab.model.nodata.command.CreateCrosstabWhenNoDataCommand;
 import com.jaspersoft.studio.crosstab.model.nodata.command.DeleteCrosstabWhenNoDataCommand;
@@ -159,9 +161,12 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createCellNodes(JRDesignCrosstab ct, MCrosstab mCrosstab) {
-		MCell mc = new MCrosstabHeader(mCrosstab, ct.getHeaderCell());
-		if (ct.getHeaderCell() != null)
+		if (ct.getHeaderCell() == null) {
+			new MCrosstabHeader(mCrosstab, -1);
+		} else {
+			MCrosstabHeaderCell mc = new MCrosstabHeaderCell(mCrosstab, ct.getHeaderCell(), -1);
 			ReportFactory.createElementsForBand(mc, ct.getHeaderCell().getChildren());
+		}
 
 		for (Iterator<?> it = ct.getCellsList().iterator(); it.hasNext();) {
 			JRDesignCrosstabCell c = (JRDesignCrosstabCell) it.next();
@@ -180,13 +185,14 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				hide = hide || isRowGroupTotal(ct, rowname);
 
 			if (!hide) {
-				mc = new MCell(mCrosstab, c.getContents(), colname + "/" + rowname); //$NON-NLS-1$
+				MCell mc = new MCell(mCrosstab, c.getContents(), colname + "/" + rowname); //$NON-NLS-1$
 				ReportFactory.createElementsForBand(mc, c.getContents().getChildren());
 			}
 		}
-
-		mc = new MCrosstabWhenNoData(mCrosstab, ct.getWhenNoDataCell());
-		if (ct.getWhenNoDataCell() != null) {
+		if (ct.getWhenNoDataCell() == null) {
+			new MCrosstabWhenNoData(mCrosstab, -1);
+		} else {
+			MCrosstabWhenNoDataCell mc = new MCrosstabWhenNoDataCell(mCrosstab, ct.getWhenNoDataCell(), -1);
 			ReportFactory.createElementsForBand(mc, ct.getWhenNoDataCell().getChildren());
 		}
 		mCrosstab.getCrosstabManager().refresh();
@@ -269,11 +275,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				return new CreateRowGroupCommand((MRowGroups) parent, (MRowGroup) child, newIndex);
 		}
 		if (child instanceof MCrosstabHeader) {
-			if (parent instanceof MCrosstabHeader && ((MCrosstabHeader) parent).getValue() == null)
+			if (parent instanceof MCrosstabHeader)
 				return new CreateCrosstabHeaderCommand((MCrosstab) parent.getParent(), (MCrosstabHeader) child);
 		}
 		if (child instanceof MCrosstabWhenNoData) {
-			if (parent instanceof MCrosstabWhenNoData && ((MCrosstabWhenNoData) parent).getValue() == null)
+			if (parent instanceof MCrosstabWhenNoData)
 				return new CreateCrosstabWhenNoDataCommand((MCrosstab) parent.getParent(), (MCrosstabWhenNoData) child);
 		}
 
@@ -297,13 +303,13 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			if (parent instanceof MRowGroups)
 				return new DeleteRowGroupCommand((MRowGroups) parent, (MRowGroup) child);
 		}
-		if (child instanceof MCrosstabHeader && ((MCrosstabHeader) child).getValue() != null) {
+		if (child instanceof MCrosstabHeaderCell && ((MCrosstabHeaderCell) child).getValue() != null) {
 			if (parent instanceof MCrosstab)
-				return new DeleteCrosstabHeaderCommand((MCrosstab) parent, (MCrosstabHeader) child);
+				return new DeleteCrosstabHeaderCommand((MCrosstab) parent, (MCrosstabHeaderCell) child);
 		}
-		if (child instanceof MCrosstabWhenNoData && ((MCrosstabWhenNoData) child).getValue() != null) {
+		if (child instanceof MCrosstabWhenNoDataCell && ((MCrosstabWhenNoDataCell) child).getValue() != null) {
 			if (parent instanceof MCrosstab)
-				return new DeleteCrosstabWhenNoDataCommand((MCrosstab) parent, (MCrosstabWhenNoData) child);
+				return new DeleteCrosstabWhenNoDataCommand((MCrosstab) parent, (MCrosstabWhenNoDataCell) child);
 		}
 		return null;
 	}
