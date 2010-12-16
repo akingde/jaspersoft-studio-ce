@@ -120,20 +120,17 @@ public class MTextField extends MTextElement {
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
 				JRDesignTextField.PROPERTY_EVALUATION_TIME, Messages.MTextField_evaluation_time, EnumHelper.getEnumNames(
 						EvaluationTimeEnum.values(), NullEnum.NULL));
-		evaluationTimeD
-				.setDescription(Messages.MTextField_evaluation_time_description);
+		evaluationTimeD.setDescription(Messages.MTextField_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
 		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,
 				Messages.MTextField_blank_when_null, NullEnum.INHERITED);
-		blankWhenNullD
-				.setDescription(Messages.MTextField_blank_when_null_description);
+		blankWhenNullD.setDescription(Messages.MTextField_blank_when_null_description);
 		desc.add(blankWhenNullD);
 
 		CheckBoxPropertyDescriptor stretchOverflowD = new CheckBoxPropertyDescriptor(
 				JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Messages.MTextField_stretch_with_overflow, NullEnum.NOTNULL);
-		stretchOverflowD
-				.setDescription(Messages.MTextField_stretch_with_overflow_description);
+		stretchOverflowD.setDescription(Messages.MTextField_stretch_with_overflow_description);
 		desc.add(stretchOverflowD);
 
 		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(JRDesignTextField.PROPERTY_EXPRESSION,
@@ -141,7 +138,8 @@ public class MTextField extends MTextElement {
 		exprD.setDescription(Messages.MTextField_expression_description);
 		desc.add(exprD);
 
-		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN, Messages.MTextField_pattern);
+		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
+				Messages.MTextField_pattern);
 		patternD.setDescription(Messages.MTextField_pattern_description);
 		desc.add(patternD);
 
@@ -217,9 +215,7 @@ public class MTextField extends MTextElement {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 
-		if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
-			jrElement.setPattern((String) value);
-		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
+		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime(EvaluationTimeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
 		else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) {
 			if (value instanceof MExpression) {

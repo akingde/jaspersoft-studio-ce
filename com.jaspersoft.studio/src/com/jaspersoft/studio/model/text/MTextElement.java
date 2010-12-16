@@ -60,24 +60,25 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP, Messages.MTextElement_markup,
-				ModelUtils.getMarkups(), NullEnum.INHERITED);
-		markupD
-				.setDescription(Messages.MTextElement_markup_description);
+		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP,
+				Messages.MTextElement_markup, ModelUtils.getMarkups(), NullEnum.INHERITED);
+		markupD.setDescription(Messages.MTextElement_markup_description);
 		desc.add(markupD);
 
 		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.MTextElement_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
+				Messages.MTextElement_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(),
+						NullEnum.INHERITED));
 		hAlignD.setDescription(Messages.MTextElement_horizontal_alignment_description);
 		desc.add(hAlignD);
 
 		ComboBoxPropertyDescriptor vAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				Messages.MTextElement_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
+				Messages.MTextElement_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(),
+						NullEnum.INHERITED));
 		vAlignD.setDescription(Messages.MTextElement_vertical_alignment_description);
 		desc.add(vAlignD);
 
-		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION, Messages.MTextElement_rotation,
-				EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
+		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION,
+				Messages.MTextElement_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
 		rotationD.setDescription(Messages.MTextElement_rotation_description);
 		desc.add(rotationD);
 
@@ -86,8 +87,7 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		lineSpacingD.setDescription(Messages.MTextElement_line_spacing_description);
 		desc.add(lineSpacingD);
 
-		if (tFont == null)
-			tFont = new MFont((JRFont) getValue());
+		tFont = new MFont((JRFont) getValue());
 		tFont.createPropertyDescriptors(desc, defaultsMap);
 
 		markupD.setCategory(Messages.MTextElement_text_category);
@@ -103,6 +103,13 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 	}
 
 	private MFont tFont;
+
+	private MFont getMFont() {
+		if (tFont == null) {
+			tFont = new MFont((JRFont) getValue());
+		}
+		return tFont;
+	}
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -120,7 +127,7 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		if (id.equals(JRBaseStyle.PROPERTY_LINE_SPACING))
 			return EnumHelper.getValue(jrElement.getOwnLineSpacingValue(), 0, true);
 
-		if (tFont != null) {
+		if (getMFont() != null) {
 			Object val = tFont.getPropertyValue(id);
 			if (val != null)
 				return val;
@@ -146,9 +153,7 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		else if (id.equals(JRBaseStyle.PROPERTY_LINE_SPACING))
 			jrElement.setLineSpacing((LineSpacingEnum) EnumHelper.getSetValue(LineSpacingEnum.values(), value, 0, true));
 
-		if (tFont != null) {
-			tFont.setPropertyValue(id, value);
-		}
+		getMFont().setPropertyValue(id, value);
 
 		super.setPropertyValue(id, value);
 	}
