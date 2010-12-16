@@ -45,6 +45,7 @@ import com.jaspersoft.studio.crosstab.figure.CrosstabFigure;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.crosstab.model.cell.command.CreateElementCommand;
+import com.jaspersoft.studio.crosstab.model.cell.command.CreateElementGroupCommand;
 import com.jaspersoft.studio.crosstab.model.cell.command.DeleteElementCommand;
 import com.jaspersoft.studio.crosstab.model.cell.command.DeleteElementGroupCommand;
 import com.jaspersoft.studio.crosstab.model.cell.command.OrphanElementCommand;
@@ -293,6 +294,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		}
 		if (child instanceof MGraphicElement && parent instanceof MCell)
 			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, newIndex);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);
 		return null;
 	}
 
