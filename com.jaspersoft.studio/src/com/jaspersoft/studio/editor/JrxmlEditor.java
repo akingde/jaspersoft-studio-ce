@@ -455,6 +455,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private void model2xml() {
 		JasperDesign report = (JasperDesign) ((MRoot) getModel()).getValue();
 		String xml = JasperCompileManager.writeReportToXml(report);
+		xml = xml.replaceFirst("<jasperReport ", "<!-- Created with Jaspersoft Studio -->\n<jasperReport ");
 		IDocumentProvider dp = xmlEditor.getDocumentProvider();
 		IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 		doc.set(xml);
