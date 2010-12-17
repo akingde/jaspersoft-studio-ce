@@ -127,31 +127,42 @@ public class MTimePeriodSeries extends APropertyNode {
 			if (itemHyperLink == null)
 				itemHyperLink = new JRDesignHyperlink();
 			mHyperLink = new MHyperLink(itemHyperLink);
+			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
 		if (id.equals(JRDesignTimePeriodSeries.PROPERTY_START_DATE_EXPRESSION)) {
-			if (sdExpression == null)
+			if (sdExpression == null) {
 				sdExpression = new MExpression(jrElement.getStartDateExpression());
+				setChildListener(sdExpression);
+			}
 			return sdExpression;
 		}
 		if (id.equals(JRDesignTimePeriodSeries.PROPERTY_END_DATE_EXPRESSION)) {
-			if (edExpression == null)
+			if (edExpression == null) {
 				edExpression = new MExpression(jrElement.getEndDateExpression());
+				setChildListener(edExpression);
+			}
 			return edExpression;
 		}
 		if (id.equals(JRDesignTimePeriodSeries.PROPERTY_LABEL_EXPRESSION)) {
-			if (lExpression == null)
+			if (lExpression == null) {
 				lExpression = new MExpression(jrElement.getLabelExpression());
+				setChildListener(lExpression);
+			}
 			return lExpression;
 		}
 		if (id.equals(JRDesignTimePeriodSeries.PROPERTY_SERIES_EXPRESSION)) {
-			if (sExpression == null)
+			if (sExpression == null) {
 				sExpression = new MExpression(jrElement.getSeriesExpression());
+				setChildListener(sExpression);
+			}
 			return sExpression;
 		}
 		if (id.equals(JRDesignTimePeriodSeries.PROPERTY_VALUE_EXPRESSION)) {
-			if (vExpression == null)
+			if (vExpression == null) {
 				vExpression = new MExpression(jrElement.getValueExpression());
+				setChildListener(vExpression);
+			}
 			return vExpression;
 		}
 
@@ -164,30 +175,35 @@ public class MTimePeriodSeries extends APropertyNode {
 		if (id.equals(JRDesignTimePeriodSeries.PROPERTY_START_DATE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				sdExpression = (MExpression) value;
+				setChildListener(sdExpression);
 				JRExpression expression = (JRExpression) sdExpression.getValue();
 				jrElement.setStartDateExpression(expression);
 			}
 		} else if (id.equals(JRDesignTimePeriodSeries.PROPERTY_END_DATE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				edExpression = (MExpression) value;
+				setChildListener(edExpression);
 				JRExpression expression = (JRExpression) edExpression.getValue();
 				jrElement.setEndDateExpression(expression);
 			}
 		} else if (id.equals(JRDesignTimePeriodSeries.PROPERTY_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				lExpression = (MExpression) value;
+				setChildListener(lExpression);
 				JRExpression expression = (JRExpression) lExpression.getValue();
 				jrElement.setLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignTimePeriodSeries.PROPERTY_SERIES_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				sExpression = (MExpression) value;
+				setChildListener(sExpression);
 				JRExpression expression = (JRExpression) sExpression.getValue();
 				jrElement.setSeriesExpression(expression);
 			}
 		} else if (id.equals(JRDesignTimePeriodSeries.PROPERTY_VALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				vExpression = (MExpression) value;
+				setChildListener(vExpression);
 				JRExpression expression = (JRExpression) vExpression.getValue();
 				jrElement.setValueExpression(expression);
 			}

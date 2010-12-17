@@ -158,6 +158,7 @@ public class MChartAxes extends APropertyNode {
 		if (id.equals(JRDesignChartAxis.PROPERTY_CHART)) {
 			if (mChart == null)
 				mChart = new MChart();
+			setChildListener(mChart);
 			mChart.setValue(jrElement.getChart());
 			return mChart;
 		}

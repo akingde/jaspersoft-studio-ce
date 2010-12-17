@@ -43,9 +43,11 @@ public class MCandlestickPlot extends MChartPlot {
 	public MCandlestickPlot(JRCandlestickPlot value) {
 		super(value);
 	}
+
 	public String getDisplayText() {
 		return Messages.MCandlestickPlot_candlestick_plot;
 	}
+
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
@@ -70,12 +72,14 @@ public class MCandlestickPlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_COLOR, Messages.MCandlestickPlot_category_axis_label_color, NullEnum.NULL);
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_COLOR, Messages.MCandlestickPlot_category_axis_label_color,
+				NullEnum.NULL);
 		catAxisLabelColorD.setDescription(Messages.MCandlestickPlot_category_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor catAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION, Messages.MCandlestickPlot_category_axis_label_expression);
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION,
+				Messages.MCandlestickPlot_category_axis_label_expression);
 		catAxisLabelExprD.setDescription(Messages.MCandlestickPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
 
@@ -85,28 +89,32 @@ public class MCandlestickPlot extends MChartPlot {
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR, Messages.MCandlestickPlot_category_axis_tick_label_color,
-				NullEnum.INHERITED);
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR,
+				Messages.MCandlestickPlot_category_axis_tick_label_color, NullEnum.INHERITED);
 		catAxisTickLabelColorD.setDescription(Messages.MCandlestickPlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
 		FontPropertyDescriptor catAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT, Messages.MCandlestickPlot_category_axis_tick_label_font);
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT,
+				Messages.MCandlestickPlot_category_axis_tick_label_font);
 		catAxisTickLabelFontD.setDescription(Messages.MCandlestickPlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LINE_COLOR, Messages.MCandlestickPlot_category_axis_line_color, NullEnum.NULL);
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LINE_COLOR, Messages.MCandlestickPlot_category_axis_line_color,
+				NullEnum.NULL);
 		catAxisLineColorD.setDescription(Messages.MCandlestickPlot_category_axis_line_color_description);
 		desc.add(catAxisLineColorD);
 
 		ColorPropertyDescriptor valAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.MCandlestickPlot_value_axis_label_color, NullEnum.NULL);
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.MCandlestickPlot_value_axis_label_color,
+				NullEnum.NULL);
 		valAxisLabelColorD.setDescription(Messages.MCandlestickPlot_value_axis_label_color_description);
 		desc.add(valAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor valAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, Messages.MCandlestickPlot_category_value_axis_label_expression);
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION,
+				Messages.MCandlestickPlot_category_value_axis_label_expression);
 		valAxisLabelExprD.setDescription(Messages.MCandlestickPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
 
@@ -116,59 +124,68 @@ public class MCandlestickPlot extends MChartPlot {
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MCandlestickPlot_value_axis_tick_label_color, NullEnum.NULL);
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR,
+				Messages.MCandlestickPlot_value_axis_tick_label_color, NullEnum.NULL);
 		valAxisTickLabelColorD.setDescription(Messages.MCandlestickPlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
 		FontPropertyDescriptor valAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, Messages.MCandlestickPlot_value_axis_tick_label_font);
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT,
+				Messages.MCandlestickPlot_value_axis_tick_label_font);
 		valAxisTickLabelFontD.setDescription(Messages.MCandlestickPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, Messages.MCandlestickPlot_value_axis_line_color, NullEnum.NULL);
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, Messages.MCandlestickPlot_value_axis_line_color,
+				NullEnum.NULL);
 		valAxisLineColorD.setDescription(Messages.MCandlestickPlot_value_axis_line_color_description);
 		desc.add(valAxisLineColorD);
 
 		JRExpressionPropertyDescriptor rangeAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, Messages.MCandlestickPlot_range_axis_minvalue_expression);
+				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION,
+				Messages.MCandlestickPlot_range_axis_minvalue_expression);
 		rangeAxisMinExprD.setDescription(Messages.MCandlestickPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, Messages.MCandlestickPlot_range_axis_maxvalue_expression);
+				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
+				Messages.MCandlestickPlot_range_axis_maxvalue_expression);
 		rangeAxisMaxExprD.setDescription(Messages.MCandlestickPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.MCandlestickPlot_domain_axis_minvalue_expression);
+				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
+				Messages.MCandlestickPlot_domain_axis_minvalue_expression);
 		domainAxisMinExprD.setDescription(Messages.MCandlestickPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.MCandlestickPlot_domain_axis_maxvalue_expression);
+				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
+				Messages.MCandlestickPlot_domain_axis_maxvalue_expression);
 		domainAxisMaxExprD.setDescription(Messages.MCandlestickPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS, Messages.MCandlestickPlot_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS,
+				Messages.MCandlestickPlot_category_axis_vertical_tick_labels, NullEnum.NOTNULL);
 		catAxisVertTickLabelD.setDescription(Messages.MCandlestickPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MCandlestickPlot_value_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
+				Messages.MCandlestickPlot_value_axis_vertical_tick_labels, NullEnum.NOTNULL);
 		valAxisVertTickLabelD.setDescription(Messages.MCandlestickPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_MASK, Messages.MCandlestickPlot_category_axis_tick_label_mask);
+				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_MASK,
+				Messages.MCandlestickPlot_category_axis_tick_label_mask);
 		catAxisTickLabelMaskD.setDescription(Messages.MCandlestickPlot_category_axis_tick_label_mask_description);
 		desc.add(catAxisTickLabelMaskD);
 
 		NTextPropertyDescriptor valAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, Messages.MCandlestickPlot_value_axis_tick_label_mask);
+				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK,
+				Messages.MCandlestickPlot_value_axis_tick_label_mask);
 		valAxisTickLabelMaskD.setDescription(Messages.MCandlestickPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
@@ -219,54 +236,74 @@ public class MCandlestickPlot extends MChartPlot {
 			return jrElement.getShowVolume();
 
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION)) {
-			if (ceAnchorExpression == null)
+			if (ceAnchorExpression == null) {
 				ceAnchorExpression = new MExpression(jrElement.getTimeAxisLabelExpression());
+				setChildListener(ceAnchorExpression);
+			}
 			return ceAnchorExpression;
 		}
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION)) {
-			if (veAnchorExpression == null)
+			if (veAnchorExpression == null) {
 				veAnchorExpression = new MExpression(jrElement.getValueAxisLabelExpression());
+				setChildListener(veAnchorExpression);
+			}
 			return veAnchorExpression;
 		}
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
-			if (rmaxAnchorExpression == null)
+			if (rmaxAnchorExpression == null) {
 				rmaxAnchorExpression = new MExpression(jrElement.getRangeAxisMaxValueExpression());
+				setChildListener(rmaxAnchorExpression);
+			}
 			return rmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
-			if (rminAnchorExpression == null)
+			if (rminAnchorExpression == null) {
 				rminAnchorExpression = new MExpression(jrElement.getRangeAxisMinValueExpression());
+				setChildListener(rminAnchorExpression);
+			}
 			return rminAnchorExpression;
 		}
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
-			if (dmaxAnchorExpression == null)
+			if (dmaxAnchorExpression == null) {
 				dmaxAnchorExpression = new MExpression(jrElement.getDomainAxisMaxValueExpression());
+				setChildListener(dmaxAnchorExpression);
+			}
 			return dmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
-			if (dminAnchorExpression == null)
+			if (dminAnchorExpression == null) {
 				dminAnchorExpression = new MExpression(jrElement.getDomainAxisMinValueExpression());
+				setChildListener(dminAnchorExpression);
+			}
 			return dminAnchorExpression;
 		}
 
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_FONT)) {
-			if (clFont == null)
+			if (clFont == null) {
 				clFont = new MFont(jrElement.getTimeAxisLabelFont());
+				setChildListener(clFont);
+			}
 			return clFont;
 		}
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT)) {
-			if (ctFont == null)
+			if (ctFont == null) {
 				ctFont = new MFont(jrElement.getTimeAxisTickLabelFont());
+				setChildListener(ctFont);
+			}
 			return ctFont;
 		}
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_FONT)) {
-			if (vlFont == null)
+			if (vlFont == null) {
 				vlFont = new MFont(jrElement.getValueAxisLabelFont());
+				setChildListener(vlFont);
+			}
 			return vlFont;
 		}
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
-			if (vtFont == null)
+			if (vtFont == null) {
 				vtFont = new MFont(jrElement.getValueAxisTickLabelFont());
+				setChildListener(vtFont);
+			}
 			return vtFont;
 		}
 
@@ -313,36 +350,42 @@ public class MCandlestickPlot extends MChartPlot {
 		else if (id.equals(JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				ceAnchorExpression = (MExpression) value;
+				setChildListener(ceAnchorExpression);
 				JRExpression expression = (JRExpression) ceAnchorExpression.getValue();
 				jrElement.setTimeAxisLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				veAnchorExpression = (MExpression) value;
+				setChildListener(veAnchorExpression);
 				JRExpression expression = (JRExpression) veAnchorExpression.getValue();
 				jrElement.setValueAxisLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				rmaxAnchorExpression = (MExpression) value;
+				setChildListener(rmaxAnchorExpression);
 				JRExpression expression = (JRExpression) rmaxAnchorExpression.getValue();
 				jrElement.setRangeAxisMaxValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				rminAnchorExpression = (MExpression) value;
+				setChildListener(rminAnchorExpression);
 				JRExpression expression = (JRExpression) rminAnchorExpression.getValue();
 				jrElement.setRangeAxisMinValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dmaxAnchorExpression = (MExpression) value;
+				setChildListener(dmaxAnchorExpression);
 				JRExpression expression = (JRExpression) dmaxAnchorExpression.getValue();
 				jrElement.setDomainAxisMaxValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dminAnchorExpression = (MExpression) value;
+				setChildListener(dminAnchorExpression);
 				JRExpression expression = (JRExpression) dminAnchorExpression.getValue();
 				jrElement.setDomainAxisMinValueExpression(expression);
 			}

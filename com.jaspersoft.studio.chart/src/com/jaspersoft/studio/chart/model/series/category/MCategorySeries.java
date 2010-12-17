@@ -120,26 +120,35 @@ public class MCategorySeries extends APropertyNode {
 			if (itemHyperLink == null)
 				itemHyperLink = new JRDesignHyperlink();
 			mHyperLink = new MHyperLink(itemHyperLink);
+			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
 		if (id.equals(JRDesignCategorySeries.PROPERTY_CATEGORY_EXPRESSION)) {
-			if (dExpression == null)
+			if (dExpression == null) {
 				dExpression = new MExpression(jrElement.getCategoryExpression());
+				setChildListener(dExpression);
+			}
 			return dExpression;
 		}
 		if (id.equals(JRDesignCategorySeries.PROPERTY_LABEL_EXPRESSION)) {
-			if (hExpression == null)
+			if (hExpression == null) {
 				hExpression = new MExpression(jrElement.getLabelExpression());
+				setChildListener(hExpression);
+			}
 			return hExpression;
 		}
 		if (id.equals(JRDesignCategorySeries.PROPERTY_SERIES_EXPRESSION)) {
-			if (lExpression == null)
+			if (lExpression == null) {
 				lExpression = new MExpression(jrElement.getSeriesExpression());
+				setChildListener(lExpression);
+			}
 			return lExpression;
 		}
 		if (id.equals(JRDesignCategorySeries.PROPERTY_VALUE_EXPRESSION)) {
-			if (oExpression == null)
+			if (oExpression == null) {
 				oExpression = new MExpression(jrElement.getValueExpression());
+				setChildListener(oExpression);
+			}
 			return oExpression;
 		}
 
@@ -152,24 +161,28 @@ public class MCategorySeries extends APropertyNode {
 		if (id.equals(JRDesignCategorySeries.PROPERTY_CATEGORY_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dExpression = (MExpression) value;
+				setChildListener(dExpression);
 				JRExpression expression = (JRExpression) dExpression.getValue();
 				jrElement.setCategoryExpression(expression);
 			}
 		} else if (id.equals(JRDesignCategorySeries.PROPERTY_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				hExpression = (MExpression) value;
+				setChildListener(hExpression);
 				JRExpression expression = (JRExpression) hExpression.getValue();
 				jrElement.setLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignCategorySeries.PROPERTY_SERIES_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				lExpression = (MExpression) value;
+				setChildListener(lExpression);
 				JRExpression expression = (JRExpression) lExpression.getValue();
 				jrElement.setSeriesExpression(expression);
 			}
 		} else if (id.equals(JRDesignCategorySeries.PROPERTY_VALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				oExpression = (MExpression) value;
+				setChildListener(oExpression);
 				JRExpression expression = (JRExpression) oExpression.getValue();
 				jrElement.setValueExpression(expression);
 			}

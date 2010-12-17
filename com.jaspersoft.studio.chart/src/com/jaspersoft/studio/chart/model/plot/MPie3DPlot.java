@@ -112,8 +112,10 @@ public class MPie3DPlot extends MChartPlot {
 		if (id.equals(JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR))
 			return jrElement.getDepthFactorDouble();
 		if (id.equals(JRDesignPie3DPlot.PROPERTY_ITEM_LABEL)) {
-			if (ilFont == null)
+			if (ilFont == null){
 				ilFont = new MChartItemLabel(jrElement.getItemLabel());
+				setChildListener(ilFont);
+			}
 			return ilFont;
 		}
 

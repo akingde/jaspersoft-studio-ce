@@ -90,7 +90,8 @@ public class MBarPlot extends MChartPlot {
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.MBarPlot_category_axis_tick_label_color, NullEnum.NULL);
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.MBarPlot_category_axis_tick_label_color,
+				NullEnum.NULL);
 		catAxisTickLabelColorD.setDescription(Messages.MBarPlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
@@ -120,7 +121,8 @@ public class MBarPlot extends MChartPlot {
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MBarPlot_value_axis_tick_label_color, NullEnum.NULL);
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MBarPlot_value_axis_tick_label_color,
+				NullEnum.NULL);
 		valAxisTickLabelColorD.setDescription(Messages.MBarPlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
@@ -129,7 +131,8 @@ public class MBarPlot extends MChartPlot {
 		valAxisTickLabelFontD.setDescription(Messages.MBarPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
 
-		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignBarPlot.PROPERTY_ITEM_LABEL, Messages.MBarPlot_item_label);
+		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignBarPlot.PROPERTY_ITEM_LABEL,
+				Messages.MBarPlot_item_label);
 		itemLabelD.setDescription(Messages.MBarPlot_item_label_description);
 		desc.add(itemLabelD);
 
@@ -159,13 +162,14 @@ public class MBarPlot extends MChartPlot {
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS, Messages.MBarPlot_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
+				Messages.MBarPlot_category_axis_vertical_tick_labels, NullEnum.NOTNULL);
 		catAxisVertTickLabelD.setDescription(Messages.MBarPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MBarPlot_value_axis_vertical_tick_labels, NullEnum.NOTNULL);
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MBarPlot_value_axis_vertical_tick_labels,
+				NullEnum.NOTNULL);
 		valAxisVertTickLabelD.setDescription(Messages.MBarPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
@@ -248,59 +252,81 @@ public class MBarPlot extends MChartPlot {
 			return jrElement.getShowTickMarks();
 
 		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION)) {
-			if (ceAnchorExpression == null)
+			if (ceAnchorExpression == null) {
 				ceAnchorExpression = new MExpression(jrElement.getCategoryAxisLabelExpression());
+				setChildListener(ceAnchorExpression);
+			}
 			return ceAnchorExpression;
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION)) {
-			if (veAnchorExpression == null)
+			if (veAnchorExpression == null) {
 				veAnchorExpression = new MExpression(jrElement.getValueAxisLabelExpression());
+				setChildListener(veAnchorExpression);
+			}
 			return veAnchorExpression;
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
-			if (rmaxAnchorExpression == null)
+			if (rmaxAnchorExpression == null) {
 				rmaxAnchorExpression = new MExpression(jrElement.getRangeAxisMaxValueExpression());
+				setChildListener(rmaxAnchorExpression);
+			}
 			return rmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
-			if (rminAnchorExpression == null)
+			if (rminAnchorExpression == null) {
 				rminAnchorExpression = new MExpression(jrElement.getRangeAxisMinValueExpression());
+				setChildListener(rminAnchorExpression);
+			}
 			return rminAnchorExpression;
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
-			if (dmaxAnchorExpression == null)
+			if (dmaxAnchorExpression == null) {
 				dmaxAnchorExpression = new MExpression(jrElement.getDomainAxisMaxValueExpression());
+				setChildListener(dmaxAnchorExpression);
+			}
 			return dmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
-			if (dminAnchorExpression == null)
+			if (dminAnchorExpression == null) {
 				dminAnchorExpression = new MExpression(jrElement.getDomainAxisMinValueExpression());
+				setChildListener(dminAnchorExpression);
+			}
 			return dminAnchorExpression;
 		}
 
 		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT)) {
-			if (clFont == null)
+			if (clFont == null) {
 				clFont = new MFont(jrElement.getCategoryAxisLabelFont());
+				setChildListener(clFont);
+			}
 			return clFont;
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT)) {
-			if (ctFont == null)
+			if (ctFont == null) {
 				ctFont = new MFont(jrElement.getCategoryAxisTickLabelFont());
+				setChildListener(ctFont);
+			}
 			return ctFont;
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_FONT)) {
-			if (vlFont == null)
+			if (vlFont == null) {
 				vlFont = new MFont(jrElement.getValueAxisLabelFont());
+				setChildListener(vlFont);
+			}
 			return vlFont;
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
-			if (vtFont == null)
+			if (vtFont == null) {
 				vtFont = new MFont(jrElement.getValueAxisTickLabelFont());
+				setChildListener(vtFont);
+			}
 			return vtFont;
 		}
 		if (id.equals(JRDesignBarPlot.PROPERTY_ITEM_LABEL)) {
-			if (ilFont == null)
+			if (ilFont == null) {
 				ilFont = new MChartItemLabel(jrElement.getItemLabel());
+				setChildListener(ilFont);
+			}
 			return ilFont;
 		}
 
@@ -355,36 +381,42 @@ public class MBarPlot extends MChartPlot {
 		else if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				ceAnchorExpression = (MExpression) value;
+				setChildListener(ceAnchorExpression);
 				JRExpression expression = (JRExpression) ceAnchorExpression.getValue();
 				jrElement.setCategoryAxisLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				veAnchorExpression = (MExpression) value;
+				setChildListener(veAnchorExpression);
 				JRExpression expression = (JRExpression) veAnchorExpression.getValue();
 				jrElement.setValueAxisLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignBarPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				rmaxAnchorExpression = (MExpression) value;
+				setChildListener(rmaxAnchorExpression);
 				JRExpression expression = (JRExpression) rmaxAnchorExpression.getValue();
 				jrElement.setRangeAxisMaxValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignBarPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				rminAnchorExpression = (MExpression) value;
+				setChildListener(rminAnchorExpression);
 				JRExpression expression = (JRExpression) rminAnchorExpression.getValue();
 				jrElement.setRangeAxisMinValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dmaxAnchorExpression = (MExpression) value;
+				setChildListener(dmaxAnchorExpression);
 				JRExpression expression = (JRExpression) dmaxAnchorExpression.getValue();
 				jrElement.setDomainAxisMaxValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dminAnchorExpression = (MExpression) value;
+				setChildListener(dminAnchorExpression);
 				JRExpression expression = (JRExpression) dminAnchorExpression.getValue();
 				jrElement.setDomainAxisMinValueExpression(expression);
 			}

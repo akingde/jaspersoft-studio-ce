@@ -73,7 +73,8 @@ public class MLinePlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, Messages.MLinePlot_category_axis_label_color, NullEnum.NULL);
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, Messages.MLinePlot_category_axis_label_color,
+				NullEnum.NULL);
 		catAxisLabelColorD.setDescription(Messages.MLinePlot_category_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
@@ -88,7 +89,8 @@ public class MLinePlot extends MChartPlot {
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.MLinePlot_category_axis_tick_label_color, NullEnum.NULL);
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.MLinePlot_category_axis_tick_label_color,
+				NullEnum.NULL);
 		catAxisTickLabelColorD.setDescription(Messages.MLinePlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
@@ -118,7 +120,8 @@ public class MLinePlot extends MChartPlot {
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MLinePlot_value_axis_tick_label_color, NullEnum.INHERITED);
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MLinePlot_value_axis_tick_label_color,
+				NullEnum.INHERITED);
 		valAxisTickLabelColorD.setDescription(Messages.MLinePlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
@@ -153,13 +156,14 @@ public class MLinePlot extends MChartPlot {
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS, Messages.MLinePlot_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
+				Messages.MLinePlot_category_axis_vertical_tick_labels, NullEnum.NOTNULL);
 		catAxisVertTickLabelD.setDescription(Messages.MLinePlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MLinePlot_value_axis_vertical_tick_labels, NullEnum.NULL);
+				JRDesignLinePlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MLinePlot_value_axis_vertical_tick_labels,
+				NullEnum.NULL);
 		valAxisVertTickLabelD.setDescription(Messages.MLinePlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
@@ -184,7 +188,8 @@ public class MLinePlot extends MChartPlot {
 		desc.add(valAxisTickLabelMaskD);
 
 		DoublePropertyDescriptor catAxisTickLabelRotation = new DoublePropertyDescriptor(
-				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, Messages.MLinePlot_category_axis_tick_label_rotation);
+				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION,
+				Messages.MLinePlot_category_axis_tick_label_rotation);
 		catAxisTickLabelRotation.setDescription(Messages.MLinePlot_category_axis_tick_label_rotation_description);
 		desc.add(catAxisTickLabelRotation);
 
@@ -234,54 +239,74 @@ public class MLinePlot extends MChartPlot {
 			return jrElement.getCategoryAxisTickLabelRotation();
 
 		if (id.equals(JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION)) {
-			if (ceAnchorExpression == null)
+			if (ceAnchorExpression == null) {
 				ceAnchorExpression = new MExpression(jrElement.getCategoryAxisLabelExpression());
+				setChildListener(ceAnchorExpression);
+			}
 			return ceAnchorExpression;
 		}
 		if (id.equals(JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION)) {
-			if (veAnchorExpression == null)
+			if (veAnchorExpression == null) {
 				veAnchorExpression = new MExpression(jrElement.getValueAxisLabelExpression());
+				setChildListener(veAnchorExpression);
+			}
 			return veAnchorExpression;
 		}
 		if (id.equals(JRDesignLinePlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
-			if (rmaxAnchorExpression == null)
+			if (rmaxAnchorExpression == null) {
 				rmaxAnchorExpression = new MExpression(jrElement.getRangeAxisMaxValueExpression());
+				setChildListener(rmaxAnchorExpression);
+			}
 			return rmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignLinePlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
-			if (rminAnchorExpression == null)
+			if (rminAnchorExpression == null) {
 				rminAnchorExpression = new MExpression(jrElement.getRangeAxisMinValueExpression());
+				setChildListener(rminAnchorExpression);
+			}
 			return rminAnchorExpression;
 		}
 		if (id.equals(JRDesignLinePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
-			if (dmaxAnchorExpression == null)
+			if (dmaxAnchorExpression == null) {
 				dmaxAnchorExpression = new MExpression(jrElement.getDomainAxisMaxValueExpression());
+				setChildListener(dmaxAnchorExpression);
+			}
 			return dmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignLinePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
-			if (dminAnchorExpression == null)
+			if (dminAnchorExpression == null) {
 				dminAnchorExpression = new MExpression(jrElement.getDomainAxisMinValueExpression());
+				setChildListener(dminAnchorExpression);
+			}
 			return dminAnchorExpression;
 		}
 
 		if (id.equals(JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT)) {
-			if (clFont == null)
+			if (clFont == null) {
 				clFont = new MFont(jrElement.getCategoryAxisLabelFont());
+				setChildListener(clFont);
+			}
 			return clFont;
 		}
 		if (id.equals(JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT)) {
-			if (ctFont == null)
+			if (ctFont == null) {
 				ctFont = new MFont(jrElement.getCategoryAxisTickLabelFont());
+				setChildListener(ctFont);
+			}
 			return ctFont;
 		}
 		if (id.equals(JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_FONT)) {
-			if (vlFont == null)
+			if (vlFont == null) {
 				vlFont = new MFont(jrElement.getValueAxisLabelFont());
+				setChildListener(vlFont);
+			}
 			return vlFont;
 		}
 		if (id.equals(JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
-			if (vtFont == null)
+			if (vtFont == null) {
 				vtFont = new MFont(jrElement.getValueAxisTickLabelFont());
+				setChildListener(vtFont);
+			}
 			return vtFont;
 		}
 

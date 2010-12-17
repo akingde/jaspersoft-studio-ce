@@ -50,9 +50,11 @@ public class MMeterPlot extends MChartPlot {
 	public MMeterPlot(JRMeterPlot value) {
 		super(value);
 	}
+
 	public String getDisplayText() {
 		return Messages.MMeterPlot_meter_plot;
 	}
+
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
@@ -133,7 +135,8 @@ public class MMeterPlot extends MChartPlot {
 		dataRangeLowExprD.setDescription(Messages.MMeterPlot_data_range_low_expression_description);
 		desc.add(dataRangeLowExprD);
 
-		NTextPropertyDescriptor unitsD = new NTextPropertyDescriptor(JRDesignMeterPlot.PROPERTY_UNITS, Messages.MMeterPlot_units);
+		NTextPropertyDescriptor unitsD = new NTextPropertyDescriptor(JRDesignMeterPlot.PROPERTY_UNITS,
+				Messages.MMeterPlot_units);
 		unitsD.setDescription(Messages.MMeterPlot_units_description);
 		desc.add(unitsD);
 
@@ -176,23 +179,31 @@ public class MMeterPlot extends MChartPlot {
 			return jrElement.getValueDisplay().getMask();
 
 		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
-			if (drhaExpression == null)
+			if (drhaExpression == null) {
 				drhaExpression = new MExpression(jrElement.getDataRange().getHighExpression());
+				setChildListener(drhaExpression);
+			}
 			return drhaExpression;
 		}
 		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
-			if (drlExpression == null)
+			if (drlExpression == null) {
 				drlExpression = new MExpression(jrElement.getDataRange().getLowExpression());
+				setChildListener(drlExpression);
+			}
 			return drlExpression;
 		}
 		if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT)) {
-			if (tlFont == null)
+			if (tlFont == null) {
 				tlFont = new MFont(jrElement.getTickLabelFont());
+				setChildListener(tlFont);
+			}
 			return tlFont;
 		}
 		if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
-			if (vdFont == null)
+			if (vdFont == null) {
 				vdFont = new MFont(jrElement.getValueDisplay().getFont());
+				setChildListener(vdFont);
+			}
 			return vdFont;
 		}
 		return super.getPropertyValue(id);
@@ -248,12 +259,14 @@ public class MMeterPlot extends MChartPlot {
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
 			if (value instanceof MExpression) {
 				drhaExpression = (MExpression) value;
+				setChildListener(drhaExpression);
 				JRExpression expression = (JRExpression) drhaExpression.getValue();
 				((JRDesignDataRange) jrElement.getDataRange()).setHighExpression(expression);
 			}
 		} else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
 			if (value instanceof MExpression) {
 				drlExpression = (MExpression) value;
+				setChildListener(drlExpression);
 				JRExpression expression = (JRExpression) drlExpression.getValue();
 				((JRDesignDataRange) jrElement.getDataRange()).setLowExpression(expression);
 			}

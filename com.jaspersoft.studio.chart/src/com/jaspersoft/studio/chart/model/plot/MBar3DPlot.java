@@ -46,9 +46,11 @@ public class MBar3DPlot extends MChartPlot {
 	public MBar3DPlot(JRBar3DPlot value) {
 		super(value);
 	}
+
 	public String getDisplayText() {
-		return Messages.MBar3DPlot_bar3d_plot; 
+		return Messages.MBar3DPlot_bar3d_plot;
 	}
+
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
@@ -73,7 +75,8 @@ public class MBar3DPlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, Messages.MBar3DPlot_category_axis_label_color, NullEnum.NULL);
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, Messages.MBar3DPlot_category_axis_label_color,
+				NullEnum.NULL);
 		catAxisLabelColorD.setDescription(Messages.MBar3DPlot_category_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
@@ -88,7 +91,8 @@ public class MBar3DPlot extends MChartPlot {
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.MBar3DPlot_category_axis_tick_label_color, NullEnum.NULL);
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.MBar3DPlot_category_axis_tick_label_color,
+				NullEnum.NULL);
 		catAxisTickLabelColorD.setDescription(Messages.MBar3DPlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
@@ -98,7 +102,8 @@ public class MBar3DPlot extends MChartPlot {
 		desc.add(catAxisTickLabelFontD);
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, Messages.MBar3DPlot_category_axis_line_color, NullEnum.NULL);
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, Messages.MBar3DPlot_category_axis_line_color,
+				NullEnum.NULL);
 		catAxisLineColorD.setDescription(Messages.MBar3DPlot_category_axis_line_color_description);
 		desc.add(catAxisLineColorD);
 
@@ -118,7 +123,8 @@ public class MBar3DPlot extends MChartPlot {
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MBar3DPlot_value_axis_tick_label_color, NullEnum.NULL);
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MBar3DPlot_value_axis_tick_label_color,
+				NullEnum.NULL);
 		valAxisTickLabelColorD.setDescription(Messages.MBar3DPlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
@@ -127,7 +133,8 @@ public class MBar3DPlot extends MChartPlot {
 		valAxisTickLabelFontD.setDescription(Messages.MBar3DPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
 
-		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignBar3DPlot.PROPERTY_ITEM_LABEL, Messages.MBar3DPlot_item_label);
+		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignBar3DPlot.PROPERTY_ITEM_LABEL,
+				Messages.MBar3DPlot_item_label);
 		itemLabelD.setDescription(Messages.MBar3DPlot_item_label_description);
 		desc.add(itemLabelD);
 
@@ -157,13 +164,14 @@ public class MBar3DPlot extends MChartPlot {
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS, Messages.MBar3DPlot_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
+				Messages.MBar3DPlot_category_axis_vertical_tick_labels, NullEnum.NOTNULL);
 		catAxisVertTickLabelD.setDescription(Messages.MBar3DPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MBar3DPlot_value_axis_vertical_tick_labels, NullEnum.NOTNULL);
+				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
+				Messages.MBar3DPlot_value_axis_vertical_tick_labels, NullEnum.NOTNULL);
 		valAxisVertTickLabelD.setDescription(Messages.MBar3DPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
@@ -183,15 +191,18 @@ public class MBar3DPlot extends MChartPlot {
 		desc.add(valAxisTickLabelMaskD);
 
 		DoublePropertyDescriptor catAxisTickLabelRotation = new DoublePropertyDescriptor(
-				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, Messages.MBar3DPlot_category_axis_tick_label_rotation);
+				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION,
+				Messages.MBar3DPlot_category_axis_tick_label_rotation);
 		catAxisTickLabelRotation.setDescription(Messages.MBar3DPlot_category_axis_tick_label_rotation_description);
 		desc.add(catAxisTickLabelRotation);
 
-		DoublePropertyDescriptor xoffsetD = new DoublePropertyDescriptor(JRDesignBar3DPlot.PROPERTY_X_OFFSET, Messages.MBar3DPlot_x_offset);
+		DoublePropertyDescriptor xoffsetD = new DoublePropertyDescriptor(JRDesignBar3DPlot.PROPERTY_X_OFFSET,
+				Messages.MBar3DPlot_x_offset);
 		xoffsetD.setDescription(Messages.MBar3DPlot_x_offset_description);
 		desc.add(xoffsetD);
 
-		DoublePropertyDescriptor yoffsetD = new DoublePropertyDescriptor(JRDesignBar3DPlot.PROPERTY_Y_OFFSET, Messages.MBar3DPlot_y_offset);
+		DoublePropertyDescriptor yoffsetD = new DoublePropertyDescriptor(JRDesignBar3DPlot.PROPERTY_Y_OFFSET,
+				Messages.MBar3DPlot_y_offset);
 		yoffsetD.setDescription(Messages.MBar3DPlot_y_offset_description);
 		desc.add(yoffsetD);
 
@@ -244,59 +255,81 @@ public class MBar3DPlot extends MChartPlot {
 			return jrElement.getYOffsetDouble();
 
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION)) {
-			if (ceAnchorExpression == null)
+			if (ceAnchorExpression == null) {
 				ceAnchorExpression = new MExpression(jrElement.getCategoryAxisLabelExpression());
+				setChildListener(ceAnchorExpression);
+			}
 			return ceAnchorExpression;
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION)) {
-			if (veAnchorExpression == null)
+			if (veAnchorExpression == null) {
 				veAnchorExpression = new MExpression(jrElement.getValueAxisLabelExpression());
+				setChildListener(veAnchorExpression);
+			}
 			return veAnchorExpression;
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
-			if (rmaxAnchorExpression == null)
+			if (rmaxAnchorExpression == null) {
 				rmaxAnchorExpression = new MExpression(jrElement.getRangeAxisMaxValueExpression());
+				setChildListener(rmaxAnchorExpression);
+			}
 			return rmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
-			if (rminAnchorExpression == null)
+			if (rminAnchorExpression == null) {
 				rminAnchorExpression = new MExpression(jrElement.getRangeAxisMinValueExpression());
+				setChildListener(rminAnchorExpression);
+			}
 			return rminAnchorExpression;
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
-			if (dmaxAnchorExpression == null)
+			if (dmaxAnchorExpression == null) {
 				dmaxAnchorExpression = new MExpression(jrElement.getDomainAxisMaxValueExpression());
+				setChildListener(dmaxAnchorExpression);
+			}
 			return dmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
-			if (dminAnchorExpression == null)
+			if (dminAnchorExpression == null) {
 				dminAnchorExpression = new MExpression(jrElement.getDomainAxisMinValueExpression());
+				setChildListener(dminAnchorExpression);
+			}
 			return dminAnchorExpression;
 		}
 
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT)) {
-			if (clFont == null)
+			if (clFont == null) {
 				clFont = new MFont(jrElement.getCategoryAxisLabelFont());
+				setChildListener(clFont);
+			}
 			return clFont;
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT)) {
-			if (ctFont == null)
+			if (ctFont == null) {
 				ctFont = new MFont(jrElement.getCategoryAxisTickLabelFont());
+				setChildListener(ctFont);
+			}
 			return ctFont;
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_FONT)) {
-			if (vlFont == null)
+			if (vlFont == null) {
 				vlFont = new MFont(jrElement.getValueAxisLabelFont());
+				setChildListener(vlFont);
+			}
 			return vlFont;
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
-			if (vtFont == null)
+			if (vtFont == null) {
 				vtFont = new MFont(jrElement.getValueAxisTickLabelFont());
+				setChildListener(vtFont);
+			}
 			return vtFont;
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_ITEM_LABEL)) {
-			if (ilFont == null)
+			if (ilFont == null) {
 				ilFont = new MChartItemLabel(jrElement.getItemLabel());
+				setChildListener(ilFont);
+			}
 			return ilFont;
 		}
 
@@ -351,36 +384,42 @@ public class MBar3DPlot extends MChartPlot {
 		else if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				ceAnchorExpression = (MExpression) value;
+				setChildListener(ceAnchorExpression);
 				JRExpression expression = (JRExpression) ceAnchorExpression.getValue();
 				jrElement.setCategoryAxisLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				veAnchorExpression = (MExpression) value;
+				setChildListener(veAnchorExpression);
 				JRExpression expression = (JRExpression) veAnchorExpression.getValue();
 				jrElement.setValueAxisLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				rmaxAnchorExpression = (MExpression) value;
+				setChildListener(rmaxAnchorExpression);
 				JRExpression expression = (JRExpression) rmaxAnchorExpression.getValue();
 				jrElement.setRangeAxisMaxValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				rminAnchorExpression = (MExpression) value;
+				setChildListener(rminAnchorExpression);
 				JRExpression expression = (JRExpression) rminAnchorExpression.getValue();
 				jrElement.setRangeAxisMinValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dmaxAnchorExpression = (MExpression) value;
+				setChildListener(dmaxAnchorExpression);
 				JRExpression expression = (JRExpression) dmaxAnchorExpression.getValue();
 				jrElement.setDomainAxisMaxValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignBar3DPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dminAnchorExpression = (MExpression) value;
+				setChildListener(dminAnchorExpression);
 				JRExpression expression = (JRExpression) dminAnchorExpression.getValue();
 				jrElement.setDomainAxisMinValueExpression(expression);
 			}

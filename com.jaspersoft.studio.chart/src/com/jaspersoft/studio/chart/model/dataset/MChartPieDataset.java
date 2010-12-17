@@ -143,6 +143,7 @@ public class MChartPieDataset extends MChartDataset {
 			if (sectionHyperlink == null)
 				sectionHyperlink = new JRDesignHyperlink();
 			mHyperLink = new MHyperLink(sectionHyperlink);
+			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_SECTION_HYPERLINK)) {
@@ -150,31 +151,42 @@ public class MChartPieDataset extends MChartDataset {
 			if (otherSectionHyperlink == null)
 				otherSectionHyperlink = new JRDesignHyperlink();
 			omHyperLink = new MHyperLink(otherSectionHyperlink);
+			setChildListener(omHyperLink);
 			return omHyperLink;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION)) {
-			if (cExpression == null)
+			if (cExpression == null) {
 				cExpression = new MExpression(jrElement.getKeyExpression());
+				setChildListener(cExpression);
+			}
 			return cExpression;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION)) {
-			if (dExpression == null)
+			if (dExpression == null) {
 				dExpression = new MExpression(jrElement.getLabelExpression());
+				setChildListener(dExpression);
+			}
 			return dExpression;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION)) {
-			if (hExpression == null)
+			if (hExpression == null) {
 				hExpression = new MExpression(jrElement.getOtherKeyExpression());
+				setChildListener(hExpression);
+			}
 			return hExpression;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION)) {
-			if (lExpression == null)
+			if (lExpression == null) {
 				lExpression = new MExpression(jrElement.getOtherLabelExpression());
+				setChildListener(lExpression);
+			}
 			return lExpression;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION)) {
-			if (oExpression == null)
+			if (oExpression == null) {
 				oExpression = new MExpression(jrElement.getValueExpression());
+				setChildListener(oExpression);
+			}
 			return oExpression;
 		}
 
@@ -192,37 +204,42 @@ public class MChartPieDataset extends MChartDataset {
 		else if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				cExpression = (MExpression) value;
+				setChildListener(cExpression);
 				JRExpression expression = (JRExpression) cExpression.getValue();
 				jrElement.setKeyExpression(expression);
 			}
 		} else if (id.equals(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dExpression = (MExpression) value;
+				setChildListener(dExpression);
 				JRExpression expression = (JRExpression) dExpression.getValue();
 				jrElement.setLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				hExpression = (MExpression) value;
+				setChildListener(hExpression);
 				JRExpression expression = (JRExpression) hExpression.getValue();
 				jrElement.setOtherKeyExpression(expression);
 			}
 		} else if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				lExpression = (MExpression) value;
+				setChildListener(lExpression);
 				JRExpression expression = (JRExpression) lExpression.getValue();
 				jrElement.setOtherLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				oExpression = (MExpression) value;
+				setChildListener(oExpression);
 				JRExpression expression = (JRExpression) oExpression.getValue();
 				jrElement.setValueExpression(expression);
 			}
 		} else
 			super.setPropertyValue(id, value);
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals("pieSeries")) { //$NON-NLS-1$

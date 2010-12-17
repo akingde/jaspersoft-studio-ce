@@ -153,8 +153,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		legendPositionD.setDescription(Messages.MChart_legend_position_description);
 		desc.add(legendPositionD);
 
-		ColorPropertyDescriptor titleColorD = new ColorPropertyDescriptor(JRBaseChart.PROPERTY_TITLE_COLOR, Messages.MChart_title_color,
-				NullEnum.INHERITED);
+		ColorPropertyDescriptor titleColorD = new ColorPropertyDescriptor(JRBaseChart.PROPERTY_TITLE_COLOR,
+				Messages.MChart_title_color, NullEnum.INHERITED);
 		titleColorD.setDescription(Messages.MChart_title_color_description);
 		desc.add(titleColorD);
 
@@ -165,8 +165,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(JRDesignChart.PROPERTY_EVALUATION_TIME,
 				Messages.MChart_evaluation_time, EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NULL));
-		evaluationTimeD
-				.setDescription(Messages.MChart_evaluation_time_description);
+		evaluationTimeD.setDescription(Messages.MChart_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
 		ColorPropertyDescriptor subtitleColorD = new ColorPropertyDescriptor(JRBaseChart.PROPERTY_SUBTITLE_COLOR,
@@ -200,21 +199,23 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		desc.add(showLegendD);
 
 		RWComboBoxPropertyDescriptor rendererTypeD = new RWComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_RENDER_TYPE,
-				Messages.MChart_renderer_type, new String[] { "", "draw", "image", "svg" }, NullEnum.NULL);  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				Messages.MChart_renderer_type, new String[] { "", "draw", "image", "svg" }, NullEnum.NULL); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		rendererTypeD.setDescription(Messages.MChart_renderer_type_description);
 		desc.add(rendererTypeD);
 
-		RWComboBoxPropertyDescriptor themeD = new RWComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_THEME, Messages.MChart_theme,
+		RWComboBoxPropertyDescriptor themeD = new RWComboBoxPropertyDescriptor(JRBaseChart.PROPERTY_THEME,
+				Messages.MChart_theme,
 				new String[] { "", "aegian", "default", "default.spring", "generic", "eye.candy.sixties" }, NullEnum.NULL); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		themeD.setDescription(Messages.MChart_theme_description);
 		desc.add(themeD);
 
-		evaluationGroupD = new RComboBoxPropertyDescriptor(JRDesignChart.PROPERTY_EVALUATION_GROUP, Messages.MChart_evaluation_group,
-				new String[] { "" }); //$NON-NLS-1$
+		evaluationGroupD = new RComboBoxPropertyDescriptor(JRDesignChart.PROPERTY_EVALUATION_GROUP,
+				Messages.MChart_evaluation_group, new String[] { "" }); //$NON-NLS-1$
 		evaluationGroupD.setDescription(Messages.MChart_evaluation_group_description);
 		desc.add(evaluationGroupD);
 
-		FontPropertyDescriptor titleFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_TITLE_FONT, Messages.MChart_title_font);
+		FontPropertyDescriptor titleFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_TITLE_FONT,
+				Messages.MChart_title_font);
 		titleFontD.setDescription(Messages.MChart_title_font_description);
 		desc.add(titleFontD);
 
@@ -223,7 +224,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		subtitleFontD.setDescription(Messages.MChart_subtitle_font_description);
 		desc.add(subtitleFontD);
 
-		FontPropertyDescriptor legendFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_LEGEND_FONT, Messages.MChart_legend_font);
+		FontPropertyDescriptor legendFontD = new FontPropertyDescriptor(JRDesignChart.PROPERTY_LEGEND_FONT,
+				Messages.MChart_legend_font);
 		legendFontD.setDescription(Messages.MChart_legend_font_description);
 		desc.add(legendFontD);
 
@@ -335,55 +337,75 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			return EnumHelper.getValue(jrElement.getHyperlinkTypeValue(), 0, false);
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
-			if (mAnchorExpression == null)
+			if (mAnchorExpression == null) {
 				mAnchorExpression = new MExpression(jrElement.getHyperlinkAnchorExpression());
+				setChildListener(mAnchorExpression);
+			}
 			return mAnchorExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
-			if (mPageExpression == null)
+			if (mPageExpression == null) {
 				mPageExpression = new MExpression(jrElement.getHyperlinkPageExpression());
+				setChildListener(mPageExpression);
+			}
 			return mPageExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
-			if (mReferenceExpression == null)
+			if (mReferenceExpression == null) {
 				mReferenceExpression = new MExpression(jrElement.getHyperlinkReferenceExpression());
+				setChildListener(mReferenceExpression);
+			}
 			return mReferenceExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
-			if (mToolTipExpression == null)
+			if (mToolTipExpression == null) {
 				mToolTipExpression = new MExpression(jrElement.getHyperlinkTooltipExpression());
+				setChildListener(mToolTipExpression);
+			}
 			return mToolTipExpression;
 		}
 
 		if (id.equals("PLOTPROPERTY")) { //$NON-NLS-1$
-			if (mChartPlot == null)
+			if (mChartPlot == null) {
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
+				setChildListener(mChartPlot);
+			}
 			return mChartPlot;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
-			if (tFont == null)
+			if (tFont == null) {
 				tFont = new MFont(jrElement.getTitleFont());
+				setChildListener(tFont);
+			}
 			return tFont;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_FONT)) {
-			if (stFont == null)
+			if (stFont == null) {
 				stFont = new MFont(jrElement.getSubtitleFont());
+				setChildListener(stFont);
+			}
 			return stFont;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_LEGEND_FONT)) {
-			if (lFont == null)
+			if (lFont == null) {
 				lFont = new MFont(jrElement.getLegendFont());
+				setChildListener(lFont);
+			}
 			return lFont;
 		}
 
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_EXPRESSION)) {
-			if (titleExpression == null)
+			if (titleExpression == null) {
 				titleExpression = new MExpression(jrElement.getTitleExpression());
+				setChildListener(titleExpression);
+			}
 			return titleExpression;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION)) {
-			if (subtitleExpression == null)
+			if (subtitleExpression == null) {
 				subtitleExpression = new MExpression(jrElement.getSubtitleExpression());
+				setChildListener(subtitleExpression);
+			}
 			return subtitleExpression;
 		}
 
@@ -430,12 +452,14 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		} else if (id.equals(JRDesignChart.PROPERTY_TITLE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				titleExpression = (MExpression) value;
+				setChildListener(titleExpression);
 				JRExpression expression = (JRExpression) titleExpression.getValue();
 				jrElement.setTitleExpression(expression);
 			}
 		} else if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				subtitleExpression = (MExpression) value;
+				setChildListener(subtitleExpression);
 				JRExpression expression = (JRExpression) subtitleExpression.getValue();
 				jrElement.setSubtitleExpression(expression);
 			}
@@ -447,24 +471,28 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mAnchorExpression = (MExpression) value;
+				setChildListener(mAnchorExpression);
 				JRExpression expression = (JRExpression) mAnchorExpression.getValue();
 				jrElement.setHyperlinkAnchorExpression(expression);
 			}
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mPageExpression = (MExpression) value;
+				setChildListener(mPageExpression);
 				JRExpression expression = (JRExpression) mPageExpression.getValue();
 				jrElement.setHyperlinkPageExpression(expression);
 			}
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mReferenceExpression = (MExpression) value;
+				setChildListener(mReferenceExpression);
 				JRExpression expression = (JRExpression) mReferenceExpression.getValue();
 				jrElement.setHyperlinkReferenceExpression(expression);
 			}
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mToolTipExpression = (MExpression) value;
+				setChildListener(mToolTipExpression);
 				JRExpression expression = (JRExpression) mToolTipExpression.getValue();
 				jrElement.setHyperlinkTooltipExpression(expression);
 			}

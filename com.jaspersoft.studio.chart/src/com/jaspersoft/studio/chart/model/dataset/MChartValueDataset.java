@@ -65,8 +65,10 @@ public class MChartValueDataset extends MChartDataset {
 		JRDesignValueDataset jrElement = (JRDesignValueDataset) getValue();
 
 		if (id.equals(JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION)) {
-			if (oExpression == null)
+			if (oExpression == null){
 				oExpression = new MExpression(jrElement.getValueExpression());
+				setChildListener(oExpression);
+			}
 			return oExpression;
 		}
 
@@ -80,6 +82,7 @@ public class MChartValueDataset extends MChartDataset {
 		if (id.equals(JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				oExpression = (MExpression) value;
+				setChildListener(oExpression);
 				JRExpression expression = (JRExpression) oExpression.getValue();
 				jrElement.setValueExpression(expression);
 			}

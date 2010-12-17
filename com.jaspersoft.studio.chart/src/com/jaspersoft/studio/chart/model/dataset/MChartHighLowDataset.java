@@ -129,42 +129,57 @@ public class MChartHighLowDataset extends MChartDataset {
 				if (itemHyperlink == null)
 					itemHyperlink = new JRDesignHyperlink();
 				mHyperLink = new MHyperLink(itemHyperlink);
+				setChildListener(mHyperLink);
 			}
 			return mHyperLink;
 		}
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_CLOSE_EXPRESSION)) {
-			if (cExpression == null)
+			if (cExpression == null) {
 				cExpression = new MExpression(jrElement.getCloseExpression());
+				setChildListener(cExpression);
+			}
 			return cExpression;
 		}
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_DATE_EXPRESSION)) {
-			if (dExpression == null)
+			if (dExpression == null) {
 				dExpression = new MExpression(jrElement.getDateExpression());
+				setChildListener(dExpression);
+			}
 			return dExpression;
 		}
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_HIGH_EXPRESSION)) {
-			if (hExpression == null)
+			if (hExpression == null) {
 				hExpression = new MExpression(jrElement.getHighExpression());
+				setChildListener(hExpression);
+			}
 			return hExpression;
 		}
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_LOW_EXPRESSION)) {
-			if (lExpression == null)
+			if (lExpression == null) {
 				lExpression = new MExpression(jrElement.getLowExpression());
+				setChildListener(lExpression);
+			}
 			return lExpression;
 		}
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_OPEN_EXPRESSION)) {
-			if (oExpression == null)
+			if (oExpression == null) {
 				oExpression = new MExpression(jrElement.getOpenExpression());
+				setChildListener(oExpression);
+			}
 			return oExpression;
 		}
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_SERIES_EXPRESSION)) {
-			if (sExpression == null)
+			if (sExpression == null) {
 				sExpression = new MExpression(jrElement.getSeriesExpression());
+				setChildListener(sExpression);
+			}
 			return sExpression;
 		}
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_VOLUME_EXPRESSION)) {
-			if (vExpression == null)
+			if (vExpression == null) {
 				vExpression = new MExpression(jrElement.getVolumeExpression());
+				setChildListener(vExpression);
+			}
 			return vExpression;
 		}
 		return super.getPropertyValue(id);
@@ -177,42 +192,49 @@ public class MChartHighLowDataset extends MChartDataset {
 		if (id.equals(JRDesignHighLowDataset.PROPERTY_CLOSE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				cExpression = (MExpression) value;
+				setChildListener(cExpression);
 				JRExpression expression = (JRExpression) cExpression.getValue();
 				jrElement.setCloseExpression(expression);
 			}
 		} else if (id.equals(JRDesignHighLowDataset.PROPERTY_DATE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dExpression = (MExpression) value;
+				setChildListener(dExpression);
 				JRExpression expression = (JRExpression) dExpression.getValue();
 				jrElement.setDateExpression(expression);
 			}
 		} else if (id.equals(JRDesignHighLowDataset.PROPERTY_HIGH_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				hExpression = (MExpression) value;
+				setChildListener(hExpression);
 				JRExpression expression = (JRExpression) hExpression.getValue();
 				jrElement.setHighExpression(expression);
 			}
 		} else if (id.equals(JRDesignHighLowDataset.PROPERTY_LOW_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				lExpression = (MExpression) value;
+				setChildListener(lExpression);
 				JRExpression expression = (JRExpression) lExpression.getValue();
 				jrElement.setLowExpression(expression);
 			}
 		} else if (id.equals(JRDesignHighLowDataset.PROPERTY_OPEN_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				oExpression = (MExpression) value;
+				setChildListener(oExpression);
 				JRExpression expression = (JRExpression) oExpression.getValue();
 				jrElement.setOpenExpression(expression);
 			}
 		} else if (id.equals(JRDesignHighLowDataset.PROPERTY_SERIES_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				sExpression = (MExpression) value;
+				setChildListener(sExpression);
 				JRExpression expression = (JRExpression) sExpression.getValue();
 				jrElement.setSeriesExpression(expression);
 			}
 		} else if (id.equals(JRDesignHighLowDataset.PROPERTY_VOLUME_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				vExpression = (MExpression) value;
+				setChildListener(vExpression);
 				JRExpression expression = (JRExpression) vExpression.getValue();
 				jrElement.setVolumeExpression(expression);
 			}

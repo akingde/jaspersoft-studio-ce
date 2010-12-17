@@ -120,26 +120,35 @@ public class MTimeSeries extends APropertyNode {
 			if (itemHyperLink == null)
 				itemHyperLink = new JRDesignHyperlink();
 			mHyperLink = new MHyperLink(itemHyperLink);
+			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
 		if (id.equals(JRDesignTimeSeries.PROPERTY_TIME_PERIOD_EXPRESSION)) {
-			if (tpExpression == null)
+			if (tpExpression == null) {
 				tpExpression = new MExpression(jrElement.getTimePeriodExpression());
+				setChildListener(tpExpression);
+			}
 			return tpExpression;
 		}
 		if (id.equals(JRDesignTimeSeries.PROPERTY_LABEL_EXPRESSION)) {
-			if (lExpression == null)
+			if (lExpression == null) {
 				lExpression = new MExpression(jrElement.getLabelExpression());
+				setChildListener(lExpression);
+			}
 			return lExpression;
 		}
 		if (id.equals(JRDesignTimeSeries.PROPERTY_SERIES_EXPRESSION)) {
-			if (sExpression == null)
+			if (sExpression == null) {
 				sExpression = new MExpression(jrElement.getSeriesExpression());
+				setChildListener(sExpression);
+			}
 			return sExpression;
 		}
 		if (id.equals(JRDesignTimeSeries.PROPERTY_VALUE_EXPRESSION)) {
-			if (vExpression == null)
+			if (vExpression == null) {
 				vExpression = new MExpression(jrElement.getValueExpression());
+				setChildListener(vExpression);
+			}
 			return vExpression;
 		}
 
@@ -152,24 +161,28 @@ public class MTimeSeries extends APropertyNode {
 		if (id.equals(JRDesignTimeSeries.PROPERTY_TIME_PERIOD_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				tpExpression = (MExpression) value;
+				setChildListener(tpExpression);
 				JRExpression expression = (JRExpression) tpExpression.getValue();
 				jrElement.setTimePeriodExpression(expression);
 			}
 		} else if (id.equals(JRDesignTimeSeries.PROPERTY_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				lExpression = (MExpression) value;
+				setChildListener(lExpression);
 				JRExpression expression = (JRExpression) lExpression.getValue();
 				jrElement.setLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignTimeSeries.PROPERTY_SERIES_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				sExpression = (MExpression) value;
+				setChildListener(sExpression);
 				JRExpression expression = (JRExpression) sExpression.getValue();
 				jrElement.setSeriesExpression(expression);
 			}
 		} else if (id.equals(JRDesignTimeSeries.PROPERTY_VALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				vExpression = (MExpression) value;
+				setChildListener(vExpression);
 				JRExpression expression = (JRExpression) vExpression.getValue();
 				jrElement.setValueExpression(expression);
 			}

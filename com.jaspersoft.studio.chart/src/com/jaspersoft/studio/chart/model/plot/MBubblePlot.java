@@ -46,9 +46,11 @@ public class MBubblePlot extends MChartPlot {
 	public MBubblePlot(JRBubblePlot value) {
 		super(value);
 	}
+
 	public String getDisplayText() {
 		return Messages.MBubblePlot_bubble_plot;
 	}
+
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
@@ -88,7 +90,8 @@ public class MBubblePlot extends MChartPlot {
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR, Messages.MBubblePlot_category_axis_tick_label_color, NullEnum.NULL);
+				JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR, Messages.MBubblePlot_category_axis_tick_label_color,
+				NullEnum.NULL);
 		catAxisTickLabelColorD.setDescription(Messages.MBubblePlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
@@ -118,7 +121,8 @@ public class MBubblePlot extends MChartPlot {
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR, Messages.MBubblePlot_value_axis_tick_label_color, NullEnum.NULL);
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR, Messages.MBubblePlot_value_axis_tick_label_color,
+				NullEnum.NULL);
 		valAxisTickLabelColorD.setDescription(Messages.MBubblePlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
@@ -143,22 +147,26 @@ public class MBubblePlot extends MChartPlot {
 		desc.add(rangeAxisMaxExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.MBubblePlot_domain_axis_minvalue_expression);
+				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
+				Messages.MBubblePlot_domain_axis_minvalue_expression);
 		domainAxisMinExprD.setDescription(Messages.MBubblePlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.MBubblePlot_domain_axis_maxvalue_expression);
+				JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
+				Messages.MBubblePlot_domain_axis_maxvalue_expression);
 		domainAxisMaxExprD.setDescription(Messages.MBubblePlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS, Messages.MBubblePlot_category_axis_vertical_tick_labels, NullEnum.NOTNULL);
+				JRDesignBubblePlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS,
+				Messages.MBubblePlot_category_axis_vertical_tick_labels, NullEnum.NOTNULL);
 		catAxisVertTickLabelD.setDescription(Messages.MBubblePlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBubblePlot.PROPERTY_Y_AXIS_VERTICAL_TICK_LABELS, Messages.MBubblePlot_value_axis_vertical_tick_labels, NullEnum.NOTNULL);
+				JRDesignBubblePlot.PROPERTY_Y_AXIS_VERTICAL_TICK_LABELS, Messages.MBubblePlot_value_axis_vertical_tick_labels,
+				NullEnum.NOTNULL);
 		valAxisVertTickLabelD.setDescription(Messages.MBubblePlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
@@ -219,54 +227,74 @@ public class MBubblePlot extends MChartPlot {
 			return EnumHelper.getValue(jrElement.getScaleTypeValue(), 0, false);
 
 		if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_EXPRESSION)) {
-			if (ceAnchorExpression == null)
+			if (ceAnchorExpression == null) {
 				ceAnchorExpression = new MExpression(jrElement.getXAxisLabelExpression());
+				setChildListener(ceAnchorExpression);
+			}
 			return ceAnchorExpression;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_EXPRESSION)) {
-			if (veAnchorExpression == null)
+			if (veAnchorExpression == null) {
 				veAnchorExpression = new MExpression(jrElement.getYAxisLabelExpression());
+				setChildListener(veAnchorExpression);
+			}
 			return veAnchorExpression;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
-			if (rmaxAnchorExpression == null)
+			if (rmaxAnchorExpression == null) {
 				rmaxAnchorExpression = new MExpression(jrElement.getRangeAxisMaxValueExpression());
+				setChildListener(rmaxAnchorExpression);
+			}
 			return rmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
-			if (rminAnchorExpression == null)
+			if (rminAnchorExpression == null) {
 				rminAnchorExpression = new MExpression(jrElement.getRangeAxisMinValueExpression());
+				setChildListener(rminAnchorExpression);
+			}
 			return rminAnchorExpression;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
-			if (dmaxAnchorExpression == null)
+			if (dmaxAnchorExpression == null) {
 				dmaxAnchorExpression = new MExpression(jrElement.getDomainAxisMaxValueExpression());
+				setChildListener(dmaxAnchorExpression);
+			}
 			return dmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
-			if (dminAnchorExpression == null)
+			if (dminAnchorExpression == null) {
 				dminAnchorExpression = new MExpression(jrElement.getDomainAxisMinValueExpression());
+				setChildListener(dminAnchorExpression);
+			}
 			return dminAnchorExpression;
 		}
 
 		if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_FONT)) {
-			if (clFont == null)
+			if (clFont == null) {
 				clFont = new MFont(jrElement.getXAxisLabelFont());
+				setChildListener(clFont);
+			}
 			return clFont;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_FONT)) {
-			if (ctFont == null)
+			if (ctFont == null) {
 				ctFont = new MFont(jrElement.getXAxisTickLabelFont());
+				setChildListener(ctFont);
+			}
 			return ctFont;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_FONT)) {
-			if (vlFont == null)
+			if (vlFont == null) {
 				vlFont = new MFont(jrElement.getYAxisLabelFont());
+				setChildListener(vlFont);
+			}
 			return vlFont;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_FONT)) {
-			if (vtFont == null)
+			if (vtFont == null) {
 				vtFont = new MFont(jrElement.getYAxisTickLabelFont());
+				setChildListener(vtFont);
+			}
 			return vtFont;
 		}
 
@@ -314,36 +342,42 @@ public class MBubblePlot extends MChartPlot {
 		else if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				ceAnchorExpression = (MExpression) value;
+				setChildListener(ceAnchorExpression);
 				JRExpression expression = (JRExpression) ceAnchorExpression.getValue();
 				jrElement.setXAxisLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				veAnchorExpression = (MExpression) value;
+				setChildListener(veAnchorExpression);
 				JRExpression expression = (JRExpression) veAnchorExpression.getValue();
 				jrElement.setYAxisLabelExpression(expression);
 			}
 		} else if (id.equals(JRDesignBubblePlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				rmaxAnchorExpression = (MExpression) value;
+				setChildListener(rmaxAnchorExpression);
 				JRExpression expression = (JRExpression) rmaxAnchorExpression.getValue();
 				jrElement.setRangeAxisMaxValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignBubblePlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				rminAnchorExpression = (MExpression) value;
+				setChildListener(rminAnchorExpression);
 				JRExpression expression = (JRExpression) rminAnchorExpression.getValue();
 				jrElement.setRangeAxisMinValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dmaxAnchorExpression = (MExpression) value;
+				setChildListener(dmaxAnchorExpression);
 				JRExpression expression = (JRExpression) dmaxAnchorExpression.getValue();
 				jrElement.setDomainAxisMaxValueExpression(expression);
 			}
 		} else if (id.equals(JRDesignBubblePlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dminAnchorExpression = (MExpression) value;
+				setChildListener(dminAnchorExpression);
 				JRExpression expression = (JRExpression) dminAnchorExpression.getValue();
 				jrElement.setDomainAxisMinValueExpression(expression);
 			}

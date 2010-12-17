@@ -105,8 +105,10 @@ public class MPiePlot extends MChartPlot {
 		if (id.equals(JRDesignPiePlot.PROPERTY_LABEL_FORMAT))
 			return jrElement.getLabelFormat();
 		if (id.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL)) {
-			if (ilFont == null)
+			if (ilFont == null){
 				ilFont = new MChartItemLabel(jrElement.getItemLabel());
+				setChildListener(ilFont);
+			}
 			return ilFont;
 		}
 
