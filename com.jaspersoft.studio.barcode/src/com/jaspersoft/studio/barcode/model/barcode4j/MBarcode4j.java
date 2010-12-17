@@ -39,6 +39,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.barcode.BarcodeNodeIconDescriptor;
 import com.jaspersoft.studio.barcode.model.MBarcode;
+import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
@@ -216,13 +217,17 @@ public class MBarcode4j extends MBarcode {
 			return TextPosition.getPos4TextPosition(jrList.getTextPosition());
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			if (codeExpression == null)
+			if (codeExpression == null){
 				codeExpression = new MExpression(jrList.getCodeExpression());
+				setChildListener(codeExpression);
+			}
 			return codeExpression;
 		}
 		if (id.equals(BarcodeComponent.PROPERTY_PATTERN_EXPRESSION)) {
-			if (ptExpression == null)
+			if (ptExpression == null){
 				ptExpression = new MExpression(jrList.getPatternExpression());
+				setChildListener(ptExpression);
+			}
 			return ptExpression;
 		}
 

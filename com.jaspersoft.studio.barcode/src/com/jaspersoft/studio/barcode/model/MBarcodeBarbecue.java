@@ -170,7 +170,8 @@ public class MBarcodeBarbecue extends MBarcode {
 		desc.add(heightD);
 
 		JRExpressionPropertyDescriptor appIDexprD = new JRExpressionPropertyDescriptor(
-				StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION, Messages.MBarcodeBarbecue_application_identifier_expression);
+				StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION,
+				Messages.MBarcodeBarbecue_application_identifier_expression);
 		appIDexprD.setDescription(Messages.MBarcodeBarbecue_application_identifier_expression_description);
 		desc.add(appIDexprD);
 
@@ -235,15 +236,19 @@ public class MBarcodeBarbecue extends MBarcode {
 		if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_WIDTH))
 			return jrList.getBarWidth();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			if (codeExpression == null)
+			if (codeExpression == null) {
 				codeExpression = new MExpression(jrList.getCodeExpression());
+				setChildListener(codeExpression);
+			}
 			return codeExpression;
 		}
 		if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
 			return EnumHelper.getValue(jrList.getOwnRotation(), 0, true);
 		if (id.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION)) {
-			if (appidExpression == null)
+			if (appidExpression == null) {
 				appidExpression = new MExpression(jrList.getApplicationIdentifierExpression());
+				setChildListener(appidExpression);
+			}
 			return appidExpression;
 		}
 		return super.getPropertyValue(id);
@@ -275,12 +280,14 @@ public class MBarcodeBarbecue extends MBarcode {
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				codeExpression = (MExpression) value;
+				setChildListener(codeExpression);
 				JRExpression expression = (JRExpression) codeExpression.getValue();
 				jrList.setCodeExpression(expression);
 			}
 		} else if (id.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				appidExpression = (MExpression) value;
+				setChildListener(appidExpression);
 				JRExpression expression = (JRExpression) appidExpression.getValue();
 				jrList.setApplicationIdentifierExpression(expression);
 			}
