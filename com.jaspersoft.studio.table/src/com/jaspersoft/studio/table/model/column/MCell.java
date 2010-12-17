@@ -76,6 +76,10 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 
 	private DesignCell cell;
 
+	public DesignCell getCell() {
+		return cell;
+	}
+
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 

@@ -184,8 +184,10 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH))
 			return jrElement.getWidth();
 		if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			if (mExpression == null)
+			if (mExpression == null) {
 				mExpression = new MExpression(jrElement.getPrintWhenExpression());
+				setChildListener(mExpression);
+			}
 			return mExpression;
 		}
 		return null;
@@ -216,6 +218,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 		} else if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
+				setChildListener(mExpression);
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrElement.setPrintWhenExpression(expression);
 			}

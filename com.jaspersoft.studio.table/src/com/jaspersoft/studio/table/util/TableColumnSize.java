@@ -26,7 +26,7 @@ public class TableColumnSize {
 			for (BaseColumn bc : jrGroup.getColumns()) {
 				maxh = Math.max(maxh, getColumnHeight(bc, type, grName));
 			}
-		return maxh;
+		return maxh <= 0 ? 40 : maxh;
 	}
 
 	private static int getGroupHeigh2Top(List<BaseColumn> cols, StandardColumnGroup scg, int type, String grName) {

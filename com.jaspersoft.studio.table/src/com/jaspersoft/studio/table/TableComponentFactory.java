@@ -46,6 +46,8 @@ import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MCollection;
+import com.jaspersoft.studio.model.MElementGroup;
+import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
@@ -56,6 +58,14 @@ import com.jaspersoft.studio.table.model.MTableFooter;
 import com.jaspersoft.studio.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.table.model.MTableHeader;
+import com.jaspersoft.studio.table.model.cell.command.CreateElementCommand;
+import com.jaspersoft.studio.table.model.cell.command.CreateElementGroupCommand;
+import com.jaspersoft.studio.table.model.cell.command.DeleteElementCommand;
+import com.jaspersoft.studio.table.model.cell.command.DeleteElementGroupCommand;
+import com.jaspersoft.studio.table.model.cell.command.OrphanElementCommand;
+import com.jaspersoft.studio.table.model.cell.command.OrphanElementGroupCommand;
+import com.jaspersoft.studio.table.model.cell.command.ReorderElementCommand;
+import com.jaspersoft.studio.table.model.cell.command.ReorderElementGroupCommand;
 import com.jaspersoft.studio.table.model.column.MCell;
 import com.jaspersoft.studio.table.model.column.MColumn;
 import com.jaspersoft.studio.table.model.column.action.CreateColumnAction;
@@ -329,6 +339,10 @@ public class TableComponentFactory implements IComponentFactory {
 			if (parent instanceof MColumn)
 				return new CreateColumnCommand((MColumn) parent, (MColumn) child, newIndex);
 		}
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, newIndex);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);
 		return null;
 	}
 
@@ -353,6 +367,10 @@ public class TableComponentFactory implements IComponentFactory {
 			if (parent instanceof MColumnGroupCell)
 				return new DeleteColumnFromGroupCommand((MColumnGroupCell) parent, (MColumn) child);
 		}
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new DeleteElementCommand((MCell) parent, (MGraphicElement) child);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new DeleteElementGroupCommand((MCell) parent, (MElementGroup) child);
 		return null;
 	}
 
@@ -366,6 +384,10 @@ public class TableComponentFactory implements IComponentFactory {
 				return new ReorderColumnGroupCommand((MColumn) child, (MColumnGroup) parent, newIndex);
 
 		}
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new ReorderElementCommand((MGraphicElement) child, (MCell) parent, newIndex);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new ReorderElementGroupCommand((MElementGroup) child, (MCell) parent, newIndex);
 		return null;
 	}
 
@@ -402,6 +424,10 @@ public class TableComponentFactory implements IComponentFactory {
 			if (parent instanceof MColumnGroup)
 				return new OrphanColumn4GroupCommand((MColumnGroup) parent, (MColumn) child);
 		}
+		if (child instanceof MGraphicElement && parent instanceof MCell)
+			return new OrphanElementCommand((MCell) parent, (MGraphicElement) child);
+		if (child instanceof MElementGroup && parent instanceof MCell)
+			return new OrphanElementGroupCommand((MCell) parent, (MElementGroup) child);
 		return null;
 	}
 
