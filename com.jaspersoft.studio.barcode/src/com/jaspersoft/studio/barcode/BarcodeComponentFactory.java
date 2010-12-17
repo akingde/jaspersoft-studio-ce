@@ -47,7 +47,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
-import com.jaspersoft.studio.barcode.command.CreateElementCommand;
+import com.jaspersoft.studio.barcode.command.CreateBarcodeCommand;
 import com.jaspersoft.studio.barcode.model.MBarcode;
 import com.jaspersoft.studio.barcode.model.MBarcodeBarbecue;
 import com.jaspersoft.studio.barcode.model.barcode4j.MBarcode4j;
@@ -132,16 +132,16 @@ public class BarcodeComponentFactory implements IComponentFactory {
 	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
 		if (child instanceof MBarcode) {
 			if (parent instanceof MElementGroup)
-				return new CreateElementCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+				return new CreateBarcodeCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MBand)
-				return new CreateElementCommand((MBand) parent, (MGraphicElement) child, newIndex);
+				return new CreateBarcodeCommand((MBand) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateElementCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+				return new CreateBarcodeCommand((MFrame) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateBarcodeCommand(parent, (MGraphicElement) child, location, newIndex);
 
 			if (parent instanceof IGroupElement) {
-				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateBarcodeCommand(parent, (MGraphicElement) child, location, newIndex);
 			}
 		}
 		return null;

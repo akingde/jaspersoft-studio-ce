@@ -48,7 +48,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  * 
  * @author Chicu Veaceslav
  */
-public class CreateElementCommand extends Command {
+public class CreateBarcodeCommand extends Command {
 
 	/** The src node. */
 	private MGraphicElement srcNode;
@@ -75,7 +75,7 @@ public class CreateElementCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateElementCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
+	public CreateBarcodeCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
 		super();
 		setContext(destNode, srcNode, index);
 	}
@@ -90,7 +90,7 @@ public class CreateElementCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateElementCommand(MFrame destNode, MGraphicElement srcNode, int index) {
+	public CreateBarcodeCommand(MFrame destNode, MGraphicElement srcNode, int index) {
 		super();
 		setContext(destNode, srcNode, index);
 	}
@@ -105,7 +105,7 @@ public class CreateElementCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateElementCommand(MBand destNode, MGraphicElement srcNode, int index) {
+	public CreateBarcodeCommand(MBand destNode, MGraphicElement srcNode, int index) {
 		super();
 		setContext(destNode, srcNode, index);
 	}
@@ -122,7 +122,7 @@ public class CreateElementCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateElementCommand(ANode destNode, MGraphicElement srcNode, Point position, int index) {
+	public CreateBarcodeCommand(ANode destNode, MGraphicElement srcNode, Point position, int index) {
 		super();
 		if (destNode instanceof IGroupElement)
 			setContext(destNode, srcNode, index);
