@@ -126,10 +126,9 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(
-				StandardListComponent.PROPERTY_PRINT_ORDER, Messages.MList_print_order, EnumHelper.getEnumNames(PrintOrderEnum.values(),
-						NullEnum.NOTNULL));
-		stretchTypeD
-				.setDescription(Messages.MList_print_order_description);
+				StandardListComponent.PROPERTY_PRINT_ORDER, Messages.MList_print_order, EnumHelper.getEnumNames(
+						PrintOrderEnum.values(), NullEnum.NOTNULL));
+		stretchTypeD.setDescription(Messages.MList_print_order_description);
 		desc.add(stretchTypeD);
 		stretchTypeD.setCategory(Messages.MList_properties_category);
 
@@ -185,6 +184,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 				if (j == null)
 					j = new JRDesignDatasetRun();
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+				setChildListener(mDatasetRun);
 			}
 			return mDatasetRun;
 
