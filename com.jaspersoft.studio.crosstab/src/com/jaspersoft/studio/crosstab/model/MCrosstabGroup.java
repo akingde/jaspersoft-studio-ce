@@ -104,16 +104,15 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 		totalPositionD.setDescription(Messages.MCrosstabGroup_total_position_description);
 		desc.add(totalPositionD);
 
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_NAME, Messages.MCrosstabGroup_name);
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_NAME,
+				Messages.MCrosstabGroup_name);
 		nameD.setDescription(Messages.MCrosstabGroup_name_description);
 		desc.add(nameD);
 
-		JRPropertyDescriptor bucketD = new JRPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_BUCKET, Messages.MCrosstabGroup_bucket);
+		JRPropertyDescriptor bucketD = new JRPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_BUCKET,
+				Messages.MCrosstabGroup_bucket);
 		bucketD.setDescription(Messages.MCrosstabGroup_bucket_description);
 		desc.add(bucketD);
-		
-		
-		
 
 	}
 
@@ -131,8 +130,10 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION))
 			return EnumHelper.getValue(jrField.getTotalPositionValue(), 0, false);
 		if (id.equals(JRDesignCrosstabGroup.PROPERTY_BUCKET)) {
-			if (mBucket == null)
+			if (mBucket == null) {
 				mBucket = new MBucket(jrField.getBucket());
+				setChildListener(mBucket);
+			}
 			return mBucket;
 		}
 		return null;

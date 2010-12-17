@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.crosstab.model.measure;
 
@@ -140,19 +136,20 @@ public class MMeasure extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabMeasure.PROPERTY_NAME, Messages.MMeasure_name);
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabMeasure.PROPERTY_NAME,
+				Messages.MMeasure_name);
 		nameD.setDescription(Messages.MMeasure_name_description);
 		desc.add(nameD);
 
 		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_CALCULATION, Messages.MMeasure_calculation, EnumHelper.getEnumNames(CalculationEnum.values(),
-						NullEnum.NOTNULL));
+				JRDesignCrosstabMeasure.PROPERTY_CALCULATION, Messages.MMeasure_calculation, EnumHelper.getEnumNames(
+						CalculationEnum.values(), NullEnum.NOTNULL));
 		calculationD.setDescription(Messages.MMeasure_calculation_description);
 		desc.add(calculationD);
 
 		ComboBoxPropertyDescriptor percentOfTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE, Messages.MMeasure_percentage_of_type, EnumHelper.getEnumNames(
-						CrosstabPercentageEnum.values(), NullEnum.NOTNULL));
+				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE, Messages.MMeasure_percentage_of_type,
+				EnumHelper.getEnumNames(CrosstabPercentageEnum.values(), NullEnum.NOTNULL));
 		percentOfTypeD.setDescription(Messages.MMeasure_percentage_of_type_description);
 		desc.add(percentOfTypeD);
 
@@ -172,7 +169,8 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		desc.add(incFactClassD);
 
 		ClassTypePropertyDescriptor percCalcClassD = new ClassTypePropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME, Messages.MMeasure_percentage_calculation_class_name);
+				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME,
+				Messages.MMeasure_percentage_calculation_class_name);
 		percCalcClassD.setDescription(Messages.MMeasure_percentage_calculation_class_name_description);
 		desc.add(percCalcClassD);
 	}
@@ -193,8 +191,10 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE))
 			return EnumHelper.getValue(jrField.getPercentageType(), 0, false);
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION)) {
-			if (vExpression == null)
+			if (vExpression == null) {
 				vExpression = new MExpression(jrField.getValueExpression());
+				setChildListener(vExpression);
+			}
 			return vExpression;
 		}
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS))
@@ -223,6 +223,7 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				vExpression = (MExpression) value;
+				setChildListener(vExpression);
 				JRExpression expression = (JRExpression) vExpression.getValue();
 				jrField.setValueExpression(expression);
 			}

@@ -208,14 +208,18 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 		if (id.equals(JRBaseCrosstab.PROPERTY_RUN_DIRECTION))
 			return EnumHelper.getValue(jrElement.getRunDirectionValue(), 0, false);
 		if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (prmMapExpr == null)
+			if (prmMapExpr == null) {
 				prmMapExpr = new MExpression(jrElement.getParametersMapExpression());
+				setChildListener(prmMapExpr);
+			}
 			return prmMapExpr;
 		}
 
 		if (id.equals(JRDesignCrosstab.PROPERTY_DATASET)) {
-			if (mCrosstabDataset == null)
+			if (mCrosstabDataset == null) {
 				mCrosstabDataset = new MCrosstabDataset(jrElement.getDataset(), getJasperDesign());
+				setChildListener(mCrosstabDataset);
+			}
 			return mCrosstabDataset;
 		}
 
@@ -243,6 +247,7 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 		} else if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				prmMapExpr = (MExpression) value;
+				setChildListener(prmMapExpr);
 				JRExpression expression = (JRExpression) prmMapExpr.getValue();
 				jrElement.setParametersMapExpression(expression);
 			}
