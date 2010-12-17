@@ -116,21 +116,19 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP, Messages.MVariable_reset_group,
-				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP,
+				Messages.MVariable_reset_group, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		resetGroupD.setDescription(Messages.MVariable_reset_group_description);
 		desc.add(resetGroupD);
 
-		incrementGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_INCREMENT_GROUP, Messages.MVariable_increment_group,
-				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
-		incrementGroupD
-				.setDescription(Messages.MVariable_increment_group_description);
+		incrementGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_INCREMENT_GROUP,
+				Messages.MVariable_increment_group, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		incrementGroupD.setDescription(Messages.MVariable_increment_group_description);
 		desc.add(incrementGroupD);
 
 		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_CALCULATION,
 				Messages.MVariable_calculation, EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL));
-		calculationD
-				.setDescription(Messages.MVariable_calculation_description);
+		calculationD.setDescription(Messages.MVariable_calculation_description);
 		desc.add(calculationD);
 
 		ComboBoxPropertyDescriptor resetTypeD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_TYPE,
@@ -139,27 +137,24 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		desc.add(resetTypeD);
 
 		ComboBoxPropertyDescriptor incrementTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignVariable.PROPERTY_INCREMENT_TYPE, Messages.MVariable_increment_type, EnumHelper.getEnumNames(IncrementTypeEnum.values(),
-						NullEnum.NOTNULL));
+				JRDesignVariable.PROPERTY_INCREMENT_TYPE, Messages.MVariable_increment_type, EnumHelper.getEnumNames(
+						IncrementTypeEnum.values(), NullEnum.NOTNULL));
 		incrementTypeD.setDescription(Messages.MVariable_increment_type_description);
 		desc.add(incrementTypeD);
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(
 				JRDesignVariable.PROPERTY_EXPRESSION, Messages.MVariable_expression);
-		expressionD
-				.setDescription(Messages.MVariable_expression_description);
+		expressionD.setDescription(Messages.MVariable_expression_description);
 		desc.add(expressionD);
 
 		JRExpressionPropertyDescriptor iniValExprD = new JRExpressionPropertyDescriptor(
 				JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION, Messages.MVariable_initial_value_expression);
-		iniValExprD
-				.setDescription(Messages.MVariable_initial_value_expression_description);
+		iniValExprD.setDescription(Messages.MVariable_initial_value_expression_description);
 		desc.add(iniValExprD);
 
 		NClassTypePropertyDescriptor factoryClassName = new NClassTypePropertyDescriptor(
 				JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, Messages.MVariable_incrementer_factory_class_name);
-		factoryClassName
-				.setDescription(Messages.MVariable_incrementer_factory_class_name_description);
+		factoryClassName.setDescription(Messages.MVariable_incrementer_factory_class_name_description);
 		desc.add(factoryClassName);
 
 		defaultsMap.put(JRDesignVariable.PROPERTY_CALCULATION, EnumHelper.getValue(CalculationEnum.NOTHING, 0, false));
@@ -226,13 +221,17 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
 			return jrVariable.getIncrementerFactoryClassName();
 		if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION)) {
-			if (mExpression == null)
+			if (mExpression == null) {
 				mExpression = new MExpression(jrVariable.getExpression());
+				setChildListener(mExpression);
+			}
 			return mExpression;
 		}
 		if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION)) {
-			if (mIniValExpression == null)
+			if (mIniValExpression == null) {
 				mIniValExpression = new MExpression(jrVariable.getInitialValueExpression());
+				setChildListener(mIniValExpression);
+			}
 			return mIniValExpression;
 		}
 		return null;
@@ -256,12 +255,14 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		} else if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
+				setChildListener(mExpression);
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrVariable.setExpression(expression);
 			}
 		} else if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mIniValExpression = (MExpression) value;
+				setChildListener(mIniValExpression);
 				JRExpression expression = (JRExpression) mIniValExpression.getValue();
 				jrVariable.setInitialValueExpression(expression);
 			}
@@ -319,7 +320,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		jrDesignVariable.setName(ModelUtils.getDefaultName(jrDataset.getVariablesMap(), "Variable_"));
 		return jrDesignVariable;
 	}
- 
+
 	public boolean isCopyable2(Object parent) {
 		if (parent instanceof MVariables)
 			return true;

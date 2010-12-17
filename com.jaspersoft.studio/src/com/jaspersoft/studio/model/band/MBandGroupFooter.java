@@ -120,6 +120,7 @@ public class MBandGroupFooter extends MBand {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private MGroupBand mGroupBand;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -152,8 +153,13 @@ public class MBandGroupFooter extends MBand {
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (id.equals(MAIN_GROUP))
-			return new MGroupBand(getJrGroup());
+		if (id.equals(MAIN_GROUP)) {
+			if (mGroupBand == null) {
+				mGroupBand = new MGroupBand(getJrGroup());
+				setChildListener(mGroupBand);
+			}
+			return mGroupBand;
+		}
 		return super.getPropertyValue(id);
 	}
 

@@ -382,14 +382,16 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		if (id.equals(LINE_PEN)) {
 			if (linePen == null) {
 				linePen = new MLinePen(jrstyle.getLinePen());
-				linePen.getPropertyChangeSupport().addPropertyChangeListener(this);
+				setChildListener(linePen);
+				// linePen.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			return linePen;
 		}
 		if (id.equals(LINE_BOX)) {
 			if (lineBox == null) {
 				lineBox = new MLineBox(jrstyle.getLineBox());
-				lineBox.getPropertyChangeSupport().addPropertyChangeListener(this);
+				setChildListener(lineBox);
+				// lineBox.getPropertyChangeSupport().addPropertyChangeListener(this);
 			}
 			return lineBox;
 		}

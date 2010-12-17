@@ -284,8 +284,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.MGraphicElement_parent_style,
-				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE,
+				Messages.MGraphicElement_parent_style, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
 		desc.add(styleD);
 
@@ -294,45 +294,48 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		groupChangesD.setDescription(Messages.MGraphicElement_print_when_group_changes_description);
 		desc.add(groupChangesD);
 
-		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY, Messages.MGraphicElement_key);
+		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY,
+				Messages.MGraphicElement_key);
 		keyD.setDescription(Messages.MGraphicElement_key_description);
 		desc.add(keyD);
 
 		// bounds
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT, Messages.MGraphicElement_height);
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,
+				Messages.MGraphicElement_height);
 		heightD.setCategory(Messages.MGraphicElement_size_category);
 		heightD.setDescription(Messages.MGraphicElement_height_description);
 		desc.add(heightD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH, Messages.MGraphicElement_width);
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,
+				Messages.MGraphicElement_width);
 		widthD.setCategory(Messages.MGraphicElement_size_category);
 		widthD.setDescription(Messages.MGraphicElement_width_description);
 		desc.add(widthD);
 
-		IntegerPropertyDescriptor xD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_X, Messages.MGraphicElement_left);
+		IntegerPropertyDescriptor xD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_X,
+				Messages.MGraphicElement_left);
 		xD.setCategory(Messages.MGraphicElement_location_category);
 		xD.setDescription(Messages.MGraphicElement_left_description);
 		desc.add(xD);
 
-		IntegerPropertyDescriptor yD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_Y, Messages.MGraphicElement_top);
+		IntegerPropertyDescriptor yD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_Y,
+				Messages.MGraphicElement_top);
 		yD.setCategory(Messages.MGraphicElement_location_category);
 		yD.setDescription(Messages.MGraphicElement_top_description);
 		desc.add(yD);
 		// colors
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR, Messages.MGraphicElement_backcolor,
-				NullEnum.INHERITED);
-		backcolorD
-				.setDescription(Messages.MGraphicElement_backcolor_description);
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR,
+				Messages.MGraphicElement_backcolor, NullEnum.INHERITED);
+		backcolorD.setDescription(Messages.MGraphicElement_backcolor_description);
 		desc.add(backcolorD);
 
-		ColorPropertyDescriptor forecolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_FORECOLOR, Messages.MGraphicElement_forecolor,
-				NullEnum.INHERITED);
-		forecolorD
-				.setDescription(Messages.MGraphicElement_forecolor_description);
+		ColorPropertyDescriptor forecolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_FORECOLOR,
+				Messages.MGraphicElement_forecolor, NullEnum.INHERITED);
+		forecolorD.setDescription(Messages.MGraphicElement_forecolor_description);
 		desc.add(forecolorD);
 		// opacity
-		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MGraphicElement_opaque,
-				EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
+		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
+				Messages.MGraphicElement_opaque, EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
 		opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueD);
 
@@ -345,44 +348,37 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE,
 				Messages.MGraphicElement_stretch_type, EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
 		stretchTypeD.setCategory(Messages.MGraphicElement_size_category);
-		stretchTypeD
-				.setDescription(Messages.MGraphicElement_stretch_type_description);
+		stretchTypeD.setDescription(Messages.MGraphicElement_stretch_type_description);
 		desc.add(stretchTypeD);
 
 		CheckBoxPropertyDescriptor printRVAlueD = new CheckBoxPropertyDescriptor(
 				JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, Messages.MGraphicElement_print_repeated_values);
-		printRVAlueD
-				.setDescription(Messages.MGraphicElement_print_repeated_values_description);
+		printRVAlueD.setDescription(Messages.MGraphicElement_print_repeated_values_description);
 		desc.add(printRVAlueD);
 
 		CheckBoxPropertyDescriptor rmLineWBlankD = new CheckBoxPropertyDescriptor(
 				JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, Messages.MGraphicElement_remove_line_when_blank);
-		rmLineWBlankD
-				.setDescription(Messages.MGraphicElement_remove_line_when_blank_description);
+		rmLineWBlankD.setDescription(Messages.MGraphicElement_remove_line_when_blank_description);
 		desc.add(rmLineWBlankD);
 
 		CheckBoxPropertyDescriptor printInFirstWholeBandD = new CheckBoxPropertyDescriptor(
 				JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, Messages.MGraphicElement_print_in_first_whole_band);
-		printInFirstWholeBandD
-				.setDescription(Messages.MGraphicElement_print_in_first_whole_band_description);
+		printInFirstWholeBandD.setDescription(Messages.MGraphicElement_print_in_first_whole_band_description);
 		desc.add(printInFirstWholeBandD);
 
 		CheckBoxPropertyDescriptor printWhenDetailOverflowsD = new CheckBoxPropertyDescriptor(
 				JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, Messages.MGraphicElement_print_when_detail_overflows);
-		printWhenDetailOverflowsD
-				.setDescription(Messages.MGraphicElement_print_when_detail_overflows_desription);
+		printWhenDetailOverflowsD.setDescription(Messages.MGraphicElement_print_when_detail_overflows_desription);
 		desc.add(printWhenDetailOverflowsD);
 
 		JRExpressionPropertyDescriptor printWhenExprD = new JRExpressionPropertyDescriptor(
 				JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MGraphicElement_print_when_expression);
-		printWhenExprD
-				.setDescription(Messages.MGraphicElement_print_when_expression_description);
+		printWhenExprD.setDescription(Messages.MGraphicElement_print_when_expression_description);
 		desc.add(printWhenExprD);
 
 		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(
 				JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, Messages.MGraphicElement_property_expressions);
-		propertiesD
-				.setDescription(Messages.MGraphicElement_property_expressions_description);
+		propertiesD.setDescription(Messages.MGraphicElement_property_expressions_description);
 		desc.add(propertiesD);
 
 		forecolorD.setCategory(Messages.MGraphicElement_graphic_category);
@@ -417,8 +413,10 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
 			return jrElement.getKey();
 		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			if (mExpression == null)
+			if (mExpression == null) {
 				mExpression = new MExpression(jrElement.getPrintWhenExpression());
+				setChildListener(mExpression);
+			}
 			return mExpression;
 		}
 		if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
@@ -493,6 +491,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
+				setChildListener(mExpression);
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrElement.setPrintWhenExpression(expression);
 			}

@@ -29,7 +29,6 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 
-// TODO: Auto-generated Javadoc
 /**
  * link nodes & together.
  * 

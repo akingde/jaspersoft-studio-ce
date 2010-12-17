@@ -30,7 +30,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class OrphanElementCommand.
  * 

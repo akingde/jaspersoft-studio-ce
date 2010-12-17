@@ -52,8 +52,8 @@ public class MDatasetRun extends APropertyNode {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		subdatasetnameD = new RWComboBoxPropertyDescriptor(JRDesignDatasetRun.PROPERTY_DATASET_NAME, Messages.MDatasetRun_dataset_name,
-				new String[] { "" }, NullEnum.NOTNULL); //$NON-NLS-1$
+		subdatasetnameD = new RWComboBoxPropertyDescriptor(JRDesignDatasetRun.PROPERTY_DATASET_NAME,
+				Messages.MDatasetRun_dataset_name, new String[] { "" }, NullEnum.NOTNULL); //$NON-NLS-1$
 		subdatasetnameD.setDescription(Messages.MDatasetRun_dataset_name_description);
 		desc.add(subdatasetnameD);
 
@@ -92,18 +92,24 @@ public class MDatasetRun extends APropertyNode {
 		JRDesignDatasetRun jrElement = (JRDesignDatasetRun) getValue();
 
 		if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (pmExpression == null)
+			if (pmExpression == null) {
 				pmExpression = new MExpression(jrElement.getParametersMapExpression());
+				setChildListener(pmExpression);
+			}
 			return pmExpression;
 		}
 		if (id.equals(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION)) {
-			if (cnExpression == null)
+			if (cnExpression == null) {
 				cnExpression = new MExpression(jrElement.getConnectionExpression());
+				setChildListener(cnExpression);
+			}
 			return cnExpression;
 		}
 		if (id.equals(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION)) {
-			if (dsExpression == null)
+			if (dsExpression == null) {
 				dsExpression = new MExpression(jrElement.getDataSourceExpression());
+				setChildListener(dsExpression);
+			}
 			return dsExpression;
 		}
 		if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS)) {
@@ -140,18 +146,21 @@ public class MDatasetRun extends APropertyNode {
 		if (id.equals(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				cnExpression = (MExpression) value;
+				setChildListener(cnExpression);
 				JRExpression expression = (JRExpression) cnExpression.getValue();
 				jrElement.setConnectionExpression(expression);
 			}
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				pmExpression = (MExpression) value;
+				setChildListener(pmExpression);
 				JRExpression expression = (JRExpression) pmExpression.getValue();
 				jrElement.setParametersMapExpression(expression);
 			}
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dsExpression = (MExpression) value;
+				setChildListener(dsExpression);
 				JRExpression expression = (JRExpression) dsExpression.getValue();
 				jrElement.setDataSourceExpression(expression);
 			}

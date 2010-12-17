@@ -22,7 +22,9 @@ package com.jaspersoft.studio.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
@@ -156,6 +158,7 @@ public abstract class ANode implements INode {
 			if (this.parent != null && this.parent.getChildren() != null)
 				this.parent.getChildren().remove(this);
 			this.parent = null;
+			unsetDependents();
 		} else {
 			register();
 			this.parent = parent;
@@ -164,6 +167,31 @@ public abstract class ANode implements INode {
 			else
 				parent.getChildren().add(this);
 			getPropertyChangeSupport().addPropertyChangeListener(parent);
+		}
+	}
+
+	Set<ANode> dependents;
+
+	public void setChildListener(ANode child) {
+		if (child != null)
+			child.getPropertyChangeSupport().addPropertyChangeListener(this);
+		if (dependents == null)
+			dependents = new HashSet<ANode>();
+		dependents.add(child);
+	}
+
+	public void unsetChildListener(ANode child) {
+		if (child != null)
+			child.getPropertyChangeSupport().removePropertyChangeListener(this);
+		if (dependents != null)
+			dependents.remove(child);
+	}
+
+	public void unsetDependents() {
+		if (dependents != null) {
+			for (ANode n : dependents)
+				n.getPropertyChangeSupport().removePropertyChangeListener(this);
+			dependents.clear();
 		}
 	}
 
@@ -251,8 +279,15 @@ public abstract class ANode implements INode {
 			}
 		}
 		PropertyChangeEvent newEvent = evt;
-		if (!(evt.getSource() instanceof ANode))
-			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		if (evt.getSource() instanceof ANode) {
+			// ANode enode = (ANode) evt.getSource();
+			// if (dependents.contains(enode)) {
+			// newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(),
+			// evt.getNewValue());
+			// }
+		} else {
+			newEvent = new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		}
 		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
 

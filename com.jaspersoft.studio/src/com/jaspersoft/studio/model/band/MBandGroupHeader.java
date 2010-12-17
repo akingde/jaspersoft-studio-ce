@@ -149,10 +149,17 @@ public class MBandGroupHeader extends MBand {
 		desc.add(groupD);
 	}
 
+	private MGroupBand mGroupBand;
+
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (id.equals(MAIN_GROUP))
-			return new MGroupBand(getJrGroup());
+		if (id.equals(MAIN_GROUP)) {
+			if (mGroupBand == null) {
+				mGroupBand = new MGroupBand(getJrGroup());
+				setChildListener(mGroupBand);
+			}
+			return mGroupBand;
+		}
 		return super.getPropertyValue(id);
 	}
 

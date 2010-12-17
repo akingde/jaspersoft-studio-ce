@@ -150,8 +150,7 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 		JRExpressionPropertyDescriptor conditionalExpressionD = new JRExpressionPropertyDescriptor(
 				JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION, Messages.MConditionalStyle_conditional_expression);
 		conditionalExpressionD.setCategory(Messages.MConditionalStyle_properties_category);
-		conditionalExpressionD
-				.setDescription(Messages.MConditionalStyle_conditional_expression_description);
+		conditionalExpressionD.setDescription(Messages.MConditionalStyle_conditional_expression_description);
 		desc.add(conditionalExpressionD);
 
 	}
@@ -167,8 +166,10 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	public Object getPropertyValue(Object id) {
 		JRDesignConditionalStyle jrstyle = (JRDesignConditionalStyle) getValue();
 		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION)) {
-			if (mExpression == null)
+			if (mExpression == null) {
 				mExpression = new MExpression(jrstyle.getConditionExpression());
+				setChildListener(mExpression);
+			}
 			return mExpression;
 		}
 		return super.getPropertyValue(id);
@@ -185,6 +186,7 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
+				setChildListener(mExpression);
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrstyle.setConditionExpression(expression);
 			}

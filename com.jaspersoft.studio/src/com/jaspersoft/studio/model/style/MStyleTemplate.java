@@ -29,13 +29,14 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 /**
  * The Class MStyleTemplate.
@@ -129,10 +130,13 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION,
-				"source expression");
-		descriptors = new IPropertyDescriptor[] { nameD };
+		JRExpressionPropertyDescriptor sourceExpression = new JRExpressionPropertyDescriptor(
+				JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION, "Source Expression");
+		sourceExpression.setDescription("Source Expression");
+		desc.add(sourceExpression);
 	}
+
+	private MExpression mExpression;
 
 	/*
 	 * (non-Javadoc)
@@ -141,8 +145,13 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
-		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION))
-			return jrTemplate.getSourceExpression();
+		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)) {
+			if (mExpression == null) {
+				mExpression = new MExpression(jrTemplate.getSourceExpression());
+				setChildListener(mExpression);
+			}
+			return mExpression;
+		}
 		return null;
 	}
 
@@ -153,8 +162,14 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
-		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION))
-			jrTemplate.setSourceExpression((JRExpression) value);
+		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)) {
+			if (value instanceof MExpression) {
+				mExpression = (MExpression) value;
+				setChildListener(mExpression);
+				JRExpression expression = (JRExpression) mExpression.getValue();
+				jrTemplate.setSourceExpression(expression);
+			}
+		}
 	}
 
 	/**

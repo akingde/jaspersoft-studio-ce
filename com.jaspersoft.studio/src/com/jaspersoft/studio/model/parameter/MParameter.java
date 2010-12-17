@@ -118,17 +118,16 @@ public class MParameter extends MParameterSystem implements ICopyable {
 
 		CheckBoxPropertyDescriptor isForPromptingD = new CheckBoxPropertyDescriptor(
 				JRDesignParameter.PROPERTY_FOR_PROMPTING, Messages.MParameter_is_for_prompting, NullEnum.NOTNULL);
-		isForPromptingD
-				.setDescription(Messages.MParameter_is_for_prompting_description);
+		isForPromptingD.setDescription(Messages.MParameter_is_for_prompting_description);
 		desc.add(isForPromptingD);
 
 		JRExpressionPropertyDescriptor defValueExprD = new JRExpressionPropertyDescriptor(
 				JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION, Messages.MParameter_default_value_expression);
-		defValueExprD
-				.setDescription(Messages.MParameter_default_value_expression_description);
+		defValueExprD.setDescription(Messages.MParameter_default_value_expression_description);
 		desc.add(defValueExprD);
 
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, Messages.MParameter_properties);
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
+				Messages.MParameter_properties);
 		propertiesD.setDescription(Messages.MParameter_properties_description);
 		desc.add(propertiesD);
 
@@ -156,8 +155,10 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING))
 			return new Boolean(jrParameter.isForPrompting());
 		if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)) {
-			if (mExpression == null)
+			if (mExpression == null) {
 				mExpression = new MExpression(jrParameter.getDefaultValueExpression());
+				setChildListener(mExpression);
+			}
 			return mExpression;
 		}
 		if (id.equals(PROPERTY_MAP))
@@ -184,6 +185,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		else if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
+				setChildListener(mExpression);
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrParameter.setDefaultValueExpression(expression);
 			}

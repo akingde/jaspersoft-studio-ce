@@ -47,26 +47,22 @@ public class MHyperLink extends APropertyNode {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		JRExpressionPropertyDescriptor anchorExpressionD = new JRExpressionPropertyDescriptor(
 				JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION, Messages.MHyperLink_hyperlink_anchor_expression);
-		anchorExpressionD
-				.setDescription(Messages.MHyperLink_hyperlink_anchor_expression_description);
+		anchorExpressionD.setDescription(Messages.MHyperLink_hyperlink_anchor_expression_description);
 		desc.add(anchorExpressionD);
 
 		JRExpressionPropertyDescriptor pageExpressionD = new JRExpressionPropertyDescriptor(
 				JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION, Messages.MHyperLink_hyperlink_page_expression);
-		pageExpressionD
-				.setDescription(Messages.MHyperLink_hyperlink_page_expression_description);
+		pageExpressionD.setDescription(Messages.MHyperLink_hyperlink_page_expression_description);
 		desc.add(pageExpressionD);
 
 		JRExpressionPropertyDescriptor referenceExpressionD = new JRExpressionPropertyDescriptor(
 				JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION, Messages.MHyperLink_hyperlink_reference_expression);
-		referenceExpressionD
-				.setDescription(Messages.MHyperLink_hyperlink_reference_expression_description);
+		referenceExpressionD.setDescription(Messages.MHyperLink_hyperlink_reference_expression_description);
 		desc.add(referenceExpressionD);
 
 		JRExpressionPropertyDescriptor toolTipExpressionD = new JRExpressionPropertyDescriptor(
 				JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION, Messages.MHyperLink_hyperlink_tooltip_expression);
-		toolTipExpressionD
-				.setDescription(Messages.MHyperLink_hyperlink_tooltip_expression_description);
+		toolTipExpressionD.setDescription(Messages.MHyperLink_hyperlink_tooltip_expression_description);
 		desc.add(toolTipExpressionD);
 
 		NTextPropertyDescriptor linkTargetD = new NTextPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TARGET,
@@ -126,23 +122,31 @@ public class MHyperLink extends APropertyNode {
 			if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 				return EnumHelper.getValue(hyperLink.getHyperlinkTypeValue(), 0, false);
 			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
-				if (mAnchorExpression == null)
+				if (mAnchorExpression == null) {
 					mAnchorExpression = new MExpression(hyperLink.getHyperlinkAnchorExpression());
+					setChildListener(mAnchorExpression);
+				}
 				return mAnchorExpression;
 			}
 			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
-				if (mPageExpression == null)
+				if (mPageExpression == null) {
 					mPageExpression = new MExpression(hyperLink.getHyperlinkPageExpression());
+					setChildListener(mPageExpression);
+				}
 				return mPageExpression;
 			}
 			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
-				if (mReferenceExpression == null)
+				if (mReferenceExpression == null) {
 					mReferenceExpression = new MExpression(hyperLink.getHyperlinkReferenceExpression());
+					setChildListener(mReferenceExpression);
+				}
 				return mReferenceExpression;
 			}
 			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
-				if (mToolTipExpression == null)
+				if (mToolTipExpression == null) {
 					mToolTipExpression = new MExpression(hyperLink.getHyperlinkTooltipExpression());
+					setChildListener(mToolTipExpression);
+				}
 				return mToolTipExpression;
 			}
 		}
@@ -165,24 +169,28 @@ public class MHyperLink extends APropertyNode {
 			else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 				if (value instanceof MExpression) {
 					mAnchorExpression = (MExpression) value;
+					setChildListener(mAnchorExpression);
 					JRExpression expression = (JRExpression) mAnchorExpression.getValue();
 					hyperLink.setHyperlinkAnchorExpression(expression);
 				}
 			} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
 				if (value instanceof MExpression) {
 					mPageExpression = (MExpression) value;
+					setChildListener(mPageExpression);
 					JRExpression expression = (JRExpression) mPageExpression.getValue();
 					hyperLink.setHyperlinkPageExpression(expression);
 				}
 			} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
 				if (value instanceof MExpression) {
 					mReferenceExpression = (MExpression) value;
+					setChildListener(mReferenceExpression);
 					JRExpression expression = (JRExpression) mReferenceExpression.getValue();
 					hyperLink.setHyperlinkReferenceExpression(expression);
 				}
 			} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
 				if (value instanceof MExpression) {
 					mToolTipExpression = (MExpression) value;
+					setChildListener(mToolTipExpression);
 					JRExpression expression = (JRExpression) mToolTipExpression.getValue();
 					hyperLink.setHyperlinkTooltipExpression(expression);
 				}

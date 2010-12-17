@@ -117,8 +117,7 @@ public class MImage extends MGraphicElementLineBox {
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignImage.PROPERTY_EXPRESSION,
 				Messages.MImage_expression);
-		expressionD
-				.setDescription(Messages.MImage_expression_description);
+		expressionD.setDescription(Messages.MImage_expression_description);
 		desc.add(expressionD);
 
 		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.MImage_fill,
@@ -148,14 +147,12 @@ public class MImage extends MGraphicElementLineBox {
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(JRDesignImage.PROPERTY_EVALUATION_TIME,
 				Messages.MImage_evaluation_type, EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NULL));
-		evaluationTimeD
-				.setDescription(Messages.MImage_evaluation_type_description);
+		evaluationTimeD.setDescription(Messages.MImage_evaluation_type_description);
 		desc.add(evaluationTimeD);
 
 		CheckBoxPropertyDescriptor usingCacheD = new CheckBoxPropertyDescriptor(JRBaseImage.PROPERTY_USING_CACHE,
 				Messages.MImage_using_cache, NullEnum.INHERITED);
-		usingCacheD
-				.setDescription(Messages.MImage_using_cache_description);
+		usingCacheD.setDescription(Messages.MImage_using_cache_description);
 		desc.add(usingCacheD);
 
 		CheckBoxPropertyDescriptor lazyD = new CheckBoxPropertyDescriptor(JRBaseImage.PROPERTY_LAZY, Messages.MImage_lazy,
@@ -212,8 +209,10 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, true);
 		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION)) {
-			if (mExpression == null)
+			if (mExpression == null) {
 				mExpression = new MExpression(jrElement.getExpression());
+				setChildListener(mExpression);
+			}
 			return mExpression;
 		}
 		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
@@ -226,23 +225,31 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			return EnumHelper.getValue(jrElement.getHyperlinkTypeValue(), 0, false);
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
-			if (mAnchorExpression == null)
+			if (mAnchorExpression == null) {
 				mAnchorExpression = new MExpression(jrElement.getHyperlinkAnchorExpression());
+				setChildListener(mAnchorExpression);
+			}
 			return mAnchorExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
-			if (mPageExpression == null)
+			if (mPageExpression == null) {
 				mPageExpression = new MExpression(jrElement.getHyperlinkPageExpression());
+				setChildListener(mPageExpression);
+			}
 			return mPageExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
-			if (mReferenceExpression == null)
+			if (mReferenceExpression == null) {
 				mReferenceExpression = new MExpression(jrElement.getHyperlinkReferenceExpression());
+				setChildListener(mReferenceExpression);
+			}
 			return mReferenceExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
-			if (mToolTipExpression == null)
+			if (mToolTipExpression == null) {
 				mToolTipExpression = new MExpression(jrElement.getHyperlinkTooltipExpression());
+				setChildListener(mToolTipExpression);
+			}
 			return mToolTipExpression;
 		}
 		return super.getPropertyValue(id);
@@ -270,6 +277,7 @@ public class MImage extends MGraphicElementLineBox {
 		else if (id.equals(JRDesignImage.PROPERTY_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
+				setChildListener(mExpression);
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrElement.setExpression(expression);
 			}
@@ -285,24 +293,28 @@ public class MImage extends MGraphicElementLineBox {
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mAnchorExpression = (MExpression) value;
+				setChildListener(mAnchorExpression);
 				JRExpression expression = (JRExpression) mAnchorExpression.getValue();
 				jrElement.setHyperlinkAnchorExpression(expression);
 			}
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mPageExpression = (MExpression) value;
+				setChildListener(mPageExpression);
 				JRExpression expression = (JRExpression) mPageExpression.getValue();
 				jrElement.setHyperlinkPageExpression(expression);
 			}
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mReferenceExpression = (MExpression) value;
+				setChildListener(mReferenceExpression);
 				JRExpression expression = (JRExpression) mReferenceExpression.getValue();
 				jrElement.setHyperlinkReferenceExpression(expression);
 			}
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mToolTipExpression = (MExpression) value;
+				setChildListener(mToolTipExpression);
 				JRExpression expression = (JRExpression) mToolTipExpression.getValue();
 				jrElement.setHyperlinkTooltipExpression(expression);
 			}

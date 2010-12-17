@@ -150,8 +150,10 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
 			return EnumHelper.getValue(jrElement.getIncrementTypeValue(), 1, false);
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION)) {
-			if (incWhenExp == null)
+			if (incWhenExp == null){
 				incWhenExp = new MExpression(jrElement.getIncrementWhenExpression());
+				setChildListener(incWhenExp);
+			}
 			return incWhenExp;
 		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_GROUP)) {
@@ -170,6 +172,7 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				if (j == null)
 					j = new JRDesignDatasetRun();
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+				setChildListener(mDatasetRun);
 			}
 			return mDatasetRun;
 
@@ -203,6 +206,7 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				incWhenExp = (MExpression) value;
+				setChildListener(incWhenExp);
 				JRExpression expression = (JRExpression) incWhenExp.getValue();
 				jrElement.setIncrementWhenExpression(expression);
 			}

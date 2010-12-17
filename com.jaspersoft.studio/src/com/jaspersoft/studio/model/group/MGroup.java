@@ -142,8 +142,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignGroup.PROPERTY_EXPRESSION,
 				Messages.MGroup_expression);
-		expressionD
-				.setDescription(Messages.MGroup_expression_description);
+		expressionD.setDescription(Messages.MGroup_expression_description);
 		desc.add(expressionD);
 	}
 
@@ -159,8 +158,10 @@ public class MGroup extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
 			return jrGroup.getName();
 		if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION)) {
-			if (mExpression == null)
+			if (mExpression == null) {
 				mExpression = new MExpression(jrGroup.getExpression());
+				setChildListener(mExpression);
+			}
 			return mExpression;
 		}
 		return null;
@@ -178,6 +179,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
+				setChildListener(mExpression);
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrGroup.setExpression(expression);
 			}

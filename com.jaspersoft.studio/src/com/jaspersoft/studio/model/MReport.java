@@ -157,28 +157,29 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 
 		NClassTypePropertyDescriptor formatFactoryClassD = new NClassTypePropertyDescriptor(
 				JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS, Messages.MReport_format_factory_class);
-		formatFactoryClassD
-				.setDescription(Messages.MReport_format_factory_class_description);
+		formatFactoryClassD.setDescription(Messages.MReport_format_factory_class_description);
 		desc.add(formatFactoryClassD);
 
 		ImportDeclarationPropertyDescriptor importsD = new ImportDeclarationPropertyDescriptor(
 				JasperDesign.PROPERTY_IMPORTS, Messages.MReport_imports);
-		importsD
-				.setDescription(Messages.MReport_imports_description);
+		importsD.setDescription(Messages.MReport_imports_description);
 		desc.add(importsD);
 
 		// main dataset
-		PropertyDescriptor datasetD = new PropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET, Messages.MReport_main_dataset);
+		PropertyDescriptor datasetD = new PropertyDescriptor(JasperDesign.PROPERTY_MAIN_DATASET,
+				Messages.MReport_main_dataset);
 		datasetD.setDescription(Messages.MReport_main_dataset_description);
 		desc.add(datasetD);
 
 		// -------------------
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT, Messages.MReport_page_height);
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_HEIGHT,
+				Messages.MReport_page_height);
 		heightD.setDescription(Messages.MReport_page_height_description);
 		heightD.setCategory(Messages.MReport_report_page_category);
 		desc.add(heightD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_WIDTH, Messages.MReport_page_width);
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_PAGE_WIDTH,
+				Messages.MReport_page_width);
 		widthD.setDescription(Messages.MReport_page_width_description);
 		widthD.setCategory(Messages.MReport_report_page_category);
 		desc.add(widthD);
@@ -195,7 +196,8 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		leftMarginD.setCategory(Messages.MReport_report_page_category);
 		desc.add(leftMarginD);
 
-		IntegerPropertyDescriptor topMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_TOP_MARGIN, Messages.MReport_top_margin);
+		IntegerPropertyDescriptor topMarginD = new IntegerPropertyDescriptor(JasperDesign.PROPERTY_TOP_MARGIN,
+				Messages.MReport_top_margin);
 		topMarginD.setDescription(Messages.MReport_top_margin_description);
 		topMarginD.setCategory(Messages.MReport_report_page_category);
 		desc.add(topMarginD);
@@ -244,34 +246,29 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 
 		ComboBoxPropertyDescriptor whenNoDataD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
 				Messages.MReport_when_no_data_type, EnumHelper.getEnumNames(WhenNoDataTypeEnum.values(), NullEnum.NULL));
-		whenNoDataD
-				.setDescription(Messages.MReport_when_no_data_type_description);
+		whenNoDataD.setDescription(Messages.MReport_when_no_data_type_description);
 		whenNoDataD.setCategory(Messages.MReport_report_category);
 		desc.add(whenNoDataD);
 
 		// checkboxes
 		CheckBoxPropertyDescriptor titleNewPageD = new CheckBoxPropertyDescriptor(JasperDesign.PROPERTY_TITLE_NEW_PAGE,
 				Messages.MReport_title_on_a_new_page);
-		titleNewPageD
-				.setDescription(Messages.MReport_title_on_a_new_page_description);
+		titleNewPageD.setDescription(Messages.MReport_title_on_a_new_page_description);
 		desc.add(titleNewPageD);
 
 		CheckBoxPropertyDescriptor summaryNewPageD = new CheckBoxPropertyDescriptor(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE,
 				Messages.MReport_summary_on_a_new_page);
-		summaryNewPageD
-				.setDescription(Messages.MReport_summary_on_a_new_page_description);
+		summaryNewPageD.setDescription(Messages.MReport_summary_on_a_new_page_description);
 		desc.add(summaryNewPageD);
 
 		CheckBoxPropertyDescriptor summaryWHFD = new CheckBoxPropertyDescriptor(
 				JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, Messages.MReport_summary_with_page_header_and_footer);
-		summaryWHFD
-				.setDescription(Messages.MReport_summary_with_page_header_and_footer_description);
+		summaryWHFD.setDescription(Messages.MReport_summary_with_page_header_and_footer_description);
 		desc.add(summaryWHFD);
 
 		CheckBoxPropertyDescriptor floatColumnFooterD = new CheckBoxPropertyDescriptor(
 				JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, Messages.MReport_float_column_footer);
-		floatColumnFooterD
-				.setDescription(Messages.MReport_float_column_footer_description);
+		floatColumnFooterD.setDescription(Messages.MReport_float_column_footer_description);
 		desc.add(floatColumnFooterD);
 
 		CheckBoxPropertyDescriptor ignorePaginationD = new CheckBoxPropertyDescriptor(
@@ -325,8 +322,10 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		}
 
 		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET)) {
-			if (mDataset == null)
+			if (mDataset == null) {
 				mDataset = new MDataset((JRDesignDataset) jrDesign.getMainDataset());
+				setChildListener(mDataset);
+			}
 			return mDataset;
 		}
 

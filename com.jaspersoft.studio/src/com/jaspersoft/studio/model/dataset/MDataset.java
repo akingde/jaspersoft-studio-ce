@@ -158,14 +158,14 @@ public class MDataset extends APropertyNode implements ICopyable {
 		nameD.setDescription(Messages.MDataset_name_description);
 		desc.add(nameD);
 
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, Messages.MDataset_properties);
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
+				Messages.MDataset_properties);
 		propertiesD.setDescription(Messages.MDataset_properties_description);
 		desc.add(propertiesD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
 				Messages.MDataset_class);
-		classD
-				.setDescription(Messages.MDataset_class_description);
+		classD.setDescription(Messages.MDataset_class_description);
 		desc.add(classD);
 
 		NResourcePropertyDescriptor resBundleD = new NResourcePropertyDescriptor(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE,
@@ -173,16 +173,15 @@ public class MDataset extends APropertyNode implements ICopyable {
 		resBundleD.setDescription(Messages.MDataset_resource_bundle_description);
 		desc.add(resBundleD);
 
-		JRQueryPropertyDescriptor queryD = new JRQueryPropertyDescriptor(JRDesignDataset.PROPERTY_QUERY, Messages.MDataset_query,
-				NullEnum.NULL);
+		JRQueryPropertyDescriptor queryD = new JRQueryPropertyDescriptor(JRDesignDataset.PROPERTY_QUERY,
+				Messages.MDataset_query, NullEnum.NULL);
 		queryD.setDescription(Messages.MDataset_query_description);
 		desc.add(queryD);
 
 		ComboBoxPropertyDescriptor whenResMissTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, Messages.MDataset_when_resource_missing_type, EnumHelper.getEnumNames(
-						WhenResourceMissingTypeEnum.values(), NullEnum.NOTNULL));
-		whenResMissTypeD
-				.setDescription(Messages.MDataset_when_resource_missing_type_description);
+				JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, Messages.MDataset_when_resource_missing_type,
+				EnumHelper.getEnumNames(WhenResourceMissingTypeEnum.values(), NullEnum.NOTNULL));
+		whenResMissTypeD.setDescription(Messages.MDataset_when_resource_missing_type_description);
 		desc.add(whenResMissTypeD);
 
 		JRExpressionPropertyDescriptor filterExpression = new JRExpressionPropertyDescriptor(
@@ -209,13 +208,17 @@ public class MDataset extends APropertyNode implements ICopyable {
 			return jrDataset.getName();
 
 		if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
-			if (mQuery == null)
+			if (mQuery == null) {
 				mQuery = new MQuery(jrDataset.getQuery());
+				setChildListener(mQuery);
+			}
 			return mQuery;
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
-			if (mExpression == null)
+			if (mExpression == null) {
 				mExpression = new MExpression(jrDataset.getFilterExpression());
+				setChildListener(mExpression);
+			}
 			return mExpression;
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
@@ -245,11 +248,13 @@ public class MDataset extends APropertyNode implements ICopyable {
 			jrDataset.setScriptletClass((String) value);
 		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
 			if (value == null) {
+				unsetChildListener(mExpression);
 				mExpression = null;
 				jrDataset.setFilterExpression(null);
 			}
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
+				setChildListener(mExpression);
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrDataset.setFilterExpression(expression);
 			}
@@ -268,6 +273,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 		else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
 			if (value instanceof MQuery) {
 				mQuery = (MQuery) value;
+				setChildListener(mQuery);
 				JRDesignQuery jrQuery = (JRDesignQuery) mQuery.getValue();
 				jrDataset.setQuery(jrQuery);
 

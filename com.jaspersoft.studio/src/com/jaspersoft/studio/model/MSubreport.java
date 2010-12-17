@@ -115,14 +115,12 @@ public class MSubreport extends MGraphicElement {
 
 		CheckBoxPropertyDescriptor runToBottomD = new CheckBoxPropertyDescriptor(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM,
 				Messages.MSubreport_run_to_bottom, NullEnum.NULL);
-		runToBottomD
-				.setDescription(Messages.MSubreport_run_to_bottom_description);
+		runToBottomD.setDescription(Messages.MSubreport_run_to_bottom_description);
 		desc.add(runToBottomD);
 
 		CheckBoxPropertyDescriptor useCacheD = new CheckBoxPropertyDescriptor(JRBaseSubreport.PROPERTY_USING_CACHE,
 				Messages.MSubreport_using_cache, NullEnum.INHERITED);
-		useCacheD
-				.setDescription(Messages.MSubreport_using_cache_description);
+		useCacheD.setDescription(Messages.MSubreport_using_cache_description);
 		desc.add(useCacheD);
 
 		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(JRDesignSubreport.PROPERTY_EXPRESSION,
@@ -181,23 +179,31 @@ public class MSubreport extends MGraphicElement {
 		if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE))
 			return jrElement.isOwnUsingCache();
 		if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION)) {
-			if (mExpression == null)
+			if (mExpression == null) {
 				mExpression = new MExpression(jrElement.getExpression());
+				setChildListener(mExpression);
+			}
 			return mExpression;
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (pmExpression == null)
+			if (pmExpression == null) {
 				pmExpression = new MExpression(jrElement.getParametersMapExpression());
+				setChildListener(pmExpression);
+			}
 			return pmExpression;
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION)) {
-			if (cnExpression == null)
+			if (cnExpression == null) {
 				cnExpression = new MExpression(jrElement.getConnectionExpression());
+				setChildListener(cnExpression);
+			}
 			return cnExpression;
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION)) {
-			if (dsExpression == null)
+			if (dsExpression == null) {
 				dsExpression = new MExpression(jrElement.getDataSourceExpression());
+				setChildListener(dsExpression);
+			}
 			return dsExpression;
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS))
@@ -225,24 +231,28 @@ public class MSubreport extends MGraphicElement {
 		else if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mExpression = (MExpression) value;
+				setChildListener(mExpression);
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrElement.setExpression(expression);
 			}
 		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				pmExpression = (MExpression) value;
+				setChildListener(pmExpression);
 				JRExpression expression = (JRExpression) pmExpression.getValue();
 				jrElement.setParametersMapExpression(expression);
 			}
 		} else if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				cnExpression = (MExpression) value;
+				setChildListener(cnExpression);
 				JRExpression expression = (JRExpression) cnExpression.getValue();
 				jrElement.setConnectionExpression(expression);
 			}
 		} else if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				dsExpression = (MExpression) value;
+				setChildListener(dsExpression);
 				JRExpression expression = (JRExpression) dsExpression.getValue();
 				jrElement.setDataSourceExpression(expression);
 			}

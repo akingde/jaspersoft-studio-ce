@@ -107,6 +107,7 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 	private MFont getMFont() {
 		if (tFont == null) {
 			tFont = new MFont((JRFont) getValue());
+			setChildListener(tFont);
 		}
 		return tFont;
 	}

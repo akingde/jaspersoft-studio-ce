@@ -191,7 +191,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT, Messages.MBand_height);
+		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT,
+				Messages.MBand_height);
 		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);
 
@@ -202,8 +203,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 
 		JRExpressionPropertyDescriptor printWhenExpD = new JRExpressionPropertyDescriptor(
 				JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MBand_print_when_expression);
-		printWhenExpD
-				.setDescription(Messages.MBand_print_when_expression_desription);
+		printWhenExpD.setDescription(Messages.MBand_print_when_expression_desription);
 		desc.add(printWhenExpD);
 
 		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, CONST_HEIGHT);
@@ -225,8 +225,10 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
 				return EnumHelper.getValue(jrband.getSplitTypeValue(), 1, true);
 			if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-				if (mExpression == null)
+				if (mExpression == null) {
 					mExpression = new MExpression(jrband.getPrintWhenExpression());
+					setChildListener(mExpression);
+				}
 				return mExpression;
 			}
 		}
@@ -248,6 +250,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 				if (value instanceof MExpression) {
 					mExpression = (MExpression) value;
+					setChildListener(mExpression);
 					JRExpression expression = (JRExpression) mExpression.getValue();
 					jrband.setPrintWhenExpression(expression);
 				}
