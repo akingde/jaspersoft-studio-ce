@@ -146,7 +146,7 @@ public class CrosstabManager {
 			}
 		}
 		// mirror elements if is Right to left
-		if (crosstab.getRunDirectionValue().equals(RunDirectionEnum.RTL)) {
+		if (crosstab.getRunDirectionValue() != null && crosstab.getRunDirectionValue().equals(RunDirectionEnum.RTL)) {
 			int cwidth = crosstab.getWidth();
 			for (Rectangle r : boundsMap.values()) {
 				r.setLocation(cwidth - r.x - r.width + crosstab.getX(), r.y);

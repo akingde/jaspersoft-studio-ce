@@ -57,6 +57,7 @@ import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroups;
 import com.jaspersoft.studio.crosstab.model.columngroup.action.CreateColumnGroupAction;
 import com.jaspersoft.studio.crosstab.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.crosstab.model.columngroup.command.DeleteColumnGroupCommand;
+import com.jaspersoft.studio.crosstab.model.crosstab.command.CreateCrosstabCommand;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.crosstab.model.header.action.CreateCrosstabHeaderAction;
@@ -85,10 +86,14 @@ import com.jaspersoft.studio.crosstab.model.rowgroup.command.DeleteRowGroupComma
 import com.jaspersoft.studio.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.crosstab.part.CrosstabEditPart;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
+import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.ReportFactory;
+import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.parameter.MParameter;
 
 public class CrosstabComponentFactory implements IComponentFactory {
@@ -296,6 +301,20 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
 			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);
+		if (child instanceof MCrosstab) {
+			if (parent instanceof MElementGroup)
+				return new CreateCrosstabCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MBand)
+				return new CreateCrosstabCommand((MBand) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MFrame)
+				return new CreateCrosstabCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MReport)
+				return new CreateCrosstabCommand(parent, (MGraphicElement) child, location, newIndex);
+
+			if (parent instanceof IGroupElement) {
+				return new CreateCrosstabCommand(parent, (MGraphicElement) child, location, newIndex);
+			}
+		}
 		return null;
 	}
 
