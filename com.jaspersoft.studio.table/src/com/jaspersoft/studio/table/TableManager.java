@@ -22,6 +22,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
+import com.jaspersoft.studio.table.model.MTable;
+
 public class TableManager {
 	private StandardTable table;
 	private Map<Cell, Rectangle> boundsMap = new HashMap<Cell, Rectangle>();
@@ -165,6 +167,15 @@ public class TableManager {
 			boundsMap.put(c, new Rectangle(p.x, y, w, h));
 		}
 		return new Rectangle(p.x + bc.getWidth(), y, w, h);
+	}
+
+	public static List<BaseColumn> getAllColumns(MTable mTable) {
+		JRDesignComponentElement tbl = (JRDesignComponentElement) mTable.getValue();
+		if (tbl.getComponent() instanceof StandardTable) {
+			StandardTable table = (StandardTable) tbl.getComponent();
+			return getAllColumns(table.getColumns());
+		}
+		return new ArrayList<BaseColumn>(0);
 	}
 
 	public static List<BaseColumn> getAllColumns(List<BaseColumn> cols) {

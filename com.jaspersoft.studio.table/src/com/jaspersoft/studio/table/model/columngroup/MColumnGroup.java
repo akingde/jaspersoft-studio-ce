@@ -77,7 +77,7 @@ public class MColumnGroup extends MColumn {
 		AMCollection section = getSection();
 		if (section != null) {
 			if (evt.getPropertyName().equals(StandardColumnGroup.PROPERTY_COLUMNS)) {
-				if (evt.getSource() instanceof StandardColumnGroup) {
+				if (evt.getSource() instanceof StandardColumnGroup && evt.getSource() == getValue()) {
 					if (evt.getOldValue() == null && evt.getNewValue() != null) {
 						int newIndex = -1;
 						if (evt instanceof CollectionElementAddedEvent) {

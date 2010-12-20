@@ -39,17 +39,7 @@ public abstract class AMCollection extends MCollection {
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(getCellEvent())) {
-			// MColumn m = (MColumn) evt.getSource();
-			//
-			// int newIndex = getChildren().indexOf(m);
-			//
-			// StandardBaseColumn bc = (StandardBaseColumn) m.getValue();
-			//
-			// removeChild(m);
-
-			// createColumn(this, bc, 122, newIndex);
-		} else if (evt.getPropertyName().equals(StandardTable.PROPERTY_COLUMNS)) {
+		if (evt.getPropertyName().equals(StandardTable.PROPERTY_COLUMNS)) {
 			if (evt.getSource() instanceof StandardTable) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;

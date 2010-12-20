@@ -33,6 +33,8 @@ import com.jaspersoft.studio.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.table.model.MTableHeader;
 import com.jaspersoft.studio.table.model.column.MColumn;
+import com.jaspersoft.studio.table.model.columngroup.MColumnGroup;
+import com.jaspersoft.studio.table.model.columngroup.MColumnGroupCell;
 
 /**
  * link nodes & together.
@@ -42,13 +44,19 @@ import com.jaspersoft.studio.table.model.column.MColumn;
 public class DeleteColumnCellCommand extends Command {
 
 	private StandardBaseColumn jrColumn;
-	private Class<ANode> type;
+	private Class<?> type;
 	private String groupName;
 	private Cell jrCell;
 
 	public DeleteColumnCellCommand(ANode parent, MColumn srcNode) {
 		super();
-		type = (Class<ANode>) parent.getClass();
+		if (parent instanceof MColumnGroup)
+			type = ((MColumnGroup) parent).getSection().getClass();
+		else if (parent instanceof MColumnGroupCell)
+			type = ((MColumnGroupCell) parent).getSection().getClass();
+		else
+			type = (Class<ANode>) parent.getClass();
+
 		if (parent instanceof MTableGroupHeader)
 			groupName = ((MTableGroupHeader) parent).getJrDesignGroup().getName();
 		if (parent instanceof MTableGroupFooter)

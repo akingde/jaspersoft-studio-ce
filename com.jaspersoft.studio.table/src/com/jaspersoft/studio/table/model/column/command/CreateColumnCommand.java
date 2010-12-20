@@ -54,9 +54,11 @@ public class CreateColumnCommand extends Command {
 	private int index;
 
 	public static StandardTable getTable(ANode destNode) {
-		JRDesignComponentElement tbl = (JRDesignComponentElement) destNode.getValue();
-		if (tbl.getComponent() instanceof StandardTable) {
-			return (StandardTable) tbl.getComponent();
+		if (destNode.getValue() instanceof JRDesignComponentElement) {
+			JRDesignComponentElement tbl = (JRDesignComponentElement) destNode.getValue();
+			if (tbl.getComponent() instanceof StandardTable) {
+				return (StandardTable) tbl.getComponent();
+			}
 		}
 		return null;
 	}

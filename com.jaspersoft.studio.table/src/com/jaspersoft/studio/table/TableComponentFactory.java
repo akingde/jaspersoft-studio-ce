@@ -43,12 +43,16 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
-import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.MElementGroup;
+import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.ReportFactory;
+import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.table.figure.TableFigure;
 import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.model.MTableColumnFooter;
@@ -85,6 +89,7 @@ import com.jaspersoft.studio.table.model.columngroup.action.CreateColumnGroupAct
 import com.jaspersoft.studio.table.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.table.model.columngroup.command.CreateColumnGroupFromGroupCommand;
 import com.jaspersoft.studio.table.model.columngroup.command.ReorderColumnGroupCommand;
+import com.jaspersoft.studio.table.model.table.command.CreateTableCommand;
 import com.jaspersoft.studio.table.part.TableCellEditPart;
 import com.jaspersoft.studio.table.part.TableEditPart;
 
@@ -277,7 +282,7 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MTable)
-			return new ComponentFigure();
+			return new TableFigure();
 		// if (node instanceof MCell)
 		// return new CellFigure();
 		return null;
@@ -336,21 +341,35 @@ public class TableComponentFactory implements IComponentFactory {
 			if (parent.getParent() instanceof MColumnGroup)
 				return new CreateColumnFromGroupCommand((MColumnGroup) parent.getParent(), (MColumn) child, newIndex);
 
-			if (parent instanceof MColumn)
+			if (parent instanceof MColumn && ((MColumn) parent).getMTable() != null)
 				return new CreateColumnCommand((MColumn) parent, (MColumn) child, newIndex);
 		}
 		if (child instanceof MGraphicElement && parent instanceof MCell)
 			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
 			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);
+		if (child instanceof MTable) {
+			if (parent instanceof MElementGroup)
+				return new CreateTableCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MBand)
+				return new CreateTableCommand((MBand) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MFrame)
+				return new CreateTableCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MReport)
+				return new CreateTableCommand(parent, (MGraphicElement) child, location, newIndex);
+
+			if (parent instanceof IGroupElement) {
+				return new CreateTableCommand(parent, (MGraphicElement) child, location, newIndex);
+			}
+		}
 		return null;
 	}
 
 	public Command getDeleteCommand(ANode parent, ANode child) {
 		if (child instanceof MCell) {
-			if (parent instanceof MColumnGroup && !(parent instanceof MCell))
+			if (parent instanceof MColumnGroupCell)
 				return new DeleteColumnCellCommand((ANode) parent.getParent(), (MCell) child);
-			if (parent instanceof MColumn && !(parent instanceof MCell))
+			if (parent instanceof MColumnGroup)
 				return new DeleteColumnCellCommand((ANode) parent.getParent(), (MCell) child);
 			if (parent instanceof AMCollection)
 				return new DeleteColumnCellCommand((ANode) parent, (MCell) child);
