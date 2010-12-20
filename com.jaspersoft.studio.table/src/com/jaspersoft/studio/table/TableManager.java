@@ -397,17 +397,17 @@ public class TableManager {
 	}
 
 	private boolean isBottomCell(Cell c, StandardBaseColumn col, List<BaseColumn> columns) {
-		if (col instanceof StandardColumnGroup)
-			return false;
-		for (BaseColumn bc : columns) {
-			if (bc == col)
-				return true;
-			if (bc instanceof StandardColumnGroup) {
-				if (isBottomCell(c, col, ((StandardColumnGroup) bc).getColumns()))
-					return true;
-			}
-		}
+//		if (col instanceof StandardColumnGroup)
+//			return false;
+//		for (BaseColumn bc : columns) {
+//			if (bc == col)
+//				return true;
+//			if (bc instanceof StandardColumnGroup) {
+//				if (isBottomCell(c, col, ((StandardColumnGroup) bc).getColumns()))
+//					return true;
+//			}
+//		}
 
-		return false;
+		return true;
 	}
 }

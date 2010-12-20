@@ -28,9 +28,12 @@ import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.JRBoxContainer;
+import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -43,6 +46,7 @@ import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MLineBox;
+import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
@@ -72,6 +76,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	public MCell(ANode parent, StandardBaseColumn column, Cell cell, String name, int index) {
 		super(parent, column, name, index);
 		this.cell = (DesignCell) cell;
+		this.cell.getEventSupport().addPropertyChangeListener(this);
 	}
 
 	private DesignCell cell;
@@ -260,6 +265,48 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 		}
 
 		return rect;
+	}
+
+	@Override
+	public void setValue(Object value) {
+		if (value == null && cell != null)
+			cell.getEventSupport().removePropertyChangeListener(this);
+
+		super.setValue(value);
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
+			if (evt.getSource() == cell) {
+				if (evt.getOldValue() == null && evt.getNewValue() != null) {
+					int newIndex = -1;
+					if (evt instanceof CollectionElementAddedEvent) {
+						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+					}
+					// add the node to this parent
+					ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
+					if (evt.getNewValue() instanceof JRElementGroup) {
+						JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
+						ReportFactory.createElementsForBand(n, jrFrame.getChildren());
+					}
+				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+					// delete
+					for (INode n : getChildren()) {
+						if (n.getValue() == evt.getOldValue()) {
+							removeChild((ANode) n);
+							break;
+						}
+					}
+				} else {
+					// changed
+					for (INode n : getChildren()) {
+						if (n.getValue() == evt.getOldValue())
+							n.setValue(evt.getNewValue());
+					}
+				}
+			}
+		}
+		super.propertyChange(evt);
 	}
 
 	public JRBoxContainer getBoxContainer() {
