@@ -353,11 +353,15 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @param mute
 	 *          the mute
 	 */
-	public void handleJRException(IEditorInput editorInput, JRException e, boolean mute) {
+	public void handleJRException(IEditorInput editorInput, final JRException e, boolean mute) {
 		if (!mute) {
-			IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
-					"Your .jasper file contain errors, please fix them in xml editor.", e.getCause());
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error loading .jrxml to Model", null, status);
+			Display.getCurrent().asyncExec(new Runnable() {
+				public void run() {
+					IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
+							"Your .jasper file contain errors, please fix them in xml editor.", e.getCause());
+					ErrorDialog.openError(Display.getDefault().getActiveShell(), "Error loading .jrxml to Model", null, status);
+				}
+			});
 		}
 		try {
 			int lineNumber = 0;
@@ -375,7 +379,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 			marker.setAttribute(IMarker.USER_EDITABLE, false);
 
-			getSite().getWorkbenchWindow().getShell().getDisplay().asyncExec(new Runnable() {
+			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
 					gotoMarker(marker);
 					setActivePage(PAGE_XMLEDITOR);
