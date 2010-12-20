@@ -118,9 +118,10 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 	@Override
 	protected List getModelChildren() {
 		List<Object> list = new ArrayList<Object>();
-		for (INode node : ((ANode) getModel()).getChildren()) {
-			list.add(node);
-		}
+		if (getModel() != null)
+			for (INode node : ((ANode) getModel()).getChildren()) {
+				list.add(node);
+			}
 		return list;
 	}
 

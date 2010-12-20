@@ -155,8 +155,9 @@ public abstract class ANode implements INode {
 		if (parent == null) {
 			unregister();
 			getPropertyChangeSupport().removePropertyChangeListener(parent);
-			if (this.parent != null && this.parent.getChildren() != null)
+			if (this.parent != null && this.parent.getChildren() != null){
 				this.parent.getChildren().remove(this);
+			}
 			this.parent = null;
 			unsetDependents();
 		} else {
