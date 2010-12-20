@@ -76,7 +76,6 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class JDReportOutlineView.
  */
@@ -251,7 +250,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		hookOutlineViewer();
 		getViewer().setContents(editor.getModel());
 		if (outline instanceof Tree) {
-			((Tree) outline).getItem(0).setExpanded(true);
+			Tree tree = (Tree) outline;
+			if (tree.getItems() != null && tree.getItems().length > 0)
+				tree.getItem(0).setExpanded(true);
 		}
 	}
 
