@@ -48,6 +48,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -66,7 +67,9 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -437,7 +440,14 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				break;
 			}
 		}
+		
 		super.pageChange(newPageIndex);
+		setSite(getSite());
+		setInput(getEditorInput());
+		getSite().setSelectionProvider(new MultiPageSelectionProvider(this));
+		
+		
+
 	}
 
 	/**

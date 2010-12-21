@@ -220,6 +220,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		while (node != null) {
 			if (node instanceof IGraphicElement) {
 				Rectangle b = ((IGraphicElement) node).getBounds();
+				if (node instanceof IGraphicElementContainer) {
+					int x = ((IGraphicElementContainer) node).getLeftPadding();
+					int y = ((IGraphicElementContainer) node).getTopPadding();
+
+					b.setLocation(b.x + x, b.y + y);
+				}
 				return new Rectangle(b.x + jr.getX(), b.y + jr.getY(), jr.getWidth(), jr.getHeight());
 			}
 			node = node.getParent();

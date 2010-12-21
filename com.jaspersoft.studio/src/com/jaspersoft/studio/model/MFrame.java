@@ -29,7 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
  * The Class MFrame.
  */
 public class MFrame extends MGraphicElementLineBox implements IPastable, IPastableGraphic, IContainer,
-		IContainerEditPart {
+		IContainerEditPart, IGraphicElementContainer {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -128,6 +128,20 @@ public class MFrame extends MGraphicElementLineBox implements IPastable, IPastab
 	@Override
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
+	}
+
+	public int getTopPadding() {
+		JRDesignFrame frame = (JRDesignFrame) getValue();
+		if (frame != null)
+			return frame.getLineBox().getTopPadding();
+		return 0;
+	}
+
+	public int getLeftPadding() {
+		JRDesignFrame frame = (JRDesignFrame) getValue();
+		if (frame != null)
+			return frame.getLineBox().getLeftPadding();
+		return 0;
 	}
 
 }

@@ -65,23 +65,24 @@ public class LinePenSection extends AbstractSection {
 
 	@Override
 	protected void setInputC(IWorkbenchPart part, ISelection selection) {
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
-		Assert.isTrue(input instanceof EditPart);
-		Object model = ((EditPart) input).getModel();
-		Assert.isTrue(model instanceof MGraphicElementLinePen || model instanceof MStyle);
-		model = ((APropertyNode) model).getPropertyValue(MGraphicElementLinePen.LINE_PEN);
+		if (selection instanceof IStructuredSelection) {
+			Assert.isTrue(selection instanceof IStructuredSelection);
+			Object input = ((IStructuredSelection) selection).getFirstElement();
+			Assert.isTrue(input instanceof EditPart);
+			Object model = ((EditPart) input).getModel();
+			Assert.isTrue(model instanceof MGraphicElementLinePen || model instanceof MStyle);
+			model = ((APropertyNode) model).getPropertyValue(MGraphicElementLinePen.LINE_PEN);
 
-		EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
-		if (provider != null)
-			setEditDomain(provider.getEditDomain());
-		if (getElement() != model) {
-			if (getElement() != null)
-				getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
-			setElement((APropertyNode) model);
-			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+			EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
+			if (provider != null)
+				setEditDomain(provider.getEditDomain());
+			if (getElement() != model) {
+				if (getElement() != null)
+					getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+				setElement((APropertyNode) model);
+				getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
 		}
-
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class LinePenSection extends AbstractSection {
 		GridLayout layout = new GridLayout(6, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.LinePenSection_pen_color+":", SWT.RIGHT); //$NON-NLS-1$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.LinePenSection_pen_color + ":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -115,7 +116,7 @@ public class LinePenSection extends AbstractSection {
 		gd.widthHint = 30;
 		lineColor.setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(composite, Messages.LinePenSection_pen_style+":"); //$NON-NLS-1$
+		getWidgetFactory().createCLabel(composite, Messages.LinePenSection_pen_style + ":"); //$NON-NLS-1$
 		lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		lineStyle.setItems(EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
 		lineStyle.addSelectionListener(new SelectionListener() {
@@ -129,7 +130,7 @@ public class LinePenSection extends AbstractSection {
 		});
 		lineStyle.setToolTipText(Messages.LinePenSection_line_style);
 
-		label = getWidgetFactory().createCLabel(composite, Messages.LinePenSection_pen_width+":", SWT.RIGHT); //$NON-NLS-1$
+		label = getWidgetFactory().createCLabel(composite, Messages.LinePenSection_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
 
 		lineWidth = new Spinner(composite, SWT.BORDER);
 		lineWidth.setValues(0, 0, 5000, 1, 1, 100);
