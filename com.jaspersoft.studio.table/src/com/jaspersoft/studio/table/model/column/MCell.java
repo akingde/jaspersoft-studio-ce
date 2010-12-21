@@ -42,6 +42,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastableGraphic;
@@ -51,10 +52,14 @@ import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
+import com.jaspersoft.studio.table.model.MTableGroupFooter;
+import com.jaspersoft.studio.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.table.util.TableColumnNumerator;
+import com.jaspersoft.studio.table.util.TableColumnSize;
 
-public class MCell extends MColumn implements IGraphicElement, IPastableGraphic, ILineBox {
+public class MCell extends MColumn implements IGraphicElement, IPastableGraphic, ILineBox, IGraphicElementContainer {
 
 	/**
 	 * Instantiates a new m field.
@@ -203,12 +208,23 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 			} else if (id.equals(DesignCell.PROPERTY_HEIGHT)) {
 				MTable mtable = getMTable();
 
-				mtable.getTableManager().setHeight(cell, (Integer) value, (StandardBaseColumn) getValue());
+				AMCollection section = getSection();
+				if (section != null) {
+					Class<AMCollection> classType = (Class<AMCollection>) section.getClass();
+					String grName = null;
+					if (section instanceof MTableGroupHeader)
+						grName = ((MTableGroupHeader) section).getJrDesignGroup().getName();
+					if (section instanceof MTableGroupFooter)
+						grName = ((MTableGroupFooter) section).getJrDesignGroup().getName();
 
-				mtable.getTableManager().refresh();
-				TableColumnNumerator.renumerateColumnNames(mtable);
-				getPropertyChangeSupport().firePropertyChange(
-						new PropertyChangeEvent(this, DesignCell.PROPERTY_HEIGHT, null, value));
+					mtable.getTableManager().setHeight(cell, (Integer) value, (StandardBaseColumn) getValue(),
+							TableColumnSize.getType(classType), grName);
+
+					mtable.getTableManager().refresh();
+					TableColumnNumerator.renumerateColumnNames(mtable);
+					getPropertyChangeSupport().firePropertyChange(
+							new PropertyChangeEvent(this, DesignCell.PROPERTY_HEIGHT, null, value));
+				}
 			}
 		}
 		super.setPropertyValue(id, value);
@@ -311,5 +327,13 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 
 	public JRBoxContainer getBoxContainer() {
 		return cell;
+	}
+
+	public int getTopPadding() {
+		return cell.getLineBox().getTopPadding();
+	}
+
+	public int getLeftPadding() {
+		return cell.getLineBox().getLeftPadding();
 	}
 }

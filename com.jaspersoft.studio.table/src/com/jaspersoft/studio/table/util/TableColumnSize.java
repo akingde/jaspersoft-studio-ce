@@ -4,10 +4,20 @@ import java.util.List;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
+import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
+
+import com.jaspersoft.studio.table.model.AMCollection;
+import com.jaspersoft.studio.table.model.MTableColumnFooter;
+import com.jaspersoft.studio.table.model.MTableColumnHeader;
+import com.jaspersoft.studio.table.model.MTableDetail;
+import com.jaspersoft.studio.table.model.MTableFooter;
+import com.jaspersoft.studio.table.model.MTableGroupFooter;
+import com.jaspersoft.studio.table.model.MTableGroupHeader;
+import com.jaspersoft.studio.table.model.MTableHeader;
 
 public class TableColumnSize {
 	public static final int TABLE_HEADER = 0;
@@ -17,6 +27,24 @@ public class TableColumnSize {
 	public static final int COLUMN_DETAIL = 4;
 	public static final int COLUMN_GROUP_HEADER = 5;
 	public static final int COLUMN_GROUP_FOOTER = 6;
+
+	public static int getType(Class<AMCollection> c) {
+		if (c.isAssignableFrom(MTableHeader.class))
+			return TABLE_HEADER;
+		if (c.isAssignableFrom(MTableFooter.class))
+			return TABLE_FOOTER;
+		if (c.isAssignableFrom(MTableColumnHeader.class))
+			return COLUMN_HEADER;
+		if (c.isAssignableFrom(MTableColumnFooter.class))
+			return COLUMN_FOOTER;
+		if (c.isAssignableFrom(MTableDetail.class))
+			return COLUMN_DETAIL;
+		if (c.isAssignableFrom(MTableGroupHeader.class))
+			return COLUMN_GROUP_HEADER;
+		if (c.isAssignableFrom(MTableGroupFooter.class))
+			return COLUMN_GROUP_FOOTER;
+		return -1;
+	}
 
 	public static int getInitGroupHeight(StandardTable jrTable, StandardColumnGroup jrGroup, int type, String grName) {
 		int maxh = 0;
@@ -118,6 +146,41 @@ public class TableColumnSize {
 		if (cell != null)
 			return cell.getHeight();
 		return -1;
+	}
+
+	public static void setCellHeightDelta(BaseColumn bc, int type, String grName, int delta) {
+		Cell cell = null;
+		switch (type) {
+		case TABLE_HEADER:
+			cell = bc.getTableHeader();
+			break;
+		case TABLE_FOOTER:
+			cell = bc.getTableFooter();
+			break;
+		case COLUMN_HEADER:
+			cell = bc.getColumnHeader();
+			break;
+		case COLUMN_FOOTER:
+			cell = bc.getColumnFooter();
+			break;
+		case COLUMN_DETAIL:
+			if (bc instanceof StandardColumn)
+				cell = ((StandardColumn) bc).getDetailCell();
+			break;
+		case COLUMN_GROUP_HEADER:
+			cell = bc.getGroupHeader(grName);
+			break;
+		case COLUMN_GROUP_FOOTER:
+			cell = bc.getGroupFooter(grName);
+			break;
+		}
+		if (cell != null) {
+			DesignCell designCell = (DesignCell) cell;
+			int height = cell.getHeight() + delta;
+			if (height < 0)
+				height = 0;
+			designCell.setHeight(height);
+		}
 	}
 
 }

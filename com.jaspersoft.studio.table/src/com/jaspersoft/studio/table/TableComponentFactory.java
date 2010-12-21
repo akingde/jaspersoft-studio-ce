@@ -344,7 +344,7 @@ public class TableComponentFactory implements IComponentFactory {
 			if (parent instanceof MColumn && ((MColumn) parent).getMTable() != null)
 				return new CreateColumnCommand((MColumn) parent, (MColumn) child, newIndex);
 		}
-		if (child instanceof MGraphicElement && parent instanceof MCell && !(parent instanceof MColumnGroupCell))
+		if (child instanceof MGraphicElement && parent instanceof MCell)
 			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
 			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);

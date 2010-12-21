@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
@@ -23,6 +24,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.table.model.MTable;
+import com.jaspersoft.studio.table.util.TableColumnSize;
 
 public class TableManager {
 	private StandardTable table;
@@ -369,45 +371,61 @@ public class TableManager {
 		return false;
 	}
 
-	public void setHeight(DesignCell cell, int height, StandardBaseColumn col) {
+	public void setHeight(DesignCell cell, int height, StandardBaseColumn col, int type, String grName) {
 		if (height >= 0) {
 			int delta = height - cell.getHeight();
-			int y = boundsMap.get(cell).y;
-			int bY = y + cell.getHeight();
-			List<Cell> cells = new ArrayList<Cell>();
-			for (Cell c : boundsMap.keySet()) {
-				int cy = boundsMap.get(c).y;
-				int cbx = c.getHeight() + cy;
-				if (cy >= y && cbx <= bY) {
-					cells.add(c);
-					if (delta >= 0 && cbx == bY) {
-						if (c.getHeight() == 0 && !isBottomCell(c, col, table.getColumns()))
-							continue;
-						((DesignCell) c).setHeight(c.getHeight() + delta);
-					} else if (delta < 0) {
-						int dy = bY + delta;
-						if (cy > dy)
-							((DesignCell) c).setHeight(0);
-						else
-							((DesignCell) c).setHeight(dy - cy);
-					}
-				}
+			setColumnHeight(table.getColumns(), delta, type, grName, col);
+
+			// int y = boundsMap.get(cell).y;
+			// int bY = y + cell.getHeight();
+			// List<Cell> cells = new ArrayList<Cell>();
+			// Set<Cell> keySet = boundsMap.keySet();
+			// for (Cell c : keySet) {
+			// int cy = boundsMap.get(c).y;
+			// int cbx = c.getHeight() + cy;
+			// if (cy >= y && cbx <= bY) {
+			// cells.add(c);
+			// if (delta >= 0 && cbx == bY) {
+			// // if (c.getHeight() == 0 && !isBottomCell(c, col, table.getColumns()))
+			// // continue;
+			// // ((DesignCell) c).setHeight(c.getHeight() + delta);
+			// } else if (delta < 0) {
+			// int dy = bY + delta;
+			// if (cy > dy)
+			// ((DesignCell) c).setHeight(0);
+			// else
+			// ((DesignCell) c).setHeight(dy - cy);
+			// }
+			// }
+			// }
+		}
+	}
+
+	private void setColumnHeight(List<BaseColumn> columns, int delta, int type, String grName, StandardBaseColumn col) {
+		for (BaseColumn bc : columns) {
+			if (bc instanceof StandardColumn)
+				TableColumnSize.setCellHeightDelta(bc, type, grName, delta);
+			else if (bc instanceof StandardColumnGroup) {
+				if (col == bc) {
+					TableColumnSize.setCellHeightDelta(bc, type, grName, delta);
+				} else
+					setColumnHeight(((StandardColumnGroup) bc).getColumns(), delta, type, grName, col);
 			}
 		}
 	}
 
 	private boolean isBottomCell(Cell c, StandardBaseColumn col, List<BaseColumn> columns) {
-//		if (col instanceof StandardColumnGroup)
-//			return false;
-//		for (BaseColumn bc : columns) {
-//			if (bc == col)
-//				return true;
-//			if (bc instanceof StandardColumnGroup) {
-//				if (isBottomCell(c, col, ((StandardColumnGroup) bc).getColumns()))
-//					return true;
-//			}
-//		}
+		if (col instanceof StandardColumnGroup)
+			return false;
+		for (BaseColumn bc : columns) {
+			if (bc == col)
+				return true;
+			if (bc instanceof StandardColumnGroup) {
+				if (isBottomCell(c, col, ((StandardColumnGroup) bc).getColumns()))
+					return true;
+			}
+		}
 
-		return true;
+		return false;
 	}
 }

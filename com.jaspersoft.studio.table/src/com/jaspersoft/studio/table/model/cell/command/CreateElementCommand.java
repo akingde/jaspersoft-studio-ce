@@ -1,6 +1,7 @@
 package com.jaspersoft.studio.table.model.cell.command;
 
 import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Point;
@@ -13,6 +14,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 public class CreateElementCommand extends Command {
 	private MGraphicElement srcNode;
 	private JRDesignElement jrElement;
+	private StandardBaseColumn jrColumn;
 
 	private DesignCell jrCell;
 
@@ -36,6 +38,7 @@ public class CreateElementCommand extends Command {
 		this.jrCell = destNode.getCell();
 		this.index = index;
 		this.srcNode = srcNode;
+		this.jrColumn = (StandardBaseColumn) destNode.getValue();
 	}
 
 	/**
@@ -50,7 +53,7 @@ public class CreateElementCommand extends Command {
 					location = new Point(0, 0);
 				jrElement.setX(location.x);
 				jrElement.setY(location.y);
-				// jrElement.setWidth(jrCell.getWidth());
+				jrElement.setWidth(jrColumn.getWidth());
 				jrElement.setHeight(jrCell.getHeight());
 			}
 		}
