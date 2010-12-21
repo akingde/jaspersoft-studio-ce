@@ -47,6 +47,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
@@ -62,7 +63,7 @@ import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MCell extends APropertyNode implements IGraphicElement, IPastable, IPastableGraphic, IContainer,
-		IContainerEditPart, ILineBox {
+		IContainerEditPart, ILineBox, IGraphicElementContainer {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -356,5 +357,23 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 
 	public JRBoxContainer getBoxContainer() {
 		return (JRBoxContainer) getValue();
+	}
+
+	public int getTopPadding() {
+		JRDesignCellContents c = null;
+		if (getValue() != null) {
+			c = (JRDesignCellContents) getValue();
+			return c.getLineBox().getTopPadding();
+		}
+		return 0;
+	}
+
+	public int getLeftPadding() {
+		JRDesignCellContents c = null;
+		if (getValue() != null) {
+			c = (JRDesignCellContents) getValue();
+			return c.getLineBox().getLeftPadding();
+		}
+		return 0;
 	}
 }
