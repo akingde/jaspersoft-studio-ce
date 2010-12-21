@@ -164,7 +164,7 @@ public class BordersSection extends AbstractSection {
 						pe.setY(b.y + 10);
 						pe.setWidth(b.width - 20);
 						pe.setHeight(b.height - 20);
-						if (getElement() instanceof ILineBox)
+						if (getElement() instanceof ILineBox && getElement() != null)
 							bd.drawBox(graphics2d, ((ILineBox) getElement()).getBoxContainer().getLineBox(), pe);
 					} else {
 						graphics.drawRectangle(0, 0, 100, 100);
