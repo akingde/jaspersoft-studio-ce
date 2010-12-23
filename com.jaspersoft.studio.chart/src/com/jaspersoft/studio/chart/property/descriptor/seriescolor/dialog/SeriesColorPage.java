@@ -90,7 +90,7 @@ public class SeriesColorPage extends WizardPage {
 			case 0:
 				return clb.getText(Colors.getSWTRGB4AWTGBColor(((JRBaseSeriesColor) element).getColor()));
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 
@@ -128,8 +128,8 @@ public class SeriesColorPage extends WizardPage {
 
 	protected SeriesColorPage(String pageName) {
 		super(pageName);
-		setTitle("Series Colors");
-		setDescription("Series Colors.");
+		setTitle(Messages.common_series_colors);
+		setDescription(Messages.SeriesColorPage_description);
 
 	}
 
@@ -152,7 +152,7 @@ public class SeriesColorPage extends WizardPage {
 		table.setLayoutData(gd);
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText("&add");
+		addB.setText(Messages.SeriesColorPage_add);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 100;
 		addB.setLayoutData(gridData);
@@ -179,7 +179,7 @@ public class SeriesColorPage extends WizardPage {
 		});
 
 		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText("&delete");
+		delB.setText(Messages.SeriesColorPage_delete);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 100;
 		delB.setLayoutData(gridData);
@@ -208,13 +208,13 @@ public class SeriesColorPage extends WizardPage {
 						tableViewer.setSelection(new StructuredSelection(sp));
 						// cursor.setSelection(table.getSelectionIndex(), 0);
 					} else
-						setMessage("Table is empty");
+						setMessage(Messages.SeriesColorPage_table_is_empty);
 				}
 			}
 		});
 
 		Button upB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		upB.setText("Move &Up");
+		upB.setText(Messages.SeriesColorPage_move_up);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 100;
 		upB.setLayoutData(gridData);
@@ -247,7 +247,7 @@ public class SeriesColorPage extends WizardPage {
 		});
 
 		Button downB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		downB.setText("Move &Down");
+		downB.setText(Messages.SeriesColorPage_move_down);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 100;
 		downB.setLayoutData(gridData);
@@ -304,7 +304,7 @@ public class SeriesColorPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[1];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText("Color");
+		column[0].setText(Messages.SeriesColorPage_color);
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++) {
@@ -360,9 +360,9 @@ public class SeriesColorPage extends WizardPage {
 
 			public Object getValue(Object element, String property) {
 				JRBaseSeriesColor prop = (JRBaseSeriesColor) element;
-				if ("COLOR".equals(property))
+				if ("COLOR".equals(property)) //$NON-NLS-1$
 					return Colors.getSWTRGB4AWTGBColor(prop.getColor());
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 			public void modify(Object element, String property, Object value) {
@@ -371,7 +371,7 @@ public class SeriesColorPage extends WizardPage {
 		});
 
 		viewer.setCellEditors(new CellEditor[] { new ColorCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "COLOR" });
+		viewer.setColumnProperties(new String[] { "COLOR" }); //$NON-NLS-1$
 	}
 
 	private void fillTable(Table table) {
@@ -391,7 +391,7 @@ public class SeriesColorPage extends WizardPage {
 				switch (event.type) {
 				case SWT.MouseDown:
 					Event e = new Event();
-					e.item = (TableItem) label.getData("_TABLEITEM");
+					e.item = (TableItem) label.getData("_TABLEITEM"); //$NON-NLS-1$
 					// Assuming table is single select, set the selection as if
 					// the mouse down event went through to the table
 					table.setSelection(new TableItem[] { (TableItem) e.item });
@@ -424,7 +424,7 @@ public class SeriesColorPage extends WizardPage {
 				case SWT.MouseHover: {
 					TableItem item = table.getItem(new Point(event.x, event.y));
 					String description = getDescription(item);
-					if (item != null && !description.equals("")) {
+					if (item != null && !description.equals("")) { //$NON-NLS-1$
 
 						if (tip != null && !tip.isDisposed())
 							tip.dispose();
@@ -433,7 +433,7 @@ public class SeriesColorPage extends WizardPage {
 						label = new Label(tip, SWT.NONE);
 						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-						label.setData("_TABLEITEM", item);
+						label.setData("_TABLEITEM", item); //$NON-NLS-1$
 
 						label.setText(description);
 						label.addListener(SWT.MouseExit, labelListener);
@@ -461,6 +461,6 @@ public class SeriesColorPage extends WizardPage {
 		// if (p.getProperty().equals(key))
 		// return p.getDescription();
 		// }
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }

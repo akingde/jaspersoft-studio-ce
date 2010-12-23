@@ -45,13 +45,13 @@ public class SeriesColorEditor extends Wizard {
 
 	public SeriesColorEditor() {
 		super();
-		setWindowTitle("Series Colors");
+		setWindowTitle(Messages.common_series_colors);
 		setNeedsProgressMonitor(false);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new SeriesColorPage("SeriesColor");
+		page0 = new SeriesColorPage("SeriesColor"); //$NON-NLS-1$
 		page0.setValue(value);
 		addPage(page0);
 	}

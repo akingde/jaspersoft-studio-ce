@@ -4,13 +4,12 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.chart.model.command.messages"; //$NON-NLS-1$
-	public static String ChartWizard_window_title;
+	public static String common_chartaxis_wizard;
 	public static String ChartWizardPage_area_chart;
 	public static String ChartWizardPage_bar_chart;
 	public static String ChartWizardPage_bar3d_chart;
 	public static String ChartWizardPage_bubble_chart;
 	public static String ChartWizardPage_candlestick_chart;
-	public static String ChartWizardPage_chart_wizard;
 	public static String ChartWizardPage_chart_wizard_description;
 	public static String ChartWizardPage_highlow_chart;
 	public static String ChartWizardPage_line_chart;

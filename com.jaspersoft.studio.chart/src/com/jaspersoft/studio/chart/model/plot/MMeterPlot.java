@@ -94,7 +94,7 @@ public class MMeterPlot extends MChartPlot {
 		desc.add(needleColorD);
 
 		ColorPropertyDescriptor valueColorD = new ColorPropertyDescriptor(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
-				+ JRDesignValueDisplay.PROPERTY_COLOR, Messages.MMeterPlot_value_color, NullEnum.NULL);
+				+ JRDesignValueDisplay.PROPERTY_COLOR, Messages.common_value_color, NullEnum.NULL);
 		valueColorD.setDescription(Messages.MMeterPlot_value_color_description);
 		desc.add(valueColorD);
 
@@ -104,7 +104,7 @@ public class MMeterPlot extends MChartPlot {
 		desc.add(tickLabelFontD);
 
 		FontPropertyDescriptor valueFontD = new FontPropertyDescriptor(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
-				+ JRDesignValueDisplay.PROPERTY_FONT, Messages.MMeterPlot_value_font);
+				+ JRDesignValueDisplay.PROPERTY_FONT, Messages.common_value_font);
 		valueFontD.setDescription(Messages.MMeterPlot_value_font_description);
 		desc.add(valueFontD);
 
@@ -125,13 +125,13 @@ public class MMeterPlot extends MChartPlot {
 
 		JRExpressionPropertyDescriptor dataRangeHighExprD = new JRExpressionPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION, //$NON-NLS-1$
-				Messages.MMeterPlot_data_range_high_expression);
+				Messages.common_data_range_high_expression);
 		dataRangeHighExprD.setDescription(Messages.MMeterPlot_data_range_high_expression_description);
 		desc.add(dataRangeHighExprD);
 
 		JRExpressionPropertyDescriptor dataRangeLowExprD = new JRExpressionPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION, //$NON-NLS-1$
-				Messages.MMeterPlot_data_range_low_expression);
+				Messages.common_data_range_low_expression);
 		dataRangeLowExprD.setDescription(Messages.MMeterPlot_data_range_low_expression_description);
 		desc.add(dataRangeLowExprD);
 
@@ -141,7 +141,7 @@ public class MMeterPlot extends MChartPlot {
 		desc.add(unitsD);
 
 		NTextPropertyDescriptor maskD = new NTextPropertyDescriptor(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
-				+ JRDesignValueDisplay.PROPERTY_MASK, Messages.MMeterPlot_value_mask);
+				+ JRDesignValueDisplay.PROPERTY_MASK, Messages.common_value_mask);
 		maskD.setDescription(Messages.MMeterPlot_value_mask_description);
 		desc.add(maskD);
 

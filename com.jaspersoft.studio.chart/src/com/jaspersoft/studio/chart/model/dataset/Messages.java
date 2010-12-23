@@ -4,6 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.chart.model.dataset.messages"; //$NON-NLS-1$
+	public static String common_value_expression;
 	public static String MChartHighLowDataset_chart_highlow_dataset_category;
 	public static String MChartHighLowDataset_close_expression;
 	public static String MChartHighLowDataset_close_expression_description;
@@ -38,13 +39,11 @@ public class Messages extends NLS {
 	public static String MChartPieDataset_other_section_hyperlink_description;
 	public static String MChartPieDataset_section_hyperlink;
 	public static String MChartPieDataset_section_hyperlink_description;
-	public static String MChartPieDataset_value_expression;
 	public static String MChartPieDataset_value_expression_description;
 	public static String MChartTimeSeriesDataset_chart_time_period_dataset_category;
 	public static String MChartTimeSeriesDataset_time_period;
 	public static String MChartTimeSeriesDataset_time_period_description;
 	public static String MChartValueDataset_chart_value_dataset_category;
-	public static String MChartValueDataset_value_expression;
 	public static String MChartValueDataset_value_expression_description;
 	static {
 		// initialize resource bundle

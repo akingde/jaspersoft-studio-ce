@@ -75,106 +75,106 @@ public class MBarPlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, Messages.MBarPlot_category_axis_label_color, NullEnum.NULL);
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR, Messages.common_category_axis_label_color, NullEnum.NULL);
 		catAxisLabelColorD.setDescription(Messages.MBarPlot_category_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor catAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION, Messages.MBarPlot_category_axis_label_expression);
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION, Messages.common_category_axis_label_expression);
 		catAxisLabelExprD.setDescription(Messages.MBarPlot_category_axis_label_expression_description);
 		desc.add(catAxisLabelExprD);
 
 		FontPropertyDescriptor catAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, Messages.MBarPlot_category_axis_label_font);
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, Messages.common_category_axis_label_font);
 		catAxisLabelFontD.setDescription(Messages.MBarPlot_category_axis_label_font_description);
 		desc.add(catAxisLabelFontD);
 
 		ColorPropertyDescriptor catAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.MBarPlot_category_axis_tick_label_color,
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR, Messages.common_category_axis_tick_label_color,
 				NullEnum.NULL);
 		catAxisTickLabelColorD.setDescription(Messages.MBarPlot_category_axis_tick_label_color_description);
 		desc.add(catAxisTickLabelColorD);
 
 		FontPropertyDescriptor catAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, Messages.MBarPlot_category_axis_tick_label_font);
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, Messages.common_category_axis_tick_label_font);
 		catAxisTickLabelFontD.setDescription(Messages.MBarPlot_category_axis_tick_label_font_description);
 		desc.add(catAxisTickLabelFontD);
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, Messages.MBarPlot_category_axis_line_color, NullEnum.NULL);
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR, Messages.common_category_axis_line_color, NullEnum.NULL);
 		catAxisLineColorD.setDescription(Messages.MBarPlot_category_axis_line_color_description);
 		desc.add(catAxisLineColorD);
 
 		ColorPropertyDescriptor valAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.MBarPlot_value_axis_label_color, NullEnum.NULL);
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.common_value_axis_label_color, NullEnum.NULL);
 		valAxisLabelColorD.setDescription(Messages.MBarPlot_value_axis_label_color_description);
 		desc.add(valAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor valAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, Messages.MBarPlot_category_value_axis_label_expression);
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, Messages.common_category_value_axis_label_expression);
 		valAxisLabelExprD.setDescription(Messages.MBarPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
 
 		FontPropertyDescriptor valAxisLabelFontD = new FontPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, Messages.MBarPlot_value_axis_label_font);
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, Messages.common_value_axis_label_font);
 		valAxisLabelFontD.setDescription(Messages.MBarPlot_value_axis_label_font_description);
 		desc.add(valAxisLabelFontD);
 
 		ColorPropertyDescriptor valAxisTickLabelColorD = new ColorPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.MBarPlot_value_axis_tick_label_color,
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR, Messages.common_value_axis_tick_label_color,
 				NullEnum.NULL);
 		valAxisTickLabelColorD.setDescription(Messages.MBarPlot_value_axis_tick_label_color_description);
 		desc.add(valAxisTickLabelColorD);
 
 		FontPropertyDescriptor valAxisTickLabelFontD = new FontPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, Messages.MBarPlot_value_axis_tick_label_font);
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, Messages.common_value_axis_tick_label_font);
 		valAxisTickLabelFontD.setDescription(Messages.MBarPlot_value_axis_tick_label_font_description);
 		desc.add(valAxisTickLabelFontD);
 
 		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignBarPlot.PROPERTY_ITEM_LABEL,
-				Messages.MBarPlot_item_label);
+				Messages.common_item_label);
 		itemLabelD.setDescription(Messages.MBarPlot_item_label_description);
 		desc.add(itemLabelD);
 
 		ColorPropertyDescriptor valAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, Messages.MBarPlot_value_axis_line_color, NullEnum.NULL);
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR, Messages.common_value_axis_line_color, NullEnum.NULL);
 		valAxisLineColorD.setDescription(Messages.MBarPlot_value_axis_line_color_description);
 		desc.add(valAxisLineColorD);
 
 		JRExpressionPropertyDescriptor rangeAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, Messages.MBarPlot_range_axis_minvalue_expression);
+				JRDesignBarPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, Messages.common_range_axis_minvalue_expression);
 		rangeAxisMinExprD.setDescription(Messages.MBarPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, Messages.MBarPlot_range_axis_maxvalue_expression);
+				JRDesignBarPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, Messages.common_range_axis_maxvalue_expression);
 		rangeAxisMaxExprD.setDescription(Messages.MBarPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.MBarPlot_domain_axis_minvalue_expression);
+				JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.common_domain_axis_minvalue_expression);
 		domainAxisMinExprD.setDescription(Messages.MBarPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.MBarPlot_domain_axis_maxvalue_expression);
+				JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.common_domain_axis_maxvalue_expression);
 		domainAxisMaxExprD.setDescription(Messages.MBarPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
 
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
-				Messages.MBarPlot_category_axis_vertical_tick_labels, NullEnum.NOTNULL);
+				Messages.common_category_axis_vertical_tick_labels, NullEnum.NOTNULL);
 		catAxisVertTickLabelD.setDescription(Messages.MBarPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.MBarPlot_value_axis_vertical_tick_labels,
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.common_value_axis_vertical_tick_labels,
 				NullEnum.NOTNULL);
 		valAxisVertTickLabelD.setDescription(Messages.MBarPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(JRDesignBarPlot.PROPERTY_SHOW_LABELS,
-				Messages.MBarPlot_show_labels, NullEnum.NULL);
+				Messages.common_show_labels, NullEnum.NULL);
 		showLabelsD.setDescription(Messages.MBarPlot_show_labels_description);
 		desc.add(showLabelsD);
 
@@ -189,17 +189,17 @@ public class MBarPlot extends MChartPlot {
 		desc.add(showTickMarksD);
 
 		NTextPropertyDescriptor catAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK, Messages.MBarPlot_category_axis_tick_label_mask);
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK, Messages.common_category_axis_tick_label_mask);
 		catAxisTickLabelMaskD.setDescription(Messages.MBarPlot_category_axis_tick_label_mask_description);
 		desc.add(catAxisTickLabelMaskD);
 
 		NTextPropertyDescriptor valAxisTickLabelMaskD = new NTextPropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, Messages.MBarPlot_value_axis_tick_label_mask);
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK, Messages.common_value_axis_tick_label_mask);
 		valAxisTickLabelMaskD.setDescription(Messages.MBarPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
 		DoublePropertyDescriptor catAxisTickLabelRotation = new DoublePropertyDescriptor(
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, Messages.MBarPlot_category_axis_tick_label_rotation);
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION, Messages.common_category_axis_tick_label_rotation);
 		catAxisTickLabelRotation.setDescription(Messages.MBarPlot_category_axis_tick_label_rotation_description);
 		desc.add(catAxisTickLabelRotation);
 

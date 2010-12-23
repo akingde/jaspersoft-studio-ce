@@ -64,27 +64,27 @@ public class MPie3DPlot extends MChartPlot {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignPie3DPlot.PROPERTY_ITEM_LABEL, Messages.MPie3DPlot_item_label);
+		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignPie3DPlot.PROPERTY_ITEM_LABEL, Messages.common_item_label);
 		itemLabelD.setDescription(Messages.MPie3DPlot_item_label_description);
 		desc.add(itemLabelD);
 
 		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(JRDesignPie3DPlot.PROPERTY_SHOW_LABELS,
-				Messages.MPie3DPlot_show_labels, NullEnum.NULL);
+				Messages.common_show_labels, NullEnum.NULL);
 		showLabelsD.setDescription(Messages.MPie3DPlot_show_labels_description);
 		desc.add(showLabelsD);
 
 		CheckBoxPropertyDescriptor circularD = new CheckBoxPropertyDescriptor(JRDesignPie3DPlot.PROPERTY_CIRCULAR,
-				Messages.MPie3DPlot_circular, NullEnum.NULL);
+				Messages.common_circular, NullEnum.NULL);
 		circularD.setDescription(Messages.MPie3DPlot_circular_description);
 		desc.add(circularD);
 
 		NTextPropertyDescriptor legendLabelFormatD = new NTextPropertyDescriptor(
-				JRDesignPie3DPlot.PROPERTY_LEGEND_LABEL_FORMAT, Messages.MPie3DPlot_legend_label_format);
+				JRDesignPie3DPlot.PROPERTY_LEGEND_LABEL_FORMAT, Messages.common_legend_label_format);
 		legendLabelFormatD.setDescription(Messages.MPie3DPlot_legend_label_format_description);
 		desc.add(legendLabelFormatD);
 
 		NTextPropertyDescriptor labelFormatD = new NTextPropertyDescriptor(JRDesignPie3DPlot.PROPERTY_LABEL_FORMAT,
-				Messages.MPie3DPlot_label_format);
+				Messages.common_label_format);
 		labelFormatD.setDescription(Messages.MPie3DPlot_label_format_description);
 		desc.add(labelFormatD);
 

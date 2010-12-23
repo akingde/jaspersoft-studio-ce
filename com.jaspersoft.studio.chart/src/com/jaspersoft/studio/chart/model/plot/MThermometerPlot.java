@@ -81,29 +81,29 @@ public class MThermometerPlot extends MChartPlot {
 		desc.add(mercuryColorD);
 
 		ColorPropertyDescriptor valueColorD = new ColorPropertyDescriptor(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY
-				+ "." + JRDesignValueDisplay.PROPERTY_COLOR, Messages.MThermometerPlot_value_color, NullEnum.NULL); //$NON-NLS-1$
+				+ "." + JRDesignValueDisplay.PROPERTY_COLOR, Messages.common_value_color, NullEnum.NULL); //$NON-NLS-1$
 		valueColorD.setDescription(Messages.MThermometerPlot_value_color_description);
 		desc.add(valueColorD);
 
 		FontPropertyDescriptor valueFontD = new FontPropertyDescriptor(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
-				+ JRDesignValueDisplay.PROPERTY_FONT, Messages.MThermometerPlot_value_font);
+				+ JRDesignValueDisplay.PROPERTY_FONT, Messages.common_value_font);
 		valueFontD.setDescription(Messages.MThermometerPlot_value_font_description);
 		desc.add(valueFontD);
 
 		NTextPropertyDescriptor maskD = new NTextPropertyDescriptor(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
-				+ JRDesignValueDisplay.PROPERTY_MASK, Messages.MThermometerPlot_value_mask);
+				+ JRDesignValueDisplay.PROPERTY_MASK, Messages.common_value_mask);
 		maskD.setDescription(Messages.MThermometerPlot_value_mask_description);
 		desc.add(maskD);
 
 		JRExpressionPropertyDescriptor dataRangeHighExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION, //$NON-NLS-1$
-				Messages.MThermometerPlot_data_range_high_expression);
+				Messages.common_data_range_high_expression);
 		dataRangeHighExprD.setDescription(Messages.MThermometerPlot_data_range_high_expression_description);
 		desc.add(dataRangeHighExprD);
 
 		JRExpressionPropertyDescriptor dataRangeLowExprD = new JRExpressionPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION, //$NON-NLS-1$
-				Messages.MThermometerPlot_data_range_low_expression);
+				Messages.common_data_range_low_expression);
 		dataRangeLowExprD.setDescription(Messages.MThermometerPlot_data_range_low_expression_description);
 		desc.add(dataRangeLowExprD);
 

@@ -78,7 +78,7 @@ public class MChartPieDataset extends MChartDataset {
 		desc.add(oLblExprD);
 
 		JRExpressionPropertyDescriptor valExpD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION, Messages.MChartPieDataset_value_expression);
+				JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION, Messages.common_value_expression);
 		valExpD.setDescription(Messages.MChartPieDataset_value_expression_description);
 		desc.add(valExpD);
 

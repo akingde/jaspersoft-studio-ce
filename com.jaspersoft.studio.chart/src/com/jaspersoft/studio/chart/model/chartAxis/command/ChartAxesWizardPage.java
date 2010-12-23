@@ -46,7 +46,7 @@ public class ChartAxesWizardPage extends WizardPage {
 
 	protected ChartAxesWizardPage() {
 		super("chartaxiswizard"); //$NON-NLS-1$
-		setTitle(Messages.ChartAxesWizardPage_chartaxis_wizard);
+		setTitle(Messages.common_chartaxis_wizard);
 		setDescription(Messages.ChartAxesWizardPage_chartaxis_wizard_description);
 	}
 

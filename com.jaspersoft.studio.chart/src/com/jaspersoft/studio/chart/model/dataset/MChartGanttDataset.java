@@ -18,7 +18,7 @@ public class MChartGanttDataset extends MChartDataset {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("ganttSeries")) {
+		if (evt.getPropertyName().equals("ganttSeries")) { //$NON-NLS-1$
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;
