@@ -33,7 +33,7 @@ public class BarcodeWizard extends Wizard {
 
 	public BarcodeWizard() {
 		super();
-		setWindowTitle(Messages.BarcodeWizard_window_title);
+		setWindowTitle(Messages.common_barcode_wizard);
 	}
 
 	@Override

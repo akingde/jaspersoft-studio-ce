@@ -84,7 +84,7 @@ public class MCodabar extends MBarcode4j {
 		super.createPropertyDescriptors(desc, defaultsMap);
 		
 		DoublePropertyDescriptor wideFactorD = new DoublePropertyDescriptor(CodabarComponent.PROPERTY_WIDE_FACTOR,
-				Messages.MCodabar_wide_factor);
+				Messages.common_wide_factor);
 		wideFactorD.setDescription(Messages.MCodabar_wide_factor_description);
 		desc.add(wideFactorD);
 

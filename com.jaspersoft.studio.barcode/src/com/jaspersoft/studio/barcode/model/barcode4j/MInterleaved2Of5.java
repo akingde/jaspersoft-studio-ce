@@ -87,17 +87,17 @@ public class MInterleaved2Of5 extends MBarcode4j {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(
-				Interleaved2Of5Component.PROPERTY_CHECKSUM_MODE, Messages.MInterleaved2Of5_checksum_mode, ChecksumMode.getItems());
+				Interleaved2Of5Component.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MInterleaved2Of5_checksum_mode_description);
 		desc.add(checksumModeD);
 
 		DoublePropertyDescriptor wideFactorD = new DoublePropertyDescriptor(Interleaved2Of5Component.PROPERTY_WIDE_FACTOR,
-				Messages.MInterleaved2Of5_wide_factor);
+				Messages.common_wide_factor);
 		wideFactorD.setDescription(Messages.MInterleaved2Of5_wide_factor_description);
 		desc.add(wideFactorD);
 
 		CheckBoxPropertyDescriptor displayChecksumD = new CheckBoxPropertyDescriptor(
-				Interleaved2Of5Component.PROPERTY_DISPLAY_CHECKSUM, Messages.MInterleaved2Of5_display_checksum, NullEnum.NULL);
+				Interleaved2Of5Component.PROPERTY_DISPLAY_CHECKSUM, Messages.common_display_checksum, NullEnum.NULL);
 		displayChecksumD.setDescription(Messages.MInterleaved2Of5_display_checksum_description);
 		desc.add(displayChecksumD);
 

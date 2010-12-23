@@ -21,7 +21,7 @@ package com.jaspersoft.studio.barcode.model.barcode4j;
 
 public class TextPosition {
 	public static String[] getItems() {
-		return new String[] { Messages.TextPosition_default, Messages.TextPosition_none, Messages.TextPosition_bottom, Messages.TextPosition_top };
+		return new String[] { Messages.common_default, Messages.TextPosition_none, Messages.common_bottom, Messages.common_top };
 	}
 
 	public static int getPos4TextPosition(String textPosition) {

@@ -82,7 +82,7 @@ public class MUPCE extends MBarcode4j {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(UPCEComponent.PROPERTY_CHECKSUM_MODE,
-				Messages.MUPCE_checksum_mode, ChecksumMode.getItems());
+				Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MUPCE_checksum_mode_description);
 		desc.add(checksumModeD);
 

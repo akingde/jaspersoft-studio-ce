@@ -84,17 +84,17 @@ public class MCode39 extends MBarcode4j {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 		DoublePropertyDescriptor wideFactorD = new DoublePropertyDescriptor(Code39Component.PROPERTY_WIDE_FACTOR,
-				Messages.MCode39_wide_factor);
+				Messages.common_wide_factor);
 		wideFactorD.setDescription(Messages.MCode39_wide_factor_description);
 		desc.add(wideFactorD);
 
 		DoublePropertyDescriptor intercharD = new DoublePropertyDescriptor(Code39Component.PROPERTY_INTERCHAR_GAP_WIDTH,
-				Messages.MCode39_interchar_gap_witdh);
-		intercharD.setDescription(Messages.MCode39_interchar_gap_witdh_description);
+				Messages.common_interchar_gap_width);
+		intercharD.setDescription(Messages.MCode39_interchar_gap_width_description);
 		desc.add(intercharD);
 
 		CheckBoxPropertyDescriptor displayChecksumD = new CheckBoxPropertyDescriptor(
-				Code39Component.PROPERTY_DISPLAY_CHECKSUM, Messages.MCode39_display_checksum, NullEnum.NULL);
+				Code39Component.PROPERTY_DISPLAY_CHECKSUM, Messages.common_display_checksum, NullEnum.NULL);
 		displayChecksumD.setDescription(Messages.MCode39_display_checksum_description);
 		desc.add(displayChecksumD);
 
@@ -109,7 +109,7 @@ public class MCode39 extends MBarcode4j {
 		desc.add(extendedCharsetD);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(Code39Component.PROPERTY_CHECKSUM_MODE,
-				Messages.MCode39_checksum_mode, ChecksumMode.getItems());
+				Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MCode39_checksum_mode_description);
 		desc.add(checksumModeD);
 

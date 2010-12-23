@@ -87,13 +87,13 @@ public abstract class MBarcode extends MGraphicElement {
 		desc.add(evaluationTimeD);
 
 		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP,
-				Messages.MBarcode_evaluation_group, new String[] { "" }); //$NON-NLS-2$
+				Messages.MBarcode_evaluation_group, new String[] { "" }); //$NON-NLS-1$
 		evaluationGroupNameD.setDescription(Messages.MBarcode_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
-		evaluationTimeD.setCategory(Messages.MBarcode_properties_category);
-		evaluationGroupNameD.setCategory(Messages.MBarcode_properties_category);
-		codeExprD.setCategory(Messages.MBarcode_properties_category);
+		evaluationTimeD.setCategory(Messages.common_properties_category);
+		evaluationGroupNameD.setCategory(Messages.common_properties_category);
+		codeExprD.setCategory(Messages.common_properties_category);
 
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}

@@ -91,17 +91,17 @@ public class MPOSTNET extends MBarcode4j {
 		desc.add(shortBarHeightD);
 
 		DoublePropertyDescriptor intercharD = new DoublePropertyDescriptor(POSTNETComponent.PROPERTY_INTERCHAR_GAP_WIDTH,
-				Messages.MPOSTNET_interchar_gap_width);
+				Messages.common_interchar_gap_width);
 		intercharD.setDescription(Messages.MPOSTNET_interchar_gap_width_description);
 		desc.add(intercharD);
 
 		CheckBoxPropertyDescriptor displayChecksumD = new CheckBoxPropertyDescriptor(
-				POSTNETComponent.PROPERTY_DISPLAY_CHECKSUM, Messages.MPOSTNET_display_checksum, NullEnum.NULL);
+				POSTNETComponent.PROPERTY_DISPLAY_CHECKSUM, Messages.common_display_checksum, NullEnum.NULL);
 		displayChecksumD.setDescription(Messages.MPOSTNET_display_checksum_description);
 		desc.add(displayChecksumD);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(POSTNETComponent.PROPERTY_CHECKSUM_MODE,
-				Messages.MPOSTNET_checksum_mode, ChecksumMode.getItems());
+				Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MPOSTNET_checksum_mode_description);
 		desc.add(checksumModeD);
 

@@ -82,7 +82,7 @@ public class MEAN13 extends MBarcode4j {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(EAN13Component.PROPERTY_CHECKSUM_MODE,
-				Messages.MEAN13_checksum_mode, ChecksumMode.getItems());
+				Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MEAN13_checksum_mode_description);
 		desc.add(checksumModeD);
 

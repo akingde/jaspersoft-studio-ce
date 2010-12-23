@@ -64,7 +64,7 @@ public class BarcodeWizardPage extends WizardPage {
 
 	protected BarcodeWizardPage() {
 		super("barcodepage"); //$NON-NLS-1$
-		setTitle(Messages.BarcodeWizardPage_barcode_wizard);
+		setTitle(Messages.common_barcode_wizard);
 		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a +
 				Messages.BarcodeWizardPage_barcode_wizard_description_b);
 	}

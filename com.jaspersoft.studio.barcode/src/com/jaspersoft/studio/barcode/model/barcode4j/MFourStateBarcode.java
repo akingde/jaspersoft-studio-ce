@@ -73,12 +73,12 @@ public class MFourStateBarcode extends MBarcode4j {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE, Messages.MFourStateBarcode_checksum_mode, ChecksumMode.getItems());
+				FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE, Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MFourStateBarcode_checksum_mode_description);
 		desc.add(checksumModeD);
 
 		DoublePropertyDescriptor intercharD = new DoublePropertyDescriptor(
-				FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH, Messages.MFourStateBarcode_interchar_gap_width);
+				FourStateBarcodeComponent.PROPERTY_INTERCHAR_GAP_WIDTH, Messages.common_interchar_gap_width);
 		intercharD.setDescription(Messages.MFourStateBarcode_interchar_gap_width_description);
 		desc.add(intercharD);
 
@@ -92,10 +92,10 @@ public class MFourStateBarcode extends MBarcode4j {
 		trackHeightD.setDescription(Messages.MFourStateBarcode_track_height_description);
 		desc.add(trackHeightD);
 
-		checksumModeD.setCategory(Messages.MFourStateBarcode_properties_category);
-		intercharD.setCategory(Messages.MFourStateBarcode_properties_category);
-		ascenderHeightD.setCategory(Messages.MFourStateBarcode_properties_category);
-		trackHeightD.setCategory(Messages.MFourStateBarcode_properties_category);
+		checksumModeD.setCategory(Messages.common_properties_category);
+		intercharD.setCategory(Messages.common_properties_category);
+		ascenderHeightD.setCategory(Messages.common_properties_category);
+		trackHeightD.setCategory(Messages.common_properties_category);
 	}
 
 	@Override

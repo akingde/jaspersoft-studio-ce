@@ -82,7 +82,7 @@ public class MUPCA extends MBarcode4j {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(UPCAComponent.PROPERTY_CHECKSUM_MODE,
-				Messages.MUPCA_checksum_mode, ChecksumMode.getItems());
+				Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MUPCA_checksum_mode_description);
 		desc.add(checksumModeD);
 

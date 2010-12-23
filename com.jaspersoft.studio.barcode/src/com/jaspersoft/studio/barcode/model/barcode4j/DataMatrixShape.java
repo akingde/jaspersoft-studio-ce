@@ -21,7 +21,7 @@ package com.jaspersoft.studio.barcode.model.barcode4j;
 
 public class DataMatrixShape {
 	public static String[] getItems() {
-		return new String[] { Messages.DataMatrixShape_default, Messages.DataMatrixShape_force_none, Messages.DataMatrixShape_force_square, Messages.DataMatrixShape_force_rectangle };
+		return new String[] { Messages.common_default, Messages.DataMatrixShape_force_none, Messages.DataMatrixShape_force_square, Messages.DataMatrixShape_force_rectangle };
 	}
 
 	public static int getPos4Shape(String pos4shape) {

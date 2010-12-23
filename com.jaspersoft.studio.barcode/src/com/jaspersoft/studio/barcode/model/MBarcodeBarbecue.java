@@ -96,8 +96,8 @@ public class MBarcodeBarbecue extends MBarcode {
 		exp.setText("\"1234\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr",
-				"barbecue"));
+		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
+				"barbecue")); //$NON-NLS-1$
 		return el;
 	}
 
@@ -177,7 +177,7 @@ public class MBarcodeBarbecue extends MBarcode {
 
 		RComboBoxPropertyDescriptor typeD = new RComboBoxPropertyDescriptor(StandardBarbecueComponent.PROPERTY_TYPE,
 				Messages.MBarcodeBarbecue_type, new String[] {
-						"2of7", "3of9", "Bookland", "Codabar", "Code128", "Code128A", "Code128B", "Code128C", //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+						"2of7", "3of9", "Bookland", "Codabar", "Code128", "Code128A", "Code128B", "Code128C", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 						"Code39", "Code39 (Extended)", "EAN128", "EAN13", "GlobalTradeItemNumber", "Int2of5", "Monarch", "NW7", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 						"PDF417", "PostNet", "RandomWeightUPCA", "SCC14ShippingCode", "ShipmentIdentificationNumber", "SSCC18", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 						"Std2of5", "UCC128", "UPCA", "USD3", "USD4", "USPS" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
@@ -199,13 +199,13 @@ public class MBarcodeBarbecue extends MBarcode {
 		rotationD.setDescription(Messages.MBarcodeBarbecue_rotation_description);
 		desc.add(rotationD);
 
-		rotationD.setCategory(Messages.MBarcodeBarbecue_properties_category);
-		widthD.setCategory(Messages.MBarcodeBarbecue_properties_category);
-		typeD.setCategory(Messages.MBarcodeBarbecue_properties_category);
-		drawTextD.setCategory(Messages.MBarcodeBarbecue_properties_category);
-		checksumRequiredD.setCategory(Messages.MBarcodeBarbecue_properties_category);
-		heightD.setCategory(Messages.MBarcodeBarbecue_properties_category);
-		appIDexprD.setCategory(Messages.MBarcodeBarbecue_properties_category);
+		rotationD.setCategory(Messages.common_properties_category);
+		widthD.setCategory(Messages.common_properties_category);
+		typeD.setCategory(Messages.common_properties_category);
+		drawTextD.setCategory(Messages.common_properties_category);
+		checksumRequiredD.setCategory(Messages.common_properties_category);
+		heightD.setCategory(Messages.common_properties_category);
+		appIDexprD.setCategory(Messages.common_properties_category);
 
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_ROTATION, null);

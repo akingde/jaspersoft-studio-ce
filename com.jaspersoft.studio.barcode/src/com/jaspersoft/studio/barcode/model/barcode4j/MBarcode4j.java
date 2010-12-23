@@ -183,12 +183,12 @@ public class MBarcode4j extends MBarcode {
 		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
 		desc.add(vertQuietZoneD);
 
-		vertQuietZoneD.setCategory(Messages.MBarcode4j_properties_category);
-		moduleWidthD.setCategory(Messages.MBarcode4j_properties_category);
-		quiteZoneD.setCategory(Messages.MBarcode4j_properties_category);
-		orientationD.setCategory(Messages.MBarcode4j_properties_category);
-		patternExprD.setCategory(Messages.MBarcode4j_properties_category);
-		textPositionD.setCategory(Messages.MBarcode4j_properties_category);
+		vertQuietZoneD.setCategory(Messages.common_properties_category);
+		moduleWidthD.setCategory(Messages.common_properties_category);
+		quiteZoneD.setCategory(Messages.common_properties_category);
+		orientationD.setCategory(Messages.common_properties_category);
+		patternExprD.setCategory(Messages.common_properties_category);
+		textPositionD.setCategory(Messages.common_properties_category);
 
 	}
 
