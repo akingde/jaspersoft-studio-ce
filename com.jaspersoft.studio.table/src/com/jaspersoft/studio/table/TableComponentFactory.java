@@ -165,7 +165,7 @@ public class TableComponentFactory implements IComponentFactory {
 
 			createCellColumnFooter(mcf, bc, i + 1, i);
 
-			createCellTableHeader(mtf, bc, i + 1, i);
+			createCellTableFooter(mtf, bc, i + 1, i);
 		}
 	}
 

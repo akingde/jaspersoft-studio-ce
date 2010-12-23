@@ -148,7 +148,22 @@ public class TableColumnSize {
 		return -1;
 	}
 
-	public static void setCellHeightDelta(BaseColumn bc, int type, String grName, int delta) {
+	public static int setCellHeightDelta(BaseColumn bc, int type, String grName, int delta) {
+		int dif = 0;
+		Cell cell = getCell(bc, type, grName);
+		if (cell != null) {
+			DesignCell designCell = (DesignCell) cell;
+			int height = cell.getHeight() + delta;
+			if (height < 0) {
+				dif = height;
+				height = 0;
+			}
+			designCell.setHeight(height);
+		}
+		return dif;
+	}
+
+	public static Cell getCell(BaseColumn bc, int type, String grName) {
 		Cell cell = null;
 		switch (type) {
 		case TABLE_HEADER:
@@ -174,13 +189,7 @@ public class TableColumnSize {
 			cell = bc.getGroupFooter(grName);
 			break;
 		}
-		if (cell != null) {
-			DesignCell designCell = (DesignCell) cell;
-			int height = cell.getHeight() + delta;
-			if (height < 0)
-				height = 0;
-			designCell.setHeight(height);
-		}
+		return cell;
 	}
 
 }

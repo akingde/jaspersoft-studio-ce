@@ -179,7 +179,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 				JRBoxContainer jrGraphicElement = (JRBoxContainer) cell;
 				if (lineBox == null) {
 					lineBox = new MLineBox(jrGraphicElement.getLineBox());
-					lineBox.getPropertyChangeSupport().addPropertyChangeListener(this);
+					setChildListener(lineBox);
 				}
 				return lineBox;
 			}
@@ -207,9 +207,10 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 				}
 			} else if (id.equals(DesignCell.PROPERTY_HEIGHT)) {
 				MTable mtable = getMTable();
-
+				Integer height = (Integer) value;
 				AMCollection section = getSection();
-				if (section != null) {
+				if (section != null && height.intValue() >= 0) {
+
 					Class<AMCollection> classType = (Class<AMCollection>) section.getClass();
 					String grName = null;
 					if (section instanceof MTableGroupHeader)
@@ -217,13 +218,14 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 					if (section instanceof MTableGroupFooter)
 						grName = ((MTableGroupFooter) section).getJrDesignGroup().getName();
 
-					mtable.getTableManager().setHeight(cell, (Integer) value, (StandardBaseColumn) getValue(),
+					mtable.getTableManager().setHeight(cell, height, (StandardBaseColumn) getValue(),
 							TableColumnSize.getType(classType), grName);
 
+//					cell.setHeight(height);
 					mtable.getTableManager().refresh();
-					TableColumnNumerator.renumerateColumnNames(mtable);
-					getPropertyChangeSupport().firePropertyChange(
-							new PropertyChangeEvent(this, DesignCell.PROPERTY_HEIGHT, null, value));
+
+					// getPropertyChangeSupport().firePropertyChange(
+					// new PropertyChangeEvent(this, DesignCell.PROPERTY_HEIGHT, null, value));
 				}
 			}
 		}

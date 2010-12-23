@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.Cell;
@@ -49,8 +48,8 @@ public class TableManager {
 		int h = 0;
 		Rectangle r = new Rectangle(0, 0, 0, 0);
 		for (BaseColumn bc : table.getColumns()) {
-			r = initTableHeader(r, bc);
-			r.setLocation(r.x, y);
+			r = initHeader(r, bc, TableColumnSize.TABLE_HEADER, null);
+			r.setLocation(r.x , y);
 			if (h < r.height)
 				h = r.height;
 		}
@@ -58,7 +57,7 @@ public class TableManager {
 		r = new Rectangle(0, y, 0, 0);
 		h = 0;
 		for (BaseColumn bc : table.getColumns()) {
-			r = initColumnHeader(r, bc);
+			r = initHeader(r, bc, TableColumnSize.COLUMN_HEADER, null);
 			r.setLocation(r.x, y);
 			if (h < r.height)
 				h = r.height;
@@ -72,7 +71,7 @@ public class TableManager {
 				r = new Rectangle(0, y, 0, 0);
 				h = 0;
 				for (BaseColumn bc : table.getColumns()) {
-					r = initGroupHeader(r, bc, jrGroup.getName());
+					r = initHeader(r, bc, TableColumnSize.COLUMN_GROUP_HEADER, jrGroup.getName());
 					r.setLocation(r.x, y);
 					if (h < r.height)
 						h = r.height;
@@ -96,7 +95,7 @@ public class TableManager {
 				r = new Rectangle(0, y, 0, 0);
 				h = 0;
 				for (BaseColumn bc : table.getColumns()) {
-					r = initGroupFooter(r, bc, jrGroup.getName());
+					r = initFooter(r, bc, TableColumnSize.COLUMN_GROUP_FOOTER, jrGroup.getName());
 					r.setLocation(r.x, y);
 					if (h < r.height)
 						h = r.height;
@@ -107,68 +106,17 @@ public class TableManager {
 		r = new Rectangle(0, y, 0, 0);
 		h = 0;
 		for (BaseColumn bc : table.getColumns()) {
-			r = initColumnFooter(r, bc);
+			r = initFooter(r, bc, TableColumnSize.COLUMN_FOOTER, null);
 			r.setLocation(r.x, y);
 			if (h < r.height)
 				h = r.height;
 		}
 		y += h;
 		r = new Rectangle(0, y, 0, 0);
-		h = 0;
 		for (BaseColumn bc : table.getColumns()) {
-			r = initTableFooter(r, bc);
+			r = initFooter(r, bc, TableColumnSize.TABLE_FOOTER, null);
 			r.setLocation(r.x, y);
-			if (h < r.height)
-				h = r.height;
 		}
-	}
-
-	private Rectangle initGroupHeader(Rectangle p, BaseColumn bc, String grName) {
-		int y = p.y;
-		int h = 0;
-		int w = bc.getWidth();
-		Cell c = bc.getGroupHeader(grName);
-		if (c != null) {
-			y = p.y + c.getHeight();
-			h = c.getHeight();
-			boundsMap.put(c, new Rectangle(p.x, p.y, w, h));
-		}
-		if (bc instanceof StandardColumnGroup) {
-			Rectangle pi = new Rectangle(p.x, y, w, h);
-			int hi = 0;
-			for (BaseColumn bcg : ((StandardColumnGroup) bc).getColumns()) {
-				pi = initGroupHeader(pi, bcg, grName);
-				pi.setLocation(pi.x, y);
-				if (hi < pi.height)
-					hi = pi.height;
-			}
-			h += hi;
-		}
-		return new Rectangle(p.x + bc.getWidth(), y, w, h);
-	}
-
-	private Rectangle initGroupFooter(Rectangle p, BaseColumn bc, String grName) {
-		int y = p.y;
-		int h = 0;
-		int w = bc.getWidth();
-		Cell c = bc.getGroupFooter(grName);
-		if (bc instanceof StandardColumnGroup) {
-			Rectangle pi = new Rectangle(p.x, y, w, h);
-			int hi = 0;
-			for (BaseColumn bcg : ((StandardColumnGroup) bc).getColumns()) {
-				pi = initGroupFooter(pi, bcg, grName);
-				pi.setLocation(pi.x, y);
-				if (hi < pi.height)
-					hi = pi.height;
-			}
-			h += hi;
-		}
-		if (c != null) {
-			y = p.y + h;
-			h = c.getHeight();
-			boundsMap.put(c, new Rectangle(p.x, y, w, h));
-		}
-		return new Rectangle(p.x + bc.getWidth(), y, w, h);
 	}
 
 	public static List<BaseColumn> getAllColumns(MTable mTable) {
@@ -191,54 +139,6 @@ public class TableManager {
 		return lst;
 	}
 
-	private Rectangle initTableHeader(Rectangle p, BaseColumn bc) {
-		int y = p.y;
-		int h = 0;
-		int w = bc.getWidth();
-		Cell c = bc.getTableHeader();
-		if (c != null) {
-			y = p.y + c.getHeight();
-			h = c.getHeight();
-			boundsMap.put(c, new Rectangle(p.x, p.y, w, h));
-		}
-		if (bc instanceof StandardColumnGroup) {
-			Rectangle pi = new Rectangle(p.x, y, w, h);
-			int hi = 0;
-			for (BaseColumn bcg : ((StandardColumnGroup) bc).getColumns()) {
-				pi = initTableHeader(pi, bcg);
-				pi.setLocation(pi.x, y);
-				if (hi < pi.height)
-					hi = pi.height;
-			}
-			h += hi;
-		}
-		return new Rectangle(p.x + bc.getWidth(), y, w, h);
-	}
-
-	private Rectangle initColumnHeader(Rectangle p, BaseColumn bc) {
-		int y = p.y;
-		int h = 0;
-		int w = bc.getWidth();
-		Cell c = bc.getColumnHeader();
-		if (c != null) {
-			y = p.y + c.getHeight();
-			h = c.getHeight();
-			boundsMap.put(c, new Rectangle(p.x, p.y, w, h));
-		}
-		if (bc instanceof StandardColumnGroup) {
-			Rectangle pi = new Rectangle(p.x, y, w, h);
-			int hi = 0;
-			for (BaseColumn bcg : ((StandardColumnGroup) bc).getColumns()) {
-				pi = initColumnHeader(pi, bcg);
-				pi.setLocation(pi.x, y);
-				if (hi < pi.height)
-					hi = pi.height;
-			}
-			h += hi;
-		}
-		return new Rectangle(p.x + bc.getWidth(), y, w, h);
-	}
-
 	private Rectangle initDetail(Rectangle p, BaseColumn bc) {
 		int h = 0;
 		int w = 0;
@@ -252,41 +152,40 @@ public class TableManager {
 		return new Rectangle(p.x + w, p.y, w, h);
 	}
 
-	private Rectangle initColumnFooter(Rectangle p, BaseColumn bc) {
+	private Rectangle initHeader(Rectangle p, BaseColumn bc, int type, String grName) {
 		int y = p.y;
 		int h = 0;
 		int w = bc.getWidth();
-		Cell c = bc.getColumnFooter();
-
+		Cell c = TableColumnSize.getCell(bc, type, grName);
+		if (c != null) {
+			y = p.y + c.getHeight();
+			h = c.getHeight();
+			boundsMap.put(c, new Rectangle(p.x, p.y, w, h));
+		}
 		if (bc instanceof StandardColumnGroup) {
 			Rectangle pi = new Rectangle(p.x, y, w, h);
 			int hi = 0;
 			for (BaseColumn bcg : ((StandardColumnGroup) bc).getColumns()) {
-				pi = initColumnFooter(pi, bcg);
+				pi = initHeader(pi, bcg, type, grName);
 				pi.setLocation(pi.x, y);
 				if (hi < pi.height)
 					hi = pi.height;
 			}
 			h += hi;
 		}
-		if (c != null) {
-			y = p.y + h;
-			h = c.getHeight();
-			boundsMap.put(c, new Rectangle(p.x, y, w, h));
-		}
-		return new Rectangle(p.x + bc.getWidth(), y, w, h);
+		return new Rectangle(p.x + w, y, w, h);
 	}
 
-	private Rectangle initTableFooter(Rectangle p, BaseColumn bc) {
+	private Rectangle initFooter(Rectangle p, BaseColumn bc, int type, String grName) {
 		int y = p.y;
 		int h = 0;
 		int w = bc.getWidth();
-		Cell c = bc.getTableFooter();
+		Cell c = TableColumnSize.getCell(bc, type, grName);
 		if (bc instanceof StandardColumnGroup) {
 			Rectangle pi = new Rectangle(p.x, y, w, h);
 			int hi = 0;
 			for (BaseColumn bcg : ((StandardColumnGroup) bc).getColumns()) {
-				pi = initTableFooter(pi, bcg);
+				pi = initFooter(pi, bcg, type, grName);
 				pi.setLocation(pi.x, y);
 				if (hi < pi.height)
 					hi = pi.height;
@@ -298,7 +197,7 @@ public class TableManager {
 			h = c.getHeight();
 			boundsMap.put(c, new Rectangle(p.x, y, w, h));
 		}
-		return new Rectangle(p.x + bc.getWidth(), y, w, h);
+		return new Rectangle(p.x + w, y, w, h);
 	}
 
 	public Rectangle getBounds(int width, Cell cell, StandardBaseColumn col) {
@@ -375,57 +274,25 @@ public class TableManager {
 		if (height >= 0) {
 			int delta = height - cell.getHeight();
 			setColumnHeight(table.getColumns(), delta, type, grName, col);
-
-			// int y = boundsMap.get(cell).y;
-			// int bY = y + cell.getHeight();
-			// List<Cell> cells = new ArrayList<Cell>();
-			// Set<Cell> keySet = boundsMap.keySet();
-			// for (Cell c : keySet) {
-			// int cy = boundsMap.get(c).y;
-			// int cbx = c.getHeight() + cy;
-			// if (cy >= y && cbx <= bY) {
-			// cells.add(c);
-			// if (delta >= 0 && cbx == bY) {
-			// // if (c.getHeight() == 0 && !isBottomCell(c, col, table.getColumns()))
-			// // continue;
-			// // ((DesignCell) c).setHeight(c.getHeight() + delta);
-			// } else if (delta < 0) {
-			// int dy = bY + delta;
-			// if (cy > dy)
-			// ((DesignCell) c).setHeight(0);
-			// else
-			// ((DesignCell) c).setHeight(dy - cy);
-			// }
-			// }
-			// }
 		}
 	}
 
-	private void setColumnHeight(List<BaseColumn> columns, int delta, int type, String grName, StandardBaseColumn col) {
+	private int setColumnHeight(List<BaseColumn> columns, int delta, int type, String grName, StandardBaseColumn col) {
+		int dif = 0;
 		for (BaseColumn bc : columns) {
 			if (bc instanceof StandardColumn)
-				TableColumnSize.setCellHeightDelta(bc, type, grName, delta);
+				dif = TableColumnSize.setCellHeightDelta(bc, type, grName, delta);
 			else if (bc instanceof StandardColumnGroup) {
 				if (col == bc) {
 					TableColumnSize.setCellHeightDelta(bc, type, grName, delta);
-				} else
-					setColumnHeight(((StandardColumnGroup) bc).getColumns(), delta, type, grName, col);
+				} else {
+					dif = setColumnHeight(((StandardColumnGroup) bc).getColumns(), delta, type, grName, col);
+					if (delta < 0 && dif != 0)
+						dif = TableColumnSize.setCellHeightDelta(bc, type, grName, dif);
+				}
 			}
 		}
+		return dif;
 	}
 
-	private boolean isBottomCell(Cell c, StandardBaseColumn col, List<BaseColumn> columns) {
-		if (col instanceof StandardColumnGroup)
-			return false;
-		for (BaseColumn bc : columns) {
-			if (bc == col)
-				return true;
-			if (bc instanceof StandardColumnGroup) {
-				if (isBottomCell(c, col, ((StandardColumnGroup) bc).getColumns()))
-					return true;
-			}
-		}
-
-		return false;
-	}
 }
