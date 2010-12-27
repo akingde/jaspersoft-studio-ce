@@ -23,6 +23,8 @@
  */
 package com.jaspersoft.studio.barcode.model.barcode4j;
 
+import com.jaspersoft.studio.barcode.messages.Messages;
+
 public class ChecksumMode {
 	public static String[] getItems() {
 		return new String[] { Messages.common_default, Messages.ChecksumMode_auto, Messages.ChecksumMode_ignore, Messages.ChecksumMode_add, Messages.ChecksumMode_check };

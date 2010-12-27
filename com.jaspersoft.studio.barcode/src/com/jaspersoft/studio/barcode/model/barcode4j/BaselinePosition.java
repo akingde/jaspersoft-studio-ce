@@ -23,6 +23,8 @@
  */
 package com.jaspersoft.studio.barcode.model.barcode4j;
 
+import com.jaspersoft.studio.barcode.messages.Messages;
+
 public class BaselinePosition {
 	public static String[] getItems() {
 		return new String[] { Messages.common_default, Messages.common_top, Messages.common_bottom };   

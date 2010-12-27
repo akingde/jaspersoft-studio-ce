@@ -1,9 +1,10 @@
-package com.jaspersoft.studio.barcode.model.barcode4j;
+package com.jaspersoft.studio.barcode.messages;
 
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "com.jaspersoft.studio.barcode.model.barcode4j.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "com.jaspersoft.studio.barcode.messages.messages"; //$NON-NLS-1$
+	public static String common_barcode_wizard;
 	public static String common_bottom;
 	public static String common_checksum_mode;
 	public static String common_default;
@@ -12,6 +13,11 @@ public class Messages extends NLS {
 	public static String common_properties_category;
 	public static String common_top;
 	public static String common_wide_factor;
+	public static String BarcodeWizardPage_barbecue_types;
+	public static String BarcodeWizardPage_barcode_wizard_description_a;
+	public static String BarcodeWizardPage_barcode_wizard_description_b;
+	public static String BarcodeWizardPage_barcode4j_types;
+	public static String BarcodeWizardPage_name;
 	public static String ChecksumMode_add;
 	public static String ChecksumMode_auto;
 	public static String ChecksumMode_check;
@@ -19,6 +25,12 @@ public class Messages extends NLS {
 	public static String DataMatrixShape_force_none;
 	public static String DataMatrixShape_force_rectangle;
 	public static String DataMatrixShape_force_square;
+	public static String MBarcode_code_expression;
+	public static String MBarcode_code_expression_description;
+	public static String MBarcode_evaluation_group;
+	public static String MBarcode_evaluation_group_description;
+	public static String MBarcode_evaluation_time;
+	public static String MBarcode_evaluation_time_description;
 	public static String MBarcode4j_module_width;
 	public static String MBarcode4j_module_width_description;
 	public static String MBarcode4j_orientation;
@@ -31,6 +43,20 @@ public class Messages extends NLS {
 	public static String MBarcode4j_text_position_description;
 	public static String MBarcode4j_vertical_quiet_zone;
 	public static String MBarcode4j_vertical_quiet_zone_description;
+	public static String MBarcodeBarbecue_application_identifier_expression;
+	public static String MBarcodeBarbecue_application_identifier_expression_description;
+	public static String MBarcodeBarbecue_bar_height;
+	public static String MBarcodeBarbecue_bar_height_description;
+	public static String MBarcodeBarbecue_bar_width;
+	public static String MBarcodeBarbecue_bar_width_description;
+	public static String MBarcodeBarbecue_checksum_required;
+	public static String MBarcodeBarbecue_checksum_required_description;
+	public static String MBarcodeBarbecue_draw_text;
+	public static String MBarcodeBarbecue_draw_text_description;
+	public static String MBarcodeBarbecue_rotation;
+	public static String MBarcodeBarbecue_rotation_description;
+	public static String MBarcodeBarbecue_type;
+	public static String MBarcodeBarbecue_type_description;
 	public static String MCodabar_properties_category;
 	public static String MCodabar_wide_factor_description;
 	public static String MCode39_checksum_mode_description;

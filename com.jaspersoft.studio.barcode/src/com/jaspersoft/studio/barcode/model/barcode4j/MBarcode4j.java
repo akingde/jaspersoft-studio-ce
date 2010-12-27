@@ -38,6 +38,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.barcode.BarcodeNodeIconDescriptor;
+import com.jaspersoft.studio.barcode.messages.Messages;
 import com.jaspersoft.studio.barcode.model.MBarcode;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.model.ANode;

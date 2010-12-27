@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.barcode.model.barcode4j;
 
+import com.jaspersoft.studio.barcode.messages.Messages;
+
 public class DataMatrixShape {
 	public static String[] getItems() {
 		return new String[] { Messages.common_default, Messages.DataMatrixShape_force_none, Messages.DataMatrixShape_force_square, Messages.DataMatrixShape_force_rectangle };

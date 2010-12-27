@@ -23,6 +23,8 @@
  */
 package com.jaspersoft.studio.barcode.model.barcode4j;
 
+import com.jaspersoft.studio.barcode.messages.Messages;
+
 import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
 
 public class Orientation {

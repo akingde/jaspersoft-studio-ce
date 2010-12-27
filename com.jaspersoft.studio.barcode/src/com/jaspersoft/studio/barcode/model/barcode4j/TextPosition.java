@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.barcode.model.barcode4j;
 
+import com.jaspersoft.studio.barcode.messages.Messages;
+
 public class TextPosition {
 	public static String[] getItems() {
 		return new String[] { Messages.common_default, Messages.TextPosition_none, Messages.common_bottom, Messages.common_top };

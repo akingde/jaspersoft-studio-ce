@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.barcode.Activator;
+import com.jaspersoft.studio.barcode.messages.Messages;
 import com.jaspersoft.studio.barcode.model.MBarcode;
 import com.jaspersoft.studio.barcode.model.MBarcodeBarbecue;
 import com.jaspersoft.studio.barcode.model.barcode4j.MCodabar;

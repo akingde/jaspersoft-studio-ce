@@ -25,6 +25,7 @@ package com.jaspersoft.studio.barcode.command;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.barcode.messages.Messages;
 import com.jaspersoft.studio.barcode.model.MBarcode;
 
 public class BarcodeWizard extends Wizard {
