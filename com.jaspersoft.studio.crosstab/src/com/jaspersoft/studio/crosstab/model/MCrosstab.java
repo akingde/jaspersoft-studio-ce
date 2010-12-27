@@ -42,6 +42,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.crosstab.CrosstabManager;
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.crosstab.model.nodata.MCrosstabWhenNoData;

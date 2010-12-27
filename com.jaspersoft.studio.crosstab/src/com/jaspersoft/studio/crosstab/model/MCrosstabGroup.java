@@ -31,6 +31,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
@@ -105,12 +106,12 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 		desc.add(totalPositionD);
 
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_NAME,
-				Messages.MCrosstabGroup_name);
+				Messages.common_name);
 		nameD.setDescription(Messages.MCrosstabGroup_name_description);
 		desc.add(nameD);
 
 		JRPropertyDescriptor bucketD = new JRPropertyDescriptor(JRDesignCrosstabGroup.PROPERTY_BUCKET,
-				Messages.MCrosstabGroup_bucket);
+				Messages.common_bucket);
 		bucketD.setDescription(Messages.MCrosstabGroup_bucket_description);
 		desc.add(bucketD);
 

@@ -42,6 +42,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.crosstab.figure.CrosstabFigure;
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.crosstab.model.cell.command.CreateElementCommand;
@@ -149,11 +150,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createColumnGroupCells(MColumnGroup rg, JRCrosstabColumnGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
+		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + ": " + p.getName()); //$NON-NLS-1$
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + p.getName());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + ": " + p.getName()); //$NON-NLS-1$
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}
@@ -166,11 +167,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createRowGroupCells(MRowGroup rg, JRCrosstabRowGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
+		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + ": " + p.getName()); //$NON-NLS-1$
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + p.getName());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + ": " + p.getName()); //$NON-NLS-1$
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}

@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.parameter.MCrosstabParameters;
 import com.jaspersoft.studio.model.parameter.MParameter;
 
@@ -58,7 +59,7 @@ public class ReorderParameterCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderParameterCommand(MParameter child, MCrosstabParameters parent, int newIndex) {
-		super(Messages.ReorderParameterCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrCrosstab = (JRDesignCrosstab) parent.getValue();

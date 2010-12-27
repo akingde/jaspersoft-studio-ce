@@ -35,6 +35,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.crosstab.CrosstabComponentFactory;
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.crosstab.model.MCrosstabGroup;
 import com.jaspersoft.studio.model.ANode;
@@ -134,7 +135,7 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 		columnPositionD.setDescription(Messages.MRowGroup_row_position_description);
 		desc.add(columnPositionD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRDesignCrosstabRowGroup.PROPERTY_WIDTH, Messages.MRowGroup_width);
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRDesignCrosstabRowGroup.PROPERTY_WIDTH, Messages.common_width);
 		widthD.setDescription(Messages.MRowGroup_width_description);
 		desc.add(widthD);
 

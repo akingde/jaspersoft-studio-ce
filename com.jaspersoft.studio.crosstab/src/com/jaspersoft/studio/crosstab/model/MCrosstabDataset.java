@@ -33,6 +33,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MElementDataset;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;

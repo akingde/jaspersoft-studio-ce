@@ -40,8 +40,8 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.crosstab.model.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
@@ -209,11 +209,11 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		desc.add(styleD);
 
 		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_WIDTH,
-				Messages.MCell_width);
+				Messages.common_width);
 		desc.add(wD);
 
 		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_HEIGHT,
-				Messages.MCell_height);
+				Messages.common_height);
 		desc.add(hD);
 
 		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MCell_line_box);

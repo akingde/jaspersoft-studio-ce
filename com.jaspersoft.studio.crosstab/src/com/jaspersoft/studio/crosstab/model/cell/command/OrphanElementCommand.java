@@ -5,9 +5,9 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.command.Messages;
 
 public class OrphanElementCommand extends Command {
 
@@ -25,7 +25,7 @@ public class OrphanElementCommand extends Command {
 	 *          the child
 	 */
 	public OrphanElementCommand(MCell parent, MGraphicElement child) {
-		super(Messages.OrphanElementCommand_orphan_child);
+		super(Messages.common_orphan_child);
 		this.jrElement = (JRDesignElement) child.getValue();
 		this.jrCell = (JRDesignCellContents) parent.getValue();
 	}

@@ -21,6 +21,7 @@ package com.jaspersoft.studio.crosstab.model.crosstab.command;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
 
 public class CrosstabWizzard extends Wizard {
@@ -29,7 +30,7 @@ public class CrosstabWizzard extends Wizard {
 
 	public CrosstabWizzard() {
 		super();
-		setWindowTitle(Messages.BarcodeWizard_window_title);
+		setWindowTitle(Messages.common_barcode_wizard);
 	}
 
 	@Override

@@ -32,6 +32,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -61,7 +62,7 @@ public class MBucket extends APropertyNode {
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
 	public String getDisplayText() {
-		return Messages.MBucket_bucket;
+		return Messages.common_bucket;
 	}
 
 	/*

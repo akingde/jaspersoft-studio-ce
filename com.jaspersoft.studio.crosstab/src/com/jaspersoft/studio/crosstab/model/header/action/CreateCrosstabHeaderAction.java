@@ -23,6 +23,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeaderCell;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
@@ -52,7 +53,7 @@ public class CreateCrosstabHeaderAction extends ACreateAction {
 	protected void init() {
 		super.init();
 		setText(Messages.CreateCrosstabHeaderAction_create_crosstab_header);
-		setToolTipText(Messages.CreateCrosstabHeaderAction_create_crosstab_header_too_tip);
+		setToolTipText(Messages.CreateCrosstabHeaderAction_create_crosstab_header_tool_tip);
 		setId(CreateCrosstabHeaderAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

@@ -5,6 +5,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 
@@ -20,7 +21,7 @@ public class MCrosstabHeader extends ANode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new CrosstabNodeIconDescriptor("cell");
+			iconDescriptor = new CrosstabNodeIconDescriptor("cell"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -56,7 +57,7 @@ public class MCrosstabHeader extends ANode {
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
 	public String getDisplayText() {
-		return "Header Cell";
+		return Messages.MCrosstabHeader_header_cell;
 	}
 
 	/*

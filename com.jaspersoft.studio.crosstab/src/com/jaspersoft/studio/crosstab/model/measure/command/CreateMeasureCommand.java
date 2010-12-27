@@ -27,6 +27,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.measure.MMeasure;
 import com.jaspersoft.studio.crosstab.model.measure.MMeasures;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -89,8 +90,8 @@ public class CreateMeasureCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(), "CopyOFMeasure_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateMeasureCommand_measure_name,
-							Messages.CreateMeasureCommand_measure_text_dialog, defaultName, null);
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateMeasureCommand_parameter_name,
+							Messages.CreateMeasureCommand_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrMeasure.setName(dlg.getValue());
 						execute();

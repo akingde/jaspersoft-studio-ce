@@ -35,6 +35,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroups;
 import com.jaspersoft.studio.model.text.MTextField;
@@ -128,7 +129,7 @@ public class CreateColumnGroupCommand extends Command {
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getColumnGroupIndicesMap(), "CopyOFColumnGroup_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateColumnGroupCommand_column_group_name,
-							Messages.CreateColumnGroupCommand_column_group_text_dialog, defaultName, null);
+							Messages.CreateColumnGroupCommand_column_group_name_dialog, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());
 						execute();

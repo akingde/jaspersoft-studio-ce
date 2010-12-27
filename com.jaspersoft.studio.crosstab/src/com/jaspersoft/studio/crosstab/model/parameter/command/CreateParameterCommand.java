@@ -31,6 +31,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.parameter.MCrosstabParameters;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -95,7 +96,7 @@ public class CreateParameterCommand extends Command {
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getParametersMap(), "CopyOFParameter_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateParameterCommand_parameter_name,
-							Messages.CreateParameterCommand_parameter_text_dialog, defaultName, null);
+							Messages.CreateParameterCommand_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrParameter.setName(dlg.getValue());
 						execute();

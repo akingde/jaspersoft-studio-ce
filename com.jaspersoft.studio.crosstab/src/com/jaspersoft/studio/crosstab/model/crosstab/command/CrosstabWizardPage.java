@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
 
 public class CrosstabWizardPage extends WizardPage {
@@ -39,9 +40,9 @@ public class CrosstabWizardPage extends WizardPage {
 
 	protected CrosstabWizardPage() {
 		super("crosstabpage"); //$NON-NLS-1$
-		setTitle(Messages.BarcodeWizardPage_barcode_wizard);
-		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a
-				+ Messages.BarcodeWizardPage_barcode_wizard_description_b);
+		setTitle(Messages.common_barcode_wizard);
+		setDescription(Messages.CrosstabWizardPage_barcode_wizard_description_a
+				+ Messages.CrosstabWizardPage_barcode_wizard_description_b);
 	}
 
 	public void createControl(Composite parent) {
@@ -52,10 +53,10 @@ public class CrosstabWizardPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.BarcodeWizardPage_barbecue_types);
+		lbl.setText(Messages.CrosstabWizardPage_barbecue_types);
 
 		lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.BarcodeWizardPage_barcode4j_types);
+		lbl.setText(Messages.CrosstabWizardPage_barcode4j_types);
 
 		final Table table = new Table(composite, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -67,7 +68,7 @@ public class CrosstabWizardPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[1];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText(Messages.BarcodeWizardPage_name);
+		column[0].setText(Messages.common_name);
 
 		column[0].pack();
 
@@ -81,7 +82,7 @@ public class CrosstabWizardPage extends WizardPage {
 
 		TableColumn[] column2 = new TableColumn[1];
 		column2[0] = new TableColumn(table2, SWT.NONE);
-		column2[0].setText(Messages.BarcodeWizardPage_name);
+		column2[0].setText(Messages.common_name);
 
 		column2[0].pack();
 

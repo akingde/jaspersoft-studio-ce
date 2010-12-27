@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.JRException;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.measure.MMeasure;
 import com.jaspersoft.studio.crosstab.model.measure.MMeasures;
 
@@ -53,7 +54,7 @@ public class ReorderMeasureCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderMeasureCommand(MMeasure child, MMeasures parent, int newIndex) {
-		super(Messages.ReorderMeasureCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrCrosstab = (JRDesignCrosstab) parent.getValue();

@@ -36,6 +36,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.rowgroup.MRowGroup;
 import com.jaspersoft.studio.crosstab.model.rowgroup.MRowGroups;
 import com.jaspersoft.studio.model.text.MTextField;
@@ -126,7 +127,7 @@ public class CreateRowGroupCommand extends Command {
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(), "CopyOFRowGroup_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateRowGroupCommand_row_group_name,
-							Messages.CreateRowGroupCommand_row_group_text_dialog, defaultName, null);
+							Messages.CreateRowGroupCommand_row_group_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());
 						execute();

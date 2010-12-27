@@ -23,6 +23,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.editor.outline.actions.ACreateAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
@@ -52,7 +53,7 @@ public class CreateColumnGroupAction extends ACreateAction {
 	protected void init() {
 		super.init();
 		setText(Messages.CreateColumnGroupAction_create_column_group);
-		setToolTipText(Messages.CreateColumnAction_create_column_group_tool_tip);
+		setToolTipText(Messages.CreateColumnGroupAction_create_column_group_tool_tip);
 		setId(CreateColumnGroupAction.ID);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));

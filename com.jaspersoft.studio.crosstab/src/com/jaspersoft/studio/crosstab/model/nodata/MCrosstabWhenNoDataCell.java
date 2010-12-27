@@ -24,6 +24,7 @@ import net.sf.jasperreports.crosstabs.JRCellContents;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.Color;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.model.ANode;
 
@@ -33,7 +34,7 @@ public class MCrosstabWhenNoDataCell extends MCell {
 	}
 
 	public MCrosstabWhenNoDataCell(ANode parent, JRCellContents jfRield, int index) {
-		super(parent, jfRield, Messages.MCrosstabWhenNoData_when_no_data, index);
+		super(parent, jfRield, Messages.MCrosstabWhenNoDataCell_when_no_data_cell, index);
 	}
 
 	@Override
