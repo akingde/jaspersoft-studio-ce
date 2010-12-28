@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.JRExpression;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.chart.property.descriptor.PlotPropertyDescriptor;
 import com.jaspersoft.studio.model.MExpression;

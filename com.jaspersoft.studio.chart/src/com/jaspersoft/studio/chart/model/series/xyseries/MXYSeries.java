@@ -12,6 +12,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
@@ -73,27 +74,27 @@ public class MXYSeries extends APropertyNode {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor xValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION, Messages.MXYSeries_x_value_expression);
+				JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION, Messages.common_x_value_expression);
 		xValueExpD.setDescription(Messages.MXYSeries_x_value_expression_description);
 		desc.add(xValueExpD);
 
 		JRExpressionPropertyDescriptor yValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION, Messages.MXYSeries_y_value_expression);
+				JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION, Messages.common_y_value_expression);
 		yValueExpD.setDescription(Messages.MXYSeries_y_value_expression_description);
 		desc.add(yValueExpD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignXySeries.PROPERTY_LABEL_EXPRESSION, Messages.MXYSeries_label_expression);
+				JRDesignXySeries.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
 		lblExprD.setDescription(Messages.MXYSeries_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignXySeries.PROPERTY_SERIES_EXPRESSION, Messages.MXYSeries_series_expression);
+				JRDesignXySeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
 		seriesExprD.setDescription(Messages.MXYSeries_series_expression_description);
 		desc.add(seriesExprD);
 
 		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignXySeries.PROPERTY_ITEM_HYPERLINK,
-				Messages.MXYSeries_item_hyperlink);
+				Messages.common_item_hyperlink);
 		itemHyperLinkD.setDescription(Messages.MXYSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 

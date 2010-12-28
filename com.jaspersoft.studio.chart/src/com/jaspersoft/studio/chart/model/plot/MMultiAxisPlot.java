@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.chart.model.plot;
 
+import com.jaspersoft.studio.chart.messages.Messages;
+
 import net.sf.jasperreports.charts.JRMultiAxisPlot;
 
 public class MMultiAxisPlot extends MChartPlot {

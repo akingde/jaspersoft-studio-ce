@@ -34,6 +34,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.jfree.chart.plot.PlotOrientation;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.property.descriptor.seriescolor.SeriesColorPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;

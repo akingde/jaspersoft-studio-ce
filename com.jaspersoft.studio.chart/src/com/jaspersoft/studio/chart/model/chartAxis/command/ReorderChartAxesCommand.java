@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.model.chartAxis.MChartAxes;
 import com.jaspersoft.studio.model.ANode;
 
@@ -57,7 +58,7 @@ public class ReorderChartAxesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderChartAxesCommand(MChartAxes child, ANode parent, int newIndex) {
-		super(Messages.ReorderChartAxesCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignChartAxis) child.getValue();
 		this.jrGroup = (JRDesignMultiAxisPlot) ((JRDesignChart) parent.getValue()).getPlot();

@@ -24,6 +24,7 @@ import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.chart.model.series.pie.MPieSeries;
 
@@ -49,7 +50,7 @@ public class ReorderPieSeriesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderPieSeriesCommand(MPieSeries child, MChartDataset parent, int newIndex) {
-		super(Messages.ReorderPieSeriesCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignPieSeries) child.getValue();
 		this.jrGroup = (JRDesignPieDataset) parent.getValue();

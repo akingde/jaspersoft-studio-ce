@@ -34,6 +34,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.model.MChart;
 import com.jaspersoft.studio.chart.model.plot.PlotFactory;
 import com.jaspersoft.studio.model.ANode;

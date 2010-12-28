@@ -25,13 +25,15 @@ package com.jaspersoft.studio.chart.model.command;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.chart.messages.Messages;
+
 public class ChartWizard extends Wizard {
 	private ChartWizardPage page0;
 	private byte chart;
 
 	public ChartWizard() {
 		super();
-		setWindowTitle(Messages.common_chartaxis_wizard);
+		setWindowTitle(Messages.common_chart_wizard);
 	}
 
 	@Override

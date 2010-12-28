@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.chart.Activator;
+import com.jaspersoft.studio.chart.messages.Messages;
 
 public class ChartAxesWizardPage extends WizardPage {
 	private byte chartAxes;
@@ -77,7 +78,7 @@ public class ChartAxesWizardPage extends WizardPage {
 
 		TableColumn[] column2 = new TableColumn[1];
 		column2[0] = new TableColumn(chartTable, SWT.NONE);
-		column2[0].setText(Messages.ChartAxesWizardPage_name);
+		column2[0].setText(Messages.common_name);
 
 		fillTableb4j(chartTable);
 		column2[0].pack();
@@ -87,67 +88,67 @@ public class ChartAxesWizardPage extends WizardPage {
 		table.setRedraw(false);
 
 		TableItem ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_line_chart);
+		ti.setText(Messages.common_line_chart);
 		ti.setImage(Activator.getImage("/icons/line.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_LINE);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_area_chart);
+		ti.setText(Messages.common_area_chart);
 		ti.setImage(Activator.getImage("/icons/area.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_AREA);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_bar_chart);
+		ti.setText(Messages.common_bar_chart);
 		ti.setImage(Activator.getImage("/icons/bar.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_BAR);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_bar3d_chart);
+		ti.setText(Messages.common_bar3d_chart);
 		ti.setImage(Activator.getImage("/icons/bar3d.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_BAR3D);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_bubble_chart);
+		ti.setText(Messages.common_bubble_chart);
 		ti.setImage(Activator.getImage("/icons/bubble.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_BUBBLE);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_candlestick_chart);
+		ti.setText(Messages.common_candlestick_chart);
 		ti.setImage(Activator.getImage("/icons/candlestick.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_CANDLESTICK);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_highlow_chart);
+		ti.setText(Messages.common_highlow_chart);
 		ti.setImage(Activator.getImage("/icons/highlow.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_HIGHLOW);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_meter_chart);
+		ti.setText(Messages.common_meter_chart);
 		ti.setImage(Activator.getImage("/icons/meter.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_METER);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_pie3d_chart);
+		ti.setText(Messages.common_pie3d_chart);
 		ti.setImage(Activator.getImage("/icons/pie3d.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_PIE3D);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_pie_chart);
+		ti.setText(Messages.common_pie_chart);
 		ti.setImage(Activator.getImage("/icons/pie.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_PIE);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_scatter_chart);
+		ti.setText(Messages.common_scatter_chart);
 		ti.setImage(Activator.getImage("/icons/scatter.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_SCATTER);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_thermometer_chart);
+		ti.setText(Messages.common_thermometer_chart);
 		ti.setImage(Activator.getImage("/icons/thermometer.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_THERMOMETER);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartAxesWizardPage_timeseries_chart);
+		ti.setText(Messages.common_timeseries_chart);
 		ti.setImage(Activator.getImage("/icons/timeseries.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_TIMESERIES);
 

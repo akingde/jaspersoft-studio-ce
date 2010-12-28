@@ -24,6 +24,7 @@ import net.sf.jasperreports.charts.design.JRDesignTimePeriodSeries;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.chart.model.series.timeperiod.MTimePeriodSeries;
 
@@ -49,7 +50,7 @@ public class ReorderTimePeriodSeriesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderTimePeriodSeriesCommand(MTimePeriodSeries child, MChartDataset parent, int newIndex) {
-		super(Messages.ReorderTimePeriodSeriesCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignTimePeriodSeries) child.getValue();
 		this.jrGroup = (JRDesignTimePeriodDataset) parent.getValue();

@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.chart.model.series.category.MCategorySeries;
 
@@ -52,7 +53,7 @@ public class ReorderCategorySeriesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderCategorySeriesCommand(MCategorySeries child, MChartDataset parent, int newIndex) {
-		super(Messages.ReorderCategorySeriesCommand_reorder_elements); 
+		super(Messages.common_reorder_elements); 
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignCategorySeries) child.getValue();
 		this.jrGroup = (JRDesignCategoryDataset) parent.getValue();

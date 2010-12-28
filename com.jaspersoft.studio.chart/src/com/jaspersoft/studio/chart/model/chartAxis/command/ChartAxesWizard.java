@@ -25,6 +25,8 @@ package com.jaspersoft.studio.chart.model.chartAxis.command;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.chart.messages.Messages;
+
 public class ChartAxesWizard extends Wizard {
 	private ChartAxesWizardPage page0;
 	private byte chart;

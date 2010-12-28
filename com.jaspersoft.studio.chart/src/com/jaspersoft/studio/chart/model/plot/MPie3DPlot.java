@@ -27,6 +27,7 @@ import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.chart.property.descriptor.PlotPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;

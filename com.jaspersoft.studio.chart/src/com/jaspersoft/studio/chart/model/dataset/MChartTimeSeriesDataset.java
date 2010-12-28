@@ -12,6 +12,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.ReportFactory;

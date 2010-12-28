@@ -13,6 +13,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MExpression;
@@ -58,12 +59,12 @@ public class MChartPieDataset extends MChartDataset {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor keyExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_KEY_EXPRESSION, Messages.MChartPieDataset_key_expression);
+				JRDesignPieDataset.PROPERTY_KEY_EXPRESSION, Messages.common_key_expression);
 		keyExprD.setDescription(Messages.MChartPieDataset_key_expression_description);
 		desc.add(keyExprD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION, Messages.MChartPieDataset_label_expression);
+				JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
 		lblExprD.setDescription(Messages.MChartPieDataset_label_expression_description);
 		desc.add(lblExprD);
 
@@ -88,7 +89,7 @@ public class MChartPieDataset extends MChartDataset {
 		desc.add(oSectHyperLD);
 
 		JRPropertyDescriptor sectHyperLD = new JRPropertyDescriptor(JRDesignPieDataset.PROPERTY_SECTION_HYPERLINK,
-				Messages.MChartPieDataset_section_hyperlink);
+				Messages.common_section_hyperlink);
 		sectHyperLD.setDescription(Messages.MChartPieDataset_section_hyperlink_description);
 		desc.add(sectHyperLD);
 

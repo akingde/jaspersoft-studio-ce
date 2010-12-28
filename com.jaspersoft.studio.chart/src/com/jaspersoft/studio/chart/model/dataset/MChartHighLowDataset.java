@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
@@ -77,7 +78,7 @@ public class MChartHighLowDataset extends MChartDataset {
 		desc.add(openExprD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowDataset.PROPERTY_SERIES_EXPRESSION, Messages.MChartHighLowDataset_series_expression);
+				JRDesignHighLowDataset.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
 		seriesExprD.setDescription(Messages.MChartHighLowDataset_series_expression_description);
 		desc.add(seriesExprD);
 
@@ -87,7 +88,7 @@ public class MChartHighLowDataset extends MChartDataset {
 		desc.add(volumeExprD);
 
 		JRPropertyDescriptor hyperLinkD = new JRPropertyDescriptor(JRDesignHighLowDataset.PROPERTY_ITEM_HYPERLINK,
-				Messages.MChartHighLowDataset_item_hyperlink);
+				Messages.common_item_hyperlink);
 		hyperLinkD.setDescription(Messages.MChartHighLowDataset_item_hyperlink_description);
 		desc.add(hyperLinkD);
 

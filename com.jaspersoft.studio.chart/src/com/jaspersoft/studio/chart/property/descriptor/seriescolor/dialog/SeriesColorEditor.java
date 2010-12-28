@@ -27,6 +27,8 @@ import java.util.SortedSet;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.chart.messages.Messages;
+
 public class SeriesColorEditor extends Wizard {
 	private SortedSet<?> value;
 	private SeriesColorPage page0;

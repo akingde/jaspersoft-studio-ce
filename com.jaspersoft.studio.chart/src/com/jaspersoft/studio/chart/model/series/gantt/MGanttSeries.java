@@ -12,6 +12,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
@@ -73,17 +74,17 @@ public class MGanttSeries extends APropertyNode {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor endDateExpD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION, Messages.MGanttSeries_end_date_expression);
+				JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION, Messages.common_end_date_expression);
 		endDateExpD.setDescription(Messages.MGanttSeries_end_date_expression_description);
 		desc.add(endDateExpD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION, Messages.MGanttSeries_label_expression);
+				JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
 		lblExprD.setDescription(Messages.MGanttSeries_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION, Messages.MGanttSeries_series_expression);
+				JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
 		seriesExprD.setDescription(Messages.MGanttSeries_series_expression_description);
 		desc.add(seriesExprD);
 
@@ -93,7 +94,7 @@ public class MGanttSeries extends APropertyNode {
 		desc.add(percExprD);
 
 		JRExpressionPropertyDescriptor startDateExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION, Messages.MGanttSeries_start_date_expression);
+				JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION, Messages.common_start_date_expression);
 		startDateExprD.setDescription(Messages.MGanttSeries_start_date_expression_description);
 		desc.add(startDateExprD);
 
@@ -108,7 +109,7 @@ public class MGanttSeries extends APropertyNode {
 		desc.add(taskExprD);
 
 		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignGanttSeries.PROPERTY_ITEM_HYPERLINK,
-				Messages.MGanttSeries_item_hyperlink);
+				Messages.common_item_hyperlink);
 		itemHyperLinkD.setDescription(Messages.MGanttSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 

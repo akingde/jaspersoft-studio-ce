@@ -12,6 +12,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
@@ -78,22 +79,22 @@ public class MCategorySeries extends APropertyNode {
 		desc.add(catExpD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCategorySeries.PROPERTY_LABEL_EXPRESSION, Messages.MCategorySeries_label_expression);
+				JRDesignCategorySeries.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
 		lblExprD.setDescription(Messages.MCategorySeries_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCategorySeries.PROPERTY_SERIES_EXPRESSION, Messages.MCategorySeries_series_expression);
+				JRDesignCategorySeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
 		seriesExprD.setDescription(Messages.MCategorySeries_series_expression_description);
 		desc.add(seriesExprD);
 
 		JRExpressionPropertyDescriptor valExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCategorySeries.PROPERTY_VALUE_EXPRESSION, Messages.MCategorySeries_value_expression);
+				JRDesignCategorySeries.PROPERTY_VALUE_EXPRESSION, Messages.common_value_expression);
 		valExprD.setDescription(Messages.MCategorySeries_value_expression_description);
 		desc.add(valExprD);
 
 		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignCategorySeries.PROPERTY_ITEM_HYPERLINK,
-				Messages.MCategorySeries_item_hyperlink);
+				Messages.common_item_hyperlink);
 		itemHyperLinkD.setDescription(Messages.MCategorySeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 

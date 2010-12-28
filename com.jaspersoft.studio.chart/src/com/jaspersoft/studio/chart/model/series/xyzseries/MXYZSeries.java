@@ -12,6 +12,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IIconDescriptor;
@@ -73,12 +74,12 @@ public class MXYZSeries extends APropertyNode {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor xValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION, Messages.MXYZSeries_x_value_expression);
+				JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION, Messages.common_x_value_expression);
 		xValueExpD.setDescription(Messages.MXYZSeries_x_value_expression_description);
 		desc.add(xValueExpD);
 
 		JRExpressionPropertyDescriptor yValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION, Messages.MXYZSeries_y_value_expression);
+				JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION, Messages.common_y_value_expression);
 		yValueExpD.setDescription(Messages.MXYZSeries_y_value_expression_description);
 		desc.add(yValueExpD);
 
@@ -88,12 +89,12 @@ public class MXYZSeries extends APropertyNode {
 		desc.add(zValueExpD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION, Messages.MXYZSeries_series_expression);
+				JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
 		seriesExprD.setDescription(Messages.MXYZSeries_series_expression_description);
 		desc.add(seriesExprD);
 
 		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignXyzSeries.PROPERTY_ITEM_HYPERLINK,
-				Messages.MXYZSeries_item_hyperlink);
+				Messages.common_item_hyperlink);
 		itemHyperLinkD.setDescription(Messages.MXYZSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 

@@ -24,6 +24,7 @@ import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.model.dataset.MChartDataset;
 import com.jaspersoft.studio.chart.model.series.gantt.MGanttSeries;
 
@@ -49,7 +50,7 @@ public class ReorderGanttSeriesCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderGanttSeriesCommand(MGanttSeries child, MChartDataset parent, int newIndex) {
-		super(Messages.ReorderGanttSeriesCommand_reorder_elements); 
+		super(Messages.common_reorder_elements); 
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignGanttSeries) child.getValue();
 		this.jrGroup = (JRDesignGanttDataset) parent.getValue();
