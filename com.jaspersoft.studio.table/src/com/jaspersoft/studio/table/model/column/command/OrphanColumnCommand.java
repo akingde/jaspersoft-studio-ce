@@ -25,6 +25,7 @@ import net.sf.jasperreports.components.table.StandardTable;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.table.model.AMCollection;
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.column.MColumn;
 
 /**
@@ -49,7 +50,7 @@ public class OrphanColumnCommand extends Command {
 	 *          the child
 	 */
 	public OrphanColumnCommand(AMCollection parent, MColumn child) {
-		super("Orphan element");
+		super(Messages.common_orphan_element);
 		this.jrTable = CreateColumnCommand.getTable(parent);
 		this.jrColumn = (StandardBaseColumn) child.getValue();
 	}

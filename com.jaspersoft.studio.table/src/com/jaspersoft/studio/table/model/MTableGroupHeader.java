@@ -31,6 +31,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.table.TableComponentFactory;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
+import com.jaspersoft.studio.table.messages.Messages;
 
 public class MTableGroupHeader extends AMCollection {
 
@@ -44,7 +45,7 @@ public class MTableGroupHeader extends AMCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablegroupheader");
+			iconDescriptor = new TableNodeIconDescriptor("tablegroupheader"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -64,7 +65,7 @@ public class MTableGroupHeader extends AMCollection {
 	}
 
 	public String getDisplayText() {
-		return "Group Header: " + jrDesignGroup.getName();
+		return Messages.MTableGroupHeader_group_header + ": " + jrDesignGroup.getName(); //$NON-NLS-1$
 	}
 
 	/*

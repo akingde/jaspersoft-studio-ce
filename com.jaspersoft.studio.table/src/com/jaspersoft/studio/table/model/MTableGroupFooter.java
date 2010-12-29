@@ -32,6 +32,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.table.TableComponentFactory;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
+import com.jaspersoft.studio.table.messages.Messages;
 
 public class MTableGroupFooter extends AMCollection {
 
@@ -45,7 +46,7 @@ public class MTableGroupFooter extends AMCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablegroupfooter");
+			iconDescriptor = new TableNodeIconDescriptor("tablegroupfooter"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -70,7 +71,7 @@ public class MTableGroupFooter extends AMCollection {
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
 	public String getDisplayText() {
-		return "Group Footer: " + jrDesignGroup.getName();
+		return Messages.MTableGroupFooter_group_footer + ": " + jrDesignGroup.getName(); //$NON-NLS-1$
 	}
 
 	/*

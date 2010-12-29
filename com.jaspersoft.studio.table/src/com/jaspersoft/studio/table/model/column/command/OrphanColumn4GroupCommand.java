@@ -25,6 +25,7 @@ import net.sf.jasperreports.components.table.StandardTable;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.column.MColumn;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroupCell;
@@ -53,14 +54,14 @@ public class OrphanColumn4GroupCommand extends Command {
 	 *          the child
 	 */
 	public OrphanColumn4GroupCommand(MColumnGroup parent, MColumn child) {
-		super("Orphan element");
+		super(Messages.common_orphan_element);
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();
 		this.jrTable = CreateColumnCommand.getTable(parent.getMTable());
 	}
 
 	public OrphanColumn4GroupCommand(MColumnGroupCell parent, MColumn child) {
-		super("Orphan element");
+		super(Messages.common_orphan_element);
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();
 		this.jrTable = CreateColumnCommand.getTable(parent.getMTable());

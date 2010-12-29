@@ -127,7 +127,7 @@ public class TableComponentFactory implements IComponentFactory {
 		if (groupsList != null)
 			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
 				JRDesignGroup jrGroup = (JRDesignGroup) it.next();
-				grHeaders.add(new MTableGroupHeader(mt, tbl, jrGroup, ""));
+				grHeaders.add(new MTableGroupHeader(mt, tbl, jrGroup, "")); //$NON-NLS-1$
 			}
 
 		MTableDetail mtd = new MTableDetail(mt, tbl, StandardColumn.PROPERTY_DETAIL);
@@ -135,7 +135,7 @@ public class TableComponentFactory implements IComponentFactory {
 		if (groupsList != null)
 			for (ListIterator<?> it = groupsList.listIterator(groupsList.size()); it.hasPrevious();) {
 				JRDesignGroup jrGroup = (JRDesignGroup) it.previous();
-				grFooters.add(new MTableGroupFooter(mt, tbl, jrGroup, ""));
+				grFooters.add(new MTableGroupFooter(mt, tbl, jrGroup, "")); //$NON-NLS-1$
 			}
 
 		MTableColumnFooter mtcf = new MTableColumnFooter(mt, tbl, StandardColumn.PROPERTY_COLUMN_FOOTER);

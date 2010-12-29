@@ -43,7 +43,7 @@ public class MTableFooter extends AMCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tablefooter");
+			iconDescriptor = new TableNodeIconDescriptor("tablefooter"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

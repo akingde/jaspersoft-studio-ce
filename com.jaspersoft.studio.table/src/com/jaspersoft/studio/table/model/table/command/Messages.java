@@ -3,7 +3,7 @@ package com.jaspersoft.studio.table.model.table.command;
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "com.jaspersoft.studio.barcode.command.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "com.jaspersoft.studio.table.model.table.command.messages"; //$NON-NLS-1$
 	public static String BarcodeWizard_window_title;
 	public static String BarcodeWizardPage_barbecue_types;
 	public static String BarcodeWizardPage_barcode_wizard;

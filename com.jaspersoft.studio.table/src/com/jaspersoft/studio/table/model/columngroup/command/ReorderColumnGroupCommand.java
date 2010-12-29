@@ -24,6 +24,7 @@ import net.sf.jasperreports.components.table.StandardColumnGroup;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.column.MColumn;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroupCell;
@@ -50,14 +51,14 @@ public class ReorderColumnGroupCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderColumnGroupCommand(MColumn child, MColumnGroup parent, int newIndex) {
-		super("Reorder Column Group");
+		super(Messages.ReorderColumnGroupCommand_reorder_column_group);
 		this.newIndex = newIndex;
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();
 	}
 
 	public ReorderColumnGroupCommand(MColumn child, MColumnGroupCell parent, int newIndex) {
-		super("Reorder Column Group");
+		super(Messages.ReorderColumnGroupCommand_reorder_column_group);
 		this.newIndex = newIndex;
 		this.jrGroup = (StandardColumnGroup) parent.getValue();
 		this.jrColumn = (StandardBaseColumn) child.getValue();

@@ -25,6 +25,7 @@ import net.sf.jasperreports.components.table.StandardTable;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.table.model.MTable;
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.column.MColumn;
 
 /**
@@ -49,7 +50,7 @@ public class ReorderColumnCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderColumnCommand(MColumn child, MTable parent, int newIndex) {
-		super(Messages.ReorderColumnCommand_column_text_dialog);
+		super(Messages.ReorderColumnCommand_reorder_columns);
 
 		this.newIndex = newIndex;
 		this.jrTable = CreateColumnCommand.getTable(parent);

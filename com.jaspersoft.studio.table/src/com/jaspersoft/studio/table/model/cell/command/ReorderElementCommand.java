@@ -6,7 +6,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.command.Messages;
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.column.MCell;
 
 public class ReorderElementCommand extends Command {
@@ -27,7 +27,7 @@ public class ReorderElementCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderElementCommand(MGraphicElement child, MCell parent, int newIndex) {
-		super(Messages.ReorderElementCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignElement) child.getValue();
 		this.jrCell = parent.getCell();

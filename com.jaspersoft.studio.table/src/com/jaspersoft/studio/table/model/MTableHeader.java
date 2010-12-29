@@ -54,7 +54,7 @@ public class MTableHeader extends AMCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tableheader");
+			iconDescriptor = new TableNodeIconDescriptor("tableheader"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

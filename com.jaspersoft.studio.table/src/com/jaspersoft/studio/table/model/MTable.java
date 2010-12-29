@@ -44,6 +44,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.table.TableManager;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
+import com.jaspersoft.studio.table.messages.Messages;
 
 public class MTable extends MGraphicElement implements IContainer, IContainerEditPart, IGroupElement {
 	/** The icon descriptor. */
@@ -56,7 +57,7 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("table");
+			iconDescriptor = new TableNodeIconDescriptor("table"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
@@ -122,9 +123,9 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(StandardTable.PROPERTY_DATASET_RUN, "Dataset Run");
-		datasetRunD.setDescription("Dataset run.");
-		datasetRunD.setCategory("Table Properties");
+		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(StandardTable.PROPERTY_DATASET_RUN, Messages.MTable_dataset_run);
+		datasetRunD.setDescription(Messages.MTable_dataset_run_description);
+		datasetRunD.setCategory(Messages.MTable_table_properties_category);
 		desc.add(datasetRunD);
 
 	}

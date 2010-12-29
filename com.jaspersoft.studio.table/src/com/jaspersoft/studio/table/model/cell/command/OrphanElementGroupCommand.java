@@ -6,7 +6,7 @@ import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.MElementGroup;
-import com.jaspersoft.studio.model.command.Messages;
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.column.MCell;
 
 public class OrphanElementGroupCommand extends Command {
@@ -25,7 +25,7 @@ public class OrphanElementGroupCommand extends Command {
 	 *          the child
 	 */
 	public OrphanElementGroupCommand(MCell parent, MElementGroup child) {
-		super(Messages.OrphanElementCommand_orphan_child);
+		super(Messages.common_orphan_child);
 		this.jrElement = (JRDesignElementGroup) child.getValue();
 		this.jrCell = parent.getCell();
 	}

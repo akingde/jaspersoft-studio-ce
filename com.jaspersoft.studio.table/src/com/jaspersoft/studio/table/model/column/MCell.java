@@ -52,6 +52,7 @@ import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.model.MTableGroupFooter;
@@ -116,7 +117,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 			if (styleD != null && cell != null) {
 				JRStyle[] styles = jasperDesign.getStyles();
 				String[] items = new String[styles.length + 1];
-				items[0] = cell.getStyleNameReference() != null ? cell.getStyleNameReference() : "";
+				items[0] = cell.getStyleNameReference() != null ? cell.getStyleNameReference() : ""; //$NON-NLS-1$
 				for (int j = 0; j < styles.length; j++) {
 					items[j + 1] = styles[j].getName();
 				}
@@ -136,26 +137,26 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		styleD = new RWComboBoxPropertyDescriptor(DesignCell.PROPERTY_STYLE, "Parent Style", new String[] { "" },
+		styleD = new RWComboBoxPropertyDescriptor(DesignCell.PROPERTY_STYLE, Messages.MCell_parent_style, new String[] { "" }, //$NON-NLS-2$
 				NullEnum.NULL);
-		styleD.setDescription("Name of the report level style to use as base style (see <style> element).");
+		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
 
-		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(DesignCell.PROPERTY_HEIGHT, "Height");
+		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(DesignCell.PROPERTY_HEIGHT, Messages.MCell_height);
 		desc.add(hD);
 
-		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, "Line Box");
-		lineBoxD.setDescription("Groups the properties of the pen used to draw lines or borders.");
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MCell_line_box);
+		lineBoxD.setDescription(Messages.MCell_line_box_description);
 		desc.add(lineBoxD);
 
-		styleD.setCategory("Cell Properties");
-		hD.setCategory("Cell Properties");
-		lineBoxD.setCategory("Cell Properties");
+		styleD.setCategory(Messages.MCell_cell_properties_category);
+		hD.setCategory(Messages.MCell_cell_properties_category);
+		lineBoxD.setCategory(Messages.MCell_cell_properties_category);
 
 		defaultsMap.put(DesignCell.PROPERTY_STYLE, null);
 	}
 
-	public static final String LINE_BOX = "LineBox";
+	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
 	private MLineBox lineBox;
 
 	/*
@@ -170,7 +171,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 					return cell.getStyleNameReference();
 				if (cell.getStyle() != null)
 					return cell.getStyle().getName();
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 			if (id.equals(DesignCell.PROPERTY_HEIGHT))
@@ -195,7 +196,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	public void setPropertyValue(Object id, Object value) {
 		if (cell != null) {
 			if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
-				if (!value.equals("")) {
+				if (!value.equals("")) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
 					if (style != null) {
 						cell.setStyle(style);

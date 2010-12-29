@@ -196,7 +196,7 @@ public class CreateTableCommand extends Command {
 			// jrElement.setKey((String) wizardDescriptor.getProperty("basename"));
 			((JRDesignComponentElement) jrElement).setComponent(component);
 			((JRDesignComponentElement) jrElement).setComponentKey(new ComponentKey(
-					"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table"));
+					"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 			JRDesignDataset newDataset = new JRDesignDataset(false);
 			String name = "Table Dataset ";
@@ -220,8 +220,8 @@ public class CreateTableCommand extends Command {
 
 			datasetRun.setDatasetName(newDataset.getName());
 			JRDesignExpression exp = new JRDesignExpression();
-			exp.setValueClassName("net.sf.jasperreports.engine.JRDataSource");// NOI18N
-			exp.setText("new net.sf.jasperreports.engine.JREmptyDataSource(1)");// NOI18N
+			exp.setValueClassName("net.sf.jasperreports.engine.JRDataSource");// NOI18N //$NON-NLS-1$
+			exp.setText("new net.sf.jasperreports.engine.JREmptyDataSource(1)");// NOI18N //$NON-NLS-1$
 
 			datasetRun.setDataSourceExpression(exp);
 			component.setDatasetRun(datasetRun);

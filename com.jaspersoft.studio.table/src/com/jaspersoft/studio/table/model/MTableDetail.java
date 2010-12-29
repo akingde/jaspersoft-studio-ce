@@ -43,7 +43,7 @@ public class MTableDetail extends AMCollection {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new TableNodeIconDescriptor("tabledetail");
+			iconDescriptor = new TableNodeIconDescriptor("tabledetail"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
