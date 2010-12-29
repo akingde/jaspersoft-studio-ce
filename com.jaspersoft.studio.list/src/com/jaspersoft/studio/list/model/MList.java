@@ -40,6 +40,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.list.ListNodeIconDescriptor;
+import com.jaspersoft.studio.list.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -130,29 +131,29 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 						PrintOrderEnum.values(), NullEnum.NOTNULL));
 		stretchTypeD.setDescription(Messages.MList_print_order_description);
 		desc.add(stretchTypeD);
-		stretchTypeD.setCategory(Messages.MList_properties_category);
+		stretchTypeD.setCategory(Messages.MList_list_properties_category);
 
 		CheckBoxPropertyDescriptor ignoreWidthD = new CheckBoxPropertyDescriptor(
 				StandardListComponent.PROPERTY_IGNORE_WIDTH, Messages.MList_ignore_width);
 		ignoreWidthD.setDescription(Messages.MList_ignore_width_description);
 		desc.add(ignoreWidthD);
-		ignoreWidthD.setCategory(Messages.MList_properties_category);
+		ignoreWidthD.setCategory(Messages.MList_list_properties_category);
 
 		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(PREFIX + DesignListContents.PROPERTY_HEIGHT,
 				Messages.MList_cell_height);
-		heightD.setCategory(Messages.MList_properties_category);
+		heightD.setCategory(Messages.MList_list_properties_category);
 		heightD.setDescription(Messages.MList_cell_height_description);
 		desc.add(heightD);
 
 		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(PREFIX + DesignListContents.PROPERTY_WIDTH,
 				Messages.MList_cell_width);
-		widthD.setCategory(Messages.MList_properties_category);
+		widthD.setCategory(Messages.MList_list_properties_category);
 		widthD.setDescription(Messages.MList_cell_width_description);
 		desc.add(widthD);
 
 		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(PREFIX + "DATASET_RUN", Messages.MList_dataset_run); //$NON-NLS-1$
 		datasetRunD.setDescription(Messages.MList_dataset_run_description);
-		datasetRunD.setCategory(Messages.MList_properties_category);
+		datasetRunD.setCategory(Messages.MList_list_properties_category);
 		desc.add(datasetRunD);
 
 		defaultsMap.put(StandardListComponent.PROPERTY_IGNORE_WIDTH, new Boolean(false));

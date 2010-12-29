@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.list.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
 
