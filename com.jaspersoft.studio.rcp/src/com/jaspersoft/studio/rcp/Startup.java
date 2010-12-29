@@ -38,6 +38,8 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.ui.IStartup;
 
+import com.jaspersoft.studio.rcp.messages.Messages;
+
 /**
  *
  */
@@ -45,7 +47,7 @@ public class Startup implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("JSS_PROJECT");
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("JSS_PROJECT"); //$NON-NLS-1$
 		try
 		{
 			if (!project.exists())
@@ -55,7 +57,7 @@ public class Startup implements IStartup {
 			project.open(null);
 
 			IProjectDescription description = project.getDescription();
-			description.setName("JSS Project");
+			description.setName(Messages.Startup_jss_project);
 			String[] ids = description.getNatureIds();
 			if (!Arrays.asList(ids).contains(JavaCore.NATURE_ID))
 			{

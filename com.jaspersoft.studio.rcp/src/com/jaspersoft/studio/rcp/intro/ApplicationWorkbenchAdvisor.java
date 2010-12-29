@@ -41,7 +41,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
     }
 
 	public String getInitialWindowPerspectiveId() {
-		return "com.jaspersoft.studio.ReportDesignPerspective";//FIXME export this from studio plugin?
+		return "com.jaspersoft.studio.ReportDesignPerspective";//FIXME export this from studio plugin? //$NON-NLS-1$
 	}
 	
 	@Override

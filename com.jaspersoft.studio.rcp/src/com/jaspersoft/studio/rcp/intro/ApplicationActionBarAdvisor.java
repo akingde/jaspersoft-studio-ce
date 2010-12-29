@@ -34,6 +34,8 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
+import com.jaspersoft.studio.rcp.messages.Messages;
+
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	private IWorkbenchAction saveAction;
@@ -70,20 +72,20 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	protected void fillMenuBar(IMenuManager menuBar) {
 
-		MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
+		MenuManager fileMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_file, IWorkbenchActionConstants.M_FILE);
 		menuBar.add(fileMenu);
 
 		fileMenu.add(saveAction);
 		fileMenu.add(reopenEditorsContributionItem);
 
-		MenuManager windowMenu = new MenuManager("&Window", IWorkbenchActionConstants.M_WINDOW);
+		MenuManager windowMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_window, IWorkbenchActionConstants.M_WINDOW);
 		menuBar.add(windowMenu);
 
 		// Window
 		windowMenu.add(viewsShortlistContributionItem);
 		windowMenu.add(preferencesAction);
 
-		MenuManager helpMenu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
+		MenuManager helpMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_help, IWorkbenchActionConstants.M_HELP);
 		menuBar.add(helpMenu);
 
 		// Help
