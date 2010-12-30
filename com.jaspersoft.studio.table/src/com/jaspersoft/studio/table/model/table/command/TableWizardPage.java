@@ -39,9 +39,9 @@ public class TableWizardPage extends WizardPage {
 
 	protected TableWizardPage() {
 		super("barcodepage"); //$NON-NLS-1$
-		setTitle(Messages.BarcodeWizardPage_barcode_wizard);
-		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a
-				+ Messages.BarcodeWizardPage_barcode_wizard_description_b);
+		setTitle(Messages.TableWizardPage_wizard);
+		setDescription(Messages.TableWizardPage_wizard_description_a
+				+ Messages.TableWizardPage_wizard_description_b);
 	}
 
 	@Override
@@ -57,37 +57,37 @@ public class TableWizardPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.BarcodeWizardPage_barbecue_types);
-
-		lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.BarcodeWizardPage_barcode4j_types);
-
-		final Table table = new Table(composite, SWT.NONE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.heightHint = 500;
-		gd.widthHint = 300;
-		table.setLayoutData(gd);
-		table.setHeaderVisible(false);
-		table.setLinesVisible(true);
-
-		TableColumn[] column = new TableColumn[1];
-		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText(Messages.BarcodeWizardPage_name);
-
-		column[0].pack();
-
-		final Table table2 = new Table(composite, SWT.NONE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.heightHint = 500;
-		gd.widthHint = 300;
-		table2.setLayoutData(gd);
-		table2.setHeaderVisible(false);
-		table2.setLinesVisible(true);
-
-		TableColumn[] column2 = new TableColumn[1];
-		column2[0] = new TableColumn(table2, SWT.NONE);
-		column2[0].setText(Messages.BarcodeWizardPage_name);
+		// Label lbl = new Label(composite, SWT.NONE);
+		// lbl.setText(Messages.BarcodeWizardPage_barbecue_types);
+		//
+		// lbl = new Label(composite, SWT.NONE);
+		// lbl.setText(Messages.BarcodeWizardPage_barcode4j_types);
+		//
+		// final Table table = new Table(composite, SWT.NONE);
+		// GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		// gd.heightHint = 500;
+		// gd.widthHint = 300;
+		// table.setLayoutData(gd);
+		// table.setHeaderVisible(false);
+		// table.setLinesVisible(true);
+		//
+		// TableColumn[] column = new TableColumn[1];
+		// column[0] = new TableColumn(table, SWT.NONE);
+		// column[0].setText(Messages.BarcodeWizardPage_name);
+		//
+		// column[0].pack();
+		//
+		// final Table table2 = new Table(composite, SWT.NONE);
+		// gd = new GridData(GridData.FILL_HORIZONTAL);
+		// gd.heightHint = 500;
+		// gd.widthHint = 300;
+		// table2.setLayoutData(gd);
+		// table2.setHeaderVisible(false);
+		// table2.setLinesVisible(true);
+		//
+		// TableColumn[] column2 = new TableColumn[1];
+		// column2[0] = new TableColumn(table2, SWT.NONE);
+		// column2[0].setText(Messages.BarcodeWizardPage_name);
 
 	}
 

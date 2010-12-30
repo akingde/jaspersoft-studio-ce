@@ -29,7 +29,7 @@ public class TableWizard extends Wizard {
 
 	public TableWizard() {
 		super();
-		setWindowTitle(Messages.BarcodeWizard_window_title);
+		setWindowTitle(Messages.TableWizard_window_title);
 	}
 
 	@Override
