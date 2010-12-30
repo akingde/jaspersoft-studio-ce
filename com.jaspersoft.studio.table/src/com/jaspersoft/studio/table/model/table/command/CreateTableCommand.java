@@ -199,7 +199,7 @@ public class CreateTableCommand extends Command {
 					"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 			JRDesignDataset newDataset = new JRDesignDataset(false);
-			String name = "Table Dataset ";
+			String name = "Table Dataset "; //$NON-NLS-1$
 			for (int i = 1;; i++) {
 				if (!jrDesign.getDatasetMap().containsKey(name + i)) {
 					newDataset.setName(name + i);

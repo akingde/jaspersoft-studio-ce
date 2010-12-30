@@ -21,13 +21,10 @@ package com.jaspersoft.studio.table.model.table.command;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.MTable;
 
 public class TableWizardPage extends WizardPage {
@@ -39,9 +36,8 @@ public class TableWizardPage extends WizardPage {
 
 	protected TableWizardPage() {
 		super("barcodepage"); //$NON-NLS-1$
-		setTitle(Messages.TableWizardPage_wizard);
-		setDescription(Messages.TableWizardPage_wizard_description_a
-				+ Messages.TableWizardPage_wizard_description_b);
+		setTitle(Messages.common_table_wizard);
+		setDescription(Messages.TableWizardPage_wizard_description);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ public class Messages extends NLS {
 	public static String common_orphan_child;
 	public static String common_orphan_element;
 	public static String common_reorder_elements;
+	public static String common_table_wizard;
 	public static String CreateColumnAction_create_column;
 	public static String CreateColumnAction_create_column_group;
 	public static String CreateColumnAction_create_column_group_tool_tip;
@@ -30,6 +31,7 @@ public class Messages extends NLS {
 	public static String MTableGroupHeader_group_header;
 	public static String ReorderColumnCommand_reorder_columns;
 	public static String ReorderColumnGroupCommand_reorder_column_group;
+	public static String TableWizardPage_wizard_description;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

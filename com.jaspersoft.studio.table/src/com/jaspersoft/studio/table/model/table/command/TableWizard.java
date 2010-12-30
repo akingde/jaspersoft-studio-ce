@@ -21,6 +21,7 @@ package com.jaspersoft.studio.table.model.table.command;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.MTable;
 
 public class TableWizard extends Wizard {
@@ -29,7 +30,7 @@ public class TableWizard extends Wizard {
 
 	public TableWizard() {
 		super();
-		setWindowTitle(Messages.TableWizard_window_title);
+		setWindowTitle(Messages.common_table_wizard);
 	}
 
 	@Override
