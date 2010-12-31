@@ -37,8 +37,8 @@ import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
-import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
@@ -165,7 +165,8 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		desc.add(valueClassD);
 
 		ClassTypePropertyDescriptor incFactClassD = new ClassTypePropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME, Messages.MMeasure_incrementer_factory_class_name);
+				JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME,
+				Messages.MMeasure_incrementer_factory_class_name);
 		incFactClassD.setDescription(Messages.MMeasure_incrementer_factory_class_name_description);
 		desc.add(incFactClassD);
 

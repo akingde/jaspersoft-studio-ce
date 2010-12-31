@@ -7,7 +7,7 @@ import org.eclipse.swt.graphics.Color;
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MCrosstabHeader extends ANode {
 

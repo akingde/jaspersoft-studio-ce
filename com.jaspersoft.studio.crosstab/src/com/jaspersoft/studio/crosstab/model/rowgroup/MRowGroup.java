@@ -40,7 +40,7 @@ import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.crosstab.model.MCrosstabGroup;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
-import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -135,7 +135,8 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 		columnPositionD.setDescription(Messages.MRowGroup_row_position_description);
 		desc.add(columnPositionD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRDesignCrosstabRowGroup.PROPERTY_WIDTH, Messages.common_width);
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRDesignCrosstabRowGroup.PROPERTY_WIDTH,
+				Messages.common_width);
 		widthD.setDescription(Messages.MRowGroup_width_description);
 		desc.add(widthD);
 
@@ -165,13 +166,13 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 		if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_POSITION))
 			jrField.setPosition((CrosstabRowPositionEnum) EnumHelper.getSetValue(CrosstabRowPositionEnum.values(), value, 0,
 					false));
-		else if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_WIDTH)){
+		else if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_WIDTH)) {
 			jrField.setWidth((Integer) value);
 			MCrosstab cross = getMCrosstab();
 			cross.getCrosstabManager().refresh();
 			getPropertyChangeSupport().firePropertyChange(
 					new PropertyChangeEvent(this, JRDesignCrosstabRowGroup.PROPERTY_WIDTH, null, value));
-		}else
+		} else
 			super.setPropertyValue(id, value);
 	}
 

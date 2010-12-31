@@ -4,10 +4,10 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabLayoutEditPolicy;
-import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 
-public class CrosstabEditPart extends FigureEditPart {
+public class CrosstabEditPart extends EditableFigureEditPart {
 
 	/*
 	 * (non-Javadoc)

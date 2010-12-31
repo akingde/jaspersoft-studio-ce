@@ -40,6 +40,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
+import com.jaspersoft.studio.crosstab.editor.CrosstabEditor;
 import com.jaspersoft.studio.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.crosstab.figure.CrosstabFigure;
 import com.jaspersoft.studio.crosstab.messages.Messages;
@@ -86,16 +87,18 @@ import com.jaspersoft.studio.crosstab.model.rowgroup.command.CreateRowGroupComma
 import com.jaspersoft.studio.crosstab.model.rowgroup.command.DeleteRowGroupCommand;
 import com.jaspersoft.studio.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.crosstab.part.CrosstabEditPart;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.util.ReportFactory;
 
 public class CrosstabComponentFactory implements IComponentFactory {
 
@@ -105,28 +108,29 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			ct.preprocess();
 			CrosstabManager ctManager = new CrosstabManager(ct);
 			MCrosstab mCrosstab = new MCrosstab(parent, ct, newIndex, ctManager);
-			MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct, JRDesignCrosstab.PROPERTY_PARAMETERS);
-			if (ct.getParameters() != null)
-				for (JRCrosstabParameter p : ct.getParameters())
-					ReportFactory.createNode(mp, p, -1);
+			if (parent instanceof MPage) {
+				MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct, JRDesignCrosstab.PROPERTY_PARAMETERS);
+				if (ct.getParameters() != null)
+					for (JRCrosstabParameter p : ct.getParameters())
+						ReportFactory.createNode(mp, p, -1);
 
-			MRowGroups mrg = new MRowGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_ROW_GROUPS);
-			if (ct.getRowGroups() != null)
-				for (JRCrosstabRowGroup p : ct.getRowGroups())
-					ReportFactory.createNode(mrg, p, -1);
+				MRowGroups mrg = new MRowGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_ROW_GROUPS);
+				if (ct.getRowGroups() != null)
+					for (JRCrosstabRowGroup p : ct.getRowGroups())
+						ReportFactory.createNode(mrg, p, -1);
 
-			MColumnGroups mcg = new MColumnGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
-			if (ct.getColumnGroups() != null)
-				for (JRCrosstabColumnGroup p : ct.getColumnGroups())
-					ReportFactory.createNode(mcg, p, -1);
+				MColumnGroups mcg = new MColumnGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
+				if (ct.getColumnGroups() != null)
+					for (JRCrosstabColumnGroup p : ct.getColumnGroups())
+						ReportFactory.createNode(mcg, p, -1);
 
-			MMeasures mm = new MMeasures(mCrosstab, ct, JRDesignCrosstab.PROPERTY_MEASURES);
-			if (ct.getMeasures() != null)
-				for (JRCrosstabMeasure p : ct.getMeasures())
-					ReportFactory.createNode(mm, p, -1);
-			// ---------------------------------
-			createCellNodes(ct, mCrosstab);
-
+				MMeasures mm = new MMeasures(mCrosstab, ct, JRDesignCrosstab.PROPERTY_MEASURES);
+				if (ct.getMeasures() != null)
+					for (JRCrosstabMeasure p : ct.getMeasures())
+						ReportFactory.createNode(mm, p, -1);
+				// ---------------------------------
+				createCellNodes(ct, mCrosstab);
+			}
 			return mCrosstab;
 		}
 		if (jrObject instanceof JRCrosstabRowGroup) {
@@ -150,11 +154,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createColumnGroupCells(MColumnGroup rg, JRCrosstabColumnGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + ": " + p.getName()); //$NON-NLS-1$
+		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + ": " + p.getName()); //$NON-NLS-1$
+			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}
@@ -167,11 +171,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createRowGroupCells(MRowGroup rg, JRCrosstabRowGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + ": " + p.getName()); //$NON-NLS-1$
+		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + ": " + p.getName()); //$NON-NLS-1$
+			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}
@@ -408,6 +412,12 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			return new OrphanElementCommand((MCell) parent, (MGraphicElement) child);
 		if (child instanceof MElementGroup && parent instanceof MCell)
 			return new OrphanElementGroupCommand((MCell) parent, (MElementGroup) child);
+		return null;
+	}
+
+	public AbstractVisualEditor getEditor(Object node) {
+		if (node instanceof JRDesignCrosstab)
+			return new CrosstabEditor();
 		return null;
 	}
 
