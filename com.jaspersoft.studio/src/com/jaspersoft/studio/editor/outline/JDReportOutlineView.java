@@ -46,10 +46,13 @@ import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
@@ -58,6 +61,7 @@ import org.eclipse.ui.part.PageBook;
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
+import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
@@ -75,6 +79,7 @@ import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.EditorContributor;
+import com.jaspersoft.studio.model.ANode;
 
 /**
  * The Class JDReportOutlineView.
@@ -205,8 +210,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		getViewer().setEditPartFactory(new OutlineTreeEditPartFactory());
 		ContextMenuProvider provider = new AppContextMenuProvider(getViewer(), editor.getActionRegistry());
 		getViewer().setContextMenu(provider);
-		getSite().registerContextMenu("com.jaspersoft.studio.outline.contextmenu", //$NON-NLS-1$
-				provider, getSite().getSelectionProvider());
+
 		getViewer().addDropTargetListener((TransferDropTargetListener) new TemplateTransferDropTargetListener(getViewer()) {
 			@Override
 			protected CreationFactory getFactory(Object template) {
@@ -214,7 +218,11 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 			}
 		});
 
-		IToolBarManager tbm = getSite().getActionBars().getToolBarManager();
+		IPageSite site = getSite();
+		site.registerContextMenu("com.jaspersoft.studio.outline.contextmenu", //$NON-NLS-1$
+				provider, site.getSelectionProvider());
+
+		IToolBarManager tbm = site.getActionBars().getToolBarManager();
 		showOutlineAction = new Action() {
 			public void run() {
 				showPage(ID_OUTLINE);
@@ -233,7 +241,9 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 				"icons/overview.gif")); //$NON-NLS-1$
 		showOverviewAction.setToolTipText(Messages.JDReportOutlineView_show_overview_tool_tip);
 		tbm.add(showOverviewAction);
+
 		showPage(ID_OUTLINE);
+
 	}
 
 	/*
@@ -248,11 +258,37 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		pageBook.showPage(outline);
 		configureOutlineViewer();
 		hookOutlineViewer();
-		getViewer().setContents(editor.getModel());
+		setContents(editor.getModel());
 		if (outline instanceof Tree) {
 			Tree tree = (Tree) outline;
 			if (tree.getItems() != null && tree.getItems().length > 0)
 				tree.getItem(0).setExpanded(true);
+			tree.addMouseListener(new MouseListener() {
+
+				public void mouseUp(MouseEvent e) {
+
+				}
+
+				public void mouseDown(MouseEvent e) {
+
+				}
+
+				public void mouseDoubleClick(MouseEvent e) {
+					if (e.getSource() instanceof Tree) {
+						Tree t = (Tree) e.getSource();
+						TreeItem[] ti = t.getSelection();
+						if (ti != null && ti.length > 0) {
+							Object obj = ti[0].getData();
+							if (obj instanceof ATreeEditPart) {
+								ATreeEditPart atep = (ATreeEditPart) obj;
+								if (atep.getModel() instanceof ANode) {
+									EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), editor);
+								}
+							}
+						}
+					}
+				}
+			});
 		}
 	}
 

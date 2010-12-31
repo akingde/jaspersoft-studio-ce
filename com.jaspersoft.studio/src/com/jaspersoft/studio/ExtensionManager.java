@@ -32,6 +32,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 
 public class ExtensionManager {
@@ -151,5 +152,14 @@ public class ExtensionManager {
 				lst.addAll(l);
 		}
 		return lst;
+	}
+
+	public AbstractVisualEditor getEditor(Object parent) {
+		for (IComponentFactory f : nodeFactory) {
+			AbstractVisualEditor n = f.getEditor(parent);
+			if (n != null)
+				return n;
+		}
+		return null;
 	}
 }

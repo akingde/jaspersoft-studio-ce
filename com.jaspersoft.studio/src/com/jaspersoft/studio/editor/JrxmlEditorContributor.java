@@ -22,6 +22,8 @@ package com.jaspersoft.studio.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.DeleteRetargetAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -62,6 +64,7 @@ import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 
 /**
@@ -136,14 +139,19 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		// addRetargetAction(new MatchWidthRetargetAction());
 		// addRetargetAction(new MatchHeightRetargetAction());
 		// GEFMessages.ToggleRulerVisibility_Label
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_show_ruler, IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_guides, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY,
+				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_show_ruler, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID,
+				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_guides, IAction.AS_CHECK_BOX));
 
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_show_grid, IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_geometry,
-				IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SnapToGridAction.ID, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_grid, IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SizeGridAction.ID, com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_grid_size));
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY,
+				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_show_grid, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY,
+				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_geometry, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SnapToGridAction.ID,
+				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_grid, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SizeGridAction.ID,
+				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_grid_size));
 	}
 
 	/**
@@ -234,8 +242,14 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			bars.setGlobalActionHandler(ActionFactory.FIND.getId(), getAction(editor, ITextEditorActionConstants.FIND));
 			bars.setGlobalActionHandler(IDEActionFactory.BOOKMARK.getId(),
 					getAction(editor, IDEActionFactory.BOOKMARK.getId()));
-		} else if (activeEditor instanceof ReportContainer) {
+		} else if (activeEditor instanceof ReportContainer || activeEditor instanceof AbstractVisualEditor) {
 			addZoom(bars.getToolBarManager());
+			if (activeEditor instanceof AbstractVisualEditor) {
+				GraphicalViewer graphicalViewer = ((AbstractVisualEditor) activeEditor).getGraphicalViewer();
+				ZoomManager property = (ZoomManager) graphicalViewer.getProperty(ZoomManager.class.toString());
+				if (property != null)
+					zoomCombo.setZoomManager(property);
+			}
 			ActionRegistry registry = (ActionRegistry) activeEditor.getAdapter(ActionRegistry.class);
 			if (registry != null)
 				for (String id : globalActionKeys) {
@@ -264,11 +278,15 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	private void createActions() {
 		sampleAction = new Action() {
 			public void run() {
-				MessageDialog.openInformation(null, "Jasper Studio", com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action_executed); //$NON-NLS-1$
+				MessageDialog
+						.openInformation(
+								null,
+								"Jasper Studio", com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action_executed); //$NON-NLS-1$
 			}
 		};
 		sampleAction.setText(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action);
-		sampleAction.setToolTipText(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action_tool_tip);
+		sampleAction
+				.setToolTipText(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action_tool_tip);
 		sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(IDE.SharedImages.IMG_OBJS_TASK_TSK));
 	}
@@ -331,7 +349,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			manager.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);
 		}
 
-		MenuManager viewMenu = new MenuManager(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_view);
+		MenuManager viewMenu = new MenuManager(
+				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_view);
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
 		viewMenu.add(new Separator());
@@ -345,7 +364,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 
-		IMenuManager menu = new MenuManager(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_editor_menu);
+		IMenuManager menu = new MenuManager(
+				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_editor_menu);
 		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
 		menu.add(sampleAction);
 

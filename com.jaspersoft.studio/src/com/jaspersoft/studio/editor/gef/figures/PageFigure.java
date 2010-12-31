@@ -54,7 +54,7 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 	private JasperDesign jrDesign = null;
 
 	/** The bands height. */
-	private int bandsHeight = 0;
+	private int bandsHeight = 300;
 
 	private GridLayer grid = new GridLayer();
 
@@ -117,10 +117,10 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 			int pageWidth = jrDesign.getPageWidth();
 			int pageHeight = bandsHeight;// + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
 
-			int leftMargin = jrDesign.getLeftMargin();
-			int rightMargin = jrDesign.getRightMargin();
-			int topMargin = jrDesign.getTopMargin();
-			// int bottomMargin = jrDesign.getBottomMargin();
+			int leftMargin = PAGE_BORDER.left;
+			int rightMargin = PAGE_BORDER.right;
+			int topMargin = PAGE_BORDER.top;
+			int bottomMargin = PAGE_BORDER.bottom;
 
 			Rectangle rectangle = new Rectangle(clientArea.x, clientArea.y, pageWidth, pageHeight);
 			g.fillRectangle(rectangle);
@@ -137,13 +137,13 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 
 			paintGrid(g, rectangle);
 
-			graphics2d.setColor(Color.RED);
-
-			graphics2d.setStroke(new BasicStroke(0.5f));
-			g.drawLine(clientArea.x, clientArea.y + topMargin, clientArea.x + pageWidth, clientArea.y + topMargin);
-			g.drawLine(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y);
-			g.drawLine(topRight.x, topRight.y, bottomRight.x, bottomRight.y);
-			graphics2d.setStroke(oldStroke);
+			// graphics2d.setColor(Color.RED);
+			//
+			// graphics2d.setStroke(new BasicStroke(0.5f));
+			// g.drawLine(clientArea.x, clientArea.y + topMargin, clientArea.x + pageWidth, clientArea.y + topMargin);
+			// g.drawLine(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y);
+			// g.drawLine(topRight.x, topRight.y, bottomRight.x, bottomRight.y);
+			// graphics2d.setStroke(oldStroke);
 		}
 		if (getBorder() != null)
 			getBorder().paint(this, g, NO_INSETS);
@@ -193,7 +193,7 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 	@Override
 	public Rectangle getFreeformExtent() {
 		Rectangle freeformExtent = super.getFreeformExtent();
-		freeformExtent.height += jrDesign.getBottomMargin() + 80;
+		freeformExtent.height += PAGE_BORDER.bottom + 80;
 		return freeformExtent;
 	}
 

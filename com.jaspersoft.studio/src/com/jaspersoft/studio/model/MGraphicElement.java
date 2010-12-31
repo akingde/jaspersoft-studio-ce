@@ -45,6 +45,8 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -218,7 +220,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		JRElement jr = (JRElement) getValue();
 		INode node = getParent();
 		while (node != null) {
-			if (node instanceof IGraphicElement) {
+			if (node instanceof MPage) {
+				return new Rectangle(0, 0, jr.getWidth(), jr.getHeight());
+			} else if (node instanceof IGraphicElement) {
 				Rectangle b = ((IGraphicElement) node).getBounds();
 				if (node instanceof IGraphicElementContainer) {
 					int x = ((IGraphicElementContainer) node).getLeftPadding();

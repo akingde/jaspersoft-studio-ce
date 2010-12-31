@@ -128,7 +128,7 @@ public class BandFigure extends RectangleFigure {
 			g.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
 
 			if (drawColumn) {
-				int x = marginLeft + PageFigure.PAGE_BORDER.left;
+				int x = marginLeft + ReportPageFigure.PAGE_BORDER.left;
 				for (int i = 0; i < columnNumber; i++) {
 					if (i > 0)
 						g.drawLine(x, b.y, x, b.y + b.height + 1);

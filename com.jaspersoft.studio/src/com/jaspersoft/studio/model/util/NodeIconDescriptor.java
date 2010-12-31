@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.model;
+package com.jaspersoft.studio.model.util;
 
 import java.io.IOException;
 import java.io.InputStream;

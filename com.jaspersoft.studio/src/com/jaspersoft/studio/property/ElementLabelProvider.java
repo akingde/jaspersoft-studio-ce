@@ -32,8 +32,8 @@ import org.eclipse.ui.views.properties.tabbed.ITypeMapper;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 /**
  * Label provider for the title bar for the tabbed property sheet page.

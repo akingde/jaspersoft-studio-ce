@@ -37,6 +37,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.model.util.ReportFactory;
 
 /**
  * The Class ANode.
@@ -155,7 +158,7 @@ public abstract class ANode implements INode {
 		if (parent == null) {
 			unregister();
 			getPropertyChangeSupport().removePropertyChangeListener(parent);
-			if (this.parent != null && this.parent.getChildren() != null){
+			if (this.parent != null && this.parent.getChildren() != null) {
 				this.parent.getChildren().remove(this);
 			}
 			this.parent = null;
@@ -287,7 +290,8 @@ public abstract class ANode implements INode {
 			// evt.getNewValue());
 			// }
 		} else {
-			newEvent = new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+			// newEvent = new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(), evt.getOldValue(),
+			// evt.getNewValue());
 		}
 		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
@@ -361,14 +365,6 @@ public abstract class ANode implements INode {
 		for (Object o : propertyChangeSupport.getPropertyChangeListeners()) {
 			if (o instanceof FigureEditPart)
 				return (EditPart) o;
-		}
-		return null;
-	}
-
-	public ANode getNode(Object obj) {
-		INode root = getRoot();
-		if (root instanceof MReport) {
-			return ((MReport) root).getNode(obj);
 		}
 		return null;
 	}

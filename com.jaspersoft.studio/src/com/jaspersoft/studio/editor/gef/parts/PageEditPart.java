@@ -24,9 +24,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
@@ -56,14 +54,13 @@ import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * The Class PageEditPart.
@@ -199,8 +196,8 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * 
 	 * @return the page
 	 */
-	public MReport getPage() {
-		return (MReport) getModel();
+	public ANode getPage() {
+		return (ANode) getModel();
 	}
 
 	/**
@@ -209,7 +206,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * @return the jasper design
 	 */
 	public JasperDesign getJasperDesign() {
-		return (JasperDesign) getPage().getValue();
+		return getPage().getJasperDesign();
 	}
 
 	/*
@@ -256,42 +253,16 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
 	 */
 	protected List<Object> getModelChildren() {
-		List<Object> list = new ArrayList<Object>();
-		List<Object> sList = new ArrayList<Object>();
-		// put bands first
+		final List<Object> list = new ArrayList<Object>();
+		new ModelVisitor(getPage()) {
 
-		for (INode node : getPage().getChildren()) {
-			if (node instanceof IGraphicElement && node.getValue() != null) {
-				if (node instanceof MBand) {
-					MBand band = (MBand) node;
-					if (!(band.getBandType().equals(BandTypeEnum.BACKGROUND) || band.getBandType().equals(BandTypeEnum.NO_DATA))) {
-						list.add(band);
-						getNodeChildren(node, sList);
-					}
-					continue;
-				}
-				sList.add(node);
+			@Override
+			public void visit(INode n) {
+				if (n instanceof IGraphicElement && n.getValue() != null)
+					list.add(n);
 			}
-		}
-		list.addAll(sList);
+		};
 		return list;
-	}
-
-	/**
-	 * Gets the node children.
-	 * 
-	 * @param node
-	 *          the node
-	 * @param list
-	 *          the list
-	 * @return the node children
-	 */
-	private void getNodeChildren(INode node, List<Object> list) {
-		for (INode nod : node.getChildren()) {
-			if (nod instanceof IGraphicElement)
-				list.add(nod);
-			getNodeChildren(nod, list);
-		}
 	}
 
 	/*
@@ -345,24 +316,18 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 *          the figure2
 	 */
 	private void setupPageFigure(JasperDesign jd, PageFigure figure2) {
-		List<JRBand> bands = ModelUtils.getAllBands(jd);
-		int dh = ModelUtils.getDesignHeight(bands);
-		int designHeight = dh + jd.getTopMargin() + jd.getBottomMargin();
+		int w = 200;// jd.getPageWidth() + 20;
+		int h = 500;// designHeight + 10;
 
-		int w = jd.getPageWidth() + 20;
-		int h = designHeight + 10;
-
-		figure2.setBandNumber(bands.size());
-		figure2.setBandsHeight(designHeight);
 		figure2.setSize(w, h);
 
-		getViewer().setProperty("RULER_HOFFSET", jd.getLeftMargin() + PageFigure.PAGE_BORDER.left); //$NON-NLS-1$
-		getViewer().setProperty("RULER_VOFFSET", jd.getTopMargin() + PageFigure.PAGE_BORDER.top); //$NON-NLS-1$
-		getViewer().setProperty("RULER_HEND", jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin()); //$NON-NLS-1$
-		getViewer().setProperty("RULER_VEND", dh - PageFigure.PAGE_BORDER.top); //$NON-NLS-1$
+		getViewer().setProperty("RULER_HOFFSET", PageFigure.PAGE_BORDER.left); //$NON-NLS-1$
+		getViewer().setProperty("RULER_VOFFSET", PageFigure.PAGE_BORDER.top); //$NON-NLS-1$
+		getViewer().setProperty("RULER_HEND", jd.getPageWidth()); //$NON-NLS-1$
+		getViewer().setProperty("RULER_VEND", jd.getPageHeight() - PageFigure.PAGE_BORDER.top); //$NON-NLS-1$
 
 		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
-				new Point(PageFigure.PAGE_BORDER.left + jd.getLeftMargin(), PageFigure.PAGE_BORDER.top + jd.getTopMargin()));
+				new Point(PageFigure.PAGE_BORDER.left, PageFigure.PAGE_BORDER.top));
 	}
 
 	/*
@@ -372,10 +337,10 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 */
 	public void propertyChange(PropertyChangeEvent arg0) {
 		Object source = arg0.getSource();
-		if (source instanceof IContainerEditPart) {
-			refreshChildren();
-			refreshVisuals();
-		}
+		// if (source instanceof IContainerEditPart) {
+		refreshChildren();
+		refreshVisuals();
+		// }
 	}
 
 }

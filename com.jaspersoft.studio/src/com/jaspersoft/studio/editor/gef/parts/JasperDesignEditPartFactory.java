@@ -19,13 +19,19 @@
  */
 package com.jaspersoft.studio.editor.gef.parts;
 
+import java.util.List;
+
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
+import com.jaspersoft.studio.editor.gef.parts.text.StaticTextFigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
@@ -49,9 +55,15 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 		EditPart editPart = m.createEditPart(context, model);
 		if (editPart == null) {
 			if (model instanceof MRoot) {
+				List<INode> children = ((MRoot) model).getChildren();
+				if (children != null && !children.isEmpty() && children.get(0) instanceof MReport)
+					editPart = new ReportPageEditPart();
+				else
+					editPart = new PageEditPart();
+			} else if (model instanceof MPage) {
 				editPart = new PageEditPart();
 			} else if (model instanceof MReport) {
-				editPart = new PageEditPart();
+				editPart = new ReportPageEditPart();
 			} else if (model instanceof MBand) {
 				editPart = new BandEditPart();
 			} else if (model instanceof MStaticText) {

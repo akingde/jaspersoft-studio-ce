@@ -38,7 +38,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
-import com.jaspersoft.studio.editor.gef.figures.PageFigure;
+import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandContainerEditPolicy;
@@ -155,7 +155,7 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener,
 		// int width = jasperDesign.getPageWidth() + PageFigure.PAGE_BORDER.left + 1;
 		int width = jasperDesign.getPageWidth() + 1;
 		int height = jrBand != null ? jrBand.getHeight() + 1 : 0;
-		rect.setBounds(new Rectangle(PageFigure.PAGE_BORDER.left, bounds.y + PageFigure.PAGE_BORDER.top, width, height));
+		rect.setBounds(new Rectangle(ReportPageFigure.PAGE_BORDER.left, bounds.y + ReportPageFigure.PAGE_BORDER.top, width, height));
 		// rect.setBounds(new Rectangle(0, bounds.y + PageFigure.PAGE_BORDER.top, width, height));
 	}
 

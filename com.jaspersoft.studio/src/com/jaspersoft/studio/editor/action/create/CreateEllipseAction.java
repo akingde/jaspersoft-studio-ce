@@ -25,8 +25,8 @@ package com.jaspersoft.studio.editor.action.create;
 
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MEllipse;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -38,6 +38,7 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.AlignmentAction;
@@ -52,6 +53,7 @@ import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
+import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.Action;
@@ -63,6 +65,8 @@ import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
@@ -86,6 +90,7 @@ import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.dnd.TextTransferDropTargetListener;
+import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerComposite;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
@@ -102,6 +107,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
+import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 
@@ -141,8 +147,8 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	public void setModel(INode model) {
 		this.model = model;
 		// getGraphicalViewer().setRootEditPart(new MainDesignerRootEditPart());
-		if (model != null)
-			getGraphicalViewer().setContents(model);
+		// if (model != null)
+		getGraphicalViewer().setContents(model);
 	}
 
 	/**
@@ -162,6 +168,48 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	@Override
 	public ActionRegistry getActionRegistry() {
 		return super.getActionRegistry();
+	}
+
+	/** The ruler comp. */
+	private JDRulerComposite rulerComp;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette#createGraphicalViewer(org.eclipse.swt.widgets
+	 * .Composite)
+	 */
+	@Override
+	protected void createGraphicalViewer(Composite parent) {
+		rulerComp = new JDRulerComposite(parent, SWT.NONE);
+		super.createGraphicalViewer(rulerComp);
+		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getPaletteRoot()
+	 */
+	@Override
+	protected PaletteRoot getPaletteRoot() {
+		return JDPaletteFactory.createPalette();
+	}
+
+	// FIXME: something wrong, I should not do that, order in initialisation is
+	// wrong
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getGraphicalControl()
+	 */
+	@Override
+	protected Control getGraphicalControl() {
+		if (rulerComp != null)
+			return rulerComp;
+		return super.getGraphicalControl();
 	}
 
 	/*
@@ -272,16 +320,15 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 * 
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class type) {
 		if (type == ZoomManager.class)
 			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
 		if (type == IContentOutlinePage.class) {
-
-			TreeViewer viewer = new TreeViewer();
-			outlinePage = new JDReportOutlineView(this, viewer);
-
+			if (outlinePage == null) {
+				TreeViewer viewer = new TreeViewer();
+				outlinePage = new JDReportOutlineView(this, viewer);
+			}
 			return outlinePage;
 		}
 		if (type == EditorContributor.class) {
@@ -289,7 +336,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 				editorContributor = new EditorContributor(getEditDomain());
 			return editorContributor;
 		}
-
 		return super.getAdapter(type);
 	}
 

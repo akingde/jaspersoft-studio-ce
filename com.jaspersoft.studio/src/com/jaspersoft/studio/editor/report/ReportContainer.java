@@ -19,42 +19,46 @@
  */
 package com.jaspersoft.studio.editor.report;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
+import com.jaspersoft.studio.ExtensionManager;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.IJROBjectEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.outline.ReportOutlineView;
-import com.jaspersoft.studio.property.JRPropertySheetEntry;
+import com.jaspersoft.studio.model.MPage;
+import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 
 /**
  * The Class ReportContainer.
  * 
  * @author Chicu Veaceslav
  */
-public class ReportContainer extends MultiPageEditorPart implements ITabbedPropertySheetPageContributor {
+public class ReportContainer extends MultiPageEditorPart implements ITabbedPropertySheetPageContributor,
+		IJROBjectEditor {
 
 	/** The model. */
 	private INode model = null;
@@ -93,6 +97,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	@Override
 	protected void createPages() {
 		((CTabFolder) getContainer()).setTabPosition(SWT.TOP);
+		((CTabFolder) getContainer()).setUnselectedCloseVisible(true);
 		try {
 			ReportEditor reportEditor = new ReportEditor();
 			int index = addPage(reportEditor, getEditorInput());
@@ -101,6 +106,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(), "Error creating nested visual editor", null, e.getStatus());
 		}
+		getEditorSite().getActionBarContributor();
 	}
 
 	/*
@@ -137,6 +143,20 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		return true;
 	}
 
+	private PropertyChangeListener modelListener = new PropertyChangeListener() {
+
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getNewValue() != null && evt.getOldValue() == null) {
+				createEditorPage(evt.getNewValue());
+			} else if (evt.getNewValue() == null && evt.getOldValue() != null) {
+				AbstractVisualEditor obj = ccMap.get(evt.getOldValue());
+				if (obj != null)
+					removeEditorPage(evt, obj);
+			}
+		}
+
+	};
+
 	/**
 	 * Sets the model.
 	 * 
@@ -144,22 +164,78 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 *          the new model
 	 */
 	public void setModel(INode model) {
+		if (this.model != null && this.model.getChildren() != null && !this.model.getChildren().isEmpty())
+			this.model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+		if (model != null && model.getChildren() != null && !model.getChildren().isEmpty())
+			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelListener);
 		this.model = model;
-		if (propertySheetEntry != null)
-			propertySheetEntry.setModel((ANode) model.getChildren().get(0));
-		if (outlineView != null)
-			outlineView.setModel((ANode) model);
+		createModelPages(model);
 		updateVisualView();
+	}
+
+	private Map<Object, AbstractVisualEditor> ccMap = new HashMap<Object, AbstractVisualEditor>();
+
+	private void createModelPages(INode model) {
+		new ModelVisitor(model) {
+			@Override
+			public void visit(INode node) {
+				// createEditorPage(node.getValue());
+			}
+		};
+	}
+
+	private ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+
+	private AbstractVisualEditor createEditorPage(Object obj) {
+		AbstractVisualEditor ave = ccMap.get(obj);
+		try {
+			if (ave == null) {
+				JasperDesign jd = getModel().getJasperDesign();
+				MRoot root = new MRoot(null, jd);
+				MPage rep = new MPage(root, jd);
+				ANode node = m.createNode(rep, obj, -1);
+
+				ave = m.getEditor(obj);
+				if (ave != null) {
+					int index = addPage(ave, getEditorInput());
+					setPageText(index, ave.getPartName());
+					editors.add(ave);
+					ccMap.put(node.getValue(), ave);
+					ave.setModel(root);
+					AbstractVisualEditor mainave = getMainEditor();
+					if (mainave != null)
+						ave.getEditDomain().setCommandStack(mainave.getEditDomain().getCommandStack());
+
+				}
+			}
+		} catch (PartInitException e) {
+			e.printStackTrace();
+		}
+		return ave;
+	}
+
+	private void removeEditorPage(PropertyChangeEvent evt, AbstractVisualEditor ave) {
+		ave.setModel(null);
+		int ind = editors.indexOf(ave);
+		removePage(ind);
+		editors.remove(ind);
+		ccMap.remove(evt.getOldValue());
+		ave.dispose();
 	}
 
 	/**
 	 * Update visual view.
 	 */
 	public void updateVisualView() {
-		if (editors != null)
-			for (AbstractVisualEditor editor : editors) {
-				editor.setModel(this.model);
-			}
+		AbstractVisualEditor ave = getMainEditor();
+		if (ave != null)
+			ave.setModel(this.model);
+	}
+
+	public AbstractVisualEditor getMainEditor() {
+		if (editors != null && !editors.isEmpty())
+			return editors.get(0);
+		return null;
 	}
 
 	/**
@@ -176,7 +252,6 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 * 
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#getAdapter(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class type) {
 		if (type == IPropertySource.class)
@@ -189,21 +264,12 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	/** The property sheet page. */
 	private IPropertySheetPage propertySheetPage;
 
-	/** The property sheet entry. */
-	private JRPropertySheetEntry propertySheetEntry;
-
 	/**
 	 * Gets the property sheet page.
 	 * 
 	 * @return the property sheet page
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		// PropertySheetPage psp = new PropertySheetPage();
-		// propertySheetEntry = new JRPropertySheetEntry(((ReportEditor) editors.get(0)).getEditDomain().getCommandStack(),
-		// (ANode) getModel());
-		// psp.setRootEntry(propertySheetEntry);
-		// propertySheetPage = psp;
-
 		TabbedPropertySheetPage tpsp = new TabbedPropertySheetPage(ReportContainer.this, true);
 		propertySheetPage = tpsp;
 
@@ -219,50 +285,33 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		return "com.jaspersoft.studio.editor.report.ReportContainer"; //$NON-NLS-1$
 	}
 
-	/** The outline view. */
-	private ReportOutlineView outlineView = null;
+	@Override
+	protected void pageChange(int newPageIndex) {
+		super.pageChange(newPageIndex);
+		AbstractVisualEditor activeEditor = editors.get(newPageIndex);
 
-	/**
-	 * Returns the overview for the outline view.
-	 * 
-	 * @return the overview
-	 */
-	public ReportOutlineView getOutlinePage() {
-		if (null == outlineView) {
-			outlineView = new ReportOutlineView(getModel());
+		IEditorActionBarContributor contributor = parent.getEditorSite().getActionBarContributor();
+		if (contributor != null && contributor instanceof MultiPageEditorActionBarContributor) {
 
-			getSite().getPage().addSelectionListener(new ISelectionListener() {
-
-				public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-
-					if (selection instanceof StructuredSelection) {
-						Object obj = ((StructuredSelection) selection).getFirstElement();
-						if (obj instanceof AJDEditPart) { // from editpart
-							Object[] editParts = ((StructuredSelection) selection).toArray();
-							INode[] models = new INode[editParts.length];
-							for (int i = 0; i < editParts.length; i++) {
-								AJDEditPart pageEditPart = (AJDEditPart) editParts[i];
-								models[i] = pageEditPart.getModelNode();
-							}
-							outlineView.setSelection(new StructuredSelection(models));
-						} else if (selection instanceof TreeSelection) { // from outline
-							if (getActiveEditor() instanceof AbstractVisualEditor) {
-								List<EditPart> parts = new ArrayList<EditPart>();
-								GraphicalViewer viewer = ((AbstractVisualEditor) getActiveEditor()).getGraphicalViewer();
-								TreeSelection s = (TreeSelection) selection;
-								for (Iterator<?> it = s.iterator(); it.hasNext();) {
-									EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(it.next());
-									if (editPart != null)
-										parts.add(editPart);
-								}
-								viewer.setSelection(new StructuredSelection(parts));
-							}
-						}
-					}
-
-				}
-			});
+			((MultiPageEditorActionBarContributor) contributor).setActivePage(activeEditor);
 		}
-		return outlineView;
 	}
+
+	public void openEditor(Object obj) {
+		if (obj instanceof JasperDesign) {
+			setActivePage(0);
+		} else {
+			AbstractVisualEditor ave = createEditorPage(obj);
+			if (getActiveEditor() != ave) {
+				int index = editors.indexOf(ave);
+				if (index > 0 && index <= editors.size() - 1) {
+					setActivePage(index);
+					// if (obj instanceof JRDesignElement)
+					// SelectionHelper.setSelection((JRDesignElement) obj, true);
+					// ave.getGraphicalViewer().setSelection(new StructuredSelection(obj));
+				}
+			}
+		}
+	}
+
 }

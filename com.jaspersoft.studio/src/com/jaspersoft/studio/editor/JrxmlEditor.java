@@ -48,8 +48,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -67,18 +68,19 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
+import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.ReportFactory;
+import com.jaspersoft.studio.model.util.ReportFactory;
 
 /**
  * An example showing how to create a multi-page editor. This example has 3 pages:
@@ -88,7 +90,7 @@ import com.jaspersoft.studio.model.ReportFactory;
  * <li>page 2 shows the words in page 0 in sorted order
  * </ul>
  */
-public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker {
+public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor {
 
 	/**
 	 * The listener interface for receiving modelPropertyChange events. The class that is interested in processing a
@@ -135,7 +137,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private XMLEditor xmlEditor;
 
 	/** The model property change listener. */
-	private ModelPropertyChangeListener modelPropertyChangeListener;
+	private ModelPropertyChangeListener modelPropertyChangeListener = new ModelPropertyChangeListener();
 
 	/**
 	 * Creates a multi-page editor example.
@@ -150,8 +152,15 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	void createPage0() {
 		try {
-			// reportContainer = new ReportEditor();
 			reportContainer = new ReportContainer(this);
+
+			reportContainer.addPageChangedListener(new IPageChangedListener() {
+
+				public void pageChanged(PageChangedEvent event) {
+					updateContentOutline(PAGE_DESIGNER);
+				}
+			});
+
 			int index = addPage(reportContainer, getEditorInput());
 			setPageText(index, "Design");
 		} catch (PartInitException e) {
@@ -207,6 +216,38 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		createPage0();
 		createPage1();
 		createPage2();
+	}
+
+	private MultiOutlineView outlinePage;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(java.lang.Class)
+	 */
+	@Override
+	public Object getAdapter(Class type) {
+		if (type == IContentOutlinePage.class) {
+			outlinePage = new MultiOutlineView(this);
+			Display.getCurrent().asyncExec(new Runnable() {
+
+				public void run() {
+					updateContentOutline(getActivePage());
+				}
+			});
+			return outlinePage;
+		}
+		return super.getAdapter(type);
+	}
+
+	private void updateContentOutline(int page) {
+		if (outlinePage == null)
+			return;
+		IContentOutlinePage outline = null;
+		if (page == PAGE_DESIGNER)
+			outline = (IContentOutlinePage) reportContainer.getAdapter(IContentOutlinePage.class);
+		outlinePage.setPageActive(outline);
+
 	}
 
 	/**
@@ -428,26 +469,30 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				}
 				updateVisualView();
 				modelFresh = true;
+				// getSite().setSelectionProvider(reportContainer.getActiveEditor().getSite().getSelectionProvider());
 				break;
 			case PAGE_XMLEDITOR:
 				if (!modelFresh) {
 					model2xml();
 					xmlFresh = true;
 				}
+				// getSite().setSelectionProvider(xmlEditor.getSelectionProvider());
 				break;
 			case PAGE_PREVIEW:
+				if (getActiveEditor() == xmlEditor)
+					try {
+						xml2model();
+					} catch (JRException e) {
+						handleJRException(getEditorInput(), e, false);
+					}
 				model2preview();
+				// getSite().setSelectionProvider(previewEditor.getSite().getSelectionProvider());
 				break;
 			}
 		}
-		
+		getSite().getSelectionProvider().setSelection(null);
 		super.pageChange(newPageIndex);
-		setSite(getSite());
-		setInput(getEditorInput());
-		getSite().setSelectionProvider(new MultiPageSelectionProvider(this));
-		
-		
-
+		updateContentOutline(getActivePage());
 	}
 
 	/**
@@ -519,18 +564,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the new model
 	 */
 	public void setModel(INode model) {
-		if (this.model != null && modelPropertyChangeListener != null)
-			this.model.getPropertyChangeSupport().removePropertyChangeListener(modelPropertyChangeListener);
-		if (model != null) {
-			if (modelPropertyChangeListener == null) {
-				modelPropertyChangeListener = new ModelPropertyChangeListener();
-			}
-			// FIXME (...)
+		if (this.model != null && this.model.getChildren() != null && !this.model.getChildren().isEmpty())
+			this.model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropertyChangeListener);
+		if (model != null && model.getChildren() != null && !model.getChildren().isEmpty())
 			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropertyChangeListener);
-		}
 		this.model = model;
-		if (model != null)
-			updateVisualView();
+		updateVisualView();
 	}
 
 	/**
@@ -558,6 +597,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void gotoMarker(IMarker marker) {
 		setActivePage(PAGE_XMLEDITOR);
 		IDE.gotoMarker(xmlEditor, marker);
+	}
+
+	public void openEditor(Object obj) {
+		reportContainer.openEditor(obj);
 	}
 
 }

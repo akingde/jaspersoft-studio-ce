@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.model;
+package com.jaspersoft.studio.model.util;
 
 import java.util.Iterator;
 import java.util.List;
@@ -57,6 +57,18 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MBreak;
+import com.jaspersoft.studio.model.MElementGroup;
+import com.jaspersoft.studio.model.MEllipse;
+import com.jaspersoft.studio.model.MFrame;
+import com.jaspersoft.studio.model.MImage;
+import com.jaspersoft.studio.model.MLine;
+import com.jaspersoft.studio.model.MRectangle;
+import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.MSubreport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;

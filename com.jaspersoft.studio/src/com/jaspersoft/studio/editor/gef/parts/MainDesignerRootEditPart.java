@@ -31,7 +31,6 @@ import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 
-import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.java2d.J2DScalableFreeformLayeredPane;
 
 /**
@@ -87,21 +86,19 @@ public class MainDesignerRootEditPart extends ScalableFreeformRootEditPart {
 
 		FreeformLayer sectionsLayer = new FreeformLayer();
 		layers.add(sectionsLayer, SECTIONS_LAYER);
-		
+
 		FreeformLayer elementsLayer = new FreeformLayer();
 		layers.add(elementsLayer, ELEMENTS_LAYER);
-
-		
 
 		return layers;
 	}
 
 	@Override
 	protected void addChildVisual(EditPart childEditPart, int index) {
-		if (childEditPart instanceof PageEditPart) {
+		if (childEditPart instanceof ReportPageEditPart) {
 			IFigure layer = getLayer(MainDesignerRootEditPart.REPORT_LAYER);
 			if (layer != null) {
-				IFigure pageFigure = ((PageEditPart) childEditPart).getFigure();
+				IFigure pageFigure = ((ReportPageEditPart) childEditPart).getFigure();
 				layer.add(pageFigure);
 			}
 		}

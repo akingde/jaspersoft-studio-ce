@@ -34,7 +34,6 @@ import org.eclipse.gef.palette.SelectionToolEntry;
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.MEllipse;
 import com.jaspersoft.studio.model.MFrame;
@@ -51,6 +50,7 @@ import com.jaspersoft.studio.model.textfield.MPageXofY;
 import com.jaspersoft.studio.model.textfield.MPercentage;
 import com.jaspersoft.studio.model.textfield.MTime;
 import com.jaspersoft.studio.model.textfield.MTotalPages;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 /**
  * A factory for creating JDPalette objects.

@@ -22,8 +22,8 @@ package com.jaspersoft.studio.model.datasource.dtp;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
-import com.jaspersoft.studio.model.NodeIconDescriptor;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
 public class MDTPDatasources extends ANode {
 	/** The icon descriptor. */

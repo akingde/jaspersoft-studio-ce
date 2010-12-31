@@ -21,21 +21,14 @@ package com.jaspersoft.studio.editor.report;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
-import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
-import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerComposite;
-import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 
 /**
@@ -53,37 +46,7 @@ public class ReportEditor extends AbstractVisualEditor {
 	 */
 	public ReportEditor() {
 		super();
-	}
-
-	/** The ruler comp. */
-	private JDRulerComposite rulerComp;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette#createGraphicalViewer(org.eclipse.swt.widgets
-	 * .Composite)
-	 */
-	@Override
-	protected void createGraphicalViewer(Composite parent) {
-		rulerComp = new JDRulerComposite(parent, SWT.NONE);
-		super.createGraphicalViewer(rulerComp);
-		rulerComp.setGraphicalViewer((ScrollingGraphicalViewer) getGraphicalViewer());
-	}
-
-	// FIXME: something wrong, I should not do that, order in initialisation is
-	// wrong
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getGraphicalControl()
-	 */
-	@Override
-	protected Control getGraphicalControl() {
-		if (rulerComp != null)
-			return rulerComp;
-		return super.getGraphicalControl();
+		setPartName("Main Report");
 	}
 
 	/*
@@ -117,16 +80,6 @@ public class ReportEditor extends AbstractVisualEditor {
 
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(graphicalViewer));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getPaletteRoot()
-	 */
-	@Override
-	protected PaletteRoot getPaletteRoot() {
-		return JDPaletteFactory.createPalette();
 	}
 
 }

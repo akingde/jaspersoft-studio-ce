@@ -132,6 +132,5 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
-
 	}
 }

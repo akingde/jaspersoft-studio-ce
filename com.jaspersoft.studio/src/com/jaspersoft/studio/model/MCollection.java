@@ -21,6 +21,8 @@ package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeEvent;
 
+import com.jaspersoft.studio.model.util.ReportFactory;
+
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
@@ -71,8 +73,8 @@ public abstract class MCollection extends ANode implements IPastable, IContainer
 				}
 			}
 		}
-		if (!(evt.getSource() instanceof ANode))
-			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+//		if (!(evt.getSource() instanceof ANode))
+//			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
 		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
 

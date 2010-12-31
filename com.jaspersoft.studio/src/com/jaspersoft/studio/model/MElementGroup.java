@@ -26,6 +26,9 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+
 /**
  * The Class MElementGroup.
  * 

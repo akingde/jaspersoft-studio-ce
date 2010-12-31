@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.gef.parts;
+package com.jaspersoft.studio.editor.gef.parts.text;
 
 import net.sf.jasperreports.engine.base.JRBaseStaticText;
 
@@ -34,6 +34,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.property.SetValueCommand;
 

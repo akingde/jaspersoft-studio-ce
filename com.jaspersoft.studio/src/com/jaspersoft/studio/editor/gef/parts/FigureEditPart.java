@@ -38,7 +38,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.gef.figures.FigureFactory;
-import com.jaspersoft.studio.editor.gef.figures.PageFigure;
+import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.CornerBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
@@ -142,8 +142,8 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		ANode model = (ANode) getModel();
 		if (model instanceof IGraphicElement && model.getValue() != null) {
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
-			int x = bounds.x + PageFigure.PAGE_BORDER.left;
-			int y = bounds.y + PageFigure.PAGE_BORDER.top;
+			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
+			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
 			if (model.getValue() instanceof JRDesignElement) {
 				JRDesignElement jrElement = (JRDesignElement) model.getValue();
 				if (rect instanceof ComponentFigure && drawVisitor != null) {

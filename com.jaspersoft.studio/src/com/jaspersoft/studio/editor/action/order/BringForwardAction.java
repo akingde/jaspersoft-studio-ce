@@ -85,13 +85,15 @@ public class BringForwardAction extends SelectionAction {
 			Object model = part.getModel();
 			if (model instanceof MGraphicElement) {
 				ANode parent = (ANode) ((MGraphicElement) model).getParent();
-				int newIndex = parent.getChildren().indexOf(model) + 1;
-				if (newIndex < parent.getChildren().size()) {
-					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
-				} else
-					return null;
-				if (cmd != null)
-					compoundCmd.add(cmd);
+				if (parent.getChildren() != null) {
+					int newIndex = parent.getChildren().indexOf(model) + 1;
+					if (newIndex < parent.getChildren().size()) {
+						cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);
+					} else
+						return null;
+					if (cmd != null)
+						compoundCmd.add(cmd);
+				}
 			}
 		}
 		return compoundCmd;

@@ -28,6 +28,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 
 public interface IComponentFactory {
@@ -52,5 +53,7 @@ public interface IComponentFactory {
 	public List<Action> getActions(WorkbenchPart part);
 
 	public List<String> getActionsID();
+
+	public AbstractVisualEditor getEditor(Object node);
 
 }

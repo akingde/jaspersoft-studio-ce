@@ -29,7 +29,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.gef.handles.HandleBounds;
 
-import com.jaspersoft.studio.editor.gef.figures.PageFigure;
+import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
 
@@ -44,7 +44,7 @@ public class SimpleShadowBorder extends AbstractBorder {
 	 * @see org.eclipse.draw2d.Border#getInsets(org.eclipse.draw2d.IFigure)
 	 */
 	public Insets getInsets(IFigure figure) {
-		return new Insets(PageFigure.PAGE_BORDER.top);
+		return new Insets(ReportPageFigure.PAGE_BORDER.top);
 	}
 
 	/*
@@ -90,28 +90,28 @@ public class SimpleShadowBorder extends AbstractBorder {
 		g.setColor(Color.lightGray);
 
 		int sOffset = 5;
-		g.fillRect(x + PageFigure.PAGE_BORDER.left + sOffset, y + height - PageFigure.PAGE_BORDER.bottom, width
-				- (PageFigure.PAGE_BORDER.left + PageFigure.PAGE_BORDER.left), sOffset);
-		g.fillRect(x + width - PageFigure.PAGE_BORDER.right, y + PageFigure.PAGE_BORDER.top + sOffset, sOffset, height
-				- PageFigure.PAGE_BORDER.bottom - PageFigure.PAGE_BORDER.top);
+		g.fillRect(x + ReportPageFigure.PAGE_BORDER.left + sOffset, y + height - ReportPageFigure.PAGE_BORDER.bottom, width
+				- (ReportPageFigure.PAGE_BORDER.left + ReportPageFigure.PAGE_BORDER.left), sOffset);
+		g.fillRect(x + width - ReportPageFigure.PAGE_BORDER.right, y + ReportPageFigure.PAGE_BORDER.top + sOffset, sOffset, height
+				- ReportPageFigure.PAGE_BORDER.bottom - ReportPageFigure.PAGE_BORDER.top);
 
 		g.setBackground(Color.black);
 		g.setColor(Color.black);
 		// TOP
-		g.drawLine(x + PageFigure.PAGE_BORDER.left, y + PageFigure.PAGE_BORDER.top, x + width
-				- PageFigure.PAGE_BORDER.right, y + PageFigure.PAGE_BORDER.top);
+		g.drawLine(x + ReportPageFigure.PAGE_BORDER.left, y + ReportPageFigure.PAGE_BORDER.top, x + width
+				- ReportPageFigure.PAGE_BORDER.right, y + ReportPageFigure.PAGE_BORDER.top);
 
 		// BOTTOM
-		g.drawLine(x + PageFigure.PAGE_BORDER.left, y + height - PageFigure.PAGE_BORDER.bottom, x + width
-				- PageFigure.PAGE_BORDER.right, y + height - PageFigure.PAGE_BORDER.top);
+		g.drawLine(x + ReportPageFigure.PAGE_BORDER.left, y + height - ReportPageFigure.PAGE_BORDER.bottom, x + width
+				- ReportPageFigure.PAGE_BORDER.right, y + height - ReportPageFigure.PAGE_BORDER.top);
 
 		// LEFT
-		g.drawLine(x + PageFigure.PAGE_BORDER.left, y + PageFigure.PAGE_BORDER.top, x + PageFigure.PAGE_BORDER.left, y
-				+ height - PageFigure.PAGE_BORDER.top);
+		g.drawLine(x + ReportPageFigure.PAGE_BORDER.left, y + ReportPageFigure.PAGE_BORDER.top, x + ReportPageFigure.PAGE_BORDER.left, y
+				+ height - ReportPageFigure.PAGE_BORDER.top);
 
 		// RIGHT
-		g.drawLine(x + width - PageFigure.PAGE_BORDER.right, y + PageFigure.PAGE_BORDER.top, x + width
-				- PageFigure.PAGE_BORDER.right, y + height - PageFigure.PAGE_BORDER.top);
+		g.drawLine(x + width - ReportPageFigure.PAGE_BORDER.right, y + ReportPageFigure.PAGE_BORDER.top, x + width
+				- ReportPageFigure.PAGE_BORDER.right, y + height - ReportPageFigure.PAGE_BORDER.top);
 
 		g.setStroke(oldStroke);
 	}

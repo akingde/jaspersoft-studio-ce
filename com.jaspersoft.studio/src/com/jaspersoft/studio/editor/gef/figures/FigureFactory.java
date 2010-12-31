@@ -87,8 +87,8 @@ public class FigureFactory {
 	 *          the jdesign
 	 * @return the page figure
 	 */
-	public static PageFigure createNewPage(JasperDesign jdesign) {
-		PageFigure page = new PageFigure(jdesign, true);
+	public static ReportPageFigure createNewPage(JasperDesign jdesign) {
+		ReportPageFigure page = new ReportPageFigure(jdesign, true);
 		return page;
 	}
 

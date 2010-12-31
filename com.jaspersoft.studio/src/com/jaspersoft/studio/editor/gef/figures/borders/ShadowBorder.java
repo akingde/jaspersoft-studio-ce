@@ -31,7 +31,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.gef.handles.HandleBounds;
 
-import com.jaspersoft.studio.editor.gef.figures.PageFigure;
+import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.util.RoundGradientPaint;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
@@ -46,7 +46,7 @@ public class ShadowBorder extends AbstractBorder {
 	 * @see org.eclipse.draw2d.Border#getInsets(org.eclipse.draw2d.IFigure)
 	 */
 	public Insets getInsets(IFigure figure) {
-		return new Insets(PageFigure.PAGE_BORDER.top);
+		return new Insets(ReportPageFigure.PAGE_BORDER.top);
 	}
 
 	/*
