@@ -15,9 +15,9 @@ import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 

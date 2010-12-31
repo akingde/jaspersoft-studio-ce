@@ -8,7 +8,7 @@ import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.ReportFactory;
+import com.jaspersoft.studio.model.util.ReportFactory;
 
 public class MChartGanttDataset extends MChartDataset {
 
