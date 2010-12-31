@@ -35,6 +35,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.list.figure.ListFigure;
 import com.jaspersoft.studio.list.model.MList;
 import com.jaspersoft.studio.model.ANode;
@@ -122,7 +123,10 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	public Command getOrphanCommand(ANode parent, ANode child) {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public AbstractVisualEditor getEditor(Object node) {
 		return null;
 	}
 

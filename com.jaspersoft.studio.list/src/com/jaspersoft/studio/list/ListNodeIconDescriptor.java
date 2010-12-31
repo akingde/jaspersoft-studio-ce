@@ -25,7 +25,7 @@ package com.jaspersoft.studio.list;
 
 import java.util.ResourceBundle;
 
-import com.jaspersoft.studio.model.NodeIconDescriptor;
+import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
 /**
  * The Class NodeIconDescriptor.
