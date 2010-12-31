@@ -66,6 +66,7 @@ import com.jaspersoft.studio.barcode.model.barcode4j.MUPCA;
 import com.jaspersoft.studio.barcode.model.barcode4j.MUPCE;
 import com.jaspersoft.studio.barcode.model.barcode4j.MUSPSIntelligent;
 import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -168,7 +169,10 @@ public class BarcodeComponentFactory implements IComponentFactory {
 	}
 
 	public Command getOrphanCommand(ANode parent, ANode child) {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public AbstractVisualEditor getEditor(Object node) {
 		return null;
 	}
 
