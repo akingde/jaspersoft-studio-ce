@@ -3,11 +3,11 @@ package com.jaspersoft.studio.table.part;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 
-import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.table.part.editpolicy.TableLayoutEditPolicy;
 
-public class TableEditPart extends FigureEditPart {
+public class TableEditPart extends EditableFigureEditPart {
 
 	/*
 	 * (non-Javadoc)

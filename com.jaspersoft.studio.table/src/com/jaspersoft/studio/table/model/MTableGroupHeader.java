@@ -28,7 +28,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.table.TableComponentFactory;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.table.messages.Messages;

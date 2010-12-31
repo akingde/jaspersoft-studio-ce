@@ -47,7 +47,7 @@ import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MLineBox;
-import com.jaspersoft.studio.model.ReportFactory;
+import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
@@ -57,7 +57,6 @@ import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.table.model.MTableGroupHeader;
-import com.jaspersoft.studio.table.util.TableColumnNumerator;
 import com.jaspersoft.studio.table.util.TableColumnSize;
 
 public class MCell extends MColumn implements IGraphicElement, IPastableGraphic, ILineBox, IGraphicElementContainer {

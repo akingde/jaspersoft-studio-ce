@@ -10,7 +10,7 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 public class CellFigure extends ComponentFigure {
 	public CellFigure() {
 		super();
-		setBorder(new LineBorder(0));
+		setBorder(new LineBorder(1));
 	}
 
 	@Override

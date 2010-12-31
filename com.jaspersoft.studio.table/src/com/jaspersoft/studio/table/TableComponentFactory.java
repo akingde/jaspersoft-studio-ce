@@ -31,6 +31,7 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -43,15 +44,19 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.ReportFactory;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.table.editor.TableEditor;
+import com.jaspersoft.studio.table.figure.CellFigure;
 import com.jaspersoft.studio.table.figure.TableFigure;
 import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
@@ -103,7 +108,9 @@ public class TableComponentFactory implements IComponentFactory {
 				JasperDesign jasperDesign = parent.getJasperDesign();
 				TableManager tblManager = new TableManager(tbl, jasperDesign);
 				MTable mt = new MTable(parent, tbl, newIndex, tblManager);
-				return createTable(mt);
+				if (parent instanceof MPage)
+					createTable(mt);
+				return mt;
 			}
 		}
 		return null;
@@ -127,7 +134,7 @@ public class TableComponentFactory implements IComponentFactory {
 		if (groupsList != null)
 			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
 				JRDesignGroup jrGroup = (JRDesignGroup) it.next();
-				grHeaders.add(new MTableGroupHeader(mt, tbl, jrGroup, "")); //$NON-NLS-1$
+				grHeaders.add(new MTableGroupHeader(mt, tbl, jrGroup, ""));
 			}
 
 		MTableDetail mtd = new MTableDetail(mt, tbl, StandardColumn.PROPERTY_DETAIL);
@@ -135,7 +142,7 @@ public class TableComponentFactory implements IComponentFactory {
 		if (groupsList != null)
 			for (ListIterator<?> it = groupsList.listIterator(groupsList.size()); it.hasPrevious();) {
 				JRDesignGroup jrGroup = (JRDesignGroup) it.previous();
-				grFooters.add(new MTableGroupFooter(mt, tbl, jrGroup, "")); //$NON-NLS-1$
+				grFooters.add(new MTableGroupFooter(mt, tbl, jrGroup, ""));
 			}
 
 		MTableColumnFooter mtcf = new MTableColumnFooter(mt, tbl, StandardColumn.PROPERTY_COLUMN_FOOTER);
@@ -283,8 +290,8 @@ public class TableComponentFactory implements IComponentFactory {
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MTable)
 			return new TableFigure();
-		// if (node instanceof MCell)
-		// return new CellFigure();
+		if (node instanceof MCell)
+			return new CellFigure();
 		return null;
 	}
 
@@ -447,6 +454,16 @@ public class TableComponentFactory implements IComponentFactory {
 			return new OrphanElementCommand((MCell) parent, (MGraphicElement) child);
 		if (child instanceof MElementGroup && parent instanceof MCell)
 			return new OrphanElementGroupCommand((MCell) parent, (MElementGroup) child);
+		return null;
+	}
+
+	public AbstractVisualEditor getEditor(Object node) {
+
+		if (node != null && node instanceof JRDesignComponentElement) {
+			Component component = ((JRDesignComponentElement) node).getComponent();
+			if (component != null && component instanceof StandardTable)
+				return new TableEditor();
+		}
 		return null;
 	}
 

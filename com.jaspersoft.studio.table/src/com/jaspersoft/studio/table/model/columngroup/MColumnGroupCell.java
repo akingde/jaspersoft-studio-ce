@@ -30,8 +30,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IIconDescriptor;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
