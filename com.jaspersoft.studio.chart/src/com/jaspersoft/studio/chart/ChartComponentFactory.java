@@ -105,6 +105,7 @@ import com.jaspersoft.studio.chart.model.series.xyzseries.action.CreateXYZAction
 import com.jaspersoft.studio.chart.model.series.xyzseries.command.CreateXYZSeriesCommand;
 import com.jaspersoft.studio.chart.model.series.xyzseries.command.DeleteXYZSeriesCommand;
 import com.jaspersoft.studio.chart.model.series.xyzseries.command.ReorderXYZSeriesCommand;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -293,7 +294,10 @@ public class ChartComponentFactory implements IComponentFactory {
 	}
 
 	public Command getOrphanCommand(ANode parent, ANode child) {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public AbstractVisualEditor getEditor(Object node) {
 		return null;
 	}
 
