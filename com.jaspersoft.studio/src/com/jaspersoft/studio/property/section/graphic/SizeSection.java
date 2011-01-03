@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -62,7 +63,7 @@ public class SizeSection extends AbstractSection {
 		GridLayout layout = new GridLayout(5, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.SizeSection_size+":", SWT.RIGHT); //$NON-NLS-1$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_size+":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -75,7 +76,7 @@ public class SizeSection extends AbstractSection {
 		heightText.setValues(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
 		heightText.setToolTipText(Messages.SizeSection_height_tool_tip);
 
-		label = getWidgetFactory().createCLabel(composite, Messages.SizeSection_stretch_type+":"); //$NON-NLS-1$
+		label = getWidgetFactory().createCLabel(composite, Messages.common_stretch_type+":"); //$NON-NLS-1$
 		gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);

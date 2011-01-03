@@ -27,6 +27,8 @@ import java.util.List;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class SortFieldEditor extends Wizard {
 	private List<?> list;
 	private SortFieldPage page0;
@@ -43,7 +45,7 @@ public class SortFieldEditor extends Wizard {
 
 	public SortFieldEditor() {
 		super();
-		setWindowTitle(Messages.SortFieldEditor_sort_field_editor);
+		setWindowTitle(Messages.common_sort_field_editor);
 	}
 
 	@Override

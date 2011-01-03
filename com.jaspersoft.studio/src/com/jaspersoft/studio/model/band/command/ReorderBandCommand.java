@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.design.JRDesignSection;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
@@ -57,7 +58,7 @@ public class ReorderBandCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderBandCommand(MBandGroupHeader child, int newIndex) {
-		super(Messages.ReorderBandCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDesignSection = (JRDesignSection) child.getJrGroup().getGroupHeaderSection();
@@ -73,7 +74,7 @@ public class ReorderBandCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderBandCommand(MBandGroupFooter child, int newIndex) {
-		super(Messages.ReorderBandCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDesignSection = (JRDesignSection) child.getJrGroup().getGroupFooterSection();
@@ -91,7 +92,7 @@ public class ReorderBandCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderBandCommand(MBand child, MReport parent, int newIndex) {
-		super(Messages.ReorderBandCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDesignSection = (JRDesignSection) parent.getJasperDesign().getDetailSection();

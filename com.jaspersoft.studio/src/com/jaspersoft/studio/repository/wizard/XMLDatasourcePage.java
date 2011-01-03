@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 import com.jaspersoft.studio.swt.widgets.WLocale;
@@ -59,19 +60,19 @@ public class XMLDatasourcePage extends AFileDatasourcePage {
 		super.createMoreControls(parent);
 
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.XMLDatasourcePage_xpath_select+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_xpath_select+":"); //$NON-NLS-1$
 
 		xpathselectTXT = new Text(parent, SWT.BORDER);
 		xpathselectTXT.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.XMLDatasourcePage_xpath_timezone+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_xpath_timezone+":"); //$NON-NLS-1$
 
 		timezoneC = new WTimeZone(parent, SWT.DROP_DOWN | SWT.BORDER);
 		timezoneC.setSelection(TimeZone.getDefault());
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.XMLDatasourcePage_xpath_locale+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_xpath_locale+":"); //$NON-NLS-1$
 
 		localeC = new WLocale(parent, SWT.DROP_DOWN | SWT.BORDER);
 		localeC.setSelection(Locale.getDefault());

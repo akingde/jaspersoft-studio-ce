@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 
 /**
@@ -52,10 +53,10 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MGraphicElementLineBox_line_box);
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.common_line_box);
 		lineBoxD.setDescription(Messages.MGraphicElementLineBox_line_box_description);
 		desc.add(lineBoxD);
-		lineBoxD.setCategory(Messages.MGraphicElementLineBox_graphic_category);
+		lineBoxD.setCategory(Messages.common_graphic);
 	}
 
 	private MLineBox lineBox;

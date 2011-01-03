@@ -206,7 +206,7 @@ public class JRPrintEditor extends EditorPart {
 			} else if (input instanceof IFileEditorInput) {
 				in = ((IFileEditorInput) input).getFile().getContents();
 			} else {
-				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput");
+				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 			}
 			jasperPrint = loadJRObject(in);
 			setReportDocument(true);
@@ -336,7 +336,7 @@ public class JRPrintEditor extends EditorPart {
 		tbManager.add(exportMenu);
 
 		// tbManager.add(new PrintAction(reportViewer));
-		tbManager.add(new GroupMarker("DATASOURCEGROUP"));
+		tbManager.add(new GroupMarker("DATASOURCEGROUP")); //$NON-NLS-1$
 
 		tbManager.add(new Separator());
 		tbManager.add(new FirstPageAction(reportViewer));

@@ -27,6 +27,7 @@ import java.util.TimeZone;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.datasource.AMFileDataSource;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -98,13 +99,13 @@ public class MXMLDataSource extends AMFileDataSource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_XPATHSELECT, Messages.MXMLDataSource_xpath_select);
+		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_XPATHSELECT, Messages.common_xpath_select);
 		desc.add(jdbcURLD);
 
-		NTextPropertyDescriptor timeZoneD = new NTextPropertyDescriptor(PROPERTY_XPATHTIMEZONE, Messages.MXMLDataSource_xpath_timezone);
+		NTextPropertyDescriptor timeZoneD = new NTextPropertyDescriptor(PROPERTY_XPATHTIMEZONE, Messages.common_xpath_timezone);
 		desc.add(timeZoneD);
 
-		NTextPropertyDescriptor localeD = new NTextPropertyDescriptor(PROPERTY_XPATHLOCALE, Messages.MXMLDataSource_xpath_locale);
+		NTextPropertyDescriptor localeD = new NTextPropertyDescriptor(PROPERTY_XPATHLOCALE, Messages.common_xpath_locale);
 		desc.add(localeD);
 
 		defaultsMap.put(PROPERTY_XPATHTIMEZONE, TimeZone.getDefault());

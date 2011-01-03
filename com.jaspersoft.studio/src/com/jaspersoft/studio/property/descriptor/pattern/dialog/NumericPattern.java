@@ -39,6 +39,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class NumericPattern extends APattern {
 
 	public NumericPattern(Composite parent) {

@@ -21,6 +21,8 @@ package com.jaspersoft.studio.property.descriptor.pattern.dialog;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class PatternEditor extends Wizard {
 	private String value;
 	private PatternPage page0;
@@ -39,13 +41,13 @@ public class PatternEditor extends Wizard {
 
 	public PatternEditor() {
 		super();
-		setWindowTitle(Messages.PatternEditor_pattern);
+		setWindowTitle(Messages.common_pattern);
 		setNeedsProgressMonitor(false);
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new PatternPage("Pattern");
+		page0 = new PatternPage(Messages.common_pattern);
 		page0.setValue(value);
 		page0.setDatePatterns(datePatterns);
 		page0.setNumberPatterns(numberPatterns);

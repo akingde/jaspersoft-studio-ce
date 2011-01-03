@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -61,7 +62,7 @@ public class LocationSection extends AbstractSection {
 		GridLayout layout = new GridLayout(5, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.LocationSection_position+":", SWT.RIGHT); //$NON-NLS-2$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.LocationSection_position+":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -74,7 +75,7 @@ public class LocationSection extends AbstractSection {
 		yText.setValues(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
 		yText.setToolTipText(Messages.LocationSection_y_position_tool_tip);
 
-		label = getWidgetFactory().createCLabel(composite, Messages.LocationSection_position_type+":"); //$NON-NLS-2$
+		label = getWidgetFactory().createCLabel(composite, Messages.common_position_type+":"); //$NON-NLS-1$
 		gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);

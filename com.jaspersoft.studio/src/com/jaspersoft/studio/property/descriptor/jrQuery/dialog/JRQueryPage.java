@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -66,7 +67,7 @@ public class JRQueryPage extends WizardPage {
 
 	protected JRQueryPage(String pageName) {
 		super(pageName);
-		setTitle(Messages.JRQueryPage_query_editor);
+		setTitle(Messages.common_query_editor);
 		setDescription(Messages.JRQueryPage_description);
 	}
 
@@ -78,7 +79,7 @@ public class JRQueryPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl1 = new Label(composite, SWT.NONE);
-		lbl1.setText(Messages.JRQueryPage_language);
+		lbl1.setText(Messages.common_language + ":"); //$NON-NLS-1$
 
 		langCombo = new Combo(composite, SWT.DROP_DOWN | SWT.FLAT | SWT.BORDER);
 		langCombo.setItems(ModelUtils.getQueryLanguages());
@@ -90,7 +91,7 @@ public class JRQueryPage extends WizardPage {
 		});
 
 		Label lbl2 = new Label(composite, SWT.NONE);
-		lbl2.setText(Messages.JRQueryPage_query);
+		lbl2.setText(Messages.common_query + ":"); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		lbl2.setLayoutData(gd);

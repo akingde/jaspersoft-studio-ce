@@ -31,6 +31,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class CustomPattern extends APattern {
 
 	public CustomPattern(Composite parent, String pattern, Format formatter, Object sample) {

@@ -41,6 +41,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -118,11 +119,11 @@ public class MImage extends MGraphicElementLineBox {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignImage.PROPERTY_EXPRESSION,
-				Messages.MImage_expression);
+				Messages.common_expression);
 		expressionD.setDescription(Messages.MImage_expression_description);
 		desc.add(expressionD);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.MImage_fill,
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill,
 				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
 		fillD.setDescription(Messages.MImage_fill_description);
 		desc.add(fillD);
@@ -133,12 +134,12 @@ public class MImage extends MGraphicElementLineBox {
 		desc.add(scaleImageD);
 
 		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.MImage_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
+				Messages.common_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
 		hAlignD.setDescription(Messages.MImage_horizontal_alignment_description);
 		desc.add(hAlignD);
 
 		ComboBoxPropertyDescriptor vAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				Messages.MImage_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
+				Messages.common_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
 		vAlignD.setDescription(Messages.MImage_vertical_alignment_description);
 		desc.add(vAlignD);
 
@@ -153,7 +154,7 @@ public class MImage extends MGraphicElementLineBox {
 		desc.add(evaluationTimeD);
 
 		CheckBoxPropertyDescriptor usingCacheD = new CheckBoxPropertyDescriptor(JRBaseImage.PROPERTY_USING_CACHE,
-				Messages.MImage_using_cache, NullEnum.INHERITED);
+				Messages.common_using_cache, NullEnum.INHERITED);
 		usingCacheD.setDescription(Messages.MImage_using_cache_description);
 		desc.add(usingCacheD);
 
@@ -166,15 +167,15 @@ public class MImage extends MGraphicElementLineBox {
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
-		evaluationTimeD.setCategory(Messages.MImage_image_category);
-		onErrorTypeD.setCategory(Messages.MImage_image_category);
-		scaleImageD.setCategory(Messages.MImage_image_category);
-		expressionD.setCategory(Messages.MImage_image_category);
+		evaluationTimeD.setCategory(Messages.MImage_image_properties_category);
+		onErrorTypeD.setCategory(Messages.MImage_image_properties_category);
+		scaleImageD.setCategory(Messages.MImage_image_properties_category);
+		expressionD.setCategory(Messages.MImage_image_properties_category);
 
-		hAlignD.setCategory(Messages.MImage_image_category);
-		vAlignD.setCategory(Messages.MImage_image_category);
-		usingCacheD.setCategory(Messages.MImage_image_category);
-		lazyD.setCategory(Messages.MImage_image_category);
+		hAlignD.setCategory(Messages.MImage_image_properties_category);
+		vAlignD.setCategory(Messages.MImage_image_properties_category);
+		usingCacheD.setCategory(Messages.MImage_image_properties_category);
+		lazyD.setCategory(Messages.MImage_image_properties_category);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_SCALE_IMAGE, null);

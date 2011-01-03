@@ -26,6 +26,7 @@ import java.util.Map;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -97,16 +98,16 @@ public class MJDBCDataSource extends AMDatasource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor driverClassD = new NTextPropertyDescriptor(PROPERTY_DRIVERCLASS, Messages.MJDBCDataSource_driver_class);
+		NTextPropertyDescriptor driverClassD = new NTextPropertyDescriptor(PROPERTY_DRIVERCLASS, Messages.common_driver_class);
 		desc.add(driverClassD);
 
-		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_JDBC_URL, Messages.MJDBCDataSource_jdbc_url);
+		NTextPropertyDescriptor jdbcURLD = new NTextPropertyDescriptor(PROPERTY_JDBC_URL, Messages.common_jdbc_url);
 		desc.add(jdbcURLD);
 
-		NTextPropertyDescriptor usernameD = new NTextPropertyDescriptor(PROPERTY_USERNAME, Messages.MJDBCDataSource_username);
+		NTextPropertyDescriptor usernameD = new NTextPropertyDescriptor(PROPERTY_USERNAME, Messages.common_username);
 		desc.add(usernameD);
 
-		NTextPropertyDescriptor passwordD = new NTextPropertyDescriptor(PROPERTY_PASSWORD, Messages.MJDBCDataSource_password);
+		NTextPropertyDescriptor passwordD = new NTextPropertyDescriptor(PROPERTY_PASSWORD, Messages.common_password);
 		desc.add(passwordD);
 
 		NTextPropertyDescriptor jarD = new NTextPropertyDescriptor(PROPERTY_JAR, Messages.MJDBCDataSource_classpath);

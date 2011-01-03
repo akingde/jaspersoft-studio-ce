@@ -33,6 +33,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class DatePattern extends APattern {
 
 	public DatePattern(Composite parent) {

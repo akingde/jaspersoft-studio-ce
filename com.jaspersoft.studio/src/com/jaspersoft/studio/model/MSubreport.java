@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -121,22 +122,22 @@ public class MSubreport extends MGraphicElement {
 		desc.add(runToBottomD);
 
 		CheckBoxPropertyDescriptor useCacheD = new CheckBoxPropertyDescriptor(JRBaseSubreport.PROPERTY_USING_CACHE,
-				Messages.MSubreport_using_cache, NullEnum.INHERITED);
+				Messages.common_using_cache, NullEnum.INHERITED);
 		useCacheD.setDescription(Messages.MSubreport_using_cache_description);
 		desc.add(useCacheD);
 
 		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(JRDesignSubreport.PROPERTY_EXPRESSION,
-				Messages.MSubreport_expression);
+				Messages.common_expression);
 		exprD.setDescription(Messages.MSubreport_expression_description);
 		desc.add(exprD);
 
 		JRExpressionPropertyDescriptor paramExprD = new JRExpressionPropertyDescriptor(
-				JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.MSubreport_parameters_map_expression);
+				JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.common_parameters_map_expression);
 		paramExprD.setDescription(Messages.MSubreport_parameters_map_expression_description);
 		desc.add(paramExprD);
 
 		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(
-				JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, Messages.MSubreport_connection_expression);
+				JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, Messages.common_connection_expression);
 		connExprD.setDescription(Messages.MSubreport_connection_expression_description);
 		desc.add(connExprD);
 
@@ -146,23 +147,23 @@ public class MSubreport extends MGraphicElement {
 		desc.add(dsExprD);
 
 		SubreportPropertiesPropertyDescriptor propertiesD = new SubreportPropertiesPropertyDescriptor(
-				JRDesignSubreport.PROPERTY_PARAMETERS, Messages.MSubreport_parameters);
+				JRDesignSubreport.PROPERTY_PARAMETERS, Messages.common_parameters);
 		propertiesD.setDescription(Messages.MSubreport_parameters_description);
 		desc.add(propertiesD);
 
 		RVPropertyDescriptor returnValuesD = new RVPropertyDescriptor(JRDesignSubreport.PROPERTY_RETURN_VALUES,
-				Messages.MSubreport_return_values);
+				Messages.common_return_values);
 		returnValuesD.setDescription(Messages.MSubreport_return_values_description);
 		desc.add(returnValuesD);
 
-		returnValuesD.setCategory(Messages.MSubreport_subreport_category);
-		propertiesD.setCategory(Messages.MSubreport_subreport_category);
-		dsExprD.setCategory(Messages.MSubreport_subreport_category);
-		connExprD.setCategory(Messages.MSubreport_subreport_category);
-		paramExprD.setCategory(Messages.MSubreport_subreport_category);
-		exprD.setCategory(Messages.MSubreport_subreport_category);
-		useCacheD.setCategory(Messages.MSubreport_subreport_category);
-		runToBottomD.setCategory(Messages.MSubreport_subreport_category);
+		returnValuesD.setCategory(Messages.MSubreport_subreport_properties_category);
+		propertiesD.setCategory(Messages.MSubreport_subreport_properties_category);
+		dsExprD.setCategory(Messages.MSubreport_subreport_properties_category);
+		connExprD.setCategory(Messages.MSubreport_subreport_properties_category);
+		paramExprD.setCategory(Messages.MSubreport_subreport_properties_category);
+		exprD.setCategory(Messages.MSubreport_subreport_properties_category);
+		useCacheD.setCategory(Messages.MSubreport_subreport_properties_category);
+		runToBottomD.setCategory(Messages.MSubreport_subreport_properties_category);
 
 	}
 

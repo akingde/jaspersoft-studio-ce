@@ -21,6 +21,7 @@ package com.jaspersoft.studio.property.descriptor.genericElement;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.genericElement.dialog.ParameterDTO;
 
 /**
@@ -36,11 +37,11 @@ public class ParameterLabelProvider extends LabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element == null)
-			return "";
+			return ""; //$NON-NLS-1$
 		if (element.getClass().isArray())
-			return "[Parameters: " + ((Object[]) element).length + "]";
+			return "[" + Messages.common_parameters + ": " + ((Object[]) element).length + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		if (element instanceof ParameterDTO)
-			return "[Parameters: " + ((ParameterDTO) element).getValue().length + "]";
+			return "[" + Messages.common_parameters + ": " + ((ParameterDTO) element).getValue().length + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return element.toString();
 	}
 

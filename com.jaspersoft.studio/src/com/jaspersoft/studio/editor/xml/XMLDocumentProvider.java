@@ -102,7 +102,7 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 				return true;
 			} else if (editorInput instanceof IFileEditorInput) {
 				String fileExtention = JrxmlEditor.getFileExtension(editorInput);
-				if (fileExtention.equals("jasper")) {
+				if (fileExtention.equals("jasper")) { //$NON-NLS-1$
 					IFile file = ((IFileEditorInput) editorInput).getFile();
 					stream = file.getContents(false);
 					setDocumentContent(document, JrxmlEditor.getXML(editorInput, encoding, stream), encoding);
@@ -133,7 +133,7 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	@Override
 	protected void doSaveDocument(IProgressMonitor monitor, Object element, IDocument document, boolean overwrite)
 			throws CoreException {
-		if (JrxmlEditor.getFileExtension((IEditorInput) element).equals("jasper")) {
+		if (JrxmlEditor.getFileExtension((IEditorInput) element).equals("jasper")) { //$NON-NLS-1$
 			return; // do not save .jasper files, they are binary
 		}
 		if (element instanceof FileStoreEditorInput) {
@@ -144,11 +144,11 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 			try {
 				charset = Charset.forName(encoding);
 			} catch (UnsupportedCharsetException ex) {
-				String message = "unsuported encoding message";
+				String message = "unsuported encoding message"; //$NON-NLS-1$
 				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, IStatus.OK, message, ex);
 				throw new CoreException(s);
 			} catch (IllegalCharsetNameException ex) {
-				String message = "document provider error encoding";
+				String message = "document provider error encoding"; //$NON-NLS-1$
 				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, IStatus.OK, message, ex);
 				throw new CoreException(s);
 			}
@@ -173,15 +173,15 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 
 			} catch (CharacterCodingException ex) {
 				Assert.isTrue(ex instanceof UnmappableCharacterException);
-				String message = "Error charset mapping";
+				String message = "Error charset mapping"; //$NON-NLS-1$
 				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message, null);
 				throw new CoreException(s);
 			} catch (FileNotFoundException e) {
-				String message = "FileNotFoundException";
+				String message = "FileNotFoundException"; //$NON-NLS-1$
 				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message, null);
 				throw new CoreException(s);
 			} catch (IOException e) {
-				String message = "IOException";
+				String message = "IOException"; //$NON-NLS-1$
 				IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message, null);
 				throw new CoreException(s);
 			} finally {
@@ -189,7 +189,7 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 					try {
 						stream.close();
 					} catch (IOException e) {
-						String message = "IOException";
+						String message = "IOException"; //$NON-NLS-1$
 						IStatus s = new Status(IStatus.ERROR, EditorsUI.PLUGIN_ID, EditorsUI.CHARSET_MAPPING_FAILED, message, null);
 						throw new CoreException(s);
 					}

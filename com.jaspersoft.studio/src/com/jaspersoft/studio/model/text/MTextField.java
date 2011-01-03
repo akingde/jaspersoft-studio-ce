@@ -37,6 +37,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
@@ -118,13 +119,13 @@ public class MTextField extends MTextElement {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
-				JRDesignTextField.PROPERTY_EVALUATION_TIME, Messages.MTextField_evaluation_time, EnumHelper.getEnumNames(
+				JRDesignTextField.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time, EnumHelper.getEnumNames(
 						EvaluationTimeEnum.values(), NullEnum.NULL));
 		evaluationTimeD.setDescription(Messages.MTextField_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
 		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,
-				Messages.MTextField_blank_when_null, NullEnum.INHERITED);
+				Messages.common_blank_when_null, NullEnum.INHERITED);
 		blankWhenNullD.setDescription(Messages.MTextField_blank_when_null_description);
 		desc.add(blankWhenNullD);
 
@@ -134,12 +135,12 @@ public class MTextField extends MTextElement {
 		desc.add(stretchOverflowD);
 
 		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(JRDesignTextField.PROPERTY_EXPRESSION,
-				Messages.MTextField_expression);
+				Messages.common_expression);
 		exprD.setDescription(Messages.MTextField_expression_description);
 		desc.add(exprD);
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
-				Messages.MTextField_pattern);
+				Messages.common_pattern);
 		patternD.setDescription(Messages.MTextField_pattern_description);
 		desc.add(patternD);
 

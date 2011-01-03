@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
 
 /**
@@ -52,10 +53,10 @@ public abstract class MGraphicElementLinePen extends MGraphicElement implements 
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, Messages.MGraphicElementLinePen_line_pen);
+		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, Messages.common_line_pen);
 		linePenD.setDescription(Messages.MGraphicElementLinePen_line_pen_description);
 		desc.add(linePenD);
-		linePenD.setCategory(Messages.MGraphicElementLinePen_graphic_category);
+		linePenD.setCategory(Messages.common_graphic);
 	}
 
 	private MLinePen linePen;

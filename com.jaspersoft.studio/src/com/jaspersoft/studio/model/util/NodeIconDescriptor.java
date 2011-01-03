@@ -38,13 +38,13 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 public class NodeIconDescriptor implements IIconDescriptor {
 
 	/** The ICO n_ title. */
-	private String ICON_TITLE = "Unknown element";
+	private String ICON_TITLE = "Unknown element"; //$NON-NLS-1$
 
 	/** The ICO n_ description. */
-	private String ICON_DESCRIPTION = "Unknown element";
+	private String ICON_DESCRIPTION = "Unknown element"; //$NON-NLS-1$
 
 	/** The ICO n_ tooltip. */
-	private String ICON_TOOLTIP = "Unknown element";
+	private String ICON_TOOLTIP = "Unknown element"; //$NON-NLS-1$
 
 	/** The ICO n_16. */
 	private String ICON_16 = "icons/resources/genericelement-16.png"; //$NON-NLS-1$

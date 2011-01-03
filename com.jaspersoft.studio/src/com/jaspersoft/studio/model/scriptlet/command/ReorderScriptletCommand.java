@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.scriptlet.MScriptlet;
 import com.jaspersoft.studio.model.scriptlet.MScriptlets;
 
@@ -58,7 +59,7 @@ public class ReorderScriptletCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderScriptletCommand(MScriptlet child, MScriptlets parent, int newIndex) {
-		super(Messages.ReorderScriptletCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDataset = (JRDesignDataset) parent.getValue();

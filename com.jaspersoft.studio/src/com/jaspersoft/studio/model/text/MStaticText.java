@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -100,7 +101,7 @@ public class MStaticText extends MTextElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRBaseStaticText.PROPERTY_TEXT, Messages.MStaticText_text);
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRBaseStaticText.PROPERTY_TEXT, Messages.common_text);
 		desc.add(textD);
 		textD.setCategory(Messages.MStaticText_text_description);
 	}
@@ -151,7 +152,7 @@ public class MStaticText extends MTextElement {
 	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignStaticText jrDesignStaticText = new JRDesignStaticText();
-		jrDesignStaticText.setText("Static text");
+		jrDesignStaticText.setText(Messages.MStaticText_static_text);
 		return jrDesignStaticText;
 	}
 

@@ -27,6 +27,7 @@ import org.eclipse.jface.action.Action;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
+import com.jaspersoft.studio.messages.Messages;
 
 public class ReloadAction extends Action {
 	public static final String ID = "PREVIEWRELOADACTION"; //$NON-NLS-1$

@@ -48,6 +48,7 @@ import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WLocale;
 import com.jaspersoft.studio.swt.widgets.WTimeZone;
 
@@ -79,7 +80,7 @@ public class ParametersDialog extends FormDialog {
 					.isAssignableFrom(p.getValueClass())))
 				continue;
 
-			toolkit.createLabel(mform.getForm().getBody(), p.getName() + ":", SWT.RIGHT);
+			toolkit.createLabel(mform.getForm().getBody(), p.getName() + ":", SWT.RIGHT); //$NON-NLS-1$
 
 			if (p.getValueClass().equals(String.class)) {
 				createText(mform, toolkit, p);
@@ -116,8 +117,8 @@ public class ParametersDialog extends FormDialog {
 				public void widgetSelected(SelectionEvent e) {
 					params.put(
 							param.getName(),
-							java.sql.Date.valueOf(String.format("%04d", date.getYear()) + "-"
-									+ String.format("%02d", date.getMonth()) + "-" + String.format("%02d", date.getDay())));
+							java.sql.Date.valueOf(String.format("%04d", date.getYear()) + "-" //$NON-NLS-1$ //$NON-NLS-2$
+									+ String.format("%02d", date.getMonth()) + "-" + String.format("%02d", date.getDay()))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
 			});
 			if (params.get(param.getName()) != null) {
@@ -135,9 +136,9 @@ public class ParametersDialog extends FormDialog {
 				public void widgetSelected(SelectionEvent e) {
 					params.put(
 							param.getName(),
-							java.sql.Time.valueOf(String.format("%02d",
-									String.format("%02d", time.getHours()) + ":" + String.format("%02d", time.getMinutes()) + ":"
-											+ String.format("%02d", time.getSeconds()))));
+							java.sql.Time.valueOf(String.format("%02d", //$NON-NLS-1$
+									String.format("%02d", time.getHours()) + ":" + String.format("%02d", time.getMinutes()) + ":" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+											+ String.format("%02d", time.getSeconds())))); //$NON-NLS-1$
 
 				}
 			});
@@ -163,9 +164,9 @@ public class ParametersDialog extends FormDialog {
 			final DateTime time = new DateTime(c, SWT.TIME | SWT.LONG | SWT.BORDER);
 			SelectionAdapter listener = new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
-					String timestamp = String.format("%04d", date.getYear()) + "-" + String.format("%02d", date.getMonth()) + "-"
-							+ String.format("%02d", date.getDay()) + " " + String.format("%02d", time.getHours()) + ":"
-							+ String.format("%02d", time.getMinutes()) + ":" + String.format("%02d", time.getSeconds());
+					String timestamp = String.format("%04d", date.getYear()) + "-" + String.format("%02d", date.getMonth()) + "-" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							+ String.format("%02d", date.getDay()) + " " + String.format("%02d", time.getHours()) + ":" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							+ String.format("%02d", time.getMinutes()) + ":" + String.format("%02d", time.getSeconds()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					params.put(param.getName(), java.sql.Timestamp.valueOf(timestamp));
 				}
 			};
@@ -224,7 +225,7 @@ public class ParametersDialog extends FormDialog {
 				} else if (param.getValueClass().equals(Short.class)) {
 					n = new Short((short) num.getSelection());
 				} else if (param.getValueClass().equals(BigInteger.class)) {
-					n = new BigInteger(new String("" + num.getSelection()));
+					n = new BigInteger(new String("" + num.getSelection())); //$NON-NLS-1$
 				} else if (param.getValueClass().equals(Byte.class)) {
 					n = new Byte((byte) num.getSelection());
 				} else if (param.getValueClass().equals(BigDecimal.class)) {

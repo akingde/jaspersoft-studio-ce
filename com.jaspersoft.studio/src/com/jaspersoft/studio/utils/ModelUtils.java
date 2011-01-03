@@ -53,6 +53,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
@@ -365,15 +366,15 @@ public class ModelUtils {
 
 			JRGroup group = (JRGroup) jd.getGroupsMap().get(origin.getGroupName());
 			int index = getBandIndex(group.getGroupHeaderSection(), b);
-			return "GroupHeaderSection " + origin.getGroupName() + " " + (index + 1);
+			return Messages.ModelUtils_groupheader_section + " " + origin.getGroupName() + " " + (index + 1); //$NON-NLS-1$ //$NON-NLS-2$
 
 		} else if (origin.getBandType() == JROrigin.DETAIL) {
 			int index = getBandIndex(jd.getDetailSection(), b);
-			return "Detail section " + (index + 1);
+			return Messages.ModelUtils_detail_section + " " + (index + 1); //$NON-NLS-1$
 		} else if (origin.getBandType() == JROrigin.GROUP_FOOTER) {
 			JRGroup group = (JRGroup) jd.getGroupsMap().get(origin.getGroupName());
 			int index = getBandIndex(group.getGroupFooterSection(), b);
-			return "GroupFooterSection " + origin.getGroupName() + (index + 1);
+			return Messages.ModelUtils_groupfooter_section + " " + origin.getGroupName() + (index + 1); //$NON-NLS-1$
 		}
 
 		return nameOf(((JRDesignBand) b).getOrigin());
@@ -535,16 +536,16 @@ public class ModelUtils {
 				langs.add(l[i]);
 		}
 		List<String> lst = new ArrayList<String>();
-		lst.add("");
+		lst.add(""); //$NON-NLS-1$
 		lst.addAll(langs);
 		return lst.toArray(new String[lst.size()]);
 	}
 
 	public static String[] getMarkups() {
 		List<String> lst = new ArrayList<String>();
-		lst.add("");
-		lst.add("none");
-		lst.add("styled");
+		lst.add(""); //$NON-NLS-1$
+		lst.add("none"); //$NON-NLS-1$
+		lst.add("styled"); //$NON-NLS-1$
 		List<PropertySuffix> props = JRProperties
 				.getProperties(MarkupProcessorFactory.PROPERTY_MARKUP_PROCESSOR_FACTORY_PREFIX);
 		for (PropertySuffix p : props) {
@@ -555,7 +556,7 @@ public class ModelUtils {
 
 	public static String[] getFontNames() {
 		java.util.List<String> classes = new ArrayList<String>();
-		classes.add("");
+		classes.add(""); //$NON-NLS-1$
 		ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 
 		Collection<?> extensionFonts = JRFontUtil.getFontFamilyNames();
@@ -567,7 +568,7 @@ public class ModelUtils {
 		Thread.currentThread().setContextClassLoader(oldCL);
 
 		String[] names = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		classes.add("______________");
+		classes.add("______________"); //$NON-NLS-1$
 		for (int i = 0; i < names.length; i++) {
 			String name = names[i];
 			classes.add(name);
@@ -578,57 +579,57 @@ public class ModelUtils {
 
 	public static String[] getPDFFontNames() {
 		java.util.List<String> classes = new ArrayList<String>();
-		classes.add("");
-		classes.add("Helvetica");
-		classes.add("Helvetica-Bold");
-		classes.add("Helvetica-BoldOblique");
-		classes.add("Helvetica-Oblique");
-		classes.add("Courier");
-		classes.add("Courier-Bold");
-		classes.add("Courier-BoldOblique");
-		classes.add("Courier-Oblique");
-		classes.add("Symbol");
-		classes.add("Times-Roman");
-		classes.add("Times-Bold");
-		classes.add("Times-BoldItalic");
-		classes.add("Times-Italic");
-		classes.add("ZapfDingbats");
-		classes.add("STSong-Light");
-		classes.add("MHei-Medium");
-		classes.add("MSung-Light");
-		classes.add("HeiseiKakuGo-W5");
-		classes.add("HeiseiMin-W3");
-		classes.add("HYGoThic-Medium");
-		classes.add("HYSMyeongJo-Medium");
+		classes.add(""); //$NON-NLS-1$
+		classes.add("Helvetica"); //$NON-NLS-1$
+		classes.add("Helvetica-Bold"); //$NON-NLS-1$
+		classes.add("Helvetica-BoldOblique"); //$NON-NLS-1$
+		classes.add("Helvetica-Oblique"); //$NON-NLS-1$
+		classes.add("Courier"); //$NON-NLS-1$
+		classes.add("Courier-Bold"); //$NON-NLS-1$
+		classes.add("Courier-BoldOblique"); //$NON-NLS-1$
+		classes.add("Courier-Oblique"); //$NON-NLS-1$
+		classes.add("Symbol"); //$NON-NLS-1$
+		classes.add("Times-Roman"); //$NON-NLS-1$
+		classes.add("Times-Bold"); //$NON-NLS-1$
+		classes.add("Times-BoldItalic"); //$NON-NLS-1$
+		classes.add("Times-Italic"); //$NON-NLS-1$
+		classes.add("ZapfDingbats"); //$NON-NLS-1$
+		classes.add("STSong-Light"); //$NON-NLS-1$
+		classes.add("MHei-Medium"); //$NON-NLS-1$
+		classes.add("MSung-Light"); //$NON-NLS-1$
+		classes.add("HeiseiKakuGo-W5"); //$NON-NLS-1$
+		classes.add("HeiseiMin-W3"); //$NON-NLS-1$
+		classes.add("HYGoThic-Medium"); //$NON-NLS-1$
+		classes.add("HYSMyeongJo-Medium"); //$NON-NLS-1$
 
 		return classes.toArray(new String[classes.size()]);
 	}
 
 	public static String[] getPDFEncodings() {
 		java.util.List<String> encodings = new ArrayList<String>();
-		encodings.add("");
+		encodings.add(""); //$NON-NLS-1$
 
-		mp.put("Cp1250", "CP1250 (Central European)");
-		mp.put("Cp1251", "CP1251 (Cyrillic)");
-		mp.put("Cp1252", "CP1252 (Western European ANSI aka WinAnsi)");
-		mp.put("Cp1253", "CP1253 (Greek)");
-		mp.put("Cp1254", "CP1254 (Turkish)");
-		mp.put("Cp1255", "CP1255 (Hebrew)");
-		mp.put("Cp1256", "CP1256 (Arabic)");
-		mp.put("Cp1257", "CP1257 (Baltic)");
-		mp.put("Cp1258", "CP1258 (Vietnamese)");
-		mp.put("UniGB-UCS2-H", "UniGB-UCS2-H (Chinese Simplified)");
-		mp.put("UniGB-UCS2-V", "UniGB-UCS2-V (Chinese Simplified)");
-		mp.put("UniCNS-UCS2-H", "UniCNS-UCS2-H (Chinese traditional)");
-		mp.put("UniCNS-UCS2-V", "UniCNS-UCS2-V (Chinese traditional)");
-		mp.put("UniJIS-UCS2-H", "UniJIS-UCS2-H (Japanese)");
-		mp.put("UniJIS-UCS2-V", "UniJIS-UCS2-V (Japanese)");
-		mp.put("UniJIS-UCS2-HW-H", "UniJIS-UCS2-HW-H (Japanese)");
-		mp.put("UniJIS-UCS2-HW-V", "UniJIS-UCS2-HW-V (Japanese)");
-		mp.put("UniKS-UCS2-H", "UniKS-UCS2-H (Korean)");
-		mp.put("UniKS-UCS2-V", "UniKS-UCS2-V (Korean)");
-		mp.put("Identity-H", "Identity-H (Unicode with horizontal writing)");
-		mp.put("Identity-V", "Identity-V (Unicode with vertical writing)");
+		mp.put("Cp1250", "CP1250 (Central European)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Cp1251", "CP1251 (Cyrillic)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Cp1252", "CP1252 (Western European ANSI aka WinAnsi)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Cp1253", "CP1253 (Greek)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Cp1254", "CP1254 (Turkish)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Cp1255", "CP1255 (Hebrew)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Cp1256", "CP1256 (Arabic)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Cp1257", "CP1257 (Baltic)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Cp1258", "CP1258 (Vietnamese)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniGB-UCS2-H", "UniGB-UCS2-H (Chinese Simplified)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniGB-UCS2-V", "UniGB-UCS2-V (Chinese Simplified)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniCNS-UCS2-H", "UniCNS-UCS2-H (Chinese traditional)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniCNS-UCS2-V", "UniCNS-UCS2-V (Chinese traditional)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniJIS-UCS2-H", "UniJIS-UCS2-H (Japanese)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniJIS-UCS2-V", "UniJIS-UCS2-V (Japanese)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniJIS-UCS2-HW-H", "UniJIS-UCS2-HW-H (Japanese)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniJIS-UCS2-HW-V", "UniJIS-UCS2-HW-V (Japanese)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniKS-UCS2-H", "UniKS-UCS2-H (Korean)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("UniKS-UCS2-V", "UniKS-UCS2-V (Korean)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Identity-H", "Identity-H (Unicode with horizontal writing)"); //$NON-NLS-1$ //$NON-NLS-2$
+		mp.put("Identity-V", "Identity-V (Unicode with vertical writing)"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		encodings.addAll(mp.values());
 
@@ -656,6 +657,6 @@ public class ModelUtils {
 	}
 
 	public static String[] getFontSizes() {
-		return new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26" };
+		return new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$
 	}
 }

@@ -30,6 +30,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * 
@@ -56,7 +57,7 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 		gridData.horizontalSpan = 2;
 
 		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER, Messages.RulersGridPreferencePage_show_rulers, group));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES, Messages.RulersGridPreferencePage_snap_to_guides, group));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES, Messages.common_snap_to_guides, group));
 
 		group.setLayoutData(gridData);
 		group.setLayout(gridLayout);
@@ -71,8 +72,8 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 		gridData.horizontalSpan = 2;
 
 		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID, Messages.RulersGridPreferencePage_show_grid, group));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID, Messages.RulersGridPreferencePage_snap_to_grid, group));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGEOMETRY, Messages.RulersGridPreferencePage_snape_to_geometry, group));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID, Messages.common_snap_to_grid, group));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGEOMETRY, Messages.common_snap_to_geometry, group));
 		IntegerFieldEditor spaceX = new IntegerFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEX, Messages.RulersGridPreferencePage_grid_spacing_x,
 				group);
 		spaceX.setValidRange(2, 100);

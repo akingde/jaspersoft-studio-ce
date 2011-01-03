@@ -28,6 +28,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.group.MGroups;
@@ -110,7 +111,7 @@ public class CreateGroupCommand extends Command {
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataSet.getGroupsMap(), "CopyOFGroup_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateGroupCommand_group_name,
-							Messages.CreateGroupCommand_group_name_dialog, defaultName, null);
+							Messages.CreateGroupCommand_group_name_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());
 						execute();

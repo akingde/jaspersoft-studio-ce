@@ -32,6 +32,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
@@ -107,13 +108,13 @@ public class MRectangle extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.MRectangle_fill, EnumHelper
+		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, EnumHelper
 				.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
 		fillD.setDescription(Messages.MRectangle_fill_description);
 		desc.add(fillD);
 
-		IntegerPropertyDescriptor rD = new IntegerPropertyDescriptor(JRBaseStyle.PROPERTY_RADIUS, Messages.MRectangle_radius);
-		rD.setCategory(Messages.MRectangle_rectangle_category);
+		IntegerPropertyDescriptor rD = new IntegerPropertyDescriptor(JRBaseStyle.PROPERTY_RADIUS, Messages.common_radius);
+		rD.setCategory(Messages.MRectangle_rectangle_properties_category);
 		rD.setDescription(Messages.MRectangle_radius_description);
 		desc.add(rD);
 

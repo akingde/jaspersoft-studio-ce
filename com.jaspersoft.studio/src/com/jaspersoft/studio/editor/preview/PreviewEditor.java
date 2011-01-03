@@ -66,6 +66,7 @@ import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.editor.JRPrintEditor;
 import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.AMFileDataSource;
 import com.jaspersoft.studio.model.datasource.empty.MEmptyDataSource;
@@ -102,7 +103,7 @@ public class PreviewEditor extends JRPrintEditor {
 	public void runReport(final AMDatasource d) {
 		if (isNotRunning()) {
 
-			String dsName = "";
+			String dsName = ""; //$NON-NLS-1$
 			if (d != null) {
 				dsName = d.getDisplayText();
 				datasource = d;
@@ -119,7 +120,7 @@ public class PreviewEditor extends JRPrintEditor {
 			if (pdresult != Window.OK)
 				return;
 
-			String jobName = Messages.PreviewEditor_preview_a + jasperDesign.getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]";
+			String jobName = Messages.PreviewEditor_preview_a + ": " + jasperDesign.getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			Job job = new Job(jobName) {
 
 				@Override
@@ -138,7 +139,7 @@ public class PreviewEditor extends JRPrintEditor {
 						JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
 						SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
-								new File(file.getParent().getLocationURI()), new File("."),
+								new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
 								new File(file.getProject().getLocationURI()) }));
 						fileResolver.setResolveAbsolutePath(true);
 
@@ -158,11 +159,11 @@ public class PreviewEditor extends JRPrintEditor {
 							} else if (datasource instanceof AMFileDataSource) {
 								io = new FileInputStream((String) datasource.getPropertyValue(MFileDataSource.PROPERTY_FILENAME));
 								String df = (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT);
-								if (df == null || df.trim().equals(""))
-									df = "yyyy-MM-dd";
+								if (df == null || df.trim().equals("")) //$NON-NLS-1$
+									df = "yyyy-MM-dd"; //$NON-NLS-1$
 								String nf = (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT);
-								if (nf == null || nf.trim().equals(""))
-									nf = "#,##0.##";
+								if (nf == null || nf.trim().equals("")) //$NON-NLS-1$
+									nf = "#,##0.##"; //$NON-NLS-1$
 
 								if (datasource instanceof MFileDataSource) {
 									jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource) datasource);
@@ -193,7 +194,7 @@ public class PreviewEditor extends JRPrintEditor {
 									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, locale);
 
 									String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
-									if (select != null && !select.trim().endsWith("")) {
+									if (select != null && !select.trim().endsWith("")) { //$NON-NLS-1$
 										jrds = RepositoryManager.createXMLDataSource(PreviewEditor.this, io, select);
 									} else {
 										jasperParameter.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, JRXmlUtils.parse(io));

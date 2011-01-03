@@ -314,22 +314,22 @@ public class JDRulerComposite extends Composite {
 		propertyListener = new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				String property = evt.getPropertyName();
-				if (property.equals("RULER_HOFFSET")) {
+				if (property.equals("RULER_HOFFSET")) { //$NON-NLS-1$
 					RulerProvider rh = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER);
 					if (rh != null)
 						((ReportRuler) rh.getRuler()).setHoffset((Integer) evt.getNewValue());
 					Display.getCurrent().asyncExec(runnable);
-				} else if (property.equals("RULER_HEND")) {
+				} else if (property.equals("RULER_HEND")) { //$NON-NLS-1$
 					RulerProvider rh = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER);
 					if (rh != null)
 						((ReportRuler) rh.getRuler()).setHend((Integer) evt.getNewValue());
 					Display.getCurrent().asyncExec(runnable);
-				} else if (property.equals("RULER_VOFFSET")) {
+				} else if (property.equals("RULER_VOFFSET")) { //$NON-NLS-1$
 					RulerProvider rh = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_VERTICAL_RULER);
 					if (rh != null)
 						((ReportRuler) rh.getRuler()).setVoffset((Integer) evt.getNewValue());
 					Display.getCurrent().asyncExec(runnable);
-				} else if (property.equals("RULER_VEND")) {
+				} else if (property.equals("RULER_VEND")) { //$NON-NLS-1$
 					RulerProvider rh = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_VERTICAL_RULER);
 					if (rh != null)
 						((ReportRuler) rh.getRuler()).setVend((Integer) evt.getNewValue());

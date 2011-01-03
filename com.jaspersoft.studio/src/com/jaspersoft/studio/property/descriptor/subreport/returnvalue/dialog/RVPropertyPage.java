@@ -63,6 +63,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.JReportsDTO;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
@@ -131,7 +132,7 @@ public class RVPropertyPage extends WizardPage {
 
 	protected RVPropertyPage(String pageName) {
 		super(pageName);
-		setTitle(Messages.RVPropertyPage_subreport_parameters);
+		setTitle(Messages.common_subreport_parameters);
 		setDescription(Messages.RVPropertyPage_description);
 
 	}
@@ -155,7 +156,7 @@ public class RVPropertyPage extends WizardPage {
 		table.setLayoutData(gd);
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText(Messages.RVPropertyPage_add);
+		addB.setText(Messages.common_add);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		addB.setLayoutData(gridData);
@@ -195,7 +196,7 @@ public class RVPropertyPage extends WizardPage {
 		});
 
 		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText(Messages.RVPropertyPage_delete);
+		delB.setText(Messages.common_delete);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		delB.setLayoutData(gridData);
@@ -223,7 +224,7 @@ public class RVPropertyPage extends WizardPage {
 						// cursor.setSelection(table.getSelectionIndex(), 0);
 						validate();
 					} else
-						setMessage(Messages.RVPropertyPage_table_is_empty);
+						setMessage(Messages.common_table_is_empty);
 				}
 			}
 		});

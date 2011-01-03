@@ -21,6 +21,7 @@ package com.jaspersoft.studio.repository.wizard;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.empty.MEmptyDataSource;
 import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
@@ -44,7 +45,7 @@ public class DatasourceEditor extends Wizard {
 
 	public DatasourceEditor() {
 		super();
-		setWindowTitle(Messages.DatasourceEditor_datasource_editor);
+		setWindowTitle(Messages.common_datasource_editor);
 	}
 
 	@Override

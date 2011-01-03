@@ -230,13 +230,13 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 	private final class RulerListener implements PropertyChangeListener {
 
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (evt.getPropertyName().equals("HOFFSET")) {
+			if (evt.getPropertyName().equals("HOFFSET")) { //$NON-NLS-1$
 				((JDRulerFigure) getFigure()).setHoffset((Integer) evt.getNewValue());
-			} else if (evt.getPropertyName().equals("VOFFSET")) {
+			} else if (evt.getPropertyName().equals("VOFFSET")) { //$NON-NLS-1$
 				((JDRulerFigure) getFigure()).setVoffset((Integer) evt.getNewValue());
-			} else if (evt.getPropertyName().equals("HEND")) {
+			} else if (evt.getPropertyName().equals("HEND")) { //$NON-NLS-1$
 				((JDRulerFigure) getFigure()).setHend((Integer) evt.getNewValue());
-			} else if (evt.getPropertyName().equals("VEND")) {
+			} else if (evt.getPropertyName().equals("VEND")) { //$NON-NLS-1$
 				((JDRulerFigure) getFigure()).setVend((Integer) evt.getNewValue());
 			}
 		}

@@ -25,6 +25,8 @@ package com.jaspersoft.studio.property.descriptor.parameter.dialog;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class ParameterEditor extends Wizard {
 	private ParameterDTO value;
 	private ParameterPage page0;
@@ -43,7 +45,7 @@ public class ParameterEditor extends Wizard {
 
 	public ParameterEditor() {
 		super();
-		setWindowTitle(Messages.ParameterEditor_properties);
+		setWindowTitle(Messages.common_properties);
 		setNeedsProgressMonitor(false);
 	}
 

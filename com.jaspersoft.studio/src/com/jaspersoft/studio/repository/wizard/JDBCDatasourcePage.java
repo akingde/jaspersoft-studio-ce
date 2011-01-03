@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
 import com.jaspersoft.studio.repository.RepositoryManager;
@@ -77,25 +78,25 @@ public class JDBCDatasourcePage extends ADatasourcePage {
 	protected void createMoreControls(Composite parent) {
 
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.JDBCDatasourcePage_driver_class+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_driver_class+":"); //$NON-NLS-1$
 
 		driverClassTxt = new Text(parent, SWT.BORDER);
 		driverClassTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.JDBCDatasourcePage_jdbc_url+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_jdbc_url+":"); //$NON-NLS-1$
 
 		jdbcURLTxt = new Text(parent, SWT.BORDER);
 		jdbcURLTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.JDBCDatasourcePage_username+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_username+":"); //$NON-NLS-1$
 
 		usernameTxt = new Text(parent, SWT.BORDER);
 		usernameTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.JDBCDatasourcePage_password+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_password+":"); //$NON-NLS-1$
 
 		passwordTxt = new Text(parent, SWT.PASSWORD | SWT.BORDER);
 		passwordTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

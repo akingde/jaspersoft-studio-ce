@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.repository.wizard;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class XLSDatasourcePage extends AFileDatasourcePage {
 
 	protected XLSDatasourcePage() {

@@ -30,6 +30,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -139,21 +140,21 @@ public class MField extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, Messages.MField_properties);
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, Messages.common_properties);
 		propertiesD.setDescription(Messages.MField_properties_description);
 		desc.add(propertiesD);
 
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignField.PROPERTY_NAME, Messages.MField_name);
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignField.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MField_name_description);
 		desc.add(nameD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignField.PROPERTY_VALUE_CLASS_NAME,
-				Messages.MField_class);
+				Messages.common_class);
 		classD.setDescription(Messages.MField_class_description);
 		desc.add(classD);
 
 		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignField.PROPERTY_DESCRIPTION,
-				Messages.MField_description);
+				Messages.common_description);
 		descriptionD
 				.setDescription(Messages.MField_description_description);
 		desc.add(descriptionD);
@@ -201,7 +202,7 @@ public class MField extends APropertyNode implements ICopyable {
 	 */
 	public static JRDesignField createJRField(JRDesignDataset jrDataset) {
 		JRDesignField jrDesignField = new JRDesignField();
-		jrDesignField.setName(ModelUtils.getDefaultName(jrDataset.getFieldsMap(), "Field_"));
+		jrDesignField.setName(ModelUtils.getDefaultName(jrDataset.getFieldsMap(), "Field_")); //$NON-NLS-1$
 		return jrDesignField;
 	}
 

@@ -30,6 +30,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.ModelUtils;
 

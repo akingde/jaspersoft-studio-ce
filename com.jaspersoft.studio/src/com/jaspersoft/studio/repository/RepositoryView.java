@@ -49,6 +49,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.repository.actions.CreateDataSourceAction;
@@ -107,7 +108,7 @@ public class RepositoryView extends ViewPart {
 		IStructuredSelection sel = (IStructuredSelection) treeViewer.getSelection();
 		if (sel.isEmpty())
 			return;
-		memento = memento.createChild("selection");
+		memento = memento.createChild("selection"); //$NON-NLS-1$
 		// Iterator<E> iter = sel.iterator();
 		// while (iter.hasNext()) {
 		// Word word = (Word) iter.next();
@@ -119,9 +120,9 @@ public class RepositoryView extends ViewPart {
 	private void restoreState() {
 		if (memento == null)
 			return;
-		memento = memento.getChild("selection");
+		memento = memento.getChild("selection"); //$NON-NLS-1$
 		if (memento != null) {
-			IMemento descriptors[] = memento.getChildren("descriptor");
+			IMemento descriptors[] = memento.getChildren("descriptor"); //$NON-NLS-1$
 			if (descriptors.length > 0) {
 				List<IMemento> objList = new ArrayList<IMemento>(descriptors.length);
 				// for (int nX = 0; nX < descriptors.length; nX++) {

@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignVariable;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariables;
 
@@ -58,7 +59,7 @@ public class ReorderVariableCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderVariableCommand(MVariable child, MVariables parent, int newIndex) {
-		super(Messages.ReorderVariableCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDataset = (JRDesignDataset) parent.getValue();

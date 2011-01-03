@@ -23,6 +23,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * The Class CreateGuideCommand.

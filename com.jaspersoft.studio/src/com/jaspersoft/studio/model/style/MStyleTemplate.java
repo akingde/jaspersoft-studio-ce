@@ -30,6 +30,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -131,8 +132,8 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		JRExpressionPropertyDescriptor sourceExpression = new JRExpressionPropertyDescriptor(
-				JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION, "Source Expression");
-		sourceExpression.setDescription("Source Expression");
+				JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION, Messages.MStyleTemplate_source_expression);
+		sourceExpression.setDescription(Messages.MStyleTemplate_source_expression_description);
 		desc.add(sourceExpression);
 	}
 

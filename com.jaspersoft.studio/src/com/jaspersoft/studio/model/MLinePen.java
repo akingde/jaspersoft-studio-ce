@@ -32,6 +32,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
@@ -48,7 +49,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// pen
-		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR, Messages.MLinePen_line_color,
+		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR, Messages.common_line_color,
 				NullEnum.INHERITED);
 		penLineColorD
 				.setDescription(Messages.MLinePen_line_color_description);
@@ -59,7 +60,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		desc.add(penLineWidthD);
 
 		ComboBoxPropertyDescriptor penLineStyleD = new ComboBoxPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE,
-				Messages.MLinePen_line_style, EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
+				Messages.common_line_style, EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
 		penLineStyleD.setDescription(Messages.MLinePen_line_style_description);
 		desc.add(penLineStyleD);
 

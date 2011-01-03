@@ -35,6 +35,8 @@ import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class SizeGridAction extends Action {
 	private final class SizeDialog extends FormDialog {
 		private int w;
@@ -55,7 +57,7 @@ public class SizeGridAction extends Action {
 
 			mform.getForm().getBody().setLayout(new GridLayout(4, false));
 
-			toolkit.createLabel(mform.getForm().getBody(), Messages.SizeGridAction_spacing_x);
+			toolkit.createLabel(mform.getForm().getBody(), Messages.SizeGridAction_spacing_x + ":"); //$NON-NLS-1$
 			final Spinner width = new Spinner(mform.getForm().getBody(), SWT.BORDER);
 			width.setValues(w, 0, Integer.MAX_VALUE, 0, 1, 10);
 			width.setToolTipText(Messages.SizeGridAction_grid_space_width_tool_tip);
@@ -65,7 +67,7 @@ public class SizeGridAction extends Action {
 				}
 			});
 
-			toolkit.createLabel(mform.getForm().getBody(), Messages.SizeGridAction_spacing_y);
+			toolkit.createLabel(mform.getForm().getBody(), Messages.SizeGridAction_spacing_y + ":"); //$NON-NLS-1$
 
 			final Spinner height = new Spinner(mform.getForm().getBody(), SWT.BORDER);
 			height.setValues(h, 0, Integer.MAX_VALUE, 0, 1, 10);

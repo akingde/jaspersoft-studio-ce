@@ -63,6 +63,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 
@@ -144,7 +145,7 @@ public class ParameterPage extends WizardPage {
 		table.setLayoutData(gd);
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText(Messages.ParameterPage_add);
+		addB.setText(Messages.common_add);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		addB.setLayoutData(gridData);
@@ -172,7 +173,7 @@ public class ParameterPage extends WizardPage {
 		});
 
 		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText(Messages.ParameterPage_delete);
+		delB.setText(Messages.common_delete);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		delB.setLayoutData(gridData);
@@ -199,7 +200,7 @@ public class ParameterPage extends WizardPage {
 						tableViewer.setSelection(new StructuredSelection(sp));
 						// cursor.setSelection(table.getSelectionIndex(), 0);
 					} else
-						setMessage(Messages.ParameterPage_table_is_empty);
+						setMessage(Messages.common_table_is_empty);
 				}
 			}
 		});
@@ -231,7 +232,7 @@ public class ParameterPage extends WizardPage {
 		column[0].setText(Messages.ParameterPage_parameter);
 
 		column[1] = new TableColumn(table, SWT.NONE);
-		column[1].setText(Messages.ParameterPage_expression);
+		column[1].setText(Messages.common_expression);
 
 		column[2] = new TableColumn(table, SWT.NONE);
 		column[2].setText(Messages.ParameterPage_skip_empty);
@@ -335,7 +336,7 @@ public class ParameterPage extends WizardPage {
 		});
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new JRExpressionCellEditor(parent),
-				new ComboBoxCellEditor(parent, new String[] { "false", "true" }) });
+				new ComboBoxCellEditor(parent, new String[] { "false", "true" }) }); //$NON-NLS-1$ //$NON-NLS-2$
 		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "SKIPONEMPTY" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 

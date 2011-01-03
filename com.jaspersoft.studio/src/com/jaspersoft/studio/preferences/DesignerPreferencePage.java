@@ -23,6 +23,7 @@ import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * 
@@ -40,9 +41,9 @@ public class DesignerPreferencePage extends FieldEditorPreferencePage implements
 	 */
 	public void createFieldEditors() {
 		addField(new ComboFieldEditor(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_element_design_border_style,
-				new String[][] { { "Corners", "corners" }, { "Rectangle", "rectangle" } }, getFieldEditorParent()));
+				new String[][] { { Messages.DesignerPreferencePage_corners, "corners" }, { Messages.DesignerPreferencePage_rectangle, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-2$ //$NON-NLS-4$
 		addField(new ComboFieldEditor(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_page_border_style, new String[][] {
-				{ "Fancy Shadow", "shadow" }, { "Simple Shadow", "rectangle" } }, getFieldEditorParent()));
+				{ Messages.DesignerPreferencePage_fancy_shadow, "shadow" }, { Messages.DesignerPreferencePage_simple_shadow, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-2$ //$NON-NLS-4$
 	}
 
 	/*

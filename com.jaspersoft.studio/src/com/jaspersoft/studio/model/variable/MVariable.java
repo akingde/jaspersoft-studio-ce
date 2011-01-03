@@ -33,6 +33,7 @@ import net.sf.jasperreports.engine.type.ResetTypeEnum;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.MExpression;
@@ -117,12 +118,12 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP,
-				Messages.MVariable_reset_group, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+				Messages.common_reset_group, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		resetGroupD.setDescription(Messages.MVariable_reset_group_description);
 		desc.add(resetGroupD);
 
 		incrementGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_INCREMENT_GROUP,
-				Messages.MVariable_increment_group, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+				Messages.common_increment_group, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		incrementGroupD.setDescription(Messages.MVariable_increment_group_description);
 		desc.add(incrementGroupD);
 
@@ -132,18 +133,18 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		desc.add(calculationD);
 
 		ComboBoxPropertyDescriptor resetTypeD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_TYPE,
-				Messages.MVariable_reset_type, EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
+				Messages.common_reset_type, EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
 		resetTypeD.setDescription(Messages.MVariable_reset_type_description);
 		desc.add(resetTypeD);
 
 		ComboBoxPropertyDescriptor incrementTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignVariable.PROPERTY_INCREMENT_TYPE, Messages.MVariable_increment_type, EnumHelper.getEnumNames(
+				JRDesignVariable.PROPERTY_INCREMENT_TYPE, Messages.common_increment_type, EnumHelper.getEnumNames(
 						IncrementTypeEnum.values(), NullEnum.NOTNULL));
 		incrementTypeD.setDescription(Messages.MVariable_increment_type_description);
 		desc.add(incrementTypeD);
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(
-				JRDesignVariable.PROPERTY_EXPRESSION, Messages.MVariable_expression);
+				JRDesignVariable.PROPERTY_EXPRESSION, Messages.common_expression);
 		expressionD.setDescription(Messages.MVariable_expression_description);
 		desc.add(expressionD);
 
@@ -317,7 +318,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	public static JRDesignVariable createJRVariable(JRDesignDataset jrDataset) {
 		JRDesignVariable jrDesignVariable = new JRDesignVariable();
 		jrDesignVariable.setSystemDefined(false);
-		jrDesignVariable.setName(ModelUtils.getDefaultName(jrDataset.getVariablesMap(), "Variable_"));
+		jrDesignVariable.setName(ModelUtils.getDefaultName(jrDataset.getVariablesMap(), "Variable_")); //$NON-NLS-1$
 		return jrDesignVariable;
 	}
 

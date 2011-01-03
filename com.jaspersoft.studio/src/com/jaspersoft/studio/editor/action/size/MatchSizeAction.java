@@ -29,6 +29,7 @@ import org.eclipse.gef.ui.actions.MatchHeightAction;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 
 public class MatchSizeAction extends MatchHeightAction {
 	public static final String ID = GEFActionConstants.MATCH_HEIGHT + GEFActionConstants.MATCH_WIDTH;

@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -133,12 +134,12 @@ public class MParameterSystem extends APropertyNode {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, Messages.MParameterSystem_name);
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MParameterSystem_name_description);
 		desc.add(nameD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME,
-				Messages.MParameterSystem_class);
+				Messages.common_class);
 		classD.setDescription(Messages.MParameterSystem_class_description);
 		desc.add(classD);
 
@@ -182,7 +183,7 @@ public class MParameterSystem extends APropertyNode {
 	public static JRDesignParameter createJRParameter(JRDesignDataset jrDataset) {
 		JRDesignParameter jrDesignParameter = new JRDesignParameter();
 		jrDesignParameter.setSystemDefined(true);
-		jrDesignParameter.setName(ModelUtils.getDefaultName(jrDataset.getParametersMap(), "Parameter"));
+		jrDesignParameter.setName(ModelUtils.getDefaultName(jrDataset.getParametersMap(), "Parameter")); //$NON-NLS-1$
 		return jrDesignParameter;
 	}
 }

@@ -27,8 +27,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.ui.internal.WorkbenchMessages;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 
@@ -38,9 +38,9 @@ public class DeleteDataSourceAction extends Action {
 	public DeleteDataSourceAction(TreeViewer treeViewer) {
 		super();
 		this.treeViewer = treeViewer;
-		setText(WorkbenchMessages.Workbench_delete);
-		setDescription(WorkbenchMessages.Workbench_deleteToolTip);
-		setToolTipText(WorkbenchMessages.Workbench_deleteToolTip);
+		setText(Messages.DeleteDataSourceAction_delete);
+		setDescription(Messages.DeleteDataSourceAction_description);
+		setToolTipText(Messages.DeleteDataSourceAction_tool_tip);
 	}
 
 	@Override

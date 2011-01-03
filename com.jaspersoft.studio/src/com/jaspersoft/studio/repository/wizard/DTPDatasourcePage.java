@@ -25,6 +25,8 @@ package com.jaspersoft.studio.repository.wizard;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class DTPDatasourcePage extends ADatasourcePage {
 
 	protected DTPDatasourcePage() {

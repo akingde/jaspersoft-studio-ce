@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -55,7 +56,7 @@ public class OrphanElementCommand extends Command {
 	 *          the child
 	 */
 	public OrphanElementCommand(ANode parent, MGraphicElement child) {
-		super(Messages.OrphanElementCommand_orphan_child);
+		super(Messages.common_orphan_child);
 		this.jrElement = (JRDesignElement) child.getValue();
 		if (parent instanceof IGroupElement)
 			this.jrGroup = ((IGroupElement) parent).getJRElementGroup();

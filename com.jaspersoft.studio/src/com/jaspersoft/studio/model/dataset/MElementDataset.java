@@ -17,6 +17,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
@@ -97,12 +98,12 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		ComboBoxPropertyDescriptor resetTypeD = new ComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_TYPE,
-				Messages.MElementDataset_reset_type, EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
+				Messages.common_reset_type, EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
 		resetTypeD.setDescription(Messages.MElementDataset_reset_type_description);
 		desc.add(resetTypeD);
 
 		ComboBoxPropertyDescriptor inctypeD = new ComboBoxPropertyDescriptor(
-				JRDesignElementDataset.PROPERTY_INCREMENT_TYPE, Messages.MElementDataset_increment_type, EnumHelper.getEnumNames(
+				JRDesignElementDataset.PROPERTY_INCREMENT_TYPE, Messages.common_increment_type, EnumHelper.getEnumNames(
 						IncrementTypeEnum.values(), NullEnum.NOTNULL));
 		inctypeD.setDescription(Messages.MElementDataset_increment_type_description);
 		desc.add(inctypeD);
@@ -112,12 +113,12 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		incWhenExprD.setDescription(Messages.MElementDataset_increment_when_expression_description);
 		desc.add(incWhenExprD);
 
-		resetGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP, Messages.MElementDataset_reset_group,
+		resetGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP, Messages.common_reset_group,
 				new String[] { "" }); //$NON-NLS-1$
 		resetGroupD.setDescription(Messages.MElementDataset_reset_group_description);
 		desc.add(resetGroupD);
 
-		incGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP, Messages.MElementDataset_increment_group,
+		incGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP, Messages.common_increment_group,
 				new String[] { "" }); //$NON-NLS-1$
 		incGroupD.setDescription(Messages.MElementDataset_increment_group_description);
 		desc.add(incGroupD);

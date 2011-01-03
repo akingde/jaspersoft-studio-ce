@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 
 public abstract class ADatasourcePage extends WizardPage {
@@ -49,7 +50,7 @@ public abstract class ADatasourcePage extends WizardPage {
 
 	protected ADatasourcePage(String pageName) {
 		super(pageName);
-		setTitle(Messages.ADatasourcePage_datasource_editor);
+		setTitle(Messages.common_datasource_editor);
 		setDescription(Messages.ADatasourcePage_datasource_editor_description);
 	}
 
@@ -59,7 +60,7 @@ public abstract class ADatasourcePage extends WizardPage {
 		setControl(composite);
 
 		Label lbl1 = new Label(composite, SWT.NONE);
-		lbl1.setText(Messages.ADatasourcePage_datasource_name+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_datasource_name+":"); //$NON-NLS-1$
 
 		datasourceNameTxt = new Text(composite, SWT.BORDER);
 		datasourceNameTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

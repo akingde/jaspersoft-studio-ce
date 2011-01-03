@@ -23,6 +23,8 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
  * @author Chicu Veaceslav
  * 
@@ -36,9 +38,9 @@ public class RVPropertiesLabelProvider extends LabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element == null)
-			return "";
+			return ""; //$NON-NLS-1$
 		if (element instanceof List)
-			return "[Return Values: " + ((List<?>) element).size() + "]";
+			return "[" + Messages.common_return_values + ": " + ((List<?>) element).size() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return element.toString();
 	}
 

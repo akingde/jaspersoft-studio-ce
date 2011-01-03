@@ -50,6 +50,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
@@ -155,7 +156,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JasperDesign.PROPERTY_NAME, Messages.MReport_report_name);
 		nameD.setDescription(Messages.MReport_report_name_description);
-		nameD.setCategory(Messages.MReport_report_category);
+		nameD.setCategory(Messages.common_report);
 		desc.add(nameD);
 
 		NClassTypePropertyDescriptor formatFactoryClassD = new NClassTypePropertyDescriptor(
@@ -230,9 +231,9 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		desc.add(columnSpaceD);
 
 		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
-				Messages.MReport_language, new String[] { "", "Java", "Groovy", "JavaScript", "bsh" }, NullEnum.NOTNULL); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+				Messages.common_language, new String[] { "", "Java", "Groovy", "JavaScript", "bsh" }, NullEnum.NOTNULL); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		languageD.setDescription(Messages.MReport_language_description);
-		languageD.setCategory(Messages.MReport_report_category);
+		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
 
 		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_ORIENTATION,
@@ -250,7 +251,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		ComboBoxPropertyDescriptor whenNoDataD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
 				Messages.MReport_when_no_data_type, EnumHelper.getEnumNames(WhenNoDataTypeEnum.values(), NullEnum.NULL));
 		whenNoDataD.setDescription(Messages.MReport_when_no_data_type_description);
-		whenNoDataD.setCategory(Messages.MReport_report_category);
+		whenNoDataD.setCategory(Messages.common_report);
 		desc.add(whenNoDataD);
 
 		// checkboxes
@@ -583,7 +584,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 							ReportFactory.createElementsForBand(mBand, ((JRDesignBand) evt.getNewValue()).getChildren());
 						else
 							mBand.removeChildren();
-						mBand.propertyChange(new PropertyChangeEvent(mBand, "VALUE", evt.getOldValue(), evt.getNewValue()));
+						mBand.propertyChange(new PropertyChangeEvent(mBand, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
 						break;
 					}
 				}

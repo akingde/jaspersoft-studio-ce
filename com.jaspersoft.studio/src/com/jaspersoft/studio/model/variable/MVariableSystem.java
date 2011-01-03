@@ -29,6 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -133,12 +134,12 @@ public class MVariableSystem extends APropertyNode {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.MVariableSystem_name);
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MVariableSystem_name_description);
 		desc.add(nameD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,
-				Messages.MVariableSystem_value_class_name);
+				Messages.common_value_class_name);
 		classD.setDescription(Messages.MVariableSystem_value_class_name_description);
 		desc.add(classD);
 
@@ -182,7 +183,7 @@ public class MVariableSystem extends APropertyNode {
 	public static JRDesignVariable createJRVariable(JasperDesign jrDesign) {
 		JRDesignVariable jrDesignVariable = new JRDesignVariable();
 		jrDesignVariable.setSystemDefined(true);
-		jrDesignVariable.setName(ModelUtils.getDefaultName(jrDesign.getVariablesMap(), "Variable_"));
+		jrDesignVariable.setName(ModelUtils.getDefaultName(jrDesign.getVariablesMap(), "Variable_")); //$NON-NLS-1$
 		return jrDesignVariable;
 	}
 }

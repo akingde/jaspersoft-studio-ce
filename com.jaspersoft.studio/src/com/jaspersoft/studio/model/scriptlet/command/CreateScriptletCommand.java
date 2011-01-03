@@ -28,6 +28,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.scriptlet.MScriptlet;
 import com.jaspersoft.studio.model.scriptlet.MScriptlets;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -91,7 +92,7 @@ public class CreateScriptletCommand extends Command {
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataset.getScriptletsMap(), "CopyOFScriptlet_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateScriptletCommand_scriptlet_name,
-							Messages.CreateScriptletCommand_scriptlet_name_dialog, defaultName, null);
+							Messages.CreateScriptletCommand_scriptlet_name_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrScriptlet.setName(dlg.getValue());
 						execute();

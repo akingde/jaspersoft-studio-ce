@@ -33,6 +33,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -175,11 +176,11 @@ public class MSortField extends APropertyNode implements ICopyable {
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
-		nameD = new RComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_NAME, Messages.MSortField_name, new String[] { "" }); //$NON-NLS-2$
+		nameD = new RComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_NAME, Messages.common_name, new String[] { "" }); //$NON-NLS-1$
 		nameD.setDescription(Messages.MSortField_name_description);
 		desc.add(nameD);
 
-		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, Messages.MSortField_order,
+		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, Messages.common_order,
 				EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
 		orderD.setDescription(Messages.MSortField_order_description);
 		desc.add(orderD);

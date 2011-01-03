@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.design.JRDesignFrame;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 
@@ -58,7 +59,7 @@ public class ReorderElementCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderElementCommand(MGraphicElement child, ANode parent, int newIndex) {
-		super(Messages.ReorderElementCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrElement = (JRDesignElement) child.getValue();
 		this.jrGroup = jrElement.getElementGroup();

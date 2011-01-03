@@ -44,6 +44,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -187,42 +188,42 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.MStyle_parent_style,
-				new String[] { "" }, //$NON-NLS-2$
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
+				new String[] { "" }, //$NON-NLS-1$
 				NullEnum.NULL);
 		styleD.setDescription(Messages.MStyle_parent_style_description);
 		desc.add(styleD);
 
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, Messages.MStyle_name);
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MStyle_name_description);
 		desc.add(nameD);
 
-		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, Messages.MStyle_line_pen);
+		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, Messages.common_line_pen);
 		linePenD.setDescription(Messages.MStyle_line_pen_description);
 		desc.add(linePenD);
 
-		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MStyle_line_box);
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.common_line_box);
 		lineBoxD.setDescription(Messages.MStyle_line_box_description);
 		desc.add(lineBoxD);
-		lineBoxD.setCategory(Messages.MStyle_graphic_category);
+		lineBoxD.setCategory(Messages.common_graphic);
 
 		ColorPropertyDescriptor forecolorD = new ColorPropertyDescriptor(JRDesignStyle.PROPERTY_FORECOLOR,
-				Messages.MStyle_forecolor, NullEnum.INHERITED);
+				Messages.common_forecolor, NullEnum.INHERITED);
 		forecolorD.setDescription(Messages.MStyle_forecolor_description);
 		desc.add(forecolorD);
 
 		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRDesignStyle.PROPERTY_BACKCOLOR,
-				Messages.MStyle_backcolor, NullEnum.INHERITED);
+				Messages.common_backcolor, NullEnum.INHERITED);
 		backcolorD.setDescription(Messages.MStyle_backcolor_description);
 		desc.add(backcolorD);
 
 		IntegerPropertyDescriptor radiusD = new IntegerPropertyDescriptor(JRDesignStyle.PROPERTY_RADIUS,
-				Messages.MStyle_radius);
+				Messages.common_radius);
 		radiusD.setDescription(Messages.MStyle_radius_description);
 		desc.add(radiusD);
 
 		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_FILL,
-				Messages.MStyle_fill, EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
+				Messages.common_fill, EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
 		fillD.setDescription(Messages.MStyle_fill_description);
 		desc.add(fillD);
 
@@ -232,22 +233,22 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(scaleD);
 
 		ComboBoxPropertyDescriptor halignD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.MStyle_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
+				Messages.common_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
 		halignD.setDescription(Messages.MStyle_horizontal_alignment_description);
 		desc.add(halignD);
 
 		ComboBoxPropertyDescriptor valignD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				Messages.MStyle_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
+				Messages.common_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
 		valignD.setDescription(Messages.MStyle_vertical_alignment_description);
 		desc.add(valignD);
 
 		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ROTATION,
-				Messages.MStyle_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
+				Messages.common_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
 		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
 		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_LINE_SPACING,
-				Messages.MStyle_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
+				Messages.common_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
 		lineSpacingD.setDescription(Messages.MStyle_line_spacing_description);
 		desc.add(lineSpacingD);
 
@@ -257,27 +258,27 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(modeD);
 
 		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,
-				Messages.MStyle_blank_when_null, NullEnum.INHERITED);
+				Messages.common_blank_when_null, NullEnum.INHERITED);
 		blankWhenNullD.setDescription(Messages.MStyle_blank_when_null_description);
 		desc.add(blankWhenNullD);
 
 		CheckBoxPropertyDescriptor strikeThroughD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_STRIKE_THROUGH,
-				Messages.MStyle_strike_trough, NullEnum.INHERITED);
+				Messages.common_strike_trough, NullEnum.INHERITED);
 		strikeThroughD.setDescription(Messages.MStyle_strike_trough_description);
 		desc.add(strikeThroughD);
 
 		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_UNDERLINE,
-				Messages.MStyle_underline, NullEnum.INHERITED);
+				Messages.common_underline, NullEnum.INHERITED);
 		underlineD.setDescription(Messages.MStyle_underline_description);
 		desc.add(underlineD);
 
 		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ITALIC,
-				Messages.MStyle_italic, NullEnum.INHERITED);
+				Messages.common_italic, NullEnum.INHERITED);
 		italicD.setDescription(Messages.MStyle_italic_description);
 		desc.add(italicD);
 
 		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BOLD,
-				Messages.MStyle_bold, NullEnum.INHERITED);
+				Messages.common_bold, NullEnum.INHERITED);
 		boldD.setDescription(Messages.MStyle_bold_description);
 		desc.add(boldD);
 
@@ -292,18 +293,18 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(markupD);
 
 		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME,
-				Messages.MStyle_font_name, ModelUtils.getFontNames(), NullEnum.INHERITED);
+				Messages.common_font_name, ModelUtils.getFontNames(), NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MStyle_font_name_description);
 		desc.add(fontNameD);
 
 		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE,
-				Messages.MStyle_font_size, ModelUtils.getFontSizes(), NullEnum.INHERITED);
+				Messages.common_font_size, ModelUtils.getFontSizes(), NullEnum.INHERITED);
 		fontSizeD.setDescription(Messages.MStyle_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
 
 		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
-				Messages.MStyle_pattern);
+				Messages.common_pattern);
 		patternD.setDescription(Messages.MStyle_pattern_description);
 		desc.add(patternD);
 
@@ -311,19 +312,19 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		backcolorD.setCategory(Messages.MStyle_common_category);
 		modeD.setCategory(Messages.MStyle_common_category);
 
-		linePenD.setCategory(Messages.MStyle_graphic_category);
+		linePenD.setCategory(Messages.common_graphic);
 
-		radiusD.setCategory(Messages.MStyle_graphic_category);
-		scaleD.setCategory(Messages.MStyle_graphic_category);
-		fillD.setCategory(Messages.MStyle_graphic_category);
+		radiusD.setCategory(Messages.common_graphic);
+		scaleD.setCategory(Messages.common_graphic);
+		fillD.setCategory(Messages.common_graphic);
 
-		patternD.setCategory(Messages.MStyle_text_category);
-		blankWhenNullD.setCategory(Messages.MStyle_text_category);
-		lineSpacingD.setCategory(Messages.MStyle_text_category);
-		rotationD.setCategory(Messages.MStyle_text_category);
-		markupD.setCategory(Messages.MStyle_text_category);
-		halignD.setCategory(Messages.MStyle_text_category);
-		valignD.setCategory(Messages.MStyle_text_category);
+		patternD.setCategory(Messages.common_text);
+		blankWhenNullD.setCategory(Messages.common_text);
+		lineSpacingD.setCategory(Messages.common_text);
+		rotationD.setCategory(Messages.common_text);
+		markupD.setCategory(Messages.common_text);
+		halignD.setCategory(Messages.common_text);
+		valignD.setCategory(Messages.common_text);
 
 		fontNameD.setCategory(Messages.MStyle_text_font_category);
 		fontSizeD.setCategory(Messages.MStyle_text_font_category);
@@ -523,7 +524,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 */
 	public static JRDesignStyle createJRStyle(JasperDesign jrDesign) {
 		JRDesignStyle jrDesignStyle = new JRDesignStyle();
-		jrDesignStyle.setName(ModelUtils.getDefaultName(jrDesign.getStylesMap(), "Style"));
+		jrDesignStyle.setName(ModelUtils.getDefaultName(jrDesign.getStylesMap(), "Style")); //$NON-NLS-1$
 		return jrDesignStyle;
 	}
 

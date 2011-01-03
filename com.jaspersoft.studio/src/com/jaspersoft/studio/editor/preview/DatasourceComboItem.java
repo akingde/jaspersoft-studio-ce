@@ -45,6 +45,7 @@ import org.eclipse.ui.IPartListener;
 
 import com.jasperassistant.designer.viewer.IReportViewerListener;
 import com.jasperassistant.designer.viewer.ReportViewerEvent;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.repository.RepositoryManager;
 
@@ -122,11 +123,11 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 
 	private String[] getStringItems() {
 		String[] s = new String[items.size() + 1];
-		s[0] = "-- Select a DataSource --";
+		s[0] = "-- " + Messages.DatasourceComboItem_select_a_datasource + " --"; //$NON-NLS-1$ //$NON-NLS-2$
 		for (int i = 0; i < items.size(); i++) {
 			String displayText = items.get(i).getDisplayText();
-			if (displayText == null || displayText.trim().equals(""))
-				displayText = "empty";
+			if (displayText == null || displayText.trim().equals("")) //$NON-NLS-1$
+				displayText = Messages.DatasourceComboItem_empty;
 			s[i + 1] = displayText;
 		}
 		return s;

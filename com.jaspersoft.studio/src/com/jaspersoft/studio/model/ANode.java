@@ -126,7 +126,7 @@ public abstract class ANode implements INode {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null) {
-			iconDescriptor = new NodeIconDescriptor("report");
+			iconDescriptor = new NodeIconDescriptor("report"); //$NON-NLS-1$
 		}
 		return iconDescriptor;
 	}

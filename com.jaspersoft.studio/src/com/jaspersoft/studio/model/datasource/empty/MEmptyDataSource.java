@@ -25,6 +25,7 @@ import java.util.Map;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -96,7 +97,7 @@ public class MEmptyDataSource extends AMDatasource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		IntegerPropertyDescriptor driverClassD = new IntegerPropertyDescriptor(PROPERTY_SIZE, Messages.MEmptyDataSource_size);
+		IntegerPropertyDescriptor driverClassD = new IntegerPropertyDescriptor(PROPERTY_SIZE, Messages.common_size);
 		desc.add(driverClassD);
 	}
 

@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.design.JRDesignSortField;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
 
@@ -53,7 +54,7 @@ public class ReorderSortFieldCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderSortFieldCommand(MSortField child, MSortFields parent, int newIndex) {
-		super(Messages.ReorderSortFieldCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDataset = (JRDesignDataset) parent.getValue();

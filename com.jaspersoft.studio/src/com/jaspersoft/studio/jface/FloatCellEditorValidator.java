@@ -55,7 +55,7 @@ public class FloatCellEditorValidator implements ICellEditorValidator {
 				new Float((String) value);
 			return null;
 		} catch (NumberFormatException exc) {
-			return "This is not a float number";
+			return "This is not a float number"; //$NON-NLS-1$
 		}
 	}
 

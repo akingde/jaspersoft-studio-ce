@@ -68,7 +68,7 @@ public final class J2DGraphicsSource implements GraphicsSource
 		 */
   	public J2DGraphicsSource(Control paramControl) {
 	    this.c = paramControl;
-	    System.out.println("Control: " + paramControl);
+	    System.out.println("Control: " + paramControl); //$NON-NLS-1$
 	    System.out.flush();
 	  }
 	  

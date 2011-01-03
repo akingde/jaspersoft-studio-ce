@@ -21,6 +21,7 @@ package com.jaspersoft.studio.property.descriptor.expression.dialog;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MExpression;
 
 public class JRExpressionEditor extends Wizard {
@@ -41,7 +42,7 @@ public class JRExpressionEditor extends Wizard {
 
 	public JRExpressionEditor() {
 		super();
-		setWindowTitle(Messages.JRExpressionEditor_expression_editor);
+		setWindowTitle(Messages.common_expression_editor);
 	}
 
 	@Override

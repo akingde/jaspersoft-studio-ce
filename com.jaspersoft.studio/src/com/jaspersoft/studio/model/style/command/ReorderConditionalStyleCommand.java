@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 
@@ -57,7 +58,7 @@ public class ReorderConditionalStyleCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderConditionalStyleCommand(MConditionalStyle child, MStyle parent, int newIndex) {
-		super(Messages.ReorderConditionalStyleCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrStyle = (JRDesignStyle) parent.getValue();
 		this.jrConditionalStyle = (JRDesignConditionalStyle) child.getValue();

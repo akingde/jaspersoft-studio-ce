@@ -55,7 +55,7 @@ public class DoubleCellEditorValidator implements ICellEditorValidator {
 				new Double((String) value);
 			return null;
 		} catch (NumberFormatException exc) {
-			return "This is not a Double number";
+			return "This is not a Double number"; //$NON-NLS-1$
 		}
 	}
 

@@ -44,7 +44,7 @@ public class ReportTreeLabelProvider extends CellLabelProvider {
 	 */
 	@Override
 	public String getToolTipText(Object element) {
-		return "tooltip";
+		return "tooltip"; //$NON-NLS-1$
 	}
 
 	/*

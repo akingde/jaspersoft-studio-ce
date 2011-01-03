@@ -31,6 +31,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -104,8 +105,8 @@ public class MBandGroupFooter extends MBand {
 			return super.getDisplayText();
 		JRDesignBand value = (JRDesignBand) getValue();
 		if (value != null)
-			return jrGroup.getName() + " Group Footer [" + value.getHeight() + "px] ";// + value.hashCode();
-		return jrGroup.getName() + " Group Footer";
+			return jrGroup.getName() + " " + Messages.MBandGroupFooter_group_footer + " [" + value.getHeight() + "px] ";// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return jrGroup.getName() + " " + Messages.MBandGroupFooter_group_footer; //$NON-NLS-1$
 	}
 
 	/*
@@ -147,7 +148,7 @@ public class MBandGroupFooter extends MBand {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		PropertyDescriptor groupD = new PropertyDescriptor(MAIN_GROUP, Messages.MBandGroupFooter_group);
+		PropertyDescriptor groupD = new PropertyDescriptor(MAIN_GROUP, Messages.common_group);
 		desc.add(groupD);
 	}
 

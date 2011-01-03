@@ -21,6 +21,7 @@ package com.jaspersoft.studio.property.descriptor.jrQuery.dialog;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MQuery;
 
 public class JRQueryEditor extends Wizard {
@@ -41,7 +42,7 @@ public class JRQueryEditor extends Wizard {
 
 	public JRQueryEditor() {
 		super();
-		setWindowTitle(Messages.JRQueryEditor_query_editor);
+		setWindowTitle(Messages.common_query_editor);
 	}
 
 	@Override

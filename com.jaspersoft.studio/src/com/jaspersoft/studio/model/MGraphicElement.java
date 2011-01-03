@@ -45,6 +45,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
@@ -295,7 +296,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE,
-				Messages.MGraphicElement_parent_style, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+				Messages.common_parent_style, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
 		desc.add(styleD);
 
@@ -311,14 +312,14 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 		// bounds
 		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_HEIGHT,
-				Messages.MGraphicElement_height);
-		heightD.setCategory(Messages.MGraphicElement_size_category);
+				Messages.common_height);
+		heightD.setCategory(Messages.common_size);
 		heightD.setDescription(Messages.MGraphicElement_height_description);
 		desc.add(heightD);
 
 		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_WIDTH,
 				Messages.MGraphicElement_width);
-		widthD.setCategory(Messages.MGraphicElement_size_category);
+		widthD.setCategory(Messages.common_size);
 		widthD.setDescription(Messages.MGraphicElement_width_description);
 		desc.add(widthD);
 
@@ -335,12 +336,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(yD);
 		// colors
 		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR,
-				Messages.MGraphicElement_backcolor, NullEnum.INHERITED);
+				Messages.common_backcolor, NullEnum.INHERITED);
 		backcolorD.setDescription(Messages.MGraphicElement_backcolor_description);
 		desc.add(backcolorD);
 
 		ColorPropertyDescriptor forecolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_FORECOLOR,
-				Messages.MGraphicElement_forecolor, NullEnum.INHERITED);
+				Messages.common_forecolor, NullEnum.INHERITED);
 		forecolorD.setDescription(Messages.MGraphicElement_forecolor_description);
 		desc.add(forecolorD);
 		// opacity
@@ -350,14 +351,14 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(opaqueD);
 
 		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
-				Messages.MGraphicElement_position_type, EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
+				Messages.common_position_type, EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
 		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
 		desc.add(positionTypeD);
 		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
 
 		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE,
-				Messages.MGraphicElement_stretch_type, EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
-		stretchTypeD.setCategory(Messages.MGraphicElement_size_category);
+				Messages.common_stretch_type, EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
+		stretchTypeD.setCategory(Messages.common_size);
 		stretchTypeD.setDescription(Messages.MGraphicElement_stretch_type_description);
 		desc.add(stretchTypeD);
 
@@ -382,7 +383,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(printWhenDetailOverflowsD);
 
 		JRExpressionPropertyDescriptor printWhenExprD = new JRExpressionPropertyDescriptor(
-				JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MGraphicElement_print_when_expression);
+				JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.common_print_when_expression);
 		printWhenExprD.setDescription(Messages.MGraphicElement_print_when_expression_description);
 		desc.add(printWhenExprD);
 
@@ -391,9 +392,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		propertiesD.setDescription(Messages.MGraphicElement_property_expressions_description);
 		desc.add(propertiesD);
 
-		forecolorD.setCategory(Messages.MGraphicElement_graphic_category);
-		backcolorD.setCategory(Messages.MGraphicElement_graphic_category);
-		opaqueD.setCategory(Messages.MGraphicElement_graphic_category);
+		forecolorD.setCategory(Messages.common_size);
+		backcolorD.setCategory(Messages.common_size);
+		opaqueD.setCategory(Messages.common_size);
 
 		defaultsMap.put(JRDesignElement.PROPERTY_PARENT_STYLE, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);

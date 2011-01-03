@@ -23,6 +23,8 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class JRPropertyEditor extends Wizard {
 	private JRPropertiesMap value;
 	private JRPropertyPage page0;
@@ -41,7 +43,7 @@ public class JRPropertyEditor extends Wizard {
 
 	public JRPropertyEditor() {
 		super();
-		setWindowTitle(Messages.JRPropertyEditor_properties);
+		setWindowTitle(Messages.common_properties);
 		setNeedsProgressMonitor(false);
 	}
 

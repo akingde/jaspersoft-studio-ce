@@ -31,6 +31,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -137,17 +138,17 @@ public class MScriptlet extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignScriptlet.PROPERTY_NAME, Messages.MScriptlet_name);
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignScriptlet.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MScriptlet_name_description);
 		desc.add(nameD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME,
-				Messages.MScriptlet_class);
+				Messages.common_class);
 		classD.setDescription(Messages.MScriptlet_class_description);
 		desc.add(classD);
 
 		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignScriptlet.PROPERTY_DESCRIPTION,
-				Messages.MScriptlet_description);
+				Messages.common_description);
 		descriptionD.setDescription(Messages.MScriptlet_description_description);
 		desc.add(descriptionD);
 	}
@@ -192,7 +193,7 @@ public class MScriptlet extends APropertyNode implements ICopyable {
 	 */
 	public static JRDesignScriptlet createJRScriptlet(JRDesignDataset jrDataset) {
 		JRDesignScriptlet jrScriptlet = new JRDesignScriptlet();
-		jrScriptlet.setName(ModelUtils.getDefaultName(jrDataset.getScriptletsMap(), "Scriptlet_"));
+		jrScriptlet.setName(ModelUtils.getDefaultName(jrDataset.getScriptletsMap(), "Scriptlet_")); //$NON-NLS-1$
 		return jrScriptlet;
 
 	}

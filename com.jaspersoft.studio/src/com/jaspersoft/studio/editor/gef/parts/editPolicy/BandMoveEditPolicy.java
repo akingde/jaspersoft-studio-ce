@@ -120,7 +120,7 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 
 			// Draw the label...
 			g.setAlpha(128);
-			String text = bandHeight + " px";
+			String text = bandHeight + " px"; //$NON-NLS-1$
 			Label label = new Label(text);
 			label.setFont(g.getFont());
 			Rectangle textBounds = label.getTextBounds();
@@ -254,7 +254,7 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 			feedbackFigure.setForegroundColor(ColorConstants.black);
 
 			if (b.getHeight() + moveDelta.y <= 0) {
-				System.out.println(moveDelta.y + " set to" + (-b.getHeight()));
+				System.out.println(moveDelta.y + " set to" + (-b.getHeight())); //$NON-NLS-1$
 
 				moveDelta.y = -b.getHeight();
 				feedbackFigure.setForegroundColor(ColorConstants.blue);
@@ -368,7 +368,7 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 			setCommand.setTarget(mBand);
 			setCommand.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
 			setCommand.setPropertyValue(height);
-			System.out.println("RESIZE COMMAND: " + request.getResizeDirection() + " " + request.getSizeDelta());
+			System.out.println("RESIZE COMMAND: " + request.getResizeDirection() + " " + request.getSizeDelta()); //$NON-NLS-1$ //$NON-NLS-2$
 			return setCommand;
 		}
 		return null;

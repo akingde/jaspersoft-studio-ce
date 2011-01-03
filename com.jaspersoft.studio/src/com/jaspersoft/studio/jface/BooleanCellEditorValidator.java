@@ -25,6 +25,7 @@ package com.jaspersoft.studio.jface;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 
 public class BooleanCellEditorValidator implements ICellEditorValidator {
@@ -42,6 +43,6 @@ public class BooleanCellEditorValidator implements ICellEditorValidator {
 		if (value instanceof Boolean)
 			return null;
 		else
-			return "Value is not instanceof Boolean!";
+			return "Value is not instanceof Boolean!"; //$NON-NLS-1$
 	}
 }

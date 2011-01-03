@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.design.JRDesignStyle;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
 
@@ -57,7 +58,7 @@ public class OrphanConditionalStyleCommand extends Command {
 	 *          the child
 	 */
 	public OrphanConditionalStyleCommand(MStyle parent, MConditionalStyle child) {
-		super(Messages.OrphanConditionalStyleCommand_orphan_child);
+		super(Messages.common_orphan_child);
 		this.jrStyle = (JRDesignStyle) parent.getValue();
 		this.jrConditionalStyle = (JRDesignConditionalStyle) child.getValue();
 	}

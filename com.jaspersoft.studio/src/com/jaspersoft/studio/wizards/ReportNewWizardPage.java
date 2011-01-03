@@ -39,6 +39,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
  * The "New" wizard page allows setting the container for the new file as well as the file name. The page will only
  * accept file name without the extension OR with the extension that matches the expected one (jrxml).

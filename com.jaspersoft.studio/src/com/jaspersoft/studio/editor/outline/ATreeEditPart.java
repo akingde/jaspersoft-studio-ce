@@ -106,7 +106,7 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 		}
 		String displayText = node.getDisplayText();
 		if (displayText.length() > 30)
-			displayText = displayText.substring(0, 30) + " ...";
+			displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
 		setWidgetText(displayText);
 	}
 

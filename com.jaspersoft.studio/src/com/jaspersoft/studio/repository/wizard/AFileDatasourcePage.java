@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.AMFileDataSource;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
@@ -60,7 +61,7 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 	@Override
 	protected void createMoreControls(Composite parent) {
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.AFileDatasourcePage_file_name+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_file_name+":"); //$NON-NLS-1$
 
 		Composite c = new Composite(parent, SWT.NONE);
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -89,7 +90,7 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		});
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.AFileDatasourcePage_number_format+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_number_format+":"); //$NON-NLS-1$
 
 		c = new Composite(parent, SWT.NONE);
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -129,7 +130,7 @@ public abstract class AFileDatasourcePage extends ADatasourcePage {
 		});
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.AFileDatasourcePage_date_format+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_date_format+":"); //$NON-NLS-1$
 
 		c = new Composite(parent, SWT.NONE);
 		c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

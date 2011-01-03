@@ -32,6 +32,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -110,7 +111,7 @@ public class MBreak extends MGraphicElement {
 				.getEnumNames(BreakTypeEnum.values(), NullEnum.NULL));
 		hAlignD.setDescription(Messages.MBreak_type_description);
 		desc.add(hAlignD);
-		hAlignD.setCategory(Messages.MBreak_break_category);
+		hAlignD.setCategory(Messages.MBreak_break_properties_category);
 
 		defaultsMap.put(JRBaseBreak.PROPERTY_TYPE, EnumHelper.getValue(BreakTypeEnum.PAGE, 1, true));
 	}

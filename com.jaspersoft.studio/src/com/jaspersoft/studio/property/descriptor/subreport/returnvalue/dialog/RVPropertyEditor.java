@@ -21,6 +21,7 @@ package com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.JReportsDTO;
 
 public class RVPropertyEditor extends Wizard {
@@ -41,7 +42,7 @@ public class RVPropertyEditor extends Wizard {
 
 	public RVPropertyEditor() {
 		super();
-		setWindowTitle(Messages.RVPropertyEditor_properties);
+		setWindowTitle(Messages.common_properties);
 		setNeedsProgressMonitor(false);
 	}
 

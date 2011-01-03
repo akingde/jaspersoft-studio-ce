@@ -25,6 +25,7 @@ import java.util.Map;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.datasource.AMFileDataSource;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -97,13 +98,13 @@ public class MFileDataSource extends AMFileDataSource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor recordDelimiter = new NTextPropertyDescriptor(PROPERTY_RECORDDELIMITER, Messages.MFileDataSource_record_delimiter);
+		NTextPropertyDescriptor recordDelimiter = new NTextPropertyDescriptor(PROPERTY_RECORDDELIMITER, Messages.common_record_delimiter);
 		desc.add(recordDelimiter);
 
-		NTextPropertyDescriptor columnDelimiter = new NTextPropertyDescriptor(PROPERTY_COLUMNDELIMITER, Messages.MFileDataSource_field_delimiter);
+		NTextPropertyDescriptor columnDelimiter = new NTextPropertyDescriptor(PROPERTY_COLUMNDELIMITER, Messages.common_field_delimiter);
 		desc.add(columnDelimiter);
 
-		NTextPropertyDescriptor columnNames = new NTextPropertyDescriptor(PROPERTY_COLUMNNAMES, Messages.MFileDataSource_column_names);
+		NTextPropertyDescriptor columnNames = new NTextPropertyDescriptor(PROPERTY_COLUMNNAMES, Messages.common_column_names);
 		desc.add(columnNames);
 
 		CheckBoxPropertyDescriptor firstRowHeaderD = new CheckBoxPropertyDescriptor(PROPERTY_FIRSTROWASHEADER,

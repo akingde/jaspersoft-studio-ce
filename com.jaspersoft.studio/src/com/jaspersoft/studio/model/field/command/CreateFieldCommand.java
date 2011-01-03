@@ -28,6 +28,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -92,7 +93,7 @@ public class CreateFieldCommand extends Command {
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataSet.getFieldsMap(), "CopyOFField_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateFieldCommand_field_name,
-							Messages.CreateFieldCommand_field_name_dialog, defaultName, null);
+							Messages.CreateFieldCommand_field_name_text_dialog, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrField.setName(dlg.getValue());
 						execute();

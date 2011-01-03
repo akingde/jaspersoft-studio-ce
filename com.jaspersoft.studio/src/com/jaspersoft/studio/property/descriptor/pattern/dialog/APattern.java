@@ -84,7 +84,7 @@ public abstract class APattern {
 	}
 
 	protected void formatChanged() {
-		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "pattern", null, getPattern()));
+		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, "pattern", null, getPattern())); //$NON-NLS-1$
 	}
 
 	protected PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);

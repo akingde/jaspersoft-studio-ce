@@ -78,6 +78,7 @@ import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
@@ -162,9 +163,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			});
 
 			int index = addPage(reportContainer, getEditorInput());
-			setPageText(index, "Design");
+			setPageText(index, Messages.JrxmlEditor_design);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error creating nested visual editor", null,
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_visual_editor, null,
 					e.getStatus());
 		}
 	}
@@ -176,7 +177,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			xmlEditor = new XMLEditor();
 			int index = addPage(xmlEditor, getEditorInput());
-			setPageText(index, "Source");
+			setPageText(index, Messages.JrxmlEditor_source);
 			xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput())
 					.addDocumentListener(new IDocumentListener() {
 
@@ -189,7 +190,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						}
 					});
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error creating nested text editor", null,
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.JrxmlEditor_error_creating_nested_text_editor, null,
 					e.getStatus());
 		}
 	}
@@ -201,9 +202,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		previewEditor = new PreviewEditor();
 		try {
 			int index = addPage(previewEditor, getEditorInput());
-			setPageText(index, "Preview");
+			setPageText(index, Messages.JrxmlEditor_preview);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), "Error creating nested visual editor", null,
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_visual_editor, null,
 					e.getStatus());
 		}
 
@@ -280,7 +281,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				e.printStackTrace();
 			}
 		}
-		if (getFileExtension(getEditorInput()).equals("")) {
+		if (getFileExtension(getEditorInput()).equals("")) { //$NON-NLS-1$
 			// save binary
 			try {
 				new JasperReportsBuilder().compileJRXML(resource, monitor);
@@ -339,10 +340,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			} else if (editorInput instanceof IFileEditorInput) {
 				in = ((IFileEditorInput) editorInput).getFile().getContents();
 			} else {
-				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput");
+				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 			}
 			JasperDesign jd = null;
-			in = JrxmlEditor.getXML(editorInput, "UTF-8", in);
+			in = JrxmlEditor.getXML(editorInput, "UTF-8", in); //$NON-NLS-1$
 			jd = JRXmlLoader.load(in);
 			setModel(ReportFactory.createReport(jd));
 		} catch (JRException e) {
@@ -353,23 +354,23 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			throw new PartInitException(e.getMessage(), e);
 		} catch (FileNotFoundException e) {
 			setModel(null);
-			throw new PartInitException("File not found", e);
+			throw new PartInitException("File not found", e); //$NON-NLS-1$
 		} finally {
 			if (in != null)
 				try {
 					in.close();
 				} catch (IOException e) {
 					setModel(null);
-					throw new PartInitException("error closing input stream", e);
+					throw new PartInitException("error closing input stream", e); //$NON-NLS-1$
 				}
 		}
 	}
 
 	public static String getFileExtension(IEditorInput editorInput) {
-		String fileExtention = "";
+		String fileExtention = ""; //$NON-NLS-1$
 		if (editorInput instanceof FileStoreEditorInput) {
 			String path = ((FileStoreEditorInput) editorInput).getURI().getPath();
-			fileExtention = path.substring(path.lastIndexOf(".") + 1, path.length());
+			fileExtention = path.substring(path.lastIndexOf(".") + 1, path.length()); //$NON-NLS-1$
 		} else if (editorInput instanceof IFileEditorInput) {
 			fileExtention = ((IFileEditorInput) editorInput).getFile().getFileExtension();
 		}
@@ -378,7 +379,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	public static InputStream getXML(IEditorInput editorInput, String encoding, InputStream in) throws JRException {
 		String fileExtension = getFileExtension(editorInput);
-		if (fileExtension.equals("jasper")) {
+		if (fileExtension.equals("jasper")) { //$NON-NLS-1$
 			JasperReport report = (JasperReport) JRLoader.loadObject(in);
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			JRXmlWriter.writeReport(report, outputStream, encoding);
@@ -402,8 +403,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
 					IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
-							"Your .jasper file contain errors, please fix them in xml editor.", e.getCause());
-					ErrorDialog.openError(Display.getDefault().getActiveShell(), "Error loading .jrxml to Model", null, status);
+							"Your .jasper file contain errors, please fix them in xml editor.", e.getCause()); //$NON-NLS-1$
+					ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.JrxmlEditor_error_loading_jrxml_to_model, null, status);
 				}
 			});
 		}
@@ -514,7 +515,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private void model2xml() {
 		JasperDesign report = (JasperDesign) ((MRoot) getModel()).getValue();
 		String xml = JasperCompileManager.writeReportToXml(report);
-		xml = xml.replaceFirst("<jasperReport ", "<!-- Created with Jaspersoft Studio -->\n<jasperReport ");
+		xml = xml.replaceFirst("<jasperReport ", "<!-- Created with Jaspersoft Studio -->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
 		IDocumentProvider dp = xmlEditor.getDocumentProvider();
 		IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 		doc.set(xml);

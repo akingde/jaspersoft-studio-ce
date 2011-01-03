@@ -38,6 +38,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -80,10 +81,10 @@ public abstract class AMDatasource extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(PROPERTY_NAME, Messages.AMDatasource_datasource_name);
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(PROPERTY_NAME, Messages.common_datasource_name);
 		desc.add(textD);
 
-		defaultsMap.put(PROPERTY_NAME, RepositoryManager.checkDataSourceName("DataSource"));
+		defaultsMap.put(PROPERTY_NAME, RepositoryManager.checkDataSourceName("DataSource")); //$NON-NLS-1$
 	}
 
 	public static final String PROPERTY_NAME = "PROPERTY_NAME"; //$NON-NLS-1$

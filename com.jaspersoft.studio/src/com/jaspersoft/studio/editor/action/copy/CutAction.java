@@ -29,6 +29,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 
 public class CutAction extends SelectionAction {
@@ -42,7 +43,7 @@ public class CutAction extends SelectionAction {
 	protected void init() {
 		super.init();
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText(Messages.CutAction_cut);
+		setText(Messages.common_cut);
 		setId(ActionFactory.CUT.getId());
 		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));

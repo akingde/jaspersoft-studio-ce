@@ -29,6 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -44,14 +45,14 @@ public class MQuery extends APropertyNode implements IPropertySource {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// pen
-		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRDesignQuery.PROPERTY_TEXT, Messages.MQuery_text);
+		NTextPropertyDescriptor textD = new NTextPropertyDescriptor(JRDesignQuery.PROPERTY_TEXT, Messages.common_text);
 		textD.setDescription(Messages.MQuery_text_description);
 		desc.add(textD);
 
 		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JRDesignQuery.PROPERTY_LANGUAGE,
-				Messages.MQuery_language, ModelUtils.getQueryLanguages(), NullEnum.NOTNULL);
+				Messages.common_language, ModelUtils.getQueryLanguages(), NullEnum.NOTNULL);
 		languageD.setDescription(Messages.MQuery_language_description);
-		languageD.setCategory(Messages.MQuery_report_category);
+		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
 
 		defaultsMap.put(JRDesignQuery.PROPERTY_LANGUAGE, "SQL"); //$NON-NLS-1$

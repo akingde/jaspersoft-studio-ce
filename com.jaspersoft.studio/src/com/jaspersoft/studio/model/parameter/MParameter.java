@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.MExpression;
@@ -112,7 +113,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignParameter.PROPERTY_DESCRIPTION,
-				Messages.MParameter_description);
+				Messages.common_description);
 		descriptionD.setDescription(Messages.MParameter_description_description);
 		desc.add(descriptionD);
 
@@ -127,7 +128,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		desc.add(defValueExprD);
 
 		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
-				Messages.MParameter_properties);
+				Messages.common_properties);
 		propertiesD.setDescription(Messages.MParameter_properties_description);
 		desc.add(propertiesD);
 
@@ -203,7 +204,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 	public static JRDesignParameter createJRParameter(JRDesignDataset jrDataset) {
 		JRDesignParameter jrDesignParameter = new JRDesignParameter();
 		jrDesignParameter.setSystemDefined(false);
-		jrDesignParameter.setName(ModelUtils.getDefaultName(jrDataset.getParametersMap(), "Parameter"));
+		jrDesignParameter.setName(ModelUtils.getDefaultName(jrDataset.getParametersMap(), "Parameter")); //$NON-NLS-1$
 		return jrDesignParameter;
 	}
 

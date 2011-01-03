@@ -38,10 +38,10 @@ import com.jaspersoft.studio.model.ANode;
 public class ExtensionManager {
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"com.jaspersoft.studio", "components");
+				"com.jaspersoft.studio", "components"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
-				Object o = e.createExecutableExtension("ClassFactory");
+				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
 				if (o instanceof IComponentFactory)
 					nodeFactory.add((IComponentFactory) o);
 			} catch (CoreException ex) {

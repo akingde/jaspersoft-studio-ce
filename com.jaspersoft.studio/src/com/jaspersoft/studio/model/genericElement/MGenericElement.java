@@ -35,6 +35,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -143,13 +144,13 @@ public class MGenericElement extends MGraphicElement {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
-				JRDesignGenericElement.PROPERTY_EVALUATION_TIME, Messages.MGenericElement_evaluation_time, EnumHelper.getEnumNames(
+				JRDesignGenericElement.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time, EnumHelper.getEnumNames(
 						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
 		evaluationTimeD.setDescription(Messages.MGenericElement_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
 		evaluationGroupNameD = new RComboBoxPropertyDescriptor(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME,
-				Messages.MGenericElement_evaluation_group_name, new String[] { "" }); //$NON-NLS-2$
+				Messages.MGenericElement_evaluation_group_name, new String[] { "" }); //$NON-NLS-1$
 		evaluationGroupNameD.setDescription(Messages.MGenericElement_evaluation_group_name_description);
 		desc.add(evaluationGroupNameD);
 
@@ -164,15 +165,15 @@ public class MGenericElement extends MGraphicElement {
 		desc.add(nameSpaceD);
 
 		ParameterPropertyDescriptor parametersD = new ParameterPropertyDescriptor(
-				JRDesignGenericElement.PROPERTY_PARAMETERS, Messages.MGenericElement_parameters);
+				JRDesignGenericElement.PROPERTY_PARAMETERS, Messages.common_parameters);
 		parametersD.setDescription(Messages.MGenericElement_parameters_description);
 		desc.add(parametersD);
 
-		parametersD.setCategory(Messages.MGenericElement_properties_category);
-		nameD.setCategory(Messages.MGenericElement_properties_category);
-		nameSpaceD.setCategory(Messages.MGenericElement_properties_category);
-		evaluationTimeD.setCategory(Messages.MGenericElement_properties_category);
-		evaluationGroupNameD.setCategory(Messages.MGenericElement_properties_category);
+		parametersD.setCategory(Messages.MGenericElement_generic_element_properties_category);
+		nameD.setCategory(Messages.MGenericElement_generic_element_properties_category);
+		nameSpaceD.setCategory(Messages.MGenericElement_generic_element_properties_category);
+		evaluationTimeD.setCategory(Messages.MGenericElement_generic_element_properties_category);
+		evaluationGroupNameD.setCategory(Messages.MGenericElement_generic_element_properties_category);
 
 		defaultsMap.put(JRDesignGenericElement.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 	}

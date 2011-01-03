@@ -37,6 +37,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class SortFieldPage extends WizardPage {
 	private List<?> list;
 
@@ -50,7 +52,7 @@ public class SortFieldPage extends WizardPage {
 
 	protected SortFieldPage(String pageName) {
 		super(pageName);
-		setTitle(Messages.SortFieldPage_sort_field_editor);
+		setTitle(Messages.common_sort_field_editor);
 		setDescription(Messages.SortFieldPage_description);
 	}
 
@@ -85,7 +87,7 @@ public class SortFieldPage extends WizardPage {
 
 		column = new TableColumn(table, SWT.CENTER);
 		column.setWidth(100);
-		column.setText(Messages.SortFieldPage_order);
+		column.setText(Messages.common_order);
 		column.pack();
 
 		TableViewer tableViewer = new TableViewer(table);
@@ -113,7 +115,7 @@ public class SortFieldPage extends WizardPage {
 	private void createButtons(Composite composite) {
 		GridData gridData;
 		Button add = new Button(composite, SWT.PUSH | SWT.CENTER);
-		add.setText(Messages.SortFieldPage_add);
+		add.setText(Messages.common_add);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		add.setLayoutData(gridData);

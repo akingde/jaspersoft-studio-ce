@@ -37,6 +37,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
@@ -122,9 +123,9 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		JRDesignBand value = (JRDesignBand) getValue();
 		if (bandType.equals(BandTypeEnum.DETAIL)) {
 			if (value != null)
-				return "Detail [" + value.getHeight() + "px] ";// + value.hashCode();
+				return Messages.MBand_detail + " [" + value.getHeight() + "px] ";// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$
 			else
-				return "Detail ";
+				return Messages.MBand_detail + " "; //$NON-NLS-1$
 		}
 		if (value == null)
 			return bandType.getName();
@@ -160,7 +161,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	@Override
 	public String getToolTip() {
 		if (getValue() != null)
-			return "Band: " + getDisplayText() + " 	";
+			return Messages.MBand_band + ": " + getDisplayText() + " 	"; //$NON-NLS-1$ //$NON-NLS-2$
 
 		return getIconDescriptor().getToolTip();
 	}
@@ -192,17 +193,17 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT,
-				Messages.MBand_height);
+				Messages.common_height);
 		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);
 
 		ComboBoxPropertyDescriptor splitStyleD = new ComboBoxPropertyDescriptor(JRDesignBand.PROPERTY_SPLIT_TYPE,
-				Messages.MBand_split_type, EnumHelper.getEnumNames(SplitTypeEnum.values(), NullEnum.NULL));
+				Messages.common_split_type, EnumHelper.getEnumNames(SplitTypeEnum.values(), NullEnum.NULL));
 		splitStyleD.setDescription(Messages.MBand_split_type_dscription);
 		desc.add(splitStyleD);
 
 		JRExpressionPropertyDescriptor printWhenExpD = new JRExpressionPropertyDescriptor(
-				JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MBand_print_when_expression);
+				JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.common_print_when_expression);
 		printWhenExpD.setDescription(Messages.MBand_print_when_expression_desription);
 		desc.add(printWhenExpD);
 

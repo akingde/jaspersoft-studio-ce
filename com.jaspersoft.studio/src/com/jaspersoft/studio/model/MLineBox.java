@@ -29,6 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
 
@@ -41,7 +42,7 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING, Messages.MLineBox_padding);
+		IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING, Messages.common_padding);
 		paddingD.setDescription(Messages.MLineBox_padding_description);
 		desc.add(paddingD);
 
@@ -65,14 +66,14 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 		paddingBottomD.setDescription(Messages.MLineBox_bottom_padding_description);
 		desc.add(paddingBottomD);
 
-		paddingD.setCategory(Messages.MLineBox_padding_category);
-		paddingBottomD.setCategory(Messages.MLineBox_padding_category);
-		paddingTopD.setCategory(Messages.MLineBox_padding_category);
-		paddingLeftD.setCategory(Messages.MLineBox_padding_category);
-		paddingRightD.setCategory(Messages.MLineBox_padding_category);
+		paddingD.setCategory(Messages.common_padding);
+		paddingBottomD.setCategory(Messages.common_padding);
+		paddingTopD.setCategory(Messages.common_padding);
+		paddingLeftD.setCategory(Messages.common_padding);
+		paddingRightD.setCategory(Messages.common_padding);
 		// --------------------------------------------------------------------------------------------------------------
 		// pen
-		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, Messages.MLineBox_line_pen);
+		PenPropertyDescriptor linePenD = new PenPropertyDescriptor(LINE_PEN, Messages.common_line_pen);
 		linePenD.setDescription(Messages.MLineBox_line_pen_description);
 		desc.add(linePenD);
 

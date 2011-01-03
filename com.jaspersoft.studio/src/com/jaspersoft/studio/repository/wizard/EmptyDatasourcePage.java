@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.empty.MEmptyDataSource;
 
@@ -51,7 +52,7 @@ public class EmptyDatasourcePage extends ADatasourcePage {
 	@Override
 	protected void createMoreControls(Composite parent) {
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.EmptyDatasourcePage_size+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_size+":"); //$NON-NLS-1$
 
 		sizeTxt = new Spinner(parent, SWT.BORDER);
 		sizeTxt.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);

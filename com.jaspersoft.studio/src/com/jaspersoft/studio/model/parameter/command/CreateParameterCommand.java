@@ -28,6 +28,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -89,7 +90,7 @@ public class CreateParameterCommand extends Command {
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataset.getParametersMap(), "CopyOFParameter_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateParameterCommand_parameter_name,
-							Messages.CreateParameterCommand_parameter_name_dialog, defaultName, null);
+							Messages.CreateParameterCommand_parameter_name_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrParameter.setName(dlg.getValue());
 						execute();

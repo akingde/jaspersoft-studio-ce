@@ -46,6 +46,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IJROBjectEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
@@ -104,7 +105,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 			setPageText(index, Messages.ReportContainer_main_report);
 			editors.add(reportEditor);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(getSite().getShell(), "Error creating nested visual editor", null, e.getStatus());
+			ErrorDialog.openError(getSite().getShell(), Messages.common_error_creating_nested_visual_editor, null, e.getStatus());
 		}
 		getEditorSite().getActionBarContributor();
 	}

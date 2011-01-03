@@ -28,6 +28,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyles;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -89,7 +90,7 @@ public class CreateStyleCommand extends Command {
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDesign.getStylesMap(), "CopyOFStyle_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateStyleCommand_style_name,
-							Messages.CreateStyleCommand_style_name_dialog, defaultName, null);
+							Messages.CreateStyleCommand_style_name_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrStyle.setName(dlg.getValue());
 						execute();

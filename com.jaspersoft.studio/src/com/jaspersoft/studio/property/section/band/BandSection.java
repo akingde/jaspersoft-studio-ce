@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -61,7 +62,7 @@ public class BandSection extends AbstractSection {
 		GridLayout layout = new GridLayout(5, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.BandSection_height+":", SWT.RIGHT); //$NON-NLS-2$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_height+":", SWT.RIGHT); //$NON-NLS-2$ //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -77,7 +78,7 @@ public class BandSection extends AbstractSection {
 			}
 		});
 
-		getWidgetFactory().createCLabel(composite, Messages.BandSection_split_type+":", SWT.RIGHT); //$NON-NLS-2$
+		getWidgetFactory().createCLabel(composite, Messages.common_split_type+":", SWT.RIGHT); //$NON-NLS-2$ //$NON-NLS-1$
 
 		splitType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		splitType.setItems(EnumHelper.getEnumNames(SplitTypeEnum.values(), NullEnum.NULL));

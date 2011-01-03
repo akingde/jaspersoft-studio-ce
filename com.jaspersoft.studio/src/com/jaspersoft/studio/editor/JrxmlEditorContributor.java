@@ -51,9 +51,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IDEActionFactory;
-import org.eclipse.ui.internal.WorkbenchMessages;
 import org.eclipse.ui.internal.handlers.IActionCommandMappingService;
-import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
@@ -66,6 +64,7 @@ import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * Manages the installation/deinstallation of global actions for multi-page editors. Responsible for the redirection of
@@ -140,18 +139,18 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		// addRetargetAction(new MatchHeightRetargetAction());
 		// GEFMessages.ToggleRulerVisibility_Label
 		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY,
-				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_show_ruler, IAction.AS_CHECK_BOX));
+				Messages.JrxmlEditorContributor_show_ruler, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID,
-				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_guides, IAction.AS_CHECK_BOX));
+				Messages.common_snap_to_guides, IAction.AS_CHECK_BOX));
 
 		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY,
-				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_show_grid, IAction.AS_CHECK_BOX));
+				Messages.common_show_grid, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY,
-				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_geometry, IAction.AS_CHECK_BOX));
+				Messages.common_snap_to_geometry, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SnapToGridAction.ID,
-				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_snap_to_grid, IAction.AS_CHECK_BOX));
+				Messages.common_snap_to_grid, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SizeGridAction.ID,
-				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_grid_size));
+				Messages.JrxmlEditorContributor_grid_size));
 	}
 
 	/**
@@ -281,12 +280,12 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 				MessageDialog
 						.openInformation(
 								null,
-								"Jasper Studio", com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action_executed); //$NON-NLS-1$
+								"Jasper Studio", Messages.JrxmlEditorContributor_sample_action_executed); //$NON-NLS-1$
 			}
 		};
-		sampleAction.setText(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action);
+		sampleAction.setText(Messages.JrxmlEditorContributor_sample_action);
 		sampleAction
-				.setToolTipText(com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_sample_action_tool_tip);
+				.setToolTipText(Messages.JrxmlEditorContributor_sample_action_tool_tip);
 		sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(IDE.SharedImages.IMG_OBJS_TASK_TSK));
 	}
@@ -350,7 +349,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		}
 
 		MenuManager viewMenu = new MenuManager(
-				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_view);
+				Messages.JrxmlEditorContributor_view);
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
 		viewMenu.add(new Separator());
@@ -365,7 +364,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 
 		IMenuManager menu = new MenuManager(
-				com.jaspersoft.studio.editor.IDEWorkbenchMessages.JrxmlEditorContributor_editor_menu);
+				Messages.JrxmlEditorContributor_editor_menu);
 		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
 		menu.add(sampleAction);
 
@@ -377,7 +376,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * @return the menu manager
 	 */
 	private MenuManager createEditMenu() {
-		MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_edit, IWorkbenchActionConstants.M_EDIT);
+		MenuManager menu = new MenuManager(Messages.JrxmlEditorContributor_edit, IWorkbenchActionConstants.M_EDIT);
 		menu.add(new GroupMarker(IWorkbenchActionConstants.EDIT_START));
 
 		menu.add(getAction(ActionFactory.UNDO.getId()));
@@ -445,7 +444,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getCutItem() {
 		return getItem(ActionFactory.CUT.getId(), ActionFactory.CUT.getCommandId(), ISharedImages.IMG_TOOL_CUT,
-				ISharedImages.IMG_TOOL_CUT_DISABLED, WorkbenchMessages.Workbench_cut, WorkbenchMessages.Workbench_cutToolTip,
+				ISharedImages.IMG_TOOL_CUT_DISABLED, Messages.common_cut, Messages.common_cut,
 				null);
 	}
 
@@ -456,8 +455,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getCopyItem() {
 		return getItem(ActionFactory.COPY.getId(), ActionFactory.COPY.getCommandId(), ISharedImages.IMG_TOOL_COPY,
-				ISharedImages.IMG_TOOL_COPY_DISABLED, WorkbenchMessages.Workbench_copy,
-				WorkbenchMessages.Workbench_copyToolTip, null);
+				ISharedImages.IMG_TOOL_COPY_DISABLED, Messages.common_copy,
+				Messages.common_copy, null);
 	}
 
 	/**
@@ -467,8 +466,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getPasteItem() {
 		return getItem(ActionFactory.PASTE.getId(), ActionFactory.PASTE.getCommandId(), ISharedImages.IMG_TOOL_PASTE,
-				ISharedImages.IMG_TOOL_PASTE_DISABLED, WorkbenchMessages.Workbench_paste,
-				WorkbenchMessages.Workbench_pasteToolTip, null);
+				ISharedImages.IMG_TOOL_PASTE_DISABLED, Messages.common_paste,
+				Messages.common_paste, null);
 	}
 
 	/**
@@ -478,7 +477,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getSelectAllItem() {
 		return getItem(ActionFactory.SELECT_ALL.getId(), ActionFactory.SELECT_ALL.getCommandId(), null, null,
-				WorkbenchMessages.Workbench_selectAll, WorkbenchMessages.Workbench_selectAllToolTip, null);
+				Messages.JrxmlEditorContributor_select_all, Messages.JrxmlEditorContributor_select_all, null);
 	}
 
 	/**
@@ -488,7 +487,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getFindItem() {
 		return getItem(ActionFactory.FIND.getId(), ActionFactory.FIND.getCommandId(), null, null,
-				WorkbenchMessages.Workbench_findReplace, WorkbenchMessages.Workbench_findReplaceToolTip, null);
+				Messages.JrxmlEditorContributor_find_replace, Messages.JrxmlEditorContributor_find_replace, null);
 	}
 
 	/**
@@ -498,7 +497,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getBookmarkItem() {
 		return getItem(IDEActionFactory.BOOKMARK.getId(), IDEActionFactory.BOOKMARK.getCommandId(), null, null,
-				IDEWorkbenchMessages.Workbench_addBookmark, IDEWorkbenchMessages.Workbench_addBookmarkToolTip, null);
+				Messages.JrxmlEditorContributor_add_bookmark, Messages.JrxmlEditorContributor_add_bookmark, null);
 	}
 
 	/**
@@ -508,7 +507,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getTaskItem() {
 		return getItem(IDEActionFactory.ADD_TASK.getId(), IDEActionFactory.ADD_TASK.getCommandId(), null, null,
-				IDEWorkbenchMessages.Workbench_addTask, IDEWorkbenchMessages.Workbench_addTaskToolTip, null);
+				Messages.JrxmlEditorContributor_add_task, Messages.JrxmlEditorContributor_add_task, null);
 	}
 
 	/**

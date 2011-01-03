@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
@@ -66,7 +67,7 @@ public class ColorsSection extends AbstractSection {
 		GridLayout layout = new GridLayout(6, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.ColorsSection_backcolor+":", SWT.RIGHT); //$NON-NLS-2$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_backcolor+":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -85,7 +86,7 @@ public class ColorsSection extends AbstractSection {
 		gd = new GridData();
 		gd.widthHint = 30;
 		backButton.setLayoutData(gd);
-		getWidgetFactory().createCLabel(composite, Messages.ColorsSection_forecolor+":", SWT.RIGHT); //$NON-NLS-2$
+		getWidgetFactory().createCLabel(composite, Messages.common_forecolor+":", SWT.RIGHT); //$NON-NLS-1$
 
 		foreButton = new Button(composite, SWT.FLAT);
 		foreButton.addSelectionListener(new SelectionAdapter() {
@@ -102,7 +103,7 @@ public class ColorsSection extends AbstractSection {
 		gd.widthHint = 30;
 		foreButton.setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(composite, Messages.ColorsSection_transparency+":"); //$NON-NLS-2$
+		getWidgetFactory().createCLabel(composite, Messages.ColorsSection_transparency+":"); //$NON-NLS-1$
 		modeType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		modeType.setItems(EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
 		modeType.addSelectionListener(new SelectionListener() {

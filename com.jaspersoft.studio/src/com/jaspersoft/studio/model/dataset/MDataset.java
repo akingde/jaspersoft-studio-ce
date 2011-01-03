@@ -34,6 +34,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -154,17 +155,17 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME, Messages.MDataset_name);
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MDataset_name_description);
 		desc.add(nameD);
 
 		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
-				Messages.MDataset_properties);
+				Messages.common_properties);
 		propertiesD.setDescription(Messages.MDataset_properties_description);
 		desc.add(propertiesD);
 
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
-				Messages.MDataset_class);
+				Messages.common_class);
 		classD.setDescription(Messages.MDataset_class_description);
 		desc.add(classD);
 
@@ -174,7 +175,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 		desc.add(resBundleD);
 
 		JRQueryPropertyDescriptor queryD = new JRQueryPropertyDescriptor(JRDesignDataset.PROPERTY_QUERY,
-				Messages.MDataset_query, NullEnum.NULL);
+				Messages.common_query, NullEnum.NULL);
 		queryD.setDescription(Messages.MDataset_query_description);
 		desc.add(queryD);
 
@@ -295,7 +296,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 */
 	public static JRDesignDataset createJRDataset(JasperDesign jrDesign) {
 		JRDesignDataset jrDesignDataset = new JRDesignDataset(false);
-		jrDesignDataset.setName(ModelUtils.getDefaultName(jrDesign.getDatasetMap(), "Dataset"));
+		jrDesignDataset.setName(ModelUtils.getDefaultName(jrDesign.getDatasetMap(), "Dataset")); //$NON-NLS-1$
 		return jrDesignDataset;
 	}
 

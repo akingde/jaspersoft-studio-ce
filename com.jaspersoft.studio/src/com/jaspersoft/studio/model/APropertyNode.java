@@ -107,7 +107,7 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		Map<String, Object> defaultsMap = getDefaultsMap();
 		if (defaultsMap != null && defaultsMap.containsKey(id))
 			return defaultsMap.get(id);
-		throw new Exception("Key not found");
+		throw new Exception("Key not found"); //$NON-NLS-1$
 	}
 
 	public void initProperties() {

@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameters;
 
@@ -58,7 +59,7 @@ public class ReorderParameterCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderParameterCommand(MParameter child, MParameters parent, int newIndex) {
-		super(Messages.ReorderParameterCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDataset = (JRDesignDataset) parent.getValue();

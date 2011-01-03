@@ -28,6 +28,8 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class PercentagePattern extends NumericPattern {
 
 	public PercentagePattern(Composite parent) {

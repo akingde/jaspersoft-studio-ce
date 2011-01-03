@@ -58,6 +58,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
@@ -107,7 +108,7 @@ public class BordersSection extends AbstractSection {
 		GridLayout layout = new GridLayout(7, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.BordersSection_box + ":", SWT.RIGHT); //$NON-NLS-2$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.BordersSection_box + ":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.verticalSpan = 2;
 		gd.widthHint = 100;
@@ -186,7 +187,7 @@ public class BordersSection extends AbstractSection {
 		GridLayout layout = new GridLayout(2, false);
 		composite.setLayout(layout);
 
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_padding + ":", SWT.RIGHT); //$NON-NLS-2$
+		getWidgetFactory().createCLabel(composite, Messages.common_padding + ":", SWT.RIGHT); //$NON-NLS-1$
 
 		final Spinner padding = new Spinner(composite, SWT.BORDER);
 		padding.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
@@ -198,13 +199,13 @@ public class BordersSection extends AbstractSection {
 		});
 		pMap.put(property, padding);
 
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_pen_color + ":", SWT.RIGHT); //$NON-NLS-2$
+		getWidgetFactory().createCLabel(composite, Messages.common_pen_color + ":", SWT.RIGHT); //$NON-NLS-1$
 
 		Button lineColor = new Button(composite, SWT.FLAT);
 		lineColor.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(composite.getShell());
-				cd.setText(Messages.BordersSection_line_color);
+				cd.setText(Messages.common_line_color);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR));
 				RGB newColor = cd.open();
 				changeProperty(property, JRBasePen.PROPERTY_LINE_COLOR, newColor);
@@ -215,7 +216,7 @@ public class BordersSection extends AbstractSection {
 		lineColor.setLayoutData(gd);
 		lineColorMap.put(property + "." + JRBasePen.PROPERTY_LINE_COLOR, lineColor); //$NON-NLS-1$
 
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_pen_style + ":"); //$NON-NLS-2$
+		getWidgetFactory().createCLabel(composite, Messages.common_pen_style + ":"); //$NON-NLS-1$
 
 		final CCombo lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		lineStyle.setItems(EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
@@ -228,10 +229,10 @@ public class BordersSection extends AbstractSection {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		lineStyle.setToolTipText(Messages.BordersSection_line_style);
+		lineStyle.setToolTipText(Messages.common_line_style);
 		lineStyleMap.put(property + "." + JRBasePen.PROPERTY_LINE_STYLE, lineStyle); //$NON-NLS-1$
 
-		getWidgetFactory().createCLabel(composite, Messages.BordersSection_pen_width + ":", SWT.RIGHT); //$NON-NLS-2$
+		getWidgetFactory().createCLabel(composite, Messages.common_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
 
 		final Spinner lineWidth = new Spinner(composite, SWT.BORDER);
 		lineWidth.setValues(0, 0, 5000, 1, 1, 1);

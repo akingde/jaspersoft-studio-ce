@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -58,7 +59,7 @@ public class MDatasetRun extends APropertyNode {
 		desc.add(subdatasetnameD);
 
 		JRExpressionPropertyDescriptor connExprD = new JRExpressionPropertyDescriptor(
-				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, Messages.MDatasetRun_connection_expression);
+				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, Messages.common_connection_expression);
 		connExprD.setDescription(Messages.MDatasetRun_connection_expression_description);
 		desc.add(connExprD);
 
@@ -68,12 +69,12 @@ public class MDatasetRun extends APropertyNode {
 		desc.add(dsExprD);
 
 		JRExpressionPropertyDescriptor pmExprD = new JRExpressionPropertyDescriptor(
-				JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.MDatasetRun_parameters_map_expression);
+				JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION, Messages.common_parameters_map_expression);
 		pmExprD.setDescription(Messages.MDatasetRun_parameters_map_expression_description);
 		desc.add(pmExprD);
 
 		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(JRDesignDatasetRun.PROPERTY_PARAMETERS,
-				Messages.MDatasetRun_parameters);
+				Messages.common_parameters);
 		propertiesD.setDescription(Messages.MDatasetRun_parameters_description);
 		desc.add(propertiesD);
 

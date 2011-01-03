@@ -35,6 +35,7 @@ import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -66,35 +67,35 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		desc.add(markupD);
 
 		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.MTextElement_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(),
+				Messages.common_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(),
 						NullEnum.INHERITED));
 		hAlignD.setDescription(Messages.MTextElement_horizontal_alignment_description);
 		desc.add(hAlignD);
 
 		ComboBoxPropertyDescriptor vAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				Messages.MTextElement_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(),
+				Messages.common_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(),
 						NullEnum.INHERITED));
 		vAlignD.setDescription(Messages.MTextElement_vertical_alignment_description);
 		desc.add(vAlignD);
 
 		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION,
-				Messages.MTextElement_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
+				Messages.common_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
 		rotationD.setDescription(Messages.MTextElement_rotation_description);
 		desc.add(rotationD);
 
 		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_LINE_SPACING,
-				Messages.MTextElement_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
+				Messages.common_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
 		lineSpacingD.setDescription(Messages.MTextElement_line_spacing_description);
 		desc.add(lineSpacingD);
 
 		tFont = new MFont((JRFont) getValue());
 		tFont.createPropertyDescriptors(desc, defaultsMap);
 
-		markupD.setCategory(Messages.MTextElement_text_category);
-		hAlignD.setCategory(Messages.MTextElement_text_category);
-		vAlignD.setCategory(Messages.MTextElement_text_category);
-		rotationD.setCategory(Messages.MTextElement_text_category);
-		lineSpacingD.setCategory(Messages.MTextElement_text_category);
+		markupD.setCategory(Messages.MTextElement_text_properties_category);
+		hAlignD.setCategory(Messages.MTextElement_text_properties_category);
+		vAlignD.setCategory(Messages.MTextElement_text_properties_category);
+		rotationD.setCategory(Messages.MTextElement_text_properties_category);
+		lineSpacingD.setCategory(Messages.MTextElement_text_properties_category);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);

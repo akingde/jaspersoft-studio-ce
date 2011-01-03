@@ -33,6 +33,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.outline.ATreeEditPart;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;

@@ -69,7 +69,7 @@ public class ColorLabelProvider extends LabelProvider {
 		if (element == null || !(element instanceof RGB))
 			return canBeNull.getName();
 		RGB rgb = (RGB) element;
-		return "RGB (" + rgb.red + "," + rgb.green + "," + rgb.blue + ")";
+		return "RGB (" + rgb.red + "," + rgb.green + "," + rgb.blue + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 }

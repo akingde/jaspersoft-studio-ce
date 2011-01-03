@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
 
@@ -65,7 +66,7 @@ public class FileDatasourcePage extends AFileDatasourcePage {
 		super.createMoreControls(parent);
 
 		Label lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.FileDatasourcePage_record_delimiter+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_record_delimiter+":"); //$NON-NLS-1$
 
 		recordDelimiterTxt = new Text(parent, SWT.BORDER);
 		recordDelimiterTxt.setTextLimit(10);
@@ -74,7 +75,7 @@ public class FileDatasourcePage extends AFileDatasourcePage {
 		recordDelimiterTxt.setLayoutData(gd);
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.FileDatasourcePage_field_delimiter+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_field_delimiter+":"); //$NON-NLS-1$
 
 		columnDelimiterTxt = new Text(parent, SWT.BORDER);
 		columnDelimiterTxt.setTextLimit(1);
@@ -88,7 +89,7 @@ public class FileDatasourcePage extends AFileDatasourcePage {
 		firstRowHeaderTxt = new Button(parent, SWT.CHECK);
 
 		lbl1 = new Label(parent, SWT.NONE);
-		lbl1.setText(Messages.FileDatasourcePage_column_names+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.common_column_names+":"); //$NON-NLS-1$
 
 		columnNamesTxt = new Text(parent, SWT.BORDER);
 		columnNamesTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

@@ -61,6 +61,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.internal.help.WorkbenchHelpSystem;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxCellEditor;
 
 public class JRPropertyPage extends WizardPage {
@@ -124,7 +125,7 @@ public class JRPropertyPage extends WizardPage {
 
 	protected JRPropertyPage(String pageName) {
 		super(pageName);
-		setTitle(Messages.JRPropertyPage_properties);
+		setTitle(Messages.common_properties);
 		setDescription(Messages.JRPropertyPage_description);
 
 	}
@@ -148,7 +149,7 @@ public class JRPropertyPage extends WizardPage {
 		table.setLayoutData(gd);
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText(Messages.JRPropertyPage_add);
+		addB.setText(Messages.common_add);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		addB.setLayoutData(gridData);
@@ -195,7 +196,7 @@ public class JRPropertyPage extends WizardPage {
 					tableViewer.setSelection(new StructuredSelection(sp));
 					cursor.setSelection(table.getSelectionIndex(), 0);
 				} else
-					setMessage(Messages.JRPropertyPage_table_is_empty);
+					setMessage(Messages.common_table_is_empty);
 			}
 		});
 	}
@@ -273,7 +274,7 @@ public class JRPropertyPage extends WizardPage {
 
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText(Messages.JRPropertyPage_name);
+		column[0].setText(Messages.common_name);
 
 		column[1] = new TableColumn(table, SWT.NONE);
 		column[1].setText(Messages.JRPropertyPage_value);

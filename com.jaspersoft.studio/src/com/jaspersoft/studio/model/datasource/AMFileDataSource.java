@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -47,13 +48,13 @@ public abstract class AMFileDataSource extends AMDatasource {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		NTextPropertyDescriptor driverClassD = new NTextPropertyDescriptor(PROPERTY_FILENAME, Messages.AMFileDataSource_fine_name);
+		NTextPropertyDescriptor driverClassD = new NTextPropertyDescriptor(PROPERTY_FILENAME, Messages.common_file_name);
 		desc.add(driverClassD);
 
-		PatternPropertyDescriptor numberFormatD = new PatternPropertyDescriptor(PROPERTY_NUMBERFORMAT, Messages.AMFileDataSource_number_format);
+		PatternPropertyDescriptor numberFormatD = new PatternPropertyDescriptor(PROPERTY_NUMBERFORMAT, Messages.common_number_format);
 		desc.add(numberFormatD);
 
-		PatternPropertyDescriptor dateFormatD = new PatternPropertyDescriptor(PROPERTY_DATEFORMAT, Messages.AMFileDataSource_date_format);
+		PatternPropertyDescriptor dateFormatD = new PatternPropertyDescriptor(PROPERTY_DATEFORMAT, Messages.common_date_format);
 		desc.add(dateFormatD);
 	}
 

@@ -31,6 +31,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -103,8 +104,8 @@ public class MBandGroupHeader extends MBand {
 			return super.getDisplayText();
 		JRDesignBand value = (JRDesignBand) getValue();
 		if (value != null)
-			return jrGroup.getName() + " Group Header [" + value.getHeight() + "px] ";// + value.hashCode();
-		return jrGroup.getName() + " Group Header";
+			return jrGroup.getName() + " " + Messages.MBandGroupHeader_group_header + " [" + value.getHeight() + "px] ";// + value.hashCode(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return jrGroup.getName() + " " + Messages.MBandGroupHeader_group_header; //$NON-NLS-1$
 	}
 
 	/*
@@ -145,7 +146,7 @@ public class MBandGroupHeader extends MBand {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		PropertyDescriptor groupD = new PropertyDescriptor(MAIN_GROUP, Messages.MBandGroupHeader_group);
+		PropertyDescriptor groupD = new PropertyDescriptor(MAIN_GROUP, Messages.common_group);
 		desc.add(groupD);
 	}
 

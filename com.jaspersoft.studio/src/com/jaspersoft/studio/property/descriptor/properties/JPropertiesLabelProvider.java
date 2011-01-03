@@ -23,6 +23,8 @@ import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
  * @author Chicu Veaceslav
  * 
@@ -36,9 +38,9 @@ public class JPropertiesLabelProvider extends LabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element == null)
-			return "";
+			return ""; //$NON-NLS-1$
 		if (element instanceof JRPropertiesMap)
-			return "[Properties: " + ((JRPropertiesMap) element).getPropertyNames().length + "]";
+			return "[" + Messages.common_properties + ": " + ((JRPropertiesMap) element).getPropertyNames().length + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return element.toString();
 	}
 

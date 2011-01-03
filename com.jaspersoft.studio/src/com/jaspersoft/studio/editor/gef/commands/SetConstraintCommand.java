@@ -249,7 +249,7 @@ public class SetConstraintCommand extends Command {
 	 */
 	public String getLabel() {
 		if (oldBounds != null && (oldBounds.x != newBounds.x || oldBounds.y != newBounds.y))
-			return "set location";
-		return "resize";
+			return "set location"; //$NON-NLS-1$
+		return "resize"; //$NON-NLS-1$
 	}
 }

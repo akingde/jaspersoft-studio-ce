@@ -30,6 +30,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -136,12 +137,12 @@ public class MGroup extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.MGroup_name);
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MGroup_name_description);
 		desc.add(nameD);
 
 		JRExpressionPropertyDescriptor expressionD = new JRExpressionPropertyDescriptor(JRDesignGroup.PROPERTY_EXPRESSION,
-				Messages.MGroup_expression);
+				Messages.common_expression);
 		expressionD.setDescription(Messages.MGroup_expression_description);
 		desc.add(expressionD);
 	}
@@ -195,7 +196,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 	 */
 	public static JRDesignGroup createJRGroup(JRDesignDataset jrDataset) {
 		JRDesignGroup jrDesignGroup = new JRDesignGroup();
-		jrDesignGroup.setName(ModelUtils.getDefaultName(jrDataset.getGroupsMap(), "Group"));
+		jrDesignGroup.setName(ModelUtils.getDefaultName(jrDataset.getGroupsMap(), "Group")); //$NON-NLS-1$
 		return jrDesignGroup;
 	}
 

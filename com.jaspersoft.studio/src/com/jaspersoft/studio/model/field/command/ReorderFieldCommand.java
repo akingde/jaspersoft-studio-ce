@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
 
@@ -58,7 +59,7 @@ public class ReorderFieldCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderFieldCommand(MField child, MFields parent, int newIndex) {
-		super(Messages.ReorderFieldCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDataset = (JRDesignDataset) parent.getValue();

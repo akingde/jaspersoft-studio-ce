@@ -24,6 +24,8 @@ import java.text.MessageFormat;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
  * The Class SetValueCommand.
  */
@@ -58,7 +60,7 @@ public class SetValueCommand extends Command {
 	 *          the prop label
 	 */
 	public SetValueCommand(String propLabel) {
-		super(MessageFormat.format("Set {0} Property", new Object[] { propLabel }).trim());
+		super(MessageFormat.format(Messages.SetValueCommand_set_zero_property, new Object[] { propLabel }).trim());
 	}
 
 	/*

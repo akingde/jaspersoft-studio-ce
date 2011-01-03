@@ -28,6 +28,8 @@ import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.jface.action.Action;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class ShowGridAction extends Action {
 
 	private GraphicalViewer diagramViewer;
@@ -39,7 +41,7 @@ public class ShowGridAction extends Action {
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
 	public ShowGridAction(GraphicalViewer diagramViewer) {
-		super(Messages.ShowGridAction_show_grid, AS_CHECK_BOX);
+		super(Messages.common_show_grid, AS_CHECK_BOX);
 		this.diagramViewer = diagramViewer;
 		setToolTipText(Messages.ShowGridAction_show_grid_tool_tip);
 		setId(GEFActionConstants.TOGGLE_GRID_VISIBILITY);

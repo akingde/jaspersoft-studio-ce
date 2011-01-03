@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.group.MGroups;
 
@@ -58,7 +59,7 @@ public class ReorderGroupCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderGroupCommand(MGroup child, MGroups parent, int newIndex) {
-		super(Messages.ReorderGroupCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrDataset = (JRDesignDataset) parent.getValue();

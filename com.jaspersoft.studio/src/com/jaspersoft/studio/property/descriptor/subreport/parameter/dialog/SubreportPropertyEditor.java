@@ -25,6 +25,8 @@ import net.sf.jasperreports.engine.JRSubreportParameter;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class SubreportPropertyEditor extends Wizard {
 	private Map<String, JRSubreportParameter> value;
 	private SubreportPropertyPage page0;
@@ -43,7 +45,7 @@ public class SubreportPropertyEditor extends Wizard {
 
 	public SubreportPropertyEditor() {
 		super();
-		setWindowTitle(Messages.SubreportPropertyEditor_properties);
+		setWindowTitle(Messages.common_properties);
 		setNeedsProgressMonitor(false);
 	}
 

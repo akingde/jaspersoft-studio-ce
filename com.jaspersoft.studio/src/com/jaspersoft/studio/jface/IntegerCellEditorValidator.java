@@ -55,7 +55,7 @@ public class IntegerCellEditorValidator implements ICellEditorValidator {
 				new Integer((String) value);
 			return null;
 		} catch (NumberFormatException exc) {
-			return "This is not an Integer number";
+			return "This is not an Integer number"; //$NON-NLS-1$
 		}
 	}
 

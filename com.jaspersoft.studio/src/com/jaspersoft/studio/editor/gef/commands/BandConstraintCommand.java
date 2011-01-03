@@ -27,6 +27,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class BandConstraintCommand.

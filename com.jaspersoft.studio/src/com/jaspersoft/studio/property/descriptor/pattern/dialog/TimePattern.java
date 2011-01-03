@@ -28,6 +28,8 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class TimePattern extends DatePattern {
 
 	public TimePattern(Composite parent) {

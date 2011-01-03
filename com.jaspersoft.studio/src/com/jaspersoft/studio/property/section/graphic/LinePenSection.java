@@ -43,6 +43,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.editor.report.EditorContributor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLinePen;
 import com.jaspersoft.studio.model.style.MStyle;
@@ -97,7 +98,7 @@ public class LinePenSection extends AbstractSection {
 		GridLayout layout = new GridLayout(6, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.LinePenSection_pen_color + ":", SWT.RIGHT); //$NON-NLS-1$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_pen_color + ":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -106,7 +107,7 @@ public class LinePenSection extends AbstractSection {
 		lineColor.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				ColorDialog cd = new ColorDialog(composite.getShell());
-				cd.setText(Messages.LinePenSection_line_color);
+				cd.setText(Messages.common_line_color);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR));
 				RGB newColor = cd.open();
 				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, newColor);
@@ -116,7 +117,7 @@ public class LinePenSection extends AbstractSection {
 		gd.widthHint = 30;
 		lineColor.setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(composite, Messages.LinePenSection_pen_style + ":"); //$NON-NLS-1$
+		getWidgetFactory().createCLabel(composite, Messages.common_pen_style + ":"); //$NON-NLS-1$
 		lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		lineStyle.setItems(EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
 		lineStyle.addSelectionListener(new SelectionListener() {
@@ -128,9 +129,9 @@ public class LinePenSection extends AbstractSection {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		lineStyle.setToolTipText(Messages.LinePenSection_line_style);
+		lineStyle.setToolTipText(Messages.common_line_style);
 
-		label = getWidgetFactory().createCLabel(composite, Messages.LinePenSection_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
+		label = getWidgetFactory().createCLabel(composite, Messages.common_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
 
 		lineWidth = new Spinner(composite, SWT.BORDER);
 		lineWidth.setValues(0, 0, 5000, 1, 1, 100);

@@ -35,12 +35,12 @@ public class LinuxImageRenderer implements ImageRenderer {
 	 */
 	public final void render(Display paramDisplay, GC paramGC, int[] data, int xSrc, int ySrc, int width, int height,
 			int xDest, int yDest, int imgWidth, int imgHeight) {
-		renderImage(paramGC.handle, xDest, yDest, width, height, 0, 0, data, imgWidth, imgHeight);
+		renderImage((int) paramGC.handle, xDest, yDest, width, height, 0, 0, data, imgWidth, imgHeight);
 	}
 
 	static {
-		System.out.println(System.getProperty("java.library.path"));
-		System.loadLibrary("libj2d-gtk-linux-i386-2.0.0");
+		System.out.println(System.getProperty("java.library.path")); //$NON-NLS-1$
+		System.loadLibrary("libj2d-gtk-linux-i386-2.0.0"); //$NON-NLS-1$
 	}
 
 	/**

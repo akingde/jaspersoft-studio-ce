@@ -69,6 +69,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -131,11 +132,11 @@ public class RepositoryManager {
 	}
 
 	public static void saveResource(AMDatasource d) {
-		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(d, "DATASOURCE", null, d));
+		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(d, "DATASOURCE", null, d)); //$NON-NLS-1$
 		// save to disc
 		Preferences prefs = new InstanceScope().getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 		try {
-			String strDS = "<datasources>";
+			String strDS = "<datasources>"; //$NON-NLS-1$
 			for (AMDatasource ds : getDatasources()) {
 				try {
 					strDS += ds.getToString();
@@ -145,7 +146,7 @@ public class RepositoryManager {
 					e.printStackTrace();
 				}
 			}
-			prefs.put("REPOSITORYDATASOURCES", strDS + "</datasources>");
+			prefs.put("REPOSITORYDATASOURCES", strDS + "</datasources>"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			prefs.flush();
 		} catch (BackingStoreException e) {
@@ -166,7 +167,7 @@ public class RepositoryManager {
 			// new MDTPDatasources(datasources);
 			Preferences prefs = new InstanceScope().getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 
-			String dts = prefs.get("REPOSITORYDATASOURCES", "");
+			String dts = prefs.get("REPOSITORYDATASOURCES", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			System.out.println(dts);
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder;
@@ -174,11 +175,11 @@ public class RepositoryManager {
 				builder = factory.newDocumentBuilder();
 				InputSource is = new InputSource(new StringReader(dts));
 				Document doc = builder.parse(is);
-				NodeList nl = doc.getElementsByTagName("DATASOURCE");
+				NodeList nl = doc.getElementsByTagName("DATASOURCE"); //$NON-NLS-1$
 				for (int i = 0; i < nl.getLength(); i++) {
 					Node n = nl.item(i);
 					NamedNodeMap nnm = n.getAttributes();
-					Node ntype = nnm.getNamedItem("type");
+					Node ntype = nnm.getNamedItem("type"); //$NON-NLS-1$
 					String type = ntype.getNodeValue();
 					AMDatasource m = null;
 					if (type.equals(MJDBCDataSource.class.getName()))
@@ -249,15 +250,15 @@ public class RepositoryManager {
 			String user = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_USERNAME);
 			String pass = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_PASSWORD);
 			String jars = (String) d.getPropertyValue(MJDBCDataSource.PROPERTY_JAR);
-			if (drvClass != null && !drvClass.trim().equals("")) {
+			if (drvClass != null && !drvClass.trim().equals("")) { //$NON-NLS-1$
 				Driver driver = drivers.get(drvClass);
 				if (driver == null)
 					driver = loadJDBCDriver(editorPart, monitor, drvClass, jars);
 				Properties info = new Properties();
 				if (user != null)
-					info.put("user", user);
+					info.put("user", user); //$NON-NLS-1$
 				if (pass != null)
-					info.put("password", pass);
+					info.put("password", pass); //$NON-NLS-1$
 				try {
 					connection = driver.connect(url, info);
 				} catch (NoClassDefFoundError e) {
@@ -276,9 +277,9 @@ public class RepositoryManager {
 		Driver driver;
 		ClassLoader loader = null;
 		Class<?> cl = null;
-		if (jars != null && !jars.trim().equals("")) {
+		if (jars != null && !jars.trim().equals("")) { //$NON-NLS-1$
 			List<URL> urls = new ArrayList<URL>();
-			StringTokenizer st = new StringTokenizer(jars, ";");
+			StringTokenizer st = new StringTokenizer(jars, ";"); //$NON-NLS-1$
 			while (st.hasMoreElements()) {
 				String jar = st.nextToken();
 				java.io.File jarFiles = new java.io.File(jar);
@@ -313,8 +314,8 @@ public class RepositoryManager {
 				cl = Class.forName(drvClass);
 			}
 		if (!Driver.class.isAssignableFrom(cl))
-			throw new Exception("Connection failed. The specified driver class does not implement the "
-					+ Driver.class.getName() + " interface.");
+			throw new Exception("Connection failed. The specified driver class does not implement the " //$NON-NLS-1$
+					+ Driver.class.getName() + " interface."); //$NON-NLS-1$
 		driver = (Driver) cl.newInstance();
 		drivers.put(drvClass, driver);
 		return driver;
@@ -334,7 +335,7 @@ public class RepositoryManager {
 	public static JRDataSource createFileDataSource(InputStream io, MFileDataSource datasource) {
 		JRCsvDataSource jrds = new JRCsvDataSource(io);
 		String p = (String) datasource.getPropertyValue(MFileDataSource.PROPERTY_RECORDDELIMITER);
-		String crlf = p.replace("\\r", "\r").replace("\\n", "\n").replace("\\t", "\t");
+		String crlf = p.replace("\\r", "\r").replace("\\n", "\n").replace("\\t", "\t"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		jrds.setRecordDelimiter(crlf);
 
 		char c = (Character) datasource.getPropertyValue(MFileDataSource.PROPERTY_COLUMNDELIMITER);
@@ -344,9 +345,9 @@ public class RepositoryManager {
 		jrds.setUseFirstRowAsHeader(b);
 
 		p = (String) datasource.getPropertyValue(MFileDataSource.PROPERTY_COLUMNNAMES);
-		if (p != null && !p.trim().equals("")) {
-			p = p.replaceAll(" ", "");
-			StringTokenizer st = new StringTokenizer(p, ",");
+		if (p != null && !p.trim().equals("")) { //$NON-NLS-1$
+			p = p.replaceAll(" ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			StringTokenizer st = new StringTokenizer(p, ","); //$NON-NLS-1$
 			List<String> cols = new ArrayList<String>();
 			while (st.hasMoreTokens()) {
 				String nextToken = st.nextToken();

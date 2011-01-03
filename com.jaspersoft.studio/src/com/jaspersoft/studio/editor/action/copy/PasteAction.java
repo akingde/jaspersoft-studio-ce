@@ -29,6 +29,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IPastable;
 
@@ -44,7 +45,7 @@ public class PasteAction extends SelectionAction {
 		super.init();
 
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-		setText(Messages.PasteAction_paste);
+		setText(Messages.common_paste);
 		setId(ActionFactory.PASTE.getId());
 		setHoverImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));

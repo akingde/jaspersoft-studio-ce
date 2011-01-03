@@ -42,6 +42,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class PatternPage extends WizardPage implements PropertyChangeListener {
 
 	private String value;
@@ -95,7 +97,7 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		list.setLayoutData(gd);
 
 		Group patternGroup = new Group(composite, SWT.NONE);
-		patternGroup.setText(" Pattern ");
+		patternGroup.setText(" " + Messages.common_pattern + " ");
 		gd = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.widthHint = 200;
 		patternGroup.setLayoutData(gd);
@@ -191,17 +193,17 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 
 	private void createNumberPatterns(Composite parent) {
 		if (numberPatterns) {
-			map.put("Number", new NumericPattern(parent));
-			map.put("Currency", new CurrencyPattern(parent));
-			map.put("Percentage", new PercentagePattern(parent));
-			map.put("Scientific", new ScientificPattern(parent));
+			map.put(Messages.PatternPage_number, new NumericPattern(parent));
+			map.put(Messages.PatternPage_currency, new CurrencyPattern(parent));
+			map.put(Messages.PatternPage_percentage, new PercentagePattern(parent));
+			map.put(Messages.PatternPage_scientific, new ScientificPattern(parent));
 		}
 	}
 
 	private void createDatePatterns(Composite parent) {
 		if (datePatterns) {
-			map.put("Date", new DatePattern(parent));
-			map.put("Time", new TimePattern(parent));
+			map.put(Messages.PatternPage_date, new DatePattern(parent));
+			map.put(Messages.PatternPage_time, new TimePattern(parent));
 		}
 	}
 

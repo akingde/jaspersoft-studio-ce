@@ -58,7 +58,7 @@ public class NResourceCellEditorValidator implements ICellEditorValidator {
 			// }
 			return null;
 		}
-		return "This is a not correct java Class";
+		return "This is a not correct java Class"; //$NON-NLS-1$
 	}
 
 }

@@ -33,6 +33,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -56,12 +57,12 @@ public class MFont extends APropertyNode {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		RWComboBoxPropertyDescriptor fontNameD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_NAME,
-				Messages.MFont_font_name, ModelUtils.getFontNames(), NullEnum.INHERITED);
+				Messages.common_font_name, ModelUtils.getFontNames(), NullEnum.INHERITED);
 		fontNameD.setDescription(Messages.MFont_font_name_description);
 		desc.add(fontNameD);
 
 		RWComboBoxPropertyDescriptor fontSizeD = new RWComboBoxPropertyDescriptor(JRBaseFont.PROPERTY_FONT_SIZE,
-				Messages.MFont_font_size, ModelUtils.getFontSizes(), NullEnum.INHERITED);
+				Messages.common_font_size, ModelUtils.getFontSizes(), NullEnum.INHERITED);
 		fontSizeD.setDescription(Messages.MFont_font_size_description);
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
@@ -76,23 +77,23 @@ public class MFont extends APropertyNode {
 		pdfEncodingD.setDescription(Messages.MFont_pdf_encoding_description);
 		desc.add(pdfEncodingD);
 
-		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_BOLD, Messages.MFont_bold,
+		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_BOLD, Messages.common_bold,
 				NullEnum.INHERITED);
 		boldD.setDescription(Messages.MFont_bold_description);
 		desc.add(boldD);
 
-		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_ITALIC, Messages.MFont_italic,
+		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_ITALIC, Messages.common_italic,
 				NullEnum.INHERITED);
 		italicD.setDescription(Messages.MFont_italic_description);
 		desc.add(italicD);
 
-		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_UNDERLINE, Messages.MFont_underline,
+		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_UNDERLINE, Messages.common_underline,
 				NullEnum.INHERITED);
 		underlineD.setDescription(Messages.MFont_underline_description);
 		desc.add(underlineD);
 
 		CheckBoxPropertyDescriptor strikeTroughD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_STRIKE_THROUGH,
-				Messages.MFont_strike_trough, NullEnum.INHERITED);
+				Messages.common_strike_trough, NullEnum.INHERITED);
 		strikeTroughD.setDescription(Messages.MFont_strike_trough_description);
 		desc.add(strikeTroughD);
 
@@ -108,15 +109,15 @@ public class MFont extends APropertyNode {
 		defaultsMap.put(JRBaseFont.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
 		defaultsMap.put(JRBaseFont.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
 
-		fontNameD.setCategory(Messages.MFont_font_category);
-		fontSizeD.setCategory(Messages.MFont_font_category);
-		pdfFontNameD.setCategory(Messages.MFont_font_category);
-		pdfEncodingD.setCategory(Messages.MFont_font_category);
-		boldD.setCategory(Messages.MFont_font_category);
-		italicD.setCategory(Messages.MFont_font_category);
-		underlineD.setCategory(Messages.MFont_font_category);
-		strikeTroughD.setCategory(Messages.MFont_font_category);
-		pdfEmbedD.setCategory(Messages.MFont_font_category);
+		fontNameD.setCategory(Messages.common_font);
+		fontSizeD.setCategory(Messages.common_font);
+		pdfFontNameD.setCategory(Messages.common_font);
+		pdfEncodingD.setCategory(Messages.common_font);
+		boldD.setCategory(Messages.common_font);
+		italicD.setCategory(Messages.common_font);
+		underlineD.setCategory(Messages.common_font);
+		strikeTroughD.setCategory(Messages.common_font);
+		pdfEmbedD.setCategory(Messages.common_font);
 
 	}
 

@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MExpression;
 
 public class JRExpressionPage extends WizardPage {
@@ -65,7 +66,7 @@ public class JRExpressionPage extends WizardPage {
 
 	protected JRExpressionPage(String pageName) {
 		super(pageName);
-		setTitle(Messages.JRExpressionPage_expression_editor);
+		setTitle(Messages.common_expression_editor);
 		setDescription(Messages.JRExpressionPage_description);
 	}
 
@@ -77,7 +78,7 @@ public class JRExpressionPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl1 = new Label(composite, SWT.NONE);
-		lbl1.setText(Messages.JRExpressionPage_value_class_name);
+		lbl1.setText(Messages.JRExpressionPage_value_class_name+":"); //$NON-NLS-1$
 
 		valuleClassCombo = new Combo(composite, SWT.DROP_DOWN | SWT.FLAT | SWT.BORDER);
 		valuleClassCombo.setItems(new String[] { "java.lang.Boolean", "java.lang.Byte", "java.util.Date", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -91,7 +92,7 @@ public class JRExpressionPage extends WizardPage {
 		});
 
 		Label lbl2 = new Label(composite, SWT.NONE);
-		lbl2.setText(Messages.JRExpressionPage_expression);
+		lbl2.setText(Messages.common_expression+":"); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		lbl2.setLayoutData(gd);

@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
 
@@ -53,7 +54,7 @@ public class ReorderStyleTemplateCommand extends Command {
 	 *          the new index
 	 */
 	public ReorderStyleTemplateCommand(MStyleTemplate child, MStyles parent, int newIndex) {
-		super(Messages.ReorderStyleTemplateCommand_reorder_elements);
+		super(Messages.common_reorder_elements);
 		this.newIndex = newIndex;
 		this.jrDesign = parent.getJasperDesign();
 		this.jrTemplate = (JRDesignReportTemplate) child.getValue();
