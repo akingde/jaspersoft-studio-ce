@@ -51,7 +51,6 @@ public class TableEditor extends AbstractVisualEditor {
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
-		getGraphicalViewer().getControl().setBackground(ColorConstants.button);
 
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		MainDesignerRootEditPart rootEditPart = new MainDesignerRootEditPart();

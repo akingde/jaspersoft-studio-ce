@@ -32,6 +32,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
+import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.table.model.column.MCell;
 import com.jaspersoft.studio.table.model.column.MColumn;

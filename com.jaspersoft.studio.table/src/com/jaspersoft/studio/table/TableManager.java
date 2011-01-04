@@ -20,6 +20,8 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.table.model.MTable;
@@ -40,6 +42,43 @@ public class TableManager {
 		init(table);
 	}
 
+	private Dimension size;
+
+	public Dimension getSize() {
+		return size;
+	}
+
+	public void setSize() {
+		int xmin = 0;
+		int xmax = 0;
+		int ymin = 0;
+		int ymax = 0;
+		for (Rectangle r : boundsMap.values()) {
+			if (xmin > r.x)
+				xmin = r.x;
+			if (xmax < r.x + r.width)
+				xmax = r.x + r.width;
+			if (ymin > r.y)
+				ymin = r.y;
+			if (ymax < r.y + r.height)
+				ymax = r.y + r.height;
+		}
+		size = new Dimension(xmax - xmin, ymax - ymin);
+	}
+
+	public Cell getCell(Point location) {
+		for (Cell cell : boundsMap.keySet()) {
+			Rectangle r = boundsMap.get(cell);
+			if (r.x <= location.x && r.x + r.width >= location.x && r.y <= location.y && r.y + r.height >= location.y)
+				return cell;
+		}
+		return null;
+	}
+
+	public Rectangle getCellBounds(Cell cell) {
+		return boundsMap.get(cell);
+	}
+
 	public void init(StandardTable table) {
 		boundsMap.clear();
 
@@ -49,7 +88,7 @@ public class TableManager {
 		Rectangle r = new Rectangle(0, 0, 0, 0);
 		for (BaseColumn bc : table.getColumns()) {
 			r = initHeader(r, bc, TableColumnSize.TABLE_HEADER, null);
-			r.setLocation(r.x , y);
+			r.setLocation(r.x, y);
 			if (h < r.height)
 				h = r.height;
 		}
@@ -117,6 +156,7 @@ public class TableManager {
 			r = initFooter(r, bc, TableColumnSize.TABLE_FOOTER, null);
 			r.setLocation(r.x, y);
 		}
+		setSize();
 	}
 
 	public static List<BaseColumn> getAllColumns(MTable mTable) {

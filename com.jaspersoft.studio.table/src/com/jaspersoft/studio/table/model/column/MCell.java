@@ -136,7 +136,8 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		styleD = new RWComboBoxPropertyDescriptor(DesignCell.PROPERTY_STYLE, Messages.MCell_parent_style, new String[] { "" }, //$NON-NLS-2$
+		styleD = new RWComboBoxPropertyDescriptor(DesignCell.PROPERTY_STYLE, Messages.MCell_parent_style,
+				new String[] { "" }, //$NON-NLS-2$
 				NullEnum.NULL);
 		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
@@ -221,7 +222,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 					mtable.getTableManager().setHeight(cell, height, (StandardBaseColumn) getValue(),
 							TableColumnSize.getType(classType), grName);
 
-//					cell.setHeight(height);
+					// cell.setHeight(height);
 					mtable.getTableManager().refresh();
 
 					// getPropertyChangeSupport().firePropertyChange(

@@ -38,6 +38,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
@@ -47,6 +48,7 @@ import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
@@ -54,6 +56,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.table.editor.TableEditor;
 import com.jaspersoft.studio.table.figure.CellFigure;
@@ -367,6 +370,24 @@ public class TableComponentFactory implements IComponentFactory {
 
 			if (parent instanceof IGroupElement) {
 				return new CreateTableCommand(parent, (MGraphicElement) child, location, newIndex);
+			}
+		}
+		if (parent instanceof MTable && child instanceof MGraphicElement) {
+			MTable mt = (MTable) parent;
+			final Cell cell = mt.getTableManager().getCell(location);
+			Rectangle r = mt.getTableManager().getCellBounds(cell);
+			location = location.setLocation(location.x - r.x, location.y - r.y);
+
+			if (cell != null) {
+				ModelVisitor mv = new ModelVisitor(parent) {
+					@Override
+					public void visit(INode n) {
+						if (n instanceof MCell && ((MCell) n).getCell() == cell)
+							setObject(n);
+					}
+				};
+				MCell mcell = (MCell) mv.getObject();
+				return new CreateElementCommand(mcell, (MGraphicElement) child, location);
 			}
 		}
 		return null;

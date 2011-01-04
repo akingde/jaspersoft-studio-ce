@@ -19,14 +19,15 @@
  */
 package com.jaspersoft.studio.table.figure;
 
+import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.XYLayout;
 
-import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+import com.jaspersoft.studio.editor.gef.figures.AElementBoundsFigure;
 
-public class TableFigure extends ComponentFigure {
+public class TableFigure extends AElementBoundsFigure {
 
 	/**
 	 * Instantiates a new text field figure.
@@ -45,7 +46,7 @@ public class TableFigure extends ComponentFigure {
 	 */
 	@Override
 	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		// drawVisitor.visitCrosstab((JRCrosstab) jrElement);
+		drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 	}
 
 }
