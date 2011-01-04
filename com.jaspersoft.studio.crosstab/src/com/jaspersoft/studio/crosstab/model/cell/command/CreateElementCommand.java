@@ -18,7 +18,7 @@ public class CreateElementCommand extends Command {
 
 	private Point location;
 
-	private int index;
+	private int index = -1;
 
 	/**
 	 * Instantiates a new creates the element command.
@@ -38,6 +38,14 @@ public class CreateElementCommand extends Command {
 		this.srcNode = srcNode;
 	}
 
+	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Point location) {
+		super();
+		this.jrElement = (JRDesignElement) srcNode.getValue();
+		this.jrCell = (JRDesignCellContents) destNode.getValue();
+		this.location = location;
+		this.srcNode = srcNode;
+	}
+
 	/**
 	 * Creates the object.
 	 */
@@ -50,8 +58,8 @@ public class CreateElementCommand extends Command {
 					location = new Point(0, 0);
 				jrElement.setX(location.x);
 				jrElement.setY(location.y);
-				jrElement.setWidth(jrCell.getWidth());
-				jrElement.setHeight(jrCell.getHeight());
+				jrElement.setWidth(Math.min(srcNode.getDefaultWidth(), jrCell.getWidth() - location.x));
+				jrElement.setHeight(Math.min(srcNode.getDefaultHeight(), jrCell.getHeight() - location.y));
 			}
 		}
 	}

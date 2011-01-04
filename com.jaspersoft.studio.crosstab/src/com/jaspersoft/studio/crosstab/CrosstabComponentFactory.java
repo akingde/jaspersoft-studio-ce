@@ -28,12 +28,14 @@ import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.JRCrosstabParameter;
 import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
@@ -98,6 +100,7 @@ import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.model.util.ReportFactory;
 
 public class CrosstabComponentFactory implements IComponentFactory {
@@ -318,6 +321,19 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 			if (parent instanceof IGroupElement) {
 				return new CreateCrosstabCommand(parent, (MGraphicElement) child, location, newIndex);
+			}
+		}
+		if (parent instanceof MCrosstab && child instanceof MGraphicElement) {
+			MCrosstab mt = (MCrosstab) parent;
+			final JRDesignCellContents cell = mt.getCrosstabManager().getCell(location);
+			if (cell != null) {
+				Rectangle r = mt.getCrosstabManager().getCellBounds(cell);
+				location = location.setLocation(location.x - r.x, location.y - r.y);
+
+				if (cell != null) {
+					MCell mcell = (MCell) ModelUtil.getNode(cell, mt);
+					return new CreateElementCommand(mcell, (MGraphicElement) child, location);
+				}
 			}
 		}
 		return null;

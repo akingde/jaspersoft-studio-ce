@@ -27,6 +27,8 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.AbstractHandle;
 
+import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
+
 /**
  * The Class BandResizableEditPolicy.
  */

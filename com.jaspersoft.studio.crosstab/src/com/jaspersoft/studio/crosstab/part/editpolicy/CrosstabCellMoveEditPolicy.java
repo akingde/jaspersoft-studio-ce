@@ -33,6 +33,7 @@ import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.crosstab.model.cell.MCell;
+import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**

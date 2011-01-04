@@ -19,15 +19,15 @@
  */
 package com.jaspersoft.studio.crosstab.figure;
 
-import org.eclipse.draw2d.XYLayout;
-
 import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
-import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+import org.eclipse.draw2d.XYLayout;
 
-public class CrosstabFigure extends ComponentFigure {
+import com.jaspersoft.studio.editor.gef.figures.AElementBoundsFigure;
+
+public class CrosstabFigure extends AElementBoundsFigure {
 
 	/**
 	 * Instantiates a new text field figure.

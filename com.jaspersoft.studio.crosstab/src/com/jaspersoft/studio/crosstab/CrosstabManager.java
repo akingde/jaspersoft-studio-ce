@@ -16,6 +16,8 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 public class CrosstabManager {
@@ -32,6 +34,43 @@ public class CrosstabManager {
 	public void refresh() {
 		crosstab.preprocess();
 		init(crosstab);
+	}
+
+	private Dimension size;
+
+	public Dimension getSize() {
+		return size;
+	}
+
+	public void setSize() {
+		int xmin = 0;
+		int xmax = 0;
+		int ymin = 0;
+		int ymax = 0;
+		for (Rectangle r : boundsMap.values()) {
+			if (xmin > r.x)
+				xmin = r.x;
+			if (xmax < r.x + r.width)
+				xmax = r.x + r.width;
+			if (ymin > r.y)
+				ymin = r.y;
+			if (ymax < r.y + r.height)
+				ymax = r.y + r.height;
+		}
+		size = new Dimension(xmax - xmin, ymax - ymin);
+	}
+
+	public JRDesignCellContents getCell(Point location) {
+		for (JRDesignCellContents cell : boundsMap.keySet()) {
+			Rectangle r = boundsMap.get(cell);
+			if (r.x <= location.x && r.x + r.width >= location.x && r.y <= location.y && r.y + r.height >= location.y)
+				return cell;
+		}
+		return null;
+	}
+
+	public Rectangle getCellBounds(JRDesignCellContents cell) {
+		return boundsMap.get(cell);
 	}
 
 	public void init(JRDesignCrosstab crosstab) {
@@ -152,6 +191,7 @@ public class CrosstabManager {
 				r.setLocation(cwidth - r.x - r.width + crosstab.getX(), r.y);
 			}
 		}
+		setSize();
 	}
 
 	public void setCellRow(int y, String rowTotal) {

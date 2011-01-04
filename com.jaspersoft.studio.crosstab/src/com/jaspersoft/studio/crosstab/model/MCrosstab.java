@@ -388,11 +388,10 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 		} else if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_CELLS)) {
 			if (evt.getSource() == getValue() && getValue() != null && !flagRefreshCells) {
 				flagRefreshCells = true;
-				final CrosstabComponentFactory crosstabComponentFactory = new CrosstabComponentFactory();
-				crosstabComponentFactory.deleteCellNodes(MCrosstab.this);
+				CrosstabComponentFactory.deleteCellNodes(MCrosstab.this);
 				Display.getCurrent().asyncExec(new Runnable() {
 					public void run() {
-						crosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), MCrosstab.this);
+						CrosstabComponentFactory.createCellNodes((JRDesignCrosstab) getValue(), MCrosstab.this);
 						flagRefreshCells = false;
 						MCrosstab.super.propertyChange(evt);
 					}
