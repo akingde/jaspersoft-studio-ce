@@ -16,4 +16,15 @@ public abstract class ModelVisitor {
 	}
 
 	public abstract void visit(INode n);
+
+	private Object object;
+
+	public Object getObject() {
+		return object;
+	}
+
+	public void setObject(Object object) {
+		this.object = object;
+	}
+
 }

@@ -30,6 +30,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
@@ -192,7 +193,7 @@ public class MPage extends APropertyNode implements IGraphicElement, IContainerE
 	 * @see com.jaspersoft.studio.model.IGraphicElement#getBounds()
 	 */
 	public Rectangle getBounds() {
-		return new Rectangle(0, 0, 300, 400);
+		return new Rectangle(PageFigure.PAGE_BORDER.left, PageFigure.PAGE_BORDER.top, 300, 400);
 	}
 
 }

@@ -394,7 +394,9 @@ public class BordersSection extends AbstractSection {
 			Set<String> keys = pMap.keySet();
 			for (String key : keys) {
 				Integer padding = (Integer) lb.getPropertyValue(key);
-				pMap.get(key).setSelection(padding != null ? padding : 0);
+				Spinner spinner = pMap.get(key);
+				if (spinner != null && !spinner.isDisposed())
+					spinner.setSelection(padding != null ? padding : 0);
 			}
 		}
 	}
@@ -409,20 +411,23 @@ public class BordersSection extends AbstractSection {
 
 			Float propertyValue = (Float) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
 			Spinner lineWidth = lineWidthMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_WIDTH); //$NON-NLS-1$
-			if (propertyValue != null)
-				lineWidth.setSelection((int) (propertyValue.doubleValue() * Math.pow(10, 1)));
-			else
-				lineWidth.setSelection(0);
+			if (lineWidth != null && !lineWidth.isDisposed())
+				if (propertyValue != null)
+					lineWidth.setSelection((int) (propertyValue.doubleValue() * Math.pow(10, 1)));
+				else
+					lineWidth.setSelection(0);
 
 			CCombo lineStyle = lineStyleMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_STYLE); //$NON-NLS-1$
-			lineStyle.select(((Integer) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
+			if (lineStyle != null && !lineStyle.isDisposed())
+				lineStyle.select(((Integer) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
 
 			RGB backcolor = (RGB) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
 			Button lineColor = lineColorMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_COLOR); //$NON-NLS-1$
-			if (backcolor != null)
-				lineColor.setImage(colorLabelProvider.getImage(backcolor));
-			else
-				lineColor.setImage(null);
+			if (lineColor != null && !lineColor.isDisposed())
+				if (backcolor != null)
+					lineColor.setImage(colorLabelProvider.getImage(backcolor));
+				else
+					lineColor.setImage(null);
 		}
 	}
 

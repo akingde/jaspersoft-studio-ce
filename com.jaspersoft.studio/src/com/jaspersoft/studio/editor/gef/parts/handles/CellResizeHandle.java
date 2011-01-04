@@ -17,43 +17,59 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.gef.parts.editPolicy;
+package com.jaspersoft.studio.editor.gef.parts.handles;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.Cursors;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.AbstractHandle;
 
-import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
-
 /**
- * The Class BandResizableEditPolicy.
+ * The Class BandResizeHandle.
  */
-public class BandResizableEditPolicy extends ResizableEditPolicy {
+public class CellResizeHandle extends AbstractHandle {
+
+	/** The tracker. */
+	CellResizeTracker tracker = null;
 
 	/**
-	 * Instantiates a new band resizable edit policy.
+	 * Constructor for SectionResizeHandle.
+	 * 
+	 * @param owner
+	 *          the owner
 	 */
-	public BandResizableEditPolicy() {
-		super();
-		setDragAllowed(false);
+	public CellResizeHandle(GraphicalEditPart owner, int position) {
+		super(owner, new CellHandleLocator(owner.getFigure(), position));
+		initialize();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.ResizableEditPolicy#createSelectionHandles()
+	 * @see org.eclipse.gef.handles.AbstractHandle#createDragTracker()
 	 */
-	@Override
-	protected List createSelectionHandles() {
-		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
+	protected DragTracker createDragTracker() {
+		if (tracker == null) {
+			tracker = new CellResizeTracker(getOwner());
+		}
+		return tracker;
+	}
 
-		return list;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.gef.handles.AbstractHandle#getDragTracker()
+	 */
+	public DragTracker getDragTracker() {
+		return createDragTracker();
+	}
+
+	/**
+	 * Initializes the handle. Sets the {@link DragTracker} and DragCursor.
+	 */
+	protected void initialize() {
+		setOpaque(false);
+		setCursor(Cursors.SIZES);
 	}
 
 }

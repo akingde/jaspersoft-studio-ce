@@ -32,6 +32,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -41,21 +42,20 @@ import org.eclipse.gef.SnapToGeometry;
 import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.figures.PageFigure;
-import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
-import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -126,10 +126,10 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
 				PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, "shadow", null); //$NON-NLS-1$
 
-		if (pref.equals("shadow")) //$NON-NLS-1$
-			rect.setBorder(new ShadowBorder());
-		else
-			rect.setBorder(new SimpleShadowBorder());
+		//		if (pref.equals("shadow")) //$NON-NLS-1$
+		// rect.setBorder(new ShadowBorder());
+		// else
+		// rect.setBorder(new SimpleShadowBorder());
 	}
 
 	/**
@@ -233,7 +233,13 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PageLayoutEditPolicy() {
+			protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
+				Rectangle r = (Rectangle) constraint;
+				r.setLocation(r.x - PageFigure.PAGE_BORDER.left, r.y - PageFigure.PAGE_BORDER.top);
+				return super.createChangeConstraintCommand(request, child, constraint);
+			}
+		});
 		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$
 	}
 
@@ -316,8 +322,8 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 *          the figure2
 	 */
 	private void setupPageFigure(JasperDesign jd, PageFigure figure2) {
-		int w = 200;// jd.getPageWidth() + 20;
-		int h = 500;// designHeight + 10;
+		int w = 2000;// jd.getPageWidth() + 20;
+		int h = 5000;// designHeight + 10;
 
 		figure2.setSize(w, h);
 

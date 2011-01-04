@@ -39,6 +39,7 @@ import org.eclipse.gef.rulers.RulerProvider;
 
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
+import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;

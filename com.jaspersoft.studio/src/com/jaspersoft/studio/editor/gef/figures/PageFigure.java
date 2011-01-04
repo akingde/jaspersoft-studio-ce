@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
@@ -53,9 +51,6 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 	/** The jr design. */
 	private JasperDesign jrDesign = null;
 
-	/** The bands height. */
-	private int bandsHeight = 300;
-
 	private GridLayer grid = new GridLayer();
 
 	/**
@@ -81,26 +76,6 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 		this.viewMargins = viewMargins;
 	}
 
-	/**
-	 * Sets the band number.
-	 * 
-	 * @param bands
-	 *          the new band number
-	 */
-	public void setBandNumber(int bands) {
-		// this.bands = bands;
-	}
-
-	/**
-	 * Sets the bands height.
-	 * 
-	 * @param bandsHeight
-	 *          the new bands height
-	 */
-	public void setBandsHeight(int bandsHeight) {
-		this.bandsHeight = bandsHeight;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -114,8 +89,8 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 			clientArea.x -= dx;
 			clientArea.y -= dy;
 
-			int pageWidth = jrDesign.getPageWidth();
-			int pageHeight = bandsHeight;// + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
+			int pageWidth = getSize().width;
+			int pageHeight = getSize().height;// + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
 
 			int leftMargin = PAGE_BORDER.left;
 			int rightMargin = PAGE_BORDER.right;
@@ -136,14 +111,6 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 			graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, g.getAbsoluteScale()));
 
 			paintGrid(g, rectangle);
-
-			// graphics2d.setColor(Color.RED);
-			//
-			// graphics2d.setStroke(new BasicStroke(0.5f));
-			// g.drawLine(clientArea.x, clientArea.y + topMargin, clientArea.x + pageWidth, clientArea.y + topMargin);
-			// g.drawLine(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y);
-			// g.drawLine(topRight.x, topRight.y, bottomRight.x, bottomRight.y);
-			// graphics2d.setStroke(oldStroke);
 		}
 		if (getBorder() != null)
 			getBorder().paint(this, g, NO_INSETS);
@@ -183,8 +150,8 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 		clientArea.x -= dx;
 		clientArea.y -= dy;
 
-		int pageWidth = jrDesign.getPageWidth();
-		int pageHeight = bandsHeight;// + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
+		int pageWidth = getSize().width;
+		int pageHeight = getSize().height;// + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
 		Insets insets = getInsets();
 		return new Rectangle(clientArea.x - insets.right, clientArea.y - insets.top,
 				pageWidth + insets.left + insets.right, pageHeight + insets.top + insets.bottom);

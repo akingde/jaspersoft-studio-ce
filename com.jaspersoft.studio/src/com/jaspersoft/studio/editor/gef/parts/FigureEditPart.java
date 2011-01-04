@@ -138,7 +138,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 * @param rect
 	 *          the new up figure
 	 */
-	private void setupFigure(IFigure rect) {
+	protected void setupFigure(IFigure rect) {
 		ANode model = (ANode) getModel();
 		if (model instanceof IGraphicElement && model.getValue() != null) {
 			Rectangle bounds = ((IGraphicElement) model).getBounds();

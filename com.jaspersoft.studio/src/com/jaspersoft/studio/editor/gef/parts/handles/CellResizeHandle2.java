@@ -17,43 +17,45 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.gef.parts.editPolicy;
+package com.jaspersoft.studio.editor.gef.parts.handles;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.editpolicies.ResizableEditPolicy;
-import org.eclipse.gef.handles.AbstractHandle;
-
-import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
+import org.eclipse.gef.handles.ResizeHandle;
+import org.eclipse.swt.graphics.Color;
 
 /**
- * The Class BandResizableEditPolicy.
+ * The Class BandResizeHandle2.
  */
-public class BandResizableEditPolicy extends ResizableEditPolicy {
+public class CellResizeHandle2 extends ResizeHandle {
+
+	/** The tracker. */
+	CellResizeTracker tracker = null;
 
 	/**
-	 * Instantiates a new band resizable edit policy.
+	 * Constructor for SectionResizeHandle.
+	 * 
+	 * @param owner
+	 *          the owner
+	 * @param direction
+	 *          the direction
 	 */
-	public BandResizableEditPolicy() {
-		super();
-		setDragAllowed(false);
+	public CellResizeHandle2(GraphicalEditPart owner, int direction) {
+		super(owner, direction);
+		setLocator(new CellResizeHandleLocator(owner.getFigure(), direction));
+		setPreferredSize(5, 5);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.ResizableEditPolicy#createSelectionHandles()
+	 * @see org.eclipse.gef.handles.SquareHandle#getFillColor()
 	 */
 	@Override
-	protected List createSelectionHandles() {
-		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
-
-		return list;
+	protected Color getFillColor() {
+		if (getOwner().getFigure().getBounds().height == 0)
+			return ColorConstants.red;
+		return super.getFillColor();
 	}
 
 }
