@@ -19,24 +19,15 @@
  */
 package com.jaspersoft.studio.table.part;
 
-import net.sf.jasperreports.components.table.DesignCell;
-import net.sf.jasperreports.components.table.StandardBaseColumn;
-
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
-import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.table.model.column.MCell;
-import com.jaspersoft.studio.table.model.column.MColumn;
 import com.jaspersoft.studio.table.part.editpolicy.TableCellContainerEditPolicy;
 import com.jaspersoft.studio.table.part.editpolicy.TableCellMoveEditPolicy;
 import com.jaspersoft.studio.table.part.editpolicy.TableCellResizableEditPolicy;
@@ -70,38 +61,6 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 
 	public EditPolicy getEditPolicy() {
 		return new TableCellResizableEditPolicy();
-	}
-
-	public Command createChangeConstraintCommand(EditPart child, Object constraint) {
-		MColumn model = (MColumn) child.getModel();
-		StandardBaseColumn jrdesign = (StandardBaseColumn) model.getValue();
-		Rectangle delta = (Rectangle) constraint;
-
-		CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
-		if (delta.height != 0 && model instanceof MCell) {
-			MCell mc = (MCell) model;
-			int height = (Integer) mc.getPropertyValue(DesignCell.PROPERTY_HEIGHT) + delta.height;
-			if (height < 0)
-				height = 0;
-
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setTarget(model);
-			setCommand.setPropertyId(DesignCell.PROPERTY_HEIGHT);
-			setCommand.setPropertyValue(height);
-			c.add(setCommand);
-		}
-		if (delta.width != 0) {
-			int width = jrdesign.getWidth() + delta.width;
-			if (width < 0)
-				width = 0;
-
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setTarget(model);
-			setCommand.setPropertyId(StandardBaseColumn.PROPERTY_WIDTH);
-			setCommand.setPropertyValue(width);
-			c.add(setCommand);
-		}
-		return c;
 	}
 
 	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {

@@ -87,6 +87,8 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	public boolean understandsRequest(Request request) {
 		if (REQ_RESIZE.equals(request.getType()))
 			return true;
+		if (REQ_MOVE.equals(request.getType()))
+			return true;
 		return false;
 	}
 
@@ -133,6 +135,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 */
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
 		if (request.getResizeDirection() == PositionConstants.SOUTH
+				|| request.getResizeDirection() == PositionConstants.SOUTH_EAST
 				|| request.getResizeDirection() == PositionConstants.EAST) {
 			MColumn model = (MColumn) getHost().getModel();
 			StandardBaseColumn jrdesign = (StandardBaseColumn) model.getValue();
