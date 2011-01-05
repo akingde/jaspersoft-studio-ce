@@ -132,6 +132,7 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 */
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
 		if (request.getResizeDirection() == PositionConstants.SOUTH
+				|| request.getResizeDirection() == PositionConstants.SOUTH_EAST
 				|| request.getResizeDirection() == PositionConstants.EAST) {
 			MCell mBand = (MCell) getHost().getModel();
 

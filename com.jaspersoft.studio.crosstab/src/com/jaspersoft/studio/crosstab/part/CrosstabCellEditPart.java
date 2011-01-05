@@ -19,26 +19,18 @@
  */
 package com.jaspersoft.studio.crosstab.part;
 
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
-
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellContainerEditPolicy;
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellMoveEditPolicy;
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
-import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -69,36 +61,6 @@ public class CrosstabCellEditPart extends FigureEditPart implements IContainerPa
 
 	public EditPolicy getEditPolicy() {
 		return new CrosstabCellResizableEditPolicy();
-	}
-
-	public Command createChangeConstraintCommand(EditPart child, Object constraint) {
-		MCell model = (MCell) child.getModel();
-		JRDesignCellContents jrdesign = (JRDesignCellContents) model.getValue();
-		Rectangle delta = (Rectangle) constraint;
-		int height = jrdesign.getHeight() + delta.height;
-		if (height < 0)
-			height = 0;
-
-		int width = jrdesign.getWidth() + delta.width;
-		if (width < 0)
-			width = 0;
-
-		CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
-		if (delta.height != 0) {
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setTarget(model);
-			setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_HEIGHT);
-			setCommand.setPropertyValue(height);
-			c.add(setCommand);
-		}
-		if (delta.width != 0) {
-			SetValueCommand setCommand = new SetValueCommand();
-			setCommand.setTarget(model);
-			setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_WIDTH);
-			setCommand.setPropertyValue(width);
-			c.add(setCommand);
-		}
-		return c;
 	}
 
 	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {

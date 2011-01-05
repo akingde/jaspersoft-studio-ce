@@ -22,8 +22,8 @@ public class CrosstabEditPart extends EditableFigureEditPart {
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new CrosstabLayoutEditPolicy());
-		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$
+//		installEditPolicy(EditPolicy.LAYOUT_ROLE, new CrosstabLayoutEditPolicy());
+//		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$
 	}
 
 	@Override
