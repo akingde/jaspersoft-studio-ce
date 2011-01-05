@@ -23,18 +23,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PrecisionPoint;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.gef.AutoexposeHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ViewportAutoexposeHelper;
+import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.tools.AbstractTool;
 import org.eclipse.gef.tools.SimpleDragTracker;
 import org.eclipse.gef.tools.ToolUtilities;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -47,6 +56,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 
 	/** The expose helper. */
 	private AutoexposeHelper exposeHelper;
+	private SnapToHelper snapToHelper;
 
 	/*
 	 * (non-Javadoc)
@@ -56,6 +66,9 @@ public class BandResizeTracker extends SimpleDragTracker {
 	public void deactivate() {
 		super.deactivate();
 		setAutoexposeHelper(null);
+		snapToHelper = null;
+		sourceRectangle = null;
+		compoundSrcRect = null;
 	}
 
 	/**
@@ -175,6 +188,9 @@ public class BandResizeTracker extends SimpleDragTracker {
 	 */
 	protected void setSourceEditPart(EditPart part) {
 		this.editpart = part;
+		snapToHelper = null;
+		if (editpart != null && getOperationSet().size() > 0)
+			snapToHelper = (SnapToHelper) editpart.getParent().getAdapter(SnapToHelper.class);
 	}
 
 	/*
@@ -185,12 +201,13 @@ public class BandResizeTracker extends SimpleDragTracker {
 	protected List createOperationSet() {
 		List<EditPart> editparts = null;
 		if (editpart == null) {
-			editparts = Collections.EMPTY_LIST;
+			editparts = Collections.emptyList();
 		} else {
 			editparts = new ArrayList<EditPart>();
 			editparts.add(editpart);
 			ToolUtilities.filterEditPartsUnderstanding(editparts, getSourceRequest());
 		}
+
 		return editparts;
 	}
 
@@ -215,13 +232,87 @@ public class BandResizeTracker extends SimpleDragTracker {
 
 		Dimension d = getDragMoveDelta();
 
-		Point location = new Point(getLocation());
-		Point p = new Point(0, 0);
-		p.y = d.height;
-
 		request.setSizeDelta(new Dimension(0, d.height));
-		request.setLocation(location);
 		request.setEditParts(getOperationSet());
+		request.setResizeDirection(PositionConstants.SOUTH);
+
+		snapPoint(request);
+
+		request.setLocation(getLocation());
+	}
+
+	@Override
+	protected void setState(int state) {
+		super.setState(state);
+		captureSourceDimensions();
+	}
+
+	private PrecisionRectangle sourceRectangle, compoundSrcRect;
+
+	/**
+	 * Captures the bounds of the source being dragged, and the unioned bounds of all figures being dragged. These bounds
+	 * are used for snapping by the snap strategies in <code>updateTargetRequest()</code>.
+	 */
+	private void captureSourceDimensions() {
+		List editparts = getOperationSet();
+		for (int i = 0; i < editparts.size(); i++) {
+			GraphicalEditPart child = (GraphicalEditPart) editparts.get(i);
+			IFigure figure = child.getFigure();
+			PrecisionRectangle bounds = null;
+			if (figure instanceof HandleBounds)
+				bounds = new PrecisionRectangle(((HandleBounds) figure).getHandleBounds());
+			else
+				bounds = new PrecisionRectangle(figure.getBounds());
+			figure.translateToAbsolute(bounds);
+
+			if (compoundSrcRect == null)
+				compoundSrcRect = new PrecisionRectangle(bounds);
+			else
+				compoundSrcRect = compoundSrcRect.union(bounds);
+			if (child == getSourceEditPart())
+				sourceRectangle = bounds;
+		}
+		if (sourceRectangle == null) {
+			IFigure figure = ((GraphicalEditPart) getSourceEditPart()).getFigure();
+			if (figure instanceof HandleBounds)
+				sourceRectangle = new PrecisionRectangle(((HandleBounds) figure).getHandleBounds());
+			else
+				sourceRectangle = new PrecisionRectangle(figure.getBounds());
+			figure.translateToAbsolute(sourceRectangle);
+		}
+	}
+
+	static final int MODIFIER_NO_SNAPPING;
+	static {
+		if (Platform.OS_MACOSX.equals(Platform.getOS())) {
+			MODIFIER_NO_SNAPPING = SWT.CTRL;
+		} else {
+			MODIFIER_NO_SNAPPING = SWT.ALT;
+		}
+	}
+
+	/**
+	 * This method can be overridden by clients to customize the snapping behavior.
+	 * 
+	 * @param request
+	 *          the <code>ChangeBoundsRequest</code> from which the move delta can be extracted and updated
+	 * @since 3.4
+	 */
+	protected void snapPoint(ChangeBoundsRequest request) {
+		Point moveDelta = request.getMoveDelta();
+		if (editpart != null && getOperationSet().size() > 0)
+			snapToHelper = (SnapToHelper) editpart.getParent().getAdapter(SnapToHelper.class);
+		if (snapToHelper != null && !getCurrentInput().isModKeyDown(MODIFIER_NO_SNAPPING)) {
+			PrecisionRectangle baseRect = sourceRectangle.getPreciseCopy();
+			PrecisionRectangle jointRect = compoundSrcRect.getPreciseCopy();
+			baseRect.translate(moveDelta);
+			jointRect.translate(moveDelta);
+
+			PrecisionPoint preciseDelta = new PrecisionPoint(moveDelta);
+			snapToHelper.snapPoint(request, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL,
+					new PrecisionRectangle[] { baseRect, jointRect }, preciseDelta);
+			request.setMoveDelta(preciseDelta);
+		}
 	}
 
 	/*

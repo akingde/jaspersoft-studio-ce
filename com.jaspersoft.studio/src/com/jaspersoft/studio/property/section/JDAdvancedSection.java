@@ -73,12 +73,13 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 			Assert.isTrue(input instanceof EditPart);
 			Object model = ((EditPart) input).getModel();
 			Assert.isTrue(model instanceof APropertyNode);
+			if (getEditDomain() != null) {
+				JRPropertySheetEntry propertySheetEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(),
+						(ANode) model);
+				page.setRootEntry(propertySheetEntry);
 
-			JRPropertySheetEntry propertySheetEntry = new JRPropertySheetEntry(getEditDomain().getCommandStack(),
-					(ANode) model);
-			page.setRootEntry(propertySheetEntry);
-
-			this.element = (APropertyNode) model;
+				this.element = (APropertyNode) model;
+			}
 		}
 	}
 
@@ -94,7 +95,8 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeShown()
 	 */
 	public void aboutToBeShown() {
-		getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+		if (getElement() != null)
+			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
 	}
 
 	/**

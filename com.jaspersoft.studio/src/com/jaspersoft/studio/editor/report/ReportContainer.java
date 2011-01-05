@@ -204,8 +204,8 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 					ccMap.put(node.getValue(), ave);
 					ave.setModel(root);
 					AbstractVisualEditor mainave = getMainEditor();
-					if (mainave != null)
-						ave.getEditDomain().setCommandStack(mainave.getEditDomain().getCommandStack());
+//					if (mainave != null)
+//						ave.getEditDomain().setCommandStack(mainave.getEditDomain().getCommandStack());
 
 				}
 			}

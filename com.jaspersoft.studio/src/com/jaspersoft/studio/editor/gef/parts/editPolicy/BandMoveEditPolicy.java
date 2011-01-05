@@ -224,7 +224,7 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 
 			getFeedbackLayer().translateToRelative(moveDelta);
 
-			moveDelta.y = moveDelta.y - originalYLocation;
+			// moveDelta.y = moveDelta.y - originalYLocation;
 			moveDelta.x = 0;
 
 			// The request delta is in absolute coordinates. We need to translate the
@@ -342,8 +342,8 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 	 * @return the resize command
 	 */
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
-		if (request.getResizeDirection() == PositionConstants.SOUTH
-				|| request.getResizeDirection() == PositionConstants.NORTH) {
+		if (request.getSizeDelta().height != 0
+				&& (request.getResizeDirection() == PositionConstants.SOUTH || request.getResizeDirection() == PositionConstants.NORTH)) {
 			MBand mBand = (MBand) getHost().getModel();
 			if (request.getResizeDirection() == PositionConstants.NORTH) {
 				// change band upper
@@ -355,12 +355,10 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 						break;
 					}
 				}
-			} else if (request.getResizeDirection() == PositionConstants.NORTH) {
-				if (request.getMoveDelta().y < 0)
-					return null;
+				request.getSizeDelta().height = -request.getSizeDelta().height;
 			}
 			JRDesignBand jrdesign = (JRDesignBand) mBand.getValue();
-			int height = jrdesign.getHeight() + request.getMoveDelta().y;
+			int height = jrdesign.getHeight() + request.getSizeDelta().height;
 			if (height < 0)
 				height = 0;
 

@@ -44,6 +44,7 @@ import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractEditPart;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.rulers.RulerProvider;
@@ -53,7 +54,6 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
 import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
-import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -239,6 +239,19 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 				r.setLocation(r.x - PageFigure.PAGE_BORDER.left, r.y - PageFigure.PAGE_BORDER.top);
 				return super.createChangeConstraintCommand(request, child, constraint);
 			}
+
+			@Override
+			public Command getCommand(Request request) {
+				if (request instanceof ChangeBoundsRequest) {
+					if (request.getType() == REQ_MOVE || request.getType() == REQ_MOVE_CHILDREN) {
+						for (Object obj : ((ChangeBoundsRequest) request).getEditParts()) {
+							if (obj instanceof EditableFigureEditPart)
+								return null;
+						}
+					}
+				}
+				return super.getCommand(request);
+			}
 		});
 		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$
 	}
@@ -278,10 +291,10 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 	 */
 	@Override
 	protected void addChildVisual(EditPart childEditPart, int index) {
-		if (childEditPart instanceof BandEditPart) {
+		if (childEditPart instanceof IContainerPart) {
 			IFigure layer = getLayer(MainDesignerRootEditPart.SECTIONS_LAYER);
 			if (layer != null) {
-				layer.add(((BandEditPart) childEditPart).getFigure());
+				layer.add(((AbstractGraphicalEditPart) childEditPart).getFigure());
 			}
 		} else if (childEditPart instanceof FigureEditPart) {
 			IFigure layer = getLayer(MainDesignerRootEditPart.ELEMENTS_LAYER);

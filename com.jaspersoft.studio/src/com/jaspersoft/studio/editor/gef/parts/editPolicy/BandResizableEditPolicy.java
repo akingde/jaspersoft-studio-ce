@@ -27,7 +27,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.AbstractHandle;
 
-import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
+import com.jaspersoft.studio.editor.gef.parts.band.BandResizeHandle2;
 
 /**
  * The Class BandResizableEditPolicy.
@@ -50,8 +50,8 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 	@Override
 	protected List createSelectionHandles() {
 		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
+		list.add(new BandResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
+		list.add(new BandResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
 
 		return list;
 	}

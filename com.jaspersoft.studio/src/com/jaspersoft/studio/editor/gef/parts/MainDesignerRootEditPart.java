@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.GridLayer;
@@ -75,20 +74,12 @@ public class MainDesignerRootEditPart extends ScalableFreeformRootEditPart {
 	protected ScalableFreeformLayeredPane createScaledLayers() {
 		ScalableFreeformLayeredPane layers = new J2DScalableFreeformLayeredPane();
 		// layers.add(createGridLayer(), GRID_LAYER);
-		LayeredPane printableLayers = getPrintableLayers();
 
-		layers.add(printableLayers, PRINTABLE_LAYERS);
+		layers.add(getPrintableLayers(), PRINTABLE_LAYERS);
 		layers.add(new FeedbackLayer(), SCALED_FEEDBACK_LAYER);
-
-		FreeformLayer reportLayer = new FreeformLayer();
-		layers.add(reportLayer, REPORT_LAYER);
-		// reportLayer.add(createGridLayer(), GRID_LAYER);
-
-		FreeformLayer sectionsLayer = new FreeformLayer();
-		layers.add(sectionsLayer, SECTIONS_LAYER);
-
-		FreeformLayer elementsLayer = new FreeformLayer();
-		layers.add(elementsLayer, ELEMENTS_LAYER);
+		layers.add(new FreeformLayer(), REPORT_LAYER);
+		layers.add(new FreeformLayer(), SECTIONS_LAYER);
+		layers.add(new FreeformLayer(), ELEMENTS_LAYER);
 
 		return layers;
 	}
@@ -99,6 +90,13 @@ public class MainDesignerRootEditPart extends ScalableFreeformRootEditPart {
 			IFigure layer = getLayer(MainDesignerRootEditPart.REPORT_LAYER);
 			if (layer != null) {
 				IFigure pageFigure = ((ReportPageEditPart) childEditPart).getFigure();
+				layer.add(pageFigure);
+			}
+		}
+		if (childEditPart instanceof PageEditPart) {
+			IFigure layer = getLayer(MainDesignerRootEditPart.REPORT_LAYER);
+			if (layer != null) {
+				IFigure pageFigure = ((PageEditPart) childEditPart).getFigure();
 				layer.add(pageFigure);
 			}
 		}

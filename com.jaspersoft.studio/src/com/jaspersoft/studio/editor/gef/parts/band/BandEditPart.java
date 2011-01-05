@@ -31,10 +31,8 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
@@ -46,7 +44,6 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandMoveEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -155,7 +152,8 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener,
 		// int width = jasperDesign.getPageWidth() + PageFigure.PAGE_BORDER.left + 1;
 		int width = jasperDesign.getPageWidth() + 1;
 		int height = jrBand != null ? jrBand.getHeight() + 1 : 0;
-		rect.setBounds(new Rectangle(ReportPageFigure.PAGE_BORDER.left, bounds.y + ReportPageFigure.PAGE_BORDER.top, width, height));
+		rect.setBounds(new Rectangle(ReportPageFigure.PAGE_BORDER.left, bounds.y + ReportPageFigure.PAGE_BORDER.top, width,
+				height));
 		// rect.setBounds(new Rectangle(0, bounds.y + PageFigure.PAGE_BORDER.top, width, height));
 	}
 
@@ -170,19 +168,6 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener,
 
 	public EditPolicy getEditPolicy() {
 		return new BandResizableEditPolicy();
-	}
-
-	public Command createChangeConstraintCommand(EditPart child, Object constraint) {
-		MBand model = (MBand) child.getModel();
-		JRDesignBand jrdesign = (JRDesignBand) model.getValue();
-		int height = jrdesign.getHeight() + ((Rectangle) constraint).height;
-		if (height < 0)
-			height = 0;
-		SetValueCommand setCommand = new SetValueCommand();
-		setCommand.setTarget(model);
-		setCommand.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
-		setCommand.setPropertyValue(height);
-		return setCommand;
 	}
 
 	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {

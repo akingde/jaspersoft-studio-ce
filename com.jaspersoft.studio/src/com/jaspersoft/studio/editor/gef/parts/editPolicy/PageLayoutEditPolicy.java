@@ -39,7 +39,6 @@ import org.eclipse.gef.rulers.RulerProvider;
 
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
-import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
@@ -95,9 +94,9 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	@Override
 	protected Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {
-		if (child instanceof IContainerPart) {
-			return ((IContainerPart) child).getConstraintFor(request, child);
-		}
+		// if (child instanceof IContainerPart) {
+		// return ((IContainerPart) child).getConstraintFor(request, child);
+		// }
 		// If we are dragging a band, we need to check the bounds and suggest a
 		// proper
 		// new location accordingly with the max and min band size.
@@ -173,9 +172,9 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	@Override
 	protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
-		if (child instanceof IContainerPart) {
-			return ((IContainerPart) child).createChangeConstraintCommand(child, constraint);
-		}
+		// if (child instanceof IContainerPart) {
+		// return ((IContainerPart) child).createChangeConstraintCommand(child, constraint);
+		// }
 		SetConstraintCommand cmd = new SetConstraintCommand();
 		cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), (Rectangle) constraint);
 

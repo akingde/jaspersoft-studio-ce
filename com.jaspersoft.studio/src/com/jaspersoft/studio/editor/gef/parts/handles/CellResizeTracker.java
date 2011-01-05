@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.AutoexposeHelper;
@@ -217,13 +218,12 @@ public class CellResizeTracker extends SimpleDragTracker {
 		Dimension d = getDragMoveDelta();
 
 		Point location = new Point(getLocation());
-		Point p = new Point(0, 0);
-		p.y = d.height;
-		p.x = d.width;
 
 		request.setSizeDelta(new Dimension(d.width, d.height));
 		request.setLocation(location);
 		request.setEditParts(getOperationSet());
+
+		request.setResizeDirection(d.height != 0 ? PositionConstants.SOUTH : PositionConstants.EAST);
 	}
 
 	/*
