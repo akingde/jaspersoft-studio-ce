@@ -6,6 +6,7 @@ import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import com.jaspersoft.studio.model.INode;
@@ -22,7 +23,7 @@ public class TableColumnNumerator {
 		JRDesignComponentElement tbl = (JRDesignComponentElement) mtable.getValue();
 		if (tbl.getComponent() instanceof StandardTable) {
 			StandardTable table = (StandardTable) tbl.getComponent();
-			List<BaseColumn> columns = TableManager.getAllColumns(table.getColumns());
+			List<BaseColumn> columns = TableUtil.getAllColumns(table.getColumns());
 			setColNames(mtable, columns);
 		}
 	}
@@ -40,7 +41,7 @@ public class TableColumnNumerator {
 		StandardBaseColumn bc = (StandardBaseColumn) col.getValue();
 		int i = columns.indexOf(bc) + 1;
 		if (col instanceof MColumnGroup || col instanceof MColumnGroupCell) {
-			int size = TableManager.getAllColumns(((StandardColumnGroup) bc).getColumns()).size();
+			int size = TableUtil.getAllColumns(((StandardColumnGroup) bc).getColumns()).size();
 			col.setName("Columns [" + size + "]");
 		} else if (col instanceof MColumn)
 			col.setName("Column" + i);

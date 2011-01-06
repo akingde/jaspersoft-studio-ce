@@ -27,12 +27,12 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 
-import com.jaspersoft.studio.table.TableManager;
 import com.jaspersoft.studio.table.model.column.MColumn;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroupCell;
@@ -76,36 +76,36 @@ public class CreateColumnFromGroupCommand extends Command {
 		col.setWidth(40);
 
 		DesignCell cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableColumnSize.TABLE_HEADER, null));
+		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.TABLE_HEADER, null));
 		col.setTableHeader(cell);
 
 		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableColumnSize.TABLE_FOOTER, null));
+		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.TABLE_FOOTER, null));
 		col.setTableFooter(cell);
 
 		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableColumnSize.COLUMN_HEADER, null));
+		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_HEADER, null));
 		col.setColumnHeader(cell);
 
 		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableColumnSize.COLUMN_FOOTER, null));
+		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_FOOTER, null));
 		col.setColumnFooter(cell);
 
 		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableColumnSize.COLUMN_DETAIL, null));
+		cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_DETAIL, null));
 		col.setDetailCell(cell);
 
-		List<?> groupsList = TableManager.getGroupList(jrTable, jrDesign);
+		List<?> groupsList = TableUtil.getGroupList(jrTable, jrDesign);
 		if (groupsList != null)
 			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
 				JRDesignGroup jrDesignGroup = (JRDesignGroup) it.next();
 				cell = new DesignCell();
-				cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableColumnSize.COLUMN_GROUP_HEADER,
+				cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_GROUP_HEADER,
 						jrDesignGroup.getName()));
 				col.setGroupHeader(jrDesignGroup.getName(), cell);
 
 				cell = new DesignCell();
-				cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableColumnSize.COLUMN_GROUP_FOOTER,
+				cell.setHeight(TableColumnSize.getInitGroupHeight(jrTable, jrGroup, TableUtil.COLUMN_GROUP_FOOTER,
 						jrDesignGroup.getName()));
 				col.setGroupFooter(jrDesignGroup.getName(), cell);
 			}

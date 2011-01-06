@@ -31,6 +31,7 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -130,7 +131,7 @@ public class TableComponentFactory implements IComponentFactory {
 		MTableHeader mth = new MTableHeader(mt, tbl, StandardColumn.PROPERTY_TABLE_HEADER);
 		MTableColumnHeader mch = new MTableColumnHeader(mt, tbl, StandardColumn.PROPERTY_COLUMN_HEADER);
 
-		List<?> groupsList = mt.getTableManager().getGroupList();
+		List<?> groupsList = TableUtil.getGroupList(table, mt.getJasperDesign());
 		List<MTableGroupHeader> grHeaders = new ArrayList<MTableGroupHeader>();
 		List<MTableGroupFooter> grFooters = new ArrayList<MTableGroupFooter>();
 
