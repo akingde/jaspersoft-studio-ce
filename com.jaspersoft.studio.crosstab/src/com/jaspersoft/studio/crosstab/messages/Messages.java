@@ -36,6 +36,7 @@ public class Messages extends NLS {
 	public static String CrosstabComponentFactory_detail;
 	public static String CrosstabComponentFactory_header;
 	public static String CrosstabComponentFactory_total;
+	public static String CrosstabEditor_crosstab;
 	public static String CrosstabWizardPage_barbecue_types;
 	public static String CrosstabWizardPage_barcode_wizard_description_a;
 	public static String CrosstabWizardPage_barcode_wizard_description_b;

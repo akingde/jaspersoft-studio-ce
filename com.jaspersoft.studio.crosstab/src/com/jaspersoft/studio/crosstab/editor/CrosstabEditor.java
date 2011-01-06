@@ -25,6 +25,7 @@ import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
@@ -40,7 +41,7 @@ import com.jaspersoft.studio.preferences.PreferenceConstants;
 public class CrosstabEditor extends AbstractVisualEditor {
 	public CrosstabEditor() {
 		super();
-		setPartName("Crosstab");
+		setPartName(Messages.CrosstabEditor_crosstab);
 	}
 
 	/*

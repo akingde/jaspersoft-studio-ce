@@ -31,6 +31,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
+import com.jaspersoft.studio.table.messages.Messages;
 
 /**
  * The Class TableEditor.
@@ -40,7 +41,7 @@ import com.jaspersoft.studio.preferences.PreferenceConstants;
 public class TableEditor extends AbstractVisualEditor {
 	public TableEditor() {
 		super();
-		setPartName("Table");
+		setPartName(Messages.TableEditor_table);
 	}
 
 	/*

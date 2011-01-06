@@ -252,7 +252,7 @@ public class Messages extends NLS {
 	public static String MBand_band;
 	public static String MBand_detail;
 	public static String MBand_height_description;
-	public static String MBand_print_when_expression_desription;
+	public static String MBand_print_when_expression_description;
 	public static String MBand_split_type_dscription;
 	public static String MBandGroupFooter_group_footer;
 	public static String MBandGroupHeader_group_header;

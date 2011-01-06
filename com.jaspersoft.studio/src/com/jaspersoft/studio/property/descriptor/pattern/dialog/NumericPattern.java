@@ -61,7 +61,7 @@ public class NumericPattern extends APattern {
 		lab.setText(Messages.NumericPattern_leading_zeroes);
 
 		lab = new Label(container, SWT.NONE | SWT.CENTER);
-		lab.setText(Messages.NumericPattern_decimal_places);
+		lab.setText(Messages.NumericPattern_decimal_places + ":");
 
 		final Spinner zeroes = new Spinner(container, SWT.BORDER);
 		zeroes.setMinimum(0);

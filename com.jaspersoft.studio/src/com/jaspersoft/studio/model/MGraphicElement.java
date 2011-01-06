@@ -301,7 +301,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(styleD);
 
 		groupChangesD = new RComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES,
-				Messages.MGraphicElement_print_when_group_changes, new String[] { "" }); //$NON-NLS-2$
+				Messages.MGraphicElement_print_when_group_changes, new String[] { "" }); //$NON-NLS-1$
 		groupChangesD.setDescription(Messages.MGraphicElement_print_when_group_changes_description);
 		desc.add(groupChangesD);
 

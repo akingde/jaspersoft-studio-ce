@@ -137,7 +137,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		styleD = new RWComboBoxPropertyDescriptor(DesignCell.PROPERTY_STYLE, Messages.MCell_parent_style,
-				new String[] { "" }, //$NON-NLS-2$
+				new String[] { "" }, //$NON-NLS-1$
 				NullEnum.NULL);
 		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);

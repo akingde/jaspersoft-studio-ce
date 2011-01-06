@@ -30,6 +30,7 @@ import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.list.messages.Messages;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 
 /**
@@ -40,7 +41,7 @@ import com.jaspersoft.studio.preferences.PreferenceConstants;
 public class ListEditor extends AbstractVisualEditor {
 	public ListEditor() {
 		super();
-		setPartName("List");
+		setPartName(Messages.ListEditor_list);
 	}
 
 	/*
