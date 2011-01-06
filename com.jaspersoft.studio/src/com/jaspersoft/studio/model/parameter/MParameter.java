@@ -201,7 +201,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 			names = v.getPropertyNames();
 			for (int i = 0; i < names.length; i++)
 				jrParameter.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
-			jrParameter.getEventSupport().firePropertyChange(PROPERTY_MAP, false, true);
+			this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
 		}
 		super.setPropertyValue(id, value);
 	}

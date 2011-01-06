@@ -164,7 +164,7 @@ public class JRPropertyPage extends WizardPage {
 				list.add(p);
 				tableViewer.add(p);
 				tableViewer.setSelection(new StructuredSelection(p));
-				cursor.setSelection(table.getSelectionIndex(), 0);
+				// cursor.setSelection(table.getSelectionIndex(), 0);
 				tableViewer.refresh();
 				table.setFocus();
 			}
@@ -194,7 +194,7 @@ public class JRPropertyPage extends WizardPage {
 
 				if (sp != null) {
 					tableViewer.setSelection(new StructuredSelection(sp));
-					cursor.setSelection(table.getSelectionIndex(), 0);
+					// cursor.setSelection(table.getSelectionIndex(), 0);
 				} else
 					setMessage(Messages.common_table_is_empty);
 			}
@@ -303,7 +303,7 @@ public class JRPropertyPage extends WizardPage {
 	static void editCell(final TableViewer tableViewer, final TableCursor cursor) {
 		tableViewer.editElement(cursor.getRow().getData(), cursor.getColumn());
 		// hide cursor only f there is an editor active on the cell
-		cursor.setVisible(!tableViewer.isCellEditorActive());
+		// cursor.setVisible(!tableViewer.isCellEditorActive());
 	}
 
 	private void attachContentProvider(TableViewer viewer) {
@@ -509,11 +509,13 @@ public class JRPropertyPage extends WizardPage {
 	}
 
 	private String getDescription(TableItem item) {
-		String key = ((PropertyDTO) item.getData()).getProperty();
-		List<PropertyDTO> dp = getDefaultProperties();
-		for (PropertyDTO p : dp) {
-			if (p.getProperty().equals(key))
-				return p.getDescription();
+		if (item != null && item.getData() != null) {
+			String key = ((PropertyDTO) item.getData()).getProperty();
+			List<PropertyDTO> dp = getDefaultProperties();
+			for (PropertyDTO p : dp) {
+				if (p.getProperty().equals(key))
+					return p.getDescription();
+			}
 		}
 		return ""; //$NON-NLS-1$
 	}

@@ -201,7 +201,7 @@ public class MField extends APropertyNode implements ICopyable {
 			names = v.getPropertyNames();
 			for (int i = 0; i < names.length; i++)
 				jrField.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
-			jrField.getEventSupport().firePropertyChange(PROPERTY_MAP, false, true);
+			this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
 		}
 	}
 

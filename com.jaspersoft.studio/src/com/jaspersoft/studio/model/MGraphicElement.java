@@ -521,7 +521,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			names = v.getPropertyNames();
 			for (int i = 0; i < names.length; i++)
 				propertiesMap.setProperty(names[i], v.getProperty(names[i]));
-			jrElement.getEventSupport().firePropertyChange(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, false, true);
+			this.getPropertyChangeSupport().firePropertyChange(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, false, true);
 		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
 			jrElement.setHeight(((Integer) value).intValue());
 		else if (id.equals(JRDesignElement.PROPERTY_WIDTH))

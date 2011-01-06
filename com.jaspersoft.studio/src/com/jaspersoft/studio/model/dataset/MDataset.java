@@ -269,7 +269,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 			names = v.getPropertyNames();
 			for (int i = 0; i < names.length; i++)
 				jrDataset.setProperty(names[i], v.getProperty(names[i]));
-			jrDataset.getEventSupport().firePropertyChange(PROPERTY_MAP, false, true);
+			this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
 		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
 			jrDataset.setWhenResourceMissingType((WhenResourceMissingTypeEnum) EnumHelper.getSetValue(
 					WhenResourceMissingTypeEnum.values(), value, 1, false));
