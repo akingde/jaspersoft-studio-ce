@@ -111,6 +111,8 @@ public class JRQueryPage extends WizardPage {
 
 	private void setWidgets() {
 		String lang = (String) value.getPropertyValue(JRDesignQuery.PROPERTY_LANGUAGE);
+		if (lang == null)
+			lang = "sql";
 		String[] items = langCombo.getItems();
 		for (int i = 0; i < items.length; i++) {
 			if (items[i].equals(lang)) {
@@ -118,7 +120,11 @@ public class JRQueryPage extends WizardPage {
 				break;
 			}
 		}
-		queryText.setText((String) value.getPropertyValue(JRDesignQuery.PROPERTY_TEXT));
+
+		String text = (String) value.getPropertyValue(JRDesignQuery.PROPERTY_TEXT);
+		if (text == null)
+			text = "";
+		queryText.setText(text);
 	}
 
 }

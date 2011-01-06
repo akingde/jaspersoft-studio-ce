@@ -295,8 +295,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE,
-				Messages.common_parent_style, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
+				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		styleD.setDescription(Messages.MGraphicElement_parent_style_description);
 		desc.add(styleD);
 
@@ -521,6 +521,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			names = v.getPropertyNames();
 			for (int i = 0; i < names.length; i++)
 				propertiesMap.setProperty(names[i], v.getProperty(names[i]));
+			jrElement.getEventSupport().firePropertyChange(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS, false, true);
 		} else if (id.equals(JRDesignElement.PROPERTY_HEIGHT))
 			jrElement.setHeight(((Integer) value).intValue());
 		else if (id.equals(JRDesignElement.PROPERTY_WIDTH))

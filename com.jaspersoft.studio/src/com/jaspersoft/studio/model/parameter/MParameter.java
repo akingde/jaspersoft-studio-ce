@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
@@ -162,8 +163,9 @@ public class MParameter extends MParameterSystem implements ICopyable {
 			}
 			return mExpression;
 		}
-		if (id.equals(PROPERTY_MAP))
+		if (id.equals(PROPERTY_MAP)) {
 			return jrParameter.getPropertiesMap();
+		}
 		if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME))
 			return jrParameter.getNestedTypeName();
 		return super.getPropertyValue(id);
@@ -190,6 +192,16 @@ public class MParameter extends MParameterSystem implements ICopyable {
 				JRExpression expression = (JRExpression) mExpression.getValue();
 				jrParameter.setDefaultValueExpression(expression);
 			}
+		} else if (id.equals(PROPERTY_MAP)) {
+			JRPropertiesMap v = (JRPropertiesMap) value;
+			String[] names = jrParameter.getPropertiesMap().getPropertyNames();
+			for (int i = 0; i < names.length; i++) {
+				jrParameter.getPropertiesMap().removeProperty(names[i]);
+			}
+			names = v.getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				jrParameter.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
+			jrParameter.getEventSupport().firePropertyChange(PROPERTY_MAP, false, true);
 		}
 		super.setPropertyValue(id, value);
 	}

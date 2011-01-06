@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.field;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -140,7 +141,8 @@ public class MField extends APropertyNode implements ICopyable {
 	 *          the desc
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP, Messages.common_properties);
+		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
+				Messages.common_properties);
 		propertiesD.setDescription(Messages.MField_properties_description);
 		desc.add(propertiesD);
 
@@ -155,8 +157,7 @@ public class MField extends APropertyNode implements ICopyable {
 
 		NTextPropertyDescriptor descriptionD = new NTextPropertyDescriptor(JRDesignField.PROPERTY_DESCRIPTION,
 				Messages.common_description);
-		descriptionD
-				.setDescription(Messages.MField_description_description);
+		descriptionD.setDescription(Messages.MField_description_description);
 		desc.add(descriptionD);
 	}
 
@@ -191,6 +192,17 @@ public class MField extends APropertyNode implements ICopyable {
 			jrField.setValueClassName((String) value);
 		else if (id.equals(JRDesignParameter.PROPERTY_DESCRIPTION))
 			jrField.setDescription((String) value);
+		else if (id.equals(PROPERTY_MAP)) {
+			JRPropertiesMap v = (JRPropertiesMap) value;
+			String[] names = jrField.getPropertiesMap().getPropertyNames();
+			for (int i = 0; i < names.length; i++) {
+				jrField.getPropertiesMap().removeProperty(names[i]);
+			}
+			names = v.getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				jrField.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
+			jrField.getEventSupport().firePropertyChange(PROPERTY_MAP, false, true);
+		}
 	}
 
 	/**

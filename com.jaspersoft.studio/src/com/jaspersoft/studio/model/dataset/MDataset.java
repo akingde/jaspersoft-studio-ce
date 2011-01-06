@@ -224,8 +224,9 @@ public class MDataset extends APropertyNode implements ICopyable {
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			return jrDataset.getScriptletClass();
-		if (id.equals(PROPERTY_MAP))
+		if (id.equals(PROPERTY_MAP)) {
 			return jrDataset.getPropertiesMap();
+		}
 		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
 			return EnumHelper.getValue(jrDataset.getWhenResourceMissingTypeValue(), 1, false);
 		if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
@@ -268,6 +269,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 			names = v.getPropertyNames();
 			for (int i = 0; i < names.length; i++)
 				jrDataset.setProperty(names[i], v.getProperty(names[i]));
+			jrDataset.getEventSupport().firePropertyChange(PROPERTY_MAP, false, true);
 		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
 			jrDataset.setWhenResourceMissingType((WhenResourceMissingTypeEnum) EnumHelper.getSetValue(
 					WhenResourceMissingTypeEnum.values(), value, 1, false));
