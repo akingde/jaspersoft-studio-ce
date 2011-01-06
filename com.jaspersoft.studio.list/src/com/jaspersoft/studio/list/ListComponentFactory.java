@@ -22,9 +22,8 @@ package com.jaspersoft.studio.list;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.components.list.ListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
-import net.sf.jasperreports.engine.JRComponentElement;
+import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.draw2d.IFigure;
@@ -36,23 +35,33 @@ import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
+import com.jaspersoft.studio.list.editor.ListEditor;
 import com.jaspersoft.studio.list.figure.ListFigure;
 import com.jaspersoft.studio.list.model.MList;
+import com.jaspersoft.studio.list.part.ListEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+import com.jaspersoft.studio.model.util.ReportFactory;
 
 public class ListComponentFactory implements IComponentFactory {
 
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement
-				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof StandardListComponent)
-			return new MList(parent, (JRDesignComponentElement) jrObject, newIndex);
+				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof StandardListComponent) {
+			StandardListComponent list = (StandardListComponent) ((JRDesignComponentElement) jrObject).getComponent();
+			MList mlist = new MList(parent, (JRDesignComponentElement) jrObject, newIndex);
+			if (mlist.getParent() instanceof MPage) {
+				ReportFactory.createElementsForBand(mlist, list.getContents().getChildren());
+			}
+			return mlist;
+		}
 		return null;
 	}
 
@@ -63,13 +72,13 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	public List<?> getChildren4Element(Object jrObject) {
-		if (jrObject instanceof JRComponentElement
-				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof StandardListComponent) {
-			StandardListComponent slc = (StandardListComponent) ((JRDesignComponentElement) jrObject).getComponent();
-			ListContents lc = slc.getContents();
-			if (lc != null)
-				return lc.getChildren();
-		}
+		// if (jrObject instanceof JRComponentElement
+		// && ((JRDesignComponentElement) jrObject).getComponent() instanceof StandardListComponent) {
+		// StandardListComponent slc = (StandardListComponent) ((JRDesignComponentElement) jrObject).getComponent();
+		// ListContents lc = slc.getContents();
+		// if (lc != null)
+		// return lc.getChildren();
+		// }
 		return null;
 	}
 
@@ -119,6 +128,8 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
+		if (model instanceof MList)
+			return new ListEditPart();
 		return null;
 	}
 
@@ -127,6 +138,11 @@ public class ListComponentFactory implements IComponentFactory {
 	}
 
 	public AbstractVisualEditor getEditor(Object node) {
+		if (node != null && node instanceof JRDesignComponentElement) {
+			Component component = ((JRDesignComponentElement) node).getComponent();
+			if (component != null && component instanceof StandardListComponent)
+				return new ListEditor();
+		}
 		return null;
 	}
 
