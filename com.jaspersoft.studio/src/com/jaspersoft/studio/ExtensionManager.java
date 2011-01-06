@@ -64,7 +64,7 @@ public class ExtensionManager {
 	public List<?> getChildren4Element(Object jrObject) {
 		for (IComponentFactory f : nodeFactory) {
 			List<?> lst = f.getChildren4Element(jrObject);
-			if (lst != null)
+			if (lst != null && !lst.isEmpty())
 				return lst;
 		}
 		return null;
