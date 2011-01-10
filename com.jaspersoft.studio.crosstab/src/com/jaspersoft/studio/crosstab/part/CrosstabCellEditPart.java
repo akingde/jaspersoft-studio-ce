@@ -19,18 +19,28 @@
  */
 package com.jaspersoft.studio.crosstab.part;
 
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.engine.JRElement;
+
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
+import com.jaspersoft.studio.crosstab.figure.CellFigure;
+import com.jaspersoft.studio.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellContainerEditPolicy;
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellMoveEditPolicy;
 import com.jaspersoft.studio.crosstab.part.editpolicy.CrosstabCellResizableEditPolicy;
+import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.model.IGraphicElement;
 
 /**
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -52,6 +62,19 @@ public class CrosstabCellEditPart extends FigureEditPart implements IContainerPa
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new CrosstabCellMoveEditPolicy());
 		installEditPolicy(EditPolicy.CONTAINER_ROLE, new CrosstabCellContainerEditPolicy());
+	}
+
+	protected void setupFigure(IFigure rect) {
+		MCell model = (MCell) getModel();
+		if (model instanceof IGraphicElement && model.getValue() != null) {
+			Rectangle bounds = ((IGraphicElement) model).getBounds();
+			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
+			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
+
+			CellFigure f = (CellFigure) rect;
+			f.setLocation(new Point(x, y));
+			f.setJRElement((JRDesignCellContents) model.getValue(), getDrawVisitor());
+		}
 	}
 
 	@Override
