@@ -29,7 +29,7 @@ public class TableEditPart extends EditableFigureEditPart {
 			MTable m = (MTable) getModel();
 			Dimension d = m.getTableManager().getSize();
 			Dimension dr = rect.getSize();
-			rect.setSize(Math.max(dr.width, d.width) + 2, Math.max(dr.height, d.height) + 2);
+			rect.setSize(Math.max(dr.width, d.width) + 4, Math.max(dr.height, d.height) + 4);
 		}
 	}
 }

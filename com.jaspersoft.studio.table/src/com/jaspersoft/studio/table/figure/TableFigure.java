@@ -25,9 +25,9 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.XYLayout;
 
-import com.jaspersoft.studio.editor.gef.figures.AElementBoundsFigure;
+import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 
-public class TableFigure extends AElementBoundsFigure {
+public class TableFigure extends FrameFigure {
 
 	/**
 	 * Instantiates a new text field figure.

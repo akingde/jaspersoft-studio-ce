@@ -1,21 +1,52 @@
 package com.jaspersoft.studio.table.figure;
 
-import org.eclipse.draw2d.LineBorder;
-
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
-import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+import org.eclipse.draw2d.LineBorder;
 
-public class CellFigure extends ComponentFigure {
+import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+
+public class CellFigure extends FrameFigure {
+	private DesignCell cell;
+	private StandardBaseColumn column;
+
 	public CellFigure() {
 		super();
 		setBorder(new LineBorder(1));
 	}
 
-	@Override
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
-		setSize(jrElement.getWidth(), jrElement.getHeight());
+	public void setJRElement(DesignCell cell, StandardBaseColumn column, DrawVisitor drawVisitor) {
+		this.cell = cell;
+		this.column = column;
+		super.setJRElement(null, drawVisitor);
+		setSize(getElementWidth(), getElementHeight());
 	}
 
+	protected JRLineBox getLineBox() {
+		JRLineBox box = null;
+		box = cell.getLineBox();
+		if (box == null && cell.getStyle() != null)
+			box = cell.getStyle().getLineBox();
+
+		return box;
+	}
+
+	@Override
+	protected int getElementHeight() {
+		return cell.getHeight();
+	}
+
+	@Override
+	protected int getElementWidth() {
+		return column.getWidth();
+	}
+
+	@Override
+	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
+
+	}
 }

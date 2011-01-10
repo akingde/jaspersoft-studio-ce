@@ -19,15 +19,23 @@
  */
 package com.jaspersoft.studio.table.part;
 
+import net.sf.jasperreports.components.table.StandardBaseColumn;
+
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
+import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.model.IGraphicElement;
+import com.jaspersoft.studio.table.figure.CellFigure;
+import com.jaspersoft.studio.table.model.column.MCell;
 import com.jaspersoft.studio.table.part.editpolicy.TableCellContainerEditPolicy;
 import com.jaspersoft.studio.table.part.editpolicy.TableCellMoveEditPolicy;
 import com.jaspersoft.studio.table.part.editpolicy.TableCellResizableEditPolicy;
@@ -57,6 +65,19 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 	@Override
 	public boolean isSelectable() {
 		return true;
+	}
+
+	protected void setupFigure(IFigure rect) {
+		MCell model = (MCell) getModel();
+		if (model instanceof IGraphicElement && model.getValue() != null) {
+			Rectangle bounds = ((IGraphicElement) model).getBounds();
+			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
+			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
+
+			CellFigure f = (CellFigure) rect;
+			f.setLocation(new Point(x, y));
+			f.setJRElement(model.getCell(), (StandardBaseColumn) model.getValue(), getDrawVisitor());
+		}
 	}
 
 	public EditPolicy getEditPolicy() {
