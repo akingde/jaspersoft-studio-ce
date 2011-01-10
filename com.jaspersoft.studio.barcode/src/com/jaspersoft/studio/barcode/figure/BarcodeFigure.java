@@ -23,13 +23,13 @@ import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
-import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
+import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 
 /**
  * @author Chicu Veaceslav
  * @version $Id$
  */
-public class BarcodeFigure extends ComponentFigure {
+public class BarcodeFigure extends FrameFigure {
 
 	/**
 	 * Instantiates a new text field figure.
