@@ -23,7 +23,7 @@ public class CellFigure extends FrameFigure {
 		this.cell = cell;
 		this.column = column;
 		super.setJRElement(null, drawVisitor);
-		setSize(getElementWidth(), getElementHeight());
+		setSize(getElementWidth() + 3, getElementHeight() + 3);
 	}
 
 	protected JRLineBox getLineBox() {
