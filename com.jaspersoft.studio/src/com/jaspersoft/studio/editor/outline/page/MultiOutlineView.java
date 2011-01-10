@@ -2,6 +2,7 @@ package com.jaspersoft.studio.editor.outline.page;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -22,7 +23,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
 
 public class MultiOutlineView extends Page implements IContentOutlinePage, ISelectionProvider,
-		ISelectionChangedListener {
+		ISelectionChangedListener, IAdaptable {
 	private PageBook pagebook;
 	private ISelection selection;
 	private ArrayList<ISelectionChangedListener> listeners;
@@ -162,5 +163,11 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 			// toolBarManager.add(new ToggleLinkWithEditorAction(editor));
 			// toolBarManager.add(new SortingAction());
 		}
+	}
+
+	public Object getAdapter(Class adapter) {
+		if (currentPage instanceof IAdaptable)
+			return ((IAdaptable) currentPage).getAdapter(adapter);
+		return null;
 	}
 }

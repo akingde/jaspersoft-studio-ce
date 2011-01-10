@@ -49,13 +49,13 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		// pen
-		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR, Messages.common_line_color,
-				NullEnum.INHERITED);
-		penLineColorD
-				.setDescription(Messages.MLinePen_line_color_description);
+		ColorPropertyDescriptor penLineColorD = new ColorPropertyDescriptor(JRBasePen.PROPERTY_LINE_COLOR,
+				Messages.common_line_color, NullEnum.INHERITED);
+		penLineColorD.setDescription(Messages.MLinePen_line_color_description);
 		desc.add(penLineColorD);
 
-		FloatPropertyDescriptor penLineWidthD = new FloatPropertyDescriptor(JRBasePen.PROPERTY_LINE_WIDTH, Messages.MLinePen_line_width);
+		FloatPropertyDescriptor penLineWidthD = new FloatPropertyDescriptor(JRBasePen.PROPERTY_LINE_WIDTH,
+				Messages.MLinePen_line_width);
 		penLineWidthD.setDescription(Messages.MLinePen_line_width_description);
 		desc.add(penLineWidthD);
 
@@ -65,6 +65,8 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		desc.add(penLineStyleD);
 
 		defaultsMap.put(JRBasePen.PROPERTY_LINE_STYLE, null);
+		defaultsMap.put(JRBasePen.PROPERTY_LINE_COLOR, null);
+		defaultsMap.put(JRBasePen.PROPERTY_LINE_WIDTH, null);
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -116,6 +118,8 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
 				linePen.setLineWidth(((Float) value));
 			else if (id.equals(JRBasePen.PROPERTY_LINE_COLOR)) {
+				if (value == null)
+					linePen.setLineColor(null);
 				if (value instanceof RGB)
 					linePen.setLineColor(Colors.getAWT4SWTRGBColor((RGB) value));
 			} else if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))

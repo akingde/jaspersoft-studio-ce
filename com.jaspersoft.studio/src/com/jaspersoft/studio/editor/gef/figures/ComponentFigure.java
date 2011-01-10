@@ -61,7 +61,8 @@ public class ComponentFigure extends RectangleFigure {
 	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
 		this.drawVisitor = drawVisitor;
 		this.jrElement = jrElement;
-		setSize(jrElement.getWidth(), jrElement.getHeight());
+		if (jrElement != null)
+			setSize(jrElement.getWidth(), jrElement.getHeight());
 	}
 
 	/*

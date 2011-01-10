@@ -131,7 +131,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public void changeProperty(String property, Object newValue, APropertyNode el) {
 		if (!isRefreshing && getElement() != null) {
 			Object oldValue = getElement().getPropertyValue(property);
-			if (!newValue.equals(oldValue) && getEditDomain() != null) {
+			if (((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || (newValue != null && !newValue
+					.equals(oldValue))) && getEditDomain() != null) {
 				CommandStack cs = getEditDomain().getCommandStack();
 
 				SetValueCommand setCommand = new SetValueCommand(getElement().getDisplayText());

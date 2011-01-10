@@ -117,8 +117,11 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (getElement() != evt.getSource())
+		if (getElement() != evt.getSource()) {
+			getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
 			refresh();
+			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+		}
 	}
 
 }

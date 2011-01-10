@@ -56,12 +56,14 @@ import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -361,8 +363,10 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 		getViewer().setProperty("RULER_HEND", jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin()); //$NON-NLS-1$
 		getViewer().setProperty("RULER_VEND", dh - ReportPageFigure.PAGE_BORDER.top); //$NON-NLS-1$
 
-		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
-				new Point(ReportPageFigure.PAGE_BORDER.left + jd.getLeftMargin(), ReportPageFigure.PAGE_BORDER.top + jd.getTopMargin()));
+		getViewer().setProperty(
+				SnapToGrid.PROPERTY_GRID_ORIGIN,
+				new Point(ReportPageFigure.PAGE_BORDER.left + jd.getLeftMargin(), ReportPageFigure.PAGE_BORDER.top
+						+ jd.getTopMargin()));
 	}
 
 	/*
@@ -371,11 +375,20 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent arg0) {
-		Object source = arg0.getSource();
-		if (source instanceof IContainerEditPart) {
-			refreshChildren();
-			refreshVisuals();
+		if (arg0.getSource() instanceof MReport) {
+			ANode model = (ANode) getModel();
+			if (model.getChildren() != null)
+				for (Object node : getModelChildren()) {
+					if (node instanceof INode) {
+						EditPart ep = (EditPart) getViewer().getEditPartRegistry().get(node);
+						if (ep instanceof FigureEditPart)
+							((FigureEditPart) ep).propertyChange(arg0);
+					}
+				}
 		}
+		// if (source instanceof IContainerEditPart) {
+		refreshChildren();
+		refreshVisuals();
+		// }
 	}
-
 }

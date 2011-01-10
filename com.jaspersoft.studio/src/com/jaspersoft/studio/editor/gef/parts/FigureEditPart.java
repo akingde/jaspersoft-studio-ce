@@ -53,6 +53,10 @@ import com.jaspersoft.studio.preferences.PreferenceConstants;
 public class FigureEditPart extends AJDEditPart implements PropertyChangeListener {
 
 	private DrawVisitor drawVisitor;
+	public DrawVisitor getDrawVisitor() {
+		return drawVisitor;
+	}
+
 	private PreferenceListener preferenceListener;
 
 	private final class PreferenceListener implements IPropertyChangeListener {
@@ -166,6 +170,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
 		refreshC((ANode) getModel());
+		refreshVisuals();
 	}
 
 	/**

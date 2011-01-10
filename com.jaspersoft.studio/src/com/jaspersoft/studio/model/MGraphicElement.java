@@ -489,15 +489,20 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
 			jrElement.setKey((String) value);
 		else if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
-			if (!value.equals("")) { //$NON-NLS-1$
-				JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
-				if (style != null) {
-					jrElement.setStyle(style);
-					jrElement.setStyleNameReference(null);
-				} else {
-					jrElement.setStyleNameReference((String) value);
-					jrElement.setStyle(null);
+			if (value != null) {
+				if (!value.equals("")) { //$NON-NLS-1$
+					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
+					if (style != null) {
+						jrElement.setStyle(style);
+						// jrElement.setStyleNameReference(null);
+					} else {
+						jrElement.setStyleNameReference((String) value);
+						// jrElement.setStyle(null);
+					}
 				}
+			} else {
+				jrElement.setStyle(null);
+				jrElement.setStyleNameReference(null);
 			}
 		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 			if (value instanceof MExpression) {

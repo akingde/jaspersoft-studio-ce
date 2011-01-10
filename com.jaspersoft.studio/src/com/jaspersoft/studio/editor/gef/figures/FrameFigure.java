@@ -74,7 +74,17 @@ public class FrameFigure extends AHandleBoundsFigure {
 	 * @return the line box
 	 */
 	protected JRLineBox getLineBox() {
-		return ((JRBoxContainer) getJrElement()).getLineBox();
+		JRElement jrElement = getJrElement();
+		JRLineBox box = null;
+		if (jrElement != null) {
+			if (jrElement instanceof JRBoxContainer)
+				box = ((JRBoxContainer) jrElement).getLineBox();
+			if (box == null && jrElement.getStyle() != null)
+				box = jrElement.getStyle().getLineBox();
+		} else {
+			box = null;
+		}
+		return box;
 	}
 
 	/*
@@ -86,9 +96,17 @@ public class FrameFigure extends AHandleBoundsFigure {
 	public Rectangle getHandleBounds() {
 		Rectangle b = getBounds();
 		Rectangle o = calcBorder(getLineBox());
-		return new Rectangle(b.x + o.x, b.y + o.y, getJrElement().getWidth() + 1, getJrElement().getHeight() + 1);
+		return new Rectangle(b.x + o.x, b.y + o.y, getElementWidth() + 1, getElementHeight() + 1);
 		// return new Rectangle(b.x + o.x, b.y + o.y, getJrElement().getWidth() + o.width - 1, getJrElement().getHeight()
 		// + o.height - 1);
+	}
+
+	protected int getElementWidth() {
+		return getJrElement() != null ? getJrElement().getWidth() : 0;
+	}
+
+	protected int getElementHeight() {
+		return getJrElement() != null ? getJrElement().getHeight() : 0;
 	}
 
 	/**
@@ -99,6 +117,8 @@ public class FrameFigure extends AHandleBoundsFigure {
 	 * @return the rectangle
 	 */
 	protected Rectangle calcBorder(JRLineBox jrLineBox) {
+		if (jrLineBox == null)
+			return new Rectangle(0, 0, 0, 0);
 		int x = (int) Math.ceil(jrLineBox.getLeftPen().getLineWidth() / 2);
 		int y = (int) Math.ceil(jrLineBox.getTopPen().getLineWidth() / 2);
 		int w = (int) Math.ceil(jrLineBox.getRightPen().getLineWidth() / 2) + 1;

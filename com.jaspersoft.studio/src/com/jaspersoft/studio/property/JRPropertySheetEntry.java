@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertySheetEntry;
 
@@ -236,7 +237,7 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	 * @param command
 	 *          the command
 	 */
-	void valueChanged(JRPropertySheetEntry child, CompoundCommand command) {
+	void valueChanged(JRPropertySheetEntry child, final CompoundCommand command) {
 		CompoundCommand cc = new CompoundCommand();
 		command.add(cc);
 
@@ -254,7 +255,13 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 			((JRPropertySheetEntry) getParent()).valueChanged(this, command);
 		else {
 			// I am the root entry
-			stack.execute(command);
+			Display.getCurrent().asyncExec(new Runnable() {
+
+				public void run() {
+					stack.execute(command);
+				}
+			});
+
 		}
 	}
 

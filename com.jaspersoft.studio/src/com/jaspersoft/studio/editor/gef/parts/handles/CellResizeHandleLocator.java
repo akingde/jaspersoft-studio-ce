@@ -25,6 +25,7 @@ import org.eclipse.draw2d.RelativeLocator;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.handles.HandleBounds;
 
 public class CellResizeHandleLocator extends RelativeLocator {
 	private double relativeY;
@@ -69,7 +70,8 @@ public class CellResizeHandleLocator extends RelativeLocator {
 	@Override
 	public void relocate(IFigure target) {
 		IFigure reference = getReferenceFigure();
-		Rectangle targetBounds = new PrecisionRectangle(getReferenceBox().getResized(-1, -1));
+		Rectangle referenceBox = ((HandleBounds) reference).getHandleBounds();
+		Rectangle targetBounds = new PrecisionRectangle(referenceBox.getResized(-1, -1));
 		reference.translateToAbsolute(targetBounds);
 		target.translateToRelative(targetBounds);
 		targetBounds.resize(1, 1);

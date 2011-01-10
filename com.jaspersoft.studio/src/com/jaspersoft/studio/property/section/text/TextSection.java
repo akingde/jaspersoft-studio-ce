@@ -74,7 +74,7 @@ public class TextSection extends AbstractSection {
 		GridLayout layout = new GridLayout(50, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_text+":", SWT.RIGHT); //$NON-NLS-1$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_text + ":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -207,7 +207,7 @@ public class TextSection extends AbstractSection {
 
 			Integer valign = (Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT);
 			if (valign != null) {
-				VerticalAlignEnum val = (VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), halign, 1, true);
+				VerticalAlignEnum val = (VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), valign, 1, true);
 				alignTopButton.setSelection(VerticalAlignEnum.TOP.equals(val));
 				alignMiddleButton.setSelection(VerticalAlignEnum.MIDDLE.equals(val));
 				alignVJustifiedButton.setSelection(VerticalAlignEnum.JUSTIFIED.equals(val));

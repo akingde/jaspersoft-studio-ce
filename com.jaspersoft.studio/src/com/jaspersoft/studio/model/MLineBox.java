@@ -42,7 +42,8 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING, Messages.common_padding);
+		IntegerPropertyDescriptor paddingD = new IntegerPropertyDescriptor(JRBaseLineBox.PROPERTY_PADDING,
+				Messages.common_padding);
 		paddingD.setDescription(Messages.MLineBox_padding_description);
 		desc.add(paddingD);
 
@@ -92,6 +93,12 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 		PenPropertyDescriptor linePenRightD = new PenPropertyDescriptor(LINE_PEN_RIGHT, Messages.MLineBox_line_pen_right);
 		linePenRightD.setDescription(Messages.MLineBox_line_pen_right_description);
 		desc.add(linePenRightD);
+
+		defaultsMap.put(JRBaseLineBox.PROPERTY_PADDING, null);
+		defaultsMap.put(JRBaseLineBox.PROPERTY_LEFT_PADDING, null);
+		defaultsMap.put(JRBaseLineBox.PROPERTY_RIGHT_PADDING, null);
+		defaultsMap.put(JRBaseLineBox.PROPERTY_TOP_PADDING, null);
+		defaultsMap.put(JRBaseLineBox.PROPERTY_BOTTOM_PADDING, null);
 	}
 
 	public static final String LINE_PEN = "LinePen"; //$NON-NLS-1$
@@ -148,35 +155,35 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 			if (id.equals(LINE_PEN)) {
 				if (linePen == null) {
 					linePen = new MLinePen(lineBox.getPen());
-					linePen.getPropertyChangeSupport().addPropertyChangeListener(this);
+					setChildListener(linePen);
 				}
 				return linePen;
 			}
 			if (id.equals(LINE_PEN_TOP)) {
 				if (linePenTop == null) {
 					linePenTop = new MLinePen(lineBox.getTopPen());
-					linePenTop.getPropertyChangeSupport().addPropertyChangeListener(this);
+					setChildListener(linePenTop);
 				}
 				return linePenTop;
 			}
 			if (id.equals(LINE_PEN_BOTTOM)) {
 				if (linePenBottom == null) {
 					linePenBottom = new MLinePen(lineBox.getBottomPen());
-					linePenBottom.getPropertyChangeSupport().addPropertyChangeListener(this);
+					setChildListener(linePenBottom);
 				}
 				return linePenBottom;
 			}
 			if (id.equals(LINE_PEN_LEFT)) {
 				if (linePenLeft == null) {
 					linePenLeft = new MLinePen(lineBox.getLeftPen());
-					linePenLeft.getPropertyChangeSupport().addPropertyChangeListener(this);
+					setChildListener(linePenLeft);
 				}
 				return linePenLeft;
 			}
 			if (id.equals(LINE_PEN_RIGHT)) {
 				if (linePenRight == null) {
 					linePenRight = new MLinePen(lineBox.getRightPen());
-					linePenRight.getPropertyChangeSupport().addPropertyChangeListener(this);
+					setChildListener(linePenRight);
 				}
 				return linePenRight;
 			}
