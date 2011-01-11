@@ -42,4 +42,6 @@ public class ElementEditPolicy extends ComponentEditPolicy {
 			return OutlineTreeEditPartFactory.getDeleteCommand((ANode) parent, (ANode) getHost().getModel());
 		return null;
 	}
+	
+	
 }
