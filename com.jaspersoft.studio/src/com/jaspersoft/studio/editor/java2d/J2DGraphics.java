@@ -912,7 +912,6 @@ public class J2DGraphics extends Graphics {
 	 * @see org.eclipse.draw2d.Graphics#setXORMode(boolean)
 	 */
 	public void setXORMode(boolean b) {
-		// System.err.println("setXORMode("+b+")");
 		_xor = b;
 		updateColors();
 	}
