@@ -74,6 +74,8 @@ public class TextEditManager extends DirectEditManager {
 
 	protected void initCellEditor() { 
 		// update text
+		
+		try {
 		MStaticText model = (MStaticText)((FigureEditPart)getEditPart()).getModel();
 		getCellEditor().setValue(model.getPropertyValue(JRBaseStaticText.PROPERTY_TEXT));
 		getCellEditor().getControl().setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
@@ -93,6 +95,11 @@ public class TextEditManager extends DirectEditManager {
 		actionHandler = new CellEditorActionHandler(actionBars);
 		actionHandler.addCellEditor(getCellEditor());
 		actionBars.updateActionBars();
+		
+		} catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 
 	private void restoreSavedActions(IActionBars actionBars) {
@@ -123,9 +130,23 @@ public class TextEditManager extends DirectEditManager {
 		
 		int fontSize = 1;
 		Object fontSizeValue = model == null ? null : model.getPropertyValue(JRBaseFont.PROPERTY_FONT_SIZE);
+		
+		try {
 		if (fontSizeValue != null)
 		{
-			 fontSize = ((Integer)fontSizeValue).intValue();
+			 if (fontSizeValue instanceof String)
+			 {
+				 fontSize = Integer.parseInt((String)fontSizeValue);
+			 }
+			 else if (fontSizeValue instanceof Integer)
+			 {
+				 fontSize = ((Integer)fontSizeValue).intValue();
+			 }
+			 
+		}
+		} catch (Exception ex)
+		{
+			
 		}
 		
 		String fontName = model == null ? null : (String)model.getPropertyValue(JRBaseFont.PROPERTY_FONT_NAME);
@@ -137,7 +158,7 @@ public class TextEditManager extends DirectEditManager {
 		
 		try {
 		FontData fd = font.getFontData()[0];
-		fd.setHeight((int) (fd.getHeight() * zoom * fontSize));
+		fd.setHeight((int) (zoom * fontSize * 0.75)); //fd.getHeight()
 		if (fontName != null && fontName.length() > 0)
 		{
 			fd.setName( fontName );

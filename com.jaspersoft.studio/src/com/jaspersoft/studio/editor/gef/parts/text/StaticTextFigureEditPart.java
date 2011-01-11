@@ -29,13 +29,10 @@ import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
-import com.jaspersoft.studio.model.text.MStaticText;
+import com.jaspersoft.studio.editor.gef.parts.directeditor.TextEditManager;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /**
@@ -73,6 +70,17 @@ public class StaticTextFigureEditPart extends FigureEditPart {
 	protected DirectEditManager manager;
 
 	public void performRequest(Request request) {
+		
+		
+		if (request.getType() == RequestConstants.REQ_OPEN) {
+			
+			if (manager == null) {
+				manager = new TextEditManager(this, new LabelCellEditorLocator(getFigure()) );
+			}
+			manager.show();
+		}
+		
+		/*
 		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
 			if (manager == null) {
 				manager = new DirectEditManager(this, TextCellEditor.class, new LabelCellEditorLocator(getFigure()), null) {
@@ -87,6 +95,7 @@ public class StaticTextFigureEditPart extends FigureEditPart {
 			}
 			manager.show();
 		}
+		*/
 	}
 
 }
