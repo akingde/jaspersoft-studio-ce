@@ -40,6 +40,7 @@ import org.eclipse.gef.rulers.RulerProvider;
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
@@ -243,6 +244,10 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected EditPolicy createChildEditPolicy(EditPart child) {
 		if (child instanceof IContainerPart) {
 			return ((IContainerPart) child).getEditPolicy();
+		}
+		if (child instanceof FigureEditPart)
+		{
+			return new ElementResizableEditPolicy();
 		}
 		return super.createChildEditPolicy(child);
 	}

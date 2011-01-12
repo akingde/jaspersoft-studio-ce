@@ -1,21 +1,19 @@
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
+
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.geom.Rectangle2D;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.editparts.ZoomManager;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
-public class ElementFeedbackFigure extends RectangleFigure {
+public class BandFeedbackFigure  extends RectangleFigure {
 
 	String text = "";
 	/**
@@ -26,7 +24,7 @@ public class ElementFeedbackFigure extends RectangleFigure {
 	 * @param viewMargins
 	 *          the view margins
 	 */
-	public ElementFeedbackFigure() {
+	public BandFeedbackFigure() {
 		setFill(false);
 	}
 	
@@ -55,8 +53,7 @@ public class ElementFeedbackFigure extends RectangleFigure {
       
       
       if (clientArea.width < 20 || clientArea.height < 20) return;
-      
-      Rectangle currentBounds = getBounds();
+
 			// draw the line
 			gr.setColor(Color.gray);
 			// Draw the label...
@@ -100,14 +97,7 @@ public class ElementFeedbackFigure extends RectangleFigure {
       gr.setColor(Color.white);
 			gr.drawString(text,textBgBounds.x+10, textBgBounds.y + fm.getAscent() );
 			
-			
-      //gr.drawString(text, clientArea.x + 10, clientArea.y + 10);
-      
-      //Shape oldClip = graphics2d.getClip();
-      //Shape rect = new Rectangle2D.Float(0,0,clientArea.width, clientArea.height);
-      //graphics2d.clip(rect);
-      //gr.setClip(oldClip);
-      //paintBorder(g);
+
 	}
 }
 

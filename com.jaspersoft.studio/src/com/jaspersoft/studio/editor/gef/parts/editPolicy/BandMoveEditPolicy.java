@@ -19,6 +19,12 @@
  */
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.geom.Rectangle2D;
+
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -41,6 +47,7 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandResizeHandle;
+import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -112,13 +119,18 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 		 * @see org.eclipse.draw2d.IFigure#paint(Graphics)
 		 */
 		public void paint(Graphics g) {
-			// g.setForegroundColor(ColorConstants.green);
-			Rectangle currentBounds = getBounds();
+			
+			
+		
+			
+			/*
 			// draw the line
 			g.setForegroundColor(this.getForegroundColor());
 			g.drawLine(currentBounds.x, currentBounds.y, currentBounds.x + currentBounds.width, currentBounds.y);
 
 			// Draw the label...
+			
+			
 			g.setAlpha(128);
 			String text = bandHeight + " px"; //$NON-NLS-1$
 			Label label = new Label(text);
@@ -129,6 +141,7 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 					10);
 			g.setForegroundColor(ColorConstants.white);
 			g.drawText(text, xLabelPos + 10, currentBounds.y);
+			*/
 		}
 
 	}
@@ -358,7 +371,12 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 				request.getSizeDelta().height = -request.getSizeDelta().height;
 			}
 			JRDesignBand jrdesign = (JRDesignBand) mBand.getValue();
-			int height = jrdesign.getHeight() + request.getSizeDelta().height;
+			
+			PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0, 0, request.getSizeDelta().width, request.getSizeDelta().height));
+			getHostFigure().translateToRelative(deltaRect);
+			int delta = deltaRect.height;	
+			
+			int height = jrdesign.getHeight() + delta;
 			if (height < 0)
 				height = 0;
 
@@ -366,7 +384,6 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 			setCommand.setTarget(mBand);
 			setCommand.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
 			setCommand.setPropertyValue(height);
-			System.out.println("RESIZE COMMAND: " + request.getResizeDirection() + " " + request.getSizeDelta()); //$NON-NLS-1$ //$NON-NLS-2$
 			return setCommand;
 		}
 		return null;
