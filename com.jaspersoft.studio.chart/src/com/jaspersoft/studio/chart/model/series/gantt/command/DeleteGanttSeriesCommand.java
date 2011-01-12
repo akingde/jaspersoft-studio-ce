@@ -38,7 +38,7 @@ public class DeleteGanttSeriesCommand extends Command {
 	private JRDesignGanttSeries jrElement;
 
 	/** The element position. */
-	private int elementPosition = 0;
+	private int oldIndex = 0;
 
 	/**
 	 * Instantiates a new delete element command.
@@ -61,10 +61,9 @@ public class DeleteGanttSeriesCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		elementPosition = jrGroup.getSeriesList().indexOf(jrElement);
+		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 
 		jrGroup.removeGanttSeries(jrElement);
-		jrGroup.getEventSupport().fireCollectionElementRemovedEvent("ganttSeries", jrElement, elementPosition); //$NON-NLS-1$
 	}
 
 	/*
@@ -86,8 +85,9 @@ public class DeleteGanttSeriesCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		jrGroup.addGanttSeries(jrElement);
-		jrGroup.getEventSupport().fireCollectionElementAddedEvent("ganttSeries", jrElement, //$NON-NLS-1$
-				jrGroup.getSeriesList().size() - 1);
+		if (oldIndex >= 0 && oldIndex < jrGroup.getSeriesList().size())
+			jrGroup.addGanttSeries(oldIndex, jrElement);
+		else
+			jrGroup.addGanttSeries(jrElement);
 	}
 }

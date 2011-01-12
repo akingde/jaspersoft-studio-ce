@@ -1,30 +1,27 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.wizards;
 
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -46,14 +43,10 @@ import org.eclipse.ui.ide.IDE;
 import com.jaspersoft.studio.messages.Messages;
 
 /**
- * This is a sample new wizard. Its role is to create a new file 
- * resource in the provided container. If the container resource
- * (a folder or a project) is selected in the workspace 
- * when the wizard is opened, it will accept it as the target
- * container. The wizard creates one file with the extension
- * "jrxml". If a sample multi-page editor (also available
- * as a template) is registered for the same extension, it will
- * be able to open it.
+ * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container
+ * resource (a folder or a project) is selected in the workspace when the wizard is opened, it will accept it as the
+ * target container. The wizard creates one file with the extension "jrxml". If a sample multi-page editor (also
+ * available as a template) is registered for the same extension, it will be able to open it.
  */
 
 public class ReportNewWizard extends Wizard implements INewWizard {
@@ -67,7 +60,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		super();
 		setNeedsProgressMonitor(true);
 	}
-	
+
 	/**
 	 * Adding the page to the wizard.
 	 */
@@ -78,9 +71,8 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 	}
 
 	/**
-	 * This method is called when 'Finish' button is pressed in
-	 * the wizard. We will create an operation and run it
-	 * using wizard as execution context.
+	 * This method is called when 'Finish' button is pressed in the wizard. We will create an operation and run it using
+	 * wizard as execution context.
 	 */
 	public boolean performFinish() {
 		final String containerName = page.getContainerName();
@@ -107,18 +99,13 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		}
 		return true;
 	}
-	
+
 	/**
-	 * The worker method. It will find the container, create the
-	 * file if missing or just replace its contents, and open
+	 * The worker method. It will find the container, create the file if missing or just replace its contents, and open
 	 * the editor on the newly created file.
 	 */
 
-	private void doFinish(
-		String containerName,
-		String fileName,
-		IProgressMonitor monitor)
-		throws CoreException {
+	private void doFinish(String containerName, String fileName, IProgressMonitor monitor) throws CoreException {
 		// create a sample file
 		monitor.beginTask("Creating " + fileName, 2); //$NON-NLS-1$
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -130,8 +117,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		final IFile file = container.getFile(new Path(fileName));
 		try {
 			InputStream stream = openContentStream();
-			
-			
+
 			if (file.exists()) {
 				file.setContents(stream, true, true, monitor);
 			} else {
@@ -145,8 +131,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		monitor.setTaskName("Opening file for editing..."); //$NON-NLS-1$
 		getShell().getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				IWorkbenchPage page =
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
 					IDE.openEditor(page, file, true);
 				} catch (PartInitException e) {
@@ -156,7 +141,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		});
 		monitor.worked(1);
 	}
-	
+
 	/**
 	 * We will initialize file contents with a sample text.
 	 */
@@ -170,32 +155,36 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		jd.setLeftMargin(25);
 		jd.setRightMargin(25);
 		jd.setName(Messages.ReportNewWizard_new_report);
-		
-		JRDesignBand jb  = new JRDesignBand();
+
+		JRDesignQuery jrDesignQuery = new JRDesignQuery();
+		jrDesignQuery.setLanguage("sql");
+		jrDesignQuery.setText("");
+		jd.setQuery(jrDesignQuery);
+
+		JRDesignBand jb = new JRDesignBand();
 		jb.setHeight(100);
 		jd.setPageHeader(jb);
-		
+
 		jb = new JRDesignBand();
 		jb.setHeight(200);
-		((JRDesignSection)jd.getDetailSection()).addBand(jb);
-		
-		jb  = new JRDesignBand();
+		((JRDesignSection) jd.getDetailSection()).addBand(jb);
+
+		jb = new JRDesignBand();
 		jb.setHeight(100);
 		jd.setPageFooter(jb);
-		
+
 		String contents = JasperCompileManager.writeReportToXml(jd);
 		return new ByteArrayInputStream(contents.getBytes());
 	}
 
 	private void throwCoreException(String message) throws CoreException {
-		IStatus status =
-			new Status(IStatus.ERROR, "com.jaspersoft.studio", IStatus.OK, message, null); //$NON-NLS-1$
+		IStatus status = new Status(IStatus.ERROR, "com.jaspersoft.studio", IStatus.OK, message, null); //$NON-NLS-1$
 		throw new CoreException(status);
 	}
 
 	/**
-	 * We will accept the selection in the workbench to see if
-	 * we can initialize from it.
+	 * We will accept the selection in the workbench to see if we can initialize from it.
+	 * 
 	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {

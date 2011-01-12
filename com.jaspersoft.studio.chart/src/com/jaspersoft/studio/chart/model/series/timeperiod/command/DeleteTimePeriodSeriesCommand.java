@@ -38,7 +38,7 @@ public class DeleteTimePeriodSeriesCommand extends Command {
 	private JRDesignTimePeriodSeries jrElement;
 
 	/** The element position. */
-	private int elementPosition = 0;
+	private int oldIndex = 0;
 
 	/**
 	 * Instantiates a new delete element command.
@@ -61,7 +61,7 @@ public class DeleteTimePeriodSeriesCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		elementPosition = jrGroup.getSeriesList().indexOf(jrElement);
+		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 
 		jrGroup.removeTimePeriodSeries(jrElement);
 	}
@@ -85,6 +85,9 @@ public class DeleteTimePeriodSeriesCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		jrGroup.addTimePeriodSeries(jrElement);
+		if (oldIndex >= 0 && oldIndex < jrGroup.getSeriesList().size())
+			jrGroup.addTimePeriodSeries(oldIndex, jrElement);
+		else
+			jrGroup.addTimePeriodSeries(jrElement);
 	}
 }

@@ -75,7 +75,10 @@ public class CreateCategorySeriesCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
-			jrDataset.addCategorySeries(jrElement);
+			if (index >= 0 && index < jrDataset.getSeriesList().size())
+				jrDataset.addCategorySeries(index, jrElement);
+			else
+				jrDataset.addCategorySeries(jrElement);
 		}
 	}
 

@@ -90,7 +90,10 @@ public class CreateChartAxesCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
-			jrChart.addAxis(jrElement);
+			if (index >= 0 && index < jrChart.getAxes().size())
+				jrChart.addAxis(index, jrElement);
+			else
+				jrChart.addAxis(jrElement);
 		}
 	}
 
@@ -113,12 +116,7 @@ public class CreateChartAxesCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		// jrChart.getAxes().remove(jrElemSent);
-
-		jrChart.getAxes().remove(jrElement);
-		JRDesignChartAxis axis0 = (JRDesignChartAxis) jrChart.getAxes().get(0);
-		((JRDesignChart) jrChart.getChart()).setDataset(axis0.getChart().getDataset());
-		jrChart.getEventSupport().firePropertyChange(JRDesignMultiAxisPlot.PROPERTY_AXES, jrElement, null);
+		jrChart.removeAxis(jrElement);
 	}
 
 }

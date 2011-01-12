@@ -75,7 +75,10 @@ public class CreateTimePeriodSeriesCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
-			jrDataset.addTimePeriodSeries(jrElement);
+			if (index >= 0 && index < jrDataset.getSeriesList().size())
+				jrDataset.addTimePeriodSeries(index, jrElement);
+			else
+				jrDataset.addTimePeriodSeries(jrElement);
 		}
 	}
 

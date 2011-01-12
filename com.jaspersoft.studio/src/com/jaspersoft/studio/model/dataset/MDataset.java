@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -210,7 +211,13 @@ public class MDataset extends APropertyNode implements ICopyable {
 
 		if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
 			if (mQuery == null) {
-				mQuery = new MQuery(jrDataset.getQuery());
+				JRQuery jdq = jrDataset.getQuery();
+				if (jdq == null) {
+					jdq = new JRDesignQuery();
+					((JRDesignQuery) jdq).setLanguage("sql");
+					((JRDesignQuery) jdq).setText("");
+				}
+				mQuery = new MQuery(jdq);
 				setChildListener(mQuery);
 			}
 			return mQuery;
@@ -279,7 +286,6 @@ public class MDataset extends APropertyNode implements ICopyable {
 				setChildListener(mQuery);
 				JRDesignQuery jrQuery = (JRDesignQuery) mQuery.getValue();
 				jrDataset.setQuery(jrQuery);
-
 			}
 		}
 	}
@@ -299,6 +305,10 @@ public class MDataset extends APropertyNode implements ICopyable {
 	public static JRDesignDataset createJRDataset(JasperDesign jrDesign) {
 		JRDesignDataset jrDesignDataset = new JRDesignDataset(false);
 		jrDesignDataset.setName(ModelUtils.getDefaultName(jrDesign.getDatasetMap(), "Dataset")); //$NON-NLS-1$
+		JRDesignQuery jrDesignQuery = new JRDesignQuery();
+		jrDesignQuery.setLanguage("sql");
+		jrDesignQuery.setText("");
+		jrDesignDataset.setQuery(jrDesignQuery);
 		return jrDesignDataset;
 	}
 

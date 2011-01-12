@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Barcode Component
 Bundle-SymbolicName: com.jaspersoft.studio.barcode;singleton:=true
-Bundle-Version: 0.1.0
+Bundle-Version: 0.1.1
 Bundle-Activator: com.jaspersoft.studio.barcode.Activator
 Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: org.eclipse.ui,

@@ -77,12 +77,13 @@ public class CreateMeasureCommand extends Command {
 	public void execute() {
 		if (jrMeasure == null) {
 			this.jrMeasure = new JRDesignCrosstabMeasure();
-			this.jrMeasure.setName(ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(), Messages.CreateMeasureCommand_measure));
+			this.jrMeasure.setName(ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(),
+					Messages.CreateMeasureCommand_measure));
 		}
 		if (jrMeasure != null) {
 			try {
-				if (index < 0 || index > jrCrosstab.getMesuresList().size())
-					jrCrosstab.addMeasure(jrMeasure);
+				if (index >= 0 && index < jrCrosstab.getMesuresList().size())
+					jrCrosstab.addMeasure(index, jrMeasure);
 				else
 					jrCrosstab.addMeasure(jrMeasure);
 				// jrCrosstab.addParameter(index, jrParameter);
@@ -90,8 +91,9 @@ public class CreateMeasureCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(), "CopyOFMeasure_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateMeasureCommand_parameter_name,
-							Messages.CreateMeasureCommand_dialog_text, defaultName, null);
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
+							Messages.CreateMeasureCommand_parameter_name, Messages.CreateMeasureCommand_dialog_text, defaultName,
+							null);
 					if (dlg.open() == InputDialog.OK) {
 						jrMeasure.setName(dlg.getValue());
 						execute();

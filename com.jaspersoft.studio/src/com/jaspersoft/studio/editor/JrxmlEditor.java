@@ -73,7 +73,6 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
@@ -165,8 +164,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			int index = addPage(reportContainer, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_design);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_visual_editor, null,
-					e.getStatus());
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
+					null, e.getStatus());
 		}
 	}
 
@@ -190,8 +189,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						}
 					});
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.JrxmlEditor_error_creating_nested_text_editor, null,
-					e.getStatus());
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.JrxmlEditor_error_creating_nested_text_editor, null, e.getStatus());
 		}
 	}
 
@@ -204,8 +203,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			int index = addPage(previewEditor, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_preview);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_visual_editor, null,
-					e.getStatus());
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
+					null, e.getStatus());
 		}
 
 	}
@@ -403,8 +402,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
 					IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
-							"Your .jasper file contain errors, please fix them in xml editor.", e.getCause()); //$NON-NLS-1$
-					ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.JrxmlEditor_error_loading_jrxml_to_model, null, status);
+							"Your report file contain errors, please fix them in xml editor.", e.getCause()); //$NON-NLS-1$
+					ErrorDialog.openError(Display.getDefault().getActiveShell(),
+							Messages.JrxmlEditor_error_loading_jrxml_to_model, null, status);
 				}
 			});
 		}

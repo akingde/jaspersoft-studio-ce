@@ -38,7 +38,7 @@ public class DeleteXYZSeriesCommand extends Command {
 	private JRDesignXyzSeries jrElement;
 
 	/** The element position. */
-	private int elementPosition = 0;
+	private int oldIndex = 0;
 
 	/**
 	 * Instantiates a new delete element command.
@@ -61,7 +61,7 @@ public class DeleteXYZSeriesCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		elementPosition = jrGroup.getSeriesList().indexOf(jrElement);
+		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 
 		jrGroup.removeXyzSeries(jrElement);
 	}
@@ -85,6 +85,10 @@ public class DeleteXYZSeriesCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		jrGroup.addXyzSeries(jrElement);
+		jrGroup.removeXyzSeries(jrElement);
+		if (oldIndex >= 0 && oldIndex < jrGroup.getSeriesList().size())
+			jrGroup.addXyzSeries(oldIndex, jrElement);
+		else
+			jrGroup.addXyzSeries(jrElement);
 	}
 }

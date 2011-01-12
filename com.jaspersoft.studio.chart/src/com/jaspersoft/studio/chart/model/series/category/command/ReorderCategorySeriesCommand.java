@@ -21,9 +21,6 @@ package com.jaspersoft.studio.chart.model.series.category.command;
 
 import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
 import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
-import net.sf.jasperreports.charts.design.JRDesignChartAxis;
-import net.sf.jasperreports.charts.design.JRDesignMultiAxisPlot;
-import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.gef.commands.Command;
 

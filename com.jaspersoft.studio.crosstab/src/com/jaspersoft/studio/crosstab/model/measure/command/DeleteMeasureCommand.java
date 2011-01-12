@@ -89,11 +89,10 @@ public class DeleteMeasureCommand extends Command {
 	@Override
 	public void undo() {
 		try {
-			if (elementPosition < 0 || elementPosition > jrCrosstab.getMesuresList().size())
-				jrCrosstab.addMeasure(jrMeasure);
+			if (elementPosition >= 0 && elementPosition < jrCrosstab.getMesuresList().size())
+				jrCrosstab.addMeasure(elementPosition, jrMeasure);
 			else
 				jrCrosstab.addMeasure(jrMeasure);
-			// jrCrosstab.addParameter(elementPosition, jrParameter);
 		} catch (JRException e) {
 			e.printStackTrace();
 		}

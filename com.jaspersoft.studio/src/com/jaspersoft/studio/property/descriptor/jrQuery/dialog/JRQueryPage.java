@@ -47,17 +47,19 @@ public class JRQueryPage extends WizardPage {
 
 	@Override
 	public void dispose() {
+		String lang = "";
+		int selectionIndex = langCombo.getSelectionIndex();
+		if (selectionIndex < 0)
+			lang = langCombo.getText().trim();
+		else
+			lang = langCombo.getItem(selectionIndex);
+		String text = queryText.getText();
+
 		JRDesignQuery jrQuery = new JRDesignQuery();
-		try {
-			int selectionIndex = langCombo.getSelectionIndex();
-			if (selectionIndex < 0)
-				selectionIndex = 0;
-			jrQuery.setLanguage(langCombo.getItem(selectionIndex));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		jrQuery.setText(queryText.getText());
+		jrQuery.setLanguage(lang);
+		jrQuery.setText(text);
 		value = new MQuery(jrQuery);
+
 		super.dispose();
 	}
 
@@ -120,6 +122,8 @@ public class JRQueryPage extends WizardPage {
 				break;
 			}
 		}
+		if (langCombo.getSelectionIndex() < 0)
+			langCombo.setText(lang);
 
 		String text = (String) value.getPropertyValue(JRDesignQuery.PROPERTY_TEXT);
 		if (text == null)

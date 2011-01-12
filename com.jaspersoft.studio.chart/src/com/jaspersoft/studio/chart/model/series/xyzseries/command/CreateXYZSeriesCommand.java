@@ -75,7 +75,10 @@ public class CreateXYZSeriesCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
-			jrDataset.addXyzSeries(jrElement);
+			if (index >= 0 && index < jrDataset.getSeriesList().size())
+				jrDataset.addXyzSeries(index, jrElement);
+			else
+				jrDataset.addXyzSeries(jrElement);
 		}
 	}
 

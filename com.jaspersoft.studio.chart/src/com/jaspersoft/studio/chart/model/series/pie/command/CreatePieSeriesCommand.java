@@ -75,7 +75,10 @@ public class CreatePieSeriesCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
-			jrDataset.addPieSeries(jrElement);
+			if (index >= 0 && index < jrDataset.getSeriesList().size())
+				jrDataset.addPieSeries(index, jrElement);
+			else
+				jrDataset.addPieSeries(jrElement);
 		}
 	}
 
