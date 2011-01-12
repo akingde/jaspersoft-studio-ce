@@ -66,10 +66,13 @@ public class ReorderCategorySeriesCommand extends Command {
 	 */
 	public void execute() {
 		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
-
-		jrGroup.addCategorySeries(jrElement);
 		jrGroup.removeCategorySeries(jrElement);
 
+		if (newIndex >= 0 && newIndex < jrGroup.getSeriesList().size())
+			jrGroup.addCategorySeries(newIndex, jrElement);
+		else
+			jrGroup.addCategorySeries(jrElement);
+		
 	}
 
 	/*
@@ -80,7 +83,10 @@ public class ReorderCategorySeriesCommand extends Command {
 	public void undo() {
 		jrGroup.removeCategorySeries(jrElement);
 
-		jrGroup.addCategorySeries(jrElement);
+		if (oldIndex >= 0 && oldIndex < jrGroup.getSeriesList().size())
+			jrGroup.addCategorySeries(oldIndex, jrElement);
+		else
+			jrGroup.addCategorySeries(jrElement);
 	}
 
 }

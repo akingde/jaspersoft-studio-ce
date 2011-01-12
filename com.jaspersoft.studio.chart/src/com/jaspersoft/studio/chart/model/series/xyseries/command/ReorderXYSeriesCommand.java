@@ -64,9 +64,11 @@ public class ReorderXYSeriesCommand extends Command {
 	public void execute() {
 		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 
-		jrGroup.addXySeries(jrElement);
 		jrGroup.removeXySeries(jrElement);
-
+		if (newIndex >= 0 && newIndex < jrGroup.getSeriesList().size())
+			jrGroup.addXySeries(newIndex, jrElement);
+		else
+			jrGroup.addXySeries(jrElement);
 	}
 
 	/*
@@ -75,9 +77,10 @@ public class ReorderXYSeriesCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	public void undo() {
-		jrGroup.removeXySeries(jrElement);
-
-		jrGroup.addXySeries(jrElement);
+		if (oldIndex >= 0 && oldIndex < jrGroup.getSeriesList().size())
+			jrGroup.addXySeries(oldIndex, jrElement);
+		else
+			jrGroup.addXySeries(jrElement);
 	}
 
 }

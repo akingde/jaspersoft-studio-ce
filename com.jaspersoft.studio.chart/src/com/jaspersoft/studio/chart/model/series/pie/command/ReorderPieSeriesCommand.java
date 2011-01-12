@@ -64,8 +64,11 @@ public class ReorderPieSeriesCommand extends Command {
 	public void execute() {
 		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 
-		jrGroup.addPieSeries(jrElement);
 		jrGroup.removePieSeries(jrElement);
+		if (newIndex >= 0 && newIndex < jrGroup.getSeriesList().size())
+			jrGroup.addPieSeries(newIndex, jrElement);
+		else
+			jrGroup.addPieSeries(jrElement);
 
 	}
 
@@ -76,8 +79,10 @@ public class ReorderPieSeriesCommand extends Command {
 	 */
 	public void undo() {
 		jrGroup.removePieSeries(jrElement);
-
-		jrGroup.addPieSeries(jrElement);
+		if (oldIndex >= 0 && oldIndex < jrGroup.getSeriesList().size())
+			jrGroup.addPieSeries(oldIndex, jrElement);
+		else
+			jrGroup.addPieSeries(jrElement);
 	}
 
 }

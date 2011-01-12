@@ -64,9 +64,11 @@ public class ReorderTimeSeriesCommand extends Command {
 	public void execute() {
 		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 
-		jrGroup.addTimeSeries(jrElement);
 		jrGroup.removeTimeSeries(jrElement);
-
+		if (newIndex >= 0 && newIndex < jrGroup.getSeriesList().size())
+			jrGroup.addTimeSeries(newIndex, jrElement);
+		else
+			jrGroup.addTimeSeries(jrElement);
 	}
 
 	/*
@@ -76,8 +78,10 @@ public class ReorderTimeSeriesCommand extends Command {
 	 */
 	public void undo() {
 		jrGroup.removeTimeSeries(jrElement);
-
-		jrGroup.addTimeSeries(jrElement);
+		if (oldIndex >= 0 && oldIndex < jrGroup.getSeriesList().size())
+			jrGroup.addTimeSeries(oldIndex, jrElement);
+		else
+			jrGroup.addTimeSeries(jrElement);
 	}
 
 }
