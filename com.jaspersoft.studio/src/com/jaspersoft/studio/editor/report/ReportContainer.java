@@ -51,7 +51,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.util.ModelVisitor;
 
 /**
  * The Class ReportContainer.
@@ -103,9 +102,11 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 			ReportEditor reportEditor = new ReportEditor();
 			int index = addPage(reportEditor, getEditorInput());
 			setPageText(index, Messages.ReportContainer_main_report);
+			setPageImage(index, reportEditor.getPartImage());
 			editors.add(reportEditor);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(getSite().getShell(), Messages.common_error_creating_nested_visual_editor, null, e.getStatus());
+			ErrorDialog.openError(getSite().getShell(), Messages.common_error_creating_nested_visual_editor, null,
+					e.getStatus());
 		}
 		getEditorSite().getActionBarContributor();
 	}
@@ -170,20 +171,10 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		if (model != null && model.getChildren() != null && !model.getChildren().isEmpty())
 			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelListener);
 		this.model = model;
-		createModelPages(model);
 		updateVisualView();
 	}
 
 	private Map<Object, AbstractVisualEditor> ccMap = new HashMap<Object, AbstractVisualEditor>();
-
-	private void createModelPages(INode model) {
-		new ModelVisitor(model) {
-			@Override
-			public void visit(INode node) {
-				// createEditorPage(node.getValue());
-			}
-		};
-	}
 
 	private ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 
@@ -199,14 +190,12 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				ave = m.getEditor(obj);
 				if (ave != null) {
 					int index = addPage(ave, getEditorInput());
-					setPageText(index, ave.getPartName());
+
 					editors.add(ave);
 					ccMap.put(node.getValue(), ave);
 					ave.setModel(root);
-					AbstractVisualEditor mainave = getMainEditor();
-//					if (mainave != null)
-//						ave.getEditDomain().setCommandStack(mainave.getEditDomain().getCommandStack());
-
+					setPageText(index, ave.getPartName());
+					setPageImage(index, ave.getPartImage());
 				}
 			}
 		} catch (PartInitException e) {

@@ -518,6 +518,7 @@ public class Messages extends NLS {
 	public static String MStyle_scale;
 	public static String MStyle_scale_description;
 	public static String MStyle_strike_trough_description;
+	public static String MStyle_Style_properties;
 	public static String MStyle_text_font_category;
 	public static String MStyle_underline_description;
 	public static String MStyle_vertical_alignment_description;

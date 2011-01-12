@@ -65,6 +65,7 @@ import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPart;
@@ -109,6 +110,7 @@ import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 
 /**
@@ -117,6 +119,11 @@ import com.jaspersoft.studio.preferences.PreferenceConstants;
  * @author Chicu Veaceslav
  */
 public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable {
+	private Image partImage = JaspersoftStudioPlugin.getImage(MReport.getIconDescriptor().getIcon16());
+
+	public Image getPartImage() {
+		return partImage;
+	}
 
 	/**
 	 * Instantiates a new abstract visual editor.
@@ -149,6 +156,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		// getGraphicalViewer().setRootEditPart(new MainDesignerRootEditPart());
 		// if (model != null)
 		getGraphicalViewer().setContents(model);
+	}
+
+	public void setPartImage(Image partImage) {
+		this.partImage = partImage;
 	}
 
 	/**
