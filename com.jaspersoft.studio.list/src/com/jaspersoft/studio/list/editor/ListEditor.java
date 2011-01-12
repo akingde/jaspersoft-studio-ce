@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.list.editor;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
@@ -31,6 +30,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.list.messages.Messages;
+import com.jaspersoft.studio.list.model.MList;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 
 /**
@@ -42,6 +42,7 @@ public class ListEditor extends AbstractVisualEditor {
 	public ListEditor() {
 		super();
 		setPartName(Messages.ListEditor_list);
+		setPartImage(JaspersoftStudioPlugin.getImage(MList.getIconDescriptor().getIcon16()));
 	}
 
 	/*
