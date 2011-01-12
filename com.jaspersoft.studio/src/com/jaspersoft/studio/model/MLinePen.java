@@ -120,7 +120,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 			else if (id.equals(JRBasePen.PROPERTY_LINE_COLOR)) {
 				if (value == null)
 					linePen.setLineColor(null);
-				if (value instanceof RGB)
+				else if (value instanceof RGB)
 					linePen.setLineColor(Colors.getAWT4SWTRGBColor((RGB) value));
 			} else if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
 				linePen.setLineStyle((LineStyleEnum) EnumHelper.getSetValue(LineStyleEnum.values(), value, 0, true));

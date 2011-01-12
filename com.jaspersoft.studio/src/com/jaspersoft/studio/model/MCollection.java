@@ -48,7 +48,7 @@ public abstract class MCollection extends ANode implements IPastable, IContainer
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		PropertyChangeEvent newEvent = evt;
+		// PropertyChangeEvent newEvent = evt;
 		if (evt.getPropertyName().equals(PROPERTY_PARAMETERS) && evt.getSource() == getValue()) {
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
 				int newIndex = -1;
@@ -73,9 +73,8 @@ public abstract class MCollection extends ANode implements IPastable, IContainer
 				}
 			}
 		}
-//		if (!(evt.getSource() instanceof ANode))
-//			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-		getPropertyChangeSupport().firePropertyChange(newEvent);
+		super.propertyChange(evt);
+		// getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
 
 }

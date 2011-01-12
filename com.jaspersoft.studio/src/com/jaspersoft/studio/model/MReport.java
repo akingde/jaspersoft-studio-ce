@@ -515,14 +515,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		} else if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS)) {
 			handleGroupChanged(evt);
 		}
-		PropertyChangeEvent newEvent = evt;
-		if (evt.getSource() instanceof JRDesignElement) {
-
-		} else {
-			if (!(evt.getSource() instanceof MReport))
-				newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-			getPropertyChangeSupport().firePropertyChange(newEvent);
-		}
+		super.propertyChange(evt);
 	}
 
 	/**

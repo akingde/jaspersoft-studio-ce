@@ -73,7 +73,7 @@ public abstract class MGraphicElementLineBox extends MGraphicElement implements 
 			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
 			if (lineBox == null) {
 				lineBox = new MLineBox(jrGraphicElement.getLineBox());
-				lineBox.getPropertyChangeSupport().addPropertyChangeListener(this);
+				setChildListener(lineBox);
 			}
 			return lineBox;
 		}

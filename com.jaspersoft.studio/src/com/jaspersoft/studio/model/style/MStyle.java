@@ -23,7 +23,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -308,6 +307,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		patternD.setDescription(Messages.MStyle_pattern_description);
 		desc.add(patternD);
 
+		styleD.setCategory(Messages.MStyle_Style_properties);
+		nameD.setCategory(Messages.MStyle_Style_properties);
+		defaultD.setCategory(Messages.MStyle_Style_properties);
+
 		forecolorD.setCategory(Messages.MStyle_common_category);
 		backcolorD.setCategory(Messages.MStyle_common_category);
 		modeD.setCategory(Messages.MStyle_common_category);
@@ -393,10 +396,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				setChildListener(lineBox);
 			}
 			return lineBox;
-		}
-		if (id.equals(LINE_BOX)) {
-			JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
-			return jrGraphicElement.getLineBox();
 		}
 		if (id.equals(JRBaseStyle.PROPERTY_PATTERN))
 			return jrstyle.getOwnPattern();
@@ -533,7 +532,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		PropertyChangeEvent newEvent = evt;
 		if (evt.getPropertyName().equals(JRDesignStyle.PROPERTY_CONDITIONAL_STYLES) && evt.getSource() == getValue()) {
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
 				int newIndex = -1;
@@ -558,9 +556,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				}
 			}
 		}
-		if (!(evt.getSource() instanceof ANode))
-			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-		getPropertyChangeSupport().firePropertyChange(newEvent);
+		evt = new PropertyChangeEvent(getValue(), evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+		super.propertyChange(evt);
 	}
 
 	public boolean isCopyable2(Object parent) {

@@ -282,18 +282,18 @@ public abstract class ANode implements INode {
 				}
 			}
 		}
-		PropertyChangeEvent newEvent = evt;
-		if (evt.getSource() instanceof ANode) {
-			// ANode enode = (ANode) evt.getSource();
-			// if (dependents.contains(enode)) {
-			// newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(),
-			// evt.getNewValue());
-			// }
-		} else {
-			// newEvent = new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(), evt.getOldValue(),
-			// evt.getNewValue());
-		}
-		getPropertyChangeSupport().firePropertyChange(newEvent);
+		// PropertyChangeEvent newEvent = evt;
+		// if (evt.getSource() instanceof ANode) {
+		// ANode enode = (ANode) evt.getSource();
+		// if (dependents.contains(enode)) {
+		// newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(),
+		// evt.getNewValue());
+		// }
+		// } else {
+		// newEvent = new PropertyChangeEvent(evt.getSource(), evt.getPropertyName(), evt.getOldValue(),
+		// evt.getNewValue());
+		// }
+		getPropertyChangeSupport().firePropertyChange(evt);
 	}
 
 	/*

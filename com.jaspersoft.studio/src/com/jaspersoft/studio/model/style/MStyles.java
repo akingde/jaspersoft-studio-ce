@@ -105,7 +105,6 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		PropertyChangeEvent newEvent = evt;
 		if (evt.getPropertyName().equals(JasperDesign.PROPERTY_STYLES)
 				|| evt.getPropertyName().equals(JasperDesign.PROPERTY_TEMPLATES) && evt.getSource() == getValue()) {
 			if (evt.getOldValue() == null && evt.getNewValue() != null) {
@@ -138,11 +137,8 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 						n.setValue(evt.getNewValue());
 				}
 			}
-			// REFRESH EDIT PARTS
 		}
-		if (!(evt.getSource() instanceof ANode))
-			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-		getPropertyChangeSupport().firePropertyChange(newEvent);
+		super.propertyChange(evt);
 	}
 
 }
