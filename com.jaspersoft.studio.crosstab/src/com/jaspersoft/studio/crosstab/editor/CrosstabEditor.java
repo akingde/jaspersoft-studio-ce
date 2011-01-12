@@ -19,13 +19,13 @@
  */
 package com.jaspersoft.studio.crosstab.editor;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.crosstab.messages.Messages;
+import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
@@ -42,6 +42,7 @@ public class CrosstabEditor extends AbstractVisualEditor {
 	public CrosstabEditor() {
 		super();
 		setPartName(Messages.CrosstabEditor_crosstab);
+		setPartImage(JaspersoftStudioPlugin.getImage(MCrosstab.getIconDescriptor().getIcon16()));
 	}
 
 	/*

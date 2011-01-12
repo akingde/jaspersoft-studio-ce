@@ -61,6 +61,7 @@ import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroups;
 import com.jaspersoft.studio.crosstab.model.columngroup.action.CreateColumnGroupAction;
 import com.jaspersoft.studio.crosstab.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.crosstab.model.columngroup.command.DeleteColumnGroupCommand;
+import com.jaspersoft.studio.crosstab.model.columngroup.command.ReorderColumnGroupCommand;
 import com.jaspersoft.studio.crosstab.model.crosstab.command.CreateCrosstabCommand;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeader;
 import com.jaspersoft.studio.crosstab.model.header.MCrosstabHeaderCell;
@@ -87,6 +88,7 @@ import com.jaspersoft.studio.crosstab.model.rowgroup.MRowGroups;
 import com.jaspersoft.studio.crosstab.model.rowgroup.action.CreateRowGroupAction;
 import com.jaspersoft.studio.crosstab.model.rowgroup.command.CreateRowGroupCommand;
 import com.jaspersoft.studio.crosstab.model.rowgroup.command.DeleteRowGroupCommand;
+import com.jaspersoft.studio.crosstab.model.rowgroup.command.ReorderRowGroupCommand;
 import com.jaspersoft.studio.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.crosstab.part.CrosstabEditPart;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
@@ -242,7 +244,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	public static void deleteCellNodes(MCrosstab mCrosstab) {
 		List<INode> nodes = new ArrayList<INode>();
 		for (INode n : mCrosstab.getChildren()) {
-			if (n instanceof MCell)
+			if (n instanceof MCell || n instanceof MCrosstabWhenNoData || n instanceof MCrosstabHeader)
 				nodes.add(n);
 		}
 		mCrosstab.removeChildren(nodes);
@@ -380,14 +382,14 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			if (parent instanceof MMeasures)
 				return new ReorderMeasureCommand((MMeasure) child, (MMeasures) parent, newIndex);
 		}
-		// if (child instanceof MColumnGroup) {
-		// if (parent instanceof MColumnGroups)
-		// return new ReorderColumnGroupCommand((MColumnGroup) child, (MColumnGroups) parent, newIndex);
-		// }
-		// if (child instanceof MRowGroup) {
-		// if (parent instanceof MRowGroups)
-		// return new ReorderRowGroupCommand((MRowGroup) child, (MRowGroups) parent, newIndex);
-		// }
+		if (child instanceof MColumnGroup && child.getValue() != null) {
+			if (parent instanceof MColumnGroups)
+				return new ReorderColumnGroupCommand((MColumnGroup) child, (MColumnGroups) parent, newIndex);
+		}
+		if (child instanceof MRowGroup && child.getValue() != null) {
+			if (parent instanceof MRowGroups)
+				return new ReorderRowGroupCommand((MRowGroup) child, (MRowGroups) parent, newIndex);
+		}
 		if (child instanceof MGraphicElement && parent instanceof MCell)
 			return new ReorderElementCommand((MGraphicElement) child, (MCell) parent, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)

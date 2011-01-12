@@ -17,27 +17,27 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.crosstab.model.measure.command;
+package com.jaspersoft.studio.crosstab.model.rowgroup.command;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.crosstab.messages.Messages;
-import com.jaspersoft.studio.crosstab.model.measure.MMeasure;
-import com.jaspersoft.studio.crosstab.model.measure.MMeasures;
+import com.jaspersoft.studio.crosstab.model.rowgroup.MRowGroup;
+import com.jaspersoft.studio.crosstab.model.rowgroup.MRowGroups;
 
 /**
  * The Class ReorderParameterCommand.
  */
-public class ReorderMeasureCommand extends Command {
+public class ReorderRowGroupCommand extends Command {
 
 	/** The new index. */
 	private int oldIndex, newIndex;
 
 	/** The jr parameter. */
-	private JRDesignCrosstabMeasure jrMeasure;
+	private JRDesignCrosstabRowGroup jrRowGroup;
 
 	/** The jr dataset. */
 	private JRDesignCrosstab jrCrosstab;
@@ -52,12 +52,12 @@ public class ReorderMeasureCommand extends Command {
 	 * @param newIndex
 	 *          the new index
 	 */
-	public ReorderMeasureCommand(MMeasure child, MMeasures parent, int newIndex) {
+	public ReorderRowGroupCommand(MRowGroup child, MRowGroups parent, int newIndex) {
 		super(Messages.common_reorder_elements);
 
 		this.newIndex = newIndex;
 		this.jrCrosstab = (JRDesignCrosstab) parent.getValue();
-		this.jrMeasure = (JRDesignCrosstabMeasure) child.getValue();
+		this.jrRowGroup = (JRDesignCrosstabRowGroup) child.getValue();
 	}
 
 	/*
@@ -66,17 +66,16 @@ public class ReorderMeasureCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	public void execute() {
-		oldIndex = jrCrosstab.getMesuresList().indexOf(jrMeasure);
+		oldIndex = jrCrosstab.getRowGroupsList().indexOf(jrRowGroup);
 
-		jrCrosstab.getMesuresList().remove(jrMeasure);
-		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_MEASURES, jrMeasure,
+		jrCrosstab.getRowGroupsList().remove(jrRowGroup);
+		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,
 				oldIndex);
-		if (newIndex >= 0 && newIndex < jrCrosstab.getMesuresList().size())
-			jrCrosstab.getMesuresList().add(newIndex, jrMeasure);
+		if (newIndex >= 0 && newIndex < jrCrosstab.getRowGroupsList().size())
+			jrCrosstab.getRowGroupsList().add(newIndex, jrRowGroup);
 		else
-			jrCrosstab.getMesuresList().add(jrMeasure);
-
-		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_MEASURES, jrMeasure,
+			jrCrosstab.getRowGroupsList().add(jrRowGroup);
+		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,
 				newIndex);
 	}
 
@@ -86,14 +85,15 @@ public class ReorderMeasureCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	public void undo() {
-		jrCrosstab.getMesuresList().remove(jrMeasure);
-		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_MEASURES, jrMeasure,
+
+		jrCrosstab.getRowGroupsList().remove(jrRowGroup);
+		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,
 				newIndex);
-		if (oldIndex >= 0 && oldIndex < jrCrosstab.getMesuresList().size())
-			jrCrosstab.getMesuresList().add(oldIndex, jrMeasure);
+		if (oldIndex >= 0 && oldIndex < jrCrosstab.getRowGroupsList().size())
+			jrCrosstab.getRowGroupsList().add(oldIndex, jrRowGroup);
 		else
-			jrCrosstab.getMesuresList().add(jrMeasure);
-		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_MEASURES, jrMeasure,
+			jrCrosstab.getRowGroupsList().add(jrRowGroup);
+		jrCrosstab.getEventSupport().fireCollectionElementAddedEvent(JRDesignCrosstab.PROPERTY_ROW_GROUPS, jrRowGroup,
 				oldIndex);
 	}
 }

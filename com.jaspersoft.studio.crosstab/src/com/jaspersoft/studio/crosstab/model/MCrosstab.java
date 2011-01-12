@@ -385,7 +385,9 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 					}
 				}
 			}
-		} else if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_CELLS)) {
+		} else if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_CELLS)
+				|| evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_ROW_GROUPS)
+				|| evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS)) {
 			if (evt.getSource() == getValue() && getValue() != null && !flagRefreshCells) {
 				flagRefreshCells = true;
 				CrosstabComponentFactory.deleteCellNodes(MCrosstab.this);
