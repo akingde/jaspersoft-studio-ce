@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.table.editor;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
@@ -32,6 +31,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 import com.jaspersoft.studio.table.messages.Messages;
+import com.jaspersoft.studio.table.model.MTable;
 
 /**
  * The Class TableEditor.
@@ -42,6 +42,7 @@ public class TableEditor extends AbstractVisualEditor {
 	public TableEditor() {
 		super();
 		setPartName(Messages.TableEditor_table);
+		setPartImage(JaspersoftStudioPlugin.getImage(MTable.getIconDescriptor().getIcon16()));
 	}
 
 	/*

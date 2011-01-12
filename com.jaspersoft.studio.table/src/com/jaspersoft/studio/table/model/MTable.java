@@ -123,7 +123,8 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(StandardTable.PROPERTY_DATASET_RUN, Messages.MTable_dataset_run);
+		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(StandardTable.PROPERTY_DATASET_RUN,
+				Messages.MTable_dataset_run);
 		datasetRunD.setDescription(Messages.MTable_dataset_run_description);
 		datasetRunD.setCategory(Messages.MTable_table_properties_category);
 		desc.add(datasetRunD);
