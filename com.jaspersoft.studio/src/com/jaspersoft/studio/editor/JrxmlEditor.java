@@ -160,6 +160,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					updateContentOutline(PAGE_DESIGNER);
 				}
 			});
+			reportContainer.getPropertyChangeSupport().addPropertyChangeListener(modelPropertyChangeListener);
 
 			int index = addPage(reportContainer, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_design);

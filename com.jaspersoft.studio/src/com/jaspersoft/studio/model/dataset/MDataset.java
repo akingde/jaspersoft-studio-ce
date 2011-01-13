@@ -212,11 +212,6 @@ public class MDataset extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
 			if (mQuery == null) {
 				JRQuery jdq = jrDataset.getQuery();
-				if (jdq == null) {
-					jdq = new JRDesignQuery();
-					((JRDesignQuery) jdq).setLanguage("sql");
-					((JRDesignQuery) jdq).setText("");
-				}
 				mQuery = new MQuery(jdq);
 				setChildListener(mQuery);
 			}

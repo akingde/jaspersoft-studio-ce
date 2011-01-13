@@ -21,6 +21,7 @@ package com.jaspersoft.studio.editor.report;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +69,13 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 
 	/** The parent. */
 	private EditorPart parent;
+	private PropertyChangeSupport propertyChangeSupport;
+
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		if (propertyChangeSupport == null)
+			propertyChangeSupport = new PropertyChangeSupport(this);
+		return propertyChangeSupport;
+	}
 
 	/**
 	 * Instantiates a new report container.
@@ -155,6 +163,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				if (obj != null)
 					removeEditorPage(evt, obj);
 			}
+			getPropertyChangeSupport().firePropertyChange(evt);
 		}
 
 	};
@@ -196,6 +205,8 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 					ave.setModel(root);
 					setPageText(index, ave.getPartName());
 					setPageImage(index, ave.getPartImage());
+
+					rep.getPropertyChangeSupport().addPropertyChangeListener(modelListener);
 				}
 			}
 		} catch (PartInitException e) {
@@ -205,6 +216,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	}
 
 	private void removeEditorPage(PropertyChangeEvent evt, AbstractVisualEditor ave) {
+		ave.getModel().getPropertyChangeSupport().addPropertyChangeListener(modelListener);
 		ave.setModel(null);
 		int ind = editors.indexOf(ave);
 		removePage(ind);

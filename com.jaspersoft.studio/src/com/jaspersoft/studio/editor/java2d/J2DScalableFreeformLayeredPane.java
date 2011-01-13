@@ -22,7 +22,6 @@ package com.jaspersoft.studio.editor.java2d;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 
-// TODO: Auto-generated Javadoc
 /**
  * A J2DScalableFreeformLayeredPane behaves like a ScalableFreeformLayeredPane except that no intermediaite
  * ScaledGraphics is created: the scale factor is directly applied to the Graphics object because java2D will compute

@@ -26,7 +26,6 @@ package com.jaspersoft.studio.editor.java2d;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class J2DScrollingGraphicalViewer.
  */
