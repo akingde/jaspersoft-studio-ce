@@ -43,6 +43,6 @@ public class BooleanCellEditorValidator implements ICellEditorValidator {
 		if (value instanceof Boolean)
 			return null;
 		else
-			return "Value is not instanceof Boolean!"; //$NON-NLS-1$
+			return Messages.BooleanCellEditorValidator_value_is_not_instance_of_boolean; 
 	}
 }

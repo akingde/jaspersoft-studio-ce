@@ -160,7 +160,6 @@ public class JRPropertyPage extends WizardPage {
 				List<PropertyDTO> list = (List<PropertyDTO>) tableViewer.getInput();
 				PropertyDTO p = new PropertyDTO();
 				p.setValue("");
-				p.setValue("");
 				list.add(p);
 				tableViewer.add(p);
 				tableViewer.setSelection(new StructuredSelection(p));
@@ -171,7 +170,7 @@ public class JRPropertyPage extends WizardPage {
 		});
 
 		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText("&delete"); //$NON-NLS-1$
+		delB.setText(Messages.common_delete); 
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		delB.setLayoutData(gridData);
@@ -358,7 +357,7 @@ public class JRPropertyPage extends WizardPage {
 					List<PropertyDTO> plist = (List<PropertyDTO>) tableViewer.getInput();
 					for (PropertyDTO p : plist) {
 						if (p != data && p.getProperty() != null && p.getProperty().equals(value)) {
-							setErrorMessage("Properties are unique, you can't put duplicate values");
+							setErrorMessage(Messages.JRPropertyPage_error_message);
 							return;
 						}
 					}

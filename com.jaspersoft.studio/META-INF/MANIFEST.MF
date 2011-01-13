@@ -2,15 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio
 Bundle-SymbolicName: com.jaspersoft.studio;singleton:=true
-Bundle-Version: 0.1.2
+Bundle-Version: 0.1.1
 Bundle-Activator: com.jaspersoft.studio.JaspersoftStudioPlugin
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-NativeCode: 
- /libnative/Linux/i386/libj2d-gtk-linux-i386-2.0.0.so ; osname=Linux ; processor=x86, 
- /libnative/Windows/i386/J2DWin32ImageRenderer.dll ; osname=Win32 ; processor=x86 
+ /libnative/Linux/i386/libj2d-gtk-linux-i386-2.0.0.so ; osname=Linux ; processor=x86,
+ /libnative/Windows/i386/J2DWin32ImageRenderer.dll ; osname=Win32 ; processor=x86,
+ /libnative/Windows/i386/J2DWin32ImageRenderer.dll ; osname=Win7 ; processor=x86_64
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,

@@ -62,6 +62,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.table.editor.TableEditor;
 import com.jaspersoft.studio.table.figure.CellFigure;
 import com.jaspersoft.studio.table.figure.TableFigure;
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.model.MTableColumnFooter;
@@ -271,7 +272,7 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public static ANode createColumnCell(ANode parent, BaseColumn bc, int i, Cell grHeader, int index) {
-		String name = "Column" + i;
+		String name = Messages.TableComponentFactory_column + i;
 		if (grHeader != null) {
 			MCell mc = new MCell(parent, (StandardBaseColumn) bc, (DesignCell) grHeader, name, index);
 			ReportFactory.createElementsForBand(mc, grHeader.getChildren());
@@ -281,7 +282,7 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public static MColumn getColumnGroup(ANode mth, StandardColumnGroup scg, DesignCell cell, int i, int index) {
-		String name = "Columns " + i + "-" + (i + scg.getColumns().size() - 1);
+		String name = Messages.TableComponentFactory_columns + " " + i + "-" + (i + scg.getColumns().size() - 1); //$NON-NLS-1$ //$NON-NLS-2$
 		MColumn mcg = null;
 		if (cell != null) {
 			mcg = new MColumnGroupCell(mth, scg, cell, name, index);

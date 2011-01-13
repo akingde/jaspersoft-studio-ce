@@ -121,11 +121,11 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 		if (accPart == null)
 			accPart = new AccessibleGraphicalEditPart() {
 				public void getName(AccessibleEvent e) {
-					e.result = isHorizontal() ? "Horizontal" : "Vertical";
+					e.result = isHorizontal() ? "Horizontal" : "Vertical"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
 				public void getDescription(AccessibleEvent e) {
-					e.result = "Ruler";
+					e.result = "Ruler"; //$NON-NLS-1$
 				}
 			};
 		return accPart;

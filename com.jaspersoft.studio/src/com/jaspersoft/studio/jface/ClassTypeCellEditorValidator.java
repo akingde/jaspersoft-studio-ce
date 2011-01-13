@@ -21,6 +21,8 @@ package com.jaspersoft.studio.jface;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
  * The Class IntegerCellEditorValidator.
  * 
@@ -55,7 +57,7 @@ public class ClassTypeCellEditorValidator implements ICellEditorValidator {
 				new Integer((String) value);
 			return null;
 		} catch (NumberFormatException exc) {
-			return "This is not an Integer number"; //$NON-NLS-1$
+			return Messages.common_this_is_not_an_integer_number; 
 		}
 	}
 

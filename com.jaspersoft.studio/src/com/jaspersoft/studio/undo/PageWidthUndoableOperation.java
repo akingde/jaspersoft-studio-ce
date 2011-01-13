@@ -32,6 +32,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import com.jaspersoft.studio.messages.Messages;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class PageWidthUndoableOperation.
@@ -59,7 +61,7 @@ public class PageWidthUndoableOperation extends AbstractOperation {
 	 */
 	public PageWidthUndoableOperation(JasperDesign jd, int oldWidth, int newWidth)
 	{
-		super("change page width");
+		super(Messages.PageWidthUndoableOperation_change_page_width);
 		this.jd=jd;
 		this.oldWidth=oldWidth;
 		this.newWidth=newWidth;

@@ -31,6 +31,8 @@ public class Messages extends NLS {
 	public static String MTableGroupHeader_group_header;
 	public static String ReorderColumnCommand_reorder_columns;
 	public static String ReorderColumnGroupCommand_reorder_column_group;
+	public static String TableComponentFactory_column;
+	public static String TableComponentFactory_columns;
 	public static String TableEditor_table;
 	public static String TableWizardPage_wizard_description;
 	static {

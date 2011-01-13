@@ -83,6 +83,7 @@ public class Messages extends NLS {
 	public static String common_subreport_parameters;
 	public static String common_table_is_empty;
 	public static String common_text;
+	public static String common_this_is_not_an_integer_number;
 	public static String common_underline;
 	public static String common_username;
 	public static String common_using_cache;
@@ -113,6 +114,7 @@ public class Messages extends NLS {
 	public static String BandConstraintCommand_band_resized;
 	public static String BandSection_height_tool_tip;
 	public static String BandSection_split_type_tool_tip;
+	public static String BooleanCellEditorValidator_value_is_not_instance_of_boolean;
 	public static String BordersSection_all_borders_tool_tip;
 	public static String BordersSection_border_and_padding;
 	public static String BordersSection_bottom_border_tool_tip;
@@ -194,6 +196,7 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_page_border_style;
 	public static String DesignerPreferencePage_rectangle;
 	public static String DesignerPreferencePage_simple_shadow;
+	public static String DoubleCellEditorValidator_this_is_not_a_double_number;
 	public static String DTPDatasourcePage_description;
 	public static String DTPDatasourcePage_dtp_datasource;
 	public static String EditDataSourceAction_description;
@@ -205,6 +208,7 @@ public class Messages extends NLS {
 	public static String FileDatasourcePage_description;
 	public static String FileDatasourcePage_file_datasource;
 	public static String FileDatasourcePage_use_first_row_as_header;
+	public static String FloatCellEditorValidator_this_is_not_a_float_number;
 	public static String FontSection_bold_tool_tip;
 	public static String FontSection_font_name_tool_tip;
 	public static String FontSection_font_size_tool_tip;
@@ -223,6 +227,7 @@ public class Messages extends NLS {
 	public static String JRExpressionPage_description;
 	public static String JRExpressionPage_value_class_name;
 	public static String JRPropertyPage_description;
+	public static String JRPropertyPage_error_message;
 	public static String JRPropertyPage_value;
 	public static String JRQueryPage_description;
 	public static String JrxmlEditor_design;
@@ -585,6 +590,7 @@ public class Messages extends NLS {
 	public static String PageSizeSection_portrait;
 	public static String PageSizeSection_portrait_tool_tip;
 	public static String PageSizeSection_width_tool_tip;
+	public static String PageWidthUndoableOperation_change_page_width;
 	public static String ParameterPage_dataset_parameters;
 	public static String ParameterPage_description;
 	public static String ParameterPage_generic_elements_parameters;

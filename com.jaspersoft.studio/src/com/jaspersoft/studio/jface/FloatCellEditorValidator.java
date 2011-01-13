@@ -21,6 +21,8 @@ package com.jaspersoft.studio.jface;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
+import com.jaspersoft.studio.messages.Messages;
+
 /**
  * The Class FloatCellEditorValidator.
  * 
@@ -55,7 +57,7 @@ public class FloatCellEditorValidator implements ICellEditorValidator {
 				new Float((String) value);
 			return null;
 		} catch (NumberFormatException exc) {
-			return "This is not a float number"; //$NON-NLS-1$
+			return Messages.FloatCellEditorValidator_this_is_not_a_float_number; 
 		}
 	}
 
