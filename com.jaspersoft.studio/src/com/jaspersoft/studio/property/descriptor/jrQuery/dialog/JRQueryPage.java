@@ -55,11 +55,14 @@ public class JRQueryPage extends WizardPage {
 			lang = langCombo.getItem(selectionIndex);
 		String text = queryText.getText();
 
-		JRDesignQuery jrQuery = new JRDesignQuery();
-		jrQuery.setLanguage(lang);
-		jrQuery.setText(text);
-		value = new MQuery(jrQuery);
-
+		if (lang.equals("") && (text == null || text.equals("")))
+			value = new MQuery(null);
+		else {
+			JRDesignQuery jrQuery = new JRDesignQuery();
+			jrQuery.setLanguage(lang);
+			jrQuery.setText(text);
+			value = new MQuery(jrQuery);
+		}
 		super.dispose();
 	}
 

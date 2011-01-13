@@ -329,7 +329,7 @@ public class RepositoryManager {
 			javaProject.open(monitor);
 			return new JavaProjectClassLoader(javaProject, Thread.currentThread().getContextClassLoader());
 		}
-		return null;
+		return activeProject.getClass().getClassLoader();
 	}
 
 	public static JRDataSource createFileDataSource(InputStream io, MFileDataSource datasource) {
