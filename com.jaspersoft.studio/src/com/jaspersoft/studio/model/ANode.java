@@ -329,14 +329,14 @@ public abstract class ANode implements INode {
 	 * @see com.jaspersoft.studio.model.INode#setValue(java.lang.Object)
 	 */
 	public void setValue(Object value) {
-		if (this.value != null) {
-			if (this.value instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) this.value).getEventSupport().removePropertyChangeListener(this);
-			unregister();
-		} else if (value != null) {
-			if (value instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) value).getEventSupport().addPropertyChangeListener(this);
+		unregister();
+		if (this.value != null && this.value instanceof JRChangeEventsSupport) {
+			((JRChangeEventsSupport) this.value).getEventSupport().removePropertyChangeListener(this);
+		}
+		if (value != null) {
 			this.value = value;
+			if (this.value instanceof JRChangeEventsSupport)
+				((JRChangeEventsSupport) this.value).getEventSupport().addPropertyChangeListener(this);
 			register();
 			return;
 		}

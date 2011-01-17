@@ -56,6 +56,7 @@ import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
@@ -372,17 +373,17 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// if (arg0.getSource() instanceof MReport) {
-		// ANode model = (ANode) getModel();
-		// if (model.getChildren() != null)
-		// for (Object node : getModelChildren()) {
-		// if (node instanceof INode) {
-		// EditPart ep = (EditPart) getViewer().getEditPartRegistry().get(node);
-		// if (ep instanceof FigureEditPart)
-		// ((FigureEditPart) ep).propertyChange(arg0);
-		// }
-		// }
-		// }
+		if (arg0.getSource() instanceof MReport) {
+			ANode model = (ANode) getModel();
+			if (model.getChildren() != null)
+				for (Object node : getModelChildren()) {
+					if (node instanceof INode) {
+						EditPart ep = (EditPart) getViewer().getEditPartRegistry().get(node);
+						if (ep instanceof FigureEditPart)
+							((FigureEditPart) ep).propertyChange(arg0);
+					}
+				}
+		}
 		refreshChildren();
 		refreshVisuals();
 	}
