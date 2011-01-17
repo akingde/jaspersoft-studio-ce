@@ -51,32 +51,23 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 	private String feedbackText = "";
 
 	protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
-		IFigure feedback = getDragSourceFeedbackFigure();
 
-		PrecisionRectangle rect = new PrecisionRectangle(getInitialFeedbackBounds().getCopy());
-		getHostFigure().translateToAbsolute(rect);
-		rect.translate(request.getMoveDelta());
-		rect.resize(request.getSizeDelta());
-		int scale = 0;
 		if (getHost() instanceof BandEditPart
 				&& ((BandEditPart) getHost()).getModelNode().getValue() instanceof JRDesignBand) {
 			int bandHeight = ((JRDesignBand) (((BandEditPart) getHost()).getModelNode().getValue())).getHeight();
 
 			Rectangle oldBounds = new Rectangle(0, 0, 0, bandHeight);
 
-			PrecisionRectangle rect2 = new PrecisionRectangle(new Rectangle(0, 0, 0, request.getSizeDelta().height));
+			PrecisionRectangle rect2 = new PrecisionRectangle(new Rectangle(0, 0, request.getSizeDelta().width,
+					request.getSizeDelta().height));
 			getHostFigure().translateToRelative(rect2);
 
 			oldBounds.resize(rect2.width, rect2.height);
 
 			setFeedbackText(oldBounds.height + " px");
-
-			if (oldBounds.height != 0)
-				scale = rect.height / oldBounds.height - 1;
 		}
-		feedback.translateToRelative(rect);
 
-		feedback.setBounds(rect.resize(-scale, -scale));
+		super.showChangeBoundsFeedback(request);
 	}
 
 	/**
@@ -180,6 +171,9 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		r.setOpaque(false);
 		r.setFill(false);
 
+		// FigureUtilities.makeGhostShape(r);
+		// r.setLineStyle(Graphics.LINE_DOT);
+		// r.setForegroundColor(ColorConstants.white);
 		r.setBounds(getInitialFeedbackBounds());
 		addFeedback(r);
 		return r;
