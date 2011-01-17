@@ -120,7 +120,8 @@ public class PreviewEditor extends JRPrintEditor {
 			if (pdresult != Window.OK)
 				return;
 
-			String jobName = Messages.PreviewEditor_preview_a + ": " + jasperDesign.getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			String jobName = Messages.PreviewEditor_preview_a
+					+ ": " + jasperDesign.getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			Job job = new Job(jobName) {
 
 				@Override
@@ -170,7 +171,7 @@ public class PreviewEditor extends JRPrintEditor {
 									((JRCsvDataSource) jrds).setDateFormat(new SimpleDateFormat(df));
 									((JRCsvDataSource) jrds).setNumberFormat(new DecimalFormat(nf));
 								} else if (datasource instanceof MXLSDataSource) {
-									jrds = new JRXlsDataSource(io);
+									jrds = RepositoryManager.createXlsDataSource(io, (MXLSDataSource) datasource);
 									((JRXlsDataSource) jrds).setDateFormat(new SimpleDateFormat(df));
 									((JRXlsDataSource) jrds).setNumberFormat(new DecimalFormat(nf));
 								} else if (datasource instanceof MXMLDataSource) {
@@ -283,7 +284,6 @@ public class PreviewEditor extends JRPrintEditor {
 			sm.beginTask(Messages.PreviewEditor_fill_report, IProgressMonitor.UNKNOWN);
 			org.mozilla.javascript.Context.enter();
 
-			
 			fh.addListener(new AsynchronousFilllListener() {
 
 				public void reportFinished(JasperPrint jPrint) {

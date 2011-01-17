@@ -46,6 +46,7 @@ import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
+import net.sf.jasperreports.engine.data.JRXlsDataSource;
 import net.sf.jasperreports.engine.data.JRXmlDataSource;
 
 import org.eclipse.core.resources.IFile;
@@ -69,7 +70,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -356,6 +356,32 @@ public class RepositoryManager {
 			}
 			jrds.setColumnNames(cols.toArray(new String[cols.size()]));
 			// .setColumnNames(new String[] { "city", "id", "name", "address", "state" });
+		}
+		return jrds;
+	}
+
+	public static JRDataSource createXlsDataSource(InputStream io, MXLSDataSource datasource) throws JRException,
+			IOException {
+		JRXlsDataSource jrds = new JRXlsDataSource(io);
+
+		boolean b = (Boolean) datasource.getPropertyValue(MXLSDataSource.PROPERTY_FIRSTROWASHEADER);
+		jrds.setUseFirstRowAsHeader(b);
+
+		String p = (String) datasource.getPropertyValue(MXLSDataSource.PROPERTY_COLUMNNAMES);
+		if (p != null && !p.trim().equals("")) { //$NON-NLS-1$
+			p = p.replaceAll(" ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			StringTokenizer st = new StringTokenizer(p, ","); //$NON-NLS-1$
+			List<String> cols = new ArrayList<String>();
+			while (st.hasMoreTokens()) {
+				String nextToken = st.nextToken();
+				nextToken = nextToken.replace('"', ' ').trim();
+				cols.add(nextToken);
+			}
+			jrds.setColumnNames(cols.toArray(new String[cols.size()]));
+			// .setColumnNames(new String[] { "city", "id", "name", "address", "state" });
+			// FIXME
+			// jrds.setColumnIndexes(columnIndexes);
+			// jrds.setColumnNames(columnNames, columnIndexes)
 		}
 		return jrds;
 	}

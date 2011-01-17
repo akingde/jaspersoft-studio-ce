@@ -92,23 +92,23 @@ public class PageFigure extends FreeformLayeredPane implements HandleBounds {
 			int pageWidth = getSize().width;
 			int pageHeight = getSize().height;// + jrDesign.getTopMargin() + jrDesign.getBottomMargin();
 
-			int leftMargin = PAGE_BORDER.left;
-			int rightMargin = PAGE_BORDER.right;
-			int topMargin = PAGE_BORDER.top;
-			int bottomMargin = PAGE_BORDER.bottom;
+			// int leftMargin = PAGE_BORDER.left;
+			// int rightMargin = PAGE_BORDER.right;
+			// int topMargin = PAGE_BORDER.top;
+			// int bottomMargin = PAGE_BORDER.bottom;
 
 			Rectangle rectangle = new Rectangle(clientArea.x, clientArea.y, pageWidth, pageHeight);
 			g.fillRectangle(rectangle);
 
-			Point topLeft = new Point(clientArea.x + leftMargin, clientArea.y);
-			Point topRight = new Point(clientArea.x + pageWidth - rightMargin, clientArea.y);
+			// Point topLeft = new Point(clientArea.x + leftMargin, clientArea.y);
+			// Point topRight = new Point(clientArea.x + pageWidth - rightMargin, clientArea.y);
 
-			Point bottomLeft = new Point(topLeft.x, clientArea.y + pageHeight);
-			Point bottomRight = new Point(topRight.x, clientArea.y + pageHeight);
+			// Point bottomLeft = new Point(topLeft.x, clientArea.y + pageHeight);
+			// Point bottomRight = new Point(topRight.x, clientArea.y + pageHeight);
 
-			Graphics2D graphics2d = ((J2DGraphics) g).getGraphics2D();
-			Stroke oldStroke = graphics2d.getStroke();
-			graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, g.getAbsoluteScale()));
+			// Graphics2D graphics2d = ((J2DGraphics) g).getGraphics2D();
+			// Stroke oldStroke = graphics2d.getStroke();
+			// graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(oldStroke, g.getAbsoluteScale()));
 
 			paintGrid(g, rectangle);
 		}

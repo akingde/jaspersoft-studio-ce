@@ -19,9 +19,21 @@
  */
 package com.jaspersoft.studio.repository.wizard;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.datasource.AMDatasource;
+import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
+import com.jaspersoft.studio.model.datasource.xls.MXLSDataSource;
 
 public class XLSDatasourcePage extends AFileDatasourcePage {
+	private Button firstRowHeaderTxt;
+	private Text columnNamesTxt;
 
 	protected XLSDatasourcePage() {
 		super("xlsdatasourceeditor"); //$NON-NLS-1$
@@ -32,6 +44,47 @@ public class XLSDatasourcePage extends AFileDatasourcePage {
 	@Override
 	protected String[] getFilterExt() {
 		return new String[] { "*.xls", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	@Override
+	public void dispose() {
+		AMDatasource value = getValue();
+
+		value.setPropertyValue(MFileDataSource.PROPERTY_COLUMNNAMES, columnNamesTxt.getText());
+		value.setPropertyValue(MFileDataSource.PROPERTY_FIRSTROWASHEADER, firstRowHeaderTxt.getSelection());
+		super.dispose();
+	}
+
+	@Override
+	protected void createMoreControls(Composite parent) {
+		super.createMoreControls(parent);
+
+		Label lbl1 = new Label(parent, SWT.NONE);
+		lbl1.setText(Messages.FileDatasourcePage_use_first_row_as_header + ":"); //$NON-NLS-1$
+
+		firstRowHeaderTxt = new Button(parent, SWT.CHECK);
+
+		lbl1 = new Label(parent, SWT.NONE);
+		lbl1.setText(Messages.common_column_names + ":"); //$NON-NLS-1$
+
+		columnNamesTxt = new Text(parent, SWT.BORDER);
+		columnNamesTxt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	@Override
+	protected void setWidgets() {
+		super.setWidgets();
+		AMDatasource value = getValue();
+		if (value != null) {
+
+			String dsName = (String) value.getPropertyValue(MXLSDataSource.PROPERTY_COLUMNNAMES);
+			if (dsName == null)
+				dsName = ""; //$NON-NLS-1$
+			columnNamesTxt.setText(dsName);
+
+			boolean firstRowHeader = (Boolean) value.getPropertyValue(MXLSDataSource.PROPERTY_FIRSTROWASHEADER);
+			firstRowHeaderTxt.setSelection(firstRowHeader);
+		}
 	}
 
 }

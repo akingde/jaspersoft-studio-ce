@@ -55,7 +55,7 @@ public class DatasourceEditor extends Wizard {
 		} else if (value instanceof MEmptyDataSource) {
 			page0 = new EmptyDatasourcePage();
 		} else if (value instanceof MFileDataSource) {
-			page0 = new FileDatasourcePage();
+			page0 = new CSVDatasourcePage();
 			// } else if (value instanceof MODADatasources) {
 			// page0 = new ODADatasourcePage();
 			// } else if (value instanceof MDTPDatasources) {

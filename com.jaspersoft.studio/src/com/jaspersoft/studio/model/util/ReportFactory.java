@@ -333,9 +333,12 @@ public class ReportFactory {
 	public static ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		ANode n = m.createNode(parent, jrObject, newIndex);
-		if (n != null)
+		if (n != null) {
+			List<?> children = m.getChildren4Element(jrObject);
+			if (children != null && !children.isEmpty())
+				createElementsForBand(n, children);
 			return n;
-		else if (jrObject instanceof JRDesignBand) {
+		} else if (jrObject instanceof JRDesignBand) {
 			return new MBand(parent, (JRDesignBand) jrObject, ((JRDesignBand) jrObject).getOrigin().getBandTypeValue(),
 					newIndex);
 		} else if (jrObject instanceof JRFrame) {

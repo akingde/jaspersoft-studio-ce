@@ -40,7 +40,7 @@ public class LinuxImageRenderer implements ImageRenderer {
 
 	static {
 		System.out.println(System.getProperty("java.library.path")); //$NON-NLS-1$
-		System.loadLibrary("libj2d-gtk-linux-i386-2.0.0"); //$NON-NLS-1$
+		System.loadLibrary("libj2d-gtk-linux-i386-2.0.0.so"); //$NON-NLS-1$
 	}
 
 	/**

@@ -22,7 +22,7 @@
  *  along with iReport. If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 #include "com_jaspersoft_studio_editor_java2d_LinuxImageRenderer.h"
-#include <windows.h>
+#include <gtk.h>
 
 /*
  * Class:     com_jaspersoft_studio.designer_java2d_LinuxImageRenderer

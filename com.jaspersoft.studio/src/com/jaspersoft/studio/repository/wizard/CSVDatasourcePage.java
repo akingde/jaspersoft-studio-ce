@@ -34,14 +34,14 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
 
-public class FileDatasourcePage extends AFileDatasourcePage {
+public class CSVDatasourcePage extends AFileDatasourcePage {
 
 	private Text recordDelimiterTxt;
 	private Text columnDelimiterTxt;
 	private Button firstRowHeaderTxt;
 	private Text columnNamesTxt;
 
-	protected FileDatasourcePage() {
+	protected CSVDatasourcePage() {
 		super("fiedatasourceeditor"); //$NON-NLS-1$
 		setTitle(Messages.FileDatasourcePage_file_datasource);
 		setDescription(Messages.FileDatasourcePage_description);

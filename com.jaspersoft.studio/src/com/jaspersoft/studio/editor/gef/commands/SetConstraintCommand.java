@@ -91,7 +91,7 @@ public class SetConstraintCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	public void execute() {
-		
+
 		if (jrElement != null) {
 			oldBounds = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 			// check position,

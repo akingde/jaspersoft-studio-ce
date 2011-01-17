@@ -105,8 +105,12 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		Rectangle bounds = figure.getBounds();
 		if (figure instanceof HandleBounds) {
 			bounds = ((HandleBounds) figure).getHandleBounds();
-			bounds.width = bounds.width - 1;
-			bounds.height = bounds.height - 1;
+			// if (request.getResizeDirection() == PositionConstants.NORTH
+			// || request.getResizeDirection() == PositionConstants.SOUTH)
+			bounds.width -= 1;
+			// if (request.getResizeDirection() == PositionConstants.EAST
+			// || request.getResizeDirection() == PositionConstants.WEST)
+			bounds.height -= 1;
 		}
 		Rectangle rect = new PrecisionRectangle(bounds);
 		Rectangle original = rect.getCopy();
@@ -245,8 +249,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (child instanceof IContainerPart) {
 			return ((IContainerPart) child).getEditPolicy();
 		}
-		if (child instanceof FigureEditPart)
-		{
+		if (child instanceof FigureEditPart) {
 			return new ElementResizableEditPolicy();
 		}
 		return super.createChildEditPolicy(child);

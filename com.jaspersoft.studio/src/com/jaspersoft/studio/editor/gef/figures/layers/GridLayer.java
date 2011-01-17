@@ -28,6 +28,7 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+import com.jaspersoft.studio.editor.java2d.J2DUtils;
 
 public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 	public GridLayer() {
@@ -56,6 +57,8 @@ public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 					j = 0;
 				} else
 					graphics2d.setStroke(new BasicStroke(0.1f));
+				
+				graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(graphics2d.getStroke(), g.getAbsoluteScale()));
 				graphics2d.drawLine(i, clip.y, i, clip.y + clip.height);
 				j++;
 			}
@@ -74,7 +77,8 @@ public class GridLayer extends org.eclipse.gef.editparts.GridLayer {
 					j = 0;
 				} else
 					graphics2d.setStroke(new BasicStroke(0.1f));
-
+				
+				graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(graphics2d.getStroke(), g.getAbsoluteScale()));
 				graphics2d.drawLine(clip.x, i, clip.x + clip.width, i);
 				j++;
 			}
