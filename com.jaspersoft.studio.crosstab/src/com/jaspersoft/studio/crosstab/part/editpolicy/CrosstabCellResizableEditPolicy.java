@@ -99,9 +99,9 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 			oldBounds.resize(rect2.width, rect2.height);
 
 			s += oldBounds.width + ", " + oldBounds.height;
-			if (oldBounds.width != 1)
+			if (oldBounds.width != 0)
 				scale = rect.width / oldBounds.width - 1;
-			else if (oldBounds.height != 1)
+			else if (oldBounds.height != 0)
 				scale = rect.height / oldBounds.height - 1;
 		}
 

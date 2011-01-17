@@ -71,7 +71,7 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 
 			setFeedbackText(oldBounds.height + " px");
 
-			if (oldBounds.height != 1)
+			if (oldBounds.height != 0)
 				scale = rect.height / oldBounds.height - 1;
 		}
 		feedback.translateToRelative(rect);
