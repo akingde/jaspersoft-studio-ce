@@ -141,7 +141,7 @@ public class ReportPageFigure extends FreeformLayeredPane implements HandleBound
 			graphics2d.setStroke(new BasicStroke(0.5f));
 			graphics2d.setStroke(J2DUtils.getInvertedZoomedStroke(graphics2d.getStroke(), g.getAbsoluteScale()));
 
-			g.drawLine(clientArea.x, clientArea.y + topMargin, clientArea.x + pageWidth, clientArea.y + topMargin);
+			//g.drawLine(clientArea.x, clientArea.y + topMargin, clientArea.x + pageWidth, clientArea.y + topMargin);
 			g.drawLine(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y);
 			g.drawLine(topRight.x, topRight.y, bottomRight.x, bottomRight.y);
 			graphics2d.setStroke(oldStroke);

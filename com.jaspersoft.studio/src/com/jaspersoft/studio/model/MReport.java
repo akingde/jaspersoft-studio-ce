@@ -566,7 +566,6 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	 *          the evt
 	 */
 	private void handleBandChanged(PropertyChangeEvent evt) {
-		if (evt.getNewValue() instanceof JRDesignBand)
 			for (Iterator<?> it = getChildren().iterator(); it.hasNext();) {
 				ANode node = (ANode) it.next();
 				if (node instanceof MBand) {
