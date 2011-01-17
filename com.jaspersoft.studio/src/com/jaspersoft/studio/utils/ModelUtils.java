@@ -43,6 +43,7 @@ import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.util.JRFontUtil;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
@@ -59,6 +60,7 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.property.descriptor.NullEnum;
 
 /**
  * The Class ModelUtils.
@@ -658,5 +660,12 @@ public class ModelUtils {
 
 	public static String[] getFontSizes() {
 		return new String[] { "", "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$
+	}
+
+	public static String[] getHyperLinkType() {
+		List<String> list = new ArrayList<String>();
+		list.addAll(Arrays.asList(EnumHelper.getEnumNames(HyperlinkTypeEnum.values(), NullEnum.NOTNULL)));
+
+		return list.toArray(new String[list.size()]);
 	}
 }

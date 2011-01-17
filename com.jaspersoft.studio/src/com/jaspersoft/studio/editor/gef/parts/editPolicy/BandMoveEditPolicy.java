@@ -19,12 +19,6 @@
  */
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 
-import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.geom.Rectangle2D;
-
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -33,7 +27,6 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -47,7 +40,6 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.band.BandResizeHandle;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -119,29 +111,20 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 		 * @see org.eclipse.draw2d.IFigure#paint(Graphics)
 		 */
 		public void paint(Graphics g) {
-			
-			
-		
-			
-			/*
-			// draw the line
-			g.setForegroundColor(this.getForegroundColor());
-			g.drawLine(currentBounds.x, currentBounds.y, currentBounds.x + currentBounds.width, currentBounds.y);
 
-			// Draw the label...
-			
-			
-			g.setAlpha(128);
-			String text = bandHeight + " px"; //$NON-NLS-1$
-			Label label = new Label(text);
-			label.setFont(g.getFont());
-			Rectangle textBounds = label.getTextBounds();
-			g.setBackgroundColor(ColorConstants.gray);
-			g.fillRoundRectangle(new Rectangle(xLabelPos, currentBounds.y, textBounds.width + 20, textBounds.height + 8), 10,
-					10);
-			g.setForegroundColor(ColorConstants.white);
-			g.drawText(text, xLabelPos + 10, currentBounds.y);
-			*/
+			/*
+			 * // draw the line g.setForegroundColor(this.getForegroundColor()); g.drawLine(currentBounds.x, currentBounds.y,
+			 * currentBounds.x + currentBounds.width, currentBounds.y);
+			 * 
+			 * // Draw the label...
+			 * 
+			 * 
+			 * g.setAlpha(128); String text = bandHeight + " px"; //$NON-NLS-1$ Label label = new Label(text);
+			 * label.setFont(g.getFont()); Rectangle textBounds = label.getTextBounds();
+			 * g.setBackgroundColor(ColorConstants.gray); g.fillRoundRectangle(new Rectangle(xLabelPos, currentBounds.y,
+			 * textBounds.width + 20, textBounds.height + 8), 10, 10); g.setForegroundColor(ColorConstants.white);
+			 * g.drawText(text, xLabelPos + 10, currentBounds.y);
+			 */
 		}
 
 	}
@@ -371,11 +354,12 @@ public class BandMoveEditPolicy extends GraphicalEditPolicy {
 				request.getSizeDelta().height = -request.getSizeDelta().height;
 			}
 			JRDesignBand jrdesign = (JRDesignBand) mBand.getValue();
-			
-			PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0, 0, request.getSizeDelta().width, request.getSizeDelta().height));
+
+			PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0, 0, request.getSizeDelta().width,
+					request.getSizeDelta().height));
 			getHostFigure().translateToRelative(deltaRect);
-			int delta = deltaRect.height;	
-			
+			int delta = deltaRect.height;
+
 			int height = jrdesign.getHeight() + delta;
 			if (height < 0)
 				height = 0;

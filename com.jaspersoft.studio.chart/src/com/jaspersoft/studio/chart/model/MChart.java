@@ -38,7 +38,6 @@ import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
-import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
@@ -336,7 +335,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			return jrElement.getLinkTarget();
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
-			return EnumHelper.getValue(jrElement.getHyperlinkTypeValue(), 0, false);
+			return jrElement.getLinkType();
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 			if (mAnchorExpression == null) {
 				mAnchorExpression = new MExpression(jrElement.getHyperlinkAnchorExpression());
@@ -467,8 +466,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			jrElement.setLinkTarget((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
-			jrElement
-					.setHyperlinkType((HyperlinkTypeEnum) EnumHelper.getSetValue(HyperlinkTypeEnum.values(), value, 0, false));
+			jrElement.setLinkType((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mAnchorExpression = (MExpression) value;

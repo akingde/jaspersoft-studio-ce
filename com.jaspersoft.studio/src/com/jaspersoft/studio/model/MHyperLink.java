@@ -25,17 +25,16 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
-import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MHyperLink extends APropertyNode {
 
@@ -71,8 +70,8 @@ public class MHyperLink extends APropertyNode {
 		linkTargetD.setDescription(Messages.MHyperLink_link_target_description);
 		desc.add(linkTargetD);
 
-		ComboBoxPropertyDescriptor linkTypeD = new ComboBoxPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TYPE,
-				Messages.MHyperLink_link_type, EnumHelper.getEnumNames(HyperlinkTypeEnum.values(), NullEnum.NOTNULL));
+		RWComboBoxPropertyDescriptor linkTypeD = new RWComboBoxPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TYPE,
+				Messages.MHyperLink_link_type, ModelUtils.getHyperLinkType(), NullEnum.NULL);
 		linkTypeD.setDescription(Messages.MHyperLink_link_type_description);
 		desc.add(linkTypeD);
 
@@ -121,7 +120,7 @@ public class MHyperLink extends APropertyNode {
 			if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 				return hyperLink.getLinkTarget();
 			if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
-				return EnumHelper.getValue(hyperLink.getHyperlinkTypeValue(), 0, false);
+				return hyperLink.getLinkType();
 			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 				if (mAnchorExpression == null) {
 					mAnchorExpression = new MExpression(hyperLink.getHyperlinkAnchorExpression());
@@ -165,8 +164,7 @@ public class MHyperLink extends APropertyNode {
 			if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 				hyperLink.setLinkTarget((String) value);
 			else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
-				hyperLink.setHyperlinkType((HyperlinkTypeEnum) EnumHelper.getSetValue(HyperlinkTypeEnum.values(), value, 0,
-						false));
+				hyperLink.setLinkType((String) value);
 			else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 				if (value instanceof MExpression) {
 					mAnchorExpression = (MExpression) value;

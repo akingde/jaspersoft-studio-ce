@@ -162,7 +162,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
-		refresh();
+		getParent().refresh();
 	}
 
 	public EditPolicy getEditPolicy() {

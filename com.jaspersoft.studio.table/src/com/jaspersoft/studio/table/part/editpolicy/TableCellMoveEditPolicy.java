@@ -24,6 +24,9 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
@@ -139,11 +142,13 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 				|| request.getResizeDirection() == PositionConstants.EAST) {
 			MColumn model = (MColumn) getHost().getModel();
 			StandardBaseColumn jrdesign = (StandardBaseColumn) model.getValue();
-
+			Dimension sizeDelta = request.getSizeDelta();
+			PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0, 0, sizeDelta.width, sizeDelta.height));
+			getHostFigure().translateToRelative(deltaRect);
 			CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
 
 			if (request.getSizeDelta().width != 0) {
-				int width = jrdesign.getWidth() + request.getSizeDelta().width;
+				int width = jrdesign.getWidth() + deltaRect.width;
 				if (width < 0)
 					width = 0;
 
@@ -155,7 +160,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 			}
 			if (request.getSizeDelta().height != 0 && model instanceof MCell) {
 				MCell mc = (MCell) model;
-				int height = (Integer) mc.getPropertyValue(DesignCell.PROPERTY_HEIGHT) + request.getSizeDelta().height;
+				int height = (Integer) mc.getPropertyValue(DesignCell.PROPERTY_HEIGHT) + deltaRect.height;
 				if (height < 0)
 					height = 0;
 

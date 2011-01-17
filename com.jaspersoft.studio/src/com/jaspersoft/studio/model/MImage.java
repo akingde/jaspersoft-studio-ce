@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.type.FillEnum;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
-import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.type.OnErrorTypeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
@@ -226,7 +225,7 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			return jrElement.getLinkTarget();
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
-			return EnumHelper.getValue(jrElement.getHyperlinkTypeValue(), 0, false);
+			return jrElement.getLinkType();
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 			if (mAnchorExpression == null) {
 				mAnchorExpression = new MExpression(jrElement.getHyperlinkAnchorExpression());
@@ -291,8 +290,7 @@ public class MImage extends MGraphicElementLineBox {
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			jrElement.setLinkTarget((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
-			jrElement
-					.setHyperlinkType((HyperlinkTypeEnum) EnumHelper.getSetValue(HyperlinkTypeEnum.values(), value, 0, false));
+			jrElement.setLinkType((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
 			if (value instanceof MExpression) {
 				mAnchorExpression = (MExpression) value;
