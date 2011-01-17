@@ -24,6 +24,9 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
@@ -136,25 +139,30 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 				|| request.getResizeDirection() == PositionConstants.EAST) {
 			MCell mBand = (MCell) getHost().getModel();
 
+			Dimension sizeDelta = request.getSizeDelta();
+			PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0, 0, sizeDelta.width,
+					sizeDelta.height));
+			getHostFigure().translateToRelative(deltaRect);
+
 			JRDesignCellContents jrdesign = (JRDesignCellContents) mBand.getValue();
-			int height = jrdesign.getHeight() + request.getSizeDelta().height;
+			int height = jrdesign.getHeight() + deltaRect.height;
 			if (height < 0)
 				height = 0;
 
-			int width = jrdesign.getWidth() + request.getSizeDelta().width;
+			int width = jrdesign.getWidth() + deltaRect.width;
 			if (width < 0)
 				width = 0;
 
 			CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
 
-			if (request.getSizeDelta().width != 0) {
+			if (sizeDelta.width != 0) {
 				SetValueCommand setCommand = new SetValueCommand();
 				setCommand.setTarget(mBand);
 				setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_WIDTH);
 				setCommand.setPropertyValue(width);
 				c.add(setCommand);
 			}
-			if (request.getSizeDelta().height != 0) {
+			if (sizeDelta.height != 0) {
 				SetValueCommand setCommand = new SetValueCommand();
 				setCommand.setTarget(mBand);
 				setCommand.setPropertyId(JRDesignCrosstabCell.PROPERTY_HEIGHT);
