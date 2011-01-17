@@ -42,7 +42,6 @@ import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.CornerBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementResizableEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;

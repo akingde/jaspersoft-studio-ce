@@ -36,6 +36,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
+import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -163,7 +164,7 @@ public class CreateTableCommand extends Command {
 	 *          the position
 	 * @return the a node
 	 */
-	protected ANode fixPosition(ANode destNode, MGraphicElement srcNode, Point position) {
+	protected ANode fixPosition(ANode destNode, IGuidebleElement srcNode, Point position) {
 		// calculate position, fix position relative to parent
 		MBand band = ModelUtils.getBand4Point(destNode, position);
 		// set proposed bounds

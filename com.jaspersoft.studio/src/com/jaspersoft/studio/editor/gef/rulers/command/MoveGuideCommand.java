@@ -31,6 +31,8 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -69,19 +71,22 @@ public class MoveGuideCommand extends Command {
 	public void execute() {
 		if (constraintCommands == null) {
 			constraintCommands = new ArrayList<SetConstraintCommand>();
-			for (MGraphicElement part : guide.getParts()) {
-				if (part.getParent() == null)
+			for (IGuidebleElement part : guide.getParts()) {
+				ANode node = (ANode) part;
+				if (node.getParent() == null)
 					continue;
-				JRDesignElement jrE = (JRDesignElement) part.getValue();
-				Point location = ModelUtils.getY4Element(part);
-				if (guide.isHorizontal()) {
-					location.y += pDelta;
-				} else {
-					location.x += pDelta;
+				if (node instanceof MGraphicElement) {
+					JRDesignElement jrE = (JRDesignElement) node.getValue();
+					Point location = ModelUtils.getY4Element((MGraphicElement) node);
+					if (guide.isHorizontal()) {
+						location.y += pDelta;
+					} else {
+						location.x += pDelta;
+					}
+					SetConstraintCommand cc = new SetConstraintCommand();
+					cc.setContext(null, node, new Rectangle(location.x, location.y, jrE.getWidth(), jrE.getHeight()));
+					constraintCommands.add(cc);
 				}
-				SetConstraintCommand cc = new SetConstraintCommand();
-				cc.setContext(null, part, new Rectangle(location.x, location.y, jrE.getWidth(), jrE.getHeight()));
-				constraintCommands.add(cc);
 			}
 		}
 		guide.setPosition(guide.getPosition() + pDelta);

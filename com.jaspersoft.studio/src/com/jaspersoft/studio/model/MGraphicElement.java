@@ -63,21 +63,44 @@ import com.jaspersoft.studio.utils.EnumHelper;
 /**
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable {
+public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement {
 	private ReportRulerGuide verticalGuide, horizontalGuide;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.IGuidebleElement#getVerticalGuide()
+	 */
 	public ReportRulerGuide getVerticalGuide() {
 		return verticalGuide;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.model.IGuidebleElement#setVerticalGuide(com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide
+	 * )
+	 */
 	public void setVerticalGuide(ReportRulerGuide verticalGuide) {
 		this.verticalGuide = verticalGuide;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.IGuidebleElement#getHorizontalGuide()
+	 */
 	public ReportRulerGuide getHorizontalGuide() {
 		return horizontalGuide;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.IGuidebleElement#setHorizontalGuide(com.jaspersoft.studio.editor.gef.rulers.
+	 * ReportRulerGuide)
+	 */
 	public void setHorizontalGuide(ReportRulerGuide horizontalGuide) {
 		this.horizontalGuide = horizontalGuide;
 	}
@@ -85,7 +108,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	@Override
 	public void setParent(ANode parent, int newIndex) {
 		if (parent instanceof MGraphicElement) {
-			MGraphicElement p = (MGraphicElement) parent;
+			IGuidebleElement p = (IGuidebleElement) parent;
 			if (p.getVerticalGuide() != null)
 				p.getVerticalGuide().detachPart(p);
 			if (p.getHorizontalGuide() != null)
@@ -531,12 +554,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			jrElement.setHeight(((Integer) value).intValue());
 		else if (id.equals(JRDesignElement.PROPERTY_WIDTH))
 			jrElement.setWidth(((Integer) value).intValue());
-		else if (id.equals(JRDesignElement.PROPERTY_X))
-		{
+		else if (id.equals(JRDesignElement.PROPERTY_X)) {
 			System.out.println("Setting element position...");
 			jrElement.setX(((Integer) value).intValue());
 		}
-			
+
 		else if (id.equals(JRDesignElement.PROPERTY_Y))
 			jrElement.setY(((Integer) value).intValue());
 		else

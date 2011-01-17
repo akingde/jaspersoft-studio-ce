@@ -27,7 +27,7 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.IGuidebleElement;
 
 /**
  * The Class DeleteGuideCommand.
@@ -43,7 +43,7 @@ public class DeleteGuideCommand extends Command {
 	private ReportRulerGuide guide;
 
 	/** The old parts. */
-	private Map<MGraphicElement, Integer> oldParts;
+	private Map<IGuidebleElement, Integer> oldParts;
 
 	/**
 	 * Instantiates a new delete guide command.
@@ -74,8 +74,8 @@ public class DeleteGuideCommand extends Command {
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	public void execute() {
-		oldParts = new HashMap<MGraphicElement, Integer>(guide.getMap());
-		for (MGraphicElement part : guide.getParts()) {
+		oldParts = new HashMap<IGuidebleElement, Integer>(guide.getMap());
+		for (IGuidebleElement part : guide.getParts()) {
 			guide.detachPart(part);
 		}
 		parent.removeGuide(guide);
@@ -88,8 +88,8 @@ public class DeleteGuideCommand extends Command {
 	 */
 	public void undo() {
 		parent.addGuide(guide);
-		for (MGraphicElement part : guide.getParts()) {
-			guide.attachPart(part, ( oldParts.get(part)).intValue());
+		for (IGuidebleElement part : guide.getParts()) {
+			guide.attachPart(part, (oldParts.get(part)).intValue());
 		}
 	}
 }

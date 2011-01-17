@@ -46,13 +46,14 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
  * The Class PageLayoutEditPolicy.
  */
 public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
-	protected Command chainGuideAttachmentCommand(Request request, MGraphicElement part, Command cmd, boolean horizontal) {
+	protected Command chainGuideAttachmentCommand(Request request, IGuidebleElement part, Command cmd, boolean horizontal) {
 		Command result = cmd;
 
 		// Attach to guide, if one is given
@@ -69,7 +70,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		return result;
 	}
 
-	protected Command chainGuideDetachmentCommand(Request request, MGraphicElement part, Command cmd, boolean horizontal) {
+	protected Command chainGuideDetachmentCommand(Request request, IGuidebleElement part, Command cmd, boolean horizontal) {
 		Command result = cmd;
 
 		// Detach from guide, if none is given
@@ -190,8 +191,8 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		Command result = createChangeConstraintCommand(child, constraint);
 		if (child instanceof IContainerPart)
 			return result;
-		if (child.getModel() instanceof MGraphicElement) {
-			MGraphicElement part = (MGraphicElement) child.getModel();
+		if (child.getModel() instanceof IGuidebleElement) {
+			IGuidebleElement part = (IGuidebleElement) child.getModel();
 
 			if ((request.getResizeDirection() & PositionConstants.NORTH_SOUTH) != 0) {
 				Integer guidePos = (Integer) request.getExtendedData().get(SnapToGuides.KEY_HORIZONTAL_GUIDE);

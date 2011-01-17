@@ -521,7 +521,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		return 200;
 	}
 
-	public JRDesignElement createJRElement(JasperDesign jasperDesign, byte chartType) {
+	public static JRDesignElement createJRElement(JasperDesign jasperDesign, byte chartType) {
 		JRDesignElement jrDesignElement = new JRDesignChart(jasperDesign, chartType);
 		return jrDesignElement;
 	}

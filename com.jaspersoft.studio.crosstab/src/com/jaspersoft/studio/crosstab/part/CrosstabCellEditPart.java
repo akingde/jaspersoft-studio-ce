@@ -19,9 +19,7 @@
  */
 package com.jaspersoft.studio.crosstab.part;
 
-import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.engine.JRElement;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;

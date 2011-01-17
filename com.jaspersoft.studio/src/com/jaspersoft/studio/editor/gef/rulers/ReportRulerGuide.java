@@ -29,7 +29,7 @@ import java.util.Set;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.IGuidebleElement;
 
 /**
  * Model object representing a guide.
@@ -55,7 +55,7 @@ public class ReportRulerGuide implements Serializable {
 	protected PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 
 	/** The map. */
-	private Map<MGraphicElement, Integer> map;
+	private Map<IGuidebleElement, Integer> map;
 
 	/** The position. */
 	private int position;
@@ -97,9 +97,9 @@ public class ReportRulerGuide implements Serializable {
 	 * @return The Map containing all the parts attached to this guide, and their alignments; the keys are LogicSubparts
 	 *         and values are Integers
 	 */
-	public Map<MGraphicElement, Integer> getMap() {
+	public Map<IGuidebleElement, Integer> getMap() {
 		if (map == null) {
-			map = new Hashtable<MGraphicElement, Integer>();
+			map = new Hashtable<IGuidebleElement, Integer>();
 		}
 		return map;
 	}
@@ -110,7 +110,7 @@ public class ReportRulerGuide implements Serializable {
 	 * @return the set of all the parts attached to this guide; a set is used because a part can only be attached to a
 	 *         guide along one edge.
 	 */
-	public Set<MGraphicElement> getParts() {
+	public Set<IGuidebleElement> getParts() {
 		return getMap().keySet();
 	}
 
@@ -176,7 +176,7 @@ public class ReportRulerGuide implements Serializable {
 	 * @param alignment
 	 *          -1 is left or top; 0, center; 1, right or bottom
 	 */
-	public void attachPart(MGraphicElement part, int alignment) {
+	public void attachPart(IGuidebleElement part, int alignment) {
 		if (getMap().containsKey(part) && getAlignment(part) == alignment)
 			return;
 
@@ -199,7 +199,7 @@ public class ReportRulerGuide implements Serializable {
 	 * @param part
 	 *          the part that is to be detached from this guide
 	 */
-	public void detachPart(MGraphicElement part) {
+	public void detachPart(IGuidebleElement part) {
 		if (getMap().containsKey(part)) {
 			getMap().remove(part);
 			if (isHorizontal()) {
@@ -223,9 +223,9 @@ public class ReportRulerGuide implements Serializable {
 	 * @see org.eclipse.gef.examples.logicdesigner.edit.LogicXYLayoutEditPolicy#createChangeConstraintCommand(ChangeBoundsRequest,
 	 *      EditPart, Object)
 	 */
-	public int getAlignment(MGraphicElement part) {
+	public int getAlignment(IGuidebleElement part) {
 		if (getMap().get(part) != null)
-			return ( getMap().get(part)).intValue();
+			return (getMap().get(part)).intValue();
 		return -2;
 	}
 

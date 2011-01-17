@@ -3,18 +3,12 @@ package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.FocusBorder;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
-import org.eclipse.gef.handles.AbstractHandle;
-import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -61,7 +55,10 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 			oldBounds.resize(rect2.width, rect2.height);
 
 			s += oldBounds.x + ", " + oldBounds.y + ", " + oldBounds.width + ", " + oldBounds.height;
-			scale = rect.width / oldBounds.width - 1;
+			if (oldBounds.width != 1)
+				scale = rect.width / oldBounds.width - 1;
+			else if (oldBounds.height != 1)
+				scale = rect.height / oldBounds.height - 1;
 		}
 
 		feedback.translateToRelative(rect);
@@ -77,7 +74,6 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 	 * @return the new feedback figure
 	 */
 	protected IFigure createDragSourceFeedbackFigure() {
-
 		// Use a ghost rectangle for feedback
 		RectangleFigure r = new ElementFeedbackFigure();
 
@@ -87,32 +83,6 @@ public class ElementResizableEditPolicy extends ResizableEditPolicy {
 		r.setBounds(getInitialFeedbackBounds().resize(-1, -1));// new Rectangle(ifb.x, ifb.y, ifb.width -100, ifb.height));
 		addFeedback(r);
 		return r;
-	}
-
-	@Override
-	protected void showFocus() {
-		AbstractHandle focusRect = new AbstractHandle((GraphicalEditPart) getHost(), new Locator() {
-			public void relocate(IFigure target) {
-				IFigure figure = getHostFigure();
-				Rectangle r;
-				if (figure instanceof HandleBounds)
-					r = ((HandleBounds) figure).getHandleBounds().getCopy();
-				else
-					r = getHostFigure().getBounds().getResized(-1, -1);
-				getHostFigure().translateToAbsolute(r);
-				target.translateToRelative(r);
-				target.setBounds(r);// .expand(5, 5));
-			}
-		}) {
-			{
-				setBorder(new FocusBorder());
-			}
-
-			protected DragTracker createDragTracker() {
-				return null;
-			}
-		};
-		addFeedback(focusRect);
 	}
 
 }

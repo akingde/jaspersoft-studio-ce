@@ -33,14 +33,12 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
-import com.jaspersoft.studio.editor.gef.parts.AJDEditPart;
+import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
-import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandContainerEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandMoveEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
@@ -55,7 +53,7 @@ import com.jaspersoft.studio.model.band.MBand;
  * @author Chicu Veaceslav, Giulio Toffoli
  * 
  */
-public class BandEditPart extends AJDEditPart implements PropertyChangeListener, IContainerPart {
+public class BandEditPart extends FigureEditPart implements PropertyChangeListener, IContainerPart {
 
 	/**
 	 * Gets the band.
@@ -107,7 +105,7 @@ public class BandEditPart extends AJDEditPart implements PropertyChangeListener,
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new BandMoveEditPolicy());
-		installEditPolicy(EditPolicy.CONTAINER_ROLE, new BandContainerEditPolicy());
+		// installEditPolicy(EditPolicy.CONTAINER_ROLE, new BandContainerEditPolicy());
 	}
 
 	@Override
