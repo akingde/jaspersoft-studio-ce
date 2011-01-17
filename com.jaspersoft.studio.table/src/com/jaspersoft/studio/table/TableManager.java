@@ -78,7 +78,9 @@ public class TableManager {
 	}
 
 	public static Rectangle getAWT2SWTRectangle(java.awt.Rectangle rect) {
-		return new Rectangle(rect.x, rect.y, rect.width, rect.height);
+		if (rect != null)
+			return new Rectangle(rect.x, rect.y, rect.width, rect.height);
+		return null;
 	}
 
 	public static List<BaseColumn> getAllColumns(MTable mTable) {

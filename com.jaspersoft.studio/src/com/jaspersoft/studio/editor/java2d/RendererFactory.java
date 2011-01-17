@@ -50,9 +50,11 @@ public final class RendererFactory {
 		try {
 			if ((Platform.getOS().equals(Platform.OS_WIN32)) && (Platform.getOSArch().equals(Platform.ARCH_X86))) {
 				return new Win32ImageRenderer();
-			} else if ((Platform.getOS().equals(Platform.OS_LINUX)) && (Platform.getWS().equals(Platform.WS_GTK))) {
-				return new LinuxImageRenderer();
-			}
+			} 
+
+			// else if ((Platform.getOS().equals(Platform.OS_LINUX)) && (Platform.getWS().equals(Platform.WS_GTK))) {
+			// return new LinuxImageRenderer();
+			// }
 		} catch (NoClassDefFoundError e) {
 			e.printStackTrace();
 		} catch (UnsatisfiedLinkError e) {

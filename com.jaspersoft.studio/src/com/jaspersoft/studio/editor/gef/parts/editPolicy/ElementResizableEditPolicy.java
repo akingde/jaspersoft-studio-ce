@@ -15,8 +15,6 @@ import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 
 public class ElementResizableEditPolicy extends ResizableEditPolicy {
 
-	IFigure feedbackFigure = null;
-
 	/**
 	 * Instantiates a new band resizable edit policy.
 	 */

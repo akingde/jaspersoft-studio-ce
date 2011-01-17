@@ -35,7 +35,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class J2DGraphicsSource.
  */
