@@ -310,7 +310,7 @@ public class TableComponentFactory implements IComponentFactory {
 		return list;
 	}
 
-	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
+	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		if (child instanceof MCell) {
 			if (parent instanceof MColumnGroup && !(parent instanceof MCell))
 				return new CreateColumnCellCommand(((MColumn) parent).getSection(), (MColumn) parent);
@@ -376,7 +376,7 @@ public class TableComponentFactory implements IComponentFactory {
 		}
 		if (parent instanceof MTable && child instanceof MGraphicElement) {
 			MTable mt = (MTable) parent;
-			final Cell cell = mt.getTableManager().getCell(location);
+			final Cell cell = mt.getTableManager().getCell(new Point(location.x, location.y));
 			Rectangle r = mt.getTableManager().getCellBounds(cell);
 			location = location.setLocation(location.x - r.x, location.y - r.y);
 

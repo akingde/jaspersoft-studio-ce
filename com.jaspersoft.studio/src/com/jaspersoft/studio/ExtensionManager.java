@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
@@ -80,7 +81,7 @@ public class ExtensionManager {
 		return list;
 	}
 
-	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
+	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		for (IComponentFactory f : nodeFactory) {
 			Command c = f.getCreateCommand(parent, child, location, newIndex);
 			if (c != null)

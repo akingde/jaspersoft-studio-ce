@@ -4,7 +4,7 @@ import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -18,7 +18,7 @@ public class CreateElementCommand extends Command {
 
 	private DesignCell jrCell;
 
-	private Point location;
+	private Rectangle location;
 
 	private int index = -1;
 
@@ -41,7 +41,7 @@ public class CreateElementCommand extends Command {
 		this.jrColumn = (StandardBaseColumn) destNode.getValue();
 	}
 
-	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Point position) {
+	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Rectangle position) {
 		super();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		this.jrCell = destNode.getCell();
@@ -59,11 +59,12 @@ public class CreateElementCommand extends Command {
 
 			if (jrElement != null) {
 				if (location == null)
-					location = new Point(0, 0);
+					location = new Rectangle(0, 0, Math.min(srcNode.getDefaultWidth(), jrColumn.getWidth() - location.x),
+							Math.min(srcNode.getDefaultHeight(), jrCell.getHeight() - location.y));
 				jrElement.setX(location.x);
 				jrElement.setY(location.y);
-				jrElement.setWidth(Math.min(srcNode.getDefaultWidth(), jrColumn.getWidth() - location.x));
-				jrElement.setHeight(Math.min(srcNode.getDefaultHeight(), jrCell.getHeight() - location.y));
+				jrElement.setWidth(location.width);
+				jrElement.setHeight(location.height);
 			}
 		}
 	}

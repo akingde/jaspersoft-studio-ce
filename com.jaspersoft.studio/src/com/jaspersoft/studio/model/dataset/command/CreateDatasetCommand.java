@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.MReport;
@@ -53,12 +52,10 @@ public class CreateDatasetCommand extends Command {
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
-	 * @param position
-	 *          the position
 	 * @param index
 	 *          the index
 	 */
-	public CreateDatasetCommand(MReport destNode, MDataset srcNode, Point position, int index) {
+	public CreateDatasetCommand(MReport destNode, MDataset srcNode, int index) {
 		super();
 		this.jrDesign = destNode.getJasperDesign();
 		this.index = index;

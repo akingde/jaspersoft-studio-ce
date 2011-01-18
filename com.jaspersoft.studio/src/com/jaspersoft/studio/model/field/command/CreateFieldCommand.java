@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
@@ -33,7 +32,6 @@ import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.field.MFields;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * link nodes & together.
  * 
@@ -57,12 +55,10 @@ public class CreateFieldCommand extends Command {
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
-	 * @param position
-	 *          the position
 	 * @param index
 	 *          the index
 	 */
-	public CreateFieldCommand(MFields destNode, MField srcNode, Point position, int index) {
+	public CreateFieldCommand(MFields destNode, MField srcNode, int index) {
 		super();
 		this.jrDataSet = (JRDesignDataset) destNode.getValue();
 		this.index = index;
@@ -92,8 +88,9 @@ public class CreateFieldCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataSet.getFieldsMap(), "CopyOFField_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateFieldCommand_field_name,
-							Messages.CreateFieldCommand_field_name_text_dialog, defaultName, null);
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
+							Messages.CreateFieldCommand_field_name, Messages.CreateFieldCommand_field_name_text_dialog, defaultName,
+							null);
 					if (dlg.open() == InputDialog.OK) {
 						jrField.setName(dlg.getValue());
 						execute();

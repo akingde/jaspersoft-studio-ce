@@ -27,7 +27,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.commands.Command;
@@ -322,7 +322,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 *          the new index
 	 * @return the creates the command
 	 */
-	public static Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
+	public static Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		Command c = m.getCreateCommand(parent, child, location, newIndex);
 		if (c != null)
@@ -359,42 +359,42 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new CreateElementGroupCommand(parent, (MElementGroup) child, newIndex);
 		} else if (child instanceof MConditionalStyle) {
 			if (parent instanceof MStyle && !(parent instanceof MConditionalStyle))
-				return new CreateConditionalStyleCommand((MStyle) parent, (MConditionalStyle) child, location, newIndex);
+				return new CreateConditionalStyleCommand((MStyle) parent, (MConditionalStyle) child, newIndex);
 		} else if (child instanceof MStyle) {
 			if (parent instanceof MStyles)
-				return new CreateStyleCommand((MStyles) parent, (MStyle) child, location, newIndex);
+				return new CreateStyleCommand((MStyles) parent, (MStyle) child, newIndex);
 		} else if (child instanceof MStyleTemplate) {
 			if (parent instanceof MStyles)
-				return new CreateStyleTemplateCommand((MStyles) parent, (MStyleTemplate) child, location, 0);
+				return new CreateStyleTemplateCommand((MStyles) parent, (MStyleTemplate) child, 0);
 		} else if (child instanceof MParameter) {
 			if (parent instanceof MParameters) {
 				JRDesignParameter p = (JRDesignParameter) child.getValue();
 				if (p == null || !p.isSystemDefined())
-					return new CreateParameterCommand((MParameters) parent, (MParameter) child, location, newIndex);
+					return new CreateParameterCommand((MParameters) parent, (MParameter) child, newIndex);
 			}
 		} else if (child instanceof MField) {
 			if (parent instanceof MFields)
-				return new CreateFieldCommand((MFields) parent, (MField) child, location, newIndex);
+				return new CreateFieldCommand((MFields) parent, (MField) child, newIndex);
 		} else if (child instanceof MSortField) {
 			if (parent instanceof MSortFields)
-				return new CreateSortFieldCommand((MSortFields) parent, (MSortField) child, location, newIndex);
+				return new CreateSortFieldCommand((MSortFields) parent, (MSortField) child, newIndex);
 		} else if (child instanceof MGroup) {
 			if (parent instanceof MGroups)
-				return new CreateGroupCommand((MGroups) parent, (MGroup) child, location, newIndex);
+				return new CreateGroupCommand((MGroups) parent, (MGroup) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreateGroupCommand((MReport) parent, (MGroup) child, location, newIndex);
+				return new CreateGroupCommand((MReport) parent, (MGroup) child, newIndex);
 		} else if (child instanceof MVariable) {
 			if (parent instanceof MVariables) {
 				JRDesignVariable p = (JRDesignVariable) child.getValue();
 				if (p == null || !p.isSystemDefined())
-					return new CreateVariableCommand((MVariables) parent, (MVariable) child, location, newIndex);
+					return new CreateVariableCommand((MVariables) parent, (MVariable) child, newIndex);
 			}
 		} else if (child instanceof MScriptlet) {
 			if (parent instanceof MScriptlets)
-				return new CreateScriptletCommand((MScriptlets) parent, (MScriptlet) child, location, newIndex);
+				return new CreateScriptletCommand((MScriptlets) parent, (MScriptlet) child, newIndex);
 		} else if (child instanceof MDataset) {
 			if (parent instanceof MReport) {
-				return new CreateDatasetCommand((MReport) parent, (MDataset) child, location, newIndex);
+				return new CreateDatasetCommand((MReport) parent, (MDataset) child, newIndex);
 			}
 		} else if (child instanceof MBand) {
 			if (parent instanceof MBandGroupHeader)
@@ -423,7 +423,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		Command c = m.getOrphanCommand(parent, child);
 		if (c != null)
 			return c;
-		
+
 		if (child instanceof MGraphicElement)
 			return new OrphanElementCommand(parent, (MGraphicElement) child);
 		if (child instanceof MElementGroup)

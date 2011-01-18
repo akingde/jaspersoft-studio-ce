@@ -27,7 +27,7 @@ import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -39,7 +39,6 @@ import com.jaspersoft.studio.model.textfield.MPageNumber;
 import com.jaspersoft.studio.model.textfield.MPageXofY;
 import com.jaspersoft.studio.model.textfield.MTotalPages;
 
-// TODO: Auto-generated Javadoc
 /**
  * link nodes & together.
  * 
@@ -104,7 +103,7 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 	 * @param index
 	 *          the index
 	 */
-	public CreatePageXofYCommand(ANode destNode, MPageXofY srcNode, Point position, int index) {
+	public CreatePageXofYCommand(ANode destNode, MPageXofY srcNode, Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
 
@@ -124,9 +123,9 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 	 * Creates the object.
 	 */
 	protected void createObject() {
-		Point location = getLocation();
+		Rectangle location = getLocation();
 		if (location == null)
-			location = new Point(0, 0);
+			location = new Rectangle(0, 0, 10, 10);
 		int index = getIndex();
 		JRElementGroup jrGroup = getJrGroup();
 		if (index < 0)

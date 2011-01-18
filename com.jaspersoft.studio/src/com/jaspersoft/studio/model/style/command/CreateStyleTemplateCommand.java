@@ -22,7 +22,6 @@ package com.jaspersoft.studio.model.style.command;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.style.MStyleTemplate;
@@ -51,14 +50,12 @@ public class CreateStyleTemplateCommand extends Command {
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
-	 * @param position
-	 *          the position
 	 * @param index
 	 *          the index
 	 */
-	public CreateStyleTemplateCommand(MStyles destNode, MStyleTemplate srcNode, Point position, int index) {
+	public CreateStyleTemplateCommand(MStyles destNode, MStyleTemplate srcNode, int index) {
 		super();
-		this.jrDesign =  destNode.getJasperDesign();
+		this.jrDesign = destNode.getJasperDesign();
 		this.index = index;
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrTemplate = (JRDesignReportTemplate) srcNode.getValue();

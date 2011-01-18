@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
@@ -57,12 +56,10 @@ public class CreateGroupCommand extends Command {
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
-	 * @param position
-	 *          the position
 	 * @param index
 	 *          the index
 	 */
-	public CreateGroupCommand(MReport destNode, MGroup srcNode, Point position, int index) {
+	public CreateGroupCommand(MReport destNode, MGroup srcNode, int index) {
 		super();
 		this.jrDataSet = (JRDesignDataset) destNode.getJasperDesign().getMainDataset();
 		this.index = index;
@@ -77,12 +74,10 @@ public class CreateGroupCommand extends Command {
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
-	 * @param position
-	 *          the position
 	 * @param index
 	 *          the index
 	 */
-	public CreateGroupCommand(MGroups destNode, MGroup srcNode, Point position, int index) {
+	public CreateGroupCommand(MGroups destNode, MGroup srcNode, int index) {
 		super();
 		this.jrDataSet = (JRDesignDataset) destNode.getValue();
 		this.index = index;
@@ -110,8 +105,9 @@ public class CreateGroupCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataSet.getGroupsMap(), "CopyOFGroup_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateGroupCommand_group_name,
-							Messages.CreateGroupCommand_group_name_dialog_text, defaultName, null);
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
+							Messages.CreateGroupCommand_group_name, Messages.CreateGroupCommand_group_name_dialog_text, defaultName,
+							null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());
 						execute();

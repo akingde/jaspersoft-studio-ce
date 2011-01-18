@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
@@ -56,12 +55,10 @@ public class CreateStyleCommand extends Command {
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
-	 * @param position
-	 *          the position
 	 * @param index
 	 *          the index
 	 */
-	public CreateStyleCommand(MStyles destNode, MStyle srcNode, Point position, int index) {
+	public CreateStyleCommand(MStyles destNode, MStyle srcNode, int index) {
 		super();
 		this.jrDesign = destNode.getJasperDesign();
 		this.index = index;
@@ -89,8 +86,9 @@ public class CreateStyleCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDesign.getStylesMap(), "CopyOFStyle_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateStyleCommand_style_name,
-							Messages.CreateStyleCommand_style_name_dialog_text, defaultName, null);
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
+							Messages.CreateStyleCommand_style_name, Messages.CreateStyleCommand_style_name_dialog_text, defaultName,
+							null);
 					if (dlg.open() == InputDialog.OK) {
 						jrStyle.setName(dlg.getValue());
 						execute();

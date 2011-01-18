@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
@@ -61,7 +60,7 @@ public class CreateParameterCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateParameterCommand(MParameters destNode, MParameter srcNode, Point position, int index) {
+	public CreateParameterCommand(MParameters destNode, MParameter srcNode, int index) {
 		super();
 		this.jrDataset = (JRDesignDataset) destNode.getValue();
 		this.index = index;
@@ -89,7 +88,8 @@ public class CreateParameterCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataset.getParametersMap(), "CopyOFParameter_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateParameterCommand_parameter_name,
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
+							Messages.CreateParameterCommand_parameter_name,
 							Messages.CreateParameterCommand_parameter_name_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrParameter.setName(dlg.getValue());

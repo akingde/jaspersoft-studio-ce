@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.table.part.editpolicy;
 
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ContainerEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
@@ -38,7 +39,15 @@ public class TableCellContainerEditPolicy extends ContainerEditPolicy {
 	 */
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
-		return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(), (ANode) request.getNewObject(),
-				request.getLocation(), -1);
+		int width = 50;
+		int height = 30;
+		if (request.getSize() != null) {
+			height = request.getSize().height;
+			width = request.getSize().width;
+		}
+
+		Rectangle r = new Rectangle(request.getLocation().x, request.getLocation().y, width, height);
+		return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(), (ANode) request.getNewObject(), r,
+				-1);
 	}
 }

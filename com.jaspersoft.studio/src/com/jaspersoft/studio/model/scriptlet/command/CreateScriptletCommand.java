@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
@@ -56,12 +55,10 @@ public class CreateScriptletCommand extends Command {
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
-	 * @param position
-	 *          the position
 	 * @param index
 	 *          the index
 	 */
-	public CreateScriptletCommand(MScriptlets destNode, MScriptlet srcNode, Point position, int index) {
+	public CreateScriptletCommand(MScriptlets destNode, MScriptlet srcNode, int index) {
 		super();
 		this.jrDataset = (JRDesignDataset) destNode.getValue();
 		this.index = index;
@@ -91,7 +88,8 @@ public class CreateScriptletCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataset.getScriptletsMap(), "CopyOFScriptlet_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateScriptletCommand_scriptlet_name,
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
+							Messages.CreateScriptletCommand_scriptlet_name,
 							Messages.CreateScriptletCommand_scriptlet_name_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrScriptlet.setName(dlg.getValue());

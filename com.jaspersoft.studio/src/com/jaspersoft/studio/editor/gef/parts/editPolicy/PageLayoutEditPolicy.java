@@ -22,7 +22,6 @@ package com.jaspersoft.studio.editor.gef.parts.editPolicy;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -155,12 +154,12 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 
 			if (request.getNewObject() instanceof CreateElementAction) {
 				CreateElementAction action = (CreateElementAction) request.getNewObject();
-				action.dropInto(getHost().getModel(), new Point(constraint.x, constraint.y), -1);
+				action.dropInto(getHost().getModel(), constraint.getCopy(), -1);
 				action.run();
 				return action.getCommand();
 			} else if (request.getNewObject() instanceof MGraphicElement) {
 				return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(),
-						(MGraphicElement) request.getNewObject(), new Point(constraint.x, constraint.y), -1);
+						(MGraphicElement) request.getNewObject(), constraint.getCopy(), -1);
 			}
 		}
 

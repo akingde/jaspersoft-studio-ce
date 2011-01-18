@@ -24,7 +24,6 @@ import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.sortfield.MSortField;
@@ -53,12 +52,10 @@ public class CreateSortFieldCommand extends Command {
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
-	 * @param position
-	 *          the position
 	 * @param index
 	 *          the index
 	 */
-	public CreateSortFieldCommand(MSortFields destNode, MSortField srcNode, Point position, int index) {
+	public CreateSortFieldCommand(MSortFields destNode, MSortField srcNode, int index) {
 		super();
 		this.jrDataSet = (JRDesignDataset) destNode.getValue();
 		this.index = index;

@@ -22,7 +22,7 @@ package com.jaspersoft.studio;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
@@ -42,7 +42,7 @@ public interface IComponentFactory {
 
 	public EditPart createEditPart(EditPart context, Object model);
 
-	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex);
+	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex);
 
 	public Command getReorderCommand(ANode parent, ANode child, int newIndex);
 

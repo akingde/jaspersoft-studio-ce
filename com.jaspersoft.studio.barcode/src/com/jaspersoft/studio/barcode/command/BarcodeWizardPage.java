@@ -1,30 +1,26 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.barcode.command;
 
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
-import net.sf.jasperreports.engine.JRComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -66,8 +62,8 @@ public class BarcodeWizardPage extends WizardPage {
 	protected BarcodeWizardPage() {
 		super("barcodepage"); //$NON-NLS-1$
 		setTitle(Messages.common_barcode_wizard);
-		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a +
-				Messages.BarcodeWizardPage_barcode_wizard_description_b);
+		setDescription(Messages.BarcodeWizardPage_barcode_wizard_description_a
+				+ Messages.BarcodeWizardPage_barcode_wizard_description_b);
 	}
 
 	@Override
@@ -103,9 +99,10 @@ public class BarcodeWizardPage extends WizardPage {
 				barcode = new MPOSTNET();
 		} else if (bbcCode != null) {
 			barcode = new MBarcodeBarbecue();
-			JRComponentElement de = (JRComponentElement) barcode.createJRElement(null);
+			JRDesignComponentElement de = (JRDesignComponentElement) barcode.createJRElement(null);
 			StandardBarbecueComponent sbc = (StandardBarbecueComponent) de.getComponent();
 			sbc.setType(bbcCode);
+			barcode = new MBarcodeBarbecue(null, de, -1);
 		}
 		super.dispose();
 	}
@@ -157,7 +154,7 @@ public class BarcodeWizardPage extends WizardPage {
 
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] sel = table2.getSelection();
-				if (sel != null && sel.length >0) {
+				if (sel != null && sel.length > 0) {
 					b4jCode = sel[0].getText();
 					table.setSelection(-1);
 					bbcCode = null;

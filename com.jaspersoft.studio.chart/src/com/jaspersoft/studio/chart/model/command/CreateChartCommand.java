@@ -19,49 +19,25 @@
  */
 package com.jaspersoft.studio.chart.model.command;
 
-import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignFrame;
-
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.chart.model.MChart;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.IGroupElement;
-import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.model.command.CreateElementCommand;
 
 /**
  * link nodes & together.
  * 
  * @author Chicu Veaceslav
  */
-public class CreateChartCommand extends Command {
-
-	/** The src node. */
-	private MGraphicElement srcNode;
-
-	/** The jr element. */
-	private JRDesignElement jrElement;
-
-	/** The jr group. */
-	private JRElementGroup jrGroup;
-
-	/** The location. */
-	private Point location;
-
-	/** The index. */
-	private int index;
+public class CreateChartCommand extends CreateElementCommand {
 
 	/**
 	 * Instantiates a new creates the element command.
@@ -74,8 +50,7 @@ public class CreateChartCommand extends Command {
 	 *          the index
 	 */
 	public CreateChartCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
-		super();
-		setContext(destNode, srcNode, index);
+		super(destNode, srcNode, index);
 	}
 
 	/**
@@ -89,8 +64,7 @@ public class CreateChartCommand extends Command {
 	 *          the index
 	 */
 	public CreateChartCommand(MFrame destNode, MGraphicElement srcNode, int index) {
-		super();
-		setContext(destNode, srcNode, index);
+		super(destNode, srcNode, index);
 	}
 
 	/**
@@ -104,8 +78,7 @@ public class CreateChartCommand extends Command {
 	 *          the index
 	 */
 	public CreateChartCommand(MBand destNode, MGraphicElement srcNode, int index) {
-		super();
-		setContext(destNode, srcNode, index);
+		super(destNode, srcNode, index);
 	}
 
 	/**
@@ -120,54 +93,8 @@ public class CreateChartCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateChartCommand(ANode destNode, MGraphicElement srcNode, Point position, int index) {
-		super();
-		if (destNode instanceof IGroupElement)
-			setContext(destNode, srcNode, index);
-		else
-			setContext(fixPosition(destNode, srcNode, position), srcNode, index);
-	}
-
-	/**
-	 * Sets the context.
-	 * 
-	 * @param destNode
-	 *          the dest node
-	 * @param srcNode
-	 *          the src node
-	 * @param index
-	 *          the index
-	 */
-	protected void setContext(ANode destNode, MGraphicElement srcNode, int index) {
-		this.srcNode = srcNode;
-		this.jrElement = (JRDesignElement) srcNode.getValue();
-		if (destNode instanceof IGroupElement)
-			this.jrGroup = ((IGroupElement) destNode).getJRElementGroup();
-		else
-			this.jrGroup = (JRElementGroup) destNode.getValue();
-		this.index = index;
-	}
-
-	/**
-	 * Fix position.
-	 * 
-	 * @param destNode
-	 *          the dest node
-	 * @param srcNode
-	 *          the src node
-	 * @param position
-	 *          the position
-	 * @return the a node
-	 */
-	protected ANode fixPosition(ANode destNode, IGuidebleElement srcNode, Point position) {
-		// calculate position, fix position relative to parent
-		MBand band = ModelUtils.getBand4Point(destNode, position);
-		// set proposed bounds
-		int x = position.x - band.getBounds().x;
-		int y = position.y - band.getBounds().y;
-
-		this.location = new Point(x, y);
-		return band;
+	public CreateChartCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
+		super(destNode, srcNode, position, index);
 	}
 
 	/**
@@ -183,109 +110,10 @@ public class CreateChartCommand extends Command {
 				byte type = wizard.getChart();
 				jrElement = MChart.createJRElement(srcNode.getJasperDesign(), type);
 			}
-			if (jrElement != null) {
-				if (location == null)
-					location = new Point(0, 0);
-				jrElement.setX(location.x);
-				jrElement.setY(location.y);
-				jrElement.setWidth(srcNode.getDefaultWidth());
-				jrElement.setHeight(srcNode.getDefaultHeight());
-			}
+			if (jrElement != null)
+				setElementBounds();
 
 		}
 	}
 
-	public void setJrGroup(JRElementGroup jrGroup) {
-		this.jrGroup = jrGroup;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
-	@Override
-	public void execute() {
-		createObject();
-		if (jrElement != null) {
-			if (jrGroup instanceof JRDesignElementGroup) {
-				if (index < 0 || index > jrGroup.getChildren().size())
-					((JRDesignElementGroup) jrGroup).addElement(jrElement);
-				else
-					((JRDesignElementGroup) jrGroup).addElement(index, jrElement);
-			} else if (jrGroup instanceof JRDesignFrame) {
-				if (index < 0 || index > jrGroup.getChildren().size())
-					((JRDesignFrame) jrGroup).addElement(jrElement);
-				else
-					((JRDesignFrame) jrGroup).addElement(index, jrElement);
-			}
-		}
-		if (firstTime) {
-			SelectionHelper.setSelection(jrElement, false);
-			firstTime = false;
-		}
-	}
-
-	private boolean firstTime = true;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#canUndo()
-	 */
-	@Override
-	public boolean canUndo() {
-		if (jrGroup == null || jrElement == null)
-			return false;
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
-	@Override
-	public void undo() {
-		if (jrGroup instanceof JRDesignElementGroup)
-			((JRDesignElementGroup) jrGroup).removeElement(jrElement);
-		else if (jrGroup instanceof JRDesignFrame)
-			((JRDesignFrame) jrGroup).removeElement(jrElement);
-	}
-
-	/**
-	 * Gets the jr element.
-	 * 
-	 * @return the jr element
-	 */
-	public JRDesignElement getJrElement() {
-		return jrElement;
-	}
-
-	/**
-	 * Gets the jr group.
-	 * 
-	 * @return the jr group
-	 */
-	public JRElementGroup getJrGroup() {
-		return jrGroup;
-	}
-
-	/**
-	 * Gets the location.
-	 * 
-	 * @return the location
-	 */
-	public Point getLocation() {
-		return location;
-	}
-
-	/**
-	 * Gets the index.
-	 * 
-	 * @return the index
-	 */
-	public int getIndex() {
-		return index;
-	}
 }

@@ -41,6 +41,7 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
@@ -130,7 +131,7 @@ public class BarcodeComponentFactory implements IComponentFactory {
 		return list;
 	}
 
-	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
+	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		if (child instanceof MBarcode) {
 			if (parent instanceof MElementGroup)
 				return new CreateBarcodeCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);

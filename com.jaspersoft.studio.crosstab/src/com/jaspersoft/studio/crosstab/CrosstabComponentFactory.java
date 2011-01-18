@@ -282,7 +282,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		return list;
 	}
 
-	public Command getCreateCommand(ANode parent, ANode child, Point location, int newIndex) {
+	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		if (child instanceof MParameter) {
 			if (parent instanceof MCrosstabParameters)
 				return new CreateParameterCommand((MCrosstabParameters) parent, (MParameter) child, newIndex);
@@ -327,7 +327,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		}
 		if (parent instanceof MCrosstab && child instanceof MGraphicElement) {
 			MCrosstab mt = (MCrosstab) parent;
-			final JRDesignCellContents cell = mt.getCrosstabManager().getCell(location);
+			final JRDesignCellContents cell = mt.getCrosstabManager().getCell(new Point(location.x, location.y));
 			if (cell != null) {
 				Rectangle r = mt.getCrosstabManager().getCellBounds(cell);
 				location = location.setLocation(location.x - r.x, location.y - r.y);

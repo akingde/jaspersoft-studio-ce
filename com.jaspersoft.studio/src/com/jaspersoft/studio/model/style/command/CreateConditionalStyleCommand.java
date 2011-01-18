@@ -22,7 +22,6 @@ package com.jaspersoft.studio.model.style.command;
 import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.style.MConditionalStyle;
@@ -51,12 +50,10 @@ public class CreateConditionalStyleCommand extends Command {
 	 *          the dest node
 	 * @param srcNode
 	 *          the src node
-	 * @param position
-	 *          the position
 	 * @param index
 	 *          the index
 	 */
-	public CreateConditionalStyleCommand(MStyle destNode, MConditionalStyle srcNode, Point position, int index) {
+	public CreateConditionalStyleCommand(MStyle destNode, MConditionalStyle srcNode, int index) {
 		super();
 		this.index = index;
 		this.jrStyle = (JRDesignStyle) destNode.getValue();

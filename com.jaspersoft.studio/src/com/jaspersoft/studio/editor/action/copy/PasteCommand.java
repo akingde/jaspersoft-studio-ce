@@ -26,7 +26,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRCloneable;
 
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.Clipboard;
 
@@ -82,7 +82,7 @@ public class PasteCommand extends Command {
 
 					n.setValue(((JRCloneable) value).clone());
 					// create command
-					Command cmd = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, (Point) null, -1);
+					Command cmd = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, (Rectangle) null, -1);
 					list.put(node, cmd);
 				}
 			} catch (InstantiationException e) {

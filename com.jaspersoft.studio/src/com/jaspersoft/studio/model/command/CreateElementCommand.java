@@ -23,8 +23,10 @@ import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
@@ -43,21 +45,21 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  * @author Chicu Veaceslav
  */
 public class CreateElementCommand extends Command {
-
+	protected JasperDesign jasperDesign;
 	/** The src node. */
-	private MGraphicElement srcNode;
+	protected MGraphicElement srcNode;
 
 	/** The jr element. */
-	private JRDesignElement jrElement;
+	protected JRDesignElement jrElement;
 
 	/** The jr group. */
-	private JRElementGroup jrGroup;
+	protected JRElementGroup jrGroup;
 
 	/** The location. */
-	private Point location;
+	protected Rectangle location;
 
 	/** The index. */
-	private int index;
+	protected int index;
 
 	/**
 	 * Instantiates a new creates the element command.
@@ -116,8 +118,9 @@ public class CreateElementCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateElementCommand(ANode destNode, MGraphicElement srcNode, Point position, int index) {
+	public CreateElementCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super();
+		this.location = position;
 		if (destNode instanceof IGroupElement)
 			setContext(destNode, srcNode, index);
 		else
@@ -136,6 +139,7 @@ public class CreateElementCommand extends Command {
 	 */
 	protected void setContext(ANode destNode, MGraphicElement srcNode, int index) {
 		this.srcNode = srcNode;
+		this.jasperDesign = destNode.getJasperDesign();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		if (destNode instanceof IGroupElement)
 			this.jrGroup = ((IGroupElement) destNode).getJRElementGroup();
@@ -155,14 +159,15 @@ public class CreateElementCommand extends Command {
 	 *          the position
 	 * @return the a node
 	 */
-	protected ANode fixPosition(ANode destNode, IGuidebleElement srcNode, Point position) {
+	protected ANode fixPosition(ANode destNode, IGuidebleElement srcNode, Rectangle position) {
 		// calculate position, fix position relative to parent
-		MBand band = ModelUtils.getBand4Point(destNode, position);
+		MBand band = ModelUtils.getBand4Point(destNode, new Point(position.x, position.y));
 		// set proposed bounds
 		int x = position.x - band.getBounds().x;
 		int y = position.y - band.getBounds().y;
-
-		this.location = new Point(x, y);
+		if (location == null)
+			location = new Rectangle(0, 0, 50, 30);
+		this.location.setLocation(x, y);
 		return band;
 	}
 
@@ -173,15 +178,23 @@ public class CreateElementCommand extends Command {
 		if (jrElement == null) {
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
 
-			if (jrElement != null) {
-				if (location == null)
-					location = new Point(0, 0);
-				jrElement.setX(location.x);
-				jrElement.setY(location.y);
-				jrElement.setWidth(srcNode.getDefaultWidth());
-				jrElement.setHeight(srcNode.getDefaultHeight());
-			}
+			if (jrElement != null)
+				setElementBounds();
 		}
+	}
+
+	protected void setElementBounds() {
+		if (location == null)
+			location = new Rectangle(0, 0, srcNode.getDefaultWidth(), srcNode.getDefaultHeight());
+		if (location.width < 0)
+			location.width = srcNode.getDefaultWidth();
+		if (location.height < 0)
+			location.height = srcNode.getDefaultHeight();
+
+		jrElement.setX(location.x);
+		jrElement.setY(location.y);
+		jrElement.setWidth(location.width);
+		jrElement.setHeight(location.height);
 	}
 
 	public void setJrGroup(JRElementGroup jrGroup) {
@@ -265,7 +278,7 @@ public class CreateElementCommand extends Command {
 	 * 
 	 * @return the location
 	 */
-	public Point getLocation() {
+	public Rectangle getLocation() {
 		return location;
 	}
 

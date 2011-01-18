@@ -3,7 +3,7 @@ package com.jaspersoft.studio.crosstab.model.cell.command;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.crosstab.model.cell.MCell;
@@ -16,7 +16,7 @@ public class CreateElementCommand extends Command {
 
 	private JRDesignCellContents jrCell;
 
-	private Point location;
+	private Rectangle location;
 
 	private int index = -1;
 
@@ -38,7 +38,7 @@ public class CreateElementCommand extends Command {
 		this.srcNode = srcNode;
 	}
 
-	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Point location) {
+	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Rectangle location) {
 		super();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		this.jrCell = (JRDesignCellContents) destNode.getValue();
@@ -53,15 +53,23 @@ public class CreateElementCommand extends Command {
 		if (jrElement == null) {
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
 
-			if (jrElement != null) {
-				if (location == null)
-					location = new Point(0, 0);
-				jrElement.setX(location.x);
-				jrElement.setY(location.y);
-				jrElement.setWidth(Math.min(srcNode.getDefaultWidth(), jrCell.getWidth() - location.x));
-				jrElement.setHeight(Math.min(srcNode.getDefaultHeight(), jrCell.getHeight() - location.y));
-			}
+			if (jrElement != null)
+				setElementBounds();
 		}
+	}
+
+	protected void setElementBounds() {
+		if (location == null)
+			location = new Rectangle(0, 0, srcNode.getDefaultWidth(), srcNode.getDefaultHeight());
+		if (location.width < 0)
+			location.width = srcNode.getDefaultWidth();
+		if (location.height < 0)
+			location.height = srcNode.getDefaultHeight();
+
+		jrElement.setX(location.x);
+		jrElement.setY(location.y);
+		jrElement.setWidth(location.width);
+		jrElement.setHeight(location.height);
 	}
 
 	/*
