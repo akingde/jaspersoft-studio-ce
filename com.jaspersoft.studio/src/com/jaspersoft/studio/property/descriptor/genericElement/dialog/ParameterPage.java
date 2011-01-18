@@ -105,6 +105,7 @@ public class ParameterPage extends WizardPage {
 	public void dispose() {
 		// clear all properties
 		List<JRGenericElementParameter> props = (List<JRGenericElementParameter>) tableViewer.getInput();
+		value = new ParameterDTO();
 		value.setValue(props.toArray(new JRGenericElementParameter[props.size()]));
 
 		super.dispose();
