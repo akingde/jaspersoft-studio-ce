@@ -80,6 +80,20 @@ public class MDatasetRun extends APropertyNode {
 
 	}
 
+	@Override
+	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
+		if (subdatasetnameD != null) {
+			JasperDesign jd = getJasperDesign();
+			List<JRDataset> datasets = jd.getDatasetsList();
+			String[] sds = new String[datasets.size()];
+			for (int i = 0; i < sds.length; i++) {
+				sds[i] = datasets.get(i).getName();
+			}
+			subdatasetnameD.setItems(sds);
+		}
+	}
+
 	private MExpression cnExpression;
 	private MExpression dsExpression;
 	private MExpression pmExpression;
@@ -122,13 +136,6 @@ public class MDatasetRun extends APropertyNode {
 			return propertyDTO;
 		}
 		if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
-			JasperDesign jd = getJasperDesign();
-			List<JRDataset> datasets = jd.getDatasetsList();
-			String[] sds = new String[datasets.size()];
-			for (int i = 0; i < sds.length; i++) {
-				sds[i] = datasets.get(i).getName();
-			}
-			subdatasetnameD.setItems(sds);
 			return jrElement.getDatasetName() != null ? jrElement.getDatasetName() : ""; //$NON-NLS-1$
 		}
 		return null;
@@ -183,7 +190,6 @@ public class MDatasetRun extends APropertyNode {
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
 			if (!value.equals("")) //$NON-NLS-1$
 				jrElement.setDatasetName((String) value);
-
 		}
 	}
 
