@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.base.JRBaseFont;
@@ -66,6 +67,7 @@ import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -296,6 +298,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 	private MExpression mPageExpression;
 	private MExpression mReferenceExpression;
 	private MExpression mToolTipExpression;
+	private ParameterDTO propertyDTO;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -316,7 +319,14 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 				return jrElement.getEvaluationGroup().getName();
 			return ""; //$NON-NLS-1$
 		}
-
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
+			if (propertyDTO == null) {
+				propertyDTO = new ParameterDTO();
+				propertyDTO.setJasperDesign(getJasperDesign());
+				propertyDTO.setValue(jrElement.getHyperlinkParameters());
+			}
+			return propertyDTO;
+		}
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getOwnTitleColor());
 		if (id.equals(JRBaseChart.PROPERTY_SUBTITLE_COLOR))
@@ -494,6 +504,18 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 				setChildListener(mToolTipExpression);
 				JRExpression expression = (JRExpression) mToolTipExpression.getValue();
 				jrElement.setHyperlinkTooltipExpression(expression);
+			}
+		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
+			if (value instanceof ParameterDTO) {
+				ParameterDTO v = (ParameterDTO) value;
+
+				for (JRHyperlinkParameter prm : propertyDTO.getValue())
+					jrElement.removeHyperlinkParameter(prm);
+
+				for (JRHyperlinkParameter param : v.getValue())
+					jrElement.addHyperlinkParameter(param);
+
+				propertyDTO = v;
 			}
 		} else
 			super.setPropertyValue(id, value);

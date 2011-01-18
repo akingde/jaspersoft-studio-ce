@@ -4,33 +4,32 @@
  * 
  * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
  * 
- * This program is part of Jaspersoft Open Studio.
+ * This program is part of iReport.
  * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor.genericElement.dialog;
+package com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.JRGenericElementParameter;
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignGenericElementParameter;
+import net.sf.jasperreports.engine.design.JRDesignHyperlinkParameter;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -77,16 +76,12 @@ public class ParameterPage extends WizardPage {
 		public String getColumnText(Object element, int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return ((JRGenericElementParameter) element).getName();
+				return ((JRHyperlinkParameter) element).getName();
 			case 1:
-				JRGenericElementParameter value2 = (JRGenericElementParameter) element;
+				JRHyperlinkParameter value2 = (JRHyperlinkParameter) element;
 				if (value2 != null && value2.getValueExpression() != null)
 					return value2.getValueExpression().getText();
-				break;
-			case 2:
-				return Boolean.toString(((JRGenericElementParameter) element).isSkipWhenEmpty());
 			}
-
 			return ""; //$NON-NLS-1$
 		}
 	}
@@ -104,8 +99,8 @@ public class ParameterPage extends WizardPage {
 	@Override
 	public void dispose() {
 		// clear all properties
-		List<JRGenericElementParameter> props = (List<JRGenericElementParameter>) tableViewer.getInput();
-		value.setValue(props.toArray(new JRGenericElementParameter[props.size()]));
+		List<JRHyperlinkParameter> props = (List<JRHyperlinkParameter>) tableViewer.getInput();
+		value.setValue(props.toArray(new JRHyperlinkParameter[props.size()]));
 
 		super.dispose();
 	}
@@ -121,7 +116,7 @@ public class ParameterPage extends WizardPage {
 
 	protected ParameterPage(String pageName) {
 		super(pageName);
-		setTitle(Messages.ParameterPage_generic_elements_parameters);
+		setTitle(Messages.ParameterPage_dataset_parameters);
 		setDescription(Messages.ParameterPage_description);
 
 	}
@@ -153,12 +148,12 @@ public class ParameterPage extends WizardPage {
 
 			// Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
-				List<JRGenericElementParameter> list = (List<JRGenericElementParameter>) tableViewer.getInput();
-				for (JRGenericElementParameter dto : list) {
+				List<JRHyperlinkParameter> list = (List<JRHyperlinkParameter>) tableViewer.getInput();
+				for (JRHyperlinkParameter dto : list) {
 					if (dto.getName() == null || dto.getName().trim().equals("NEW PARAMETER")) //$NON-NLS-1$
 						return;
 				}
-				JRDesignGenericElementParameter p = new JRDesignGenericElementParameter();
+				JRDesignHyperlinkParameter p = new JRDesignHyperlinkParameter();
 				JRDesignExpression expression = new JRDesignExpression();
 				expression.setValueClassName("java.lang.String"); //$NON-NLS-1$
 				p.setValueExpression(expression);
@@ -182,7 +177,7 @@ public class ParameterPage extends WizardPage {
 			// Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
 				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
-				JRGenericElementParameter property = (JRGenericElementParameter) iStructuredSelection.getFirstElement();
+				JRHyperlinkParameter property = (JRHyperlinkParameter) iStructuredSelection.getFirstElement();
 				Object input = tableViewer.getInput();
 				if (input instanceof List<?>) {
 					List<?> list = (List<?>) input;
@@ -208,7 +203,7 @@ public class ParameterPage extends WizardPage {
 
 	private void buildTable(Composite composite) {
 		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
-		table.setToolTipText("");
+		table.setToolTipText(""); //$NON-NLS-1$
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -222,20 +217,16 @@ public class ParameterPage extends WizardPage {
 		TableLayout tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
 		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
-		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
 		table.setLayout(tlayout);
 
 		setColumnToolTip();
 
-		TableColumn[] column = new TableColumn[3];
+		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
 		column[0].setText(Messages.ParameterPage_parameter);
 
 		column[1] = new TableColumn(table, SWT.NONE);
 		column[1].setText(Messages.common_expression);
-
-		column[2] = new TableColumn(table, SWT.NONE);
-		column[2].setText(Messages.ParameterPage_skip_empty);
 
 		fillTable(table);
 		for (int i = 0, n = column.length; i < n; i++) {
@@ -267,7 +258,7 @@ public class ParameterPage extends WizardPage {
 	private void attachContentProvider(TableViewer viewer) {
 		viewer.setContentProvider(new IStructuredContentProvider() {
 			public Object[] getElements(Object inputElement) {
-				return ((List<JRGenericElementParameter>) inputElement).toArray();
+				return ((List<JRHyperlinkParameter>) inputElement).toArray();
 			}
 
 			public void dispose() {
@@ -290,21 +281,17 @@ public class ParameterPage extends WizardPage {
 					return true;
 				if (property.equals("NAME")) //$NON-NLS-1$
 					return true;
-				if (property.equals("SKIPONEMPTY")) //$NON-NLS-1$
-					return true;
 				return false;
 			}
 
 			public Object getValue(Object element, String property) {
-				JRGenericElementParameter prop = (JRGenericElementParameter) element;
+				JRHyperlinkParameter prop = (JRHyperlinkParameter) element;
 				if ("VALUE".equals(property)) //$NON-NLS-1$
 					if (prop.getValueExpression() != null)
 						return new MExpression(prop.getValueExpression());
-				if ("NAME".equals(property)) //$NON-NLS-1$
+				if ("NAME".equals(property)) { //$NON-NLS-1$
 					return prop.getName();
-				if ("SKIPONEMPTY".equals(property)) //$NON-NLS-1$
-					return new Integer(prop.isSkipWhenEmpty() ? 0 : 1);
-
+				}
 				return ""; //$NON-NLS-1$
 			}
 
@@ -312,36 +299,34 @@ public class ParameterPage extends WizardPage {
 				TableItem tableItem = (TableItem) element;
 				setErrorMessage(null);
 				setMessage(getDescription(tableItem));
-				JRDesignGenericElementParameter data = (JRDesignGenericElementParameter) tableItem.getData();
+				JRHyperlinkParameter data = (JRHyperlinkParameter) tableItem.getData();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
 					if (value instanceof MExpression) {
 						JRExpression e = (JRExpression) ((MExpression) value).getValue();
-						data.setValueExpression(e);
+						((JRDesignHyperlinkParameter) data).setValueExpression(e);
 					}
-				} else if ("NAME".equals(property)) { //$NON-NLS-1$
-					List<JRDesignGenericElementParameter> plist = (List<JRDesignGenericElementParameter>) tableViewer.getInput();
-					for (JRDesignGenericElementParameter p : plist) {
+				}
+				if ("NAME".equals(property)) { //$NON-NLS-1$
+					List<JRHyperlinkParameter> plist = (List<JRHyperlinkParameter>) tableViewer.getInput();
+					for (JRHyperlinkParameter p : plist) {
 						if (p != data && p.getName() != null && p.getName().equals(value)) {
 							setErrorMessage("Properties are unique, you can't put duplicate values");
 							return;
 						}
 					}
-					data.setName((String) value);
-				} else if ("SKIPONEMPTY".equals(property)) { //$NON-NLS-1$
-					data.setSkipWhenEmpty(new Boolean(value != null && ((Integer) value).intValue() == 1));
+					((JRDesignHyperlinkParameter) data).setName((String) value);
 				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new JRExpressionCellEditor(parent),
-				new ComboBoxCellEditor(parent, new String[] { "false", "true" }) }); //$NON-NLS-1$ //$NON-NLS-2$
-		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "SKIPONEMPTY" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new JRExpressionCellEditor(parent) });
+		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private void fillTable(Table table) {
-		List<JRGenericElementParameter> lst = new ArrayList<JRGenericElementParameter>();
+		List<JRHyperlinkParameter> lst = new ArrayList<JRHyperlinkParameter>();
 		if (value.getValue() != null)
 			lst.addAll(Arrays.asList(value.getValue()));
 		tableViewer.setInput(lst);

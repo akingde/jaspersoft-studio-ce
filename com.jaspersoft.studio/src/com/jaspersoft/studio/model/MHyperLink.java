@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlink;
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -33,6 +34,8 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.ParameterPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -75,6 +78,12 @@ public class MHyperLink extends APropertyNode {
 		linkTypeD.setDescription(Messages.MHyperLink_link_type_description);
 		desc.add(linkTypeD);
 
+		ParameterPropertyDescriptor propertiesD = new ParameterPropertyDescriptor(
+				JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS, Messages.common_parameters);
+		propertiesD.setDescription(Messages.MHyperLink_parameters_description);
+		desc.add(propertiesD);
+
+		propertiesD.setCategory(Messages.MHyperLink_hyperlink_category);
 		anchorExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
 		pageExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
 		referenceExpressionD.setCategory(Messages.MHyperLink_hyperlink_category);
@@ -149,9 +158,19 @@ public class MHyperLink extends APropertyNode {
 				}
 				return mToolTipExpression;
 			}
+			if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
+				if (propertyDTO == null) {
+					propertyDTO = new ParameterDTO();
+					propertyDTO.setJasperDesign(getJasperDesign());
+					propertyDTO.setValue(hyperLink.getHyperlinkParameters());
+				}
+				return propertyDTO;
+			}
 		}
 		return null;
 	}
+
+	private ParameterDTO propertyDTO;
 
 	/*
 	 * (non-Javadoc)
@@ -192,6 +211,18 @@ public class MHyperLink extends APropertyNode {
 					setChildListener(mToolTipExpression);
 					JRExpression expression = (JRExpression) mToolTipExpression.getValue();
 					hyperLink.setHyperlinkTooltipExpression(expression);
+				}
+			} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
+				if (value instanceof ParameterDTO) {
+					ParameterDTO v = (ParameterDTO) value;
+
+					for (JRHyperlinkParameter prm : propertyDTO.getValue())
+						hyperLink.removeHyperlinkParameter(prm);
+
+					for (JRHyperlinkParameter param : v.getValue())
+						hyperLink.addHyperlinkParameter(param);
+
+					propertyDTO = v;
 				}
 			}
 		}

@@ -379,6 +379,9 @@ public class Messages extends NLS {
 	public static String MHyperLink_hyperlink_reference_expression_description;
 	public static String MHyperLink_hyperlink_tooltip_expression;
 	public static String MHyperLink_hyperlink_tooltip_expression_description;
+	public static String MHyperLink_parameters_description;
+	public static String MHyperLink_parameters_map_expression_description;
+	
 	public static String MHyperLink_link_target;
 	public static String MHyperLink_link_target_description;
 	public static String MHyperLink_link_type;

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseImage;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -46,6 +47,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
@@ -193,6 +195,7 @@ public class MImage extends MGraphicElementLineBox {
 	private MExpression mPageExpression;
 	private MExpression mReferenceExpression;
 	private MExpression mToolTipExpression;
+	private ParameterDTO propertyDTO;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -216,6 +219,14 @@ public class MImage extends MGraphicElementLineBox {
 				setChildListener(mExpression);
 			}
 			return mExpression;
+		}
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
+			if (propertyDTO == null) {
+				propertyDTO = new ParameterDTO();
+				propertyDTO.setJasperDesign(getJasperDesign());
+				propertyDTO.setValue(jrElement.getHyperlinkParameters());
+			}
+			return propertyDTO;
 		}
 		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
 			return jrElement.isOwnUsingCache();
@@ -319,8 +330,20 @@ public class MImage extends MGraphicElementLineBox {
 				JRExpression expression = (JRExpression) mToolTipExpression.getValue();
 				jrElement.setHyperlinkTooltipExpression(expression);
 			}
-		} else
-			super.setPropertyValue(id, value);
+		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
+			if (value instanceof ParameterDTO) {
+				ParameterDTO v = (ParameterDTO) value;
+
+				for (JRHyperlinkParameter prm : propertyDTO.getValue())
+					jrElement.removeHyperlinkParameter(prm);
+
+				for (JRHyperlinkParameter param : v.getValue())
+					jrElement.addHyperlinkParameter(param);
+
+				propertyDTO = v;
+			}
+		}
+		super.setPropertyValue(id, value);
 	}
 
 	/*

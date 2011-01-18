@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio
 Bundle-SymbolicName: com.jaspersoft.studio;singleton:=true
-Bundle-Version: 0.1.4
+Bundle-Version: 0.1.5
 Bundle-Activator: com.jaspersoft.studio.JaspersoftStudioPlugin
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Localization: plugin
@@ -85,6 +85,8 @@ Export-Package: com.jaspersoft.studio,
  com.jaspersoft.studio.property.descriptor.genericElement,
  com.jaspersoft.studio.property.descriptor.genericElement.dialog,
  com.jaspersoft.studio.property.descriptor.hyperlink,
+ com.jaspersoft.studio.property.descriptor.hyperlink.parameter,
+ com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog,
  com.jaspersoft.studio.property.descriptor.jrQuery,
  com.jaspersoft.studio.property.descriptor.jrQuery.dialog,
  com.jaspersoft.studio.property.descriptor.parameter,
