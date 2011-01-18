@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.descriptor.parameter.dialog;
 
@@ -104,6 +100,7 @@ public class ParameterPage extends WizardPage {
 	public void dispose() {
 		// clear all properties
 		List<JRDatasetParameter> props = (List<JRDatasetParameter>) tableViewer.getInput();
+		value = new ParameterDTO();
 		value.setValue(props.toArray(new JRDatasetParameter[props.size()]));
 
 		super.dispose();
@@ -153,21 +150,32 @@ public class ParameterPage extends WizardPage {
 			// Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
 				List<JRDatasetParameter> list = (List<JRDatasetParameter>) tableViewer.getInput();
-				for (JRDatasetParameter dto : list) {
-					if (dto.getName() == null || dto.getName().trim().equals("NEW PARAMETER")) //$NON-NLS-1$
-						return;
+				String newName = "NEW PARAMETER";
+				for (int i = 1; i < Integer.MAX_VALUE; i++) {
+					if (checkName(newName, list))
+						newName = "NEW PARAMETER " + i;
+					else
+						break;
 				}
 				JRDesignDatasetParameter p = new JRDesignDatasetParameter();
 				JRDesignExpression expression = new JRDesignExpression();
 				expression.setValueClassName("java.lang.String"); //$NON-NLS-1$
 				p.setExpression(expression);
-				p.setName("NEW PARAMETER"); //$NON-NLS-1$
+				p.setName(newName); //$NON-NLS-1$
 				list.add(p);
 				tableViewer.add(p);
 				tableViewer.setSelection(new StructuredSelection(p));
 				// cursor.setSelection(table.getSelectionIndex(), 0);
 				tableViewer.refresh();
 				table.setFocus();
+			}
+
+			private boolean checkName(String newName, List<JRDatasetParameter> list) {
+				for (JRDatasetParameter dto : list) {
+					if (dto.getName() == null || dto.getName().trim().equals(newName)) //$NON-NLS-1$
+						return true;
+				}
+				return false;
 			}
 		});
 
