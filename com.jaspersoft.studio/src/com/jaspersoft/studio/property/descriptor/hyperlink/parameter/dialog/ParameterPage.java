@@ -100,8 +100,11 @@ public class ParameterPage extends WizardPage {
 	public void dispose() {
 		// clear all properties
 		List<JRHyperlinkParameter> props = (List<JRHyperlinkParameter>) tableViewer.getInput();
-		value.setValue(props.toArray(new JRHyperlinkParameter[props.size()]));
+		
 
+		value = new ParameterDTO();
+		value.setValue(props.toArray(new JRHyperlinkParameter[props.size()]));
+		
 		super.dispose();
 	}
 
@@ -149,21 +152,32 @@ public class ParameterPage extends WizardPage {
 			// Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
 				List<JRHyperlinkParameter> list = (List<JRHyperlinkParameter>) tableViewer.getInput();
-				for (JRHyperlinkParameter dto : list) {
-					if (dto.getName() == null || dto.getName().trim().equals("NEW PARAMETER")) //$NON-NLS-1$
-						return;
+				String newName = "NEW PARAMETER";
+				for (int i = 1; i < Integer.MAX_VALUE; i++) {
+					if(checkName(newName, list))
+						newName = "NEW PARAMETER " + i;
+					else
+						break;
 				}
 				JRDesignHyperlinkParameter p = new JRDesignHyperlinkParameter();
 				JRDesignExpression expression = new JRDesignExpression();
 				expression.setValueClassName("java.lang.String"); //$NON-NLS-1$
 				p.setValueExpression(expression);
-				p.setName("NEW PARAMETER"); //$NON-NLS-1$
+				p.setName(newName); //$NON-NLS-1$
 				list.add(p);
 				tableViewer.add(p);
 				tableViewer.setSelection(new StructuredSelection(p));
 				// cursor.setSelection(table.getSelectionIndex(), 0);
 				tableViewer.refresh();
 				table.setFocus();
+			}
+
+			private boolean checkName(String newName, List<JRHyperlinkParameter> list) {
+				for (JRHyperlinkParameter dto : list) {
+					if (dto.getName() == null || dto.getName().trim().equals(newName)) //$NON-NLS-1$
+						return true;
+				}
+				return false;
 			}
 		});
 

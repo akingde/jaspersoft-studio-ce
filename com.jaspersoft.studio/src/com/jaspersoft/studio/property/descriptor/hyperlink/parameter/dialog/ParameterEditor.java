@@ -51,7 +51,7 @@ public class ParameterEditor extends Wizard {
 
 	@Override
 	public void addPages() {
-		page0 = new ParameterPage("Datasetparameters"); //$NON-NLS-1$
+		page0 = new ParameterPage("Hyperlinkparameters"); //$NON-NLS-1$
 		page0.setValue(value);
 		addPage(page0);
 	}
