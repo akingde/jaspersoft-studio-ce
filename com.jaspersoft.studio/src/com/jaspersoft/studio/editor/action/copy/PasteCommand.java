@@ -50,7 +50,7 @@ public class PasteCommand extends Command {
 		if (obj == null)
 			return false;
 		if (obj instanceof Collection<?>) {
-			Collection bList = (Collection) obj;
+			Collection<?> bList = (Collection<?>) obj;
 			if (bList.isEmpty())
 				return false;
 			for (Iterator<?> it = bList.iterator(); it.hasNext();) {

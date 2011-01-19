@@ -91,7 +91,7 @@ public class MTextField extends MTextElement {
 		setValue(jrStaticText);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
 	@Override

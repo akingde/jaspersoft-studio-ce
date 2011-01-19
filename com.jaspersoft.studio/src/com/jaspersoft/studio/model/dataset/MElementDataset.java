@@ -76,7 +76,7 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		this.jasperDesign = jasperDesign;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
 	@Override
@@ -113,13 +113,13 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		incWhenExprD.setDescription(Messages.MElementDataset_increment_when_expression_description);
 		desc.add(incWhenExprD);
 
-		resetGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP, Messages.common_reset_group,
-				new String[] { "" }); //$NON-NLS-1$
+		resetGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_GROUP,
+				Messages.common_reset_group, new String[] { "" }); //$NON-NLS-1$
 		resetGroupD.setDescription(Messages.MElementDataset_reset_group_description);
 		desc.add(resetGroupD);
 
-		incGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP, Messages.common_increment_group,
-				new String[] { "" }); //$NON-NLS-1$
+		incGroupD = new RComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP,
+				Messages.common_increment_group, new String[] { "" }); //$NON-NLS-1$
 		incGroupD.setDescription(Messages.MElementDataset_increment_group_description);
 		desc.add(incGroupD);
 
@@ -151,7 +151,7 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
 			return EnumHelper.getValue(jrElement.getIncrementTypeValue(), 1, false);
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION)) {
-			if (incWhenExp == null){
+			if (incWhenExp == null) {
 				incWhenExp = new MExpression(jrElement.getIncrementWhenExpression());
 				setChildListener(incWhenExp);
 			}

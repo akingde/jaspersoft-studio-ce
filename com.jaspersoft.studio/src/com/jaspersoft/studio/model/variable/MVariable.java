@@ -89,7 +89,7 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		super(parent, jrVariable, newIndex);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
 	@Override

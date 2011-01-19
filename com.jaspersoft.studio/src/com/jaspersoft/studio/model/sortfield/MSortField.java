@@ -31,7 +31,6 @@ import net.sf.jasperreports.engine.type.SortOrderEnum;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -115,7 +114,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 	private RComboBoxPropertyDescriptor nameD;
 
@@ -180,8 +179,8 @@ public class MSortField extends APropertyNode implements ICopyable {
 		nameD.setDescription(Messages.MSortField_name_description);
 		desc.add(nameD);
 
-		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, Messages.common_order,
-				EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
+		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER,
+				Messages.common_order, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
 		orderD.setDescription(Messages.MSortField_order_description);
 		desc.add(orderD);
 

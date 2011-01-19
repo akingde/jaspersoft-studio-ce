@@ -156,6 +156,8 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		// getGraphicalViewer().setRootEditPart(new MainDesignerRootEditPart());
 		// if (model != null)
 		getGraphicalViewer().setContents(model);
+		if(outlinePage != null)
+			outlinePage.setContents(model);
 	}
 
 	public void setPartImage(Image partImage) {

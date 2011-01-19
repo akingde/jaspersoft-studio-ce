@@ -48,7 +48,7 @@ public abstract class MBarcode extends MGraphicElement {
 		super(parent, newIndex);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
 	@Override

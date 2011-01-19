@@ -262,8 +262,6 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		setContents(editor.getModel());
 		if (outline instanceof Tree) {
 			Tree tree = (Tree) outline;
-			if (tree.getItems() != null && tree.getItems().length > 0)
-				tree.getItem(0).setExpanded(true);
 			tree.addMouseListener(new MouseListener() {
 
 				public void mouseUp(MouseEvent e) {
@@ -372,6 +370,11 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 */
 	public void setContents(Object contents) {
 		getViewer().setContents(contents);
+		if (outline instanceof Tree) {
+			Tree tree = (Tree) outline;
+			if (tree.getItems() != null && tree.getItems().length > 0)
+				tree.getItem(0).setExpanded(true);
+		}
 	}
 
 	/**

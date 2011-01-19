@@ -91,7 +91,7 @@ public class MImage extends MGraphicElementLineBox {
 		setValue(jrImage);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
 	@Override

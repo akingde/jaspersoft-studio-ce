@@ -117,7 +117,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		setValue(jrChart);
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
 	@Override

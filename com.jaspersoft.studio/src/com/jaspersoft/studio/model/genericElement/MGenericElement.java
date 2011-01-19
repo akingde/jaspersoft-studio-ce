@@ -110,7 +110,7 @@ public class MGenericElement extends MGraphicElement {
 		return getIconDescriptor().getToolTip();
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
 

@@ -32,7 +32,7 @@ public class MDatasetRun extends APropertyNode {
 		this.jasperDesign = jasperDesign;
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
 	@Override

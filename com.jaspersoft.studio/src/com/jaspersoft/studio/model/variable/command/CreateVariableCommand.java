@@ -27,6 +27,7 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariables;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * link nodes & together.
@@ -74,6 +75,10 @@ public class CreateVariableCommand extends Command {
 		}
 		if (jrVariable != null) {
 			try {
+				if (jrDataset.getVariablesMap().get(jrVariable.getName()) != null) {
+					jrVariable.setName(ModelUtils.getDefaultName(jrDataset.getVariablesMap(), jrVariable.getName() + "_"));
+				}
+
 				if (index < 0 || index > jrDataset.getVariablesList().size())
 					jrDataset.addVariable(jrVariable);
 				else

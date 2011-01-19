@@ -38,7 +38,6 @@ import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MDate.
  */

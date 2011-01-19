@@ -261,7 +261,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		return new Rectangle(0, 0, jr.getWidth(), jr.getHeight());
 	}
 
-	private static IPropertyDescriptor[] descriptors;
+	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
 	@Override

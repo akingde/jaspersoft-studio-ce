@@ -379,4 +379,15 @@ public abstract class ANode implements INode {
 			return (JasperDesign) getRoot().getValue();
 		return null;
 	}
+
+	public int findElement(Object obj) {
+		if (obj == null)
+			return -1;
+		List<INode> children2 = getChildren();
+		for (int i = 0; i < children2.size(); i++) {
+			if (children2.get(i).getValue() == obj)
+				return i;
+		}
+		return -1;
+	}
 }

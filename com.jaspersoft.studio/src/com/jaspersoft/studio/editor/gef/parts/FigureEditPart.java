@@ -53,6 +53,7 @@ import com.jaspersoft.studio.preferences.PreferenceConstants;
 public class FigureEditPart extends AJDEditPart implements PropertyChangeListener {
 
 	private DrawVisitor drawVisitor;
+
 	public DrawVisitor getDrawVisitor() {
 		return drawVisitor;
 	}
@@ -106,7 +107,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 
 	/*
 	 * (non-Javadoc)
-	 * 	
+	 * 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
 	@Override
