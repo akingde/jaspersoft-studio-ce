@@ -154,7 +154,7 @@ public class ParameterPage extends WizardPage {
 				List<JRHyperlinkParameter> list = (List<JRHyperlinkParameter>) tableViewer.getInput();
 				String newName = "NEW PARAMETER";
 				for (int i = 1; i < Integer.MAX_VALUE; i++) {
-					if(checkName(newName, list))
+					if (checkName(newName, list))
 						newName = "NEW PARAMETER " + i;
 					else
 						break;

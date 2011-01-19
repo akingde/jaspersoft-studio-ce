@@ -223,8 +223,9 @@ public class MGenericElement extends MGraphicElement {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;
 
-				for (JRGenericElementParameter prm : propertyDTO.getValue())
-					jrElement.removeParameter(prm);
+				if (jrElement.getParameters() != null)
+					for (JRGenericElementParameter prm : jrElement.getParameters())
+						jrElement.removeParameter(prm);
 
 				for (JRGenericElementParameter param : v.getValue())
 					jrElement.addParameter(param);

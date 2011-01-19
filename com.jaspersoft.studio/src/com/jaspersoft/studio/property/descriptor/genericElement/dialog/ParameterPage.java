@@ -155,21 +155,32 @@ public class ParameterPage extends WizardPage {
 			// Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
 				List<JRGenericElementParameter> list = (List<JRGenericElementParameter>) tableViewer.getInput();
-				for (JRGenericElementParameter dto : list) {
-					if (dto.getName() == null || dto.getName().trim().equals("NEW PARAMETER")) //$NON-NLS-1$
-						return;
+				String newName = "NEW PARAMETER";
+				for (int i = 1; i < Integer.MAX_VALUE; i++) {
+					if (checkName(newName, list))
+						newName = "NEW PARAMETER " + i;
+					else
+						break;
 				}
 				JRDesignGenericElementParameter p = new JRDesignGenericElementParameter();
 				JRDesignExpression expression = new JRDesignExpression();
 				expression.setValueClassName("java.lang.String"); //$NON-NLS-1$
 				p.setValueExpression(expression);
-				p.setName("NEW PARAMETER"); //$NON-NLS-1$
+				p.setName(newName); //$NON-NLS-1$
 				list.add(p);
 				tableViewer.add(p);
 				tableViewer.setSelection(new StructuredSelection(p));
 				// cursor.setSelection(table.getSelectionIndex(), 0);
 				tableViewer.refresh();
 				table.setFocus();
+			}
+
+			private boolean checkName(String newName, List<JRGenericElementParameter> list) {
+				for (JRGenericElementParameter dto : list) {
+					if (dto.getName() == null || dto.getName().trim().equals(newName)) //$NON-NLS-1$
+						return true;
+				}
+				return false;
 			}
 		});
 
