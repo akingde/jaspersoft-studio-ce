@@ -150,10 +150,10 @@ public class ParameterPage extends WizardPage {
 			// Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
 				List<JRDatasetParameter> list = (List<JRDatasetParameter>) tableViewer.getInput();
-				String newName = "NEW PARAMETER";
+				String newName = "NEW PARAMETER"; //$NON-NLS-1$
 				for (int i = 1; i < Integer.MAX_VALUE; i++) {
 					if (checkName(newName, list))
-						newName = "NEW PARAMETER " + i;
+						newName = "NEW PARAMETER " + i; //$NON-NLS-1$
 					else
 						break;
 				}
@@ -322,7 +322,7 @@ public class ParameterPage extends WizardPage {
 					List<JRDesignDatasetParameter> plist = (List<JRDesignDatasetParameter>) tableViewer.getInput();
 					for (JRDesignDatasetParameter p : plist) {
 						if (p != data && p.getName() != null && p.getName().equals(value)) {
-							setErrorMessage("Properties are unique, you can't put duplicate values");
+							setErrorMessage(Messages.common_error_message_unique_properties);
 							return;
 						}
 					}

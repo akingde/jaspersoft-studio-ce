@@ -357,7 +357,7 @@ public class JRPropertyPage extends WizardPage {
 					List<PropertyDTO> plist = (List<PropertyDTO>) tableViewer.getInput();
 					for (PropertyDTO p : plist) {
 						if (p != data && p.getProperty() != null && p.getProperty().equals(value)) {
-							setErrorMessage(Messages.JRPropertyPage_error_message);
+							setErrorMessage(Messages.common_error_message_unique_properties);
 							return;
 						}
 					}

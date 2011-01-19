@@ -556,7 +556,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		else if (id.equals(JRDesignElement.PROPERTY_WIDTH))
 			jrElement.setWidth(((Integer) value).intValue());
 		else if (id.equals(JRDesignElement.PROPERTY_X)) {
-			System.out.println("Setting element position...");
+			System.out.println("Setting element position..."); //$NON-NLS-1$
 			jrElement.setX(((Integer) value).intValue());
 		}
 

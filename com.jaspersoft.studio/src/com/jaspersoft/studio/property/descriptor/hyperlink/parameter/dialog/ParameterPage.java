@@ -152,10 +152,10 @@ public class ParameterPage extends WizardPage {
 			// Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
 				List<JRHyperlinkParameter> list = (List<JRHyperlinkParameter>) tableViewer.getInput();
-				String newName = "NEW PARAMETER";
+				String newName = "NEW PARAMETER"; //$NON-NLS-1$
 				for (int i = 1; i < Integer.MAX_VALUE; i++) {
 					if (checkName(newName, list))
-						newName = "NEW PARAMETER " + i;
+						newName = "NEW PARAMETER " + i; //$NON-NLS-1$
 					else
 						break;
 				}
@@ -217,7 +217,7 @@ public class ParameterPage extends WizardPage {
 
 	private void buildTable(Composite composite) {
 		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
-		table.setToolTipText(""); //$NON-NLS-1$
+		table.setToolTipText(""); 
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -324,7 +324,7 @@ public class ParameterPage extends WizardPage {
 					List<JRHyperlinkParameter> plist = (List<JRHyperlinkParameter>) tableViewer.getInput();
 					for (JRHyperlinkParameter p : plist) {
 						if (p != data && p.getName() != null && p.getName().equals(value)) {
-							setErrorMessage("Properties are unique, you can't put duplicate values");
+							setErrorMessage(Messages.common_error_message_unique_properties);
 							return;
 						}
 					}

@@ -84,7 +84,7 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 		rect.resize(request.getSizeDelta());
 
 		// Calculate changes for the figure...
-		String s = "";
+		String s = ""; //$NON-NLS-1$
 		int scale = 0;
 		if (getHost() instanceof FigureEditPart
 				&& ((FigureEditPart) getHost()).getModelNode().getValue() instanceof JRDesignCellContents) {
@@ -98,7 +98,7 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 			// oldBounds.translate(rect2.x, rect2.y);
 			oldBounds.resize(rect2.width, rect2.height);
 
-			s += oldBounds.width + ", " + oldBounds.height;
+			s += oldBounds.width + ", " + oldBounds.height; //$NON-NLS-1$
 			if (oldBounds.width != 0)
 				scale = rect.width / oldBounds.width - 1;
 			else if (oldBounds.height != 0)

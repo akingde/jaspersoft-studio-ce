@@ -20,6 +20,7 @@ public class Messages extends NLS {
 	public static String common_description;
 	public static String common_driver_class;
 	public static String common_error_creating_nested_visual_editor;
+	public static String common_error_message_unique_properties;
 	public static String common_evaluation_time;
 	public static String common_expression;
 	public static String common_expression_editor;
@@ -227,7 +228,6 @@ public class Messages extends NLS {
 	public static String JRExpressionPage_description;
 	public static String JRExpressionPage_value_class_name;
 	public static String JRPropertyPage_description;
-	public static String JRPropertyPage_error_message;
 	public static String JRPropertyPage_value;
 	public static String JRQueryPage_description;
 	public static String JrxmlEditor_design;
@@ -379,13 +379,11 @@ public class Messages extends NLS {
 	public static String MHyperLink_hyperlink_reference_expression_description;
 	public static String MHyperLink_hyperlink_tooltip_expression;
 	public static String MHyperLink_hyperlink_tooltip_expression_description;
-	public static String MHyperLink_parameters_description;
-	public static String MHyperLink_parameters_map_expression_description;
-	
 	public static String MHyperLink_link_target;
 	public static String MHyperLink_link_target_description;
 	public static String MHyperLink_link_type;
 	public static String MHyperLink_link_type_description;
+	public static String MHyperLink_parameters_description;
 	public static String MImage_evaluation_type;
 	public static String MImage_evaluation_type_description;
 	public static String MImage_expression_description;

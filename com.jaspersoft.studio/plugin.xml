@@ -329,6 +329,20 @@
             name="JasperReport">
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+      <category
+            id="com.jaspersoft.studio.cheatsheets.repository"
+            name="Repository CheatSheets">
+      </category>
+      <cheatsheet
+            category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/content.xml"
+            id="com.jaspersoft.studio.cheatsheets.cheatsheet1"
+            name="Create JDBC Datasources">
+      </cheatsheet>
+   </extension>
    
 
 </plugin>

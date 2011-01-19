@@ -157,8 +157,8 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		jd.setName(Messages.ReportNewWizard_new_report);
 
 		JRDesignQuery jrDesignQuery = new JRDesignQuery();
-		jrDesignQuery.setLanguage("sql");
-		jrDesignQuery.setText("");
+		jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$
+		jrDesignQuery.setText(""); //$NON-NLS-1$
 		jd.setQuery(jrDesignQuery);
 
 		JRDesignBand jb = new JRDesignBand();

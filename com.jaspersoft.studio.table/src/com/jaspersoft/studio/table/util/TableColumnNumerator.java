@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.table.TableManager;
+import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.model.column.MColumn;
@@ -42,8 +43,8 @@ public class TableColumnNumerator {
 		int i = columns.indexOf(bc) + 1;
 		if (col instanceof MColumnGroup || col instanceof MColumnGroupCell) {
 			int size = TableUtil.getAllColumns(((StandardColumnGroup) bc).getColumns()).size();
-			col.setName("Columns [" + size + "]");
+			col.setName(Messages.common_columns + " [" + size + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 		} else if (col instanceof MColumn)
-			col.setName("Column" + i);
+			col.setName(Messages.common_column + i);
 	}
 }

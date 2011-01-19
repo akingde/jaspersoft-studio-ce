@@ -4,6 +4,8 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.table.messages.messages"; //$NON-NLS-1$
+	public static String common_column;
+	public static String common_columns;
 	public static String common_orphan_child;
 	public static String common_orphan_element;
 	public static String common_reorder_elements;
@@ -31,8 +33,6 @@ public class Messages extends NLS {
 	public static String MTableGroupHeader_group_header;
 	public static String ReorderColumnCommand_reorder_columns;
 	public static String ReorderColumnGroupCommand_reorder_column_group;
-	public static String TableComponentFactory_column;
-	public static String TableComponentFactory_columns;
 	public static String TableEditor_table;
 	public static String TableWizardPage_wizard_description;
 	static {

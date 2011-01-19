@@ -272,7 +272,7 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public static ANode createColumnCell(ANode parent, BaseColumn bc, int i, Cell grHeader, int index) {
-		String name = Messages.TableComponentFactory_column + i;
+		String name = Messages.common_column + i;
 		if (grHeader != null) {
 			MCell mc = new MCell(parent, (StandardBaseColumn) bc, (DesignCell) grHeader, name, index);
 			ReportFactory.createElementsForBand(mc, grHeader.getChildren());
@@ -282,7 +282,7 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public static MColumn getColumnGroup(ANode mth, StandardColumnGroup scg, DesignCell cell, int i, int index) {
-		String name = Messages.TableComponentFactory_columns + " " + i + "-" + (i + scg.getColumns().size() - 1); //$NON-NLS-1$ //$NON-NLS-2$
+		String name = Messages.common_columns + " " + i + "-" + (i + scg.getColumns().size() - 1); //$NON-NLS-1$ //$NON-NLS-2$
 		MColumn mcg = null;
 		if (cell != null) {
 			mcg = new MColumnGroupCell(mth, scg, cell, name, index);
