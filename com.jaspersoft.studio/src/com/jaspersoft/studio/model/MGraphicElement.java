@@ -415,9 +415,10 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		propertiesD.setDescription(Messages.MGraphicElement_property_expressions_description);
 		desc.add(propertiesD);
 
-		forecolorD.setCategory(Messages.common_size);
-		backcolorD.setCategory(Messages.common_size);
-		opaqueD.setCategory(Messages.common_size);
+		forecolorD.setCategory(Messages.common_graphic);
+		backcolorD.setCategory(Messages.common_graphic);
+		opaqueD.setCategory(Messages.common_graphic);
+		styleD.setCategory(Messages.common_graphic);
 
 		defaultsMap.put(JRDesignElement.PROPERTY_PARENT_STYLE, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);

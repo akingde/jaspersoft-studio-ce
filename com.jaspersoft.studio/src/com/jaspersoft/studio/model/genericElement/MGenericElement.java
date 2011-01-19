@@ -231,15 +231,16 @@ public class MGenericElement extends MGraphicElement {
 
 				propertyDTO = v;
 			}
+
+			// FIXME: in JR rewrite hashCode to work with null values for namespace and name
+		} else if (id.equals(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + PROPERTY_NAME)) {
+			String namespace = genericType != null ? genericType.getNamespace() : "";
+			jrElement.setGenericType(new JRGenericElementType(namespace, (String) value));
+		} else if (id.equals(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + PROPERTY_NAMESPACE)) {
+			String name = genericType != null ? genericType.getName() : "";
+			jrElement.setGenericType(new JRGenericElementType((String) value, name));
 		}
 
-		else if (genericType != null) {
-			if (id.equals(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + PROPERTY_NAME)) {
-				jrElement.setGenericType(new JRGenericElementType(genericType.getNamespace(), (String) value));
-			} else if (id.equals(JRDesignGenericElement.PROPERTY_GENERIC_TYPE + PROPERTY_NAMESPACE)) {
-				jrElement.setGenericType(new JRGenericElementType((String) value, genericType.getName()));
-			}
-		}
 		super.setPropertyValue(id, value);
 	}
 }

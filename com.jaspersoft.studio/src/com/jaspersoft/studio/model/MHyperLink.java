@@ -216,8 +216,10 @@ public class MHyperLink extends APropertyNode {
 				if (value instanceof ParameterDTO) {
 					ParameterDTO v = (ParameterDTO) value;
 
-					for (JRHyperlinkParameter prm : propertyDTO.getValue())
-						hyperLink.removeHyperlinkParameter(prm);
+					JRHyperlinkParameter[] hyperlinkParameters = hyperLink.getHyperlinkParameters();
+					if (hyperlinkParameters != null)
+						for (JRHyperlinkParameter prm : hyperlinkParameters)
+							hyperLink.removeHyperlinkParameter(prm);
 
 					for (JRHyperlinkParameter param : v.getValue())
 						hyperLink.addHyperlinkParameter(param);

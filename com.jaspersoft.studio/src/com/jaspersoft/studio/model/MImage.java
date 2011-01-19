@@ -334,8 +334,10 @@ public class MImage extends MGraphicElementLineBox {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;
 
-				for (JRHyperlinkParameter prm : propertyDTO.getValue())
-					jrElement.removeHyperlinkParameter(prm);
+				JRHyperlinkParameter[] hyperlinkParameters = jrElement.getHyperlinkParameters();
+				if (hyperlinkParameters != null)
+					for (JRHyperlinkParameter prm : hyperlinkParameters)
+						jrElement.removeHyperlinkParameter(prm);
 
 				for (JRHyperlinkParameter param : v.getValue())
 					jrElement.addHyperlinkParameter(param);
