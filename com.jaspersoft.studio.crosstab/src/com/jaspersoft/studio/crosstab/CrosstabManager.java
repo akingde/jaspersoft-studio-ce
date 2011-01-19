@@ -339,7 +339,16 @@ public class CrosstabManager {
 			if (height >= 0)
 				for (int i = cells.length - 1; i >= 0; i--) {
 					for (int j = cells[i].length - 1; j >= 0; j--) {
-						((JRDesignCrosstabCell) cells[i][j]).setHeight(height);
+						JRDesignCrosstabCell jrCrosstabCell = (JRDesignCrosstabCell) cells[i][j];
+						if (jrCrosstabCell.getContents() == cell) {
+							jrCrosstabCell.setHeight(height);
+
+							for (int k = 0; k < cells.length; k++) {
+								if (cells[k][j] != null) {
+									((JRDesignCrosstabCell) cells[i][k]).setHeight(height);
+								}
+							}
+						}
 					}
 				}
 			break;
