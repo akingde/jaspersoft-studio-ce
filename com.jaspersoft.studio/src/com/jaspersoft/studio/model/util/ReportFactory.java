@@ -265,7 +265,7 @@ public class ReportFactory {
 		ANode nSortFields = new MSortFields(nDataset, dataSet);
 		if (dataSet.getSortFields() != null) {
 			for (Iterator<JRDesignSortField> it = dataSet.getSortFieldsList().iterator(); it.hasNext();) {
-				createNode(nFields, it.next(), -1);
+				createNode(nSortFields, it.next(), -1);
 			}
 		}
 		// create variables
