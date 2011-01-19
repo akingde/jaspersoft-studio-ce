@@ -682,84 +682,90 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 				removeChild(n);
 			}
 		} else if (evt instanceof CollectionElementAddedEvent && evt.getNewValue() != null && evt.getOldValue() == null) {
-			if (this.findElement(evt.getNewValue()) == -1) {
-				// find the right position to put the band
-				JRDesignGroup group = (JRDesignGroup) evt.getNewValue();
-				addGroupListener(group);
-				JRDesignGroup gr = null;
-				int grPosition = ((JRDesignDataset) getJasperDesign().getMainDataset()).getGroupsList().size()
-						- ((CollectionElementAddedEvent) evt).getAddedIndex();
-				int grCount = 0;
-				int position = 0;
-				for (INode node : getChildren()) {
-					if (node instanceof MBandGroupHeader) {
-						MBandGroupHeader band = (MBandGroupHeader) node;
-						if (gr == null || !gr.equals(band.getJrGroup())) {
-							gr = band.getJrGroup();
-							grCount++;
-							if (grCount < grPosition) // ok, we are after the group
-								break;
-						}
-						// ok, I'm now just create in the right position the bands
-					} else if (node instanceof MBand && ((MBand) node).getBandType().equals(BandTypeEnum.DETAIL))
-						break;
-					position++;
-				}
-				if (group.getGroupHeaderSection() != null) {
-					List<?> grhBands = ((JRDesignSection) group.getGroupHeaderSection()).getBandsList();
-					if (grhBands != null) {
-						if (grhBands.isEmpty()) {
-							MBand b = new MBandGroupHeader(this, group, null, position);
+			JRDesignGroup group = (JRDesignGroup) evt.getNewValue();
+			for (INode n : getChildren()) {
+				if (n instanceof MBandGroupHeader && ((MBandGroupHeader) n).getJrGroup() == group)
+					return;
+				if (n instanceof MBandGroupFooter && ((MBandGroupFooter) n).getJrGroup() == group)
+					return;
+			}
+
+			// find the right position to put the band
+			addGroupListener(group);
+			JRDesignGroup gr = null;
+			int grPosition = ((JRDesignDataset) getJasperDesign().getMainDataset()).getGroupsList().size()
+					- ((CollectionElementAddedEvent) evt).getAddedIndex();
+			int grCount = 0;
+			int position = 0;
+			for (INode node : getChildren()) {
+				if (node instanceof MBandGroupHeader) {
+					MBandGroupHeader band = (MBandGroupHeader) node;
+					if (gr == null || !gr.equals(band.getJrGroup())) {
+						gr = band.getJrGroup();
+						grCount++;
+						if (grCount < grPosition) // ok, we are after the group
+							break;
+					}
+					// ok, I'm now just create in the right position the bands
+				} else if (node instanceof MBand && ((MBand) node).getBandType().equals(BandTypeEnum.DETAIL))
+					break;
+				position++;
+			}
+			if (group.getGroupHeaderSection() != null) {
+				List<?> grhBands = ((JRDesignSection) group.getGroupHeaderSection()).getBandsList();
+				if (grhBands != null) {
+					if (grhBands.isEmpty()) {
+						MBand b = new MBandGroupHeader(this, group, null, position);
+						b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
+					} else {
+						int j = 0;
+						for (Iterator<?> it = grhBands.iterator(); it.hasNext(); j++) {
+							JRDesignBand jrDB = (JRDesignBand) it.next();
+							MBandGroupHeader b = new MBandGroupHeader(this, group, jrDB, position + j);
+							ReportFactory.createElementsForBand(b, jrDB.getChildren());
 							b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
-						} else {
-							int j = 0;
-							for (Iterator<?> it = grhBands.iterator(); it.hasNext(); j++) {
-								JRDesignBand jrDB = (JRDesignBand) it.next();
-								MBandGroupHeader b = new MBandGroupHeader(this, group, jrDB, position + j);
-								ReportFactory.createElementsForBand(b, jrDB.getChildren());
-								b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
-							}
 						}
 					}
 				}
-				grCount = 0;
-				position = getChildren().size();
-				gr = null;
-				// ADD FOOTER
-				for (ListIterator<INode> it = getChildren().listIterator(getChildren().size()); it.hasPrevious();) {
-					INode node = it.previous();
-					if (node instanceof MBandGroupFooter) {
-						MBandGroupFooter band = (MBandGroupFooter) node;
-						if (gr == null || !gr.equals(band.getJrGroup())) {
-							gr = band.getJrGroup();
-							grCount++;
-							if (grCount < grPosition) // ok, we are after the group
-								break;
-						}
-						// ok, I'm now just create in the right position the bands
-					} else if (node instanceof MBand && ((MBand) node).getBandType().equals(BandTypeEnum.DETAIL))
-						break;
-					position--;
-				}
-				if (group.getGroupFooterSection() != null) {
-					List<?> grhBands = ((JRDesignSection) group.getGroupFooterSection()).getBandsList();
-					if (grhBands != null) {
-						if (grhBands.isEmpty()) {
-							MBand b = new MBandGroupFooter(this, group, null, position);
+			}
+			grCount = 0;
+			position = getChildren().size();
+			gr = null;
+			// ADD FOOTER
+			for (ListIterator<INode> it = getChildren().listIterator(getChildren().size()); it.hasPrevious();) {
+				INode node = it.previous();
+				if (node instanceof MBandGroupFooter) {
+					MBandGroupFooter band = (MBandGroupFooter) node;
+					if (gr == null || !gr.equals(band.getJrGroup())) {
+						gr = band.getJrGroup();
+						grCount++;
+						if (grCount < grPosition) // ok, we are after the group
+							break;
+					}
+					// ok, I'm now just create in the right position the bands
+				} else if (node instanceof MBand && ((MBand) node).getBandType().equals(BandTypeEnum.DETAIL))
+					break;
+				position--;
+			}
+			if (group.getGroupFooterSection() != null) {
+				List<?> grhBands = ((JRDesignSection) group.getGroupFooterSection()).getBandsList();
+				if (grhBands != null) {
+					if (grhBands.isEmpty()) {
+						MBand b = new MBandGroupFooter(this, group, null, position);
+						b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
+					} else {
+						int j = 0;
+						for (Iterator<?> it = grhBands.iterator(); it.hasNext(); j++) {
+							JRDesignBand jrDB = (JRDesignBand) it.next();
+							MBandGroupFooter b = new MBandGroupFooter(this, group, jrDB, position + j);
+							ReportFactory.createElementsForBand(b, jrDB.getChildren());
 							b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
-						} else {
-							int j = 0;
-							for (Iterator<?> it = grhBands.iterator(); it.hasNext(); j++) {
-								JRDesignBand jrDB = (JRDesignBand) it.next();
-								MBandGroupFooter b = new MBandGroupFooter(this, group, jrDB, position + j);
-								ReportFactory.createElementsForBand(b, jrDB.getChildren());
-								b.propertyChange(new PropertyChangeEvent(b, "VALUE", evt.getOldValue(), evt.getNewValue())); //$NON-NLS-1$
-							}
 						}
 					}
 				}
 			}
 		}
+
 	}
 
 	/*
