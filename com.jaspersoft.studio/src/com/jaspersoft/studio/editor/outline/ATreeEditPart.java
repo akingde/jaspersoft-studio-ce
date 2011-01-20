@@ -88,15 +88,17 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 			return;
 		TreeItem item = (TreeItem) getWidget();
 		ANode node = (ANode) getModel();
-		Image image = JaspersoftStudioPlugin.getImage(node.getImagePath());
-		if (image != null) {
-			if (node.getBackground() != null)
-				image.setBackground(node.getBackground());
-			else {
-				if (item != null && item.getParent() != null && item.getParent().getBackground() != null)
-					image.setBackground(item.getParent().getBackground());
+		if (node.getImagePath() != null) {
+			Image image = JaspersoftStudioPlugin.getImage(node.getImagePath());
+			if (image != null) {
+				if (node.getBackground() != null)
+					image.setBackground(node.getBackground());
+				else {
+					if (item != null && item.getParent() != null && item.getParent().getBackground() != null)
+						image.setBackground(item.getParent().getBackground());
+				}
+				setWidgetImage(image);
 			}
-			setWidgetImage(image);
 		}
 		if (item != null) {
 			if (node.getBackground() != null)

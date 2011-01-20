@@ -32,4 +32,5 @@ public class TableEditPart extends EditableFigureEditPart {
 			rect.setSize(Math.max(dr.width, d.width) + 4, Math.max(dr.height, d.height) + 4);
 		}
 	}
+
 }

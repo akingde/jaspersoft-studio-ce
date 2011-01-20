@@ -252,6 +252,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 				}
 				return super.getCommand(request);
 			}
+
 		});
 		installEditPolicy("Snap Feedback", new SnapFeedbackPolicy()); //$NON-NLS-1$
 	}
