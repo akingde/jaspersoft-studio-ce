@@ -347,7 +347,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(widthD);
 
 		IntegerPropertyDescriptor xD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_X,
-				Messages.MGraphicElement_left);
+				Messages.common_left);
 		xD.setCategory(Messages.MGraphicElement_location_category);
 		xD.setDescription(Messages.MGraphicElement_left_description);
 		desc.add(xD);
@@ -374,13 +374,13 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(opaqueD);
 
 		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
-				Messages.common_position_type, EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
+				Messages.common_position_type, new String[] {Messages.common_float,Messages.common_fix_relative_to_top,Messages.common_fix_relative_to_bottom});
 		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
 		desc.add(positionTypeD);
 		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
 
 		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE,
-				Messages.common_stretch_type, EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
+				Messages.common_stretch_type, new String[] {Messages.common_no_stretch,Messages.common_relative_to_tallest_object,Messages.common_relative_to_band_height});
 		stretchTypeD.setCategory(Messages.common_size);
 		stretchTypeD.setDescription(Messages.MGraphicElement_stretch_type_description);
 		desc.add(stretchTypeD);

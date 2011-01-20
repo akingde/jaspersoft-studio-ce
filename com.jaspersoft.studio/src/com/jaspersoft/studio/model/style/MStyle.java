@@ -242,12 +242,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(valignD);
 
 		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ROTATION,
-				Messages.common_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
+				Messages.common_rotation, new String[] {NullEnum.INHERITED.getName(),Messages.common_none,Messages.common_left,Messages.common_right,Messages.common_upside_down});
 		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
 		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_LINE_SPACING,
-				Messages.common_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
+				Messages.common_line_spacing, new String[] {NullEnum.INHERITED.getName(),Messages.common_single,LineSpacingEnum.ONE_AND_HALF.getName(),Messages.common_double});
 		lineSpacingD.setDescription(Messages.MStyle_line_spacing_description);
 		desc.add(lineSpacingD);
 

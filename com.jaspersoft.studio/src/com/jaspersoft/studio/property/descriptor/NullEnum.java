@@ -23,8 +23,10 @@
  */
 package com.jaspersoft.studio.property.descriptor;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public enum NullEnum {
-	NOTNULL((byte) 1, ""), NULL((byte) 2, "<NULL>"), INHERITED((byte) 3, "<INHERITED>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	NOTNULL((byte) 1, ""), NULL((byte) 2, "<" + Messages.NullEnum_null + ">"), INHERITED((byte) 3, "<" + Messages.NullEnum_inherited + ">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
 	private final transient byte value;
 	private final transient String name;

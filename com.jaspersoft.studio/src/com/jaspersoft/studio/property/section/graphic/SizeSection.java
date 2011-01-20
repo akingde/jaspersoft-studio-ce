@@ -20,8 +20,6 @@
 package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.type.StretchTypeEnum;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -36,9 +34,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
  * The location section on the location tab.
@@ -82,7 +78,7 @@ public class SizeSection extends AbstractSection {
 		label.setLayoutData(gd);
 
 		stretchType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		stretchType.setItems(EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
+		stretchType.setItems(new String[] {Messages.common_no_stretch,Messages.common_relative_to_tallest_object,Messages.common_relative_to_band_height});
 		stretchType
 				.setToolTipText(Messages.SizeSection_stretch_type_tool_tip);
 

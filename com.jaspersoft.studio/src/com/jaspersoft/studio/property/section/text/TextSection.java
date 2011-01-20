@@ -22,7 +22,6 @@ package com.jaspersoft.studio.property.section.text;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 import net.sf.jasperreports.engine.type.LineSpacingEnum;
-import net.sf.jasperreports.engine.type.RotationEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
 import org.eclipse.swt.SWT;
@@ -154,7 +153,7 @@ public class TextSection extends AbstractSection {
 		alignBottomButton.setToolTipText(Messages.TextSection_align_bottom_tool_tip);
 
 		rotation = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		rotation.setItems(EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
+		rotation.setItems(new String[] {NullEnum.INHERITED.getName(),Messages.common_none,Messages.common_left,Messages.common_right,Messages.common_upside_down});
 		rotation.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -167,7 +166,7 @@ public class TextSection extends AbstractSection {
 		rotation.setToolTipText(Messages.TextSection_rotation_tool_tip);
 
 		lineSpace = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		lineSpace.setItems(EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
+		lineSpace.setItems(new String[] {NullEnum.INHERITED.getName(),Messages.common_single,LineSpacingEnum.ONE_AND_HALF.getName(),Messages.common_double});
 		lineSpace.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
