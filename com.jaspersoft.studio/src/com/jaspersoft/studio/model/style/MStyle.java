@@ -55,6 +55,7 @@ import com.jaspersoft.studio.model.MLinePen;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.property.descriptor.I18nTypesEnum;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
@@ -242,12 +243,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(valignD);
 
 		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ROTATION,
-				Messages.common_rotation, new String[] {NullEnum.INHERITED.getName(),Messages.common_none,Messages.common_left,Messages.common_right,Messages.common_upside_down});
+				Messages.common_rotation, EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.ROTATION), NullEnum.INHERITED));
 		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
 		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_LINE_SPACING,
-				Messages.common_line_spacing, new String[] {NullEnum.INHERITED.getName(),Messages.common_single,LineSpacingEnum.ONE_AND_HALF.getName(),Messages.common_double});
+				Messages.common_line_spacing, EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.LINE_SPACING), NullEnum.INHERITED));
 		lineSpacingD.setDescription(Messages.MStyle_line_spacing_description);
 		desc.add(lineSpacingD);
 

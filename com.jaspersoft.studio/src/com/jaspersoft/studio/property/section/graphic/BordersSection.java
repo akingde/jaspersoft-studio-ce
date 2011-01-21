@@ -30,8 +30,6 @@ import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBasePrintText;
 import net.sf.jasperreports.engine.export.draw.BoxDrawer;
-import net.sf.jasperreports.engine.type.LineStyleEnum;
-
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.RectangleFigure;
@@ -64,6 +62,7 @@ import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
+import com.jaspersoft.studio.property.descriptor.I18nTypesEnum;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -219,7 +218,7 @@ public class BordersSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_style + ":"); //$NON-NLS-1$
 
 		final CCombo lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		lineStyle.setItems(EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
+		lineStyle.setItems(EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.LINE_STYLE), NullEnum.INHERITED));
 		lineStyle.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

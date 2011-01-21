@@ -20,8 +20,6 @@
 package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.base.JRBasePen;
-import net.sf.jasperreports.engine.type.LineStyleEnum;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
@@ -47,6 +45,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLinePen;
 import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.property.descriptor.I18nTypesEnum;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -119,7 +118,7 @@ public class LinePenSection extends AbstractSection {
 
 		getWidgetFactory().createCLabel(composite, Messages.common_pen_style + ":"); //$NON-NLS-1$
 		lineStyle = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		lineStyle.setItems(EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
+		lineStyle.setItems(EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.LINE_STYLE), NullEnum.INHERITED));
 		lineStyle.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

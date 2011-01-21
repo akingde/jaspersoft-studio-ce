@@ -48,6 +48,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.I18nTypesEnum;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -374,13 +375,13 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(opaqueD);
 
 		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
-				Messages.common_position_type, new String[] {Messages.common_float,Messages.common_fix_relative_to_top,Messages.common_fix_relative_to_bottom});
+				Messages.common_position_type, EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.POSITION_TYPE), NullEnum.NOTNULL));
 		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
 		desc.add(positionTypeD);
 		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
 
 		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE,
-				Messages.common_stretch_type, new String[] {Messages.common_no_stretch,Messages.common_relative_to_tallest_object,Messages.common_relative_to_band_height});
+				Messages.common_stretch_type, EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.STRETCH_TYPE), NullEnum.NOTNULL));
 		stretchTypeD.setCategory(Messages.common_size);
 		stretchTypeD.setDescription(Messages.MGraphicElement_stretch_type_description);
 		desc.add(stretchTypeD);

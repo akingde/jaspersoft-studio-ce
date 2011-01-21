@@ -13,11 +13,13 @@ public class Messages extends NLS {
 	public static String common_connection_expression;
 	public static String common_copy;
 	public static String common_cut;
+	public static String common_dashed;
 	public static String common_datasource_editor;
 	public static String common_datasource_name;
 	public static String common_date_format;
 	public static String common_delete;
 	public static String common_description;
+	public static String common_dotted;
 	public static String common_double;
 	public static String common_driver_class;
 	public static String common_error_creating_nested_visual_editor;
@@ -88,6 +90,7 @@ public class Messages extends NLS {
 	public static String common_snap_to_geometry;
 	public static String common_snap_to_grid;
 	public static String common_snap_to_guides;
+	public static String common_solid;
 	public static String common_sort_field_editor;
 	public static String common_split_type;
 	public static String common_stretch_type;
