@@ -22,7 +22,6 @@ package com.jaspersoft.studio.model.parameter;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -38,6 +37,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -157,10 +157,7 @@ public class MParameter extends MParameterSystem implements ICopyable {
 		if (id.equals(JRDesignParameter.PROPERTY_FOR_PROMPTING))
 			return new Boolean(jrParameter.isForPrompting());
 		if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrParameter.getDefaultValueExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrParameter.getDefaultValueExpression());
 			return mExpression;
 		}
 		if (id.equals(PROPERTY_MAP)) {
@@ -185,14 +182,9 @@ public class MParameter extends MParameterSystem implements ICopyable {
 			jrParameter.setForPrompting(((Boolean) value).booleanValue());
 		else if (id.equals(JRDesignParameter.PROPERTY_NESTED_TYPE_NAME))
 			jrParameter.setNestedTypeName((String) value);
-		else if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrParameter.setDefaultValueExpression(expression);
-			}
-		} else if (id.equals(PROPERTY_MAP)) {
+		else if (id.equals(JRDesignParameter.PROPERTY_DEFAULT_VALUE_EXPRESSION))
+			jrParameter.setDefaultValueExpression(ExprUtil.setValues(jrParameter.getDefaultValueExpression(), value));
+		else if (id.equals(PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrParameter.getPropertiesMap().getPropertyNames();
 			for (int i = 0; i < names.length; i++) {

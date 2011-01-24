@@ -37,6 +37,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 /**
@@ -167,10 +168,7 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	public Object getPropertyValue(Object id) {
 		JRDesignConditionalStyle jrstyle = (JRDesignConditionalStyle) getValue();
 		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrstyle.getConditionExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrstyle.getConditionExpression());
 			return mExpression;
 		}
 		return super.getPropertyValue(id);
@@ -184,14 +182,9 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignConditionalStyle jrstyle = (JRDesignConditionalStyle) getValue();
-		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrstyle.setConditionExpression(expression);
-			}
-		} else
+		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION))
+			jrstyle.setConditionExpression(ExprUtil.setValues(jrstyle.getConditionExpression(), value));
+		else
 			super.setPropertyValue(id, value);
 	}
 

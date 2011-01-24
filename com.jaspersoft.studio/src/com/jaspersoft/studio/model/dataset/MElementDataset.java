@@ -5,7 +5,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementDataset;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
@@ -29,6 +28,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -151,10 +151,7 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
 			return EnumHelper.getValue(jrElement.getIncrementTypeValue(), 1, false);
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION)) {
-			if (incWhenExp == null) {
-				incWhenExp = new MExpression(jrElement.getIncrementWhenExpression());
-				setChildListener(incWhenExp);
-			}
+			incWhenExp = ExprUtil.getExpression(this, incWhenExp, jrElement.getIncrementWhenExpression());
 			return incWhenExp;
 		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_GROUP)) {
@@ -204,14 +201,9 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 					.setIncrementType((IncrementTypeEnum) EnumHelper.getSetValue(IncrementTypeEnum.values(), value, 1, false));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_RESET_TYPE))
 			jrElement.setResetType((ResetTypeEnum) EnumHelper.getSetValue(ResetTypeEnum.values(), value, 1, false));
-		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				incWhenExp = (MExpression) value;
-				setChildListener(incWhenExp);
-				JRExpression expression = (JRExpression) incWhenExp.getValue();
-				jrElement.setIncrementWhenExpression(expression);
-			}
-		} else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP)) {
+		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION))
+			jrElement.setIncrementWhenExpression(ExprUtil.setValues(jrElement.getIncrementWhenExpression(), value));
+		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP)) {
 			if (!value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setIncrementGroup(group);

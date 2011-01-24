@@ -22,7 +22,6 @@ package com.jaspersoft.studio.model.dataset;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -46,6 +45,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
@@ -218,10 +218,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 			return mQuery;
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrDataset.getFilterExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrDataset.getFilterExpression());
 			return mExpression;
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
@@ -250,19 +247,9 @@ public class MDataset extends APropertyNode implements ICopyable {
 			jrDataset.setResourceBundle((String) value);
 		else if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			jrDataset.setScriptletClass((String) value);
-		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
-			if (value == null) {
-				unsetChildListener(mExpression);
-				mExpression = null;
-				jrDataset.setFilterExpression(null);
-			}
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrDataset.setFilterExpression(expression);
-			}
-		} else if (id.equals(PROPERTY_MAP)) {
+		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION))
+			jrDataset.setFilterExpression(ExprUtil.setValues(jrDataset.getFilterExpression(), value));
+		else if (id.equals(PROPERTY_MAP)) {
 			JRPropertiesMap v = (JRPropertiesMap) value;
 			String[] names = jrDataset.getPropertiesMap().getPropertyNames();
 			for (int i = 0; i < names.length; i++) {

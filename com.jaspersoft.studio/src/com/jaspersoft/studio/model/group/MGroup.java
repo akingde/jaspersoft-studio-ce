@@ -22,7 +22,6 @@ package com.jaspersoft.studio.model.group;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 
@@ -37,6 +36,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -159,10 +159,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
 			return jrGroup.getName();
 		if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrGroup.getExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrGroup.getExpression());
 			return mExpression;
 		}
 		return null;
@@ -177,14 +174,8 @@ public class MGroup extends APropertyNode implements ICopyable {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
 			jrGroup.setName((String) value);
-		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrGroup.setExpression(expression);
-			}
-		}
+		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION))
+			jrGroup.setExpression(ExprUtil.setValues(jrGroup.getExpression(), value));
 	}
 
 	/**

@@ -88,28 +88,30 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 			return;
 		TreeItem item = (TreeItem) getWidget();
 		ANode node = (ANode) getModel();
-		if (node.getImagePath() != null) {
-			Image image = JaspersoftStudioPlugin.getImage(node.getImagePath());
-			if (image != null) {
-				if (node.getBackground() != null)
-					image.setBackground(node.getBackground());
-				else {
-					if (item != null && item.getParent() != null && item.getParent().getBackground() != null)
-						image.setBackground(item.getParent().getBackground());
+		if (node != null) {
+			if (node.getImagePath() != null) {
+				Image image = JaspersoftStudioPlugin.getImage(node.getImagePath());
+				if (image != null) {
+					if (node.getBackground() != null)
+						image.setBackground(node.getBackground());
+					else {
+						if (item != null && item.getParent() != null && item.getParent().getBackground() != null)
+							image.setBackground(item.getParent().getBackground());
+					}
+					setWidgetImage(image);
 				}
-				setWidgetImage(image);
 			}
+			if (item != null) {
+				if (node.getBackground() != null)
+					item.setBackground(node.getBackground());
+				if (node.getForeground() != null)
+					item.setForeground(node.getForeground());
+			}
+			String displayText = node.getDisplayText();
+			if (displayText.length() > 30)
+				displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
+			setWidgetText(displayText);
 		}
-		if (item != null) {
-			if (node.getBackground() != null)
-				item.setBackground(node.getBackground());
-			if (node.getForeground() != null)
-				item.setForeground(node.getForeground());
-		}
-		String displayText = node.getDisplayText();
-		if (displayText.length() > 30)
-			displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
-		setWidgetText(displayText);
 	}
 
 	/*

@@ -22,7 +22,6 @@ package com.jaspersoft.studio.model.style;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 
@@ -37,6 +36,7 @@ import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 /**
@@ -147,10 +147,7 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	public Object getPropertyValue(Object id) {
 		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
 		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrTemplate.getSourceExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrTemplate.getSourceExpression());
 			return mExpression;
 		}
 		return null;
@@ -163,14 +160,8 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignReportTemplate jrTemplate = (JRDesignReportTemplate) getValue();
-		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrTemplate.setSourceExpression(expression);
-			}
-		}
+		if (id.equals(JRDesignReportTemplate.PROPERTY_SOURCE_EXPRESSION))
+			jrTemplate.setSourceExpression(ExprUtil.setValues(jrTemplate.getSourceExpression(), value));
 	}
 
 	/**
