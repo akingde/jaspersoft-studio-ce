@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignPieSeries;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 
@@ -19,6 +18,7 @@ import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MPieSeries extends APropertyNode {
@@ -118,24 +118,15 @@ public class MPieSeries extends APropertyNode {
 			return mHyperLink;
 		}
 		if (id.equals(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION)) {
-			if (dExpression == null) {
-				dExpression = new MExpression(jrElement.getKeyExpression());
-				setChildListener(dExpression);
-			}
+			dExpression = ExprUtil.getExpression(this, dExpression, jrElement.getKeyExpression());
 			return dExpression;
 		}
 		if (id.equals(JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION)) {
-			if (hExpression == null) {
-				hExpression = new MExpression(jrElement.getLabelExpression());
-				setChildListener(hExpression);
-			}
+			hExpression = ExprUtil.getExpression(this, hExpression, jrElement.getLabelExpression());
 			return hExpression;
 		}
 		if (id.equals(JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION)) {
-			if (lExpression == null) {
-				lExpression = new MExpression(jrElement.getValueExpression());
-				setChildListener(lExpression);
-			}
+			lExpression = ExprUtil.getExpression(this, lExpression, jrElement.getValueExpression());
 			return lExpression;
 		}
 
@@ -145,28 +136,12 @@ public class MPieSeries extends APropertyNode {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignPieSeries jrElement = (JRDesignPieSeries) getValue();
 
-		if (id.equals(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				dExpression = (MExpression) value;
-				setChildListener(dExpression);
-				JRExpression expression = (JRExpression) dExpression.getValue();
-				jrElement.setKeyExpression(expression);
-			}
-		} else if (id.equals(JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				hExpression = (MExpression) value;
-				setChildListener(hExpression);
-				JRExpression expression = (JRExpression) hExpression.getValue();
-				jrElement.setLabelExpression(expression);
-			}
-		} else if (id.equals(JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				lExpression = (MExpression) value;
-				setChildListener(lExpression);
-				JRExpression expression = (JRExpression) lExpression.getValue();
-				jrElement.setValueExpression(expression);
-			}
-		}
+		if (id.equals(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION))
+			jrElement.setKeyExpression(ExprUtil.setValues(jrElement.getKeyExpression(), value));
+		else if (id.equals(JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION))
+			jrElement.setLabelExpression(ExprUtil.setValues(jrElement.getKeyExpression(), value));
+		else if (id.equals(JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION))
+			jrElement.setValueExpression(ExprUtil.setValues(jrElement.getValueExpression(), value));
 	}
 
 	public ImageDescriptor getImagePath() {

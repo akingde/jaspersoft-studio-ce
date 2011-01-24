@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignValueDataset;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -12,6 +11,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MChartValueDataset extends MChartDataset {
@@ -66,10 +66,7 @@ public class MChartValueDataset extends MChartDataset {
 		JRDesignValueDataset jrElement = (JRDesignValueDataset) getValue();
 
 		if (id.equals(JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION)) {
-			if (oExpression == null){
-				oExpression = new MExpression(jrElement.getValueExpression());
-				setChildListener(oExpression);
-			}
+			oExpression = ExprUtil.getExpression(this, oExpression, jrElement.getValueExpression());
 			return oExpression;
 		}
 
@@ -80,14 +77,9 @@ public class MChartValueDataset extends MChartDataset {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignValueDataset jrElement = (JRDesignValueDataset) getValue();
 
-		if (id.equals(JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				oExpression = (MExpression) value;
-				setChildListener(oExpression);
-				JRExpression expression = (JRExpression) oExpression.getValue();
-				jrElement.setValueExpression(expression);
-			}
-		} else
+		if (id.equals(JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION))
+			jrElement.setValueExpression(ExprUtil.setValues(jrElement.getValueExpression(), value));
+		else
 			super.setPropertyValue(id, value);
 	}
 

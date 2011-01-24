@@ -22,6 +22,9 @@ package com.jaspersoft.studio.chart.model.plot;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.charts.JRHighLowPlot;
+import net.sf.jasperreports.charts.design.JRDesignHighLowPlot;
+
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -31,14 +34,11 @@ import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
-
-import net.sf.jasperreports.charts.JRHighLowPlot;
-import net.sf.jasperreports.charts.design.JRDesignHighLowPlot;
-import net.sf.jasperreports.engine.JRExpression;
 
 public class MHighLowPlot extends MChartPlot {
 	public MHighLowPlot(JRHighLowPlot value) {
@@ -73,8 +73,7 @@ public class MHighLowPlot extends MChartPlot {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ColorPropertyDescriptor catAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_COLOR, Messages.common_category_axis_label_color,
-				NullEnum.NULL);
+				JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_COLOR, Messages.common_category_axis_label_color, NullEnum.NULL);
 		catAxisLabelColorD.setDescription(Messages.MHighLowPlot_category_axis_label_color_description);
 		desc.add(catAxisLabelColorD);
 
@@ -100,20 +99,17 @@ public class MHighLowPlot extends MChartPlot {
 		desc.add(catAxisTickLabelFontD);
 
 		ColorPropertyDescriptor catAxisLineColorD = new ColorPropertyDescriptor(
-				JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LINE_COLOR, Messages.common_category_axis_line_color,
-				NullEnum.NULL);
+				JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LINE_COLOR, Messages.common_category_axis_line_color, NullEnum.NULL);
 		catAxisLineColorD.setDescription(Messages.MHighLowPlot_category_axis_line_color_description);
 		desc.add(catAxisLineColorD);
 
 		ColorPropertyDescriptor valAxisLabelColorD = new ColorPropertyDescriptor(
-				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.common_value_axis_label_color,
-				NullEnum.NULL);
+				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR, Messages.common_value_axis_label_color, NullEnum.NULL);
 		valAxisLabelColorD.setDescription(Messages.MHighLowPlot_value_axis_label_color_description);
 		desc.add(valAxisLabelColorD);
 
 		JRExpressionPropertyDescriptor valAxisLabelExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION,
-				Messages.common_category_value_axis_label_expression);
+				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION, Messages.common_category_value_axis_label_expression);
 		valAxisLabelExprD.setDescription(Messages.MHighLowPlot_category_value_axis_label_expression_description);
 		desc.add(valAxisLabelExprD);
 
@@ -139,26 +135,22 @@ public class MHighLowPlot extends MChartPlot {
 		desc.add(valAxisLineColorD);
 
 		JRExpressionPropertyDescriptor rangeAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION,
-				Messages.common_range_axis_minvalue_expression);
+				JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION, Messages.common_range_axis_minvalue_expression);
 		rangeAxisMinExprD.setDescription(Messages.MHighLowPlot_range_axis_minvalue_expression_description);
 		desc.add(rangeAxisMinExprD);
 
 		JRExpressionPropertyDescriptor rangeAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION,
-				Messages.common_range_axis_maxvalue_expression);
+				JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION, Messages.common_range_axis_maxvalue_expression);
 		rangeAxisMaxExprD.setDescription(Messages.MHighLowPlot_range_axis_maxvalue_expression_description);
 		desc.add(rangeAxisMaxExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMinExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION,
-				Messages.common_domain_axis_minvalue_expression);
+				JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION, Messages.common_domain_axis_minvalue_expression);
 		domainAxisMinExprD.setDescription(Messages.MHighLowPlot_domain_axis_minvalue_expression_description);
 		desc.add(domainAxisMinExprD);
 
 		JRExpressionPropertyDescriptor domainAxisMaxExprD = new JRExpressionPropertyDescriptor(
-				JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION,
-				Messages.common_domain_axis_maxvalue_expression);
+				JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION, Messages.common_domain_axis_maxvalue_expression);
 		domainAxisMaxExprD.setDescription(Messages.MHighLowPlot_domain_axis_maxvalue_expression_description);
 		desc.add(domainAxisMaxExprD);
 
@@ -169,8 +161,8 @@ public class MHighLowPlot extends MChartPlot {
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
-				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
-				Messages.common_value_axis_vertical_tick_labels, NullEnum.NOTNULL);
+				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS, Messages.common_value_axis_vertical_tick_labels,
+				NullEnum.NOTNULL);
 		valAxisVertTickLabelD.setDescription(Messages.MHighLowPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
 
@@ -238,45 +230,31 @@ public class MHighLowPlot extends MChartPlot {
 			return jrElement.getShowOpenTicks();
 
 		if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION)) {
-			if (ceAnchorExpression == null) {
-				ceAnchorExpression = new MExpression(jrElement.getTimeAxisLabelExpression());
-				setChildListener(ceAnchorExpression);
-			}
+			ceAnchorExpression = ExprUtil.getExpression(this, ceAnchorExpression, jrElement.getTimeAxisLabelExpression());
 			return ceAnchorExpression;
 		}
 		if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION)) {
-			if (veAnchorExpression == null) {
-				veAnchorExpression = new MExpression(jrElement.getValueAxisLabelExpression());
-				setChildListener(veAnchorExpression);
-			}
+			veAnchorExpression = ExprUtil.getExpression(this, veAnchorExpression, jrElement.getValueAxisLabelExpression());
 			return veAnchorExpression;
 		}
 		if (id.equals(JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
-			if (rmaxAnchorExpression == null) {
-				rmaxAnchorExpression = new MExpression(jrElement.getRangeAxisMaxValueExpression());
-				setChildListener(rmaxAnchorExpression);
-			}
+			rmaxAnchorExpression = ExprUtil.getExpression(this, rmaxAnchorExpression,
+					jrElement.getRangeAxisMaxValueExpression());
 			return rmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
-			if (rminAnchorExpression == null) {
-				rminAnchorExpression = new MExpression(jrElement.getRangeAxisMinValueExpression());
-				setChildListener(rminAnchorExpression);
-			}
+			rminAnchorExpression = ExprUtil.getExpression(this, rminAnchorExpression,
+					jrElement.getRangeAxisMinValueExpression());
 			return rminAnchorExpression;
 		}
 		if (id.equals(JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
-			if (dmaxAnchorExpression == null) {
-				dmaxAnchorExpression = new MExpression(jrElement.getDomainAxisMaxValueExpression());
-				setChildListener(dmaxAnchorExpression);
-			}
+			dmaxAnchorExpression = ExprUtil.getExpression(this, dmaxAnchorExpression,
+					jrElement.getDomainAxisMaxValueExpression());
 			return dmaxAnchorExpression;
 		}
 		if (id.equals(JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
-			if (dminAnchorExpression == null) {
-				dminAnchorExpression = new MExpression(jrElement.getDomainAxisMinValueExpression());
-				setChildListener(dminAnchorExpression);
-			}
+			dminAnchorExpression = ExprUtil.getExpression(this, dminAnchorExpression,
+					jrElement.getDomainAxisMinValueExpression());
 			return dminAnchorExpression;
 		}
 
@@ -351,49 +329,19 @@ public class MHighLowPlot extends MChartPlot {
 		else if (id.equals(JRDesignHighLowPlot.PROPERTY_SHOW_OPEN_TICKS))
 			jrElement.setShowOpenTicks((Boolean) value);
 
-		else if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				ceAnchorExpression = (MExpression) value;
-				setChildListener(ceAnchorExpression);
-				JRExpression expression = (JRExpression) ceAnchorExpression.getValue();
-				jrElement.setTimeAxisLabelExpression(expression);
-			}
-		} else if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				veAnchorExpression = (MExpression) value;
-				setChildListener(veAnchorExpression);
-				JRExpression expression = (JRExpression) veAnchorExpression.getValue();
-				jrElement.setValueAxisLabelExpression(expression);
-			}
-		} else if (id.equals(JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				rmaxAnchorExpression = (MExpression) value;
-				setChildListener(rmaxAnchorExpression);
-				JRExpression expression = (JRExpression) rmaxAnchorExpression.getValue();
-				jrElement.setRangeAxisMaxValueExpression(expression);
-			}
-		} else if (id.equals(JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				rminAnchorExpression = (MExpression) value;
-				setChildListener(rminAnchorExpression);
-				JRExpression expression = (JRExpression) rminAnchorExpression.getValue();
-				jrElement.setRangeAxisMinValueExpression(expression);
-			}
-		} else if (id.equals(JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				dmaxAnchorExpression = (MExpression) value;
-				setChildListener(dmaxAnchorExpression);
-				JRExpression expression = (JRExpression) dmaxAnchorExpression.getValue();
-				jrElement.setDomainAxisMaxValueExpression(expression);
-			}
-		} else if (id.equals(JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				dminAnchorExpression = (MExpression) value;
-				setChildListener(dminAnchorExpression);
-				JRExpression expression = (JRExpression) dminAnchorExpression.getValue();
-				jrElement.setDomainAxisMinValueExpression(expression);
-			}
-		} else
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION))
+			jrElement.setTimeAxisLabelExpression(ExprUtil.setValues(jrElement.getTimeAxisLabelExpression(), value));
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION))
+			jrElement.setValueAxisLabelExpression(ExprUtil.setValues(jrElement.getValueAxisLabelExpression(), value));
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION))
+			jrElement.setRangeAxisMaxValueExpression(ExprUtil.setValues(jrElement.getRangeAxisMaxValueExpression(), value));
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION))
+			jrElement.setRangeAxisMinValueExpression(ExprUtil.setValues(jrElement.getRangeAxisMinValueExpression(), value));
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION))
+			jrElement.setDomainAxisMaxValueExpression(ExprUtil.setValues(jrElement.getDomainAxisMaxValueExpression(), value));
+		else if (id.equals(JRDesignHighLowPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION))
+			jrElement.setDomainAxisMinValueExpression(ExprUtil.setValues(jrElement.getDomainAxisMinValueExpression(), value));
+		else
 			super.setPropertyValue(id, value);
 	}
 }

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignXyzSeries;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 
@@ -19,6 +18,7 @@ import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MXYZSeries extends APropertyNode {
@@ -124,31 +124,19 @@ public class MXYZSeries extends APropertyNode {
 			return mHyperLink;
 		}
 		if (id.equals(JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION)) {
-			if (xExpression == null) {
-				xExpression = new MExpression(jrElement.getXValueExpression());
-				setChildListener(xExpression);
-			}
+			xExpression = ExprUtil.getExpression(this, xExpression, jrElement.getXValueExpression());
 			return xExpression;
 		}
 		if (id.equals(JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION)) {
-			if (yExpression == null) {
-				yExpression = new MExpression(jrElement.getYValueExpression());
-				setChildListener(yExpression);
-			}
+			yExpression = ExprUtil.getExpression(this, yExpression, jrElement.getYValueExpression());
 			return yExpression;
 		}
 		if (id.equals(JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION)) {
-			if (zExpression == null) {
-				zExpression = new MExpression(jrElement.getZValueExpression());
-				setChildListener(zExpression);
-			}
+			zExpression = ExprUtil.getExpression(this, zExpression, jrElement.getZValueExpression());
 			return zExpression;
 		}
 		if (id.equals(JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION)) {
-			if (sExpression == null) {
-				sExpression = new MExpression(jrElement.getSeriesExpression());
-				setChildListener(sExpression);
-			}
+			sExpression = ExprUtil.getExpression(this, sExpression, jrElement.getSeriesExpression());
 			return sExpression;
 		}
 
@@ -158,35 +146,14 @@ public class MXYZSeries extends APropertyNode {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignXyzSeries jrElement = (JRDesignXyzSeries) getValue();
 
-		if (id.equals(JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				xExpression = (MExpression) value;
-				setChildListener(xExpression);
-				JRExpression expression = (JRExpression) xExpression.getValue();
-				jrElement.setXValueExpression(expression);
-			}
-		} else if (id.equals(JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				yExpression = (MExpression) value;
-				setChildListener(yExpression);
-				JRExpression expression = (JRExpression) yExpression.getValue();
-				jrElement.setYValueExpression(expression);
-			}
-		} else if (id.equals(JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				zExpression = (MExpression) value;
-				setChildListener(zExpression);
-				JRExpression expression = (JRExpression) zExpression.getValue();
-				jrElement.setZValueExpression(expression);
-			}
-		} else if (id.equals(JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				sExpression = (MExpression) value;
-				setChildListener(sExpression);
-				JRExpression expression = (JRExpression) sExpression.getValue();
-				jrElement.setSeriesExpression(expression);
-			}
-		}
+		if (id.equals(JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION))
+			jrElement.setXValueExpression(ExprUtil.setValues(jrElement.getXValueExpression(), value));
+		else if (id.equals(JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION))
+			jrElement.setYValueExpression(ExprUtil.setValues(jrElement.getYValueExpression(), value));
+		else if (id.equals(JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION))
+			jrElement.setZValueExpression(ExprUtil.setValues(jrElement.getZValueExpression(), value));
+		else if (id.equals(JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION))
+			jrElement.setSeriesExpression(ExprUtil.setValues(jrElement.getSeriesExpression(), value));
 	}
 
 	public ImageDescriptor getImagePath() {

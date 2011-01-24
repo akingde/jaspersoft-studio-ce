@@ -26,7 +26,6 @@ import java.util.Map;
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseChart;
@@ -66,6 +65,7 @@ import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDesc
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
@@ -347,31 +347,20 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			return jrElement.getLinkType();
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
-			if (mAnchorExpression == null) {
-				mAnchorExpression = new MExpression(jrElement.getHyperlinkAnchorExpression());
-				setChildListener(mAnchorExpression);
-			}
+			mAnchorExpression = ExprUtil.getExpression(this, mAnchorExpression, jrElement.getHyperlinkAnchorExpression());
 			return mAnchorExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
-			if (mPageExpression == null) {
-				mPageExpression = new MExpression(jrElement.getHyperlinkPageExpression());
-				setChildListener(mPageExpression);
-			}
+			mPageExpression = ExprUtil.getExpression(this, mPageExpression, jrElement.getHyperlinkPageExpression());
 			return mPageExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
-			if (mReferenceExpression == null) {
-				mReferenceExpression = new MExpression(jrElement.getHyperlinkReferenceExpression());
-				setChildListener(mReferenceExpression);
-			}
+			mReferenceExpression = ExprUtil.getExpression(this, mReferenceExpression,
+					jrElement.getHyperlinkReferenceExpression());
 			return mReferenceExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
-			if (mToolTipExpression == null) {
-				mToolTipExpression = new MExpression(jrElement.getHyperlinkTooltipExpression());
-				setChildListener(mToolTipExpression);
-			}
+			mToolTipExpression = ExprUtil.getExpression(this, mToolTipExpression, jrElement.getHyperlinkTooltipExpression());
 			return mToolTipExpression;
 		}
 
@@ -405,17 +394,11 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		}
 
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_EXPRESSION)) {
-			if (titleExpression == null) {
-				titleExpression = new MExpression(jrElement.getTitleExpression());
-				setChildListener(titleExpression);
-			}
+			titleExpression = ExprUtil.getExpression(this, titleExpression, jrElement.getTitleExpression());
 			return titleExpression;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION)) {
-			if (subtitleExpression == null) {
-				subtitleExpression = new MExpression(jrElement.getSubtitleExpression());
-				setChildListener(subtitleExpression);
-			}
+			subtitleExpression = ExprUtil.getExpression(this, subtitleExpression, jrElement.getSubtitleExpression());
 			return subtitleExpression;
 		}
 
@@ -460,52 +443,22 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		} else if (id.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS)) {
 			jrElement.setCustomizerClass((String) value);
 		} else if (id.equals(JRDesignChart.PROPERTY_TITLE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				titleExpression = (MExpression) value;
-				setChildListener(titleExpression);
-				JRExpression expression = (JRExpression) titleExpression.getValue();
-				jrElement.setTitleExpression(expression);
-			}
+			jrElement.setTitleExpression(ExprUtil.setValues(jrElement.getTitleExpression(), value));
 		} else if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				subtitleExpression = (MExpression) value;
-				setChildListener(subtitleExpression);
-				JRExpression expression = (JRExpression) subtitleExpression.getValue();
-				jrElement.setSubtitleExpression(expression);
-			}
+			jrElement.setSubtitleExpression(ExprUtil.setValues(jrElement.getSubtitleExpression(), value));
 		} else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
 			jrElement.setLinkTarget((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			jrElement.setLinkType((String) value);
-		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mAnchorExpression = (MExpression) value;
-				setChildListener(mAnchorExpression);
-				JRExpression expression = (JRExpression) mAnchorExpression.getValue();
-				jrElement.setHyperlinkAnchorExpression(expression);
-			}
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mPageExpression = (MExpression) value;
-				setChildListener(mPageExpression);
-				JRExpression expression = (JRExpression) mPageExpression.getValue();
-				jrElement.setHyperlinkPageExpression(expression);
-			}
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mReferenceExpression = (MExpression) value;
-				setChildListener(mReferenceExpression);
-				JRExpression expression = (JRExpression) mReferenceExpression.getValue();
-				jrElement.setHyperlinkReferenceExpression(expression);
-			}
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mToolTipExpression = (MExpression) value;
-				setChildListener(mToolTipExpression);
-				JRExpression expression = (JRExpression) mToolTipExpression.getValue();
-				jrElement.setHyperlinkTooltipExpression(expression);
-			}
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
+			jrElement.setHyperlinkAnchorExpression(ExprUtil.setValues(jrElement.getHyperlinkAnchorExpression(), value));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
+			jrElement.setHyperlinkPageExpression(ExprUtil.setValues(jrElement.getHyperlinkPageExpression(), value));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
+			jrElement.setHyperlinkReferenceExpression(ExprUtil.setValues(jrElement.getHyperlinkReferenceExpression(), value));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
+			jrElement.setHyperlinkTooltipExpression(ExprUtil.setValues(jrElement.getHyperlinkTooltipExpression(), value));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;
 

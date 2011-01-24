@@ -28,7 +28,6 @@ import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.charts.type.MeterShapeEnum;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExpression;
 
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -41,6 +40,7 @@ import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -158,6 +158,7 @@ public class MMeterPlot extends MChartPlot {
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignMeterPlot jrElement = (JRDesignMeterPlot) getValue();
+		JRDesignDataRange jrDataRange = (JRDesignDataRange) jrElement.getDataRange();
 		if (id.equals(JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getMeterBackgroundColor());
 		if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_COLOR))
@@ -180,17 +181,11 @@ public class MMeterPlot extends MChartPlot {
 			return jrElement.getValueDisplay().getMask();
 
 		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
-			if (drhaExpression == null) {
-				drhaExpression = new MExpression(jrElement.getDataRange().getHighExpression());
-				setChildListener(drhaExpression);
-			}
+			drhaExpression = ExprUtil.getExpression(this, drhaExpression, jrDataRange.getHighExpression());
 			return drhaExpression;
 		}
 		if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
-			if (drlExpression == null) {
-				drlExpression = new MExpression(jrElement.getDataRange().getLowExpression());
-				setChildListener(drlExpression);
-			}
+			drlExpression = ExprUtil.getExpression(this, drlExpression, jrDataRange.getLowExpression());
 			return drlExpression;
 		}
 		if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT)) {
@@ -220,6 +215,7 @@ public class MMeterPlot extends MChartPlot {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignMeterPlot jrElement = (JRDesignMeterPlot) getValue();
+		JRDesignDataRange jrDataRange = (JRDesignDataRange) jrElement.getDataRange();
 		if (id.equals(JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR) && value instanceof RGB)
 			jrElement.setMeterBackgroundColor(Colors.getAWT4SWTRGBColor((RGB) value));
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_COLOR) && value instanceof RGB)
@@ -257,21 +253,11 @@ public class MMeterPlot extends MChartPlot {
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
 			jrElement.setUnits((String) value);
 
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)) { //$NON-NLS-1$
-			if (value instanceof MExpression) {
-				drhaExpression = (MExpression) value;
-				setChildListener(drhaExpression);
-				JRExpression expression = (JRExpression) drhaExpression.getValue();
-				((JRDesignDataRange) jrElement.getDataRange()).setHighExpression(expression);
-			}
-		} else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)) { //$NON-NLS-1$
-			if (value instanceof MExpression) {
-				drlExpression = (MExpression) value;
-				setChildListener(drlExpression);
-				JRExpression expression = (JRExpression) drlExpression.getValue();
-				((JRDesignDataRange) jrElement.getDataRange()).setLowExpression(expression);
-			}
-		} else
+		else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION))
+			jrDataRange.setHighExpression(ExprUtil.setValues(jrDataRange.getHighExpression(), value));
+		else if (id.equals(JRDesignMeterPlot.PROPERTY_DATA_RANGE + "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION))
+			jrDataRange.setLowExpression(ExprUtil.setValues(jrDataRange.getLowExpression(), value));
+		else
 			super.setPropertyValue(id, value);
 	}
 }

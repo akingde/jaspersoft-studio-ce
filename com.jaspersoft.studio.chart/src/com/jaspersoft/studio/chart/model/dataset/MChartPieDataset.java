@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -22,6 +21,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MChartPieDataset extends MChartDataset {
@@ -156,38 +156,23 @@ public class MChartPieDataset extends MChartDataset {
 			return omHyperLink;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION)) {
-			if (cExpression == null) {
-				cExpression = new MExpression(jrElement.getKeyExpression());
-				setChildListener(cExpression);
-			}
+			cExpression = ExprUtil.getExpression(this, cExpression, jrElement.getKeyExpression());
 			return cExpression;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION)) {
-			if (dExpression == null) {
-				dExpression = new MExpression(jrElement.getLabelExpression());
-				setChildListener(dExpression);
-			}
+			dExpression = ExprUtil.getExpression(this, dExpression, jrElement.getLabelExpression());
 			return dExpression;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION)) {
-			if (hExpression == null) {
-				hExpression = new MExpression(jrElement.getOtherKeyExpression());
-				setChildListener(hExpression);
-			}
+			hExpression = ExprUtil.getExpression(this, hExpression, jrElement.getOtherKeyExpression());
 			return hExpression;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION)) {
-			if (lExpression == null) {
-				lExpression = new MExpression(jrElement.getOtherLabelExpression());
-				setChildListener(lExpression);
-			}
+			lExpression = ExprUtil.getExpression(this, lExpression, jrElement.getOtherLabelExpression());
 			return lExpression;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION)) {
-			if (oExpression == null) {
-				oExpression = new MExpression(jrElement.getValueExpression());
-				setChildListener(oExpression);
-			}
+			oExpression = ExprUtil.getExpression(this, oExpression, jrElement.getValueExpression());
 			return oExpression;
 		}
 
@@ -202,42 +187,17 @@ public class MChartPieDataset extends MChartDataset {
 			jrElement.setMinPercentage((Float) value);
 		else if (id.equals(JRDesignPieDataset.PROPERTY_MAX_COUNT))
 			jrElement.setMaxCount((Integer) value);
-		else if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				cExpression = (MExpression) value;
-				setChildListener(cExpression);
-				JRExpression expression = (JRExpression) cExpression.getValue();
-				jrElement.setKeyExpression(expression);
-			}
-		} else if (id.equals(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				dExpression = (MExpression) value;
-				setChildListener(dExpression);
-				JRExpression expression = (JRExpression) dExpression.getValue();
-				jrElement.setLabelExpression(expression);
-			}
-		} else if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				hExpression = (MExpression) value;
-				setChildListener(hExpression);
-				JRExpression expression = (JRExpression) hExpression.getValue();
-				jrElement.setOtherKeyExpression(expression);
-			}
-		} else if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				lExpression = (MExpression) value;
-				setChildListener(lExpression);
-				JRExpression expression = (JRExpression) lExpression.getValue();
-				jrElement.setOtherLabelExpression(expression);
-			}
-		} else if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				oExpression = (MExpression) value;
-				setChildListener(oExpression);
-				JRExpression expression = (JRExpression) oExpression.getValue();
-				jrElement.setValueExpression(expression);
-			}
-		} else
+		else if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION))
+			jrElement.setKeyExpression(ExprUtil.setValues(jrElement.getKeyExpression(), value));
+		else if (id.equals(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION))
+			jrElement.setLabelExpression(ExprUtil.setValues(jrElement.getLabelExpression(), value));
+		else if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION))
+			jrElement.setOtherKeyExpression(ExprUtil.setValues(jrElement.getOtherKeyExpression(), value));
+		else if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION))
+			jrElement.setOtherLabelExpression(ExprUtil.setValues(jrElement.getOtherLabelExpression(), value));
+		else if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION))
+			jrElement.setValueExpression(ExprUtil.setValues(jrElement.getValueExpression(), value));
+		else
 			super.setPropertyValue(id, value);
 	}
 

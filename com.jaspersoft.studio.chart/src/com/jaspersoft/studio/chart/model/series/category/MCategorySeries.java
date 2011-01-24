@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 
@@ -19,6 +18,7 @@ import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MCategorySeries extends APropertyNode {
@@ -159,35 +159,14 @@ public class MCategorySeries extends APropertyNode {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCategorySeries jrElement = (JRDesignCategorySeries) getValue();
 
-		if (id.equals(JRDesignCategorySeries.PROPERTY_CATEGORY_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				dExpression = (MExpression) value;
-				setChildListener(dExpression);
-				JRExpression expression = (JRExpression) dExpression.getValue();
-				jrElement.setCategoryExpression(expression);
-			}
-		} else if (id.equals(JRDesignCategorySeries.PROPERTY_LABEL_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				hExpression = (MExpression) value;
-				setChildListener(hExpression);
-				JRExpression expression = (JRExpression) hExpression.getValue();
-				jrElement.setLabelExpression(expression);
-			}
-		} else if (id.equals(JRDesignCategorySeries.PROPERTY_SERIES_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				lExpression = (MExpression) value;
-				setChildListener(lExpression);
-				JRExpression expression = (JRExpression) lExpression.getValue();
-				jrElement.setSeriesExpression(expression);
-			}
-		} else if (id.equals(JRDesignCategorySeries.PROPERTY_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				oExpression = (MExpression) value;
-				setChildListener(oExpression);
-				JRExpression expression = (JRExpression) oExpression.getValue();
-				jrElement.setValueExpression(expression);
-			}
-		}
+		if (id.equals(JRDesignCategorySeries.PROPERTY_CATEGORY_EXPRESSION))
+			jrElement.setCategoryExpression(ExprUtil.setValues(jrElement.getCategoryExpression(), value));
+		else if (id.equals(JRDesignCategorySeries.PROPERTY_LABEL_EXPRESSION))
+			jrElement.setLabelExpression(ExprUtil.setValues(jrElement.getLabelExpression(), value));
+		else if (id.equals(JRDesignCategorySeries.PROPERTY_SERIES_EXPRESSION))
+			jrElement.setSeriesExpression(ExprUtil.setValues(jrElement.getSeriesExpression(), value));
+		else if (id.equals(JRDesignCategorySeries.PROPERTY_VALUE_EXPRESSION))
+			jrElement.setValueExpression(ExprUtil.setValues(jrElement.getValueExpression(), value));
 	}
 
 	public ImageDescriptor getImagePath() {
