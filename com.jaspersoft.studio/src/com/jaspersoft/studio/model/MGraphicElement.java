@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRStyle;
@@ -48,13 +47,13 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.I18nTypesEnum;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -375,13 +374,13 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(opaqueD);
 
 		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
-				Messages.common_position_type, EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.POSITION_TYPE), NullEnum.NOTNULL));
+				Messages.common_position_type, EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
 		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
 		desc.add(positionTypeD);
 		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
 
 		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE,
-				Messages.common_stretch_type, EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.STRETCH_TYPE), NullEnum.NOTNULL));
+				Messages.common_stretch_type, EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
 		stretchTypeD.setCategory(Messages.common_size);
 		stretchTypeD.setDescription(Messages.MGraphicElement_stretch_type_description);
 		desc.add(stretchTypeD);
@@ -449,10 +448,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
 			return jrElement.getKey();
 		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrElement.getPrintWhenExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getPrintWhenExpression());
 			return mExpression;
 		}
 		if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
@@ -529,14 +525,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				jrElement.setStyle(null);
 				jrElement.setStyleNameReference(null);
 			}
-		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrElement.setPrintWhenExpression(expression);
-			}
-		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
+		} else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION))
+			jrElement.setPrintWhenExpression(ExprUtil.setValues(jrElement.getPrintWhenExpression(), value));
+		else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES)) {
 			if (!value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setPrintWhenGroupChanges(group);
