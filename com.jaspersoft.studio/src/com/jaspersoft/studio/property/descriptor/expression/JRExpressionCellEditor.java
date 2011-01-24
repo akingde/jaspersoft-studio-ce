@@ -19,16 +19,19 @@
  */
 package com.jaspersoft.studio.property.descriptor.expression;
 
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.property.descriptor.ATextDialogRWCellEditor;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
-public class JRExpressionCellEditor extends DialogCellEditor {
+public class JRExpressionCellEditor extends ATextDialogRWCellEditor {
 
 	public JRExpressionCellEditor(Composite parent) {
 		super(parent);
@@ -62,4 +65,44 @@ public class JRExpressionCellEditor extends DialogCellEditor {
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
 	}
+
+	@Override
+	protected Object doGetValue() {
+		Object val = super.doGetValue();
+		if (isDirty() && val instanceof MExpression) {
+			final MExpression m = (MExpression) val;
+			JRDesignExpression dexpr = (JRDesignExpression) m.getValue();
+			if (dexpr == null) {
+				dexpr = new JRDesignExpression();
+				dexpr.setValueClassName(String.class.getName());
+				m.setValue(dexpr);
+			}
+			final JRDesignExpression e = dexpr;
+			Display.getCurrent().asyncExec(new Runnable() {
+
+				public void run() {
+					// m.setPropertyValue(JRDesignExpression.PROPERTY_TEXT, text.getText());
+					e.setText(text.getText());
+				}
+			});
+			return new MExpression(dexpr);
+		}
+		return val;
+	}
+
+	@Override
+	protected void doSetValue(Object value) {
+		super.doSetValue(value);
+		if (value instanceof MExpression) {
+			MExpression expression = (MExpression) value;
+
+			text.removeModifyListener(getModifyListener());
+			String pvalue = (String) expression.getPropertyValue(JRDesignExpression.PROPERTY_TEXT);
+			if (pvalue == null)
+				pvalue = "";
+			text.setText(pvalue);
+			text.addModifyListener(getModifyListener());
+		}
+	}
+
 }

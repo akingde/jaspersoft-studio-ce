@@ -22,7 +22,6 @@ package com.jaspersoft.studio.model.variable;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
@@ -43,6 +42,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -117,8 +117,8 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP,
-				Messages.common_reset_group, new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
+		resetGroupD = new RWComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_GROUP, Messages.common_reset_group,
+				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$
 		resetGroupD.setDescription(Messages.MVariable_reset_group_description);
 		desc.add(resetGroupD);
 
@@ -222,17 +222,11 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
 			return jrVariable.getIncrementerFactoryClassName();
 		if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrVariable.getExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrVariable.getExpression());
 			return mExpression;
 		}
 		if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION)) {
-			if (mIniValExpression == null) {
-				mIniValExpression = new MExpression(jrVariable.getInitialValueExpression());
-				setChildListener(mIniValExpression);
-			}
+			mIniValExpression = ExprUtil.getExpression(this, mIniValExpression, jrVariable.getInitialValueExpression());
 			return mIniValExpression;
 		}
 		return null;
@@ -253,21 +247,11 @@ public class MVariable extends MVariableSystem implements ICopyable {
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);
 				jrVariable.setResetGroup(group);
 			}
-		} else if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrVariable.setExpression(expression);
-			}
-		} else if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mIniValExpression = (MExpression) value;
-				setChildListener(mIniValExpression);
-				JRExpression expression = (JRExpression) mIniValExpression.getValue();
-				jrVariable.setInitialValueExpression(expression);
-			}
-		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
+		} else if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION))
+			jrVariable.setExpression(ExprUtil.setValues(jrVariable.getExpression(), value));
+		else if (id.equals(JRDesignVariable.PROPERTY_INITIAL_VALUE_EXPRESSION))
+			jrVariable.setInitialValueExpression(ExprUtil.setValues(jrVariable.getInitialValueExpression(), value));
+		else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_GROUP)) {
 			if (!value.equals("") && jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP)) { //$NON-NLS-1$
 				JRDesignDataset jrDataset = getDataSet();
 				JRGroup group = (JRGroup) jrDataset.getGroupsMap().get(value);

@@ -42,7 +42,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-public abstract class ATextDialogCellEditor extends DialogCellEditor {
+public abstract class ATextDialogRWCellEditor extends DialogCellEditor {
 
 	/**
 	 * State information for updating action enablement
@@ -72,7 +72,7 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 	 * @param parent
 	 *          the parent control
 	 */
-	public ATextDialogCellEditor(Composite parent) {
+	public ATextDialogRWCellEditor(Composite parent) {
 		this(parent, SWT.NONE);
 	}
 
@@ -85,7 +85,7 @@ public abstract class ATextDialogCellEditor extends DialogCellEditor {
 	 * @param style
 	 *          the style bits
 	 */
-	public ATextDialogCellEditor(Composite parent, int style) {
+	public ATextDialogRWCellEditor(Composite parent, int style) {
 		super(parent, style);
 	}
 

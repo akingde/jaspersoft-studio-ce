@@ -22,7 +22,6 @@ package com.jaspersoft.studio.model.text;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.base.JRBaseTextField;
@@ -45,6 +44,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
@@ -172,10 +172,7 @@ public class MTextField extends MTextElement {
 	public Object getPropertyValue(Object id) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 		if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrElement.getExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getExpression());
 			return mExpression;
 		}
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
@@ -192,13 +189,6 @@ public class MTextField extends MTextElement {
 			return jrElement.getLinkTarget();
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			return jrElement.getLinkType();
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
-			if (mAnchorExpression == null) {
-				mAnchorExpression = new MExpression(jrElement.getHyperlinkAnchorExpression());
-				setChildListener(mAnchorExpression);
-			}
-			return mAnchorExpression;
-		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			if (propertyDTO == null) {
 				propertyDTO = new ParameterDTO();
@@ -207,25 +197,21 @@ public class MTextField extends MTextElement {
 			}
 			return propertyDTO;
 		}
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
+			mAnchorExpression = ExprUtil.getExpression(this, mAnchorExpression, jrElement.getHyperlinkAnchorExpression());
+			return mAnchorExpression;
+		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
-			if (mPageExpression == null) {
-				mPageExpression = new MExpression(jrElement.getHyperlinkPageExpression());
-				setChildListener(mPageExpression);
-			}
+			mPageExpression = ExprUtil.getExpression(this, mPageExpression, jrElement.getHyperlinkPageExpression());
 			return mPageExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
-			if (mReferenceExpression == null) {
-				mReferenceExpression = new MExpression(jrElement.getHyperlinkReferenceExpression());
-				setChildListener(mReferenceExpression);
-			}
+			mReferenceExpression = ExprUtil.getExpression(this, mReferenceExpression,
+					jrElement.getHyperlinkReferenceExpression());
 			return mReferenceExpression;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
-			if (mToolTipExpression == null) {
-				mToolTipExpression = new MExpression(jrElement.getHyperlinkTooltipExpression());
-				setChildListener(mToolTipExpression);
-			}
+			mToolTipExpression = ExprUtil.getExpression(this, mToolTipExpression, jrElement.getHyperlinkTooltipExpression());
 			return mToolTipExpression;
 		}
 
@@ -238,14 +224,9 @@ public class MTextField extends MTextElement {
 
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime(EvaluationTimeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
-		else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrElement.setExpression(expression);
-			}
-		} else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
+		else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) 
+			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
+		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrElement.setBlankWhenNull((Boolean) value);
 		else if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
 			jrElement.setPattern((String) value);
@@ -255,34 +236,15 @@ public class MTextField extends MTextElement {
 			jrElement.setLinkTarget((String) value);
 		else if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			jrElement.setLinkType((String) value);
-		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mAnchorExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) mAnchorExpression.getValue();
-				jrElement.setHyperlinkAnchorExpression(expression);
-			}
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mPageExpression = (MExpression) value;
-				setChildListener(mPageExpression);
-				JRExpression expression = (JRExpression) mPageExpression.getValue();
-				jrElement.setHyperlinkPageExpression(expression);
-			}
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mReferenceExpression = (MExpression) value;
-				setChildListener(mReferenceExpression);
-				JRExpression expression = (JRExpression) mReferenceExpression.getValue();
-				jrElement.setHyperlinkReferenceExpression(expression);
-			}
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mToolTipExpression = (MExpression) value;
-				setChildListener(mToolTipExpression);
-				JRExpression expression = (JRExpression) mToolTipExpression.getValue();
-				jrElement.setHyperlinkTooltipExpression(expression);
-			}
-		} else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
+			jrElement.setHyperlinkAnchorExpression(ExprUtil.setValues(jrElement.getHyperlinkAnchorExpression(), value));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
+			jrElement.setHyperlinkPageExpression(ExprUtil.setValues(jrElement.getHyperlinkPageExpression(), value));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
+			jrElement.setHyperlinkReferenceExpression(ExprUtil.setValues(jrElement.getHyperlinkReferenceExpression(), value));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
+			jrElement.setHyperlinkTooltipExpression(ExprUtil.setValues(jrElement.getHyperlinkTooltipExpression(), value));
+		else if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;
 

@@ -48,18 +48,14 @@ public class MExpression extends APropertyNode implements IPropertySource {
 		desc.add(textD);
 
 		RComboBoxPropertyDescriptor languageD = new RComboBoxPropertyDescriptor(
-				JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, Messages.common_value_class_name, new String[] { "java.lang.Boolean", //$NON-NLS-1$
+				JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, Messages.common_value_class_name, new String[] {
+						"java.lang.Boolean", //$NON-NLS-1$
 						"java.lang.Byte", "java.util.Date", "java.sql.Timestamp", "java.sql.Time", "java.lang.Double", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 						"java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.math.BigDecimal", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 						"java.lang.Number", "java.lang.String" }); //$NON-NLS-1$ //$NON-NLS-2$
 		languageD.setDescription(Messages.MExpression_value_class_name_description);
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
-
-		// ClassTypePropertyDescriptor formatFactoryClassD = new ClassTypePropertyDescriptor(
-		// JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "Value Class Name");
-		// formatFactoryClassD.setDescription("Value class name.");
-		// desc.add(formatFactoryClassD);
 
 		defaultsMap.put(JRDesignExpression.PROPERTY_VALUE_CLASS_NAME, "java.lang.String"); //$NON-NLS-1$
 	}

@@ -40,8 +40,17 @@ public class JRExpressionLabelProvider extends LabelProvider {
 		if (element != null && element instanceof MExpression) {
 			MExpression me = (MExpression) element;
 			JRDesignExpression jde = (JRDesignExpression) me.getValue();
-			if (jde != null)
-				return jde.getText();
+			if (jde != null) {
+				String clasname = jde.getValueClassName();
+				if (clasname == null)
+					clasname = "";
+				else
+					clasname = "<" + clasname + ">";
+				String text = jde.getText();
+				if (text == null)
+					text = "";
+				return clasname + text;
+			}
 		}
 		return ""; //$NON-NLS-1$
 	}

@@ -7,7 +7,6 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -16,10 +15,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.parameter.ParameterPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
@@ -108,23 +106,16 @@ public class MDatasetRun extends APropertyNode {
 
 		if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
 			if (pmExpression == null) {
-				pmExpression = new MExpression(jrElement.getParametersMapExpression());
-				setChildListener(pmExpression);
+				pmExpression = ExprUtil.getExpression(this, pmExpression, jrElement.getParametersMapExpression());
 			}
 			return pmExpression;
 		}
 		if (id.equals(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION)) {
-			if (cnExpression == null) {
-				cnExpression = new MExpression(jrElement.getConnectionExpression());
-				setChildListener(cnExpression);
-			}
+			cnExpression = ExprUtil.getExpression(this, cnExpression, jrElement.getConnectionExpression());
 			return cnExpression;
 		}
 		if (id.equals(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION)) {
-			if (dsExpression == null) {
-				dsExpression = new MExpression(jrElement.getDataSourceExpression());
-				setChildListener(dsExpression);
-			}
+			dsExpression = ExprUtil.getExpression(this, dsExpression, jrElement.getDataSourceExpression());
 			return dsExpression;
 		}
 		if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS)) {
@@ -151,28 +142,13 @@ public class MDatasetRun extends APropertyNode {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignDatasetRun jrElement = (JRDesignDatasetRun) getValue();
-		if (id.equals(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				cnExpression = (MExpression) value;
-				setChildListener(cnExpression);
-				JRExpression expression = (JRExpression) cnExpression.getValue();
-				jrElement.setConnectionExpression(expression);
-			}
-		} else if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				pmExpression = (MExpression) value;
-				setChildListener(pmExpression);
-				JRExpression expression = (JRExpression) pmExpression.getValue();
-				jrElement.setParametersMapExpression(expression);
-			}
-		} else if (id.equals(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				dsExpression = (MExpression) value;
-				setChildListener(dsExpression);
-				JRExpression expression = (JRExpression) dsExpression.getValue();
-				jrElement.setDataSourceExpression(expression);
-			}
-		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
+		if (id.equals(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION))
+			jrElement.setConnectionExpression(ExprUtil.setValues(jrElement.getConnectionExpression(), value));
+		else if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION))
+			jrElement.setParametersMapExpression(ExprUtil.setValues(jrElement.getParametersMapExpression(), value));
+		else if (id.equals(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION))
+			jrElement.setDataSourceExpression(ExprUtil.setValues(jrElement.getDataSourceExpression(), value));
+		else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;
 

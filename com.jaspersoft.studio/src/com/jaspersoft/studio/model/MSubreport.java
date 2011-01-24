@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRSubreportReturnValue;
 import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -41,6 +40,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.SubreportPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.RVPropertyDescriptor;
@@ -182,31 +182,19 @@ public class MSubreport extends MGraphicElement {
 		if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE))
 			return jrElement.isOwnUsingCache();
 		if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrElement.getExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getExpression());
 			return mExpression;
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (pmExpression == null) {
-				pmExpression = new MExpression(jrElement.getParametersMapExpression());
-				setChildListener(pmExpression);
-			}
+			pmExpression = ExprUtil.getExpression(this, pmExpression, jrElement.getParametersMapExpression());
 			return pmExpression;
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION)) {
-			if (cnExpression == null) {
-				cnExpression = new MExpression(jrElement.getConnectionExpression());
-				setChildListener(cnExpression);
-			}
+			cnExpression = ExprUtil.getExpression(this, cnExpression, jrElement.getConnectionExpression());
 			return cnExpression;
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION)) {
-			if (dsExpression == null) {
-				dsExpression = new MExpression(jrElement.getDataSourceExpression());
-				setChildListener(dsExpression);
-			}
+			dsExpression = ExprUtil.getExpression(this, dsExpression, jrElement.getDataSourceExpression());
 			return dsExpression;
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS))
@@ -231,35 +219,15 @@ public class MSubreport extends MGraphicElement {
 			jrElement.setRunToBottom((Boolean) value);
 		else if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
 			jrElement.setUsingCache((Boolean) value);
-		else if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrElement.setExpression(expression);
-			}
-		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				pmExpression = (MExpression) value;
-				setChildListener(pmExpression);
-				JRExpression expression = (JRExpression) pmExpression.getValue();
-				jrElement.setParametersMapExpression(expression);
-			}
-		} else if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				cnExpression = (MExpression) value;
-				setChildListener(cnExpression);
-				JRExpression expression = (JRExpression) cnExpression.getValue();
-				jrElement.setConnectionExpression(expression);
-			}
-		} else if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				dsExpression = (MExpression) value;
-				setChildListener(dsExpression);
-				JRExpression expression = (JRExpression) dsExpression.getValue();
-				jrElement.setDataSourceExpression(expression);
-			}
-		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
+		else if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION))
+			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
+		else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION))
+			jrElement.setParametersMapExpression(ExprUtil.setValues(jrElement.getParametersMapExpression(), value));
+		else if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION))
+			jrElement.setConnectionExpression(ExprUtil.setValues(jrElement.getConnectionExpression(), value));
+		else if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION))
+			jrElement.setDataSourceExpression(ExprUtil.setValues(jrElement.getDataSourceExpression(), value));
+		else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
 			if (value instanceof Map) {
 				Map<String, JRDesignSubreportParameter> v = (Map<String, JRDesignSubreportParameter>) value;
 				Set<String> names = new HashSet<String>(jrElement.getParametersMap().keySet());

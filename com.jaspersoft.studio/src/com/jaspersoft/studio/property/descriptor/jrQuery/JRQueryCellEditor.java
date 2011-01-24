@@ -19,19 +19,22 @@
  */
 package com.jaspersoft.studio.property.descriptor.jrQuery;
 
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.MQuery;
+import com.jaspersoft.studio.property.descriptor.ATextDialogRWCellEditor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.jrQuery.dialog.JRQueryEditor;
 
-public class JRQueryCellEditor extends DialogCellEditor {
+public class JRQueryCellEditor extends ATextDialogRWCellEditor {
 
 	/**
 	 * Creates a new color cell editor parented under the given control. The cell editor value is black (
@@ -81,4 +84,44 @@ public class JRQueryCellEditor extends DialogCellEditor {
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
 	}
+
+	@Override
+	protected Object doGetValue() {
+		Object val = super.doGetValue();
+		if (isDirty() && val instanceof MQuery) {
+			final MQuery m = (MQuery) val;
+			JRDesignQuery dexpr = (JRDesignQuery) m.getValue();
+			if (dexpr == null) {
+				dexpr = new JRDesignQuery();
+				dexpr.setLanguage("sql");
+				m.setValue(dexpr);
+			}
+			final JRDesignQuery e = dexpr;
+			Display.getCurrent().asyncExec(new Runnable() {
+
+				public void run() {
+					// m.setPropertyValue(JRDesignExpression.PROPERTY_TEXT, text.getText());
+					e.setText(text.getText());
+				}
+			});
+			return new MQuery(dexpr);
+		}
+		return val;
+	}
+
+	@Override
+	protected void doSetValue(Object value) {
+		super.doSetValue(value);
+		if (value instanceof MQuery) {
+			MQuery expression = (MQuery) value;
+
+			text.removeModifyListener(getModifyListener());
+			String pvalue = (String) expression.getPropertyValue(JRDesignQuery.PROPERTY_TEXT);
+			if (pvalue == null)
+				pvalue = "";
+			text.setText(pvalue);
+			text.addModifyListener(getModifyListener());
+		}
+	}
+
 }
