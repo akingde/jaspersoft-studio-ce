@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.barcode.model.barcode4j;
 
@@ -28,7 +24,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
@@ -44,6 +39,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -217,17 +213,11 @@ public class MBarcode4j extends MBarcode {
 			return TextPosition.getPos4TextPosition(jrList.getTextPosition());
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			if (codeExpression == null){
-				codeExpression = new MExpression(jrList.getCodeExpression());
-				setChildListener(codeExpression);
-			}
+			codeExpression = ExprUtil.getExpression(this, codeExpression, jrList.getCodeExpression());
 			return codeExpression;
 		}
 		if (id.equals(BarcodeComponent.PROPERTY_PATTERN_EXPRESSION)) {
-			if (ptExpression == null){
-				ptExpression = new MExpression(jrList.getPatternExpression());
-				setChildListener(ptExpression);
-			}
+			ptExpression = ExprUtil.getExpression(this, ptExpression, jrList.getPatternExpression());
 			return ptExpression;
 		}
 
@@ -257,17 +247,9 @@ public class MBarcode4j extends MBarcode {
 			jrList.setTextPosition(TextPosition.getTextPosition4Pos((Integer) value));
 
 		else if (id.equals(BarcodeComponent.PROPERTY_PATTERN_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				ptExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) ptExpression.getValue();
-				jrList.setPatternExpression(expression);
-			}
+			jrList.setPatternExpression(ExprUtil.setValues(jrList.getPatternExpression(), value));
 		} else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				codeExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) codeExpression.getValue();
-				jrList.setCodeExpression(expression);
-			}
+			jrList.setCodeExpression(ExprUtil.setValues(jrList.getCodeExpression(), value));
 		} else
 			super.setPropertyValue(id, value);
 	}

@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -44,6 +43,7 @@ import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -237,19 +237,13 @@ public class MBarcodeBarbecue extends MBarcode {
 		if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_WIDTH))
 			return jrList.getBarWidth();
 		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			if (codeExpression == null) {
-				codeExpression = new MExpression(jrList.getCodeExpression());
-				setChildListener(codeExpression);
-			}
+			codeExpression = ExprUtil.getExpression(this, codeExpression, jrList.getCodeExpression());
 			return codeExpression;
 		}
 		if (id.equals(StandardBarbecueComponent.PROPERTY_ROTATION))
 			return EnumHelper.getValue(jrList.getOwnRotation(), 0, true);
 		if (id.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION)) {
-			if (appidExpression == null) {
-				appidExpression = new MExpression(jrList.getApplicationIdentifierExpression());
-				setChildListener(appidExpression);
-			}
+			appidExpression = ExprUtil.getExpression(this, appidExpression, jrList.getApplicationIdentifierExpression());
 			return appidExpression;
 		}
 		return super.getPropertyValue(id);
@@ -279,19 +273,9 @@ public class MBarcodeBarbecue extends MBarcode {
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_BAR_WIDTH))
 			jrList.setBarWidth((Integer) value);
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				codeExpression = (MExpression) value;
-				setChildListener(codeExpression);
-				JRExpression expression = (JRExpression) codeExpression.getValue();
-				jrList.setCodeExpression(expression);
-			}
+			jrList.setCodeExpression(ExprUtil.setValues(jrList.getCodeExpression(), value));
 		} else if (id.equals(StandardBarbecueComponent.PROPERTY_APPLICATION_IDENTIFIER_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				appidExpression = (MExpression) value;
-				setChildListener(appidExpression);
-				JRExpression expression = (JRExpression) appidExpression.getValue();
-				jrList.setApplicationIdentifierExpression(expression);
-			}
+			jrList.setApplicationIdentifierExpression(ExprUtil.setValues(jrList.getApplicationIdentifierExpression(), value));
 		} else
 			super.setPropertyValue(id, value);
 	}
