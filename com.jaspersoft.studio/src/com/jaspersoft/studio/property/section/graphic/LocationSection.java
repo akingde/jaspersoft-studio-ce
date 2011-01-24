@@ -20,6 +20,8 @@
 package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.type.PositionTypeEnum;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -34,7 +36,6 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.I18nTypesEnum;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -80,7 +81,7 @@ public class LocationSection extends AbstractSection {
 		label.setLayoutData(gd);
 
 		positionType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		positionType.setItems(EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.POSITION_TYPE), NullEnum.NOTNULL));
+		positionType.setItems(EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
 		positionType.setToolTipText(Messages.LocationSection_position_type_tool_tip);
 
 		xText.addSelectionListener(new SelectionAdapter() {

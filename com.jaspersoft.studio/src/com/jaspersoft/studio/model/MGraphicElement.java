@@ -353,7 +353,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(xD);
 
 		IntegerPropertyDescriptor yD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_Y,
-				Messages.MGraphicElement_top);
+				Messages.common_top);
 		yD.setCategory(Messages.MGraphicElement_location_category);
 		yD.setDescription(Messages.MGraphicElement_top_description);
 		desc.add(yD);
@@ -369,7 +369,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(forecolorD);
 		// opacity
 		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
-				Messages.MGraphicElement_opaque, EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
+				Messages.common_opaque, EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
 		opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueD);
 

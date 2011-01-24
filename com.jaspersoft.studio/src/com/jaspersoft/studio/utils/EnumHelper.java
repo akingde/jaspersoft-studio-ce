@@ -19,9 +19,11 @@
  */
 package com.jaspersoft.studio.utils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 
 import net.sf.jasperreports.engine.type.EnumUtil;
@@ -30,11 +32,20 @@ import net.sf.jasperreports.engine.type.JREnum;
 public class EnumHelper {
 
 	public static String[] getEnumNames(JREnum[] jrEnum, NullEnum nullable) {
+		Class i18n = Messages.class;
+		Field field;
 		List<String> res = new ArrayList<String>();
+		
 		if (nullable != NullEnum.NOTNULL)
 			res.add(nullable.getName());
 		for (int i = 0; i < jrEnum.length; i++) {
-			res.add(jrEnum[i].getName());
+			try {
+				field = i18n.getField("common_" + jrEnum[i].getName().toLowerCase());
+				res.add(field.get(null).toString());
+			} catch (Exception e) {
+				System.out.println("Messages.class: No such field common_" + jrEnum[i].getName().toLowerCase());
+				res.add(jrEnum[i].getName());
+			}
 		}
 		return res.toArray(new String[res.size()]);
 	}

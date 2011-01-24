@@ -38,7 +38,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
-import com.jaspersoft.studio.property.descriptor.I18nTypesEnum;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -80,12 +79,12 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		desc.add(vAlignD);
 
 		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION,
-				Messages.common_rotation, EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.ROTATION), NullEnum.INHERITED));
+				Messages.common_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
 		rotationD.setDescription(Messages.MTextElement_rotation_description);
 		desc.add(rotationD);
 
 		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_LINE_SPACING,
-				Messages.common_line_spacing, EnumHelper.getEnumNames(I18nTypesEnum.getValues(I18nTypesEnum.LINE_SPACING), NullEnum.INHERITED));
+				Messages.common_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
 		lineSpacingD.setDescription(Messages.MTextElement_line_spacing_description);
 		desc.add(lineSpacingD);
 

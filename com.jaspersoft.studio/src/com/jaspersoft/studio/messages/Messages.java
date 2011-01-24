@@ -4,10 +4,13 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.messages.messages"; //$NON-NLS-1$
+	public static String common_1_1_2;
 	public static String common_add;
 	public static String common_backcolor;
 	public static String common_blank_when_null;
 	public static String common_bold;
+	public static String common_bottom;
+	public static String common_center;
 	public static String common_class;
 	public static String common_column_names;
 	public static String common_connection_expression;
@@ -30,8 +33,8 @@ public class Messages extends NLS {
 	public static String common_field_delimiter;
 	public static String common_file_name;
 	public static String common_fill;
-	public static String common_fix_relative_to_bottom;
-	public static String common_fix_relative_to_top;
+	public static String common_fixrelativetobottom;
+	public static String common_fixrelativetotop;
 	public static String common_float;
 	public static String common_font;
 	public static String common_font_name;
@@ -45,6 +48,7 @@ public class Messages extends NLS {
 	public static String common_increment_type;
 	public static String common_italic;
 	public static String common_jdbc_url;
+	public static String common_justified;
 	public static String common_language;
 	public static String common_left;
 	public static String common_line_box;
@@ -52,10 +56,12 @@ public class Messages extends NLS {
 	public static String common_line_pen;
 	public static String common_line_spacing;
 	public static String common_line_style;
+	public static String common_middle;
 	public static String common_name;
 	public static String common_none;
-	public static String common_no_stretch;
+	public static String common_nostretch;
 	public static String common_number_format;
+	public static String common_opaque;
 	public static String common_order;
 	public static String common_orphan_child;
 	public static String common_padding;
@@ -75,8 +81,8 @@ public class Messages extends NLS {
 	public static String common_query_editor;
 	public static String common_radius;
 	public static String common_record_delimiter;
-	public static String common_relative_to_band_height;
-	public static String common_relative_to_tallest_object;
+	public static String common_relativetobandheight;
+	public static String common_relativetotallestobject;
 	public static String common_reorder_elements;
 	public static String common_report;
 	public static String common_reset_group;
@@ -99,8 +105,10 @@ public class Messages extends NLS {
 	public static String common_table_is_empty;
 	public static String common_text;
 	public static String common_this_is_not_an_integer_number;
+	public static String common_top;
+	public static String common_transparent;
 	public static String common_underline;
-	public static String common_upside_down;
+	public static String common_upsidedown;
 	public static String common_username;
 	public static String common_using_cache;
 	public static String common_value_class_name;
@@ -344,7 +352,6 @@ public class Messages extends NLS {
 	public static String MGraphicElement_key_description;
 	public static String MGraphicElement_left_description;
 	public static String MGraphicElement_location_category;
-	public static String MGraphicElement_opaque;
 	public static String MGraphicElement_opaque_description;
 	public static String MGraphicElement_parent_style_description;
 	public static String MGraphicElement_position_type_description;
@@ -362,7 +369,6 @@ public class Messages extends NLS {
 	public static String MGraphicElement_remove_line_when_blank;
 	public static String MGraphicElement_remove_line_when_blank_description;
 	public static String MGraphicElement_stretch_type_description;
-	public static String MGraphicElement_top;
 	public static String MGraphicElement_top_description;
 	public static String MGraphicElement_width;
 	public static String MGraphicElement_width_description;
