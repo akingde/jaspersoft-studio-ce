@@ -29,7 +29,6 @@ import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
@@ -59,6 +58,7 @@ import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -209,10 +209,7 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 		if (id.equals(JRBaseCrosstab.PROPERTY_RUN_DIRECTION))
 			return EnumHelper.getValue(jrElement.getRunDirectionValue(), 0, false);
 		if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (prmMapExpr == null) {
-				prmMapExpr = new MExpression(jrElement.getParametersMapExpression());
-				setChildListener(prmMapExpr);
-			}
+			prmMapExpr = ExprUtil.getExpression(this, prmMapExpr, jrElement.getParametersMapExpression());
 			return prmMapExpr;
 		}
 
@@ -245,14 +242,9 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 			getCrosstabManager().refresh();
 			getPropertyChangeSupport().firePropertyChange(
 					new PropertyChangeEvent(this, JRBaseCrosstab.PROPERTY_RUN_DIRECTION, null, value));
-		} else if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				prmMapExpr = (MExpression) value;
-				setChildListener(prmMapExpr);
-				JRExpression expression = (JRExpression) prmMapExpr.getValue();
-				jrElement.setParametersMapExpression(expression);
-			}
-		} else
+		} else if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION))
+			jrElement.setParametersMapExpression(ExprUtil.setValues(jrElement.getParametersMapExpression(), value));
+		else
 			super.setPropertyValue(id, value);
 	}
 

@@ -24,7 +24,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
@@ -36,6 +35,7 @@ import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -145,24 +145,15 @@ public class MBucket extends APropertyNode {
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER))
 			return EnumHelper.getValue(jrField.getOrderValue(), 1, false);
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION)) {
-			if (cExpression == null) {
-				cExpression = new MExpression(jrField.getComparatorExpression());
-				setChildListener(cExpression);
-			}
+			cExpression = ExprUtil.getExpression(this, cExpression, jrField.getComparatorExpression());
 			return cExpression;
 		}
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION)) {
-			if (oExpression == null) {
-				oExpression = new MExpression(jrField.getOrderByExpression());
-				setChildListener(oExpression);
-			}
+			oExpression = ExprUtil.getExpression(this, oExpression, jrField.getOrderByExpression());
 			return oExpression;
 		}
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION)) {
-			if (eExpression == null) {
-				eExpression = new MExpression(jrField.getExpression());
-				setChildListener(eExpression);
-			}
+			eExpression = ExprUtil.getExpression(this, eExpression, jrField.getExpression());
 			return eExpression;
 		}
 		return null;
@@ -178,24 +169,11 @@ public class MBucket extends APropertyNode {
 
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER))
 			jrField.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
-		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				cExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) cExpression.getValue();
-				jrField.setComparatorExpression(expression);
-			}
-		} else if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				oExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) oExpression.getValue();
-				jrField.setComparatorExpression(expression);
-			}
-		} else if (id.equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				eExpression = (MExpression) value;
-				JRExpression expression = (JRExpression) eExpression.getValue();
-				jrField.setExpression((JRDesignExpression) expression);
-			}
-		}
+		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION))
+			jrField.setComparatorExpression(ExprUtil.setValues(jrField.getComparatorExpression(), value));
+		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION))
+			jrField.setOrderByExpression(ExprUtil.setValues(jrField.getOrderByExpression(), value));
+		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION))
+			jrField.setExpression((JRDesignExpression) ExprUtil.setValues(jrField.getExpression(), value));
 	}
 }

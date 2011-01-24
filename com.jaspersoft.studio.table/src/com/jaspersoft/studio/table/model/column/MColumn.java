@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -43,6 +42,7 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.table.TableNodeIconDescriptor;
 import com.jaspersoft.studio.table.messages.Messages;
@@ -162,11 +162,11 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		JRExpressionPropertyDescriptor printWhenExprD = new JRExpressionPropertyDescriptor(
 				StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MColumn_print_when_expression);
-		printWhenExprD
-				.setDescription(Messages.MColumn_print_when_expression_description);
+		printWhenExprD.setDescription(Messages.MColumn_print_when_expression_description);
 		desc.add(printWhenExprD);
 
-		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(StandardBaseColumn.PROPERTY_WIDTH, Messages.MColumn_column_width);
+		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(StandardBaseColumn.PROPERTY_WIDTH,
+				Messages.MColumn_column_width);
 		desc.add(wD);
 
 		printWhenExprD.setCategory(Messages.MColumn_column_properties_category);
@@ -185,10 +185,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH))
 			return jrElement.getWidth();
 		if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			if (mExpression == null) {
-				mExpression = new MExpression(jrElement.getPrintWhenExpression());
-				setChildListener(mExpression);
-			}
+			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getPrintWhenExpression());
 			return mExpression;
 		}
 		return null;
@@ -216,14 +213,8 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 						new PropertyChangeEvent(this, StandardBaseColumn.PROPERTY_WIDTH, null, value));
 				canSet = true;
 			}
-		} else if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				mExpression = (MExpression) value;
-				setChildListener(mExpression);
-				JRExpression expression = (JRExpression) mExpression.getValue();
-				jrElement.setPrintWhenExpression(expression);
-			}
-		}
+		} else if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION))
+			jrElement.setPrintWhenExpression(ExprUtil.setValues(jrElement.getPrintWhenExpression(), value));
 	}
 
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {

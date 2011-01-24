@@ -25,7 +25,6 @@ import java.util.Map;
 import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.type.CrosstabPercentageEnum;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -41,6 +40,7 @@ import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -193,10 +193,7 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE))
 			return EnumHelper.getValue(jrField.getPercentageType(), 0, false);
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION)) {
-			if (vExpression == null) {
-				vExpression = new MExpression(jrField.getValueExpression());
-				setChildListener(vExpression);
-			}
+			vExpression = ExprUtil.getExpression(this, vExpression, jrField.getValueExpression());
 			return vExpression;
 		}
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS))
@@ -222,14 +219,9 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE))
 			jrField.setPercentageType((CrosstabPercentageEnum) EnumHelper.getSetValue(CrosstabPercentageEnum.values(), value,
 					0, false));
-		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION)) {
-			if (value instanceof MExpression) {
-				vExpression = (MExpression) value;
-				setChildListener(vExpression);
-				JRExpression expression = (JRExpression) vExpression.getValue();
-				jrField.setValueExpression(expression);
-			}
-		} else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS))
+		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION))
+			jrField.setValueExpression(ExprUtil.setValues(jrField.getValueExpression(), value));
+		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS))
 			jrField.setValueClassName((String) value);
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
 			jrField.setIncrementerFactoryClassName((String) value);
