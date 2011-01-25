@@ -329,7 +329,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		desc.add(groupChangesD);
 
 		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY,
-				Messages.MGraphicElement_key);
+				Messages.common_key);
 		keyD.setDescription(Messages.MGraphicElement_key_description);
 		desc.add(keyD);
 

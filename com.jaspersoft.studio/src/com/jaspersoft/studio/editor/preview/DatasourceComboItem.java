@@ -127,7 +127,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		for (int i = 0; i < items.size(); i++) {
 			String displayText = items.get(i).getDisplayText();
 			if (displayText == null || displayText.trim().equals("")) //$NON-NLS-1$
-				displayText = Messages.DatasourceComboItem_empty;
+				displayText = Messages.common_empty;
 			s[i + 1] = displayText;
 		}
 		return s;

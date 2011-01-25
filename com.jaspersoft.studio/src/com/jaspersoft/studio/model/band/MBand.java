@@ -161,7 +161,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	@Override
 	public String getToolTip() {
 		if (getValue() != null)
-			return Messages.MBand_band + ": " + getDisplayText() + " 	"; //$NON-NLS-1$ //$NON-NLS-2$
+			return Messages.common_band + ": " + getDisplayText() + " 	"; //$NON-NLS-1$ //$NON-NLS-2$
 
 		return getIconDescriptor().getToolTip();
 	}

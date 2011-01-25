@@ -92,7 +92,7 @@ public class PageSizeSection extends AbstractSection {
 			}
 		});
 		portraitButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/portrait16.png")); //$NON-NLS-1$
-		portraitButton.setText(Messages.PageSizeSection_portrait);
+		portraitButton.setText(Messages.common_portrait);
 		portraitButton.setToolTipText(Messages.PageSizeSection_portrait_tool_tip);
 
 		landscapeButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
@@ -102,7 +102,7 @@ public class PageSizeSection extends AbstractSection {
 			}
 		});
 		landscapeButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/landscape16.png")); //$NON-NLS-1$
-		landscapeButton.setText(Messages.PageSizeSection_landscape);
+		landscapeButton.setText(Messages.common_landscape);
 		landscapeButton.setToolTipText(Messages.PageSizeSection_landscape_tool_tip);
 	}
 
