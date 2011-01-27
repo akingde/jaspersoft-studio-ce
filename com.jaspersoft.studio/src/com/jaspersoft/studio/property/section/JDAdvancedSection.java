@@ -58,10 +58,14 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		data.top = new FormAttachment(0, 0);
 		data.bottom = new FormAttachment(100, 0);
 		page.getControl().setLayoutData(data);
+		this.atabbedPropertySheetPage = atabbedPropertySheetPage;
 		IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
 		page.makeContributions(actionBars.getMenuManager(), actionBars.getToolBarManager(),
 				actionBars.getStatusLineManager());
+		actionBars.updateActionBars();
 	}
+
+	TabbedPropertySheetPage atabbedPropertySheetPage;
 
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
@@ -101,6 +105,8 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 	public void aboutToBeShown() {
 		if (getElement() != null)
 			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+		IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+		actionBars.updateActionBars();
 	}
 
 	/**
