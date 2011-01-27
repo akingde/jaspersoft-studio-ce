@@ -52,6 +52,8 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
+import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
+import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
@@ -237,7 +239,11 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 			protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 				Rectangle r = (Rectangle) constraint;
 				r.setLocation(r.x - PageFigure.PAGE_BORDER.left, r.y - PageFigure.PAGE_BORDER.top);
-				return super.createChangeConstraintCommand(request, child, constraint);
+
+				SetPageConstraintCommand cmd = new SetPageConstraintCommand();
+				cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), (Rectangle) constraint);
+
+				return cmd;
 			}
 
 			@Override

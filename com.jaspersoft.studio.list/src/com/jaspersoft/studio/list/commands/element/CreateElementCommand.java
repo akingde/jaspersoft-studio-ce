@@ -24,7 +24,7 @@ import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.list.model.MList;
@@ -43,7 +43,7 @@ public class CreateElementCommand extends Command {
 
 	private StandardListComponent jrGroup;
 
-	private Point location;
+	private Rectangle location;
 
 	private int index;
 
@@ -57,13 +57,14 @@ public class CreateElementCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateElementCommand(MList destNode, MGraphicElement srcNode, int index) {
+	public CreateElementCommand(MList destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super();
 		this.srcNode = srcNode;
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) destNode.getValue();
 		this.jrGroup = (StandardListComponent) jrElement.getComponent();
 		this.index = index;
+		this.location = position;
 	}
 
 	/**
@@ -73,15 +74,23 @@ public class CreateElementCommand extends Command {
 		if (jrElement == null) {
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
 
-			if (jrElement != null) {
-				if (location == null)
-					location = new Point(0, 0);
-				jrElement.setX(location.x);
-				jrElement.setY(location.y);
-				jrElement.setWidth(srcNode.getDefaultWidth());
-				jrElement.setHeight(srcNode.getDefaultHeight());
-			}
+			if (jrElement != null)
+				setElementBounds();
 		}
+	}
+
+	protected void setElementBounds() {
+		if (location == null)
+			location = new Rectangle(0, 0, srcNode.getDefaultWidth(), srcNode.getDefaultHeight());
+		if (location.width < 0)
+			location.width = srcNode.getDefaultWidth();
+		if (location.height < 0)
+			location.height = srcNode.getDefaultHeight();
+
+		jrElement.setX(location.x);
+		jrElement.setY(location.y);
+		jrElement.setWidth(location.width);
+		jrElement.setHeight(location.height);
 	}
 
 	public void setJrGroup(StandardListComponent jrGroup) {

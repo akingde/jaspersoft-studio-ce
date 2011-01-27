@@ -156,7 +156,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		// getGraphicalViewer().setRootEditPart(new MainDesignerRootEditPart());
 		// if (model != null)
 		getGraphicalViewer().setContents(model);
-		if(outlinePage != null)
+		if (outlinePage != null)
 			outlinePage.setContents(model);
 	}
 
@@ -207,8 +207,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	 */
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		return JDPaletteFactory.createPalette();
+		return JDPaletteFactory.createPalette(getIgnorePalleteElements());
 	}
+
+	protected abstract List<String> getIgnorePalleteElements();
 
 	// FIXME: something wrong, I should not do that, order in initialisation is
 	// wrong

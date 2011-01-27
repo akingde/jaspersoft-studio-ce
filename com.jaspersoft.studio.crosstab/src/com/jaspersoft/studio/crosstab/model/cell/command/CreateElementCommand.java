@@ -20,29 +20,12 @@ public class CreateElementCommand extends Command {
 
 	private int index = -1;
 
-	/**
-	 * Instantiates a new creates the element command.
-	 * 
-	 * @param destNode
-	 *          the dest node
-	 * @param srcNode
-	 *          the src node
-	 * @param index
-	 *          the index
-	 */
-	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, int index) {
+	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		this.jrCell = (JRDesignCellContents) destNode.getValue();
 		this.index = index;
-		this.srcNode = srcNode;
-	}
-
-	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Rectangle location) {
-		super();
-		this.jrElement = (JRDesignElement) srcNode.getValue();
-		this.jrCell = (JRDesignCellContents) destNode.getValue();
-		this.location = location;
+		this.location = position;
 		this.srcNode = srcNode;
 	}
 

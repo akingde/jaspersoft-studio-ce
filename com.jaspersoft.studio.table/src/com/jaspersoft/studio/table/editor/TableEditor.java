@@ -19,6 +19,9 @@
  */
 package com.jaspersoft.studio.table.editor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
@@ -75,6 +78,13 @@ public class TableEditor extends AbstractVisualEditor {
 
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(graphicalViewer));
+	}
+
+	@Override
+	protected List<String> getIgnorePalleteElements() {
+		List<String> lst = new ArrayList<String>();
+		lst.add("com.jaspersoft.studio.crosstab.model.MCrosstab");
+		return lst;
 	}
 
 }

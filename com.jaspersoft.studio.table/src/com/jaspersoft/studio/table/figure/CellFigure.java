@@ -7,6 +7,7 @@ import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.XYLayout;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 
@@ -16,6 +17,7 @@ public class CellFigure extends FrameFigure {
 
 	public CellFigure() {
 		super();
+		setLayoutManager(new XYLayout());
 		setBorder(new LineBorder(1));
 	}
 

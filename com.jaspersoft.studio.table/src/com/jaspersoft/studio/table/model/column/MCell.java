@@ -45,6 +45,7 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.IGraphicElementContainer;
 import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.util.ReportFactory;
@@ -59,7 +60,7 @@ import com.jaspersoft.studio.table.model.MTableGroupFooter;
 import com.jaspersoft.studio.table.model.MTableGroupHeader;
 import com.jaspersoft.studio.table.util.TableColumnSize;
 
-public class MCell extends MColumn implements IGraphicElement, IPastableGraphic, ILineBox, IGraphicElementContainer {
+public class MCell extends MColumn implements IGraphicElement, IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable {
 
 	/**
 	 * Instantiates a new m field.

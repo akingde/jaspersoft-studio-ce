@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
+import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 /**
@@ -39,6 +40,7 @@ public class FrameFigure extends AHandleBoundsFigure {
 	 */
 	public FrameFigure() {
 		super();
+		setLayoutManager(new XYLayout());
 	}
 
 	/*

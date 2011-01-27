@@ -106,7 +106,7 @@ public class ListComponentFactory implements IComponentFactory {
 		if (child instanceof MGraphicElement && child.getValue() != null)
 			if (parent instanceof MList)
 				return new com.jaspersoft.studio.list.commands.element.CreateElementCommand((MList) parent,
-						(MGraphicElement) child, newIndex);
+						(MGraphicElement) child, location, newIndex);
 
 		return null;
 	}

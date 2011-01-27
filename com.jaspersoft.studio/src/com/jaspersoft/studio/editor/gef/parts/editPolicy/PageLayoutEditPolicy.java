@@ -146,9 +146,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	 */
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
-		if (request.getType() == REQ_MOVE) {
-			// System.out.println("getCreateCommand " + request);
-		} else if (request.getType() == REQ_CREATE && getHost() instanceof AJDEditPart) {
+		if (request.getType() == REQ_CREATE && getHost() instanceof AJDEditPart) {
 
 			Rectangle constraint = (Rectangle) getConstraintFor(request);
 

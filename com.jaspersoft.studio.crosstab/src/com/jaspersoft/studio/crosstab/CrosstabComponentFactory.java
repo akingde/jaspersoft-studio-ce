@@ -308,7 +308,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				return new CreateCrosstabWhenNoDataCommand((MCrosstab) parent.getParent(), (MCrosstabWhenNoData) child);
 		}
 		if (child instanceof MGraphicElement && parent instanceof MCell)
-			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, newIndex);
+			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
 			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);
 		if (child instanceof MCrosstab) {
@@ -334,7 +334,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 				if (cell != null) {
 					MCell mcell = (MCell) ModelUtil.getNode(cell, mt);
-					return new CreateElementCommand(mcell, (MGraphicElement) child, location);
+					return new CreateElementCommand(mcell, (MGraphicElement) child, location, newIndex);
 				}
 			}
 		}

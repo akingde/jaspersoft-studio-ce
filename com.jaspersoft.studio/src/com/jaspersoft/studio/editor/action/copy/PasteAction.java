@@ -19,11 +19,13 @@
  */
 package com.jaspersoft.studio.editor.action.copy;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.SelectionAction;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -55,17 +57,22 @@ public class PasteAction extends SelectionAction {
 	}
 
 	private Command createPasteCommand(List<Object> selectedObjects) {
-		if (!selectedObjects.isEmpty() && selectedObjects.size() == 1) {
-			Object selection = selectedObjects.get(0);
+		for (Object selection : selectedObjects) {
 			if (selection instanceof EditPart) {
 				ANode n = (ANode) ((EditPart) selection).getModel();
 				if (n instanceof IPastable)
 					return new PasteCommand((IPastable) n);
 			} else if (selection instanceof IPastable)
 				return new PasteCommand((IPastable) selection);
+			else if (selection instanceof StructuredSelection) {
+				StructuredSelection s = (StructuredSelection) selection;
+				for (Iterator<?> it = s.iterator(); it.hasNext();) {
+					Object o = it.next();
+					if (o instanceof IPastable)
+						return new PasteCommand((IPastable) o);
+				}
+			}
 		}
-		int i = 0;
-		i++;
 		return null;
 	}
 

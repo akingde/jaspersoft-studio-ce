@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AdvancedPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -57,6 +58,9 @@ public class JDAdvancedSection extends AdvancedPropertySection implements Proper
 		data.top = new FormAttachment(0, 0);
 		data.bottom = new FormAttachment(100, 0);
 		page.getControl().setLayoutData(data);
+		IActionBars actionBars = atabbedPropertySheetPage.getSite().getActionBars();
+		page.makeContributions(actionBars.getMenuManager(), actionBars.getToolBarManager(),
+				actionBars.getStatusLineManager());
 	}
 
 	@Override

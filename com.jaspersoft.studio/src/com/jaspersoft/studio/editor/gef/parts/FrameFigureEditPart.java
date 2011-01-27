@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.list.part;
+package com.jaspersoft.studio.editor.gef.parts;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
@@ -12,14 +12,12 @@ import org.eclipse.gef.requests.CreateRequest;
 
 import com.jaspersoft.studio.editor.action.create.CreateElementAction;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
-import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
-import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 
-public class ListEditPart extends EditableFigureEditPart {
+public class FrameFigureEditPart extends FigureEditPart {
 
 	/*
 	 * (non-Javadoc)
@@ -73,11 +71,6 @@ public class ListEditPart extends EditableFigureEditPart {
 			}
 
 		});
-	}
-
-	@Override
-	public boolean isSelectable() {
-		return getParent() instanceof ReportPageEditPart;
 	}
 
 }

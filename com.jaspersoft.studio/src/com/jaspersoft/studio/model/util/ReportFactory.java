@@ -174,21 +174,22 @@ public class ReportFactory {
 			}
 		}
 
+		MBand detBand = null;
 		if (jd.getDetailSection() != null) {
 			JRBand[] bandsList = jd.getDetailSection().getBands();
 			if (bandsList != null)
 				for (int k = 0; k < bandsList.length; k++) {
 					if (bandsList[k] != null) {
-						MBand band = new MBand(report, bandsList[k], BandTypeEnum.DETAIL, -1);
-						createElementsForBand(band, bandsList[k].getChildren());
+						detBand = new MBand(report, bandsList[k], BandTypeEnum.DETAIL, -1);
+						createElementsForBand(detBand, bandsList[k].getChildren());
 						//
 						// for (JRElement element : bandsList[k].getElements())
 						// createNode(band, element, -1);
 					}
 				}
-		} else {
-			// what we do if null?
 		}
+		if (detBand == null)
+			new MBand(report, null, BandTypeEnum.DETAIL, -1);
 
 		if (jd.getGroupsList() != null) {
 			for (ListIterator<?> ij = jd.getGroupsList().listIterator(jd.getGroupsList().size()); ij.hasPrevious();) {

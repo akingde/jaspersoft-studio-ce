@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.editor.action.create;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;

@@ -27,7 +27,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -37,6 +40,7 @@ import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -52,6 +56,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * The Class ReportContainer.
@@ -291,6 +296,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
 		AbstractVisualEditor activeEditor = editors.get(newPageIndex);
+		activeEditor.setModel(activeEditor.getModel());
 
 		IEditorActionBarContributor contributor = parent.getEditorSite().getActionBarContributor();
 		if (contributor != null && contributor instanceof MultiPageEditorActionBarContributor) {
@@ -300,6 +306,26 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	}
 
 	public void openEditor(Object obj) {
+		if (getEditorInput() instanceof FileEditorInput) {
+			if (obj instanceof JRDesignSubreport) {
+				if (getEditorInput() instanceof FileEditorInput) {
+					JRDesignSubreport s = (JRDesignSubreport) obj;
+					if (s.getExpression() != null)
+						SelectionHelper.openEditor((FileEditorInput) getEditorInput(),
+								JRExpressionUtil.getSimpleExpressionText(s.getExpression()));
+				}
+				return;
+			}
+			if (obj instanceof JRDesignImage) {
+				if (getEditorInput() instanceof FileEditorInput) {
+					JRDesignImage s = (JRDesignImage) obj;
+					if (s.getExpression() != null)
+						SelectionHelper.openEditor((FileEditorInput) getEditorInput(),
+								JRExpressionUtil.getSimpleExpressionText(s.getExpression()));
+				}
+				return;
+			}
+		}
 		if (obj instanceof JasperDesign) {
 			setActivePage(0);
 		} else {
@@ -315,5 +341,4 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 			}
 		}
 	}
-
 }

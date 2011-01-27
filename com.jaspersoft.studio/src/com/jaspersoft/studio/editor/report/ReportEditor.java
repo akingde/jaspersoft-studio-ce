@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.editor.report;
 
+import java.util.List;
+
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
@@ -80,6 +82,12 @@ public class ReportEditor extends AbstractVisualEditor {
 
 		createAdditionalActions();
 		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(graphicalViewer));
+	}
+
+	@Override
+	protected List<String> getIgnorePalleteElements() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.list.figure;
 
+import org.eclipse.draw2d.XYLayout;
+
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
@@ -36,6 +38,7 @@ public class ListFigure extends FrameFigure {
 	 */
 	public ListFigure() {
 		super();
+		setLayoutManager(new XYLayout());
 	}
 
 	/*

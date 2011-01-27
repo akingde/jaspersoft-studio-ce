@@ -19,15 +19,24 @@
  */
 package com.jaspersoft.studio.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JrxmlEditor;
@@ -85,6 +94,31 @@ public class SelectionHelper {
 			ep.getViewer().reveal(ep);
 		}
 
+	}
+
+	public static final void openEditor(FileEditorInput editorInput, String path) {
+		try {
+			if (path != null) {
+				String rpath = editorInput.getPath().toPortableString();
+
+				String pathname = FileUtils.findRelativePath(rpath, path);
+
+				File fileToBeOpened = new File(pathname);
+
+				if (fileToBeOpened.exists() && fileToBeOpened.isFile()) {
+					IFileStore fileStore = EFS.getLocalFileSystem().getStore(fileToBeOpened.toURI());
+
+					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+					IDE.openEditorOnFileStore(page, fileStore);
+				}
+			}
+		} catch (PartInitException e) {
+			// Put your exception handler here if you wish to
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

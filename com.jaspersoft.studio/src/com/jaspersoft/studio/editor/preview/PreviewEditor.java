@@ -252,8 +252,10 @@ public class PreviewEditor extends JRPrintEditor {
 		if (prompts.isEmpty())
 			return Window.OK;
 		ParametersDialog pd = new ParametersDialog(getEditorSite().getShell(), prompts, jasperParameter);
-		int pdresult = pd.open();
-		return pdresult;
+		if (pd.canShowParameters()) {
+			return pd.open();
+		}
+		return Window.OK;
 	}
 
 	public void setNotRunning(boolean norun) {

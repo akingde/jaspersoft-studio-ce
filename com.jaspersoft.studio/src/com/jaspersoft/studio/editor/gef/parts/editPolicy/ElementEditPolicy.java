@@ -38,10 +38,9 @@ public class ElementEditPolicy extends ComponentEditPolicy {
 	 */
 	protected Command createDeleteCommand(GroupRequest request) {
 		Object parent = getHost().getParent().getModel();
-		if (parent instanceof ANode)
+		if (parent != null && parent instanceof ANode)
 			return OutlineTreeEditPartFactory.getDeleteCommand((ANode) parent, (ANode) getHost().getModel());
 		return null;
 	}
-	
-	
+
 }

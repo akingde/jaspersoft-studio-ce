@@ -19,9 +19,6 @@
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.FreeformLayeredPane;
@@ -32,8 +29,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
-import com.jaspersoft.studio.editor.java2d.J2DGraphics;
-import com.jaspersoft.studio.editor.java2d.J2DUtils;
 
 /**
  * The Class PageFigure.

@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.table;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +36,7 @@ import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -43,6 +46,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
@@ -113,15 +117,50 @@ public class TableComponentFactory implements IComponentFactory {
 				JasperDesign jasperDesign = parent.getJasperDesign();
 				TableManager tblManager = new TableManager(tbl, jasperDesign);
 				MTable mt = new MTable(parent, tbl, newIndex, tblManager);
-				if (parent instanceof MPage)
+				if (parent instanceof MPage) {
 					createTable(mt);
-				return mt;
+
+					// listen for datasets
+					final JasperDesign jd = mt.getJasperDesign();
+					final MTable finaltable = mt;
+					final PropertyChangeListener listener = new PropertyChangeListener() {
+
+						public void propertyChange(PropertyChangeEvent evt) {
+							Display.getCurrent().asyncExec(new Runnable() {
+
+								public void run() {
+									refreshTable(finaltable);
+								}
+							});
+
+						}
+					};
+					PropertyChangeListener dlistener = new PropertyChangeListener() {
+
+						public void propertyChange(PropertyChangeEvent evt) {
+							listenDatasets(jd, listener);
+						}
+					};
+					jd.getEventSupport().addPropertyChangeListener(JasperDesign.PROPERTY_DATASETS, dlistener);
+
+					listenDatasets(jd, listener);
+					return mt;
+				}
 			}
 		}
 		return null;
 	}
 
+	private static void listenDatasets(final JasperDesign jd, final PropertyChangeListener listener) {
+		for (Object jddt : jd.getDatasetsList()) {
+			((JRDesignDataset) jddt).getEventSupport()
+					.removePropertyChangeListener(JRDesignDataset.PROPERTY_GROUPS, listener);
+			((JRDesignDataset) jddt).getEventSupport().addPropertyChangeListener(JRDesignDataset.PROPERTY_GROUPS, listener);
+		}
+	}
+
 	public static void refreshTable(MTable mt) {
+
 		mt.removeChildren();
 		createTable(mt);
 	}
@@ -357,7 +396,7 @@ public class TableComponentFactory implements IComponentFactory {
 				return new CreateColumnCommand((MColumn) parent, (MColumn) child, newIndex);
 		}
 		if (child instanceof MGraphicElement && parent instanceof MCell)
-			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, newIndex);
+			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
 			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);
 		if (child instanceof MTable) {
@@ -389,7 +428,7 @@ public class TableComponentFactory implements IComponentFactory {
 					}
 				};
 				MCell mcell = (MCell) mv.getObject();
-				return new CreateElementCommand(mcell, (MGraphicElement) child, location);
+				return new CreateElementCommand(mcell, (MGraphicElement) child, location, newIndex);
 			}
 		}
 		return null;

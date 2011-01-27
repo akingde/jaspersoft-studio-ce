@@ -32,19 +32,11 @@ public class CreateElementCommand extends Command {
 	 * @param index
 	 *          the index
 	 */
-	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, int index) {
+	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Rectangle position, int index) {
 		super();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		this.jrCell = destNode.getCell();
 		this.index = index;
-		this.srcNode = srcNode;
-		this.jrColumn = (StandardBaseColumn) destNode.getValue();
-	}
-
-	public CreateElementCommand(MCell destNode, MGraphicElement srcNode, Rectangle position) {
-		super();
-		this.jrElement = (JRDesignElement) srcNode.getValue();
-		this.jrCell = destNode.getCell();
 		this.location = position;
 		this.srcNode = srcNode;
 		this.jrColumn = (StandardBaseColumn) destNode.getValue();
@@ -61,6 +53,10 @@ public class CreateElementCommand extends Command {
 				if (location == null)
 					location = new Rectangle(0, 0, Math.min(srcNode.getDefaultWidth(), jrColumn.getWidth() - location.x),
 							Math.min(srcNode.getDefaultHeight(), jrCell.getHeight() - location.y));
+				if (location.width < 0)
+					location.width = srcNode.getDefaultWidth();
+				if (location.height < 0)
+					location.height = srcNode.getDefaultHeight();
 				jrElement.setX(location.x);
 				jrElement.setY(location.y);
 				jrElement.setWidth(location.width);

@@ -31,9 +31,11 @@ import com.jaspersoft.studio.editor.gef.parts.text.StaticTextFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MImage;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.MSubreport;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
@@ -70,6 +72,11 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 				editPart = new StaticTextFigureEditPart();
 			} else if (model instanceof MTextField) {
 				editPart = new TextFieldFigureEditPart();
+			} else if (model instanceof MSubreport) {
+				editPart = new SubreportFigureEditPart();
+			} else if (model instanceof MImage) {
+				editPart = new ImageFigureEditPart();
+
 			} else if (model instanceof IGraphicElement) {
 				editPart = new FigureEditPart();
 			}

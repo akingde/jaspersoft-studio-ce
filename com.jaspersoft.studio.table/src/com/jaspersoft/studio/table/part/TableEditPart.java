@@ -5,6 +5,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPolicy;
 
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
+import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MPage;
@@ -31,6 +32,11 @@ public class TableEditPart extends EditableFigureEditPart {
 			Dimension dr = rect.getSize();
 			rect.setSize(Math.max(dr.width, d.width) + 4, Math.max(dr.height, d.height) + 4);
 		}
+	}
+
+	@Override
+	public boolean isSelectable() {
+		return getParent() instanceof ReportPageEditPart;
 	}
 
 }

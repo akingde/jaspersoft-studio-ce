@@ -37,11 +37,11 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.MEllipse;
 import com.jaspersoft.studio.model.MFrame;
-import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MImage;
 import com.jaspersoft.studio.model.MLine;
 import com.jaspersoft.studio.model.MRectangle;
 import com.jaspersoft.studio.model.MSubreport;
+import com.jaspersoft.studio.model.genericElement.MGenericElement;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.model.textfield.MDate;
@@ -62,11 +62,11 @@ public class JDPaletteFactory {
 	 * 
 	 * @return the palette root
 	 */
-	public static PaletteRoot createPalette() {
+	public static PaletteRoot createPalette(List<String> ignore) {
 		PaletteRoot paletteRoot = new PaletteRoot();
 		createToolBar(paletteRoot);
-		createElements(paletteRoot);
-		createFields(paletteRoot);
+		createElements(paletteRoot, ignore);
+		createFields(paletteRoot, ignore);
 
 		return paletteRoot;
 	}
@@ -82,7 +82,7 @@ public class JDPaletteFactory {
 	 */
 	private static PaletteEntry createJDEntry(IIconDescriptor iconDescriptor, Class<?> aclass) {
 		return new CombinedTemplateCreationEntry(iconDescriptor.getTitle(), iconDescriptor.getDescription(), aclass,
-				new JDPaletteCreationFactory(aclass), iconDescriptor.getIcon16(), iconDescriptor.getIcon16());
+				new JDPaletteCreationFactory(aclass), iconDescriptor.getIcon16(), iconDescriptor.getIcon32());
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class JDPaletteFactory {
 	 * @param paletteRoot
 	 *          the palette root
 	 */
-	public static void createElements(PaletteRoot paletteRoot) {
+	public static void createElements(PaletteRoot paletteRoot, List<String> ignore) {
 		PaletteDrawer drawer = new PaletteDrawer("Elements",
 				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/elementgroup-16.png"));
 		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
@@ -105,15 +105,18 @@ public class JDPaletteFactory {
 		entries.add(createJDEntry(MFrame.getIconDescriptor(), MFrame.class));
 		entries.add(createJDEntry(MBreak.getIconDescriptor(), MBreak.class));
 		entries.add(createJDEntry(MSubreport.getIconDescriptor(), MSubreport.class));
-		entries.add(createJDEntry(MGraphicElement.getIconDescriptor(), MGraphicElement.class));
+		entries.add(createJDEntry(MGenericElement.getIconDescriptor(), MGenericElement.class));
 
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<Class<?>> lp = m.getPaletteEntries();
 		for (Class<?> mn : lp) {
 			if (ANode.class.isAssignableFrom(mn)) {
 				try {
-					entries.add(createJDEntry(
-							(IIconDescriptor) mn.getDeclaredMethod("getIconDescriptor", new Class[0]).invoke(mn, new Object[0]), mn));
+					if (ignore == null || !ignore.contains(mn.getCanonicalName()))
+						entries
+								.add(createJDEntry(
+										(IIconDescriptor) mn.getDeclaredMethod("getIconDescriptor", new Class[0]).invoke(mn, new Object[0]),
+										mn));
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (SecurityException e) {
@@ -138,7 +141,7 @@ public class JDPaletteFactory {
 	 * @param paletteRoot
 	 *          the palette root
 	 */
-	public static void createFields(PaletteRoot paletteRoot) {
+	public static void createFields(PaletteRoot paletteRoot, List<String> ignore) {
 		PaletteDrawer drawer = new PaletteDrawer("Fields",
 				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/fields-16.png"));
 		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
