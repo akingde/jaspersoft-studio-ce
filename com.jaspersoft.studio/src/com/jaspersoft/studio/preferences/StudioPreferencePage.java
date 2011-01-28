@@ -19,11 +19,11 @@
  */
 package com.jaspersoft.studio.preferences;
 
-import org.eclipse.jface.preference.*;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
 
 /**
  * This class represents a preference page that is contributed to the Preferences dialog. By subclassing
@@ -48,8 +48,8 @@ public class StudioPreferencePage extends FieldEditorPreferencePage implements I
 	 */
 	public void createFieldEditors() {
 		// addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, "&Directory preference:", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID,
-				Messages.StudioPreferencePage_example_text, getFieldEditorParent()));
+		// addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID,
+		// Messages.StudioPreferencePage_example_text, getFieldEditorParent()));
 
 		// addField(new RadioGroupFieldEditor(PreferenceConstants.P_CHOICE, "An example of a multiple-choice preference", 1,
 		// new String[][] { { "&Choice 1", "choice1" }, { "C&hoice 2", "choice2" } }, getFieldEditorParent()));

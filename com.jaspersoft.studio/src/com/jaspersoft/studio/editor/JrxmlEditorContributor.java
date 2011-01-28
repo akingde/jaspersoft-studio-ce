@@ -31,7 +31,6 @@ import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomInRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomOutRetargetAction;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -40,7 +39,6 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
@@ -49,7 +47,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IDEActionFactory;
 import org.eclipse.ui.internal.handlers.IActionCommandMappingService;
 import org.eclipse.ui.menus.CommandContributionItem;
@@ -84,8 +81,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	/** The registry. */
 	private ActionRegistry registry = new ActionRegistry();
 
-	/** The sample action. */
-	private Action sampleAction;
 
 	/** The zoom combo. */
 	private RZoomComboContributionItem zoomCombo;
@@ -275,19 +270,19 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * Creates the actions.
 	 */
 	private void createActions() {
-		sampleAction = new Action() {
-			public void run() {
-				MessageDialog
-						.openInformation(
-								null,
-								"Jasper Studio", Messages.JrxmlEditorContributor_sample_action_executed); //$NON-NLS-1$
-			}
-		};
-		sampleAction.setText(Messages.JrxmlEditorContributor_sample_action);
-		sampleAction
-				.setToolTipText(Messages.JrxmlEditorContributor_sample_action_tool_tip);
-		sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-				.getImageDescriptor(IDE.SharedImages.IMG_OBJS_TASK_TSK));
+		// sampleAction = new Action() {
+		// public void run() {
+		// MessageDialog
+		// .openInformation(
+		// null,
+		//								"Jasper Studio", Messages.JrxmlEditorContributor_sample_action_executed); //$NON-NLS-1$
+		// }
+		// };
+		// sampleAction.setText(Messages.JrxmlEditorContributor_sample_action);
+		// sampleAction
+		// .setToolTipText(Messages.JrxmlEditorContributor_sample_action_tool_tip);
+		// sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
+		// .getImageDescriptor(IDE.SharedImages.IMG_OBJS_TASK_TSK));
 	}
 
 	/**
@@ -363,10 +358,10 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 
-		IMenuManager menu = new MenuManager(
-				Messages.JrxmlEditorContributor_editor_menu);
-		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
-		menu.add(sampleAction);
+		// IMenuManager menu = new MenuManager(
+		// Messages.JrxmlEditorContributor_editor_menu);
+		// manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
+		// menu.add(sampleAction);
 
 	}
 
@@ -415,7 +410,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	@Override
 	public void contributeToStatusLine(IStatusLineManager statusLineManager) {
-		statusLineManager.setMessage("hello"); //$NON-NLS-1$
+		statusLineManager.setMessage(""); //$NON-NLS-1$
 	}
 
 	/**
