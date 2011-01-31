@@ -39,6 +39,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * The location section on the location tab.
@@ -111,8 +112,8 @@ public class LocationSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		if (element != null) {
-			xText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_X)).intValue());
-			yText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_Y)).intValue());
+			UIUtils.setSpinnerSelection(xText, element.getPropertyValue(JRDesignElement.PROPERTY_X)) ;
+			UIUtils.setSpinnerSelection(yText, element.getPropertyValue(JRDesignElement.PROPERTY_Y)) ;
 			positionType.select(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_POSITION_TYPE)).intValue());
 		}
 		isRefreshing = false;

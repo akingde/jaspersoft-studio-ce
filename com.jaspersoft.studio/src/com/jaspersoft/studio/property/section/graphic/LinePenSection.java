@@ -51,6 +51,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * The location section on the location tab.
@@ -163,11 +164,9 @@ public class LinePenSection extends AbstractSection {
 
 			lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
 			Float propertyValue = (Float) element.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
-			if (propertyValue != null)
-				lineWidth.setSelection((int) (propertyValue.doubleValue() * Math.pow(10, 1)));
-			else
-				lineWidth.setSelection(0);
-
+			
+			UIUtils.setSpinnerSelection( lineWidth , null, (int)((propertyValue == null) ? 0 : propertyValue.doubleValue() * Math.pow(10, 1)));
+			
 			lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
 		}
 		isRefreshing = false;

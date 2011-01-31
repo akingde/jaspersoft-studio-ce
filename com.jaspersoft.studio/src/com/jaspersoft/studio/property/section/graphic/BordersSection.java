@@ -68,6 +68,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * The location section on the location tab.
@@ -412,11 +413,10 @@ public class BordersSection extends AbstractSection {
 			Float propertyValue = (Float) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
 			Spinner lineWidth = lineWidthMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_WIDTH); //$NON-NLS-1$
 			if (lineWidth != null && !lineWidth.isDisposed())
-				if (propertyValue != null)
-					lineWidth.setSelection((int) (propertyValue.doubleValue() * Math.pow(10, 1)));
-				else
-					lineWidth.setSelection(0);
-
+			{
+				UIUtils.setSpinnerSelection( lineWidth , null, (int)((propertyValue == null) ? 0 : propertyValue.doubleValue() * Math.pow(10, 1)));
+			}
+			
 			CCombo lineStyle = lineStyleMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_STYLE); //$NON-NLS-1$
 			if (lineStyle != null && !lineStyle.isDisposed())
 				lineStyle.select(((Integer) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());

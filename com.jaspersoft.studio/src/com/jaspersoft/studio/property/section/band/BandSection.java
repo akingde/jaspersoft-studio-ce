@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.property.section.band;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.type.SplitTypeEnum;
 
 import org.eclipse.swt.SWT;
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * The location section on the location tab.
@@ -101,9 +103,7 @@ public class BandSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		if (element != null && element.getValue() != null) {
-			Integer pheight = (Integer) element.getPropertyValue(JRDesignBand.PROPERTY_HEIGHT);
-			if (pheight != null)
-				height.setSelection(pheight.intValue());
+			UIUtils.setSpinnerSelection(height, element.getPropertyValue(JRDesignBand.PROPERTY_HEIGHT));
 			Integer splitTypeInt = (Integer) element.getPropertyValue(JRDesignBand.PROPERTY_SPLIT_TYPE);
 			if (splitTypeInt != null)
 				splitType.select(splitTypeInt.intValue());

@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.property.section.graphic;
 
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.type.StretchTypeEnum;
 
@@ -39,6 +40,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * The location section on the location tab.
@@ -115,8 +117,8 @@ public class SizeSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		if (element != null) {
-			widthText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_WIDTH)).intValue());
-			heightText.setSelection(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT)).intValue());
+			UIUtils.setSpinnerSelection(widthText, element.getPropertyValue(JRDesignElement.PROPERTY_WIDTH));
+			UIUtils.setSpinnerSelection(heightText, element.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT));
 			stretchType.select(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_STRETCH_TYPE)).intValue());
 		}
 		isRefreshing = false;

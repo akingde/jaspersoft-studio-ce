@@ -38,6 +38,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * The location section on the location tab.
@@ -113,8 +114,9 @@ public class PageSizeSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		if (element != null) {
-			height.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_PAGE_HEIGHT)).intValue());
-			width.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_PAGE_WIDTH)).intValue());
+			
+			UIUtils.setSpinnerSelection(height, element.getPropertyValue(JasperDesign.PROPERTY_PAGE_HEIGHT), 0);
+			UIUtils.setSpinnerSelection(width, element.getPropertyValue(JasperDesign.PROPERTY_PAGE_WIDTH), 0);
 
 			Integer orientation = (Integer) element.getPropertyValue(JasperDesign.PROPERTY_ORIENTATION);
 			if (orientation != null) {

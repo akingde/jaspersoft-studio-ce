@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.property.section.report;
 
+import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
@@ -35,6 +36,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /**
  * The location section on the location tab.
@@ -125,10 +127,12 @@ public class PageMarginSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		if (element != null) {
-			bottomMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_BOTTOM_MARGIN)).intValue());
-			topMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_TOP_MARGIN)).intValue());
-			leftMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_LEFT_MARGIN)).intValue());
-			rightMargin.setSelection(((Integer) element.getPropertyValue(JasperDesign.PROPERTY_RIGHT_MARGIN)).intValue());
+			
+			UIUtils.setSpinnerSelection(bottomMargin, element.getPropertyValue(JasperDesign.PROPERTY_BOTTOM_MARGIN), 0);
+			UIUtils.setSpinnerSelection(topMargin, element.getPropertyValue(JasperDesign.PROPERTY_TOP_MARGIN), 0);
+			UIUtils.setSpinnerSelection(leftMargin, element.getPropertyValue(JasperDesign.PROPERTY_LEFT_MARGIN), 0);
+			UIUtils.setSpinnerSelection(rightMargin, element.getPropertyValue(JasperDesign.PROPERTY_RIGHT_MARGIN), 0);
+
 		}
 		isRefreshing = false;
 	}
