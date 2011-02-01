@@ -47,8 +47,8 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.util.JRFontUtil;
 import net.sf.jasperreports.engine.util.JRProperties;
-import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
+import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 
 import org.eclipse.draw2d.geometry.Point;
@@ -68,16 +68,16 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
  */
 public class ModelUtils {
 
-	private static Map<String, String> mp = new HashMap<String, String>();
-
 	public static String[] getDataSources(JasperDesign jd) {
-		String[] res = new String[jd.getDatasetsList().size() + 1];
+		List<?> datasetsList = jd.getDatasetsList();
+		String[] res = new String[datasetsList.size() + 1];
 		res[0] = jd.getMainDataset().getName();
-		for (int i = 0; i < jd.getDatasetsList().size(); i++)
-			res[i + 1] = ((JRDataset) jd.getDatasetsList().get(i)).getName();
-
+		for (int i = 0; i < datasetsList.size(); i++)
+			res[i + 1] = ((JRDataset) datasetsList.get(i)).getName();
 		return res;
 	}
+
+	private static Map<String, String> mp = new HashMap<String, String>();
 
 	/**
 	 * Return the ordered list of bands available in the current report.
