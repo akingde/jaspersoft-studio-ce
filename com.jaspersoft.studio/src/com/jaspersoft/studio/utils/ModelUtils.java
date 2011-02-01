@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
@@ -68,6 +69,15 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 public class ModelUtils {
 
 	private static Map<String, String> mp = new HashMap<String, String>();
+
+	public static String[] getDataSources(JasperDesign jd) {
+		String[] res = new String[jd.getDatasetsList().size() + 1];
+		res[0] = jd.getMainDataset().getName();
+		for (int i = 0; i < jd.getDatasetsList().size(); i++)
+			res[i + 1] = ((JRDataset) jd.getDatasetsList().get(i)).getName();
+
+		return res;
+	}
 
 	/**
 	 * Return the ordered list of bands available in the current report.
