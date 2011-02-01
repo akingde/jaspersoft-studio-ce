@@ -29,6 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * The Class NodeIconDescriptor.
@@ -158,7 +159,8 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getDescription()
 	 */
 	public String getDescription() {
-		return this.ICON_DESCRIPTION;
+		return Messages.Tag(this.ICON_DESCRIPTION, this.ICON_TITLE, Messages.DESCRIPTION);
+		//return this.ICON_DESCRIPTION;
 	}
 
 	/*
@@ -204,7 +206,8 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getTitle()
 	 */
 	public String getTitle() {
-		return this.ICON_TITLE;
+		return Messages.Tag(this.ICON_TITLE);
+		//return this.ICON_TITLE;
 	}
 
 	/*
@@ -213,7 +216,8 @@ public class NodeIconDescriptor implements IIconDescriptor {
 	 * @see com.jaspersoft.studio.model.IIconDescriptor#getToolTip()
 	 */
 	public String getToolTip() {
-		return this.ICON_TOOLTIP;
+		return Messages.Tag(this.ICON_TOOLTIP, this.ICON_TITLE, Messages.TOOLTIP);
+		//return this.ICON_TOOLTIP;
 	}
 
 }

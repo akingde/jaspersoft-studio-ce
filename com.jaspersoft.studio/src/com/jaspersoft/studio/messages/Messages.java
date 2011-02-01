@@ -1,9 +1,17 @@
 package com.jaspersoft.studio.messages;
 
+import java.lang.reflect.Field;
+
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.messages.messages"; //$NON-NLS-1$
+	private static Class<Messages> messages = Messages.class;
+	private static Field field;
+	public static final int NONE 				= 0;
+	public static final int DESCRIPTION = 1;
+	public static final int TOOLTIP 		= 2;
+	
 	public static String common_1_1_2;
 	public static String common_add;
 	public static String common_allsectionsnodetail;
@@ -11,12 +19,20 @@ public class Messages extends NLS {
 	public static String common_average;
 	public static String common_backcolor;
 	public static String common_band;
+	public static String common_barcode_description;
+	public static String common_barcode;
 	public static String common_blankpage;
 	public static String common_blank_when_null;
+	public static String common_blank;
 	public static String common_bold;
 	public static String common_bottomup;
 	public static String common_bottom;
+	public static String common_break_description;
+	public static String common_break;
+	public static String common_category_series;
 	public static String common_center;
+	public static String common_chart_description;
+	public static String common_chart;
 	public static String common_class;
 	public static String common_clip;
 	public static String common_collateatbottom;
@@ -25,9 +41,14 @@ public class Messages extends NLS {
 	public static String common_connection_expression;
 	public static String common_copy;
 	public static String common_count;
+	public static String common_crosstab_description;
+	public static String common_crosstab;
+	public static String common_current_date_description;
+	public static String common_current_date;
 	public static String common_custom;
 	public static String common_cut;
 	public static String common_dashed;
+	public static String common_dataset;
 	public static String common_datasource_editor;
 	public static String common_datasource_name;
 	public static String common_date_format;
@@ -37,6 +58,9 @@ public class Messages extends NLS {
 	public static String common_dotted;
 	public static String common_double;
 	public static String common_driver_class;
+	public static String common_element_group;
+	public static String common_ellipse_description;
+	public static String common_ellipse;
 	public static String common_empty;
 	public static String common_error_creating_nested_visual_editor;
 	public static String common_error_message_unique_properties;
@@ -44,6 +68,7 @@ public class Messages extends NLS {
 	public static String common_evaluation_time;
 	public static String common_expression;
 	public static String common_expression_editor;
+	public static String common_fields;
 	public static String common_field_delimiter;
 	public static String common_file_name;
 	public static String common_fill;
@@ -57,12 +82,19 @@ public class Messages extends NLS {
 	public static String common_font_size;
 	public static String common_forceatbottom;
 	public static String common_forecolor;
+	public static String common_frame_description;
+	public static String common_frame;
+	public static String common_generic_description;
+	public static String common_generic;
 	public static String common_graphic;
 	public static String common_group;
 	public static String common_height;
 	public static String common_highest;
 	public static String common_horizontal;
 	public static String common_horizontal_alignment;
+	public static String common_icon;
+	public static String common_image_description;
+	public static String common_image;
 	public static String common_immediate;
 	public static String common_increment_group;
 	public static String common_increment_type;
@@ -76,12 +108,17 @@ public class Messages extends NLS {
 	public static String common_left;
 	public static String common_line_box;
 	public static String common_line_color;
+	public static String common_line_description;
 	public static String common_line_pen;
 	public static String common_line_spacing;
 	public static String common_line_style;
+	public static String common_line;
+	public static String common_list_description;
+	public static String common_list;
 	public static String common_localanchor;
 	public static String common_localpage;
 	public static String common_lowest;
+	public static String common_ltr;
 	public static String common_middle;
 	public static String common_name;
 	public static String common_nodatasection;
@@ -97,6 +134,10 @@ public class Messages extends NLS {
 	public static String common_order;
 	public static String common_orphan_child;
 	public static String common_padding;
+	public static String common_page_number_description;
+	public static String common_page_number;
+	public static String common_page_x_of_y_description;
+	public static String common_page_x_of_y;
 	public static String common_page;
 	public static String common_parameters;
 	public static String common_parameters_map_expression;
@@ -107,6 +148,8 @@ public class Messages extends NLS {
 	public static String common_pen_color;
 	public static String common_pen_style;
 	public static String common_pen_width;
+	public static String common_percentage_description;
+	public static String common_percentage;
 	public static String common_portrait;
 	public static String common_position_type;
 	public static String common_prevent;
@@ -118,6 +161,8 @@ public class Messages extends NLS {
 	public static String common_realheight;
 	public static String common_realsize;
 	public static String common_record_delimiter;
+	public static String common_rectangle_description;
+	public static String common_rectangle;
 	public static String common_reference;
 	public static String common_relativetobandheight;
 	public static String common_relativetotallestobject;
@@ -131,6 +176,8 @@ public class Messages extends NLS {
 	public static String common_return_values;
 	public static String common_right;
 	public static String common_rotation;
+	public static String common_rtl;
+	public static String common_scriptlets;
 	public static String common_show_grid;
 	public static String common_single;
 	public static String common_size;
@@ -138,27 +185,42 @@ public class Messages extends NLS {
 	public static String common_snap_to_grid;
 	public static String common_snap_to_guides;
 	public static String common_solid;
+	public static String common_sort_fields;
 	public static String common_sort_field_editor;
 	public static String common_split_type;
 	public static String common_stackatbottom;
 	public static String common_standarddeviation;
+	public static String common_static_text_description;
+	public static String common_static_text;
 	public static String common_stretch_type;
 	public static String common_stretch;
 	public static String common_strike_trough;
+	public static String common_styles;
+	public static String common_subreport_description;
 	public static String common_subreport_parameters;
+	public static String common_subreport;
 	public static String common_sum;
 	public static String common_system;
+	public static String common_table_description;
 	public static String common_table_is_empty;
+	public static String common_table;
+	public static String common_text_field_description;
+	public static String common_text_field;
 	public static String common_text;
 	public static String common_this_is_not_an_integer_number;
+	public static String common_time_description;
+	public static String common_time;
 	public static String common_topdown;
 	public static String common_top;
+	public static String common_total_pages_description;
+	public static String common_total_pages;
 	public static String common_transparent;
 	public static String common_underline;
 	public static String common_upsidedown;
 	public static String common_username;
 	public static String common_using_cache;
 	public static String common_value_class_name;
+	public static String common_variables;
 	public static String common_variance;
 	public static String common_vertical;
 	public static String common_vertical_alignment;
@@ -266,7 +328,6 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_element_design_border_style;
 	public static String DesignerPreferencePage_fancy_shadow;
 	public static String DesignerPreferencePage_page_border_style;
-	public static String DesignerPreferencePage_rectangle;
 	public static String DesignerPreferencePage_simple_shadow;
 	public static String DoubleCellEditorValidator_this_is_not_a_double_number;
 	public static String DTPDatasourcePage_description;
@@ -294,6 +355,7 @@ public class Messages extends NLS {
 	public static String JDBCDatasourcePage_jars;
 	public static String JDBCDatasourcePage_jdbc_datasource;
 	public static String JDBCDatasourcePage_test_connection;
+	public static String JDPaletteFactory_elements;
 	public static String JDReportOutlineView_show_outline_tool_tip;
 	public static String JDReportOutlineView_show_overview_tool_tip;
 	public static String JRExpressionPage_description;
@@ -561,7 +623,6 @@ public class Messages extends NLS {
 	public static String MScriptlet_name_description;
 	public static String MSortField_name_description;
 	public static String MSortField_order_description;
-	public static String MStaticText_static_text;
 	public static String MStaticText_text_description;
 	public static String MStyle_backcolor_description;
 	public static String MStyle_blank_when_null_description;
@@ -667,9 +728,7 @@ public class Messages extends NLS {
 	public static String PatternPage_description;
 	public static String PatternPage_format_pattern;
 	public static String PatternPage_number;
-	public static String PatternPage_percentage;
 	public static String PatternPage_scientific;
-	public static String PatternPage_time;
 	public static String PercentagePattern_description;
 	public static String PreviewEditor_connection_could_not_be_established;
 	public static String PreviewEditor_fill_report;
@@ -761,5 +820,31 @@ public class Messages extends NLS {
 	}
 
 	private Messages() {
+	}
+	
+	public static String Tag(String taggedString) {
+		String str = taggedString.toLowerCase().replaceAll(" ", "_"); //$NON-NLS-1$ //$NON-NLS-2$
+		try {
+		  field = messages.getField("common_" + str); //$NON-NLS-1$
+			return field.get(null).toString();
+		} catch (Exception e) {
+			System.out.println("Messages.class: No such field common_" + str); //$NON-NLS-1$
+			return taggedString;
+		}
+	}
+	
+	public static String Tag(String taggedString, String key, int category) {
+		String str = key.toLowerCase().replaceAll(" ", "_"); //$NON-NLS-1$ //$NON-NLS-2$
+		try {
+			if (category == DESCRIPTION || category == TOOLTIP) {
+				field = messages.getField("common_" + str + "_description"); //$NON-NLS-1$ //$NON-NLS-2$
+			} else {
+				field = messages.getField("common_" + str); //$NON-NLS-1$
+			}
+			return field.get(null).toString();
+		} catch (Exception e) {
+			System.out.println("Messages.class: No such field common_" + str + "_description"); //$NON-NLS-1$ //$NON-NLS-2$
+			return taggedString;
+		}
 	}
 }

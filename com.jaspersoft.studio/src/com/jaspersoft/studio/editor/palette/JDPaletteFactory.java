@@ -33,6 +33,7 @@ import org.eclipse.gef.palette.SelectionToolEntry;
 
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.MEllipse;
@@ -92,8 +93,8 @@ public class JDPaletteFactory {
 	 *          the palette root
 	 */
 	public static void createElements(PaletteRoot paletteRoot, List<String> ignore) {
-		PaletteDrawer drawer = new PaletteDrawer("Elements",
-				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/elementgroup-16.png"));
+		PaletteDrawer drawer = new PaletteDrawer(Messages.JDPaletteFactory_elements,
+				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/elementgroup-16.png")); //$NON-NLS-1$
 		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
 
 		entries.add(createJDEntry(MEllipse.getIconDescriptor(), MEllipse.class));
@@ -115,7 +116,7 @@ public class JDPaletteFactory {
 					if (ignore == null || !ignore.contains(mn.getCanonicalName()))
 						entries
 								.add(createJDEntry(
-										(IIconDescriptor) mn.getDeclaredMethod("getIconDescriptor", new Class[0]).invoke(mn, new Object[0]),
+										(IIconDescriptor) mn.getDeclaredMethod("getIconDescriptor", new Class[0]).invoke(mn, new Object[0]), //$NON-NLS-1$
 										mn));
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
@@ -142,8 +143,8 @@ public class JDPaletteFactory {
 	 *          the palette root
 	 */
 	public static void createFields(PaletteRoot paletteRoot, List<String> ignore) {
-		PaletteDrawer drawer = new PaletteDrawer("Fields",
-				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/fields-16.png"));
+		PaletteDrawer drawer = new PaletteDrawer(Messages.common_fields,
+				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/fields-16.png")); //$NON-NLS-1$
 		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
 		entries.add(createJDEntry(MPageNumber.getIconDescriptor(), MPageNumber.class));
 		entries.add(createJDEntry(MTotalPages.getIconDescriptor(), MTotalPages.class));
@@ -163,7 +164,7 @@ public class JDPaletteFactory {
 	 *          the palette root
 	 */
 	public static void createToolBar(PaletteRoot paletteRoot) {
-		PaletteToolbar paletteToolbar = new PaletteToolbar("toolbar");
+		PaletteToolbar paletteToolbar = new PaletteToolbar("toolbar"); //$NON-NLS-1$
 		paletteToolbar.add(new SelectionToolEntry());
 		paletteToolbar.add(new MarqueeToolEntry());
 		paletteRoot.add(paletteToolbar);

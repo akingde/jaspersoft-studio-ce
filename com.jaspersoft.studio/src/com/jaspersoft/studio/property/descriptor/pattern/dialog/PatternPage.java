@@ -195,7 +195,7 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 		if (numberPatterns) {
 			map.put(Messages.PatternPage_number, new NumericPattern(parent));
 			map.put(Messages.PatternPage_currency, new CurrencyPattern(parent));
-			map.put(Messages.PatternPage_percentage, new PercentagePattern(parent));
+			map.put(Messages.common_percentage, new PercentagePattern(parent));
 			map.put(Messages.PatternPage_scientific, new ScientificPattern(parent));
 		}
 	}
@@ -203,7 +203,7 @@ public class PatternPage extends WizardPage implements PropertyChangeListener {
 	private void createDatePatterns(Composite parent) {
 		if (datePatterns) {
 			map.put(Messages.PatternPage_date, new DatePattern(parent));
-			map.put(Messages.PatternPage_time, new TimePattern(parent));
+			map.put(Messages.common_time, new TimePattern(parent));
 		}
 	}
 
