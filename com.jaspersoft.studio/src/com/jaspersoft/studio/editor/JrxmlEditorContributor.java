@@ -81,7 +81,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	/** The registry. */
 	private ActionRegistry registry = new ActionRegistry();
 
-
 	/** The zoom combo. */
 	private RZoomComboContributionItem zoomCombo;
 
@@ -135,17 +134,14 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		// GEFMessages.ToggleRulerVisibility_Label
 		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_RULER_VISIBILITY,
 				Messages.JrxmlEditorContributor_show_ruler, IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID,
-				Messages.common_snap_to_guides, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SnapToGuidesAction.ID, Messages.common_snap_to_guides, IAction.AS_CHECK_BOX));
 
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY,
-				Messages.common_show_grid, IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY,
-				Messages.common_snap_to_geometry, IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SnapToGridAction.ID,
-				Messages.common_snap_to_grid, IAction.AS_CHECK_BOX));
-		addRetargetAction(new RetargetAction(SizeGridAction.ID,
-				Messages.JrxmlEditorContributor_grid_size));
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_GRID_VISIBILITY, Messages.common_show_grid,
+				IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY, Messages.common_snap_to_geometry,
+				IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SnapToGridAction.ID, Messages.common_snap_to_grid, IAction.AS_CHECK_BOX));
+		addRetargetAction(new RetargetAction(SizeGridAction.ID, Messages.JrxmlEditorContributor_grid_size));
 	}
 
 	/**
@@ -343,8 +339,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 			manager.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);
 		}
 
-		MenuManager viewMenu = new MenuManager(
-				Messages.JrxmlEditorContributor_view);
+		MenuManager viewMenu = new MenuManager(Messages.JrxmlEditorContributor_view);
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
 		viewMenu.add(new Separator());
@@ -439,8 +434,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getCutItem() {
 		return getItem(ActionFactory.CUT.getId(), ActionFactory.CUT.getCommandId(), ISharedImages.IMG_TOOL_CUT,
-				ISharedImages.IMG_TOOL_CUT_DISABLED, Messages.common_cut, Messages.common_cut,
-				null);
+				ISharedImages.IMG_TOOL_CUT_DISABLED, Messages.common_cut, Messages.common_cut, null);
 	}
 
 	/**
@@ -450,8 +444,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getCopyItem() {
 		return getItem(ActionFactory.COPY.getId(), ActionFactory.COPY.getCommandId(), ISharedImages.IMG_TOOL_COPY,
-				ISharedImages.IMG_TOOL_COPY_DISABLED, Messages.common_copy,
-				Messages.common_copy, null);
+				ISharedImages.IMG_TOOL_COPY_DISABLED, Messages.common_copy, Messages.common_copy, null);
 	}
 
 	/**
@@ -461,8 +454,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	private IContributionItem getPasteItem() {
 		return getItem(ActionFactory.PASTE.getId(), ActionFactory.PASTE.getCommandId(), ISharedImages.IMG_TOOL_PASTE,
-				ISharedImages.IMG_TOOL_PASTE_DISABLED, Messages.common_paste,
-				Messages.common_paste, null);
+				ISharedImages.IMG_TOOL_PASTE_DISABLED, Messages.common_paste, Messages.common_paste, null);
 	}
 
 	/**
