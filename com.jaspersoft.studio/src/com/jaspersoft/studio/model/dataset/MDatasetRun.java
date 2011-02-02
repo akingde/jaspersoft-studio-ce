@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.model;
+package com.jaspersoft.studio.model.dataset;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +15,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;

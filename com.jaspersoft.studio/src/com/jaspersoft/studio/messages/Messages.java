@@ -810,6 +810,9 @@ public class Messages extends NLS {
 	public static String TextSection_line_spacing_tool_tip;
 	public static String TextSection_rotation_tool_tip;
 	public static String TimePattern_description;
+	public static String WizardDatasetPage_0;
+	public static String WizardDatasetPage_1;
+	public static String WizardDatasetPage_2;
 	public static String XLSDatasourcePage_description;
 	public static String XLSDatasourcePage_xls_datasource;
 	public static String XMLDatasourcePage_description;

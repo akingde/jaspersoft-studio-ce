@@ -204,7 +204,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * @see com.jaspersoft.studio.model.IGraphicElement#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
-		return new JRDesignGenericElement(jasperDesign);
+		JRDesignGenericElement jrDesignGenericElement = new JRDesignGenericElement(jasperDesign);
+		return jrDesignGenericElement;
 	}
 
 	/*

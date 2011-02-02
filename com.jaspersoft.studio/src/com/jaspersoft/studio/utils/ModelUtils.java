@@ -71,7 +71,7 @@ public class ModelUtils {
 	public static String[] getDataSources(JasperDesign jd) {
 		List<?> datasetsList = jd.getDatasetsList();
 		String[] res = new String[datasetsList.size() + 1];
-		res[0] = jd.getMainDataset().getName();
+		res[0] = "[Main Dataset]";
 		for (int i = 0; i < datasetsList.size(); i++)
 			res[i + 1] = ((JRDataset) datasetsList.get(i)).getName();
 		return res;
