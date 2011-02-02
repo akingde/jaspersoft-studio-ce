@@ -85,7 +85,8 @@ public class CreateRowGroupCommand extends Command {
 	public void execute() {
 		if (jrGroup == null) {
 			this.jrGroup = new JRDesignCrosstabRowGroup();
-			this.jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(), Messages.CreateRowGroupCommand_row_group));
+			this.jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(),
+					Messages.CreateRowGroupCommand_row_group));
 			this.jrGroup.setWidth(100);
 
 			JRDesignExpression exp = new JRDesignExpression();
@@ -98,9 +99,9 @@ public class CreateRowGroupCommand extends Command {
 			JRDesignCellContents headerCell = new JRDesignCellContents();
 			jrGroup.setHeader(headerCell);
 			// the width is the with of the current base cell...
-			JRDesignCrosstabCell baseCell = (JRDesignCrosstabCell) jrCrosstab.getCellsMap().get(new Pair(null, null));
-			int baseHeight = (baseCell.getHeight() != null) ? baseCell.getHeight()
-					: ((baseCell.getContents() != null) ? baseCell.getContents().getHeight() : 30);
+			// JRDesignCrosstabCell baseCell = (JRDesignCrosstabCell) jrCrosstab.getCellsMap().get(new Pair(null, null));
+			// int baseHeight = (baseCell != null && baseCell.getHeight() != null) ? baseCell.getHeight()
+			// : ((baseCell.getContents() != null) ? baseCell.getContents().getHeight() : 30);
 
 			exp = new JRDesignExpression();
 			exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
@@ -126,8 +127,9 @@ public class CreateRowGroupCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(), "CopyOFRowGroup_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateRowGroupCommand_row_group_name,
-							Messages.CreateRowGroupCommand_row_group_dialog_text, defaultName, null);
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
+							Messages.CreateRowGroupCommand_row_group_name, Messages.CreateRowGroupCommand_row_group_dialog_text,
+							defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());
 						execute();

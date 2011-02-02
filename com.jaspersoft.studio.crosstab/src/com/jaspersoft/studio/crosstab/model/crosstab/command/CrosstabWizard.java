@@ -17,49 +17,62 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.table.model.table.command;
+package com.jaspersoft.studio.crosstab.model.crosstab.command;
 
-import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.crosstab.messages.Messages;
+import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.table.messages.Messages;
-import com.jaspersoft.studio.table.model.MTable;
+import com.jaspersoft.studio.model.dataset.MElementDataset;
 import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
 
-public class TableWizard extends Wizard {
+public class CrosstabWizard extends Wizard {
 	private WizardDatasetPage page0;
-	private TableWizardFieldsPage page1;
-	private TableWizardConnectionPage page2;
-	private TableWizardLayoutPage page3;
-	private MTable table;
+	private CrosstabWizardColumnPage page1;
+	private CrosstabWizardRowPage page2;
+	private CrosstabWizardMeasurePage page3;
+	private CrosstabWizardLayoutPage page4;
+	private MCrosstab crosstab;
 
-	public TableWizard() {
+	public CrosstabWizard() {
 		super();
-		setWindowTitle(Messages.common_table_wizard);
+		setWindowTitle(Messages.common_crosstab_wizard);
 	}
 
 	@Override
 	public void addPages() {
-		this.table = new MTable();
-		table.setValue(table.createJRElement(jasperDesign));
+		this.crosstab = new MCrosstab();
+		crosstab.setValue(crosstab.createJRElement(jasperDesign));
 
 		page0 = new WizardDatasetPage(jasperDesign);
 		addPage(page0);
-		page0.setDataSetRun((MDatasetRun) table.getPropertyValue(StandardTable.PROPERTY_DATASET_RUN));
+		MElementDataset dataset = (MElementDataset) crosstab.getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET);
+		page0.setDataSetRun((MDatasetRun) dataset.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN));
 
-		page1 = new TableWizardFieldsPage();
+		page1 = new CrosstabWizardColumnPage();
 		addPage(page1);
-		page2 = new TableWizardConnectionPage();
+		page1.setCrosstab(crosstab);
+
+		page2 = new CrosstabWizardRowPage();
 		addPage(page2);
-		page3 = new TableWizardLayoutPage();
+		page2.setCrosstab(crosstab);
+
+		page3 = new CrosstabWizardMeasurePage();
 		addPage(page3);
+		page3.setCrosstab(crosstab);
+
+		page4 = new CrosstabWizardLayoutPage();
+		addPage(page4);
+		page4.setCrosstab(crosstab);
 	}
 
-	public MTable getTable() {
-		return table;
+	public MCrosstab getCrosstab() {
+		return crosstab;
 	}
 
 	@Override
@@ -72,4 +85,5 @@ public class TableWizard extends Wizard {
 	public void init(JasperDesign jd) {
 		this.jasperDesign = jd;
 	}
+
 }

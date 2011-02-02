@@ -26,6 +26,7 @@ import java.util.Map;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -38,8 +39,8 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGroupElement;
-import com.jaspersoft.studio.model.MDatasetRun;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.table.TableManager;
@@ -178,8 +179,34 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		return 200;
 	}
 
-	public JRDesignElement createJRElement(JasperDesign jasperDesign, byte chartType) {
-		return null;
+	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+		JRDesignComponentElement jrElement = new JRDesignComponentElement();
+		StandardTable component = new StandardTable();
+
+		// jrElement.setKey((String) wizardDescriptor.getProperty("basename"));
+		((JRDesignComponentElement) jrElement).setComponent(component);
+		((JRDesignComponentElement) jrElement).setComponentKey(new ComponentKey(
+				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		// JRDesignDataset newDataset = new JRDesignDataset(false);
+		//		String name = "Table Dataset "; //$NON-NLS-1$
+		// for (int i = 1;; i++) {
+		// if (!jasperDesign.getDatasetMap().containsKey(name + i)) {
+		// newDataset.setName(name + i);
+		// break;
+		// }
+		// }
+		//
+		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
+		//
+		// datasetRun.setDatasetName(newDataset.getName());
+		// JRDesignExpression exp = new JRDesignExpression();
+		//		exp.setValueClassName("net.sf.jasperreports.engine.JRDataSource");// NOI18N //$NON-NLS-1$
+		//		exp.setText("new net.sf.jasperreports.engine.JREmptyDataSource(1)");// NOI18N //$NON-NLS-1$
+		//
+		// datasetRun.setDataSourceExpression(exp);
+		component.setDatasetRun(datasetRun);
+		return jrElement;
 	}
 
 	/*
@@ -218,7 +245,8 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		getTableManager().refresh();
+		if (getTableManager() != null)
+			getTableManager().refresh();
 		super.propertyChange(evt);
 	}
 }

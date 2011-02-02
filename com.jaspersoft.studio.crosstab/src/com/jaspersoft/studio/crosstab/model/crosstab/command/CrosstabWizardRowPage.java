@@ -19,35 +19,44 @@
  */
 package com.jaspersoft.studio.crosstab.model.crosstab.command;
 
-import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 
+import com.jaspersoft.studio.crosstab.Activator;
 import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
 
-public class CrosstabWizzard extends Wizard {
-	private CrosstabWizardPage page0;
+public class CrosstabWizardRowPage extends WizardPage {
 	private MCrosstab crosstab;
 
-	public CrosstabWizzard() {
-		super();
-		setWindowTitle(Messages.common_barcode_wizard);
+	public void setCrosstab(MCrosstab crosstab) {
+		this.crosstab = crosstab;
 	}
 
-	@Override
-	public void addPages() {
-		page0 = new CrosstabWizardPage();
-		addPage(page0);
-	}
-
-	public MCrosstab getBarcode() {
-		if (page0 != null)
-			return page0.getCrosstab();
+	public MCrosstab getCrosstab() {
 		return crosstab;
 	}
 
-	@Override
-	public boolean performFinish() {
-		return true;
+	protected CrosstabWizardRowPage() {
+		super("crosstabrowpage"); //$NON-NLS-1$
+		setTitle(Messages.CrosstabWizardRowPage_0);
+		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_rows.png"));
+		setDescription(Messages.CrosstabWizardRowPage_1);
+	}
+
+	public void createControl(Composite parent) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		composite.setLayout(layout);
+		setControl(composite);
+
+		PlatformUI.getWorkbench().getHelpSystem()
+				.setHelp(getControl(), IWorkbenchHelpContextIds.PREFERENCES_EXPORT_WIZARD_PAGE);
 	}
 
 }

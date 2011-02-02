@@ -19,14 +19,12 @@
  */
 package com.jaspersoft.studio.table.model.table.command;
 
-import net.sf.jasperreports.components.table.StandardTable;
-import net.sf.jasperreports.engine.component.ComponentKey;
-import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -105,55 +103,20 @@ public class CreateTableCommand extends CreateElementCommand {
 	 */
 	protected void createObject() {
 		if (jrElement == null) {
-			// here put a wizard
-			// BarcodeWizard wizard = new BarcodeWizard();
-			// WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-			// dialog.create();
-			// if (dialog.open() == Dialog.OK) {
-			// srcNode = wizard.getBarcode();
-			// if (srcNode.getValue() == null)
-			// jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
-			// else
-			// jrElement = (JRDesignElement) srcNode.getValue();
-			// }
-			jrElement = new JRDesignComponentElement();
-			StandardTable component = new StandardTable();
-
-			// jrElement.setKey((String) wizardDescriptor.getProperty("basename"));
-			((JRDesignComponentElement) jrElement).setComponent(component);
-			((JRDesignComponentElement) jrElement).setComponentKey(new ComponentKey(
-					"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "table")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-			JRDesignDataset newDataset = new JRDesignDataset(false);
-			String name = "Table Dataset "; //$NON-NLS-1$
-			for (int i = 1;; i++) {
-				if (!jasperDesign.getDatasetMap().containsKey(name + i)) {
-					newDataset.setName(name + i);
-					break;
+			TableWizard wizard = new TableWizard();
+			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			wizard.init(jasperDesign);
+			dialog.create();
+			if (dialog.open() == Dialog.OK) {
+				srcNode = wizard.getTable();
+				if (srcNode.getValue() == null)
+					jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+				else {
+					jrElement = (JRDesignElement) srcNode.getValue();
 				}
+				if (jrElement != null)
+					setElementBounds();
 			}
-			// try {
-			// jd.addDataset(newDataset);
-			// AddDatasetUndoableEdit edit2 = new AddDatasetUndoableEdit(newDataset, jd);
-			// if (edit == null) edit = edit2;
-			// else edit.concatenate(edit2);
-			//
-			// } catch (JRException ex) {
-			// //Exceptions.printStackTrace(ex);
-			// }
-
-			JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
-
-			datasetRun.setDatasetName(newDataset.getName());
-			JRDesignExpression exp = new JRDesignExpression();
-			exp.setValueClassName("net.sf.jasperreports.engine.JRDataSource");// NOI18N //$NON-NLS-1$
-			exp.setText("new net.sf.jasperreports.engine.JREmptyDataSource(1)");// NOI18N //$NON-NLS-1$
-
-			datasetRun.setDataSourceExpression(exp);
-			component.setDatasetRun(datasetRun);
-
-			if (jrElement != null)
-				setElementBounds();
 		}
 	}
 

@@ -27,17 +27,17 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.MTable;
 
-public class TableWizardPage extends WizardPage {
+public class TableWizardFieldsPage extends WizardPage {
 	private MTable table = new MTable();
 
 	public MTable getTable() {
 		return table;
 	}
 
-	protected TableWizardPage() {
-		super("barcodepage"); //$NON-NLS-1$
-		setTitle(Messages.common_table_wizard);
-		setDescription(Messages.TableWizardPage_wizard_description);
+	protected TableWizardFieldsPage() {
+		super("tablepage"); //$NON-NLS-1$
+		setTitle(Messages.TableWizardFieldsPage_0);
+		setDescription(Messages.TableWizardFieldsPage_1);
 	}
 
 	@Override

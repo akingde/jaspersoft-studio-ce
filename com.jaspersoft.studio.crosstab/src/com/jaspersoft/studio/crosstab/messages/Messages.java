@@ -4,7 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.crosstab.messages.messages"; //$NON-NLS-1$
-	public static String common_barcode_wizard;
+	public static String common_crosstab_wizard;
 	public static String common_bucket;
 	public static String common_height;
 	public static String common_name;
@@ -37,10 +37,18 @@ public class Messages extends NLS {
 	public static String CrosstabComponentFactory_header;
 	public static String CrosstabComponentFactory_total;
 	public static String CrosstabEditor_crosstab;
+	public static String CrosstabWizardColumnPage_0;
+	public static String CrosstabWizardColumnPage_1;
+	public static String CrosstabWizardLayoutPage_0;
+	public static String CrosstabWizardLayoutPage_1;
+	public static String CrosstabWizardMeasurePage_0;
+	public static String CrosstabWizardMeasurePage_1;
 	public static String CrosstabWizardPage_barbecue_types;
-	public static String CrosstabWizardPage_barcode_wizard_description_a;
-	public static String CrosstabWizardPage_barcode_wizard_description_b;
+	public static String CrosstabWizardPage_crosstab_wizard_description_a;
+	public static String CrosstabWizardPage_crosstab_wizard_description_b;
 	public static String CrosstabWizardPage_barcode4j_types;
+	public static String CrosstabWizardRowPage_0;
+	public static String CrosstabWizardRowPage_1;
 	public static String MBucket_comparator_expression;
 	public static String MBucket_comparator_expression_description;
 	public static String MBucket_expression;

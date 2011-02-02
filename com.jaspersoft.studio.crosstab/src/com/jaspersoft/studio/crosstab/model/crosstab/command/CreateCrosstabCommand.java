@@ -19,9 +19,12 @@
  */
 package com.jaspersoft.studio.crosstab.model.crosstab.command;
 
-import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -101,20 +104,19 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard
-			// BarcodeWizard wizard = new BarcodeWizard();
-			// WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-			// dialog.create();
-			// if (dialog.open() == Dialog.OK) {
-			// srcNode = wizard.getBarcode();
-			// if (srcNode.getValue() == null)
-			// jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
-			// else
-			// jrElement = (JRDesignElement) srcNode.getValue();
-			// }
-			jrElement = new JRDesignCrosstab();
-			if (jrElement != null)
-				setElementBounds();
-
+			CrosstabWizard wizard = new CrosstabWizard();
+			wizard.init(jasperDesign);
+			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			dialog.create();
+			if (dialog.open() == Dialog.OK) {
+				srcNode = wizard.getCrosstab();
+				if (srcNode.getValue() == null)
+					jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+				else
+					jrElement = (JRDesignElement) srcNode.getValue();
+				if (jrElement != null)
+					setElementBounds();
+			}
 		}
 	}
 

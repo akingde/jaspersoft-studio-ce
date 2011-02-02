@@ -28,7 +28,9 @@ import net.sf.jasperreports.crosstabs.JRCrosstab;
 import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
@@ -268,8 +270,11 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 		return 200;
 	}
 
-	public JRDesignElement createJRElement(JasperDesign jasperDesign, byte chartType) {
-		JRDesignElement jrDesignElement = new JRDesignCrosstab(jasperDesign);
+	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+		JRDesignCrosstab jrDesignElement = new JRDesignCrosstab(jasperDesign);
+		JRDesignCrosstabDataset dataset = new JRDesignCrosstabDataset();
+		dataset.setDatasetRun(new JRDesignDatasetRun());
+		jrDesignElement.setDataset(dataset);
 		return jrDesignElement;
 	}
 

@@ -21,28 +21,32 @@ package com.jaspersoft.studio.crosstab.model.crosstab.command;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 
+import com.jaspersoft.studio.crosstab.Activator;
 import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
+import com.jaspersoft.studio.model.dataset.MDataset;
 
-public class CrosstabWizardPage extends WizardPage {
-	private MCrosstab table = new MCrosstab();
+public class CrosstabWizardMeasurePage extends WizardPage {
+	private MCrosstab crosstab;
 
-	public MCrosstab getCrosstab() {
-		return table;
+	public void setCrosstab(MCrosstab crosstab) {
+		this.crosstab = crosstab;
 	}
 
-	protected CrosstabWizardPage() {
-		super("crosstabpage"); //$NON-NLS-1$
-		setTitle(Messages.common_barcode_wizard);
-		setDescription(Messages.CrosstabWizardPage_barcode_wizard_description_a
-				+ Messages.CrosstabWizardPage_barcode_wizard_description_b);
+	public MCrosstab getCrosstab() {
+		return crosstab;
+	}
+
+	protected CrosstabWizardMeasurePage() {
+		super("crosstabmeasurepage"); //$NON-NLS-1$
+		setTitle(Messages.CrosstabWizardMeasurePage_0);
+		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_details.png"));
+		setDescription(Messages.CrosstabWizardMeasurePage_1);
 	}
 
 	public void createControl(Composite parent) {
@@ -52,40 +56,8 @@ public class CrosstabWizardPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.CrosstabWizardPage_barbecue_types);
-
-		lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.CrosstabWizardPage_barcode4j_types);
-
-		final Table table = new Table(composite, SWT.NONE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.heightHint = 500;
-		gd.widthHint = 300;
-		table.setLayoutData(gd);
-		table.setHeaderVisible(false);
-		table.setLinesVisible(true);
-
-		TableColumn[] column = new TableColumn[1];
-		column[0] = new TableColumn(table, SWT.NONE);
-		column[0].setText(Messages.common_name);
-
-		column[0].pack();
-
-		final Table table2 = new Table(composite, SWT.NONE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.heightHint = 500;
-		gd.widthHint = 300;
-		table2.setLayoutData(gd);
-		table2.setHeaderVisible(false);
-		table2.setLinesVisible(true);
-
-		TableColumn[] column2 = new TableColumn[1];
-		column2[0] = new TableColumn(table2, SWT.NONE);
-		column2[0].setText(Messages.common_name);
-
-		column2[0].pack();
-
+		PlatformUI.getWorkbench().getHelpSystem()
+				.setHelp(getControl(), IWorkbenchHelpContextIds.PREFERENCES_EXPORT_WIZARD_PAGE);
 	}
 
 }
