@@ -306,11 +306,12 @@ public class ReportFactory {
 	public static void createElementsForBand(ANode band, List<?> list) {
 		for (Object element : list) {
 			ANode node = createNode(band, element, -1);
-			ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
-			List<?> children = m.getChildren4Element(element);
-			if (children != null && !children.isEmpty()) {
-				createElementsForBand(node, children);
-			} else if (element instanceof JRDesignFrame) {
+			// ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+			// List<?> children = m.getChildren4Element(element);
+			// if (children != null && !children.isEmpty()) {
+			// createElementsForBand(node, children);
+			// } else
+			if (element instanceof JRDesignFrame) {
 				JRDesignFrame frame = (JRDesignFrame) element;
 				createElementsForBand(node, frame.getChildren());
 			} else if (element instanceof JRElementGroup) {
