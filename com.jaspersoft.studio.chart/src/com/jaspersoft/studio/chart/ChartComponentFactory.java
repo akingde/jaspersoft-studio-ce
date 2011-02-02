@@ -147,26 +147,25 @@ public class ChartComponentFactory implements IComponentFactory {
 	}
 
 	public List<?> getChildren4Element(Object jrObject) {
-		List ch = new ArrayList<Object>();
+		List<Object> ch = new ArrayList<Object>();
 		if (jrObject instanceof JRDesignCategoryDataset)
 			ch.addAll(((JRDesignCategoryDataset) jrObject).getSeriesList());
-		if (jrObject instanceof JRDesignGanttDataset)
+		else if (jrObject instanceof JRDesignGanttDataset)
 			ch.addAll(((JRDesignGanttDataset) jrObject).getSeriesList());
-		if (jrObject instanceof JRDesignPieDataset)
+		else if (jrObject instanceof JRDesignPieDataset)
 			ch.addAll(((JRDesignPieDataset) jrObject).getSeriesList());
-		if (jrObject instanceof JRDesignTimePeriodDataset)
+		else if (jrObject instanceof JRDesignTimePeriodDataset)
 			ch.addAll(((JRDesignTimePeriodDataset) jrObject).getSeriesList());
-		if (jrObject instanceof JRDesignTimeSeriesDataset)
+		else if (jrObject instanceof JRDesignTimeSeriesDataset)
 			ch.addAll(((JRDesignTimeSeriesDataset) jrObject).getSeriesList());
-		if (jrObject instanceof JRDesignXyDataset)
+		else if (jrObject instanceof JRDesignXyDataset)
 			ch.addAll(((JRDesignXyDataset) jrObject).getSeriesList());
-		if (jrObject instanceof JRDesignXyzDataset)
+		else if (jrObject instanceof JRDesignXyzDataset)
 			ch.addAll(((JRDesignXyzDataset) jrObject).getSeriesList());
 
-		if (jrObject instanceof JRChart) {
+		else if (jrObject instanceof JRChart) {
 			ch.add(((JRChart) jrObject).getDataset());
-		}
-		if (jrObject instanceof JRChart && ((JRChart) jrObject).getPlot() instanceof JRMultiAxisPlot) {
+		} else if (jrObject instanceof JRChart && ((JRChart) jrObject).getPlot() instanceof JRMultiAxisPlot) {
 			JRMultiAxisPlot slc = (JRMultiAxisPlot) ((JRChart) jrObject).getPlot();
 			if (slc.getAxes() != null)
 				ch.addAll(slc.getAxes());

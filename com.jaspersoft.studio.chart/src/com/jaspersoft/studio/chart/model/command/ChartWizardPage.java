@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of iReport.
- *
- * iReport is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * iReport is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with iReport. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.chart.model.command;
 
@@ -27,38 +23,32 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 
 import com.jaspersoft.studio.chart.Activator;
 import com.jaspersoft.studio.chart.messages.Messages;
 
 public class ChartWizardPage extends WizardPage {
-	private byte chart;
+	private byte chartType = JRDesignChart.CHART_TYPE_LINE;
 	private Table chartTable;
 
-	public byte getChart() {
-		return chart;
+	public byte getChartType() {
+		return chartType;
 	}
 
 	protected ChartWizardPage() {
 		super("chartwizard"); //$NON-NLS-1$
 		setTitle(Messages.common_chart_wizard);
 		setDescription(Messages.ChartWizardPage_chart_wizard_description);
-	}
-
-	@Override
-	public void dispose() {
-		TableItem[] tis = chartTable.getSelection();
-		if (tis.length > 0) {
-			TableItem ti = tis[0];
-			chart = (Byte) ti.getData();
-		}
-		super.dispose();
 	}
 
 	public void createControl(Composite parent) {
@@ -82,6 +72,22 @@ public class ChartWizardPage extends WizardPage {
 
 		fillTableb4j(chartTable);
 		column2[0].pack();
+
+		chartTable.select(0);
+		chartTable.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				if (e.item instanceof TableItem) {
+					chartType = (Byte) ((TableItem) e.item).getData();
+				}
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				e.getSource();
+			}
+		});
+		PlatformUI.getWorkbench().getHelpSystem()
+				.setHelp(getControl(), IWorkbenchHelpContextIds.PREFERENCES_EXPORT_WIZARD_PAGE);
 	}
 
 	private void fillTableb4j(Table table) {

@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.chart.model.command;
 
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -104,11 +106,15 @@ public class CreateChartCommand extends CreateElementCommand {
 		if (jrElement == null) {
 			// here put a wizard
 			ChartWizard wizard = new ChartWizard();
+			wizard.init(jasperDesign);
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
-				byte type = wizard.getChart();
-				jrElement = MChart.createJRElement(srcNode.getJasperDesign(), type);
+				srcNode = wizard.getChart();
+				if (srcNode.getValue() == null)
+					jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+				else
+					jrElement = (JRDesignElement) srcNode.getValue();
 			}
 			if (jrElement != null)
 				setElementBounds();

@@ -26,15 +26,18 @@ import java.util.Map;
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
+import net.sf.jasperreports.engine.design.JRVerifier;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
@@ -495,7 +498,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 	}
 
 	public static JRDesignElement createJRElement(JasperDesign jasperDesign, byte chartType) {
-		JRDesignElement jrDesignElement = new JRDesignChart(jasperDesign, chartType);
+		JRDesignChart jrDesignElement = new JRDesignChart(jasperDesign, chartType);
 		return jrDesignElement;
 	}
 
