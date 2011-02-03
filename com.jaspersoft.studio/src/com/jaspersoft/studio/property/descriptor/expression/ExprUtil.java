@@ -8,13 +8,18 @@ import com.jaspersoft.studio.model.MExpression;
 
 public class ExprUtil {
 	public static JRExpression setValues(JRExpression e, Object value) {
+		if (value == null)
+			return null;
 		String text = "";
 		JRDesignExpression expr = (JRDesignExpression) e;
 		if (expr == null) {
 			expr = new JRDesignExpression();
 			expr.setValueClassName(String.class.getName());
 		}
-		if (value instanceof MExpression) {
+		if (value instanceof JRDesignExpression) {
+			text = ((JRDesignExpression) value).getText();
+			expr.setValueClassName(((JRDesignExpression) value).getValueClassName());
+		} else if (value instanceof MExpression) {
 			expr = (JRDesignExpression) ((MExpression) value).getValue();
 			text = expr.getText();
 			expr.setValueClassName(expr.getValueClassName());

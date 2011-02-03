@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.table.model.table.command;
 
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.Wizard;
@@ -27,12 +28,13 @@ import org.eclipse.jface.wizard.Wizard;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.MTable;
+import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
 import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
 
 public class TableWizard extends Wizard {
 	private WizardDatasetPage page0;
 	private TableWizardFieldsPage page1;
-	private TableWizardConnectionPage page2;
+	private WizardConnectionPage page2;
 	private TableWizardLayoutPage page3;
 	private MTable table;
 
@@ -46,14 +48,21 @@ public class TableWizard extends Wizard {
 		this.table = new MTable();
 		table.setValue(table.createJRElement(jasperDesign));
 
+		MDatasetRun mdataset = (MDatasetRun) table.getPropertyValue(StandardTable.PROPERTY_DATASET_RUN);
+		if (mdataset == null)
+			mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
+
 		page0 = new WizardDatasetPage(jasperDesign);
 		addPage(page0);
-		page0.setDataSetRun((MDatasetRun) table.getPropertyValue(StandardTable.PROPERTY_DATASET_RUN));
+		page0.setDataSetRun(mdataset);
+
+		page2 = new WizardConnectionPage();
+		addPage(page2);
+		page2.setDataSetRun(mdataset);
 
 		page1 = new TableWizardFieldsPage();
 		addPage(page1);
-		page2 = new TableWizardConnectionPage();
-		addPage(page2);
+
 		page3 = new TableWizardLayoutPage();
 		addPage(page3);
 	}

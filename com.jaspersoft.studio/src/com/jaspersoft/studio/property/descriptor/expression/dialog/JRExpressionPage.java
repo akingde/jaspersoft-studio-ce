@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.MExpression;
 
 public class JRExpressionPage extends WizardPage {
 	private MExpression value;
-	private Combo valuleClassCombo;
+	private Combo valueClassCombo;
 	private StyledText queryText;
 
 	public MExpression getValue() {
@@ -48,10 +48,10 @@ public class JRExpressionPage extends WizardPage {
 	public void dispose() {
 		JRDesignExpression jrExpression = new JRDesignExpression();
 		try {
-			int selectionIndex = valuleClassCombo.getSelectionIndex();
+			int selectionIndex = valueClassCombo.getSelectionIndex();
 			if (selectionIndex < 0)
 				selectionIndex = 0;
-			jrExpression.setValueClassName(valuleClassCombo.getItem(selectionIndex));
+			jrExpression.setValueClassName(valueClassCombo.getItem(selectionIndex));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -78,23 +78,25 @@ public class JRExpressionPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl1 = new Label(composite, SWT.NONE);
-		lbl1.setText(Messages.JRExpressionPage_value_class_name+":"); //$NON-NLS-1$
+		lbl1.setText(Messages.JRExpressionPage_value_class_name + ":"); //$NON-NLS-1$
 
-		valuleClassCombo = new Combo(composite, SWT.DROP_DOWN | SWT.FLAT | SWT.BORDER);
-		valuleClassCombo.setItems(new String[] { "java.lang.Boolean", "java.lang.Byte", "java.util.Date", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				"java.sql.Timestamp", "java.sql.Time", "java.lang.Double", "java.lang.Float", "java.lang.Integer", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-				"java.lang.Long", "java.lang.Short", "java.math.BigDecimal", "java.lang.Number", "java.lang.String", "java.lang.Object" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		valuleClassCombo.addSelectionListener(new SelectionAdapter() {
+		valueClassCombo = new Combo(composite, SWT.DROP_DOWN | SWT.FLAT | SWT.BORDER);
+		valueClassCombo
+				.setItems(new String[] {
+						"", "java.lang.Boolean", "java.lang.Byte", "java.util.Date", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						"java.sql.Timestamp", "java.sql.Time", "java.lang.Double", "java.lang.Float", "java.lang.Integer", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						"java.lang.Long", "java.lang.Short", "java.math.BigDecimal", "java.lang.Number", "java.lang.String", "java.lang.Object" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+		valueClassCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// set value into the MQuery, attention, thru commands!
 
 			}
 		});
 
 		Label lbl2 = new Label(composite, SWT.NONE);
-		lbl2.setText(Messages.common_expression+":"); //$NON-NLS-1$
+		lbl2.setText(Messages.common_expression + ":"); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
+		gd.widthHint = 300;
 		lbl2.setLayoutData(gd);
 
 		queryText = new StyledText(composite, SWT.BORDER);
@@ -112,12 +114,17 @@ public class JRExpressionPage extends WizardPage {
 
 	private void setWidgets() {
 		String lang = (String) value.getPropertyValue(JRDesignExpression.PROPERTY_VALUE_CLASS_NAME);
-		String[] items = valuleClassCombo.getItems();
+		String[] items = valueClassCombo.getItems();
+		valueClassCombo.select(0);
 		for (int i = 0; i < items.length; i++) {
 			if (items[i].equals(lang)) {
-				valuleClassCombo.select(i);
+				valueClassCombo.select(i);
 				break;
 			}
+		}
+		if (valueClassCombo.getSelectionIndex() <= 0 && lang != null) {
+			valueClassCombo.setItem(0, lang);
+			valueClassCombo.select(0);
 		}
 		String text = (String) value.getPropertyValue(JRDesignExpression.PROPERTY_TEXT);
 		if (text == null)
