@@ -17,48 +17,50 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.chart.model.command;
+package com.jaspersoft.studio.list.model.command.wizard;
 
-import net.sf.jasperreports.engine.JRDatasetRun;
-import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.Wizard;
 
-import com.jaspersoft.studio.chart.messages.Messages;
-import com.jaspersoft.studio.chart.model.MChart;
+import com.jaspersoft.studio.list.model.MList;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
 import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
 
-public class ChartWizard extends Wizard {
-	private ChartWizardPage page0;
-	private WizardDatasetPage page1;
-	private MChart chart;
+public class ListWizard extends Wizard {
+	private WizardDatasetPage page0;
+	private WizardConnectionPage page2;
+	private MList list;
 
-	public ChartWizard() {
+	public ListWizard() {
 		super();
-		setWindowTitle(Messages.common_chart_wizard);
+		setWindowTitle("List");
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new ChartWizardPage();
-		addPage(page0);
 
-		page1 = new WizardDatasetPage(jasperDesign);
-		addPage(page1);
-		page1.setDataSetRun(new MDatasetRun(new JRDesignDatasetRun(), jasperDesign));
+		this.list = new MList();
+		list.setValue(list.createJRElement(jasperDesign));
+
+		MDatasetRun mdataset = (MDatasetRun) list.getPropertyValue(MList.PREFIX + "DATASET_RUN");
+		if (mdataset == null)
+			mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
+
+		page0 = new WizardDatasetPage(jasperDesign);
+		addPage(page0);
+		page0.setDataSetRun(mdataset);
+
+		page2 = new WizardConnectionPage();
+		addPage(page2);
+		page2.setDataSetRun(mdataset);
+
 	}
 
-	public MChart getChart() {
-		this.chart = new MChart();
-		chart.setValue(MChart.createJRElement(jasperDesign, page0.getChartType()));
-		JRDesignChart jrChart = (JRDesignChart) chart.getValue();
-		JRDesignChartDataset jrDataSet = (JRDesignChartDataset) jrChart.getDataset();
-		jrDataSet.setDatasetRun((JRDatasetRun) page1.getDataSetRun().getValue());
-		return chart;
+	public MList getList() {
+		return list;
 	}
 
 	@Override
@@ -71,4 +73,5 @@ public class ChartWizard extends Wizard {
 	public void init(JasperDesign jd) {
 		this.jasperDesign = jd;
 	}
+
 }

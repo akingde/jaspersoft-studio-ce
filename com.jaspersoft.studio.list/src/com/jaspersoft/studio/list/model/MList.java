@@ -160,7 +160,7 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		defaultsMap.put(StandardListComponent.PROPERTY_PRINT_ORDER, PrintOrderEnum.HORIZONTAL);
 	}
 
-	private static final String PREFIX = "CONTENTS."; //$NON-NLS-1$
+	public static final String PREFIX = "CONTENTS."; //$NON-NLS-1$
 
 	private MDatasetRun mDatasetRun;
 
@@ -182,8 +182,10 @@ public class MList extends MGraphicElement implements IPastable, IPastableGraphi
 		if (id.equals(PREFIX + "DATASET_RUN")) { //$NON-NLS-1$
 			if (mDatasetRun == null) {
 				JRDatasetRun j = jrList.getDatasetRun();
-				if (j == null)
+				if (j == null) {
 					j = new JRDesignDatasetRun();
+					jrList.setDatasetRun(j);
+				}
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
 				setChildListener(mDatasetRun);
 			}

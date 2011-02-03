@@ -36,7 +36,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MExpression;
@@ -278,7 +277,7 @@ public class WizardConnectionPage extends WizardPage {
 		});
 
 		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(getControl(), IWorkbenchHelpContextIds.PREFERENCES_EXPORT_WIZARD_PAGE);
+				.setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
 	private void mainReportConnection() {

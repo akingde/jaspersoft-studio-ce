@@ -35,8 +35,8 @@ import com.jaspersoft.studio.model.MImage;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.MSubreport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 

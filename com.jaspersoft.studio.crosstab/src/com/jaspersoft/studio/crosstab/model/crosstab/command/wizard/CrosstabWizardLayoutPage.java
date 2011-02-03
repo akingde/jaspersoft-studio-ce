@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.crosstab.model.crosstab.command;
+package com.jaspersoft.studio.crosstab.model.crosstab.command.wizard;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -28,7 +28,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 
 import com.jaspersoft.studio.crosstab.Activator;
 import com.jaspersoft.studio.crosstab.messages.Messages;
@@ -95,11 +94,8 @@ public class CrosstabWizardLayoutPage extends WizardPage {
 		gd.horizontalSpan = 2;
 		addColumnTotals.setLayoutData(gd);
 
-		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(useWhiteGrid, IWorkbenchHelpContextIds.PERSPECTIVES_PREFERENCE_PAGE);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(useWhiteGrid, "Jaspersoft.wizard");
 
-		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(getControl(), IWorkbenchHelpContextIds.PREFERENCES_EXPORT_WIZARD_PAGE);
 	}
 
 }

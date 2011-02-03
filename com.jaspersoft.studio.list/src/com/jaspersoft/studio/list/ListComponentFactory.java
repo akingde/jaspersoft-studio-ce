@@ -38,6 +38,7 @@ import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.list.editor.ListEditor;
 import com.jaspersoft.studio.list.figure.ListFigure;
 import com.jaspersoft.studio.list.model.MList;
+import com.jaspersoft.studio.list.model.command.CreateListCommand;
 import com.jaspersoft.studio.list.part.ListEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -47,7 +48,6 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.util.ReportFactory;
 
 public class ListComponentFactory implements IComponentFactory {
@@ -91,16 +91,16 @@ public class ListComponentFactory implements IComponentFactory {
 	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
 		if (child instanceof MList) {
 			if (parent instanceof MElementGroup)
-				return new CreateElementCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+				return new CreateListCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MBand)
-				return new CreateElementCommand((MBand) parent, (MGraphicElement) child, newIndex);
+				return new CreateListCommand((MBand) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateElementCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+				return new CreateListCommand((MFrame) parent, (MGraphicElement) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateListCommand(parent, (MGraphicElement) child, location, newIndex);
 
 			if (parent instanceof IGroupElement) {
-				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateListCommand(parent, (MGraphicElement) child, location, newIndex);
 			}
 		}
 		if (child instanceof MGraphicElement && child.getValue() != null)

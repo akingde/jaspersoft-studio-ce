@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.chart.model.command;
+package com.jaspersoft.studio.chart.model.command.wizard;
 
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
@@ -32,7 +32,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 
 import com.jaspersoft.studio.chart.Activator;
 import com.jaspersoft.studio.chart.messages.Messages;
@@ -87,7 +86,7 @@ public class ChartWizardPage extends WizardPage {
 			}
 		});
 		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(getControl(), IWorkbenchHelpContextIds.PREFERENCES_EXPORT_WIZARD_PAGE);
+				.setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
 	private void fillTableb4j(Table table) {

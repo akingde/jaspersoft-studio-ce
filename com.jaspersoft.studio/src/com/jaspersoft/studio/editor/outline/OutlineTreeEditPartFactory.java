@@ -104,6 +104,8 @@ import com.jaspersoft.studio.model.style.command.OrphanConditionalStyleCommand;
 import com.jaspersoft.studio.model.style.command.ReorderConditionalStyleCommand;
 import com.jaspersoft.studio.model.style.command.ReorderStyleCommand;
 import com.jaspersoft.studio.model.style.command.ReorderStyleTemplateCommand;
+import com.jaspersoft.studio.model.subreport.MSubreport;
+import com.jaspersoft.studio.model.subreport.command.CreateSubreportCommand;
 import com.jaspersoft.studio.model.textfield.MPageXofY;
 import com.jaspersoft.studio.model.textfield.command.CreatePageXofYCommand;
 import com.jaspersoft.studio.model.variable.MVariable;
@@ -337,6 +339,19 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new CreatePageXofYCommand((MFrame) parent, (MPageXofY) child, newIndex);
 			if (parent instanceof MReport)
 				return new CreatePageXofYCommand(parent, (MPageXofY) child, location, newIndex);
+		} else if (child instanceof MSubreport) {
+			if (parent instanceof MElementGroup)
+				return new CreateSubreportCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MBand)
+				return new CreateSubreportCommand((MBand) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MFrame)
+				return new CreateSubreportCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MReport)
+				return new CreateSubreportCommand(parent, (MGraphicElement) child, location, newIndex);
+
+			if (parent instanceof IGroupElement) {
+				return new CreateSubreportCommand(parent, (MGraphicElement) child, location, newIndex);
+			}
 		} else if (child instanceof MGraphicElement) {
 			if (parent instanceof MElementGroup)
 				return new CreateElementCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);

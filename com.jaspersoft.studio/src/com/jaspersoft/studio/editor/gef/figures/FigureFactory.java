@@ -32,8 +32,8 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MImage;
 import com.jaspersoft.studio.model.MLine;
 import com.jaspersoft.studio.model.MRectangle;
-import com.jaspersoft.studio.model.MSubreport;
 import com.jaspersoft.studio.model.genericElement.MGenericElement;
+import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 

@@ -17,58 +17,49 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.table.model.table.command;
+package com.jaspersoft.studio.model.subreport.command.wizard;
 
-import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.table.messages.Messages;
-import com.jaspersoft.studio.table.model.MTable;
+import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
-import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
 
-public class TableWizard extends Wizard {
-	private WizardDatasetPage page0;
-	private TableWizardFieldsPage page1;
-	private WizardConnectionPage page2;
-	private TableWizardLayoutPage page3;
-	private MTable table;
+public class SubreportWizard extends Wizard {
 
-	public TableWizard() {
+	private WizardConnectionPage page5;
+	private MSubreport subreport;
+
+	public SubreportWizard() {
 		super();
-		setWindowTitle(Messages.common_table_wizard);
+		setWindowTitle("Subreport");
 	}
 
 	@Override
 	public void addPages() {
-		this.table = new MTable();
-		table.setValue(table.createJRElement(jasperDesign));
 
-		MDatasetRun mdataset = (MDatasetRun) table.getPropertyValue(StandardTable.PROPERTY_DATASET_RUN);
-		if (mdataset == null)
-			mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
+		MDatasetRun mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
 
-		page0 = new WizardDatasetPage(jasperDesign);
-		addPage(page0);
-		page0.setDataSetRun(mdataset);
-
-		page2 = new WizardConnectionPage();
-		addPage(page2);
-		page2.setDataSetRun(mdataset);
-
-		page1 = new TableWizardFieldsPage();
-		addPage(page1);
-
-		page3 = new TableWizardLayoutPage();
-		addPage(page3);
+		page5 = new WizardConnectionPage();
+		addPage(page5);
+		page5.setDataSetRun(mdataset);
 	}
 
-	public MTable getTable() {
-		return table;
+	public MSubreport getSubreport() {
+		this.subreport = new MSubreport();
+		subreport.setValue(subreport.createJRElement(jasperDesign));
+		JRDesignSubreport jrSubreport = (JRDesignSubreport) subreport.getValue();
+		JRDatasetRun jrDR = (JRDatasetRun) page5.getDataSetRun().getValue();
+
+		jrSubreport.setDataSourceExpression(jrDR.getDataSourceExpression());
+		jrSubreport.setConnectionExpression(jrDR.getConnectionExpression());
+
+		return subreport;
 	}
 
 	@Override

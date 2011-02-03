@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.crosstab.model.crosstab.command;
+package com.jaspersoft.studio.crosstab.model.crosstab.command.wizard;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
@@ -29,6 +29,7 @@ import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.MElementDataset;
+import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
 import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
 
 public class CrosstabWizard extends Wizard {
@@ -37,6 +38,7 @@ public class CrosstabWizard extends Wizard {
 	private CrosstabWizardRowPage page2;
 	private CrosstabWizardMeasurePage page3;
 	private CrosstabWizardLayoutPage page4;
+	private WizardConnectionPage page5;
 	private MCrosstab crosstab;
 
 	public CrosstabWizard() {
@@ -52,7 +54,12 @@ public class CrosstabWizard extends Wizard {
 		page0 = new WizardDatasetPage(jasperDesign);
 		addPage(page0);
 		MElementDataset dataset = (MElementDataset) crosstab.getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET);
-		page0.setDataSetRun((MDatasetRun) dataset.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN));
+		MDatasetRun mdataset = (MDatasetRun) dataset.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
+		page0.setDataSetRun(mdataset);
+
+		page5 = new WizardConnectionPage();
+		addPage(page5);
+		page5.setDataSetRun(mdataset);
 
 		page1 = new CrosstabWizardColumnPage();
 		addPage(page1);
