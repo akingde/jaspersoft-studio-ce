@@ -82,7 +82,7 @@ public class ParametersDialog extends FormDialog {
 		for (JRDesignParameter p : prompts)
 			for (IDataInput in : inputs) {
 				if (in.isForType(p.getValueClass())) {
-					toolkit.createLabel(mform.getForm().getBody(), p.getName() + ":", SWT.RIGHT);
+					toolkit.createLabel(mform.getForm().getBody(), p.getName() + ":", SWT.RIGHT); //$NON-NLS-1$
 					in.createInput(mform.getForm().getBody(), p, p.getValueClass(), params);
 					break;
 				}

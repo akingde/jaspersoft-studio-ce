@@ -31,6 +31,7 @@ import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 
 /**
@@ -48,7 +49,7 @@ public class ReportEditor extends AbstractVisualEditor {
 	 */
 	public ReportEditor() {
 		super();
-		setPartName("Main Report");
+		setPartName(Messages.common_main_report);
 	}
 
 	/*

@@ -35,7 +35,7 @@ public class EnumHelper {
 		if (nullable != NullEnum.NOTNULL)
 			res.add(nullable.getName());
 		for (int i = 0; i < jrEnum.length; i++) {
-			res.add(Messages.Tag(jrEnum[i].getName()));
+			res.add(Messages.getString(jrEnum[i].getName()));
 		}
 		return res.toArray(new String[res.size()]);
 	}

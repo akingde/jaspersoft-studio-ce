@@ -33,7 +33,7 @@ import com.jaspersoft.studio.model.ANode;
 
 public interface IComponentFactory {
 	public ANode createNode(ANode parent, Object jrObject, int newIndex);
-
+	
 	public List<?> getChildren4Element(Object jrObject);
 
 	public List<Class<?>> getPaletteEntries();

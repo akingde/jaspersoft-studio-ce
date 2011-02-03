@@ -114,7 +114,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		try {
 			ReportEditor reportEditor = new ReportEditor();
 			int index = addPage(reportEditor, getEditorInput());
-			setPageText(index, Messages.ReportContainer_main_report);
+			setPageText(index, Messages.common_main_report);
 			setPageImage(index, reportEditor.getPartImage());
 			editors.add(reportEditor);
 		} catch (PartInitException e) {
