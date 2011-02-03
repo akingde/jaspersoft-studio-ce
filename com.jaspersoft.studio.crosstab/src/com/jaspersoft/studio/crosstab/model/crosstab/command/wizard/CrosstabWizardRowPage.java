@@ -24,7 +24,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 
 import com.jaspersoft.studio.crosstab.Activator;
 import com.jaspersoft.studio.crosstab.messages.Messages;
@@ -55,8 +54,7 @@ public class CrosstabWizardRowPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(getControl(), IWorkbenchHelpContextIds.PREFERENCES_EXPORT_WIZARD_PAGE);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
 }

@@ -21,18 +21,13 @@ package com.jaspersoft.studio.crosstab.model.crosstab.command.wizard;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 
 import com.jaspersoft.studio.crosstab.Activator;
 import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 public class CrosstabWizardColumnPage extends WizardPage {
 	private MCrosstab crosstab;
@@ -59,8 +54,7 @@ public class CrosstabWizardColumnPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(getControl(), IWorkbenchHelpContextIds.PREFERENCES_IMPORT_WIZARD_PAGE);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
 }

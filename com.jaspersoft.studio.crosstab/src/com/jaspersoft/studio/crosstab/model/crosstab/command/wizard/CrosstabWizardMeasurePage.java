@@ -24,12 +24,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
 
 import com.jaspersoft.studio.crosstab.Activator;
 import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
-import com.jaspersoft.studio.model.dataset.MDataset;
 
 public class CrosstabWizardMeasurePage extends WizardPage {
 	private MCrosstab crosstab;
@@ -56,8 +54,7 @@ public class CrosstabWizardMeasurePage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(getControl(), IWorkbenchHelpContextIds.PREFERENCES_EXPORT_WIZARD_PAGE);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
 }
