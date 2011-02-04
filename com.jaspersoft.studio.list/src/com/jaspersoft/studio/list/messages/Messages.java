@@ -4,7 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.list.messages.messages"; //$NON-NLS-1$
-	public static String ListEditor_list;
+	public static String common_list;
 	public static String MList_cell_height;
 	public static String MList_cell_height_description;
 	public static String MList_cell_width;

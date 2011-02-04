@@ -23,7 +23,7 @@ import com.jaspersoft.studio.barcode.messages.Messages;
 
 public class TextPosition {
 	public static String[] getItems() {
-		return new String[] { Messages.common_default, Messages.TextPosition_none, Messages.common_bottom, Messages.common_top };
+		return new String[] { "<" + Messages.common_default + ">", Messages.TextPosition_none, Messages.common_bottom, Messages.common_top };
 	}
 
 	public static int getPos4TextPosition(String textPosition) {

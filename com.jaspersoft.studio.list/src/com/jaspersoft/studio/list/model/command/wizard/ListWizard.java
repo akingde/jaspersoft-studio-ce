@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.list.messages.Messages;
 import com.jaspersoft.studio.list.model.MList;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
@@ -36,7 +37,7 @@ public class ListWizard extends Wizard {
 
 	public ListWizard() {
 		super();
-		setWindowTitle("List");
+		setWindowTitle(Messages.common_list);
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class ListWizard extends Wizard {
 		this.list = new MList();
 		list.setValue(list.createJRElement(jasperDesign));
 
-		MDatasetRun mdataset = (MDatasetRun) list.getPropertyValue(MList.PREFIX + "DATASET_RUN");
+		MDatasetRun mdataset = (MDatasetRun) list.getPropertyValue(MList.PREFIX + "DATASET_RUN"); //$NON-NLS-1$
 		if (mdataset == null)
 			mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
 

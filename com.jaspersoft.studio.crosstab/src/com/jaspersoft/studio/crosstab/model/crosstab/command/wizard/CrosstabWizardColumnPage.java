@@ -42,9 +42,9 @@ public class CrosstabWizardColumnPage extends WizardPage {
 
 	protected CrosstabWizardColumnPage() {
 		super("crosstabcolumnpage"); //$NON-NLS-1$
-		setTitle(Messages.CrosstabWizardColumnPage_0);
-		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_columns.png"));
-		setDescription(Messages.CrosstabWizardColumnPage_1);
+		setTitle(Messages.CrosstabWizardColumnPage_columns);
+		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_columns.png")); //$NON-NLS-1$
+		setDescription(Messages.CrosstabWizardColumnPage_description);
 	}
 
 	public void createControl(Composite parent) {

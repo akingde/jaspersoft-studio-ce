@@ -44,7 +44,7 @@ import com.jaspersoft.studio.preferences.PreferenceConstants;
 public class ListEditor extends AbstractVisualEditor {
 	public ListEditor() {
 		super();
-		setPartName(Messages.ListEditor_list);
+		setPartName(Messages.common_list);
 		setPartImage(JaspersoftStudioPlugin.getImage(MList.getIconDescriptor().getIcon16()));
 	}
 
@@ -83,7 +83,7 @@ public class ListEditor extends AbstractVisualEditor {
 	@Override
 	protected List<String> getIgnorePalleteElements() {
 		List<String> lst = new ArrayList<String>();
-		lst.add("com.jaspersoft.studio.crosstab.model.MCrosstab");
+		lst.add("com.jaspersoft.studio.crosstab.model.MCrosstab"); //$NON-NLS-1$
 		return lst;
 	}
 

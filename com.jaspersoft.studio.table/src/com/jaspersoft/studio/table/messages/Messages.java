@@ -34,10 +34,10 @@ public class Messages extends NLS {
 	public static String ReorderColumnCommand_reorder_columns;
 	public static String ReorderColumnGroupCommand_reorder_column_group;
 	public static String TableEditor_table;
-	public static String TableWizardLayoutPage_0;
-	public static String TableWizardLayoutPage_1;
-
-	public static String TableWizardPage_wizard_description;
+	public static String TableWizardFieldsPage_description;
+	public static String TableWizardFieldsPage_fields;
+	public static String TableWizardLayoutPage_description;
+	public static String TableWizardLayoutPage_layout;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

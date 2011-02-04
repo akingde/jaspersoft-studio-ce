@@ -36,8 +36,8 @@ public class TableWizardLayoutPage extends WizardPage {
 
 	protected TableWizardLayoutPage() {
 		super("tablepage"); //$NON-NLS-1$
-		setTitle(Messages.TableWizardLayoutPage_0);
-		setDescription(Messages.TableWizardLayoutPage_1);
+		setTitle(Messages.TableWizardLayoutPage_layout);
+		setDescription(Messages.TableWizardLayoutPage_description);
 	}
 
 	@Override

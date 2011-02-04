@@ -46,9 +46,9 @@ public class CrosstabWizardLayoutPage extends WizardPage {
 
 	protected CrosstabWizardLayoutPage() {
 		super("crosstablayoutpage"); //$NON-NLS-1$
-		setTitle(Messages.CrosstabWizardLayoutPage_0);
-		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_preview.png"));
-		setDescription(Messages.CrosstabWizardLayoutPage_1);
+		setTitle(Messages.CrosstabWizardLayoutPage_layout);
+		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_preview.png")); //$NON-NLS-1$
+		setDescription(Messages.CrosstabWizardLayoutPage_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -59,37 +59,37 @@ public class CrosstabWizardLayoutPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText("Color scheme");
+		lbl.setText(Messages.CrosstabWizardLayoutPage_color_scheme);
 
 		CCombo colorScheme = new CCombo(composite, SWT.BORDER);
 		// colorScheme.setItems(ModelUtils.getDataSources(jasperDesign));
 		// colorScheme.select(0);
 
 		lbl = new Label(composite, SWT.NONE);
-		lbl.setText("Variations");
+		lbl.setText(Messages.CrosstabWizardLayoutPage_variations);
 
 		CCombo variations = new CCombo(composite, SWT.BORDER);
 
 		Button useWhiteGrid = new Button(composite, SWT.CHECK);
-		useWhiteGrid.setText("Use white grid");
+		useWhiteGrid.setText(Messages.CrosstabWizardLayoutPage_use_white_grid);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		useWhiteGrid.setLayoutData(gd);
 
 		Button showGridLines = new Button(composite, SWT.CHECK);
-		showGridLines.setText("Show grid lines (adding cell border)");
+		showGridLines.setText(Messages.CrosstabWizardLayoutPage_show_grid_lines);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		showGridLines.setLayoutData(gd);
 
 		Button addRowTotals = new Button(composite, SWT.CHECK);
-		addRowTotals.setText("Add row group totals");
+		addRowTotals.setText(Messages.CrosstabWizardLayoutPage_add_row_group_totals);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		addRowTotals.setLayoutData(gd);
 
 		Button addColumnTotals = new Button(composite, SWT.CHECK);
-		addColumnTotals.setText("Add column group totals");
+		addColumnTotals.setText(Messages.CrosstabWizardLayoutPage_add_column_group_totals);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		addColumnTotals.setLayoutData(gd);

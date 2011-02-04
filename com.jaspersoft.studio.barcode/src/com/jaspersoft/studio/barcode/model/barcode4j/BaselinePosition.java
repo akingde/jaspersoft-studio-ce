@@ -27,7 +27,7 @@ import com.jaspersoft.studio.barcode.messages.Messages;
 
 public class BaselinePosition {
 	public static String[] getItems() {
-		return new String[] { Messages.common_default, Messages.common_top, Messages.common_bottom };   
+		return new String[] { "<" + Messages.common_default + ">", Messages.common_top, Messages.common_bottom };   
 	}
 
 	public static int getPos4BaselinePosition(String mode) {

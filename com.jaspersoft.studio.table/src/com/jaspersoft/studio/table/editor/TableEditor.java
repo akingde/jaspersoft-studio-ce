@@ -83,7 +83,7 @@ public class TableEditor extends AbstractVisualEditor {
 	@Override
 	protected List<String> getIgnorePalleteElements() {
 		List<String> lst = new ArrayList<String>();
-		lst.add("com.jaspersoft.studio.crosstab.model.MCrosstab");
+		lst.add("com.jaspersoft.studio.crosstab.model.MCrosstab"); //$NON-NLS-1$
 		return lst;
 	}
 

@@ -42,9 +42,9 @@ public class CrosstabWizardRowPage extends WizardPage {
 
 	protected CrosstabWizardRowPage() {
 		super("crosstabrowpage"); //$NON-NLS-1$
-		setTitle(Messages.CrosstabWizardRowPage_0);
-		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_rows.png"));
-		setDescription(Messages.CrosstabWizardRowPage_1);
+		setTitle(Messages.CrosstabWizardRowPage_rows);
+		setImageDescriptor(Activator.getImageDescriptor("icons/wizard_rows.png")); //$NON-NLS-1$
+		setDescription(Messages.CrosstabWizardRowPage_description);
 	}
 
 	public void createControl(Composite parent) {
