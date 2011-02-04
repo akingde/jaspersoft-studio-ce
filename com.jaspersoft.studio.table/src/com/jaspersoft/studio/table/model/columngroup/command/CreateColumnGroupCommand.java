@@ -25,8 +25,10 @@ import java.util.List;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.column.MColumn;
@@ -50,7 +52,7 @@ public class CreateColumnGroupCommand extends CreateColumnCommand {
 	}
 
 	@Override
-	protected StandardBaseColumn createColumn() {
+	public StandardBaseColumn createColumn(JasperDesign jrDesign, StandardTable jrTable) {
 		StandardBaseColumn col = new StandardColumnGroup();
 		col.setWidth(0);
 
@@ -75,13 +77,11 @@ public class CreateColumnGroupCommand extends CreateColumnCommand {
 			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
 				JRDesignGroup jrGroup = (JRDesignGroup) it.next();
 				cell = new DesignCell();
-				cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_HEADER,
-						jrGroup.getName()) / 2);
+				cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_HEADER, jrGroup.getName()) / 2);
 				col.setGroupHeader(jrGroup.getName(), cell);
 
 				cell = new DesignCell();
-				cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_FOOTER,
-						jrGroup.getName()) / 2);
+				cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName()) / 2);
 				col.setGroupFooter(jrGroup.getName(), cell);
 			}
 		return col;

@@ -166,7 +166,9 @@ public class MDatasetRun extends APropertyNode {
 				propertyDTO = v;
 			}
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
-			if (!value.equals("")) //$NON-NLS-1$
+			if (value == null)
+				jrElement.setDatasetName(null);
+			else if (!value.equals("")) //$NON-NLS-1$
 				jrElement.setDatasetName((String) value);
 		}
 	}

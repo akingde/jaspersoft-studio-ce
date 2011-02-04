@@ -38,7 +38,9 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -53,6 +55,7 @@ import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.mozilla.javascript.edu.emory.mathcs.backport.java.util.Collections;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
@@ -75,6 +78,27 @@ public class ModelUtils {
 		for (int i = 0; i < datasetsList.size(); i++)
 			res[i + 1] = ((JRDataset) datasetsList.get(i)).getName();
 		return res;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<JRDesignField> getFields4Datasource(JasperDesign jd, String ds) {
+		if (ds == null || ds.equals("")) {
+			List fieldsList = jd.getFieldsList();
+			List res = new ArrayList(fieldsList);
+			Collections.copy(res, fieldsList);
+			return res;
+		}
+		List<?> datasetsList = jd.getDatasetsList();
+		for (int i = 0; i < datasetsList.size(); i++) {
+			JRDesignDataset d = (JRDesignDataset) datasetsList.get(i);
+			if (d.getName().equals(ds)) {
+				List fieldsList = d.getFieldsList();
+				List res = new ArrayList(fieldsList);
+				Collections.copy(res, fieldsList);
+				return res;
+			}
+		}
+		return new ArrayList<JRDesignField>();
 	}
 
 	private static Map<String, String> mp = new HashMap<String, String>();

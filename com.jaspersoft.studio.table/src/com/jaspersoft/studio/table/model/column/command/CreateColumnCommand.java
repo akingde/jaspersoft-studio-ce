@@ -97,7 +97,7 @@ public class CreateColumnCommand extends Command {
 	@Override
 	public void execute() {
 		if (jrColumn == null) {
-			jrColumn = createColumn();
+			jrColumn = createColumn(jrDesign, jrTable);
 		}
 		if (index >= 0 && index < jrTable.getColumns().size())
 			jrTable.addColumn(index, jrColumn);
@@ -105,7 +105,11 @@ public class CreateColumnCommand extends Command {
 			jrTable.addColumn(jrColumn);
 	}
 
-	protected StandardBaseColumn createColumn() {
+	public StandardBaseColumn createColumn(JasperDesign jrDesign, StandardTable jrTable) {
+		return CreateColumnCommand.addColumn(jrDesign, jrTable);
+	}
+
+	public static StandardColumn addColumn(JasperDesign jrDesign, StandardTable jrTable) {
 		StandardColumn col = new StandardColumn();
 		col.setWidth(40);
 

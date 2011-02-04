@@ -462,11 +462,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
 				// if (!xmlFresh) {
-				try {
-					xml2model();
-					xmlFresh = true;
-				} catch (JRException e) {
-					handleJRException(getEditorInput(), e, false);
+				if (getActiveEditor() == xmlEditor) {
+					try {
+						xml2model();
+						xmlFresh = true;
+					} catch (JRException e) {
+						handleJRException(getEditorInput(), e, false);
+					}
 				}
 				// }
 				updateVisualView();
@@ -487,6 +489,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					} catch (JRException e) {
 						handleJRException(getEditorInput(), e, false);
 					}
+				else {
+					model2xml();
+					xmlFresh = true;
+				}
 				model2preview();
 				// getSite().setSelectionProvider(previewEditor.getSite().getSelectionProvider());
 				break;

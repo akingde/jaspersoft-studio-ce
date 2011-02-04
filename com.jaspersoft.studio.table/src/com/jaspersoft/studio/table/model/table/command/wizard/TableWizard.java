@@ -19,23 +19,37 @@
  */
 package com.jaspersoft.studio.table.model.table.command.wizard;
 
+import java.util.List;
+
+import net.sf.jasperreports.components.table.DesignCell;
+import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignStaticText;
+import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.text.MStaticText;
+import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.MTable;
+import com.jaspersoft.studio.table.model.column.command.CreateColumnCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
 import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
+import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
 
 public class TableWizard extends Wizard {
 	private WizardDatasetPage page0;
-	private TableWizardFieldsPage page1;
+	private WizardFieldsPage page1;
 	private WizardConnectionPage page2;
-	private TableWizardLayoutPage page3;
+	// private TableWizardLayoutPage page3;
 	private MTable table;
 
 	public TableWizard() {
@@ -60,14 +74,52 @@ public class TableWizard extends Wizard {
 		addPage(page2);
 		page2.setDataSetRun(mdataset);
 
-		page1 = new TableWizardFieldsPage();
+		page1 = new WizardFieldsPage();
 		addPage(page1);
 
-		page3 = new TableWizardLayoutPage();
-		addPage(page3);
+		// page3 = new TableWizardLayoutPage();
+		// addPage(page3);
+	}
+
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+		if (page instanceof WizardFieldsPage) {
+			WizardFieldsPage tpage = (WizardFieldsPage) page;
+			String dataset = (String) page0.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+			if (dataset.equals(""))
+				dataset = null;
+			tpage.setFields(ModelUtils.getFields4Datasource(jasperDesign, dataset));
+		}
+		return super.getNextPage(page);
 	}
 
 	public MTable getTable() {
+		List<JRDesignField> lst = page1.getFields();
+		StandardTable tbl = CreateColumnCommand.getTable(table);
+		for (JRDesignField f : lst) {
+			StandardColumn col = CreateColumnCommand.addColumn(jasperDesign, tbl);
+
+			DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
+			DesignCell detCell = (DesignCell) col.getDetailCell();
+
+			JRDesignStaticText sText = (JRDesignStaticText) new MStaticText().createJRElement(jasperDesign);
+			sText.setWidth(col.getWidth());
+			sText.setHeight(colHeadCell.getHeight());
+			sText.setText(f.getName());
+			colHeadCell.addElement(sText);
+
+			JRDesignTextField fText = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
+			fText.setWidth(col.getWidth());
+			fText.setHeight(detCell.getHeight());
+			JRDesignExpression jre = new JRDesignExpression();
+			jre.setValueClassName(f.getValueClassName());
+			jre.setText("$F{" + f.getName() + "}");
+			fText.setExpression(jre);
+			detCell.addElement(fText);
+
+			tbl.addColumn(col);
+		}
+
 		return table;
 	}
 

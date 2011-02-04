@@ -717,6 +717,12 @@ public class Messages extends NLS {
 	public static String WizardDatasetPage_0;
 	public static String WizardDatasetPage_1;
 	public static String WizardDatasetPage_2;
+	public static String WizardFieldsPage_0;
+	public static String WizardFieldsPage_1;
+	public static String WizardFieldsPage_2;
+	public static String WizardFieldsPage_3;
+	public static String WizardFieldsPage_4;
+	public static String WizardFieldsPage_5;
 	public static String XLSDatasourcePage_description;
 	public static String XLSDatasourcePage_xls_datasource;
 	public static String XMLDatasourcePage_description;

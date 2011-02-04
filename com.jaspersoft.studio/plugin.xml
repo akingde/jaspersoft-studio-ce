@@ -163,17 +163,20 @@
          <propertyTab
                category="advanced"
                id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab"
+               image="icons/resources/eclipse/properties_view.gif"
                label="Advanced">
          </propertyTab>
          <propertyTab
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               image="icons/resources/eclipse/left_align.gif"
                label="Appearance">
          </propertyTab>
          <propertyTab
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               image="icons/resources/eclipse/border_frame.gif"
                label="Borders">
          </propertyTab>
       </propertyTabs>
