@@ -113,7 +113,7 @@ public class MJDBCDataSource extends AMDatasource {
 		NTextPropertyDescriptor jarD = new NTextPropertyDescriptor(PROPERTY_JAR, Messages.MJDBCDataSource_classpath);
 		desc.add(jarD);
 
-		NTextPropertyDescriptor connectionD = new NTextPropertyDescriptor(PROPERTY_CONNECTION, Messages.MJDBCDataSource_connection);
+		NTextPropertyDescriptor connectionD = new NTextPropertyDescriptor(PROPERTY_CONNECTION, Messages.common_connection);
 		desc.add(connectionD);
 
 	}

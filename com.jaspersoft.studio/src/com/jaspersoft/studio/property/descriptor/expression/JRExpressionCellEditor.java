@@ -99,7 +99,7 @@ public class JRExpressionCellEditor extends ATextDialogRWCellEditor {
 			text.removeModifyListener(getModifyListener());
 			String pvalue = (String) expression.getPropertyValue(JRDesignExpression.PROPERTY_TEXT);
 			if (pvalue == null)
-				pvalue = "";
+				pvalue = ""; //$NON-NLS-1$
 			text.setText(pvalue);
 			text.addModifyListener(getModifyListener());
 		}

@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -54,9 +55,9 @@ public class WizardDatasetPage extends WizardPage {
 
 	public WizardDatasetPage(JasperDesign jasperDesign) {
 		super("datasetpage"); //$NON-NLS-1$
-		setTitle(com.jaspersoft.studio.messages.Messages.WizardDatasetPage_0);
+		setTitle(Messages.WizardDatasetPage_dataset);
 		setImageDescriptor(MDataset.getIconDescriptor().getIcon32());
-		setDescription(com.jaspersoft.studio.messages.Messages.WizardDatasetPage_1);
+		setDescription(Messages.WizardDatasetPage_description);
 		this.jasperDesign = jasperDesign;
 	}
 
@@ -68,7 +69,7 @@ public class WizardDatasetPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText(com.jaspersoft.studio.messages.Messages.WizardDatasetPage_2);
+		lbl.setText(Messages.WizardDatasetPage_dataset);
 
 		final CCombo datasets = new CCombo(composite, SWT.BORDER);
 		datasets.setItems(ModelUtils.getDataSources(jasperDesign));

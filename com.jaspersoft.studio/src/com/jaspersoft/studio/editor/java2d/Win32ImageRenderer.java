@@ -38,7 +38,7 @@ public class Win32ImageRenderer implements ImageRenderer {
 	  {
   		Integer intParamGC = Integer.class.cast(paramGC.handle);
   		
-		  renderImage((int) intParamGC.intValue(), xDest, yDest, width, height, 0, 0, data, imgWidth, imgHeight);
+		  renderImage(intParamGC.intValue(), xDest, yDest, width, height, 0, 0, data, imgWidth, imgHeight);
 	  }
 
 	  static {

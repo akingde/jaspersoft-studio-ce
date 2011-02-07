@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
@@ -37,7 +38,7 @@ public class SubreportWizard extends Wizard {
 
 	public SubreportWizard() {
 		super();
-		setWindowTitle("Subreport");
+		setWindowTitle(Messages.SubreportWizard_subreport);
 	}
 
 	@Override

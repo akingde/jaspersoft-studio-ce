@@ -58,8 +58,8 @@ public class WizardConnectionPage extends WizardPage {
 
 	public WizardConnectionPage() {
 		super("connectionpage"); //$NON-NLS-1$
-		setTitle(Messages.WizardConnectionPage_0);
-		setDescription(Messages.WizardConnectionPage_1);
+		setTitle(Messages.common_connection);
+		setDescription(Messages.WizardConnectionPage_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -70,7 +70,7 @@ public class WizardConnectionPage extends WizardPage {
 		setControl(composite);
 
 		final Button mainReport = new Button(composite, SWT.RADIO);
-		mainReport.setText(Messages.WizardConnectionPage_2);
+		mainReport.setText(Messages.WizardConnectionPage_mainreport_text);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		mainReport.setLayoutData(gd);
@@ -91,7 +91,7 @@ public class WizardConnectionPage extends WizardPage {
 		// -----------------------------------------------------------------------
 
 		final Button connection = new Button(composite, SWT.RADIO);
-		connection.setText(Messages.WizardConnectionPage_3);
+		connection.setText(Messages.WizardConnectionPage_connection_text);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		connection.setLayoutData(gd);
@@ -103,7 +103,7 @@ public class WizardConnectionPage extends WizardPage {
 		connExpr.setEnabled(false);
 
 		final Button connExprDialog = new Button(composite, SWT.PUSH);
-		connExprDialog.setText(Messages.WizardConnectionPage_4);
+		connExprDialog.setText("..."); //$NON-NLS-1$
 		connExprDialog.setEnabled(false);
 		connExprDialog.addSelectionListener(new SelectionListener() {
 
@@ -113,7 +113,7 @@ public class WizardConnectionPage extends WizardPage {
 				MExpression mexp = (MExpression) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION);
 				if (mexp == null || mexp.getValue() == null) {
 					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName(Messages.WizardConnectionPage_5);
+					jrExpression.setValueClassName("java.sql.Connection"); //$NON-NLS-1$
 					mexp = new MExpression(jrExpression);
 				}
 
@@ -138,7 +138,7 @@ public class WizardConnectionPage extends WizardPage {
 				MExpression mexp = (MExpression) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION);
 				if (mexp == null || mexp.getValue() == null) {
 					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName(Messages.WizardConnectionPage_6);
+					jrExpression.setValueClassName("java.sql.Connection"); //$NON-NLS-1$
 					mexp = new MExpression(jrExpression);
 				}
 				mexp.setPropertyValue(JRDesignExpression.PROPERTY_TEXT, connExpr.getText());
@@ -162,7 +162,7 @@ public class WizardConnectionPage extends WizardPage {
 		// ---------------------------------------------------------------------------
 
 		final Button dataSource = new Button(composite, SWT.RADIO);
-		dataSource.setText(Messages.WizardConnectionPage_7);
+		dataSource.setText(Messages.WizardConnectionPage_datasource_text);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		dataSource.setLayoutData(gd);
@@ -174,7 +174,7 @@ public class WizardConnectionPage extends WizardPage {
 		dsExpr.setEnabled(false);
 
 		final Button dsExprDialog = new Button(composite, SWT.PUSH);
-		dsExprDialog.setText(Messages.WizardConnectionPage_8);
+		dsExprDialog.setText("..."); //$NON-NLS-1$
 		dsExprDialog.setEnabled(false);
 
 		dataSource.addSelectionListener(new SelectionListener() {
@@ -199,7 +199,7 @@ public class WizardConnectionPage extends WizardPage {
 						.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION);
 				if (mexp == null || mexp.getValue() == null) {
 					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName(Messages.WizardConnectionPage_9);
+					jrExpression.setValueClassName("net.sf.jasperreports.engine.JRDataSource"); //$NON-NLS-1$
 					mexp = new MExpression(jrExpression);
 				}
 
@@ -225,7 +225,7 @@ public class WizardConnectionPage extends WizardPage {
 						.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION);
 				if (mexp == null || mexp.getValue() == null) {
 					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName(Messages.WizardConnectionPage_10);
+					jrExpression.setValueClassName("net.sf.jasperreports.engine.JRDataSource"); //$NON-NLS-1$
 					mexp = new MExpression(jrExpression);
 				}
 				mexp.setPropertyValue(JRDesignExpression.PROPERTY_TEXT, connExpr.getText());
@@ -237,7 +237,7 @@ public class WizardConnectionPage extends WizardPage {
 		// ------------------------------------------------------------------------------
 
 		final Button emptyConnection = new Button(composite, SWT.RADIO);
-		emptyConnection.setText(Messages.WizardConnectionPage_11);
+		emptyConnection.setText(Messages.WizardConnectionPage_empty_connection_text);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		emptyConnection.setLayoutData(gd);
@@ -246,8 +246,8 @@ public class WizardConnectionPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				if (emptyConnection.getSelection()) {
 					JRDesignExpression jde = new JRDesignExpression();
-					jde.setValueClassName(Messages.WizardConnectionPage_12);
-					jde.setText(Messages.WizardConnectionPage_13);
+					jde.setValueClassName("net.sf.jasperreports.engine.JRDataSource"); //$NON-NLS-1$
+					jde.setText("new net.sf.jasperreports.engine.JREmptyDataSource()"); //$NON-NLS-1$
 
 					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, null);
 					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, jde);
@@ -259,7 +259,7 @@ public class WizardConnectionPage extends WizardPage {
 		});
 
 		final Button noConnection = new Button(composite, SWT.RADIO);
-		noConnection.setText(Messages.WizardConnectionPage_14);
+		noConnection.setText(Messages.WizardConnectionPage_noconnection_text);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		noConnection.setLayoutData(gd);
@@ -282,8 +282,8 @@ public class WizardConnectionPage extends WizardPage {
 
 	private void mainReportConnection() {
 		JRDesignExpression jde = new JRDesignExpression();
-		jde.setValueClassName(Messages.WizardConnectionPage_15);
-		jde.setText(Messages.WizardConnectionPage_16);
+		jde.setValueClassName("java.sql.Connection"); //$NON-NLS-1$
+		jde.setText("$P{REPORT_CONNECTION}"); //$NON-NLS-1$
 
 		datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, jde);
 		datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, null);

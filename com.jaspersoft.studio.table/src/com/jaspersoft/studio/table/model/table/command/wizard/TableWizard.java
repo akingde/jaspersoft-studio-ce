@@ -86,7 +86,7 @@ public class TableWizard extends Wizard {
 		if (page instanceof WizardFieldsPage) {
 			WizardFieldsPage tpage = (WizardFieldsPage) page;
 			String dataset = (String) page0.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
-			if (dataset.equals(""))
+			if (dataset.equals("")) //$NON-NLS-1$
 				dataset = null;
 			tpage.setFields(ModelUtils.getFields4Datasource(jasperDesign, dataset));
 		}
@@ -113,7 +113,7 @@ public class TableWizard extends Wizard {
 			fText.setHeight(detCell.getHeight());
 			JRDesignExpression jre = new JRDesignExpression();
 			jre.setValueClassName(f.getValueClassName());
-			jre.setText("$F{" + f.getName() + "}");
+			jre.setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 			fText.setExpression(jre);
 			detCell.addElement(fText);
 

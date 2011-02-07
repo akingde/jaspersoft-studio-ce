@@ -60,8 +60,8 @@ public class WizardFieldsPage extends WizardPage {
 
 	public WizardFieldsPage() {
 		super("tablepage"); //$NON-NLS-1$
-		setTitle(Messages.WizardFieldsPage_0);
-		setDescription(Messages.WizardFieldsPage_1);
+		setTitle(Messages.WizardFieldsPage_dataset_fields);
+		setDescription(Messages.WizardFieldsPage_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -89,7 +89,7 @@ public class WizardFieldsPage extends WizardPage {
 		bGroup.setLayoutData(gd);
 
 		Button addField = new Button(bGroup, SWT.BORDER);
-		addField.setText(Messages.WizardFieldsPage_2);
+		addField.setText(">"); //$NON-NLS-1$
 		addField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addField.addSelectionListener(new SelectionListener() {
 
@@ -103,7 +103,7 @@ public class WizardFieldsPage extends WizardPage {
 		});
 
 		Button addFields = new Button(bGroup, SWT.BORDER);
-		addFields.setText(Messages.WizardFieldsPage_3);
+		addFields.setText(">>"); //$NON-NLS-1$
 		addFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addFields.addSelectionListener(new SelectionListener() {
 
@@ -121,7 +121,7 @@ public class WizardFieldsPage extends WizardPage {
 		});
 
 		Button delField = new Button(bGroup, SWT.BORDER);
-		delField.setText(Messages.WizardFieldsPage_4);
+		delField.setText("<"); //$NON-NLS-1$
 		delField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delField.addSelectionListener(new SelectionListener() {
 
@@ -135,7 +135,7 @@ public class WizardFieldsPage extends WizardPage {
 		});
 
 		Button delFields = new Button(bGroup, SWT.BORDER);
-		delFields.setText(Messages.WizardFieldsPage_5);
+		delFields.setText("<<"); //$NON-NLS-1$
 		delFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delFields.addSelectionListener(new SelectionListener() {
 

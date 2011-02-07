@@ -83,7 +83,7 @@ public class JRExpressionPage extends WizardPage {
 		valueClassCombo = new Combo(composite, SWT.DROP_DOWN | SWT.FLAT | SWT.BORDER);
 		valueClassCombo
 				.setItems(new String[] {
-						"", "java.lang.Boolean", "java.lang.Byte", "java.util.Date", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						"", "java.lang.Boolean", "java.lang.Byte", "java.util.Date", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						"java.sql.Timestamp", "java.sql.Time", "java.lang.Double", "java.lang.Float", "java.lang.Integer", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 						"java.lang.Long", "java.lang.Short", "java.math.BigDecimal", "java.lang.Number", "java.lang.String", "java.lang.Object" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		valueClassCombo.addSelectionListener(new SelectionAdapter() {

@@ -43,12 +43,12 @@ public class JRExpressionLabelProvider extends LabelProvider {
 			if (jde != null) {
 				String clasname = jde.getValueClassName();
 				if (clasname == null)
-					clasname = "";
+					clasname = ""; //$NON-NLS-1$
 				else
-					clasname = "<" + clasname + ">";
+					clasname = "<" + clasname + ">"; //$NON-NLS-1$ //$NON-NLS-2$
 				String text = jde.getText();
 				if (text == null)
-					text = "";
+					text = ""; //$NON-NLS-1$
 				return clasname + text;
 			}
 		}

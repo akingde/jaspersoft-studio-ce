@@ -288,7 +288,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 		JRDesignDataset jrDesignDataset = new JRDesignDataset(false);
 		jrDesignDataset.setName(ModelUtils.getDefaultName(jrDesign.getDatasetMap(), "Dataset")); //$NON-NLS-1$
 		JRDesignQuery jrDesignQuery = new JRDesignQuery();
-		jrDesignQuery.setLanguage("sql");
+		jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$
 		jrDesignQuery.setText("");
 		jrDesignDataset.setQuery(jrDesignQuery);
 		return jrDesignDataset;
