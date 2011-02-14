@@ -22,6 +22,7 @@ package com.jaspersoft.studio.list.model.command.wizard;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.list.messages.Messages;
@@ -31,8 +32,8 @@ import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
 import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
 
 public class ListWizard extends Wizard {
-	private WizardDatasetPage page0;
-	private WizardConnectionPage page2;
+	private WizardDatasetPage step1;
+	private WizardConnectionPage step2;
 	private MList list;
 
 	public ListWizard() {
@@ -46,18 +47,25 @@ public class ListWizard extends Wizard {
 		this.list = new MList();
 		list.setValue(list.createJRElement(jasperDesign));
 
-		MDatasetRun mdataset = (MDatasetRun) list.getPropertyValue(MList.PREFIX + "DATASET_RUN"); //$NON-NLS-1$
+		MDatasetRun mdataset = (MDatasetRun) list.getPropertyValue(MList.PREFIX + "DATASET_RUN");//$NON-NLS-1$
 		if (mdataset == null)
 			mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
 
-		page0 = new WizardDatasetPage(jasperDesign);
-		addPage(page0);
-		page0.setDataSetRun(mdataset);
+		step1 = new WizardDatasetPage(jasperDesign, false);
+		addPage(step1);
+		step1.setDataSetRun(mdataset);
 
-		page2 = new WizardConnectionPage();
-		addPage(page2);
-		page2.setDataSetRun(mdataset);
+		step2 = new WizardConnectionPage();
+		addPage(step2);
+		step2.setDataSetRun(mdataset);
+	}
 
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+		Object dsname = step1.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+		if (page == step1 && (dsname == null || dsname.equals("")))
+			page = step2;
+		return super.getNextPage(page);
 	}
 
 	public MList getList() {
