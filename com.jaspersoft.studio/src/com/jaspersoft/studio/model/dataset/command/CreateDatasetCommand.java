@@ -24,9 +24,13 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.wizards.dataset.DatasetWizard;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -70,9 +74,7 @@ public class CreateDatasetCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		if (jrDataset == null) {
-			this.jrDataset = MDataset.createJRDataset(jrDesign);
-		}
+		createObject();
 		if (jrDataset != null) {
 			try {
 				if (index < 0 || index > jrDesign.getDatasetsList().size())
@@ -81,6 +83,23 @@ public class CreateDatasetCommand extends Command {
 					jrDesign.addDataset(index, jrDataset);
 			} catch (JRException e) {
 				e.printStackTrace();
+			}
+		}
+	}
+
+	protected void createObject() {
+		if (jrDataset == null) {
+			DatasetWizard wizard = new DatasetWizard();
+			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			wizard.init(jrDesign);
+			dialog.create();
+			if (dialog.open() == Dialog.OK) {
+				MDataset srcNode = wizard.getDataset();
+				if (srcNode.getValue() == null)
+					jrDataset = MDataset.createJRDataset(jrDesign);
+				else {
+					jrDataset = (JRDesignDataset) srcNode.getValue();
+				}
 			}
 		}
 	}

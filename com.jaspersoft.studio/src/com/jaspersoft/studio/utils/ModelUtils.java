@@ -55,7 +55,6 @@ import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.mozilla.javascript.edu.emory.mathcs.backport.java.util.Collections;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
@@ -71,12 +70,17 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
  */
 public class ModelUtils {
 
-	public static String[] getDataSources(JasperDesign jd) {
-		List<?> datasetsList = jd.getDatasetsList();
-		String[] res = new String[datasetsList.size() + 1];
-		res[0] = "[Main Dataset]";
-		for (int i = 0; i < datasetsList.size(); i++)
-			res[i + 1] = ((JRDataset) datasetsList.get(i)).getName();
+	public static String[] getDataSources(JasperDesign jd, boolean all) {
+		List datasetsList = new ArrayList(jd.getDatasetsList());
+		if (all)
+			datasetsList.add(0, jd.getMainDataset());
+		String[] res = new String[datasetsList.size()];
+		for (int i = 0; i < datasetsList.size(); i++) {
+			String name = ((JRDataset) datasetsList.get(i)).getName();
+			if (datasetsList.get(i) == jd.getMainDataset())
+				name = "[Main Dataset]";
+			res[i] = name;
+		}
 		return res;
 	}
 
@@ -85,7 +89,6 @@ public class ModelUtils {
 		if (ds == null || ds.equals("")) {
 			List fieldsList = jd.getFieldsList();
 			List res = new ArrayList(fieldsList);
-			Collections.copy(res, fieldsList);
 			return res;
 		}
 		List<?> datasetsList = jd.getDatasetsList();
@@ -94,7 +97,6 @@ public class ModelUtils {
 			if (d.getName().equals(ds)) {
 				List fieldsList = d.getFieldsList();
 				List res = new ArrayList(fieldsList);
-				Collections.copy(res, fieldsList);
 				return res;
 			}
 		}

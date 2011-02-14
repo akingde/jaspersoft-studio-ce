@@ -19,16 +19,24 @@
  */
 package com.jaspersoft.studio.wizards.dataset;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.PlatformUI;
 
@@ -38,9 +46,21 @@ import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class WizardDatasetPage extends WizardPage {
-	private JasperDesign jasperDesign;
+	private final class DatasetListListener implements Listener {
+		public void handleEvent(Event event) {
+			if (datasets.getSelectionIndex() == 0 && all)
+				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME, null);
+			else
+				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME,
+						datasets.getItem(datasets.getSelectionIndex()));
+		}
+	}
 
+	private JasperDesign jasperDesign;
+	private boolean all = true;
 	private MDatasetRun datasetrun;
+	private List datasets;
+	private DatasetListListener dsListener;
 
 	public void setDataSetRun(MDatasetRun datasetrun) {
 		this.datasetrun = datasetrun;
@@ -54,11 +74,16 @@ public class WizardDatasetPage extends WizardPage {
 	}
 
 	public WizardDatasetPage(JasperDesign jasperDesign) {
+		this(jasperDesign, true);
+	}
+
+	public WizardDatasetPage(JasperDesign jasperDesign, boolean all) {
 		super("datasetpage"); //$NON-NLS-1$
-		setTitle(Messages.WizardDatasetPage_dataset);
+		setTitle(Messages.WizardDatasetNewPage_0);
 		setImageDescriptor(MDataset.getIconDescriptor().getIcon32());
-		setDescription(Messages.WizardDatasetPage_description);
+		setDescription(Messages.WizardDatasetPage_0);
 		this.jasperDesign = jasperDesign;
+		this.all = all;
 	}
 
 	public void createControl(Composite parent) {
@@ -68,32 +93,57 @@ public class WizardDatasetPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.WizardDatasetPage_dataset);
+		String[] dsNames = ModelUtils.getDataSources(jasperDesign, all);
 
-		final CCombo datasets = new CCombo(composite, SWT.BORDER);
-		datasets.setItems(ModelUtils.getDataSources(jasperDesign));
-		datasets.addListener(SWT.Selection, new Listener() {
-
-			public void handleEvent(Event event) {
-				if (datasets.getSelectionIndex() == 0)
-					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME, null);
-				else
-					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME, datasets.getText());
-			}
-		});
-		datasets.select(0);
+		datasets = new List(composite, SWT.BORDER | SWT.READ_ONLY);
+		datasets.setItems(dsNames);
+		dsListener = new DatasetListListener();
+		datasets.addListener(SWT.Selection, dsListener);
+		datasets.setSelection(0);
 		String dsname = (String) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
 		if (dsname != null) {
 			String[] items = datasets.getItems();
 			for (int i = 0; i < items.length; i++) {
 				if (items[i].equals(dsname)) {
-					datasets.select(i);
+					datasets.setSelection(i);
 					break;
 				}
 			}
 		}
+		dsListener.handleEvent(new Event());
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.widthHint = 300;
+		datasets.setLayoutData(gd);
 
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
+		Button newDataset = new Button(composite, SWT.PUSH);
+		newDataset.setText(Messages.WizardDatasetPage_3);
+		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		newDataset.setLayoutData(gd);
+		newDataset.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				DatasetWizard wizard = new DatasetWizard();
+				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+				wizard.init(jasperDesign);
+				dialog.create();
+				if (dialog.open() == Dialog.OK) {
+					String ds = (String) wizard.getDataset().getPropertyValue(JRDesignDataset.PROPERTY_NAME);
+					datasets.add(ds);
+					datasets.select(datasets.getItemCount() - 1);
+
+					try {
+						jasperDesign.addDataset((JRDesignDataset) wizard.getDataset().getValue());
+					} catch (JRException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
 	}
+
 }

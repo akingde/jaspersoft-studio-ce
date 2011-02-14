@@ -520,12 +520,24 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Model2xml.
 	 */
 	private void model2xml() {
-		JasperDesign report = (JasperDesign) ((MRoot) getModel()).getValue();
-		String xml = JasperCompileManager.writeReportToXml(report);
-		xml = xml.replaceFirst("<jasperReport ", "<!-- Created with Jaspersoft Studio -->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
-		IDocumentProvider dp = xmlEditor.getDocumentProvider();
-		IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-		doc.set(xml);
+		try {
+			JasperDesign report = (JasperDesign) ((MRoot) getModel()).getValue();
+			String xml = JasperCompileManager.writeReportToXml(report);
+			xml = xml.replaceFirst("<jasperReport ", "<!-- Created with Jaspersoft Studio -->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
+			IDocumentProvider dp = xmlEditor.getDocumentProvider();
+			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
+			doc.set(xml);
+		} catch (final Exception e) {
+			Display.getCurrent().asyncExec(new Runnable() {
+				public void run() {
+					IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
+							"Error transforming model to xml.", e.getCause()); //$NON-NLS-1$
+					ErrorDialog.openError(Display.getDefault().getActiveShell(),
+							Messages.JrxmlEditor_error_loading_jrxml_to_model, null, status);
+				}
+			});
+		}
+
 	}
 
 	/**

@@ -91,6 +91,8 @@ public class BringBackwardAction extends SelectionAction {
 			Object model = part.getModel();
 			if (model instanceof MGraphicElement) {
 				ANode parent = (ANode) ((MGraphicElement) model).getParent();
+				if (parent == null)
+					return null;
 				int newIndex = parent.getChildren().indexOf(model) - 1;
 				if (newIndex >= 0) {
 					cmd = OutlineTreeEditPartFactory.getReorderCommand((ANode) model, parent, newIndex);

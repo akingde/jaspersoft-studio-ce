@@ -26,6 +26,8 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -42,32 +44,52 @@ public class WizardFieldsPage extends WizardPage {
 	private org.eclipse.swt.widgets.List leftField;
 
 	public void setFields(List<JRDesignField> inFields) {
-		if (this.inFields != null && this.outFields != null
-				&& inFields.size() == this.inFields.size() + this.outFields.size()) {
+		if (inFields == null || this.outFields == null)
+			fillTables(inFields, new ArrayList<JRDesignField>());
+		else {
+			// add fields if not exists inside
 			for (JRDesignField f : inFields) {
 				if (this.inFields.contains(f) || this.outFields.contains(f))
 					continue;
-				fillTables(inFields, new ArrayList<JRDesignField>());
-				return;
+				this.inFields.add(f);
+				leftField.add(f.getName());
 			}
+			List<JRDesignField> tmp = new ArrayList<JRDesignField>();
+			// remove fields from in
+			for (JRDesignField f : this.inFields) {
+				if (!inFields.contains(f))
+					tmp.add(f);
+			}
+			removeFields(this.inFields, leftField, tmp);
+
+			tmp.clear();
+			// remove fields from out
+			for (JRDesignField f : this.outFields) {
+				if (!outFields.contains(f))
+					tmp.add(f);
+			}
+			removeFields(this.outFields, rightField, tmp);
 		}
-		fillTables(inFields, new ArrayList<JRDesignField>());
 	}
 
 	public List<JRDesignField> getFields() {
 		return outFields;
 	}
 
+	public WizardFieldsPage(String key) {
+		super(key); //$NON-NLS-1$
+		setTitle(Messages.WizardFieldsPage_0);
+		setDescription(Messages.WizardFieldsPage_1);
+	}
+
 	public WizardFieldsPage() {
-		super("tablepage"); //$NON-NLS-1$
-		setTitle(Messages.WizardFieldsPage_dataset_fields);
-		setDescription(Messages.WizardFieldsPage_description);
+		this("tablepage");
 	}
 
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 3;
+		layout.numColumns = 4;
 		composite.setLayout(layout);
 		setControl(composite);
 
@@ -88,8 +110,8 @@ public class WizardFieldsPage extends WizardPage {
 		gd.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		bGroup.setLayoutData(gd);
 
-		Button addField = new Button(bGroup, SWT.BORDER);
-		addField.setText(">"); //$NON-NLS-1$
+		final Button addField = new Button(bGroup, SWT.BORDER);
+		addField.setText(Messages.WizardFieldsPage_2);
 		addField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addField.addSelectionListener(new SelectionListener() {
 
@@ -103,7 +125,7 @@ public class WizardFieldsPage extends WizardPage {
 		});
 
 		Button addFields = new Button(bGroup, SWT.BORDER);
-		addFields.setText(">>"); //$NON-NLS-1$
+		addFields.setText(Messages.WizardFieldsPage_3);
 		addFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addFields.addSelectionListener(new SelectionListener() {
 
@@ -120,8 +142,8 @@ public class WizardFieldsPage extends WizardPage {
 			}
 		});
 
-		Button delField = new Button(bGroup, SWT.BORDER);
-		delField.setText("<"); //$NON-NLS-1$
+		final Button delField = new Button(bGroup, SWT.BORDER);
+		delField.setText(Messages.WizardFieldsPage_4);
 		delField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delField.addSelectionListener(new SelectionListener() {
 
@@ -134,8 +156,8 @@ public class WizardFieldsPage extends WizardPage {
 			}
 		});
 
-		Button delFields = new Button(bGroup, SWT.BORDER);
-		delFields.setText("<<"); //$NON-NLS-1$
+		final Button delFields = new Button(bGroup, SWT.BORDER);
+		delFields.setText(Messages.WizardFieldsPage_5);
 		delFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delFields.addSelectionListener(new SelectionListener() {
 
@@ -157,6 +179,98 @@ public class WizardFieldsPage extends WizardPage {
 		gd.widthHint = 200;
 		gd.heightHint = 300;
 		rightField.setLayoutData(gd);
+
+		bGroup = new Composite(composite, SWT.NONE);
+		layout = new GridLayout();
+		layout.numColumns = 1;
+		bGroup.setLayout(layout);
+
+		gd = new GridData();
+		gd.widthHint = 100;
+		gd.heightHint = 300;
+		gd.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
+		bGroup.setLayoutData(gd);
+
+		final Button upField = new Button(bGroup, SWT.BORDER);
+		upField.setText("&Up");
+		upField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		upField.setEnabled(false);
+		upField.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				int index = rightField.getSelectionIndex();
+				if (index > 0) {
+					JRDesignField f = outFields.get(index);
+
+					outFields.remove(index);
+					rightField.remove(index);
+
+					index--;
+
+					outFields.add(index, f);
+					rightField.add(f.getName(), index);
+
+					rightField.select(index);
+				}
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+
+		final Button downFields = new Button(bGroup, SWT.BORDER);
+		downFields.setText("&Down");
+		downFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		downFields.setEnabled(false);
+		downFields.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				int index = rightField.getSelectionIndex();
+				if (index < outFields.size() - 1) {
+					JRDesignField f = outFields.get(index);
+
+					outFields.remove(index);
+					rightField.remove(index);
+
+					index++;
+
+					outFields.add(index, f);
+					rightField.add(f.getName(), index);
+
+					rightField.select(index);
+				}
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+		rightField.addFocusListener(new FocusListener() {
+
+			public void focusLost(FocusEvent e) {
+				upField.setEnabled(false);
+				downFields.setEnabled(false);
+			}
+
+			public void focusGained(FocusEvent e) {
+				upField.setEnabled(rightField.getSelectionIndex() > 0);
+				downFields.setEnabled(rightField.getSelectionIndex() < rightField.getItemCount() - 1);
+			}
+		});
+		rightField.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				boolean lsel = rightField.getSelectionCount() > 0 && rightField.isFocusControl();
+				upField.setEnabled(lsel && rightField.getSelectionIndex() > 0);
+				downFields.setEnabled(lsel && rightField.getSelectionIndex() < rightField.getItemCount() - 1);
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+
 	}
 
 	private void fillTables(List<JRDesignField> inlist, List<JRDesignField> outlist) {
@@ -180,6 +294,10 @@ public class WizardFieldsPage extends WizardPage {
 			outlist.add(inF);
 			f.add(inF);
 		}
+		removeFields(inlist, llist, f);
+	}
+
+	private void removeFields(List<JRDesignField> inlist, org.eclipse.swt.widgets.List llist, List<JRDesignField> f) {
 		for (JRDesignField fil : f) {
 			int i = inlist.indexOf(fil);
 			llist.remove(i);

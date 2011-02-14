@@ -19,19 +19,27 @@
  */
 package com.jaspersoft.studio.wizards;
 
+import net.sf.jasperreports.engine.JRDataSourceProvider;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.operation.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.core.resources.*;
@@ -41,6 +49,10 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.wizards.dataset.DatasetWizard;
+import com.jaspersoft.studio.wizards.dataset.WizardDataSourcePage;
+import com.jaspersoft.studio.wizards.dataset.WizardFieldsGroupByPage;
+import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
 
 /**
  * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container
@@ -50,7 +62,10 @@ import com.jaspersoft.studio.messages.Messages;
  */
 
 public class ReportNewWizard extends Wizard implements INewWizard {
-	private ReportNewWizardPage page;
+	private ReportNewWizardPage step1;
+	private WizardDataSourcePage step2;
+	private WizardFieldsPage step3;
+	private WizardFieldsGroupByPage step4;
 	private ISelection selection;
 
 	/**
@@ -66,8 +81,42 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 	 */
 
 	public void addPages() {
-		page = new ReportNewWizardPage(selection);
-		addPage(page);
+		step1 = new ReportNewWizardPage(selection);
+		addPage(step1);
+
+		step2 = new WizardDataSourcePage();
+		addPage(step2);
+
+		step3 = new WizardFieldsPage();
+		addPage(step3);
+
+		step4 = new WizardFieldsGroupByPage();
+		addPage(step4);
+	}
+
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+		if (page == step3) {
+			JRField[] fields;
+			try {
+				JRDataSourceProvider dataSource = step2.getDataSource();
+				if (dataSource != null) {
+					fields = dataSource.getFields(null);
+					List<JRDesignField> flist = new ArrayList<JRDesignField>();
+					for (JRField f : fields)
+						flist.add((JRDesignField) f);
+
+					step3.setFields(flist);
+				}
+			} catch (UnsupportedOperationException e) {
+				e.printStackTrace();
+			} catch (JRException e) {
+				e.printStackTrace();
+			}
+		}
+		if (page == step4)
+			step4.setFields(new ArrayList<JRDesignField>(step3.getFields()));
+		return super.getNextPage(page);
 	}
 
 	/**
@@ -75,8 +124,8 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 	 * wizard as execution context.
 	 */
 	public boolean performFinish() {
-		final String containerName = page.getContainerName();
-		final String fileName = page.getFileName();
+		final String containerName = step1.getContainerName();
+		final String fileName = step1.getFileName();
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
@@ -172,6 +221,10 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		jb = new JRDesignBand();
 		jb.setHeight(100);
 		jd.setPageFooter(jb);
+
+		
+		
+		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step3, step4);
 
 		String contents = JasperCompileManager.writeReportToXml(jd);
 		return new ByteArrayInputStream(contents.getBytes());
