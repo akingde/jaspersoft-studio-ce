@@ -106,30 +106,39 @@ public class CreateColumnCommand extends Command {
 	}
 
 	public StandardBaseColumn createColumn(JasperDesign jrDesign, StandardTable jrTable) {
-		return CreateColumnCommand.addColumn(jrDesign, jrTable);
+		return CreateColumnCommand.addColumn(jrDesign, jrTable, true, true, true, true, true, true);
 	}
 
-	public static StandardColumn addColumn(JasperDesign jrDesign, StandardTable jrTable) {
+	public static StandardColumn addColumn(JasperDesign jrDesign, StandardTable jrTable, boolean isTHead,
+			boolean isTFoot, boolean isCHead, boolean isCFoot, boolean isGHead, boolean isGFoot) {
 		StandardColumn col = new StandardColumn();
 		col.setWidth(40);
 
+		if (isTHead) {
+			DesignCell cell = new DesignCell();
+			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.TABLE_HEADER, null));
+			col.setTableHeader(cell);
+		}
+
+		if (isTFoot) {
+			DesignCell cell = new DesignCell();
+			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.TABLE_FOOTER, null));
+			col.setTableFooter(cell);
+		}
+
+		if (isCHead) {
+			DesignCell cell = new DesignCell();
+			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_HEADER, null));
+			col.setColumnHeader(cell);
+		}
+
+		if (isCFoot) {
+			DesignCell cell = new DesignCell();
+			cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_FOOTER, null));
+			col.setColumnFooter(cell);
+		}
+
 		DesignCell cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.TABLE_HEADER, null));
-		col.setTableHeader(cell);
-
-		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.TABLE_FOOTER, null));
-		col.setTableFooter(cell);
-
-		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_HEADER, null));
-		col.setColumnHeader(cell);
-
-		cell = new DesignCell();
-		cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_FOOTER, null));
-		col.setColumnFooter(cell);
-
-		cell = new DesignCell();
 		cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_DETAIL, null));
 		col.setDetailCell(cell);
 
@@ -137,13 +146,16 @@ public class CreateColumnCommand extends Command {
 		if (groupsList != null)
 			for (Iterator<?> it = groupsList.iterator(); it.hasNext();) {
 				JRDesignGroup jrGroup = (JRDesignGroup) it.next();
-				cell = new DesignCell();
-				cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_HEADER, jrGroup.getName()));
-				col.setGroupHeader(jrGroup.getName(), cell);
-
-				cell = new DesignCell();
-				cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName()));
-				col.setGroupFooter(jrGroup.getName(), cell);
+				if (isGHead) {
+					cell = new DesignCell();
+					cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_HEADER, jrGroup.getName()));
+					col.setGroupHeader(jrGroup.getName(), cell);
+				}
+				if (isGFoot) {
+					cell = new DesignCell();
+					cell.setHeight(TableColumnSize.getInitTableHeight(jrTable, TableUtil.COLUMN_GROUP_FOOTER, jrGroup.getName()));
+					col.setGroupFooter(jrGroup.getName(), cell);
+				}
 			}
 
 		return col;

@@ -46,10 +46,10 @@ import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
 import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
 
 public class TableWizard extends Wizard {
-	private WizardDatasetPage page0;
-	private WizardFieldsPage page1;
-	private WizardConnectionPage page2;
-	// private TableWizardLayoutPage page3;
+	private WizardDatasetPage step1;
+	private WizardFieldsPage step3;
+	private WizardConnectionPage step2;
+	private TableWizardLayoutPage step4;
 	private MTable table;
 
 	public TableWizard() {
@@ -66,54 +66,60 @@ public class TableWizard extends Wizard {
 		if (mdataset == null)
 			mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
 
-		page0 = new WizardDatasetPage(jasperDesign);
-		addPage(page0);
-		page0.setDataSetRun(mdataset);
+		step1 = new WizardDatasetPage(jasperDesign, false);
+		addPage(step1);
+		step1.setDataSetRun(mdataset);
 
-		page2 = new WizardConnectionPage();
-		addPage(page2);
-		page2.setDataSetRun(mdataset);
+		step2 = new WizardConnectionPage();
+		addPage(step2);
+		step2.setDataSetRun(mdataset);
 
-		page1 = new WizardFieldsPage();
-		addPage(page1);
+		step3 = new WizardFieldsPage();
+		addPage(step3);
 
-		// page3 = new TableWizardLayoutPage();
-		// addPage(page3);
+		step4 = new TableWizardLayoutPage();
+		addPage(step4);
 	}
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		if (page instanceof WizardFieldsPage) {
-			WizardFieldsPage tpage = (WizardFieldsPage) page;
-			String dataset = (String) page0.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
-			if (dataset.equals("")) //$NON-NLS-1$
-				dataset = null;
-			tpage.setFields(ModelUtils.getFields4Datasource(jasperDesign, dataset));
+		String dsname = (String) step1.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+		if (page == step1 && jasperDesign.getDatasetsList().size() == 0)
+			page = step2;
+		if (page == step2) {
+			if (dsname != null && !dsname.equals(""))//$NON-NLS-1$
+				step3.setFields(ModelUtils.getFields4Datasource(jasperDesign, dsname));
+			else
+				page = step3;
 		}
 		return super.getNextPage(page);
 	}
 
 	public MTable getTable() {
-		List<JRDesignField> lst = page1.getFields();
+		List<JRDesignField> lst = step3.getFields();
 		StandardTable tbl = CreateColumnCommand.getTable(table);
 		for (JRDesignField f : lst) {
-			StandardColumn col = CreateColumnCommand.addColumn(jasperDesign, tbl);
+			StandardColumn col = CreateColumnCommand.addColumn(jasperDesign, tbl, step4.isTableHeader(),
+					step4.isTableFooter(), step4.isColumnHeader(), step4.isColumnFooter(), step4.isGroupHeader(),
+					step4.isGroupFooter());
 
 			DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
 			DesignCell detCell = (DesignCell) col.getDetailCell();
 
-			JRDesignStaticText sText = (JRDesignStaticText) new MStaticText().createJRElement(jasperDesign);
-			sText.setWidth(col.getWidth());
-			sText.setHeight(colHeadCell.getHeight());
-			sText.setText(f.getName());
-			colHeadCell.addElement(sText);
+			if (step4.isColumnHeader()) {
+				JRDesignStaticText sText = (JRDesignStaticText) new MStaticText().createJRElement(jasperDesign);
+				sText.setWidth(col.getWidth());
+				sText.setHeight(colHeadCell.getHeight());
+				sText.setText(f.getName());
+				colHeadCell.addElement(sText);
+			}
 
 			JRDesignTextField fText = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
 			fText.setWidth(col.getWidth());
 			fText.setHeight(detCell.getHeight());
 			JRDesignExpression jre = new JRDesignExpression();
 			jre.setValueClassName(f.getValueClassName());
-			jre.setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+			jre.setText("$F{" + f.getName() + "}");//$NON-NLS-1$
 			fText.setExpression(jre);
 			detCell.addElement(fText);
 

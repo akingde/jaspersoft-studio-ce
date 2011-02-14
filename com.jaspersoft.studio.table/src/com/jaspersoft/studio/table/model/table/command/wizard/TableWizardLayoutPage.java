@@ -21,8 +21,12 @@ package com.jaspersoft.studio.table.model.table.command.wizard;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.MTable;
@@ -30,14 +34,21 @@ import com.jaspersoft.studio.table.model.MTable;
 public class TableWizardLayoutPage extends WizardPage {
 	private MTable table = new MTable();
 
+	private boolean isTableHeader = true;
+	private boolean isTableFooter = true;
+	private boolean isColumnHeader = true;
+	private boolean isColumnFooter = true;
+	private boolean isGroupHeader = true;
+	private boolean isGroupFooter = true;
+
 	public MTable getTable() {
 		return table;
 	}
 
 	protected TableWizardLayoutPage() {
 		super("tablepage"); //$NON-NLS-1$
-		setTitle(Messages.TableWizardLayoutPage_layout);
-		setDescription(Messages.TableWizardLayoutPage_description);
+		setTitle(Messages.TableWizardLayoutPage_0);
+		setDescription(Messages.TableWizardLayoutPage_1);
 	}
 
 	@Override
@@ -49,42 +60,119 @@ public class TableWizardLayoutPage extends WizardPage {
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 1;
 		composite.setLayout(layout);
 		setControl(composite);
 
-		// Label lbl = new Label(composite, SWT.NONE);
-		// lbl.setText(Messages.BarcodeWizardPage_barbecue_types);
-		//
-		// lbl = new Label(composite, SWT.NONE);
-		// lbl.setText(Messages.BarcodeWizardPage_barcode4j_types);
-		//
-		// final Table table = new Table(composite, SWT.NONE);
-		// GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		// gd.heightHint = 500;
-		// gd.widthHint = 300;
-		// table.setLayoutData(gd);
-		// table.setHeaderVisible(false);
-		// table.setLinesVisible(true);
-		//
-		// TableColumn[] column = new TableColumn[1];
-		// column[0] = new TableColumn(table, SWT.NONE);
-		// column[0].setText(Messages.BarcodeWizardPage_name);
-		//
-		// column[0].pack();
-		//
-		// final Table table2 = new Table(composite, SWT.NONE);
-		// gd = new GridData(GridData.FILL_HORIZONTAL);
-		// gd.heightHint = 500;
-		// gd.widthHint = 300;
-		// table2.setLayoutData(gd);
-		// table2.setHeaderVisible(false);
-		// table2.setLinesVisible(true);
-		//
-		// TableColumn[] column2 = new TableColumn[1];
-		// column2[0] = new TableColumn(table2, SWT.NONE);
-		// column2[0].setText(Messages.BarcodeWizardPage_name);
+		final Button addTHeader = new Button(composite, SWT.CHECK);
+		addTHeader.setText(Messages.TableWizardLayoutPage_2);
+		addTHeader.setSelection(isTableHeader);
+		addTHeader.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				isTableHeader = addTHeader.getSelection();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+
+		final Button addCHeader = new Button(composite, SWT.CHECK);
+		addCHeader.setText(Messages.TableWizardLayoutPage_3);
+		addCHeader.setSelection(isColumnHeader);
+		addCHeader.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				isColumnHeader = addCHeader.getSelection();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+
+		final Button addGHeader = new Button(composite, SWT.CHECK);
+		addGHeader.setText(Messages.TableWizardLayoutPage_4);
+		addGHeader.setSelection(isGroupHeader);
+		addGHeader.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				isGroupHeader = addGHeader.getSelection();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+
+		final Button addGFooter = new Button(composite, SWT.CHECK);
+		addGFooter.setText(Messages.TableWizardLayoutPage_5);
+		addGFooter.setSelection(isGroupFooter);
+		addGFooter.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				isGroupFooter = addGFooter.getSelection();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+
+		final Button addCFooter = new Button(composite, SWT.CHECK);
+		addCFooter.setText(Messages.TableWizardLayoutPage_6);
+		addCFooter.setSelection(isColumnFooter);
+		addCFooter.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				isColumnFooter = addCFooter.getSelection();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+
+		final Button addTFooter = new Button(composite, SWT.CHECK);
+		addTFooter.setText(Messages.TableWizardLayoutPage_7);
+		addTFooter.setSelection(isTableFooter);
+		addTFooter.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				isTableFooter = addTFooter.getSelection();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+			}
+		});
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(addTHeader, Messages.TableWizardLayoutPage_8);
 
 	}
 
+	public boolean isTableHeader() {
+		return isTableHeader;
+	}
+
+	public boolean isTableFooter() {
+		return isTableFooter;
+	}
+
+	public boolean isColumnHeader() {
+		return isColumnHeader;
+	}
+
+	public boolean isColumnFooter() {
+		return isColumnFooter;
+	}
+
+	public boolean isGroupHeader() {
+		return isGroupHeader;
+	}
+
+	public boolean isGroupFooter() {
+		return isGroupFooter;
+	}
 }

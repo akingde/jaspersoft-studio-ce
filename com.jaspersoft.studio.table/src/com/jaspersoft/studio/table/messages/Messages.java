@@ -34,8 +34,17 @@ public class Messages extends NLS {
 	public static String ReorderColumnCommand_reorder_columns;
 	public static String ReorderColumnGroupCommand_reorder_column_group;
 	public static String TableEditor_table;
-	public static String TableWizardLayoutPage_description;
-	public static String TableWizardLayoutPage_layout;
+	public static String TableWizardLayoutPage_0;
+	public static String TableWizardLayoutPage_1;
+	public static String TableWizardLayoutPage_2;
+	public static String TableWizardLayoutPage_3;
+	public static String TableWizardLayoutPage_4;
+	public static String TableWizardLayoutPage_5;
+	public static String TableWizardLayoutPage_6;
+	public static String TableWizardLayoutPage_7;
+	public static String TableWizardLayoutPage_8;
+
+	public static String TableWizardPage_wizard_description;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
