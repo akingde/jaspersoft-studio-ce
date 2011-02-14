@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.chart.messages.Messages;
@@ -35,8 +36,8 @@ import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
 
 public class ChartWizard extends Wizard {
 	private ChartWizardPage page0;
-	private WizardDatasetPage page1;
-	private WizardConnectionPage page5;
+	private WizardDatasetPage step1;
+	private WizardConnectionPage step2;
 	private MChart chart;
 
 	public ChartWizard() {
@@ -49,22 +50,33 @@ public class ChartWizard extends Wizard {
 		page0 = new ChartWizardPage();
 		addPage(page0);
 
-		page1 = new WizardDatasetPage(jasperDesign);
-		addPage(page1);
+		step1 = new WizardDatasetPage(jasperDesign);
+		addPage(step1);
 		MDatasetRun mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
-		page1.setDataSetRun(mdataset);
+		step1.setDataSetRun(mdataset);
 
-		page5 = new WizardConnectionPage();
-		addPage(page5);
-		page5.setDataSetRun(mdataset);
+		step2 = new WizardConnectionPage();
+		addPage(step2);
+		step2.setDataSetRun(mdataset);
+	}
+
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+		Object dsname = step1.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+		if (page == step1 && (dsname == null || dsname.equals("")))
+			page = step2;
+		return super.getNextPage(page);
 	}
 
 	public MChart getChart() {
 		this.chart = new MChart();
-		chart.setValue(MChart.createJRElement(jasperDesign, page0.getChartType()));
-		JRDesignChart jrChart = (JRDesignChart) chart.getValue();
+		JRDesignChart jrChart = (JRDesignChart) MChart.createJRElement(jasperDesign, page0.getChartType());
+		chart.setValue(jrChart);
 		JRDesignChartDataset jrDataSet = (JRDesignChartDataset) jrChart.getDataset();
-		jrDataSet.setDatasetRun((JRDatasetRun) page1.getDataSetRun().getValue());
+		jrDataSet.setDatasetRun((JRDatasetRun) step1.getDataSetRun().getValue());
+		if (jrDataSet.getDatasetRun().getDatasetName() == null)
+			jrDataSet.setDatasetRun(null);
+
 		return chart;
 	}
 
