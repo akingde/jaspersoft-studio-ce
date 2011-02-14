@@ -19,15 +19,19 @@
  */
 package com.jaspersoft.studio.crosstab.model.rowgroup.command;
 
-import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import java.util.List;
+
+import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.Pair;
@@ -84,45 +88,11 @@ public class CreateRowGroupCommand extends Command {
 	@Override
 	public void execute() {
 		if (jrGroup == null) {
-			this.jrGroup = new JRDesignCrosstabRowGroup();
-			this.jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(),
-					Messages.CreateRowGroupCommand_row_group));
-			this.jrGroup.setWidth(100);
-
-			JRDesignExpression exp = new JRDesignExpression();
-			exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
-			exp.setText(""); //$NON-NLS-1$
-			JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
-			bucket.setExpression(exp);
-			this.jrGroup.setBucket(bucket);
-
-			JRDesignCellContents headerCell = new JRDesignCellContents();
-			jrGroup.setHeader(headerCell);
-			// the width is the with of the current base cell...
-			// JRDesignCrosstabCell baseCell = (JRDesignCrosstabCell) jrCrosstab.getCellsMap().get(new Pair(null, null));
-			// int baseHeight = (baseCell != null && baseCell.getHeight() != null) ? baseCell.getHeight()
-			// : ((baseCell.getContents() != null) ? baseCell.getContents().getHeight() : 30);
-
-			exp = new JRDesignExpression();
-			exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
-			exp.setText("$V{" + jrGroup.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
-
-			JRDesignTextField tf = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
-			tf.setX(0);
-			tf.setY(0);
-			tf.setWidth(60);
-			tf.setHeight(20);
-			if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) { //$NON-NLS-1$ //$NON-NLS-2$
-				tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text")); //$NON-NLS-1$
-			}
-			tf.setExpression(exp);
-
-			headerCell.addElement(tf); // NOI18N
-			jrGroup.setTotalHeader(new JRDesignCellContents());
+			jrGroup = createRowGroup(jasperDesign, jrCrosstab, Messages.CreateRowGroupCommand_row_group);
 		}
 		if (jrGroup != null) {
 			try {
-				addRowGroup(jrCrosstab, jrGroup);
+				addRowGroup(jrCrosstab, jrGroup, index, true);
 			} catch (JRException e) {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
@@ -139,23 +109,85 @@ public class CreateRowGroupCommand extends Command {
 		}
 	}
 
-	public static void addRowGroup(JRDesignCrosstab jrCross, JRDesignCrosstabRowGroup jrRowGr) throws JRException {
-		jrCross.addRowGroup(jrRowGr);
+	public static JRDesignCrosstabRowGroup createRowGroup(JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab,
+			String name) {
+		JRDesignCrosstabRowGroup jrGroup = new JRDesignCrosstabRowGroup();
+		jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab.getRowGroupIndicesMap(), name));
+		jrGroup.setWidth(60);
 
-		// I need to add the extra cells...
-		JRCrosstabColumnGroup[] columns = jrCross.getColumnGroups();
+		JRDesignExpression exp = new JRDesignExpression();
+		exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
+		exp.setText(""); //$NON-NLS-1$
+		JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
+		bucket.setExpression(exp);
+		jrGroup.setBucket(bucket);
+
+		JRDesignCellContents headerCell = new JRDesignCellContents();
+		jrGroup.setHeader(headerCell);
+		// the width is the with of the current base cell...
+		// JRDesignCrosstabCell baseCell = (JRDesignCrosstabCell) jrCrosstab.getCellsMap().get(new Pair(null, null));
+		// int baseHeight = (baseCell != null && baseCell.getHeight() != null) ? baseCell.getHeight()
+		// : ((baseCell.getContents() != null) ? baseCell.getContents().getHeight() : 30);
+
+		exp = new JRDesignExpression();
+		exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
+		exp.setText("$V{" + jrGroup.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+
+		JRDesignTextField tf = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
+		tf.setX(0);
+		tf.setY(0);
+		tf.setWidth(jrGroup.getWidth());
+		tf.setHeight(20);
+		if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) { //$NON-NLS-1$ //$NON-NLS-2$
+			tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text")); //$NON-NLS-1$
+		}
+		tf.setExpression(exp);
+
+		headerCell.addElement(tf); // NOI18N
+		JRDesignCellContents totalCell = new JRDesignCellContents();
+		JRDesignStaticText stext = new JRDesignStaticText();
+		stext.setX(0);
+		stext.setY(0);
+		stext.setWidth(jrGroup.getWidth());
+		stext.setHeight(20);
+		stext.setText("Total " + jrGroup.getName());
+		totalCell.addElement(stext);
+		jrGroup.setTotalHeader(totalCell);
+		return jrGroup;
+	}
+
+	public static void addRowGroup(JRDesignCrosstab jrCross, JRDesignCrosstabRowGroup jrRowGr, int index, boolean addTotal)
+			throws JRException {
+		if (index >= 0 && index < jrCross.getRowGroupsList().size())
+			jrCross.addRowGroup(index, jrRowGr);
+		else
+			jrCross.addRowGroup(jrRowGr);
+
+		if (!jrCross.getCellsMap().containsKey(new Pair(null, null))) {
+			JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
+			dT.setColumnTotalGroup(null);
+			dT.setRowTotalGroup(null);
+			jrCross.addCell(dT);
+			dT.setHeight(20);
+			dT.setWidth(jrRowGr.getWidth());
+		}
+
 		JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
 		dT.setRowTotalGroup(jrRowGr.getName());
 		jrCross.addCell(dT);
-		// for each column, we need to add the total...
-		for (int i = 0; i < columns.length; ++i) {
-			JRDesignCrosstabCell cell = new JRDesignCrosstabCell();
-			cell.setRowTotalGroup(jrRowGr.getName());
-			cell.setColumnTotalGroup(columns[i].getName());
-			jrCross.addCell(cell);
+		dT.setHeight(20);
+		dT.setWidth(jrRowGr.getWidth());
 
-			// Add some cells...
-		}
+		List<JRDesignCrosstabColumnGroup> columns = jrCross.getColumnGroupsList();
+		if (columns != null)
+			for (JRDesignCrosstabColumnGroup c : columns) {
+				JRDesignCrosstabCell cell = new JRDesignCrosstabCell();
+				cell.setRowTotalGroup(jrRowGr.getName());
+				cell.setColumnTotalGroup(c.getName());
+				jrCross.addCell(cell);
+				cell.setHeight(c.getHeight());
+				cell.setWidth(jrRowGr.getWidth());
+			}
 
 		jrCross.preprocess();
 	}

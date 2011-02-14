@@ -39,6 +39,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.crosstab.CrosstabManager;
 import com.jaspersoft.studio.crosstab.CrosstabNodeIconDescriptor;
 import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.crosstab.model.MCrosstab;
@@ -340,8 +341,8 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 		JRDesignCellContents c = null;
 		if (getValue() != null) {
 			c = (JRDesignCellContents) getValue();
-			w = c.getWidth();
-			h = c.getHeight();
+			w = CrosstabManager.getHW(c.getWidth(), 60);
+			h = CrosstabManager.getHW(c.getHeight(), 20);
 		}
 
 		MCrosstab mc = getMCrosstab();

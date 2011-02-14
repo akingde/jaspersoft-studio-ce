@@ -220,7 +220,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			MCrosstabWhenNoDataCell mc = new MCrosstabWhenNoDataCell(mCrosstab, ct.getWhenNoDataCell(), -1);
 			ReportFactory.createElementsForBand(mc, ct.getWhenNoDataCell().getChildren());
 		}
-		mCrosstab.getCrosstabManager().refresh();
+		if (mCrosstab.getCrosstabManager() != null)
+			mCrosstab.getCrosstabManager().refresh();
 	}
 
 	private static boolean isRowGroupTotal(JRDesignCrosstab ct, String rowname) {
@@ -243,12 +244,15 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public static void deleteCellNodes(MCrosstab mCrosstab) {
 		List<INode> nodes = new ArrayList<INode>();
-		for (INode n : mCrosstab.getChildren()) {
-			if (n instanceof MCell || n instanceof MCrosstabWhenNoData || n instanceof MCrosstabHeader)
-				nodes.add(n);
+		if (mCrosstab.getChildren() != null) {
+			for (INode n : mCrosstab.getChildren()) {
+				if (n instanceof MCell || n instanceof MCrosstabWhenNoData || n instanceof MCrosstabHeader)
+					nodes.add(n);
+			}
+			mCrosstab.removeChildren(nodes);
+			if (mCrosstab.getCrosstabManager() != null)
+				mCrosstab.getCrosstabManager().refresh();
 		}
-		mCrosstab.removeChildren(nodes);
-		mCrosstab.getCrosstabManager().refresh();
 	}
 
 	public IFigure createFigure(ANode node) {

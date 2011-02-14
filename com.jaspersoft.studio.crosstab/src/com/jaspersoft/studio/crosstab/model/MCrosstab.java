@@ -336,6 +336,8 @@ public class MCrosstab extends MGraphicElement implements IContainer, IContainer
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
+		if (getParent() == null)
+			return;
 		if (evt.getPropertyName().equals(JRDesignCrosstab.PROPERTY_HEADER_CELL)) {
 			if (evt.getSource() == getValue()) {
 				if (evt.getOldValue() != null && evt.getNewValue() == null) {

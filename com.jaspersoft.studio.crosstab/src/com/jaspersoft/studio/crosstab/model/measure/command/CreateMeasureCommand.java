@@ -76,9 +76,7 @@ public class CreateMeasureCommand extends Command {
 	@Override
 	public void execute() {
 		if (jrMeasure == null) {
-			this.jrMeasure = new JRDesignCrosstabMeasure();
-			this.jrMeasure.setName(ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(),
-					Messages.CreateMeasureCommand_measure));
+			jrMeasure = createMesure(jrCrosstab, Messages.CreateMeasureCommand_measure);
 		}
 		if (jrMeasure != null) {
 			try {
@@ -101,6 +99,12 @@ public class CreateMeasureCommand extends Command {
 				}
 			}
 		}
+	}
+
+	public static JRDesignCrosstabMeasure createMesure(JRDesignCrosstab jrCrosstab, String name) {
+		JRDesignCrosstabMeasure jrMeasure = new JRDesignCrosstabMeasure();
+		jrMeasure.setName(ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(), name));
+		return jrMeasure;
 	}
 
 	/*

@@ -73,6 +73,18 @@ public class CrosstabManager {
 		return boundsMap.get(cell);
 	}
 
+	public static int getHW(int hw) {
+		if (hw < 0)
+			return 0;
+		return hw;
+	}
+
+	public static int getHW(int hw, int def) {
+		if (hw < 0)
+			return def;
+		return hw;
+	}
+
 	public void init(JRDesignCrosstab crosstab) {
 		boundsMap.clear();
 		int rp = 0;
@@ -81,8 +93,8 @@ public class CrosstabManager {
 		int ty = 0;
 		JRDesignCellContents headerCell = (JRDesignCellContents) crosstab.getHeaderCell();
 		if (headerCell != null) {
-			boundsMap.put(headerCell, new Rectangle(0, 0, headerCell.getWidth(), headerCell.getHeight()));
-			ty = headerCell.getHeight();
+			boundsMap.put(headerCell, new Rectangle(0, 0, getHW(headerCell.getWidth()), getHW(headerCell.getHeight())));
+			ty = getHW(headerCell.getHeight());
 		}
 
 		JRCrosstabRowGroup[] rowGroups = crosstab.getRowGroups();
@@ -92,16 +104,17 @@ public class CrosstabManager {
 				JRDesignCellContents ct = (JRDesignCellContents) p.getTotalHeader();
 
 				if (p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.START)) {
-					boundsMap.put(ct, new Rectangle(tx, ty, ct.getWidth(), ct.getHeight()));
-					ty += ct.getHeight();
+					boundsMap.put(ct, new Rectangle(tx, ty, getHW(ct.getWidth()), getHW(ct.getHeight())));
+					ty += getHW(ct.getHeight());
 				} else if (p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.END)) {
-					boundsMap.put(ct, new Rectangle(tx, ty + ch.getHeight(), ct.getWidth(), ct.getHeight()));
+					boundsMap.put(ct,
+							new Rectangle(tx, ty + getHW(ch.getHeight(), 20), getHW(ct.getWidth()), getHW(ct.getHeight())));
 				} else {
 					boundsMap.put(ct, new Rectangle(tx, ty, 0, 0));
 				}
-				boundsMap.put(ch, new Rectangle(tx, ty, ch.getWidth(), ch.getHeight()));
+				boundsMap.put(ch, new Rectangle(tx, ty, getHW(ch.getWidth()), getHW(ch.getHeight(), 20)));
 
-				tx += ch.getWidth();
+				tx += getHW(ch.getWidth());
 
 				cp++;
 
@@ -116,16 +129,17 @@ public class CrosstabManager {
 				JRDesignCellContents ct = (JRDesignCellContents) p.getTotalHeader();
 
 				if (p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.START)) {
-					boundsMap.put(ct, new Rectangle(tx, ty, ct.getWidth(), ct.getHeight()));
-					tx += ct.getWidth();
+					boundsMap.put(ct, new Rectangle(tx, ty, getHW(ct.getWidth()), getHW(ct.getHeight())));
+					tx += getHW(ct.getWidth());
 				} else if (p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.END)) {
-					boundsMap.put(ct, new Rectangle(tx + ch.getWidth(), ty, ct.getWidth(), ct.getHeight()));
+					boundsMap.put(ct, new Rectangle(tx + getHW(ch.getWidth(), 20), ty, getHW(ct.getWidth()),
+							getHW(ct.getHeight())));
 				} else {
 					boundsMap.put(ct, new Rectangle(tx, ty, 0, 0));
 				}
 
-				boundsMap.put(ch, new Rectangle(tx, ty, ch.getWidth(), ch.getHeight()));
-				ty += ch.getHeight();
+				boundsMap.put(ch, new Rectangle(tx, ty, getHW(ch.getWidth(), 20), getHW(ch.getHeight())));
+				ty += getHW(ch.getHeight());
 				rp++;
 			}
 		}
@@ -148,22 +162,22 @@ public class CrosstabManager {
 		tx = ctx;
 		ty = cty;
 		JRCrosstabCell[][] cells = crosstab.getCells();
-
-		for (int i = cells.length - 1; i >= 0; i--) {
-			JRCrosstabCell[] rows = cells[i];
-			int h = 0;
-			for (int j = rows.length - 1; j >= 0; j--) {
-				JRCrosstabCell cols = rows[j];
-				if (cols != null) {
-					JRDesignCellContents cc = (JRDesignCellContents) cols.getContents();
-					boundsMap.put(cc, new Rectangle(tx, ty, cc.getWidth(), cc.getHeight()));
-					tx += cc.getWidth();
-					h = cc.getHeight();
+		if (cells != null)
+			for (int i = cells.length - 1; i >= 0; i--) {
+				JRCrosstabCell[] rows = cells[i];
+				int h = 0;
+				for (int j = rows.length - 1; j >= 0; j--) {
+					JRCrosstabCell cols = rows[j];
+					if (cols != null) {
+						JRDesignCellContents cc = (JRDesignCellContents) cols.getContents();
+						boundsMap.put(cc, new Rectangle(tx, ty, getHW(cc.getWidth()), getHW(cc.getHeight())));
+						tx += getHW(cc.getWidth());
+						h = getHW(cc.getHeight());
+					}
 				}
+				ty += h;
+				tx = ctx;
 			}
-			ty += h;
-			tx = ctx;
-		}
 
 		if (rowGroups != null) {
 			for (int i = 0; i < rowGroups.length; i++) {
@@ -232,7 +246,7 @@ public class CrosstabManager {
 		Rectangle b = boundsMap.get(cell);
 		if (b != null)
 			return b;
-		return new Rectangle(0, 0, cell.getWidth(), cell.getHeight());
+		return new Rectangle(0, 0, getHW(cell.getWidth(), 60), getHW(cell.getHeight(), 20));
 	}
 
 	public void setWidth(JRDesignCellContents cell, int width) {
@@ -310,7 +324,9 @@ public class CrosstabManager {
 				JRDesignCrosstabColumnGroup rg = (JRDesignCrosstabColumnGroup) colGroupsList.get(i);
 				if (rg.getName().equals(colGroupName)) {
 					if (i == colGroupsList.size() - 1) {
-						setWidth((JRDesignCellContents) cells[cells.length - 1][cells[i].length - 1].getContents(), width);
+						if (i < cells.length)
+							setWidth((JRDesignCellContents) cells[cells.length - 1][cells[i].length - 1].getContents(), width);
+
 					} else {
 						int delta = width - cell.getWidth();
 						JRDesignCrosstabColumnGroup rgNext = (JRDesignCrosstabColumnGroup) colGroupsList.get(i + 1);
