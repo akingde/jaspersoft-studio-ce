@@ -10,6 +10,7 @@ public class Messages extends NLS {
 	public static String common_name;
 	public static String common_orphan_child;
 	public static String common_reorder_elements;
+	public static String common_total;
 	public static String common_width;
 	public static String CreateColumnGroupAction_create_column_group;
 	public static String CreateColumnGroupAction_create_column_group_tool_tip;
@@ -35,7 +36,6 @@ public class Messages extends NLS {
 	public static String CreateRowGroupCommand_row_group_name;
 	public static String CrosstabComponentFactory_detail;
 	public static String CrosstabComponentFactory_header;
-	public static String CrosstabComponentFactory_total;
 	public static String CrosstabEditor_crosstab;
 	public static String CrosstabWizardColumnPage_columns;
 	public static String CrosstabWizardColumnPage_description;

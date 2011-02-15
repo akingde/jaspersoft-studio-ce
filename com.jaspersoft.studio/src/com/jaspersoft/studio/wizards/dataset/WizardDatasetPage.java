@@ -79,9 +79,9 @@ public class WizardDatasetPage extends WizardPage {
 
 	public WizardDatasetPage(JasperDesign jasperDesign, boolean all) {
 		super("datasetpage"); //$NON-NLS-1$
-		setTitle(Messages.WizardDatasetNewPage_0);
+		setTitle(Messages.common_dataset);
 		setImageDescriptor(MDataset.getIconDescriptor().getIcon32());
-		setDescription(Messages.WizardDatasetPage_0);
+		setDescription(Messages.WizardDatasetPage_description);
 		this.jasperDesign = jasperDesign;
 		this.all = all;
 	}
@@ -116,7 +116,7 @@ public class WizardDatasetPage extends WizardPage {
 		datasets.setLayoutData(gd);
 
 		Button newDataset = new Button(composite, SWT.PUSH);
-		newDataset.setText(Messages.WizardDatasetPage_3);
+		newDataset.setText(Messages.WizardDatasetPage_new);
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		newDataset.setLayoutData(gd);
 		newDataset.addSelectionListener(new SelectionListener() {

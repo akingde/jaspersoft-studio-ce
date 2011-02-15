@@ -21,11 +21,13 @@ public class Messages extends NLS {
 	public static String common_connection;
 	public static String common_copy;
 	public static String common_cut;
+	public static String common_dataset;
 	public static String common_datasource_editor;
 	public static String common_datasource_name;
 	public static String common_date_format;
 	public static String common_delete;
 	public static String common_description;
+	public static String common_down;
 	public static String common_driver_class;
 	public static String common_empty;
 	public static String common_error_creating_nested_visual_editor;
@@ -109,6 +111,7 @@ public class Messages extends NLS {
 	public static String common_time;
 	public static String common_top;
 	public static String common_underline;
+	public static String common_up;
 	public static String common_username;
 	public static String common_using_cache;
 	public static String common_value_class_name;
@@ -260,12 +263,8 @@ public class Messages extends NLS {
 	public static String JrxmlEditorContributor_add_bookmark;
 	public static String JrxmlEditorContributor_add_task;
 	public static String JrxmlEditorContributor_edit;
-	public static String JrxmlEditorContributor_editor_menu;
 	public static String JrxmlEditorContributor_find_replace;
 	public static String JrxmlEditorContributor_grid_size;
-	public static String JrxmlEditorContributor_sample_action;
-	public static String JrxmlEditorContributor_sample_action_executed;
-	public static String JrxmlEditorContributor_sample_action_tool_tip;
 	public static String JrxmlEditorContributor_select_all;
 	public static String JrxmlEditorContributor_show_ruler;
 	public static String JrxmlEditorContributor_view;
@@ -416,7 +415,6 @@ public class Messages extends NLS {
 	public static String MImage_using_cache_description;
 	public static String MImage_vertical_alignment_description;
 	public static String MJDBCDataSource_classpath;
-	public static String MJDBCDataSource_connection;
 	public static String MLine_direction;
 	public static String MLine_direction_description;
 	public static String MLine_fill_description;
@@ -681,13 +679,10 @@ public class Messages extends NLS {
 	public static String SnapToGridAction_snap_to_grid_tool_tip;
 	public static String SnapToGuidesAction_show_grid_tool_tip;
 	public static String SortFieldPage_description;
-	public static String SortFieldPage_down;
 	public static String SortFieldPage_field;
 	public static String SortFieldPage_remove;
-	public static String SortFieldPage_up;
-	public static String StudioPreferencePage_example_text;
 	public static String SubreportPropertyPage_description;
-	public static String SubreportWizard_0;
+	public static String SubreportWizard_subreport;
 	public static String TextSection_align_bottom_tool_tip;
 	public static String TextSection_align_center_tool_tip;
 	public static String TextSection_align_justified_tool_tip;
@@ -705,27 +700,17 @@ public class Messages extends NLS {
 	public static String WizardConnectionPage_empty_connection_text;
 	public static String WizardConnectionPage_mainreport_text;
 	public static String WizardConnectionPage_noconnection_text;
-	public static String WizardDatasetNewPage_0;
-	public static String WizardDatasetNewPage_1;
-	public static String WizardDatasetNewPage_2;
-	public static String WizardDatasetNewPage_3;
-	public static String WizardDatasetNewPage_4;
-	public static String WizardDatasetNewPage_5;
-	public static String WizardDatasetNewPage_6;
-	public static String WizardDatasetNewPage_7;
-	public static String WizardDatasetPage_0;
-	public static String WizardDatasetPage_dataset;
+	public static String WizardDatasetNewPage_create_an_empty_dataset;
+	public static String WizardDatasetNewPage_create_new_dataset;
+	public static String WizardDatasetNewPage_dataset_name;
+	public static String WizardDatasetNewPage_description;
 	public static String WizardDatasetPage_description;
-	public static String WizardFieldsPage_dataset_fields;
+	public static String WizardDatasetPage_new;
+	public static String WizardDataSourcePage_datasource;
+	public static String WizardDataSourcePage_description;
+	public static String WizardFieldsGroupByPage_description;
+	public static String WizardFieldsGroupByPage_group_by;
 	public static String WizardFieldsPage_description;
-	public static String WizardDatasetPage_3;
-	public static String WizardFieldsPage_0;
-	public static String WizardFieldsPage_1;
-	public static String WizardFieldsPage_2;
-	public static String WizardFieldsPage_3;
-	public static String WizardFieldsPage_4;
-	public static String WizardFieldsPage_5;
-	
 	public static String XLSDatasourcePage_description;
 	public static String XLSDatasourcePage_xls_datasource;
 	public static String XMLDatasourcePage_description;
@@ -739,16 +724,17 @@ public class Messages extends NLS {
 	}
 	
 	/**
-	 * Call this method if it's not possible to use static String fields from Messages class.
+	 * Call this method if it's not possible to use static String fields from NLS class.
 	 * 
 	 * @param key String key to retrieve the translation
+	 * 
+	 * @return translated key
 	 */
 	public static String getString(String key) {
     try {
       return RB_MESSAGES_BY_KEYS.getString(key.toLowerCase());
     } catch (MissingResourceException e) {
       System.out.println("Key: " + key + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
-      
       return key;
     }
   }

@@ -141,7 +141,7 @@ public class SortFieldPage extends WizardPage {
 		});
 
 		Button up = new Button(composite, SWT.PUSH | SWT.CENTER);
-		up.setText(Messages.SortFieldPage_up);
+		up.setText(Messages.common_up);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		up.setLayoutData(gridData);
@@ -154,7 +154,7 @@ public class SortFieldPage extends WizardPage {
 		});
 
 		Button down = new Button(composite, SWT.PUSH | SWT.CENTER);
-		down.setText(Messages.SortFieldPage_down);
+		down.setText(Messages.common_down);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		down.setLayoutData(gridData);

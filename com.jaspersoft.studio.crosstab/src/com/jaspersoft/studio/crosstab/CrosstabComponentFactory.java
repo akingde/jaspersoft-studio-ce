@@ -163,7 +163,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + p.getName());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}
@@ -180,7 +180,7 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.CrosstabComponentFactory_total + p.getName());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + p.getName());
 			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
 		}
 	}

@@ -21,7 +21,6 @@ package com.jaspersoft.studio.crosstab.model.rowgroup.command;
 
 import java.util.List;
 
-import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
@@ -150,7 +149,7 @@ public class CreateRowGroupCommand extends Command {
 		stext.setY(0);
 		stext.setWidth(jrGroup.getWidth());
 		stext.setHeight(20);
-		stext.setText("Total " + jrGroup.getName());
+		stext.setText(Messages.common_total + " " + jrGroup.getName()); //$NON-NLS-1$
 		totalCell.addElement(stext);
 		jrGroup.setTotalHeader(totalCell);
 		return jrGroup;

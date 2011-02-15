@@ -93,7 +93,7 @@ public class CrosstabWizardLayoutPage extends WizardPage {
 		// showGridLines.setLayoutData(gd);
 
 		final Button addRowTotals = new Button(composite, SWT.CHECK);
-		addRowTotals.setText("Add row group totals");
+		addRowTotals.setText(Messages.CrosstabWizardLayoutPage_add_row_group_totals);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		addRowTotals.setLayoutData(gd);
@@ -110,7 +110,7 @@ public class CrosstabWizardLayoutPage extends WizardPage {
 		});
 
 		final Button addColumnTotals = new Button(composite, SWT.CHECK);
-		addColumnTotals.setText("Add column group totals");
+		addColumnTotals.setText(Messages.CrosstabWizardLayoutPage_add_column_group_totals);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		addColumnTotals.setLayoutData(gd);

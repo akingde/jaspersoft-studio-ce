@@ -47,8 +47,8 @@ public class TableWizardLayoutPage extends WizardPage {
 
 	protected TableWizardLayoutPage() {
 		super("tablepage"); //$NON-NLS-1$
-		setTitle(Messages.TableWizardLayoutPage_0);
-		setDescription(Messages.TableWizardLayoutPage_1);
+		setTitle(Messages.TableWizardLayoutPage_layout);
+		setDescription(Messages.TableWizardLayoutPage_description);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class TableWizardLayoutPage extends WizardPage {
 		setControl(composite);
 
 		final Button addTHeader = new Button(composite, SWT.CHECK);
-		addTHeader.setText(Messages.TableWizardLayoutPage_2);
+		addTHeader.setText(Messages.TableWizardLayoutPage_add_table_header);
 		addTHeader.setSelection(isTableHeader);
 		addTHeader.addSelectionListener(new SelectionListener() {
 
@@ -79,7 +79,7 @@ public class TableWizardLayoutPage extends WizardPage {
 		});
 
 		final Button addCHeader = new Button(composite, SWT.CHECK);
-		addCHeader.setText(Messages.TableWizardLayoutPage_3);
+		addCHeader.setText(Messages.TableWizardLayoutPage_add_column_header);
 		addCHeader.setSelection(isColumnHeader);
 		addCHeader.addSelectionListener(new SelectionListener() {
 
@@ -93,7 +93,7 @@ public class TableWizardLayoutPage extends WizardPage {
 		});
 
 		final Button addGHeader = new Button(composite, SWT.CHECK);
-		addGHeader.setText(Messages.TableWizardLayoutPage_4);
+		addGHeader.setText(Messages.TableWizardLayoutPage_add_group_header);
 		addGHeader.setSelection(isGroupHeader);
 		addGHeader.addSelectionListener(new SelectionListener() {
 
@@ -107,7 +107,7 @@ public class TableWizardLayoutPage extends WizardPage {
 		});
 
 		final Button addGFooter = new Button(composite, SWT.CHECK);
-		addGFooter.setText(Messages.TableWizardLayoutPage_5);
+		addGFooter.setText(Messages.TableWizardLayoutPage_add_group_footer);
 		addGFooter.setSelection(isGroupFooter);
 		addGFooter.addSelectionListener(new SelectionListener() {
 
@@ -121,7 +121,7 @@ public class TableWizardLayoutPage extends WizardPage {
 		});
 
 		final Button addCFooter = new Button(composite, SWT.CHECK);
-		addCFooter.setText(Messages.TableWizardLayoutPage_6);
+		addCFooter.setText(Messages.TableWizardLayoutPage_add_column_footer);
 		addCFooter.setSelection(isColumnFooter);
 		addCFooter.addSelectionListener(new SelectionListener() {
 
@@ -135,7 +135,7 @@ public class TableWizardLayoutPage extends WizardPage {
 		});
 
 		final Button addTFooter = new Button(composite, SWT.CHECK);
-		addTFooter.setText(Messages.TableWizardLayoutPage_7);
+		addTFooter.setText(Messages.TableWizardLayoutPage_add_table_footer);
 		addTFooter.setSelection(isTableFooter);
 		addTFooter.addSelectionListener(new SelectionListener() {
 
@@ -148,7 +148,7 @@ public class TableWizardLayoutPage extends WizardPage {
 			}
 		});
 
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(addTHeader, Messages.TableWizardLayoutPage_8);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(addTHeader, "Jaspersoft.wizard");
 
 	}
 

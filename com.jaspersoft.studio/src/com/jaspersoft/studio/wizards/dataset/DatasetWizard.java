@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
 
 public class DatasetWizard extends Wizard {
@@ -26,7 +27,7 @@ public class DatasetWizard extends Wizard {
 
 	public DatasetWizard() {
 		super();
-		setWindowTitle("Dataset");
+		setWindowTitle(Messages.common_dataset);
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class DatasetWizard extends Wizard {
 					JRDesignGroup group = new JRDesignGroup();
 					group.setName(f.getName());
 					JRDesignExpression jre = new JRDesignExpression();
-					jre.setText("$F{" + f.getName() + "}");
+					jre.setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 					group.setExpression(jre);
 
 					jdataset.addGroup(group);

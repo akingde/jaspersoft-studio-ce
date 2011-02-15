@@ -105,10 +105,10 @@ public class CrosstabWizard extends Wizard {
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		String dsname = (String) step1.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
-		if (page == step1 && (dsname == null || dsname.equals("")))
+		if (page == step1 && (dsname == null || dsname.equals(""))) //$NON-NLS-1$
 			page = step2;
 		if (page == step2) {
-			if (dsname != null && !dsname.equals("")) {
+			if (dsname != null && !dsname.equals("")) { //$NON-NLS-1$
 				List<JRDesignField> flist = ModelUtils.getFields4Datasource(jasperDesign, dsname);
 				if (step3.getFields() != null)
 					flist.removeAll(step3.getFields());
@@ -122,7 +122,7 @@ public class CrosstabWizard extends Wizard {
 				page = step3;
 		}
 		if (page == step3) {
-			if (dsname != null && !dsname.equals("")) {
+			if (dsname != null && !dsname.equals("")) { //$NON-NLS-1$
 				// exclude step3 fields
 				List<JRDesignField> flist = ModelUtils.getFields4Datasource(jasperDesign, dsname);
 				if (step3.getFields() != null)
@@ -138,7 +138,7 @@ public class CrosstabWizard extends Wizard {
 				page = step4;
 		}
 		if (page == step4) {
-			if (dsname != null && !dsname.equals(""))
+			if (dsname != null && !dsname.equals("")) //$NON-NLS-1$
 				step5.setFields(ModelUtils.getFields4Datasource(jasperDesign, dsname));
 			else
 				page = step5;
@@ -155,10 +155,10 @@ public class CrosstabWizard extends Wizard {
 		if (step5.getFields() != null)
 			for (JRDesignField f : step5.getFields()) {
 				try {
-					JRDesignCrosstabMeasure m = CreateMeasureCommand.createMesure(jdc, f.getName() + "_MEASURE");
+					JRDesignCrosstabMeasure m = CreateMeasureCommand.createMesure(jdc, f.getName() + "_MEASURE"); //$NON-NLS-1$
 					JRDesignExpression jre = new JRDesignExpression();
 					jre.setValueClassName(f.getValueClassName());
-					jre.setText("$F{" + f.getName() + "}");
+					jre.setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 					m.setValueExpression(jre);
 					m.setCalculation(CalculationEnum.COUNT);
 
@@ -183,7 +183,7 @@ public class CrosstabWizard extends Wizard {
 						colGroup.setTotalPosition(CrosstabTotalPositionEnum.END);
 					else
 						colGroup.setTotalPosition(CrosstabTotalPositionEnum.NONE);
-					((JRDesignExpression) colGroup.getBucket().getExpression()).setText("$F{" + f.getName() + "}");
+					((JRDesignExpression) colGroup.getBucket().getExpression()).setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 
 					CreateColumnGroupCommand.addColumnGroup(jdc, colGroup, -1);
 
@@ -200,7 +200,7 @@ public class CrosstabWizard extends Wizard {
 					else
 						colGroup.setTotalPosition(CrosstabTotalPositionEnum.NONE);
 
-					((JRDesignExpression) colGroup.getBucket().getExpression()).setText("$F{" + f.getName() + "}");
+					((JRDesignExpression) colGroup.getBucket().getExpression()).setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 
 					CreateRowGroupCommand.addRowGroup(jdc, colGroup, -1, step6.isAddRowTotal());
 

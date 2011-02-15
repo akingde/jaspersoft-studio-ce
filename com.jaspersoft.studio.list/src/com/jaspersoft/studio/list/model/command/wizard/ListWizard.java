@@ -63,7 +63,7 @@ public class ListWizard extends Wizard {
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		Object dsname = step1.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
-		if (page == step1 && (dsname == null || dsname.equals("")))
+		if (page == step1 && (dsname == null || dsname.equals(""))) //$NON-NLS-1$
 			page = step2;
 		return super.getNextPage(page);
 	}

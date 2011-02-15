@@ -119,7 +119,7 @@ public class TableWizard extends Wizard {
 			fText.setHeight(detCell.getHeight());
 			JRDesignExpression jre = new JRDesignExpression();
 			jre.setValueClassName(f.getValueClassName());
-			jre.setText("$F{" + f.getName() + "}");//$NON-NLS-1$
+			jre.setText("$F{" + f.getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
 			fText.setExpression(jre);
 			detCell.addElement(fText);
 

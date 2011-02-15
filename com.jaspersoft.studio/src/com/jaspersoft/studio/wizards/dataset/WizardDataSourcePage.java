@@ -22,8 +22,6 @@ package com.jaspersoft.studio.wizards.dataset;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRDataSourceProvider;
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -33,6 +31,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.MDatasources;
 import com.jaspersoft.studio.repository.RepositoryManager;
@@ -49,9 +48,9 @@ public class WizardDataSourcePage extends WizardPage {
 
 	public WizardDataSourcePage() {
 		super("datasourcepage"); //$NON-NLS-1$
-		setTitle("Datasource");
+		setTitle(Messages.WizardDataSourcePage_datasource);
 		setImageDescriptor(MDatasources.getIconDescriptor().getIcon32());
-		setDescription("Select a datasource and design the query.");
+		setDescription(Messages.WizardDataSourcePage_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -62,7 +61,7 @@ public class WizardDataSourcePage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText("Datasource:");
+		lbl.setText(Messages.WizardDataSourcePage_datasource + ":"); //$NON-NLS-1$
 
 		dsList = RepositoryManager.getDatasources();
 

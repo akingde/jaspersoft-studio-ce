@@ -22,12 +22,13 @@ package com.jaspersoft.studio.model.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 
 /**
@@ -93,7 +94,7 @@ public class NodeIconDescriptor implements IIconDescriptor {
 		if (getResourceBundleIcons() == null) {
 			InputStream inputStream = null;
 			try {
-				inputStream = plugin.getBundle().getResource("resources/icons.properties").openStream(); //$NON-NLS-1$
+				inputStream = plugin.getBundle().getResource("resources/icons" + getLocale() + ".properties").openStream(); //$NON-NLS-1$ //$NON-NLS-2$
 				setResourceBundleIcons(new PropertyResourceBundle(inputStream));
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
@@ -216,4 +217,26 @@ public class NodeIconDescriptor implements IIconDescriptor {
 		return this.ICON_TOOLTIP;
 	}
 
+  // This method returns the correct locale suffix. It will test from the most specific to
+	// the most general: fr_FR > fr > no suffix.
+	private String getLocale() {
+		String dLocale = Locale.getDefault().toString();
+		int charIndex = dLocale.indexOf("_");
+		String[] suffixes = {"", "_" + dLocale, "_" + dLocale.substring(0, charIndex)};
+		int returnIndex = 0;
+		URL url1 = plugin.getBundle().getResource("resources/icons" + suffixes[1] + ".properties");
+		URL url2 = plugin.getBundle().getResource("resources/icons" + suffixes[2] + ".properties");
+		try {
+			url1.getFile();
+			returnIndex = 1;
+		} catch (NullPointerException e1) {
+			try {
+				url2.getFile();
+				returnIndex = 2;
+			} catch (NullPointerException e2) {
+				// ignore
+			}
+		}
+		return suffixes[returnIndex];
+	}
 }

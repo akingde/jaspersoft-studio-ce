@@ -63,9 +63,9 @@ public class WizardDatasetNewPage extends WizardPage {
 
 	public WizardDatasetNewPage(JasperDesign jasperDesign) {
 		super("datasetpage"); //$NON-NLS-1$
-		setTitle(Messages.WizardDatasetNewPage_0);
+		setTitle(Messages.common_dataset);
 		setImageDescriptor(MDataset.getIconDescriptor().getIcon32());
-		setDescription(Messages.WizardDatasetNewPage_1);
+		setDescription(Messages.WizardDatasetNewPage_description);
 		this.jasperDesign = jasperDesign;
 	}
 
@@ -77,17 +77,17 @@ public class WizardDatasetNewPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.WizardDatasetNewPage_2);
+		lbl.setText(Messages.WizardDatasetNewPage_dataset_name + ":"); //$NON-NLS-1$
 
 		dsname = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		dsname.setText(ModelUtils.getDefaultName(jasperDesign.getDatasetMap(), Messages.WizardDatasetNewPage_3)); 
+		dsname.setText(ModelUtils.getDefaultName(jasperDesign.getDatasetMap(), "NEWDATASET"));  //$NON-NLS-1$
 		dsname.addListener(SWT.Selection, new Listener() {
 
 			public void handleEvent(Event event) {
 
 				String dstext = dsname.getText();
 				if (jasperDesign.getDatasetMap().get(dstext) != null) {
-					setErrorMessage(Messages.WizardDatasetNewPage_4 + dstext + Messages.WizardDatasetNewPage_5);
+					setErrorMessage("Attention! The name [" + dstext + "] allready exists.");
 				} else {
 					setMessage(getDescription());
 					dataset.setPropertyValue(JRDesignDataset.PROPERTY_NAME, dstext);
@@ -97,7 +97,7 @@ public class WizardDatasetNewPage extends WizardPage {
 		dsname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		final Button fromConn = new Button(composite, SWT.RADIO);
-		fromConn.setText(Messages.WizardDatasetNewPage_6);
+		fromConn.setText(Messages.WizardDatasetNewPage_create_new_dataset);
 		fromConn.setSelection(true);
 		fromConn.addSelectionListener(new SelectionListener() {
 
@@ -115,7 +115,7 @@ public class WizardDatasetNewPage extends WizardPage {
 		fromConn.setLayoutData(gd);
 
 		final Button empty = new Button(composite, SWT.RADIO);
-		empty.setText(Messages.WizardDatasetNewPage_7);
+		empty.setText(Messages.WizardDatasetNewPage_create_an_empty_dataset);
 		empty.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

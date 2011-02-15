@@ -150,7 +150,7 @@ public class CreateColumnGroupCommand extends Command {
 		stext.setY(0);
 		stext.setWidth(60);
 		stext.setHeight(jrGroup.getHeight());
-		stext.setText("Total " + jrGroup.getName());
+		stext.setText(Messages.common_total + " " + jrGroup.getName()); //$NON-NLS-1$
 		totalCell.addElement(stext);
 		jrGroup.setTotalHeader(totalCell);
 		return jrGroup;
