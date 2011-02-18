@@ -659,6 +659,9 @@ public class Messages extends NLS {
 	public static String ScientificPattern_description;
 	public static String SetValueCommand_set_zero_property;
 	public static String ShowGridAction_show_grid_tool_tip;
+	public static String ShowParametersAction_description;
+	public static String ShowParametersAction_showinputparameters;
+	public static String ShowParametersAction_tooltip;
 	public static String ShowPropertyViewAction_show_properties;
 	public static String ShowPropertyViewAction_show_properties_tool_tip;
 	public static String Size2BorderAction_fit_both;
@@ -683,6 +686,10 @@ public class Messages extends NLS {
 	public static String SortFieldPage_description;
 	public static String SortFieldPage_field;
 	public static String SortFieldPage_remove;
+	public static String SortFieldSection_SortField;
+	public static String SortFieldSection_SortFieldsColumnTitle;
+	public static String SortFieldSection_SortOrder;
+	public static String SortFieldSection_tablename;
 	public static String SubreportPropertyPage_description;
 	public static String SubreportWizard_subreport;
 	public static String TextSection_align_bottom_tool_tip;

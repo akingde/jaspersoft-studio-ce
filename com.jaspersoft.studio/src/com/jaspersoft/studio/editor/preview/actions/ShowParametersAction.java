@@ -24,6 +24,7 @@ import org.eclipse.swt.SWT;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.parameter.MParameter;
 
 public class ShowParametersAction extends Action {
@@ -34,9 +35,9 @@ public class ShowParametersAction extends Action {
 		super();
 		this.editor = editor;
 		setId(ID);
-		setText("Show Input Parameters");
-		setDescription("Allways show input parameters dialog before running the report");
-		setToolTipText("Allways show input parameters dialog before running the report");
+		setText(Messages.ShowParametersAction_showinputparameters);
+		setDescription(Messages.ShowParametersAction_description);
+		setToolTipText(Messages.ShowParametersAction_tooltip);
 		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(MParameter.getIconDescriptor().getIcon16Path())); //$NON-NLS-1$
 		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/parameters-16d.png")); //$NON-NLS-1$
 	}

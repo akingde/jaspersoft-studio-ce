@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -64,9 +65,9 @@ public class SortFieldSection {
 
 	public void createSortField(FormToolkit toolkit, CTabFolder tabFolder) {
 		for (JRDesignParameter p : prompts)
-			if (p.getName().equals("SORT_FIELDS")) {
+			if (p.getName().equals("SORT_FIELDS")) {//$NON-NLS-1$
 				CTabItem sftab = new CTabItem(tabFolder, SWT.NONE);
-				sftab.setText("Sort Fields");
+				sftab.setText(Messages.SortFieldSection_SortFieldsColumnTitle);
 
 				Composite composite = toolkit.createComposite(tabFolder);
 				composite.setLayout(new GridLayout(4, false));
@@ -80,7 +81,7 @@ public class SortFieldSection {
 
 				TableColumn[] col = new TableColumn[1];
 				col[0] = new TableColumn(leftTable, SWT.NONE);
-				col[0].setText("Report Objects");
+				col[0].setText(Messages.SortFieldSection_tablename);
 				col[0].pack();
 
 				leftTView = new TableViewer(leftTable);
@@ -100,11 +101,11 @@ public class SortFieldSection {
 
 				col = new TableColumn[2];
 				col[0] = new TableColumn(rightTable, SWT.NONE);
-				col[0].setText("Sort Field");
+				col[0].setText(Messages.SortFieldSection_SortField);
 				col[0].pack();
 
 				col[0] = new TableColumn(rightTable, SWT.NONE);
-				col[0].setText("Sort Order");
+				col[0].setText(Messages.SortFieldSection_SortOrder);
 				col[0].pack();
 
 				TableLayout tlayout = new TableLayout();
@@ -210,11 +211,11 @@ public class SortFieldSection {
 		}
 		leftTView.setInput(inFields);
 
-		Object obj = params.get("SORT_FIELDS");
+		Object obj = params.get("SORT_FIELDS");//$NON-NLS-1$
 		if (obj == null || !(obj instanceof List)) {
 			outFields = new ArrayList<JRSortField>();
 
-			params.put("SORT_FIELDS", outFields);
+			params.put("SORT_FIELDS", outFields);//$NON-NLS-1$
 		} else
 			outFields = (List<JRSortField>) obj;
 

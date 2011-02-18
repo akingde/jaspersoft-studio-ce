@@ -369,12 +369,14 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 *          the new contents
 	 */
 	public void setContents(Object contents) {
-		getViewer().setContents(contents);
+		if (getViewer().getEditPartFactory() != null)
+			getViewer().setContents(contents);
 		if (outline instanceof Tree) {
 			Tree tree = (Tree) outline;
 			if (!tree.isDisposed() && tree.getItems() != null && tree.getItems().length > 0)
 				tree.getItem(0).setExpanded(true);
 		}
+
 	}
 
 	/**
