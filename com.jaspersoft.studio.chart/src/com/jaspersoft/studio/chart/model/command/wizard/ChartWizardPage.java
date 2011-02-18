@@ -85,8 +85,7 @@ public class ChartWizardPage extends WizardPage {
 				e.getSource();
 			}
 		});
-		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(getControl(), "Jaspersoft.wizard");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
 	private void fillTableb4j(Table table) {

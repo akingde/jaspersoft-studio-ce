@@ -26,18 +26,15 @@ import java.util.Map;
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
-import net.sf.jasperreports.engine.design.JRVerifier;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
@@ -169,7 +166,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		desc.add(titleExprD);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(JRDesignChart.PROPERTY_EVALUATION_TIME,
-				Messages.MChart_evaluation_time, EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NULL));
+				Messages.MChart_evaluation_time, EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NOTNULL));
 		evaluationTimeD.setDescription(Messages.MChart_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
@@ -278,7 +275,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 
 		defaultsMap.put(JRBaseChart.PROPERTY_TITLE_POSITION, null);
 		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_POSITION, null);
-		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME, EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, true));
+		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME, EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, false));
 	}
 
 	@Override
@@ -312,7 +309,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))
 			return EnumHelper.getValue(jrElement.getLegendPositionValue(), 0, true);
 		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, true);
+			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, false);
 		if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE))
 			return jrElement.getRenderType();
 		if (id.equals(JRBaseChart.PROPERTY_THEME))
@@ -417,7 +414,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer, IConta
 			jrElement.setLegendPosition((EdgeEnum) EnumHelper.getSetValue(EdgeEnum.values(), value, 0, true));
 		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1,
-					true));
+					false));
 		else if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
 			jrElement.setShowLegend((Boolean) value);
 		else if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE))
