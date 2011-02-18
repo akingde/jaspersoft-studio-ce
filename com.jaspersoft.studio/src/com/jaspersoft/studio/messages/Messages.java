@@ -564,6 +564,8 @@ public class Messages extends NLS {
 	public static String MTextElement_vertical_alignment_description;
 	public static String MTextField_blank_when_null_description;
 	public static String MTextField_evaluation_time_description;
+	public static String MTextField_EvaluationGroup_Descriptoin;
+	public static String MTextField_EvaluatoinGroup;
 	public static String MTextField_expression_description;
 	public static String MTextField_pattern_description;
 	public static String MTextField_stretch_with_overflow;
@@ -694,6 +696,18 @@ public class Messages extends NLS {
 	public static String TextSection_line_spacing_tool_tip;
 	public static String TextSection_rotation_tool_tip;
 	public static String TimePattern_description;
+	public static String WizardBandGroupPage_0;
+	public static String WizardBandGroupPage_1;
+	public static String WizardBandGroupPage_10;
+	public static String WizardBandGroupPage_11;
+	public static String WizardBandGroupPage_2;
+	public static String WizardBandGroupPage_3;
+	public static String WizardBandGroupPage_4;
+	public static String WizardBandGroupPage_5;
+	public static String WizardBandGroupPage_6;
+	public static String WizardBandGroupPage_7;
+	public static String WizardBandGroupPage_8;
+	public static String WizardBandGroupPage_9;
 	public static String WizardConnectionPage_connection_text;
 	public static String WizardConnectionPage_datasource_text;
 	public static String WizardConnectionPage_description;

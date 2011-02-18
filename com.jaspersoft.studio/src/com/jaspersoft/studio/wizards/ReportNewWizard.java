@@ -114,7 +114,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 				e.printStackTrace();
 			}
 		}
-		if (page == step4)
+		if (page == step4 && step3.getFields() != null)
 			step4.setFields(new ArrayList<JRDesignField>(step3.getFields()));
 		return super.getNextPage(page);
 	}
@@ -173,6 +173,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 				file.create(stream, true, monitor);
 			}
 			stream.close();
+			reportFile = file;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -189,6 +190,12 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 			}
 		});
 		monitor.worked(1);
+	}
+
+	private IFile reportFile;
+
+	public IFile getReportFile() {
+		return reportFile;
 	}
 
 	/**
@@ -222,8 +229,6 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		jb.setHeight(100);
 		jd.setPageFooter(jb);
 
-		
-		
 		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step3, step4);
 
 		String contents = JasperCompileManager.writeReportToXml(jd);

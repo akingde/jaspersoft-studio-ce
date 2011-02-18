@@ -24,6 +24,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.LabelProvider;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.JReportsDTO;
 
 /**
  * @author Chicu Veaceslav
@@ -39,8 +40,11 @@ public class RVPropertiesLabelProvider extends LabelProvider {
 	public String getText(Object element) {
 		if (element == null)
 			return ""; //$NON-NLS-1$
+		if (element instanceof JReportsDTO)
+			element = ((JReportsDTO) element).getValue();
 		if (element instanceof List)
-			return "[" + Messages.common_return_values + ": " + ((List<?>) element).size() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			return "Elements: " + ((List<?>) element).size();
+
 		return element.toString();
 	}
 

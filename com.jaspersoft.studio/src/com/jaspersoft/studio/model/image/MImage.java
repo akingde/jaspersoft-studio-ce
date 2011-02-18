@@ -17,11 +17,12 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.model;
+package com.jaspersoft.studio.model.image;
 
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseImage;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -41,10 +42,15 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.model.MGraphicElementLineBox;
+import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
@@ -110,6 +116,14 @@ public class MImage extends MGraphicElementLineBox {
 		defaultsMap = defaultsMap1;
 	}
 
+	protected void setGroupItems(String[] items) {
+		super.setGroupItems(items);
+		if (evalGroupD != null)
+			evalGroupD.setItems(items);
+	}
+
+	private RComboBoxPropertyDescriptor evalGroupD;
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -150,9 +164,14 @@ public class MImage extends MGraphicElementLineBox {
 		desc.add(onErrorTypeD);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(JRDesignImage.PROPERTY_EVALUATION_TIME,
-				Messages.MImage_evaluation_type, EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NULL));
+				Messages.MImage_evaluation_type, EnumHelper.getEnumNames(EvaluationTimeEnum.values(), NullEnum.NOTNULL));
 		evaluationTimeD.setDescription(Messages.MImage_evaluation_type_description);
 		desc.add(evaluationTimeD);
+
+		evalGroupD = new RComboBoxPropertyDescriptor(JRDesignImage.PROPERTY_EVALUATION_GROUP,
+				Messages.MTextField_EvaluatoinGroup, new String[] { "" }); //$NON-NLS-2$
+		evalGroupD.setDescription(Messages.MTextField_EvaluationGroup_Descriptoin);
+		desc.add(evalGroupD);
 
 		CheckBoxPropertyDescriptor usingCacheD = new CheckBoxPropertyDescriptor(JRBaseImage.PROPERTY_USING_CACHE,
 				Messages.common_using_cache, NullEnum.INHERITED);
@@ -169,6 +188,7 @@ public class MImage extends MGraphicElementLineBox {
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
 
 		evaluationTimeD.setCategory(Messages.MImage_image_properties_category);
+		evalGroupD.setCategory(Messages.MImage_image_properties_category);
 		onErrorTypeD.setCategory(Messages.MImage_image_properties_category);
 		scaleImageD.setCategory(Messages.MImage_image_properties_category);
 		expressionD.setCategory(Messages.MImage_image_properties_category);
@@ -183,7 +203,7 @@ public class MImage extends MGraphicElementLineBox {
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseImage.PROPERTY_ON_ERROR_TYPE, EnumHelper.getValue(OnErrorTypeEnum.ERROR, 1, true));
-		defaultsMap.put(JRDesignImage.PROPERTY_EVALUATION_TIME, EnumHelper.getValue(EvaluationTimeEnum.NOW, 1, true));
+		defaultsMap.put(JRDesignImage.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(JRDesignImage.PROPERTY_EXPRESSION, "java.lang.String"); //$NON-NLS-1$
 		defaultsMap.put(JRBaseImage.PROPERTY_LAZY, Boolean.FALSE);
 	}
@@ -212,11 +232,18 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRBaseImage.PROPERTY_ON_ERROR_TYPE))
 			return EnumHelper.getValue(jrElement.getOnErrorTypeValue(), 1, true);
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, true);
+			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, false);
 		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION)) {
 			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getExpression());
 			return mExpression;
 		}
+
+		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
+			if (jrElement.getEvaluationGroup() != null)
+				return jrElement.getEvaluationGroup().getName();
+			return ""; //$NON-NLS-1$
+		}
+
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PARAMETERS)) {
 			if (propertyDTO == null) {
 				propertyDTO = new ParameterDTO();
@@ -272,8 +299,13 @@ public class MImage extends MGraphicElementLineBox {
 			jrElement.setOnErrorType((OnErrorTypeEnum) EnumHelper.getSetValue(OnErrorTypeEnum.values(), value, 1, true));
 		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1,
-					true));
-		else if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
+					false));
+		else if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
+			if (!value.equals("")) { //$NON-NLS-1$
+				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
+				jrElement.setEvaluationGroup(group);
+			}
+		} else if (id.equals(JRDesignImage.PROPERTY_EXPRESSION))
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
 		else if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
 			jrElement.setUsingCache((Boolean) value);

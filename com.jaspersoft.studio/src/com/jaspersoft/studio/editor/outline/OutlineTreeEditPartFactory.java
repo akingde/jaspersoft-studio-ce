@@ -74,8 +74,11 @@ import com.jaspersoft.studio.model.field.command.ReorderFieldCommand;
 import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.group.MGroups;
 import com.jaspersoft.studio.model.group.command.CreateGroupCommand;
+import com.jaspersoft.studio.model.group.command.CreateMainGroupCommand;
 import com.jaspersoft.studio.model.group.command.DeleteGroupCommand;
 import com.jaspersoft.studio.model.group.command.ReorderGroupCommand;
+import com.jaspersoft.studio.model.image.MImage;
+import com.jaspersoft.studio.model.image.command.CreateImageCommand;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.parameter.MParameters;
 import com.jaspersoft.studio.model.parameter.command.CreateParameterCommand;
@@ -352,6 +355,19 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof IGroupElement) {
 				return new CreateSubreportCommand(parent, (MGraphicElement) child, location, newIndex);
 			}
+		} else if (child instanceof MImage) {
+			if (parent instanceof MElementGroup)
+				return new CreateImageCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MBand)
+				return new CreateImageCommand((MBand) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MFrame)
+				return new CreateImageCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+			if (parent instanceof MReport)
+				return new CreateImageCommand(parent, (MGraphicElement) child, location, newIndex);
+
+			if (parent instanceof IGroupElement) {
+				return new CreateElementCommand(parent, (MGraphicElement) child, location, newIndex);
+			}
 		} else if (child instanceof MGraphicElement) {
 			if (parent instanceof MElementGroup)
 				return new CreateElementCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
@@ -397,7 +413,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MGroups)
 				return new CreateGroupCommand((MGroups) parent, (MGroup) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreateGroupCommand((MReport) parent, (MGroup) child, newIndex);
+				return new CreateMainGroupCommand((MReport) parent, (MGroup) child, newIndex);
 		} else if (child instanceof MVariable) {
 			if (parent instanceof MVariables) {
 				JRDesignVariable p = (JRDesignVariable) child.getValue();

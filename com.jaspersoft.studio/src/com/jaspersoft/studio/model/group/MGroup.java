@@ -174,7 +174,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 		JRDesignGroup jrGroup = (JRDesignGroup) getValue();
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
 			jrGroup.setName((String) value);
-		else if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION))
+		else if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
 			jrGroup.setExpression(ExprUtil.setValues(jrGroup.getExpression(), value));
 	}
 

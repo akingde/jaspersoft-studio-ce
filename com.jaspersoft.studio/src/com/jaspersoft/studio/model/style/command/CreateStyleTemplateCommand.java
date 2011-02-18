@@ -19,10 +19,17 @@
  */
 package com.jaspersoft.studio.model.style.command;
 
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.internal.resources.File;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
@@ -68,14 +75,31 @@ public class CreateStyleTemplateCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		if (jrTemplate == null) {
-			this.jrTemplate = MStyleTemplate.createJRTemplate();
-		}
+		createObject();
 		if (jrTemplate != null) {
 			if (index < 0 || index > jrDesign.getTemplatesList().size())
 				jrDesign.addTemplate(jrTemplate);
 			else
 				jrDesign.addTemplate(index, jrTemplate);
+		}
+	}
+
+	private void createObject() {
+		if (jrTemplate == null) {
+			FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(Display.getCurrent().getActiveShell(),
+					false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
+			fd.setInitialPattern("*.jrtx");//$NON-NLS-1$
+			if (fd.open() == Dialog.OK) {
+				File file = (File) fd.getFirstResult();
+
+				this.jrTemplate = MStyleTemplate.createJRTemplate();
+
+				JRDesignExpression jre = new JRDesignExpression();
+				jre.setValueClassName(String.class.getName());
+				jre.setText("\"" + file.getFullPath().toPortableString() + "\"");//$NON-NLS-1$
+				((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
+
+			}
 		}
 	}
 

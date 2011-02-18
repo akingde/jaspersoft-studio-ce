@@ -26,10 +26,8 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
@@ -43,7 +41,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.data.JRXlsDataSource;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
@@ -60,12 +57,19 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IFileEditorInput;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JRPrintEditor;
 import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
+import com.jaspersoft.studio.editor.preview.actions.ShowParametersAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.AMFileDataSource;
@@ -99,6 +103,7 @@ public class PreviewEditor extends JRPrintEditor {
 	private Throwable fillError = null;
 	private DatasourceComboItem dataSourceWidget;
 	private ReloadAction reloadAction;
+	private ShowParametersAction showParametersAction;
 
 	public void runReport(final AMDatasource d) {
 		if (isNotRunning()) {
@@ -121,7 +126,7 @@ public class PreviewEditor extends JRPrintEditor {
 				return;
 
 			String jobName = Messages.PreviewEditor_preview_a
-					+ ": " + jasperDesign.getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ ": " + getJasperDesign().getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			Job job = new Job(jobName) {
 
 				@Override
@@ -137,7 +142,7 @@ public class PreviewEditor extends JRPrintEditor {
 
 						setJasperPrint(null);
 						AsynchronousFillHandle fh = null;
-						JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+						JasperReport jasperReport = JasperCompileManager.compileReport(getJasperDesign());
 
 						SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
 								new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
@@ -241,27 +246,29 @@ public class PreviewEditor extends JRPrintEditor {
 		}
 	}
 
+	private boolean showParameters = false;
+
 	private int askParameters() {
-		List<JRDesignParameter> prompts = new ArrayList<JRDesignParameter>();
-		List<JRDesignParameter> params = jasperDesign.getParametersList();
-		for (JRDesignParameter jdp : params) {
-			if (jdp.isForPrompting() && !jdp.isSystemDefined()) {
-				prompts.add(jdp);
-			}
-		}
-		if (prompts.isEmpty())
-			return Window.OK;
-		ParametersDialog pd = new ParametersDialog(getEditorSite().getShell(), prompts, jasperParameter);
-		if (pd.canShowParameters()) {
+		ParametersDialog pd = new ParametersDialog(getEditorSite().getShell(), jasperDesign, jasperParameter);
+		if (showParameters || pd.canShowParameters()) {
 			return pd.open();
 		}
 		return Window.OK;
+	}
+
+	public boolean isShowParameters() {
+		return showParameters;
+	}
+
+	public void setShowParameters(boolean showParameters) {
+		this.showParameters = showParameters;
 	}
 
 	public void setNotRunning(boolean norun) {
 		super.setNotRunning(norun);
 		dataSourceWidget.refresh(true);
 		reloadAction.setEnabled(norun);
+		showParametersAction.setEnabled(norun);
 	}
 
 	protected void refreshToolbar() {
@@ -273,6 +280,28 @@ public class PreviewEditor extends JRPrintEditor {
 		tbManager.appendToGroup("DATASOURCEGROUP", reloadAction); //$NON-NLS-1$
 		dataSourceWidget = new DatasourceComboItem(this);
 		tbManager.appendToGroup("DATASOURCEGROUP", dataSourceWidget); //$NON-NLS-1$
+
+		// ToolBarContributionItem2 i = new ToolBarContributionItem2();
+		// i.
+
+		showParametersAction = new ShowParametersAction(this);
+		// ToolItem item = new ToolItem(((ToolBarManager) tbManager).getControl(), SWT.CHECK);
+		// item.setText(showParametersAction.getText());
+		// item.setImage(JaspersoftStudioPlugin.getImage(showParametersAction.getImageDescriptor()));
+		// item.setHotImage(JaspersoftStudioPlugin.getImage(showParametersAction.getHoverImageDescriptor()));
+		// item.setToolTipText(showParametersAction.getToolTipText());
+		// item.addSelectionListener(new SelectionListener() {
+		//
+		// public void widgetSelected(SelectionEvent e) {
+		// showParametersAction.run();
+		// }
+		//
+		// public void widgetDefaultSelected(SelectionEvent e) {
+		//
+		// }
+		// });
+
+		tbManager.appendToGroup("DATASOURCEGROUP", showParametersAction); //$NON-NLS-1$
 
 		tbManager.update(true);
 	}

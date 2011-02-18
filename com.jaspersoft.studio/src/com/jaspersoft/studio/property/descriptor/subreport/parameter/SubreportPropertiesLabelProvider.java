@@ -19,6 +19,9 @@
  */
 package com.jaspersoft.studio.property.descriptor.subreport.parameter;
 
+import java.util.Collection;
+import java.util.Map;
+
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
 import org.eclipse.jface.viewers.LabelProvider;
@@ -40,7 +43,11 @@ public class SubreportPropertiesLabelProvider extends LabelProvider {
 		if (element == null)
 			return ""; //$NON-NLS-1$
 		if (element instanceof JRPropertiesMap)
-			return "[" + Messages.common_properties + ": " + ((JRPropertiesMap) element).getPropertyNames().length + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			return "Number of parameters: " + ((JRPropertiesMap) element).getPropertyNames().length; //$NON-NLS-1$
+		if (element instanceof Collection)
+			return "Number of parameters: " + ((Collection) element).size(); //$NON-NLS-1$
+		if (element instanceof Map)
+			return "Number of parameters: " + ((Map) element).size(); //$NON-NLS-1$ 
 		return element.toString();
 	}
 

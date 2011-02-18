@@ -69,7 +69,7 @@ public class DatasetWizard extends Wizard {
 				e.printStackTrace();
 			}
 		}
-		if (page == step4)
+		if (page == step4 && step3.getFields() != null)
 			step4.setFields(new ArrayList<JRDesignField>(step3.getFields()));
 		return super.getNextPage(page);
 	}

@@ -119,7 +119,12 @@ public class SubreportPropertyPage extends WizardPage {
 			fillTable(table);
 	}
 
-	protected SubreportPropertyPage(String pageName) {
+	public SubreportPropertyPage() {
+		this("subreportpage");
+
+	}
+
+	public SubreportPropertyPage(String pageName) {
 		super(pageName);
 		setTitle(Messages.common_subreport_parameters);
 		setDescription(Messages.SubreportPropertyPage_description);
@@ -333,15 +338,17 @@ public class SubreportPropertyPage extends WizardPage {
 	}
 
 	private void fillTable(Table table) {
-		List<SubreportPropertyDTO> props = new ArrayList<SubreportPropertyDTO>();
-		Set<String> names = value.keySet();
-		for (String name : names) {
-			SubreportPropertyDTO p = new SubreportPropertyDTO();
-			p.setProperty(name);
-			p.setValue((JRDesignSubreportParameter) value.get(name));
-			props.add(p);
+		if (value != null) {
+			List<SubreportPropertyDTO> props = new ArrayList<SubreportPropertyDTO>();
+			Set<String> names = value.keySet();
+			for (String name : names) {
+				SubreportPropertyDTO p = new SubreportPropertyDTO();
+				p.setProperty(name);
+				p.setValue((JRDesignSubreportParameter) value.get(name));
+				props.add(p);
+			}
+			tableViewer.setInput(props);
 		}
-		tableViewer.setInput(props);
 	}
 
 	private void setColumnToolTip() {

@@ -19,21 +19,27 @@
  */
 package com.jaspersoft.studio.model.subreport.command.wizard;
 
-import net.sf.jasperreports.engine.JRDatasetRun;
+import java.util.Map;
+
+import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.subreport.MSubreport;
+import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyPage;
 import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
 
 public class SubreportWizard extends Wizard {
 
-	private WizardConnectionPage page5;
+	private WizardNewSubreportPage step1;
+	private WizardConnectionPage step2;
+	private SubreportPropertyPage step3;
 	private MSubreport subreport;
 
 	public SubreportWizard() {
@@ -43,22 +49,46 @@ public class SubreportWizard extends Wizard {
 
 	@Override
 	public void addPages() {
+		this.subreport = new MSubreport();
+		subreport.setValue(subreport.createJRElement(jasperDesign));
 
 		MDatasetRun mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
 
-		page5 = new WizardConnectionPage();
-		addPage(page5);
-		page5.setDataSetRun(mdataset);
+		step1 = new WizardNewSubreportPage();
+		addPage(step1);
+		step1.setSubreport(subreport);
+
+		step2 = new WizardConnectionPage();
+		addPage(step2);
+		step2.setDataSetRun(mdataset);
+
+		step3 = new SubreportPropertyPage();
+		addPage(step3);
+	}
+
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+
+		if (page == step3) {
+			Map map = (Map) subreport.getPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS);
+			if (map != null)
+				step3.setValue(map);
+		}
+		return super.getNextPage(page);
 	}
 
 	public MSubreport getSubreport() {
-		this.subreport = new MSubreport();
-		subreport.setValue(subreport.createJRElement(jasperDesign));
-		JRDesignSubreport jrSubreport = (JRDesignSubreport) subreport.getValue();
-		JRDatasetRun jrDR = (JRDatasetRun) page5.getDataSetRun().getValue();
+		Map<String, JRSubreportParameter> map = step3.getValue();
+		if (map != null)
+			subreport.setPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS, map);
 
-		jrSubreport.setDataSourceExpression(jrDR.getDataSourceExpression());
-		jrSubreport.setConnectionExpression(jrDR.getConnectionExpression());
+		MDatasetRun dr = step2.getDataSetRun();
+		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION,
+				dr.getPropertyValue(JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION));
+		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION,
+				dr.getPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION));
+		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION,
+				dr.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION));
 
 		return subreport;
 	}

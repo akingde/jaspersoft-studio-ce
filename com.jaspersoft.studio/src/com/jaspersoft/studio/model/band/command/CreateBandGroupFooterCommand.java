@@ -26,7 +26,6 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 
-// TODO: Auto-generated Javadoc
 /**
  * creates a band in a Group.
  * 
@@ -49,6 +48,16 @@ public class CreateBandGroupFooterCommand extends Command {
 	 * @param destNode
 	 *          the dest node
 	 */
+	public CreateBandGroupFooterCommand() {
+		super();
+	}
+
+	/**
+	 * Instantiates a new creates the band group footer command.
+	 * 
+	 * @param destNode
+	 *          the dest node
+	 */
 	public CreateBandGroupFooterCommand(MBandGroupFooter destNode) {
 		super();
 		this.jrDesignSection = (JRDesignSection) (destNode.getJrGroup()).getGroupFooterSection();
@@ -64,7 +73,7 @@ public class CreateBandGroupFooterCommand extends Command {
 		if (jrBand == null) {
 			jrBand = MBandGroupFooter.createJRBand();
 		}
-		if (jrBand != null) {
+		if (jrBand != null && jrDesignSection != null) {
 			if (index < 0 || index > jrDesignSection.getBandsList().size())
 				jrDesignSection.addBand(jrBand);
 			else
@@ -89,8 +98,10 @@ public class CreateBandGroupFooterCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		index = jrDesignSection.getBandsList().indexOf(jrBand);
-		jrDesignSection.removeBand(jrBand);
+		if (jrBand != null && jrDesignSection != null) {
+			index = jrDesignSection.getBandsList().indexOf(jrBand);
+			jrDesignSection.removeBand(jrBand);
+		}
 	}
 
 }

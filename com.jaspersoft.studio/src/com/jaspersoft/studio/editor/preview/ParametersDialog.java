@@ -24,37 +24,48 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.jaspersoft.studio.editor.preview.inputs.BigNumericInput;
+import com.jaspersoft.studio.editor.preview.inputs.BooleanInput;
 import com.jaspersoft.studio.editor.preview.inputs.DateInput;
 import com.jaspersoft.studio.editor.preview.inputs.IDataInput;
 import com.jaspersoft.studio.editor.preview.inputs.LocaleInput;
 import com.jaspersoft.studio.editor.preview.inputs.NumericInput;
 import com.jaspersoft.studio.editor.preview.inputs.TextInput;
 import com.jaspersoft.studio.editor.preview.inputs.TimeZoneInput;
-import com.jaspersoft.studio.messages.Messages;
 
 public class ParametersDialog extends FormDialog {
 	private static List<IDataInput> inputs = new ArrayList<IDataInput>();
 	static {
+		inputs.add(new BooleanInput());
 		inputs.add(new TextInput());
 		inputs.add(new LocaleInput());
 		inputs.add(new TimeZoneInput());
 		inputs.add(new NumericInput());
+		inputs.add(new BigNumericInput());
 		inputs.add(new DateInput());
 	}
 	private List<JRDesignParameter> prompts;
 	private Map<String, Object> params;
+	private JasperDesign jDesign;
 
-	public ParametersDialog(Shell shell, List<JRDesignParameter> prompts, Map<String, Object> params) {
+	public ParametersDialog(Shell shell, JasperDesign jDesign, Map<String, Object> params) {
 		super(shell);
-		this.prompts = prompts;
+		this.jDesign = jDesign;
+		this.prompts = jDesign.getParametersList();
 		this.params = params;
 	}
 
@@ -63,30 +74,88 @@ public class ParametersDialog extends FormDialog {
 	}
 
 	public boolean canShowParameters() {
-		for (JRDesignParameter p : prompts)
-			for (IDataInput in : inputs)
-				if (in.isForType(p.getValueClass())) {
-					return true;
-				}
+		for (JRDesignParameter p : prompts) {
+			if (p.isForPrompting() && !p.isSystemDefined())
+				for (IDataInput in : inputs)
+					if (in.isForType(p.getValueClass())) {
+						return true;
+					}
+		}
 		return false;
 	}
 
 	@Override
-	protected void createFormContent(IManagedForm mform) {
-		mform.getForm().setText(Messages.ParametersDialog_report_parameters);
-
+	protected void createFormContent(final IManagedForm mform) {
+		mform.getForm().setText("Report Parameters");
 		FormToolkit toolkit = mform.getToolkit();
 
-		mform.getForm().getBody().setLayout(new GridLayout(2, false));
+		Composite body = mform.getForm().getBody();
+		body.setLayout(new GridLayout());
+
+		CTabFolder tabFolder = new CTabFolder(body, SWT.BOTTOM);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.widthHint = 700;
+		gd.heightHint = 500;
+		tabFolder.setLayoutData(gd);
+		tabFolder.setBackground(body.getBackground());
+
+		createUserParam(toolkit, tabFolder);
+
+		createBParam(toolkit, tabFolder);
+
+		new SortFieldSection(prompts, params, jDesign).createSortField(toolkit, tabFolder);
+	}
+
+	private void createBParam(FormToolkit toolkit, CTabFolder tabFolder) {
+		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+		bptab.setText("Buil-in Parameters");
+
+		ScrolledComposite scompo = new ScrolledComposite(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL);
+		scompo.setExpandHorizontal(true);
+		scompo.setExpandVertical(true);
+
+		Composite sectionClient = toolkit.createComposite(scompo);
+		sectionClient.setLayout(new GridLayout(2, false));
 
 		for (JRDesignParameter p : prompts)
-			for (IDataInput in : inputs) {
-				if (in.isForType(p.getValueClass())) {
-					toolkit.createLabel(mform.getForm().getBody(), p.getName() + ":", SWT.RIGHT); //$NON-NLS-1$
-					in.createInput(mform.getForm().getBody(), p, p.getValueClass(), params);
-					break;
-				}
+			if (!p.isForPrompting() || p.isSystemDefined())
+				createInput(toolkit, sectionClient, p);
+		sectionClient.pack();
+		scompo.setMinSize(sectionClient.getSize());
+		scompo.setContent(sectionClient);
+		bptab.setControl(scompo);
+	}
+
+	private void createUserParam(FormToolkit toolkit, CTabFolder tabFolder) {
+		if (canShowParameters()) {
+			CTabItem ptab = new CTabItem(tabFolder, SWT.NONE);
+			ptab.setText("User Parameters");
+
+			ScrolledComposite scompo = new ScrolledComposite(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL);
+			scompo.setExpandHorizontal(true);
+			scompo.setExpandVertical(true);
+
+			Composite sectionClient = toolkit.createComposite(scompo);
+			sectionClient.setLayout(new GridLayout(2, false));
+
+			for (JRDesignParameter p : prompts)
+				if (p.isForPrompting() && !p.isSystemDefined())
+					createInput(toolkit, sectionClient, p);
+			sectionClient.pack();
+			scompo.setMinSize(sectionClient.getSize());
+			scompo.setContent(sectionClient);
+			ptab.setControl(scompo);
+		}
+	}
+
+	private void createInput(FormToolkit toolkit, Composite sectionClient, JRDesignParameter p) {
+		for (IDataInput in : inputs) {
+			if (in.isForType(p.getValueClass())) {
+				toolkit.createLabel(sectionClient, p.getName() + ":", SWT.RIGHT); //$NON-NLS-1$
+				in.createInput(sectionClient, p, p.getValueClass(), params);
+				break;
 			}
+		}
 	}
 
 }

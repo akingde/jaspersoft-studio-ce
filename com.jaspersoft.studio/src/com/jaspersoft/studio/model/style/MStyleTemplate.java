@@ -88,6 +88,9 @@ public class MStyleTemplate extends APropertyNode implements IPropertySource, IC
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
 	public String getDisplayText() {
+		JRDesignReportTemplate jt = (JRDesignReportTemplate) getValue();
+		if (jt != null && jt.getSourceExpression() != null && jt.getSourceExpression().getText() != null)
+			return iconDescriptor.getTitle() + "(" + jt.getSourceExpression().getText() + ")";//$NON-NLS-2$
 		return iconDescriptor.getTitle();
 	}
 

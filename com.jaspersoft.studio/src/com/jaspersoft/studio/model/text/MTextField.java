@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.text;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.base.JRBaseTextField;
@@ -44,6 +45,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
@@ -110,6 +112,14 @@ public class MTextField extends MTextElement {
 		defaultsMap = defaultsMap1;
 	}
 
+	protected void setGroupItems(String[] items) {
+		super.setGroupItems(items);
+		if (evalGroupD != null)
+			evalGroupD.setItems(items);
+	}
+
+	private RComboBoxPropertyDescriptor evalGroupD;
+
 	/**
 	 * Creates the property descriptors.
 	 * 
@@ -121,9 +131,14 @@ public class MTextField extends MTextElement {
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
 				JRDesignTextField.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time, EnumHelper.getEnumNames(
-						EvaluationTimeEnum.values(), NullEnum.NULL));
+						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
 		evaluationTimeD.setDescription(Messages.MTextField_evaluation_time_description);
 		desc.add(evaluationTimeD);
+
+		evalGroupD = new RComboBoxPropertyDescriptor(JRDesignTextField.PROPERTY_EVALUATION_GROUP,
+				Messages.MTextField_EvaluatoinGroup, new String[] { "" }); //$NON-NLS-2$
+		evalGroupD.setDescription(Messages.MTextField_EvaluationGroup_Descriptoin);
+		desc.add(evalGroupD);
 
 		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,
 				Messages.common_blank_when_null, NullEnum.INHERITED);
@@ -152,9 +167,11 @@ public class MTextField extends MTextElement {
 		patternD.setCategory(Messages.MTextField_textfield_category);
 		exprD.setCategory(Messages.MTextField_textfield_category);
 		evaluationTimeD.setCategory(Messages.MTextField_textfield_category);
+		evalGroupD.setCategory(Messages.MTextField_textfield_category);
 		blankWhenNullD.setCategory(Messages.MTextField_textfield_category);
 		stretchOverflowD.setCategory(Messages.MTextField_textfield_category);
 
+		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);
 	}
@@ -176,13 +193,19 @@ public class MTextField extends MTextElement {
 			return mExpression;
 		}
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrElement.getEvaluationTimeValue());
+			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, false);
 		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrElement.isOwnBlankWhenNull();
 		if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
 			return new Boolean(jrElement.isStretchWithOverflow());
 		if (id.equals(JRDesignStyle.PROPERTY_PATTERN))
 			return jrElement.getOwnPattern();
+
+		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
+			if (jrElement.getEvaluationGroup() != null)
+				return jrElement.getEvaluationGroup().getName();
+			return ""; //$NON-NLS-1$
+		}
 
 		// hyperlink --------------------------------------
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TARGET))
@@ -223,8 +246,14 @@ public class MTextField extends MTextElement {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime(EvaluationTimeEnum.getByValue(EnumHelper.getSetValue((Integer) value)));
-		else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) 
+			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1,
+					false));
+		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
+			if (!value.equals("")) { //$NON-NLS-1$
+				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
+				jrElement.setEvaluationGroup(group);
+			}
+		} else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION))
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
 		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrElement.setBlankWhenNull((Boolean) value);

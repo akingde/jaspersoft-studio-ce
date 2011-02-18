@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.group.command;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -41,13 +42,14 @@ import com.jaspersoft.studio.utils.ModelUtils;
 public class CreateGroupCommand extends Command {
 
 	/** The jr field. */
-	private JRDesignGroup jrGroup;
+	protected JRDesignGroup jrGroup;
 
 	/** The jr data set. */
-	private JRDesignDataset jrDataSet;
+	protected JRDesignDataset jrDataSet;
 
 	/** The index. */
 	private int index;
+	protected JasperDesign jrDesign;
 
 	/**
 	 * Instantiates a new creates the group command.
@@ -65,6 +67,7 @@ public class CreateGroupCommand extends Command {
 		this.index = index;
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrGroup = (JRDesignGroup) srcNode.getValue();
+		this.jrDesign = destNode.getJasperDesign();
 	}
 
 	/**
@@ -85,6 +88,12 @@ public class CreateGroupCommand extends Command {
 			this.jrGroup = (JRDesignGroup) srcNode.getValue();
 	}
 
+	protected void createObject() {
+		if (jrGroup == null) {
+			jrGroup = MGroup.createJRGroup(jrDataSet);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -92,9 +101,7 @@ public class CreateGroupCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		if (jrGroup == null) {
-			this.jrGroup = MGroup.createJRGroup(jrDataSet);
-		}
+		createObject();
 		if (jrGroup != null) {
 			try {
 				if (index < 0 || index > jrDataSet.getGroupsList().size())
