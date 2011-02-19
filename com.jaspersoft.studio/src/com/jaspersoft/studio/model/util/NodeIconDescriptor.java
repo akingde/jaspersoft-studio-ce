@@ -223,20 +223,20 @@ public class NodeIconDescriptor implements IIconDescriptor {
 		String dLocale = Locale.getDefault().toString();
 		int charIndex = dLocale.indexOf("_");
 		String[] suffixes = {"", "_" + dLocale, "_" + dLocale.substring(0, charIndex)};
-		int returnIndex = 0;
+		int suffixesIndex = 0;
 		URL url1 = plugin.getBundle().getResource("resources/icons" + suffixes[1] + ".properties");
 		URL url2 = plugin.getBundle().getResource("resources/icons" + suffixes[2] + ".properties");
 		try {
 			url1.getFile();
-			returnIndex = 1;
+			suffixesIndex = 1;
 		} catch (NullPointerException e1) {
 			try {
 				url2.getFile();
-				returnIndex = 2;
+				suffixesIndex = 2;
 			} catch (NullPointerException e2) {
 				// ignore
 			}
 		}
-		return suffixes[returnIndex];
+		return suffixes[suffixesIndex];
 	}
 }

@@ -120,7 +120,7 @@ public class SubreportPropertyPage extends WizardPage {
 	}
 
 	public SubreportPropertyPage() {
-		this("subreportpage");
+		this("subreportpage"); //$NON-NLS-1$
 
 	}
 
@@ -322,7 +322,7 @@ public class SubreportPropertyPage extends WizardPage {
 					List<SubreportPropertyDTO> plist = (List<SubreportPropertyDTO>) tableViewer.getInput();
 					for (SubreportPropertyDTO p : plist) {
 						if (p != data && p.getProperty() != null && p.getProperty().equals(value)) {
-							setErrorMessage("Properties are unique, you can't put duplicate values");
+							setErrorMessage(Messages.common_error_message_unique_properties);
 							return;
 						}
 					}

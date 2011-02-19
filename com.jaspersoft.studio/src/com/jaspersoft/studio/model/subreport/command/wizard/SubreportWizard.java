@@ -44,7 +44,7 @@ public class SubreportWizard extends Wizard {
 
 	public SubreportWizard() {
 		super();
-		setWindowTitle(Messages.SubreportWizard_subreport);
+		setWindowTitle(Messages.common_subreport);
 	}
 
 	@Override

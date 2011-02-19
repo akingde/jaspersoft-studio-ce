@@ -31,6 +31,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.tabbed.ITypeMapper;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -96,13 +97,13 @@ public class ElementLabelProvider extends LabelProvider {
 	 */
 	public String getText(Object objects) {
 		if (objects == null || objects.equals(StructuredSelection.EMPTY)) {
-			return "No items selected";//$NON-NLS-1$
+			return Messages.ElementLabelProvider_no_items_selected;
 		}
 		final boolean multiple[] = { false };
 		final Object object = getObject(objects, multiple);
 
 		if (object == null || (objects instanceof IStructuredSelection && ((IStructuredSelection) objects).size() > 1)) {
-			return ((IStructuredSelection) objects).size() + " items selected";//$NON-NLS-1$
+			return ((IStructuredSelection) objects).size() + " " + Messages.ElementLabelProvider_items_selected; //$NON-NLS-1$
 		} else {
 			String name = typeMapper.mapType(object).getName();
 			if (object instanceof EditPart) {

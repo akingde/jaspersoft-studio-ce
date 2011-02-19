@@ -49,6 +49,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
 
@@ -66,8 +67,8 @@ public class WizardNewSubreportPage extends WizardPage {
 
 	public WizardNewSubreportPage() {
 		super("newsubreport"); //$NON-NLS-1$
-		setTitle("Subreport");
-		setDescription("Please, select an existing report or just press finish.");
+		setTitle(Messages.common_subreport);
+		setDescription(Messages.WizardNewSubreportPage_description);
 		setImageDescriptor(MSubreport.getIconDescriptor().getIcon32());
 	}
 
@@ -79,7 +80,7 @@ public class WizardNewSubreportPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText("Subreport path:");
+		lbl.setText(Messages.WizardNewSubreportPage_subreport_path + ":"); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.horizontalSpan = 3;
 		lbl.setLayoutData(gd);
@@ -90,7 +91,7 @@ public class WizardNewSubreportPage extends WizardPage {
 		etxt.setLayoutData(gd);
 
 		final Button fbut = new Button(composite, SWT.BORDER);
-		fbut.setText("Browse ...");
+		fbut.setText(Messages.common_browse + "..."); //$NON-NLS-1$
 		fbut.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		fbut.addSelectionListener(new SelectionListener() {
 
@@ -107,7 +108,7 @@ public class WizardNewSubreportPage extends WizardPage {
 			}
 		});
 		final Button newrep = new Button(composite, SWT.BORDER);
-		newrep.setText("New");
+		newrep.setText(Messages.common_new);
 		newrep.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		newrep.addSelectionListener(new SelectionListener() {
 
@@ -130,7 +131,7 @@ public class WizardNewSubreportPage extends WizardPage {
 	private void setUpSubreport(IFile file) {
 		JRDesignExpression jre = new JRDesignExpression();
 		jre.setValueClassName(String.class.getName());
-		jre.setText("\"" + file.getFullPath().toPortableString() + "\"");//$NON-NLS-1$
+		jre.setText("\"" + file.getFullPath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_EXPRESSION, jre);
 		JRDesignSubreport s = (JRDesignSubreport) subreport.getValue();
 		try {

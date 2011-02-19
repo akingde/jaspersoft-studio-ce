@@ -46,6 +46,7 @@ import com.jaspersoft.studio.editor.preview.inputs.LocaleInput;
 import com.jaspersoft.studio.editor.preview.inputs.NumericInput;
 import com.jaspersoft.studio.editor.preview.inputs.TextInput;
 import com.jaspersoft.studio.editor.preview.inputs.TimeZoneInput;
+import com.jaspersoft.studio.messages.Messages;
 
 public class ParametersDialog extends FormDialog {
 	private static List<IDataInput> inputs = new ArrayList<IDataInput>();
@@ -86,7 +87,7 @@ public class ParametersDialog extends FormDialog {
 
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
-		mform.getForm().setText("Report Parameters");
+		mform.getForm().setText(Messages.ParametersDialog_report_parameters);
 		FormToolkit toolkit = mform.getToolkit();
 
 		Composite body = mform.getForm().getBody();
@@ -108,7 +109,7 @@ public class ParametersDialog extends FormDialog {
 
 	private void createBParam(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Buil-in Parameters");
+		bptab.setText(Messages.ParametersDialog_built_in_parameters);
 
 		ScrolledComposite scompo = new ScrolledComposite(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL);
 		scompo.setExpandHorizontal(true);
@@ -129,7 +130,7 @@ public class ParametersDialog extends FormDialog {
 	private void createUserParam(FormToolkit toolkit, CTabFolder tabFolder) {
 		if (canShowParameters()) {
 			CTabItem ptab = new CTabItem(tabFolder, SWT.NONE);
-			ptab.setText("User Parameters");
+			ptab.setText(Messages.ParametersDialog_user_parameters);
 
 			ScrolledComposite scompo = new ScrolledComposite(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL);
 			scompo.setExpandHorizontal(true);

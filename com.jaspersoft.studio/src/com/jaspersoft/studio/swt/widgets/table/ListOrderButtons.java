@@ -11,6 +11,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class ListOrderButtons {
 	private final class ElementOrderChanger implements SelectionListener {
 		private final TableViewer tableViewer;
@@ -47,12 +49,12 @@ public class ListOrderButtons {
 
 	public void createOrderButtons(Composite composite, TableViewer tableViewer) {
 		Button upField = new Button(composite, SWT.BORDER);
-		upField.setText("&Up");
+		upField.setText(Messages.common_up);
 		upField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		upField.addSelectionListener(new ElementOrderChanger(tableViewer, true));
 
 		Button downFields = new Button(composite, SWT.BORDER);
-		downFields.setText("&Down");
+		downFields.setText(Messages.common_down);
 		downFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		downFields.addSelectionListener(new ElementOrderChanger(tableViewer, false));
 	}

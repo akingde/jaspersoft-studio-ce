@@ -8,6 +8,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
@@ -27,7 +28,7 @@ public class CreateMainGroupCommand extends CompoundCommand {
 	private MReport destNode;
 
 	public CreateMainGroupCommand(MReport destNode, MGroup srcNode, int index) {
-		super("Create main Group");
+		super(Messages.CreateMainGroupCommand_create_main_group);
 		add(new CreateGroupCommand(destNode, srcNode, index) {
 			@Override
 			protected void createObject() {

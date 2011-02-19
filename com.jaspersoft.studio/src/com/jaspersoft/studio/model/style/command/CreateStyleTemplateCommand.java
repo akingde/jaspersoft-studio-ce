@@ -96,7 +96,7 @@ public class CreateStyleTemplateCommand extends Command {
 
 				JRDesignExpression jre = new JRDesignExpression();
 				jre.setValueClassName(String.class.getName());
-				jre.setText("\"" + file.getFullPath().toPortableString() + "\"");//$NON-NLS-1$
+				jre.setText("\"" + file.getFullPath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 				((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
 
 			}

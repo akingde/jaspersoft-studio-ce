@@ -136,8 +136,8 @@ public class MTextField extends MTextElement {
 		desc.add(evaluationTimeD);
 
 		evalGroupD = new RComboBoxPropertyDescriptor(JRDesignTextField.PROPERTY_EVALUATION_GROUP,
-				Messages.MTextField_EvaluatoinGroup, new String[] { "" }); //$NON-NLS-2$
-		evalGroupD.setDescription(Messages.MTextField_EvaluationGroup_Descriptoin);
+				Messages.MTextField_evaluation_group, new String[] { "" }); //$NON-NLS-1$
+		evalGroupD.setDescription(Messages.MTextField_evaluation_group_description);
 		desc.add(evalGroupD);
 
 		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,

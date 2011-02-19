@@ -71,8 +71,8 @@ public class WizardBandGroupPage extends WizardPage {
 
 	public WizardBandGroupPage(JasperDesign jrDesign) {
 		super("grouppage"); //$NON-NLS-1$
-		setTitle(Messages.WizardBandGroupPage_0);
-		setDescription(Messages.WizardBandGroupPage_1);
+		setTitle(Messages.common_group);
+		setDescription(Messages.WizardBandGroupPage_description);
 		this.jrDesign = jrDesign;
 		fList = new ArrayList<JRDesignField>(jrDesign.getFieldsList());
 		vList = new ArrayList<JRDesignVariable>();
@@ -92,7 +92,7 @@ public class WizardBandGroupPage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.WizardBandGroupPage_2);
+		lbl.setText(Messages.common_group_name);
 
 		grName = new Text(composite, SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -101,7 +101,7 @@ public class WizardBandGroupPage extends WizardPage {
 
 			public void modifyText(ModifyEvent e) {
 				if (jrDesign.getMainDesignDataset().getGroupsMap().get(grName.getText()) != null)
-					setErrorMessage(Messages.WizardBandGroupPage_3);
+					setErrorMessage(Messages.WizardBandGroupPage_error_message_unique_name);
 				else {
 					setErrorMessage(null);
 					setMessage(getDescription());
@@ -110,10 +110,10 @@ public class WizardBandGroupPage extends WizardPage {
 			}
 		});
 		grName.setText(ModelUtils.getDefaultName(jrDesign.getMainDesignDataset().getGroupsMap(),
-				Messages.WizardBandGroupPage_4));
+				Messages.common_group));
 
 		Group expgroup = new Group(composite, SWT.BORDER);
-		expgroup.setText(Messages.WizardBandGroupPage_5);
+		expgroup.setText(Messages.WizardBandGroupPage_group_by_following_report_object+":");
 		layout = new GridLayout();
 		layout.numColumns = 2;
 		expgroup.setLayout(layout);
@@ -122,10 +122,10 @@ public class WizardBandGroupPage extends WizardPage {
 		expgroup.setLayoutData(gd);
 
 		lbl = new Label(expgroup, SWT.NONE);
-		lbl.setText(Messages.WizardBandGroupPage_6);
+		lbl.setText(Messages.common_fields);
 
 		lbl = new Label(expgroup, SWT.NONE);
-		lbl.setText(Messages.WizardBandGroupPage_7);
+		lbl.setText(Messages.common_variables);
 
 		final List fields = new List(expgroup, SWT.BORDER | SWT.V_SCROLL);
 		fields.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -134,7 +134,7 @@ public class WizardBandGroupPage extends WizardPage {
 		variables.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Button addField = new Button(expgroup, SWT.PUSH);
-		addField.setText(Messages.WizardBandGroupPage_8);
+		addField.setText(Messages.WizardBandGroupPage_field_text);
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gd.horizontalSpan = 2;
 		addField.setLayoutData(gd);
@@ -148,7 +148,7 @@ public class WizardBandGroupPage extends WizardPage {
 		expCompo.setLayoutData(gd);
 
 		lbl = new Label(expCompo, SWT.NONE);
-		lbl.setText(Messages.WizardBandGroupPage_9);
+		lbl.setText(Messages.WizardBandGroupPage_group_by_following_expression);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
@@ -211,7 +211,7 @@ public class WizardBandGroupPage extends WizardPage {
 				int sel = fields.getSelectionIndex();
 				if (sel >= 0 && sel < fList.size()) {
 					JRDesignField f = fList.get(sel);
-					String expression = "$F{" + f.getName() + "}";//$NON-NLS-2$
+					String expression = "$F{" + f.getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
 					MExpression mexp = (MExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
 					if (mexp == null || mexp.getValue() == null) {
 						JRDesignExpression jrExpression = new JRDesignExpression();
@@ -228,7 +228,7 @@ public class WizardBandGroupPage extends WizardPage {
 				sel = variables.getSelectionIndex();
 				if (sel >= 0 && sel < fList.size()) {
 					JRDesignVariable v = vList.get(sel);
-					String expression = "$V{" + v.getName() + "}";//$NON-NLS-1$
+					String expression = "$V{" + v.getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
 					MExpression mexp = (MExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
 					if (mexp == null || mexp.getValue() == null) {
 						JRDesignExpression jrExpression = new JRDesignExpression();

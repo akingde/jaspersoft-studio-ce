@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.image.MImage;
 
 public class ImageWizard extends Wizard {
@@ -32,7 +33,7 @@ public class ImageWizard extends Wizard {
 
 	public ImageWizard() {
 		super();
-		setWindowTitle("Image");
+		setWindowTitle(Messages.common_image);
 	}
 
 	@Override

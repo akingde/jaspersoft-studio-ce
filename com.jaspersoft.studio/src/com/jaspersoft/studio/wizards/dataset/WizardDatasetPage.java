@@ -116,7 +116,7 @@ public class WizardDatasetPage extends WizardPage {
 		datasets.setLayoutData(gd);
 
 		Button newDataset = new Button(composite, SWT.PUSH);
-		newDataset.setText(Messages.WizardDatasetPage_new);
+		newDataset.setText(Messages.common_new);
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		newDataset.setLayoutData(gd);
 		newDataset.addSelectionListener(new SelectionListener() {

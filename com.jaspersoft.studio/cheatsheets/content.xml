@@ -5,11 +5,12 @@
 		</description>
 	</intro>
 	<item title="Show the repository view" skip="true">
-		<action pluginId="org.eclipse.ui.views" 
-		class="com.jaspersoft.studio.repository.RepositoryView"/>
 		<description>Select Window > Show View > Other... at the top of Eclipse. In Jaspersoft 
 		Studio folder, select Repository and do OK. This will show the repository view.
-		</description> 
+		</description>
+  		<command
+        required="false"
+        serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=com.jaspersoft.studio.Repository)"/> 
 	</item>
 	<item title="Launch the JDBC datasource editor" skip="true">
 		<description>In the repository view, go to Datasources > JDBC Datasources. Right-click 

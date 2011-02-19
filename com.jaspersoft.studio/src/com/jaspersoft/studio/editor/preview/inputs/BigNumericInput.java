@@ -58,9 +58,9 @@ public class BigNumericInput implements IDataInput {
 						if (oldText.length() - 1 > e.start + 1)
 							number += oldText.substring(e.start + 1);
 
-						if (number.equals("-"))
+						if (number.equals("-")) //$NON-NLS-1$
 							number = "-0";//$NON-NLS-1$
-						if (number.equals("."))
+						if (number.equals(".")) //$NON-NLS-1$
 							number = "0.";//$NON-NLS-1$
 
 						if (param.getValueClass().equals(Long.class)) {

@@ -93,7 +93,7 @@ public class JDPaletteFactory {
 	 *          the palette root
 	 */
 	public static void createElements(PaletteRoot paletteRoot, List<String> ignore) {
-		PaletteDrawer drawer = new PaletteDrawer(Messages.JDPaletteFactory_elements,
+		PaletteDrawer drawer = new PaletteDrawer(Messages.common_elements,
 				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/elementgroup-16.png")); //$NON-NLS-1$
 		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
 

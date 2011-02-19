@@ -35,7 +35,7 @@ public class ShowParametersAction extends Action {
 		super();
 		this.editor = editor;
 		setId(ID);
-		setText(Messages.ShowParametersAction_showinputparameters);
+		setText(Messages.ShowParametersAction_show_input_parameters);
 		setDescription(Messages.ShowParametersAction_description);
 		setToolTipText(Messages.ShowParametersAction_tooltip);
 		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(MParameter.getIconDescriptor().getIcon16Path())); //$NON-NLS-1$

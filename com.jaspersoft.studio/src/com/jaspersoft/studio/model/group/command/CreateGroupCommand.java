@@ -113,7 +113,7 @@ public class CreateGroupCommand extends Command {
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrDataSet.getGroupsMap(), "CopyOFGroup_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
-							Messages.CreateGroupCommand_group_name, Messages.CreateGroupCommand_group_name_dialog_text, defaultName,
+							Messages.common_group_name, Messages.CreateGroupCommand_group_name_dialog_text, defaultName,
 							null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());

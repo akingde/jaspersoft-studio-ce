@@ -87,7 +87,7 @@ public class WizardDatasetNewPage extends WizardPage {
 
 				String dstext = dsname.getText();
 				if (jasperDesign.getDatasetMap().get(dstext) != null) {
-					setErrorMessage("Attention! The name [" + dstext + "] allready exists.");
+					setErrorMessage(Messages.WizardDatasetNewPage_name_already_exists_a + " [" + dstext + "] " + Messages.WizardDatasetNewPage_name_already_exists_b); //$NON-NLS-1$ //$NON-NLS-2$
 				} else {
 					setMessage(getDescription());
 					dataset.setPropertyValue(JRDesignDataset.PROPERTY_NAME, dstext);

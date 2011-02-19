@@ -87,7 +87,7 @@ public class ReportNewWizardPage extends WizardPage {
 		});
 
 		Button button = new Button(container, SWT.PUSH);
-		button.setText(Messages.ReportNewWizardPage_browse);
+		button.setText(Messages.common_browse + "..."); //$NON-NLS-1$
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				handleBrowse();

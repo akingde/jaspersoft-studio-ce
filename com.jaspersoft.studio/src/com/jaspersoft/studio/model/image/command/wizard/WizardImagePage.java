@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.image.MImage;
 
 public class WizardImagePage extends WizardPage {
@@ -55,8 +56,8 @@ public class WizardImagePage extends WizardPage {
 
 	public WizardImagePage() {
 		super("connectionpage"); //$NON-NLS-1$
-		setTitle("Image");
-		setDescription("Please select image path");
+		setTitle(Messages.common_image);
+		setDescription(Messages.WizardImagePage_description);
 		setImageDescriptor(MImage.getIconDescriptor().getIcon32());
 	}
 
@@ -68,7 +69,7 @@ public class WizardImagePage extends WizardPage {
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText("Image Expression");
+		lbl.setText(Messages.WizardImagePage_image_expression);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		lbl.setLayoutData(gd);
@@ -79,19 +80,19 @@ public class WizardImagePage extends WizardPage {
 		etxt.setLayoutData(gd);
 
 		final Button fbut = new Button(composite, SWT.BORDER);
-		fbut.setText("Browse ...");
+		fbut.setText(Messages.common_browse + "..."); //$NON-NLS-1$
 		fbut.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		fbut.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(Display.getCurrent()
 						.getActiveShell(), false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
-				fd.setInitialPattern("*.png");
+				fd.setInitialPattern("*.png"); //$NON-NLS-1$
 				if (fd.open() == Dialog.OK) {
 					File obj = (File) fd.getFirstResult();
 					JRDesignExpression jre = new JRDesignExpression();
 					jre.setValueClassName(String.class.getName());
-					jre.setText("\"" + obj.getLocationURI().getPath() + "\"");
+					jre.setText("\"" + obj.getLocationURI().getPath() + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 					mimage.setPropertyValue(JRDesignImage.PROPERTY_EXPRESSION, jre);
 				}
 

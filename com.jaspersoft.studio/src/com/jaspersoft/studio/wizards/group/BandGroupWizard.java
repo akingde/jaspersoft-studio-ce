@@ -5,6 +5,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.group.MGroup;
 
 public class BandGroupWizard extends Wizard {
@@ -23,7 +24,7 @@ public class BandGroupWizard extends Wizard {
 
 	public BandGroupWizard() {
 		super();
-		setWindowTitle("Group Band");
+		setWindowTitle(Messages.BandGroupWizard_group_band);
 	}
 
 	@Override

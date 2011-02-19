@@ -169,8 +169,8 @@ public class MImage extends MGraphicElementLineBox {
 		desc.add(evaluationTimeD);
 
 		evalGroupD = new RComboBoxPropertyDescriptor(JRDesignImage.PROPERTY_EVALUATION_GROUP,
-				Messages.MTextField_EvaluatoinGroup, new String[] { "" }); //$NON-NLS-2$
-		evalGroupD.setDescription(Messages.MTextField_EvaluationGroup_Descriptoin);
+				Messages.MTextField_evaluation_group, new String[] { "" }); //$NON-NLS-1$
+		evalGroupD.setDescription(Messages.MTextField_evaluation_group_description);
 		desc.add(evalGroupD);
 
 		CheckBoxPropertyDescriptor usingCacheD = new CheckBoxPropertyDescriptor(JRBaseImage.PROPERTY_USING_CACHE,

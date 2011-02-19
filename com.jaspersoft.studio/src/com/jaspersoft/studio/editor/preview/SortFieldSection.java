@@ -67,7 +67,7 @@ public class SortFieldSection {
 		for (JRDesignParameter p : prompts)
 			if (p.getName().equals("SORT_FIELDS")) {//$NON-NLS-1$
 				CTabItem sftab = new CTabItem(tabFolder, SWT.NONE);
-				sftab.setText(Messages.SortFieldSection_SortFieldsColumnTitle);
+				sftab.setText(Messages.SortFieldSection_sort_fields);
 
 				Composite composite = toolkit.createComposite(tabFolder);
 				composite.setLayout(new GridLayout(4, false));
@@ -81,7 +81,7 @@ public class SortFieldSection {
 
 				TableColumn[] col = new TableColumn[1];
 				col[0] = new TableColumn(leftTable, SWT.NONE);
-				col[0].setText(Messages.SortFieldSection_tablename);
+				col[0].setText(Messages.SortFieldSection_report_objects);
 				col[0].pack();
 
 				leftTView = new TableViewer(leftTable);
@@ -101,11 +101,11 @@ public class SortFieldSection {
 
 				col = new TableColumn[2];
 				col[0] = new TableColumn(rightTable, SWT.NONE);
-				col[0].setText(Messages.SortFieldSection_SortField);
+				col[0].setText(Messages.SortFieldSection_sort_field);
 				col[0].pack();
 
 				col[0] = new TableColumn(rightTable, SWT.NONE);
-				col[0].setText(Messages.SortFieldSection_SortOrder);
+				col[0].setText(Messages.SortFieldSection_sort_order);
 				col[0].pack();
 
 				TableLayout tlayout = new TableLayout();

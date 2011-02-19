@@ -28,6 +28,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class WizardBandGroupLayoutPage extends WizardPage {
 	private boolean addHeader = true;
 	private boolean addFooter = true;
@@ -42,8 +44,8 @@ public class WizardBandGroupLayoutPage extends WizardPage {
 
 	public WizardBandGroupLayoutPage() {
 		super("grouplayout"); //$NON-NLS-1$
-		setTitle("Group layout");
-		setDescription("Please select what bands should we create");
+		setTitle(Messages.WizardBandGroupLayoutPage_group_layout);
+		setDescription(Messages.WizardBandGroupLayoutPage_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -54,7 +56,7 @@ public class WizardBandGroupLayoutPage extends WizardPage {
 		setControl(composite);
 
 		final Button addHeaderButon = new Button(composite, SWT.CHECK);
-		addHeaderButon.setText("Add the Group Header");
+		addHeaderButon.setText(Messages.WizardBandGroupLayoutPage_add_group_header);
 		addHeaderButon.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -68,7 +70,7 @@ public class WizardBandGroupLayoutPage extends WizardPage {
 		addHeaderButon.setSelection(true);
 
 		final Button addFooterButon = new Button(composite, SWT.CHECK);
-		addFooterButon.setText("Add the Group Footer");
+		addFooterButon.setText(Messages.WizardBandGroupLayoutPage_add_group_footer);
 		addFooterButon.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
