@@ -218,15 +218,20 @@ public class ParameterPage extends WizardPage {
 					if (value instanceof MExpression) {
 						JRExpression e = (JRExpression) ((MExpression) value).getValue();
 						data.setValueExpression(e);
+					} else {
+						value.getClass();
 					}
-				}
-				if ("NAME".equals(property)) { //$NON-NLS-1$
+				} else if ("NAME".equals(property)) { //$NON-NLS-1$
 					List<JRHyperlinkParameter> plist = (List<JRHyperlinkParameter>) tableViewer.getInput();
 					for (JRHyperlinkParameter p : plist) {
 						if (p != data && p.getName() != null && p.getName().equals(value)) {
 							setErrorMessage(Messages.common_error_message_unique_properties);
 							return;
 						}
+					}
+					if (value == null || ((String) value).trim().equals("")) {
+						setErrorMessage("Properties must have non empty string name.");
+						return;
 					}
 					data.setName((String) value);
 				}

@@ -219,8 +219,7 @@ public class SubreportPropertyPage extends WizardPage {
 						JRExpression e = (JRExpression) ((MExpression) value).getValue();
 						data.setExpression(e);
 					}
-				}
-				if ("NAME".equals(property)) { //$NON-NLS-1$
+				} else if ("NAME".equals(property)) { //$NON-NLS-1$
 					List<JRDesignSubreportParameter> plist = (List<JRDesignSubreportParameter>) tableViewer.getInput();
 					for (JRDesignSubreportParameter p : plist) {
 						if (p != data && p.getName() != null && p.getName().equals(value)) {

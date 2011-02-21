@@ -36,7 +36,12 @@ public class WLocale extends Composite {
 		super(parent, SWT.NONE);
 		combo = new CCombo(this, style);
 		combo.setItems(getLocales());
-		setLayout(new GridLayout());
+		GridLayout layout = new GridLayout();
+		layout.marginLeft = 0;
+		layout.marginRight = 0;
+		layout.marginWidth = 0;
+		layout.horizontalSpacing = 0;
+		setLayout(layout);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 

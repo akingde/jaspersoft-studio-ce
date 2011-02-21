@@ -50,7 +50,8 @@ public class WizardDatasetPage extends WizardPage {
 		public void handleEvent(Event event) {
 			if (datasets.getSelectionIndex() == 0 && all)
 				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME, null);
-			else
+			else if (datasets.getSelectionIndex() >= 0 && datasets.getSelectionIndex() < datasets.getItemCount())
+
 				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME,
 						datasets.getItem(datasets.getSelectionIndex()));
 		}

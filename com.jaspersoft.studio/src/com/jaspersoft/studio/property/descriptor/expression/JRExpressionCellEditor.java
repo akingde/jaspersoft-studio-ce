@@ -44,7 +44,17 @@ public class JRExpressionCellEditor extends ATextDialogRWCellEditor {
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		JRExpressionEditor wizard = new JRExpressionEditor();
-		wizard.setValue((MExpression) getValue());
+		Object val = getValue();
+
+		if (val == null)
+			val = new MExpression(new JRDesignExpression());
+		if (val instanceof String) {
+			JRDesignExpression jrexpr = new JRDesignExpression();
+			jrexpr.setValueClassName(String.class.getName());
+			jrexpr.setText((String) val);
+			val = new MExpression(jrexpr);
+		}
+		wizard.setValue((MExpression) val);
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
@@ -57,13 +67,16 @@ public class JRExpressionCellEditor extends ATextDialogRWCellEditor {
 
 	@Override
 	protected void updateContents(Object value) {
-		if (getDefaultLabel() == null) {
-			return;
-		}
 		if (labelProvider == null)
 			labelProvider = new JRExpressionLabelProvider();
-		String text = labelProvider.getText(value);
-		getDefaultLabel().setText(text);
+		String txt = labelProvider.getText(value);
+
+		if (getDefaultLabel() == null) {
+			text.removeModifyListener(getModifyListener());
+			text.setText(txt);
+			text.addModifyListener(getModifyListener());
+		} else
+			getDefaultLabel().setText(txt);
 	}
 
 	@Override
@@ -78,11 +91,15 @@ public class JRExpressionCellEditor extends ATextDialogRWCellEditor {
 				m.setValue(dexpr);
 			}
 			final JRDesignExpression e = dexpr;
+			final String exprTxt = text.getText();
+
 			Display.getCurrent().asyncExec(new Runnable() {
 
 				public void run() {
 					// m.setPropertyValue(JRDesignExpression.PROPERTY_TEXT, text.getText());
-					e.setText(text.getText());
+					e.setText(exprTxt);
+					// doSetValue(exprTxt);
+					updateContents(exprTxt);
 				}
 			});
 			return new MExpression(dexpr);

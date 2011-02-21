@@ -45,7 +45,7 @@ public class JRExpressionLabelProvider extends LabelProvider {
 				if (clasname == null)
 					clasname = ""; //$NON-NLS-1$
 				else
-					clasname = "<" + clasname + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+					clasname = "(" + clasname + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 				String text = jde.getText();
 				if (text == null)
 					text = ""; //$NON-NLS-1$

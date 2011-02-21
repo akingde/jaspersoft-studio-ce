@@ -427,7 +427,7 @@ public abstract class ATextDialogRWCellEditor extends DialogCellEditor {
 		if (tval == null) {
 			tval = "";//$NON-NLS-1$
 		}
-		Object typedValue = tval;
+		final Object typedValue = tval;
 		boolean oldValidState = isValueValid();
 		boolean newValidState = isCorrect(typedValue);
 

@@ -84,6 +84,10 @@ public class SortFieldSection {
 				col[0].setText(Messages.SortFieldSection_report_objects);
 				col[0].pack();
 
+				TableLayout tlayout = new TableLayout();
+				tlayout.addColumnData(new ColumnWeightData(100, false));
+				leftTable.setLayout(tlayout);
+
 				leftTView = new TableViewer(leftTable);
 				leftTView.setContentProvider(new ListContentProvider());
 				leftTView.setLabelProvider(new TLabelProvider());
@@ -108,9 +112,9 @@ public class SortFieldSection {
 				col[0].setText(Messages.SortFieldSection_sort_order);
 				col[0].pack();
 
-				TableLayout tlayout = new TableLayout();
-				tlayout.addColumnData(new ColumnWeightData(60, 75, true));
-				tlayout.addColumnData(new ColumnWeightData(40, 70, true));
+				tlayout = new TableLayout();
+				tlayout.addColumnData(new ColumnWeightData(65, true));
+				tlayout.addColumnData(new ColumnWeightData(35, true));
 				rightTable.setLayout(tlayout);
 
 				rightTView = new TableViewer(rightTable);

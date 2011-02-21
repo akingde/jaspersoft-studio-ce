@@ -42,7 +42,7 @@ public class DeleteButton {
 	}
 
 	public void createOrderButtons(Composite composite, TableViewer tableViewer) {
-		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
+		Button delB = new Button(composite, SWT.PUSH);
 		delB.setText(Messages.common_delete);
 		delB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delB.addSelectionListener(new DeleteListener(tableViewer));

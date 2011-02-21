@@ -48,12 +48,12 @@ public class ListOrderButtons {
 	}
 
 	public void createOrderButtons(Composite composite, TableViewer tableViewer) {
-		Button upField = new Button(composite, SWT.BORDER);
+		Button upField = new Button(composite, SWT.PUSH);
 		upField.setText(Messages.common_up);
 		upField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		upField.addSelectionListener(new ElementOrderChanger(tableViewer, true));
 
-		Button downFields = new Button(composite, SWT.BORDER);
+		Button downFields = new Button(composite, SWT.PUSH);
 		downFields.setText(Messages.common_down);
 		downFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		downFields.addSelectionListener(new ElementOrderChanger(tableViewer, false));
