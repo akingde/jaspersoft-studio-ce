@@ -31,33 +31,17 @@ import net.sf.jasperreports.engine.design.JRDesignHyperlinkParameter;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.TableCursor;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -65,6 +49,11 @@ import org.eclipse.swt.widgets.TableItem;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
+import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
+import com.jaspersoft.studio.swt.widgets.table.INewElement;
+import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
+import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
+import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
 public class ParameterPage extends WizardPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -74,13 +63,13 @@ public class ParameterPage extends WizardPage {
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
+			JRHyperlinkParameter hparam = (JRHyperlinkParameter) element;
 			switch (columnIndex) {
 			case 0:
-				return ((JRHyperlinkParameter) element).getName();
+				return hparam.getName();
 			case 1:
-				JRHyperlinkParameter value2 = (JRHyperlinkParameter) element;
-				if (value2 != null && value2.getValueExpression() != null)
-					return value2.getValueExpression().getText();
+				if (hparam != null && hparam.getValueExpression() != null)
+					return hparam.getValueExpression().getText();
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -90,21 +79,17 @@ public class ParameterPage extends WizardPage {
 	private Table table;
 	private TableViewer tableViewer;
 
-	// private TableCursor cursor;
-
 	public ParameterDTO getValue() {
 		return value;
 	}
 
 	@Override
 	public void dispose() {
-		// clear all properties
 		List<JRHyperlinkParameter> props = (List<JRHyperlinkParameter>) tableViewer.getInput();
-		
 
 		value = new ParameterDTO();
 		value.setValue(props.toArray(new JRHyperlinkParameter[props.size()]));
-		
+
 		super.dispose();
 	}
 
@@ -119,8 +104,8 @@ public class ParameterPage extends WizardPage {
 
 	protected ParameterPage(String pageName) {
 		super(pageName);
-		setTitle(Messages.ParameterPage_dataset_parameters);
-		setDescription(Messages.ParameterPage_description);
+		setTitle(Messages.HyperlinkParameterPage_Title);
+		setDescription(Messages.HyperlinkParameterPage_Description);
 
 	}
 
@@ -133,107 +118,62 @@ public class ParameterPage extends WizardPage {
 		buildTable(composite);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalAlignment = GridData.FILL;
-		gd.grabExcessHorizontalSpace = true;
-		gd.verticalAlignment = GridData.FILL;
-		gd.grabExcessVerticalSpace = true;
-		gd.verticalSpan = 2;
 		gd.heightHint = 400;
-		gd.widthHint = 600;
 		table.setLayoutData(gd);
 
-		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText(Messages.common_add);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80;
-		addB.setLayoutData(gridData);
-		addB.addSelectionListener(new SelectionAdapter() {
+		Composite bGroup = new Composite(composite, SWT.NONE);
+		bGroup.setLayout(new GridLayout(1, false));
+		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-			// Remove the selection and refresh the view
-			public void widgetSelected(SelectionEvent e) {
-				List<JRHyperlinkParameter> list = (List<JRHyperlinkParameter>) tableViewer.getInput();
-				String newName = "NEW PARAMETER"; //$NON-NLS-1$
-				for (int i = 1; i < Integer.MAX_VALUE; i++) {
-					if (checkName(newName, list))
-						newName = "NEW PARAMETER " + i; //$NON-NLS-1$
-					else
-						break;
-				}
-				JRDesignHyperlinkParameter p = new JRDesignHyperlinkParameter();
+		new NewButton().createOrderButtons(bGroup, tableViewer, new INewElement() {
+
+			public Object newElement(List<?> input) {
+				JRDesignHyperlinkParameter param = new JRDesignHyperlinkParameter();
+				int i = 0;
+				String name = "NEW_PARAMETER";//$NON-NLS-1$
+				while (getName(input, name, i) == null)
+					i++;
+				name += "_" + i;//$NON-NLS-1$
+				param.setName(name);
 				JRDesignExpression expression = new JRDesignExpression();
-				expression.setValueClassName("java.lang.String"); //$NON-NLS-1$
-				p.setValueExpression(expression);
-				p.setName(newName); //$NON-NLS-1$
-				list.add(p);
-				tableViewer.add(p);
-				tableViewer.setSelection(new StructuredSelection(p));
-				// cursor.setSelection(table.getSelectionIndex(), 0);
-				tableViewer.refresh();
-				table.setFocus();
+				expression.setValueClassName(Object.class.getName());
+				expression.setText("");//$NON-NLS-1$
+				param.setValueExpression(expression);
+
+				return param;
 			}
 
-			private boolean checkName(String newName, List<JRHyperlinkParameter> list) {
-				for (JRHyperlinkParameter dto : list) {
-					if (dto.getName() == null || dto.getName().trim().equals(newName)) //$NON-NLS-1$
-						return true;
+			private String getName(List<?> input, String name, int i) {
+				name += "_" + i;//$NON-NLS-1$
+				for (Object dto : input) {
+					JRDesignHyperlinkParameter prm = (JRDesignHyperlinkParameter) dto;
+					if (prm.getName() != null && prm.getName().trim().equals(name)) {
+						return null;
+					}
 				}
-				return false;
+				return name;
 			}
+
 		});
 
-		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText(Messages.common_delete);
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80;
-		delB.setLayoutData(gridData);
-		delB.addSelectionListener(new SelectionAdapter() {
+		new DeleteButton().createOrderButtons(bGroup, tableViewer);
 
-			// Remove the selection and refresh the view
-			public void widgetSelected(SelectionEvent e) {
-				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
-				JRHyperlinkParameter property = (JRHyperlinkParameter) iStructuredSelection.getFirstElement();
-				Object input = tableViewer.getInput();
-				if (input instanceof List<?>) {
-					List<?> list = (List<?>) input;
-					int index = list.indexOf(property);
-					list.remove(property);
-					tableViewer.remove(property);
-					tableViewer.refresh();
-					Object sp = null;
-					if (index >= list.size())
-						index = list.size() - 1;
-					if (index >= 0)
-						sp = list.get(index);
-
-					if (sp != null) {
-						tableViewer.setSelection(new StructuredSelection(sp));
-						// cursor.setSelection(table.getSelectionIndex(), 0);
-					} else
-						setMessage(Messages.common_table_is_empty);
-				}
-			}
-		});
+		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
-		table.setToolTipText(""); 
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		// cursor = new TableCursor(table, SWT.NONE);
 
 		tableViewer = new TableViewer(table);
-		attachContentProvider(tableViewer);
-		attachLabelProvider(tableViewer);
+		tableViewer.setContentProvider(new ListContentProvider());
+		tableViewer.setLabelProvider(new TLabelProvider());
 		attachCellEditors(tableViewer, table);
 
 		TableLayout tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
 		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
 		table.setLayout(tlayout);
-
-		setColumnToolTip();
 
 		TableColumn[] column = new TableColumn[2];
 		column[0] = new TableColumn(table, SWT.NONE);
@@ -242,50 +182,10 @@ public class ParameterPage extends WizardPage {
 		column[1] = new TableColumn(table, SWT.NONE);
 		column[1].setText(Messages.common_expression);
 
-		fillTable(table);
-		for (int i = 0, n = column.length; i < n; i++) {
+		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
-		}
-		table.addSelectionListener(new SelectionListener() {
 
-			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof TableItem) {
-					setMessage(getDescription(((TableItem) e.item)));
-				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-	}
-
-	/**
-	 * @param tableViewer
-	 * @param cursor
-	 */
-	static void editCell(final TableViewer tableViewer, final TableCursor cursor) {
-		tableViewer.editElement(cursor.getRow().getData(), cursor.getColumn());
-		// hide cursor only f there is an editor active on the cell
-		cursor.setVisible(!tableViewer.isCellEditorActive());
-	}
-
-	private void attachContentProvider(TableViewer viewer) {
-		viewer.setContentProvider(new IStructuredContentProvider() {
-			public Object[] getElements(Object inputElement) {
-				return ((List<JRHyperlinkParameter>) inputElement).toArray();
-			}
-
-			public void dispose() {
-			}
-
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-
-			}
-		});
-	}
-
-	private void attachLabelProvider(TableViewer viewer) {
-		viewer.setLabelProvider(new TLabelProvider());
+		fillTable(table);
 	}
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
@@ -312,12 +212,12 @@ public class ParameterPage extends WizardPage {
 			public void modify(Object element, String property, Object value) {
 				TableItem tableItem = (TableItem) element;
 				setErrorMessage(null);
-				setMessage(getDescription(tableItem));
-				JRHyperlinkParameter data = (JRHyperlinkParameter) tableItem.getData();
+				setMessage(getDescription());
+				JRDesignHyperlinkParameter data = (JRDesignHyperlinkParameter) tableItem.getData();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
 					if (value instanceof MExpression) {
 						JRExpression e = (JRExpression) ((MExpression) value).getValue();
-						((JRDesignHyperlinkParameter) data).setValueExpression(e);
+						data.setValueExpression(e);
 					}
 				}
 				if ("NAME".equals(property)) { //$NON-NLS-1$
@@ -328,7 +228,7 @@ public class ParameterPage extends WizardPage {
 							return;
 						}
 					}
-					((JRDesignHyperlinkParameter) data).setName((String) value);
+					data.setName((String) value);
 				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
@@ -346,84 +246,4 @@ public class ParameterPage extends WizardPage {
 		tableViewer.setInput(lst);
 	}
 
-	private void setColumnToolTip() {
-		final Listener labelListener = new Listener() {
-			public void handleEvent(Event event) {
-				Label label = (Label) event.widget;
-				Shell shell = label.getShell();
-				switch (event.type) {
-				case SWT.MouseDown:
-					Event e = new Event();
-					e.item = (TableItem) label.getData("_TABLEITEM"); //$NON-NLS-1$
-					// Assuming table is single select, set the selection as if
-					// the mouse down event went through to the table
-					table.setSelection(new TableItem[] { (TableItem) e.item });
-					table.notifyListeners(SWT.Selection, e);
-					// fall through
-				case SWT.MouseExit:
-					shell.dispose();
-					break;
-				}
-			}
-		};
-
-		Listener tableListener = new Listener() {
-			Shell tip = null;
-
-			Label label = null;
-
-			public void handleEvent(Event event) {
-				switch (event.type) {
-				case SWT.Dispose:
-				case SWT.KeyDown:
-				case SWT.MouseMove: {
-					if (tip == null)
-						break;
-					tip.dispose();
-					tip = null;
-					label = null;
-					break;
-				}
-				case SWT.MouseHover: {
-					TableItem item = table.getItem(new Point(event.x, event.y));
-					String description = getDescription(item);
-					if (item != null && !description.equals("")) { //$NON-NLS-1$
-
-						if (tip != null && !tip.isDisposed())
-							tip.dispose();
-						tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
-						tip.setLayout(new FillLayout());
-						label = new Label(tip, SWT.NONE);
-						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
-						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-						label.setData("_TABLEITEM", item); //$NON-NLS-1$
-
-						label.setText(description);
-						label.addListener(SWT.MouseExit, labelListener);
-						label.addListener(SWT.MouseDown, labelListener);
-						Point size = tip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-						Rectangle rect = item.getBounds(0);
-						Point pt = table.toDisplay(rect.x, rect.y);
-						tip.setBounds(pt.x, pt.y, size.x, size.y);
-						tip.setVisible(true);
-					}
-				}
-				}
-			}
-		};
-		table.addListener(SWT.Dispose, tableListener);
-		table.addListener(SWT.KeyDown, tableListener);
-		table.addListener(SWT.MouseMove, tableListener);
-		table.addListener(SWT.MouseHover, tableListener);
-	}
-
-	private String getDescription(TableItem item) {
-		// String key = ((SubreportPropertyDTO) item.getData()).getProperty();
-		// List<SubreportPropertyDTO> dp = getDefaultProperties();
-		// for (SubreportPropertyDTO p : dp) {
-		// if (p.getProperty().equals(key))
-		// return p.getDescription();
-		// }
-		return ""; //$NON-NLS-1$
-	}
 }

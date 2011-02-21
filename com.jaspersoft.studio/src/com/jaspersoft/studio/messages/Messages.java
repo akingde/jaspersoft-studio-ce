@@ -250,6 +250,8 @@ public class Messages extends NLS {
 	public static String FontSection_italic_tool_tip;
 	public static String FontSection_strike_through_tool_tip;
 	public static String FontSection_underline_tool_tip;
+	public static String HyperlinkParameterPage_Description;
+	public static String HyperlinkParameterPage_Title;
 	public static String JDBCDatasourcePage_browse;
 	public static String JDBCDatasourcePage_connection_established_message;
 	public static String JDBCDatasourcePage_connection_is_null_message;
