@@ -43,11 +43,13 @@ public class SubreportPropertiesLabelProvider extends LabelProvider {
 		if (element == null)
 			return ""; //$NON-NLS-1$
 		if (element instanceof JRPropertiesMap)
-			return Messages.SubreportPropertiesLabelProvider_numbers_of_parameters + ": " + ((JRPropertiesMap) element).getPropertyNames().length; //$NON-NLS-1$
+			return  Messages.SubreportPropertiesLabelProvider_numbers_of_parameters + ((JRPropertiesMap) element).getPropertyNames().length;
 		if (element instanceof Collection)
-			return Messages.SubreportPropertiesLabelProvider_numbers_of_parameters + ": " + ((Collection) element).size(); //$NON-NLS-1$
+			return  Messages.SubreportPropertiesLabelProvider_numbers_of_parameters + ((Collection) element).size();
 		if (element instanceof Map)
-			return Messages.SubreportPropertiesLabelProvider_numbers_of_parameters + ": " + ((Map) element).size();  //$NON-NLS-1$
+			return  Messages.SubreportPropertiesLabelProvider_numbers_of_parameters + ((Map) element).size();
+		if (element.getClass().isArray())
+			return  Messages.SubreportPropertiesLabelProvider_numbers_of_parameters + ((Object[]) element).length;
 		return element.toString();
 	}
 

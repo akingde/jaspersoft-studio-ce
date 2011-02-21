@@ -43,7 +43,7 @@ public class RVPropertiesLabelProvider extends LabelProvider {
 		if (element instanceof JReportsDTO)
 			element = ((JReportsDTO) element).getValue();
 		if (element instanceof List)
-			return Messages.common_elements + ": " + ((List<?>) element).size(); //$NON-NLS-1$
+			return Messages.common_elements + ((List<?>) element).size();
 
 		return element.toString();
 	}

@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.model.subreport.command.wizard;
 
-import java.util.Map;
-
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
@@ -70,7 +68,8 @@ public class SubreportWizard extends Wizard {
 	public IWizardPage getNextPage(IWizardPage page) {
 
 		if (page == step3) {
-			Map map = (Map) subreport.getPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS);
+			JRSubreportParameter[] map = (JRSubreportParameter[]) subreport
+					.getPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS);
 			if (map != null)
 				step3.setValue(map);
 		}
@@ -78,7 +77,7 @@ public class SubreportWizard extends Wizard {
 	}
 
 	public MSubreport getSubreport() {
-		Map<String, JRSubreportParameter> map = step3.getValue();
+		JRSubreportParameter[] map = step3.getValue();
 		if (map != null)
 			subreport.setPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS, map);
 

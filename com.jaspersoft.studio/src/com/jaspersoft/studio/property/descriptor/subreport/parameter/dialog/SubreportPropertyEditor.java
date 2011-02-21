@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog;
 
-import java.util.Map;
-
 import net.sf.jasperreports.engine.JRSubreportParameter;
 
 import org.eclipse.jface.wizard.Wizard;
@@ -28,16 +26,16 @@ import org.eclipse.jface.wizard.Wizard;
 import com.jaspersoft.studio.messages.Messages;
 
 public class SubreportPropertyEditor extends Wizard {
-	private Map<String, JRSubreportParameter> value;
+	private JRSubreportParameter[] value;
 	private SubreportPropertyPage page0;
 
-	public Map<String, JRSubreportParameter> getValue() {
+	public JRSubreportParameter[] getValue() {
 		if (page0 != null)
 			return page0.getValue();
 		return value;
 	}
 
-	public void setValue(Map<String, JRSubreportParameter> value) {
+	public void setValue(JRSubreportParameter[] value) {
 		if (page0 != null)
 			page0.setValue(value);
 		this.value = value;

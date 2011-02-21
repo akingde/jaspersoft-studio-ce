@@ -19,46 +19,40 @@
  */
 package com.jaspersoft.studio.property.descriptor.subreport.returnvalue.dialog;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.TableCursor;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -67,6 +61,11 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.JReportsDTO;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
+import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
+import com.jaspersoft.studio.swt.widgets.table.INewElement;
+import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
+import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
+import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class RVPropertyPage extends WizardPage {
@@ -77,15 +76,16 @@ public class RVPropertyPage extends WizardPage {
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
+			JRDesignSubreportReturnValue val = (JRDesignSubreportReturnValue) element;
 			switch (columnIndex) {
 			case 0:
-				return ((JRDesignSubreportReturnValue) element).getSubreportVariable();
+				return val.getSubreportVariable();
 			case 1:
-				return ((JRDesignSubreportReturnValue) element).getToVariable();
+				return val.getToVariable();
 			case 2:
-				return ((JRDesignSubreportReturnValue) element).getCalculationValue().getName();
+				return val.getCalculationValue().getName();
 			case 3:
-				return ((JRDesignSubreportReturnValue) element).getIncrementerFactoryClassName();
+				return val.getIncrementerFactoryClassName();
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -128,11 +128,12 @@ public class RVPropertyPage extends WizardPage {
 		}
 		if (table != null)
 			fillTable(table);
+		getSubreport();
 	}
 
 	protected RVPropertyPage(String pageName) {
 		super(pageName);
-		setTitle(Messages.common_subreport_parameters);
+		setTitle("Subreport Return Values");
 		setDescription(Messages.RVPropertyPage_description);
 
 	}
@@ -146,101 +147,91 @@ public class RVPropertyPage extends WizardPage {
 		buildTable(composite);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalAlignment = GridData.FILL;
-		gd.grabExcessHorizontalSpace = true;
-		gd.verticalAlignment = GridData.FILL;
-		gd.grabExcessVerticalSpace = true;
-		gd.verticalSpan = 2;
 		gd.heightHint = 400;
-		gd.widthHint = 700;
 		table.setLayoutData(gd);
 
-		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText(Messages.common_add);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80;
-		addB.setLayoutData(gridData);
-		addB.addSelectionListener(new SelectionAdapter() {
+		Composite bGroup = new Composite(composite, SWT.NONE);
+		bGroup.setLayout(new GridLayout(1, false));
+		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-			// Remove the selection and refresh the view
-			public void widgetSelected(SelectionEvent e) {
+		new NewButton().createOrderButtons(bGroup, tableViewer, new INewElement() {
+
+			public Object newElement(List<?> input) {
 				List<JRDesignSubreportReturnValue> list = (List<JRDesignSubreportReturnValue>) tableViewer.getInput();
-				JRDesignSubreportReturnValue p = new JRDesignSubreportReturnValue();
-				p.setSubreportVariable("new_subreport_variable"); //$NON-NLS-1$
 
+				JRDesignSubreportReturnValue p = new JRDesignSubreportReturnValue();
+				setSubreportVariableName(input, list, p);
 				// get toVariable from list
 				String[] toV = getToVariables();
-				for (int i = 0; i < toV.length; i++) {
+
+				for (int j = 0; j < toV.length; j++) {
 					boolean vExists = false;
 					for (JRDesignSubreportReturnValue v : list)
-						if (toV[i].equals(v.getToVariable())) {
+						if (toV[j].equals(v.getToVariable())) {
 							vExists = true;
 							break;
 						}
 					if (!vExists) {
-						p.setToVariable(toV[i]);
+						p.setToVariable(toV[j]);
 						p.setCalculation(CalculationEnum.NOTHING);
 						p.setIncrementerFactoryClassName(" "); //$NON-NLS-1$
-						list.add(p);
-						tableViewer.add(p);
-						tableViewer.setSelection(new StructuredSelection(p));
-						// cursor.setSelection(table.getSelectionIndex(), 0);
-						tableViewer.refresh();
-						table.setFocus();
-						return;
+						return p;
 					}
 				}
-				// should I have a message? or just disable the button if it's not possible
-				MessageDialog.openError(getShell(), "Error", "All report variables are allready used, you can't add more");
+				setErrorMessage("All report variables are allready used, you can't add anymore");
+
+				return null;
 			}
-		});
 
-		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText(Messages.common_delete);
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80;
-		delB.setLayoutData(gridData);
-		delB.addSelectionListener(new SelectionAdapter() {
-
-			// Remove the selection and refresh the view
-			public void widgetSelected(SelectionEvent e) {
-				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
-				JRDesignSubreportReturnValue property = (JRDesignSubreportReturnValue) iStructuredSelection.getFirstElement();
-				Object input = tableViewer.getInput();
-				if (input instanceof List<?>) {
-					List<?> list = (List<?>) input;
-					int index = list.indexOf(property);
-					list.remove(property);
-					tableViewer.remove(property);
-					tableViewer.refresh();
-					Object sp = null;
-					if (index >= list.size())
-						index = list.size() - 1;
-					if (index >= 0)
-						sp = list.get(index);
-
-					if (sp != null) {
-						tableViewer.setSelection(new StructuredSelection(sp));
-						// cursor.setSelection(table.getSelectionIndex(), 0);
-						validate();
-					} else
-						setMessage(Messages.common_table_is_empty);
+			private void setSubreportVariableName(List<?> input, List<JRDesignSubreportReturnValue> list,
+					JRDesignSubreportReturnValue p) {
+				for (String spn : srcParamNames) {
+					boolean vExists = false;
+					for (JRDesignSubreportReturnValue v : list)
+						if (spn.equals(v.getToVariable())) {
+							vExists = true;
+							break;
+						}
+					if (!vExists) {
+						p.setSubreportVariable(spn);
+						vExists = true;
+						break;
+					}
+				}
+				if (p.getSubreportVariable() == null) {
+					int i = 0;
+					String name = "NEW_VARIABLE";//$NON-NLS-1$
+					while (getName(input, name, i) == null)
+						i++;
+					name += "_" + i;
+					p.setSubreportVariable(name); //$NON-NLS-1$
 				}
 			}
+
+			private String getName(List<?> input, String name, int i) {
+				name += "_" + i;
+				for (Object dto : input) {
+					JRDesignSubreportReturnValue prm = (JRDesignSubreportReturnValue) dto;
+					if (prm.getSubreportVariable() != null && prm.getSubreportVariable().trim().equals(name)) {
+						return null;
+					}
+				}
+				return name;
+			}
+
 		});
+
+		new DeleteButton().createOrderButtons(bGroup, tableViewer);
+		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
-		table.setToolTipText("");
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		// cursor = new TableCursor(table, SWT.NONE);
 
 		tableViewer = new TableViewer(table);
-		attachContentProvider(tableViewer);
-		attachLabelProvider(tableViewer);
+		tableViewer.setContentProvider(new ListContentProvider());
+		tableViewer.setLabelProvider(new TLabelProvider());
 		attachCellEditors(tableViewer, table);
 
 		TableLayout tlayout = new TableLayout();
@@ -249,8 +240,6 @@ public class RVPropertyPage extends WizardPage {
 		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
 		tlayout.addColumnData(new ColumnWeightData(50, 100, true));
 		table.setLayout(tlayout);
-
-		setColumnToolTip();
 
 		TableColumn[] column = new TableColumn[4];
 		column[0] = new TableColumn(table, SWT.NONE);
@@ -269,46 +258,6 @@ public class RVPropertyPage extends WizardPage {
 		for (int i = 0, n = column.length; i < n; i++) {
 			column[i].pack();
 		}
-		table.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof TableItem) {
-					setMessage(getDescription(((TableItem) e.item)));
-				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-	}
-
-	/**
-	 * @param tableViewer
-	 * @param cursor
-	 */
-	static void editCell(final TableViewer tableViewer, final TableCursor cursor) {
-		tableViewer.editElement(cursor.getRow().getData(), cursor.getColumn());
-		// hide cursor only f there is an editor active on the cell
-		cursor.setVisible(!tableViewer.isCellEditorActive());
-	}
-
-	private void attachContentProvider(TableViewer viewer) {
-		viewer.setContentProvider(new IStructuredContentProvider() {
-			public Object[] getElements(Object inputElement) {
-				return ((List<JRDesignSubreportReturnValue>) inputElement).toArray();
-			}
-
-			public void dispose() {
-			}
-
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-
-			}
-		});
-	}
-
-	private void attachLabelProvider(TableViewer viewer) {
-		viewer.setLabelProvider(new TLabelProvider());
 	}
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
@@ -346,7 +295,7 @@ public class RVPropertyPage extends WizardPage {
 			public void modify(Object element, String property, Object value) {
 				TableItem tableItem = (TableItem) element;
 				setErrorMessage(null);
-				setMessage(getDescription(tableItem));
+				setMessage(getDescription());
 				JRDesignSubreportReturnValue data = (JRDesignSubreportReturnValue) tableItem.getData();
 				if ("SUBREPORTVARIABLE".equals(property)) { //$NON-NLS-1$
 					data.setSubreportVariable((String) value);
@@ -374,7 +323,7 @@ public class RVPropertyPage extends WizardPage {
 				"INCREMENTERFACTORYCLASS" }); //$NON-NLS-1$
 	}
 
-	public void validate() {
+	public boolean validate() {
 		// validate toVariable is unique
 		List<String> lto = new ArrayList<String>();
 		List<JRDesignSubreportReturnValue> input = (List<JRDesignSubreportReturnValue>) tableViewer.getInput();
@@ -385,11 +334,12 @@ public class RVPropertyPage extends WizardPage {
 		if (size != setSize) {
 			setErrorMessage("Your Rerurn Variables contains duplicate ToVariable values.");
 			setPageComplete(false);
+			return false;
 		} else {
 			setErrorMessage(null);
 			setPageComplete(true);
 		}
-
+		return true;
 	}
 
 	public String[] getToVariables() {
@@ -397,11 +347,39 @@ public class RVPropertyPage extends WizardPage {
 			List<String> res = new ArrayList<String>();
 			for (Object o : dto.getJasperDesign().getVariablesList()) {
 				JRDesignVariable jdVar = (JRDesignVariable) o;
-				res.add(jdVar.getName());
+				if (!jdVar.isSystemDefined())
+					res.add(jdVar.getName());
 			}
 			toVariables = res.toArray(new String[res.size()]);
 		}
 		return toVariables;
+	}
+
+	private List<String> srcParamNames = new ArrayList<String>();
+
+	private void getSubreport() {
+		try {
+			JRSubreport sr = (JRSubreport) dto.getProp1();
+			if (sr.getExpression() != null) {
+				String path = sr.getExpression().getText();
+				path = path.replace("\"", "");
+				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
+				InputStream io = file.getContents();
+				JasperDesign jd = JRXmlLoader.load(io);
+
+				List<JRParameter> prms = jd.getParametersList();
+				for (JRParameter p : prms) {
+					srcParamNames.add(p.getName());
+				}
+				io.close();
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JRException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void fillTable(Table table) {
@@ -409,86 +387,7 @@ public class RVPropertyPage extends WizardPage {
 		for (JRDesignSubreportReturnValue v : value)
 			props.add(v);
 		tableViewer.setInput(props);
+		getSubreport();
 	}
 
-	private void setColumnToolTip() {
-		final Listener labelListener = new Listener() {
-			public void handleEvent(Event event) {
-				Label label = (Label) event.widget;
-				Shell shell = label.getShell();
-				switch (event.type) {
-				case SWT.MouseDown:
-					Event e = new Event();
-					e.item = (TableItem) label.getData("_TABLEITEM"); //$NON-NLS-1$
-					// Assuming table is single select, set the selection as if
-					// the mouse down event went through to the table
-					table.setSelection(new TableItem[] { (TableItem) e.item });
-					table.notifyListeners(SWT.Selection, e);
-					// fall through
-				case SWT.MouseExit:
-					shell.dispose();
-					break;
-				}
-			}
-		};
-
-		Listener tableListener = new Listener() {
-			Shell tip = null;
-
-			Label label = null;
-
-			public void handleEvent(Event event) {
-				switch (event.type) {
-				case SWT.Dispose:
-				case SWT.KeyDown:
-				case SWT.MouseMove: {
-					if (tip == null)
-						break;
-					tip.dispose();
-					tip = null;
-					label = null;
-					break;
-				}
-				case SWT.MouseHover: {
-					TableItem item = table.getItem(new Point(event.x, event.y));
-					String description = getDescription(item);
-					if (item != null && !description.equals("")) { //$NON-NLS-1$
-
-						if (tip != null && !tip.isDisposed())
-							tip.dispose();
-						tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
-						tip.setLayout(new FillLayout());
-						label = new Label(tip, SWT.NONE);
-						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
-						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-						label.setData("_TABLEITEM", item); //$NON-NLS-1$
-
-						label.setText(description);
-						label.addListener(SWT.MouseExit, labelListener);
-						label.addListener(SWT.MouseDown, labelListener);
-						Point size = tip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-						Rectangle rect = item.getBounds(0);
-						Point pt = table.toDisplay(rect.x, rect.y);
-						tip.setBounds(pt.x, pt.y, size.x, size.y);
-						tip.setVisible(true);
-					}
-				}
-				}
-			}
-		};
-		table.addListener(SWT.Dispose, tableListener);
-		table.addListener(SWT.KeyDown, tableListener);
-		table.addListener(SWT.MouseMove, tableListener);
-		table.addListener(SWT.MouseHover, tableListener);
-	}
-
-	private String getDescription(TableItem item) {
-		// String key = ((SubreportPropertyDTO) item.getData()).getProperty();
-		// List<SubreportPropertyDTO> dp = getDefaultProperties();
-		// for (SubreportPropertyDTO p : dp) {
-		// if (p.getProperty().equals(key))
-		// return p.getDescription();
-		// }
-		return ""; //$NON-NLS-1$
-	}
 }

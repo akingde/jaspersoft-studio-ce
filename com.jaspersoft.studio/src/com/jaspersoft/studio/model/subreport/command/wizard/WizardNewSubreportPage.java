@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.model.subreport.command.wizard;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
@@ -135,18 +137,29 @@ public class WizardNewSubreportPage extends WizardPage {
 		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_EXPRESSION, jre);
 		JRDesignSubreport s = (JRDesignSubreport) subreport.getValue();
 		try {
-			JasperDesign jd = JRXmlLoader.load(file.getContents());
+			InputStream io = file.getContents();
+			JasperDesign jd = JRXmlLoader.load(io);
 			List<JRParameter> prms = jd.getParametersList();
 			for (JRParameter p : prms) {
 				if (!p.isSystemDefined()) {
 					JRDesignSubreportParameter sp = new JRDesignSubreportParameter();
 					sp.setName(p.getName());
+
+					jre = new JRDesignExpression();
+					jre.setValueClassName(Object.class.getName());
+					jre.setText("");
+					sp.setExpression(jre);
+
 					s.addParameter(sp);
 				}
 			}
+			if (io != null)
+				io.close();
 		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (CoreException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 

@@ -25,11 +25,11 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.JRSubreportReturnValue;
 import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
-import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -202,12 +202,13 @@ public class MSubreport extends MGraphicElement {
 			return dsExpression;
 		}
 		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS))
-			return jrElement.getParametersMap();
+			return jrElement.getParameters();
 		if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
 			if (returnValuesDTO == null) {
 				returnValuesDTO = new JReportsDTO();
 				returnValuesDTO.setJasperDesign(getJasperDesign());
 				returnValuesDTO.setValue(jrElement.getReturnValuesList());
+				returnValuesDTO.setProp1(jrElement);
 			}
 			return returnValuesDTO;
 
@@ -232,13 +233,15 @@ public class MSubreport extends MGraphicElement {
 		else if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION))
 			jrElement.setDataSourceExpression(ExprUtil.setValues(jrElement.getDataSourceExpression(), value));
 		else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
-			if (value instanceof Map) {
-				Map<String, JRDesignSubreportParameter> v = (Map<String, JRDesignSubreportParameter>) value;
-				Set<String> names = new HashSet<String>(jrElement.getParametersMap().keySet());
+			if (value.getClass().isArray()) {
+				JRSubreportParameter[] v = (JRSubreportParameter[]) value;
+				Set<String> names = new HashSet<String>();
+				for (JRSubreportParameter prm : v)
+					names.add(prm.getName());
 				for (String name : names)
 					jrElement.removeParameter(name);
 
-				for (JRDesignSubreportParameter param : v.values())
+				for (JRSubreportParameter param : v)
 					try {
 						jrElement.addParameter(param);
 					} catch (JRException e) {

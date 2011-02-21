@@ -45,7 +45,7 @@ public class SubreportPropertiesCellEditor extends DialogCellEditor {
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		SubreportPropertyEditor wizard = new SubreportPropertyEditor();
-		wizard.setValue((Map<String, JRSubreportParameter>) getValue());
+		wizard.setValue((JRSubreportParameter[]) getValue());
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
