@@ -22,6 +22,8 @@ package com.jaspersoft.studio.barcode.command;
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -123,7 +125,7 @@ public class BarcodeWizardPage extends WizardPage {
 		final Table table = new Table(composite, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 500;
-		gd.widthHint = 300;
+		gd.widthHint = 250;
 		table.setLayoutData(gd);
 		table.setHeaderVisible(false);
 		table.setLinesVisible(true);
@@ -132,13 +134,18 @@ public class BarcodeWizardPage extends WizardPage {
 		column[0] = new TableColumn(table, SWT.NONE);
 		column[0].setText(Messages.BarcodeWizardPage_name);
 
-		fillTableBarbecue(table);
 		column[0].pack();
+
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		table.setLayout(tlayout);
+
+		fillTableBarbecue(table);
 
 		final Table table2 = new Table(composite, SWT.NONE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 500;
-		gd.widthHint = 300;
+		gd.widthHint = 250;
 		table2.setLayoutData(gd);
 		table2.setHeaderVisible(false);
 		table2.setLinesVisible(true);
@@ -147,8 +154,13 @@ public class BarcodeWizardPage extends WizardPage {
 		column2[0] = new TableColumn(table2, SWT.NONE);
 		column2[0].setText(Messages.BarcodeWizardPage_name);
 
-		fillTableb4j(table2);
 		column2[0].pack();
+
+		tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		table.setLayout(tlayout);
+
+		fillTableb4j(table2);
 
 		table2.addSelectionListener(new SelectionListener() {
 
@@ -162,7 +174,6 @@ public class BarcodeWizardPage extends WizardPage {
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -178,7 +189,6 @@ public class BarcodeWizardPage extends WizardPage {
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 		});

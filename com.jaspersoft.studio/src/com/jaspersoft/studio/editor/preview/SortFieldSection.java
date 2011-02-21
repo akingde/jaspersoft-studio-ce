@@ -72,7 +72,7 @@ public class SortFieldSection {
 				Composite composite = toolkit.createComposite(tabFolder);
 				composite.setLayout(new GridLayout(4, false));
 
-				leftTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
+				leftTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 				leftTable.setBackground(tabFolder.getBackground());
 				GridData gd = new GridData(GridData.FILL_VERTICAL);
 				gd.widthHint = 250;
@@ -98,7 +98,7 @@ public class SortFieldSection {
 				bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 				// -----------------------------------
-				rightTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
+				rightTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 				rightTable.setBackground(tabFolder.getBackground());
 				rightTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 				rightTable.setHeaderVisible(true);

@@ -68,6 +68,7 @@ public class ParametersDialog extends FormDialog {
 		this.jDesign = jDesign;
 		this.prompts = jDesign.getParametersList();
 		this.params = params;
+		shell.setText("ABCDA");
 	}
 
 	public Map<String, Object> getParameters() {
@@ -87,6 +88,7 @@ public class ParametersDialog extends FormDialog {
 
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
+		getShell().setText(Messages.ParametersDialog_report_parameters);
 		mform.getForm().setText(Messages.ParametersDialog_report_parameters);
 		FormToolkit toolkit = mform.getToolkit();
 

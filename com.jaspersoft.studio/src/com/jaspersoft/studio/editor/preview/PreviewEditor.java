@@ -249,7 +249,7 @@ public class PreviewEditor extends JRPrintEditor {
 	private boolean showParameters = false;
 
 	private int askParameters() {
-		ParametersDialog pd = new ParametersDialog(getEditorSite().getShell(), jasperDesign, jasperParameter);
+		ParametersDialog pd = new ParametersDialog(Display.getCurrent().getActiveShell(), jasperDesign, jasperParameter);
 		if (showParameters || pd.canShowParameters()) {
 			return pd.open();
 		}
