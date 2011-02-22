@@ -91,18 +91,13 @@ public class ChartWizardPage extends WizardPage {
 				e.getSource();
 			}
 		});
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard"); //$NON-NLS-1$
 	}
 
 	private void fillTableb4j(Table table) {
 		table.setRedraw(false);
 
 		TableItem ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_line_chart);
-		ti.setImage(Activator.getImage("/icons/line.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_LINE);
-
-		ti = new TableItem(table, SWT.NONE);
 		ti.setText(Messages.common_area_chart);
 		ti.setImage(Activator.getImage("/icons/area.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_AREA);
@@ -128,9 +123,19 @@ public class ChartWizardPage extends WizardPage {
 		ti.setData(JRDesignChart.CHART_TYPE_CANDLESTICK);
 
 		ti = new TableItem(table, SWT.NONE);
+		ti.setText(Messages.ChartWizardPage_gantt);
+		ti.setImage(Activator.getImage("/icons/gantt.png")); //$NON-NLS-1$
+		ti.setData(JRDesignChart.CHART_TYPE_GANTT);
+
+		ti = new TableItem(table, SWT.NONE);
 		ti.setText(Messages.common_highlow_chart);
 		ti.setImage(Activator.getImage("/icons/highlow.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_HIGHLOW);
+
+		ti = new TableItem(table, SWT.NONE);
+		ti.setText(Messages.common_line_chart);
+		ti.setImage(Activator.getImage("/icons/line.png")); //$NON-NLS-1$
+		ti.setData(JRDesignChart.CHART_TYPE_LINE);
 
 		ti = new TableItem(table, SWT.NONE);
 		ti.setText(Messages.common_meter_chart);
@@ -143,19 +148,34 @@ public class ChartWizardPage extends WizardPage {
 		ti.setData(JRDesignChart.CHART_TYPE_MULTI_AXIS);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_pie3d_chart);
-		ti.setImage(Activator.getImage("/icons/pie3d.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_PIE3D);
-
-		ti = new TableItem(table, SWT.NONE);
 		ti.setText(Messages.common_pie_chart);
 		ti.setImage(Activator.getImage("/icons/pie.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_PIE);
 
 		ti = new TableItem(table, SWT.NONE);
+		ti.setText(Messages.common_pie3d_chart);
+		ti.setImage(Activator.getImage("/icons/pie3d.png")); //$NON-NLS-1$
+		ti.setData(JRDesignChart.CHART_TYPE_PIE3D);
+
+		ti = new TableItem(table, SWT.NONE);
 		ti.setText(Messages.common_scatter_chart);
 		ti.setImage(Activator.getImage("/icons/scatter.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_SCATTER);
+
+		ti = new TableItem(table, SWT.NONE);
+		ti.setText(Messages.ChartWizardPage_stackedarea);
+		ti.setImage(Activator.getImage("/icons/stackedarea.png")); //$NON-NLS-1$
+		ti.setData(JRDesignChart.CHART_TYPE_STACKEDAREA);
+
+		ti = new TableItem(table, SWT.NONE);
+		ti.setText(Messages.ChartWizardPage_stackedbar);
+		ti.setImage(Activator.getImage("/icons/stackedbar.png")); //$NON-NLS-1$
+		ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR);
+
+		ti = new TableItem(table, SWT.NONE);
+		ti.setText(Messages.ChartWizardPage_bar3d);
+		ti.setImage(Activator.getImage("/icons/stackedbar3d.png")); //$NON-NLS-1$
+		ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR3D);
 
 		ti = new TableItem(table, SWT.NONE);
 		ti.setText(Messages.common_thermometer_chart);
@@ -166,6 +186,21 @@ public class ChartWizardPage extends WizardPage {
 		ti.setText(Messages.common_timeseries_chart);
 		ti.setImage(Activator.getImage("/icons/timeseries.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_TIMESERIES);
+
+		ti = new TableItem(table, SWT.NONE);
+		ti.setText(Messages.ChartWizardPage_xyarea);
+		ti.setImage(Activator.getImage("/icons/xyarea.png")); //$NON-NLS-1$
+		ti.setData(JRDesignChart.CHART_TYPE_XYAREA);
+
+		ti = new TableItem(table, SWT.NONE);
+		ti.setText(Messages.ChartWizardPage_xybar);
+		ti.setImage(Activator.getImage("/icons/xybar.png")); //$NON-NLS-1$
+		ti.setData(JRDesignChart.CHART_TYPE_XYBAR);
+
+		ti = new TableItem(table, SWT.NONE);
+		ti.setText(Messages.ChartWizardPage_xyline);
+		ti.setImage(Activator.getImage("/icons/xyline.png")); //$NON-NLS-1$
+		ti.setData(JRDesignChart.CHART_TYPE_XYLINE);
 
 		table.setRedraw(true);
 	}

@@ -79,15 +79,16 @@ public class WizardDatasetNewPage extends WizardPage {
 		Label lbl = new Label(composite, SWT.NONE);
 		lbl.setText(Messages.WizardDatasetNewPage_dataset_name + ":"); //$NON-NLS-1$
 
-		dsname = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		dsname.setText(ModelUtils.getDefaultName(jasperDesign.getDatasetMap(), "NEWDATASET"));  //$NON-NLS-1$
+		dsname = new Text(composite, SWT.BORDER);
+		dsname.setText(ModelUtils.getDefaultName(jasperDesign.getDatasetMap(), "NEWDATASET")); //$NON-NLS-1$
 		dsname.addListener(SWT.Selection, new Listener() {
 
 			public void handleEvent(Event event) {
 
 				String dstext = dsname.getText();
 				if (jasperDesign.getDatasetMap().get(dstext) != null) {
-					setErrorMessage(Messages.WizardDatasetNewPage_name_already_exists_a + " [" + dstext + "] " + Messages.WizardDatasetNewPage_name_already_exists_b); //$NON-NLS-1$ //$NON-NLS-2$
+					setErrorMessage(Messages.WizardDatasetNewPage_name_already_exists_a
+							+ " [" + dstext + "] " + Messages.WizardDatasetNewPage_name_already_exists_b); //$NON-NLS-1$ //$NON-NLS-2$
 				} else {
 					setMessage(getDescription());
 					dataset.setPropertyValue(JRDesignDataset.PROPERTY_NAME, dstext);

@@ -92,7 +92,7 @@ public class WizardNewSubreportPage extends WizardPage {
 		// gd.heightHint = 60;
 		etxt.setLayoutData(gd);
 
-		final Button fbut = new Button(composite, SWT.BORDER);
+		final Button fbut = new Button(composite, SWT.PUSH);
 		fbut.setText(Messages.common_browse + "..."); //$NON-NLS-1$
 		fbut.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		fbut.addSelectionListener(new SelectionListener() {
@@ -109,7 +109,7 @@ public class WizardNewSubreportPage extends WizardPage {
 
 			}
 		});
-		final Button newrep = new Button(composite, SWT.BORDER);
+		final Button newrep = new Button(composite, SWT.PUSH);
 		newrep.setText(Messages.common_new);
 		newrep.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		newrep.addSelectionListener(new SelectionListener() {
@@ -145,10 +145,10 @@ public class WizardNewSubreportPage extends WizardPage {
 					JRDesignSubreportParameter sp = new JRDesignSubreportParameter();
 					sp.setName(p.getName());
 
-					jre = new JRDesignExpression();
-					jre.setValueClassName(Object.class.getName());
-					jre.setText("");
-					sp.setExpression(jre);
+					JRDesignExpression jrep = new JRDesignExpression();
+					jrep.setValueClassName(Object.class.getName());
+					jrep.setText("");
+					sp.setExpression(jrep);
 
 					s.addParameter(sp);
 				}

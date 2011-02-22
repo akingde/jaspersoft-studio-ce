@@ -66,8 +66,15 @@ public class Messages extends NLS {
 	public static String common_x_value_expression;
 	public static String common_y_value_expression;
 	public static String ChartAxesWizardPage_chartaxis_wizard_description;
+	public static String ChartWizardPage_bar3d;
 	public static String ChartWizardPage_chart_wizard_description;
+	public static String ChartWizardPage_gantt;
 	public static String ChartWizardPage_multiaxis_chart;
+	public static String ChartWizardPage_stackedarea;
+	public static String ChartWizardPage_stackedbar;
+	public static String ChartWizardPage_xyarea;
+	public static String ChartWizardPage_xybar;
+	public static String ChartWizardPage_xyline;
 	public static String CreateCategorySeriesAction_create_category_series;
 	public static String CreateCategorySeriesAction_create_category_series_tool_tip;
 	public static String CreateChartAxisAction_create_chartaxis;
