@@ -24,15 +24,15 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
@@ -80,16 +80,22 @@ public class WizardDatasetNewPage extends WizardPage {
 		lbl.setText(Messages.WizardDatasetNewPage_dataset_name + ":"); //$NON-NLS-1$
 
 		dsname = new Text(composite, SWT.BORDER);
-		dsname.setText(ModelUtils.getDefaultName(jasperDesign.getDatasetMap(), "NEWDATASET")); //$NON-NLS-1$
-		dsname.addListener(SWT.Selection, new Listener() {
+		if (dataset != null) {
+			String str = (String) dataset.getPropertyValue(JRDesignDataset.PROPERTY_NAME);
+			dsname.setText(str);
+		} else
+			dsname.setText(ModelUtils.getDefaultName(jasperDesign.getDatasetMap(), "NEWDATASET")); //$NON-NLS-1$
+		dsname.addModifyListener(new ModifyListener() {
 
-			public void handleEvent(Event event) {
-
+			public void modifyText(ModifyEvent e) {
 				String dstext = dsname.getText();
 				if (jasperDesign.getDatasetMap().get(dstext) != null) {
 					setErrorMessage(Messages.WizardDatasetNewPage_name_already_exists_a
-							+ " [" + dstext + "] " + Messages.WizardDatasetNewPage_name_already_exists_b); //$NON-NLS-1$ //$NON-NLS-2$
+							+ " \"" + dstext + "\" " + Messages.WizardDatasetNewPage_name_already_exists_b); //$NON-NLS-1$ //$NON-NLS-2$
+					setPageComplete(false);
 				} else {
+					setPageComplete(true);
+					setErrorMessage(null);
 					setMessage(getDescription());
 					dataset.setPropertyValue(JRDesignDataset.PROPERTY_NAME, dstext);
 				}
@@ -138,6 +144,6 @@ public class WizardDatasetNewPage extends WizardPage {
 
 	@Override
 	public boolean canFlipToNextPage() {
-		return !emptyDataset;
+		return isPageComplete() && !emptyDataset;
 	}
 }
