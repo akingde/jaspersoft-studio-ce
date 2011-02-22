@@ -110,7 +110,7 @@ public class WizardFieldsPage extends WizardPage {
 		gd.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		bGroup.setLayoutData(gd);
 
-		final Button addField = new Button(bGroup, SWT.BORDER);
+		final Button addField = new Button(bGroup, SWT.PUSH);
 		addField.setText(">"); //$NON-NLS-1$
 		addField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addField.addSelectionListener(new SelectionListener() {
@@ -124,7 +124,7 @@ public class WizardFieldsPage extends WizardPage {
 			}
 		});
 
-		Button addFields = new Button(bGroup, SWT.BORDER);
+		Button addFields = new Button(bGroup, SWT.PUSH);
 		addFields.setText(">>"); //$NON-NLS-1$
 		addFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addFields.addSelectionListener(new SelectionListener() {
@@ -142,7 +142,7 @@ public class WizardFieldsPage extends WizardPage {
 			}
 		});
 
-		final Button delField = new Button(bGroup, SWT.BORDER);
+		final Button delField = new Button(bGroup, SWT.PUSH);
 		delField.setText("<"); //$NON-NLS-1$
 		delField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delField.addSelectionListener(new SelectionListener() {
@@ -156,7 +156,7 @@ public class WizardFieldsPage extends WizardPage {
 			}
 		});
 
-		final Button delFields = new Button(bGroup, SWT.BORDER);
+		final Button delFields = new Button(bGroup, SWT.PUSH);
 		delFields.setText("<<"); //$NON-NLS-1$
 		delFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delFields.addSelectionListener(new SelectionListener() {
@@ -191,7 +191,7 @@ public class WizardFieldsPage extends WizardPage {
 		gd.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		bGroup.setLayoutData(gd);
 
-		final Button upField = new Button(bGroup, SWT.BORDER);
+		final Button upField = new Button(bGroup, SWT.PUSH);
 		upField.setText(Messages.common_up);
 		upField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		upField.setEnabled(false);
@@ -219,7 +219,7 @@ public class WizardFieldsPage extends WizardPage {
 			}
 		});
 
-		final Button downFields = new Button(bGroup, SWT.BORDER);
+		final Button downFields = new Button(bGroup, SWT.PUSH);
 		downFields.setText(Messages.common_down);
 		downFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		downFields.setEnabled(false);

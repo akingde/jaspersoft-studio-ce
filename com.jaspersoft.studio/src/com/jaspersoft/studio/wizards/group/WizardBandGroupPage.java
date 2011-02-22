@@ -112,7 +112,7 @@ public class WizardBandGroupPage extends WizardPage {
 		grName.setText(ModelUtils.getDefaultName(jrDesign.getMainDesignDataset().getGroupsMap(),
 				Messages.common_group));
 
-		Group expgroup = new Group(composite, SWT.BORDER);
+		Group expgroup = new Group(composite, SWT.NONE);
 		expgroup.setText(Messages.WizardBandGroupPage_group_by_following_report_object+":");
 		layout = new GridLayout();
 		layout.numColumns = 2;
