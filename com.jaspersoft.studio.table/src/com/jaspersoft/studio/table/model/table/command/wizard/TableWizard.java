@@ -98,33 +98,34 @@ public class TableWizard extends Wizard {
 	public MTable getTable() {
 		List<JRDesignField> lst = step3.getFields();
 		StandardTable tbl = CreateColumnCommand.getTable(table);
-		for (JRDesignField f : lst) {
-			StandardColumn col = CreateColumnCommand.addColumn(jasperDesign, tbl, step4.isTableHeader(),
-					step4.isTableFooter(), step4.isColumnHeader(), step4.isColumnFooter(), step4.isGroupHeader(),
-					step4.isGroupFooter());
+		if (tbl != null && lst != null)
+			for (JRDesignField f : lst) {
+				StandardColumn col = CreateColumnCommand.addColumn(jasperDesign, tbl, step4.isTableHeader(),
+						step4.isTableFooter(), step4.isColumnHeader(), step4.isColumnFooter(), step4.isGroupHeader(),
+						step4.isGroupFooter());
 
-			DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
-			DesignCell detCell = (DesignCell) col.getDetailCell();
+				DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
+				DesignCell detCell = (DesignCell) col.getDetailCell();
 
-			if (step4.isColumnHeader()) {
-				JRDesignStaticText sText = (JRDesignStaticText) new MStaticText().createJRElement(jasperDesign);
-				sText.setWidth(col.getWidth());
-				sText.setHeight(colHeadCell.getHeight());
-				sText.setText(f.getName());
-				colHeadCell.addElement(sText);
+				if (step4.isColumnHeader()) {
+					JRDesignStaticText sText = (JRDesignStaticText) new MStaticText().createJRElement(jasperDesign);
+					sText.setWidth(col.getWidth());
+					sText.setHeight(colHeadCell.getHeight());
+					sText.setText(f.getName());
+					colHeadCell.addElement(sText);
+				}
+
+				JRDesignTextField fText = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
+				fText.setWidth(col.getWidth());
+				fText.setHeight(detCell.getHeight());
+				JRDesignExpression jre = new JRDesignExpression();
+				jre.setValueClassName(f.getValueClassName());
+				jre.setText("$F{" + f.getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
+				fText.setExpression(jre);
+				detCell.addElement(fText);
+
+				tbl.addColumn(col);
 			}
-
-			JRDesignTextField fText = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
-			fText.setWidth(col.getWidth());
-			fText.setHeight(detCell.getHeight());
-			JRDesignExpression jre = new JRDesignExpression();
-			jre.setValueClassName(f.getValueClassName());
-			jre.setText("$F{" + f.getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
-			fText.setExpression(jre);
-			detCell.addElement(fText);
-
-			tbl.addColumn(col);
-		}
 
 		return table;
 	}
