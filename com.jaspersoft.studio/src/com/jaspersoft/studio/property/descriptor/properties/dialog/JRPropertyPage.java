@@ -25,22 +25,20 @@ import java.util.List;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
+import net.sf.jasperreports.engine.type.CalculationEnum;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.TableCursor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -59,10 +57,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.internal.help.WorkbenchHelpSystem;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxCellEditor;
+import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
+import com.jaspersoft.studio.swt.widgets.table.INewElement;
+import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
+import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
+import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
 public class JRPropertyPage extends WizardPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -86,20 +88,9 @@ public class JRPropertyPage extends WizardPage {
 	private Table table;
 	private TableViewer tableViewer;
 	private List<PropertyDTO> defaultProperties;
-	private TableCursor cursor;
 
 	public JRPropertiesMap getValue() {
 		return value;
-	}
-
-	/**
-	 * Displays the help
-	 */
-	public void performHelp() {
-		getShell().setData(WorkbenchHelpSystem.HELP_KEY, "ch.sahits.tutorial.help.firsthelp"); //$NON-NLS-1$
-
-		// PlatformUI.getWorkbench().getHelpSystem().displayHelp();//displayDynamicHelp();//
-		// displayHelp("net.sf.jasperreports.doc");
 	}
 
 	@Override
@@ -127,7 +118,6 @@ public class JRPropertyPage extends WizardPage {
 		super(pageName);
 		setTitle(Messages.common_properties);
 		setDescription(Messages.JRPropertyPage_description);
-
 	}
 
 	public void createControl(Composite parent) {
@@ -139,135 +129,53 @@ public class JRPropertyPage extends WizardPage {
 		buildTable(composite);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalAlignment = GridData.FILL;
-		gd.grabExcessHorizontalSpace = true;
-		gd.verticalAlignment = GridData.FILL;
-		gd.grabExcessVerticalSpace = true;
-		gd.verticalSpan = 2;
 		gd.heightHint = 400;
-		gd.widthHint = 600;
 		table.setLayoutData(gd);
 
-		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		addB.setText(Messages.common_add);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80;
-		addB.setLayoutData(gridData);
-		addB.addSelectionListener(new SelectionAdapter() {
+		Composite bGroup = new Composite(composite, SWT.NONE);
+		bGroup.setLayout(new GridLayout(1, false));
+		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-			// Remove the selection and refresh the view
-			public void widgetSelected(SelectionEvent e) {
+		new NewButton().createOrderButtons(bGroup, tableViewer, new INewElement() {
+
+			public Object newElement(List<?> input) {
 				List<PropertyDTO> list = (List<PropertyDTO>) tableViewer.getInput();
+				int i = 1;
+				String name = "newproperty";
+				while (getName(input, name, i) == null)
+					i++;
+				name += "_" + i;
+
 				PropertyDTO p = new PropertyDTO();
-				p.setValue("");
-				list.add(p);
-				tableViewer.add(p);
-				tableViewer.setSelection(new StructuredSelection(p));
-				// cursor.setSelection(table.getSelectionIndex(), 0);
-				tableViewer.refresh();
-				table.setFocus();
+				p.setProperty(name);
+				p.setValue("NEW_VALUE");
+				return p;
+			}
+
+			private String getName(List<?> input, String name, int i) {
+				name += "_" + i;
+				for (Object dto : input) {
+					PropertyDTO prm = (PropertyDTO) dto;
+					if (prm.getProperty() != null && prm.getProperty().trim().equals(name)) {
+						return null;
+					}
+				}
+				return name;
 			}
 		});
 
-		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delB.setText(Messages.common_delete); 
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80;
-		delB.setLayoutData(gridData);
-		delB.addSelectionListener(new SelectionAdapter() {
-
-			// Remove the selection and refresh the view
-			public void widgetSelected(SelectionEvent e) {
-				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
-				PropertyDTO property = (PropertyDTO) iStructuredSelection.getFirstElement();
-				List<PropertyDTO> list = (List<PropertyDTO>) tableViewer.getInput();
-				int index = list.indexOf(property);
-				list.remove(property);
-				tableViewer.remove(property);
-				tableViewer.refresh();
-				PropertyDTO sp = null;
-				if (index >= list.size())
-					index = list.size() - 1;
-				if (index >= 0)
-					sp = list.get(index);
-
-				if (sp != null) {
-					tableViewer.setSelection(new StructuredSelection(sp));
-					// cursor.setSelection(table.getSelectionIndex(), 0);
-				} else
-					setMessage(Messages.common_table_is_empty);
-			}
-		});
+		new DeleteButton().createOrderButtons(bGroup, tableViewer);
+		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
-		table.setToolTipText("");
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION | SWT.V_SCROLL);
 		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		// cursor = new TableCursor(table, SWT.NONE);
-		//
-		// final ControlEditor editor = new ControlEditor(cursor);
-		// editor.grabHorizontal = true;
-		// editor.grabVertical = true;
-		//
-		// cursor.addSelectionListener(new SelectionAdapter() {
-		// // This is called as the user navigates around the table
-		// public void widgetSelected(SelectionEvent event) {
-		// // Select the row in the table where the TableCursor is
-		// table.setSelection(new TableItem[] { cursor.getRow() });
-		// }
-		//
-		// // This is called when the user hits Enter
-		// public void widgetDefaultSelected(SelectionEvent event) {
-		// CellEditor cellEditor = tableViewer.getCellEditors()[cursor.getColumn()];
-		// // tableViewer.cancelEditing();
-		// if (cellEditor != null) {
-		// cellEditor.deactivate();
-		// }
-		// // set cursor-selection to mark whole row
-		// tableViewer.setSelection(new StructuredSelection(cursor.getRow()), true);
-		// // set selection of table separatly; viewer does incorrectly.
-		// table.setSelection(new TableItem[] { cursor.getRow() });
-		// // editCell(tableViewer, cursor);
-		//
-		// }
-		// });
-		// cursor.addKeyListener(new KeyAdapter() {
-		// public void keyPressed(KeyEvent e) {
-		// // Hide the TableCursor when the user hits the "CTRL" or "SHIFT" key.
-		// // This alows the user to select multiple items in the table.
-		// if ((e.keyCode == SWT.CTRL || e.keyCode == SWT.SHIFT)
-		// || (((e.stateMask & SWT.CONTROL) != 0 || (e.stateMask & SWT.SHIFT) != 0) && ((e.keyCode & SWT.ARROW) != 0))) {
-		// cursor.setVisible(false);
-		// } else
-		// // ENTER to open editor
-		// if ((e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) && e.stateMask == 0) {
-		// editCell(tableViewer, cursor);
-		// } else
-		// // any character
-		// if ((e.keyCode < 0x10000 || e.character != '\0') && e.keyCode > 0x1f && e.keyCode != 127 || e.keyCode == 0x00
-		// && (e.stateMask == 0 || e.stateMask == SWT.SHIFT)) {
-		// editCell(tableViewer, cursor);
-		// if (tableViewer.getCellEditors()[cursor.getColumn()] instanceof TextCellEditor) {
-		// TextCellEditor editor = ((TextCellEditor) tableViewer.getCellEditors()[cursor.getColumn()]);
-		// editor.setValue(String.valueOf(e.character));
-		// ((Text) editor.getControl()).setSelection(1);
-		// }
-		// }
-		// }
-		// });
 
 		tableViewer = new TableViewer(table);
-		attachContentProvider(tableViewer);
-		attachLabelProvider(tableViewer);
+		tableViewer.setContentProvider(new ListContentProvider());
+		tableViewer.setLabelProvider(new TLabelProvider());
 		attachCellEditors(tableViewer, table);
-
-		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
-		tlayout.addColumnData(new ColumnWeightData(50, 75, true));
-		table.setLayout(tlayout);
 
 		setColumnToolTip();
 
@@ -282,6 +190,12 @@ public class JRPropertyPage extends WizardPage {
 		for (int i = 0, n = column.length; i < n; i++) {
 			column[i].pack();
 		}
+
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(50, true));
+		tlayout.addColumnData(new ColumnWeightData(50, true));
+		table.setLayout(tlayout);
+
 		table.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -293,35 +207,6 @@ public class JRPropertyPage extends WizardPage {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-	}
-
-	/**
-	 * @param tableViewer
-	 * @param cursor
-	 */
-	static void editCell(final TableViewer tableViewer, final TableCursor cursor) {
-		tableViewer.editElement(cursor.getRow().getData(), cursor.getColumn());
-		// hide cursor only f there is an editor active on the cell
-		// cursor.setVisible(!tableViewer.isCellEditorActive());
-	}
-
-	private void attachContentProvider(TableViewer viewer) {
-		viewer.setContentProvider(new IStructuredContentProvider() {
-			public Object[] getElements(Object inputElement) {
-				return ((List<PropertyDTO>) inputElement).toArray();
-			}
-
-			public void dispose() {
-			}
-
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-
-			}
-		});
-	}
-
-	private void attachLabelProvider(TableViewer viewer) {
-		viewer.setLabelProvider(new TLabelProvider());
 	}
 
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
@@ -347,22 +232,29 @@ public class JRPropertyPage extends WizardPage {
 
 			public void modify(Object element, String property, Object value) {
 				TableItem tableItem = (TableItem) element;
-				setErrorMessage(null);
-				setMessage(getDescription(tableItem));
 				PropertyDTO data = (PropertyDTO) tableItem.getData();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
 					data.setValue((String) value);
-				}
-				if ("NAME".equals(property)) { //$NON-NLS-1$
+				} else if ("NAME".equals(property)) { //$NON-NLS-1$
+					String str = (String) value;
+					if (str == null || str.trim().equals("")) {
+						setErrorMessage("Property name must not be empty.");
+						setPageComplete(false);
+						return;
+					}
 					List<PropertyDTO> plist = (List<PropertyDTO>) tableViewer.getInput();
 					for (PropertyDTO p : plist) {
-						if (p != data && p.getProperty() != null && p.getProperty().equals(value)) {
+						if (p != data && p.getProperty() != null && p.getProperty().equals(str)) {
 							setErrorMessage(Messages.common_error_message_unique_properties);
+							setPageComplete(false);
 							return;
 						}
 					}
-					data.setProperty((String) value);
+					data.setProperty(str);
 				}
+				setErrorMessage(null);
+				setMessage(getDescription(tableItem));
+				setPageComplete(true);
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}
@@ -371,16 +263,16 @@ public class JRPropertyPage extends WizardPage {
 		RWComboBoxCellEditor comboBoxCellEditor = new RWComboBoxCellEditor(parent, getDefaultPropertyItems()) {
 			@Override
 			protected void doSetFocus() {
-				int index = getComboBox().getSelectionIndex();
-				String cVal = (String) getValue();
-				String[] propertyItems = getPropertyItems(getItems(), cVal);
-				setItems(propertyItems);
+				// int index = getComboBox().getSelectionIndex();
+				// String cVal = (String) getValue();
+				// String[] propertyItems = getPropertyItems(getItems(), cVal);
+				// setItems(propertyItems);
 				super.doSetFocus();
-				for (int i = 0; i < propertyItems.length; i++)
-					if (cVal.equals(propertyItems[i])) {
-						getComboBox().select(i);
-						break;
-					}
+				// for (int i = 0; i < propertyItems.length; i++)
+				// if (cVal.equals(propertyItems[i])) {
+				// getComboBox().select(i);
+				// break;
+				// }
 			}
 		};
 
@@ -516,6 +408,6 @@ public class JRPropertyPage extends WizardPage {
 					return p.getDescription();
 			}
 		}
-		return ""; //$NON-NLS-1$
+		return getDescription(); //$NON-NLS-1$
 	}
 }
