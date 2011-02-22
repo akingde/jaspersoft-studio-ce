@@ -123,7 +123,7 @@ public class ChartWizardPage extends WizardPage {
 		ti.setData(JRDesignChart.CHART_TYPE_CANDLESTICK);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartWizardPage_gantt);
+		ti.setText(Messages.common_gantt);
 		ti.setImage(Activator.getImage("/icons/gantt.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_GANTT);
 
@@ -143,7 +143,7 @@ public class ChartWizardPage extends WizardPage {
 		ti.setData(JRDesignChart.CHART_TYPE_METER);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartWizardPage_multiaxis_chart);
+		ti.setText(Messages.common_multiaxes_chart);
 		ti.setImage(Activator.getImage("/icons/multiaxis.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_MULTI_AXIS);
 
@@ -163,17 +163,17 @@ public class ChartWizardPage extends WizardPage {
 		ti.setData(JRDesignChart.CHART_TYPE_SCATTER);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartWizardPage_stackedarea);
+		ti.setText(Messages.common_stacked_area);
 		ti.setImage(Activator.getImage("/icons/stackedarea.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_STACKEDAREA);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartWizardPage_stackedbar);
+		ti.setText(Messages.common_stacked_bar);
 		ti.setImage(Activator.getImage("/icons/stackedbar.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartWizardPage_bar3d);
+		ti.setText(Messages.common_stacked_bar3D);
 		ti.setImage(Activator.getImage("/icons/stackedbar3d.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR3D);
 
@@ -188,17 +188,17 @@ public class ChartWizardPage extends WizardPage {
 		ti.setData(JRDesignChart.CHART_TYPE_TIMESERIES);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartWizardPage_xyarea);
+		ti.setText(Messages.common_xy_area);
 		ti.setImage(Activator.getImage("/icons/xyarea.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_XYAREA);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartWizardPage_xybar);
+		ti.setText(Messages.common_xy_bar);
 		ti.setImage(Activator.getImage("/icons/xybar.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_XYBAR);
 
 		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.ChartWizardPage_xyline);
+		ti.setText(Messages.common_xy_line);
 		ti.setImage(Activator.getImage("/icons/xyline.png")); //$NON-NLS-1$
 		ti.setData(JRDesignChart.CHART_TYPE_XYLINE);
 

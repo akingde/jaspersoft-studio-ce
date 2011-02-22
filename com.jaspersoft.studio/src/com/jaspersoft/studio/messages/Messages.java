@@ -56,6 +56,7 @@ public class Messages extends NLS {
 	public static String common_elements;
 	public static String common_empty;
 	public static String common_error_creating_nested_visual_editor;
+	public static String common_error_message_non_empty_properties_string_name;
 	public static String common_error_message_unique_properties;
 	public static String common_evaluation_time;
 	public static String common_expression;
@@ -287,6 +288,7 @@ public class Messages extends NLS {
 	public static String JRExpressionPage_description;
 	public static String JRExpressionPage_value_class_name;
 	public static String JRPropertyPage_description;
+	public static String JRPropertyPage_error_message_property_must_not_be_empty;
 	public static String JRPropertyPage_value;
 	public static String JRQueryPage_description;
 	public static String JrxmlEditor_design;
@@ -688,7 +690,10 @@ public class Messages extends NLS {
 	public static String RulersGridPreferencePage_show_rulers;
 	public static String RVPropertyPage_calculation_type;
 	public static String RVPropertyPage_description;
+	public static String RVPropertyPage_error_message_report_variables_all_used;
+	public static String RVPropertyPage_error_message_return_variables_contain_duplicate_tovariable_values;
 	public static String RVPropertyPage_incrementer_factory_class;
+	public static String RVPropertyPage_subreport_return_values;
 	public static String RVPropertyPage_subreport_variable;
 	public static String RVPropertyPage_to_variable;
 	public static String ScientificPattern_description;
@@ -759,7 +764,7 @@ public class Messages extends NLS {
 	public static String WizardDatasetNewPage_description;
 	public static String WizardDatasetNewPage_name_already_exists_a;
 	public static String WizardDatasetNewPage_name_already_exists_b;
-	public static String WizardDatasetNewPage_validationnotnull;
+	public static String WizardDatasetNewPage_validation_not_null;
 	public static String WizardDatasetPage_description;
 	public static String WizardDataSourcePage_datasource;
 	public static String WizardDataSourcePage_description;

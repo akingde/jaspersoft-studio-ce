@@ -50,6 +50,7 @@ public class Messages extends NLS {
 	public static String common_domain_axis_maxvalue_expression;
 	public static String common_domain_axis_minvalue_expression;
 	public static String common_end_date_expression;
+	public static String common_gantt;
 	public static String common_highlow_chart;
 	public static String common_item_hyperlink;
 	public static String common_item_label;
@@ -59,6 +60,7 @@ public class Messages extends NLS {
 	public static String common_legend_label_format;
 	public static String common_line_chart;
 	public static String common_meter_chart;
+	public static String common_multiaxes_chart;
 	public static String common_name;
 	public static String common_pie_chart;
 	public static String common_pie3d_chart;
@@ -72,6 +74,9 @@ public class Messages extends NLS {
 	public static String common_show_labels;
 	public static String common_show_lines;
 	public static String common_show_shapes;
+	public static String common_stacked_area;
+	public static String common_stacked_bar3D;
+	public static String common_stacked_bar;
 	public static String common_start_date_expression;
 	public static String common_thermometer_chart;
 	public static String common_timeseries_chart;
@@ -86,18 +91,13 @@ public class Messages extends NLS {
 	public static String common_value_expression;
 	public static String common_value_font;
 	public static String common_value_mask;
+	public static String common_xy_area;
+	public static String common_xy_bar;
+	public static String common_xy_line;
 	public static String common_x_value_expression;
 	public static String common_y_value_expression;
 	public static String ChartAxesWizardPage_chartaxis_wizard_description;
-	public static String ChartWizardPage_bar3d;
 	public static String ChartWizardPage_chart_wizard_description;
-	public static String ChartWizardPage_gantt;
-	public static String ChartWizardPage_multiaxis_chart;
-	public static String ChartWizardPage_stackedarea;
-	public static String ChartWizardPage_stackedbar;
-	public static String ChartWizardPage_xyarea;
-	public static String ChartWizardPage_xybar;
-	public static String ChartWizardPage_xyline;
 	public static String CreateCategorySeriesAction_create_category_series;
 	public static String CreateCategorySeriesAction_create_category_series_tool_tip;
 	public static String CreateChartAxisAction_create_chartaxis;

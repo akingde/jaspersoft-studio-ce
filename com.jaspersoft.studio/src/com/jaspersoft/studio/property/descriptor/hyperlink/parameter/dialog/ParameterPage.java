@@ -229,8 +229,8 @@ public class ParameterPage extends WizardPage {
 							return;
 						}
 					}
-					if (value == null || ((String) value).trim().equals("")) {
-						setErrorMessage("Properties must have non empty string name.");
+					if (value == null || ((String) value).trim().equals("")) { //$NON-NLS-1$
+						setErrorMessage(Messages.common_error_message_non_empty_properties_string_name);
 						return;
 					}
 					data.setName((String) value);

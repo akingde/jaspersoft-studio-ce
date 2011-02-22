@@ -131,8 +131,8 @@ public class PreviewEditor extends JRPrintEditor {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					unsetReportDocument(Messages.PreviewEditor_reloading, false);
-					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
+					unsetReportDocument(Messages.PreviewEditor_reloading + " ...", false); //$NON-NLS-1$
+					monitor.beginTask(Messages.PreviewEditor_starting + " ...", IProgressMonitor.UNKNOWN); //$NON-NLS-1$
 					InputStream io = null;
 					fillError = null;
 					try {

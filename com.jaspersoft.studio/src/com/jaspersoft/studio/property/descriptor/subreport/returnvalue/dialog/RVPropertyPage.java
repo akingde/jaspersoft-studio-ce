@@ -133,7 +133,7 @@ public class RVPropertyPage extends WizardPage {
 
 	protected RVPropertyPage(String pageName) {
 		super(pageName);
-		setTitle("Subreport Return Values");
+		setTitle(Messages.RVPropertyPage_subreport_return_values);
 		setDescription(Messages.RVPropertyPage_description);
 
 	}
@@ -178,7 +178,7 @@ public class RVPropertyPage extends WizardPage {
 						return p;
 					}
 				}
-				setErrorMessage("All report variables are allready used, you can't add anymore");
+				setErrorMessage(Messages.RVPropertyPage_error_message_report_variables_all_used);
 
 				return null;
 			}
@@ -203,13 +203,13 @@ public class RVPropertyPage extends WizardPage {
 					String name = "NEW_VARIABLE";//$NON-NLS-1$
 					while (getName(input, name, i) == null)
 						i++;
-					name += "_" + i;
+					name += "_" + i; //$NON-NLS-1$
 					p.setSubreportVariable(name); //$NON-NLS-1$
 				}
 			}
 
 			private String getName(List<?> input, String name, int i) {
-				name += "_" + i;
+				name += "_" + i; //$NON-NLS-1$
 				for (Object dto : input) {
 					JRDesignSubreportReturnValue prm = (JRDesignSubreportReturnValue) dto;
 					if (prm.getSubreportVariable() != null && prm.getSubreportVariable().trim().equals(name)) {
@@ -332,7 +332,7 @@ public class RVPropertyPage extends WizardPage {
 		int size = lto.size();
 		int setSize = new HashSet<String>(lto).size();
 		if (size != setSize) {
-			setErrorMessage("Your Rerurn Variables contains duplicate ToVariable values.");
+			setErrorMessage(Messages.RVPropertyPage_error_message_return_variables_contain_duplicate_tovariable_values);
 			setPageComplete(false);
 			return false;
 		} else {
@@ -362,7 +362,7 @@ public class RVPropertyPage extends WizardPage {
 			JRSubreport sr = (JRSubreport) dto.getProp1();
 			if (sr.getExpression() != null) {
 				String path = sr.getExpression().getText();
-				path = path.replace("\"", "");
+				path = path.replace("\"", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
 				InputStream io = file.getContents();
 				JasperDesign jd = JRXmlLoader.load(io);

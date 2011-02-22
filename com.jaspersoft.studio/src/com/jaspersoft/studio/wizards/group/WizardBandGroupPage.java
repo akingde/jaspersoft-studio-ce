@@ -113,7 +113,7 @@ public class WizardBandGroupPage extends WizardPage {
 				Messages.common_group));
 
 		Group expgroup = new Group(composite, SWT.NONE);
-		expgroup.setText(Messages.WizardBandGroupPage_group_by_following_report_object+":");
+		expgroup.setText(Messages.WizardBandGroupPage_group_by_following_report_object+":"); //$NON-NLS-1$
 		layout = new GridLayout();
 		layout.numColumns = 2;
 		expgroup.setLayout(layout);

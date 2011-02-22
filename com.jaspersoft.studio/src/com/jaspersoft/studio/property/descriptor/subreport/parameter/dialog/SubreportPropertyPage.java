@@ -100,7 +100,7 @@ public class SubreportPropertyPage extends WizardPage {
 	}
 
 	public SubreportPropertyPage() {
-		this("subreportpage");
+		this("subreportpage"); //$NON-NLS-1$
 	}
 
 	public SubreportPropertyPage(String pageName) {
@@ -133,7 +133,7 @@ public class SubreportPropertyPage extends WizardPage {
 				String name = "NEW_PARAMETER";//$NON-NLS-1$
 				while (getName(input, name, i) == null)
 					i++;
-				name += "_" + i;
+				name += "_" + i; //$NON-NLS-1$
 				param.setName(name);
 				JRDesignExpression expression = new JRDesignExpression();
 				expression.setValueClassName(Object.class.getName());
@@ -144,7 +144,7 @@ public class SubreportPropertyPage extends WizardPage {
 			}
 
 			private String getName(List<?> input, String name, int i) {
-				name += "_" + i;
+				name += "_" + i; //$NON-NLS-1$
 				for (Object dto : input) {
 					JRSubreportParameter prm = (JRSubreportParameter) dto;
 					if (prm.getName() != null && prm.getName().trim().equals(name)) {
@@ -227,8 +227,8 @@ public class SubreportPropertyPage extends WizardPage {
 							return;
 						}
 					}
-					if (value == null || ((String) value).trim().equals("")) {
-						setErrorMessage("Properties must have non empty string name.");
+					if (value == null || ((String) value).trim().equals("")) { //$NON-NLS-1$
+						setErrorMessage(Messages.common_error_message_non_empty_properties_string_name);
 						return;
 					}
 					data.setName((String) value);

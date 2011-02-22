@@ -94,7 +94,7 @@ public class WizardDatasetNewPage extends WizardPage {
 							+ " \"" + dstext + "\" " + Messages.WizardDatasetNewPage_name_already_exists_b); //$NON-NLS-1$ //$NON-NLS-2$
 					setPageComplete(false);
 				} else if (dstext == null || dstext.trim().equals("")) {//$NON-NLS-1$
-					setErrorMessage(Messages.WizardDatasetNewPage_validationnotnull);
+					setErrorMessage(Messages.WizardDatasetNewPage_validation_not_null);
 					setPageComplete(false);
 				} else {
 					setPageComplete(true);

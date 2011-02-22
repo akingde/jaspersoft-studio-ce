@@ -141,19 +141,19 @@ public class JRPropertyPage extends WizardPage {
 			public Object newElement(List<?> input) {
 				List<PropertyDTO> list = (List<PropertyDTO>) tableViewer.getInput();
 				int i = 1;
-				String name = "newproperty";
+				String name = "newproperty"; //$NON-NLS-1$
 				while (getName(input, name, i) == null)
 					i++;
-				name += "_" + i;
+				name += "_" + i; //$NON-NLS-1$
 
 				PropertyDTO p = new PropertyDTO();
 				p.setProperty(name);
-				p.setValue("NEW_VALUE");
+				p.setValue("NEW_VALUE"); //$NON-NLS-1$
 				return p;
 			}
 
 			private String getName(List<?> input, String name, int i) {
-				name += "_" + i;
+				name += "_" + i; //$NON-NLS-1$
 				for (Object dto : input) {
 					PropertyDTO prm = (PropertyDTO) dto;
 					if (prm.getProperty() != null && prm.getProperty().trim().equals(name)) {
@@ -237,8 +237,8 @@ public class JRPropertyPage extends WizardPage {
 					data.setValue((String) value);
 				} else if ("NAME".equals(property)) { //$NON-NLS-1$
 					String str = (String) value;
-					if (str == null || str.trim().equals("")) {
-						setErrorMessage("Property name must not be empty.");
+					if (str == null || str.trim().equals("")) { //$NON-NLS-1$
+						setErrorMessage(Messages.JRPropertyPage_error_message_property_must_not_be_empty);
 						setPageComplete(false);
 						return;
 					}
