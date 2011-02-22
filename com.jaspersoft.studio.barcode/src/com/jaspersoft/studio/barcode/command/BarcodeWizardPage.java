@@ -122,7 +122,7 @@ public class BarcodeWizardPage extends WizardPage {
 		lbl = new Label(composite, SWT.NONE);
 		lbl.setText(Messages.BarcodeWizardPage_barcode4j_types);
 
-		final Table table = new Table(composite, SWT.NONE);
+		final Table table = new Table(composite, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 500;
 		gd.widthHint = 250;
@@ -142,7 +142,7 @@ public class BarcodeWizardPage extends WizardPage {
 
 		fillTableBarbecue(table);
 
-		final Table table2 = new Table(composite, SWT.NONE);
+		final Table table2 = new Table(composite, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 500;
 		gd.widthHint = 250;
@@ -158,7 +158,7 @@ public class BarcodeWizardPage extends WizardPage {
 
 		tlayout = new TableLayout();
 		tlayout.addColumnData(new ColumnWeightData(100, false));
-		table.setLayout(tlayout);
+		table2.setLayout(tlayout);
 
 		fillTableb4j(table2);
 

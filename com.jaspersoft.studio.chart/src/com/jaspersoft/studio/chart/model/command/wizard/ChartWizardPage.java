@@ -21,6 +21,8 @@ package com.jaspersoft.studio.chart.model.command.wizard;
 
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -57,7 +59,7 @@ public class ChartWizardPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		chartTable = new Table(composite, SWT.NONE);
+		chartTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 500;
 		gd.widthHint = 300;
@@ -71,6 +73,10 @@ public class ChartWizardPage extends WizardPage {
 
 		fillTableb4j(chartTable);
 		column2[0].pack();
+
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		chartTable.setLayout(tlayout);
 
 		chartTable.select(0);
 		chartTable.addSelectionListener(new SelectionListener() {

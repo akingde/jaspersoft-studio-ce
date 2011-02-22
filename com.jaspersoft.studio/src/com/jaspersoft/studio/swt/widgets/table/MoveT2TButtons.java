@@ -73,22 +73,22 @@ public class MoveT2TButtons {
 	}
 
 	public void createButtons(Composite composite, TableViewer leftTView, TableViewer rightTView) {
-		Button addField = new Button(composite, SWT.BORDER);
+		Button addField = new Button(composite, SWT.PUSH);
 		addField.setText(">"); //$NON-NLS-1$
 		addField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addField.addSelectionListener(new MoveListener(leftTView, rightTView));
 
-		Button addFields = new Button(composite, SWT.BORDER);
+		Button addFields = new Button(composite, SWT.PUSH);
 		addFields.setText(">>"); //$NON-NLS-1$
 		addFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addFields.addSelectionListener(new MoveAllListener(leftTView, rightTView));
 
-		Button delField = new Button(composite, SWT.BORDER);
+		Button delField = new Button(composite, SWT.PUSH);
 		delField.setText("<"); //$NON-NLS-1$
 		delField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delField.addSelectionListener(new MoveListener(rightTView, leftTView));
 
-		Button delFields = new Button(composite, SWT.BORDER);
+		Button delFields = new Button(composite, SWT.PUSH);
 		delFields.setText("<<"); //$NON-NLS-1$
 		delFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delFields.addSelectionListener(new MoveAllListener(rightTView, leftTView));
