@@ -23,12 +23,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
+import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
@@ -40,6 +39,7 @@ import net.sf.jasperreports.engine.xml.JRXmlWriter;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -48,6 +48,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -331,13 +332,48 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		// FIXME: THIS IS NOT THE RIGHT PLACE TO LOAD MODEL, WE SHOULD LOAD FROM
 		// TEXT EDITOR TO AVOID 2 TIME READING THE FILE
+		if (editorInput instanceof FileStoreEditorInput) {
+			try {
+				FileStoreEditorInput fsei = (FileStoreEditorInput) editorInput;
+
+				IPath location = new Path(fsei.getURI().getPath());
+
+				// Create a new temporary project object and open it.
+				IProject project = null;
+				for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+					if (prj.isOpen()) {
+						if (project == null)
+							project = prj;
+						else
+
+						if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
+							project = prj;
+
+					}
+				}
+				if (project == null)
+					ResourcesPlugin.getWorkspace().getRoot().getProject("JSSPROJECT");
+				// Create a project if one doesn't exist and open it.
+				if (!project.exists())
+					project.create(null);
+				if (!project.isOpen())
+					project.open(null);
+
+				IFile file = project.getFile(location.lastSegment());
+				file.createLink(location, IResource.REPLACE, null);
+
+				// FileEditorInput newFileEditorInput = new FileEditorInput(file);
+				editorInput = new FileEditorInput(file);
+			} catch (CoreException e) {
+				throw new PartInitException(e.getMessage(), e);
+			}
+			// in = new FileInputStream(((FileStoreEditorInput) editorInput).getURI().getPath());
+		}
 		super.init(site, editorInput);
 		setPartName(editorInput.getName());
 		InputStream in = null;
 		try {
-			if (editorInput instanceof FileStoreEditorInput) {
-				in = new FileInputStream(((FileStoreEditorInput) editorInput).getURI().getPath());
-			} else if (editorInput instanceof IFileEditorInput) {
+			if (editorInput instanceof IFileEditorInput) {
 				in = ((IFileEditorInput) editorInput).getFile().getContents();
 			} else {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
@@ -352,9 +388,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		} catch (CoreException e) {
 			setModel(null);
 			throw new PartInitException(e.getMessage(), e);
-		} catch (FileNotFoundException e) {
-			setModel(null);
-			throw new PartInitException("File not found", e); //$NON-NLS-1$
 		} finally {
 			if (in != null)
 				try {
