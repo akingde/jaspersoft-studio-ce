@@ -19,8 +19,13 @@
  */
 package com.jaspersoft.studio.editor.report;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
+import net.sf.jasperreports.engine.util.SimpleFileResolver;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
@@ -68,6 +73,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
@@ -313,6 +319,15 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		// set context menu
 		graphicalViewer.setContextMenu(new AppContextMenuProvider(graphicalViewer, getActionRegistry()));
+
+		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+
+		SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
+		// new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
+				new File(file.getProject().getLocationURI()) }));
+		fileResolver.setResolveAbsolutePath(true);
+
+		graphicalViewer.setProperty("FILERESOLVER", fileResolver);
 	}
 
 	/*

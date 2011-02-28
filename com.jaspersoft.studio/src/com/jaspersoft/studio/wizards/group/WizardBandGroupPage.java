@@ -28,6 +28,12 @@ import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -35,28 +41,59 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.group.MGroup;
+import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
+import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class WizardBandGroupPage extends WizardPage {
 	private MGroup group;
 	private JasperDesign jrDesign;
 	private Text grName;
-	private java.util.List<JRDesignField> fList;
-	private java.util.List<JRDesignVariable> vList;
+	private java.util.List<Object> fList;
+	private Table leftTable;
+	private TableViewer leftTView;
+
+	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
+
+		public Image getColumnImage(Object element, int columnIndex) {
+			switch (columnIndex) {
+			case 0:
+				if (element instanceof JRDesignField)
+					return JaspersoftStudioPlugin.getImage(MField.getIconDescriptor().getIcon16());
+				else if (element instanceof JRDesignVariable)
+					return JaspersoftStudioPlugin.getImage(MVariable.getIconDescriptor().getIcon16());
+			}
+			return null;
+		}
+
+		public String getColumnText(Object element, int columnIndex) {
+			switch (columnIndex) {
+			case 0:
+				if (element instanceof JRDesignField)
+					return ((JRDesignField) element).getName();
+				else if (element instanceof JRDesignVariable)
+					return ((JRDesignVariable) element).getName();
+			}
+			return ""; //$NON-NLS-1$
+		}
+	}
 
 	public void setGroup(MGroup group) {
 		this.group = group;
@@ -74,12 +111,11 @@ public class WizardBandGroupPage extends WizardPage {
 		setTitle(Messages.common_group);
 		setDescription(Messages.WizardBandGroupPage_description);
 		this.jrDesign = jrDesign;
-		fList = new ArrayList<JRDesignField>(jrDesign.getFieldsList());
-		vList = new ArrayList<JRDesignVariable>();
+		fList = new ArrayList<Object>(jrDesign.getFieldsList());
 		for (int i = 0; i < jrDesign.getVariablesList().size(); i++) {
 			JRDesignVariable v = (JRDesignVariable) jrDesign.getVariablesList().get(i);
 			if (!v.isSystemDefined())
-				vList.add(v);
+				fList.add(v);
 
 		}
 	}
@@ -87,75 +123,57 @@ public class WizardBandGroupPage extends WizardPage {
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 3;
 		composite.setLayout(layout);
 		setControl(composite);
 
 		Label lbl = new Label(composite, SWT.NONE);
 		lbl.setText(Messages.common_group_name);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		lbl.setLayoutData(gd);
 
 		grName = new Text(composite, SWT.BORDER);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
 		grName.setLayoutData(gd);
 		grName.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				if (jrDesign.getMainDesignDataset().getGroupsMap().get(grName.getText()) != null)
+				if (grName.getText() == null || grName.getText().trim().equals("")) {//$NON-NLS-1$
+					setErrorMessage(Messages.WizardBandGroupPage_groupnameempty);
+					setPageComplete(false);
+				} else if (jrDesign.getMainDesignDataset().getGroupsMap().get(grName.getText()) != null) {
 					setErrorMessage(Messages.WizardBandGroupPage_error_message_unique_name);
-				else {
+					setPageComplete(false);
+				} else {
+					setPageComplete(true);
 					setErrorMessage(null);
 					setMessage(getDescription());
 					group.setPropertyValue(JRDesignGroup.PROPERTY_NAME, grName.getText());
 				}
 			}
 		});
-		grName.setText(ModelUtils.getDefaultName(jrDesign.getMainDesignDataset().getGroupsMap(),
-				Messages.common_group));
+		grName.setText(ModelUtils.getDefaultName(jrDesign.getMainDesignDataset().getGroupsMap(), Messages.common_group));
 
-		Group expgroup = new Group(composite, SWT.NONE);
-		expgroup.setText(Messages.WizardBandGroupPage_group_by_following_report_object+":"); //$NON-NLS-1$
-		layout = new GridLayout();
-		layout.numColumns = 2;
-		expgroup.setLayout(layout);
-		gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
-		expgroup.setLayoutData(gd);
-
-		lbl = new Label(expgroup, SWT.NONE);
-		lbl.setText(Messages.common_fields);
-
-		lbl = new Label(expgroup, SWT.NONE);
-		lbl.setText(Messages.common_variables);
-
-		final List fields = new List(expgroup, SWT.BORDER | SWT.V_SCROLL);
-		fields.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		final List variables = new List(expgroup, SWT.BORDER | SWT.V_SCROLL);
-		variables.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		Button addField = new Button(expgroup, SWT.PUSH);
-		addField.setText(Messages.WizardBandGroupPage_field_text);
-		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
-		gd.horizontalSpan = 2;
-		addField.setLayoutData(gd);
+		lbl = new Label(composite, SWT.NONE);
+		lbl.setText(Messages.WizardBandGroupPage_group_by_following_expression);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		lbl.setLayoutData(gd);
 
 		Composite expCompo = new Composite(composite, SWT.NONE);
 		layout = new GridLayout();
 		layout.numColumns = 2;
 		expCompo.setLayout(layout);
 		gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
+		// gd.horizontalSpan = 2;
 		expCompo.setLayoutData(gd);
-
-		lbl = new Label(expCompo, SWT.NONE);
-		lbl.setText(Messages.WizardBandGroupPage_group_by_following_expression);
-		gd = new GridData();
-		gd.horizontalSpan = 2;
-		lbl.setLayoutData(gd);
 
 		final Text dsExpr = new Text(expCompo, SWT.BORDER | SWT.MULTI);
 		gd = new GridData(GridData.FILL_BOTH);
-		gd.heightHint = 60;
+		gd.widthHint = 300;
+		gd.heightHint = 100;
 		dsExpr.setLayoutData(gd);
 
 		final Button dsExprDialog = new Button(expCompo, SWT.PUSH);
@@ -205,76 +223,62 @@ public class WizardBandGroupPage extends WizardPage {
 			}
 		});
 
+		Button addField = new Button(composite, SWT.PUSH);
+		addField.setText(" < "); //$NON-NLS-1$
+		addField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		leftTable = new Table(composite, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
+		gd = new GridData(GridData.FILL_VERTICAL);
+		gd.widthHint = 250;
+		gd.heightHint = 400;
+		leftTable.setLayoutData(gd);
+		leftTable.setHeaderVisible(true);
+
+		TableColumn[] col = new TableColumn[1];
+		col[0] = new TableColumn(leftTable, SWT.NONE);
+		col[0].setText(Messages.WizardBandGroupPage_reportobjects);
+		col[0].pack();
+
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		leftTable.setLayout(tlayout);
+
+		leftTView = new TableViewer(leftTable);
+		leftTView.setContentProvider(new ListContentProvider());
+		leftTView.setLabelProvider(new TLabelProvider());
+
 		addField.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				int sel = fields.getSelectionIndex();
-				if (sel >= 0 && sel < fList.size()) {
-					JRDesignField f = fList.get(sel);
-					String expression = "$F{" + f.getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
-					MExpression mexp = (MExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
-					if (mexp == null || mexp.getValue() == null) {
-						JRDesignExpression jrExpression = new JRDesignExpression();
-						jrExpression.setValueClassName(f.getValueClassName());
-						jrExpression.setText(expression);
-						if (mexp == null)
-							mexp = new MExpression(jrExpression);
-						else
-							mexp.setValue(jrExpression);
+				StructuredSelection sel = (StructuredSelection) leftTView.getSelection();
+				if (!sel.isEmpty()) {
+					Object obj = sel.getFirstElement();
+					JRDesignExpression jrExpression = new JRDesignExpression();
+					if (obj instanceof JRDesignField) {
+						jrExpression.setValueClassName(((JRDesignField) obj).getValueClassName());
+						jrExpression.setText("$F{" + ((JRDesignField) obj).getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
+					} else if (obj instanceof JRDesignVariable) {
+						jrExpression.setValueClassName(((JRDesignVariable) obj).getValueClassName());
+						jrExpression.setText("$V{" + ((JRDesignVariable) obj).getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
 					}
-					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
-					dsExpr.setText(expression);
-				}
-				sel = variables.getSelectionIndex();
-				if (sel >= 0 && sel < fList.size()) {
-					JRDesignVariable v = vList.get(sel);
-					String expression = "$V{" + v.getName() + "}";//$NON-NLS-1$ //$NON-NLS-2$
+
 					MExpression mexp = (MExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
-					if (mexp == null || mexp.getValue() == null) {
-						JRDesignExpression jrExpression = new JRDesignExpression();
-						jrExpression.setValueClassName(v.getValueClassName());
-						jrExpression.setText(expression);
-						if (mexp == null)
-							mexp = new MExpression(jrExpression);
-						else
-							mexp.setValue(jrExpression);
-					}
+					if (mexp == null)
+						mexp = new MExpression(jrExpression);
+					else
+						mexp.setValue(jrExpression);
+
 					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
-					dsExpr.setText(expression);
+					dsExpr.setText(jrExpression.getText());
 				}
+
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
 
-		for (JRDesignField f : fList) {
-			fields.add(f.getName());
-		}
-		for (JRDesignVariable v : vList) {
-			variables.add(v.getName());
-		}
-		fields.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				if (fields.getSelectionIndex() >= 0)
-					variables.setSelection(-1);
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-		variables.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				if (variables.getSelectionIndex() >= 0)
-					fields.setSelection(-1);
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-		});
+		leftTView.setInput(fList);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
 	}

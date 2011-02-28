@@ -24,6 +24,8 @@ import java.awt.Graphics2D;
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import net.sf.jasperreports.engine.util.FileResolver;
+import net.sf.jasperreports.engine.util.JRResourcesUtil;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.RectangleFigure;
@@ -31,6 +33,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+import com.jaspersoft.studio.repository.RepositoryManager;
 
 /**
  * The Class GenericFigure.
@@ -42,6 +45,7 @@ public class ComponentFigure extends RectangleFigure {
 
 	/** The draw visitor. */
 	private DrawVisitor drawVisitor;
+	private FileResolver fileRezolver;
 
 	/**
 	 * Instantiates a new generic figure.
@@ -58,8 +62,9 @@ public class ComponentFigure extends RectangleFigure {
 	 * @param drawVisitor
 	 *          the draw visitor
 	 */
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
+	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor, FileResolver fileRezolver) {
 		this.drawVisitor = drawVisitor;
+		this.fileRezolver = fileRezolver;
 		this.jrElement = jrElement;
 		if (jrElement != null)
 			setSize(jrElement.getWidth(), jrElement.getHeight());
@@ -81,7 +86,14 @@ public class ComponentFigure extends RectangleFigure {
 
 			if (drawVisitor != null) {
 				drawVisitor.setGraphics2D(graphics2d);
+				if (fileRezolver != null) {
+
+					JRResourcesUtil.setGlobalFileResolver(fileRezolver);
+				}
 				draw(drawVisitor, jrElement);
+				if (fileRezolver != null) {
+					// JRResourcesUtil.re
+				}
 			} else
 				graphics2d.drawRect(b.x, b.y, b.width, b.height);
 		} catch (Exception e) {

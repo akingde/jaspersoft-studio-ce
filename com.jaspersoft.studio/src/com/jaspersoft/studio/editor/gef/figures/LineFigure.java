@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRLine;
 import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
@@ -57,8 +58,8 @@ public class LineFigure extends AHandleBoundsFigure {
 	 * net.sf.jasperreports.engine.export.draw.DrawVisitor)
 	 */
 	@Override
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
-		super.setJRElement(jrElement, drawVisitor);
+	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor, FileResolver fileResolver) {
+		super.setJRElement(jrElement, drawVisitor, fileResolver);
 		// set bounds + 1/2 border
 		int offset = calcBorder(getLinePen());
 		Rectangle b = getBounds();

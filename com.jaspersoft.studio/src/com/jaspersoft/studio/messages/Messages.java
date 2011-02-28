@@ -752,6 +752,8 @@ public class Messages extends NLS {
 	public static String WizardBandGroupPage_field_text;
 	public static String WizardBandGroupPage_group_by_following_expression;
 	public static String WizardBandGroupPage_group_by_following_report_object;
+	public static String WizardBandGroupPage_groupnameempty;
+	public static String WizardBandGroupPage_reportobjects;
 	public static String WizardConnectionPage_connection_text;
 	public static String WizardConnectionPage_datasource_text;
 	public static String WizardConnectionPage_description;
@@ -764,7 +766,7 @@ public class Messages extends NLS {
 	public static String WizardDatasetNewPage_description;
 	public static String WizardDatasetNewPage_name_already_exists_a;
 	public static String WizardDatasetNewPage_name_already_exists_b;
-	public static String WizardDatasetNewPage_validation_not_null;
+	public static String WizardDatasetNewPage_validationnotnull;
 	public static String WizardDatasetPage_description;
 	public static String WizardDataSourcePage_datasource;
 	public static String WizardDataSourcePage_description;

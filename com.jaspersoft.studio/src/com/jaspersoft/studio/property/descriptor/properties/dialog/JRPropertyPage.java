@@ -25,21 +25,17 @@ import java.util.List;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.design.JRDesignSubreportReturnValue;
-import net.sf.jasperreports.engine.type.CalculationEnum;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -48,7 +44,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
@@ -153,7 +148,7 @@ public class JRPropertyPage extends WizardPage {
 			}
 
 			private String getName(List<?> input, String name, int i) {
-				name += "_" + i; //$NON-NLS-1$
+				name += "_" + i;
 				for (Object dto : input) {
 					PropertyDTO prm = (PropertyDTO) dto;
 					if (prm.getProperty() != null && prm.getProperty().trim().equals(name)) {
@@ -260,23 +255,8 @@ public class JRPropertyPage extends WizardPage {
 			}
 		});
 
-		RWComboBoxCellEditor comboBoxCellEditor = new RWComboBoxCellEditor(parent, getDefaultPropertyItems()) {
-			@Override
-			protected void doSetFocus() {
-				// int index = getComboBox().getSelectionIndex();
-				// String cVal = (String) getValue();
-				// String[] propertyItems = getPropertyItems(getItems(), cVal);
-				// setItems(propertyItems);
-				super.doSetFocus();
-				// for (int i = 0; i < propertyItems.length; i++)
-				// if (cVal.equals(propertyItems[i])) {
-				// getComboBox().select(i);
-				// break;
-				// }
-			}
-		};
-
-		viewer.setCellEditors(new CellEditor[] { comboBoxCellEditor, new TextCellEditor(parent) });
+		viewer.setCellEditors(new CellEditor[] { new RWComboBoxCellEditor(parent, getDefaultPropertyItems()),
+				new TextCellEditor(parent) });
 		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -379,7 +359,7 @@ public class JRPropertyPage extends WizardPage {
 				isDTO = true;
 			}
 		}
-		l.add(0, isDTO ? "" : dto); //$NON-NLS-1$
+		l.add(0, !isDTO ? "" : dto); //$NON-NLS-1$
 		// default - exclude existing
 		return l.toArray(new String[l.size()]);
 	}

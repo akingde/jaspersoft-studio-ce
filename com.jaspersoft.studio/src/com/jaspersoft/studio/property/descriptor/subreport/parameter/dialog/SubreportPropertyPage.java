@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRExpression;
@@ -44,7 +45,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.mozilla.javascript.edu.emory.mathcs.backport.java.util.Arrays;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MExpression;

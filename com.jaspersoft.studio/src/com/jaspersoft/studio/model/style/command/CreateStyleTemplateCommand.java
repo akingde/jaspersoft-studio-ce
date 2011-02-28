@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.internal.resources.File;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.gef.commands.Command;
@@ -90,13 +91,13 @@ public class CreateStyleTemplateCommand extends Command {
 					false, ResourcesPlugin.getWorkspace().getRoot(), IResource.FILE);
 			fd.setInitialPattern("*.jrtx");//$NON-NLS-1$
 			if (fd.open() == Dialog.OK) {
-				File file = (File) fd.getFirstResult();
+				IFile file = (IFile) fd.getFirstResult();
 
 				this.jrTemplate = MStyleTemplate.createJRTemplate();
 
 				JRDesignExpression jre = new JRDesignExpression();
 				jre.setValueClassName(String.class.getName());
-				jre.setText("\"" + file.getFullPath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
+				jre.setText("\"" + file.getProjectRelativePath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 				((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
 
 			}

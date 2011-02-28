@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.preview;
 
@@ -36,15 +32,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -54,18 +46,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.variable.MVariable;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.MoveT2TButtons;
-import com.jaspersoft.studio.utils.EnumHelper;
 
 public class SortFieldSection {
 	private List<JRSortField> inFields;
@@ -143,7 +132,6 @@ public class SortFieldSection {
 				rightTView = new TableViewer(rightTable);
 				rightTView.setContentProvider(new ListContentProvider());
 				rightTView.setLabelProvider(new TLabelProvider());
-				attachCellEditors();
 
 				createOrderButtons(tabFolder, composite);
 
@@ -178,42 +166,6 @@ public class SortFieldSection {
 			}
 			return ""; //$NON-NLS-1$
 		}
-	}
-
-	private void attachCellEditors() {
-		rightTView.setCellModifier(new ICellModifier() {
-			public boolean canModify(Object element, String property) {
-				if (property.equals("ORDER")) //$NON-NLS-1$
-					return true;
-				return false;
-			}
-
-			public Object getValue(Object element, String property) {
-				JRSortField prop = (JRSortField) element;
-				if ("NAME".equals(property)) //$NON-NLS-1$
-					return prop.getName();
-
-				if ("ORDER".equals(property)) { //$NON-NLS-1$
-					return new Integer(prop.getOrderValue().getValue() - 1);
-				}
-				return ""; //$NON-NLS-1$
-			}
-
-			public void modify(Object element, String property, Object value) {
-				TableItem tableItem = (TableItem) element;
-				JRDesignSortField data = (JRDesignSortField) tableItem.getData();
-				if ("ORDER".equals(property)) { //$NON-NLS-1$
-					data.setOrder(SortOrderEnum.getByValue((byte) (((Integer) value).intValue() + 1)));
-				}
-
-				rightTView.update(element, new String[] { property });
-				rightTView.refresh();
-			}
-		});
-
-		rightTView.setCellEditors(new CellEditor[] { new TextCellEditor(rightTable),
-				new ComboBoxCellEditor(rightTable, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL)) });
-		rightTView.setColumnProperties(new String[] { "NAME", "ORDER" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private void createOrderButtons(CTabFolder tabFolder, Composite composite) {

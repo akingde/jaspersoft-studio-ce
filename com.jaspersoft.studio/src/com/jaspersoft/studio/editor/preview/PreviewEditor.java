@@ -57,16 +57,10 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IFileEditorInput;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JRPrintEditor;
 import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
 import com.jaspersoft.studio.editor.preview.actions.ShowParametersAction;
@@ -131,8 +125,8 @@ public class PreviewEditor extends JRPrintEditor {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					unsetReportDocument(Messages.PreviewEditor_reloading + " ...", false); //$NON-NLS-1$
-					monitor.beginTask(Messages.PreviewEditor_starting + " ...", IProgressMonitor.UNKNOWN); //$NON-NLS-1$
+					unsetReportDocument(Messages.PreviewEditor_reloading, false);
+					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
 					InputStream io = null;
 					fillError = null;
 					try {
@@ -313,7 +307,6 @@ public class PreviewEditor extends JRPrintEditor {
 				SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
 		try {
 			sm.beginTask(Messages.PreviewEditor_fill_report, IProgressMonitor.UNKNOWN);
-			org.mozilla.javascript.Context.enter();
 
 			fh.addListener(new AsynchronousFilllListener() {
 
@@ -343,7 +336,6 @@ public class PreviewEditor extends JRPrintEditor {
 
 		} finally {
 			sm.done();
-			org.mozilla.javascript.Context.exit();
 		}
 		return Status.OK_STATUS;
 	}

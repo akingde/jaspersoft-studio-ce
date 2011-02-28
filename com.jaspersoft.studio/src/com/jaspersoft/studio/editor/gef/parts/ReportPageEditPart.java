@@ -359,7 +359,7 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 		getViewer().setProperty("RULER_HOFFSET", jd.getLeftMargin() + ReportPageFigure.PAGE_BORDER.left); //$NON-NLS-1$
 		getViewer().setProperty("RULER_VOFFSET", jd.getTopMargin() + ReportPageFigure.PAGE_BORDER.top); //$NON-NLS-1$
 		getViewer().setProperty("RULER_HEND", jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin()); //$NON-NLS-1$
-		getViewer().setProperty("RULER_VEND", dh - ReportPageFigure.PAGE_BORDER.top); //$NON-NLS-1$
+		getViewer().setProperty("RULER_VEND", dh);//$NON-NLS-1$
 
 		getViewer().setProperty(
 				SnapToGrid.PROPERTY_GRID_ORIGIN,

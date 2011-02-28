@@ -19,16 +19,25 @@
  */
 package com.jaspersoft.studio.editor.gef.parts;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalViewer;
 
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.StaticTextFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.text.TextFieldFigureEditPart;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
@@ -46,6 +55,23 @@ import com.jaspersoft.studio.model.text.MTextField;
  * @author Chicu Veaceslav
  */
 public class JasperDesignEditPartFactory implements EditPartFactory {
+	private DrawVisitor drawVisitor;
+	private JasperDesign jDesign;
+	private SimpleFileResolver fileResolver;
+
+	public DrawVisitor getDrawVisitor(ANode model) {
+		if (model == null)
+			return null;
+		JasperDesign tjd = model.getJasperDesign();
+		if (tjd != jDesign) {
+			jDesign = tjd;
+			drawVisitor = new DrawVisitor(jDesign, null);
+		}
+		if (drawVisitor == null) {
+			drawVisitor = new DrawVisitor(jDesign, null);
+		}
+		return drawVisitor;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -53,6 +79,13 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 	 * @see org.eclipse.gef.EditPartFactory#createEditPart(org.eclipse.gef.EditPart, java.lang.Object)
 	 */
 	public EditPart createEditPart(EditPart context, Object model) {
+		if (context != null) {
+			EditPartViewer gv = context.getViewer();
+			Object prop = gv.getProperty("FILERESOLVER");
+			if (prop != null && prop instanceof SimpleFileResolver) {
+				fileResolver = (SimpleFileResolver) prop;
+			}
+		}
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		EditPart editPart = m.createEditPart(context, model);
 		if (editPart == null) {
@@ -81,8 +114,11 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 				editPart = new FigureEditPart();
 			}
 		}
-		if (editPart != null)
+		if (editPart != null) {
 			editPart.setModel(model);
+			if (editPart instanceof FigureEditPart)
+				((FigureEditPart) editPart).setDrawVisitor(getDrawVisitor((ANode) model), fileResolver);
+		}
 		return editPart;
 	}
 }

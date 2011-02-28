@@ -24,6 +24,7 @@ import java.beans.PropertyChangeListener;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
@@ -53,6 +54,7 @@ import com.jaspersoft.studio.preferences.PreferenceConstants;
 public class FigureEditPart extends AJDEditPart implements PropertyChangeListener {
 
 	private DrawVisitor drawVisitor;
+	protected SimpleFileResolver fileResolver;
 
 	public DrawVisitor getDrawVisitor() {
 		return drawVisitor;
@@ -81,13 +83,9 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		super.deactivate();
 	}
 
-	@Override
-	public void setModel(Object model) {
-		super.setModel(model);
-		if (model != null && model instanceof ANode)
-			drawVisitor = new DrawVisitor(((ANode) model).getJasperDesign(), null);
-		else
-			drawVisitor = null;
+	public void setDrawVisitor(DrawVisitor drawVisitor, SimpleFileResolver fileResolver) {
+		this.drawVisitor = drawVisitor;
+		this.fileResolver = fileResolver;
 	}
 
 	/*
@@ -154,7 +152,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 				if (rect instanceof ComponentFigure && drawVisitor != null) {
 					ComponentFigure f = (ComponentFigure) rect;
 					f.setLocation(new Point(x, y));
-					f.setJRElement(jrElement, drawVisitor);
+					f.setJRElement(jrElement, drawVisitor, fileResolver);
 				} else
 					rect.setBounds(new Rectangle(x, y, jrElement.getWidth(), jrElement.getHeight()));
 			} else {
