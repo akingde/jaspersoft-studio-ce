@@ -118,6 +118,7 @@ public class Messages extends NLS {
 	public static String common_record_delimiter;
 	public static String common_rectangle;
 	public static String common_reorder_elements;
+	public static String common_report_objects;
 	public static String common_report;
 	public static String common_reset_group;
 	public static String common_reset_type;
@@ -726,7 +727,6 @@ public class Messages extends NLS {
 	public static String SortFieldPage_description;
 	public static String SortFieldPage_field;
 	public static String SortFieldPage_remove;
-	public static String SortFieldSection_report_objects;
 	public static String SortFieldSection_sort_field;
 	public static String SortFieldSection_sort_fields;
 	public static String SortFieldSection_sort_order;
@@ -748,12 +748,9 @@ public class Messages extends NLS {
 	public static String WizardBandGroupLayoutPage_description;
 	public static String WizardBandGroupLayoutPage_group_layout;
 	public static String WizardBandGroupPage_description;
+	public static String WizardBandGroupPage_error_message_group_name_not_empty;
 	public static String WizardBandGroupPage_error_message_unique_name;
-	public static String WizardBandGroupPage_field_text;
 	public static String WizardBandGroupPage_group_by_following_expression;
-	public static String WizardBandGroupPage_group_by_following_report_object;
-	public static String WizardBandGroupPage_groupnameempty;
-	public static String WizardBandGroupPage_reportobjects;
 	public static String WizardConnectionPage_connection_text;
 	public static String WizardConnectionPage_datasource_text;
 	public static String WizardConnectionPage_description;
@@ -766,7 +763,7 @@ public class Messages extends NLS {
 	public static String WizardDatasetNewPage_description;
 	public static String WizardDatasetNewPage_name_already_exists_a;
 	public static String WizardDatasetNewPage_name_already_exists_b;
-	public static String WizardDatasetNewPage_validationnotnull;
+	public static String WizardDatasetNewPage_validation_not_null;
 	public static String WizardDatasetPage_description;
 	public static String WizardDataSourcePage_datasource;
 	public static String WizardDataSourcePage_description;

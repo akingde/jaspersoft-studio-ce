@@ -141,7 +141,7 @@ public class WizardBandGroupPage extends WizardPage {
 
 			public void modifyText(ModifyEvent e) {
 				if (grName.getText() == null || grName.getText().trim().equals("")) {//$NON-NLS-1$
-					setErrorMessage(Messages.WizardBandGroupPage_groupnameempty);
+					setErrorMessage(Messages.WizardBandGroupPage_error_message_group_name_not_empty);
 					setPageComplete(false);
 				} else if (jrDesign.getMainDesignDataset().getGroupsMap().get(grName.getText()) != null) {
 					setErrorMessage(Messages.WizardBandGroupPage_error_message_unique_name);
@@ -236,7 +236,7 @@ public class WizardBandGroupPage extends WizardPage {
 
 		TableColumn[] col = new TableColumn[1];
 		col[0] = new TableColumn(leftTable, SWT.NONE);
-		col[0].setText(Messages.WizardBandGroupPage_reportobjects);
+		col[0].setText(Messages.common_report_objects);
 		col[0].pack();
 
 		TableLayout tlayout = new TableLayout();

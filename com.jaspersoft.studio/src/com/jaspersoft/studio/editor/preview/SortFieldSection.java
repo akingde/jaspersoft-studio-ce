@@ -93,7 +93,7 @@ public class SortFieldSection {
 
 				TableColumn[] col = new TableColumn[1];
 				col[0] = new TableColumn(leftTable, SWT.NONE);
-				col[0].setText(Messages.SortFieldSection_report_objects);
+				col[0].setText(Messages.common_report_objects);
 				col[0].pack();
 
 				TableLayout tlayout = new TableLayout();

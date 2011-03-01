@@ -90,7 +90,7 @@ public class WizardDatasetNewPage extends WizardPage {
 			public void modifyText(ModifyEvent e) {
 				String dstext = dsname.getText();
 				if (dstext == null || dstext.trim().equals("")) {//$NON-NLS-1$
-					setErrorMessage(Messages.WizardDatasetNewPage_validationnotnull);
+					setErrorMessage(Messages.WizardDatasetNewPage_validation_not_null);
 					setPageComplete(false);
 				} else if (jasperDesign.getDatasetMap().get(dstext) != null) {
 					setErrorMessage(Messages.WizardDatasetNewPage_name_already_exists_a
