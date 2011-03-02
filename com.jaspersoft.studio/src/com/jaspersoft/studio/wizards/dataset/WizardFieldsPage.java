@@ -152,7 +152,7 @@ public class WizardFieldsPage extends WizardPage {
 
 		TableColumn[] col = new TableColumn[1];
 		col[0] = new TableColumn(leftTable, SWT.NONE);
-		col[0].setText("Dataset Fields");
+		col[0].setText(Messages.WizardFieldsPage_dataset_fields);
 		col[0].pack();
 
 		TableLayout tlayout = new TableLayout();
@@ -203,7 +203,7 @@ public class WizardFieldsPage extends WizardPage {
 		TableLayout tlayout;
 		col = new TableColumn[1];
 		col[0] = new TableColumn(rightTable, SWT.NONE);
-		col[0].setText("Fields");
+		col[0].setText(Messages.common_fields);
 		col[0].pack();
 
 		tlayout = new TableLayout();

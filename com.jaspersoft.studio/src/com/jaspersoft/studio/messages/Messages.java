@@ -769,6 +769,7 @@ public class Messages extends NLS {
 	public static String WizardDataSourcePage_description;
 	public static String WizardFieldsGroupByPage_description;
 	public static String WizardFieldsGroupByPage_group_by;
+	public static String WizardFieldsPage_dataset_fields;
 	public static String WizardFieldsPage_description;
 	public static String WizardImagePage_description;
 	public static String WizardImagePage_image_expression;

@@ -108,9 +108,10 @@ public class ElementLabelProvider extends LabelProvider {
 			String name = typeMapper.mapType(object).getName();
 			if (object instanceof EditPart) {
 				ANode element = (ANode) ((EditPart) object).getModel();
-				return name.substring(name.lastIndexOf('.') + 2) + ": " + element.getDisplayText(); //$NON-NLS-1$
+				String str = Messages.getString(name.substring(name.lastIndexOf('.') + 2));
+				return str + ": " + element.getDisplayText(); //$NON-NLS-1$
 			}
-			return name.substring(name.lastIndexOf('.') + 1);
+			return Messages.getString(name.substring(name.lastIndexOf('.') + 1));
 		}
 	}
 

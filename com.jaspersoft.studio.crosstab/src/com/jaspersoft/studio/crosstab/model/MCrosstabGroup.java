@@ -100,7 +100,7 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		ComboBoxPropertyDescriptor totalPositionD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.MCrosstabGroup_total_position, EnumHelper.getEnumNames(
+				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.common_total_position, EnumHelper.getEnumNames(
 						CrosstabTotalPositionEnum.values(), NullEnum.NOTNULL));
 		totalPositionD.setDescription(Messages.MCrosstabGroup_total_position_description);
 		desc.add(totalPositionD);

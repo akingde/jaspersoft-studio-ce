@@ -55,11 +55,11 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 			String txt = m.getValueExpression().getText();
 			switch (columnIndex) {
 			case 0:
-				if (txt.startsWith("$F{"))
+				if (txt.startsWith("$F{")) //$NON-NLS-1$
 					return JaspersoftStudioPlugin.getImage(MField.getIconDescriptor().getIcon16());
-				if (txt.startsWith("$P{"))
+				if (txt.startsWith("$P{")) //$NON-NLS-1$
 					return JaspersoftStudioPlugin.getImage(MParameter.getIconDescriptor().getIcon16());
-				if (txt.startsWith("$V{"))
+				if (txt.startsWith("$V{")) //$NON-NLS-1$
 					return JaspersoftStudioPlugin.getImage(MVariable.getIconDescriptor().getIcon16());
 			}
 			return null;
@@ -92,11 +92,11 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 	protected void createColumns() {
 		TableColumn[] col = new TableColumn[2];
 		col[0] = new TableColumn(rightTable, SWT.NONE);
-		col[0].setText("Fields");
+		col[0].setText(Messages.common_fields);
 		col[0].pack();
 
 		col[1] = new TableColumn(rightTable, SWT.NONE);
-		col[1].setText("Calculation");
+		col[1].setText(Messages.common_calculation);
 		col[1].pack();
 
 		TableLayout tlayout = new TableLayout();
@@ -139,6 +139,6 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
 				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL)) });
-		viewer.setColumnProperties(new String[] { "NAME", "CALCULATION" }); //$NON-NLS-1$
+		viewer.setColumnProperties(new String[] { "NAME", "CALCULATION" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

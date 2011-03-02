@@ -27,12 +27,16 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "com.jaspersoft.studio.crosstab.messages.messages"; //$NON-NLS-1$
-	public static String common_crosstab_wizard;
 	public static String common_bucket;
+	public static String common_calculation;
+	public static String common_crosstab_wizard;
+	public static String common_fields;
 	public static String common_height;
 	public static String common_name;
+	public static String common_order;
 	public static String common_orphan_child;
 	public static String common_reorder_elements;
+	public static String common_total_position;
 	public static String common_total;
 	public static String common_width;
 	public static String CreateColumnGroupAction_create_column_group;
@@ -78,7 +82,6 @@ public class Messages extends NLS {
 	public static String MBucket_comparator_expression_description;
 	public static String MBucket_expression;
 	public static String MBucket_expression_description;
-	public static String MBucket_order;
 	public static String MBucket_order_by_expression;
 	public static String MBucket_order_by_expression_description;
 	public static String MBucket_order_description;
@@ -112,13 +115,11 @@ public class Messages extends NLS {
 	public static String MCrosstabDataset_data_presorted_description;
 	public static String MCrosstabGroup_bucket_description;
 	public static String MCrosstabGroup_name_description;
-	public static String MCrosstabGroup_total_position;
 	public static String MCrosstabGroup_total_position_description;
 	public static String MCrosstabHeader_header_cell;
 	public static String MCrosstabHeaderCell_crosstab_header;
 	public static String MCrosstabWhenNoData_when_no_data;
 	public static String MCrosstabWhenNoDataCell_when_no_data_cell;
-	public static String MMeasure_calculation;
 	public static String MMeasure_calculation_description;
 	public static String MMeasure_incrementer_factory_class_name;
 	public static String MMeasure_incrementer_factory_class_name_description;

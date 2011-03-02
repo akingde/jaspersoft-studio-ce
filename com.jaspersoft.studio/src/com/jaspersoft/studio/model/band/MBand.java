@@ -128,8 +128,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 				return Messages.MBand_detail + " "; //$NON-NLS-1$
 		}
 		if (value == null)
-			return bandType.getName();
-		return value.getOrigin().getBandTypeValue().getName();
+			return Messages.getString(bandType.getName());
+		return Messages.getString(value.getOrigin().getBandTypeValue().getName());
 	}
 
 	/*

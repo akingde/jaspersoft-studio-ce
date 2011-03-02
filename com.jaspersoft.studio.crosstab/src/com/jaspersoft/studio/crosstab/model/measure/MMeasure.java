@@ -143,7 +143,7 @@ public class MMeasure extends APropertyNode implements ICopyable {
 		desc.add(nameD);
 
 		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_CALCULATION, Messages.MMeasure_calculation, EnumHelper.getEnumNames(
+				JRDesignCrosstabMeasure.PROPERTY_CALCULATION, Messages.common_calculation, EnumHelper.getEnumNames(
 						CalculationEnum.values(), NullEnum.NOTNULL));
 		calculationD.setDescription(Messages.MMeasure_calculation_description);
 		desc.add(calculationD);

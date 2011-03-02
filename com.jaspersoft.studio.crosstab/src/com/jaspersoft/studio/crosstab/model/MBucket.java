@@ -111,7 +111,7 @@ public class MBucket extends APropertyNode {
 	 */
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignCrosstabBucket.PROPERTY_ORDER,
-				Messages.MBucket_order, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
+				Messages.common_order, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
 		orderD.setDescription(Messages.MBucket_order_description);
 		desc.add(orderD);
 
