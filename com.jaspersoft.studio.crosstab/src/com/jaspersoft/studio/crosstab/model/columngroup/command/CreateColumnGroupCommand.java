@@ -27,12 +27,14 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 import net.sf.jasperreports.engine.util.Pair;
 
 import org.eclipse.gef.commands.Command;
@@ -123,6 +125,7 @@ public class CreateColumnGroupCommand extends Command {
 		exp.setText(""); //$NON-NLS-1$
 		JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
 		bucket.setExpression(exp);
+		bucket.setOrder(SortOrderEnum.ASCENDING);
 		jrGroup.setBucket(bucket);
 
 		JRDesignCellContents headerCell = new JRDesignCellContents();
@@ -153,6 +156,7 @@ public class CreateColumnGroupCommand extends Command {
 		stext.setText(Messages.common_total + " " + jrGroup.getName()); //$NON-NLS-1$
 		totalCell.addElement(stext);
 		jrGroup.setTotalHeader(totalCell);
+		jrGroup.setTotalPosition(CrosstabTotalPositionEnum.END);
 		return jrGroup;
 	}
 

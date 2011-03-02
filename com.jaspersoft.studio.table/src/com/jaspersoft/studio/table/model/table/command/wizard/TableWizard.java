@@ -19,14 +19,15 @@
  */
 package com.jaspersoft.studio.table.model.table.command.wizard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -88,7 +89,7 @@ public class TableWizard extends Wizard {
 			page = step2;
 		if (page == step2) {
 			if (dsname != null && !dsname.equals(""))//$NON-NLS-1$
-				step3.setFields(ModelUtils.getFields4Datasource(jasperDesign, dsname));
+				step3.setFields(new ArrayList<Object>(ModelUtils.getFields4Datasource(jasperDesign, dsname)));
 			else
 				page = step3;
 		}
@@ -96,10 +97,10 @@ public class TableWizard extends Wizard {
 	}
 
 	public MTable getTable() {
-		List<JRDesignField> lst = step3.getFields();
+		List<Object> lst = step3.getFields();
 		StandardTable tbl = CreateColumnCommand.getTable(table);
 		if (tbl != null && lst != null)
-			for (JRDesignField f : lst) {
+			for (Object f : lst) {
 				StandardColumn col = CreateColumnCommand.addColumn(jasperDesign, tbl, step4.isTableHeader(),
 						step4.isTableFooter(), step4.isColumnHeader(), step4.isColumnFooter(), step4.isGroupHeader(),
 						step4.isGroupFooter());
@@ -111,7 +112,7 @@ public class TableWizard extends Wizard {
 					JRDesignStaticText sText = (JRDesignStaticText) new MStaticText().createJRElement(jasperDesign);
 					sText.setWidth(col.getWidth());
 					sText.setHeight(colHeadCell.getHeight());
-					sText.setText(f.getName());
+					sText.setText(((JRField) f).getName());
 					colHeadCell.addElement(sText);
 				}
 
@@ -119,8 +120,8 @@ public class TableWizard extends Wizard {
 				fText.setWidth(col.getWidth());
 				fText.setHeight(detCell.getHeight());
 				JRDesignExpression jre = new JRDesignExpression();
-				jre.setValueClassName(f.getValueClassName());
-				jre.setText("$F{" + f.getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
+				jre.setValueClassName(((JRField) f).getValueClassName());
+				jre.setText("$F{" + ((JRField) f).getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
 				fText.setExpression(jre);
 				detCell.addElement(fText);
 

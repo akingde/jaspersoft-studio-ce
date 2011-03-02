@@ -22,58 +22,111 @@ package com.jaspersoft.studio.wizards.dataset;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.variable.MVariable;
+import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
+import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
+import com.jaspersoft.studio.swt.widgets.table.MoveT2TButtons;
 
 public class WizardFieldsPage extends WizardPage {
-	private List<JRDesignField> inFields;
-	private List<JRDesignField> outFields;
-	private org.eclipse.swt.widgets.List rightField;
-	private org.eclipse.swt.widgets.List leftField;
+	private List<Object> inFields;
+	private List<Object> outFields;
 
-	public void setFields(List<JRDesignField> inFields) {
-		if (inFields == null || this.outFields == null)
-			fillTables(inFields, new ArrayList<JRDesignField>());
-		else {
-			// add fields if not exists inside
-			for (JRDesignField f : inFields) {
-				if (this.inFields.contains(f) || this.outFields.contains(f))
-					continue;
-				this.inFields.add(f);
-				leftField.add(f.getName());
-			}
-			List<JRDesignField> tmp = new ArrayList<JRDesignField>();
-			// remove fields from in
-			for (JRDesignField f : this.inFields) {
-				if (!inFields.contains(f))
-					tmp.add(f);
-			}
-			removeFields(this.inFields, leftField, tmp);
+	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-			tmp.clear();
-			// remove fields from out
-			for (JRDesignField f : this.outFields) {
-				if (!outFields.contains(f))
-					tmp.add(f);
+		public Image getColumnImage(Object element, int columnIndex) {
+			switch (columnIndex) {
+			case 0:
+				if (element instanceof JRDesignField)
+					return JaspersoftStudioPlugin.getImage(MField.getIconDescriptor().getIcon16());
+				if (element instanceof JRDesignParameter)
+					return JaspersoftStudioPlugin.getImage(MParameter.getIconDescriptor().getIcon16());
+				if (element instanceof JRDesignVariable)
+					return JaspersoftStudioPlugin.getImage(MVariable.getIconDescriptor().getIcon16());
 			}
-			removeFields(this.outFields, rightField, tmp);
+			return null;
+		}
+
+		public String getColumnText(Object element, int columnIndex) {
+			switch (columnIndex) {
+			case 0:
+				if (element instanceof JRDesignField)
+					return ((JRField) element).getName();
+				if (element instanceof JRParameter)
+					return ((JRParameter) element).getName();
+				if (element instanceof JRVariable)
+					return ((JRVariable) element).getName();
+			}
+			return ""; //$NON-NLS-1$
 		}
 	}
 
-	public List<JRDesignField> getFields() {
+	protected Table rightTable;
+	private Table leftTable;
+	protected TableViewer rightTView;
+	private TableViewer leftTView;
+
+	public void setFields(List<Object> inFields) {
+		if (inFields == null || this.outFields == null)
+			fillTables(inFields, new ArrayList<Object>());
+		else {
+			// add fields if not exists inside
+			for (Object f : inFields) {
+				if (this.inFields.contains(f) || this.outFields.contains(f))
+					continue;
+				this.inFields.add(f);
+			}
+			List<Object> tmp = new ArrayList<Object>();
+			// remove fields from in
+			for (Object f : this.inFields) {
+				if (!inFields.contains(f))
+					tmp.add(f);
+			}
+			this.inFields.removeAll(tmp);
+
+			tmp.clear();
+			// remove fields from out
+			for (Object f : this.outFields) {
+				if (!outFields.contains(f))
+					tmp.add(f);
+			}
+			this.outFields.removeAll(tmp);
+
+			rightTView.refresh();
+			leftTView.refresh();
+		}
+	}
+
+	public List<Object> getFields() {
 		return outFields;
+	}
+
+	public List<Object> getInFields() {
+		return inFields;
 	}
 
 	public WizardFieldsPage(String key) {
@@ -88,221 +141,89 @@ public class WizardFieldsPage extends WizardPage {
 
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 4;
-		composite.setLayout(layout);
+		composite.setLayout(new GridLayout(4, false));
 		setControl(composite);
 
-		leftField = new org.eclipse.swt.widgets.List(composite, SWT.BORDER | SWT.MULTI);
-		GridData gd = new GridData();
-		gd.widthHint = 200;
-		gd.heightHint = 300;
-		leftField.setLayoutData(gd);
+		leftTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
+		GridData gd = new GridData(GridData.FILL_VERTICAL);
+		gd.widthHint = 300;
+		leftTable.setLayoutData(gd);
+		leftTable.setHeaderVisible(true);
+
+		TableColumn[] col = new TableColumn[1];
+		col[0] = new TableColumn(leftTable, SWT.NONE);
+		col[0].setText("Dataset Fields");
+		col[0].pack();
+
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		leftTable.setLayout(tlayout);
+
+		leftTView = new TableViewer(leftTable);
+		leftTView.setContentProvider(new ListContentProvider());
+		setLabelProvider(leftTView);
 
 		Composite bGroup = new Composite(composite, SWT.NONE);
-		layout = new GridLayout();
-		layout.numColumns = 1;
-		bGroup.setLayout(layout);
+		bGroup.setLayout(new GridLayout(1, false));
+		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		gd = new GridData();
-		gd.widthHint = 50;
-		gd.heightHint = 300;
-		gd.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
-		bGroup.setLayoutData(gd);
+		// -----------------------------------
+		rightTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.minimumWidth = 300;
+		rightTable.setLayoutData(gd);
+		rightTable.setHeaderVisible(true);
 
-		final Button addField = new Button(bGroup, SWT.PUSH);
-		addField.setText(">"); //$NON-NLS-1$
-		addField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addField.addSelectionListener(new SelectionListener() {
+		createColumns();
 
-			public void widgetSelected(SelectionEvent e) {
-				moveFields(inFields, outFields, leftField, rightField, leftField.getSelectionIndices());
-			}
+		rightTView = new TableViewer(rightTable);
+		rightTView.setContentProvider(new ListContentProvider());
+		setLabelProvider(rightTView);
+		attachCellEditors(rightTView, rightTable);
 
-			public void widgetDefaultSelected(SelectionEvent e) {
+		createOrderButtons(composite);
 
-			}
-		});
+		new MoveT2TButtons().createButtons(bGroup, leftTView, rightTView);
+	}
 
-		Button addFields = new Button(bGroup, SWT.PUSH);
-		addFields.setText(">>"); //$NON-NLS-1$
-		addFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addFields.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				int[] index = new int[inFields.size()];
-				for (int i = 0; i < inFields.size(); i++)
-					index[i] = i;
-
-				moveFields(inFields, outFields, leftField, rightField, index);
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-		});
-
-		final Button delField = new Button(bGroup, SWT.PUSH);
-		delField.setText("<"); //$NON-NLS-1$
-		delField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		delField.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				moveFields(outFields, inFields, rightField, leftField, rightField.getSelectionIndices());
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-		});
-
-		final Button delFields = new Button(bGroup, SWT.PUSH);
-		delFields.setText("<<"); //$NON-NLS-1$
-		delFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		delFields.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				int[] index = new int[outFields.size()];
-				for (int i = 0; i < outFields.size(); i++)
-					index[i] = i;
-
-				moveFields(outFields, inFields, rightField, leftField, index);
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-		});
-
-		rightField = new org.eclipse.swt.widgets.List(composite, SWT.BORDER | SWT.MULTI);
-		gd = new GridData();
-		gd.widthHint = 200;
-		gd.heightHint = 300;
-		rightField.setLayoutData(gd);
-
-		bGroup = new Composite(composite, SWT.NONE);
-		layout = new GridLayout();
-		layout.numColumns = 1;
-		bGroup.setLayout(layout);
-
-		gd = new GridData();
-		gd.widthHint = 100;
-		gd.heightHint = 300;
-		gd.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
-		bGroup.setLayoutData(gd);
-
-		final Button upField = new Button(bGroup, SWT.PUSH);
-		upField.setText(Messages.common_up);
-		upField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		upField.setEnabled(false);
-		upField.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				int index = rightField.getSelectionIndex();
-				if (index > 0) {
-					JRDesignField f = outFields.get(index);
-
-					outFields.remove(index);
-					rightField.remove(index);
-
-					index--;
-
-					outFields.add(index, f);
-					rightField.add(f.getName(), index);
-
-					rightField.select(index);
-				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-		});
-
-		final Button downFields = new Button(bGroup, SWT.PUSH);
-		downFields.setText(Messages.common_down);
-		downFields.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		downFields.setEnabled(false);
-		downFields.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				int index = rightField.getSelectionIndex();
-				if (index < outFields.size() - 1) {
-					JRDesignField f = outFields.get(index);
-
-					outFields.remove(index);
-					rightField.remove(index);
-
-					index++;
-
-					outFields.add(index, f);
-					rightField.add(f.getName(), index);
-
-					rightField.select(index);
-				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-		});
-		rightField.addFocusListener(new FocusListener() {
-
-			public void focusLost(FocusEvent e) {
-				upField.setEnabled(false);
-				downFields.setEnabled(false);
-			}
-
-			public void focusGained(FocusEvent e) {
-				upField.setEnabled(rightField.getSelectionIndex() > 0);
-				downFields.setEnabled(rightField.getSelectionIndex() < rightField.getItemCount() - 1);
-			}
-		});
-		rightField.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				boolean lsel = rightField.getSelectionCount() > 0 && rightField.isFocusControl();
-				upField.setEnabled(lsel && rightField.getSelectionIndex() > 0);
-				downFields.setEnabled(lsel && rightField.getSelectionIndex() < rightField.getItemCount() - 1);
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-		});
+	protected void attachCellEditors(TableViewer viewer, Composite parent) {
 
 	}
 
-	private void fillTables(List<JRDesignField> inlist, List<JRDesignField> outlist) {
+	protected void setLabelProvider(TableViewer tableViewer) {
+		tableViewer.setLabelProvider(new TLabelProvider());
+	}
+
+	protected void rightTView(TableViewer tableViewer) {
+		tableViewer.setLabelProvider(new TLabelProvider());
+	}
+
+	protected void createColumns() {
+		TableColumn[] col;
+		TableLayout tlayout;
+		col = new TableColumn[1];
+		col[0] = new TableColumn(rightTable, SWT.NONE);
+		col[0].setText("Fields");
+		col[0].pack();
+
+		tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		rightTable.setLayout(tlayout);
+	}
+
+	private void createOrderButtons(Composite composite) {
+		Composite bGroup = new Composite(composite, SWT.NONE);
+		bGroup.setLayout(new GridLayout(1, false));
+		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+
+		new ListOrderButtons().createOrderButtons(bGroup, rightTView);
+	}
+
+	private void fillTables(List<Object> inlist, List<Object> outlist) {
 		this.inFields = inlist;
 		this.outFields = outlist;
-		leftField.removeAll();
-		rightField.removeAll();
-		if (inFields != null)
-			for (JRDesignField f : inFields)
-				leftField.add(f.getName());
-	}
-
-	public void moveFields(List<JRDesignField> inlist, List<JRDesignField> outlist, org.eclipse.swt.widgets.List llist,
-			org.eclipse.swt.widgets.List rlist, int[] index) {
-		List<JRDesignField> f = new ArrayList<JRDesignField>();
-		for (int i = 0; i < index.length; i++) {
-			int ind = index[i];
-			JRDesignField inF = inlist.get(ind);
-
-			rlist.add(inF.getName());
-			outlist.add(inF);
-			f.add(inF);
-		}
-		removeFields(inlist, llist, f);
-	}
-
-	private void removeFields(List<JRDesignField> inlist, org.eclipse.swt.widgets.List llist, List<JRDesignField> f) {
-		for (JRDesignField fil : f) {
-			int i = inlist.indexOf(fil);
-			llist.remove(i);
-			inlist.remove(fil);
-		}
+		leftTView.setInput(inFields);
+		rightTView.setInput(outFields);
 	}
 
 }

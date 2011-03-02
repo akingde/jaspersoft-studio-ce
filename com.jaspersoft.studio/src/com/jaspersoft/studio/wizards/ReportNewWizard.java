@@ -102,7 +102,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 				JRDataSourceProvider dataSource = step2.getDataSource();
 				if (dataSource != null) {
 					fields = dataSource.getFields(null);
-					List<JRDesignField> flist = new ArrayList<JRDesignField>();
+					List<Object> flist = new ArrayList<Object>();
 					for (JRField f : fields)
 						flist.add((JRDesignField) f);
 
@@ -115,7 +115,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 			}
 		}
 		if (page == step4 && step3.getFields() != null)
-			step4.setFields(new ArrayList<JRDesignField>(step3.getFields()));
+			step4.setFields(new ArrayList<Object>(step3.getFields()));
 		return super.getNextPage(page);
 	}
 

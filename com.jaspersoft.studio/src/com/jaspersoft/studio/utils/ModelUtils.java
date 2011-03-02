@@ -42,7 +42,9 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignSection;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
@@ -82,6 +84,52 @@ public class ModelUtils {
 			res[i] = name;
 		}
 		return res;
+	}
+
+	public static List<Object> getReportObjects4Datasource(JasperDesign jd, String ds) {
+		ArrayList<Object> inFields = new ArrayList<Object>();
+		inFields.addAll(ModelUtils.getFields4Datasource(jd, ds));
+		inFields.addAll(ModelUtils.getVariables4Datasource(jd, ds));
+		inFields.addAll(ModelUtils.getParameters4Datasource(jd, ds));
+		return inFields;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<JRDesignParameter> getParameters4Datasource(JasperDesign jd, String ds) {
+		if (ds == null || ds.equals("")) {
+			List fieldsList = jd.getParametersList();
+			List res = new ArrayList(fieldsList);
+			return res;
+		}
+		List<?> datasetsList = jd.getDatasetsList();
+		for (int i = 0; i < datasetsList.size(); i++) {
+			JRDesignDataset d = (JRDesignDataset) datasetsList.get(i);
+			if (d.getName().equals(ds)) {
+				List fieldsList = d.getParametersList();
+				List res = new ArrayList(fieldsList);
+				return res;
+			}
+		}
+		return new ArrayList<JRDesignParameter>();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<JRDesignVariable> getVariables4Datasource(JasperDesign jd, String ds) {
+		if (ds == null || ds.equals("")) {
+			List fieldsList = jd.getVariablesList();
+			List res = new ArrayList(fieldsList);
+			return res;
+		}
+		List<?> datasetsList = jd.getDatasetsList();
+		for (int i = 0; i < datasetsList.size(); i++) {
+			JRDesignDataset d = (JRDesignDataset) datasetsList.get(i);
+			if (d.getName().equals(ds)) {
+				List fieldsList = d.getVariablesList();
+				List res = new ArrayList(fieldsList);
+				return res;
+			}
+		}
+		return new ArrayList<JRDesignVariable>();
 	}
 
 	@SuppressWarnings("unchecked")

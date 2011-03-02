@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.wizards.dataset;
 
@@ -80,7 +76,7 @@ public class DatasetWizard extends Wizard {
 				JRDataSourceProvider dataSource = step2.getDataSource();
 				if (dataSource != null) {
 					fields = dataSource.getFields(null);
-					List<JRDesignField> flist = new ArrayList<JRDesignField>();
+					List<Object> flist = new ArrayList<Object>();
 					for (JRField f : fields)
 						flist.add((JRDesignField) f);
 
@@ -93,7 +89,7 @@ public class DatasetWizard extends Wizard {
 			}
 		}
 		if (page == step4 && step3.getFields() != null)
-			step4.setFields(new ArrayList<JRDesignField>(step3.getFields()));
+			step4.setFields(new ArrayList<Object>(step3.getFields()));
 		return super.getNextPage(page);
 	}
 
@@ -105,19 +101,20 @@ public class DatasetWizard extends Wizard {
 
 	public static void setUpDataset(JRDesignDataset jdataset, WizardFieldsPage step3, WizardFieldsGroupByPage step4) {
 		if (step3.getFields() != null)
-			for (JRDesignField f : step3.getFields())
+			for (Object f : step3.getFields())
 				try {
-					jdataset.addField(f);
+					jdataset.addField((JRField) f);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
 		if (step4.getFields() != null) {
-			for (JRDesignField f : step4.getFields()) {
+			for (Object f : step4.getFields()) {
 				try {
 					JRDesignGroup group = new JRDesignGroup();
-					group.setName(f.getName());
+					String name = ((JRField) f).getName();
+					group.setName(name);
 					JRDesignExpression jre = new JRDesignExpression();
-					jre.setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+					jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 					group.setExpression(jre);
 
 					jdataset.addGroup(group);

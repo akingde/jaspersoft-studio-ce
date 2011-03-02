@@ -27,6 +27,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabColumnGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -91,7 +92,7 @@ public class CreateRowGroupCommand extends Command {
 		}
 		if (jrGroup != null) {
 			try {
-				addRowGroup(jrCrosstab, jrGroup, index, true);
+				addRowGroup(jrCrosstab, jrGroup, index);
 			} catch (JRException e) {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
@@ -152,10 +153,11 @@ public class CreateRowGroupCommand extends Command {
 		stext.setText(Messages.common_total + " " + jrGroup.getName()); //$NON-NLS-1$
 		totalCell.addElement(stext);
 		jrGroup.setTotalHeader(totalCell);
+		jrGroup.setTotalPosition(CrosstabTotalPositionEnum.END);
 		return jrGroup;
 	}
 
-	public static void addRowGroup(JRDesignCrosstab jrCross, JRDesignCrosstabRowGroup jrRowGr, int index, boolean addTotal)
+	public static void addRowGroup(JRDesignCrosstab jrCross, JRDesignCrosstabRowGroup jrRowGr, int index)
 			throws JRException {
 		if (index >= 0 && index < jrCross.getRowGroupsList().size())
 			jrCross.addRowGroup(index, jrRowGr);

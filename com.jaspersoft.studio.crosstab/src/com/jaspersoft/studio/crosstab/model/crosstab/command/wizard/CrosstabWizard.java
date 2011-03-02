@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.crosstab.model.crosstab.command.wizard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
@@ -30,14 +31,15 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabPercentageEnum;
-import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
@@ -105,45 +107,93 @@ public class CrosstabWizard extends Wizard {
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		String dsname = (String) step1.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+		JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
 		if (page == step1 && (dsname == null || dsname.equals(""))) //$NON-NLS-1$
 			page = step2;
 		if (page == step2) {
 			if (dsname != null && !dsname.equals("")) { //$NON-NLS-1$
-				List<JRDesignField> flist = ModelUtils.getFields4Datasource(jasperDesign, dsname);
-				if (step3.getFields() != null)
-					flist.removeAll(step3.getFields());
-				step4.setFields(flist);
-
-				flist = ModelUtils.getFields4Datasource(jasperDesign, dsname);
-				if (step4.getFields() != null)
-					flist.removeAll(step4.getFields());
-				step3.setFields(flist);
+				List<Object> m = new ArrayList<Object>();
+				if (colGroups == null || !colGroups.getDsname().equals(dsname)) {
+					colGroups = new ReportObjects(ModelUtils.getReportObjects4Datasource(jasperDesign, dsname), dsname);
+					for (Object f : colGroups.getReportObects())
+						m.add(createColumnGroups(jdc, f));
+					step3.setFields(m);
+				}
+				setupColumns();
+				setupRows();
 			} else
 				page = step3;
 		}
 		if (page == step3) {
 			if (dsname != null && !dsname.equals("")) { //$NON-NLS-1$
-				// exclude step3 fields
-				List<JRDesignField> flist = ModelUtils.getFields4Datasource(jasperDesign, dsname);
-				if (step3.getFields() != null)
-					flist.removeAll(step3.getFields());
-				step4.setFields(flist);
-
-				flist = ModelUtils.getFields4Datasource(jasperDesign, dsname);
-				if (step4.getFields() != null)
-					flist.removeAll(step4.getFields());
-				step3.setFields(flist);
-
+				List<Object> m = new ArrayList<Object>();
+				if (rowGroups == null || !rowGroups.getDsname().equals(dsname)) {
+					rowGroups = new ReportObjects(ModelUtils.getReportObjects4Datasource(jasperDesign, dsname), dsname);
+					for (Object f : colGroups.getReportObects())
+						m.add(createRowGroups(jdc, f));
+					step4.setFields(m);
+				}
+				setupColumns();
+				setupRows();
 			} else
 				page = step4;
 		}
 		if (page == step4) {
-			if (dsname != null && !dsname.equals("")) //$NON-NLS-1$
-				step5.setFields(ModelUtils.getFields4Datasource(jasperDesign, dsname));
-			else
+			if (dsname != null && !dsname.equals("")) {
+
+				if (mesures == null || !mesures.getDsname().equals(dsname)) {
+					List<Object> m = new ArrayList<Object>();
+					mesures = new ReportObjects(ModelUtils.getReportObjects4Datasource(jasperDesign, dsname), dsname);
+					for (Object f : mesures.getReportObects())
+						m.add(createMesures(jdc, f));
+					step5.setFields(m);
+				}
+			} else
 				page = step5;
 		}
 		return super.getNextPage(page);
+	}
+
+	private void setupColumns() {
+		List<Object> m;
+		if (step4.getFields() != null && step3.getInFields() != null) {
+			m = new ArrayList<Object>();
+			for (Object f : step3.getInFields()) {
+				JRDesignCrosstabColumnGroup cg = (JRDesignCrosstabColumnGroup) f;
+				boolean skip = false;
+				for (Object obj : step4.getFields()) {
+					JRDesignCrosstabRowGroup rg = (JRDesignCrosstabRowGroup) obj;
+					if (cg.getBucket().getExpression().getText().equals(rg.getBucket().getExpression().getText())) {
+						skip = true;
+						break;
+					}
+				}
+				if (!skip)
+					m.add(cg);
+			}
+			step3.setFields(m);
+		}
+	}
+
+	private void setupRows() {
+		List<Object> m;
+		if (step3.getFields() != null && step4.getInFields() != null) {
+			m = new ArrayList<Object>();
+			for (Object f : step4.getInFields()) {
+				JRDesignCrosstabRowGroup cg = (JRDesignCrosstabRowGroup) f;
+				boolean skip = false;
+				for (Object obj : step3.getFields()) {
+					JRDesignCrosstabColumnGroup rg = (JRDesignCrosstabColumnGroup) obj;
+					if (cg.getBucket().getExpression().getText().equals(rg.getBucket().getExpression().getText())) {
+						skip = true;
+						break;
+					}
+				}
+				if (!skip)
+					m.add(cg);
+			}
+			step4.setFields(m);
+		}
 	}
 
 	public MCrosstab getCrosstab() {
@@ -153,89 +203,43 @@ public class CrosstabWizard extends Wizard {
 			jrDataSet.setDatasetRun(null);
 
 		if (step5.getFields() != null)
-			for (JRDesignField f : step5.getFields()) {
+			for (Object f : step5.getFields()) {
 				try {
-					JRDesignCrosstabMeasure m = CreateMeasureCommand.createMesure(jdc, f.getName() + "_MEASURE"); //$NON-NLS-1$
-					JRDesignExpression jre = new JRDesignExpression();
-					jre.setValueClassName(f.getValueClassName());
-					jre.setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
-					m.setValueExpression(jre);
-					m.setCalculation(CalculationEnum.COUNT);
-
-					m.setPercentageType(CrosstabPercentageEnum.NONE);
-
-					if (m.getCalculationValue().equals(CalculationEnum.COUNT))
-						m.setValueClassName(Integer.class.getName());
-					else
-						m.setValueClassName(m.getValueExpression().getValueClassName());
-
-					jdc.addMeasure(m);
+					jdc.addMeasure((JRDesignCrosstabMeasure) f);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
 			}
 		if (step3.getFields() != null)
-			for (JRDesignField f : step3.getFields()) {
+			for (Object f : step3.getFields()) {
 				try {
-					JRDesignCrosstabColumnGroup colGroup = CreateColumnGroupCommand.createColumnGroup(jasperDesign, jdc,
-							f.getName());
-					if (step6.isAddColTotal())
-						colGroup.setTotalPosition(CrosstabTotalPositionEnum.END);
-					else
-						colGroup.setTotalPosition(CrosstabTotalPositionEnum.NONE);
-					((JRDesignExpression) colGroup.getBucket().getExpression()).setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
-
-					CreateColumnGroupCommand.addColumnGroup(jdc, colGroup, -1);
-
+					CreateColumnGroupCommand.addColumnGroup(jdc, (JRDesignCrosstabColumnGroup) f, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
 			}
 		if (step4.getFields() != null)
-			for (JRDesignField f : step4.getFields()) {
+			for (Object f : step4.getFields()) {
 				try {
-					JRDesignCrosstabRowGroup colGroup = CreateRowGroupCommand.createRowGroup(jasperDesign, jdc, f.getName());
-					if (step6.isAddRowTotal())
-						colGroup.setTotalPosition(CrosstabTotalPositionEnum.END);
-					else
-						colGroup.setTotalPosition(CrosstabTotalPositionEnum.NONE);
-
-					((JRDesignExpression) colGroup.getBucket().getExpression()).setText("$F{" + f.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
-
-					CreateRowGroupCommand.addRowGroup(jdc, colGroup, -1, step6.isAddRowTotal());
-
+					CreateRowGroupCommand.addRowGroup(jdc, (JRDesignCrosstabRowGroup) f, -1);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
 			}
-		List<JRDesignCrosstabColumnGroup> columns = jdc.getColumnGroupsList();
-		for (JRDesignCrosstabColumnGroup colGroup : columns) {
-			for (JRElement e : colGroup.getHeader().getElements()) {
-				e.setWidth(colGroup.getHeader().getWidth());
-				((JRDesignElement) e).setHeight(colGroup.getHeader().getHeight());
-			}
-			for (JRElement e : colGroup.getTotalHeader().getElements()) {
-				e.setWidth(colGroup.getTotalHeader().getWidth());
-				((JRDesignElement) e).setHeight(colGroup.getTotalHeader().getHeight());
-			}
-		}
-		List<JRDesignCrosstabRowGroup> rows = jdc.getRowGroupsList();
-		for (JRDesignCrosstabRowGroup colGroup : rows) {
-			for (JRElement e : colGroup.getHeader().getElements()) {
-				e.setWidth(colGroup.getHeader().getWidth());
-				((JRDesignElement) e).setHeight(colGroup.getHeader().getHeight());
-			}
-			for (JRElement e : colGroup.getTotalHeader().getElements()) {
-				e.setWidth(colGroup.getTotalHeader().getWidth());
-				((JRDesignElement) e).setHeight(colGroup.getTotalHeader().getHeight());
-			}
-		}
+		setupColumnGroups(jdc);
+		setupRowGroups(jdc);
+		createDetailCells(jdc);
+
+		return crosstab;
+	}
+
+	private void createDetailCells(JRDesignCrosstab jdc) {
 		List<JRDesignCrosstabCell> cells = jdc.getCellsList();
 		JRCrosstabMeasure[] measures = jdc.getMeasures();
 		if (measures != null && cells != null)
 			for (JRDesignCrosstabCell c : cells) {
 				int y = 0;
-				if (c.getHeight() != null) {
+				if (c.getHeight() != null && measures.length > 0) {
 					int h = c.getHeight() / measures.length;
 					for (int i = 0; i < measures.length; i++) {
 						JRDesignExpression exp = new JRDesignExpression();
@@ -256,8 +260,124 @@ public class CrosstabWizard extends Wizard {
 					}
 				}
 			}
+	}
 
-		return crosstab;
+	private void setupRowGroups(JRDesignCrosstab jdc) {
+		List<JRDesignCrosstabRowGroup> rows = jdc.getRowGroupsList();
+		for (JRDesignCrosstabRowGroup colGroup : rows) {
+			for (JRElement e : colGroup.getHeader().getElements()) {
+				e.setWidth(colGroup.getHeader().getWidth());
+				((JRDesignElement) e).setHeight(colGroup.getHeader().getHeight());
+			}
+			for (JRElement e : colGroup.getTotalHeader().getElements()) {
+				e.setWidth(colGroup.getTotalHeader().getWidth());
+				((JRDesignElement) e).setHeight(colGroup.getTotalHeader().getHeight());
+			}
+		}
+	}
+
+	private void setupColumnGroups(JRDesignCrosstab jdc) {
+		List<JRDesignCrosstabColumnGroup> columns = jdc.getColumnGroupsList();
+		for (JRDesignCrosstabColumnGroup colGroup : columns) {
+			for (JRElement e : colGroup.getHeader().getElements()) {
+				e.setWidth(colGroup.getHeader().getWidth());
+				((JRDesignElement) e).setHeight(colGroup.getHeader().getHeight());
+			}
+			for (JRElement e : colGroup.getTotalHeader().getElements()) {
+				e.setWidth(colGroup.getTotalHeader().getWidth());
+				((JRDesignElement) e).setHeight(colGroup.getTotalHeader().getHeight());
+			}
+		}
+	}
+
+	private JRDesignCrosstabRowGroup createRowGroups(JRDesignCrosstab jdc, Object f) {
+		String name = "";
+		String txt = "";
+		String className = "";
+		if (f instanceof JRField) {
+			JRField fi = (JRField) f;
+			className = fi.getValueClassName();
+			name = fi.getName();
+			txt = "$F{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+		} else if (f instanceof JRParameter) {
+			JRParameter fi = (JRParameter) f;
+			className = fi.getValueClassName();
+			name = fi.getName();
+			txt = "$P{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+		} else if (f instanceof JRVariable) {
+			JRVariable fi = (JRVariable) f;
+			className = fi.getValueClassName();
+			name = fi.getName();
+			txt = "$V{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+		}
+
+		JRDesignCrosstabRowGroup rowGroup = CreateRowGroupCommand.createRowGroup(jasperDesign, jdc, name);
+
+		((JRDesignExpression) rowGroup.getBucket().getExpression()).setValueClassName(className);
+		((JRDesignExpression) rowGroup.getBucket().getExpression()).setText(txt);
+		return rowGroup;
+	}
+
+	private JRDesignCrosstabColumnGroup createColumnGroups(JRDesignCrosstab jdc, Object f) {
+		String name = "";
+		String txt = "";
+		String className = "";
+		if (f instanceof JRField) {
+			JRField fi = (JRField) f;
+			className = fi.getValueClassName();
+			name = fi.getName();
+			txt = "$F{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+		} else if (f instanceof JRParameter) {
+			JRParameter fi = (JRParameter) f;
+			className = fi.getValueClassName();
+			name = fi.getName();
+			txt = "$P{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+		} else if (f instanceof JRVariable) {
+			JRVariable fi = (JRVariable) f;
+			className = fi.getValueClassName();
+			name = fi.getName();
+			txt = "$V{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		JRDesignCrosstabColumnGroup colGroup = CreateColumnGroupCommand.createColumnGroup(jasperDesign, jdc, name);
+		((JRDesignExpression) colGroup.getBucket().getExpression()).setValueClassName(className);
+		((JRDesignExpression) colGroup.getBucket().getExpression()).setText(txt);
+
+		return colGroup;
+	}
+
+	private JRDesignCrosstabMeasure createMesures(JRDesignCrosstab jdc, Object f) {
+
+		JRDesignExpression jre = new JRDesignExpression();
+		String name = "";
+		if (f instanceof JRField) {
+			JRField fi = (JRField) f;
+			jre.setValueClassName(fi.getValueClassName());
+			name = fi.getName();
+			jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+		} else if (f instanceof JRParameter) {
+			JRParameter fi = (JRParameter) f;
+			jre.setValueClassName(fi.getValueClassName());
+			name = fi.getName();
+			jre.setText("$P{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+		} else if (f instanceof JRVariable) {
+			JRVariable fi = (JRVariable) f;
+			jre.setValueClassName(fi.getValueClassName());
+			name = fi.getName();
+			jre.setText("$V{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+
+		JRDesignCrosstabMeasure m = CreateMeasureCommand.createMesure(jdc, name + "_MEASURE"); //$NON-NLS-1$		
+		m.setValueExpression(jre);
+		m.setCalculation(CalculationEnum.COUNT);
+
+		m.setPercentageType(CrosstabPercentageEnum.NONE);
+
+		if (m.getCalculationValue().equals(CalculationEnum.COUNT)
+				|| m.getCalculationValue().equals(CalculationEnum.DISTINCT_COUNT))
+			m.setValueClassName(Integer.class.getName());
+		else
+			m.setValueClassName(m.getValueExpression().getValueClassName());
+		return m;
 	}
 
 	@Override
@@ -266,6 +386,29 @@ public class CrosstabWizard extends Wizard {
 	}
 
 	private JasperDesign jasperDesign;
+	private ReportObjects colGroups;
+	private ReportObjects rowGroups;
+	private ReportObjects mesures;
+
+	private class ReportObjects {
+		private List<Object> reportObects;
+		private String dsname;
+
+		public List<Object> getReportObects() {
+			return reportObects;
+		}
+
+		public String getDsname() {
+			return dsname;
+		}
+
+		public ReportObjects(List<Object> reportObects, String dsname) {
+			super();
+			this.reportObects = reportObects;
+			this.dsname = dsname;
+		}
+
+	}
 
 	public void init(JasperDesign jd) {
 		this.jasperDesign = jd;
