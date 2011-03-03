@@ -29,6 +29,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
@@ -130,8 +131,8 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor("location", "Location");
-		nameD.setDescription("Template location.");
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor("location", Messages.MStyleTemplateReference_location); //$NON-NLS-1$
+		nameD.setDescription(Messages.MStyleTemplateReference_location_description);
 		desc.add(nameD);
 	}
 
@@ -142,7 +143,7 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 	 */
 	public Object getPropertyValue(Object id) {
 		JRTemplateReference jrTemplate = (JRTemplateReference) getValue();
-		if (id.equals("location")) {
+		if (id.equals("location")) { //$NON-NLS-1$
 			return jrTemplate.getLocation();
 		}
 		return null;
@@ -156,7 +157,7 @@ public class MStyleTemplateReference extends APropertyNode implements IPropertyS
 	public void setPropertyValue(Object id, Object value) {
 		if (isEditable()) {
 			JRTemplateReference jrTemplate = (JRTemplateReference) getValue();
-			if (id.equals("location"))
+			if (id.equals("location")) //$NON-NLS-1$
 				jrTemplate.setLocation((String) value);
 		}
 	}

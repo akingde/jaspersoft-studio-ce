@@ -65,7 +65,7 @@ public class JRtxEditor extends MultiPageEditorPart {
 		try {
 			xmlEditor = new XMLEditor();
 			int index = addPage(xmlEditor, getEditorInput());
-			setPageText(index, Messages.JrxmlEditor_source);
+			setPageText(index, Messages.common_source);
 			xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput())
 					.addDocumentListener(new IDocumentListener() {
 
@@ -78,7 +78,7 @@ public class JRtxEditor extends MultiPageEditorPart {
 					});
 		} catch (PartInitException e) {
 			ErrorDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.JrxmlEditor_error_creating_nested_text_editor, null, e.getStatus());
+					Messages.common_error_creating_nested_text_editor, null, e.getStatus());
 		}
 	}
 }

@@ -55,6 +55,7 @@ public class Messages extends NLS {
 	public static String common_driver_class;
 	public static String common_elements;
 	public static String common_empty;
+	public static String common_error_creating_nested_text_editor;
 	public static String common_error_creating_nested_visual_editor;
 	public static String common_error_message_non_empty_properties_string_name;
 	public static String common_error_message_unique_properties;
@@ -130,6 +131,7 @@ public class Messages extends NLS {
 	public static String common_snap_to_grid;
 	public static String common_snap_to_guides;
 	public static String common_sort_field_editor;
+	public static String common_source;
 	public static String common_split_type;
 	public static String common_static_text;
 	public static String common_stretch_type;
@@ -293,10 +295,8 @@ public class Messages extends NLS {
 	public static String JRPropertyPage_value;
 	public static String JRQueryPage_description;
 	public static String JrxmlEditor_design;
-	public static String JrxmlEditor_error_creating_nested_text_editor;
 	public static String JrxmlEditor_error_loading_jrxml_to_model;
 	public static String JrxmlEditor_preview;
-	public static String JrxmlEditor_source;
 	public static String JrxmlEditorContributor_add_bookmark;
 	public static String JrxmlEditorContributor_add_task;
 	public static String JrxmlEditorContributor_edit;
@@ -581,6 +581,8 @@ public class Messages extends NLS {
 	public static String MStyle_vertical_alignment_description;
 	public static String MStyleTemplate_source_expression;
 	public static String MStyleTemplate_source_expression_description;
+	public static String MStyleTemplateReference_location;
+	public static String MStyleTemplateReference_location_description;
 	public static String MSubreport_connection_expression_description;
 	public static String MSubreport_datasource_expression;
 	public static String MSubreport_datasource_expression_description;
