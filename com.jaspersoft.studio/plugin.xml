@@ -42,16 +42,24 @@
       <editor
             class="com.jaspersoft.studio.editor.JrxmlEditor"
             contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
-            extensions="jrxml,jasper"
+            extensions="jrxml"
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.editor.JrxmlEditor"
+            name="JasperReports Designer">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.JrxmlEditor"
+            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            extensions="jasper"
+            icon="icons/resources/jasperreports_jasper.png"
+            id="com.jaspersoft.studio.editor.JrxmlEditor.jasper"
             name="JasperReports Designer">
       </editor>
       <editor
             class="com.jaspersoft.studio.editor.JRPrintEditor"
             default="false"
             extensions="jrprint"
-            icon="icons/jr_icon.png"
+            icon="icons/report.png"
             id="com.jaspersoft.studio.editor.JRPrintEditor"
             name="JasperPrint Viewer">
       </editor>
@@ -59,9 +67,17 @@
             class="com.jaspersoft.studio.editor.JRPxmlEditor"
             default="false"
             extensions="jrpxml"
-            icon="icons/jr_icon.png"
+            icon="icons/report.png"
             id="com.jaspersoft.studio.JRPxmlEditor"
             name="JasperJRPxml Viewer">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.JRtxEditor"
+            default="false"
+            extensions="jrtx"
+            icon="icons/resources/jasperreports_jrtx.png"
+            id="com.jaspersoft.studio.JRtxEditor"
+            name="Jasper Style Template Editor">
       </editor>
    </extension>
    <extension

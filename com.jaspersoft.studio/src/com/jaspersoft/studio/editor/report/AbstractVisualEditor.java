@@ -118,6 +118,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
  * The Class AbstractVisualEditor.
@@ -322,10 +323,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 
-		SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
-		// new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
-				new File(file.getProject().getLocationURI()) }));
-		fileResolver.setResolveAbsolutePath(true);
+		SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
 
 		graphicalViewer.setProperty("FILERESOLVER", fileResolver);
 	}

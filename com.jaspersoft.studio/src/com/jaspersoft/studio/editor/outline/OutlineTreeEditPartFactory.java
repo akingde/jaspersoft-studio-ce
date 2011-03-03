@@ -36,6 +36,7 @@ import org.eclipse.gef.commands.UnexecutableCommand;
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
@@ -103,6 +104,7 @@ import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
 import com.jaspersoft.studio.model.style.command.CreateStyleTemplateCommand;
 import com.jaspersoft.studio.model.style.command.DeleteConditionalStyleCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
+import com.jaspersoft.studio.model.style.command.DeleteStyleTemplateCommand;
 import com.jaspersoft.studio.model.style.command.OrphanConditionalStyleCommand;
 import com.jaspersoft.studio.model.style.command.ReorderConditionalStyleCommand;
 import com.jaspersoft.studio.model.style.command.ReorderStyleCommand;
@@ -159,8 +161,12 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			return new DeleteElementGroupCommand(parent, (MElementGroup) child);
 		} else if (child instanceof MConditionalStyle) {
 			return new DeleteConditionalStyleCommand((MStyle) parent, (MConditionalStyle) child);
+		} else if (child instanceof MStyleTemplate) {
+			if (parent instanceof MStyles)
+				return new DeleteStyleTemplateCommand((MStyles) parent, (MStyleTemplate) child);
 		} else if (child instanceof MStyle) {
-			return new DeleteStyleCommand((MStyles) parent, (MStyle) child);
+			if (parent instanceof MStyles)
+				return new DeleteStyleCommand((MStyles) parent, (MStyle) child);
 		} else if (child instanceof MParameter) {
 			JRDesignParameter p = (JRDesignParameter) child.getValue();
 			if (!p.isSystemDefined())
@@ -388,13 +394,13 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new CreateElementGroupCommand(parent, (MElementGroup) child, newIndex);
 			if (parent instanceof MFrame)
 				return new CreateElementGroupCommand(parent, (MElementGroup) child, newIndex);
-		} else if (child instanceof MConditionalStyle) {
+		} else if (child instanceof MConditionalStyle && ((APropertyNode) child).isEditable()) {
 			if (parent instanceof MStyle && !(parent instanceof MConditionalStyle))
 				return new CreateConditionalStyleCommand((MStyle) parent, (MConditionalStyle) child, newIndex);
-		} else if (child instanceof MStyle) {
+		} else if (child instanceof MStyle && ((APropertyNode) child).isEditable()) {
 			if (parent instanceof MStyles)
 				return new CreateStyleCommand((MStyles) parent, (MStyle) child, newIndex);
-		} else if (child instanceof MStyleTemplate) {
+		} else if (child instanceof MStyleTemplate && ((APropertyNode) child).isEditable()) {
 			if (parent instanceof MStyles)
 				return new CreateStyleTemplateCommand((MStyles) parent, (MStyleTemplate) child, 0);
 		} else if (child instanceof MParameter) {

@@ -20,17 +20,20 @@
 package com.jaspersoft.studio.utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -55,12 +58,20 @@ public class SelectionHelper {
 	}
 
 	public static ANode getNode(JRDesignElement jrElement) {
-		IWorkbenchWindow activeWorkbenchWindow = JaspersoftStudioPlugin.getInstance().getWorkbench()
-				.getActiveWorkbenchWindow();
-		JrxmlEditor jrxmlEditor = (JrxmlEditor) activeWorkbenchWindow.getActivePage().getActiveEditor();
+		JrxmlEditor jrxmlEditor = (JrxmlEditor) getActiveJRXMLEditor();
 		MRoot root = (MRoot) jrxmlEditor.getModel();
 		ANode node = ((MReport) root.getChildren().get(0)).getNode(jrElement);
 		return node;
+	}
+
+	public static IEditorPart getActiveJRXMLEditor() {
+		IWorkbenchWindow activeWorkbenchWindow = JaspersoftStudioPlugin.getInstance().getWorkbench()
+				.getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null && activeWorkbenchWindow.getActivePage() != null) {
+			IEditorPart p = activeWorkbenchWindow.getActivePage().getActiveEditor();
+			return p;
+		}
+		return null;
 	}
 
 	public static boolean isSelected(JRDesignElement jrElement) {
@@ -97,15 +108,18 @@ public class SelectionHelper {
 	}
 
 	public static final void openEditor(FileEditorInput editorInput, String path) {
+		openEditor(editorInput.getFile(), path);
+	}
+
+	public static final void openEditor(IFile file, String path) {
 		try {
 			if (path != null) {
-				String rpath = editorInput.getPath().toPortableString();
+				// String pathname = FileUtils.findRelativePath(rpath, path);
+				SimpleFileResolver fileResolver = getFileResolver(file);
 
-				String pathname = FileUtils.findRelativePath(rpath, path);
+				File fileToBeOpened = fileResolver.resolveFile(path);
 
-				File fileToBeOpened = new File(pathname);
-
-				if (fileToBeOpened.exists() && fileToBeOpened.isFile()) {
+				if (file != null && fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
 					IFileStore fileStore = EFS.getLocalFileSystem().getStore(fileToBeOpened.toURI());
 
 					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -114,11 +128,16 @@ public class SelectionHelper {
 				}
 			}
 		} catch (PartInitException e) {
-			// Put your exception handler here if you wish to
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public static SimpleFileResolver getFileResolver(IFile file) {
+		SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
+				new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
+				new File(file.getProject().getLocationURI()) }));
+		// fileResolver.setResolveAbsolutePath(true);
+		return fileResolver;
 	}
 
 }

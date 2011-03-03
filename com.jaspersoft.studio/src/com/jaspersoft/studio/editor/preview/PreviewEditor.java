@@ -74,6 +74,7 @@ import com.jaspersoft.studio.model.datasource.xls.MXLSDataSource;
 import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 import com.jaspersoft.studio.repository.RepositoryManager;
 import com.jaspersoft.studio.utils.ErrorUtil;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class PreviewEditor extends JRPrintEditor {
 
@@ -138,10 +139,7 @@ public class PreviewEditor extends JRPrintEditor {
 						AsynchronousFillHandle fh = null;
 						JasperReport jasperReport = JasperCompileManager.compileReport(getJasperDesign());
 
-						SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
-								new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
-								new File(file.getProject().getLocationURI()) }));
-						fileResolver.setResolveAbsolutePath(true);
+						SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
 
 						jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
 

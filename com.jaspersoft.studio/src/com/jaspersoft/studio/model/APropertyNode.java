@@ -43,6 +43,16 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		return true;
 	}
 
+	private boolean editable = true;
+
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+
 	public abstract Map<String, Object> getDefaultsMap();
 
 	public abstract void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1);

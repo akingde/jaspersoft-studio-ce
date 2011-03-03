@@ -27,7 +27,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConditionalStyle;
+import net.sf.jasperreports.engine.JRSimpleTemplate;
+import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.JRTemplateReference;
 import net.sf.jasperreports.engine.design.JRDesignImage;
+import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
@@ -56,6 +61,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
@@ -305,8 +311,13 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		}
 	}
 
-	public void openEditor(Object obj) {
+	public void openEditor(Object obj, ANode node) {
 		if (getEditorInput() instanceof FileEditorInput) {
+			if (obj instanceof JRDesignReportTemplate || obj instanceof JRSimpleTemplate || obj instanceof JRStyle
+					|| obj instanceof JRConditionalStyle || obj instanceof JRTemplateReference) {
+				StyleTemplateFactory.openEditor(obj, getEditorInput(), node);
+				return;
+			}
 			if (obj instanceof JRDesignSubreport) {
 				if (getEditorInput() instanceof FileEditorInput) {
 					JRDesignSubreport s = (JRDesignSubreport) obj;

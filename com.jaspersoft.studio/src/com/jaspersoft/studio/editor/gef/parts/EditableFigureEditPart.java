@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.parts;
 
@@ -41,27 +37,27 @@ public class EditableFigureEditPart extends FigureEditPart {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			Object value = ((ANode) getModel()).getValue();
 			IEditorPart editorPart = ((DefaultEditDomain) getViewer().getEditDomain()).getEditorPart();
-			openEditor(value, editorPart);
+			openEditor(value, editorPart, ((ANode) getModel()));
 		}
 		super.performRequest(req);
 	}
 
-	public static void openEditor(final Object val, IEditorPart editor) {
+	public static void openEditor(final Object val, IEditorPart editor, ANode node) {
 		if (editor.getEditorSite() instanceof MultiPageEditorSite) {
 			final MultiPageEditorPart mpep = ((MultiPageEditorSite) editor.getEditorSite()).getMultiPageEditor();
 			if (mpep instanceof IJROBjectEditor)
-				doOpenEditor(val, (IJROBjectEditor) mpep);
+				doOpenEditor(val, (IJROBjectEditor) mpep, node);
 		} else {
 			editor = Workbench.getInstance().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if (editor instanceof IJROBjectEditor)
-				doOpenEditor(val, (IJROBjectEditor) editor);
+				doOpenEditor(val, (IJROBjectEditor) editor, node);
 		}
 	}
 
-	public static void doOpenEditor(final Object val, final IJROBjectEditor editor) {
+	public static void doOpenEditor(final Object val, final IJROBjectEditor editor, final ANode node) {
 		Display.getCurrent().asyncExec(new Runnable() {
 			public void run() {
-				((IJROBjectEditor) editor).openEditor(val);
+				((IJROBjectEditor) editor).openEditor(val, node);
 			}
 		});
 	}

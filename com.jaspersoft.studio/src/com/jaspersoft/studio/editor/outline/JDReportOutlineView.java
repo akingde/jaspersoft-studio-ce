@@ -281,7 +281,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 							if (obj instanceof ATreeEditPart) {
 								ATreeEditPart atep = (ATreeEditPart) obj;
 								if (atep.getModel() instanceof ANode) {
-									EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), editor);
+									EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), editor, (ANode) atep.getModel());
 								}
 							}
 						}

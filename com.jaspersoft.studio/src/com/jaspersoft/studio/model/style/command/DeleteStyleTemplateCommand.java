@@ -27,7 +27,6 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
 
-// TODO: Auto-generated Javadoc
 /**
  * link nodes & together.
  * 
@@ -47,19 +46,8 @@ public class DeleteStyleTemplateCommand extends Command {
 	/**
 	 * Instantiates a new delete style template command.
 	 */
-	public DeleteStyleTemplateCommand() {
+	public DeleteStyleTemplateCommand(MStyles destNode, MStyleTemplate srcNode) {
 		super();
-	}
-
-	/**
-	 * Sets the context.
-	 * 
-	 * @param destNode
-	 *          the dest node
-	 * @param srcNode
-	 *          the src node
-	 */
-	public void setContext(MStyles destNode, MStyleTemplate srcNode) {
 		this.jrDesign = srcNode.getJasperDesign();
 		this.jrTemplate = (JRDesignReportTemplate) srcNode.getValue();
 	}

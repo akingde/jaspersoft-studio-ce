@@ -170,10 +170,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			JRDesignStyle jrElement = (JRDesignStyle) getValue();
 			JRStyle[] styles = getJasperDesign().getStyles();
 			String[] items = new String[styles.length];
-			items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
-			for (int j = 0; j < styles.length; j++) {
-				if (jrElement != styles[j])
-					items[j] = styles[j].getName();
+			if (items.length > 0) {
+				items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
+				for (int j = 0; j < styles.length; j++) {
+					if (jrElement != styles[j])
+						items[j] = styles[j].getName();
+				}
 			}
 			styleD.setItems(items);
 		}
@@ -447,6 +449,8 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
+		if (!isEditable())
+			return;
 		if (getValue() instanceof JRDesignStyle) {
 			JRDesignStyle jrstyle = (JRDesignStyle) getValue();
 			if (id.equals(JRDesignStyle.PROPERTY_NAME))

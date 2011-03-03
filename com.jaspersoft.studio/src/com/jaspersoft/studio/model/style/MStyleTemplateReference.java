@@ -19,33 +19,28 @@
  */
 package com.jaspersoft.studio.model.style;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
-import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.JRTemplateReference;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
-import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 /**
- * The Class MConditionalStyle.
+ * The Class MStyleTemplateReference.
  * 
  * @author Chicu Veaceslav
  */
-public class MConditionalStyle extends MStyle implements IPropertySource {
+public class MStyleTemplateReference extends APropertyNode implements IPropertySource, ICopyable {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -57,19 +52,19 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("style"); //$NON-NLS-1$
+			iconDescriptor = new NodeIconDescriptor("stylereference"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 
 	/**
-	 * Instantiates a new m conditional style.
+	 * Instantiates a new m style template.
 	 */
-	public MConditionalStyle() {
+	public MStyleTemplateReference() {
 		super();
 	}
 
 	/**
-	 * Instantiates a new m conditional style.
+	 * Instantiates a new m style template.
 	 * 
 	 * @param parent
 	 *          the parent
@@ -78,7 +73,7 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	 * @param newIndex
 	 *          the new index
 	 */
-	public MConditionalStyle(ANode parent, JRDesignConditionalStyle jrstyle, int newIndex) {
+	public MStyleTemplateReference(ANode parent, JRTemplateReference jrstyle, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrstyle);
 	}
@@ -88,12 +83,11 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
 	 */
-	@Override
 	public String getDisplayText() {
-		JRExpression conditionExpression = ((JRDesignConditionalStyle) getValue()).getConditionExpression();
-		if (conditionExpression != null)
-			return conditionExpression.getText();
-		return "<NO CONDITION SET>";
+		JRTemplateReference jt = (JRTemplateReference) getValue();
+		if (jt != null && jt.getLocation() != null)
+			return iconDescriptor.getTitle() + "(" + jt.getLocation() + ")";//$NON-NLS-1$ //$NON-NLS-2$
+		return iconDescriptor.getTitle();
 	}
 
 	/*
@@ -101,7 +95,6 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
-	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
@@ -137,41 +130,22 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		super.createPropertyDescriptors(desc, defaultsMap);
-
-		Set<IPropertyDescriptor> toRemove = new HashSet<IPropertyDescriptor>();
-		// remove name, defaults
-		for (IPropertyDescriptor d : desc) {
-			if (d.getId().equals(JRDesignStyle.PROPERTY_NAME))
-				toRemove.add(d);
-			else if (d.getId().equals(JRDesignStyle.PROPERTY_DEFAULT))
-				toRemove.add(d);
-		}
-		desc.removeAll(toRemove);
-
-		JRExpressionPropertyDescriptor conditionalExpressionD = new JRExpressionPropertyDescriptor(
-				JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION, Messages.MConditionalStyle_conditional_expression);
-		conditionalExpressionD.setCategory(Messages.MConditionalStyle_properties_category);
-		conditionalExpressionD.setDescription(Messages.MConditionalStyle_conditional_expression_description);
-		desc.add(conditionalExpressionD);
-
+		TextPropertyDescriptor nameD = new TextPropertyDescriptor("location", "Location");
+		nameD.setDescription("Template location.");
+		desc.add(nameD);
 	}
-
-	private MExpression mExpression;
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
-	@Override
 	public Object getPropertyValue(Object id) {
-		JRDesignConditionalStyle jrstyle = (JRDesignConditionalStyle) getValue();
-		if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION)) {
-			mExpression = ExprUtil.getExpression(this, mExpression, jrstyle.getConditionExpression());
-			return mExpression;
+		JRTemplateReference jrTemplate = (JRTemplateReference) getValue();
+		if (id.equals("location")) {
+			return jrTemplate.getLocation();
 		}
-		return super.getPropertyValue(id);
+		return null;
 	}
 
 	/*
@@ -179,31 +153,28 @@ public class MConditionalStyle extends MStyle implements IPropertySource {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
-	@Override
 	public void setPropertyValue(Object id, Object value) {
 		if (isEditable()) {
-			JRDesignConditionalStyle jrstyle = (JRDesignConditionalStyle) getValue();
-			if (id.equals(JRDesignConditionalStyle.PROPERTY_CONDITION_EXPRESSION))
-				jrstyle.setConditionExpression(ExprUtil.setValues(jrstyle.getConditionExpression(), value));
-			else
-				super.setPropertyValue(id, value);
+			JRTemplateReference jrTemplate = (JRTemplateReference) getValue();
+			if (id.equals("location"))
+				jrTemplate.setLocation((String) value);
 		}
 	}
 
 	/**
-	 * Creates the jr style.
+	 * Creates the jr template.
 	 * 
-	 * @return the jR design conditional style
+	 * @return the jR design report template
 	 */
-	public static JRDesignConditionalStyle createJRStyle() {
-		JRDesignConditionalStyle jrDesignConditionalStyle = new JRDesignConditionalStyle();
-		return jrDesignConditionalStyle;
+	public static JRTemplateReference createJRTemplate() {
+		JRTemplateReference jrDesignReportTemplate = new JRTemplateReference();
+		return jrDesignReportTemplate;
 	}
 
-	@Override
 	public boolean isCopyable2(Object parent) {
-		if (parent instanceof MStyle)
+		if (parent instanceof MStyleTemplate)
 			return true;
 		return false;
 	}
+
 }

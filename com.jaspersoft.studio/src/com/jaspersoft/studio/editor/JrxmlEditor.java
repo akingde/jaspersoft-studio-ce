@@ -79,6 +79,7 @@ import com.jaspersoft.studio.editor.preview.PreviewEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
@@ -381,7 +382,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			JasperDesign jd = null;
 			in = JrxmlEditor.getXML(editorInput, "UTF-8", in); //$NON-NLS-1$
 			jd = JRXmlLoader.load(in);
-			setModel(ReportFactory.createReport(jd));
+			setModel(ReportFactory.createReport(jd, ((IFileEditorInput) editorInput).getFile()));
 		} catch (JRException e) {
 			setModel(null);
 			handleJRException(editorInput, e, false);
@@ -546,7 +547,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		IDocumentProvider dp = xmlEditor.getDocumentProvider();
 		IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 		JasperDesign jd = JRXmlLoader.load(new ByteArrayInputStream(doc.get().getBytes()));
-		setModel(ReportFactory.createReport(jd));
+		setModel(ReportFactory.createReport(jd, ((IFileEditorInput) getEditorInput()).getFile()));
 	}
 
 	/**
@@ -652,8 +653,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		IDE.gotoMarker(xmlEditor, marker);
 	}
 
-	public void openEditor(Object obj) {
-		reportContainer.openEditor(obj);
+	public void openEditor(Object obj, ANode node) {
+		reportContainer.openEditor(obj, node);
 	}
 
 }

@@ -55,9 +55,12 @@ import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
+import org.eclipse.core.resources.IFile;
+
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -86,8 +89,8 @@ import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
 import com.jaspersoft.studio.model.style.MConditionalStyle;
 import com.jaspersoft.studio.model.style.MStyle;
-import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
+import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
@@ -109,7 +112,7 @@ public class ReportFactory {
 	 *          the jd
 	 * @return the i node
 	 */
-	public static INode createReport(JasperDesign jd) {
+	public static INode createReport(JasperDesign jd, IFile file) {
 
 		ANode node = new MRoot(null, jd);
 		ANode report = new MReport(node, jd);
@@ -118,7 +121,7 @@ public class ReportFactory {
 		ANode nStyle = new MStyles(report);
 		if (jd.getTemplates() != null) {
 			for (Iterator<JRReportTemplate> it = jd.getTemplatesList().iterator(); it.hasNext();) {
-				createNode(nStyle, it.next(), -1);
+				createNode(nStyle, it.next(), -1, file);
 			}
 		}
 		if (jd.getStyles() != null) {
@@ -321,18 +324,7 @@ public class ReportFactory {
 		}
 	}
 
-	/**
-	 * Creates a new Report object.
-	 * 
-	 * @param parent
-	 *          the parent
-	 * @param jrObject
-	 *          the jr object
-	 * @param newIndex
-	 *          the new index
-	 * @return the a node
-	 */
-	public static ANode createNode(ANode parent, Object jrObject, int newIndex) {
+	public static ANode createNode(ANode parent, Object jrObject, int newIndex, IFile file) {
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		ANode n = m.createNode(parent, jrObject, newIndex);
 		if (n != null) {
@@ -378,9 +370,11 @@ public class ReportFactory {
 			}
 			return new MStyle(parent, (JRDesignStyle) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignConditionalStyle) {
-			return new MConditionalStyle(parent, (JRDesignConditionalStyle) jrObject, newIndex);
+			MConditionalStyle mConditionalStyle = new MConditionalStyle(parent, (JRDesignConditionalStyle) jrObject, newIndex);
+			mConditionalStyle.setEditable(((APropertyNode) parent).isEditable());
+			return mConditionalStyle;
 		} else if (jrObject instanceof JRDesignReportTemplate) {
-			return new MStyleTemplate(parent, (JRDesignReportTemplate) jrObject, newIndex);
+			return StyleTemplateFactory.createTemplate(parent, (JRDesignReportTemplate) jrObject, newIndex, file);
 			// parameters
 		} else if (jrObject instanceof JRDesignParameter) {
 			JRDesignParameter jrParameter = (JRDesignParameter) jrObject;
@@ -407,5 +401,20 @@ public class ReportFactory {
 			newIndex++;
 		}
 		return null;
+	}
+
+	/**
+	 * Creates a new Report object.
+	 * 
+	 * @param parent
+	 *          the parent
+	 * @param jrObject
+	 *          the jr object
+	 * @param newIndex
+	 *          the new index
+	 * @return the a node
+	 */
+	public static ANode createNode(ANode parent, Object jrObject, int newIndex) {
+		return createNode(parent, jrObject, newIndex, null);
 	}
 }
