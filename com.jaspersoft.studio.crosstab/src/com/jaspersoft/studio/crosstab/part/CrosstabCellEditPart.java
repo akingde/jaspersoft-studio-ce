@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -74,6 +75,11 @@ public class CrosstabCellEditPart extends FigureEditPart implements IContainerPa
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
+			@Override
+			protected Dimension getMinimumSizeFor(GraphicalEditPart child) {
+				return new Dimension(1, 1);
+			}
+
 			@Override
 			protected Command getOrphanChildrenCommand(Request request) {
 				// TODO Auto-generated method stub
