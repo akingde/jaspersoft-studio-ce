@@ -52,6 +52,12 @@ import com.jaspersoft.studio.model.MGraphicElement;
  * The Class PageLayoutEditPolicy.
  */
 public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
+
+	@Override
+	protected Dimension getMinimumSizeFor(GraphicalEditPart child) {
+		return new Dimension(1, 1);
+	}
+
 	protected Command chainGuideAttachmentCommand(Request request, IGuidebleElement part, Command cmd, boolean horizontal) {
 		Command result = cmd;
 

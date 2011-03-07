@@ -27,7 +27,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
  * The Class BandHandleLocator.
  */
 public class BandHandleLocator implements Locator {
-	private static final int bandHandleOffset = 7;
+	private static final int bandHandleOffset = 3;
 	/** The reference. */
 	private IFigure reference;
 

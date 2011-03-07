@@ -253,35 +253,41 @@ public class ReportFactory {
 	public static void createDataset(ANode nDataset, JRDesignDataset dataSet, boolean showGroups) {
 		// create parameters
 		ANode nParameters = new MParameters(nDataset, dataSet, JRDesignDataset.PROPERTY_PARAMETERS);
-		if (dataSet.getParameters() != null) {
+		if (dataSet.getParametersList() != null) {
 			for (Iterator<JRDesignParameter> it = dataSet.getParametersList().iterator(); it.hasNext();) {
 				createNode(nParameters, it.next(), -1);
 			}
 		}
 		// create fields
 		ANode nFields = new MFields(nDataset, dataSet);
-		if (dataSet.getFields() != null) {
+		if (dataSet.getFieldsList() != null) {
 			for (Iterator<JRDesignField> it = dataSet.getFieldsList().iterator(); it.hasNext();) {
 				createNode(nFields, it.next(), -1);
 			}
 		}
 		// create sort fields
 		ANode nSortFields = new MSortFields(nDataset, dataSet);
-		if (dataSet.getSortFields() != null) {
+		if (dataSet.getSortFieldsList() != null) {
 			for (Iterator<JRDesignSortField> it = dataSet.getSortFieldsList().iterator(); it.hasNext();) {
 				createNode(nSortFields, it.next(), -1);
 			}
 		}
 		// create variables
 		ANode nVariables = new MVariables(nDataset, dataSet);
-		if (dataSet.getVariables() != null) {
+		if (dataSet.getVariablesList() != null) {
 			for (Iterator<JRVariable> it = dataSet.getVariablesList().iterator(); it.hasNext();) {
 				createNode(nVariables, (JRDesignVariable) it.next(), -1);
 			}
 		}
 		// create scriplets
 		ANode nScriptlets = new MScriptlets(nDataset, dataSet);
-		if (dataSet.getScriptlets() != null) {
+		if (dataSet.getScriptletClass() != null) {
+			JRDesignScriptlet jrscriptlet = new JRDesignScriptlet();
+			jrscriptlet.setName("REPORT_SCRIPTLET");
+			jrscriptlet.setValueClassName(dataSet.getScriptletClass());
+			createNode(nScriptlets, jrscriptlet, -1);
+		}
+		if (dataSet.getScriptletsList() != null) {
 			for (Iterator<JRDesignScriptlet> it = dataSet.getScriptletsList().iterator(); it.hasNext();) {
 				createNode(nScriptlets, it.next(), -1);
 			}
@@ -290,7 +296,7 @@ public class ReportFactory {
 		if (showGroups) {
 			// create scriplets
 			ANode nGroups = new MGroups(nDataset, dataSet);
-			if (dataSet.getGroups() != null) {
+			if (dataSet.getGroupsList() != null) {
 				for (Iterator<JRDesignGroup> it = dataSet.getGroupsList().iterator(); it.hasNext();) {
 					createNode(nGroups, it.next(), -1);
 				}
@@ -394,6 +400,15 @@ public class ReportFactory {
 			else
 				return new MVariable(parent, jrVariable, -1);
 		} else if (jrObject instanceof JRDesignScriptlet) {
+			if (parent instanceof MScriptlets) {
+				MScriptlets ms = (MScriptlets) parent;
+				for (INode node : ms.getChildren()) {
+					JRDesignScriptlet jds = (JRDesignScriptlet) node.getValue();
+					if (jds.getName().equals("REPORT_SCRIPTLET"))
+						newIndex++;
+				}
+			}
+
 			return new MScriptlet(parent, (JRDesignScriptlet) jrObject, newIndex);
 		} else if (jrObject instanceof JRDesignDataset) {
 			return new MDataset(parent, (JRDesignDataset) jrObject, newIndex);

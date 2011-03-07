@@ -110,7 +110,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 
 	@Override
 	public boolean isSelectable() {
-		return false;
+		return true;
 	}
 
 	/**

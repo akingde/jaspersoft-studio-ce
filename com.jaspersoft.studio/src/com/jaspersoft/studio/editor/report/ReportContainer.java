@@ -33,11 +33,18 @@ import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
+import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -336,6 +343,22 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				}
 				return;
 			}
+		}
+		if (obj instanceof JRDesignScriptlet) {
+			String str = ((JRDesignScriptlet) obj).getValueClassName();
+			IProject prj = ((FileEditorInput) getEditorInput()).getFile().getProject();
+			IJavaProject javaProject = JavaCore.create(prj);
+			if (javaProject != null)
+				try {
+					IType type = javaProject.findType(str);
+					if (type != null)
+						JavaUI.openInEditor(type);
+				} catch (PartInitException e) {
+					e.printStackTrace();
+				} catch (JavaModelException e) {
+					e.printStackTrace();
+				}
+
 		}
 		if (obj instanceof JasperDesign) {
 			setActivePage(0);

@@ -19,16 +19,18 @@
  */
 package com.jaspersoft.studio.model.scriptlet;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRAbstractScriptlet;
+import net.sf.jasperreports.engine.JRDefaultScriptlet;
 import net.sf.jasperreports.engine.JRScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -142,8 +144,11 @@ public class MScriptlet extends APropertyNode implements ICopyable {
 		nameD.setDescription(Messages.MScriptlet_name_description);
 		desc.add(nameD);
 
+		List<Class<?>> clist = new ArrayList<Class<?>>();
+		clist.add(JRAbstractScriptlet.class);
 		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME,
 				Messages.common_class);
+		classD.setClasses(clist);
 		classD.setDescription(Messages.MScriptlet_class_description);
 		desc.add(classD);
 
@@ -175,13 +180,21 @@ public class MScriptlet extends APropertyNode implements ICopyable {
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
+		JRDesignDataset ds = (JRDesignDataset) getParent().getParent().getValue();
 		JRDesignScriptlet jrField = (JRDesignScriptlet) getValue();
-		if (id.equals(JRDesignScriptlet.PROPERTY_NAME))
-			jrField.setName((String) value);
-		else if (id.equals(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME))
-			jrField.setValueClassName((String) value);
-		else if (id.equals(JRDesignScriptlet.PROPERTY_DESCRIPTION))
-			jrField.setDescription((String) value);
+		if (jrField.getValueClassName().equals("REPORT_SCRIPTLET")) {
+			if (id.equals(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME)) {
+				ds.setScriptletClass((String) value);
+			}
+		} else {
+			if (id.equals(JRDesignScriptlet.PROPERTY_NAME)) {
+				if (!ds.getScriptletClass().equals(value))
+					jrField.setName((String) value);
+			} else if (id.equals(JRDesignScriptlet.PROPERTY_VALUE_CLASS_NAME))
+				jrField.setValueClassName((String) value);
+			else if (id.equals(JRDesignScriptlet.PROPERTY_DESCRIPTION))
+				jrField.setDescription((String) value);
+		}
 	}
 
 	/**
@@ -194,6 +207,7 @@ public class MScriptlet extends APropertyNode implements ICopyable {
 	public static JRDesignScriptlet createJRScriptlet(JRDesignDataset jrDataset) {
 		JRDesignScriptlet jrScriptlet = new JRDesignScriptlet();
 		jrScriptlet.setName(ModelUtils.getDefaultName(jrDataset.getScriptletsMap(), "Scriptlet_")); //$NON-NLS-1$
+		jrScriptlet.setValueClass(JRDefaultScriptlet.class);
 		return jrScriptlet;
 
 	}

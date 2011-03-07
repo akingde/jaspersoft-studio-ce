@@ -43,7 +43,7 @@ public class CellResizeHandle2 extends ResizeHandle {
 	public CellResizeHandle2(GraphicalEditPart owner, int direction) {
 		super(owner, direction);
 		setLocator(new CellResizeHandleLocator(owner.getFigure(), direction));
-		setPreferredSize(5, 5);
+		setPreferredSize(3, 3);
 	}
 
 	/*

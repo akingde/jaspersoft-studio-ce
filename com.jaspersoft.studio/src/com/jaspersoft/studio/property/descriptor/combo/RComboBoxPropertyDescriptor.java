@@ -53,7 +53,7 @@ public class RComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor {
 
 	public void setItems(String[] items) {
 		labels = items;
-		if (cellEditor != null && !cellEditor.getControl().isDisposed())
+		if (cellEditor != null && cellEditor.getControl() != null && !cellEditor.getControl().isDisposed())
 			cellEditor.setItems(items);
 	}
 }

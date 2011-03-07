@@ -43,7 +43,7 @@ public class BandResizeHandle2 extends ResizeHandle {
 	public BandResizeHandle2(GraphicalEditPart owner, int direction) {
 		super(owner, direction);
 		setLocator(new BandResizeHandleLocator(owner.getFigure(), direction));
-		setPreferredSize(7, 7);
+		setPreferredSize(2, 2);
 	}
 
 	/*

@@ -52,7 +52,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
-import com.jaspersoft.studio.editor.gef.commands.SetConstraintCommand;
 import com.jaspersoft.studio.editor.gef.commands.SetPageConstraintCommand;
 import com.jaspersoft.studio.editor.gef.figures.PageFigure;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;

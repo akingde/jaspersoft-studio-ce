@@ -77,13 +77,11 @@ public class CreateScriptletCommand extends Command {
 			this.jrScriptlet = MScriptlet.createJRScriptlet(jrDataset);
 		}
 		if (jrScriptlet != null) {
-			if (index < 0)
-				index = jrDataset.getScriptletsList().size();
 			try {
-				if (index < 0 || index > jrDataset.getScriptletsList().size())
-					jrDataset.addScriptlet(jrScriptlet);
-				else
+				if (index >= 0 && index < jrDataset.getScriptletsList().size())
 					jrDataset.addScriptlet(index, jrScriptlet);
+				else
+					jrDataset.addScriptlet(jrScriptlet);
 			} catch (JRException e) {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$

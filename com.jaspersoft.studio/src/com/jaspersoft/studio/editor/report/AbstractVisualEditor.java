@@ -396,6 +396,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 				graphicalViewer, TextTransfer.getInstance())
 
 		);
+		
 	}
 
 	/*
