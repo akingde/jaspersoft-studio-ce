@@ -40,6 +40,33 @@ public class EnumHelper {
 		return res.toArray(new String[res.size()]);
 	}
 
+	/**
+	 * 
+	 * @param jrEnum
+	 * @param nullable
+	 * @param skipPositions - 0-based index of the JREnum to be skipped
+	 * @return
+	 */
+	public static String[] getEnumNames(JREnum[] jrEnum, NullEnum nullable, Integer... skipPositions) {
+		List<String> res = new ArrayList<String>();
+		if (nullable != NullEnum.NOTNULL)
+			res.add(nullable.getName());
+		for (int i = 0; i < jrEnum.length; i++) {
+			boolean skip = false;
+			
+			for (int j=0; j < skipPositions.length; j++) {
+				if (i == skipPositions[j]) {
+					skip = true;
+				}
+			}
+			
+			if (!skip) {
+				res.add(Messages.getString(jrEnum[i].getName()));
+			}
+		}
+		return res.toArray(new String[res.size()]);
+	}
+
 	public static Integer getValue(JREnum jrEnum) {
 		return getValue(jrEnum, 1, false);
 	}
