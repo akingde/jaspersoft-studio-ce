@@ -392,11 +392,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 				return new JDPaletteCreationFactory((Class<?>) template);
 			}
 		});
-		graphicalViewer.addDropTargetListener((TransferDropTargetListener) new TextTransferDropTargetListener(
-				graphicalViewer, TextTransfer.getInstance())
+		// graphicalViewer.addDropTargetListener((TransferDropTargetListener) new TextTransferDropTargetListener(
+		// graphicalViewer, TextTransfer.getInstance()));
 
-		);
-		
 	}
 
 	/*

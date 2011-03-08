@@ -17,46 +17,47 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.outline.editpolicy;
+package com.jaspersoft.studio.model.command;
 
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.UnexecutableCommand;
-import org.eclipse.gef.editpolicies.AbstractEditPolicy;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
+
+import com.jaspersoft.studio.messages.Messages;
 
 /**
- * The Class ElementTreeEditPolicy.
+ * The Class OrphanElementCommand.
+ * 
+ * @author Chicu Veaceslav
  */
-public class ElementTreeEditPolicy extends AbstractEditPolicy {
+public class NoActionCommand extends Command {
+
+	/**
+	 * Instantiates a new orphan element command.
+	 * 
+	 * @param parent
+	 *          the parent
+	 * @param child
+	 *          the child
+	 */
+	public NoActionCommand() {
+		super(Messages.common_orphan_child);
+	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#getCommand(org.eclipse.gef.Request)
+	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
-	public Command getCommand(Request req) {
-		if (REQ_MOVE.equals(req.getType()))
-			return getMoveCommand((ChangeBoundsRequest) req);
-		return null;
+	public void execute() {
+
 	}
 
-	/**
-	 * Gets the move command.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param req
-	 *          the req
-	 * @return the move command
+	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
-	protected Command getMoveCommand(ChangeBoundsRequest req) {
-		EditPart parent = getHost().getParent();
-		if (parent != null) {
-			ChangeBoundsRequest request = new ChangeBoundsRequest(REQ_MOVE_CHILDREN);
-			request.setEditParts(getHost());
-			request.setLocation(req.getLocation());
-			return parent.getCommand(request);
-		}
-		return UnexecutableCommand.INSTANCE;
+	public void undo() {
+
 	}
+
 }
