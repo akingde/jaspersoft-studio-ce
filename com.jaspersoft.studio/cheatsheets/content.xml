@@ -13,6 +13,9 @@
         serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=com.jaspersoft.studio.Repository)"/> 
 	</item>
 	<item title="Launch the JDBC datasource editor" skip="true">
+		<action pluginId="com.jaspersoft.studio.repository.actions.CreateDataSourceAction" 
+				class="com.jaspersoft.studio.repository.actions.CreateDataSourceAction"
+				/>
 		<description>In the repository view, go to Datasources > JDBC Datasources. Right-click 
 		on JDBC Datasources and do Create... . This will launch the JDBC datasource editor.  
 		</description>

@@ -325,7 +325,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
 
-		graphicalViewer.setProperty("FILERESOLVER", fileResolver);
+		graphicalViewer.setProperty("FILERESOLVER", fileResolver); //$NON-NLS-1$
 	}
 
 	/*

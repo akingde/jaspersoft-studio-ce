@@ -371,7 +371,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				MField mf = (MField) child;
 				JRDesignField f = (JRDesignField) mf.getValue();
 				if (f != null)
-					child = createTextField("$F{" + f.getName() + "}", f.getValueClassName());
+					child = createTextField("$F{" + f.getName() + "}", f.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} else if (child instanceof MParameterSystem) {
 			if (child instanceof MParameter) {
@@ -384,7 +384,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				MParameterSystem mf = (MParameterSystem) child;
 				JRDesignParameter f = (JRDesignParameter) mf.getValue();
 				if (f != null)
-					child = createTextField("$P{" + f.getName() + "}", f.getValueClassName());
+					child = createTextField("$P{" + f.getName() + "}", f.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} else if (child instanceof MVariableSystem) {
 			if (parent instanceof MVariables) {
@@ -395,7 +395,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				MVariableSystem mf = (MVariableSystem) child;
 				JRDesignVariable f = (JRDesignVariable) mf.getValue();
 				if (f != null)
-					child = createTextField("$V{" + f.getName() + "}", f.getValueClassName());
+					child = createTextField("$V{" + f.getName() + "}", f.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} else if (child instanceof MStyle && child.getValue() != null && !(parent instanceof IContainer)
 				&& parent instanceof MGraphicElement) {
