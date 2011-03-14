@@ -44,7 +44,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -153,16 +152,6 @@ public class MHtml extends MGraphicElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(
-				HtmlComponent.PROPERTY_WIDTH, Messages.MHtml_width);
-		widthD.setDescription(Messages.MHtml_width_description);
-		desc.add(widthD);
-
-		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(
-				HtmlComponent.PROPERTY_HEIGHT, Messages.MHtml_height);
-		heightD.setDescription(Messages.MHtml_height_description);
-		desc.add(heightD);
-
 		JRExpressionPropertyDescriptor contentExprD = new JRExpressionPropertyDescriptor(
 				HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION,
 				Messages.MHtml_content_expression);
@@ -171,7 +160,7 @@ public class MHtml extends MGraphicElement {
 		desc.add(contentExprD);
 
 		ComboBoxPropertyDescriptor scaleTypeD = new ComboBoxPropertyDescriptor(
-				HtmlComponent.PROPERTY_HTML_SCALE_TYPE, Messages.MHtml_scaletype,
+				HtmlComponent.PROPERTY_SCALE_TYPE, Messages.MHtml_scaletype,
 				EnumHelper.getEnumNames(ScaleImageEnum.values(), NullEnum.NOTNULL));
 		scaleTypeD.setDescription(Messages.MHtml_scaletype_description);
 		desc.add(scaleTypeD);
@@ -203,8 +192,6 @@ public class MHtml extends MGraphicElement {
 		evaluationGroupNameD.setDescription(Messages.MHtml_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
-		widthD.setCategory(Messages.common_properties_category);
-		heightD.setCategory(Messages.common_properties_category);
 		contentExprD.setCategory(Messages.common_properties_category);
 		scaleTypeD.setCategory(Messages.common_properties_category);
 		hAlignD.setCategory(Messages.common_properties_category);
@@ -213,7 +200,7 @@ public class MHtml extends MGraphicElement {
 		evaluationGroupNameD.setCategory(Messages.common_properties_category);
 
 		defaultsMap.put(HtmlComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
-		defaultsMap.put(HtmlComponent.PROPERTY_HTML_SCALE_TYPE, ScaleImageEnum.RETAIN_SHAPE);
+		defaultsMap.put(HtmlComponent.PROPERTY_SCALE_TYPE, ScaleImageEnum.RETAIN_SHAPE);
 		defaultsMap.put(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN, HorizontalAlignEnum.LEFT);
 		defaultsMap.put(HtmlComponent.PROPERTY_VERTICAL_ALIGN, VerticalAlignEnum.MIDDLE);
 	}
@@ -262,13 +249,9 @@ public class MHtml extends MGraphicElement {
 			return EnumHelper.getValue(htmlComp.getEvaluationTime(), 1, false);
 		if (id.equals(HtmlComponent.PROPERTY_EVALUATION_GROUP))
 			return htmlComp.getEvaluationGroup();
-		if (id.equals(HtmlComponent.PROPERTY_HTML_SCALE_TYPE)) {
-			return EnumHelper.getValue(htmlComp.getHtmlScaleType(), 1, false);
+		if (id.equals(HtmlComponent.PROPERTY_SCALE_TYPE)) {
+			return EnumHelper.getValue(htmlComp.getScaleType(), 1, false);
 		}
-		if (id.equals(HtmlComponent.PROPERTY_HEIGHT))
-			return htmlComp.getHtmlHeight();
-		if (id.equals(HtmlComponent.PROPERTY_WIDTH))
-			return htmlComp.getHtmlWidth();
 		if (id.equals(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN))
 			return EnumHelper.getValue(htmlComp.getHorizontalAlign(), 1, false);
 		if (id.equals(HtmlComponent.PROPERTY_VERTICAL_ALIGN))
@@ -291,14 +274,10 @@ public class MHtml extends MGraphicElement {
 					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
 		else if (id.equals(HtmlComponent.PROPERTY_EVALUATION_GROUP))
 			htmlComp.setEvaluationGroup((String) value);
-		else if (id.equals(HtmlComponent.PROPERTY_HTML_SCALE_TYPE)) {
-			htmlComp.setHtmlScaleType((ScaleImageEnum) EnumHelper.getSetValue(
+		else if (id.equals(HtmlComponent.PROPERTY_SCALE_TYPE)) {
+			htmlComp.setScaleType((ScaleImageEnum) EnumHelper.getSetValue(
 					ScaleImageEnum.values(), value, 1, false));
 		}
-		else if (id.equals(HtmlComponent.PROPERTY_HEIGHT))
-			htmlComp.setHtmlHeight((Integer) value);
-		else if (id.equals(HtmlComponent.PROPERTY_WIDTH))
-			htmlComp.setHtmlWidth((Integer) value);
 		else if (id.equals(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN))
 			htmlComp.setHorizontalAlign((HorizontalAlignEnum) EnumHelper
 					.getSetValue(HorizontalAlignEnum.values(), value, 1, false));

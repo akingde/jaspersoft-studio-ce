@@ -18,6 +18,7 @@ import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.html.command.CreateHtmlCommand;
 import com.jaspersoft.studio.html.model.MHtml;
+import com.jaspersoft.studio.html.parts.HtmlFigureEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -88,6 +89,8 @@ public class HtmlComponentFactory implements IComponentFactory {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
+		if (model instanceof MHtml)
+			return new HtmlFigureEditPart();
 		return null;
 	}
 
