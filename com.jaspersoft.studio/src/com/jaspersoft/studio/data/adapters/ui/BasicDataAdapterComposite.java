@@ -21,7 +21,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.jaspersoft.studio.data.adapters.DataAdapterProperty;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.wb.swt.SWTResourceManager;
+
 
 public class BasicDataAdapterComposite extends Composite {
 
@@ -104,7 +104,7 @@ public class BasicDataAdapterComposite extends Composite {
 		toolkit.adapt(composite);
 		toolkit.paintBordersFor(composite);
 		
-		this.setBackground(SWTResourceManager.getColor( SWT.COLOR_WIDGET_BACKGROUND));
+		this.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		this.setSize(500, 500);
   }
 	
