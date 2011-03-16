@@ -192,8 +192,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						}
 					});
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.common_error_creating_nested_text_editor, null, e.getStatus());
+			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_text_editor,
+					null, e.getStatus());
 		}
 	}
 
@@ -228,6 +228,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * 
 	 * @see org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette#getAdapter(java.lang.Class)
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class type) {
 		if (type == IContentOutlinePage.class) {
@@ -345,9 +346,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					if (prj.isOpen()) {
 						if (project == null)
 							project = prj;
-						else
-
-						if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
+						else if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
 							project = prj;
 
 					}
@@ -496,7 +495,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
 				// if (!xmlFresh) {
-				if (getActiveEditor() == xmlEditor) {
+				if (activePage == PAGE_XMLEDITOR) {
 					try {
 						xml2model();
 						xmlFresh = true;
@@ -517,7 +516,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// getSite().setSelectionProvider(xmlEditor.getSelectionProvider());
 				break;
 			case PAGE_PREVIEW:
-				if (getActiveEditor() == xmlEditor)
+				if (activePage == PAGE_XMLEDITOR)
 					try {
 						xml2model();
 					} catch (JRException e) {
@@ -535,7 +534,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		getSite().getSelectionProvider().setSelection(null);
 		super.pageChange(newPageIndex);
 		updateContentOutline(getActivePage());
+		activePage = newPageIndex;
 	}
+
+	private int activePage = 0;
 
 	/**
 	 * Xml2model.
