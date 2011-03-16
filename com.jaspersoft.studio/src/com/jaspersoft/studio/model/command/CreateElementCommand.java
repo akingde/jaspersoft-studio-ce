@@ -178,9 +178,9 @@ public class CreateElementCommand extends Command {
 		if (jrElement == null) {
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
 
-			if (jrElement != null)
-				setElementBounds();
 		}
+		if (jrElement != null)
+			setElementBounds();
 	}
 
 	protected void setElementBounds() {
