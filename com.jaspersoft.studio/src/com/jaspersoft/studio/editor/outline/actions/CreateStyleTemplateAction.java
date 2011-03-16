@@ -31,7 +31,6 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CreateStyleTemplateAction.
  */
