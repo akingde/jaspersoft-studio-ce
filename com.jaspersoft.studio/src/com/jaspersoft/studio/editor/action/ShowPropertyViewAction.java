@@ -22,6 +22,7 @@ package com.jaspersoft.studio.editor.action;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IPageLayout;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -67,6 +68,7 @@ public class ShowPropertyViewAction extends SelectionAction {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
 			page.showView(IPageLayout.ID_PROP_SHEET);
+
 			// page.showView("org.eclipse.ui.views.properties");
 		} catch (PartInitException e) {
 			e.printStackTrace();
