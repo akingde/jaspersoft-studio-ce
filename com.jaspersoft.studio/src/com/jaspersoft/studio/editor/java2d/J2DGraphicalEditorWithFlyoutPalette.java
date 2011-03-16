@@ -27,7 +27,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.swt.widgets.Composite;
 
-// TODO: Auto-generated Javadoc
 /**
  * A J2DGraphicalEditorWithFlyoutPalette is a GraphicalEditorWithFlyoutPalette but a
  * J2DScrollingGraphicalViewer is created instead of a ScrollingGraphicalViewer.
