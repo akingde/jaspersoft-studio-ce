@@ -53,7 +53,7 @@ import com.jaspersoft.studio.preferences.PreferenceConstants;
  */
 public class FigureEditPart extends AJDEditPart implements PropertyChangeListener {
 
-	private DrawVisitor drawVisitor;
+	protected DrawVisitor drawVisitor;
 	protected SimpleFileResolver fileResolver;
 
 	public DrawVisitor getDrawVisitor() {
@@ -122,10 +122,11 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	public void refreshVisuals() {
 		Shape rect = (Shape) getFigure();
 		setupFigure(rect);
+		rect.invalidate();
 		rect.repaint();
 	}
 
-	private void setPrefsBorder(IFigure rect) {
+	protected void setPrefsBorder(IFigure rect) {
 		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
 				PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
 
