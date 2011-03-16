@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -79,8 +80,12 @@ public class ParametersDialog extends FormDialog {
 		for (JRDesignParameter p : prompts) {
 			if (p.isForPrompting() && !p.isSystemDefined())
 				for (IDataInput in : inputs)
-					if (in.isForType(p.getValueClass())) {
-						return true;
+					try {
+						if (in.isForType(p.getValueClass())) {
+							return true;
+						}
+					} catch (JRRuntimeException e) {
+						e.printStackTrace();
 					}
 		}
 		return false;
