@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
@@ -29,6 +30,19 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class StyleTemplateFactory {
+
+	public static ANode createNode(ANode parent, Object obj, int index, IFile file, JRSimpleTemplate jrst) {
+		if (obj instanceof JRDesignStyle) {
+			index += jrst.getIncludedTemplatesList().size();
+			return new MStyle(parent, (JRDesignStyle) obj, index);
+		}
+		if (obj instanceof JRTemplateReference) {
+			ANode n = new MStyleTemplateReference(parent, (JRTemplateReference) obj, index);
+			createTemplateReference(n, ((JRTemplateReference) obj).getLocation(), -1, new HashSet<String>(), false, file);
+		}
+		return null;
+	}
+
 	public static ANode createTemplate(ANode parent, JRDesignReportTemplate jrObject, int newIndex, IFile file) {
 		MStyleTemplate mStyleTemplate = new MStyleTemplate(parent, (JRDesignReportTemplate) jrObject, newIndex);
 		String str = JRExpressionUtil.getSimpleExpressionText(jrObject.getSourceExpression());
@@ -43,7 +57,7 @@ public class StyleTemplateFactory {
 		return mStyleTemplate;
 	}
 
-	private static void createTemplateReference(ANode parent, String location, int newIndex, Set<String> set,
+	public static void createTemplateReference(ANode parent, String location, int newIndex, Set<String> set,
 			boolean editable, IFile file) {
 		if (file == null)
 			return;
@@ -52,25 +66,30 @@ public class StyleTemplateFactory {
 		File fileToBeOpened = fileResolver.resolveFile(location);
 		if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
 			JRSimpleTemplate jrst = (JRSimpleTemplate) JRXmlTemplateLoader.load(fileToBeOpened);
-			for (JRTemplateReference s : jrst.getIncludedTemplates()) {
-				MStyleTemplateReference p = new MStyleTemplateReference(parent, s, -1);
-				p.setEditable(editable);
-				if (set.contains(fileToBeOpened.getAbsolutePath()))
-					continue;
-				set.add(fileToBeOpened.getAbsolutePath());
+			createTemplate(parent, set, editable, file, fileToBeOpened, jrst);
+		}
+	}
 
-				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-				IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
-				if (fs != null && fs.length > 0)
-					createTemplateReference(p, s.getLocation(), -1, set, editable, fs[0]);
-				else
-					createTemplateReference(p, s.getLocation(), -1, set, editable, file);
-			}
+	public static void createTemplate(ANode parent, Set<String> set, boolean editable, IFile file, File fileToBeOpened,
+			JRSimpleTemplate jrst) {
+		for (JRTemplateReference s : jrst.getIncludedTemplates()) {
+			MStyleTemplateReference p = new MStyleTemplateReference(parent, s, -1);
+			p.setEditable(editable);
+			if (set.contains(fileToBeOpened.getAbsolutePath()))
+				continue;
+			set.add(fileToBeOpened.getAbsolutePath());
 
-			for (JRStyle s : jrst.getStyles()) {
-				APropertyNode n = (APropertyNode) ReportFactory.createNode(parent, s, -2);
-				n.setEditable(editable);
-			}
+			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
+			if (fs != null && fs.length > 0)
+				createTemplateReference(p, s.getLocation(), -1, set, editable, fs[0]);
+			else
+				createTemplateReference(p, s.getLocation(), -1, set, editable, file);
+		}
+
+		for (JRStyle s : jrst.getStyles()) {
+			APropertyNode n = (APropertyNode) ReportFactory.createNode(parent, s, -2);
+			n.setEditable(editable);
 		}
 	}
 
