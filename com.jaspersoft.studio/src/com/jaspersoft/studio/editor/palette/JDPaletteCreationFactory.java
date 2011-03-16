@@ -29,7 +29,7 @@ import org.eclipse.gef.requests.CreationFactory;
 public class JDPaletteCreationFactory implements CreationFactory {
 
 	/** The template. */
-	private Class<?> template;
+	private Object template;
 
 	/**
 	 * Instantiates a new jD palette creation factory.
@@ -37,7 +37,7 @@ public class JDPaletteCreationFactory implements CreationFactory {
 	 * @param t
 	 *          the t
 	 */
-	public JDPaletteCreationFactory(Class<?> t) {
+	public JDPaletteCreationFactory(Object t) {
 		this.template = t;
 	}
 
@@ -50,7 +50,8 @@ public class JDPaletteCreationFactory implements CreationFactory {
 		if (template == null)
 			return null;
 		try {
-			return template.newInstance();
+			if (template instanceof Class)
+				return ((Class<?>) template).newInstance();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 			return null;
@@ -58,6 +59,7 @@ public class JDPaletteCreationFactory implements CreationFactory {
 			e.printStackTrace();
 			return null;
 		}
+		return template;
 	}
 
 	/*
