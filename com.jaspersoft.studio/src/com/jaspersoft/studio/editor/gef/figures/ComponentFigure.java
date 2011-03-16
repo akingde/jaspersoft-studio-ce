@@ -33,7 +33,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
-import com.jaspersoft.studio.repository.RepositoryManager;
 
 /**
  * The Class GenericFigure.
@@ -41,11 +40,11 @@ import com.jaspersoft.studio.repository.RepositoryManager;
 public class ComponentFigure extends RectangleFigure {
 
 	/** The jr element. */
-	private JRElement jrElement;
+	protected JRElement jrElement;
 
 	/** The draw visitor. */
-	private DrawVisitor drawVisitor;
-	private FileResolver fileRezolver;
+	protected DrawVisitor drawVisitor;
+	protected FileResolver fileRezolver;
 
 	/**
 	 * Instantiates a new generic figure.
@@ -92,7 +91,7 @@ public class ComponentFigure extends RectangleFigure {
 				}
 				draw(drawVisitor, jrElement);
 				if (fileRezolver != null) {
-					// JRResourcesUtil.re
+					// JRResourcesUtil.rese
 				}
 			} else
 				graphics2d.drawRect(b.x, b.y, b.width, b.height);
