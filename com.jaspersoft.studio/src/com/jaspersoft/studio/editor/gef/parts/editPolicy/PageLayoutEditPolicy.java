@@ -46,7 +46,6 @@ import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGuidebleElement;
-import com.jaspersoft.studio.model.MGraphicElement;
 
 /**
  * The Class PageLayoutEditPolicy.
@@ -113,10 +112,10 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 			bounds = ((HandleBounds) figure).getHandleBounds();
 			// if (request.getResizeDirection() == PositionConstants.NORTH
 			// || request.getResizeDirection() == PositionConstants.SOUTH)
-			bounds.width -= 1;
+			bounds.width--;
 			// if (request.getResizeDirection() == PositionConstants.EAST
 			// || request.getResizeDirection() == PositionConstants.WEST)
-			bounds.height -= 1;
+			bounds.height--;
 		}
 		Rectangle rect = new PrecisionRectangle(bounds);
 		Rectangle original = rect.getCopy();
@@ -161,9 +160,9 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 				action.dropInto(getHost().getModel(), constraint.getCopy(), -1);
 				action.run();
 				return action.getCommand();
-			} else if (request.getNewObject() instanceof MGraphicElement) {
+			} else if (request.getNewObject() instanceof ANode) {
 				return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(),
-						(MGraphicElement) request.getNewObject(), constraint.getCopy(), -1);
+						(ANode) request.getNewObject(), constraint.getCopy(), -1);
 			}
 		}
 
