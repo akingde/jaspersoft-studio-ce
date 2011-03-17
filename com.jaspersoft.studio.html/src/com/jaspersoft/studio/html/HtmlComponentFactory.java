@@ -14,9 +14,9 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
-import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.html.command.CreateHtmlCommand;
+import com.jaspersoft.studio.html.figure.HtmlFigure;
 import com.jaspersoft.studio.html.model.MHtml;
 import com.jaspersoft.studio.html.parts.HtmlFigureEditPart;
 import com.jaspersoft.studio.model.ANode;
@@ -39,7 +39,7 @@ public class HtmlComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MHtml)
-			return new FrameFigure();
+			return new HtmlFigure();
 		return null;
 	}
 
