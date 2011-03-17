@@ -29,9 +29,12 @@ import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.parts.ScrollableThumbnail;
 import org.eclipse.draw2d.parts.Thumbnail;
 import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.RootEditPart;
+import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -54,30 +57,19 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageBook;
 
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
-import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
-import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
-import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -88,7 +80,7 @@ import com.jaspersoft.studio.model.ANode;
 public class JDReportOutlineView extends ContentOutlinePage implements IAdaptable {
 
 	/** The editor. */
-	private AbstractVisualEditor editor;
+	protected IGraphicalEditor editor;
 
 	/** The page book. */
 	private PageBook pageBook;
@@ -122,7 +114,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * @param viewer
 	 *          the viewer
 	 */
-	public JDReportOutlineView(AbstractVisualEditor editor, EditPartViewer viewer) {
+	public JDReportOutlineView(IGraphicalEditor editor, EditPartViewer viewer) {
 		super(viewer);
 		this.editor = editor;
 	}
@@ -154,41 +146,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		id = ActionFactory.DELETE.getId();
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 
-		id = DeleteGroupReportAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateFieldAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateSortFieldAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateVariableAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateScriptletAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateParameterAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateGroupAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateDatasetAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateStyleAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateConditionalStyleAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateStyleTemplateAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-
-		id = CreateBandAction.ID;
-		bars.setGlobalActionHandler(id, registry.getAction(id));
+		initActions(registry, bars);
 
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
 		List<String> lst = m.getActionIDs();
@@ -203,25 +161,47 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		bars.updateActionBars();
 	}
 
+	protected void initActions(ActionRegistry registry, IActionBars bars) {
+
+	}
+
+	protected ContextMenuProvider getMenuContentProvider() {
+		ContextMenuProvider provider = new AppContextMenuProvider(getViewer(), editor.getActionRegistry());
+		return provider;
+	}
+
 	/**
 	 * Configure outline viewer.
 	 */
 	protected void configureOutlineViewer() {
 		getViewer().setEditDomain(editor.getEditDomain());
-		getViewer().setEditPartFactory(new OutlineTreeEditPartFactory());
-		ContextMenuProvider provider = new AppContextMenuProvider(getViewer(), editor.getActionRegistry());
+		getViewer().setEditPartFactory(getEditPartFactory());
+		ContextMenuProvider provider = getMenuContentProvider();
 		getViewer().setContextMenu(provider);
 
 		getViewer().addDropTargetListener((TransferDropTargetListener) new TemplateTransferDropTargetListener(getViewer()) {
 			@Override
 			protected CreationFactory getFactory(Object template) {
-				return new JDPaletteCreationFactory((Class<?>) template);
+				return new JDPaletteCreationFactory(template);
+			}
+		});
+		getViewer().addDragSourceListener(new TemplateTransferDragSourceListener(getViewer()) {
+			@Override
+			protected Object getTemplate() {
+				Object obj = super.getTemplate();
+				if (obj == null) {
+					List<?> selection = getViewer().getSelectedEditParts();
+					if (selection.size() == 1) {
+						EditPart editpart = (EditPart) getViewer().getSelectedEditParts().get(0);
+						obj = editpart.getModel();
+					}
+				}
+				return obj;
 			}
 		});
 
 		IPageSite site = getSite();
-		site.registerContextMenu("com.jaspersoft.studio.outline.contextmenu", //$NON-NLS-1$
-				provider, site.getSelectionProvider());
+		site.registerContextMenu(provider.getId(), provider, site.getSelectionProvider());
 
 		IToolBarManager tbm = site.getActionBars().getToolBarManager();
 		showOutlineAction = new Action() {
@@ -281,7 +261,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 							if (obj instanceof ATreeEditPart) {
 								ATreeEditPart atep = (ATreeEditPart) obj;
 								if (atep.getModel() instanceof ANode) {
-									EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), editor, (ANode) atep.getModel());
+									EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,
+											(ANode) atep.getModel());
 								}
 							}
 						}
@@ -305,6 +286,19 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	}
 
 	private EditorContributor editorContributor;
+
+	private EditPartFactory editPartFactory;
+
+	public EditPartFactory getEditPartFactory() {
+		if (editPartFactory == null)
+			editPartFactory = new OutlineTreeEditPartFactory();
+		return editPartFactory;
+	}
+
+	public void setEditPartFactory(EditPartFactory editPartFactory) {
+		this.editPartFactory = editPartFactory;
+		getViewer().setEditPartFactory(getEditPartFactory());
+	}
 
 	/*
 	 * (non-Javadoc)

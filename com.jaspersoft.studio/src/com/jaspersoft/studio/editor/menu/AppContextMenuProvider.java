@@ -61,6 +61,10 @@ import com.jaspersoft.studio.messages.Messages;
  */
 public class AppContextMenuProvider extends ContextMenuProvider {
 
+	public String getID() {
+		return "com.jaspersoft.studio.outline.contextmenu";
+	}
+
 	/** The action registry. */
 	private ActionRegistry actionRegistry;
 
@@ -195,7 +199,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 
 		// Alignment Actions
-		submenu = new MenuManager(Messages.AppContextMenuProvider_align_components, InternalImages.DESC_HORZ_ALIGN_LEFT, GEFActionConstants.ALIGN_LEFT);
+		submenu = new MenuManager(Messages.AppContextMenuProvider_align_components, InternalImages.DESC_HORZ_ALIGN_LEFT,
+				GEFActionConstants.ALIGN_LEFT);
 
 		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_LEFT);
 		if (action.isEnabled())
@@ -259,7 +264,8 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 		menu.add(submenu);
 
 		// match size Actions
-		submenu = new MenuManager(Messages.AppContextMenuProvider_size_components, InternalImages.DESC_MATCH_WIDTH, GEFActionConstants.MATCH_WIDTH);
+		submenu = new MenuManager(Messages.AppContextMenuProvider_size_components, InternalImages.DESC_MATCH_WIDTH,
+				GEFActionConstants.MATCH_WIDTH);
 
 		action = getActionRegistry().getAction(GEFActionConstants.MATCH_WIDTH);
 		if (action.isEnabled())
