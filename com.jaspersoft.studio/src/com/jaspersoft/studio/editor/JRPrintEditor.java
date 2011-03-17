@@ -23,18 +23,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
@@ -231,6 +236,43 @@ public class JRPrintEditor extends EditorPart {
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		if (input instanceof FileStoreEditorInput) {
+			try {
+				FileStoreEditorInput fsei = (FileStoreEditorInput) input;
+
+				IPath location = new Path(fsei.getURI().getPath());
+
+				// Create a new temporary project object and open it.
+				IProject project = null;
+				for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+					if (prj.isOpen()) {
+						if (project == null)
+							project = prj;
+						else
+
+						if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
+							project = prj;
+
+					}
+				}
+				if (project == null)
+					ResourcesPlugin.getWorkspace().getRoot().getProject("JSSPROJECT");
+				// Create a project if one doesn't exist and open it.
+				if (!project.exists())
+					project.create(null);
+				if (!project.isOpen())
+					project.open(null);
+
+				IFile file = project.getFile(location.lastSegment());
+				file.createLink(location, IResource.REPLACE, null);
+
+				input = new FileEditorInput(file);
+			} catch (CoreException e) {
+				throw new PartInitException(e.getMessage(), e);
+			}
+			init(site, input);
+			return;
+		}
 		setSite(site);
 		setPartName(input.getName());
 		setInput(input);
