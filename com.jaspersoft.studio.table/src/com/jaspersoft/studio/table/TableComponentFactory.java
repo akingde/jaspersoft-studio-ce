@@ -422,9 +422,10 @@ public class TableComponentFactory implements IComponentFactory {
 			if (cell != null) {
 				ModelVisitor mv = new ModelVisitor(parent) {
 					@Override
-					public void visit(INode n) {
+					public boolean visit(INode n) {
 						if (n instanceof MCell && ((MCell) n).getCell() == cell)
 							setObject(n);
+						return true;
 					}
 				};
 				MCell mcell = (MCell) mv.getObject();
