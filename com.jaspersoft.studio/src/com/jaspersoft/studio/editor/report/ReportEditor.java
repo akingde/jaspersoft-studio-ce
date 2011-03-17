@@ -24,13 +24,32 @@ import java.util.List;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
+import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
+import org.eclipse.gef.ui.parts.TreeViewer;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.ui.IActionBars;
 
+import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
+import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
+import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
+import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
+import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 
@@ -91,4 +110,107 @@ public class ReportEditor extends AbstractVisualEditor {
 		return null;
 	}
 
+	protected JDReportOutlineView getOutlineView() {
+		if (outlinePage == null) {
+			TreeViewer viewer = new TreeViewer();
+			outlinePage = new JDReportOutlineView(this, viewer) {
+				protected void initActions(ActionRegistry registry, IActionBars bars) {
+					String id = DeleteGroupReportAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateFieldAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateSortFieldAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateVariableAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateScriptletAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateParameterAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateGroupAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateDatasetAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateStyleAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateConditionalStyleAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateStyleTemplateAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = CreateBandAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+				}
+			};
+		}
+		return outlinePage;
+	}
+
+	protected void createEditorActions(ActionRegistry registry) {
+		IAction action = new CreateFieldAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateFieldAction.ID);
+
+		action = new CreateSortFieldAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateSortFieldAction.ID);
+
+		action = new CreateVariableAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateVariableAction.ID);
+
+		action = new CreateScriptletAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateScriptletAction.ID);
+
+		action = new CreateParameterAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateParameterAction.ID);
+
+		action = new CreateGroupAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateGroupAction.ID);
+
+		action = new CreateDatasetAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateDatasetAction.ID);
+
+		action = new CreateStyleAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateStyleAction.ID);
+
+		action = new CreateConditionalStyleAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateConditionalStyleAction.ID);
+
+		action = new CreateStyleTemplateAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateStyleTemplateAction.ID);
+
+		action = new CreateBandAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateBandAction.ID);
+
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		List<Action> lst = m.getActions(this);
+		for (Action act : lst) {
+			action = act;
+			registry.registerAction(action);
+			getSelectionActions().add(act.getId());
+		}
+
+		action = new DeleteGroupReportAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(DeleteGroupReportAction.ID);
+	}
 }

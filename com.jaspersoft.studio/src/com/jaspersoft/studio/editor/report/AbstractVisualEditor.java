@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.editor.report;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
@@ -61,15 +59,12 @@ import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.gef.ui.parts.TreeViewer;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -79,8 +74,8 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.IGraphicalEditor;
 import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.action.align.Align2BorderAction;
 import com.jaspersoft.studio.editor.action.copy.CopyAction;
@@ -96,23 +91,10 @@ import com.jaspersoft.studio.editor.action.snap.ShowGridAction;
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGuidesAction;
-import com.jaspersoft.studio.editor.dnd.TextTransferDropTargetListener;
 import com.jaspersoft.studio.editor.gef.rulers.component.JDRulerComposite;
 import com.jaspersoft.studio.editor.java2d.J2DGraphicalEditorWithFlyoutPalette;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
-import com.jaspersoft.studio.editor.outline.actions.CreateBandAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateConditionalStyleAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateDatasetAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateFieldAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateGroupAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateParameterAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateScriptletAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateSortFieldAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
-import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
-import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.model.INode;
@@ -125,7 +107,8 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable {
+public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable,
+		IGraphicalEditor {
 	private Image partImage = JaspersoftStudioPlugin.getImage(MReport.getIconDescriptor().getIcon16());
 
 	public Image getPartImage() {
@@ -139,17 +122,15 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		setEditDomain(new DefaultEditDomain(this));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#getEditDomain()
-	 */
 	@Override
 	public DefaultEditDomain getEditDomain() {
 		return super.getEditDomain();
 	}
 
-	/** The model. */
+	public void setPartImage(Image partImage) {
+		this.partImage = partImage;
+	}
+
 	private INode model;
 
 	/**
@@ -165,10 +146,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		getGraphicalViewer().setContents(model);
 		if (outlinePage != null)
 			outlinePage.setContents(model);
-	}
-
-	public void setPartImage(Image partImage) {
-		this.partImage = partImage;
 	}
 
 	/**
@@ -325,7 +302,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
 
-		graphicalViewer.setProperty("FILERESOLVER", fileResolver); //$NON-NLS-1$
+		graphicalViewer.setProperty("FILERESOLVER", fileResolver);
 	}
 
 	/*
@@ -340,7 +317,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	}
 
 	/** The outline page. */
-	private JDReportOutlineView outlinePage;
+	protected JDReportOutlineView outlinePage;
 	private EditorContributor editorContributor;
 
 	/*
@@ -353,11 +330,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		if (type == ZoomManager.class)
 			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
 		if (type == IContentOutlinePage.class) {
-			if (outlinePage == null) {
-				TreeViewer viewer = new TreeViewer();
-				outlinePage = new JDReportOutlineView(this, viewer);
-			}
-			return outlinePage;
+			return getOutlineView();
 		}
 		if (type == EditorContributor.class) {
 			if (editorContributor == null)
@@ -365,6 +338,14 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 			return editorContributor;
 		}
 		return super.getAdapter(type);
+	}
+
+	protected JDReportOutlineView getOutlineView() {
+		if (outlinePage == null) {
+			TreeViewer viewer = new TreeViewer();
+			outlinePage = new JDReportOutlineView(this, viewer);
+		}
+		return outlinePage;
 	}
 
 	/*
@@ -385,16 +366,18 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	@Override
 	protected void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
+		initializeEditor();
+	}
+
+	protected void initializeEditor() {
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		graphicalViewer.addDropTargetListener(new TemplateTransferDropTargetListener(graphicalViewer) {
 			@Override
 			protected CreationFactory getFactory(Object template) {
-				return new JDPaletteCreationFactory((Class<?>) template);
+				return new JDPaletteCreationFactory(template);
 			}
-		});
-		// graphicalViewer.addDropTargetListener((TransferDropTargetListener) new TextTransferDropTargetListener(
-		// graphicalViewer, TextTransfer.getInstance()));
 
+		});
 	}
 
 	/*
@@ -487,61 +470,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 		// create actions
-		action = new CreateFieldAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateFieldAction.ID);
-
-		action = new CreateSortFieldAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateSortFieldAction.ID);
-
-		action = new CreateVariableAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateVariableAction.ID);
-
-		action = new CreateScriptletAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateScriptletAction.ID);
-
-		action = new CreateParameterAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateParameterAction.ID);
-
-		action = new CreateGroupAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateGroupAction.ID);
-
-		action = new CreateDatasetAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateDatasetAction.ID);
-
-		action = new CreateStyleAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateStyleAction.ID);
-
-		action = new CreateConditionalStyleAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateConditionalStyleAction.ID);
-
-		action = new CreateStyleTemplateAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateStyleTemplateAction.ID);
-
-		action = new CreateBandAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(CreateBandAction.ID);
-
-		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
-		List<Action> lst = m.getActions(this);
-		for (Action act : lst) {
-			action = act;
-			registry.registerAction(action);
-			getSelectionActions().add(act.getId());
-		}
-
-		action = new DeleteGroupReportAction(this);
-		registry.registerAction(action);
-		getSelectionActions().add(DeleteGroupReportAction.ID);
+		createEditorActions(registry);
 
 		// ------------
 		action = new DirectEditAction(this);
@@ -648,6 +577,10 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		action = new ShowPropertyViewAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
+
+	}
+
+	protected void createEditorActions(ActionRegistry registry) {
 
 	}
 }
