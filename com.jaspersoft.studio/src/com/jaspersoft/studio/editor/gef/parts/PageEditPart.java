@@ -282,9 +282,10 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		new ModelVisitor(getPage()) {
 
 			@Override
-			public void visit(INode n) {
+			public boolean visit(INode n) {
 				if (n instanceof IGraphicElement && n.getValue() != null)
 					list.add(n);
+				return true;
 			}
 		};
 		return list;
