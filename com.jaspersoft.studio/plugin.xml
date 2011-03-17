@@ -73,6 +73,7 @@
       </editor>
       <editor
             class="com.jaspersoft.studio.editor.JRtxEditor"
+            contributorClass="com.jaspersoft.studio.editor.style.JrtxEditorContributor"
             default="false"
             extensions="jrtx"
             icon="icons/resources/jasperreports_jrtx.png"
