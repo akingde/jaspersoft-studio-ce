@@ -25,8 +25,6 @@ import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import net.sf.jasperreports.engine.util.FileResolver;
 
-import org.eclipse.draw2d.XYLayout;
-
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 
 public class CellFigure extends FrameFigure {
@@ -34,7 +32,6 @@ public class CellFigure extends FrameFigure {
 
 	public CellFigure() {
 		super();
-		setLayoutManager(new XYLayout());
 	}
 
 	public void setJRElement(JRDesignCellContents jrElement, DrawVisitor drawVisitor, FileResolver fileResolver) {

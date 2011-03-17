@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.XYLayout;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 
@@ -37,7 +36,6 @@ public class CellFigure extends FrameFigure {
 
 	public CellFigure() {
 		super();
-		setLayoutManager(new XYLayout());
 		setBorder(new LineBorder(1));
 	}
 
