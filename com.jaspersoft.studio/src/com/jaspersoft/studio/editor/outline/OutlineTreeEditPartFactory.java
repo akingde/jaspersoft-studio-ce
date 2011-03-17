@@ -109,6 +109,7 @@ import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.style.MStyles;
 import com.jaspersoft.studio.model.style.command.CreateConditionalStyleCommand;
+import com.jaspersoft.studio.model.style.command.CreateStyleCommand;
 import com.jaspersoft.studio.model.style.command.CreateStyleTemplateCommand;
 import com.jaspersoft.studio.model.style.command.DeleteConditionalStyleCommand;
 import com.jaspersoft.studio.model.style.command.DeleteStyleCommand;
@@ -367,11 +368,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		if (child instanceof MField) {
 			if (parent instanceof MFields)
 				return new CreateFieldCommand((MFields) parent, (MField) child, newIndex);
-			else if (parent instanceof MBand || parent instanceof MGraphicElement) {
+			else if (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport) {
 				MField mf = (MField) child;
 				JRDesignField f = (JRDesignField) mf.getValue();
 				if (f != null)
-					child = createTextField("$F{" + f.getName() + "}", f.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
+					child = createTextField("$F{" + f.getName() + "}", f.getValueClassName());//$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} else if (child instanceof MParameterSystem) {
 			if (child instanceof MParameter) {
@@ -380,25 +381,27 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					if (p == null || !p.isSystemDefined())
 						return new CreateParameterCommand((MParameters) parent, (MParameter) child, newIndex);
 				}
-			} else if (parent instanceof MBand || parent instanceof MGraphicElement) {
+			} else if (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport) {
 				MParameterSystem mf = (MParameterSystem) child;
 				JRDesignParameter f = (JRDesignParameter) mf.getValue();
 				if (f != null)
-					child = createTextField("$P{" + f.getName() + "}", f.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
+					child = createTextField("$P{" + f.getName() + "}", f.getValueClassName());//$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} else if (child instanceof MVariableSystem) {
 			if (parent instanceof MVariables) {
 				JRDesignVariable p = (JRDesignVariable) child.getValue();
 				if (p == null || !p.isSystemDefined())
 					return new CreateVariableCommand((MVariables) parent, (MVariable) child, newIndex);
-			} else if (parent instanceof MBand || parent instanceof MGraphicElement) {
+			} else if (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport) {
 				MVariableSystem mf = (MVariableSystem) child;
 				JRDesignVariable f = (JRDesignVariable) mf.getValue();
 				if (f != null)
-					child = createTextField("$V{" + f.getName() + "}", f.getValueClassName()); //$NON-NLS-1$ //$NON-NLS-2$
+					child = createTextField("$V{" + f.getName() + "}", f.getValueClassName());//$NON-NLS-1$ //$NON-NLS-2$
 			}
-		} else if (child instanceof MStyle && child.getValue() != null && !(parent instanceof IContainer)
-				&& parent instanceof MGraphicElement) {
+		} else if (child instanceof MStyle) {
+			if (parent instanceof MStyles)
+				return new CreateStyleCommand((MStyles) parent, (MStyle) child, newIndex);
+		} else if (child.getValue() != null && !(parent instanceof IContainer) && parent instanceof MGraphicElement) {
 			SetValueCommand cmd = new SetValueCommand();
 			cmd.setTarget((IPropertySource) parent);
 			cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
