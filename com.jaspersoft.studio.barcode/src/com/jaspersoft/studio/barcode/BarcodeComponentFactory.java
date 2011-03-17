@@ -40,7 +40,6 @@ import net.sf.jasperreports.components.barcode4j.USPSIntelligentMailComponent;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -49,6 +48,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.barcode.command.CreateBarcodeCommand;
+import com.jaspersoft.studio.barcode.figure.BarcodeFigure;
 import com.jaspersoft.studio.barcode.model.MBarcode;
 import com.jaspersoft.studio.barcode.model.MBarcodeBarbecue;
 import com.jaspersoft.studio.barcode.model.barcode4j.MBarcode4j;
@@ -66,7 +66,6 @@ import com.jaspersoft.studio.barcode.model.barcode4j.MRoyalMail;
 import com.jaspersoft.studio.barcode.model.barcode4j.MUPCA;
 import com.jaspersoft.studio.barcode.model.barcode4j.MUPCE;
 import com.jaspersoft.studio.barcode.model.barcode4j.MUSPSIntelligent;
-import com.jaspersoft.studio.editor.gef.figures.ComponentFigure;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -116,7 +115,7 @@ public class BarcodeComponentFactory implements IComponentFactory {
 
 	public IFigure createFigure(ANode node) {
 		if (node instanceof MBarcodeBarbecue || node instanceof MBarcode4j)
-			return new ComponentFigure();
+			return new BarcodeFigure();
 		return null;
 	}
 
