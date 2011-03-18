@@ -24,11 +24,8 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
-import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
@@ -63,6 +60,7 @@ import com.jaspersoft.studio.model.band.command.DeleteBandDetailCommand;
 import com.jaspersoft.studio.model.band.command.DeleteBandGroupFooterCommand;
 import com.jaspersoft.studio.model.band.command.DeleteBandGroupHeaderCommand;
 import com.jaspersoft.studio.model.band.command.ReorderBandCommand;
+import com.jaspersoft.studio.model.command.CreateE4ObjectCommand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.command.CreateElementGroupCommand;
 import com.jaspersoft.studio.model.command.DeleteElementCommand;
@@ -120,7 +118,6 @@ import com.jaspersoft.studio.model.style.command.ReorderStyleCommand;
 import com.jaspersoft.studio.model.style.command.ReorderStyleTemplateCommand;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.model.subreport.command.CreateSubreportCommand;
-import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.model.textfield.MPageXofY;
 import com.jaspersoft.studio.model.textfield.command.CreatePageXofYCommand;
 import com.jaspersoft.studio.model.variable.MVariable;
@@ -335,18 +332,6 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		return null;
 	}
 
-	private static ANode createTextField(String txtExp, String classExp) {
-		ANode child = new MTextField();
-		JRDesignTextField tf = new JRDesignTextField();
-		child.setValue(tf);
-
-		JRDesignExpression jre = new JRDesignExpression();
-		jre.setValueClassName(classExp);
-		jre.setText(txtExp);
-		tf.setExpression(jre);
-		return child;
-	}
-
 	/**
 	 * Gets the creates the command.
 	 * 
@@ -368,11 +353,9 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		if (child instanceof MField) {
 			if (parent instanceof MFields)
 				return new CreateFieldCommand((MFields) parent, (MField) child, newIndex);
-			else if (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport) {
-				MField mf = (MField) child;
-				JRDesignField f = (JRDesignField) mf.getValue();
-				if (f != null)
-					child = createTextField("$F{" + f.getName() + "}", f.getValueClassName());//$NON-NLS-1$ //$NON-NLS-2$
+			else if (child.getValue() != null
+					&& (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport)) {
+				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
 		} else if (child instanceof MParameterSystem) {
 			if (child instanceof MParameter) {
@@ -381,22 +364,18 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					if (p == null || !p.isSystemDefined())
 						return new CreateParameterCommand((MParameters) parent, (MParameter) child, newIndex);
 				}
-			} else if (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport) {
-				MParameterSystem mf = (MParameterSystem) child;
-				JRDesignParameter f = (JRDesignParameter) mf.getValue();
-				if (f != null)
-					child = createTextField("$P{" + f.getName() + "}", f.getValueClassName());//$NON-NLS-1$ //$NON-NLS-2$
+			} else if (child.getValue() != null
+					&& (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport)) {
+				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
 		} else if (child instanceof MVariableSystem) {
 			if (parent instanceof MVariables) {
 				JRDesignVariable p = (JRDesignVariable) child.getValue();
 				if (p == null || !p.isSystemDefined())
 					return new CreateVariableCommand((MVariables) parent, (MVariable) child, newIndex);
-			} else if (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport) {
-				MVariableSystem mf = (MVariableSystem) child;
-				JRDesignVariable f = (JRDesignVariable) mf.getValue();
-				if (f != null)
-					child = createTextField("$V{" + f.getName() + "}", f.getValueClassName());//$NON-NLS-1$ //$NON-NLS-2$
+			} else if (child.getValue() != null
+					&& (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport)) {
+				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
 		} else if (child instanceof MStyle) {
 			if (parent instanceof MStyles)

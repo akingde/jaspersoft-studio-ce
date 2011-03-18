@@ -61,6 +61,10 @@ public class CreateElementCommand extends Command {
 	/** The index. */
 	protected int index;
 
+	protected CreateElementCommand() {
+		super();
+	}
+
 	/**
 	 * Instantiates a new creates the element command.
 	 * 
@@ -159,7 +163,7 @@ public class CreateElementCommand extends Command {
 	 *          the position
 	 * @return the a node
 	 */
-	protected ANode fixPosition(ANode destNode, IGuidebleElement srcNode, Rectangle position) {
+	protected ANode fixPosition(ANode destNode, ANode srcNode, Rectangle position) {
 		// calculate position, fix position relative to parent
 		MBand band = ModelUtils.getBand4Point(destNode, new Point(position.x, position.y));
 		// set proposed bounds
