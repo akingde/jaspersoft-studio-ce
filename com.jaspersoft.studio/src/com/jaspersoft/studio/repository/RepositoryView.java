@@ -51,17 +51,30 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
+import com.jaspersoft.studio.repository.actions.DuplicateDataAdapterAction;
 import com.jaspersoft.studio.repository.actions.CreateDataSourceAction;
+import com.jaspersoft.studio.repository.actions.CreateDataAdapterAction;
+import com.jaspersoft.studio.repository.actions.DeleteDataAdapterAction;
 import com.jaspersoft.studio.repository.actions.DeleteDataSourceAction;
+import com.jaspersoft.studio.repository.actions.EditDataAdapterAction;
 import com.jaspersoft.studio.repository.actions.EditDataSourceAction;
 
 public class RepositoryView extends ViewPart {
+	public RepositoryView() {
+	}
 
 	private TreeViewer treeViewer;
+	// Actions for datasources
 	private Action deleteItemAction;
 	// private Action selectAllAction;
 	private Action addItemAction;
 	private Action editItemAction;
+	
+	// Actions for data adapters
+	private Action createDataAdapterItemAction;
+	private Action editDataAdapterItemAction;
+	private Action deleteDataAdapterItemAction;
+	private Action duplicateDataAdapterItemAction;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -93,7 +106,7 @@ public class RepositoryView extends ViewPart {
 		hookGlobalActions();
 
 		// Restore state from the previous session.
-		restoreState();
+		restoreState();		
 	}
 
 	private IMemento memento;
@@ -151,11 +164,18 @@ public class RepositoryView extends ViewPart {
 	}
 
 	public void createActions() {
+		
+		// datasources actions
 		addItemAction = new CreateDataSourceAction(treeViewer);
 		editItemAction = new EditDataSourceAction(treeViewer);
-
 		deleteItemAction = new DeleteDataSourceAction(treeViewer);
 
+		// data adapters actions
+		createDataAdapterItemAction = new CreateDataAdapterAction(treeViewer);
+		editDataAdapterItemAction = new EditDataAdapterAction(treeViewer);
+		deleteDataAdapterItemAction = new DeleteDataAdapterAction(treeViewer);
+		duplicateDataAdapterItemAction = new DuplicateDataAdapterAction(treeViewer);
+		
 		// selectAllAction = new Action("Select All") {
 		// public void run() {
 		// ISelection s = treeViewer.getSelection();
@@ -176,6 +196,7 @@ public class RepositoryView extends ViewPart {
 		IStructuredSelection sel = (IStructuredSelection) treeViewer.getSelection();
 		deleteItemAction.setEnabled(sel.size() > 0);
 		editItemAction.setEnabled(sel.size() > 0);
+		editDataAdapterItemAction.setEnabled(sel.size() > 0);
 	}
 
 	/**
@@ -213,14 +234,27 @@ public class RepositoryView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager mgr) {
+		
+		// datasources actions
 		if (addItemAction.isEnabled())
 			mgr.add(addItemAction);
 		if (editItemAction.isEnabled())
 			mgr.add(editItemAction);
+		
+	// data adapters actions
+		if (createDataAdapterItemAction.isEnabled())
+			mgr.add(createDataAdapterItemAction);
+		if (editDataAdapterItemAction.isEnabled())
+			mgr.add(editDataAdapterItemAction);
+		if (duplicateDataAdapterItemAction.isEnabled())
+			mgr.add(duplicateDataAdapterItemAction);
+		
 		mgr.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		mgr.add(new Separator());
 		if (deleteItemAction.isEnabled())
 			mgr.add(deleteItemAction);
+		if (deleteDataAdapterItemAction.isEnabled())
+			mgr.add(deleteDataAdapterItemAction);
 		// mgr.add(new Separator());
 		// mgr.add(selectAllAction);
 	}

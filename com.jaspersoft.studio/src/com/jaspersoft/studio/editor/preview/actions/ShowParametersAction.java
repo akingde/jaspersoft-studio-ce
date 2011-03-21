@@ -38,7 +38,7 @@ public class ShowParametersAction extends Action {
 		setText(Messages.ShowParametersAction_show_input_parameters);
 		setDescription(Messages.ShowParametersAction_description);
 		setToolTipText(Messages.ShowParametersAction_tooltip);
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(MParameter.getIconDescriptor().getIcon16Path())); //$NON-NLS-1$
+		setImageDescriptor(MParameter.getIconDescriptor().getIcon16()); //$NON-NLS-1$
 		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/parameters-16d.png")); //$NON-NLS-1$
 	}
 

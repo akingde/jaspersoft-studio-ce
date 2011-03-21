@@ -41,5 +41,14 @@ public interface DataAdapterEditor {
 	 *         one.
 	 */
 	public Composite getComposite(Composite parent, int style);
-
+	
+	/**
+	 * This method returns the help context ID for the composite returned by getComposite()
+	 * 
+	 * @return String context ID, i.e:
+	 * public String getHelpContextId() {
+	 *   return composite.getHelpContextId();
+	 * }
+	 */
+	public String getHelpContextId();
 }

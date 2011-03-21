@@ -19,9 +19,28 @@
  */
 package com.jaspersoft.studio.data;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeSupport;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
+
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.repository.RepositoryManager;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -30,9 +49,13 @@ import java.util.List;
  */
 public class DataAdapterManager {
 
-	private static List<DataAdapterFactory> dataAdapterFactories = new ArrayList<DataAdapterFactory>();
-	
+	private static List<DataAdapterFactory> dataAdapterFactories =  new ArrayList<DataAdapterFactory>();
 	private static List<DataAdapter> dataAdapters = new ArrayList<DataAdapter>();
+	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(new RepositoryManager());
+	
+	/*******************************
+	 ** Data Adapter Factories Part **
+	 *******************************/
 	
 	/**
 	 * Add a DataAdapterFactory to the list of DataAdapterFactories in JaspersoftStudio.
@@ -46,32 +69,219 @@ public class DataAdapterManager {
 		{
 			dataAdapterFactories.add(factory);
 		}
-		
 	}
 	
+	/**
+	 * Remove the DataAdapterFactory to the list of DataAdapterFactories in JaspersoftStudio.
+	 * 
+	 * @param factory
+	 */
 	public static void removeDataAdapterFactory(DataAdapterFactory factory)
 	{
-		
-		
+		if (dataAdapterFactories.contains(factory))
+		{
+			dataAdapterFactories.remove(factory);
+		}
 	}
 	
-	public static List<DataAdapterFactory> getDataAdapterFactories()
+	/**
+	 * Return a copy of the list of DataAdapterFactories in JaspersoftStudio.
+	 */
+	public static synchronized List<DataAdapterFactory> getDataAdapterFactories()
 	{
-		return dataAdapterFactories;
+		List<DataAdapterFactory> listOfDataAdapterFactories = new ArrayList<DataAdapterFactory>();
+		listOfDataAdapterFactories.addAll(dataAdapterFactories);
+		return listOfDataAdapterFactories;
 	}
 	
-	
-	public static List<DataAdapter> loadDataAdapters()
-	{
-		// Load all the configured data adapters saved somewhere in JSS
-		return Collections.emptyList();
-	}
-	
-	public static void saveDataAdapter(DataAdapter da) throws Exception
-	{
-		// Save the data adapter configuration somewhere in JSS
-	}
-	
-	
+	/**
+	 * 
+	 * @param adapterClassName
+	 * @return
+	 */
+	public static DataAdapterFactory findFactoryByDataAdapterClass(String adapterClassName)
+	{	
+		if (adapterClassName == null) return null;
 		
+		for (DataAdapterFactory factory : dataAdapterFactories)
+		{
+			if (adapterClassName.equals(  factory.getDataAdapterClassName() ))
+			{
+				return factory;
+			}
+		}
+		return null; // No factory found for this dataAdpater..
+	}
+	
+	/***********************
+	 ** Data Adapters Part **
+	 ***********************/
+	
+	/**
+	 * Add a DataAdapter to the list of DataAdapters in JaspersoftStudio.
+	 * 
+	 * @param DataAdapter
+	 */
+	public static void addDataAdapter(DataAdapter adapter)
+	{
+		if (!dataAdapters.contains(adapter)) {
+			dataAdapters.add(adapter);
+			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, "DATAADAPTERS", null, adapter)); //$NON-NLS-1$
+			saveDataAdapters();
+		}
+	}
+
+	/**
+	 * Remove the DataAdapter to the list of DataAdapters in JaspersoftStudio.
+	 * 
+	 * @param DataAdapter
+	 */
+	public static void removeDataAdapter(DataAdapter adapter)
+	{
+		if (dataAdapters.contains(adapter)) {
+			dataAdapters.remove(adapter);
+			propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(adapter, "DATAADAPTERS", null, adapter)); //$NON-NLS-1$
+			saveDataAdapters();
+		}
+	}
+
+
+	/**
+	 * Return a copy of the list of DataAdapters in JaspersoftStudio.
+	 */
+	public static List<DataAdapter> getDataAdapters()
+	{
+		List<DataAdapter> listOfDataAdapters = new ArrayList<DataAdapter>();
+		listOfDataAdapters.addAll(dataAdapters);
+		return listOfDataAdapters;
+	}
+	
+	/**
+	 * Save a changed data adapter. The dataAdapter must be in the list
+	 * of data adapters. If not, the method will just return.
+	 */
+	public static void saveDataAdapter(DataAdapter dataAdapter)
+	{
+		if (!dataAdapters.contains(dataAdapter)) return;
+		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(dataAdapter, "DATAADAPTERS", null, dataAdapter)); //$NON-NLS-1$
+		saveDataAdapters();
+	}
+	
+	/**
+	 * Calling this method will force saving the list of adapters in the Eclipse preferences
+	 */
+	public static void saveDataAdapters()
+	{
+		Preferences prefs = new InstanceScope().getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+		
+		try {
+			StringBuffer xml = new StringBuffer();
+			xml.append("<dataAdapters>\n"); //$NON-NLS-1$
+			for (DataAdapter da : getDataAdapters()) {
+					xml.append( da.toXml());
+			}
+			xml.append("</dataAdapters>");
+			
+			prefs.put("dataAdapters", xml.toString() ); //$NON-NLS-1$ 
+      prefs.flush();
+			
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * Calling this method will force saving the list of adapters in the Eclipse preferences
+	 */
+	public static void loadDataAdapters()
+	{
+		// Clear up the list of data adapters...
+		dataAdapters.clear();
+		
+		Preferences prefs = new InstanceScope().getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+		
+		String xml = prefs.get("dataAdapters", null);
+		
+		if (xml == null) return;
+		
+		try {
+			
+			Document document = JRXmlUtils.parse( new InputSource(new StringReader(xml)) );
+			
+			NodeList adapterNodes = document.getDocumentElement().getElementsByTagName("dataAdapter");
+			
+			for (int i=0; i < adapterNodes.getLength(); ++i)
+			{
+				Node adapterNode = adapterNodes.item(i);
+				
+				//1. Find out the class of this data adapter...
+				String adapterClassName = adapterNode.getAttributes().getNamedItem("class").getNodeValue();
+				
+				DataAdapterFactory factory = findFactoryByDataAdapterClass(adapterClassName);
+				
+				if (factory == null)
+				{
+					// we should at least log a warning here....
+					JaspersoftStudioPlugin.getInstance().getLog().log(
+							 new Status(Status.WARNING,
+									 				JaspersoftStudioPlugin.getUniqueIdentifier(),
+									 				Status.OK,
+									 				"No DataAdapterFactory has been found for DataAdapterClass " + adapterClassName,
+									 				null
+									 				)
+					);
+					return;
+				}
+				
+				DataAdapter dataAdapter = factory.createDataAdapter();
+				
+				dataAdapter.setName(adapterNode.getAttributes().getNamedItem("name").getNodeValue());
+				Map<String, String> map = new HashMap<String, String>();
+				
+				// Find all the property nodes in the dataAdapter node
+				NodeList parameterNodes = adapterNode.getChildNodes();
+				
+				// For each node, load the parameter name and the parameter value
+				for (int j=0; j < parameterNodes.getLength(); ++j)
+				{
+					Node parameterNode = parameterNodes.item(j);
+					if (parameterNode.getNodeType() == Node.ELEMENT_NODE && "parameter".equals(parameterNode.getNodeName()))
+					{
+						String key = parameterNode.getAttributes().getNamedItem("name").getNodeValue();
+						String value = parameterNode.getTextContent();
+						map.put(key, value);
+					}
+				}
+				
+				dataAdapter.loadProperties(map);
+				dataAdapters.add(dataAdapter);
+			}
+			
+		} catch (JRException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Creates a copy of a data adapter looking for the right Factory.
+	 * 
+	 * A NullPointerException is rised is the dataAdapter is null or if
+	 * a suitable DataAdapterFactory is not found.
+	 * 
+	 * @param dataAdapter
+	 * @return
+	 */
+	public static DataAdapter cloneDataAdapter(DataAdapter dataAdapter) {
+		
+		DataAdapterFactory factory = findFactoryByDataAdapterClass(dataAdapter.getClass().getName());
+		DataAdapter da = factory.createDataAdapter();
+		da.loadProperties( dataAdapter.getProperties()  );
+		da.setName( dataAdapter.getName() );
+		return da; 
+	}
+
+	public static PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
 }

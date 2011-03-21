@@ -9,5 +9,14 @@
             primary="true">
       </toc>
    </extension>
+   
+   <extension
+         point="org.eclipse.help.contexts">
+    <contexts
+            file="context.xml"
+            plugin="com.jaspersoft.studio.doc">
+    </contexts>
+</extension>
+   
 
 </plugin>

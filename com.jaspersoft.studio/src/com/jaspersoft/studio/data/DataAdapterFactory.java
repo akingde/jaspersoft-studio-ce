@@ -33,7 +33,7 @@ public interface DataAdapterFactory {
     * Creates a new instance of IReportConnection
     * @return an instance of IReportConnection
     */
-   public DataAdapter createConnection();
+   public DataAdapter createDataAdapter();
 
    /**
     * This method returns the class name of the DataAdapter implementation.

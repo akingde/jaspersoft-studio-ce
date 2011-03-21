@@ -70,6 +70,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
@@ -93,12 +94,14 @@ public class RepositoryManager {
 
 	private static MRoot rootNode;
 	private static MDatasources datasources;
+	private static MDataAdapters MDataAdapters;
 	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(new RepositoryManager());
 
 	public static ANode getResources() {
 		if (rootNode == null) {
 			rootNode = new MRoot(null, null);
 			getDatasources(rootNode);
+			getMDataAdapters(rootNode);
 		}
 		return rootNode;
 	}
@@ -207,6 +210,15 @@ public class RepositoryManager {
 
 		}
 		return datasources;
+	}
+	
+	
+	
+	private static MDataAdapters getMDataAdapters(MRoot root) {
+		if (MDataAdapters == null) {
+			MDataAdapters = new MDataAdapters(root);
+		}
+		return MDataAdapters;
 	}
 
 	private static void fillProperties(Node n, AMDatasource m) {

@@ -50,20 +50,6 @@ public interface IIconDescriptor {
 	public String getToolTip();
 
 	/**
-	 * Gets the icon16 path.
-	 * 
-	 * @return the icon16 path
-	 */
-	public String getIcon16Path();
-
-	/**
-	 * Gets the icon32 path.
-	 * 
-	 * @return the icon32 path
-	 */
-	public String getIcon32Path();
-
-	/**
 	 * Gets the icon16.
 	 * 
 	 * @return the icon16

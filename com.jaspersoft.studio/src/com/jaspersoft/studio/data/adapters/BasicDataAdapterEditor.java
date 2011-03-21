@@ -56,4 +56,9 @@ public class BasicDataAdapterEditor implements DataAdapterEditor {
 		this.adapter = dataAdapter;
 	}
 
+	public String getHelpContextId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

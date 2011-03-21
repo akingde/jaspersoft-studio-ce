@@ -26,13 +26,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 
@@ -49,6 +51,25 @@ public class ExtensionManager {
 				System.out.println(ex.getMessage());
 			}
 		}
+		
+		// List all the extensions that provide a DataAdapterFactory
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio", "dataAdapters"); //$NON-NLS-1$ //$NON-NLS-2$
+		for (IConfigurationElement e : config) {
+			try {
+				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+				if (o instanceof DataAdapterFactory)
+					DataAdapterManager.addDataAdapterFactory((DataAdapterFactory) o);
+			} catch (CoreException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+		
+			DataAdapterManager.loadDataAdapters();
+			
+			for (DataAdapter da : DataAdapterManager.getDataAdapters() ) {
+				System.out.println(da.toXml());
+			}
 	}
 
 	private List<IComponentFactory> nodeFactory = new ArrayList<IComponentFactory>();
