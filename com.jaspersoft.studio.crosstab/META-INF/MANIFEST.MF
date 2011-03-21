@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Crosstab Component
 Bundle-SymbolicName: com.jaspersoft.studio.crosstab;singleton:=true
-Bundle-Version: 0.2.1
+Bundle-Version: 0.2.2
 Bundle-Activator: com.jaspersoft.studio.crosstab.Activator
 Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: org.eclipse.ui,
