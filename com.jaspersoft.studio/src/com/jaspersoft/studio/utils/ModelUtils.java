@@ -216,10 +216,10 @@ public class ModelUtils {
 			list.add(jd.getLastPageFooter());
 		if (null != jd.getSummary())
 			list.add(jd.getSummary());
-		// if (null != jd.getNoData())
-		// list.add(jd.getNoData());
-		// if (null != jd.getBackground())
-		// list.add(jd.getBackground());
+		if (null != jd.getNoData())
+			list.add(jd.getNoData());
+		if (null != jd.getBackground())
+			list.add(jd.getBackground());
 
 		return list;
 	}
@@ -340,6 +340,11 @@ public class ModelUtils {
 			bands.add(jrDesign.getPageFooter());
 		if (jrDesign.getLastPageFooter() != null)
 			bands.add(jrDesign.getLastPageFooter());
+		if (jrDesign.getSummary() != null)
+			bands.add(jrDesign.getSummary());
+
+		if (jrDesign.getNoData() != null)
+			bands.add(jrDesign.getNoData());
 		if (jrDesign.getSummary() != null)
 			bands.add(jrDesign.getSummary());
 

@@ -28,10 +28,10 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -40,8 +40,8 @@ public class Obj2TextPage extends WizardPage {
 
 	public Obj2TextPage() {
 		super("obj2text"); //$NON-NLS-1$
-		setTitle("TextField Wizard");
-		setDescription("Please select what type of field we will create for you");
+		setTitle(Messages.Obj2TextPage_title);
+		setDescription(Messages.Obj2TextPage_description);
 	}
 
 	public void createControl(Composite parent) {
@@ -50,10 +50,6 @@ public class Obj2TextPage extends WizardPage {
 		layout.numColumns = 1;
 		composite.setLayout(layout);
 		setControl(composite);
-
-		Label lbl = new Label(composite, SWT.NONE | SWT.V_SCROLL);
-		lbl.setText("Agregation Functions:");
-		lbl.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		final List lst = new List(composite, SWT.BORDER);
 		lst.setItems(EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL));
@@ -69,6 +65,7 @@ public class Obj2TextPage extends WizardPage {
 
 			}
 		});
+		lst.setSelection(0);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
 	}
@@ -76,4 +73,5 @@ public class Obj2TextPage extends WizardPage {
 	public CalculationEnum getCalculation() {
 		return calculation;
 	}
+
 }

@@ -627,6 +627,8 @@ public class Messages extends NLS {
 	public static String NumericPattern_description;
 	public static String NumericPattern_leading_zeroes;
 	public static String NumericPattern_use_1000_sperator;
+	public static String Obj2TextPage_description;
+	public static String Obj2TextPage_title;
 	public static String ODADatasourcePage_description;
 	public static String ODADatasourcePage_oda_datasource;
 	public static String PaddingSection_all_padding_tool_tip;

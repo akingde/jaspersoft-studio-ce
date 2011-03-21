@@ -264,10 +264,11 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 			if (node instanceof IGraphicElement && node.getValue() != null) {
 				if (node instanceof MBand) {
 					MBand band = (MBand) node;
-					if (!(band.getBandType().equals(BandTypeEnum.BACKGROUND) || band.getBandType().equals(BandTypeEnum.NO_DATA))) {
-						list.add(band);
-						getNodeChildren(node, sList);
-					}
+					// if (!(band.getBandType().equals(BandTypeEnum.BACKGROUND) ||
+					// band.getBandType().equals(BandTypeEnum.NO_DATA))) {
+					list.add(band);
+					getNodeChildren(node, sList);
+					// }
 					continue;
 				}
 				sList.add(node);
