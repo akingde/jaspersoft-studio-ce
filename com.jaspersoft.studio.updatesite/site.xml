@@ -3,7 +3,7 @@
    <description name="Jaspersoft Studio" url="http://jasperstudio.sf.net/updates">
       Jaspersoft Studio Update Site
    </description>
-   <feature url="features/com.jaspersoft.studio.feature_0.2.0.jar" id="com.jaspersoft.studio.feature" version="0.2.0">
+   <feature url="features/com.jaspersoft.studio.feature_0.2.2.jar" id="com.jaspersoft.studio.feature" version="0.2.2">
       <category name="com.jaspersoft.studio.category"/>
    </feature>
    <category-def name="com.jaspersoft.studio.category" label="Jaspersoft Studio"/>

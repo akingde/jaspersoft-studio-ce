@@ -100,7 +100,8 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 		try {
 			if (model != null) {
 				JRSimpleTemplate report = (JRSimpleTemplate) model.getChildren().get(0).getValue();
-				String xml = JRXmlTemplateWriter.writeTemplate(report);
+				String xml = JRXmlTemplateWriter.writeTemplate(report, ((IFileEditorInput) getEditorInput()).getFile()
+						.getCharset(true));
 				xml = xml.replaceFirst("<jasperTemplate ", "<!-- Created with Jaspersoft Studio -->\n<jasperTemplate "); //$NON-NLS-1$ //$NON-NLS-2$
 				IDocumentProvider dp = xmlEditor.getDocumentProvider();
 				IDocument doc = dp.getDocument(xmlEditor.getEditorInput());

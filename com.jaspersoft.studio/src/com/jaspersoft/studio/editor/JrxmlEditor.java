@@ -29,7 +29,6 @@ import java.io.InputStream;
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -372,16 +371,19 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		super.init(site, editorInput);
 		setPartName(editorInput.getName());
 		InputStream in = null;
+		IFile file = null;
 		try {
 			if (editorInput instanceof IFileEditorInput) {
-				in = ((IFileEditorInput) editorInput).getFile().getContents();
+				file = ((IFileEditorInput) editorInput).getFile();
+				in = file.getContents();
 			} else {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 			}
 			JasperDesign jd = null;
-			in = JrxmlEditor.getXML(editorInput, "UTF-8", in); //$NON-NLS-1$
+
+			in = JrxmlEditor.getXML(editorInput, file.getCharset(true), in);
 			jd = JRXmlLoader.load(in);
-			setModel(ReportFactory.createReport(jd, ((IFileEditorInput) editorInput).getFile()));
+			setModel(ReportFactory.createReport(jd, file));
 		} catch (JRException e) {
 			setModel(null);
 			handleJRException(editorInput, e, false);
@@ -509,10 +511,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// getSite().setSelectionProvider(reportContainer.getActiveEditor().getSite().getSelectionProvider());
 				break;
 			case PAGE_XMLEDITOR:
-				// if (!modelFresh) {
-				model2xml();
-				xmlFresh = true;
-				// }
+				if (!modelFresh) {
+					model2xml();
+					xmlFresh = true;
+				}
 				// getSite().setSelectionProvider(xmlEditor.getSelectionProvider());
 				break;
 			case PAGE_PREVIEW:
@@ -558,7 +560,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private void model2xml() {
 		try {
 			JasperDesign report = (JasperDesign) ((MRoot) getModel()).getValue();
-			String xml = JasperCompileManager.writeReportToXml(report);
+			String xml = JRXmlWriter.writeReport(report, ((IFileEditorInput) getEditorInput()).getFile().getCharset(true));// JasperCompileManager.writeReportToXml(report);
 			xml = xml.replaceFirst("<jasperReport ", "<!-- Created with Jaspersoft Studio -->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
