@@ -346,7 +346,14 @@
             class="com.jaspersoft.studio.wizards.ReportNewWizard"
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.wizards.ReportNewWizard"
-            name="JasperReport">
+            name="Jasper Report">
+      </wizard>
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.editor.style.wizard.StyleTemplateNewWizard"
+            icon="icons/resources/jasperreports_jrtx.png"
+            id="com.jaspersoft.studio.wizards.StyleTemplateNewWizard"
+            name="Style Template File">
       </wizard>
    </extension>
    <extension

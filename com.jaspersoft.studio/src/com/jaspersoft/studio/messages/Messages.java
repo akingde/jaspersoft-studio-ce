@@ -734,6 +734,8 @@ public class Messages extends NLS {
 	public static String SortFieldSection_sort_field;
 	public static String SortFieldSection_sort_fields;
 	public static String SortFieldSection_sort_order;
+	public static String StyleTemplateNewWizard_description;
+	public static String StyleTemplateNewWizard_title;
 	public static String SubreportPropertiesLabelProvider_numbers_of_parameters;
 	public static String SubreportPropertyPage_description;
 	public static String TextSection_align_bottom_tool_tip;

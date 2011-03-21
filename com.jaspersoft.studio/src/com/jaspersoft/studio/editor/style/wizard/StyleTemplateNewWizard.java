@@ -17,24 +17,17 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.wizards;
+package com.jaspersoft.studio.editor.style.wizard;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 
-import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JRDesignSection;
-import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.JRSimpleTemplate;
+import net.sf.jasperreports.engine.design.JRDesignStyle;
+import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -50,7 +43,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -62,10 +54,6 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.wizards.dataset.DatasetWizard;
-import com.jaspersoft.studio.wizards.dataset.WizardDataSourcePage;
-import com.jaspersoft.studio.wizards.dataset.WizardFieldsGroupByPage;
-import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
 
 /**
  * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container
@@ -74,17 +62,14 @@ import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
  * available as a template) is registered for the same extension, it will be able to open it.
  */
 
-public class ReportNewWizard extends Wizard implements INewWizard {
+public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 	private WizardNewFileCreationPage step1;
-	private WizardDataSourcePage step2;
-	private WizardFieldsPage step3;
-	private WizardFieldsGroupByPage step4;
 	private ISelection selection;
 
 	/**
 	 * Constructor for ReportNewWizard.
 	 */
-	public ReportNewWizard() {
+	public StyleTemplateNewWizard() {
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -95,45 +80,12 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 
 	public void addPages() {
 		step1 = new WizardNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
-		step1.setTitle("Report file");
-		step1.setDescription(Messages.ReportNewWizardPage_description);
-		step1.setFileExtension("jrxml");//$NON-NLS-1$
-		step1.setFileName("NEW_REPORT.jrxml");//$NON-NLS-1$
+		step1.setTitle(Messages.StyleTemplateNewWizard_title);
+		step1.setDescription(Messages.StyleTemplateNewWizard_description);
+		step1.setFileExtension("jrtx");//$NON-NLS-1$
+		step1.setFileName("NEW_STYLE.jrtx");//$NON-NLS-1$
 		addPage(step1);
 
-		step2 = new WizardDataSourcePage();
-		addPage(step2);
-
-		step3 = new WizardFieldsPage();
-		addPage(step3);
-
-		step4 = new WizardFieldsGroupByPage();
-		addPage(step4);
-	}
-
-	@Override
-	public IWizardPage getNextPage(IWizardPage page) {
-		if (page == step3) {
-			JRField[] fields;
-			try {
-				JRDataSourceProvider dataSource = step2.getDataSource();
-				if (dataSource != null) {
-					fields = dataSource.getFields(null);
-					List<Object> flist = new ArrayList<Object>();
-					for (JRField f : fields)
-						flist.add((JRDesignField) f);
-
-					step3.setFields(flist);
-				}
-			} catch (UnsupportedOperationException e) {
-				e.printStackTrace();
-			} catch (JRException e) {
-				e.printStackTrace();
-			}
-		}
-		if (page == step4 && step3.getFields() != null)
-			step4.setFields(new ArrayList<Object>(step3.getFields()));
-		return super.getNextPage(page);
 	}
 
 	/**
@@ -220,36 +172,18 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 	 */
 
 	private InputStream openContentStream() {
-		JasperDesign jd = new JasperDesign();
-		jd.setPageWidth(800);
-		jd.setPageHeight(1200);
-		jd.setTopMargin(30);
-		jd.setBottomMargin(30);
-		jd.setLeftMargin(25);
-		jd.setRightMargin(25);
-		jd.setName(Messages.ReportNewWizard_new_report);
+		try {
+			JRSimpleTemplate tmp = new JRSimpleTemplate();
 
-		JRDesignQuery jrDesignQuery = new JRDesignQuery();
-		jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$
-		jrDesignQuery.setText(""); //$NON-NLS-1$
-		jd.setQuery(jrDesignQuery);
-
-		JRDesignBand jb = new JRDesignBand();
-		jb.setHeight(100);
-		jd.setPageHeader(jb);
-
-		jb = new JRDesignBand();
-		jb.setHeight(200);
-		((JRDesignSection) jd.getDetailSection()).addBand(jb);
-
-		jb = new JRDesignBand();
-		jb.setHeight(100);
-		jd.setPageFooter(jb);
-
-		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step3, step4);
-
-		String contents = JasperCompileManager.writeReportToXml(jd);
-		return new ByteArrayInputStream(contents.getBytes());
+			JRDesignStyle jrDesignStyle = new JRDesignStyle();
+			jrDesignStyle.setName("SimpleStyle"); //$NON-NLS-1$
+			tmp.addStyle(jrDesignStyle);
+			String contents = JRXmlTemplateWriter.writeTemplate(tmp);
+			return new ByteArrayInputStream(contents.getBytes());
+		} catch (JRException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private void throwCoreException(String message) throws CoreException {
