@@ -345,8 +345,8 @@ public class ModelUtils {
 
 		if (jrDesign.getNoData() != null)
 			bands.add(jrDesign.getNoData());
-		if (jrDesign.getSummary() != null)
-			bands.add(jrDesign.getSummary());
+		if (jrDesign.getBackground() != null)
+			bands.add(jrDesign.getBackground());
 
 		return bands;
 	}

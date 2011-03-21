@@ -82,7 +82,8 @@ public class SubreportPropertyPage extends WizardPage {
 	public JRSubreportParameter[] getValue() {
 		if (!tableViewer.getControl().isDisposed()) {
 			List<JRSubreportParameter> lst = (List<JRSubreportParameter>) tableViewer.getInput();
-			value = lst.toArray(new JRSubreportParameter[lst.size()]);
+			if (lst != null)
+				value = lst.toArray(new JRSubreportParameter[lst.size()]);
 		}
 		return value;
 	}
