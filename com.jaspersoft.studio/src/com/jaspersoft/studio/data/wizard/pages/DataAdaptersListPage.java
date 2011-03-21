@@ -100,10 +100,7 @@ public class DataAdaptersListPage extends WizardPage {
 	@Override
 	public void performHelp() {
 		
-		IContext context = HelpSystem.getContext("com.jaspersoft.studio.doc.dataAdapters_wizard_list");
-		
-		PlatformUI.getWorkbench().getHelpSystem().displayHelp(context);
-		
-		//
+				PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.doc.dataAdapters_wizard_list");
+
 	}
 }
