@@ -70,8 +70,4 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public static void fillDefaultDataFactories()
-	{
-		
-	}
 }

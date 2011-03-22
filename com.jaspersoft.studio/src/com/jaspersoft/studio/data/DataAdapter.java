@@ -30,9 +30,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import net.sf.jasperreports.engine.JasperReport;
 
-
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.data.adapters.BasicDataAdapterEditor;
 import com.jaspersoft.studio.data.basic.DefaultDataAdapterEditor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
