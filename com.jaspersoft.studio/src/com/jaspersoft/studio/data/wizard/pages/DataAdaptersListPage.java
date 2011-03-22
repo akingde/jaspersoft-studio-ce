@@ -1,7 +1,5 @@
 package com.jaspersoft.studio.data.wizard.pages;
 
-import org.eclipse.help.HelpSystem;
-import org.eclipse.help.IContext;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;

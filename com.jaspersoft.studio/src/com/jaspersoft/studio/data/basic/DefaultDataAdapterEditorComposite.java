@@ -28,6 +28,7 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	private Button addButton;
 	private Button editButton;
 	private Button deleteButton;
+	private TableItem selectedTableItem;
 
 	/**
 	 * Create the composite.
@@ -92,12 +93,12 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 			  // Identify the selected row
         TableItem item = (TableItem) e.item;
         if (item == null) {
-        	System.out.println("item is null");
+        	selectedTableItem = null;
           editButton.setEnabled(false);
           deleteButton.setEnabled(false);
         	return;
         } else {
-        	System.out.println("enable edit and del");
+        	selectedTableItem = item;
           editButton.setEnabled(true);
           deleteButton.setEnabled(true);
         }
@@ -107,7 +108,23 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				launchPropertyDialog(getParent().getShell());
+				launchPropertyDialog(getParent().getShell(), null);
+			}
+		});
+		
+		editButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				launchPropertyDialog(getParent().getShell(), selectedTableItem);
+			}
+		});
+		
+		deleteButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				deleteRow(selectedTableItem);
+				editButton.setEnabled(false);
+				deleteButton.setEnabled(false);
 			}
 		});
 	}
@@ -162,6 +179,8 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		if(dataAdapter == null){
 		 // dataAdapter should never be null
 		}
+		Map<String, String> map = getAllProperties();
+		dataAdapter.loadProperties(map);
 		return dataAdapter;
 	}
 
@@ -174,6 +193,15 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		String[] row = keyvalue;
 		tableItem.setText(row);
 	}
+
+	public static void modifyRow(TableItem selectedTableItem, String[] newKeyValue) {
+		selectedTableItem.setText(newKeyValue);
+	}
+	
+	public static void deleteRow(TableItem selectedTableItem) {
+		int index = tableViewer.getTable().indexOf(selectedTableItem);
+		tableViewer.getTable().remove(index);
+	}
 	
 	public static boolean isKeyUnique(String key) {
 		TableItem[] tableItems = tableViewer.getTable().getItems();
@@ -183,11 +211,20 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		return true;
 	}
 	
-	private void launchPropertyDialog(Shell shell) {
-		PropertyDialog testDialog = new PropertyDialog(shell);
+	private void launchPropertyDialog(Shell shell, TableItem tableItem) {
+		PropertyDialog testDialog = new PropertyDialog(shell, tableItem);
 		testDialog.create();
 		if (testDialog.open() == Window.OK) {
 			//
 		}
+	}
+
+	private Map<String, String> getAllProperties() {
+		TableItem[] tableItems = tableViewer.getTable().getItems();
+		Map<String, String> map = new HashMap<String, String>();
+		for (TableItem tableItem : tableItems) {
+			map.put(tableItem.getText(0), tableItem.getText(1));
+		}
+		return map;
 	}
 }

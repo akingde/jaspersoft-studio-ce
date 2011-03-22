@@ -10,11 +10,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 public class PropertyDialog extends Dialog {
 	private Text property;
 	private Text value;
+	private TableItem tableItem = null;
 
 	/**
 	 * Create the dialog.
@@ -22,6 +24,11 @@ public class PropertyDialog extends Dialog {
 	 */
 	public PropertyDialog(Shell parentShell) {
 		super(parentShell);
+	}
+	
+	public PropertyDialog(Shell parentShell, TableItem tableItem) {
+		this(parentShell);
+	  this.tableItem = tableItem;
 	}
 
 	/**
@@ -47,6 +54,11 @@ public class PropertyDialog extends Dialog {
 		
 		value = new Text(container, SWT.BORDER);
 		value.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+		if (tableItem != null) {
+			property.setText(tableItem.getText(0));
+			value.setText(tableItem.getText(1));
+		}
 		
 		return container;
 	}
@@ -70,35 +82,35 @@ public class PropertyDialog extends Dialog {
 	}
 	
 	// GETTERS AND SETTERS
-	public String getProperty() {
+	private String getProperty() {
 		return property.getText();
 	}
 
-	public void setProperty(String property) {
-		this.property.setText(property);
-	}
-
-	public String getValue() {
+	private String getValue() {
 		return value.getText();
-	}
-
-	public void setValue(String value) {
-		this.value.setText(value);
 	}
 	
 	@Override
 	protected void okPressed() {
 		String newProperty = getProperty();
-		// a property name is case sensitive and must be unique
-		if (newProperty.length() != 0 && DefaultDataAdapterEditorComposite.isKeyUnique(newProperty)) {
-			String newValue = getValue();
-			
-			// Add a new row to the tableViewer
-			DefaultDataAdapterEditorComposite.addRow(new String[]{newProperty, newValue});
+		if (newProperty.length() != 0) {
+		  // Add a new row to the tableViewer
+		  // a property name is case sensitive and must be unique
+			if (tableItem == null && DefaultDataAdapterEditorComposite.isKeyUnique(newProperty)) {
+				String newValue = getValue();
+				DefaultDataAdapterEditorComposite.addRow(new String[]{newProperty, newValue});
+			} 
+			// Edit the existing row
+			else if (tableItem instanceof TableItem) {
+				String[] newKeyValue = new String[]{getProperty(), getValue()};
+				DefaultDataAdapterEditorComposite.modifyRow(tableItem, newKeyValue);
+			}
 			
 			// Close the Dialog
 			setReturnCode(OK);
 			close();
 		}
+		
+	  
 	}
 }
