@@ -235,19 +235,19 @@ public class XMLDataAdapterComposite extends Composite {
 		
 		this.xmlDataAdapter = dataAdapter;
 		
-		textFileName.setText(this.xmlDataAdapter.getFileName());
+		textFileName.setText(Misc.nvl( this.xmlDataAdapter.getFileName(),""));
 		if (this.xmlDataAdapter.isUseConnection()) {
 			useConnection = true;
 			btnRadioButtonCreateDataAdapter.setSelection(true);
 			textSelectExpression.setEnabled(true);
 			btnRadioButtonUseXpath.setSelection(false);
 		} else {
+			useConnection = false;
 			btnRadioButtonUseXpath.setSelection(true);
 			btnRadioButtonCreateDataAdapter.setSelection(false);
 			textSelectExpression.setEnabled(false);
-			useConnection = false;
 		}
-		textSelectExpression.setText(this.xmlDataAdapter.getSelectExpression());
+		textSelectExpression.setText(Misc.nvl(this.xmlDataAdapter.getSelectExpression(),""));
 		
 		textDatePattern.setText( Misc.nvl(this.xmlDataAdapter.getDatePattern(), "") );
 		textNumberPattern.setText( Misc.nvl(this.xmlDataAdapter.getNumberPattern(), "") );
