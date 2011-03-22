@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.IPageChangingListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
+import org.eclipse.jface.dialogs.PageChangingEvent;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
@@ -53,6 +57,34 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 		this.wizardDialog = wizardDialog;
 		if(this.wizardDialog != null) {
 			this.wizardDialog.addTestListener(this);
+			
+			
+			this.wizardDialog.addPageChangingListener(new IPageChangingListener() {
+				
+				public void handlePageChanging(PageChangingEvent event) {
+					System.out.println("Moving from page " + event.getCurrentPage() + " to " + event.getTargetPage());
+					
+					if (event.getCurrentPage() ==  dataAdapterListPage &&
+							event.getTargetPage() == dataAdapterEditorPage)
+					{
+						// Update the layout of the editor page with the proper data adapter editor
+						// provided by the new data adapter
+						DataAdapterFactory factory = dataAdapterListPage.getSelectedFactory();
+						
+						// 1. instance a new dataAdapter using the factory
+						DataAdapter newDataAdapter = factory.createDataAdapter();
+						
+						// 2. set in the wizard page the data adapter to edit
+						if(selectedFactory != factory) {
+							dataAdapterEditorPage.setDataAdapter(newDataAdapter);
+							selectedFactory = factory;
+						}
+					}
+					
+					getWizardDialog().setTestButtonEnabled(event.getTargetPage() == dataAdapterEditorPage);
+				}
+			});
+
 		}
 	}
 	
@@ -83,52 +115,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 		}
 	}
 
-	@Override
-	public IWizardPage getStartingPage() {
-		IWizardPage page = super.getStartingPage();
-		updateTestButton(page);
-		return page;
-	}
-	
-	@Override
-	public IWizardPage getPreviousPage(IWizardPage page) {
-		
-		IWizardPage prevPage = super.getPreviousPage(page);
-		updateTestButton(prevPage);
-		return prevPage;
-	}
-	
-	public void updateTestButton(IWizardPage page)
-	{
-		getWizardDialog().setTestButtonEnabled(page == dataAdapterEditorPage);
-	}
 
-	@Override
-	public IWizardPage getNextPage(IWizardPage page) {
-		// We enable the test button only in the second step
-		
-		
-		if (page == dataAdapterListPage)
-		{
-			// Update the layout of the editor page with the proper data adapter editor
-			// provided by the new data adapter
-			DataAdapterFactory factory = dataAdapterListPage.getSelectedFactory();
-			
-			// 1. instance a new dataAdapter using the factory
-			DataAdapter newDataAdapter = factory.createDataAdapter();
-			
-			// 2. set in the wizard page the data adapter to edit
-			if(selectedFactory != factory) {
-				dataAdapterEditorPage.setDataAdapter(newDataAdapter);
-				selectedFactory = factory;
-			}
-		}
-		IWizardPage nextPage = super.getNextPage(page);
-		
-		updateTestButton(nextPage);
-		
-		return nextPage;
-	}
 
 	// Save the new adapter using the manager
 	@Override

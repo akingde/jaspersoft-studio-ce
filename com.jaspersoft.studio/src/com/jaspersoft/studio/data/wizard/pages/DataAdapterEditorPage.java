@@ -17,6 +17,7 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.SWTResourceManager;
 
 
@@ -127,10 +128,7 @@ public class DataAdapterEditorPage extends WizardPage {
 		dataAdapterEditor.setDataAdapter(newDataAdapter);
 		
 		// 5. fill the name if the new data adapter has one
-		if (!newDataAdapter.getName().isEmpty())
-		{
-			setTextValue(newDataAdapter.getName());
-		}
+		setTextValue(Misc.nvl(newDataAdapter.getName(),""));
 		
 		// 6. resize the dialog properly
 		customContainer.layout();
