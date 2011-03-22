@@ -46,9 +46,9 @@ public interface DataAdapterEditor {
 	 * This method returns the help context ID for the composite returned by getComposite()
 	 * 
 	 * @return String context ID, i.e:
-	 * public String getHelpContextId() {
-	 *   return composite.getHelpContextId();
-	 * }
+	 *  
+	 * As possible default, the context id "com.jaspersoft.studio.doc.dataAdapters_wizard_list" can be return.
+	 * 
 	 */
 	public String getHelpContextId();
 }

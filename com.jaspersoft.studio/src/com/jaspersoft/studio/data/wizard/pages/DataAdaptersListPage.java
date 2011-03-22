@@ -34,7 +34,6 @@ public class DataAdaptersListPage extends WizardPage {
 	 * @param parent
 	 */
 	public void createControl(Composite parent) {
-		System.out.println("createControl of DataAdaptersListPage");
 		Composite container = new Composite(parent, SWT.NULL);
 
 		setControl(container);
@@ -71,7 +70,6 @@ public class DataAdaptersListPage extends WizardPage {
 	}
 	
 	protected void factorySelected(SelectionEvent e) {
-		System.out.println("selected factory" + list.getSelectionCount());
 			setPageComplete( list.getSelectionCount() > 0);
 	}
 

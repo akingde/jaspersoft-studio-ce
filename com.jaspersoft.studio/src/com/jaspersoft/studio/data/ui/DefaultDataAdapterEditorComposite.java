@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.basic;
+package com.jaspersoft.studio.data.ui;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.basic;
+package com.jaspersoft.studio.data.ui;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;

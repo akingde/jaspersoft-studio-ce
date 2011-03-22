@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.basic;
+package com.jaspersoft.studio.data.ui;
 
 import org.eclipse.swt.widgets.Composite;
 

@@ -2,6 +2,8 @@ package com.jaspersoft.studio.data.wizard;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
@@ -10,9 +12,11 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.ui.DataAdapterErrorDialog;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 
@@ -60,7 +64,6 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	public void addPages() {
 		System.out.println("addPages");
 		if(dataAdapter == null) {
-			System.out.println("dataAdapter is null");
 			dataAdapterListPage = new DataAdaptersListPage();
 			addPage(dataAdapterListPage);
 		}
@@ -82,7 +85,6 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 
 	@Override
 	public IWizardPage getStartingPage() {
-		System.out.println("getStartingPage");
 		IWizardPage page = super.getStartingPage();
 		updateTestButton(page);
 		return page;
@@ -90,8 +92,10 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	
 	@Override
 	public IWizardPage getPreviousPage(IWizardPage page) {
-		updateTestButton(page);
-		return super.getPreviousPage(page);
+		
+		IWizardPage prevPage = super.getPreviousPage(page);
+		updateTestButton(prevPage);
+		return prevPage;
 	}
 	
 	public void updateTestButton(IWizardPage page)
@@ -102,14 +106,13 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		// We enable the test button only in the second step
-		updateTestButton(page);
+		
 		
 		if (page == dataAdapterListPage)
 		{
 			// Update the layout of the editor page with the proper data adapter editor
 			// provided by the new data adapter
 			DataAdapterFactory factory = dataAdapterListPage.getSelectedFactory();
-			System.out.println("Requested the editor page " + factory);
 			
 			// 1. instance a new dataAdapter using the factory
 			DataAdapter newDataAdapter = factory.createDataAdapter();
@@ -119,9 +122,12 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 				dataAdapterEditorPage.setDataAdapter(newDataAdapter);
 				selectedFactory = factory;
 			}
-			
 		}
-		return super.getNextPage(page);
+		IWizardPage nextPage = super.getNextPage(page);
+		
+		updateTestButton(nextPage);
+		
+		return nextPage;
 	}
 
 	// Save the new adapter using the manager
@@ -137,12 +143,15 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 		{
 			// ... let's update with the adapter just modified ...
 			this.dataAdapter.loadProperties(editedDataAdapter.getProperties());
-			
-			// ... but each DataAdapter has a unique name ...
-			if (!isDataAdapterNameUnique(editedDataAdapter.getName()))
+			if (!this.dataAdapter.getName().equals( editedDataAdapter.getName() ))
 			{
-				this.dataAdapter.setName(editedDataAdapter.getName());
+				if (isDataAdapterNameUnique(editedDataAdapter.getName()))
+				{
+					this.dataAdapter.setName(editedDataAdapter.getName());
+				}
 			}
+			// ... but each DataAdapter has a unique name ...
+			
 		}
 		return true;
 	}
@@ -171,6 +180,12 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+
+        DataAdapterErrorDialog.showErrorDialog(
+        							getWizardDialog().getShell(), 
+        							"An error occurred while testing the data adapter and the test failed",
+        							e1);
+        
 			}
 		}
 	}

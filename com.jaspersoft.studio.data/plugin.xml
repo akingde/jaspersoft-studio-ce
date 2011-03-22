@@ -6,6 +6,7 @@
          name="test"
          point="com.jaspersoft.studio.dataAdapters">
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory"/>
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.jdbc.JDBCDataAdapterFactory"/>
    </extension>
 
 </plugin>
