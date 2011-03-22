@@ -7,6 +7,8 @@
          point="com.jaspersoft.studio.dataAdapters">
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.jdbc.JDBCDataAdapterFactory"/>
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.queryexecutor.QueryExecutorDataAdapterFactory"/>
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.xml.XMLDataAdapterFactory"/>
    </extension>
 
 </plugin>

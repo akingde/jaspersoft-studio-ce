@@ -51,7 +51,6 @@ public class DataAdapterWizardDialog extends WizardDialog {
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		// TODO Auto-generated method stub
 		Composite panel = new Composite(parent, SWT.NONE);
 		panel.setFont(parent.getFont());
 		((GridLayout)parent.getLayout()).numColumns=1;
