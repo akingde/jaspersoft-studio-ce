@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.jface.dialogs.LocaleDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -221,6 +222,19 @@ public class XMLDataAdapterComposite extends Composite {
 				if (dialog.open() == Dialog.OK) {
 					String val = wizard.getValue();
 					textNumberPattern.setText(val);
+				}
+			}
+		});
+		
+		btnSelectLocale.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				LocaleDialog localeDialog = new LocaleDialog(getShell(), locale);
+				localeDialog.create();
+				
+				if (localeDialog.open() == Dialog.OK) {
+					locale = localeDialog.getLocale();
+					textLocale.setText(locale.getDisplayName());
 				}
 			}
 		});

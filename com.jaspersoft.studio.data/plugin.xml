@@ -9,6 +9,9 @@
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.jdbc.JDBCDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.queryexecutor.QueryExecutorDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xml.XMLDataAdapterFactory"/>
+         
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.my.MyDataAdapterFactory"/>
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.test.TestDataAdapterFactory"/>
    </extension>
 
 </plugin>

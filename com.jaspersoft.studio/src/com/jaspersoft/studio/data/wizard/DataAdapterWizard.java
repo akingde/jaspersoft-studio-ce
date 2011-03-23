@@ -2,13 +2,8 @@ package com.jaspersoft.studio.data.wizard;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
-import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -16,7 +11,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
