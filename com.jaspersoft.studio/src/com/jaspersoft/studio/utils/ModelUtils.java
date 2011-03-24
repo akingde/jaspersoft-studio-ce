@@ -34,6 +34,8 @@ import java.util.Set;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
+import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRSection;
@@ -488,6 +490,49 @@ public class ModelUtils {
 		}
 		return -1;
 
+	}
+
+	public static int getBandHeight(JRBand band) {
+		int h = 0;
+		h = getContainerHeight(band.getChildren(), h);
+		return h;
+	}
+
+	public static int getContainerHeight(List list, int h) {
+		for (Object obj : list) {
+			if (obj instanceof JRDesignElement) {
+				JRDesignElement de = (JRDesignElement) obj;
+				h = Math.max(de.getY() + de.getHeight(), h);
+			} else if (obj instanceof JRFrame) {
+				JRFrame de = (JRFrame) obj;
+				h = Math.max(de.getY() + de.getHeight(), h);
+			} else if (obj instanceof JRElementGroup) {
+				JRElementGroup de = (JRElementGroup) obj;
+				h = Math.max(getContainerHeight(de.getChildren(), 0), h);
+			}
+		}
+		return h;
+	}
+
+	public static List<JRDesignElement> getAllGElements(JasperDesign jd) {
+		List<JRDesignElement> res = new ArrayList<JRDesignElement>();
+		List<JRBand> bands = getAllBands(jd);
+		for (JRBand b : bands) {
+			res.addAll(getGElements(b));
+		}
+		return res;
+	}
+
+	public static List<JRDesignElement> getGElements(JRElementGroup gr) {
+		List<JRDesignElement> res = new ArrayList<JRDesignElement>();
+		for (Object el : gr.getChildren()) {
+			if (el instanceof JRDesignElement) {
+				res.add((JRDesignElement) el);
+			} else if (el instanceof JRElementGroup) {
+				res.addAll(getGElements((JRElementGroup) el));
+			}
+		}
+		return res;
 	}
 
 	/**

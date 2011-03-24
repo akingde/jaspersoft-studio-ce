@@ -12,7 +12,7 @@ import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.util.JRExpressionUtil;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 
@@ -27,6 +27,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class StyleTemplateFactory {
@@ -45,7 +46,7 @@ public class StyleTemplateFactory {
 
 	public static ANode createTemplate(ANode parent, JRDesignReportTemplate jrObject, int newIndex, IFile file) {
 		MStyleTemplate mStyleTemplate = new MStyleTemplate(parent, (JRDesignReportTemplate) jrObject, newIndex);
-		String str = JRExpressionUtil.getSimpleExpressionText(jrObject.getSourceExpression());
+		String str = ExpressionUtil.eval(jrObject.getSourceExpression(), parent.getJasperDesign());
 		Set<String> set = new HashSet<String>();
 		if (file == null) {
 			IEditorPart ep = SelectionHelper.getActiveJRXMLEditor();
@@ -115,7 +116,7 @@ public class StyleTemplateFactory {
 				JRDesignReportTemplate s = (JRDesignReportTemplate) obj;
 				if (s.getSourceExpression() != null)
 					SelectionHelper.openEditor((FileEditorInput) editorInput,
-							JRExpressionUtil.getSimpleExpressionText(s.getSourceExpression()));
+							ExpressionUtil.eval(s.getSourceExpression(), node.getJasperDesign()));
 			}
 			return;
 		}
@@ -133,7 +134,8 @@ public class StyleTemplateFactory {
 
 		MStyleTemplate mst = (MStyleTemplate) p;
 		JRDesignReportTemplate drt = (JRDesignReportTemplate) mst.getValue();
-		String str = JRExpressionUtil.getSimpleExpressionText(drt.getSourceExpression());
+		JasperDesign jd = node.getJasperDesign();
+		String str = ExpressionUtil.eval(drt.getSourceExpression(), jd);
 
 		if (refFile == null)
 			refFile = ((IFileEditorInput) SelectionHelper.getActiveJRXMLEditor().getEditorInput()).getFile();
@@ -141,7 +143,7 @@ public class StyleTemplateFactory {
 		for (int i = plist.size() - 1; i >= 0; i--) {
 			Object obj = plist.get(i);
 			if (obj instanceof JRDesignReportTemplate) {
-				str = JRExpressionUtil.getSimpleExpressionText(((JRDesignReportTemplate) obj).getSourceExpression());
+				str = ExpressionUtil.eval(((JRDesignReportTemplate) obj).getSourceExpression(), jd);
 			} else if (obj instanceof JRTemplateReference) {
 				str = ((JRTemplateReference) obj).getLocation();
 			}

@@ -36,7 +36,6 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -69,6 +68,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
+import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
@@ -319,6 +319,9 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	}
 
 	public void openEditor(Object obj, ANode node) {
+		JasperDesign jd = null;
+		if (node != null)
+			jd = node.getJasperDesign();
 		if (getEditorInput() instanceof FileEditorInput) {
 			if (obj instanceof JRDesignReportTemplate || obj instanceof JRSimpleTemplate || obj instanceof JRStyle
 					|| obj instanceof JRConditionalStyle || obj instanceof JRTemplateReference) {
@@ -329,8 +332,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				if (getEditorInput() instanceof FileEditorInput) {
 					JRDesignSubreport s = (JRDesignSubreport) obj;
 					if (s.getExpression() != null)
-						SelectionHelper.openEditor((FileEditorInput) getEditorInput(),
-								JRExpressionUtil.getSimpleExpressionText(s.getExpression()));
+						SelectionHelper.openEditor((FileEditorInput) getEditorInput(), ExpressionUtil.eval(s.getExpression(), jd));
 				}
 				return;
 			}
@@ -338,8 +340,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				if (getEditorInput() instanceof FileEditorInput) {
 					JRDesignImage s = (JRDesignImage) obj;
 					if (s.getExpression() != null)
-						SelectionHelper.openEditor((FileEditorInput) getEditorInput(),
-								JRExpressionUtil.getSimpleExpressionText(s.getExpression()));
+						SelectionHelper.openEditor((FileEditorInput) getEditorInput(), ExpressionUtil.eval(s.getExpression(), jd));
 				}
 				return;
 			}

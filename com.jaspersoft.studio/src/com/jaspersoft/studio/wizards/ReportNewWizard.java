@@ -23,18 +23,24 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRExpressionUtil;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -46,6 +52,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
@@ -61,7 +68,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.wizards.dataset.DatasetWizard;
 import com.jaspersoft.studio.wizards.dataset.WizardDataSourcePage;
 import com.jaspersoft.studio.wizards.dataset.WizardFieldsGroupByPage;
@@ -75,6 +85,7 @@ import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
  */
 
 public class ReportNewWizard extends Wizard implements INewWizard {
+	private ReportTemplatesWizardPage step0;
 	private WizardNewFileCreationPage step1;
 	private WizardDataSourcePage step2;
 	private WizardFieldsPage step3;
@@ -94,6 +105,9 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 	 */
 
 	public void addPages() {
+		step0 = new ReportTemplatesWizardPage();
+		addPage(step0);
+
 		step1 = new WizardNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
 		step1.setTitle("Report file");
 		step1.setDescription(Messages.ReportNewWizardPage_description);
@@ -180,17 +194,16 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 			throwCoreException("Container \"" + containerName + "\" does not exist."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		IContainer container = (IContainer) resource;
-		final IFile file = container.getFile(new Path(fileName));
+		reportFile = container.getFile(new Path(fileName));
 		try {
-			InputStream stream = openContentStream();
-
-			if (file.exists()) {
-				file.setContents(stream, true, true, monitor);
+			InputStream stream = openContentStream(monitor);
+			if (reportFile.exists()) {
+				reportFile.setContents(stream, true, true, monitor);
 			} else {
-				file.create(stream, true, monitor);
+				reportFile.create(stream, true, monitor);
 			}
 			stream.close();
-			reportFile = file;
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -200,7 +213,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 			public void run() {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
-					IDE.openEditor(page, file, true);
+					IDE.openEditor(page, reportFile, true);
 				} catch (PartInitException e) {
 					e.printStackTrace();
 				}
@@ -219,37 +232,88 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 	 * We will initialize file contents with a sample text.
 	 */
 
-	private InputStream openContentStream() {
-		JasperDesign jd = new JasperDesign();
-		jd.setPageWidth(800);
-		jd.setPageHeight(1200);
-		jd.setTopMargin(30);
-		jd.setBottomMargin(30);
-		jd.setLeftMargin(25);
-		jd.setRightMargin(25);
-		jd.setName(Messages.ReportNewWizard_new_report);
+	private InputStream openContentStream(IProgressMonitor monitor) {
+		JasperDesign jd = null;
+		if (step0.getTemplate() != null) {
+			URL obj = step0.getTemplate();
+			try {
+				jd = JRXmlLoader.load(obj.openStream());
 
-		JRDesignQuery jrDesignQuery = new JRDesignQuery();
-		jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$
-		jrDesignQuery.setText(""); //$NON-NLS-1$
-		jd.setQuery(jrDesignQuery);
+				copyTemplateResources(monitor, jd, reportFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (JRException e) {
+				e.printStackTrace();
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		if (jd == null) {
+			jd = new JasperDesign();
+			jd.setPageWidth(800);
+			jd.setPageHeight(1200);
+			jd.setTopMargin(30);
+			jd.setBottomMargin(30);
+			jd.setLeftMargin(25);
+			jd.setRightMargin(25);
+			jd.setName(Messages.ReportNewWizard_new_report);
 
-		JRDesignBand jb = new JRDesignBand();
-		jb.setHeight(100);
-		jd.setPageHeader(jb);
+			JRDesignQuery jrDesignQuery = new JRDesignQuery();
+			jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$
+			jrDesignQuery.setText(""); //$NON-NLS-1$
+			jd.setQuery(jrDesignQuery);
 
-		jb = new JRDesignBand();
-		jb.setHeight(200);
-		((JRDesignSection) jd.getDetailSection()).addBand(jb);
+			JRDesignBand jb = new JRDesignBand();
+			jb.setHeight(100);
+			jd.setPageHeader(jb);
 
-		jb = new JRDesignBand();
-		jb.setHeight(100);
-		jd.setPageFooter(jb);
+			jb = new JRDesignBand();
+			jb.setHeight(200);
+			((JRDesignSection) jd.getDetailSection()).addBand(jb);
+
+			jb = new JRDesignBand();
+			jb.setHeight(100);
+			jd.setPageFooter(jb);
+		}
 
 		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step3, step4);
 
 		String contents = JasperCompileManager.writeReportToXml(jd);
 		return new ByteArrayInputStream(contents.getBytes());
+	}
+
+	private void copyTemplateResources(final IProgressMonitor monitor, final JasperDesign jd, final IFile repFile)
+			throws CoreException, IOException {
+		Job job = new Job("Copy template resources") {
+
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				List<JRDesignElement> list = ModelUtils.getAllGElements(jd);
+				for (JRDesignElement el : list) {
+					if (el instanceof JRImage) {
+						JRImage im = (JRImage) el;
+						String str = ExpressionUtil.eval(im.getExpression(), jd);
+						if (str != null) {// resolv image
+							Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle().findEntries("templates", str, true);
+							while (en.hasMoreElements()) {
+								URL uimage = (URL) en.nextElement();
+								IFile f = repFile.getParent().getFile(new Path(str));
+								try {
+									f.create(uimage.openStream(), true, monitor);
+								} catch (CoreException e) {
+									e.printStackTrace();
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
 	}
 
 	private void throwCoreException(String message) throws CoreException {

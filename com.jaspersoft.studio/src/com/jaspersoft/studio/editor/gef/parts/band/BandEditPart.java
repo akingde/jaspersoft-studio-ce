@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
@@ -33,7 +34,10 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
@@ -43,6 +47,8 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandMoveEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
  * BandEditPart creates the figure for the band. The figure is actually just the bottom border of the band. This allows
@@ -62,6 +68,17 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	 */
 	public JRDesignBand getBand() {
 		return (JRDesignBand) ((MBand) getModel()).getValue();
+	}
+
+	public void performRequest(Request req) {
+		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
+			SetValueCommand cmd = new SetValueCommand();
+			cmd.setTarget((IPropertySource) getModel());
+			cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
+			cmd.setPropertyValue(ModelUtils.getBandHeight(getBand()));
+			getViewer().getEditDomain().getCommandStack().execute(cmd);
+		}
+		super.performRequest(req);
 	}
 
 	/**

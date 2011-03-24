@@ -684,6 +684,8 @@ public class Messages extends NLS {
 	public static String ReportNewWizardPage_file_name_must_be_valid;
 	public static String ReportNewWizardPage_project_must_be_writable;
 	public static String ReportNewWizardPage_select_new_file_container;
+	public static String ReportTemplatesWizardPage_description;
+	public static String ReportTemplatesWizardPage_title;
 	public static String ResetValueCommand_restore_default_value;
 	public static String ResourceCellEditor_open_resource;
 	public static String RulersGridPreferencePage_description;

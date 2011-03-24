@@ -288,7 +288,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			try {
 				new JasperReportsBuilder().compileJRXML(resource, monitor);
 			} catch (CoreException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -497,10 +496,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
 				// if (!xmlFresh) {
-				if (activePage == PAGE_XMLEDITOR) {
+				if (activePage == PAGE_XMLEDITOR && !xmlFresh) {
 					try {
 						xml2model();
-						xmlFresh = true;
 					} catch (JRException e) {
 						handleJRException(getEditorInput(), e, false);
 					}
@@ -511,10 +509,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// getSite().setSelectionProvider(reportContainer.getActiveEditor().getSite().getSelectionProvider());
 				break;
 			case PAGE_XMLEDITOR:
-				if (!modelFresh) {
+				if (!modelFresh)
 					model2xml();
-					xmlFresh = true;
-				}
+
 				// getSite().setSelectionProvider(xmlEditor.getSelectionProvider());
 				break;
 			case PAGE_PREVIEW:
@@ -524,10 +521,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					} catch (JRException e) {
 						handleJRException(getEditorInput(), e, false);
 					}
-				else {
+				else if (!modelFresh)
 					model2xml();
-					xmlFresh = true;
-				}
+
 				model2preview();
 				// getSite().setSelectionProvider(previewEditor.getSite().getSelectionProvider());
 				break;
@@ -552,6 +548,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 		JasperDesign jd = JRXmlLoader.load(new ByteArrayInputStream(doc.get().getBytes()));
 		setModel(ReportFactory.createReport(jd, ((IFileEditorInput) getEditorInput()).getFile()));
+		modelFresh = true;
 	}
 
 	/**
@@ -565,6 +562,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 			doc.set(xml);
+			xmlFresh = true;
 		} catch (final Exception e) {
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
