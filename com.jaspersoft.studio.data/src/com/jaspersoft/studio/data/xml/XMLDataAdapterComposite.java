@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.jface.dialogs.LocaleDialog;
+import com.jaspersoft.studio.jface.dialogs.TimeZoneDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -238,6 +239,21 @@ public class XMLDataAdapterComposite extends Composite {
 				}
 			}
 		});
+		
+		btnSelectTimeZone.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TimeZoneDialog timeZoneDialog = new TimeZoneDialog(getShell(), timeZone);
+				timeZoneDialog.create();
+				
+				if (timeZoneDialog.open() == Dialog.OK) {
+					timeZone = timeZoneDialog.getTimeZone();
+					if(timeZone != null) {
+						textTimeZone.setText(timeZone.getID());
+					}
+				}
+			}
+		});
 	}
 
 	@Override
@@ -267,10 +283,20 @@ public class XMLDataAdapterComposite extends Composite {
 		textNumberPattern.setText( Misc.nvl(this.xmlDataAdapter.getNumberPattern(), "") );
 		
 		locale = this.xmlDataAdapter.getLocale();
-		if (locale != null) textLocale.setText(locale.getDisplayName());
+		if (locale != null) {
+			textLocale.setText(locale.getDisplayName());
+		} else {
+			textLocale.setText("Default" + " ( " + Locale.getDefault().getDisplayName() + " )");
+			locale = Locale.getDefault();
+		}
 		
 		timeZone = this.xmlDataAdapter.getTimeZone();
-		if (timeZone != null) textTimeZone.setText(timeZone.getDisplayName());
+		if (timeZone != null) {
+			textTimeZone.setText(timeZone.getID());
+		} else {
+			textTimeZone.setText("Default" + " ( " + TimeZone.getDefault().getID() + " )");
+			timeZone = TimeZone.getDefault();
+		}
 	}
 
 	public DataAdapter getDataAdapter() {

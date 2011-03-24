@@ -146,92 +146,31 @@ public class LocaleDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				CTabItem tabItem = tabFolder.getSelection();
-				
-				// in predefined locales tab, OK button is enable
-				// only when there is a selected predefined locale.
-				if (tabItem.equals(tbtmPredefinedLocales)) {
-					
-					getButton(OK).setEnabled(wLocaleList.hasSelectedLocale());
-				}
-				// in custom locale tab, OK button is enable
-				// only when there is a non empty language.
-				else {
-					
-					if (textCustomLanguageCode.getText().length() <= 0) {
-						getButton(OK).setEnabled(false);
-					} else {
-						getButton(OK).setEnabled(true);
-					}
+				CTabItem cTabItem = (CTabItem)e.item;
+				if (cTabItem == tbtmPredefinedLocales) {
+					getButton(OK).setEnabled(true);
+				} else {
+					getButton(OK).setEnabled(false);
 				}
 			}
 		});
 		
-		wLocaleList.getListViewer().getList().addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				getButton(OK).setEnabled(true);
-			}
+		SelectionAdapter selectionAdapter = new SelectionAdapter() {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				okPressed();
 			}
-		});
+		};
+		wLocaleList.setListSelectionListener(selectionAdapter);
 		
 		// init UI elements values
 		initElements();
 		
 		return container;
 	}
-
-	/**
-	 * Create contents of the button bar.
-	 * @param parent
-	 */
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		
-		buttonDefaultLocale = createButton(parent, 2, "Default Locale", false);
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
-		
-		buttonDefaultLocale.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
-				wLocaleList.setSelection(Locale.getDefault());
-			  
-				// set selection to predefined locales tab
-				tabFolder.setSelection(0);
-				
-				getButton(OK).setEnabled(wLocaleList.hasSelectedLocale());
-			}
-		});
-		
-		// This modify listener must be added after the creation of OK button
-		textCustomLanguageCode.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				
-				Text text = (Text)e.widget;
-				if (text.getText().length() <= 0) {
-					getButton(OK).setEnabled(false);
-				} else {
-					getButton(OK).setEnabled(true);
-				}
-			}
-		});
-	}
-
-	/**
-	 * Return the initial size of the dialog.
-	 */
-	@Override
-	protected Point getInitialSize() {
-		return new Point(450, 300);
-	}
 	
-	private void initElements() {
+  private void initElements() {
 		
 		if (locale != null) {
 			
@@ -273,6 +212,60 @@ public class LocaleDialog extends Dialog {
 			tabFolder.setSelection(0);
 		}
 	}
+
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		
+		buttonDefaultLocale = createButton(parent, 2, "Default", false);
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+		
+		buttonDefaultLocale.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				wLocaleList.setSelection(Locale.getDefault());
+			  
+				// set selection to predefined locales tab
+				tabFolder.setSelection(0);
+				
+				okPressed();
+			}
+		});
+		
+		textCustomLanguageCode.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				
+				getButton(OK).setEnabled(isCustomLocaleValid());
+			}
+		});
+		
+		textCustomCountryCode.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				
+				getButton(OK).setEnabled(isCustomLocaleValid());
+			}
+		});
+		
+		textCustomVariantCode.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				
+				getButton(OK).setEnabled(isCustomLocaleValid());
+			}
+		});
+	}
+
+	/**
+	 * Return the initial size of the dialog.
+	 */
+	@Override
+	protected Point getInitialSize() {
+		return new Point(450, 300);
+	}
 	
 	@Override
 	protected void okPressed() {
@@ -289,6 +282,7 @@ public class LocaleDialog extends Dialog {
 			String language = textCustomLanguageCode.getText();
 			String country = textCustomCountryCode.getText();
 			String variant = textCustomVariantCode.getText();
+			
 			if (language != null && language.trim().length() > 0) {
 				if (country != null && language.trim().length() > 0) {
 					if (variant != null && variant.trim().length() > 0) {
@@ -300,8 +294,59 @@ public class LocaleDialog extends Dialog {
 					locale = new Locale(language);
 				}
 			}
+			// language is a mandatory field. If it is not filled,
+			// just return the selected predefined locale. 
+			else { 
+				locale = wLocaleList.getSelectedLocale();
+			}
 		}
 		super.okPressed();
+	}
+	
+	/**
+	 * This method check the validity of a custom locale. Rules are:
+	 * <br>- Language is the only required field
+	 * <br>- If you fill Country, Language must be filled
+	 * <br>- If you fill Variant, both Language and Country must be filled
+	 * @return true or false
+	 */
+	private boolean isCustomLocaleValid() {
+		
+		String language = textCustomLanguageCode.getText();
+		String country = textCustomCountryCode.getText();
+		String variant = textCustomVariantCode.getText();
+		
+		/*if ( (language != null && language.trim().length() > 0)
+				 ||
+			   (
+			  	((language != null && language.trim().length() > 0))
+			  	&&((country != null && country.trim().length() > 0))
+			   )
+			   ||
+			   (
+					((language != null && language.trim().length() > 0))
+					&&((country != null && country.trim().length() > 0))
+					&&((variant != null && variant.trim().length() > 0))
+				 )
+			 ) {
+			return true;
+		}	else {
+			return false;
+		}*/
+		
+		if (variant != null && variant.trim().length() > 0) {
+			if (country != null && country.trim().length() > 0) {
+				if (language != null && language.trim().length() > 0) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 	
 	// GETTERS AND SETTERS
