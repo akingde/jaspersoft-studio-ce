@@ -28,7 +28,9 @@ import java.util.List;
 
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
+import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
+import org.eclipse.jface.action.IAction;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.parts.JasperDesignEditPartFactory;
@@ -39,6 +41,9 @@ import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.PreferenceConstants;
 import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.MTable;
+import com.jaspersoft.studio.table.model.column.action.CreateColumnAction;
+import com.jaspersoft.studio.table.model.column.action.CreateColumnCellAction;
+import com.jaspersoft.studio.table.model.columngroup.action.CreateColumnGroupAction;
 
 /**
  * The Class TableEditor.
@@ -49,7 +54,8 @@ public class TableEditor extends AbstractVisualEditor {
 	public TableEditor() {
 		super();
 		setPartName(Messages.TableEditor_table);
-		setPartImage(JaspersoftStudioPlugin.getImage(MTable.getIconDescriptor().getIcon16()));
+		setPartImage(JaspersoftStudioPlugin.getImage(MTable.getIconDescriptor()
+				.getIcon16()));
 	}
 
 	/*
@@ -69,19 +75,26 @@ public class TableEditor extends AbstractVisualEditor {
 		graphicalViewer.setEditPartFactory(new JasperDesignEditPartFactory());
 
 		// set rulers providers
-		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true, RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
+		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true,
+				RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER,
+				provider);
 
-		provider = new ReportRulerProvider(new ReportRuler(false, RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
+		provider = new ReportRulerProvider(new ReportRuler(false,
+				RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
+				provider);
 
-		Boolean isRulerVisible = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+		Boolean isRulerVisible = JaspersoftStudioPlugin.getInstance()
+				.getPreferenceStore()
 				.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER);
 
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
+				isRulerVisible);
 
 		createAdditionalActions();
-		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(graphicalViewer));
+		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(
+				graphicalViewer));
 	}
 
 	@Override
@@ -89,6 +102,20 @@ public class TableEditor extends AbstractVisualEditor {
 		List<String> lst = new ArrayList<String>();
 		lst.add("com.jaspersoft.studio.crosstab.model.MCrosstab"); //$NON-NLS-1$
 		return lst;
+	}
+
+	protected void createEditorActions(ActionRegistry registry) {
+		IAction action = new CreateColumnAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateColumnAction.ID);
+
+		action = new CreateColumnGroupAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateColumnGroupAction.ID);
+
+		action = new CreateColumnCellAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(CreateColumnCellAction.ID);
 	}
 
 }

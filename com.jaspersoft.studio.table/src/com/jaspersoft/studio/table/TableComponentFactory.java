@@ -86,8 +86,6 @@ import com.jaspersoft.studio.table.model.cell.command.ReorderElementCommand;
 import com.jaspersoft.studio.table.model.cell.command.ReorderElementGroupCommand;
 import com.jaspersoft.studio.table.model.column.MCell;
 import com.jaspersoft.studio.table.model.column.MColumn;
-import com.jaspersoft.studio.table.model.column.action.CreateColumnAction;
-import com.jaspersoft.studio.table.model.column.action.CreateColumnCellAction;
 import com.jaspersoft.studio.table.model.column.command.CreateColumnCellCommand;
 import com.jaspersoft.studio.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.table.model.column.command.CreateColumnFromGroupCommand;
@@ -99,7 +97,6 @@ import com.jaspersoft.studio.table.model.column.command.OrphanColumnCommand;
 import com.jaspersoft.studio.table.model.column.command.ReorderColumnCommand;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.table.model.columngroup.MColumnGroupCell;
-import com.jaspersoft.studio.table.model.columngroup.action.CreateColumnGroupAction;
 import com.jaspersoft.studio.table.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.table.model.columngroup.command.CreateColumnGroupFromGroupCommand;
 import com.jaspersoft.studio.table.model.columngroup.command.ReorderColumnGroupCommand;
@@ -482,17 +479,17 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public List<Action> getActions(WorkbenchPart part) {
 		List<Action> lst = new ArrayList<Action>();
-		lst.add(new CreateColumnAction(part));
-		lst.add(new CreateColumnGroupAction(part));
-		lst.add(new CreateColumnCellAction(part));
+		// lst.add(new CreateColumnAction(part));
+		// lst.add(new CreateColumnGroupAction(part));
+		// lst.add(new CreateColumnCellAction(part));
 		return lst;
 	}
 
 	public List<String> getActionsID() {
 		List<String> lst = new ArrayList<String>();
-		lst.add(CreateColumnAction.ID);
-		lst.add(CreateColumnGroupAction.ID);
-		lst.add(CreateColumnCellAction.ID);
+		// lst.add(CreateColumnAction.ID);
+		// lst.add(CreateColumnGroupAction.ID);
+		// lst.add(CreateColumnCellAction.ID);
 		return lst;
 	}
 

@@ -114,22 +114,26 @@ public class CrosstabComponentFactory implements IComponentFactory {
 			CrosstabManager ctManager = new CrosstabManager(ct);
 			MCrosstab mCrosstab = new MCrosstab(parent, ct, newIndex, ctManager);
 			if (parent instanceof MPage) {
-				MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct, JRDesignCrosstab.PROPERTY_PARAMETERS);
+				MCrosstabParameters mp = new MCrosstabParameters(mCrosstab, ct,
+						JRDesignCrosstab.PROPERTY_PARAMETERS);
 				if (ct.getParameters() != null)
 					for (JRCrosstabParameter p : ct.getParameters())
 						ReportFactory.createNode(mp, p, -1);
 
-				MRowGroups mrg = new MRowGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_ROW_GROUPS);
+				MRowGroups mrg = new MRowGroups(mCrosstab, ct,
+						JRDesignCrosstab.PROPERTY_ROW_GROUPS);
 				if (ct.getRowGroups() != null)
 					for (JRCrosstabRowGroup p : ct.getRowGroups())
 						ReportFactory.createNode(mrg, p, -1);
 
-				MColumnGroups mcg = new MColumnGroups(mCrosstab, ct, JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
+				MColumnGroups mcg = new MColumnGroups(mCrosstab, ct,
+						JRDesignCrosstab.PROPERTY_COLUMN_GROUPS);
 				if (ct.getColumnGroups() != null)
 					for (JRCrosstabColumnGroup p : ct.getColumnGroups())
 						ReportFactory.createNode(mcg, p, -1);
 
-				MMeasures mm = new MMeasures(mCrosstab, ct, JRDesignCrosstab.PROPERTY_MEASURES);
+				MMeasures mm = new MMeasures(mCrosstab, ct,
+						JRDesignCrosstab.PROPERTY_MEASURES);
 				if (ct.getMeasures() != null)
 					for (JRCrosstabMeasure p : ct.getMeasures())
 						ReportFactory.createNode(mm, p, -1);
@@ -140,10 +144,12 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		}
 		if (jrObject instanceof JRCrosstabRowGroup) {
 
-			return createRowGroup(parent, (JRCrosstabRowGroup) jrObject, newIndex);
+			return createRowGroup(parent, (JRCrosstabRowGroup) jrObject,
+					newIndex);
 		}
 		if (jrObject instanceof JRCrosstabColumnGroup) {
-			return createColumnGroup(parent, (JRCrosstabColumnGroup) jrObject, newIndex);
+			return createColumnGroup(parent, (JRCrosstabColumnGroup) jrObject,
+					newIndex);
 		}
 		if (jrObject instanceof JRCrosstabMeasure) {
 			return new MMeasure(parent, (JRCrosstabMeasure) jrObject, newIndex);
@@ -151,20 +157,25 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	private ANode createColumnGroup(ANode mcg, JRCrosstabColumnGroup p, int newIndex) {
+	private ANode createColumnGroup(ANode mcg, JRCrosstabColumnGroup p,
+			int newIndex) {
 		MColumnGroup rg = new MColumnGroup(mcg, p, newIndex);
 
 		createColumnGroupCells(rg, p);
 		return rg;
 	}
 
-	public static void createColumnGroupCells(MColumnGroup rg, JRCrosstabColumnGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
+	public static void createColumnGroupCells(MColumnGroup rg,
+			JRCrosstabColumnGroup p) {
+		MCell mc = new MCell(rg, p.getHeader(),
+				Messages.CrosstabComponentFactory_header + p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + p.getName());
-			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total
+					+ p.getName());
+			ReportFactory.createElementsForBand(mc, p.getTotalHeader()
+					.getChildren());
 		}
 	}
 
@@ -176,12 +187,15 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	}
 
 	public static void createRowGroupCells(MRowGroup rg, JRCrosstabRowGroup p) {
-		MCell mc = new MCell(rg, p.getHeader(), Messages.CrosstabComponentFactory_header + p.getName());
+		MCell mc = new MCell(rg, p.getHeader(),
+				Messages.CrosstabComponentFactory_header + p.getName());
 		ReportFactory.createElementsForBand(mc, p.getHeader().getChildren());
 
 		if (!p.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE)) {
-			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total + p.getName());
-			ReportFactory.createElementsForBand(mc, p.getTotalHeader().getChildren());
+			mc = new MCell(rg, p.getTotalHeader(), Messages.common_total
+					+ p.getName());
+			ReportFactory.createElementsForBand(mc, p.getTotalHeader()
+					.getChildren());
 		}
 	}
 
@@ -189,8 +203,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		if (ct.getHeaderCell() == null) {
 			new MCrosstabHeader(mCrosstab, -1);
 		} else {
-			MCrosstabHeaderCell mc = new MCrosstabHeaderCell(mCrosstab, ct.getHeaderCell(), -1);
-			ReportFactory.createElementsForBand(mc, ct.getHeaderCell().getChildren());
+			MCrosstabHeaderCell mc = new MCrosstabHeaderCell(mCrosstab,
+					ct.getHeaderCell(), -1);
+			ReportFactory.createElementsForBand(mc, ct.getHeaderCell()
+					.getChildren());
 		}
 
 		for (Iterator<?> it = ct.getCellsList().iterator(); it.hasNext();) {
@@ -210,15 +226,19 @@ public class CrosstabComponentFactory implements IComponentFactory {
 				hide = hide || isRowGroupTotal(ct, rowname);
 
 			if (!hide) {
-				MCell mc = new MCell(mCrosstab, c.getContents(), colname + "/" + rowname); //$NON-NLS-1$
-				ReportFactory.createElementsForBand(mc, c.getContents().getChildren());
+				MCell mc = new MCell(mCrosstab, c.getContents(), colname
+						+ "/" + rowname); //$NON-NLS-1$
+				ReportFactory.createElementsForBand(mc, c.getContents()
+						.getChildren());
 			}
 		}
 		if (ct.getWhenNoDataCell() == null) {
 			new MCrosstabWhenNoData(mCrosstab, -1);
 		} else {
-			MCrosstabWhenNoDataCell mc = new MCrosstabWhenNoDataCell(mCrosstab, ct.getWhenNoDataCell(), -1);
-			ReportFactory.createElementsForBand(mc, ct.getWhenNoDataCell().getChildren());
+			MCrosstabWhenNoDataCell mc = new MCrosstabWhenNoDataCell(mCrosstab,
+					ct.getWhenNoDataCell(), -1);
+			ReportFactory.createElementsForBand(mc, ct.getWhenNoDataCell()
+					.getChildren());
 		}
 		if (mCrosstab.getCrosstabManager() != null)
 			mCrosstab.getCrosstabManager().refresh();
@@ -228,16 +248,19 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		for (Object obj : ct.getRowGroupsList()) {
 			JRCrosstabRowGroup rg = (JRCrosstabRowGroup) obj;
 			if (rg.getName().equals(rowname))
-				return rg.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE);
+				return rg.getTotalPositionValue().equals(
+						CrosstabTotalPositionEnum.NONE);
 		}
 		return false;
 	}
 
-	private static boolean isColumnGroupTotal(JRDesignCrosstab ct, String colname) {
+	private static boolean isColumnGroupTotal(JRDesignCrosstab ct,
+			String colname) {
 		for (Object obj : ct.getColumnGroupsList()) {
 			JRCrosstabColumnGroup rg = (JRCrosstabColumnGroup) obj;
 			if (rg.getName().equals(colname))
-				return rg.getTotalPositionValue().equals(CrosstabTotalPositionEnum.NONE);
+				return rg.getTotalPositionValue().equals(
+						CrosstabTotalPositionEnum.NONE);
 		}
 		return false;
 	}
@@ -246,7 +269,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		List<INode> nodes = new ArrayList<INode>();
 		if (mCrosstab.getChildren() != null) {
 			for (INode n : mCrosstab.getChildren()) {
-				if (n instanceof MCell || n instanceof MCrosstabWhenNoData || n instanceof MCrosstabHeader)
+				if (n instanceof MCell || n instanceof MCrosstabWhenNoData
+						|| n instanceof MCrosstabHeader)
 					nodes.add(n);
 			}
 			mCrosstab.removeChildren(nodes);
@@ -286,59 +310,77 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		return list;
 	}
 
-	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
+	public Command getCreateCommand(ANode parent, ANode child,
+			Rectangle location, int newIndex) {
 		if (child instanceof MParameter) {
 			if (parent instanceof MCrosstabParameters)
-				return new CreateParameterCommand((MCrosstabParameters) parent, (MParameter) child, newIndex);
+				return new CreateParameterCommand((MCrosstabParameters) parent,
+						(MParameter) child, newIndex);
 		}
 		if (child instanceof MMeasure) {
 			if (parent instanceof MMeasures)
-				return new CreateMeasureCommand((MMeasures) parent, (MMeasure) child, newIndex);
+				return new CreateMeasureCommand((MMeasures) parent,
+						(MMeasure) child, newIndex);
 		}
 		if (child instanceof MColumnGroup) {
 			if (parent instanceof MColumnGroups)
-				return new CreateColumnGroupCommand((MColumnGroups) parent, (MColumnGroup) child, newIndex);
+				return new CreateColumnGroupCommand((MColumnGroups) parent,
+						(MColumnGroup) child, newIndex);
 		}
 		if (child instanceof MRowGroup) {
 			if (parent instanceof MRowGroups)
-				return new CreateRowGroupCommand((MRowGroups) parent, (MRowGroup) child, newIndex);
+				return new CreateRowGroupCommand((MRowGroups) parent,
+						(MRowGroup) child, newIndex);
 		}
 		if (child instanceof MCrosstabHeader) {
 			if (parent instanceof MCrosstabHeader)
-				return new CreateCrosstabHeaderCommand((MCrosstab) parent.getParent(), (MCrosstabHeader) child);
+				return new CreateCrosstabHeaderCommand(
+						(MCrosstab) parent.getParent(), (MCrosstabHeader) child);
 		}
 		if (child instanceof MCrosstabWhenNoData) {
 			if (parent instanceof MCrosstabWhenNoData)
-				return new CreateCrosstabWhenNoDataCommand((MCrosstab) parent.getParent(), (MCrosstabWhenNoData) child);
+				return new CreateCrosstabWhenNoDataCommand(
+						(MCrosstab) parent.getParent(),
+						(MCrosstabWhenNoData) child);
 		}
 		if (child instanceof MGraphicElement && parent instanceof MCell)
-			return new CreateElementCommand((MCell) parent, (MGraphicElement) child, location, newIndex);
+			return new CreateElementCommand((MCell) parent,
+					(MGraphicElement) child, location, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
-			return new CreateElementGroupCommand((MCell) parent, (MElementGroup) child, newIndex);
+			return new CreateElementGroupCommand((MCell) parent,
+					(MElementGroup) child, newIndex);
 		if (child instanceof MCrosstab) {
 			if (parent instanceof MElementGroup)
-				return new CreateCrosstabCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+				return new CreateCrosstabCommand((MElementGroup) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MBand)
-				return new CreateCrosstabCommand((MBand) parent, (MGraphicElement) child, newIndex);
+				return new CreateCrosstabCommand((MBand) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateCrosstabCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+				return new CreateCrosstabCommand((MFrame) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreateCrosstabCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateCrosstabCommand(parent,
+						(MGraphicElement) child, location, newIndex);
 
 			if (parent instanceof IGroupElement) {
-				return new CreateCrosstabCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateCrosstabCommand(parent,
+						(MGraphicElement) child, location, newIndex);
 			}
 		}
 		if (parent instanceof MCrosstab && child instanceof MGraphicElement) {
 			MCrosstab mt = (MCrosstab) parent;
-			final JRDesignCellContents cell = mt.getCrosstabManager().getCell(new Point(location.x, location.y));
+			final JRDesignCellContents cell = mt.getCrosstabManager().getCell(
+					new Point(location.x, location.y));
 			if (cell != null) {
 				Rectangle r = mt.getCrosstabManager().getCellBounds(cell);
-				location = location.setLocation(location.x - r.x, location.y - r.y);
+				location = location.setLocation(location.x - r.x, location.y
+						- r.y);
 
 				if (cell != null) {
 					MCell mcell = (MCell) ModelUtil.getNode(cell, mt);
-					return new CreateElementCommand(mcell, (MGraphicElement) child, location, newIndex);
+					return new CreateElementCommand(mcell,
+							(MGraphicElement) child, location, newIndex);
 				}
 			}
 		}
@@ -348,76 +390,92 @@ public class CrosstabComponentFactory implements IComponentFactory {
 	public Command getDeleteCommand(ANode parent, ANode child) {
 		if (child instanceof MParameter) {
 			if (parent instanceof MCrosstabParameters)
-				return new DeleteParameterCommand((MCrosstabParameters) parent, (MParameter) child);
+				return new DeleteParameterCommand((MCrosstabParameters) parent,
+						(MParameter) child);
 		}
 		if (child instanceof MMeasure) {
 			if (parent instanceof MMeasures)
-				return new DeleteMeasureCommand((MMeasures) parent, (MMeasure) child);
+				return new DeleteMeasureCommand((MMeasures) parent,
+						(MMeasure) child);
 		}
 		if (child instanceof MColumnGroup) {
 			if (parent instanceof MColumnGroups)
-				return new DeleteColumnGroupCommand((MColumnGroups) parent, (MColumnGroup) child);
+				return new DeleteColumnGroupCommand((MColumnGroups) parent,
+						(MColumnGroup) child);
 		}
 		if (child instanceof MRowGroup) {
 			if (parent instanceof MRowGroups)
-				return new DeleteRowGroupCommand((MRowGroups) parent, (MRowGroup) child);
+				return new DeleteRowGroupCommand((MRowGroups) parent,
+						(MRowGroup) child);
 		}
-		if (child instanceof MCrosstabHeaderCell && ((MCrosstabHeaderCell) child).getValue() != null) {
+		if (child instanceof MCrosstabHeaderCell
+				&& ((MCrosstabHeaderCell) child).getValue() != null) {
 			if (parent instanceof MCrosstab)
-				return new DeleteCrosstabHeaderCommand((MCrosstab) parent, (MCrosstabHeaderCell) child);
+				return new DeleteCrosstabHeaderCommand((MCrosstab) parent,
+						(MCrosstabHeaderCell) child);
 		}
-		if (child instanceof MCrosstabWhenNoDataCell && ((MCrosstabWhenNoDataCell) child).getValue() != null) {
+		if (child instanceof MCrosstabWhenNoDataCell
+				&& ((MCrosstabWhenNoDataCell) child).getValue() != null) {
 			if (parent instanceof MCrosstab)
-				return new DeleteCrosstabWhenNoDataCommand((MCrosstab) parent, (MCrosstabWhenNoDataCell) child);
+				return new DeleteCrosstabWhenNoDataCommand((MCrosstab) parent,
+						(MCrosstabWhenNoDataCell) child);
 		}
 		if (child instanceof MGraphicElement && parent instanceof MCell)
-			return new DeleteElementCommand((MCell) parent, (MGraphicElement) child);
+			return new DeleteElementCommand((MCell) parent,
+					(MGraphicElement) child);
 		if (child instanceof MElementGroup && parent instanceof MCell)
-			return new DeleteElementGroupCommand((MCell) parent, (MElementGroup) child);
+			return new DeleteElementGroupCommand((MCell) parent,
+					(MElementGroup) child);
 		return null;
 	}
 
 	public Command getReorderCommand(ANode parent, ANode child, int newIndex) {
 		if (child instanceof MParameter) {
 			if (parent instanceof MCrosstabParameters)
-				return new ReorderParameterCommand((MParameter) child, (MCrosstabParameters) parent, newIndex);
+				return new ReorderParameterCommand((MParameter) child,
+						(MCrosstabParameters) parent, newIndex);
 		}
 		if (child instanceof MMeasure) {
 			if (parent instanceof MMeasures)
-				return new ReorderMeasureCommand((MMeasure) child, (MMeasures) parent, newIndex);
+				return new ReorderMeasureCommand((MMeasure) child,
+						(MMeasures) parent, newIndex);
 		}
 		if (child instanceof MColumnGroup && child.getValue() != null) {
 			if (parent instanceof MColumnGroups)
-				return new ReorderColumnGroupCommand((MColumnGroup) child, (MColumnGroups) parent, newIndex);
+				return new ReorderColumnGroupCommand((MColumnGroup) child,
+						(MColumnGroups) parent, newIndex);
 		}
 		if (child instanceof MRowGroup && child.getValue() != null) {
 			if (parent instanceof MRowGroups)
-				return new ReorderRowGroupCommand((MRowGroup) child, (MRowGroups) parent, newIndex);
+				return new ReorderRowGroupCommand((MRowGroup) child,
+						(MRowGroups) parent, newIndex);
 		}
 		if (child instanceof MGraphicElement && parent instanceof MCell)
-			return new ReorderElementCommand((MGraphicElement) child, (MCell) parent, newIndex);
+			return new ReorderElementCommand((MGraphicElement) child,
+					(MCell) parent, newIndex);
 		if (child instanceof MElementGroup && parent instanceof MCell)
-			return new ReorderElementGroupCommand((MElementGroup) child, (MCell) parent, newIndex);
+			return new ReorderElementGroupCommand((MElementGroup) child,
+					(MCell) parent, newIndex);
 		return null;
 	}
 
 	public List<Action> getActions(WorkbenchPart part) {
 		List<Action> lst = new ArrayList<Action>();
-		lst.add(new CreateMeasureAction(part));
-		lst.add(new CreateColumnGroupAction(part));
-		lst.add(new CreateRowGroupAction(part));
-		lst.add(new CreateCrosstabHeaderAction(part));
-		lst.add(new CreateCrosstabWhenNoDataAction(part));
+		// lst.add(new CreateMeasureAction(part));
+		// lst.add(new CreateColumnGroupAction(part));
+		// lst.add(new CreateRowGroupAction(part));
+		// lst.add(new CreateCrosstabHeaderAction(part));
+		// lst.add(new CreateCrosstabWhenNoDataAction(part));
 		return lst;
 	}
 
 	public List<String> getActionsID() {
 		List<String> lst = new ArrayList<String>();
-		lst.add(CreateMeasureAction.ID);
-		lst.add(CreateColumnGroupAction.ID);
-		lst.add(CreateRowGroupAction.ID);
-		lst.add(CreateCrosstabHeaderAction.ID);
-		lst.add(CreateCrosstabWhenNoDataAction.ID);
+		// lst.add(CreateMeasureAction.ID);
+		// lst.add(CreateColumnGroupAction.ID);
+		// lst.add(CreateRowGroupAction.ID);
+		// lst.add(CreateCrosstabHeaderAction.ID);
+		// lst.add(CreateCrosstabWhenNoDataAction.ID);
 		return lst;
 	}
 
@@ -431,9 +489,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public Command getOrphanCommand(ANode parent, ANode child) {
 		if (child instanceof MGraphicElement && parent instanceof MCell)
-			return new OrphanElementCommand((MCell) parent, (MGraphicElement) child);
+			return new OrphanElementCommand((MCell) parent,
+					(MGraphicElement) child);
 		if (child instanceof MElementGroup && parent instanceof MCell)
-			return new OrphanElementGroupCommand((MCell) parent, (MElementGroup) child);
+			return new OrphanElementGroupCommand((MCell) parent,
+					(MElementGroup) child);
 		return null;
 	}
 
