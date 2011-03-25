@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.jface.dialogs.PropertyDialog;
 
 public class DefaultDataAdapterEditorComposite extends Composite {
 	
@@ -108,14 +109,14 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				launchPropertyDialog(getParent().getShell(), null);
+				launchPropertyDialog(getParent().getShell(), null, false);
 			}
 		});
 		
 		editButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				launchPropertyDialog(getParent().getShell(), selectedTableItem);
+				launchPropertyDialog(getParent().getShell(), selectedTableItem, true);
 			}
 		});
 		
@@ -188,22 +189,22 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		return "";
 	}
 
-	public static void addRow(String[] keyvalue) {
+	private void addRow(String[] keyvalue) {
 		TableItem tableItem = new TableItem(tableViewer.getTable(), SWT.NONE);
 		String[] row = keyvalue;
 		tableItem.setText(row);
 	}
 
-	public static void modifyRow(TableItem selectedTableItem, String[] newKeyValue) {
+	private void modifyRow(TableItem selectedTableItem, String[] newKeyValue) {
 		selectedTableItem.setText(newKeyValue);
 	}
 	
-	public static void deleteRow(TableItem selectedTableItem) {
+	private void deleteRow(TableItem selectedTableItem) {
 		int index = tableViewer.getTable().indexOf(selectedTableItem);
 		tableViewer.getTable().remove(index);
 	}
 	
-	public static boolean isKeyUnique(String key) {
+	private boolean isKeyUnique(String key) {
 		TableItem[] tableItems = tableViewer.getTable().getItems();
 		for (TableItem tableItem : tableItems) {
 			if ( key.equals(tableItem.getText()) ) return false;
@@ -211,11 +212,45 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		return true;
 	}
 	
-	private void launchPropertyDialog(Shell shell, TableItem tableItem) {
-		PropertyDialog testDialog = new PropertyDialog(shell, tableItem);
-		testDialog.create();
-		if (testDialog.open() == Window.OK) {
-			//
+	private void launchPropertyDialog(Shell shell, TableItem tabItem, boolean edit) {
+		
+		String[] propertyAndValue;
+		if (tabItem != null) {
+			propertyAndValue = new String[]{tabItem.getText(0), tabItem.getText(1)};
+		} else {
+			propertyAndValue = new String[]{"", ""};
+		}
+		
+		PropertyDialog propertyDialog = new PropertyDialog(shell, propertyAndValue);
+		propertyDialog.create();
+		if (propertyDialog.open() == Window.OK) {
+			
+			// Edit mode
+			if (edit) {
+				modifyRow(selectedTableItem, propertyDialog.getPropertyAndValue());
+			} 
+			// Add Mode
+			else {
+			  // a property name is case sensitive and must be unique
+				String newProperty = propertyDialog.getPropertyAndValue()[0];
+				if (isKeyUnique(newProperty) && newProperty.length() > 0) {
+					addRow(propertyDialog.getPropertyAndValue());
+				}
+			}
+			/*String newProperty = propertyDialog.getProperty();
+			if (newProperty != null && newProperty.length() != 0) {
+			  // Add a new row to the tableViewer
+			  // a property name is case sensitive and must be unique
+				if (isKeyUnique(newProperty)) {
+					String newValue = propertyDialog.getValue();
+					addRow(new String[]{newProperty, newValue});
+				}
+				// Edit the existing row
+				else {
+					String[] newKeyAndValue = new String[]{propertyDialog.getProperty(), propertyDialog.getValue()};
+					modifyRow(selectedTableItem, newKeyAndValue);
+				}
+			}*/
 		}
 	}
 

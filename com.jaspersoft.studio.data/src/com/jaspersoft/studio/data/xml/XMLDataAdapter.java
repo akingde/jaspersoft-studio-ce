@@ -183,15 +183,8 @@ public class XMLDataAdapter extends DataAdapter {
 		try {
 			java.io.File f = new java.io.File(getFileName());
 			if (!f.exists()) {
-				/*JOptionPane.showMessageDialog(Misc.getMainWindow(),
-                        Misc.formatString( //"messages.connectionDialog.fileNotFound",
-                        "File {0} not found", new Object[]{this.getFilename()}),
-                        "Error",JOptionPane.ERROR_MESSAGE);
-                throw new Exception();*/
+				throw new Exception("XML file" + " " + getFileName() + " not found.");
 			}
-			/*JOptionPane.showMessageDialog(Misc.getMainWindow(),
-                    //I18n.getString("messages.connectionDialog.connectionTestSuccessful",
-                    "Connection test successful!","",JOptionPane.INFORMATION_MESSAGE);*/
             return;
 		} catch (Exception e) {
 			throw e;
