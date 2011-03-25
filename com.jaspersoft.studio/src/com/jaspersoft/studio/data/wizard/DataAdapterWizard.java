@@ -2,7 +2,9 @@ package com.jaspersoft.studio.data.wizard;
 
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
@@ -51,8 +53,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 		this.wizardDialog = wizardDialog;
 		if(this.wizardDialog != null) {
 			this.wizardDialog.addTestListener(this);
-			
-			
+
 			this.wizardDialog.addPageChangingListener(new IPageChangingListener() {
 				
 				public void handlePageChanging(PageChangingEvent event) {
@@ -74,11 +75,16 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 							selectedFactory = factory;
 						}
 					}
-					
-					getWizardDialog().setTestButtonEnabled(event.getTargetPage() == dataAdapterEditorPage);
 				}
 			});
 
+		  // Enable the test button when the page activated is the dataAdapterEditorPage
+			this.wizardDialog.addPageChangedListener(new IPageChangedListener() {
+				
+				public void pageChanged(PageChangedEvent event) {
+					getWizardDialog().setTestButtonEnabled(event.getSelectedPage() == dataAdapterEditorPage);
+				}
+			});
 		}
 	}
 	
@@ -88,13 +94,14 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 
 	@Override
 	public void addPages() {
-		System.out.println("addPages");
+		
 		if(dataAdapter == null) {
 			dataAdapterListPage = new DataAdaptersListPage();
 			addPage(dataAdapterListPage);
 		}
 		dataAdapterEditorPage = new DataAdapterEditorPage();
 		addPage(dataAdapterEditorPage);
+
 	}
 	
 	@Override
