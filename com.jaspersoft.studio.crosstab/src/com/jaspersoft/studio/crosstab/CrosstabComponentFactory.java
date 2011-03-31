@@ -471,11 +471,11 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public List<String> getActionsID() {
 		List<String> lst = new ArrayList<String>();
-		// lst.add(CreateMeasureAction.ID);
-		// lst.add(CreateColumnGroupAction.ID);
-		// lst.add(CreateRowGroupAction.ID);
-		// lst.add(CreateCrosstabHeaderAction.ID);
-		// lst.add(CreateCrosstabWhenNoDataAction.ID);
+		lst.add(CreateMeasureAction.ID);
+		lst.add(CreateColumnGroupAction.ID);
+		lst.add(CreateRowGroupAction.ID);
+		lst.add(CreateCrosstabHeaderAction.ID);
+		lst.add(CreateCrosstabWhenNoDataAction.ID);
 		return lst;
 	}
 
