@@ -16,9 +16,9 @@ import org.eclipse.swt.widgets.MessageBox;
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
-import com.jaspersoft.studio.data.ui.DataAdapterErrorDialog;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
+import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
 
 public class DataAdapterWizard extends Wizard implements SelectionListener {
 

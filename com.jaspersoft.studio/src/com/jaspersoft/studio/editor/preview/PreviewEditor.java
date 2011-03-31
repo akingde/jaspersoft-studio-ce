@@ -61,6 +61,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
+import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.editor.JRPrintEditor;
 import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
 import com.jaspersoft.studio.editor.preview.actions.ShowParametersAction;
@@ -92,7 +93,15 @@ public class PreviewEditor extends JRPrintEditor {
 		return jasperDesign;
 	}
 
+	// $TODO complete this class to use DataAdapters and remove the AMDataSource.
 	private AMDatasource datasource;
+	
+	/**
+	 * This is the cached DataAdapter used by this report.
+	 */
+	private DataAdapter dataAdapter;
+	
+	
 	private Map<String, Object> jasperParameter = new Hashtable<String, Object>();
 
 	private Throwable fillError = null;
@@ -100,6 +109,129 @@ public class PreviewEditor extends JRPrintEditor {
 	private ReloadAction reloadAction;
 	private ShowParametersAction showParametersAction;
 
+	/**
+	 * Run a report in a Job, asking for parameters.
+	 * Parameters are cached.
+	 * DataAdapter is cached.
+	 * 
+	 * @param myDataAdapter the {@link com.jaspersoft.studio.data.DataAdapter DataAdapter} to use in order to run the report.
+	 */
+	public void runReport(DataAdapter myDataAdapter) {
+		
+		if (!isNotRunning()) return; // Nothing to do, the report is already executing, we don't want to stop it.
+		
+		// Cache the DataAdapter used for this report only if it is not null.
+		if (myDataAdapter != null) {
+			// $TODO should we save the reference in the JRXML ?
+			dataAdapter = myDataAdapter;
+		}
+		
+		// If the DataAdapter of this preview editor is still null, abort the report execution
+		if (dataAdapter== null)
+		{
+				unsetReportDocument(Messages.PreviewEditor_no_datasource, true);
+				return;
+		}
+		
+		// At this point, dataAdapter is not null.
+	
+		String dsName = dataAdapter.getName();
+
+		// $TODO move askParameters inside the Job and check for classloading related problems
+		// The idea is to allow a dataadapter to contribute the parameters before they are being asked to the user.
+		int pdresult = askParameters();
+		if (pdresult != Window.OK)
+			return;
+
+		String jobName = Messages.PreviewEditor_preview_a
+				+ ": " + getJasperDesign().getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		Job job = new Job(jobName) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				unsetReportDocument(Messages.PreviewEditor_reloading, false);
+				monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
+				InputStream io = null;
+				fillError = null;
+				
+			  // In case of the data adapter is of type JDBC, we are in charge to close the
+        // connection provided, so we store it in this variable
+				java.sql.Connection connection = null; 
+				
+				try {
+					IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+					Thread.currentThread().setContextClassLoader(
+							RepositoryManager.getClassLoader4Project(monitor, file.getProject()));
+
+					setJasperPrint(null);
+					AsynchronousFillHandle fh = null;
+					JasperReport jasperReport = JasperCompileManager.compileReport(getJasperDesign());
+
+					SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
+
+					jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
+
+					// We let the data adapter to contribute its parameters.
+					dataAdapter.getSpecialParameters(jasperParameter);
+					
+				// We create the fillHandle to run the report based on the type of data adapter....
+					if (dataAdapter.isJDBCConnection())
+					{
+						connection = dataAdapter.getConnection();
+						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
+					}
+					else if (dataAdapter.isJRDataSource())
+					{
+						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, dataAdapter.getJRDataSource(jasperReport));
+					}
+					else
+					{
+						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, dataAdapter.getJRDataSource(jasperReport));
+					}
+						
+					if (fillReport(fh, monitor) == Status.CANCEL_STATUS)
+						return Status.CANCEL_STATUS;
+
+					setReportDocument(true);
+				} catch (final Throwable e) {
+					unsetReportDocument(ErrorUtil.getStackTrace(e), true);
+				} finally {
+					if (io != null)
+						try {
+							io.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					Display.getDefault().syncExec(new Runnable() {
+						public void run() {
+							setNotRunning(true);
+						}
+					});
+					monitor.done();
+
+					// If the data adapter contributed a JDBC connection, by contract we are in charge to close it.
+					if (connection != null)
+					{
+						try { connection.close(); } catch (Exception exx)
+						{ 
+							// if an error occurs while closing the connection, we just ignore it.
+						}
+					}
+					// Allow the data adapter to cleanup its state 
+					dataAdapter.disposeSpecialParameters(jasperParameter);
+					
+				}
+				return Status.OK_STATUS;
+
+			}
+		};
+		
+		// Ready to run our Job!
+		job.setPriority(Job.LONG);
+		job.schedule();
+	}
+	
+	/*
 	public void runReport(final AMDatasource d) {
 		if (isNotRunning()) {
 
@@ -237,7 +369,8 @@ public class PreviewEditor extends JRPrintEditor {
 			job.schedule();
 		}
 	}
-
+  */
+	
 	private boolean showParameters = false;
 
 	private int askParameters() {
@@ -270,6 +403,7 @@ public class PreviewEditor extends JRPrintEditor {
 		tbManager.add(new Separator());
 		reloadAction = new ReloadAction(this);
 		tbManager.appendToGroup("DATASOURCEGROUP", reloadAction); //$NON-NLS-1$
+		
 		dataSourceWidget = new DatasourceComboItem(this);
 		tbManager.appendToGroup("DATASOURCEGROUP", dataSourceWidget); //$NON-NLS-1$
 
@@ -295,6 +429,8 @@ public class PreviewEditor extends JRPrintEditor {
 
 		tbManager.appendToGroup("DATASOURCEGROUP", showParametersAction); //$NON-NLS-1$
 
+		
+		
 		tbManager.update(true);
 	}
 

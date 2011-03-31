@@ -185,7 +185,7 @@ public abstract class DataAdapter implements IIconDescriptor {
   }
    
   /**
-   * This method is call before the adapter is used and permit to add special parameters to the map
+   * This method is call before the adapter is used and permits to add special parameters to the map
    *
    */
   public Map getSpecialParameters(Map map) throws net.sf.jasperreports.engine.JRException

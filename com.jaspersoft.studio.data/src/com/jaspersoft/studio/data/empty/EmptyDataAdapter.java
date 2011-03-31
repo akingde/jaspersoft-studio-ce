@@ -5,22 +5,24 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRDataSource;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class EmptyDataAdapter extends DataAdapter {
 
 	private Integer records = 1;
-	
+
 	public EmptyDataAdapter() {
-		
+
 	}
-	
+
 	public EmptyDataAdapter(int records) {
 		setRecords(records);
 	}
-	
+
 	public Integer getRecords() {
 		return records;
 	}
@@ -44,19 +46,12 @@ public class EmptyDataAdapter extends DataAdapter {
 
 	@Override
 	public ImageDescriptor getIcon16() {
-		// TODO Auto-generated method stub
-		return super.getIcon16();
-	}
-
-	@Override
-	public ImageDescriptor getIcon32() {
-		// TODO Auto-generated method stub
-		return super.getIcon32();
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/EmptyDataAdapterIcon-16.gif");
 	}
 
 	@Override
 	public JRDataSource getJRDataSource() {
-		return super.getJRDataSource();
+		return new net.sf.jasperreports.engine.JREmptyDataSource(getRecords());
 	}
 
 	@Override

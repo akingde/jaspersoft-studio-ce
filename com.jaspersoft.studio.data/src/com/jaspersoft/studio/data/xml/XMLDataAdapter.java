@@ -6,6 +6,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.w3c.dom.Document;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -13,6 +15,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.utils.Misc;
@@ -187,13 +190,18 @@ public class XMLDataAdapter extends DataAdapter {
 			}
             return;
 		} catch (Exception e) {
-			throw e;
+			throw new Exception(e.getMessage());
 		}
 	}
 
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new XMLDataAdapterEditor();
+	}
+
+	@Override
+	public ImageDescriptor getIcon16() {
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/XMLDataAdapterIcon-16.gif");
 	}
 
 	// GETTERS AND SETTERS

@@ -25,11 +25,14 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.Driver;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.utils.Misc;
@@ -39,7 +42,7 @@ import com.jaspersoft.studio.utils.Misc;
  *
  */
 public class JDBCDataAdapter extends DataAdapter {
-	
+
 	@Override
 	public DataAdapterEditor getEditor() {
 		
@@ -193,6 +196,7 @@ public class JDBCDataAdapter extends DataAdapter {
 
     /** This method returns an instanced java.sql.Connection to the database.
      *  If an exception occurs, the method return null.
+     *  The connection must be closed by the user.
      *  
      *  @return a new connction, otherwise it returns null.
      */
@@ -289,7 +293,7 @@ public class JDBCDataAdapter extends DataAdapter {
     }    
    
     
-    @Override
+	@Override
     public boolean isJDBCConnection() {
         return true;
     }
@@ -403,6 +407,11 @@ public class JDBCDataAdapter extends DataAdapter {
     public void setUsername(java.lang.String username) {
         this.username = username;
     }
+	
+	@Override
+	public ImageDescriptor getIcon16() {
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/JDBCDataAdapterIcon-16.gif");
+	}
     
     /*
      *  This method returns all the properties used by this connection

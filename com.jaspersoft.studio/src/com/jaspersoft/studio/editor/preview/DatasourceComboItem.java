@@ -21,6 +21,7 @@ package com.jaspersoft.studio.editor.preview;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -33,6 +34,8 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -45,13 +48,23 @@ import org.eclipse.ui.IPartListener;
 
 import com.jasperassistant.designer.viewer.IReportViewerListener;
 import com.jasperassistant.designer.viewer.ReportViewerEvent;
+import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.datasource.AMDatasource;
-import com.jaspersoft.studio.repository.RepositoryManager;
 
 public class DatasourceComboItem extends ContributionItem implements PropertyChangeListener, IReportViewerListener,
 		Listener {
-	private List<AMDatasource> items;
+	
+	
+	//private List<AMDatasource> items;
+	
+	/**
+	 * List of dataAdapter backing end the combo box.
+	 * The combo shows the data coming from this list.
+	 */
+	private List<DataAdapter> dataAdapters;
+	
+	
 	private int selecteditem;
 	// private boolean forceSetText;
 	private CCombo combo;
@@ -72,6 +85,82 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		this.editor = editor;
 	}
 
+	
+	
+	/**
+	 * This method refresh the list of data adapters
+	 * in the combo box.
+	 * It does preserve the selection (if any).
+	 * 
+	 * If combo is disposed or not yet available, it does nothing. 
+	 * 
+	 */
+	public void updateDataAdapters()
+	{
+		if (combo == null || combo.isDisposed())
+			return;
+
+		// Remove the current listener
+		combo.removeListener(SWT.Selection, this);
+		combo.removeListener(SWT.DefaultSelection, this);
+		
+		// Store the previous selection in selectedAdapter
+		int selectedIndex = combo.getSelectionIndex();
+	  
+		DataAdapter selectedAdapter = null;
+	  
+		if (selectedIndex > 0 && getDataAdapters().size() >= selectedIndex)
+	  {
+	  	selectedAdapter = getDataAdapters().get(selectedIndex-1);
+	  }
+
+		// Clear the list, and get a fresh list from the DataAdapter manager
+		getDataAdapters().clear();		
+		getDataAdapters().addAll(  DataAdapterManager.getDataAdapters() );
+
+	  // Clear the combo box...
+	  combo.removeAll();
+	  
+	  // Populate the combo with an empty string as first item
+	  String[] dataAdapterNames = new String[getDataAdapters().size()+1];
+	  
+	  dataAdapterNames[0] = "-- " + Messages.DatasourceComboItem_select_a_datasource + " --";
+	  int index = 1;
+	  for (DataAdapter da : getDataAdapters())
+	  {
+	  	dataAdapterNames[index] = da.getName();
+	  	index++;
+	  }
+	  combo.setItems(dataAdapterNames);
+		
+	  // restore the selection...if any
+	  if (selectedAdapter != null)
+	  {
+	  	int newSelectionIndex = getDataAdapters().indexOf(selectedAdapter);
+	  	if (newSelectionIndex >= 0)
+	  	{
+	  		combo.select(newSelectionIndex+1);
+	  	}
+	  }
+	  
+	  // Set a default selection
+	  if (combo.getSelectionIndex() < 0 && combo.getItemCount() > 0)
+	  {
+	  	combo.select(0);
+	  }
+	  
+	  combo.pack();
+	  Point size = combo.getSize();
+	  Rectangle bounds = combo.getBounds();
+	  bounds.width = Math.max(300, size.x);
+	  combo.setBounds(bounds);
+	  combo.setSize(size.x, bounds.height);
+	  
+	  // Restore listener
+	  combo.addListener(SWT.Selection, this);
+		combo.addListener(SWT.DefaultSelection, this);
+	}
+	
 	@Override
 	public boolean isEnabled() {
 		return super.isEnabled() && editor.isNotRunning();// .canChangeZoom();
@@ -84,11 +173,16 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		try {
 			if (!isEnabled()) {
 				combo.setEnabled(false);
-				combo.setText(""); //$NON-NLS-1$
+				//combo.setText(""); //$NON-NLS-1$
 			} else {
+				
+				/*
 				combo.removeListener(SWT.Selection, this);
 				combo.removeListener(SWT.DefaultSelection, this);
+				
 				if (repopulateCombo) {
+					
+					
 					AMDatasource d = null;
 					if (combo.getSelectionIndex() > 0)
 						d = items.get(combo.getSelectionIndex() - 1);
@@ -105,11 +199,15 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 								selectCombo(i + 1);
 								break;
 							}
-
 				}
 				combo.setEnabled(true);
 				combo.addListener(SWT.Selection, this);
 				combo.addListener(SWT.DefaultSelection, this);
+				*/
+				if (repopulateCombo) {
+					updateDataAdapters();
+				}
+				combo.setEnabled(true);
 			}
 		} catch (SWTException exception) {
 			if (!SWT.getPlatform().equals("gtk")) //$NON-NLS-1$
@@ -121,6 +219,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		combo.select(i);
 	}
 
+	/*
 	private String[] getStringItems() {
 		String[] s = new String[items.size() + 1];
 		s[0] = "-- " + Messages.DatasourceComboItem_select_a_datasource + " --"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -132,7 +231,8 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		}
 		return s;
 	}
-
+*/
+	
 	/**
 	 * Computes the width required by control
 	 * 
@@ -152,7 +252,14 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 * @return the new control
 	 */
 	protected Control createControl(Composite parent) {
-		combo = new CCombo(parent, SWT.DROP_DOWN | SWT.BORDER);
+		
+		// Create the dataAdapters array to store the combo items.
+		dataAdapters = new ArrayList<DataAdapter>();
+		// Get the data adapters from the DataAdapterManager
+		dataAdapters.addAll(  DataAdapterManager.getDataAdapters() );
+		
+		combo = new CCombo(parent, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY );
+		
 		combo.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 				handleWidgetSelected(e);
@@ -173,13 +280,22 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		});
 
 		// Initialize width of combo
+		/*
 		items = RepositoryManager.getDatasources();
 		combo.setItems(getStringItems());
 		selectCombo(0);
-		toolitem.setWidth(computeWidth(combo));
+		*/
+		
+		
+		// We add a listener to the DataAdapterManager, so we can update the
+		// list of available data adapters when they are changed.
+		DataAdapterManager.getPropertyChangeSupport().addPropertyChangeListener(this);
+		
+		
 		refresh(true);
-
-		RepositoryManager.getPropertyChangeSupport().addPropertyChangeListener(this);
+		toolitem.setWidth(computeWidth(combo));
+		
+		//RepositoryManager.getPropertyChangeSupport().addPropertyChangeListener(this);
 		return combo;
 	}
 
@@ -189,7 +305,9 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	public void dispose() {
 		if (partListener == null)
 			return;
-		RepositoryManager.getPropertyChangeSupport().removePropertyChangeListener(this);
+		
+		DataAdapterManager.getPropertyChangeSupport().removePropertyChangeListener(this);
+		//RepositoryManager.getPropertyChangeSupport().removePropertyChangeListener(this);
 		combo = null;
 		partListener = null;
 	}
@@ -240,12 +358,21 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 */
 	private void handleWidgetDefaultSelected(SelectionEvent event) {
 		if (combo.getSelectionIndex() > 0) {
-			final AMDatasource m = items.get(combo.getSelectionIndex() - 1);
+			
+			final DataAdapter da = getDataAdapters().get(combo.getSelectionIndex()-1);
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
-					editor.runReport(m);
+					
+					editor.runReport(da);
 				}
 			});
+			
+			//final AMDatasource m = items.get(combo.getSelectionIndex() - 1);
+			//Display.getDefault().syncExec(new Runnable() {
+			//	public void run() {
+			//		editor.runReport(m);
+			//	}
+			//});
 		}
 
 		refresh(false);
@@ -274,16 +401,30 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 			break;
 		case SWT.Selection:
 		case SWT.DefaultSelection:
-			onSelection();
+			//onSelection();
 			break;
 		}
 	}
 
-	private void onSelection() {
-		selecteditem = combo.getSelectionIndex();
-	}
+	//private void onSelection() {
+	//	selecteditem = combo.getSelectionIndex();
+	//}
 
 	public void viewerStateChanged(ReportViewerEvent evt) {
 		refresh(false);
+	}
+
+	/**
+	 * @param dataAdapters the dataAdapters to set
+	 */
+	private void setDataAdapters(List<DataAdapter> dataAdapters) {
+		this.dataAdapters = dataAdapters;
+	}
+
+	/**
+	 * @return the dataAdapters
+	 */
+	private List<DataAdapter> getDataAdapters() {
+		return dataAdapters;
 	}
 }

@@ -118,4 +118,5 @@ Export-Package: com.jaspersoft.studio,
  com.jaspersoft.studio.property.section.text,
  com.jaspersoft.studio.utils,
  com.jaspersoft.studio.wizards,
- com.jaspersoft.studio.wizards.dataset
+ com.jaspersoft.studio.wizards.dataset,
+ jxl
