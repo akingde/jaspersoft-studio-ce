@@ -32,13 +32,14 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IRotatable;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public abstract class MBarcode extends MGraphicElement {
+public abstract class MBarcode extends MGraphicElement implements IRotatable{
 
 	public MBarcode() {
 		super();
