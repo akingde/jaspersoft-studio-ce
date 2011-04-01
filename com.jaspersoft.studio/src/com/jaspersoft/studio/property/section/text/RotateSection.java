@@ -1,7 +1,26 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of Jaspersoft Open Studio.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.property.section.text;
 
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.type.LineSpacingEnum;
+import net.sf.jasperreports.engine.type.RotationEnum;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -24,9 +43,9 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * 
  * @author Chicu Veaceslav
  */
-public class TextSection extends AbstractSection {
+public class RotateSection extends AbstractSection {
 
-	private CCombo lineSpace;
+	private CCombo rotation;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -40,23 +59,24 @@ public class TextSection extends AbstractSection {
 		GridLayout layout = new GridLayout(50, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_text + ":", SWT.RIGHT); //$NON-NLS-1$
+		CLabel label = getWidgetFactory().createCLabel(composite, "Rotation" + ":", SWT.RIGHT);
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
 
-		lineSpace = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		lineSpace.setItems(EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
-		lineSpace.addSelectionListener(new SelectionListener() {
+		rotation = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
+		rotation.setItems(EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
+		rotation.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBaseStyle.PROPERTY_LINE_SPACING, new Integer(lineSpace.getSelectionIndex()));
+				changeProperty(JRBaseStyle.PROPERTY_ROTATION, new Integer(rotation.getSelectionIndex()));
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		lineSpace.setToolTipText(Messages.TextSection_line_spacing_tool_tip);
+		rotation.setToolTipText(Messages.TextSection_rotation_tool_tip);
+
 	}
 
 	/**
@@ -66,7 +86,7 @@ public class TextSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		if (element != null) {
-			lineSpace.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_LINE_SPACING)).intValue());
+			rotation.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_ROTATION)).intValue());
 		}
 		isRefreshing = false;
 	}

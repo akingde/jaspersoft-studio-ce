@@ -37,13 +37,14 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IRotatable;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public abstract class MTextElement extends MGraphicElementLineBox {
+public abstract class MTextElement extends MGraphicElementLineBox implements IRotatable {
 
 	public MTextElement() {
 		super();
@@ -67,14 +68,12 @@ public abstract class MTextElement extends MGraphicElementLineBox {
 		desc.add(markupD);
 
 		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.common_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(),
-						NullEnum.INHERITED));
+				Messages.common_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
 		hAlignD.setDescription(Messages.MTextElement_horizontal_alignment_description);
 		desc.add(hAlignD);
 
 		ComboBoxPropertyDescriptor vAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				Messages.common_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(),
-						NullEnum.INHERITED));
+				Messages.common_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
 		vAlignD.setDescription(Messages.MTextElement_vertical_alignment_description);
 		desc.add(vAlignD);
 

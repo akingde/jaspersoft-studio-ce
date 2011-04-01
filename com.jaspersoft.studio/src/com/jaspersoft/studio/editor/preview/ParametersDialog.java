@@ -34,6 +34,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
@@ -43,6 +44,7 @@ import com.jaspersoft.studio.editor.preview.inputs.BigNumericInput;
 import com.jaspersoft.studio.editor.preview.inputs.BooleanInput;
 import com.jaspersoft.studio.editor.preview.inputs.DateInput;
 import com.jaspersoft.studio.editor.preview.inputs.IDataInput;
+import com.jaspersoft.studio.editor.preview.inputs.ImageInput;
 import com.jaspersoft.studio.editor.preview.inputs.LocaleInput;
 import com.jaspersoft.studio.editor.preview.inputs.NumericInput;
 import com.jaspersoft.studio.editor.preview.inputs.TextInput;
@@ -59,6 +61,7 @@ public class ParametersDialog extends FormDialog {
 		inputs.add(new NumericInput());
 		inputs.add(new BigNumericInput());
 		inputs.add(new DateInput());
+		inputs.add(new ImageInput());
 	}
 	private List<JRDesignParameter> prompts;
 	private Map<String, Object> params;
@@ -159,7 +162,8 @@ public class ParametersDialog extends FormDialog {
 	private void createInput(FormToolkit toolkit, Composite sectionClient, JRDesignParameter p) {
 		for (IDataInput in : inputs) {
 			if (in.isForType(p.getValueClass())) {
-				toolkit.createLabel(sectionClient, p.getName() + ":", SWT.RIGHT); //$NON-NLS-1$
+				Label lbl = toolkit.createLabel(sectionClient, Messages.getString(p.getName()) + ":", SWT.RIGHT); //$NON-NLS-1$
+				// lbl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 				in.createInput(sectionClient, p, p.getValueClass(), params);
 				break;
 			}

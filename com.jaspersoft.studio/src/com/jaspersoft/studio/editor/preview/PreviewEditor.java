@@ -1,51 +1,18 @@
-/*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
- * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
- */
 package com.jaspersoft.studio.editor.preview;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRCsvDataSource;
-import net.sf.jasperreports.engine.data.JRXlsDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
-import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.resources.IFile;
@@ -66,13 +33,6 @@ import com.jaspersoft.studio.editor.JRPrintEditor;
 import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
 import com.jaspersoft.studio.editor.preview.actions.ShowParametersAction;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.datasource.AMDatasource;
-import com.jaspersoft.studio.model.datasource.AMFileDataSource;
-import com.jaspersoft.studio.model.datasource.empty.MEmptyDataSource;
-import com.jaspersoft.studio.model.datasource.file.MFileDataSource;
-import com.jaspersoft.studio.model.datasource.jdbc.MJDBCDataSource;
-import com.jaspersoft.studio.model.datasource.xls.MXLSDataSource;
-import com.jaspersoft.studio.model.datasource.xml.MXMLDataSource;
 import com.jaspersoft.studio.repository.RepositoryManager;
 import com.jaspersoft.studio.utils.ErrorUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
@@ -94,14 +54,13 @@ public class PreviewEditor extends JRPrintEditor {
 	}
 
 	// $TODO complete this class to use DataAdapters and remove the AMDataSource.
-	private AMDatasource datasource;
-	
+	// private AMDatasource datasource;
+
 	/**
 	 * This is the cached DataAdapter used by this report.
 	 */
 	private DataAdapter dataAdapter;
-	
-	
+
 	private Map<String, Object> jasperParameter = new Hashtable<String, Object>();
 
 	private Throwable fillError = null;
@@ -110,31 +69,30 @@ public class PreviewEditor extends JRPrintEditor {
 	private ShowParametersAction showParametersAction;
 
 	/**
-	 * Run a report in a Job, asking for parameters.
-	 * Parameters are cached.
-	 * DataAdapter is cached.
+	 * Run a report in a Job, asking for parameters. Parameters are cached. DataAdapter is cached.
 	 * 
-	 * @param myDataAdapter the {@link com.jaspersoft.studio.data.DataAdapter DataAdapter} to use in order to run the report.
+	 * @param myDataAdapter
+	 *          the {@link com.jaspersoft.studio.data.DataAdapter DataAdapter} to use in order to run the report.
 	 */
 	public void runReport(DataAdapter myDataAdapter) {
-		
-		if (!isNotRunning()) return; // Nothing to do, the report is already executing, we don't want to stop it.
-		
+
+		if (!isNotRunning())
+			return; // Nothing to do, the report is already executing, we don't want to stop it.
+
 		// Cache the DataAdapter used for this report only if it is not null.
 		if (myDataAdapter != null) {
 			// $TODO should we save the reference in the JRXML ?
 			dataAdapter = myDataAdapter;
 		}
-		
+
 		// If the DataAdapter of this preview editor is still null, abort the report execution
-		if (dataAdapter== null)
-		{
-				unsetReportDocument(Messages.PreviewEditor_no_datasource, true);
-				return;
+		if (dataAdapter == null) {
+			unsetReportDocument(Messages.PreviewEditor_no_datasource, true);
+			return;
 		}
-		
+
 		// At this point, dataAdapter is not null.
-	
+
 		String dsName = dataAdapter.getName();
 
 		// $TODO move askParameters inside the Job and check for classloading related problems
@@ -145,7 +103,7 @@ public class PreviewEditor extends JRPrintEditor {
 
 		String jobName = Messages.PreviewEditor_preview_a
 				+ ": " + getJasperDesign().getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
+
 		Job job = new Job(jobName) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -153,11 +111,11 @@ public class PreviewEditor extends JRPrintEditor {
 				monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
 				InputStream io = null;
 				fillError = null;
-				
-			  // In case of the data adapter is of type JDBC, we are in charge to close the
-        // connection provided, so we store it in this variable
-				java.sql.Connection connection = null; 
-				
+
+				// In case of the data adapter is of type JDBC, we are in charge to close the
+				// connection provided, so we store it in this variable
+				java.sql.Connection connection = null;
+
 				try {
 					IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 					Thread.currentThread().setContextClassLoader(
@@ -173,22 +131,19 @@ public class PreviewEditor extends JRPrintEditor {
 
 					// We let the data adapter to contribute its parameters.
 					dataAdapter.getSpecialParameters(jasperParameter);
-					
-				// We create the fillHandle to run the report based on the type of data adapter....
-					if (dataAdapter.isJDBCConnection())
-					{
+
+					// We create the fillHandle to run the report based on the type of data adapter....
+					if (dataAdapter.isJDBCConnection()) {
 						connection = dataAdapter.getConnection();
 						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
+					} else if (dataAdapter.isJRDataSource()) {
+						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter,
+								dataAdapter.getJRDataSource(jasperReport));
+					} else {
+						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter,
+								dataAdapter.getJRDataSource(jasperReport));
 					}
-					else if (dataAdapter.isJRDataSource())
-					{
-						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, dataAdapter.getJRDataSource(jasperReport));
-					}
-					else
-					{
-						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, dataAdapter.getJRDataSource(jasperReport));
-					}
-						
+
 					if (fillReport(fh, monitor) == Status.CANCEL_STATUS)
 						return Status.CANCEL_STATUS;
 
@@ -210,167 +165,96 @@ public class PreviewEditor extends JRPrintEditor {
 					monitor.done();
 
 					// If the data adapter contributed a JDBC connection, by contract we are in charge to close it.
-					if (connection != null)
-					{
-						try { connection.close(); } catch (Exception exx)
-						{ 
+					if (connection != null) {
+						try {
+							connection.close();
+						} catch (Exception exx) {
 							// if an error occurs while closing the connection, we just ignore it.
 						}
 					}
-					// Allow the data adapter to cleanup its state 
+					// Allow the data adapter to cleanup its state
 					dataAdapter.disposeSpecialParameters(jasperParameter);
-					
+
 				}
 				return Status.OK_STATUS;
 
 			}
 		};
-		
+
 		// Ready to run our Job!
 		job.setPriority(Job.LONG);
 		job.schedule();
 	}
-	
+
 	/*
-	public void runReport(final AMDatasource d) {
-		if (isNotRunning()) {
+	 * public void runReport(final AMDatasource d) { if (isNotRunning()) {
+	 * 
+	 * String dsName = ""; //$NON-NLS-1$ if (d != null) { dsName = d.getDisplayText(); datasource = d; } else { if
+	 * (datasource != null) dsName = datasource.getDisplayText(); else {
+	 * unsetReportDocument(Messages.PreviewEditor_no_datasource, true); // jasperPrint = new ReportConverter(jasperDesign,
+	 * false, true).getJasperPrint(); return; } } int pdresult = askParameters(); if (pdresult != Window.OK) return;
+	 * 
+	 * String jobName = Messages.PreviewEditor_preview_a + ": " + getJasperDesign().getName() +
+	 * Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ Job job = new
+	 * Job(jobName) {
+	 * 
+	 * @Override protected IStatus run(IProgressMonitor monitor) { unsetReportDocument(Messages.PreviewEditor_reloading,
+	 * false); monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN); InputStream io = null;
+	 * fillError = null; try { IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+	 * Thread.currentThread().setContextClassLoader( RepositoryManager.getClassLoader4Project(monitor,
+	 * file.getProject()));
+	 * 
+	 * setJasperPrint(null); AsynchronousFillHandle fh = null; JasperReport jasperReport =
+	 * JasperCompileManager.compileReport(getJasperDesign());
+	 * 
+	 * SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
+	 * 
+	 * jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
+	 * 
+	 * if (datasource instanceof MJDBCDataSource) { Connection connection =
+	 * RepositoryManager.establishConnection((MJDBCDataSource) datasource, PreviewEditor.this, monitor); if (connection !=
+	 * null) fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection); else
+	 * unsetReportDocument(Messages.PreviewEditor_connection_could_not_be_established, true); } else { JRDataSource jrds =
+	 * null; if (datasource instanceof MEmptyDataSource) { jrds = new JREmptyDataSource((Integer)
+	 * datasource.getPropertyValue(MEmptyDataSource.PROPERTY_SIZE)); } else if (datasource instanceof AMFileDataSource) {
+	 * io = new FileInputStream((String) datasource.getPropertyValue(MFileDataSource.PROPERTY_FILENAME)); String df =
+	 * (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT); if (df == null || df.trim().equals(""))
+	 * //$NON-NLS-1$ df = "yyyy-MM-dd"; //$NON-NLS-1$ String nf = (String)
+	 * datasource.getPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT); if (nf == null || nf.trim().equals(""))
+	 * //$NON-NLS-1$ nf = "#,##0.##"; //$NON-NLS-1$
+	 * 
+	 * if (datasource instanceof MFileDataSource) { jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource)
+	 * datasource); ((JRCsvDataSource) jrds).setDateFormat(new SimpleDateFormat(df)); ((JRCsvDataSource)
+	 * jrds).setNumberFormat(new DecimalFormat(nf)); } else if (datasource instanceof MXLSDataSource) { jrds =
+	 * RepositoryManager.createXlsDataSource(io, (MXLSDataSource) datasource); ((JRXlsDataSource) jrds).setDateFormat(new
+	 * SimpleDateFormat(df)); ((JRXlsDataSource) jrds).setNumberFormat(new DecimalFormat(nf)); } else if (datasource
+	 * instanceof MXMLDataSource) { jasperParameter.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, df);
+	 * jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, nf); TimeZone tz = (TimeZone)
+	 * datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE); if (tz == null) try { tz = (TimeZone)
+	 * datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE); } catch (Exception ex) { tz =
+	 * TimeZone.getDefault(); } jasperParameter.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, tz); Locale locale =
+	 * (Locale) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHLOCALE); if (locale == null) try { locale =
+	 * (Locale) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHLOCALE); } catch (Exception ex) { locale =
+	 * Locale.getDefault(); } jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, locale);
+	 * 
+	 * String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT); if (select != null &&
+	 * !select.trim().endsWith("")) { //$NON-NLS-1$ jrds = RepositoryManager.createXMLDataSource(PreviewEditor.this, io,
+	 * select); } else { jasperParameter.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT,
+	 * JRXmlUtils.parse(io)); } } } jasperParameter.put(JRParameter.REPORT_LOCALE, Locale.US);
+	 * 
+	 * if (jrds != null) { fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, jrds); } else fh =
+	 * AsynchronousFillHandle.createHandle(jasperReport, jasperParameter); } if (fillReport(fh, monitor) ==
+	 * Status.CANCEL_STATUS) return Status.CANCEL_STATUS;
+	 * 
+	 * setReportDocument(true); } catch (final Throwable e) { unsetReportDocument(ErrorUtil.getStackTrace(e), true); }
+	 * finally { if (io != null) try { io.close(); } catch (IOException e) { e.printStackTrace(); }
+	 * Display.getDefault().syncExec(new Runnable() { public void run() { setNotRunning(true); } }); monitor.done(); if
+	 * (datasource != null && datasource instanceof MJDBCDataSource) { RepositoryManager.closeConnection((MJDBCDataSource)
+	 * datasource); } } return Status.OK_STATUS;
+	 * 
+	 * } }; job.setPriority(Job.LONG); job.schedule(); } }
+	 */
 
-			String dsName = ""; //$NON-NLS-1$
-			if (d != null) {
-				dsName = d.getDisplayText();
-				datasource = d;
-			} else {
-				if (datasource != null)
-					dsName = datasource.getDisplayText();
-				else {
-					unsetReportDocument(Messages.PreviewEditor_no_datasource, true);
-					// jasperPrint = new ReportConverter(jasperDesign, false, true).getJasperPrint();
-					return;
-				}
-			}
-			int pdresult = askParameters();
-			if (pdresult != Window.OK)
-				return;
-
-			String jobName = Messages.PreviewEditor_preview_a
-					+ ": " + getJasperDesign().getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			Job job = new Job(jobName) {
-
-				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					unsetReportDocument(Messages.PreviewEditor_reloading, false);
-					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
-					InputStream io = null;
-					fillError = null;
-					try {
-						IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-						Thread.currentThread().setContextClassLoader(
-								RepositoryManager.getClassLoader4Project(monitor, file.getProject()));
-
-						setJasperPrint(null);
-						AsynchronousFillHandle fh = null;
-						JasperReport jasperReport = JasperCompileManager.compileReport(getJasperDesign());
-
-						SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
-
-						jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
-
-						if (datasource instanceof MJDBCDataSource) {
-							Connection connection = RepositoryManager.establishConnection((MJDBCDataSource) datasource,
-									PreviewEditor.this, monitor);
-							if (connection != null)
-								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
-							else
-								unsetReportDocument(Messages.PreviewEditor_connection_could_not_be_established, true);
-						} else {
-							JRDataSource jrds = null;
-							if (datasource instanceof MEmptyDataSource) {
-								jrds = new JREmptyDataSource((Integer) datasource.getPropertyValue(MEmptyDataSource.PROPERTY_SIZE));
-							} else if (datasource instanceof AMFileDataSource) {
-								io = new FileInputStream((String) datasource.getPropertyValue(MFileDataSource.PROPERTY_FILENAME));
-								String df = (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT);
-								if (df == null || df.trim().equals("")) //$NON-NLS-1$
-									df = "yyyy-MM-dd"; //$NON-NLS-1$
-								String nf = (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT);
-								if (nf == null || nf.trim().equals("")) //$NON-NLS-1$
-									nf = "#,##0.##"; //$NON-NLS-1$
-
-								if (datasource instanceof MFileDataSource) {
-									jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource) datasource);
-									((JRCsvDataSource) jrds).setDateFormat(new SimpleDateFormat(df));
-									((JRCsvDataSource) jrds).setNumberFormat(new DecimalFormat(nf));
-								} else if (datasource instanceof MXLSDataSource) {
-									jrds = RepositoryManager.createXlsDataSource(io, (MXLSDataSource) datasource);
-									((JRXlsDataSource) jrds).setDateFormat(new SimpleDateFormat(df));
-									((JRXlsDataSource) jrds).setNumberFormat(new DecimalFormat(nf));
-								} else if (datasource instanceof MXMLDataSource) {
-									jasperParameter.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, df);
-									jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, nf);
-									TimeZone tz = (TimeZone) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE);
-									if (tz == null)
-										try {
-											tz = (TimeZone) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE);
-										} catch (Exception ex) {
-											tz = TimeZone.getDefault();
-										}
-									jasperParameter.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, tz);
-									Locale locale = (Locale) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHLOCALE);
-									if (locale == null)
-										try {
-											locale = (Locale) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHLOCALE);
-										} catch (Exception ex) {
-											locale = Locale.getDefault();
-										}
-									jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, locale);
-
-									String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT);
-									if (select != null && !select.trim().endsWith("")) { //$NON-NLS-1$
-										jrds = RepositoryManager.createXMLDataSource(PreviewEditor.this, io, select);
-									} else {
-										jasperParameter.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, JRXmlUtils.parse(io));
-									}
-								}
-							}
-							jasperParameter.put(JRParameter.REPORT_LOCALE, Locale.US);
-
-							if (jrds != null) {
-								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, jrds);
-							} else
-								fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter);
-						}
-						if (fillReport(fh, monitor) == Status.CANCEL_STATUS)
-							return Status.CANCEL_STATUS;
-
-						setReportDocument(true);
-					} catch (final Throwable e) {
-						unsetReportDocument(ErrorUtil.getStackTrace(e), true);
-					} finally {
-						if (io != null)
-							try {
-								io.close();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						Display.getDefault().syncExec(new Runnable() {
-							public void run() {
-								setNotRunning(true);
-							}
-						});
-						monitor.done();
-						if (datasource != null && datasource instanceof MJDBCDataSource) {
-							RepositoryManager.closeConnection((MJDBCDataSource) datasource);
-						}
-					}
-					return Status.OK_STATUS;
-
-				}
-			};
-			job.setPriority(Job.LONG);
-			job.schedule();
-		}
-	}
-  */
-	
 	private boolean showParameters = false;
 
 	private int askParameters() {
@@ -403,7 +287,7 @@ public class PreviewEditor extends JRPrintEditor {
 		tbManager.add(new Separator());
 		reloadAction = new ReloadAction(this);
 		tbManager.appendToGroup("DATASOURCEGROUP", reloadAction); //$NON-NLS-1$
-		
+
 		dataSourceWidget = new DatasourceComboItem(this);
 		tbManager.appendToGroup("DATASOURCEGROUP", dataSourceWidget); //$NON-NLS-1$
 
@@ -429,8 +313,6 @@ public class PreviewEditor extends JRPrintEditor {
 
 		tbManager.appendToGroup("DATASOURCEGROUP", showParametersAction); //$NON-NLS-1$
 
-		
-		
 		tbManager.update(true);
 	}
 

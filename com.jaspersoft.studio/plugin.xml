@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.0"?><!--
+<?eclipse version="3.0"?>
+<!--
      Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
      Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
      http://www.jaspersoft.com
@@ -317,6 +318,33 @@
             </input>
             <input
                   type="com.jaspersoft.studio.model.ILineBox">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.SizeSection"
+               class="com.jaspersoft.studio.property.section.graphic.AlignSection"
+               id="com.jaspersoft.studio.property.section.graphic.AlignSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.text.MTextElement">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.image.MImage">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.graphic.AlignSection"
+               class="com.jaspersoft.studio.property.section.text.RotateSection"
+               id="com.jaspersoft.studio.property.section.text.RotateSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.IRotatable">
             </input>
          </propertySection>
       </propertySections>

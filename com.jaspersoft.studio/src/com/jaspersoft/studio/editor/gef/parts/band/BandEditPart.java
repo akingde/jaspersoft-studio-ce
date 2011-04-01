@@ -23,7 +23,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
@@ -123,11 +122,29 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new BandMoveEditPolicy());
 		// installEditPolicy(EditPolicy.CONTAINER_ROLE, new BandContainerEditPolicy());
+		// installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
+		//
+		// @Override
+		// protected Command getCreateCommand(CreateRequest request) {
+		// // TODO Auto-generated method stub
+		// return null;
+		// }
+		//
+		// @Override
+		// protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
+		// // TODO Auto-generated method stub
+		// return null;
+		// }
+		// });
+	}
+
+	public EditPolicy getEditPolicy() {
+		return new BandResizableEditPolicy();
 	}
 
 	@Override
 	public boolean isSelectable() {
-		return false;
+		return true;
 	}
 
 	/**
@@ -181,10 +198,6 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (getParent() != null)
 			getParent().refresh();
-	}
-
-	public EditPolicy getEditPolicy() {
-		return new BandResizableEditPolicy();
 	}
 
 	public Object getConstraintFor(ChangeBoundsRequest request, GraphicalEditPart child) {

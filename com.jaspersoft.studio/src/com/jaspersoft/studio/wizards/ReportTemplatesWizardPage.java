@@ -16,10 +16,15 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Scale;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+
 
 public class ReportTemplatesWizardPage extends WizardPage {
 	private java.util.List<URL> urls = new ArrayList<URL>();
@@ -42,6 +47,9 @@ public class ReportTemplatesWizardPage extends WizardPage {
 		setDescription(Messages.ReportTemplatesWizardPage_description);
 	}
 
+	private static final int GALLERY_HEIGHT = 100;
+	private static final int GALLERY_WIDTH = 100;
+
 	/**
 	 * Create contents of the wizard.
 	 * 
@@ -51,13 +59,27 @@ public class ReportTemplatesWizardPage extends WizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 
 		setControl(container);
-		container.setLayout(new GridLayout(1, false));
+		container.setLayout(new GridLayout(2, false));
+
+		Label lbl = new Label(container, SWT.NONE);
+		lbl.setText("Zoom:");
+		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.FILL_HORIZONTAL);
+		lbl.setLayoutData(gd);
+
+		final Scale scale = new Scale(container, SWT.BORDER);
+		scale.setMinimum(1);
+		scale.setMaximum(50);
+		scale.setIncrement(1);
+		scale.setPageIncrement(1);
+		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		gd.widthHint = 150;
+		scale.setLayoutData(gd);
 
 		gal = new Gallery(container, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
-		NoGroupRenderer gr = new NoGroupRenderer();
+		final NoGroupRenderer gr = new NoGroupRenderer();
 		gr.setMinMargin(2);
-		gr.setItemHeight(100);
-		gr.setItemWidth(140);
+		gr.setItemHeight(GALLERY_HEIGHT);
+		gr.setItemWidth(GALLERY_WIDTH);
 		gr.setAutoMargin(true);
 		gal.setGroupRenderer(gr);
 		DefaultGalleryItemRenderer ir = new DefaultGalleryItemRenderer();
@@ -67,7 +89,9 @@ public class ReportTemplatesWizardPage extends WizardPage {
 
 		itemGroup = new GalleryItem(gal, SWT.NONE);
 
-		gal.setLayoutData(new GridData(GridData.FILL_BOTH));
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		gal.setLayoutData(gd);
 		gal.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -85,6 +109,21 @@ public class ReportTemplatesWizardPage extends WizardPage {
 		});
 
 		findTemplates();
+
+		scale.addListener(SWT.Selection, new Listener() {
+
+			public void handleEvent(Event event) {
+				Display.getCurrent().asyncExec(new Runnable() {
+
+					public void run() {
+						double c = 1 + 0.1 * scale.getSelection();
+						gr.setItemHeight((int) (GALLERY_HEIGHT * c));
+						gr.setItemWidth((int) (GALLERY_WIDTH * c));
+					}
+				});
+
+			}
+		});
 	}
 
 	public void findTemplates() {
@@ -103,10 +142,15 @@ public class ReportTemplatesWizardPage extends WizardPage {
 
 			item.setText(tname); //$NON-NLS-1$
 			Image itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".png"));
-			if (itemImage != null)
-				JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".gif"));
-			if (itemImage != null)
-				JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".jpg"));
+			if (itemImage == null)
+				itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".gif"));
+			if (itemImage == null)
+				itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".jpg"));
+			if (itemImage == null)
+				itemImage = JaspersoftStudioPlugin.getImage(obj.getFile().replaceAll(".jrxml", ".jpg"));
+			if (itemImage == null)
+				itemImage = JaspersoftStudioPlugin.getImage("blank_a4.png");
+
 			if (itemImage != null)
 				item.setImage(itemImage);
 

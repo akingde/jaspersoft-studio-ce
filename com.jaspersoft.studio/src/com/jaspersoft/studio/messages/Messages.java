@@ -167,6 +167,7 @@ public class Messages extends NLS {
 	public static String Align2BorderAction_align_to_right_tool_tip;
 	public static String Align2BorderAction_align_to_top;
 	public static String Align2BorderAction_align_to_top_tool_tip;
+	public static String AlignSection_common_align;
 	public static String AppContextMenuProvider_align_components;
 	public static String AppContextMenuProvider_align_to_container;
 	public static String AppContextMenuProvider_order;
@@ -279,6 +280,8 @@ public class Messages extends NLS {
 	public static String FontSection_underline_tool_tip;
 	public static String HyperlinkParameterPage_Description;
 	public static String HyperlinkParameterPage_Title;
+	public static String ImageInput_nullimage;
+	public static String ImageInput_selectimage;
 	public static String JDBCDatasourcePage_browse;
 	public static String JDBCDatasourcePage_connection_established_message;
 	public static String JDBCDatasourcePage_connection_is_null_message;
@@ -525,6 +528,7 @@ public class Messages extends NLS {
 	public static String MReport_page_orientation_description;
 	public static String MReport_page_width;
 	public static String MReport_page_width_description;
+	public static String MReport_paginationcategory;
 	public static String MReport_print_order;
 	public static String MReport_print_order_description;
 	public static String MReport_report_name;
