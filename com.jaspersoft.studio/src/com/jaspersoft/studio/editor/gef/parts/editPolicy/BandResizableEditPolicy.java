@@ -26,22 +26,23 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
-import org.eclipse.gef.handles.AbstractHandle;
+import org.eclipse.gef.handles.MoveHandle;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
-import com.jaspersoft.studio.editor.gef.parts.band.BandResizeHandle2;
+import com.jaspersoft.studio.editor.gef.figures.borders.Line1Border;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.IGraphicElement;
 
 /**
  * The Class BandResizableEditPolicy.
@@ -51,12 +52,14 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 	private String feedbackText = "";
 
 	protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
+		if (getHost().getModel() instanceof IGraphicElement) {
+			// if (getHost() instanceof BandEditPart
+			// && ((BandEditPart) getHost()).getModelNode().getValue() instanceof JRDesignBand) {
+			APropertyNode n = (APropertyNode) getHost().getModel();
+			int bandHeight = (Integer) n.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT);
+			Integer bWidth = (Integer) n.getPropertyValue(JRDesignElement.PROPERTY_WIDTH);
 
-		if (getHost() instanceof BandEditPart
-				&& ((BandEditPart) getHost()).getModelNode().getValue() instanceof JRDesignBand) {
-			int bandHeight = ((JRDesignBand) (((BandEditPart) getHost()).getModelNode().getValue())).getHeight();
-
-			Rectangle oldBounds = new Rectangle(0, 0, 0, bandHeight);
+			Rectangle oldBounds = new Rectangle(0, 0, bWidth != null ? bWidth : 0, bandHeight);
 
 			PrecisionRectangle rect2 = new PrecisionRectangle(new Rectangle(0, 0, request.getSizeDelta().width,
 					request.getSizeDelta().height));
@@ -64,9 +67,8 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 
 			oldBounds.resize(rect2.width, rect2.height);
 
-			setFeedbackText(oldBounds.height + " px");
+			setFeedbackText(oldBounds.height + (bWidth != null ? "," + oldBounds.width : "") + " px");
 		}
-
 		super.showChangeBoundsFeedback(request);
 	}
 
@@ -83,17 +85,23 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 	 * 
 	 * @see org.eclipse.gef.editpolicies.ResizableEditPolicy#createSelectionHandles()
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected List createSelectionHandles() {
-		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
-		list.add(new BandResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
-		list.add(new BandResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
+		List list = new ArrayList();
 
+		MoveHandle hand = new MoveHandle((GraphicalEditPart) getHost());
+		hand.setBorder(new Line1Border(ColorConstants.darkBlue, 4));
+
+		list.add(hand);
+		// NonResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), list);
+		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
+		// // if (hasNorth)
+		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
 		return list;
 	}
 
 	protected IFigure createDragSourceFeedbackFigure() {
-
 		// Use an invisible rectangle
 		RectangleFigure r = new RectangleFigure() {
 
@@ -130,8 +138,6 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 					return;
 				}
 
-				// Label label = new Label(text);
-				// label.setFont(gr.getFont());
 				FontMetrics fm = gr.getFontMetrics();
 				Rectangle2D textBounds = fm.getStringBounds(text, gr);
 
@@ -170,10 +176,6 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		};
 		r.setOpaque(false);
 		r.setFill(false);
-
-		// FigureUtilities.makeGhostShape(r);
-		// r.setLineStyle(Graphics.LINE_DOT);
-		// r.setForegroundColor(ColorConstants.white);
 		r.setBounds(getInitialFeedbackBounds());
 		addFeedback(r);
 		return r;
