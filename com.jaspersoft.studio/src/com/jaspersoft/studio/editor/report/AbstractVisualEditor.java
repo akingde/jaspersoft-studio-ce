@@ -99,7 +99,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.preferences.PreferenceConstants;
+import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /**
@@ -254,13 +254,13 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		GraphicalViewer graphicalViewer = getGraphicalViewer();
 		// Show Grid Action
 		IPreferenceStore prefs = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-		Boolean isGridVisible = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID);
-		Boolean isSnapToGuides = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES);
-		Boolean isSnapToGrid = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID);
-		Boolean isSnapToGeometry = prefs.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGEOMETRY);
+		Boolean isGridVisible = prefs.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWGRID);
+		Boolean isSnapToGuides = prefs.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGUIDES);
+		Boolean isSnapToGrid = prefs.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGRID);
+		Boolean isSnapToGeometry = prefs.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SNAPTOGEOMETRY);
 
-		int gspaceX = prefs.getInt(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEX);
-		int gspaceY = prefs.getInt(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEY);
+		int gspaceX = prefs.getInt(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEX);
+		int gspaceY = prefs.getInt(RulersGridPreferencePage.P_PAGE_RULERGRID_GRIDSPACEY);
 
 		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_ENABLED, isSnapToGrid.booleanValue());
 		graphicalViewer.setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE, isGridVisible.booleanValue());

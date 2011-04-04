@@ -21,6 +21,7 @@ package com.jaspersoft.studio.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -37,6 +38,14 @@ import com.jaspersoft.studio.messages.Messages;
  */
 public class RulersGridPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
+	public static final String P_PAGE_RULERGRID_SHOWRULER = "pageRulerGrid_SHOWRULER"; //$NON-NLS-1$
+	public static final String P_PAGE_RULERGRID_SNAPTOGUIDES = "pageRulerGrid_SNAPTOGUIDES"; //$NON-NLS-1$
+	public static final String P_PAGE_RULERGRID_SHOWGRID = "pageRulerGrid_SHOWGRID"; //$NON-NLS-1$
+	public static final String P_PAGE_RULERGRID_SNAPTOGRID = "pageRulerGrid_SNAPTOGRID"; //$NON-NLS-1$
+	public static final String P_PAGE_RULERGRID_SNAPTOGEOMETRY = "pageRulerGrid_SNAPTOGEOMETRY"; //$NON-NLS-1$
+	public static final String P_PAGE_RULERGRID_GRIDSPACEX = "pageRulerGrid_GRIDSPACEX"; //$NON-NLS-1$
+	public static final String P_PAGE_RULERGRID_GRIDSPACEY = "pageRulerGrid_GRIDSPACEY"; //$NON-NLS-1$
+
 	public RulersGridPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
@@ -49,43 +58,47 @@ public class RulersGridPreferencePage extends FieldEditorPreferencePage implemen
 	public void createFieldEditors() {
 		Group group = new Group(getFieldEditorParent(), SWT.NONE);
 		group.setText(Messages.RulersGridPreferencePage_ruler_options);
-
-		GridLayout gridLayout = new GridLayout(2, false);
+		group.setLayout(new GridLayout(2, false));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalSpan = 2;
-
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER, Messages.RulersGridPreferencePage_show_rulers, group));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES, Messages.common_snap_to_guides, group));
-
 		group.setLayoutData(gridData);
-		group.setLayout(gridLayout);
+
+		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SHOWRULER, Messages.RulersGridPreferencePage_show_rulers, group));
+		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SNAPTOGUIDES, Messages.common_snap_to_guides, group));
 
 		group = new Group(getFieldEditorParent(), SWT.NONE);
 		group.setText(Messages.RulersGridPreferencePage_grid_options);
-
-		gridLayout = new GridLayout(2, false);
+		group.setLayout(new GridLayout(2, false));
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
-
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalSpan = 2;
+		group.setLayoutData(gridData);
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID, Messages.RulersGridPreferencePage_show_grid, group));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID, Messages.common_snap_to_grid, group));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGEOMETRY, Messages.common_snap_to_geometry, group));
-		IntegerFieldEditor spaceX = new IntegerFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEX, Messages.RulersGridPreferencePage_grid_spacing_x,
-				group);
+		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SHOWGRID, Messages.RulersGridPreferencePage_show_grid, group));
+		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SNAPTOGRID, Messages.common_snap_to_grid, group));
+		addField(new BooleanFieldEditor(P_PAGE_RULERGRID_SNAPTOGEOMETRY, Messages.common_snap_to_geometry, group));
+		IntegerFieldEditor spaceX = new IntegerFieldEditor(P_PAGE_RULERGRID_GRIDSPACEX,
+				Messages.RulersGridPreferencePage_grid_spacing_x, group);
 		spaceX.setValidRange(2, 100);
 		addField(spaceX);
-		IntegerFieldEditor spaceY = new IntegerFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEY, Messages.RulersGridPreferencePage_grid_spacing_y,
-				group);
+
+		IntegerFieldEditor spaceY = new IntegerFieldEditor(P_PAGE_RULERGRID_GRIDSPACEY,
+				Messages.RulersGridPreferencePage_grid_spacing_y, group);
 		spaceY.setValidRange(2, 100);
 		addField(spaceY);
 
-		group.setLayoutData(gridData);
-		group.setLayout(gridLayout);
+	}
 
+	public static void getDefaults(IPreferenceStore store) {
+		store.setDefault(P_PAGE_RULERGRID_SHOWRULER, new Boolean(true));
+		store.setDefault(P_PAGE_RULERGRID_SNAPTOGUIDES, new Boolean(true));
+
+		store.setDefault(P_PAGE_RULERGRID_SHOWGRID, new Boolean(true));
+		store.setDefault(P_PAGE_RULERGRID_SNAPTOGRID, new Boolean(true));
+		store.setDefault(P_PAGE_RULERGRID_SNAPTOGEOMETRY, new Boolean(true));
+		store.setDefault(P_PAGE_RULERGRID_GRIDSPACEX, new Integer(10));
+		store.setDefault(P_PAGE_RULERGRID_GRIDSPACEY, new Integer(10));
 	}
 
 	/*

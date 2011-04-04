@@ -133,6 +133,9 @@
             class="com.jaspersoft.studio.preferences.StudioPreferencePage"
             id="com.jaspersoft.studio.preferences.StudioPreferencePage"
             name="Jaspersoft Studio">
+         <keywordReference
+               id="com.jaspersoft.studio.keywordReference1">
+         </keywordReference>
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
@@ -145,6 +148,48 @@
             class="com.jaspersoft.studio.preferences.RulersGridPreferencePage"
             id="com.jaspersoft.studio.preferences.GridRulerPreferencePage"
             name="Rulers And Grid">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            name="Exporters">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage"
+            name="PDF Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage"
+            name="HTML Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
+            name="CSV Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
+            name="Text Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage"
+            name="Excel Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
+            name="XMLExporter">
       </page>
    </extension>
    <extension

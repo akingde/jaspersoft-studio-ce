@@ -46,7 +46,7 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.preferences.PreferenceConstants;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 
 /**
  * The Class FigureEditPart.
@@ -65,7 +65,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE))
+			if (event.getProperty().equals(DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE))
 				setPrefsBorder(getFigure());
 		}
 	}
@@ -128,7 +128,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 
 	protected void setPrefsBorder(IFigure rect) {
 		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
-				PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
+				DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
 
 		if (pref.equals("rectangle")) //$NON-NLS-1$
 			rect.setBorder(new ElementLineBorder(ColorConstants.black));

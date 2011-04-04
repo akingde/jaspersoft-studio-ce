@@ -23,6 +23,8 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
 
 /**
  * Class used to initialize default preference values.
@@ -36,18 +38,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, "shadow"); //$NON-NLS-1$
-		store.setDefault(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
 
-		store.setDefault(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER, new Boolean(true));
-		store.setDefault(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES, new Boolean(true));
-
-		store.setDefault(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID, new Boolean(true));
-		store.setDefault(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID, new Boolean(true));
-		store.setDefault(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGEOMETRY, new Boolean(true));
-		store.setDefault(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEX, new Integer(10));
-		store.setDefault(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEY, new Integer(10));
-
+		DesignerPreferencePage.getDefaults(store);
+		RulersGridPreferencePage.getDefaults(store);
+		JRExporterPreferencePage.getDefaults(store);
+		CSVExporterPreferencePage.getDefaults(store);
 	}
 
 }

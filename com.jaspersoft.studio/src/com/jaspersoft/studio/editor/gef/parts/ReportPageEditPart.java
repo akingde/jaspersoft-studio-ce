@@ -62,7 +62,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.preferences.PreferenceConstants;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /**
@@ -76,7 +76,7 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 	private final class PreferenceListener implements IPropertyChangeListener {
 
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE))
+			if (event.getProperty().equals(DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE))
 				setPrefsBorder(getFigure());
 		}
 	}
@@ -127,7 +127,7 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 
 	private void setPrefsBorder(IFigure rect) {
 		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
-				PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, "shadow", null); //$NON-NLS-1$
+				DesignerPreferencePage.P_PAGE_DESIGN_BORDER_STYLE, "shadow", null); //$NON-NLS-1$
 
 		if (pref.equals("shadow")) //$NON-NLS-1$
 			rect.setBorder(new ShadowBorder());

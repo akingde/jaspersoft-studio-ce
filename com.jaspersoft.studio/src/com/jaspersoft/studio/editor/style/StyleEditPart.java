@@ -23,7 +23,7 @@ import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.style.editpolicy.ElementEditPolicy;
 import com.jaspersoft.studio.model.style.MStyle;
-import com.jaspersoft.studio.preferences.PreferenceConstants;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 
 public class StyleEditPart extends FigureEditPart {
 
@@ -88,7 +88,7 @@ public class StyleEditPart extends FigureEditPart {
 
 	protected void setPrefsBorder(IFigure rect) {
 		String pref = Platform.getPreferencesService().getString(JaspersoftStudioPlugin.getUniqueIdentifier(),
-				PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
+				DesignerPreferencePage.P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle", null); //$NON-NLS-1$
 
 		if (pref.equals("rectangle")) { //$NON-NLS-1$
 			imageF.setBorder(new ElementLineBorder(ColorConstants.black));

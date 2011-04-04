@@ -51,7 +51,7 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.preferences.PreferenceConstants;
+import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 
 /**
  * The Class ReportEditor.
@@ -96,7 +96,7 @@ public class ReportEditor extends AbstractVisualEditor {
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
 
 		Boolean isRulerVisible = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER);
+				.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
 

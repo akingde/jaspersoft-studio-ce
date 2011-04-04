@@ -30,6 +30,9 @@ import com.jaspersoft.studio.messages.Messages;
  */
 public class DesignerPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
+	public static final String P_ELEMENT_DESIGN_BORDER_STYLE = "elementDesignBorderStyle"; //$NON-NLS-1$
+	public static final String P_PAGE_DESIGN_BORDER_STYLE = "pageDesignBorderStyle"; //$NON-NLS-1$
+
 	public DesignerPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
@@ -40,10 +43,16 @@ public class DesignerPreferencePage extends FieldEditorPreferencePage implements
 	 *
 	 */
 	public void createFieldEditors() {
-		addField(new ComboFieldEditor(PreferenceConstants.P_ELEMENT_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_element_design_border_style,
-				new String[][] { { Messages.DesignerPreferencePage_corners, "corners" }, { Messages.common_rectangle, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
-		addField(new ComboFieldEditor(PreferenceConstants.P_PAGE_DESIGN_BORDER_STYLE, Messages.DesignerPreferencePage_page_border_style, new String[][] {
-				{ Messages.DesignerPreferencePage_fancy_shadow, "shadow" }, { Messages.DesignerPreferencePage_simple_shadow, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
+		addField(new ComboFieldEditor(
+				P_ELEMENT_DESIGN_BORDER_STYLE,
+				Messages.DesignerPreferencePage_element_design_border_style,
+				new String[][] {
+						{ Messages.DesignerPreferencePage_corners, "corners" }, { Messages.common_rectangle, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
+		addField(new ComboFieldEditor(
+				P_PAGE_DESIGN_BORDER_STYLE,
+				Messages.DesignerPreferencePage_page_border_style,
+				new String[][] {
+						{ Messages.DesignerPreferencePage_fancy_shadow, "shadow" }, { Messages.DesignerPreferencePage_simple_shadow, "rectangle" } }, getFieldEditorParent())); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/*
@@ -54,4 +63,8 @@ public class DesignerPreferencePage extends FieldEditorPreferencePage implements
 	public void init(IWorkbench workbench) {
 	}
 
+	public static void getDefaults(IPreferenceStore store) {
+		store.setDefault(P_PAGE_DESIGN_BORDER_STYLE, "shadow"); //$NON-NLS-1$
+		store.setDefault(P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
+	}
 }
