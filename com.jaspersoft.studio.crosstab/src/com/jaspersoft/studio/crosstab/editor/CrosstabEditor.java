@@ -45,7 +45,7 @@ import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
-import com.jaspersoft.studio.preferences.PreferenceConstants;
+import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 
 /**
  * The Class CrosstabEditor.
@@ -89,7 +89,7 @@ public class CrosstabEditor extends AbstractVisualEditor {
 
 		Boolean isRulerVisible = JaspersoftStudioPlugin.getInstance()
 				.getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER);
+				.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
 				isRulerVisible);
