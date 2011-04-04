@@ -118,7 +118,7 @@ public class HTMLExporterPreferencePage extends FieldEditorPreferencePage implem
 		ptab.setText("Headader And Footer");
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
-		sc.setLayout(new GridLayout(1, true));
+		sc.setLayout(new GridLayout());
 
 		TextFieldEditor se = new TextFieldEditor(NSF_EXPORT_HTML_HEADER, "Header", sc);
 		se.getTextControl(sc).setLayoutData(new GridData(GridData.FILL_BOTH));
