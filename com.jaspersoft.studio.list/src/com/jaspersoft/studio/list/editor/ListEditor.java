@@ -38,7 +38,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.list.messages.Messages;
 import com.jaspersoft.studio.list.model.MList;
-import com.jaspersoft.studio.preferences.PreferenceConstants;
+import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 
 /**
  * The Class TableEditor.
@@ -76,7 +76,7 @@ public class ListEditor extends AbstractVisualEditor {
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
 
 		Boolean isRulerVisible = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
-				.getBoolean(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER);
+				.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
 
