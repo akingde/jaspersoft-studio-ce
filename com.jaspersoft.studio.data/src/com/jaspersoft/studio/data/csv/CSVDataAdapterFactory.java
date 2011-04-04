@@ -17,22 +17,26 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.xml;
+package com.jaspersoft.studio.data.csv;
 
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
-public class XMLDataAdapterFactory implements DataAdapterFactory {
+public class CSVDataAdapterFactory implements DataAdapterFactory {
 
+	@Override
 	public DataAdapter createDataAdapter() {
-		return new XMLDataAdapter();
+		return new CSVDataAdapter();
 	}
 
+	@Override
 	public String getDataAdapterClassName() {
-		return XMLDataAdapter.class.getName();
+		return CSVDataAdapter.class.getName();
 	}
 
+	@Override
 	public String getDescription() {
-		return "XML Data Adapter";
+		return "CSV File Data Adapter";
 	}
+
 }

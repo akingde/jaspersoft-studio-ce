@@ -17,22 +17,39 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.xml;
+package com.jaspersoft.studio.data.csv;
+
+import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.DataAdapter;
-import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class XMLDataAdapterFactory implements DataAdapterFactory {
+public class CSVDataAdapterEditor implements DataAdapterEditor {
+	
+	CSVDataAdapterComposite composite = null;
 
-	public DataAdapter createDataAdapter() {
-		return new XMLDataAdapter();
+	@Override
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		if (dataAdapter instanceof CSVDataAdapter) {
+			this.composite.setDataAdapter((CSVDataAdapter)dataAdapter);
+		}
 	}
 
-	public String getDataAdapterClassName() {
-		return XMLDataAdapter.class.getName();
+	@Override
+	public DataAdapter getDataAdapter() {
+		return this.composite.getDataAdapter();
 	}
 
-	public String getDescription() {
-		return "XML Data Adapter";
+	@Override
+	public Composite getComposite(Composite parent, int style) {
+		if (composite == null) {
+			composite = new CSVDataAdapterComposite(parent, style);
+		}
+		return composite;
+	}
+
+	@Override
+	public String getHelpContextId() {
+		return this.composite.getHelpContextId();
 	}
 }

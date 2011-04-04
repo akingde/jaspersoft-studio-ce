@@ -1,3 +1,22 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of Jaspersoft Open Studio.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.data.xls;
 
 import java.io.File;
@@ -29,7 +48,6 @@ public class XLSDataAdapter extends DataAdapter {
     private String customNumberPattern = null;
     private String fileName;
 	private List<String> columnNames = new ArrayList<String>();
-
 	private List<Integer> columnIndexes = new ArrayList<Integer>();
 	
 	/**
@@ -119,8 +137,9 @@ public class XLSDataAdapter extends DataAdapter {
 		}
 		return super.getJRDataSource();
 	}
+	
 	/**
-     *  Real getJRDataSource implementation
+     * Real getJRDataSource implementation
 	 * @throws IOException 
 	 * @throws JRException 
 	 * @throws FileNotFoundException 
@@ -145,9 +164,9 @@ public class XLSDataAdapter extends DataAdapter {
             String[] names = new String[getColumnNames().size()];
             int[] indexes = new int[getColumnNames().size()];
 
-            for (int i=0; i<names.length; ++i )
+            for (int i=0; i< names.length; ++i )
             {
-                names[i] = ""+getColumnNames().get(i);
+                names[i] = "" + getColumnNames().get(i);
                 indexes[i] = (getColumnIndexes().size() > i) ? getColumnIndexes().get(i) : i;
             }
             ds.setColumnNames( names, indexes);
