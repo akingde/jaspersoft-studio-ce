@@ -407,10 +407,11 @@ public class XLSDataAdapterComposite extends Composite {
 			
 			for (int i = 0; i < listColumnNames.size(); i++) {
 				rows.add( new String[]{listColumnNames.get(i), listColumnIndexes.get(i).toString()} );
-				tableViewer.refresh();
-				setLastTableItemSelection();
-				btnDelete.setEnabled(true);
 			}
+			
+			tableViewer.refresh();
+			setLastTableItemSelection();
+			btnDelete.setEnabled(true);
 		}
 		
 		String customDatePattern = this.xlsDataAdapter.getCustomDatePattern();
@@ -420,7 +421,7 @@ public class XLSDataAdapterComposite extends Composite {
 			textDatePattern.setEnabled(true);
 			btnCreateDatePattern.setEnabled(true);
 		} else {
-			textDatePattern.setText(new SimpleDateFormat().toLocalizedPattern());
+			textDatePattern.setText(new SimpleDateFormat().toPattern());
 		}
 		
 		String customNumberPattern = this.xlsDataAdapter.getCustomNumberPattern();
@@ -430,7 +431,7 @@ public class XLSDataAdapterComposite extends Composite {
 			textNumberPattern.setEnabled(true);
 			btnCreateNumberPattern.setEnabled(true);
 		} else {
-			textNumberPattern.setText(new DecimalFormat().toLocalizedPattern());
+			textNumberPattern.setText(new DecimalFormat().toPattern());
 		}
 		
 		btnCheckSkipFirstLine.setSelection(this.xlsDataAdapter.isUseFirstRowAsHeader());
@@ -672,6 +673,7 @@ public class XLSDataAdapterComposite extends Composite {
 	 * @throws Exception
 	 */
 	private void getExcelColumns() throws Exception {
+		
 	    if (textExcelFileName.getText().length() > 0)
 	    {
 	     	Workbook workbook = Workbook.getWorkbook(new FileInputStream(new File(textExcelFileName.getText())));

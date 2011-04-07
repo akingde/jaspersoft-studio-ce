@@ -25,7 +25,7 @@ public class Misc {
    * @param str
    * @return
    */
-	public static Object addSlashesString(String str) {
+	public static String addSlashesString(String str) {
 		if (str == null) return str;
 
     String newStr = "";

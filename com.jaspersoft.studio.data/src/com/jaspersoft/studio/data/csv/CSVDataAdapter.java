@@ -28,12 +28,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.query.JRCsvQueryExecuterFactory;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.xls.XLSDataAdapterEditor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class CSVDataAdapter extends DataAdapter {
@@ -219,6 +225,17 @@ public class CSVDataAdapter extends DataAdapter {
         
         con.setFileName( csv_file );
         con.getJRDataSource();
+	}
+	
+	@Override
+	public DataAdapterEditor getEditor() {
+		return new CSVDataAdapterEditor();
+	}
+
+	@Override
+	public ImageDescriptor getIcon16() {
+		//return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/XLSDataAdapterIcon-16.gif");
+		return super.getIcon16();
 	}
 	
 	/*

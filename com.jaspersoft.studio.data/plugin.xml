@@ -5,6 +5,7 @@
          id="test"
          name="test"
          point="com.jaspersoft.studio.dataAdapters">
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.csv.CSVDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.jdbc.JDBCDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.queryexecutor.QueryExecutorDataAdapterFactory"/>
