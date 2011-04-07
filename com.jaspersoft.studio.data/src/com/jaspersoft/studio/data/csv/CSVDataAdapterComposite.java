@@ -41,6 +41,8 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -166,7 +168,7 @@ public class CSVDataAdapterComposite extends Composite {
 		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		composite_3.setBounds(0, 0, 64, 64);
 		
-		tableViewer = new TableViewer(composite_3, SWT.BORDER | SWT.FULL_SELECTION);
+		tableViewer = new TableViewer(composite_3, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		tableViewer.setContentProvider(new CSVContentProvider());
 		tableViewer.setInput(rows);
 		
@@ -417,18 +419,25 @@ public class CSVDataAdapterComposite extends Composite {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int[] indices = table.getSelectionIndices();
-				int removedItems = 0;
 				
-				for (int i : indices) {	
-					// To prevent an IndexOutOfBoundsException
-					// we need to subtract number of removed items
-					// from the removed item index.
-					rows.remove(i - removedItems);
-					removedItems++;
+				removeEntries();
+			}
+		});
+		
+		// keys listener
+		table.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// nothing
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				if (e.character == SWT.DEL) {
+					removeEntries();
 				}
-				tableViewer.refresh();
-				setLastTableItemSelection();
 			}
 		});
 		
@@ -694,6 +703,26 @@ public class CSVDataAdapterComposite extends Composite {
 		return new String("COLUMN_" + i);
 	}
 	
+
+	/**
+	 * Removes selected entries from the data model
+	 */
+	private void removeEntries() {
+		
+		int[] indices = table.getSelectionIndices();
+		int removedItems = 0;
+		
+		for (int i : indices) {	
+			// To prevent an IndexOutOfBoundsException
+			// we need to subtract number of removed items
+			// from the removed item index.
+			rows.remove(i - removedItems);
+			removedItems++;
+		}
+		tableViewer.refresh();
+		setLastTableItemSelection();
+	}
+	
 	/**
 	 * This set selection to the last table item
 	 */
@@ -759,7 +788,7 @@ public class CSVDataAdapterComposite extends Composite {
 	 * enables the delete button
 	 * @throws IOException, Exception 
 	 */
-	protected void getCSVColumns() throws IOException, Exception {
+	private void getCSVColumns() throws IOException, Exception {
 		
 		JRCsvDataSourceInspector ds = new JRCsvDataSourceInspector( new File(textCSVFileName.getText()) );
         

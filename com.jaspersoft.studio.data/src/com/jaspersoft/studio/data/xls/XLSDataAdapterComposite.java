@@ -43,6 +43,8 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -152,16 +154,16 @@ public class XLSDataAdapterComposite extends Composite {
 		tblclmnColumnName.setMoveable(true);
 		tblclmnColumnName.setWidth(100);
 		tblclmnColumnName.setText("Column Name");
-		tableViewerColumnName.setLabelProvider(new ColumnNameLabelProvider());
-		tableViewerColumnName.setEditingSupport(new NameEditingSupport(tableViewer));
+		tableViewerColumnName.setLabelProvider(new ColumnNameIndexLabelProvider(0));
+		tableViewerColumnName.setEditingSupport(new NameIndexEditingSupport(tableViewer, 0));
 		
 		tableViewerColumnIndex = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnColumnIndex = tableViewerColumnIndex.getColumn();
 		tblclmnColumnIndex.setMoveable(true);
 		tblclmnColumnIndex.setWidth(100);
 		tblclmnColumnIndex.setText("Column Index");
-		tableViewerColumnIndex.setLabelProvider(new ColumnIndexLabelProvider());
-		tableViewerColumnIndex.setEditingSupport(new IndexEditingSupport(tableViewer));
+		tableViewerColumnIndex.setLabelProvider(new ColumnNameIndexLabelProvider(1));
+		tableViewerColumnIndex.setEditingSupport(new NameIndexEditingSupport(tableViewer, 1));
 		
 		for (int i = 0, n = table.getColumnCount(); i < n; i++) {
 		      table.getColumn(i).pack();
@@ -288,18 +290,25 @@ public class XLSDataAdapterComposite extends Composite {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int[] indices = table.getSelectionIndices();
-				int removedItems = 0;
 				
-				for (int i : indices) {	
-					// To prevent an IndexOutOfBoundsException
-					// we need to subtract number of removed items
-					// from the removed item index.
-					rows.remove(i - removedItems);
-					removedItems++;
+				removeEntries();
+			}
+		});
+		
+		// keys listener
+		table.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// nothing
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				if (e.character == SWT.DEL) {
+					removeEntries();
 				}
-				tableViewer.refresh();
-				setLastTableItemSelection();
 			}
 		});
 		
@@ -499,17 +508,19 @@ public class XLSDataAdapterComposite extends Composite {
 	}
 	
 	/**
-	 * Extended EditingSupport for the specific column Name
+	 * Extended EditingSupport
 	 * @author czhu
 	 *
 	 */
-	private class NameEditingSupport extends EditingSupport {
+	private class NameIndexEditingSupport extends EditingSupport {
 		
 		private final TableViewer viewer;
+		private int columnIndex;
 
-		public NameEditingSupport(TableViewer viewer) {
+		public NameIndexEditingSupport(TableViewer viewer, int columnIndex) {
 			super(viewer);
 			this.viewer = viewer;
+			this.columnIndex = columnIndex;
 		}
 
 		@Override
@@ -524,78 +535,38 @@ public class XLSDataAdapterComposite extends Composite {
 
 		@Override
 		protected Object getValue(Object element) {
-			return ((String[])element)[0].toString();
+			return ((String[])element)[columnIndex].toString();
 		}
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			((String[]) element)[0] = (String.valueOf(value));
+			((String[]) element)[columnIndex] = (String.valueOf(value));
 			viewer.refresh();
 		}
 	}
 	
 	/**
-	 * Extended EditingSupport for the specific column Index
+	 * Extended ColumnLabelProvider
 	 * @author czhu
 	 *
 	 */
-	private class IndexEditingSupport extends EditingSupport {
+	private class ColumnNameIndexLabelProvider extends ColumnLabelProvider {
 		
-		private final TableViewer viewer;
-
-		public IndexEditingSupport(TableViewer viewer) {
-			super(viewer);
-			this.viewer = viewer;
+		private int columnIndex;
+		
+		private ColumnNameIndexLabelProvider(int columnIndex) {
+			this.columnIndex = columnIndex;
 		}
-
-		@Override
-		protected CellEditor getCellEditor(Object element) {
-			return new TextCellEditor(viewer.getTable());
-		}
-
-		@Override
-		protected boolean canEdit(Object element) {
-			return true;
-		}
-
-		@Override
-		protected Object getValue(Object element) {
-			return ((String[])element)[1].toString();
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-			((String[]) element)[1] = (String.valueOf(value));
-			viewer.refresh();
-		}
-	}
-	
-	/**
-	 * Extended ColumnLabelProvider for the specific column Name
-	 * @author czhu
-	 *
-	 */
-	private class ColumnNameLabelProvider extends ColumnLabelProvider {
 
 		@Override
 		public String getText(Object element) {
 			String[] row = (String[]) element;
-			return row[0].toString();
-		}
-	}
-	
-	/**
-	 * Extended ColumnLabelProvider for the specific column Index
-	 * @author czhu
-	 *
-	 */
-	private class ColumnIndexLabelProvider extends ColumnLabelProvider {
-
-		@Override
-		public String getText(Object element) {
-			String[] row = (String[]) element;
-			String excelCellLabel = excelCellLabelRenderer(Integer.valueOf(row[1].toString()));
-			return row[1] + " (" + excelCellLabel + ")" ;
+			if (columnIndex == 0) { // 0 => Name column
+				return row[columnIndex].toString();
+			} else { // 1 => Index column
+				String excelCellLabel = excelCellLabelRenderer(Integer.valueOf(row[columnIndex].toString()));
+				return row[columnIndex] + " (" + excelCellLabel + ")" ;
+			}
 		}
 	}
 	
@@ -697,5 +668,24 @@ public class XLSDataAdapterComposite extends Composite {
 	        btnDelete.setEnabled(true);
 	        btnCheckSkipFirstLine.setSelection(true);
 	    }
+	}
+	
+	/**
+	 * Removes selected entries from the data model
+	 */
+	private void removeEntries() {
+		
+		int[] indices = table.getSelectionIndices();
+		int removedItems = 0;
+		
+		for (int i : indices) {	
+			// To prevent an IndexOutOfBoundsException
+			// we need to subtract number of removed items
+			// from the removed item index.
+			rows.remove(i - removedItems);
+			removedItems++;
+		}
+		tableViewer.refresh();
+		setLastTableItemSelection();
 	}
 }
