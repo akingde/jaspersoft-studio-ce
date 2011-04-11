@@ -19,14 +19,12 @@
  */
 package com.jaspersoft.studio.preferences.exporter;
 
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
@@ -40,7 +38,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.TextFieldEditor;
 
 /**
@@ -136,10 +133,10 @@ public class HTMLExporterPreferencePage extends FieldEditorPreferencePage implem
 		ptab.setText("Between Pages");
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
-		sc.setLayout(new GridLayout());
+		sc.setLayout(new GridLayout(1, false));
 
 		TextFieldEditor scf = new TextFieldEditor(NSF_EXPORT_HTML_BETWEEN_PAGES, "Between Pages", sc);
-		scf.getTextControl(sc).setLayoutData(new GridData(GridData.FILL_BOTH));
+		scf.getTextControl(sc).setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL));
 		addField(scf);
 
 		ptab.setControl(sc);

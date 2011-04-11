@@ -20,15 +20,10 @@
 package com.jaspersoft.studio.preferences.exporter;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
 
 /**
  * 
@@ -38,56 +33,13 @@ public class PDFExporterPreferencePage extends FieldEditorPreferencePage impleme
 	public PDFExporterPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription(Messages.RulersGridPreferencePage_description);
+		setDescription("PDF Export Parameters");
 	}
 
 	/**
 	 *
 	 */
 	public void createFieldEditors() {
-		Group group = new Group(getFieldEditorParent(), SWT.NONE);
-		group.setText(Messages.RulersGridPreferencePage_ruler_options);
-
-		GridLayout gridLayout = new GridLayout(2, false);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalSpan = 2;
-
-		// addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWRULER,
-		// Messages.RulersGridPreferencePage_show_rulers, group));
-		// addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGUIDES,
-		// Messages.common_snap_to_guides, group));
-
-		group.setLayoutData(gridData);
-		group.setLayout(gridLayout);
-
-		group = new Group(getFieldEditorParent(), SWT.NONE);
-		group.setText(Messages.RulersGridPreferencePage_grid_options);
-
-		gridLayout = new GridLayout(2, false);
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalSpan = 2;
-
-		// addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SHOWGRID,
-		// Messages.RulersGridPreferencePage_show_grid, group));
-		// addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGRID, Messages.common_snap_to_grid,
-		// group));
-		// addField(new BooleanFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_SNAPTOGEOMETRY,
-		// Messages.common_snap_to_geometry, group));
-		// IntegerFieldEditor spaceX = new IntegerFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEX,
-		// Messages.RulersGridPreferencePage_grid_spacing_x, group);
-		// spaceX.setValidRange(2, 100);
-		// addField(spaceX);
-		// IntegerFieldEditor spaceY = new IntegerFieldEditor(PreferenceConstants.P_PAGE_RULERGRID_GRIDSPACEY,
-		// Messages.RulersGridPreferencePage_grid_spacing_y, group);
-		// spaceY.setValidRange(2, 100);
-		// addField(spaceY);
-
-		group.setLayoutData(gridData);
-		group.setLayout(gridLayout);
 
 	}
 

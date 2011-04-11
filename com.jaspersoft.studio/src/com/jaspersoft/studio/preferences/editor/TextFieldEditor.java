@@ -13,6 +13,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -146,12 +147,12 @@ public class TextFieldEditor extends FieldEditor {
 	 * (non-Javadoc) Method declared on FieldEditor.
 	 */
 	protected void adjustForNumColumns(int numColumns) {
-		GridData gd = (GridData) textField.getLayoutData();
-		gd.horizontalSpan = numColumns - 1;
-		// We only grab excess space if we have to
-		// If another field editor has more columns then
-		// we assume it is setting the width.
-		gd.grabExcessHorizontalSpace = gd.horizontalSpan == 1;
+		// GridData gd = (GridData) textField.getLayoutData();
+		// gd.horizontalSpan = numColumns - 1;
+		// // We only grab excess space if we have to
+		// // If another field editor has more columns then
+		// // we assume it is setting the width.
+		// gd.grabExcessHorizontalSpace = gd.horizontalSpan == 1;
 	}
 
 	/**
@@ -209,20 +210,8 @@ public class TextFieldEditor extends FieldEditor {
 		getLabelControl(parent);
 
 		textField = getTextControl(parent);
-		GridData gd = new GridData();
-		gd.horizontalSpan = numColumns - 1;
-		if (widthInChars != UNLIMITED) {
-			GC gc = new GC(textField);
-			try {
-				Point extent = gc.textExtent("X");//$NON-NLS-1$
-				gd.widthHint = widthInChars * extent.x;
-			} finally {
-				gc.dispose();
-			}
-		} else {
-			gd.horizontalAlignment = GridData.FILL;
-			gd.grabExcessHorizontalSpace = true;
-		}
+		GridData gd = new GridData(GridData.FILL_BOTH);
+
 		textField.setLayoutData(gd);
 	}
 
