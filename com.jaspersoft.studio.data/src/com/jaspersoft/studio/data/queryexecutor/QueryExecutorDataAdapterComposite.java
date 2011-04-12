@@ -32,7 +32,6 @@ public class QueryExecutorDataAdapterComposite extends Composite {
 	 */
 	public QueryExecutorDataAdapterComposite(Composite parent, int style) {
 		super(parent, style);
-
 	}
 
 	@Override

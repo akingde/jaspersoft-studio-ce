@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.data.queryexecutor;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.DataAdapter;
@@ -38,7 +39,7 @@ public class QueryExecutorDataAdapterEditor implements DataAdapterEditor {
 		return composite.getDataAdapter();
 	}
 
-	public Composite getComposite(Composite parent, int style) {
+	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
 		if (composite == null) {
 			composite = new QueryExecutorDataAdapterComposite(parent, style);
 		}

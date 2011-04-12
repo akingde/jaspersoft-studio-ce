@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.data;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -52,14 +53,15 @@ public interface DataAdapterEditor {
 	 */
 	public DataAdapter getDataAdapter();
 	
-	
 	/**
-	 * This method allows to provide a UI component to edit the data adapter.
-	 * 
-	 * @return IReportConnection modified. IT can be the same instance get in input with setIReportConnection or a new
-	 *         one.
+	 * This method allows to provide a UI component to edit the data adapter. The WizardPage reference is convenient
+	 * for calling specific methods from WizardPage class like setMessage() method but this is not mandatory.
+	 * @param parent
+	 * @param style
+	 * @param wizardPage can be null
+	 * @return composite
 	 */
-	public Composite getComposite(Composite parent, int style);
+	public Composite getComposite(Composite parent, int style, WizardPage wizardPage);
 	
 	/**
 	 * This method returns the help context ID for the composite returned by getComposite()

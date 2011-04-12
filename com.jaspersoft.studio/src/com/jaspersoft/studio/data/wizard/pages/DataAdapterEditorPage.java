@@ -19,13 +19,11 @@
  */
 package com.jaspersoft.studio.data.wizard.pages;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -37,8 +35,6 @@ import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.SWTResourceManager;
-
 
 public class DataAdapterEditorPage extends WizardPage {
 
@@ -78,14 +74,14 @@ public class DataAdapterEditorPage extends WizardPage {
 		mainContainer.setLayout(new GridLayout(1, false));
 		
 		staticContainer = new Composite(mainContainer, SWT.NONE);
-		staticContainer.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
+		staticContainer.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_staticContainer = new GridLayout(2, false);
 		gl_staticContainer.marginHeight = 0;
 		gl_staticContainer.marginWidth = 0;
 		staticContainer.setLayout(gl_staticContainer);
 		
 		Label lblName = new Label(staticContainer, SWT.NONE);
-		lblName.setText("Name");
+		lblName.setText("Name:");
 		
 		textName = new Text(staticContainer, SWT.BORDER);
 		textName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -140,7 +136,7 @@ public class DataAdapterEditorPage extends WizardPage {
 			editorComposite.dispose();
 		}
 		
-		editorComposite = dataAdapterEditor.getComposite(customContainer, SWT.NULL);
+		editorComposite = dataAdapterEditor.getComposite(customContainer, SWT.NULL, this);
 		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		// 4. set the new dataAdapter to the DataAdapterEditor

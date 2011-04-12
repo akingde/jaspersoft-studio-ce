@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
+
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.SWTResourceManager;

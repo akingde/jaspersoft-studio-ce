@@ -19,12 +19,12 @@
  */
 package com.jaspersoft.studio.data.empty;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.layout.GridData;
 
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.utils.UIUtils;

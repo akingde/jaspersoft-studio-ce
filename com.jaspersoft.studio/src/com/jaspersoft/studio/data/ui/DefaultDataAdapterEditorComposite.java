@@ -26,9 +26,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -36,7 +38,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -46,15 +48,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.data.DataAdapter;
-import com.jaspersoft.studio.jface.dialogs.PropertyDialog;
 
 public class DefaultDataAdapterEditorComposite extends Composite {
 	
+	private WizardPage wizardPage = null;
 	private DataAdapter dataAdapter = null;
 	private TableViewer tableViewer;
 	private Table table;
@@ -62,7 +62,6 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	private TableViewerColumn valueViewerColumn;
 	private Button addButton;
 	private Button deleteButton;
-	private TableItem selectedTableItem;
 
   //The data model
 	private java.util.List<String[]> rows;
@@ -71,8 +70,9 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	 * Create the composite.
 	 * @param parent
 	 * @param style
+	 * @param wizardPage
 	 */
-	public DefaultDataAdapterEditorComposite(Composite parent, int style) {
+	public DefaultDataAdapterEditorComposite(Composite parent, int style, WizardPage wizardPage) {
 		
 		/*
 		 * UI ELEMENTS
@@ -82,6 +82,9 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		
 	  // data model init
 		rows = new ArrayList<String[]>();
+		
+		// wizardPage init
+		this.wizardPage = wizardPage;
 		
 		tableViewer = new TableViewer(this, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		tableViewer.setContentProvider(new DefaultContentProvider());
@@ -146,7 +149,7 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 				}
 				
 				tableViewer.refresh();
-				setLastTableItemSelection();
+				setTableSelection(rows.size() -1);
 			}
 		});
 		
@@ -160,7 +163,7 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 			}
 		});
 		
-	  // keys listener
+	  // keyboard listener
 		table.addKeyListener(new KeyListener() {
 			
 			public void keyReleased(KeyEvent e) {
@@ -223,7 +226,7 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 			}
 			
 			tableViewer.refresh();
-			setLastTableItemSelection();
+			setTableSelection(rows.size() - 1);
 			deleteButton.setEnabled(true);
 		}
 	}
@@ -253,75 +256,6 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	 */
 	public String getHelpContextId() {
 		return "";
-	}
-
-	private void addRow(String[] keyvalue) {
-		TableItem tableItem = new TableItem(tableViewer.getTable(), SWT.NONE);
-		String[] row = keyvalue;
-		tableItem.setText(row);
-	}
-
-	private void modifyRow(TableItem selectedTableItem, String[] newKeyValue) {
-		selectedTableItem.setText(newKeyValue);
-	}
-	
-	private boolean isKeyUnique(String key) {
-		TableItem[] tableItems = tableViewer.getTable().getItems();
-		for (TableItem tableItem : tableItems) {
-			if ( key.equals(tableItem.getText()) ) return false;
-		}
-		return true;
-	}
-	
-	private void launchPropertyDialog(Shell shell, TableItem tabItem, boolean edit) {
-		
-		String[] propertyAndValue;
-		if (tabItem != null) {
-			propertyAndValue = new String[]{tabItem.getText(0), tabItem.getText(1)};
-		} else {
-			propertyAndValue = new String[]{"", ""};
-		}
-		
-		PropertyDialog propertyDialog = new PropertyDialog(shell, propertyAndValue);
-		propertyDialog.create();
-		if (propertyDialog.open() == Window.OK) {
-			
-			// Edit mode
-			if (edit) {
-				modifyRow(selectedTableItem, propertyDialog.getPropertyAndValue());
-			} 
-			// Add Mode
-			else {
-			  // a property name is case sensitive and must be unique
-				String newProperty = propertyDialog.getPropertyAndValue()[0];
-				if (isKeyUnique(newProperty) && newProperty.length() > 0) {
-					addRow(propertyDialog.getPropertyAndValue());
-				}
-			}
-			/*String newProperty = propertyDialog.getProperty();
-			if (newProperty != null && newProperty.length() != 0) {
-			  // Add a new row to the tableViewer
-			  // a property name is case sensitive and must be unique
-				if (isKeyUnique(newProperty)) {
-					String newValue = propertyDialog.getValue();
-					addRow(new String[]{newProperty, newValue});
-				}
-				// Edit the existing row
-				else {
-					String[] newKeyAndValue = new String[]{propertyDialog.getProperty(), propertyDialog.getValue()};
-					modifyRow(selectedTableItem, newKeyAndValue);
-				}
-			}*/
-		}
-	}
-
-	private Map<String, String> getAllProperties() {
-		TableItem[] tableItems = tableViewer.getTable().getItems();
-		Map<String, String> map = new HashMap<String, String>();
-		for (TableItem tableItem : tableItems) {
-			map.put(tableItem.getText(0), tableItem.getText(1));
-		}
-		return map;
 	}
 	
 	/**
@@ -384,7 +318,45 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 
 		@Override
 		protected CellEditor getCellEditor(Object element) {
-			return new TextCellEditor(viewer.getTable());
+			
+			final TextCellEditor textCellEditor = new TextCellEditor(viewer.getTable());
+			
+			textCellEditor.addListener(new ICellEditorListener() {
+				
+				public void editorValueChanged(boolean oldValidState, boolean newValidState) {
+					
+					if (wizardPage != null) {
+						
+						String str = textCellEditor.getValue().toString();
+						
+						if (isPropertyValid(str)) {
+							wizardPage.setMessage(null);
+						} else {
+							
+							if (str.length() > 0) {
+								wizardPage.setMessage("Property '" + str + "' already exists. Please type another property name.", IMessageProvider.ERROR);
+							} else {
+								wizardPage.setMessage("Please type a non empty property name.", IMessageProvider.ERROR);
+							}
+							
+						}
+					}
+				}
+				
+				public void cancelEditor() {
+					// nothing
+				}
+				
+				public void applyEditorValue() {
+
+					// clean any left message
+					if (wizardPage != null) {
+						wizardPage.setMessage(null);
+					}
+				}
+			});
+			
+			return textCellEditor;
 		}
 
 		@Override
@@ -399,8 +371,21 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			((String[]) element)[columnIndex] = (String.valueOf(value));
-			viewer.refresh();
+			
+			String str = (String.valueOf(value));
+			
+			if (columnIndex == 0) { // 0 = index of Property Column
+				
+				if (isPropertyValid(str)) {
+					
+					((String[]) element)[columnIndex] = str;
+					viewer.refresh();
+				}
+			} else if (columnIndex == 1) { // 1 = index of Value Column
+				
+				((String[]) element)[columnIndex] = str;
+				viewer.refresh();
+			}
 		}
 	}
 	
@@ -410,25 +395,15 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	 */
 	private String[] createDataModelEntry() {
 		
-		int i;
-		// find max index
-		if (rows != null) {
-			i = rows.size();
-		} else { // this case should never happen
-			i = 0;
+		int i = 0;
+		String property = "PROPERTY_" + i;
+		
+		while (!isPropertyValid(property)) {
+			i++;
+			property = "PROPERTY_" + i;
 		}
 		
-		return new String[]{"PROPERTY_" + i, ""};
-	}
-	
-	/**
-	 * This set selection to the last table item
-	 */
-	private void setLastTableItemSelection() {
-		
-		if (rows != null && rows.size() > 0) {
-			table.setSelection(rows.size() - 1);
-		}
+		return new String[]{property, ""};
 	}
 	
 	/**
@@ -437,16 +412,59 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	private void removeEntries() {
 		
 		int[] indices = table.getSelectionIndices();
-		int removedItems = 0;
 		
-		for (int i : indices) {	
-			// To prevent an IndexOutOfBoundsException
-			// we need to subtract number of removed items
-			// from the removed item index.
-			rows.remove(i - removedItems);
-			removedItems++;
+		if (indices.length > 0) {
+			
+			Arrays.sort(indices);
+			int removedItems = 0;
+
+			for (int i : indices) {	
+				// To prevent an IndexOutOfBoundsException
+				// we need to subtract number of removed items
+				// from the removed item index.
+				rows.remove(i - removedItems);
+				removedItems++;
+			}
+			tableViewer.refresh();
+			setTableSelection(indices[0]);
 		}
-		tableViewer.refresh();
-		setLastTableItemSelection();
+	}
+	
+	/**
+	 * This set selection to the table's item represented by the given index.
+	 * @param index
+	 */
+	private void setTableSelection(int index) {
+		
+		if (rows != null && rows.size() > 0) {
+			
+			if (index == 0) {
+				table.setSelection(index);
+			} else if ((0 < index) && (index < rows.size() - 1)) {
+				table.setSelection(index - 1);
+			} else {
+				table.setSelection(rows.size() - 1);
+			}
+		}
+	}
+	
+	/**
+	 * Check the validity of the property name.
+	 * It is valid only if it is not null, empty
+	 * and already existed.
+	 * @param property
+	 * @return
+	 */
+	private boolean isPropertyValid(String property) {
+		
+		if (property == null || "".equals(property)) return false;
+		
+		for (String[] row : rows) {
+			if (row[0].equals(property)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

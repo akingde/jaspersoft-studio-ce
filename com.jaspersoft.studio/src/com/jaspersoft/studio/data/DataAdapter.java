@@ -40,7 +40,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
  */
 public abstract class DataAdapter implements IIconDescriptor {
     
-  private String name="";
+  private String name = "";
   
   /*
    * Return true if this connection is a "Connection" to a database

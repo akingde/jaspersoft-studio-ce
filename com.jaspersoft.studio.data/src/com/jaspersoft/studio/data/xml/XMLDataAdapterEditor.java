@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.data.xml;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.DataAdapter;
@@ -38,7 +39,7 @@ public class XMLDataAdapterEditor implements DataAdapterEditor {
 		return this.composite.getDataAdapter();
 	}
 
-	public Composite getComposite(Composite parent, int style) {
+	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
 		if (this.composite == null) {
 			composite = new XMLDataAdapterComposite(parent, style);
 		}

@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.data.xls;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.DataAdapter;
@@ -41,7 +42,7 @@ public class XLSDataAdapterEditor implements DataAdapterEditor {
 	}
 
 	@Override
-	public Composite getComposite(Composite parent, int style) {
+	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
 		if (composite == null) {
 			composite = new XLSDataAdapterComposite(parent, style);
 		}

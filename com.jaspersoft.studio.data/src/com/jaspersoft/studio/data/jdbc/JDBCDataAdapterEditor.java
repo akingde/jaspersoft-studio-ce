@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.DataAdapter;
@@ -35,8 +36,8 @@ public class JDBCDataAdapterEditor implements DataAdapterEditor {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getComposite(org.eclipse.swt.widgets.Composite, int)
 	 */
-	public Composite getComposite(Composite parent, int style) {
-		// TODO Auto-generated method stub
+	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
+		
 		if (composite == null || composite.getParent() != parent)
 		{
 			if (composite != null) composite.dispose();
@@ -62,7 +63,6 @@ public class JDBCDataAdapterEditor implements DataAdapterEditor {
 	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getHelpContextId()
 	 */
 	public String getHelpContextId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -70,11 +70,10 @@ public class JDBCDataAdapterEditor implements DataAdapterEditor {
 	 * @see com.jaspersoft.studio.data.DataAdapterEditor#setDataAdapter(com.jaspersoft.studio.data.DataAdapter)
 	 */
 	public void setDataAdapter(DataAdapter dataAdapter) {
-
-			if (composite != null && dataAdapter instanceof JDBCDataAdapter)
-			{
-				composite.setDataAdapter((JDBCDataAdapter)dataAdapter);
-			}
+		
+		if (composite != null && dataAdapter instanceof JDBCDataAdapter)
+		{
+			composite.setDataAdapter((JDBCDataAdapter)dataAdapter);
+		}
 	}
-
 }
