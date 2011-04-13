@@ -27,6 +27,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.ui.ISharedImages;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapter;
@@ -44,8 +45,8 @@ public class DuplicateDataAdapterAction extends Action {
 		setText("Duplicate DataAdapter");
 		setDescription("Duplicate DataAdapter");
 		setToolTipText("Duplicate DataAdapter");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source.gif")); //$NON-NLS-1
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
 	}
 
 	@Override

@@ -27,7 +27,9 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.ui.ISharedImages;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
@@ -41,6 +43,9 @@ public class DeleteDataAdapterAction extends Action {
 		setText("Delete DataAdapter");
 		setDescription("Delete DataAdapter");
 		setToolTipText("Delete DataAdapter");
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE)); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE)); //$NON-NLS-1
+		
 	}
 
 	@Override

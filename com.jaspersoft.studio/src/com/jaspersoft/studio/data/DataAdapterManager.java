@@ -284,4 +284,21 @@ public class DataAdapterManager {
 	public static PropertyChangeSupport getPropertyChangeSupport() {
 		return propertyChangeSupport;
 	}
+
+	/**
+	 * Check the validity of the data adapter name.
+	 * It is valid only if it is not null, not empty
+	 * and not already existed.
+	 * @param dataAdapterName
+	 * @return bool
+	 */
+  public static boolean isDataAdapterNameValid(String dataAdapterName) {
+  	
+  	if (dataAdapterName == null || "".equals(dataAdapterName.trim())) return false;
+  	
+		for (DataAdapter dataAdapter : getDataAdapters()) {
+			if (dataAdapter.getName().equals(dataAdapterName)) return false;
+		}
+		return true;
+	}
 }

@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.data.wizard.pages;
 
+import java.util.List;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -38,21 +40,14 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class DataAdapterEditorPage extends WizardPage {
 
-	Composite mainContainer = null;
-	Composite staticContainer = null;
-	Composite customContainer = null;
-	DataAdapterEditor dataAdapterEditor = null;
-	Composite editorComposite = null;
+	private DataAdapterEditor dataAdapterEditor = null;
+	private String subTitle = "";
+	private Composite mainContainer = null;
+	private Composite staticContainer = null;
+	private Composite customContainer = null;
+	private Composite editorComposite = null;
 	private Text textName;
-	private String subTitle="";
-	
-	public DataAdapterEditor getDataAdapterEditor() {
-		return dataAdapterEditor;
-	}
-	
-	public String getTextValue() {
-		return textName.getText();
-	}
+	private boolean editMode = false;
 
 	/**
 	 * Create the wizard.
@@ -97,25 +92,44 @@ public class DataAdapterEditorPage extends WizardPage {
 		textName.addModifyListener(new ModifyListener() {
 			
 			public void modifyText(ModifyEvent e) {
-				boolean b = true;
-				if(textName.getText() == "") b = false;
-				setPageComplete(b);
-				if (b) { 
-					setDescription(getSubTitle() );
-					setMessage( getSubTitle() );
+				
+				String name = textName.getText().trim();
+				boolean b;
+				
+				if (isEditMode()) { // Edit Data Adapter Mode
+					b = isDataAdapterNameValid(name);
+				} else { // Creating New Data Adapter Mode
+					b = DataAdapterManager.isDataAdapterNameValid(name);
 				}
-				else
-				{
-					setMessage("Please specify a name for this Data Adapter.", ERROR);
+				
+				setPageComplete(b);
+				
+				if (b) {
+					setDescription( getSubTitle() );
+					setMessage( getSubTitle() );
+				} else {
+					
+					if (name.length() > 0) {
+						setMessage("Data Adapter \"" + name + "\" already exists. Please specify another name.", ERROR);
+					} else {
+						setMessage("Please specify a name for this Data Adapter.", ERROR);
+					}
 				}
 			}
 		});
+		
 		setPageComplete(false);
 		setMessage("Please specify a name for this Data Adapter.", ERROR);
-		//setErrorMessage("Please specify a name for this Data Adapter.");
 	}
 
-
+	@Override
+	public void performHelp() {
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp(dataAdapterEditor.getHelpContextId());
+	}
+	
+	/*
+	 * GETTERS AND SETTERS
+	 */
 	/**
 	 * This method guesses the UI to use to edit the data adapter specified
 	 * @param newDataAdapter
@@ -143,7 +157,7 @@ public class DataAdapterEditorPage extends WizardPage {
 		dataAdapterEditor.setDataAdapter(newDataAdapter);
 		
 		// 5. fill the name if the new data adapter has one
-		setTextValue(Misc.nvl(newDataAdapter.getName(),""));
+		textName.setText(Misc.nvl(newDataAdapter.getName(),""));
 		
 		// 6. resize the dialog properly
 		customContainer.layout();
@@ -164,20 +178,10 @@ public class DataAdapterEditorPage extends WizardPage {
 
 	public DataAdapter getDataAdapter() {
 		DataAdapter da = getDataAdapterEditor().getDataAdapter();
-		da.setName(getTextValue());
+		da.setName(textName.getText());
 		return da;
 	}
 	
-	@Override
-	public void performHelp() {
-		PlatformUI.getWorkbench().getHelpSystem().displayHelp(dataAdapterEditor.getHelpContextId());
-	}
-	
-
-	public void setTextValue(String string) {
-		textName.setText(string);
-	}
-
 	/**
 	 * @param subTitle the subTitle to set
 	 */
@@ -190,5 +194,64 @@ public class DataAdapterEditorPage extends WizardPage {
 	 */
 	public String getSubTitle() {
 		return subTitle;
+	}
+	
+	/**
+	 * Returns the data adapter editor
+	 * @return dataAdapterEditor
+	 */
+	public DataAdapterEditor getDataAdapterEditor() {
+		return dataAdapterEditor;
+	}
+
+	/**
+	 * Set the DataAdapterEditorPage mode.<br>
+	 * True if modifying an existing Data Adapter.<br>
+	 * False if creating an new Data Adapter.
+	 * @param editMode boolean true or false
+	 */
+	public void setEditMode(boolean editMode) {
+		this.editMode = editMode;
+	}
+	
+	/**
+	 * Return the DataAdapterEditorPage mode.<br>
+	 * True if modifying an existing Data Adapter.<br>
+	 * False if creating an new Data Adapter.
+	 * @return true or false
+	 */
+	public boolean isEditMode() {
+		return editMode;
+	}
+
+	/**
+	 * This method is similar as <b>isDataAdapterNameValid()</b> method from {@link DataAdapterManager}.
+	 * The only difference is the data adapter currently being edited is excluded from this check.
+	 * @param dataAdapterName
+	 * @return true or false
+	 */
+	private boolean isDataAdapterNameValid(String dataAdapterName) {
+		
+		if (dataAdapterName == null || "".equals(dataAdapterName)) return false;
+		
+		// remove the currently edited data adapter from the list
+		List<DataAdapter> dataAdapters = DataAdapterManager.getDataAdapters();
+		int index = -1;
+		for (int i = 0; i < dataAdapters.size(); i++) {
+			if (dataAdapterEditor.getDataAdapter().getName().equals(dataAdapters.get(i).getName())) {
+				index = i;
+			}
+		}
+		
+		if (index < 0) {
+			return false;
+		} else {
+			dataAdapters.remove(index);
+		}
+		
+		for (DataAdapter dataAdapter : dataAdapters) {
+			if (dataAdapter.getName().equals(dataAdapterName)) return false;
+		}
+		return true;
 	}
 }

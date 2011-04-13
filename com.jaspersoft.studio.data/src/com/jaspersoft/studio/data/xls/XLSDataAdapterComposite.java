@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import jxl.Cell;
@@ -281,7 +282,7 @@ public class XLSDataAdapterComposite extends Composite {
 				}
 				
 				tableViewer.refresh();
-				setLastTableItemSelection();
+				setTableSelection(-1);
 			}
 		});
 		
@@ -419,7 +420,7 @@ public class XLSDataAdapterComposite extends Composite {
 			}
 			
 			tableViewer.refresh();
-			setLastTableItemSelection();
+			setTableSelection(-1);
 			btnDelete.setEnabled(true);
 		}
 		
@@ -616,24 +617,33 @@ public class XLSDataAdapterComposite extends Composite {
 	 */
 	private String[] createDataModelEntry() {
 		
-		int i;
-		// find max index
-		if (rows != null) {
-			i = rows.size();
-		} else { // this case should never happen
-			i = 0;
+		int i = 0;
+		String column = "COLUMN_" + i;
+		
+		while (!isColumnValid(column)) {
+			i++;
+			column = "COLUMN_" + i;
 		}
 		
-		return new String[]{"COLUMN_" + i, String.valueOf(i)};
+		return new String[]{column, String.valueOf(i)};
 	}
 	
 	/**
-	 * This set selection to the last table item
+	 * This set selection to the table's item represented by the given index.
+	 * Any index out of table's range will select the last item.
+	 * @param index
 	 */
-	private void setLastTableItemSelection() {
+	private void setTableSelection(int index) {
 		
 		if (rows != null && rows.size() > 0) {
-			table.setSelection(rows.size() - 1);
+			
+			if (index == 0) {
+				table.setSelection(index);
+			} else if ((0 < index) && (index < rows.size() - 1)) {
+				table.setSelection(index - 1);
+			} else {
+				table.setSelection(rows.size() - 1);
+			}
 		}
 	}
 	
@@ -664,7 +674,7 @@ public class XLSDataAdapterComposite extends Composite {
 	        }
 
 	        tableViewer.refresh();
-	        setLastTableItemSelection();
+	        setTableSelection(-1);
 	        btnDelete.setEnabled(true);
 	        btnCheckSkipFirstLine.setSelection(true);
 	    }
@@ -676,16 +686,41 @@ public class XLSDataAdapterComposite extends Composite {
 	private void removeEntries() {
 		
 		int[] indices = table.getSelectionIndices();
-		int removedItems = 0;
 		
-		for (int i : indices) {	
-			// To prevent an IndexOutOfBoundsException
-			// we need to subtract number of removed items
-			// from the removed item index.
-			rows.remove(i - removedItems);
-			removedItems++;
+		if (indices.length > 0) {
+
+			Arrays.sort(indices);
+			int removedItems = 0;
+			
+			for (int i : indices) {	
+				// To prevent an IndexOutOfBoundsException
+				// we need to subtract number of removed items
+				// from the removed item index.
+				rows.remove(i - removedItems);
+				removedItems++;
+			}
+			tableViewer.refresh();
+			setTableSelection(indices[0]);
 		}
-		tableViewer.refresh();
-		setLastTableItemSelection();
+	}
+	
+	/**
+	 * Check the validity of the column name.
+	 * It is valid only if it is not null, not empty
+	 * and not already existed.
+	 * @param string
+	 * @return true or false
+	 */
+	private boolean isColumnValid(String column) {
+		
+		if (column == null || "".equals(column)) return false;
+		
+		for (String[] row : rows) {
+			if (row[0].equals(column)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

@@ -41,10 +41,6 @@ public class DataAdapterWizardDialog extends WizardDialog {
 	public DataAdapterWizardDialog(Shell parentShell, IWizard newWizard) {
 		super(parentShell, newWizard);
 	}
-
-	public void setTestButtonEnabled(boolean b) {
-		testButton.setEnabled(b);
-	}
 	
 	public void addTestListener(SelectionListener listener)
 	{
@@ -93,11 +89,10 @@ public class DataAdapterWizardDialog extends WizardDialog {
 
 		});
 		super.createButtonsForButtonBar(panel);
-		panel.setLayout(layout);
-		
-		//super.createButtonsForButtonBar(parent);
+		panel.setLayout(layout);	
 	}
 	
-	
-
+	public void setTestButtonEnabled(boolean b) {
+		testButton.setEnabled(b);
+	}
 }

@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.data.wizard;
 
-import java.util.List;
-
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -76,7 +74,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 			this.wizardDialog.addPageChangingListener(new IPageChangingListener() {
 				
 				public void handlePageChanging(PageChangingEvent event) {
-					System.out.println("Moving from page " + event.getCurrentPage() + " to " + event.getTargetPage());
+					//System.out.println("Moving from page " + event.getCurrentPage() + " to " + event.getTargetPage());
 					
 					if (event.getCurrentPage() ==  dataAdapterListPage &&
 							event.getTargetPage() == dataAdapterEditorPage)
@@ -118,9 +116,12 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 			dataAdapterListPage = new DataAdaptersListPage();
 			addPage(dataAdapterListPage);
 		}
+		
 		dataAdapterEditorPage = new DataAdapterEditorPage();
+		if (dataAdapter != null) {
+			dataAdapterEditorPage.setEditMode(true);
+		}
 		addPage(dataAdapterEditorPage);
-
 	}
 	
 	@Override
@@ -152,21 +153,11 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 			this.dataAdapter.loadProperties(editedDataAdapter.getProperties());
 			if (!this.dataAdapter.getName().equals( editedDataAdapter.getName() ))
 			{
-				if (isDataAdapterNameUnique(editedDataAdapter.getName()))
+				if (DataAdapterManager.isDataAdapterNameValid(editedDataAdapter.getName()))
 				{
 					this.dataAdapter.setName(editedDataAdapter.getName());
 				}
 			}
-			// ... but each DataAdapter has a unique name ...
-			
-		}
-		return true;
-	}
-
-  public boolean isDataAdapterNameUnique(String dataAdapterName) {
-		List<DataAdapter> dataAdapters = DataAdapterManager.getDataAdapters();
-		for (DataAdapter dataAdapter : dataAdapters) {
-			if (dataAdapterName.equals(dataAdapter.getName())) return false;
 		}
 		return true;
 	}
@@ -185,7 +176,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
         mb.open();
 				
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 
         DataAdapterErrorDialog.showErrorDialog(
@@ -210,7 +201,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 		return this.dataAdapter;
 	}
 
-
 	public void widgetDefaultSelected(SelectionEvent e) {
+		// nothing
 	}
 }

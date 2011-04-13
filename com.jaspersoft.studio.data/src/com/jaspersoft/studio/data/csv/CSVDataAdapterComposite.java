@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -74,6 +75,7 @@ public class CSVDataAdapterComposite extends Composite {
 	private Button btnCreateDatePattern;
 	private Button btnCheckUseDatePattern;
 	private Text textDatePattern;
+	private Group grpFieldSeparator;
 	private Button btnRadioFieldComma;
 	private Button btnRadioFieldTab;
 	private Button btnRadioFieldNewLineUnix;
@@ -81,6 +83,7 @@ public class CSVDataAdapterComposite extends Composite {
 	private Button btnRadioFieldSemicolon;
 	private Button btnRadioFieldOther;
 	private Text textFieldOther;
+	private Group grpRowSeparator;
 	private Button btnRadioRowComma;
 	private Button btnRadioRowTab;
 	private Button btnRadioRowNewLineUnix;
@@ -236,7 +239,7 @@ public class CSVDataAdapterComposite extends Composite {
 		tbtmSeparators.setControl(composite_5);
 		composite_5.setLayout(new GridLayout(1, false));
 		
-		Group grpFieldSeparator = new Group(composite_5, SWT.NONE);
+		grpFieldSeparator = new Group(composite_5, SWT.NONE);
 		grpFieldSeparator.setText("Field separator (char)");
 		grpFieldSeparator.setLayout(new GridLayout(3, true));
 		grpFieldSeparator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -262,21 +265,21 @@ public class CSVDataAdapterComposite extends Composite {
 		btnRadioFieldSemicolon.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioFieldSemicolon.setText("Semicolon");
 		
-		Composite composite_6 = new Composite(grpFieldSeparator, SWT.NONE);
-		composite_6.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		Composite fieldComposite = new Composite(grpFieldSeparator, SWT.NONE);
+		fieldComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_composite_6 = new GridLayout(2, false);
 		gl_composite_6.marginWidth = 0;
 		gl_composite_6.marginHeight = 0;
-		composite_6.setLayout(gl_composite_6);
-		btnRadioFieldOther = new Button(composite_6, SWT.RADIO);
+		fieldComposite.setLayout(gl_composite_6);
+		btnRadioFieldOther = new Button(fieldComposite, SWT.RADIO);
 		btnRadioFieldOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnRadioFieldOther.setText("Other");
 		
-		textFieldOther = new Text(composite_6, SWT.BORDER);
+		textFieldOther = new Text(fieldComposite, SWT.BORDER);
 		textFieldOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		textFieldOther.setEnabled(false);
 		
-		Group grpRowSeparator = new Group(composite_5, SWT.NONE);
+		grpRowSeparator = new Group(composite_5, SWT.NONE);
 		grpRowSeparator.setText("Row separator");
 		grpRowSeparator.setLayout(new GridLayout(3, true));
 		grpRowSeparator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -305,17 +308,17 @@ public class CSVDataAdapterComposite extends Composite {
 		btnRadioRowSemicolon.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		btnRadioRowSemicolon.setText("Semicolon");
 		
-		Composite composite_7 = new Composite(grpRowSeparator, SWT.NONE);
-		composite_7.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		Composite rowComposite = new Composite(grpRowSeparator, SWT.NONE);
+		rowComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		GridLayout gl_composite_7 = new GridLayout(2, false);
 		gl_composite_7.marginWidth = 0;
 		gl_composite_7.marginHeight = 0;
-		composite_7.setLayout(gl_composite_7);
-		btnRadioRowOther = new Button(composite_7, SWT.RADIO);
+		rowComposite.setLayout(gl_composite_7);
+		btnRadioRowOther = new Button(rowComposite, SWT.RADIO);
 		btnRadioRowOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnRadioRowOther.setText("Other");
 		
-		textRowOther = new Text(composite_7, SWT.BORDER);
+		textRowOther = new Text(rowComposite, SWT.BORDER);
 		textRowOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		textRowOther.setEnabled(false);
 		new Label(grpRowSeparator, SWT.NONE);
@@ -410,7 +413,7 @@ public class CSVDataAdapterComposite extends Composite {
 				}
 				
 				tableViewer.refresh();
-				setLastTableItemSelection();
+				setTableSelection(-1);
 			}
 		});
 		
@@ -489,28 +492,16 @@ public class CSVDataAdapterComposite extends Composite {
 			}
 		});
 		
-		Button[] fieldButtons = new Button[]{btnRadioFieldComma, btnRadioFieldNewLineUnix, btnRadioFieldSemicolon, btnRadioFieldSpace, btnRadioFieldTab, btnRadioFieldOther};
-		for (Button button : fieldButtons) {
+		Button[] buttons = new Button[]{btnRadioFieldComma, btnRadioFieldNewLineUnix, btnRadioFieldSemicolon, btnRadioFieldSpace, btnRadioFieldTab, btnRadioFieldOther,
+				btnRadioRowComma, btnRadioRowNewLineUnix, btnRadioRowNewLineWin, btnRadioRowSemicolon, btnRadioRowSpace, btnRadioRowTab, btnRadioRowOther};
+		for (Button button : buttons) {
 			
 			button.addSelectionListener(new SelectionAdapter() {
 					
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					
-					enableFieldOther( ((Button)e.widget) );
-				}
-			});
-		}
-		
-		Button[] rowButtons = new Button[]{btnRadioRowComma, btnRadioRowNewLineUnix, btnRadioRowNewLineWin, btnRadioRowSemicolon, btnRadioRowSpace, btnRadioRowTab, btnRadioRowOther};
-		for (Button button : rowButtons) {
-			
-			button.addSelectionListener(new SelectionAdapter() {
-					
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					
-					enableRowOther( ((Button)e.widget) );
+					enableOtherButton( ((Button)e.widget) );
 				}
 			});
 		}
@@ -538,7 +529,7 @@ public class CSVDataAdapterComposite extends Composite {
 				rows.add(str);
 			}
 			tableViewer.refresh();
-			setLastTableItemSelection();
+			setTableSelection(-1);
 			btnDelete.setEnabled(true);
 		}
 		
@@ -692,54 +683,66 @@ public class CSVDataAdapterComposite extends Composite {
 	 */
 	private String createDataModelEntry() {
 		
-		int i;
-		// find max index
-		if (rows != null) {
-			i = rows.size();
-		} else { // this case should never happen
-			i = 0;
+		int i = 0;
+		String column = "COLUMN_" + i;
+		
+		while (!isColumnValid(column)) {
+			i++;
+			column = "COLUMN_" + i;
 		}
 		
-		return new String("COLUMN_" + i);
+		return column;
 	}
 	
-
 	/**
 	 * Removes selected entries from the data model
 	 */
 	private void removeEntries() {
 		
 		int[] indices = table.getSelectionIndices();
-		int removedItems = 0;
 		
-		for (int i : indices) {	
-			// To prevent an IndexOutOfBoundsException
-			// we need to subtract number of removed items
-			// from the removed item index.
-			rows.remove(i - removedItems);
-			removedItems++;
+		if (indices.length > 0) {
+
+			Arrays.sort(indices);
+			int removedItems = 0;
+			
+			for (int i : indices) {	
+				// To prevent an IndexOutOfBoundsException
+				// we need to subtract number of removed items
+				// from the removed item index.
+				rows.remove(i - removedItems);
+				removedItems++;
+			}
+			tableViewer.refresh();
+			setTableSelection(indices[0]);
 		}
-		tableViewer.refresh();
-		setLastTableItemSelection();
 	}
 	
 	/**
-	 * This set selection to the last table item
+	 * This set selection to the table's item represented by the given index.
+	 * Any index out of table's range will select the last item.
+	 * @param index
 	 */
-	private void setLastTableItemSelection() {
+	private void setTableSelection(int index) {
 		
 		if (rows != null && rows.size() > 0) {
-			table.setSelection(rows.size() - 1);
+			
+			if (index == 0) {
+				table.setSelection(index);
+			} else if ((0 < index) && (index < rows.size() - 1)) {
+				table.setSelection(index - 1);
+			} else {
+				table.setSelection(rows.size() - 1);
+			}
 		}
 	}
 	
 	/**
-	 * Because the radio button "Other" for field separator
-	 * is not in the same component as the others radio button,
-	 * we need to manually make the switch.
+	 * Because the radio button "Other" is not in the same component as
+	 * the other radio buttons, we need to manually make the switch.
 	 * @param Button
 	 */
-	private void enableFieldOther(Button button) {
+	private void enableOtherButton(Button button) {
 		
 		if (btnRadioFieldOther.equals(button)) {
 			
@@ -751,21 +754,7 @@ public class CSVDataAdapterComposite extends Composite {
 			btnRadioFieldSpace.setSelection(false);
 			btnRadioFieldTab.setSelection(false);
 			
-		} else {
-			btnRadioFieldOther.setSelection(false);
-			textFieldOther.setEnabled(false);
-		}
-	}
-	
-	/**
-	 * Because the radio button "Other" for row separator
-	 * is not in the same component as the others radio button,
-	 * we need to manually make the switch.
-	 * @param Button
-	 */
-	private void enableRowOther(Button button) {
-		
-		if (btnRadioRowOther.equals(button)) {
+		} else if (btnRadioRowOther.equals(button)) {
 			
 			textRowOther.setEnabled(true);
 			
@@ -777,8 +766,15 @@ public class CSVDataAdapterComposite extends Composite {
 			btnRadioRowTab.setSelection(false);
 			
 		} else {
-			btnRadioRowOther.setSelection(false);
-			textRowOther.setEnabled(false);
+			
+			if (grpFieldSeparator.equals(button.getParent())) {
+				btnRadioFieldOther.setSelection(false);
+				textFieldOther.setEnabled(false);
+				
+			} else if (grpRowSeparator.equals(button.getParent())) {
+				btnRadioRowOther.setSelection(false);
+				textRowOther.setEnabled(false);
+			}
 		}
 	}
 	
@@ -819,8 +815,28 @@ public class CSVDataAdapterComposite extends Composite {
         }
         
         tableViewer.refresh();
-        setLastTableItemSelection();
+        setTableSelection(-1);
         btnDelete.setEnabled(true);
         btnCheckSkipFirstLine.setSelection(true);
+	}
+	
+	/**
+	 * Check the validity of the column name.
+	 * It is valid only if it is not null, not empty
+	 * and not already existed.
+	 * @param string
+	 * @return true or false
+	 */
+	private boolean isColumnValid(String column) {
+		
+		if (column == null || "".equals(column)) return false;
+		
+		for (String row : rows) {
+			if (row.equals(column)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

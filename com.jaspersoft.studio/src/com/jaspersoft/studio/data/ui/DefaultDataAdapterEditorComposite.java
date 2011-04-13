@@ -149,7 +149,7 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 				}
 				
 				tableViewer.refresh();
-				setTableSelection(rows.size() -1);
+				setTableSelection(-1);
 			}
 		});
 		
@@ -226,7 +226,7 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 			}
 			
 			tableViewer.refresh();
-			setTableSelection(rows.size() - 1);
+			setTableSelection(-1);
 			deleteButton.setEnabled(true);
 		}
 	}
@@ -327,18 +327,17 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 					
 					if (wizardPage != null) {
 						
-						String str = textCellEditor.getValue().toString();
+						String str = textCellEditor.getValue().toString().trim();
 						
 						if (isPropertyValid(str)) {
 							wizardPage.setMessage(null);
 						} else {
 							
 							if (str.length() > 0) {
-								wizardPage.setMessage("Property '" + str + "' already exists. Please type another property name.", IMessageProvider.ERROR);
+								wizardPage.setMessage("Property \"" + str + "\" already exists. Please specify another name.", IMessageProvider.ERROR);
 							} else {
-								wizardPage.setMessage("Please type a non empty property name.", IMessageProvider.ERROR);
+								wizardPage.setMessage("Please specify a name for this property.", IMessageProvider.ERROR);
 							}
-							
 						}
 					}
 				}
@@ -432,6 +431,7 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	
 	/**
 	 * This set selection to the table's item represented by the given index.
+	 * Any index out of table's range will select the last item.
 	 * @param index
 	 */
 	private void setTableSelection(int index) {
@@ -450,10 +450,10 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	
 	/**
 	 * Check the validity of the property name.
-	 * It is valid only if it is not null, empty
-	 * and already existed.
-	 * @param property
-	 * @return
+	 * It is valid only if it is not null, not empty
+	 * and not already existed.
+	 * @param string
+	 * @return true or false
 	 */
 	private boolean isPropertyValid(String property) {
 		
