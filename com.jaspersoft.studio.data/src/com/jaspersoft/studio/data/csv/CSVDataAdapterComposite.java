@@ -94,7 +94,7 @@ public class CSVDataAdapterComposite extends Composite {
 	private Text textRowOther;
 
 	// The data model
-	private java.util.List<String> rows;
+	private java.util.List<StringBuffer> rows;
 	
 	/**
 	 * Create the composite.
@@ -110,7 +110,7 @@ public class CSVDataAdapterComposite extends Composite {
 		setLayout(new GridLayout(1, false));
 		
 		// data model init
-		rows = new ArrayList<String>();
+		rows = new ArrayList<StringBuffer>();
 		
 		Composite composite = new Composite(this, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(3, false);
@@ -497,10 +497,8 @@ public class CSVDataAdapterComposite extends Composite {
 		for (Button button : buttons) {
 			
 			button.addSelectionListener(new SelectionAdapter() {
-					
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					
 					enableOtherButton( ((Button)e.widget) );
 				}
 			});
@@ -526,7 +524,7 @@ public class CSVDataAdapterComposite extends Composite {
 		List<String> listColumnNames = csvDataAdapter.getColumnNames();
 		if (listColumnNames != null && listColumnNames.size() > 0) {
 			for (String str : listColumnNames) {
-				rows.add(str);
+				rows.add(new StringBuffer(str));
 			}
 			tableViewer.refresh();
 			setTableSelection(-1);
@@ -585,8 +583,8 @@ public class CSVDataAdapterComposite extends Composite {
 		csvDataAdapter.setQeMode(btnCheckQEMode.getSelection());
 		
 		List<String> listColumnNames = new ArrayList<String>();
-		for (String row : rows) {
-			listColumnNames.add(row);
+		for (StringBuffer row : rows) {
+			listColumnNames.add(row.toString());
 		}
 		csvDataAdapter.setColumnNames(listColumnNames);
 		
@@ -667,33 +665,36 @@ public class CSVDataAdapterComposite extends Composite {
 
 		@Override
 		protected Object getValue(Object element) {
-			return ((String)element).toString();
+			return ((StringBuffer)element).toString();
 		}
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			element = (String.valueOf(value));
+			
+			((StringBuffer)element).setLength(0);
+			((StringBuffer)element).append((String.valueOf(value)));
 			viewer.refresh();
 		}
 	}
 	
 	/**
 	 * This creates and returns a new entry for the data model
-	 * @return String
+	 * @return StringBuffer
 	 */
-	private String createDataModelEntry() {
+	private StringBuffer createDataModelEntry() {
 		
 		int i = 0;
-		String column = "COLUMN_" + i;
+		StringBuffer column = new StringBuffer("COLUMN_" + i);
 		
-		while (!isColumnValid(column)) {
+		while (!isColumnValid(column.toString())) {
 			i++;
-			column = "COLUMN_" + i;
+			column.setLength(0);
+			column.append("COLUMN_" + i);
 		}
 		
 		return column;
 	}
-	
+
 	/**
 	 * Removes selected entries from the data model
 	 */
@@ -811,7 +812,7 @@ public class CSVDataAdapterComposite extends Composite {
         {
             String fname = (names.elementAt(i)+"").trim();
             if (fname.length() > 0)
-              rows.add(fname);
+              rows.add(new StringBuffer(fname));
         }
         
         tableViewer.refresh();
@@ -831,8 +832,8 @@ public class CSVDataAdapterComposite extends Composite {
 		
 		if (column == null || "".equals(column)) return false;
 		
-		for (String row : rows) {
-			if (row.equals(column)) {
+		for (StringBuffer row : rows) {
+			if (row.toString().equals(column)) {
 				return false;
 			}
 		}

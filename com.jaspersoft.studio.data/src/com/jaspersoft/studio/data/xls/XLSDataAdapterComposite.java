@@ -505,7 +505,6 @@ public class XLSDataAdapterComposite extends Composite {
 				return ((List<?>) inputElement).toArray();
 			return new Object[0];
 		}
-		
 	}
 	
 	/**
