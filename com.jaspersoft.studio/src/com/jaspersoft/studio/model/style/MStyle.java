@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -52,10 +53,12 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
+import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -248,11 +251,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
-		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_LINE_SPACING,
-				Messages.common_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
-		lineSpacingD.setDescription(Messages.MStyle_line_spacing_description);
-		desc.add(lineSpacingD);
-
 		ComboBoxPropertyDescriptor modeD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_MODE,
 				Messages.MStyle_mode, EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
 		modeD.setDescription(Messages.MStyle_mode_description);
@@ -309,6 +307,10 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		patternD.setDescription(Messages.MStyle_pattern_description);
 		desc.add(patternD);
 
+		JRPropertyDescriptor paragraph = new JRPropertyDescriptor("paragraph", "Paragraph");
+		desc.add(paragraph);
+
+		paragraph.setCategory(Messages.common_text);
 		styleD.setCategory(Messages.MStyle_Style_properties);
 		nameD.setCategory(Messages.MStyle_Style_properties);
 		defaultD.setCategory(Messages.MStyle_Style_properties);
@@ -325,7 +327,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 		patternD.setCategory(Messages.common_text);
 		blankWhenNullD.setCategory(Messages.common_text);
-		lineSpacingD.setCategory(Messages.common_text);
 		rotationD.setCategory(Messages.common_text);
 		markupD.setCategory(Messages.common_text);
 		halignD.setCategory(Messages.common_text);
@@ -346,7 +347,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
 		defaultsMap.put(JRDesignStyle.PROPERTY_ROTATION, null);
-		defaultsMap.put(JRDesignStyle.PROPERTY_LINE_SPACING, null);
 		defaultsMap.put(JRDesignStyle.PROPERTY_MODE, EnumHelper.getValue(ModeEnum.OPAQUE, 1, true));
 
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
@@ -361,6 +361,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	private MLinePen linePen;
 	private MLineBox lineBox;
 	private RWComboBoxPropertyDescriptor styleD;
+	private MParagraph mParagraph;
 
 	/*
 	 * (non-Javadoc)
@@ -383,7 +384,15 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 					return jrstyle.getStyle().getName();
 				return ""; //$NON-NLS-1$
 			}
+			if (id.equals("paragraph")) {
+				if (mParagraph == null) {
+					mParagraph = new MParagraph((JRBaseParagraph) jrstyle.getParagraph());
+					setChildListener(mParagraph);
+				}
+				return mParagraph;
+			}
 		}
+
 		JRBaseStyle jrstyle = (JRBaseStyle) getValue();
 		if (id.equals(LINE_PEN)) {
 			if (linePen == null) {
@@ -420,8 +429,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return EnumHelper.getValue(jrstyle.getOwnVerticalAlignmentValue(), 1, true);
 		if (id.equals(JRDesignStyle.PROPERTY_ROTATION))
 			return EnumHelper.getValue(jrstyle.getOwnRotationValue(), 0, true);
-		if (id.equals(JRDesignStyle.PROPERTY_LINE_SPACING))
-			return EnumHelper.getValue(jrstyle.getOwnLineSpacingValue(), 0, true);
 		if (id.equals(JRDesignStyle.PROPERTY_MODE))
 			return EnumHelper.getValue(jrstyle.getOwnModeValue(), 1, true);
 
@@ -495,8 +502,6 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 					true));
 		else if (id.equals(JRDesignStyle.PROPERTY_ROTATION))
 			jrstyle.setRotation((RotationEnum) EnumHelper.getSetValue(RotationEnum.values(), value, 0, true));
-		else if (id.equals(JRDesignStyle.PROPERTY_LINE_SPACING))
-			jrstyle.setLineSpacing((LineSpacingEnum) EnumHelper.getSetValue(LineSpacingEnum.values(), value, 0, true));
 		else if (id.equals(JRDesignStyle.PROPERTY_MODE))
 			jrstyle.setMode((ModeEnum) EnumHelper.getSetValue(ModeEnum.values(), value, 1, true));
 

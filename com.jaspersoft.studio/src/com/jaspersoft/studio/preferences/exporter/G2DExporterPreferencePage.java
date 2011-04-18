@@ -17,32 +17,47 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.preferences;
+package com.jaspersoft.studio.preferences.exporter;
 
+import net.sf.jasperreports.engine.util.JRProperties;
+
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.editor.number.FloatFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.utils.Misc;
 
-public class StudioPreferencePage extends FieldEditorOverlayPage {
+/**
+ * 
+ */
+public class G2DExporterPreferencePage extends FieldEditorOverlayPage {
 
-	public StudioPreferencePage() {
+	public static final String NSF_EXPORT_G2D_MINJOBSIZE = "net.sf.jasperreports.export.graphics2d.min.job.size"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_G2D_ZOOM_RATIO = "net.sf.jasperreports.export.graphics2d.zoom.ratio"; //$NON-NLS-1$
+
+	public G2DExporterPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		// setDescription("A demonstration of a preference page implementation");
+		setDescription(Messages.G2DExporterPreferencePage_2);
 	}
 
 	/**
-	 * Creates the field editors. Field editors are abstractions of the common GUI blocks needed to manipulate various
-	 * types of preferences. Each field editor knows how to save and restore itself.
+	 *
 	 */
 	public void createFieldEditors() {
-		// addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, "&Directory preference:", getFieldEditorParent()));
-		// addField(new BooleanFieldEditor("test", "test", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(NSF_EXPORT_G2D_MINJOBSIZE, Messages.G2DExporterPreferencePage_3, getFieldEditorParent()));
+		FloatFieldEditor fe = new FloatFieldEditor(NSF_EXPORT_G2D_ZOOM_RATIO, Messages.G2DExporterPreferencePage_4, getFieldEditorParent());
+		fe.setValidRange(0, Float.MAX_VALUE);
+		addField(fe);
+	}
 
-		// addField(new RadioGroupFieldEditor(PreferenceConstants.P_CHOICE, "An example of a multiple-choice preference", 1,
-		// new String[][] { { "&Choice 1", "choice1" }, { "C&hoice 2", "choice2" } }, getFieldEditorParent()));
-		// addField(new StringFieldEditor(PreferenceConstants.P_STRING, "A &text preference:", getFieldEditorParent()));
+	public static void getDefaults(IPreferenceStore store) {
+		store.setDefault(NSF_EXPORT_G2D_MINJOBSIZE, JRProperties.getProperty(NSF_EXPORT_G2D_MINJOBSIZE));
+		store.setDefault(NSF_EXPORT_G2D_ZOOM_RATIO, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_G2D_ZOOM_RATIO), "1")); //$NON-NLS-1$
 	}
 
 	/*
@@ -55,7 +70,7 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 
 	@Override
 	protected String getPageId() {
-		return "com.jaspersoft.studio.preferences.StudioPreferencePage.property";
+		return "com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage.property"; //$NON-NLS-1$
 	}
 
 }

@@ -21,49 +21,50 @@ package com.jaspersoft.studio.preferences.exporter;
 
 import net.sf.jasperreports.engine.util.JRProperties;
 
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.preferences.editor.NStringFieldEditor;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
+import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 
 /**
  * 
  */
-public class CSVExporterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class CSVExporterPreferencePage extends FieldEditorOverlayPage {
 
-	public static final String NSF_EXPORT_CSV_RECORD_DELIMITER = "net.sf.jasperreports.export.csv.record.delimiter";
-	public static final String NSF_EXPORT_CSV_FIELD_DELIMITER = "net.sf.jasperreports.export.csv.field.delimiter";
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage.property";
+	public static final String NSF_EXPORT_CSV_RECORD_DELIMITER = "net.sf.jasperreports.export.csv.record.delimiter"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_CSV_FIELD_DELIMITER = "net.sf.jasperreports.export.csv.field.delimiter"; //$NON-NLS-1$
 
 	public CSVExporterPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("CSV Exporter Parameters");
+		setDescription(Messages.CSVExporterPreferencePage_title);
 	}
 
 	/**
 	 *
 	 */
 	public void createFieldEditors() {
-		NStringFieldEditor tf = new NStringFieldEditor(NSF_EXPORT_CSV_RECORD_DELIMITER, "Record Delimiter", 4,
-				getFieldEditorParent());
+		NStringFieldEditor tf = new NStringFieldEditor(NSF_EXPORT_CSV_RECORD_DELIMITER,
+				Messages.CSVExporterPreferencePage_3, 4, getFieldEditorParent());
 		tf.setEmptyStringAllowed(false);
 		tf.setTextLimit(10);
 		addField(tf);
 
-		NStringFieldEditor fd = new NStringFieldEditor(NSF_EXPORT_CSV_FIELD_DELIMITER, "Field Delimiter", 4,
-				getFieldEditorParent());
+		NStringFieldEditor fd = new NStringFieldEditor(NSF_EXPORT_CSV_FIELD_DELIMITER,
+				Messages.CSVExporterPreferencePage_4, 4, getFieldEditorParent());
 		fd.setEmptyStringAllowed(false);
 		fd.setTextLimit(10);
 		addField(fd);
 
 		Browser lbl = new Browser(getFieldEditorParent(), SWT.MULTI);
-		lbl.setText("<html><body style='font-size: 11px;'> <div style='font-size: 14px;'>Special characters:</div>  <b>\\n</b> for new line (Unix/MacOS)<br>  <b>\\n\\r</b> for newline (Windows)<br>  <b>\\r</b> for carriage return<br>  <b>\\t</b> for tab<br>  <b>\\\\</b> for backslash</body></html>");
+		lbl.setText(Messages.CSVExporterPreferencePage_5);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
@@ -82,6 +83,11 @@ public class CSVExporterPreferencePage extends FieldEditorPreferencePage impleme
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
+	}
+
+	@Override
+	protected String getPageId() {
+		return PAGE_ID; //$NON-NLS-1$
 	}
 
 }

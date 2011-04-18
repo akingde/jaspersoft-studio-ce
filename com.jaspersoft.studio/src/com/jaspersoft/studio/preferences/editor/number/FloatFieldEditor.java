@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.preferences.editor;
+package com.jaspersoft.studio.preferences.editor.number;
 
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.resource.JFaceResources;

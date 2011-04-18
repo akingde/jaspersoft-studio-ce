@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.preferences.editor;
+package com.jaspersoft.studio.preferences.editor.text;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.preference.FieldEditor;

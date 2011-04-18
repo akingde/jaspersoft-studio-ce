@@ -128,6 +128,8 @@
       </perspectiveExtension>
    </extension>
    <extension
+         id="com.jaspersoft.studio.preferences"
+         name="Jaspersoft Studio Preferences"
          point="org.eclipse.ui.preferencePages">
       <page
             class="com.jaspersoft.studio.preferences.StudioPreferencePage"
@@ -148,6 +150,12 @@
             class="com.jaspersoft.studio.preferences.RulersGridPreferencePage"
             id="com.jaspersoft.studio.preferences.GridRulerPreferencePage"
             name="Rulers And Grid">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
+            id="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
+            name="Properties">
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
@@ -190,6 +198,111 @@
             class="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
             name="XMLExporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage"
+            name="DOCX Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
+            name="G2D Exporter">
+      </page>
+   </extension>
+   <extension
+         id="com.jaspersoft.studio.properties"
+         name="Jaspersoft Studio Properties"
+         point="org.eclipse.ui.propertyPages">
+      <page
+            adaptable="true"
+            class="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            icon="icons/jr_icon.png"
+            id="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            name="Jaspersoft Studio"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            name="Exporters"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage.property"
+            name="PDF Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage.property"
+            name="HTML Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage.property"
+            name="CSV Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage.property"
+            name="Text Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage.property"
+            name="Excel Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage.property"
+            name="XML Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage.property"
+            name="DOCX Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage.property"
+            name="G2D Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
+            id="com.jaspersoft.studio.preferences.PropertiesPreferencePage.property"
+            name="Properties"
+            objectClass="org.eclipse.core.resources.IProject">
       </page>
    </extension>
    <extension
@@ -294,18 +407,6 @@
                afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
                class="com.jaspersoft.studio.property.section.text.FontSection"
                id="com.jaspersoft.studio.editor.JrxmlEditor.text.FontSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
-            <input
-                  type="com.jaspersoft.studio.model.style.MStyle">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.text.MTextElement">
-            </input>
-         </propertySection>
-         <propertySection
-               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.text.FontSection"
-               class="com.jaspersoft.studio.property.section.text.TextSection"
-               id="com.jaspersoft.studio.editor.JrxmlEditor.text.TextSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
             <input
                   type="com.jaspersoft.studio.model.style.MStyle">

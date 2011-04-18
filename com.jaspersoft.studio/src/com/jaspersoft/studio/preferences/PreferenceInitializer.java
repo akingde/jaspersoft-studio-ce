@@ -24,7 +24,14 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage;
 import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage;
+import com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage;
 
 /**
  * Class used to initialize default preference values.
@@ -39,10 +46,24 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = JaspersoftStudioPlugin.getInstance().getPreferenceStore();
 
+		initDefaultProperties(store);
+	}
+
+	public static void initDefaultProperties(IPreferenceStore store) {
+		PropertiesPreferencePage.getDefaults(store);
+
 		DesignerPreferencePage.getDefaults(store);
 		RulersGridPreferencePage.getDefaults(store);
 		JRExporterPreferencePage.getDefaults(store);
 		CSVExporterPreferencePage.getDefaults(store);
+		ExcelExporterPreferencePage.getDefaults(store);
+		HTMLExporterPreferencePage.getDefaults(store);
+		PDFExporterPreferencePage.getDefaults(store);
+		XMLExporterPreferencePage.getDefaults(store);
+		TextExporterPreferencePage.getDefaults(store);
+
+		DOCXExporterPreferencePage.getDefaults(store);
+		G2DExporterPreferencePage.getDefaults(store);
 	}
 
 }

@@ -713,6 +713,28 @@ public class ModelUtils {
 		return classes.toArray(new String[classes.size()]);
 	}
 
+	public static String[][] getPDFFontNames2() {
+		String[] str = getPDFFontNames();
+		String[][] res = new String[str.length][2];
+		for (int i = 0; i < str.length; i++) {
+			res[i][0] = str[i];
+			res[i][1] = str[i];
+		}
+		return res;
+	}
+
+	public static String[][] getPdfEncodings2() {
+		if (mp.keySet().isEmpty())
+			fillPDFEncodingMap();
+		String[] keySet = mp.keySet().toArray(new String[mp.keySet().size()]);
+		String[][] res = new String[keySet.length][2];
+		for (int i = 0; i < keySet.length; i++) {
+			res[i][0] = mp.get(keySet[i]);
+			res[i][1] = keySet[i];
+		}
+		return res;
+	}
+
 	public static String[] getPDFFontNames() {
 		java.util.List<String> classes = new ArrayList<String>();
 		classes.add(""); //$NON-NLS-1$
@@ -745,6 +767,14 @@ public class ModelUtils {
 		java.util.List<String> encodings = new ArrayList<String>();
 		encodings.add(""); //$NON-NLS-1$
 
+		fillPDFEncodingMap();
+
+		encodings.addAll(mp.values());
+
+		return encodings.toArray(new String[encodings.size()]);
+	}
+
+	private static void fillPDFEncodingMap() {
 		mp.put("Cp1250", "CP1250 (Central European)"); //$NON-NLS-1$ //$NON-NLS-2$
 		mp.put("Cp1251", "CP1251 (Cyrillic)"); //$NON-NLS-1$ //$NON-NLS-2$
 		mp.put("Cp1252", "CP1252 (Western European ANSI aka WinAnsi)"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -766,10 +796,6 @@ public class ModelUtils {
 		mp.put("UniKS-UCS2-V", "UniKS-UCS2-V (Korean)"); //$NON-NLS-1$ //$NON-NLS-2$
 		mp.put("Identity-H", "Identity-H (Unicode with horizontal writing)"); //$NON-NLS-1$ //$NON-NLS-2$
 		mp.put("Identity-V", "Identity-V (Unicode with vertical writing)"); //$NON-NLS-1$ //$NON-NLS-2$
-
-		encodings.addAll(mp.values());
-
-		return encodings.toArray(new String[encodings.size()]);
 	}
 
 	public static String getKey4PDFEncoding(String enc) {

@@ -24,47 +24,47 @@ import net.sf.jasperreports.engine.util.JRProperties;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.preferences.editor.TextFieldEditor;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
+import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.utils.Misc;
 
 /**
  * 
  */
-public class HTMLExporterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-	public static final String NSF_EXPORT_HTML_ACCESSIBLE = "net.sf.jasperreports.export.html.accessible";
-	public static final String NSF_EXPORT_HTML_FLUSH_OUTPUT = "net.sf.jasperreports.export.html.flush.output";
-	public static final String NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES = "net.sf.jasperreports.export.html.frames.as.nested.tables";
-	public static final String NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS = "net.sf.jasperreports.export.html.remove.emtpy.space.between.rows";
-	public static final String NSF_EXPORT_HTML_SIZE_UNIT = "net.sf.jasperreports.export.html.size.unit";
-	public static final String NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN = "net.sf.jasperreports.export.html.using.images.to.align";
-	public static final String NSF_EXPORT_HTML_WHITE_PAGE_BACKGROUND = "net.sf.jasperreports.export.html.white.page.background";
-	public static final String NSF_EXPORT_HTML_WRAP_BREAK_WORD = "net.sf.jasperreports.export.html.wrap.break.word";
+public class HTMLExporterPreferencePage extends FieldEditorOverlayPage {
+	public static final String NSF_EXPORT_HTML_ACCESSIBLE = "net.sf.jasperreports.export.html.accessible"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_FLUSH_OUTPUT = "net.sf.jasperreports.export.html.flush.output"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES = "net.sf.jasperreports.export.html.frames.as.nested.tables"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS = "net.sf.jasperreports.export.html.remove.emtpy.space.between.rows"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_SIZE_UNIT = "net.sf.jasperreports.export.html.size.unit"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN = "net.sf.jasperreports.export.html.using.images.to.align"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_WHITE_PAGE_BACKGROUND = "net.sf.jasperreports.export.html.white.page.background"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_WRAP_BREAK_WORD = "net.sf.jasperreports.export.html.wrap.break.word"; //$NON-NLS-1$
 
-	public static final String NSF_EXPORT_HTML_HEADER = "net.sf.jasperreports.export.html.header";
-	public static final String NSF_EXPORT_HTML_FOOTER = "net.sf.jasperreports.export.html.footer";
-	public static final String NSF_EXPORT_HTML_BETWEEN_PAGES = "net.sf.jasperreports.export.html.between.pages";
+	public static final String NSF_EXPORT_HTML_HEADER = "net.sf.jasperreports.export.html.header"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_FOOTER = "net.sf.jasperreports.export.html.footer"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_BETWEEN_PAGES = "net.sf.jasperreports.export.html.between.pages"; //$NON-NLS-1$
 
-	public static final String NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR = "net.sf.jasperreports.export.html.is.output.images.to.dir";
-	public static final String NSF_EXPORT_HTML_IMAGES_DIR_NAME = "net.sf.jasperreports.export.html.images.dir.name";
-	public static final String NSF_EXPORT_HTML_IMAGES_URI = "net.sf.jasperreports.export.html.images.uri";
+	public static final String NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR = "net.sf.jasperreports.export.html.is.output.images.to.dir"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_IMAGES_DIR_NAME = "net.sf.jasperreports.export.html.images.dir.name"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_HTML_IMAGES_URI = "net.sf.jasperreports.export.html.images.uri"; //$NON-NLS-1$
 
 	public HTMLExporterPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("HTML Exporter Parameters");
+		setDescription(Messages.HTMLExporterPreferencePage_14);
 	}
 
 	/**
@@ -85,43 +85,37 @@ public class HTMLExporterPreferencePage extends FieldEditorPreferencePage implem
 
 	private void createTabPageHTML(CTabFolder tabFolder) {
 		CTabItem ptab = new CTabItem(tabFolder, SWT.NONE);
-		ptab.setText("HTML");
+		ptab.setText(Messages.HTMLExporterPreferencePage_15);
 
-		ScrolledComposite scompo = new ScrolledComposite(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL);
-		scompo.setExpandHorizontal(true);
-		scompo.setExpandVertical(true);
+		Composite sc = new Composite(tabFolder, SWT.NONE);
 
-		Composite sc = new Composite(scompo, SWT.NONE);
-		sc.setLayout(new GridLayout(2, false));
+		addField(new ComboFieldEditor(NSF_EXPORT_HTML_SIZE_UNIT, Messages.HTMLExporterPreferencePage_16, new String[][] { { Messages.HTMLExporterPreferencePage_17, Messages.HTMLExporterPreferencePage_18 },
+				{ Messages.HTMLExporterPreferencePage_19, Messages.HTMLExporterPreferencePage_20 } }, sc));
 
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_ACCESSIBLE, "Produce Accessible HTML", sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_FLUSH_OUTPUT, "Flush Output", sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES, "Frames As Nested Tables", sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, "Remove Empty Space Between Rows",
+		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_ACCESSIBLE, Messages.HTMLExporterPreferencePage_21, sc));
+		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_FLUSH_OUTPUT, Messages.HTMLExporterPreferencePage_22, sc));
+		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES, Messages.HTMLExporterPreferencePage_23, sc));
+		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Messages.HTMLExporterPreferencePage_24,
 				sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN, "Use Images To Align", sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_WHITE_PAGE_BACKGROUND, "White Page Background", sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_WRAP_BREAK_WORD, "Wrap Break Word", sc));
-		addField(new ComboFieldEditor(NSF_EXPORT_HTML_SIZE_UNIT, "Size Unit", new String[][] { { "px", "pt" },
-				{ "pt", "pt" } }, sc));
+		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN, Messages.HTMLExporterPreferencePage_25, sc));
+		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_WHITE_PAGE_BACKGROUND, Messages.HTMLExporterPreferencePage_26, sc));
+		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_WRAP_BREAK_WORD, Messages.HTMLExporterPreferencePage_27, sc));
 
-		scompo.setMinSize(sc.getSize());
-		scompo.setContent(sc);
-		ptab.setControl(scompo);
+		ptab.setControl(sc);
 	}
 
 	private void createTabPageHB(CTabFolder tabFolder) {
 		CTabItem ptab = new CTabItem(tabFolder, SWT.NONE);
-		ptab.setText("Headader And Footer");
+		ptab.setText(Messages.HTMLExporterPreferencePage_28);
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
 		sc.setLayout(new GridLayout());
 
-		TextFieldEditor se = new TextFieldEditor(NSF_EXPORT_HTML_HEADER, "Header", sc);
+		TextFieldEditor se = new TextFieldEditor(NSF_EXPORT_HTML_HEADER, Messages.HTMLExporterPreferencePage_29, sc);
 		se.getTextControl(sc).setLayoutData(new GridData(GridData.FILL_BOTH));
 		addField(se);
 
-		TextFieldEditor scf = new TextFieldEditor(NSF_EXPORT_HTML_FOOTER, "Footer", sc);
+		TextFieldEditor scf = new TextFieldEditor(NSF_EXPORT_HTML_FOOTER, Messages.HTMLExporterPreferencePage_30, sc);
 		scf.getTextControl(sc).setLayoutData(new GridData(GridData.FILL_BOTH));
 		addField(scf);
 
@@ -130,12 +124,12 @@ public class HTMLExporterPreferencePage extends FieldEditorPreferencePage implem
 
 	private void createTabPageBP(CTabFolder tabFolder) {
 		CTabItem ptab = new CTabItem(tabFolder, SWT.NONE);
-		ptab.setText("Between Pages");
+		ptab.setText(Messages.HTMLExporterPreferencePage_31);
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
-		sc.setLayout(new GridLayout(1, false));
+		sc.setLayout(new GridLayout());
 
-		TextFieldEditor scf = new TextFieldEditor(NSF_EXPORT_HTML_BETWEEN_PAGES, "Between Pages", sc);
+		TextFieldEditor scf = new TextFieldEditor(NSF_EXPORT_HTML_BETWEEN_PAGES, Messages.HTMLExporterPreferencePage_32, sc);
 		scf.getTextControl(sc).setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL));
 		addField(scf);
 
@@ -144,31 +138,26 @@ public class HTMLExporterPreferencePage extends FieldEditorPreferencePage implem
 
 	private void createTabPageImages(CTabFolder tabFolder) {
 		CTabItem ptab = new CTabItem(tabFolder, SWT.NONE);
-		ptab.setText("Images");
+		ptab.setText(Messages.HTMLExporterPreferencePage_33);
 
-		ScrolledComposite scompo = new ScrolledComposite(tabFolder, SWT.V_SCROLL | SWT.H_SCROLL);
-		scompo.setExpandHorizontal(true);
-		scompo.setExpandVertical(true);
-
-		Composite sc = new Composite(scompo, SWT.NONE);
+		Composite sc = new Composite(tabFolder, SWT.NONE);
 		sc.setLayout(new GridLayout(3, false));
 
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR, "Save Images To Disk", sc));
-		addField(new StringFieldEditor(NSF_EXPORT_HTML_IMAGES_URI, "Images URI", sc));
-		addField(new DirectoryFieldEditor(NSF_EXPORT_HTML_IMAGES_DIR_NAME, "Images Directory Name", sc));
+		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR, Messages.HTMLExporterPreferencePage_34, sc));
+		addField(new StringFieldEditor(NSF_EXPORT_HTML_IMAGES_URI, Messages.HTMLExporterPreferencePage_35, sc));
+		addField(new DirectoryFieldEditor(NSF_EXPORT_HTML_IMAGES_DIR_NAME, Messages.HTMLExporterPreferencePage_36, sc));
 
-		scompo.setMinSize(sc.getSize());
-		scompo.setContent(sc);
-		ptab.setControl(scompo);
+		ptab.setControl(sc);
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(NSF_EXPORT_HTML_ACCESSIBLE, JRProperties.getProperty(NSF_EXPORT_HTML_ACCESSIBLE));
+		store.setDefault(NSF_EXPORT_HTML_ACCESSIBLE,
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_ACCESSIBLE), "false")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_HTML_FLUSH_OUTPUT, JRProperties.getProperty(NSF_EXPORT_HTML_FLUSH_OUTPUT));
 		store.setDefault(NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES,
 				JRProperties.getProperty(NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES));
 		store.setDefault(NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
-				JRProperties.getProperty(NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS));
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS), "false")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_HTML_SIZE_UNIT, JRProperties.getProperty(NSF_EXPORT_HTML_SIZE_UNIT));
 		store.setDefault(NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN,
 				JRProperties.getProperty(NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN));
@@ -176,14 +165,16 @@ public class HTMLExporterPreferencePage extends FieldEditorPreferencePage implem
 				JRProperties.getProperty(NSF_EXPORT_HTML_WHITE_PAGE_BACKGROUND));
 		store.setDefault(NSF_EXPORT_HTML_WRAP_BREAK_WORD, JRProperties.getProperty(NSF_EXPORT_HTML_WRAP_BREAK_WORD));
 
-		store.setDefault(NSF_EXPORT_HTML_HEADER, JRProperties.getProperty(NSF_EXPORT_HTML_HEADER));
-		store.setDefault(NSF_EXPORT_HTML_FOOTER, JRProperties.getProperty(NSF_EXPORT_HTML_FOOTER));
-		store.setDefault(NSF_EXPORT_HTML_BETWEEN_PAGES, JRProperties.getProperty(NSF_EXPORT_HTML_BETWEEN_PAGES));
+		store.setDefault(NSF_EXPORT_HTML_HEADER, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_HEADER), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_FOOTER, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_FOOTER), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_BETWEEN_PAGES,
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_BETWEEN_PAGES), "")); //$NON-NLS-1$
 
 		store.setDefault(NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR,
-				JRProperties.getProperty(NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR));
-		store.setDefault(NSF_EXPORT_HTML_IMAGES_DIR_NAME, JRProperties.getProperty(NSF_EXPORT_HTML_IMAGES_DIR_NAME));
-		store.setDefault(NSF_EXPORT_HTML_IMAGES_URI, JRProperties.getProperty(NSF_EXPORT_HTML_IMAGES_URI));
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_IMAGES_DIR_NAME,
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_IMAGES_DIR_NAME), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_IMAGES_URI, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_IMAGES_URI), "")); //$NON-NLS-1$
 	}
 
 	/*
@@ -192,6 +183,11 @@ public class HTMLExporterPreferencePage extends FieldEditorPreferencePage implem
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
+	}
+
+	@Override
+	protected String getPageId() {
+		return "com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage.property"; //$NON-NLS-1$
 	}
 
 }

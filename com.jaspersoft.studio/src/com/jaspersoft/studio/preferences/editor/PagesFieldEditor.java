@@ -130,8 +130,14 @@ public class PagesFieldEditor extends FieldEditor {
 
 			StringTokenizer st = new StringTokenizer(resourcePreference, ";");
 
-			Integer from = new Integer(st.nextToken());
-			Integer to = new Integer(st.nextToken());
+			Integer from = new Integer(0);
+			Integer to = new Integer(0);
+			try {
+				from = new Integer(st.nextToken());
+				to = new Integer(st.nextToken());
+			} catch (NumberFormatException e) {
+
+			}
 			if (to < from)
 				to = from;
 			pageFrom.setSelection(from);
@@ -140,7 +146,11 @@ public class PagesFieldEditor extends FieldEditor {
 			pageTo.setEnabled(true);
 		} else {
 			btPage.setSelection(true);
-			page.setSelection(new Integer(resourcePreference));
+			try {
+				page.setSelection(new Integer(resourcePreference));
+			} catch (NumberFormatException e) {
+				page.setSelection(new Integer(0));
+			}
 			page.setEnabled(true);
 		}
 	}

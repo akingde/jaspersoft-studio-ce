@@ -22,43 +22,48 @@ package com.jaspersoft.studio.preferences.exporter;
 import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.utils.Misc;
 
 /**
  * 
  */
-public class XMLExporterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-	public static final String NSF_EXPORT_XML_VALIDATION = "net.sf.jasperreports.export.xml.validation";
-	public static final String NSF_EXPORT_XML_IS_EMBEDDING_IMAGES = "net.sf.jasperreports.export.xml.is.embedding.images";
-	public static final String NSF_EXPORT_XML_DTD_LOCATION = "net.sf.jasperreports.export.xml.dtd.location";
+public class XMLExporterPreferencePage extends FieldEditorOverlayPage {
+	public static final String NSF_EXPORT_XML_VALIDATION = "net.sf.jasperreports.export.xml.validation"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_XML_IS_EMBEDDING_IMAGES = "net.sf.jasperreports.export.xml.is.embedding.images"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_XML_DTD_LOCATION = "net.sf.jasperreports.export.xml.dtd.location"; //$NON-NLS-1$
 
 	public XMLExporterPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		setDescription("XML Exporter Parameters");
+		setDescription(Messages.XMLExporterPreferencePage_3);
 	}
 
 	/**
 	 *
 	 */
 	public void createFieldEditors() {
-		addField(new BooleanFieldEditor(NSF_EXPORT_XML_IS_EMBEDDING_IMAGES, "Embed Images", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(NSF_EXPORT_XML_VALIDATION, "Force XML Validation", getFieldEditorParent()));
-		FileFieldEditor ffe = new FileFieldEditor(NSF_EXPORT_XML_DTD_LOCATION, "DTD File Location", getFieldEditorParent());
-		ffe.setFileExtensions(new String[] { ".dtd" });
+		addField(new BooleanFieldEditor(NSF_EXPORT_XML_IS_EMBEDDING_IMAGES, Messages.XMLExporterPreferencePage_4,
+				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(NSF_EXPORT_XML_VALIDATION, Messages.XMLExporterPreferencePage_5,
+				getFieldEditorParent()));
+		FileFieldEditor ffe = new FileFieldEditor(NSF_EXPORT_XML_DTD_LOCATION, Messages.XMLExporterPreferencePage_6,
+				getFieldEditorParent());
+		ffe.setFileExtensions(new String[] { ".dtd" }); //$NON-NLS-1$
 		addField(ffe);
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(NSF_EXPORT_XML_VALIDATION, JRProperties.getProperty(NSF_EXPORT_XML_VALIDATION));
-		store.setDefault(NSF_EXPORT_XML_IS_EMBEDDING_IMAGES, JRProperties.getProperty(NSF_EXPORT_XML_IS_EMBEDDING_IMAGES));
-		store.setDefault(NSF_EXPORT_XML_DTD_LOCATION, JRProperties.getProperty(NSF_EXPORT_XML_DTD_LOCATION));
+		store.setDefault(NSF_EXPORT_XML_IS_EMBEDDING_IMAGES,
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XML_IS_EMBEDDING_IMAGES), "false")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XML_DTD_LOCATION, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XML_DTD_LOCATION), "")); //$NON-NLS-1$
 	}
 
 	/*
@@ -67,6 +72,11 @@ public class XMLExporterPreferencePage extends FieldEditorPreferencePage impleme
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
+	}
+
+	@Override
+	protected String getPageId() {
+		return "com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage.property"; //$NON-NLS-1$
 	}
 
 }

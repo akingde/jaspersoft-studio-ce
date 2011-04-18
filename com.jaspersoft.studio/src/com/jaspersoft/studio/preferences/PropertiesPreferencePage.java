@@ -19,17 +19,33 @@
  */
 package com.jaspersoft.studio.preferences;
 
+import java.util.List;
+
+import net.sf.jasperreports.engine.util.JRProperties;
+import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
+
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.preferences.editor.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.utils.Misc;
 
-public class StudioPreferencePage extends FieldEditorOverlayPage {
+/**
+ * This class represents a preference page that is contributed to the Preferences dialog. By subclassing
+ * <samp>FieldEditorPreferencePage</samp>, we can use the field support built into JFace that allows us to create a page
+ * that is small and knows how to save, restore and apply itself.
+ * <p>
+ * This page is used to modify preferences only. They are stored in the preference store that belongs to the main
+ * plug-in class. That way, preferences can be accessed directly via the preference store.
+ */
 
-	public StudioPreferencePage() {
+public class PropertiesPreferencePage extends FieldEditorOverlayPage {
+
+	public PropertiesPreferencePage() {
 		super(GRID);
 		setPreferenceStore(JaspersoftStudioPlugin.getInstance().getPreferenceStore());
-		// setDescription("A demonstration of a preference page implementation");
 	}
 
 	/**
@@ -37,12 +53,14 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 	 * types of preferences. Each field editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		// addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, "&Directory preference:", getFieldEditorParent()));
-		// addField(new BooleanFieldEditor("test", "test", getFieldEditorParent()));
+		addField(new PropertyListFieldEditor("abcd", "Jasper Reports Properties", getFieldEditorParent()));
+	}
 
-		// addField(new RadioGroupFieldEditor(PreferenceConstants.P_CHOICE, "An example of a multiple-choice preference", 1,
-		// new String[][] { { "&Choice 1", "choice1" }, { "C&hoice 2", "choice2" } }, getFieldEditorParent()));
-		// addField(new StringFieldEditor(PreferenceConstants.P_STRING, "A &text preference:", getFieldEditorParent()));
+	@SuppressWarnings("unchecked")
+	public static void getDefaults(IPreferenceStore store) {
+		List<PropertySuffix> lst = JRProperties.getProperties("");
+		for (PropertySuffix ps : lst)
+			store.setDefault(ps.getKey(), Misc.nvl(ps.getValue(), ""));
 	}
 
 	/*
@@ -55,7 +73,7 @@ public class StudioPreferencePage extends FieldEditorOverlayPage {
 
 	@Override
 	protected String getPageId() {
-		return "com.jaspersoft.studio.preferences.StudioPreferencePage.property";
+		return "com.jaspersoft.studio.preferences.PropertiesPreferencePage.property";
 	}
 
 }

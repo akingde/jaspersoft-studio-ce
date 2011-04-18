@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRFont;
+import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -39,6 +40,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IRotatable;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
+import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -82,27 +84,25 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		rotationD.setDescription(Messages.MTextElement_rotation_description);
 		desc.add(rotationD);
 
-		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_LINE_SPACING,
-				Messages.common_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
-		lineSpacingD.setDescription(Messages.MTextElement_line_spacing_description);
-		desc.add(lineSpacingD);
+		JRPropertyDescriptor paragraph = new JRPropertyDescriptor("paragraph", "Paragraph");
+		desc.add(paragraph);
 
 		tFont = new MFont((JRFont) getValue());
 		tFont.createPropertyDescriptors(desc, defaultsMap);
 
+		paragraph.setCategory(Messages.MTextElement_text_properties_category);
 		markupD.setCategory(Messages.MTextElement_text_properties_category);
 		hAlignD.setCategory(Messages.MTextElement_text_properties_category);
 		vAlignD.setCategory(Messages.MTextElement_text_properties_category);
 		rotationD.setCategory(Messages.MTextElement_text_properties_category);
-		lineSpacingD.setCategory(Messages.MTextElement_text_properties_category);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, null);
-		defaultsMap.put(JRBaseStyle.PROPERTY_LINE_SPACING, null);
 	}
 
 	private MFont tFont;
+	private MParagraph mParagraph;
 
 	private MFont getMFont() {
 		if (tFont == null) {
@@ -119,14 +119,20 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		if (id.equals(JRDesignStyle.PROPERTY_MARKUP))
 			return jrElement.getOwnMarkup();
 
+		if (id.equals("paragraph")) {
+			if (mParagraph == null) {
+				mParagraph = new MParagraph((JRBaseParagraph) jrElement.getParagraph());
+				setChildListener(mParagraph);
+			}
+			return mParagraph;
+		}
+
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
 			return EnumHelper.getValue(jrElement.getOwnHorizontalAlignmentValue(), 1, true);
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
 			return EnumHelper.getValue(jrElement.getOwnVerticalAlignmentValue(), 1, true);
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return EnumHelper.getValue(jrElement.getOwnRotationValue(), 0, true);
-		if (id.equals(JRBaseStyle.PROPERTY_LINE_SPACING))
-			return EnumHelper.getValue(jrElement.getOwnLineSpacingValue(), 0, true);
 
 		if (getMFont() != null) {
 			Object val = tFont.getPropertyValue(id);
@@ -151,8 +157,6 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 					true));
 		else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			jrElement.setRotation((RotationEnum) EnumHelper.getSetValue(RotationEnum.values(), value, 0, true));
-		else if (id.equals(JRBaseStyle.PROPERTY_LINE_SPACING))
-			jrElement.setLineSpacing((LineSpacingEnum) EnumHelper.getSetValue(LineSpacingEnum.values(), value, 0, true));
 
 		getMFont().setPropertyValue(id, value);
 

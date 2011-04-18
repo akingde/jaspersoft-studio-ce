@@ -1,7 +1,11 @@
 package com.jaspersoft.studio.editor.preview;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -13,15 +17,20 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
@@ -33,6 +42,7 @@ import com.jaspersoft.studio.editor.JRPrintEditor;
 import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
 import com.jaspersoft.studio.editor.preview.actions.ShowParametersAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.repository.RepositoryManager;
 import com.jaspersoft.studio.utils.ErrorUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
@@ -104,6 +114,47 @@ public class PreviewEditor extends JRPrintEditor {
 		String jobName = Messages.PreviewEditor_preview_a
 				+ ": " + getJasperDesign().getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
+		// create job with a different classloader!
+		try {
+			IProject prj = ((IFileEditorInput) getEditorInput()).getFile().getProject();
+			ClassLoader cl = RepositoryManager.getClassLoader4Project(null, prj);
+			Class<?> jbclass = cl.loadClass("com.jaspersoft.studio.preferences.util.PropertiesHelper");
+			Constructor<?>[] c = jbclass.getDeclaredConstructors();
+			PropertiesHelper jb = (PropertiesHelper) c[0].newInstance(prj);
+
+			jb.getClass().getClassLoader();
+
+			ClassLoader cl2 = RepositoryManager.getClassLoader4Project(null, prj);
+			Class<?> jbclass2 = cl.loadClass("com.jaspersoft.studio.preferences.util.PropertiesHelper");
+			Constructor<?>[] c2 = jbclass.getDeclaredConstructors();
+			PropertiesHelper jb2 = (PropertiesHelper) c[0].newInstance(prj);
+
+			jb2.getClass().getClassLoader();
+
+			boolean b = jb == jb2;
+		} catch (JavaModelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (CoreException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		Job job = new Job(jobName) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -118,14 +169,20 @@ public class PreviewEditor extends JRPrintEditor {
 
 				try {
 					IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+
 					Thread.currentThread().setContextClassLoader(
 							RepositoryManager.getClassLoader4Project(monitor, file.getProject()));
+					SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
+
+					new PropertiesHelper(file.getProject()).getProperties();
+
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					JRSaver.saveObject(getJasperDesign(), out);
+					JasperDesign jd = (JasperDesign) JRLoader.loadObject(new ByteArrayInputStream(out.toByteArray()));
 
 					setJasperPrint(null);
 					AsynchronousFillHandle fh = null;
-					JasperReport jasperReport = JasperCompileManager.compileReport(getJasperDesign());
-
-					SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
+					JasperReport jasperReport = JasperCompileManager.compileReport(jd);
 
 					jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
 
@@ -177,7 +234,6 @@ public class PreviewEditor extends JRPrintEditor {
 
 				}
 				return Status.OK_STATUS;
-
 			}
 		};
 
@@ -185,75 +241,6 @@ public class PreviewEditor extends JRPrintEditor {
 		job.setPriority(Job.LONG);
 		job.schedule();
 	}
-
-	/*
-	 * public void runReport(final AMDatasource d) { if (isNotRunning()) {
-	 * 
-	 * String dsName = ""; //$NON-NLS-1$ if (d != null) { dsName = d.getDisplayText(); datasource = d; } else { if
-	 * (datasource != null) dsName = datasource.getDisplayText(); else {
-	 * unsetReportDocument(Messages.PreviewEditor_no_datasource, true); // jasperPrint = new ReportConverter(jasperDesign,
-	 * false, true).getJasperPrint(); return; } } int pdresult = askParameters(); if (pdresult != Window.OK) return;
-	 * 
-	 * String jobName = Messages.PreviewEditor_preview_a + ": " + getJasperDesign().getName() +
-	 * Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ Job job = new
-	 * Job(jobName) {
-	 * 
-	 * @Override protected IStatus run(IProgressMonitor monitor) { unsetReportDocument(Messages.PreviewEditor_reloading,
-	 * false); monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN); InputStream io = null;
-	 * fillError = null; try { IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-	 * Thread.currentThread().setContextClassLoader( RepositoryManager.getClassLoader4Project(monitor,
-	 * file.getProject()));
-	 * 
-	 * setJasperPrint(null); AsynchronousFillHandle fh = null; JasperReport jasperReport =
-	 * JasperCompileManager.compileReport(getJasperDesign());
-	 * 
-	 * SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
-	 * 
-	 * jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
-	 * 
-	 * if (datasource instanceof MJDBCDataSource) { Connection connection =
-	 * RepositoryManager.establishConnection((MJDBCDataSource) datasource, PreviewEditor.this, monitor); if (connection !=
-	 * null) fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection); else
-	 * unsetReportDocument(Messages.PreviewEditor_connection_could_not_be_established, true); } else { JRDataSource jrds =
-	 * null; if (datasource instanceof MEmptyDataSource) { jrds = new JREmptyDataSource((Integer)
-	 * datasource.getPropertyValue(MEmptyDataSource.PROPERTY_SIZE)); } else if (datasource instanceof AMFileDataSource) {
-	 * io = new FileInputStream((String) datasource.getPropertyValue(MFileDataSource.PROPERTY_FILENAME)); String df =
-	 * (String) datasource.getPropertyValue(AMFileDataSource.PROPERTY_DATEFORMAT); if (df == null || df.trim().equals(""))
-	 * //$NON-NLS-1$ df = "yyyy-MM-dd"; //$NON-NLS-1$ String nf = (String)
-	 * datasource.getPropertyValue(AMFileDataSource.PROPERTY_NUMBERFORMAT); if (nf == null || nf.trim().equals(""))
-	 * //$NON-NLS-1$ nf = "#,##0.##"; //$NON-NLS-1$
-	 * 
-	 * if (datasource instanceof MFileDataSource) { jrds = RepositoryManager.createFileDataSource(io, (MFileDataSource)
-	 * datasource); ((JRCsvDataSource) jrds).setDateFormat(new SimpleDateFormat(df)); ((JRCsvDataSource)
-	 * jrds).setNumberFormat(new DecimalFormat(nf)); } else if (datasource instanceof MXLSDataSource) { jrds =
-	 * RepositoryManager.createXlsDataSource(io, (MXLSDataSource) datasource); ((JRXlsDataSource) jrds).setDateFormat(new
-	 * SimpleDateFormat(df)); ((JRXlsDataSource) jrds).setNumberFormat(new DecimalFormat(nf)); } else if (datasource
-	 * instanceof MXMLDataSource) { jasperParameter.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, df);
-	 * jasperParameter.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, nf); TimeZone tz = (TimeZone)
-	 * datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE); if (tz == null) try { tz = (TimeZone)
-	 * datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHTIMEZONE); } catch (Exception ex) { tz =
-	 * TimeZone.getDefault(); } jasperParameter.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, tz); Locale locale =
-	 * (Locale) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHLOCALE); if (locale == null) try { locale =
-	 * (Locale) datasource.getPropertyDefaultValue(MXMLDataSource.PROPERTY_XPATHLOCALE); } catch (Exception ex) { locale =
-	 * Locale.getDefault(); } jasperParameter.put(JRXPathQueryExecuterFactory.XML_LOCALE, locale);
-	 * 
-	 * String select = (String) datasource.getPropertyValue(MXMLDataSource.PROPERTY_XPATHSELECT); if (select != null &&
-	 * !select.trim().endsWith("")) { //$NON-NLS-1$ jrds = RepositoryManager.createXMLDataSource(PreviewEditor.this, io,
-	 * select); } else { jasperParameter.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT,
-	 * JRXmlUtils.parse(io)); } } } jasperParameter.put(JRParameter.REPORT_LOCALE, Locale.US);
-	 * 
-	 * if (jrds != null) { fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, jrds); } else fh =
-	 * AsynchronousFillHandle.createHandle(jasperReport, jasperParameter); } if (fillReport(fh, monitor) ==
-	 * Status.CANCEL_STATUS) return Status.CANCEL_STATUS;
-	 * 
-	 * setReportDocument(true); } catch (final Throwable e) { unsetReportDocument(ErrorUtil.getStackTrace(e), true); }
-	 * finally { if (io != null) try { io.close(); } catch (IOException e) { e.printStackTrace(); }
-	 * Display.getDefault().syncExec(new Runnable() { public void run() { setNotRunning(true); } }); monitor.done(); if
-	 * (datasource != null && datasource instanceof MJDBCDataSource) { RepositoryManager.closeConnection((MJDBCDataSource)
-	 * datasource); } } return Status.OK_STATUS;
-	 * 
-	 * } }; job.setPriority(Job.LONG); job.schedule(); } }
-	 */
 
 	private boolean showParameters = false;
 

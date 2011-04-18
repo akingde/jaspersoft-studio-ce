@@ -279,6 +279,12 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		ignorePaginationD.setDescription(Messages.MReport_ignore_pagination_description);
 		desc.add(ignorePaginationD);
 
+		titleNewPageD.setCategory(Messages.MReport_pagination);
+		ignorePaginationD.setCategory(Messages.MReport_pagination);
+		summaryNewPageD.setCategory(Messages.MReport_pagination);
+		floatColumnFooterD.setCategory(Messages.MReport_pagination);
+		summaryWHFD.setCategory(Messages.MReport_pagination);
+
 		defaultsMap.put(JasperDesign.PROPERTY_PAGE_WIDTH, new Integer(595));
 		defaultsMap.put(JasperDesign.PROPERTY_PAGE_HEIGHT, new Integer(842));
 		defaultsMap.put(JasperDesign.PROPERTY_TOP_MARGIN, new Integer(30));
