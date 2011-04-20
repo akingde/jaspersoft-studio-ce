@@ -1,24 +1,29 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.preferences.exporter;
 
+import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -39,19 +44,11 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.utils.Misc;
-
-/**
+/*
  * 
  */
 public class HTMLExporterPreferencePage extends FieldEditorOverlayPage {
 	public static final String NSF_EXPORT_HTML_ACCESSIBLE = "net.sf.jasperreports.export.html.accessible"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_HTML_FLUSH_OUTPUT = "net.sf.jasperreports.export.html.flush.output"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES = "net.sf.jasperreports.export.html.frames.as.nested.tables"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS = "net.sf.jasperreports.export.html.remove.emtpy.space.between.rows"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_HTML_SIZE_UNIT = "net.sf.jasperreports.export.html.size.unit"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN = "net.sf.jasperreports.export.html.using.images.to.align"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_HTML_WHITE_PAGE_BACKGROUND = "net.sf.jasperreports.export.html.white.page.background"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_HTML_WRAP_BREAK_WORD = "net.sf.jasperreports.export.html.wrap.break.word"; //$NON-NLS-1$
 
 	public static final String NSF_EXPORT_HTML_HEADER = "net.sf.jasperreports.export.html.header"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_HTML_FOOTER = "net.sf.jasperreports.export.html.footer"; //$NON-NLS-1$
@@ -89,17 +86,23 @@ public class HTMLExporterPreferencePage extends FieldEditorOverlayPage {
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
 
-		addField(new ComboFieldEditor(NSF_EXPORT_HTML_SIZE_UNIT, Messages.HTMLExporterPreferencePage_16, new String[][] { { Messages.HTMLExporterPreferencePage_17, Messages.HTMLExporterPreferencePage_18 },
-				{ Messages.HTMLExporterPreferencePage_19, Messages.HTMLExporterPreferencePage_20 } }, sc));
+		addField(new ComboFieldEditor(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT, Messages.HTMLExporterPreferencePage_16,
+				new String[][] { { Messages.HTMLExporterPreferencePage_17, Messages.HTMLExporterPreferencePage_18 },
+						{ Messages.HTMLExporterPreferencePage_19, Messages.HTMLExporterPreferencePage_20 } }, sc));
 
 		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_ACCESSIBLE, Messages.HTMLExporterPreferencePage_21, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_FLUSH_OUTPUT, Messages.HTMLExporterPreferencePage_22, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES, Messages.HTMLExporterPreferencePage_23, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Messages.HTMLExporterPreferencePage_24,
-				sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN, Messages.HTMLExporterPreferencePage_25, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_WHITE_PAGE_BACKGROUND, Messages.HTMLExporterPreferencePage_26, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_HTML_WRAP_BREAK_WORD, Messages.HTMLExporterPreferencePage_27, sc));
+		addField(new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT,
+				Messages.HTMLExporterPreferencePage_22, sc));
+		addField(new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES,
+				Messages.HTMLExporterPreferencePage_23, sc));
+		addField(new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+				Messages.HTMLExporterPreferencePage_24, sc));
+		addField(new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN,
+				Messages.HTMLExporterPreferencePage_25, sc));
+		addField(new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
+				Messages.HTMLExporterPreferencePage_26, sc));
+		addField(new BooleanFieldEditor(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD,
+				Messages.HTMLExporterPreferencePage_27, sc));
 
 		ptab.setControl(sc);
 	}
@@ -153,17 +156,20 @@ public class HTMLExporterPreferencePage extends FieldEditorOverlayPage {
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(NSF_EXPORT_HTML_ACCESSIBLE,
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_ACCESSIBLE), "false")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_HTML_FLUSH_OUTPUT, JRProperties.getProperty(NSF_EXPORT_HTML_FLUSH_OUTPUT));
-		store.setDefault(NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES,
-				JRProperties.getProperty(NSF_EXPORT_HTML_FRAMES_AS_NESTED_TABLES));
-		store.setDefault(NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_REMOVE_EMPTY_SPACE_BETWEEN_ROWS), "false")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_HTML_SIZE_UNIT, JRProperties.getProperty(NSF_EXPORT_HTML_SIZE_UNIT));
-		store.setDefault(NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN,
-				JRProperties.getProperty(NSF_EXPORT_HTML_USING_IMAGES_TO_ALIGN));
-		store.setDefault(NSF_EXPORT_HTML_WHITE_PAGE_BACKGROUND,
-				JRProperties.getProperty(NSF_EXPORT_HTML_WHITE_PAGE_BACKGROUND));
-		store.setDefault(NSF_EXPORT_HTML_WRAP_BREAK_WORD, JRProperties.getProperty(NSF_EXPORT_HTML_WRAP_BREAK_WORD));
+		store.setDefault(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT,
+				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT));
+		store.setDefault(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES,
+				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
+		store.setDefault(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+				Misc.nvl(JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS), "false")); //$NON-NLS-1$
+		store.setDefault(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT,
+				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT));
+		store.setDefault(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN,
+				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN));
+		store.setDefault(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
+				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
+		store.setDefault(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD,
+				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD));
 
 		store.setDefault(NSF_EXPORT_HTML_HEADER, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_HEADER), "")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_HTML_FOOTER, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_FOOTER), "")); //$NON-NLS-1$

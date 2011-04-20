@@ -101,8 +101,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.utils.SelectionHelper;
-
-/**
+/*
  * The Class AbstractVisualEditor.
  * 
  * @author Chicu Veaceslav

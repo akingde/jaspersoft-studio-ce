@@ -1,4 +1,23 @@
 /*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of Jaspersoft Open Studio.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
+ */
+/*
  * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
  * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
@@ -311,6 +330,58 @@ public class Messages extends NLS {
 	public static String ExcelExporterPreferencePage_62;
 	public static String ExcelExporterPreferencePage_63;
 	public static String ExcelExporterPreferencePage_title;
+	public static String ExportAsCsvAction_filtername;
+	public static String ExportAsCsvAction_text;
+	public static String ExportAsCsvAction_tooltip;
+	public static String ExportAsCsvMetadataAction_title;
+	public static String ExportAsCsvMetadataAction_tooltip;
+	public static String ExportAsDocxAction_filtername;
+	public static String ExportAsDocxAction_title;
+	public static String ExportAsDocxAction_tooltip;
+	public static String ExportAsExcelAPIAction_filternames;
+	public static String ExportAsExcelAPIAction_title;
+	public static String ExportAsExcelAPIAction_tooltip;
+	public static String ExportAsHtmlAction_filternames1;
+	public static String ExportAsHtmlAction_filternames2;
+	public static String ExportAsHtmlAction_title;
+	public static String ExportAsHtmlAction_tooltip;
+	public static String ExportAsJasperReportsAction_filtername;
+	public static String ExportAsJasperReportsAction_title;
+	public static String ExportAsJasperReportsAction_tooltip;
+	public static String ExportAsOdsAction_filtername;
+	public static String ExportAsOdsAction_title;
+	public static String ExportAsOdsAction_tooltip;
+	public static String ExportAsOdtAction_filtername;
+	public static String ExportAsOdtAction_title;
+	public static String ExportAsOdtAction_tooltips;
+	public static String ExportAsPdfAction_filtername;
+	public static String ExportAsPdfAction_title;
+	public static String ExportAsPdfAction_tooltip;
+	public static String ExportAsRtfAction_filtername;
+	public static String ExportAsRtfAction_title;
+	public static String ExportAsRtfAction_tooltip;
+	public static String ExportAsTextAction_filtername;
+	public static String ExportAsTextAction_title;
+	public static String ExportAsTextAction_tooltip;
+	public static String ExportAsXHtmlAction_filternames;
+	public static String ExportAsXHtmlAction_title;
+	public static String ExportAsXHtmlAction_tooltip;
+	public static String ExportAsXlsAction_filternames;
+	public static String ExportAsXlsAction_title;
+	public static String ExportAsXlsAction_tooltip;
+	public static String ExportAsXlsxAction_filternames;
+	public static String ExportAsXlsxAction_title;
+	public static String ExportAsXlsxAction_tooltip;
+	public static String ExportAsXmlAction_ext1;
+	public static String ExportAsXmlAction_ext2;
+	public static String ExportAsXmlAction_title;
+	public static String ExportAsXmlAction_tooltip;
+	public static String ExportAsXmlWithImagesAction_filtername;
+	public static String ExportAsXmlWithImagesAction_filtername1;
+	public static String ExportAsXmlWithImagesAction_title;
+	public static String ExportAsXmlWithImagesAction_tooltip;
+	public static String ExportMenuAction_title;
+	public static String ExportMenuAction_tooltip;
 	public static String FieldEditorOverlayPage_2;
 	public static String FieldEditorOverlayPage_3;
 	public static String FieldEditorOverlayPage_4;

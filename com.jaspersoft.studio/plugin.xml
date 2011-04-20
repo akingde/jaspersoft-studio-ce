@@ -183,6 +183,12 @@
       </page>
       <page
             category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
+            name="CSV Metadata Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
             class="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
             name="Text Exporter">
@@ -302,6 +308,14 @@
             class="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
             id="com.jaspersoft.studio.preferences.PropertiesPreferencePage.property"
             name="Properties"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage.property"
+            name="CSV Metadata Exporter"
             objectClass="org.eclipse.core.resources.IProject">
       </page>
    </extension>

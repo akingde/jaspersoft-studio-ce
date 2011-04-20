@@ -1,21 +1,25 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.data.jdbc;
 
@@ -36,8 +40,7 @@ import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.utils.Misc;
-
-/**
+/*
  * @author gtoffoli
  *
  */
@@ -110,65 +113,6 @@ public class JDBCDataAdapter extends DataAdapter {
 	private List<String> classpathPaths = new ArrayList<String>();
 	
 	
-//    /**
-//     * Load a JDBC driver in the list of drivers managed by the JDBCDataAdapter.
-//     * 
-//     * @param driverClass
-//     * @throws ClassNotFoundException
-//     */
-//	private static void loadDriver(String driverClass) throws ClassNotFoundException {
-//
-//            if (driverClass == null) return;
-//
-//            try {
-//                    Driver theDriver = (Driver)Class.forName(driverClass, false, getDriversClassLoader()).newInstance();
-//                    if (!isDriverLoaded(theDriver)) {
-//                            synchronized (drivers) {
-//                                    drivers.add(theDriver);
-//                            }
-//                    }
-//            } catch (Throwable t) {
-//                    throw new ClassNotFoundException(driverClass);
-//            }
-//    }
-//
-//	/**
-//	 * Check if the specified driver is already loaded in the list of drivers or not.
-//	 * @param theDriver
-//	 * @return
-//	 */
-//    private static boolean isDriverLoaded(Driver theDriver) {
-//		int version = (theDriver.getMajorVersion()*10) + theDriver.getMinorVersion();
-//
-//		for (Driver driver : drivers) {
-//			int thisVersion = (driver.getMajorVersion()*10) + driver.getMinorVersion();
-//			if (thisVersion == version && (driver.getClass().getName().equals(theDriver.getClass().getName())))
-//				return true;
-//		}
-//		return false;
-//	}
-//
-//    /**
-//     * Find the most appropriate driver for a specific JDBC url.
-//     * This check is useful to test if the user is trying to use a wrong Jdbc url with a particular jdbc driver class.
-//     * 
-//     * @param jdbcURL
-//     * @return
-//     * @throws SQLException
-//     */
-//    public static Driver getSuitableDriver(String jdbcURL) throws SQLException {
-//
-//		for (Driver driver : drivers)
-//        {
-//			try {
-//				if (driver.acceptsURL(jdbcURL)) return driver;
-//			} catch (Throwable t) {
-//                            // Do nothing....
-//			}
-//        }
-//		return null;
-//	}
-
     private String jdbcDriver;
     
     private String username;
@@ -230,62 +174,13 @@ public class JDBCDataAdapter extends DataAdapter {
                     connectProps.setProperty("password", password);
                     
                     Connection conn = driver.connect( url, connectProps); 
-                    
-//                    if ( (this.getJDBCDriver().toLowerCase().indexOf("oracle") >= 0) && (IReportManager.getInstance().getProperty("oracle_language","").trim().length() > 0 ||
-//                        IReportManager.getInstance().getProperty("oracle_territory","").trim().length() > 0) )
-//                    {
-//	                    Statement stmt = null;
-//	                    try {
-//		                    stmt = conn.createStatement();
-//		                    if (IReportManager.getInstance().getProperty("oracle_language","").trim().length() > 0)
-//				    stmt.execute("ALTER SESSION SET NLS_LANGUAGE = '" + IReportManager.getInstance().getProperty("oracle_language","").trim() + "'");
-//				    if (IReportManager.getInstance().getProperty("oracle_territory","").trim().length() > 0)
-//				    stmt.execute("ALTER SESSION SET NLS_TERRITORY='" + IReportManager.getInstance().getProperty("oracle_territory","").trim() + "'");
-//				    
-//	                    } catch (Exception ex)
-//	                    {
-//	                    	ex.printStackTrace();
-//	        	    }
-//	        	    finally {
-//		        	    if (stmt != null) stmt.close();
-//	        	    }
-//                    }
+ 
         
                     return conn;
 			
-            }
-//            catch (NoClassDefFoundError ex)
-//            {
-//                    showErrorMessage(Misc.formatString(  // "messages.connection.noClassDefFoundError",
-//                                "{0}\nNoClassDefFoundError!!\nCheck your classpath!\n{1}",
-//                                new Object[]{""+ this.getName(), ""+ex.getMessage()}),
-//                                "Exception", ex); //"message.title.exception"
-//                    
-//                    return null;					
-//			} 
-//			catch (ClassNotFoundException ex)
-//			{
-//			    showErrorMessage(Misc.formatString( // "messages.connection.classNotFoundError",
-//		                            "{0}\nClassNotFoundError!\nMsg: {1}\nPossible not found class: {2}\nCheck your classpath!",
-//		                            new Object[]{""+ this.getName(), ""+ex.getMessage(), "" + this.getJDBCDriver()}),
-//		                            "Exception", ex);
-//				return null;				
-//			} 
-//			catch (java.sql.SQLException ex)
-//			{
-//				if (!savePassword) password = null;
-//				showErrorMessage(Misc.formatString( // "messages.connection.sqlError",
-//		                            "{0}\nSQL problems: {1}\n{2}",
-//		                            new Object[]{""+ this.getName(), ""+ex.getMessage(), "" + url}),
-//		                            "Exception", ex);
-//				return null;					
-//			} 
+            } 
 			catch (Exception ex)
-			{
-//				showErrorMessage(Misc.formatString( // "messages.connection.generalError",
-//		                            "{0}\nGeneral problem: {1}\nPlease check your username and password. The DBMS is running?!",
-//		                            new Object[]{""+ this.getName(), ""+ex.getMessage()}),
-//		                            "Exception", ex);
+			{ 
 				
 				ex.printStackTrace();
 				throw ex;

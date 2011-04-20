@@ -1,26 +1,31 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.section.text;
 
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 
+import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -40,8 +45,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
-
-/**
+/*
  * The location section on the location tab.
  * 
  * @author Chicu Veaceslav
@@ -67,7 +71,7 @@ public class FontSection extends AbstractSection {
 		GridLayout layout = new GridLayout(7, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_font+":", SWT.RIGHT); //$NON-NLS-1$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_font + ":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -121,7 +125,7 @@ public class FontSection extends AbstractSection {
 				changeProperty(JRBaseStyle.PROPERTY_BOLD, new Boolean(boldButton.getSelection()));
 			}
 		});
-		boldButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/bold.png")); //$NON-NLS-1$
+		boldButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/bold.png"));
 		boldButton.setToolTipText(Messages.FontSection_bold_tool_tip);
 
 		italicButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);

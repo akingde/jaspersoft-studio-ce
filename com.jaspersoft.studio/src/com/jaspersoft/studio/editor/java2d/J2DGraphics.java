@@ -48,12 +48,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.LineAttributes;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-// TODO: Auto-generated Javadoc
-// import org.holongate.j2d.Graphics2DFactory;
-// import org.holongate.j2d.J2DRegistry;
-// import org.holongate.j2d.J2DUtilities;
-
-/**
+/*
  * A J2DGraphics is a draw2d Graphics that delegates all its calls to a Java2D Graphics2D object. All the draw2d
  * behavior can be reproduced except for the following methods where a 'best effort' policy is only available:
  * <ul>

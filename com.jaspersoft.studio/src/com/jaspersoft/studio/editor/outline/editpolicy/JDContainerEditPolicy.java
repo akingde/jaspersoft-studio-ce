@@ -34,8 +34,7 @@ import org.eclipse.gef.requests.GroupRequest;
 
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
-
-/**
+/*
  * The Class JDContainerEditPolicy.
  * 
  * @author Chicu Veaceslav
@@ -61,9 +60,6 @@ public class JDContainerEditPolicy extends ContainerEditPolicy {
 	 */
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
-//		Command createCommand = OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(), (ANode) request
-//				.getNewObject(), request.getLocation(), -1);
-//		return createCommand;
 		return null;
 	}
 

@@ -1,6 +1,24 @@
-package com.jaspersoft.studio.preferences.editor;
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of Jaspersoft Open Studio.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.StringTokenizer;
+package com.jaspersoft.studio.preferences.editor.pages;
 
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
@@ -123,36 +141,21 @@ public class PagesFieldEditor extends FieldEditor {
 	}
 
 	private void setProperty(String resourcePreference) {
-		if (resourcePreference.equals("all")) {
-			btAll.setSelection(true);
-		} else if (resourcePreference.contains(";")) {
+		Pages p = new Pages();
+		p.parseString(resourcePreference);
+		if (p.getPage() != null) {
+			btPage.setSelection(true);
+			page.setSelection(p.getPage());
+			page.setEnabled(true);
+		} else if (p.getFrom() != null) {
 			btRange.setSelection(true);
 
-			StringTokenizer st = new StringTokenizer(resourcePreference, ";");
-
-			Integer from = new Integer(0);
-			Integer to = new Integer(0);
-			try {
-				from = new Integer(st.nextToken());
-				to = new Integer(st.nextToken());
-			} catch (NumberFormatException e) {
-
-			}
-			if (to < from)
-				to = from;
-			pageFrom.setSelection(from);
+			pageFrom.setSelection(p.getFrom());
 			pageFrom.setEnabled(true);
-			pageTo.setSelection(to);
+			pageTo.setSelection(p.getTo());
 			pageTo.setEnabled(true);
-		} else {
-			btPage.setSelection(true);
-			try {
-				page.setSelection(new Integer(resourcePreference));
-			} catch (NumberFormatException e) {
-				page.setSelection(new Integer(0));
-			}
-			page.setEnabled(true);
-		}
+		} else
+			btAll.setSelection(true);
 	}
 
 	@Override

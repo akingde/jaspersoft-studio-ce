@@ -1,24 +1,29 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.preferences.exporter;
 
+import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
 import net.sf.jasperreports.engine.util.JRProperties;
 
@@ -42,29 +47,16 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.utils.Misc;
-
-/**
+/*
  * 
  */
 public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 	// jexcelapi
-	public static final String NSF_EXPORT_XLS_CREATE_CUSTOM_PALETTE = "net.sf.jasperreports.export.xls.create.custom.palette"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_PASSWORD = "net.sf.jasperreports.export.xls.password"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_USE_TMP_FILE = "net.sf.jasperreports.export.xls.use.temp.file"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT = "net.sf.jasperreports.export.xls.cell.complex.format"; //$NON-NLS-1$
-	// common
-	public static final String NSF_EXPORT_XLS_COLLAPSE_ROW_SPAN = "net.sf.jasperreports.export.xls.collapse.row.span"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_EMPTY_SPACE_ROW = "net.sf.jasperreports.export.xls.remove.empty.space.between.rows"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_EMPTY_SPACE_COL = "net.sf.jasperreports.export.xls.remove.empty.space.between.columns"; //$NON-NLS-1$
 
-	public static final String NSF_EXPORT_XLS_IGNORE_GRAPHICS = "net.sf.jasperreports.export.xls.ignore.graphics"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_IMAGE_BORDER_FIX = "net.sf.jasperreports.export.xls.image.border.fix.enabled"; //$NON-NLS-1$
-	// page
-	public static final String NSF_EXPORT_XLS_WHITE_PAGE_BACKGROUND = "net.sf.jasperreports.export.xls.white.page.background"; //$NON-NLS-1$
 	// sheet
 	public static final String NSF_EXPORT_XLS_SHEET_DIRECTION = "net.sf.jasperreports.export.xls.sheet.direction"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_MAX_ROWS_PER_SHEET = "net.sf.jasperreports.export.xls.max.rows.per.sheet"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_ONE_PAGE_PER_SHEET = "net.sf.jasperreports.export.xls.one.page.per.sheet"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_SHEET_FOOTER_CENTER = "net.sf.jasperreports.export.xls.sheet.footer.center"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_SHEET_FOOTER_LEFT = "net.sf.jasperreports.export.xls.sheet.footer.left"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_SHEET_FOOTER_RIGHT = "net.sf.jasperreports.export.xls.sheet.footer.right"; //$NON-NLS-1$
@@ -77,11 +69,7 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 	// cell
 	public static final String NSF_EXPORT_XLS_CELL_HIDDEN = "net.sf.jasperreports.export.xls.cell.hidden"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_CELL_LOCKED = "net.sf.jasperreports.export.xls.cell.locked"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_CELL_DETECT_TYPE = "net.sf.jasperreports.export.xls.detect.cell.type"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_CELL_IGNORE_BACKGROUND = "net.sf.jasperreports.export.xls.ignore.cell.background"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_CELL_IGNORE_BORDER = "net.sf.jasperreports.export.xls.ignore.cell.border"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_CELL_WRAP_TEXT = "net.sf.jasperreports.export.xls.wrap.text"; //$NON-NLS-1$
-	public static final String NSF_EXPORT_XLS_CELL_FONT_SIZE_FIX_ENABLED = "net.sf.jasperreports.export.xls.font.size.fix.enabled"; //$NON-NLS-1$
 
 	public ExcelExporterPreferencePage() {
 		super(GRID);
@@ -110,16 +98,23 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
 
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_WHITE_PAGE_BACKGROUND, Messages.ExcelExporterPreferencePage_30, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
+				Messages.ExcelExporterPreferencePage_30, sc));
 
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_COLLAPSE_ROW_SPAN, Messages.ExcelExporterPreferencePage_31, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_EMPTY_SPACE_ROW, Messages.ExcelExporterPreferencePage_32, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_EMPTY_SPACE_COL, Messages.ExcelExporterPreferencePage_33, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN,
+				Messages.ExcelExporterPreferencePage_31, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+				Messages.ExcelExporterPreferencePage_32, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
+				Messages.ExcelExporterPreferencePage_33, sc));
 
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_IGNORE_GRAPHICS, Messages.ExcelExporterPreferencePage_34, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_IMAGE_BORDER_FIX, Messages.ExcelExporterPreferencePage_35, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS,
+				Messages.ExcelExporterPreferencePage_34, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED,
+				Messages.ExcelExporterPreferencePage_35, sc));
 
-		StringFieldEditor se = new StringFieldEditor(NSF_EXPORT_XLS_PASSWORD, Messages.ExcelExporterPreferencePage_36, sc);
+		StringFieldEditor se = new StringFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD,
+				Messages.ExcelExporterPreferencePage_36, sc);
 		((Text) se.getTextControl(sc)).setEchoChar('*');
 		addField(se);
 
@@ -142,13 +137,15 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		Composite parent = new Composite(tFolder, SWT.NONE);
 		sc.setLayout(new GridLayout(2, false));
 
-		addField(new ComboFieldEditor(NSF_EXPORT_XLS_SHEET_DIRECTION, Messages.ExcelExporterPreferencePage_39, new String[][] {
-				{ RunDirectionEnum.LTR.getName(), RunDirectionEnum.LTR.getName() },
-				{ RunDirectionEnum.RTL.getName(), RunDirectionEnum.RTL.getName() } }, parent));
-		IntegerFieldEditor iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_MAX_ROWS_PER_SHEET, Messages.ExcelExporterPreferencePage_40, parent);
+		addField(new ComboFieldEditor(NSF_EXPORT_XLS_SHEET_DIRECTION, Messages.ExcelExporterPreferencePage_39,
+				new String[][] { { RunDirectionEnum.LTR.getName(), RunDirectionEnum.LTR.getName() },
+						{ RunDirectionEnum.RTL.getName(), RunDirectionEnum.RTL.getName() } }, parent));
+		IntegerFieldEditor iedit = new IntegerFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET,
+				Messages.ExcelExporterPreferencePage_40, parent);
 		iedit.setValidRange(0, Integer.MAX_VALUE);
 		addField(iedit);
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_ONE_PAGE_PER_SHEET, Messages.ExcelExporterPreferencePage_41, parent));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET,
+				Messages.ExcelExporterPreferencePage_41, parent));
 
 		iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FIT_HEIGHT, Messages.ExcelExporterPreferencePage_42, parent);
 		iedit.setValidRange(0, Integer.MAX_VALUE);
@@ -196,11 +193,15 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_HIDDEN, Messages.ExcelExporterPreferencePage_53, sc));
 		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_LOCKED, Messages.ExcelExporterPreferencePage_54, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_DETECT_TYPE, Messages.ExcelExporterPreferencePage_55, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_IGNORE_BACKGROUND, Messages.ExcelExporterPreferencePage_56, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_IGNORE_BORDER, Messages.ExcelExporterPreferencePage_57, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE,
+				Messages.ExcelExporterPreferencePage_55, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND,
+				Messages.ExcelExporterPreferencePage_56, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER,
+				Messages.ExcelExporterPreferencePage_57, sc));
 		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_WRAP_TEXT, Messages.ExcelExporterPreferencePage_58, sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_FONT_SIZE_FIX_ENABLED, Messages.ExcelExporterPreferencePage_59, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED,
+				Messages.ExcelExporterPreferencePage_59, sc));
 
 		ptab.setControl(sc);
 	}
@@ -216,7 +217,8 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		Composite sc = new Composite(scompo, SWT.NONE);
 		sc.setLayout(new GridLayout(3, false));
 
-		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CREATE_CUSTOM_PALETTE, Messages.ExcelExporterPreferencePage_61, sc));
+		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE,
+				Messages.ExcelExporterPreferencePage_61, sc));
 		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_USE_TMP_FILE, Messages.ExcelExporterPreferencePage_62, sc));
 		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT, Messages.ExcelExporterPreferencePage_63, sc));
 
@@ -227,27 +229,34 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static void getDefaults(IPreferenceStore store) {
 		// JEXCELAPI
-		store.setDefault(NSF_EXPORT_XLS_CREATE_CUSTOM_PALETTE,
-				JRProperties.getProperty(NSF_EXPORT_XLS_CREATE_CUSTOM_PALETTE));
-		store.setDefault(NSF_EXPORT_XLS_PASSWORD, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_PASSWORD), "")); //$NON-NLS-1$
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD,
+				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD), "")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_USE_TMP_FILE, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_USE_TMP_FILE), "")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT,
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT), "")); //$NON-NLS-1$
 		// COMMON
-		store.setDefault(NSF_EXPORT_XLS_COLLAPSE_ROW_SPAN, JRProperties.getProperty(NSF_EXPORT_XLS_COLLAPSE_ROW_SPAN));
-		store.setDefault(NSF_EXPORT_XLS_IGNORE_GRAPHICS, JRProperties.getProperty(NSF_EXPORT_XLS_IGNORE_GRAPHICS));
-		store.setDefault(NSF_EXPORT_XLS_IMAGE_BORDER_FIX,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_IMAGE_BORDER_FIX), "false")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_EMPTY_SPACE_ROW, JRProperties.getProperty(NSF_EXPORT_XLS_EMPTY_SPACE_ROW));
-		store.setDefault(NSF_EXPORT_XLS_EMPTY_SPACE_COL, JRProperties.getProperty(NSF_EXPORT_XLS_EMPTY_SPACE_COL));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED,
+				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED), "false")); //$NON-NLS-1$
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS));
 		// page
-		store.setDefault(NSF_EXPORT_XLS_WHITE_PAGE_BACKGROUND,
-				JRProperties.getProperty(NSF_EXPORT_XLS_WHITE_PAGE_BACKGROUND));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
 		// sheet
 		store.setDefault(NSF_EXPORT_XLS_SHEET_DIRECTION,
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_DIRECTION), RunDirectionEnum.LTR.getName()));
-		store.setDefault(NSF_EXPORT_XLS_MAX_ROWS_PER_SHEET, JRProperties.getProperty(NSF_EXPORT_XLS_MAX_ROWS_PER_SHEET));
-		store.setDefault(NSF_EXPORT_XLS_ONE_PAGE_PER_SHEET, JRProperties.getProperty(NSF_EXPORT_XLS_ONE_PAGE_PER_SHEET));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET));
 
 		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER,
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER), "")); //$NON-NLS-1$
@@ -269,13 +278,15 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_HIDDEN), "false")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_CELL_LOCKED,
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_LOCKED), "false")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_CELL_DETECT_TYPE, JRProperties.getProperty(NSF_EXPORT_XLS_CELL_DETECT_TYPE));
-		store.setDefault(NSF_EXPORT_XLS_CELL_IGNORE_BACKGROUND,
-				JRProperties.getProperty(NSF_EXPORT_XLS_CELL_IGNORE_BACKGROUND));
-		store.setDefault(NSF_EXPORT_XLS_CELL_IGNORE_BORDER, JRProperties.getProperty(NSF_EXPORT_XLS_CELL_IGNORE_BORDER));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND));
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER,
+				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER));
 		store.setDefault(NSF_EXPORT_XLS_CELL_WRAP_TEXT, JRProperties.getProperty(NSF_EXPORT_XLS_CELL_WRAP_TEXT));
-		store.setDefault(NSF_EXPORT_XLS_CELL_FONT_SIZE_FIX_ENABLED,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_FONT_SIZE_FIX_ENABLED), "false")); //$NON-NLS-1$
+		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED,
+				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED), "false")); //$NON-NLS-1$
 	}
 
 	/*

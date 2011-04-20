@@ -31,15 +31,13 @@ import org.eclipse.gef.commands.Command;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
-import com.jaspersoft.studio.model.IGuidebleElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
-
-/**
+/*
  * link nodes & together.
  * 
  * @author Chicu Veaceslav
@@ -179,17 +177,15 @@ public class CreateElementCommand extends Command {
 	 * Creates the object.
 	 */
 	protected void createObject() {
-		if (jrElement == null) {
+		if (jrElement == null)
 			jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
-
-		}
 		if (jrElement != null)
 			setElementBounds();
 	}
 
 	protected void setElementBounds() {
 		if (location == null)
-			location = new Rectangle(0, 0, srcNode.getDefaultWidth(), srcNode.getDefaultHeight());
+			location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 		if (location.width < 0)
 			location.width = srcNode.getDefaultWidth();
 		if (location.height < 0)

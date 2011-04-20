@@ -1,21 +1,25 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor;
 
@@ -44,6 +48,7 @@ import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
@@ -67,16 +72,6 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.jasperassistant.designer.viewer.ReportViewer;
-import com.jasperassistant.designer.viewer.actions.ExportAsCsvAction;
-import com.jasperassistant.designer.viewer.actions.ExportAsHtmlAction;
-import com.jasperassistant.designer.viewer.actions.ExportAsJasperReportsAction;
-import com.jasperassistant.designer.viewer.actions.ExportAsMultiXlsAction;
-import com.jasperassistant.designer.viewer.actions.ExportAsPdfAction;
-import com.jasperassistant.designer.viewer.actions.ExportAsRtfAction;
-import com.jasperassistant.designer.viewer.actions.ExportAsSingleXlsAction;
-import com.jasperassistant.designer.viewer.actions.ExportAsXmlAction;
-import com.jasperassistant.designer.viewer.actions.ExportAsXmlWithImagesAction;
-import com.jasperassistant.designer.viewer.actions.ExportMenuAction;
 import com.jasperassistant.designer.viewer.actions.FirstPageAction;
 import com.jasperassistant.designer.viewer.actions.LastPageAction;
 import com.jasperassistant.designer.viewer.actions.NextPageAction;
@@ -88,6 +83,24 @@ import com.jasperassistant.designer.viewer.actions.ZoomFitPageAction;
 import com.jasperassistant.designer.viewer.actions.ZoomFitPageWidthAction;
 import com.jasperassistant.designer.viewer.actions.ZoomInAction;
 import com.jasperassistant.designer.viewer.actions.ZoomOutAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsCsvAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsCsvMetadataAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsDocxAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsExcelAPIAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsHtmlAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsJasperReportsAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsOdsAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsOdtAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsPdfAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsPptxAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsRtfAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsTextAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsXHtmlAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsXlsAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsXlsxAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsXmlAction;
+import com.jaspersoft.studio.editor.preview.action.ExportAsXmlWithImagesAction;
+import com.jaspersoft.studio.editor.preview.action.ExportMenuAction;
 import com.jaspersoft.studio.utils.ErrorUtil;
 
 public class JRPrintEditor extends EditorPart {
@@ -362,17 +375,37 @@ public class JRPrintEditor extends EditorPart {
 
 	protected void refreshToolbar() {
 		tbManager.removeAll();
+		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+
 		ExportMenuAction exportMenu = new ExportMenuAction(reportViewer);
 		IAction pdfAction = null;
-		exportMenu.getMenuManager().add(pdfAction = new ExportAsPdfAction(reportViewer));
-		exportMenu.getMenuManager().add(new ExportAsRtfAction(reportViewer));
-		exportMenu.getMenuManager().add(new ExportAsJasperReportsAction(reportViewer));
-		exportMenu.getMenuManager().add(new ExportAsHtmlAction(reportViewer));
-		exportMenu.getMenuManager().add(new ExportAsSingleXlsAction(reportViewer));
-		exportMenu.getMenuManager().add(new ExportAsMultiXlsAction(reportViewer));
-		exportMenu.getMenuManager().add(new ExportAsCsvAction(reportViewer));
-		exportMenu.getMenuManager().add(new ExportAsXmlAction(reportViewer));
-		exportMenu.getMenuManager().add(new ExportAsXmlWithImagesAction(reportViewer));
+		MenuManager mm = exportMenu.getMenuManager();
+		mm.add(new ExportAsJasperReportsAction(reportViewer, file));
+		mm.add(new Separator());
+
+		mm.add(pdfAction = new ExportAsPdfAction(reportViewer, file));
+		mm.add(new ExportAsHtmlAction(reportViewer, file));
+		mm.add(new ExportAsXHtmlAction(reportViewer, file));
+		mm.add(new Separator());
+
+		mm.add(new ExportAsRtfAction(reportViewer, file));
+		mm.add(new ExportAsDocxAction(reportViewer, file));
+		mm.add(new ExportAsOdtAction(reportViewer, file));
+		mm.add(new ExportAsOdsAction(reportViewer, file));
+		mm.add(new ExportAsPptxAction(reportViewer, file));
+		mm.add(new ExportAsTextAction(reportViewer, file));
+
+		mm.add(new Separator());
+		mm.add(new ExportAsXlsAction(reportViewer, file));
+		mm.add(new ExportAsXlsxAction(reportViewer, file));
+		mm.add(new ExportAsExcelAPIAction(reportViewer, file));
+
+		mm.add(new ExportAsCsvAction(reportViewer, file));
+		mm.add(new ExportAsCsvMetadataAction(reportViewer, file));
+
+		mm.add(new Separator());
+		mm.add(new ExportAsXmlAction(reportViewer, file));
+		mm.add(new ExportAsXmlWithImagesAction(reportViewer, file));
 		exportMenu.setDefaultAction(pdfAction);
 
 		tbManager.add(exportMenu);
@@ -435,6 +468,9 @@ public class JRPrintEditor extends EditorPart {
 					if (getJasperPrint() != null) {
 						try {
 							getReportViewer().setDocument(getJasperPrint());
+
+							// open document in the prefered editor
+
 						} catch (Exception e) {
 							unsetReportDocument(ErrorUtil.getStackTrace(e), true);
 						}

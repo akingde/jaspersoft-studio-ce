@@ -1,27 +1,34 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.text;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.TabStop;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.type.LineSpacingEnum;
 
@@ -34,6 +41,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.tabstops.TabStopsPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MParagraph extends APropertyNode {
@@ -86,6 +94,12 @@ public class MParagraph extends APropertyNode {
 		tabStopWidth.setDescription("Tab stop width in pixel.");
 		desc.add(tabStopWidth);
 
+		TabStopsPropertyDescriptor tabStops = new TabStopsPropertyDescriptor(JRBaseParagraph.PROPERTY_TAB_STOPS,
+				"Tab Stops");
+		tabStops.setDescription("Tab stops.");
+		desc.add(tabStops);
+
+		tabStops.setCategory("Paragraph");
 		lineSpacingD.setCategory("Paragraph");
 		lineSpacingSize.setCategory("Paragraph");
 		firstLineIdent.setCategory("Paragraph");
@@ -142,6 +156,12 @@ public class MParagraph extends APropertyNode {
 				return jrElement.getOwnSpacingAfter();
 			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH))
 				return jrElement.getOwnTabStopWidth();
+			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOPS)) {
+				TabStop[] tabStops = jrElement.getTabStops();
+				if (tabStops != null)
+					return Arrays.asList(tabStops);
+				return new ArrayList<TabStop>();
+			}
 		}
 		return null;
 	}
@@ -172,6 +192,9 @@ public class MParagraph extends APropertyNode {
 
 			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOP_WIDTH))
 				jrElement.setTabStopWidth((Integer) value);
+			if (id.equals(JRBaseParagraph.PROPERTY_TAB_STOPS)) {
+				jrElement.addTabStop(null);
+			}
 		}
 	}
 

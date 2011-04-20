@@ -1,21 +1,25 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.action.copy;
 
@@ -56,22 +60,43 @@ public class PasteAction extends SelectionAction {
 
 	}
 
-	private Command createPasteCommand(List<Object> selectedObjects) {
+	private Command createPasteCommand(List<?> selectedObjects) {
 		for (Object selection : selectedObjects) {
-			if (selection instanceof EditPart) {
-				ANode n = (ANode) ((EditPart) selection).getModel();
-				if (n instanceof IPastable)
-					return new PasteCommand((IPastable) n);
-			} else if (selection instanceof IPastable)
-				return new PasteCommand((IPastable) selection);
-			else if (selection instanceof StructuredSelection) {
+			Command cmd = getPasteComand(selection);
+			if (cmd != null)
+				return cmd;
+			if (selection instanceof StructuredSelection) {
 				StructuredSelection s = (StructuredSelection) selection;
 				for (Iterator<?> it = s.iterator(); it.hasNext();) {
 					Object o = it.next();
-					if (o instanceof IPastable)
-						return new PasteCommand((IPastable) o);
+					cmd = getPasteComand(o);
+					if (cmd != null)
+						return cmd;
 				}
 			}
+		}
+		return null;
+	}
+
+	private Command getPasteComand(Object selection) {
+		if (selection instanceof EditPart) {
+			ANode n = (ANode) ((EditPart) selection).getModel();
+			IPastable past = getParent2Paste(n);
+			if (past != null)
+				return new PasteCommand(past);
+		} else if (selection instanceof ANode) {
+			IPastable past = getParent2Paste((ANode) selection);
+			if (past != null)
+				return new PasteCommand(past);
+		}
+		return null;
+	}
+
+	private IPastable getParent2Paste(ANode n) {
+		while (n != null) {
+			if (n instanceof IPastable)
+				return (IPastable) n;
+			n = (ANode) n.getParent();
 		}
 		return null;
 	}

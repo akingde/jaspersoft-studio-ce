@@ -1,21 +1,25 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
- * rights reserved. http://www.jaspersoft.com
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
  * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of Jaspersoft Open Studio.
- * 
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
- * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
- * for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
- * see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.action.copy;
 
@@ -25,15 +29,18 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRCloneable;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
 
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.IPastable;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 public class PasteCommand extends Command {
 	private Map<ANode, Command> list = new HashMap<ANode, Command>();
@@ -70,10 +77,8 @@ public class PasteCommand extends Command {
 	public void execute() {
 		if (!canExecute())
 			return;
-
-		Iterator<ANode> it = list.keySet().iterator();
-		while (it.hasNext()) {
-			ANode node = it.next();
+		for (ANode node : list.keySet()) {
+			CompoundCommand cmd = new CompoundCommand();
 			// create new Node put, clone into it
 			try {
 				Object value = node.getValue();
@@ -81,9 +86,23 @@ public class PasteCommand extends Command {
 					ANode n = node.getClass().newInstance();
 
 					n.setValue(((JRCloneable) value).clone());
+					if (node.isCut() && node.getParent() != null) {
+						Command cmdd = OutlineTreeEditPartFactory.getDeleteCommand((ANode) node.getParent(), node);
+						if (cmd != null)
+							cmd.add(cmdd);
+					} else if (n instanceof MGraphicElement) {
+						MGraphicElement mge = (MGraphicElement) n;
+						JRDesignElement de = (JRDesignElement) mge.getValue();
+						de.setX(de.getX() + 5);
+						de.setY(de.getY() + 5);
+					}
 					// create command
-					Command cmd = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, (Rectangle) null, -1);
-					list.put(node, cmd);
+					Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, (Rectangle) null, -1);
+					if (cmdc != null)
+						cmd.add(cmdc);
+
+					if (!cmd.isEmpty())
+						list.put(node, cmd);
 				}
 			} catch (InstantiationException e) {
 				e.printStackTrace();
