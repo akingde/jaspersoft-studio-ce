@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor;
 
@@ -77,6 +73,8 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
@@ -86,13 +84,13 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.preferences.StudioPreferencePage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+
 /*
- * An example showing how to create a multi-page editor. This example has 3 pages:
- * <ul>
- * <li>page 0 contains a nested text editor.
- * <li>page 1 allows you to change the font used in page 2
- * <li>page 2 shows the words in page 0 in sorted order
- * </ul>
+ * An example showing how to create a multi-page editor. This example has 3 pages: <ul> <li>page 0 contains a nested
+ * text editor. <li>page 1 allows you to change the font used in page 2 <li>page 2 shows the words in page 0 in sorted
+ * order </ul>
  */
 public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor {
 
@@ -275,7 +273,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void doSave(IProgressMonitor monitor) {
 		IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
 		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
-			model2xml();
+			String version = p.getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, "last");
+			if (p.getBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG)) {
+				VersionDialog dialog = new VersionDialog(Display.getCurrent().getActiveShell(), version);
+				version = dialog.open(resource.getProject());
+			}
+			model2xml(version);
 		} else {
 			try { // just go thru the model, to look what happend with our markers
 				xml2model();
@@ -401,6 +404,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					throw new PartInitException("error closing input stream", e); //$NON-NLS-1$
 				}
 		}
+		p = new PropertiesHelper(file.getProject());
 	}
 
 	public static String getFileExtension(IEditorInput editorInput) {
@@ -540,6 +544,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	private int activePage = 0;
 
+	private PropertiesHelper p;
+
 	/**
 	 * Xml2model.
 	 * 
@@ -554,13 +560,21 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		modelFresh = true;
 	}
 
+	private void model2xml() {
+		model2xml("last");
+	}
+
 	/**
 	 * Model2xml.
 	 */
-	private void model2xml() {
+	private void model2xml(String version) {
 		try {
 			JasperDesign report = (JasperDesign) ((MRoot) getModel()).getValue();
-			String xml = JRXmlWriter.writeReport(report, ((IFileEditorInput) getEditorInput()).getFile().getCharset(true));// JasperCompileManager.writeReportToXml(report);
+			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+			String xml = JRXmlWriterHelper.writeReport(report, file, file.getCharset(true), version);
+
+			// String xml = JRXmlWriter.writeReport(report, file.getCharset(true));//
+			// JasperCompileManager.writeReportToXml(report);
 			xml = xml.replaceFirst("<jasperReport ", "<!-- Created with Jaspersoft Studio -->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());

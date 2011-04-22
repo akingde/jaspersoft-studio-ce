@@ -68,6 +68,13 @@ public class PropertiesHelper {
 		return p;
 	}
 
+	public String getString(String key, String def) {
+		String str = getString(key);
+		if (str == null)
+			return def;
+		return str;
+	}
+
 	public String getString(String key) {
 		return service.getString(qualifier, key, null, contexts);
 	}
