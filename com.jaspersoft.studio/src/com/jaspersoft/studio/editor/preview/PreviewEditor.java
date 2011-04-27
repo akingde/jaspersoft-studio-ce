@@ -134,47 +134,6 @@ public class PreviewEditor extends JRPrintEditor {
 		String jobName = Messages.PreviewEditor_preview_a
 				+ ": " + getJasperDesign().getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		// create job with a different classloader!
-		// try {
-		// IProject prj = ((IFileEditorInput) getEditorInput()).getFile().getProject();
-		// ClassLoader cl = RepositoryManager.getClassLoader4Project(null, prj);
-		// Class<?> jbclass = cl.loadClass("com.jaspersoft.studio.preferences.util.PropertiesHelper");
-		// Constructor<?>[] c = jbclass.getDeclaredConstructors();
-		// PropertiesHelper jb = (PropertiesHelper) c[0].newInstance(prj);
-		//
-		// jb.getClass().getClassLoader();
-		//
-		// ClassLoader cl2 = RepositoryManager.getClassLoader4Project(null, prj);
-		// Class<?> jbclass2 = cl.loadClass("com.jaspersoft.studio.preferences.util.PropertiesHelper");
-		// Constructor<?>[] c2 = jbclass.getDeclaredConstructors();
-		// PropertiesHelper jb2 = (PropertiesHelper) c[0].newInstance(prj);
-		//
-		// jb2.getClass().getClassLoader();
-		//
-		// boolean b = jb == jb2;
-		// } catch (JavaModelException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// } catch (CoreException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// } catch (ClassNotFoundException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (InstantiationException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (IllegalAccessException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (IllegalArgumentException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (InvocationTargetException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
 		Job job = new Job(jobName) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -194,11 +153,11 @@ public class PreviewEditor extends JRPrintEditor {
 							RepositoryManager.getClassLoader4Project(monitor, file.getProject()));
 					SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
 
-					new PropertiesHelper(file.getProject()).getProperties();
-
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
 					JRSaver.saveObject(getJasperDesign(), out);
 					JasperDesign jd = (JasperDesign) JRLoader.loadObject(new ByteArrayInputStream(out.toByteArray()));
+
+					new PropertiesHelper(file.getProject()).setProperties(jd);
 
 					setJasperPrint(null);
 					AsynchronousFillHandle fh = null;

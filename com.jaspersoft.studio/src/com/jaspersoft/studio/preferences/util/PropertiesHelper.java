@@ -23,6 +23,8 @@ package com.jaspersoft.studio.preferences.util;
 import java.util.List;
 import java.util.Properties;
 
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 
@@ -52,6 +54,20 @@ public class PropertiesHelper {
 			contexts = new IScopeContext[] { new ProjectScope(project), new InstanceScope() };
 		}
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void setProperties(JasperDesign jd) {
+		JRPropertiesMap map = jd.getPropertiesMap();
+		List<PropertySuffix> lst = JRProperties.getProperties("");
+		for (PropertySuffix ps : lst) {
+			String key = ps.getKey();
+			if (map.getProperty(key) == null) {
+				String val = getString(key);
+				if (key != null && val != null)
+					map.setProperty(key, val);
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
