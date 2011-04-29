@@ -24,8 +24,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -42,15 +40,12 @@ import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
@@ -63,6 +58,7 @@ import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
 import com.jaspersoft.studio.editor.preview.actions.ShowParametersAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
 import com.jaspersoft.studio.repository.RepositoryManager;
 import com.jaspersoft.studio.utils.ErrorUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
@@ -157,13 +153,16 @@ public class PreviewEditor extends JRPrintEditor {
 					JRSaver.saveObject(getJasperDesign(), out);
 					JasperDesign jd = (JasperDesign) JRLoader.loadObject(new ByteArrayInputStream(out.toByteArray()));
 
-					new PropertiesHelper(file.getProject()).setProperties(jd);
+					PropertiesHelper ps = new PropertiesHelper(file.getProject());
+					ps.setProperties(jd);
 
 					setJasperPrint(null);
 					AsynchronousFillHandle fh = null;
 					JasperReport jasperReport = JasperCompileManager.compileReport(jd);
 
 					jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
+
+					VirtualizerHelper.setVirtualizer(jd, ps);
 
 					// We let the data adapter to contribute its parameters.
 					dataAdapter.getSpecialParameters(jasperParameter);

@@ -217,6 +217,12 @@
             id="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
             name="G2D Exporter">
       </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
+            id="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
+            name="Virtualizer">
+      </page>
    </extension>
    <extension
          id="com.jaspersoft.studio.properties"
@@ -260,6 +266,14 @@
             class="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
             id="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage.property"
             name="CSV Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage.property"
+            name="CSV Metadata Exporter"
             objectClass="org.eclipse.core.resources.IProject">
       </page>
       <page
@@ -312,10 +326,10 @@
       </page>
       <page
             adaptable="true"
-            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
-            class="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
-            id="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage.property"
-            name="CSV Metadata Exporter"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
+            id="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage.property"
+            name="Virtualizer"
             objectClass="org.eclipse.core.resources.IProject">
       </page>
    </extension>

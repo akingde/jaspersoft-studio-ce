@@ -102,6 +102,13 @@ public class PropertiesHelper {
 		return new Boolean(val);
 	}
 
+	public Integer getInteger(String key, Integer def) {
+		Integer val = getInteger(key);
+		if (val == null)
+			return def;
+		return val;
+	}
+
 	public Integer getInteger(String key) {
 		String val = getString(key);
 		if (val == null)
