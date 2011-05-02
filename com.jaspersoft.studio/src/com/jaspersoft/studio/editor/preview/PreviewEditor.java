@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -158,7 +159,12 @@ public class PreviewEditor extends JRPrintEditor {
 
 					setJasperPrint(null);
 					AsynchronousFillHandle fh = null;
-					JasperReport jasperReport = JasperCompileManager.compileReport(jd);
+					
+					JasperReportCompiler compiler = new JasperReportCompiler();
+					compiler.setProject(file.getProject());
+					JasperReport jasperReport = compiler.compileReport(jasperDesign);
+
+//					 JasperReport jasperReport = JasperCompileManager.compileReport(jd);
 
 					jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
 

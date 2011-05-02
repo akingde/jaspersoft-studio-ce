@@ -48,6 +48,10 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.query.JRHibernateQueryExecuterFactory;
+import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
+import net.sf.jasperreports.engine.query.JRJpaQueryExecuterFactory;
+import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
@@ -56,6 +60,8 @@ import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
+import net.sf.jasperreports.olap.JRMdxQueryExecuterFactory;
+import net.sf.jasperreports.olap.xmla.JRXmlaQueryExecuterFactory;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -163,6 +169,7 @@ public class ModelUtils {
 	}
 
 	private static Map<String, String> mp = new HashMap<String, String>();
+	private static String[][] qexecutors;
 
 	/**
 	 * Return the ordered list of bands available in the current report.
@@ -684,6 +691,38 @@ public class ModelUtils {
 		lst.add(""); //$NON-NLS-1$
 		lst.addAll(langs);
 		return lst.toArray(new String[lst.size()]);
+	}
+
+	public static String[][] getQueryExecuters() {
+		// TODO this is a static array , we should do like in getQueryLanguages
+		// add some methods to QueryExecuteFactoryBundle
+		if (qexecutors == null)
+			qexecutors = new String[][] {
+					{ "sql", JRJdbcQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider" },
+					{ "SQL", JRJdbcQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider" },
+					{ "xPath", JRXPathQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider" },
+					{ "XPATH", JRXPathQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider" },
+					{ "hql", JRHibernateQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.HQLFieldsProvider" },
+					{ "mdx", JRMdxQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider" },
+					{ "MDX", JRMdxQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider" },
+					{ "ejbql", JRJpaQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider" },
+					{ "EJBQL", JRJpaQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider" },
+					{ "xmla-mdx", JRXmlaQueryExecuterFactory.class.getName(),
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.CincomMDXFieldsProvider" },
+					{ "xpath2", "com.jaspersoft.jrx.query.JRXPathQueryExecuterFactory",
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider" },
+					{ "plsql", "com.jaspersoft.jrx.query.PlSqlQueryExecuterFactory",
+							"com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider" } };
+		return qexecutors;
 	}
 
 	public static String[] getMarkups() {

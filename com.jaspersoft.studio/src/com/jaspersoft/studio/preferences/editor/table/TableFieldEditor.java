@@ -337,9 +337,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 			String[][] array = parseString(s);
 			for (int i = 0; i < array.length; i++) {
 				TableItem tableItem = new TableItem(table, SWT.NONE);
-				for (int j = 0; j < array[i].length; j++) {
-					tableItem.setText(array[i][j]);
-				}
+				tableItem.setText(array[i]);
 			}
 		}
 	}
@@ -557,9 +555,9 @@ public abstract class TableFieldEditor extends FieldEditor {
 			for (int j = 0; j < columnNames.length; j++) {
 				values[j] = selection[0].getText(j);
 			}
-			TableItem tableItem = new TableItem(table, SWT.NONE, target);
+			TableItem tableItem = new TableItem(table, SWT.NONE);
 			tableItem.setText(values);
-			table.setSelection(target);
+			table.setSelection(table.getItemCount());
 		}
 		selectionChanged();
 	}
@@ -609,11 +607,19 @@ public abstract class TableFieldEditor extends FieldEditor {
 		if (duplicateButton != null)
 			duplicateButton.setEnabled(index >= 0);
 		if (removeButton != null)
-			removeButton.setEnabled(index >= 0);
+			removeButton.setEnabled(index >= 0 && isRemovable(index));
 		if (upButton != null)
-			upButton.setEnabled(size > 1 && index > 0);
+			upButton.setEnabled(size > 1 && index > 0 && isSortable(index));
 		if (downButton != null)
-			downButton.setEnabled(size > 1 && index >= 0 && index < size - 1);
+			downButton.setEnabled(size > 1 && index >= 0 && index < size - 1 && isSortable(index));
+	}
+
+	protected boolean isRemovable(int row) {
+		return true;
+	}
+
+	protected boolean isSortable(int row) {
+		return true;
 	}
 
 	/*

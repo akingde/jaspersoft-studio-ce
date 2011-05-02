@@ -223,6 +223,12 @@
             id="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
             name="Virtualizer">
       </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.qexecutor.QueryExecutersPreferencePage"
+            id="com.jaspersoft.studio.preferences.qexecutor.QueryExecutersPreferencePage"
+            name="Query Executor Manager">
+      </page>
    </extension>
    <extension
          id="com.jaspersoft.studio.properties"
@@ -330,6 +336,14 @@
             class="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
             id="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage.property"
             name="Virtualizer"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.qexecutor.QueryExecutersPreferencePage"
+            id="com.jaspersoft.studio.preferences.qexecutor.QueryExecutersPreferencePage.property"
+            name="Query Executor Manager"
             objectClass="org.eclipse.core.resources.IProject">
       </page>
    </extension>
