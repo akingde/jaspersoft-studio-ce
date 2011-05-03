@@ -303,12 +303,10 @@ public class XLSDataAdapterComposite extends Composite {
 		// keys listener
 		table.addKeyListener(new KeyListener() {
 			
-			@Override
 			public void keyReleased(KeyEvent e) {
 				// nothing
 			}
 
-			@Override
 			public void keyPressed(KeyEvent e) {
 				
 				if (e.character == SWT.DEL) {
@@ -322,7 +320,6 @@ public class XLSDataAdapterComposite extends Composite {
 		// and set unchecked the skip first line button
 		tableViewer.addPostSelectionChangedListener(new ISelectionChangedListener() {
 			
-			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (rows.size() <= 0) {
 					btnDelete.setEnabled(false);
@@ -493,17 +490,14 @@ public class XLSDataAdapterComposite extends Composite {
 	 */
 	private class XLSContentProvider implements IStructuredContentProvider {
 
-		@Override
 		public void dispose() {
 			// nothing
 		}
 
-		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			// nothing
 		}
 
-		@Override
 		public Object[] getElements(Object inputElement) {
 			if (inputElement != null && inputElement instanceof List)
 				return ((List<?>) inputElement).toArray();

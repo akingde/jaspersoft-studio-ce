@@ -28,17 +28,14 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
 
 public class CSVDataAdapterFactory implements DataAdapterFactory {
 
-	@Override
 	public DataAdapter createDataAdapter() {
 		return new CSVDataAdapter();
 	}
 
-	@Override
 	public String getDataAdapterClassName() {
 		return CSVDataAdapter.class.getName();
 	}
 
-	@Override
 	public String getDescription() {
 		return "CSV File Data Adapter";
 	}

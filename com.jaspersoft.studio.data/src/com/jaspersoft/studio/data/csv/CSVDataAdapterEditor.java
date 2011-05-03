@@ -33,19 +33,16 @@ public class CSVDataAdapterEditor implements DataAdapterEditor {
 	
 	CSVDataAdapterComposite composite = null;
 
-	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
 		if (dataAdapter instanceof CSVDataAdapter) {
 			this.composite.setDataAdapter((CSVDataAdapter)dataAdapter);
 		}
 	}
 
-	@Override
 	public DataAdapter getDataAdapter() {
 		return this.composite.getDataAdapter();
 	}
 
-	@Override
 	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
 		if (composite == null) {
 			composite = new CSVDataAdapterComposite(parent, style);
@@ -53,7 +50,6 @@ public class CSVDataAdapterEditor implements DataAdapterEditor {
 		return composite;
 	}
 
-	@Override
 	public String getHelpContextId() {
 		return this.composite.getHelpContextId();
 	}
