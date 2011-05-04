@@ -32,18 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.query.JRCsvQueryExecuterFactory;
 
-import com.jaspersoft.studio.data.Activator;
+import org.eclipse.jface.resource.ImageDescriptor;
+
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterEditor;
-import com.jaspersoft.studio.data.xls.XLSDataAdapterEditor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class CSVDataAdapter extends DataAdapter {
@@ -133,15 +130,15 @@ public class CSVDataAdapter extends DataAdapter {
 			return getJRDataSourceImpl();
 		}
 		catch (FileNotFoundException e) {
-			System.out.println("File not found exception: " + e.getLocalizedMessage());
+			System.out.println("File not found exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		catch (JRException e) {
-			System.out.println("JRException: " + e.getLocalizedMessage());
+			System.out.println("JRException: " + e.getMessage());
 			e.printStackTrace();
 		}
 		catch (IOException e) {
-			System.out.println("IOException: " + e.getLocalizedMessage());
+			System.out.println("IOException: " + e.getMessage());
 			e.printStackTrace();
 		}
 		catch (Exception e) {
