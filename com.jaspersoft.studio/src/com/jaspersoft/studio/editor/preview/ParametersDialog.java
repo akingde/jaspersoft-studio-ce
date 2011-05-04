@@ -76,7 +76,7 @@ public class ParametersDialog extends FormDialog {
 		this.jDesign = jDesign;
 		this.prompts = jDesign.getParametersList();
 		this.params = params;
-		shell.setText("ABCDA");
+		shell.setText("Parameters");
 	}
 
 	public Map<String, Object> getParameters() {

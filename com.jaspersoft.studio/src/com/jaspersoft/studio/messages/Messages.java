@@ -461,6 +461,7 @@ public class Messages extends NLS {
 	public static String JrxmlEditorContributor_edit;
 	public static String JrxmlEditorContributor_find_replace;
 	public static String JrxmlEditorContributor_grid_size;
+	public static String JrxmlEditorContributor_pageformat;
 	public static String JrxmlEditorContributor_select_all;
 	public static String JrxmlEditorContributor_show_ruler;
 	public static String JrxmlEditorContributor_view;

@@ -1,29 +1,24 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.section.report;
 
-import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
@@ -41,6 +36,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.UIUtils;
+
 /*
  * The location section on the location tab.
  * 
@@ -64,7 +60,7 @@ public class PageMarginSection extends AbstractSection {
 		GridLayout layout = new GridLayout(10, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.PageMarginSection_margin+":", SWT.RIGHT); //$NON-NLS-1$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.PageMarginSection_margin + ":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -130,7 +126,7 @@ public class PageMarginSection extends AbstractSection {
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		if (element != null) {
-			
+
 			UIUtils.setSpinnerSelection(bottomMargin, element.getPropertyValue(JasperDesign.PROPERTY_BOTTOM_MARGIN), 0);
 			UIUtils.setSpinnerSelection(topMargin, element.getPropertyValue(JasperDesign.PROPERTY_TOP_MARGIN), 0);
 			UIUtils.setSpinnerSelection(leftMargin, element.getPropertyValue(JasperDesign.PROPERTY_LEFT_MARGIN), 0);

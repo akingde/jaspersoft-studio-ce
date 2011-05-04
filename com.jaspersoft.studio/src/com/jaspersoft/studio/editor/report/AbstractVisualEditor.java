@@ -100,7 +100,9 @@ import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.property.section.report.PageFormatAction;
 import com.jaspersoft.studio.utils.SelectionHelper;
+
 /*
  * The Class AbstractVisualEditor.
  * 
@@ -276,6 +278,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		SizeGridAction sizeGridAction = new SizeGridAction(graphicalViewer);
 		getActionRegistry().registerAction(sizeGridAction);
+
+		PageFormatAction pageFormatAction = new PageFormatAction(graphicalViewer);
+		getActionRegistry().registerAction(pageFormatAction);
 
 		// snap to geometry
 		IAction snapAction = new ToggleSnapToGeometryAction(graphicalViewer);

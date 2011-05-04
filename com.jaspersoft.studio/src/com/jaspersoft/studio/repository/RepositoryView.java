@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.repository;
 
@@ -27,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -49,31 +44,22 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
-import com.jaspersoft.studio.repository.actions.DuplicateDataAdapterAction;
-import com.jaspersoft.studio.repository.actions.CreateDataSourceAction;
 import com.jaspersoft.studio.repository.actions.CreateDataAdapterAction;
 import com.jaspersoft.studio.repository.actions.DeleteDataAdapterAction;
-import com.jaspersoft.studio.repository.actions.DeleteDataSourceAction;
+import com.jaspersoft.studio.repository.actions.DuplicateDataAdapterAction;
 import com.jaspersoft.studio.repository.actions.EditDataAdapterAction;
-import com.jaspersoft.studio.repository.actions.EditDataSourceAction;
 
 public class RepositoryView extends ViewPart {
 	public RepositoryView() {
 	}
 
 	private TreeViewer treeViewer;
-	// Actions for datasources
-	private Action deleteItemAction;
-	// private Action selectAllAction;
-	private Action addItemAction;
-	private Action editItemAction;
-	
+
 	// Actions for data adapters
 	private Action createDataAdapterItemAction;
 	private Action editDataAdapterItemAction;
@@ -96,7 +82,7 @@ public class RepositoryView extends ViewPart {
 			public void doubleClick(DoubleClickEvent event) {
 				Display.getCurrent().asyncExec(new Runnable() {
 					public void run() {
-						new EditDataSourceAction(treeViewer).run();
+						new EditDataAdapterAction(treeViewer).run();
 					}
 				});
 			}
@@ -110,7 +96,7 @@ public class RepositoryView extends ViewPart {
 		hookGlobalActions();
 
 		// Restore state from the previous session.
-		restoreState();		
+		restoreState();
 	}
 
 	private IMemento memento;
@@ -160,26 +146,20 @@ public class RepositoryView extends ViewPart {
 		// bars.setGlobalActionHandler(IWorkbenchActionConstants.DELETE, deleteItemAction);
 		treeViewer.getControl().addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent event) {
-				if (event.character == SWT.DEL && event.stateMask == 0 && deleteItemAction.isEnabled()) {
-					deleteItemAction.run();
+				if (event.character == SWT.DEL && event.stateMask == 0 && deleteDataAdapterItemAction.isEnabled()) {
+					deleteDataAdapterItemAction.run();
 				}
 			}
 		});
 	}
 
 	public void createActions() {
-		
-		// datasources actions
-		addItemAction = new CreateDataSourceAction(treeViewer);
-		editItemAction = new EditDataSourceAction(treeViewer);
-		deleteItemAction = new DeleteDataSourceAction(treeViewer);
-
 		// data adapters actions
 		createDataAdapterItemAction = new CreateDataAdapterAction(treeViewer);
 		editDataAdapterItemAction = new EditDataAdapterAction(treeViewer);
 		deleteDataAdapterItemAction = new DeleteDataAdapterAction(treeViewer);
 		duplicateDataAdapterItemAction = new DuplicateDataAdapterAction(treeViewer);
-		
+
 		// selectAllAction = new Action("Select All") {
 		// public void run() {
 		// ISelection s = treeViewer.getSelection();
@@ -198,8 +178,6 @@ public class RepositoryView extends ViewPart {
 
 	private void updateActionEnablement() {
 		IStructuredSelection sel = (IStructuredSelection) treeViewer.getSelection();
-		deleteItemAction.setEnabled(sel.size() > 0);
-		editItemAction.setEnabled(sel.size() > 0);
 		editDataAdapterItemAction.setEnabled(sel.size() > 0);
 	}
 
@@ -238,25 +216,16 @@ public class RepositoryView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager mgr) {
-		
-		// datasources actions
-		if (addItemAction.isEnabled())
-			mgr.add(addItemAction);
-		if (editItemAction.isEnabled())
-			mgr.add(editItemAction);
-		
-	// data adapters actions
+
+		// data adapters actions
 		if (createDataAdapterItemAction.isEnabled())
 			mgr.add(createDataAdapterItemAction);
 		if (editDataAdapterItemAction.isEnabled())
 			mgr.add(editDataAdapterItemAction);
 		if (duplicateDataAdapterItemAction.isEnabled())
 			mgr.add(duplicateDataAdapterItemAction);
-		
-		mgr.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+
 		mgr.add(new Separator());
-		if (deleteItemAction.isEnabled())
-			mgr.add(deleteItemAction);
 		if (deleteDataAdapterItemAction.isEnabled())
 			mgr.add(deleteDataAdapterItemAction);
 		// mgr.add(new Separator());

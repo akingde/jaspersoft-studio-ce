@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.repository;
 
@@ -45,8 +41,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
-import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
+import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
@@ -59,8 +54,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -104,7 +97,7 @@ public class RepositoryManager {
 	public static ANode getResources() {
 		if (rootNode == null) {
 			rootNode = new MRoot(null, null);
-			getDatasources(rootNode);
+			// getDatasources(rootNode);
 			getMDataAdapters(rootNode);
 		}
 		return rootNode;
@@ -215,9 +208,7 @@ public class RepositoryManager {
 		}
 		return datasources;
 	}
-	
-	
-	
+
 	private static MDataAdapters getMDataAdapters(MRoot root) {
 		if (MDataAdapters == null) {
 			MDataAdapters = new MDataAdapters(root);
@@ -309,11 +300,11 @@ public class RepositoryManager {
 			if (editorPart != null) {
 				IFileEditorInput input = (IFileEditorInput) editorPart.getEditorInput();
 				IFile file = input.getFile();
-				loader = getClassLoader4Project(monitor, file.getProject());
+				loader = ClassLoaderUtil.getClassLoader4Project(monitor, file.getProject());
 			} else { // take all projects
 				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 				for (IProject project : projects) {
-					loader = getClassLoader4Project(monitor, project);
+					loader = ClassLoaderUtil.getClassLoader4Project(monitor, project);
 					try {
 						cl = loader.loadClass(drvClass);
 						break;
@@ -335,17 +326,6 @@ public class RepositoryManager {
 		driver = (Driver) cl.newInstance();
 		drivers.put(drvClass, driver);
 		return driver;
-	}
-
-	public static ClassLoader getClassLoader4Project(IProgressMonitor monitor, IProject activeProject)
-			throws CoreException, JavaModelException {
-		// loader = ReportPreviewUtil.createProjectClassLoader(activeProject);
-		if (activeProject.hasNature(JasperReportsBuilder.JAVA_NATURE)) {
-			IJavaProject javaProject = JavaCore.create(activeProject);
-			javaProject.open(monitor);
-			return new JavaProjectClassLoader(javaProject, Thread.currentThread().getContextClassLoader());
-		}
-		return activeProject.getClass().getClassLoader();
 	}
 
 	public static JRDataSource createFileDataSource(InputStream io, MFileDataSource datasource) {

@@ -18,27 +18,23 @@
  * see <http://www.gnu.org/licenses/>.
  */
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.repository.actions;
 
@@ -76,14 +72,19 @@ public class DuplicateDataAdapterAction extends Action {
 
 	@Override
 	public void run() {
-
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MDataAdapter) {
 				DataAdapter copyDataAdapter = DataAdapterManager.cloneDataAdapter(((MDataAdapter) obj).getDataAdapter());
-				copyDataAdapter.setName("copy_of_"+copyDataAdapter.getName());
+				String name = "copy_of_" + copyDataAdapter.getName();
+				for (int j = 1; j < 1000; j++) {
+					if (DataAdapterManager.isDataAdapterNameValid(name))
+						break;
+					name = "copy_of_" + copyDataAdapter.getName() + j;
+				}
+				copyDataAdapter.setName(name);
 				DataAdapterManager.addDataAdapter(copyDataAdapter);
 				treeViewer.refresh(true);
 			}

@@ -28,6 +28,9 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
+import net.sf.jasperreports.eclipse.builder.JasperReportErrorHandler;
+import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
+import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -47,6 +50,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.compiler.CategorizedProblem;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
@@ -60,7 +64,6 @@ import com.jaspersoft.studio.editor.preview.actions.ShowParametersAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
-import com.jaspersoft.studio.repository.RepositoryManager;
 import com.jaspersoft.studio.utils.ErrorUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
@@ -147,7 +150,7 @@ public class PreviewEditor extends JRPrintEditor {
 					IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 
 					Thread.currentThread().setContextClassLoader(
-							RepositoryManager.getClassLoader4Project(monitor, file.getProject()));
+							ClassLoaderUtil.getClassLoader4Project(monitor, file.getProject()));
 					SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
 
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -159,36 +162,51 @@ public class PreviewEditor extends JRPrintEditor {
 
 					setJasperPrint(null);
 					AsynchronousFillHandle fh = null;
-					
+
 					JasperReportCompiler compiler = new JasperReportCompiler();
+					compiler.setErrorHandler(new JasperReportErrorHandler() {
+
+						public void addMarker(Throwable e) {
+							unsetReportDocument(ErrorUtil.getStackTrace(e), true);
+						}
+
+						public void addMarker(String message, SourceLocation location) {
+							unsetReportDocument(message + location, true);
+						}
+
+						public void addMarker(CategorizedProblem problem, SourceLocation location) {
+							unsetReportDocument(problem.getMessage() + location, true);
+						}
+					});
 					compiler.setProject(file.getProject());
 					JasperReport jasperReport = compiler.compileReport(jasperDesign);
+					if (jasperReport != null) {
+						// JasperReport jasperReport = JasperCompileManager.compileReport(jd);
 
-//					 JasperReport jasperReport = JasperCompileManager.compileReport(jd);
+						jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
 
-					jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
+						VirtualizerHelper.setVirtualizer(jd, ps);
 
-					VirtualizerHelper.setVirtualizer(jd, ps);
+						// We let the data adapter to contribute its parameters.
+						dataAdapter.getSpecialParameters(jasperParameter);
 
-					// We let the data adapter to contribute its parameters.
-					dataAdapter.getSpecialParameters(jasperParameter);
+						// We create the fillHandle to run the report based on the type of data adapter....
+						if (dataAdapter.isJDBCConnection()) {
+							connection = dataAdapter.getConnection();
+							fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
+						} else if (dataAdapter.isJRDataSource()) {
+							fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter,
+									dataAdapter.getJRDataSource(jasperReport));
+						} else {
+							fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter,
+									dataAdapter.getJRDataSource(jasperReport));
+						}
 
-					// We create the fillHandle to run the report based on the type of data adapter....
-					if (dataAdapter.isJDBCConnection()) {
-						connection = dataAdapter.getConnection();
-						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
-					} else if (dataAdapter.isJRDataSource()) {
-						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter,
-								dataAdapter.getJRDataSource(jasperReport));
-					} else {
-						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter,
-								dataAdapter.getJRDataSource(jasperReport));
+						if (fillReport(fh, monitor) == Status.CANCEL_STATUS)
+							return Status.CANCEL_STATUS;
+
+						setReportDocument(true);
 					}
-
-					if (fillReport(fh, monitor) == Status.CANCEL_STATUS)
-						return Status.CANCEL_STATUS;
-
-					setReportDocument(true);
 				} catch (final Throwable e) {
 					unsetReportDocument(ErrorUtil.getStackTrace(e), true);
 				} finally {

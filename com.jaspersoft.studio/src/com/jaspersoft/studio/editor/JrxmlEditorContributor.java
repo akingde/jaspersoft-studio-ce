@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor;
 
@@ -66,6 +62,8 @@ import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.section.report.PageFormatAction;
+
 /*
  * Manages the installation/deinstallation of global actions for multi-page editors. Responsible for the redirection of
  * global actions to the active editor. Multi-page contributor replaces the contributors for the individual editors in
@@ -145,6 +143,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 				IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SnapToGridAction.ID, Messages.common_snap_to_grid, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SizeGridAction.ID, Messages.JrxmlEditorContributor_grid_size));
+
+		addRetargetAction(new RetargetAction(PageFormatAction.ID, Messages.JrxmlEditorContributor_pageformat));
 	}
 
 	/**
@@ -353,6 +353,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		viewMenu.add(getAction(SnapToGridAction.ID));
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
 		viewMenu.add(getAction(SizeGridAction.ID));
+		viewMenu.add(new Separator());
+		viewMenu.add(getAction(PageFormatAction.ID));
 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 
