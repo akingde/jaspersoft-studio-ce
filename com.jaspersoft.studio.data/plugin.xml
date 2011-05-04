@@ -6,8 +6,10 @@
          name="test"
          point="com.jaspersoft.studio.dataAdapters">
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.csv.CSVDataAdapterFactory"/>
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.customjrds.CustomJrdsDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.jdbc.JDBCDataAdapterFactory"/>
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.jrdsprovider.JrdsProviderDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.queryexecutor.QueryExecutorDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xls.XLSDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xml.XMLDataAdapterFactory"/>
