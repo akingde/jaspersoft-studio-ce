@@ -163,25 +163,8 @@ public class PreviewEditor extends JRPrintEditor {
 					setJasperPrint(null);
 					AsynchronousFillHandle fh = null;
 
-					JasperReportCompiler compiler = new JasperReportCompiler();
-					compiler.setErrorHandler(new JasperReportErrorHandler() {
-
-						public void addMarker(Throwable e) {
-							unsetReportDocument(ErrorUtil.getStackTrace(e), true);
-						}
-
-						public void addMarker(String message, SourceLocation location) {
-							unsetReportDocument(message + location, true);
-						}
-
-						public void addMarker(CategorizedProblem problem, SourceLocation location) {
-							unsetReportDocument(problem.getMessage() + location, true);
-						}
-					});
-					compiler.setProject(file.getProject());
-					JasperReport jasperReport = compiler.compileReport(jasperDesign);
+					JasperReport jasperReport = JasperCompileManager.compileReport(jd);
 					if (jasperReport != null) {
-						// JasperReport jasperReport = JasperCompileManager.compileReport(jd);
 
 						jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
 
