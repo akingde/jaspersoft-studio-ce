@@ -13,6 +13,7 @@
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.queryexecutor.QueryExecutorDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xls.XLSDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xml.XMLDataAdapterFactory"/>
+         <dataAdapter ClassFactory="com.jaspersoft.studio.data.remotexml.RemoteXMLDataAdapterFactory"/>
    </extension>
 
 </plugin>

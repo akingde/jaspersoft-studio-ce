@@ -56,7 +56,6 @@ public class JrdsProviderDataAdapterComposite extends Composite {
 		
 		textJRDSProviderClassName = new Text(this, SWT.BORDER);
 		textJRDSProviderClassName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		textJRDSProviderClassName.setText("com.jaspersoft.studio.data.jrdsprovider.sample.PersonBeansDataSource");
 		
 		/*
 		 * UI ELEMENTS LISTENERS
@@ -77,7 +76,7 @@ public class JrdsProviderDataAdapterComposite extends Composite {
 	public void setDataAdapter(JrdsProviderDataAdapter dataAdapter) {
 		
 		jrdsProviderDataAdapter = dataAdapter;
-		textJRDSProviderClassName.setText( Misc.nvl(jrdsProviderDataAdapter.getJRDSProviderClassName(), "") );
+		textJRDSProviderClassName.setText( Misc.nvl(jrdsProviderDataAdapter.getJRDSProviderClassName(), "com.jaspersoft.studio.data.sample.PersonBeansDataSource") );
 	}
 
 	public DataAdapter getDataAdapter() {

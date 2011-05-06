@@ -89,8 +89,8 @@ public class CustomJrdsDataAdapterComposite extends Composite {
 	public void setDataAdapter(CustomJrdsDataAdapter dataAdapter) {
 		
 		customJrdsDataAdapter = dataAdapter;
-		textFactoryClass.setText(Misc.nvl(customJrdsDataAdapter.getFactoryClass(), ""));
-		textMethodToCall.setText(Misc.nvl(customJrdsDataAdapter.getMethodToCall(), ""));
+		textFactoryClass.setText(Misc.nvl(customJrdsDataAdapter.getFactoryClass(), "com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory"));
+		textMethodToCall.setText(Misc.nvl(customJrdsDataAdapter.getMethodToCall(), "createDatasource"));
 	}
 
 	public DataAdapter getDataAdapter() {

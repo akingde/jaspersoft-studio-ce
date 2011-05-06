@@ -204,7 +204,6 @@ public class XMLDataAdapter extends DataAdapter {
 	}
 
 	@Override
-	// TODO implement test function
 	public void test() throws Exception {
 		try {
 			java.io.File f = new java.io.File(getFileName());

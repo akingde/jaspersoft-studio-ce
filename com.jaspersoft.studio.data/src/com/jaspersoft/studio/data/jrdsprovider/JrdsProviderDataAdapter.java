@@ -43,7 +43,7 @@ public class JrdsProviderDataAdapter extends DataAdapter {
 	private JRDataSourceProvider dsp;
 	private JRDataSource ds;
 	private String jrdsProviderClassNameKey = "JRDataSourceProvider";
-	private String jrdsProviderClassName = "";
+	private String jrdsProviderClassName;
 
 	public DataAdapterEditor getEditor() {
 		return new JrdsProviderDataAdapterEditor();
