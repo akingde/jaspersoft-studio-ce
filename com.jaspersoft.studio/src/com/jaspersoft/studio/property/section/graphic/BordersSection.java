@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.section.graphic;
 
@@ -73,6 +69,7 @@ import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.UIUtils;
+
 /*
  * The location section on the location tab.
  * 
@@ -143,9 +140,9 @@ public class BordersSection extends AbstractSection {
 	}
 
 	private void createBorderPreview(Composite composite) {
-		GridData gd;
 		square = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
-		gd = new GridData(GridData.FILL_VERTICAL | GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER);
+		GridData gd = new GridData(GridData.FILL_VERTICAL | GridData.HORIZONTAL_ALIGN_CENTER
+				| GridData.VERTICAL_ALIGN_CENTER);
 		gd.horizontalSpan = 5;
 		gd.widthHint = 120;
 		square.setLayoutData(gd);
@@ -415,11 +412,11 @@ public class BordersSection extends AbstractSection {
 
 			Float propertyValue = (Float) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
 			Spinner lineWidth = lineWidthMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_WIDTH); //$NON-NLS-1$
-			if (lineWidth != null && !lineWidth.isDisposed())
-			{
-				UIUtils.setSpinnerSelection( lineWidth , null, (int)((propertyValue == null) ? 0 : propertyValue.doubleValue() * Math.pow(10, 1)));
+			if (lineWidth != null && !lineWidth.isDisposed()) {
+				UIUtils.setSpinnerSelection(lineWidth, null, (int) ((propertyValue == null) ? 0 : propertyValue.doubleValue()
+						* Math.pow(10, 1)));
 			}
-			
+
 			CCombo lineStyle = lineStyleMap.get(mapProperty + "." + JRBasePen.PROPERTY_LINE_STYLE); //$NON-NLS-1$
 			if (lineStyle != null && !lineStyle.isDisposed())
 				lineStyle.select(((Integer) lp.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());

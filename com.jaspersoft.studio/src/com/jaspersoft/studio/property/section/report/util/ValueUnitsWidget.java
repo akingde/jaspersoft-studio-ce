@@ -11,11 +11,23 @@ import org.eclipse.swt.widgets.Spinner;
 
 public class ValueUnitsWidget {
 
+	private final class SpinerSelectionListener implements SelectionListener {
+		public void widgetSelected(SelectionEvent e) {
+			unit.setValue(new Float(val.getSelection() / Math.pow(10, digits)).floatValue(),
+					Unit.getUnits()[unitc.getSelectionIndex()]);
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);
+		}
+	}
+
 	private Unit unit = new Unit(0, Unit.PX);
 	private int max = Integer.MAX_VALUE;
 	private int digits = 0;
 	private CCombo unitc;
 	private Spinner val;
+	private SpinerSelectionListener spinerSelection;
 
 	public void setMax(int max) {
 		this.max = max;
@@ -29,7 +41,7 @@ public class ValueUnitsWidget {
 		val = new Spinner(parent, SWT.BORDER);
 		val.setToolTipText(toolTip);
 		GridData gd = new GridData();
-		gd.widthHint = 60;
+		gd.widthHint = 80;
 		val.setLayoutData(gd);
 
 		unitc = new CCombo(parent, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
@@ -38,11 +50,9 @@ public class ValueUnitsWidget {
 
 			public void widgetSelected(SelectionEvent e) {
 				String u = Unit.getUnits()[unitc.getSelectionIndex()];
-				unit.setUnit(u);
-				digits = u.equals(Unit.PX) ? 0 : 4;
-
-				int v = (int) Math.round(unit.getValue() * Math.pow(10, digits));
-				val.setValues(v, 0, max, digits, 1, 10);
+				if (unit.setUnit(u)) {
+					setSpinerValue(u);
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -50,19 +60,46 @@ public class ValueUnitsWidget {
 			}
 		});
 
-		val.addSelectionListener(new SelectionListener() {
+		spinerSelection = new SpinerSelectionListener();
+		val.addSelectionListener(spinerSelection);
 
-			public void widgetSelected(SelectionEvent e) {
-				double v = unitc.getSelectionIndex() / Math.pow(10, digits);
-				unit.setValue(new Float(v).floatValue(), Unit.getUnits()[unitc.getSelectionIndex()]);
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
-		});
-
-		val.setSelection(0);
 		unitc.select(0);
+		setSpinerValue(unit.getUnit());
+	}
+
+	private void setSpinerValue(String u) {
+		digits = u.equals(Unit.PX) ? 0 : 4;
+
+		val.setDigits(digits);
+		val.setMinimum(0);
+		val.setMaximum(max);
+		val.setIncrement(1);
+		val.removeSelectionListener(spinerSelection);
+		val.setSelection((int) Math.round(unit.getValue(u) * Math.pow(10, digits)));
+		val.addSelectionListener(spinerSelection);
+	}
+
+	public void addSelectionListener(SelectionListener listener) {
+		val.addSelectionListener(listener);
+	}
+
+	public void removeSelectionListener(SelectionListener listener) {
+		val.removeSelectionListener(listener);
+	}
+
+	public void setUnit(String u) {
+		if (unit.setUnit(u)) {
+			unitc.select(Unit.getUnitIndex(u));
+			setSpinerValue(u);
+		}
+	}
+
+	public int getValue() {
+		return unit.getPxValue();
+	}
+
+	public void setValue(int px) {
+		unit.setValue(px, Unit.PX);
+		setSpinerValue(unit.getUnit());
 	}
 }

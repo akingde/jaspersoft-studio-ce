@@ -19,10 +19,17 @@
  */
 package com.jaspersoft.studio.property.section.report;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.gef.DefaultEditDomain;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IFileEditorInput;
+
+import com.jaspersoft.studio.model.ANode;
 
 public class PageFormatAction extends Action {
 	public static final String ID = "pageFormatAction"; //$NON-NLS-1$
@@ -46,9 +53,13 @@ public class PageFormatAction extends Action {
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
 	public void run() {
-		PageFormatDialog dlg = new PageFormatDialog(Display.getCurrent().getActiveShell());
+		StructuredSelection ss = (StructuredSelection) diagramViewer.getSelection();
+		ANode n = (ANode) ((EditPart) ss.getFirstElement()).getModel();
+		IFile file = ((IFileEditorInput) ((DefaultEditDomain) diagramViewer.getEditDomain()).getEditorPart()
+				.getEditorInput()).getFile();
+		PageFormatDialog dlg = new PageFormatDialog(Display.getCurrent().getActiveShell(), n, file);
 		if (dlg.open() == Window.OK) {
-			// diagramViewer.setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(dlg.getWidth(), dlg.getHeight()));
+			diagramViewer.getEditDomain().getCommandStack().execute(dlg.getCommand());
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package com.jaspersoft.studio.property.section.report.util;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.swt.graphics.Point;
@@ -112,7 +112,7 @@ public class PageSize {
 	 */
 	static {
 
-		PageSize.pageFormats = new HashMap<String, Point>();
+		PageSize.pageFormats = new LinkedHashMap<String, Point>();
 
 		pageFormats.put("LETTER", LETTER);
 		pageFormats.put("NOTE", NOTE);
@@ -149,10 +149,32 @@ public class PageSize {
 		pageFormats.put("11x17", _11X17);
 		pageFormats.put("LEDGER", LEDGER);
 
+		pageFormats.put("Custom", new Point(0, 0));
+
+	}
+	private static String[] pformats;
+
+	public static String[][] getFormats2() {
+		String[][] res = new String[getFormats().length][2];
+		for (int i = 0; i < res.length; i++) {
+			res[i][0] = pformats[i];
+			res[i][1] = pformats[i];
+		}
+		return res;
 	}
 
 	public static String[] getFormats() {
-		return pageFormats.keySet().toArray(new String[pageFormats.keySet().size()]);
+		if (pformats == null)
+			pformats = pageFormats.keySet().toArray(new String[pageFormats.keySet().size()]);
+		return pformats;
+	}
+
+	public static int getFormatIndx(String f) {
+		int ind = 0;
+		for (int i = 0; i < pformats.length; i++)
+			if (f.equals(pformats[i]))
+				return i;
+		return ind;
 	}
 
 	public static String defaultFormat = "A4";

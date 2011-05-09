@@ -280,6 +280,7 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_fancy_shadow;
 	public static String DesignerPreferencePage_page_border_style;
 	public static String DesignerPreferencePage_simple_shadow;
+	public static String DesignerPreferencePage_unit;
 	public static String DOCXExporterPreferencePage_3;
 	public static String DOCXExporterPreferencePage_4;
 	public static String DOCXExporterPreferencePage_title;

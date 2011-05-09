@@ -50,6 +50,7 @@ import org.eclipse.jdt.core.IJavaProject;
 
 import bsh.EvalError;
 import bsh.Interpreter;
+
 /*
  * 
  * @author gtoffoli
@@ -138,7 +139,7 @@ public class ExpressionInterpreter {
 					String after = expression.substring(ip1 + p1.length());
 
 					String param_name_literal = "param_"
-							+ net.sf.jasperreports.engine.util.JRStringUtil.getLiteral(parameter.getName());
+							+ net.sf.jasperreports.engine.util.JRStringUtil.escapeJavaStringLiteral(parameter.getName());
 
 					expression = before + param_name_literal + after;
 					// set the value...
@@ -257,7 +258,8 @@ public class ExpressionInterpreter {
 					}
 				}
 
-				String param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getLiteral(param_name);
+				String param_name_literal = "param_"
+						+ net.sf.jasperreports.engine.util.JRStringUtil.escapeJavaStringLiteral(param_name);
 
 				expression = string_replace(param_name_literal, "$P{" + param_name + "}", expression);
 				// interpreter.set( param_name_literal, recursiveInterpreter(interpreter, param_expression, parameters,
@@ -275,7 +277,8 @@ public class ExpressionInterpreter {
 			String this_param_name_literal = "param_unknow";
 
 			if (this_param_name != null) {
-				this_param_name_literal = "param_" + net.sf.jasperreports.engine.util.JRStringUtil.getLiteral(this_param_name);
+				this_param_name_literal = "param_"
+						+ net.sf.jasperreports.engine.util.JRStringUtil.escapeJavaStringLiteral(this_param_name);
 			}
 			// System.out.println("interpreto ["+ recursion_level +"]: " + expression);
 			// System.out.flush();

@@ -418,7 +418,7 @@ public class ModelUtils {
 		for (JRBand tmpBand : bands) {
 			// Detached background...
 			if (tmpBand instanceof JRDesignBand) {
-				if (((JRDesignBand) tmpBand).getOrigin().getBandType() == JROrigin.BACKGROUND) {
+				if (((JRDesignBand) tmpBand).getOrigin().getBandTypeValue().equals(BandTypeEnum.BACKGROUND)) {
 					// if (IReportManager.getInstance().isBackgroundSeparated())
 					// {
 					// yLocation += jd.getTopMargin();
@@ -471,16 +471,16 @@ public class ModelUtils {
 	 */
 	public static String nameOf(JRBand b, JasperDesign jd) {
 		JROrigin origin = ((JRDesignBand) b).getOrigin();
-		if (origin.getBandType() == JROrigin.GROUP_HEADER) {
+		if (origin.getBandTypeValue().equals(BandTypeEnum.GROUP_HEADER)) {
 
 			JRGroup group = (JRGroup) jd.getGroupsMap().get(origin.getGroupName());
 			int index = getBandIndex(group.getGroupHeaderSection(), b);
 			return Messages.ModelUtils_groupheader_section + " " + origin.getGroupName() + " " + (index + 1); //$NON-NLS-1$ //$NON-NLS-2$
 
-		} else if (origin.getBandType() == JROrigin.DETAIL) {
+		} else if (origin.getBandTypeValue().equals(BandTypeEnum.DETAIL)) {
 			int index = getBandIndex(jd.getDetailSection(), b);
 			return Messages.ModelUtils_detail_section + " " + (index + 1); //$NON-NLS-1$
-		} else if (origin.getBandType() == JROrigin.GROUP_FOOTER) {
+		} else if (origin.getBandTypeValue().equals(BandTypeEnum.GROUP_FOOTER)) {
 			JRGroup group = (JRGroup) jd.getGroupsMap().get(origin.getGroupName());
 			int index = getBandIndex(group.getGroupFooterSection(), b);
 			return Messages.ModelUtils_groupfooter_section + " " + origin.getGroupName() + (index + 1); //$NON-NLS-1$
