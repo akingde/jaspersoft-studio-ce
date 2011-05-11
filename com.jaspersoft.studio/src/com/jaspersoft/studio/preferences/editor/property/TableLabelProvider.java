@@ -33,9 +33,9 @@ public class TableLabelProvider extends LabelProvider implements ITableLabelProv
 	public String getColumnText(Object element, int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return "fda";
+			return element.toString();
 		case 1:
-			return "fda";
+			return element.toString();
 
 		default:
 			return (element != null ? element.toString() : "");

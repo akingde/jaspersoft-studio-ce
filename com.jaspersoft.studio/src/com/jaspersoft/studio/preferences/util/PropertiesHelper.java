@@ -25,6 +25,7 @@ import java.util.Properties;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.fonts.SimpleFontExtensionsRegistryFactory;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 
@@ -36,6 +37,8 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.preferences.fonts.FontFamilyExtensionsRegistryFactory;
+import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 
 public class PropertiesHelper {
 
@@ -68,6 +71,10 @@ public class PropertiesHelper {
 					map.setProperty(key, val);
 			}
 		}
+		// set fontextensionsregistry
+		map.setProperty(SimpleFontExtensionsRegistryFactory.PROPERTY_SIMPLE_FONT_FAMILIES_REGISTRY_FACTORY,
+				FontFamilyExtensionsRegistryFactory.class.getName());
+		map.setProperty(FontFamilyExtensionsRegistryFactory.PROPERTY_LIST, getString(FontsPreferencePage.FPP_FONT_LIST));
 	}
 
 	@SuppressWarnings("unchecked")

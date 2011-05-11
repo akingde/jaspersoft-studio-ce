@@ -68,7 +68,8 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 
 public class MChartPieDataset extends MChartDataset {
 
-	public MChartPieDataset(ANode parent, JRDesignPieDataset value, JasperDesign jasperDesign) {
+	public MChartPieDataset(ANode parent, JRDesignPieDataset value,
+			JasperDesign jasperDesign) {
 		super(parent, value, jasperDesign);
 	}
 
@@ -86,7 +87,8 @@ public class MChartPieDataset extends MChartDataset {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -95,71 +97,95 @@ public class MChartPieDataset extends MChartDataset {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		JRExpressionPropertyDescriptor keyExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_KEY_EXPRESSION, Messages.common_key_expression);
-		keyExprD.setDescription(Messages.MChartPieDataset_key_expression_description);
-		desc.add(keyExprD);
-
-		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
-		lblExprD.setDescription(Messages.MChartPieDataset_label_expression_description);
-		desc.add(lblExprD);
+		// JRExpressionPropertyDescriptor keyExprD = new
+		// JRExpressionPropertyDescriptor(
+		// JRDesignPieDataset.PROPERTY_KEY_EXPRESSION,
+		// Messages.common_key_expression);
+		// keyExprD.setDescription(Messages.MChartPieDataset_key_expression_description);
+		// desc.add(keyExprD);
+		//
+		// JRExpressionPropertyDescriptor lblExprD = new
+		// JRExpressionPropertyDescriptor(
+		// JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION,
+		// Messages.common_label_expression);
+		// lblExprD.setDescription(Messages.MChartPieDataset_label_expression_description);
+		// desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor oKeyExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION, Messages.MChartPieDataset_other_key_expression);
-		oKeyExprD.setDescription(Messages.MChartPieDataset_other_key_expression_description);
+				JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION,
+				Messages.MChartPieDataset_other_key_expression);
+		oKeyExprD
+				.setDescription(Messages.MChartPieDataset_other_key_expression_description);
 		desc.add(oKeyExprD);
 
 		JRExpressionPropertyDescriptor oLblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION, Messages.MChartPieDataset_other_label_expression);
-		oLblExprD.setDescription(Messages.MChartPieDataset_other_label_expression_description);
+				JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION,
+				Messages.MChartPieDataset_other_label_expression);
+		oLblExprD
+				.setDescription(Messages.MChartPieDataset_other_label_expression_description);
 		desc.add(oLblExprD);
 
-		JRExpressionPropertyDescriptor valExpD = new JRExpressionPropertyDescriptor(
-				JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION, Messages.common_value_expression);
-		valExpD.setDescription(Messages.MChartPieDataset_value_expression_description);
-		desc.add(valExpD);
+		// JRExpressionPropertyDescriptor valExpD = new
+		// JRExpressionPropertyDescriptor(
+		// JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION,
+		// Messages.common_value_expression);
+		// valExpD.setDescription(Messages.MChartPieDataset_value_expression_description);
+		// desc.add(valExpD);
 
-		JRPropertyDescriptor oSectHyperLD = new JRPropertyDescriptor(JRDesignPieDataset.PROPERTY_OTHER_SECTION_HYPERLINK,
+		JRPropertyDescriptor oSectHyperLD = new JRPropertyDescriptor(
+				JRDesignPieDataset.PROPERTY_OTHER_SECTION_HYPERLINK,
 				Messages.MChartPieDataset_other_section_hyperlink);
-		oSectHyperLD.setDescription(Messages.MChartPieDataset_other_section_hyperlink_description);
+		oSectHyperLD
+				.setDescription(Messages.MChartPieDataset_other_section_hyperlink_description);
 		desc.add(oSectHyperLD);
 
-		JRPropertyDescriptor sectHyperLD = new JRPropertyDescriptor(JRDesignPieDataset.PROPERTY_SECTION_HYPERLINK,
-				Messages.common_section_hyperlink);
-		sectHyperLD.setDescription(Messages.MChartPieDataset_section_hyperlink_description);
-		desc.add(sectHyperLD);
+		// JRPropertyDescriptor sectHyperLD = new JRPropertyDescriptor(
+		// JRDesignPieDataset.PROPERTY_SECTION_HYPERLINK,
+		// Messages.common_section_hyperlink);
+		// sectHyperLD
+		// .setDescription(Messages.MChartPieDataset_section_hyperlink_description);
+		// desc.add(sectHyperLD);
 
-		IntegerPropertyDescriptor maxCountD = new IntegerPropertyDescriptor(JRDesignPieDataset.PROPERTY_MAX_COUNT,
+		IntegerPropertyDescriptor maxCountD = new IntegerPropertyDescriptor(
+				JRDesignPieDataset.PROPERTY_MAX_COUNT,
 				Messages.MChartPieDataset_max_count);
-		maxCountD.setDescription(Messages.MChartPieDataset_max_count_description);
+		maxCountD
+				.setDescription(Messages.MChartPieDataset_max_count_description);
 		desc.add(maxCountD);
 
-		FloatPropertyDescriptor minPercD = new FloatPropertyDescriptor(JRDesignPieDataset.PROPERTY_MIN_PERCENTAGE,
+		FloatPropertyDescriptor minPercD = new FloatPropertyDescriptor(
+				JRDesignPieDataset.PROPERTY_MIN_PERCENTAGE,
 				Messages.MChartPieDataset_min_percentage);
 		minPercD.setDescription(Messages.MChartPieDataset_min_percentage_description);
 		desc.add(minPercD);
 
-		keyExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
-		lblExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
-		oKeyExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
-		oLblExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
-		valExpD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
-		oSectHyperLD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
-		sectHyperLD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		// keyExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		// lblExprD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		oKeyExprD
+				.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		oLblExprD
+				.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		// valExpD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		oSectHyperLD
+				.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		// sectHyperLD
+		// .setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
 
-		maxCountD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
+		maxCountD
+				.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
 		minPercD.setCategory(Messages.MChartPieDataset_chart_pie_dataset_category);
 
 		defaultsMap.put(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION, null);
 		defaultsMap.put(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION, null);
 		defaultsMap.put(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION, null);
-		defaultsMap.put(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION, null);
+		defaultsMap.put(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION,
+				null);
 		defaultsMap.put(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION, null);
 
 	}
@@ -181,42 +207,48 @@ public class MChartPieDataset extends MChartDataset {
 			return jrElement.getMinPercentage();
 		if (id.equals(JRDesignPieDataset.PROPERTY_MAX_COUNT))
 			return jrElement.getMaxCount();
-		if (id.equals(JRDesignPieDataset.PROPERTY_SECTION_HYPERLINK)) {
-			JRHyperlink sectionHyperlink = jrElement.getSectionHyperlink();
-			if (sectionHyperlink == null)
-				sectionHyperlink = new JRDesignHyperlink();
-			mHyperLink = new MHyperLink(sectionHyperlink);
-			setChildListener(mHyperLink);
-			return mHyperLink;
-		}
+		// if (id.equals(JRDesignPieDataset.PROPERTY_SECTION_HYPERLINK)) {
+		// JRHyperlink sectionHyperlink = jrElement.getSectionHyperlink();
+		// if (sectionHyperlink == null)
+		// sectionHyperlink = new JRDesignHyperlink();
+		// mHyperLink = new MHyperLink(sectionHyperlink);
+		// setChildListener(mHyperLink);
+		// return mHyperLink;
+		// }
 		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_SECTION_HYPERLINK)) {
-			JRHyperlink otherSectionHyperlink = jrElement.getOtherSectionHyperlink();
+			JRHyperlink otherSectionHyperlink = jrElement
+					.getOtherSectionHyperlink();
 			if (otherSectionHyperlink == null)
 				otherSectionHyperlink = new JRDesignHyperlink();
 			omHyperLink = new MHyperLink(otherSectionHyperlink);
 			setChildListener(omHyperLink);
 			return omHyperLink;
 		}
-		if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION)) {
-			cExpression = ExprUtil.getExpression(this, cExpression, jrElement.getKeyExpression());
-			return cExpression;
-		}
-		if (id.equals(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION)) {
-			dExpression = ExprUtil.getExpression(this, dExpression, jrElement.getLabelExpression());
-			return dExpression;
-		}
+		// if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION)) {
+		// cExpression = ExprUtil.getExpression(this, cExpression,
+		// jrElement.getKeyExpression());
+		// return cExpression;
+		// }
+		// if (id.equals(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION)) {
+		// dExpression = ExprUtil.getExpression(this, dExpression,
+		// jrElement.getLabelExpression());
+		// return dExpression;
+		// }
 		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION)) {
-			hExpression = ExprUtil.getExpression(this, hExpression, jrElement.getOtherKeyExpression());
+			hExpression = ExprUtil.getExpression(this, hExpression,
+					jrElement.getOtherKeyExpression());
 			return hExpression;
 		}
 		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION)) {
-			lExpression = ExprUtil.getExpression(this, lExpression, jrElement.getOtherLabelExpression());
+			lExpression = ExprUtil.getExpression(this, lExpression,
+					jrElement.getOtherLabelExpression());
 			return lExpression;
 		}
-		if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION)) {
-			oExpression = ExprUtil.getExpression(this, oExpression, jrElement.getValueExpression());
-			return oExpression;
-		}
+		// if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION)) {
+		// oExpression = ExprUtil.getExpression(this, oExpression,
+		// jrElement.getValueExpression());
+		// return oExpression;
+		// }
 
 		return super.getPropertyValue(id);
 	}
@@ -229,16 +261,21 @@ public class MChartPieDataset extends MChartDataset {
 			jrElement.setMinPercentage((Float) value);
 		else if (id.equals(JRDesignPieDataset.PROPERTY_MAX_COUNT))
 			jrElement.setMaxCount((Integer) value);
-		else if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION))
-			jrElement.setKeyExpression(ExprUtil.setValues(jrElement.getKeyExpression(), value));
-		else if (id.equals(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION))
-			jrElement.setLabelExpression(ExprUtil.setValues(jrElement.getLabelExpression(), value));
+		// else if (id.equals(JRDesignPieDataset.PROPERTY_KEY_EXPRESSION))
+		// jrElement.setKeyExpression(ExprUtil.setValues(
+		// jrElement.getKeyExpression(), value));
+		// else if (id.equals(JRDesignPieDataset.PROPERTY_LABEL_EXPRESSION))
+		// jrElement.setLabelExpression(ExprUtil.setValues(
+		// jrElement.getLabelExpression(), value));
 		else if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION))
-			jrElement.setOtherKeyExpression(ExprUtil.setValues(jrElement.getOtherKeyExpression(), value));
+			jrElement.setOtherKeyExpression(ExprUtil.setValues(
+					jrElement.getOtherKeyExpression(), value));
 		else if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION))
-			jrElement.setOtherLabelExpression(ExprUtil.setValues(jrElement.getOtherLabelExpression(), value));
-		else if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION))
-			jrElement.setValueExpression(ExprUtil.setValues(jrElement.getValueExpression(), value));
+			jrElement.setOtherLabelExpression(ExprUtil.setValues(
+					jrElement.getOtherLabelExpression(), value));
+		// else if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION))
+		// jrElement.setValueExpression(ExprUtil.setValues(
+		// jrElement.getValueExpression(), value));
 		else
 			super.setPropertyValue(id, value);
 	}
@@ -250,10 +287,12 @@ public class MChartPieDataset extends MChartDataset {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;
 					if (evt instanceof CollectionElementAddedEvent) {
-						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+						newIndex = ((CollectionElementAddedEvent) evt)
+								.getAddedIndex();
 					}
 					ReportFactory.createNode(this, evt.getNewValue(), newIndex);
-				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+				} else if (evt.getOldValue() != null
+						&& evt.getNewValue() == null) {
 					// delete
 					for (INode n : getChildren()) {
 						if (n.getValue() == evt.getOldValue()) {

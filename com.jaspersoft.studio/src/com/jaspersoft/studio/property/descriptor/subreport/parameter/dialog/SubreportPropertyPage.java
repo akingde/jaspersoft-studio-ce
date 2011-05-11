@@ -130,7 +130,7 @@ public class SubreportPropertyPage extends WizardPage {
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
-		new NewButton().createOrderButtons(bGroup, tableViewer, new INewElement() {
+		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input) {
 				JRDesignSubreportParameter param = new JRDesignSubreportParameter();

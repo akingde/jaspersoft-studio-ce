@@ -170,6 +170,7 @@ public class ModelUtils {
 
 	private static Map<String, String> mp = new HashMap<String, String>();
 	private static String[][] qexecutors;
+	private static java.util.List<String> pdfencodings;
 
 	/**
 	 * Return the ordered list of bands available in the current report.
@@ -812,14 +813,19 @@ public class ModelUtils {
 	}
 
 	public static String[] getPDFEncodings() {
-		java.util.List<String> encodings = new ArrayList<String>();
-		encodings.add(""); //$NON-NLS-1$
+		if (pdfencodings == null) {
+			pdfencodings = new ArrayList<String>();
+			pdfencodings.add(""); //$NON-NLS-1$
 
-		fillPDFEncodingMap();
+			fillPDFEncodingMap();
 
-		encodings.addAll(mp.values());
+			pdfencodings.addAll(mp.values());
+		}
+		return pdfencodings.toArray(new String[pdfencodings.size()]);
+	}
 
-		return encodings.toArray(new String[encodings.size()]);
+	public static int getPDFEncodingIndex(String key) {
+		return pdfencodings.indexOf(key);
 	}
 
 	private static void fillPDFEncodingMap() {

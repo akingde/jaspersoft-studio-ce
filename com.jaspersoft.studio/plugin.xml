@@ -229,6 +229,12 @@
             id="com.jaspersoft.studio.preferences.qexecutor.QueryExecutersPreferencePage"
             name="Query Executor Manager">
       </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
+            id="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
+            name="Fonts">
+      </page>
    </extension>
    <extension
          id="com.jaspersoft.studio.properties"
@@ -344,6 +350,14 @@
             class="com.jaspersoft.studio.preferences.qexecutor.QueryExecutersPreferencePage"
             id="com.jaspersoft.studio.preferences.qexecutor.QueryExecutersPreferencePage.property"
             name="Query Executor Manager"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
+            id="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage.property"
+            name="Fonts"
             objectClass="org.eclipse.core.resources.IProject">
       </page>
    </extension>

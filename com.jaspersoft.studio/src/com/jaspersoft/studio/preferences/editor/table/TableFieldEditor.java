@@ -70,32 +70,32 @@ public abstract class TableFieldEditor extends FieldEditor {
 	/**
 	 * The Add button.
 	 */
-	private Button addButton;
+	protected Button addButton;
 
 	/**
 	 * The Duplicate button.
 	 */
-	private Button duplicateButton;
+	protected Button duplicateButton;
 
 	/**
 	 * The Remove button.
 	 */
-	private Button removeButton;
+	protected Button removeButton;
 
 	/**
 	 * The Up button.
 	 */
-	private Button upButton;
+	protected Button upButton;
 
 	/**
 	 * The Down button.
 	 */
-	private Button downButton;
+	protected Button downButton;
 
 	/**
 	 * The selection listener.
 	 */
-	private SelectionListener selectionListener;
+	protected SelectionListener selectionListener;
 
 	private final String[] columnNames;
 
@@ -239,7 +239,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	 *          the resource name used to supply the button's label text
 	 * @return Button
 	 */
-	private Button createPushButton(Composite parent, String key) {
+	protected Button createPushButton(Composite parent, String key) {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText(key);
 		button.setFont(parent.getFont());
@@ -507,7 +507,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	 * 
 	 * @return the selection listener
 	 */
-	private SelectionListener getSelectionListener() {
+	protected SelectionListener getSelectionListener() {
 		if (selectionListener == null) {
 			createSelectionListener();
 		}
@@ -532,18 +532,20 @@ public abstract class TableFieldEditor extends FieldEditor {
 	/**
 	 * Notifies that the Add button has been pressed.
 	 */
-	private void addPressed() {
+	protected void addPressed() {
 		setPresentsDefaultValue(false);
 		String[] newInputObject = getNewInputObject();
-		TableItem tableItem = new TableItem(table, SWT.NONE);
-		tableItem.setText(newInputObject);
-		selectionChanged();
+		if (newInputObject != null) {
+			TableItem tableItem = new TableItem(table, SWT.NONE);
+			tableItem.setText(newInputObject);
+			selectionChanged();
+		}
 	}
 
 	/**
 	 * Notifies that the Add button has been pressed.
 	 */
-	private void duplicatePressed() {
+	protected void duplicatePressed() {
 		setPresentsDefaultValue(false);
 		int index = table.getSelectionIndex();
 		int target = index + 1;
@@ -565,7 +567,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	/**
 	 * Notifies that the Remove button has been pressed.
 	 */
-	private void removePressed() {
+	protected void removePressed() {
 		setPresentsDefaultValue(false);
 		int index = table.getSelectionIndex();
 		if (index >= 0) {
@@ -577,14 +579,14 @@ public abstract class TableFieldEditor extends FieldEditor {
 	/**
 	 * Notifies that the Up button has been pressed.
 	 */
-	private void upPressed() {
+	protected void upPressed() {
 		swap(true);
 	}
 
 	/**
 	 * Notifies that the Down button has been pressed.
 	 */
-	private void downPressed() {
+	protected void downPressed() {
 		swap(false);
 	}
 

@@ -87,7 +87,7 @@ public class NewButton {
 		}
 	}
 
-	public void createOrderButtons(Composite composite, TableViewer tableViewer, INewElement newElement) {
+	public void createNewButtons(Composite composite, TableViewer tableViewer, INewElement newElement) {
 		Button delB = new Button(composite, SWT.PUSH);
 		delB.setText(Messages.common_add);
 		delB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
