@@ -243,7 +243,6 @@
       <page
             adaptable="true"
             class="com.jaspersoft.studio.preferences.StudioPreferencePage"
-            icon="icons/jr_icon.png"
             id="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
             name="Jaspersoft Studio"
             objectClass="org.eclipse.core.resources.IProject">
@@ -350,14 +349,6 @@
             class="com.jaspersoft.studio.preferences.qexecutor.QueryExecutersPreferencePage"
             id="com.jaspersoft.studio.preferences.qexecutor.QueryExecutersPreferencePage.property"
             name="Query Executor Manager"
-            objectClass="org.eclipse.core.resources.IProject">
-      </page>
-      <page
-            adaptable="true"
-            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
-            class="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
-            id="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage.property"
-            name="Fonts"
             objectClass="org.eclipse.core.resources.IProject">
       </page>
    </extension>
