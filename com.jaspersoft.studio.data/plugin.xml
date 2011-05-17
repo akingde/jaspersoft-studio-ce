@@ -2,8 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="test"
-         name="test"
          point="com.jaspersoft.studio.dataAdapters">
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.csv.CSVDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.customjrds.CustomJrdsDataAdapterFactory"/>
