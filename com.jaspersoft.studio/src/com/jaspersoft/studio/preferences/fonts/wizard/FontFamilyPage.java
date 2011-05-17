@@ -92,7 +92,7 @@ public class FontFamilyPage extends WizardPage {
 		});
 		dsname.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Group gr = new Group(composite, SWT.BORDER);
+		Group gr = new Group(composite, SWT.NONE);
 		gr.setText("Font Details");
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
@@ -131,7 +131,7 @@ public class FontFamilyPage extends WizardPage {
 		italic = createFileField(gr, "Italic", ITALIC);
 		bolditalic = createFileField(gr, "Bold Italic", BOLDITALIC);
 
-		gr = new Group(composite, SWT.BORDER);
+		gr = new Group(composite, SWT.NONE);
 		gr.setText("PDF Details");
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
