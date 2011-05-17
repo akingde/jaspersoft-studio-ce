@@ -403,7 +403,7 @@ public abstract class TableFieldEditor extends FieldEditor {
 	 */
 	public Table getTableControl(Composite parent) {
 		if (table == null) {
-			table = new Table(parent, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
+			table = new Table(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
 			table.setFont(parent.getFont());
 			table.setLinesVisible(true);
 			table.setHeaderVisible(true);
@@ -552,13 +552,15 @@ public abstract class TableFieldEditor extends FieldEditor {
 
 		if (index >= 0) {
 			TableItem[] selection = table.getSelection();
-			Assert.isTrue(selection.length == 1);
-			String[] values = new String[columnNames.length];
-			for (int j = 0; j < columnNames.length; j++) {
-				values[j] = selection[0].getText(j);
+			Assert.isTrue(selection.length >= 1);
+			for (int i = 0; i < selection.length; i++) {
+				String[] values = new String[columnNames.length];
+				for (int j = 0; j < columnNames.length; j++) {
+					values[j] = selection[i].getText(j);
+				}
+				TableItem tableItem = new TableItem(table, SWT.NONE);
+				tableItem.setText(values);
 			}
-			TableItem tableItem = new TableItem(table, SWT.NONE);
-			tableItem.setText(values);
 			table.setSelection(table.getItemCount());
 		}
 		selectionChanged();

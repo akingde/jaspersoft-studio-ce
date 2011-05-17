@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.preferences.fonts;
+package com.jaspersoft.studio.preferences.fonts.utils;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionsRegistryFactory;

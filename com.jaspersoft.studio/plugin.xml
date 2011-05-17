@@ -135,9 +135,6 @@
             class="com.jaspersoft.studio.preferences.StudioPreferencePage"
             id="com.jaspersoft.studio.preferences.StudioPreferencePage"
             name="Jaspersoft Studio">
-         <keywordReference
-               id="com.jaspersoft.studio.keywordReference1">
-         </keywordReference>
       </page>
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"

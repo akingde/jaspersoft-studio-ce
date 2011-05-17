@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.preferences.fonts;
+package com.jaspersoft.studio.preferences.fonts.utils;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.extensions.ExtensionsRegistry;
 
+import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class JSSFontExtensionRegistry implements ExtensionsRegistry {
