@@ -97,7 +97,7 @@
       <perspectiveExtension
             targetID="com.jaspersoft.studio.ReportDesignPerspective">
          <view
-               id="org.eclipse.ui.views.ResourceNavigator"
+               id="com.jaspersoft.studio.Repository"
                minimized="false"
                relationship="left"
                relative="org.eclipse.ui.editorss">
@@ -107,7 +107,7 @@
                minimized="false"
                ratio="0.5"
                relationship="bottom"
-               relative="org.eclipse.ui.views.ResourceNavigator">
+               relative="com.jaspersoft.studio.Repository">
          </view>
          <view
                id="org.eclipse.ui.views.ProblemView"
