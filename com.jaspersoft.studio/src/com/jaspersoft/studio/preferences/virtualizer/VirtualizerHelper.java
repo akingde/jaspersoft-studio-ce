@@ -19,7 +19,7 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 public class VirtualizerHelper {
 	@SuppressWarnings("unchecked")
 	public static void setVirtualizer(JasperDesign jd, PropertiesHelper ps) {
-		if (ps.getBoolean(VirtualizerPreferencePage.JSS_VIRTUALIZER_USE)) {
+		if (ps.getBoolean(VirtualizerPreferencePage.JSS_VIRTUALIZER_USE, false)) {
 			List<JRParameter> params = jd.getParametersList();
 			for (JRParameter p : params) {
 				if (p.getValueClassName().equals(JRVirtualizer.class.getName())) {
