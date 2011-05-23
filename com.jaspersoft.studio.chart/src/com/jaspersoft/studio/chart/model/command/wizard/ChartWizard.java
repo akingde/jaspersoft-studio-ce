@@ -50,8 +50,8 @@ import org.eclipse.jface.wizard.Wizard;
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.chart.model.MChart;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
-import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
 
 public class ChartWizard extends Wizard {
 	private ChartWizardPage page0;

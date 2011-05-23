@@ -274,7 +274,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
 		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
 			String version = p.getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, "last");
-			if (p.getBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG)) {
+			if (p.getBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, false)) {
 				VersionDialog dialog = new VersionDialog(Display.getCurrent().getActiveShell(), version);
 				version = dialog.open(resource.getProject());
 			}

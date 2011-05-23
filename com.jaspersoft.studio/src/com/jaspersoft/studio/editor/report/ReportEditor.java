@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.report;
 
@@ -56,6 +52,9 @@ import com.jaspersoft.studio.editor.outline.actions.CreateVariableAction;
 import com.jaspersoft.studio.editor.outline.actions.DeleteGroupReportAction;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
+import com.jaspersoft.studio.property.section.report.PageFormatAction;
+
 /*
  * The Class ReportEditor.
  * 
@@ -109,7 +108,6 @@ public class ReportEditor extends AbstractVisualEditor {
 
 	@Override
 	protected List<String> getIgnorePalleteElements() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -152,6 +150,12 @@ public class ReportEditor extends AbstractVisualEditor {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 
 					id = CreateBandAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = PageFormatAction.ID;
+					bars.setGlobalActionHandler(id, registry.getAction(id));
+
+					id = DatasetAction.ID;
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 				}
 			};
@@ -215,5 +219,13 @@ public class ReportEditor extends AbstractVisualEditor {
 		action = new DeleteGroupReportAction(this);
 		registry.registerAction(action);
 		getSelectionActions().add(DeleteGroupReportAction.ID);
+
+		action = new PageFormatAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+
+		action = new DatasetAction(this);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
 	}
 }

@@ -74,18 +74,12 @@ import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.wizards.dataset.DatasetWizard;
-import com.jaspersoft.studio.wizards.dataset.WizardDataSourcePage;
-import com.jaspersoft.studio.wizards.dataset.WizardFieldsGroupByPage;
-import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
-/*
- * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container
- * resource (a folder or a project) is selected in the workspace when the wizard is opened, it will accept it as the
- * target container. The wizard creates one file with the extension "jrxml". If a sample multi-page editor (also
- * available as a template) is registered for the same extension, it will be able to open it.
- */
 
 public class ReportNewWizard extends Wizard implements INewWizard {
 	private ReportTemplatesWizardPage step0;

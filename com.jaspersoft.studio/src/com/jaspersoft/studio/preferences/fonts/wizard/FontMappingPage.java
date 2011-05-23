@@ -149,7 +149,7 @@ public class FontMappingPage extends WizardPage {
 
 		});
 
-		new DeleteButton().createOrderButtons(bGroup, tableViewer);
+		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard"); //$NON-NLS-1$
 		fillWidgets();

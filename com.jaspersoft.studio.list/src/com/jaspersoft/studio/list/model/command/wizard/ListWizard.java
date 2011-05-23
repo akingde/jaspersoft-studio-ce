@@ -47,8 +47,8 @@ import org.eclipse.jface.wizard.Wizard;
 import com.jaspersoft.studio.list.messages.Messages;
 import com.jaspersoft.studio.list.model.MList;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
-import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
 
 public class ListWizard extends Wizard {
 	private WizardDatasetPage step1;

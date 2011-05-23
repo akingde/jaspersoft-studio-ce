@@ -20,20 +20,17 @@
 package com.jaspersoft.studio.property.section.report;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.gef.DefaultEditDomain;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.model.ANode;
 
-public class PageFormatAction extends Action {
+public class PageFormatAction extends SelectionAction {
 	public static final String ID = "pageFormatAction"; //$NON-NLS-1$
-	private GraphicalViewer diagramViewer;
 
 	/**
 	 * Constructor
@@ -41,25 +38,37 @@ public class PageFormatAction extends Action {
 	 * @param diagramViewer
 	 *          the GraphicalViewer whose grid enablement and visibility properties are to be toggled
 	 */
-	public PageFormatAction(GraphicalViewer diagramViewer) {
-		super("Page Format ...");
-		this.diagramViewer = diagramViewer;
+	public PageFormatAction(IWorkbenchPart part) {
+		super(part);
+		setLazyEnablementCalculation(false);
+	}
+
+	/**
+	 * Initializes this action's text and images.
+	 */
+	protected void init() {
+		super.init();
+		setText("Page Format ...");
 		setToolTipText("Page format");
 		setId(ID);
-		setActionDefinitionId(ID);
+		setEnabled(false);
 	}
 
 	/**
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
 	public void run() {
-		StructuredSelection ss = (StructuredSelection) diagramViewer.getSelection();
-		ANode n = (ANode) ((EditPart) ss.getFirstElement()).getModel();
-		IFile file = ((IFileEditorInput) ((DefaultEditDomain) diagramViewer.getEditDomain()).getEditorPart()
-				.getEditorInput()).getFile();
+		ReportEditor part = (ReportEditor) getWorkbenchPart();
+		ANode n = (ANode) part.getModel().getChildren().get(0);
+		IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
 		PageFormatDialog dlg = new PageFormatDialog(Display.getCurrent().getActiveShell(), n, file);
 		if (dlg.open() == Window.OK) {
-			diagramViewer.getEditDomain().getCommandStack().execute(dlg.getCommand());
+			part.getEditDomain().getCommandStack().execute(dlg.getCommand());
 		}
+	}
+
+	@Override
+	protected boolean calculateEnabled() {
+		return true;
 	}
 }

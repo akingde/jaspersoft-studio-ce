@@ -49,8 +49,8 @@ import org.eclipse.jface.wizard.Wizard;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.subreport.MSubreport;
+import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyPage;
-import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
 
 public class SubreportWizard extends Wizard {
 

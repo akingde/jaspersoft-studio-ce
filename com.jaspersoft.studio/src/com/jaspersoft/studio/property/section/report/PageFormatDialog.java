@@ -355,7 +355,7 @@ final class PageFormatDialog extends FormDialog {
 
 	private void setJasperDesign(JasperDesign jd) {
 		pheigh.setValue(jd.getPageHeight());
-		pwidth.setValue(jd.getPageHeight());
+		pwidth.setValue(jd.getPageWidth());
 		String format = PageSize.deductPageFormat(jd.getPageWidth(), jd.getPageHeight());
 		pformat.select(PageSize.getFormatIndx(format));
 

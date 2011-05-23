@@ -679,7 +679,20 @@ public class ModelUtils {
 		return name;
 	}
 
+	public static String getNameFormat(String name, int index) {
+		return name + "_" + index;
+	}
+
 	public static String[] getQueryLanguages() {
+		String[] langs = getQueryLanguagesOnly();
+		String[] res = new String[langs.length + 1];
+		res[0] = "";
+		System.arraycopy(langs, 0, res, 1, langs.length);
+
+		return res;
+	}
+
+	public static String[] getQueryLanguagesOnly() {
 		Set<String> langs = new HashSet<String>();
 		List<?> bundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(QueryExecuterFactoryBundle.class);
 		for (Iterator<?> it = bundles.iterator(); it.hasNext();) {
@@ -688,10 +701,7 @@ public class ModelUtils {
 			for (int i = 0; i < l.length; i++)
 				langs.add(l[i]);
 		}
-		List<String> lst = new ArrayList<String>();
-		lst.add(""); //$NON-NLS-1$
-		lst.addAll(langs);
-		return lst.toArray(new String[lst.size()]);
+		return langs.toArray(new String[langs.size()]);
 	}
 
 	public static String[][] getQueryExecuters() {

@@ -163,7 +163,7 @@ public class JRPropertyPage extends WizardPage {
 			}
 		});
 
-		new DeleteButton().createOrderButtons(bGroup, tableViewer);
+		new DeleteButton().createDeleteButton(bGroup, tableViewer);
 		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 	}
 

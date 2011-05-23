@@ -62,6 +62,7 @@ import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 import com.jaspersoft.studio.property.section.report.PageFormatAction;
 
 /*
@@ -143,8 +144,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 				IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SnapToGridAction.ID, Messages.common_snap_to_grid, IAction.AS_CHECK_BOX));
 		addRetargetAction(new RetargetAction(SizeGridAction.ID, Messages.JrxmlEditorContributor_grid_size));
-
-		addRetargetAction(new RetargetAction(PageFormatAction.ID, Messages.JrxmlEditorContributor_pageformat));
 	}
 
 	/**
@@ -353,8 +352,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		viewMenu.add(getAction(SnapToGridAction.ID));
 		viewMenu.add(getAction(GEFActionConstants.TOGGLE_SNAP_TO_GEOMETRY));
 		viewMenu.add(getAction(SizeGridAction.ID));
-		viewMenu.add(new Separator());
-		viewMenu.add(getAction(PageFormatAction.ID));
 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
 

@@ -57,13 +57,13 @@ import org.eclipse.jface.wizard.Wizard;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.model.column.command.CreateColumnCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
-import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
-import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
 
 public class TableWizard extends Wizard {
 	private WizardDatasetPage step1;

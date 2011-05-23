@@ -120,4 +120,11 @@ public class Misc {
 
 		return newStr;
 	}
+
+	public static int indexOf(Object[] array, Object key) {
+		for (int i = 0; i < array.length; i++)
+			if (array[i].equals(key))
+				return i;
+		return -1;
+	}
 }

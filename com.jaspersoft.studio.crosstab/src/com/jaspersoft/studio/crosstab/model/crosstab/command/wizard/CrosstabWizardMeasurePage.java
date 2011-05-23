@@ -62,9 +62,9 @@ import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.variable.MVariable;
+import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
 
 public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {

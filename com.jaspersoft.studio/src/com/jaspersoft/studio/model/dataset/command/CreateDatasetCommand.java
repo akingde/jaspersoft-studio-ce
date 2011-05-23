@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
-import com.jaspersoft.studio.wizards.dataset.DatasetWizard;
+import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 /*/*
  * link nodes & together.
  * 

@@ -75,10 +75,10 @@ import com.jaspersoft.studio.crosstab.model.rowgroup.command.CreateRowGroupComma
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.MElementDataset;
 import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
+import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.wizards.dataset.WizardConnectionPage;
-import com.jaspersoft.studio.wizards.dataset.WizardDatasetPage;
-import com.jaspersoft.studio.wizards.dataset.WizardFieldsPage;
 
 public class CrosstabWizard extends Wizard {
 	private WizardDatasetPage step1;
