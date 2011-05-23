@@ -32,20 +32,16 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 
 import com.jasperassistant.designer.viewer.IReportViewer;
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.preferences.editor.pages.Pages;
 import com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public abstract class AbstractExportAction extends AReportViewerAction {
-	public static final ImageDescriptor ICON = JaspersoftStudioPlugin.getImageDescriptor("icons/resources/save.GIF"); //$NON-NLS-1$
-	public static final ImageDescriptor DISABLED_ICON = ICON;
 
 	private String[] filterNames;
 
@@ -60,15 +56,11 @@ public abstract class AbstractExportAction extends AReportViewerAction {
 
 	public AbstractExportAction(IReportViewer viewer, IResource resouce) {
 		super(viewer);
-		setImageDescriptor(ICON);
-		setDisabledImageDescriptor(DISABLED_ICON);
 		this.resource = resouce;
 	}
 
 	public AbstractExportAction(IReportViewer viewer, IResource resouce, int style) {
 		super(viewer, style);
-		setImageDescriptor(ICON);
-		setDisabledImageDescriptor(DISABLED_ICON);
 		this.resource = resouce;
 	}
 

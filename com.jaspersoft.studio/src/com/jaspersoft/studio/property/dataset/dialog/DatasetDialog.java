@@ -204,13 +204,15 @@ final class DatasetDialog extends FormDialog {
 		JRDesignDataset ds = (JRDesignDataset) mdataset.getValue();
 		command = new CompoundCommand();
 		IPropertySource mquery = (IPropertySource) mdataset.getPropertyValue(JRDesignDataset.PROPERTY_QUERY);
-		String lang = languages[langCombo.getSelectionIndex()];
-		if (ds.getQuery().getLanguage().equals(lang))
-			command.add(createCommand(JRDesignQuery.PROPERTY_LANGUAGE, lang, mquery));
-		String qtext = "";
-		if (ds.getQuery().getText().equals(qtext))
-			command.add(createCommand(JRDesignQuery.PROPERTY_TEXT, lang, mquery));
-
+		int langind = langCombo.getSelectionIndex();
+		if (langind >= 0 && langind < languages.length && ds.getQuery() != null) {
+			String lang = languages[langind];
+			if (ds.getQuery().getLanguage().equals(lang))
+				command.add(createCommand(JRDesignQuery.PROPERTY_LANGUAGE, lang, mquery));
+			String qtext = "";
+			if (ds.getQuery().getText().equals(qtext))
+				command.add(createCommand(JRDesignQuery.PROPERTY_TEXT, lang, mquery));
+		}
 		// read dataset, if not exists in dataset, delete it
 		// read list, if not exists in dataset, add it
 
