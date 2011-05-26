@@ -18,8 +18,9 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package com.jaspersoft.studio.preferences.editor;
+package com.jaspersoft.studio.preferences.editor.properties;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.sf.jasperreports.engine.util.JRProperties;
@@ -75,6 +76,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	protected void doLoad() {
 		if (getTable() != null) {
 			List<PropertySuffix> lst = JRProperties.getProperties("");
+			Collections.sort(lst, new PropertyComparator());
 			for (PropertySuffix ps : lst) {
 				String s = getPreferenceStore().getString(ps.getKey());
 
@@ -93,6 +95,7 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			getTable().removeAll();
 
 			List<PropertySuffix> lst = JRProperties.getProperties("");
+			Collections.sort(lst, new PropertyComparator());
 			for (PropertySuffix ps : lst) {
 				String s = getPreferenceStore().getDefaultString(ps.getKey());
 
