@@ -60,7 +60,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.html.HtmlNodeIconDescriptor;
 import com.jaspersoft.studio.html.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -74,7 +73,6 @@ public class MHtml extends MGraphicElement {
 	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 	private static IIconDescriptor iconDescriptor;
-	private MExpression htmlContentExpression;
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
 
 	/**
@@ -168,7 +166,8 @@ public class MHtml extends MGraphicElement {
 	 * @param desc
 	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor contentExprD = new JRExpressionPropertyDescriptor(
@@ -180,7 +179,8 @@ public class MHtml extends MGraphicElement {
 
 		ComboBoxPropertyDescriptor scaleTypeD = new ComboBoxPropertyDescriptor(
 				HtmlComponent.PROPERTY_SCALE_TYPE, Messages.MHtml_scaletype,
-				EnumHelper.getEnumNames(ScaleImageEnum.values(), NullEnum.NOTNULL));
+				EnumHelper.getEnumNames(ScaleImageEnum.values(),
+						NullEnum.NOTNULL));
 		scaleTypeD.setDescription(Messages.MHtml_scaletype_description);
 		desc.add(scaleTypeD);
 
@@ -202,13 +202,15 @@ public class MHtml extends MGraphicElement {
 				HtmlComponent.PROPERTY_EVALUATION_TIME,
 				Messages.MHtml_evaluation_time, EnumHelper.getEnumNames(
 						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
-		evaluationTimeD.setDescription(Messages.MHtml_evaluation_time_description);
+		evaluationTimeD
+				.setDescription(Messages.MHtml_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
 		evaluationGroupNameD = new RComboBoxPropertyDescriptor(
 				HtmlComponent.PROPERTY_EVALUATION_GROUP,
 				Messages.MHtml_evaluation_group, new String[] { "" }); //$NON-NLS-1$
-		evaluationGroupNameD.setDescription(Messages.MHtml_evaluation_group_description);
+		evaluationGroupNameD
+				.setDescription(Messages.MHtml_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
 		contentExprD.setCategory(Messages.common_properties_category);
@@ -218,10 +220,14 @@ public class MHtml extends MGraphicElement {
 		evaluationTimeD.setCategory(Messages.common_properties_category);
 		evaluationGroupNameD.setCategory(Messages.common_properties_category);
 
-		defaultsMap.put(HtmlComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
-		defaultsMap.put(HtmlComponent.PROPERTY_SCALE_TYPE, ScaleImageEnum.RETAIN_SHAPE);
-		defaultsMap.put(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN, HorizontalAlignEnum.LEFT);
-		defaultsMap.put(HtmlComponent.PROPERTY_VERTICAL_ALIGN, VerticalAlignEnum.MIDDLE);
+		defaultsMap.put(HtmlComponent.PROPERTY_EVALUATION_TIME,
+				EvaluationTimeEnum.NOW);
+		defaultsMap.put(HtmlComponent.PROPERTY_SCALE_TYPE,
+				ScaleImageEnum.RETAIN_SHAPE);
+		defaultsMap.put(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN,
+				HorizontalAlignEnum.LEFT);
+		defaultsMap.put(HtmlComponent.PROPERTY_VERTICAL_ALIGN,
+				VerticalAlignEnum.MIDDLE);
 	}
 
 	@Override
@@ -236,11 +242,13 @@ public class MHtml extends MGraphicElement {
 		if (getValue() != null) {
 			Object obj = getComponent();
 			if (obj instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport().removePropertyChangeListener(this);
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.removePropertyChangeListener(this);
 		} else if (value != null) {
 			Object obj = getComponent(value);
 			if (value instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport().addPropertyChangeListener(this);
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.addPropertyChangeListener(this);
 			super.setValue(value);
 			return;
 		}
@@ -275,11 +283,9 @@ public class MHtml extends MGraphicElement {
 			return EnumHelper.getValue(htmlComp.getHorizontalAlign(), 1, false);
 		if (id.equals(HtmlComponent.PROPERTY_VERTICAL_ALIGN))
 			return EnumHelper.getValue(htmlComp.getVerticalAlign(), 1, false);
-		if (id.equals(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION)) {
-			htmlContentExpression = ExprUtil.getExpression(this,
-					htmlContentExpression, htmlComp.getHtmlContentExpression());
-			return htmlContentExpression;
-		}
+		if (id.equals(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION))
+			return ExprUtil.getExpression(htmlComp.getHtmlContentExpression());
+
 		return super.getPropertyValue(id);
 	}
 
@@ -296,8 +302,7 @@ public class MHtml extends MGraphicElement {
 		else if (id.equals(HtmlComponent.PROPERTY_SCALE_TYPE)) {
 			htmlComp.setScaleType((ScaleImageEnum) EnumHelper.getSetValue(
 					ScaleImageEnum.values(), value, 1, false));
-		}
-		else if (id.equals(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN))
+		} else if (id.equals(HtmlComponent.PROPERTY_HORIZONTAL_ALIGN))
 			htmlComp.setHorizontalAlign((HorizontalAlignEnum) EnumHelper
 					.getSetValue(HorizontalAlignEnum.values(), value, 1, false));
 		else if (id.equals(HtmlComponent.PROPERTY_VERTICAL_ALIGN))

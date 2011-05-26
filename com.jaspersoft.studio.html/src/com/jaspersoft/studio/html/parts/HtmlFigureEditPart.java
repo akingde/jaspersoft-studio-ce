@@ -34,7 +34,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.html.model.MHtml;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
@@ -45,8 +44,10 @@ public class HtmlFigureEditPart extends FigureEditPart {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			JRExpressionEditor wizard = new JRExpressionEditor();
 			MHtml m = (MHtml) getModel();
-			wizard.setValue((MExpression) m.getPropertyValue(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION));
-			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			wizard.setValue((String) m
+					.getPropertyValue(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION));
+			WizardDialog dialog = new WizardDialog(Display.getCurrent()
+					.getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				SetValueCommand cmd = new SetValueCommand();

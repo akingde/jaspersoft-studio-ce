@@ -57,7 +57,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.FloatPropertyDescriptor;
@@ -193,12 +192,6 @@ public class MChartPieDataset extends MChartDataset {
 	private MHyperLink mHyperLink;
 	private MHyperLink omHyperLink;
 
-	private MExpression cExpression;
-	private MExpression dExpression;
-	private MExpression hExpression;
-	private MExpression lExpression;
-	private MExpression oExpression;
-
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignPieDataset jrElement = (JRDesignPieDataset) getValue();
@@ -234,16 +227,10 @@ public class MChartPieDataset extends MChartDataset {
 		// jrElement.getLabelExpression());
 		// return dExpression;
 		// }
-		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION)) {
-			hExpression = ExprUtil.getExpression(this, hExpression,
-					jrElement.getOtherKeyExpression());
-			return hExpression;
-		}
-		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION)) {
-			lExpression = ExprUtil.getExpression(this, lExpression,
-					jrElement.getOtherLabelExpression());
-			return lExpression;
-		}
+		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getOtherKeyExpression());
+		if (id.equals(JRDesignPieDataset.PROPERTY_OTHER_LABEL_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getOtherLabelExpression());
 		// if (id.equals(JRDesignPieDataset.PROPERTY_VALUE_EXPRESSION)) {
 		// oExpression = ExprUtil.getExpression(this, oExpression,
 		// jrElement.getValueExpression());

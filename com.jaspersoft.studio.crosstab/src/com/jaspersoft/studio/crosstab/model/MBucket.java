@@ -52,7 +52,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
@@ -64,11 +63,11 @@ public class MBucket extends APropertyNode {
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MBucket(JRCrosstabBucket jfRield) {
 		super();
@@ -117,7 +116,8 @@ public class MBucket extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -126,73 +126,80 @@ public class MBucket extends APropertyNode {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignCrosstabBucket.PROPERTY_ORDER,
-				Messages.common_order, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(
+				JRDesignCrosstabBucket.PROPERTY_ORDER, Messages.common_order,
+				EnumHelper.getEnumNames(SortOrderEnum.values(),
+						NullEnum.NOTNULL));
 		orderD.setDescription(Messages.MBucket_order_description);
 		desc.add(orderD);
 
 		JRExpressionPropertyDescriptor orderByExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION, Messages.MBucket_order_by_expression);
-		orderByExprD.setDescription(Messages.MBucket_order_by_expression_description);
+				JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION,
+				Messages.MBucket_order_by_expression);
+		orderByExprD
+				.setDescription(Messages.MBucket_order_by_expression_description);
 		desc.add(orderByExprD);
 
 		JRExpressionPropertyDescriptor compExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION, Messages.MBucket_comparator_expression);
-		compExprD.setDescription(Messages.MBucket_comparator_expression_description);
+				JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION,
+				Messages.MBucket_comparator_expression);
+		compExprD
+				.setDescription(Messages.MBucket_comparator_expression_description);
 		desc.add(compExprD);
 
 		JRExpressionPropertyDescriptor exprD = new JRExpressionPropertyDescriptor(
-				JRDesignCrosstabBucket.PROPERTY_EXPRESSION, Messages.MBucket_expression);
+				JRDesignCrosstabBucket.PROPERTY_EXPRESSION,
+				Messages.MBucket_expression);
 		exprD.setDescription(Messages.MBucket_expression_description);
 		desc.add(exprD);
 	}
 
-	private MExpression oExpression;
-	private MExpression cExpression;
-	private MExpression eExpression;
-
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabBucket jrField = (JRDesignCrosstabBucket) getValue();
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER))
 			return EnumHelper.getValue(jrField.getOrderValue(), 1, false);
-		if (id.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION)) {
-			cExpression = ExprUtil.getExpression(this, cExpression, jrField.getComparatorExpression());
-			return cExpression;
-		}
-		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION)) {
-			oExpression = ExprUtil.getExpression(this, oExpression, jrField.getOrderByExpression());
-			return oExpression;
-		}
-		if (id.equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION)) {
-			eExpression = ExprUtil.getExpression(this, eExpression, jrField.getExpression());
-			return eExpression;
-		}
+		if (id.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION))
+			return ExprUtil.getExpression(jrField.getComparatorExpression());
+		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION))
+			return ExprUtil.getExpression(jrField.getOrderByExpression());
+		if (id.equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION))
+			return ExprUtil.getExpression(jrField.getExpression());
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabBucket jrField = (JRDesignCrosstabBucket) getValue();
 
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER))
-			jrField.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
-		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION))
-			jrField.setComparatorExpression(ExprUtil.setValues(jrField.getComparatorExpression(), value));
+			jrField.setOrder((SortOrderEnum) EnumHelper.getSetValue(
+					SortOrderEnum.values(), value, 1, false));
+		else if (id
+				.equals(JRDesignCrosstabBucket.PROPERTY_COMPARATOR_EXPRESSION))
+			jrField.setComparatorExpression(ExprUtil.setValues(
+					jrField.getComparatorExpression(), value));
 		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_ORDER_BY_EXPRESSION))
-			jrField.setOrderByExpression(ExprUtil.setValues(jrField.getOrderByExpression(), value));
+			jrField.setOrderByExpression(ExprUtil.setValues(
+					jrField.getOrderByExpression(), value));
 		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION))
-			jrField.setExpression((JRDesignExpression) ExprUtil.setValues(jrField.getExpression(), value));
+			jrField.setExpression((JRDesignExpression) ExprUtil.setValues(
+					jrField.getExpression(), value));
 	}
 }

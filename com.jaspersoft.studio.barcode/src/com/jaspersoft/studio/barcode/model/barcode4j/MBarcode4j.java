@@ -55,12 +55,12 @@ import com.jaspersoft.studio.barcode.BarcodeNodeIconDescriptor;
 import com.jaspersoft.studio.barcode.messages.Messages;
 import com.jaspersoft.studio.barcode.model.MBarcode;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+
 /*
  * The Class MBarcode.
  */
@@ -91,13 +91,14 @@ public class MBarcode4j extends MBarcode {
 	 * Instantiates a new m barcode.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jrBarcode
-	 *          the jr barcode
+	 *            the jr barcode
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
-	public MBarcode4j(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
+	public MBarcode4j(ANode parent, JRDesignComponentElement jrBarcode,
+			int newIndex) {
 		super(parent, newIndex);
 		setValue(jrBarcode);
 	}
@@ -153,7 +154,8 @@ public class MBarcode4j extends MBarcode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -162,39 +164,51 @@ public class MBarcode4j extends MBarcode {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(BarcodeComponent.PROPERTY_ORIENTATION,
+		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(
+				BarcodeComponent.PROPERTY_ORIENTATION,
 				Messages.MBarcode4j_orientation, Orientation.getItems());
-		orientationD.setDescription(Messages.MBarcode4j_orientation_description);
+		orientationD
+				.setDescription(Messages.MBarcode4j_orientation_description);
 		desc.add(orientationD);
 
 		JRExpressionPropertyDescriptor patternExprD = new JRExpressionPropertyDescriptor(
-				BarcodeComponent.PROPERTY_PATTERN_EXPRESSION, Messages.MBarcode4j_pattern_expression);
-		patternExprD.setDescription(Messages.MBarcode4j_pattern_expression_description);
+				BarcodeComponent.PROPERTY_PATTERN_EXPRESSION,
+				Messages.MBarcode4j_pattern_expression);
+		patternExprD
+				.setDescription(Messages.MBarcode4j_pattern_expression_description);
 		desc.add(patternExprD);
 
-		ComboBoxPropertyDescriptor textPositionD = new ComboBoxPropertyDescriptor(BarcodeComponent.PROPERTY_TEXT_POSITION,
+		ComboBoxPropertyDescriptor textPositionD = new ComboBoxPropertyDescriptor(
+				BarcodeComponent.PROPERTY_TEXT_POSITION,
 				Messages.MBarcode4j_text_position, TextPosition.getItems());
-		textPositionD.setDescription(Messages.MBarcode4j_text_position_description);
+		textPositionD
+				.setDescription(Messages.MBarcode4j_text_position_description);
 		desc.add(textPositionD);
 
-		DoublePropertyDescriptor quiteZoneD = new DoublePropertyDescriptor(BarcodeComponent.PROPERTY_QUIET_ZONE,
+		DoublePropertyDescriptor quiteZoneD = new DoublePropertyDescriptor(
+				BarcodeComponent.PROPERTY_QUIET_ZONE,
 				Messages.MBarcode4j_quiet_zone);
 		quiteZoneD.setDescription(Messages.MBarcode4j_quiet_zone_description);
 		desc.add(quiteZoneD);
 
-		DoublePropertyDescriptor moduleWidthD = new DoublePropertyDescriptor(BarcodeComponent.PROPERTY_MODULE_WIDTH,
+		DoublePropertyDescriptor moduleWidthD = new DoublePropertyDescriptor(
+				BarcodeComponent.PROPERTY_MODULE_WIDTH,
 				Messages.MBarcode4j_module_width);
-		moduleWidthD.setDescription(Messages.MBarcode4j_module_width_description);
+		moduleWidthD
+				.setDescription(Messages.MBarcode4j_module_width_description);
 		desc.add(moduleWidthD);
 
 		DoublePropertyDescriptor vertQuietZoneD = new DoublePropertyDescriptor(
-				BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE, Messages.MBarcode4j_vertical_quiet_zone);
-		vertQuietZoneD.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
+				BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE,
+				Messages.MBarcode4j_vertical_quiet_zone);
+		vertQuietZoneD
+				.setDescription(Messages.MBarcode4j_vertical_quiet_zone_description);
 		desc.add(vertQuietZoneD);
 
 		vertQuietZoneD.setCategory(Messages.common_properties_category);
@@ -206,16 +220,14 @@ public class MBarcode4j extends MBarcode {
 
 	}
 
-	private MExpression codeExpression;
-	private MExpression ptExpression;
-
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		BarcodeComponent jrList = (BarcodeComponent) jrElement.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrList.getEvaluationTimeValue(), 1, false);
+			return EnumHelper.getValue(jrList.getEvaluationTimeValue(), 1,
+					false);
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			return jrList.getEvaluationGroup();
 
@@ -230,15 +242,10 @@ public class MBarcode4j extends MBarcode {
 		if (id.equals(BarcodeComponent.PROPERTY_TEXT_POSITION))
 			return TextPosition.getPos4TextPosition(jrList.getTextPosition());
 
-		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			codeExpression = ExprUtil.getExpression(this, codeExpression, jrList.getCodeExpression());
-			return codeExpression;
-		}
-		if (id.equals(BarcodeComponent.PROPERTY_PATTERN_EXPRESSION)) {
-			ptExpression = ExprUtil.getExpression(this, ptExpression, jrList.getPatternExpression());
-			return ptExpression;
-		}
-
+		if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION))
+			return ExprUtil.getExpression(jrList.getCodeExpression());
+		if (id.equals(BarcodeComponent.PROPERTY_PATTERN_EXPRESSION))
+			return ExprUtil.getExpression(jrList.getPatternExpression());
 		return super.getPropertyValue(id);
 	}
 
@@ -248,8 +255,8 @@ public class MBarcode4j extends MBarcode {
 		BarcodeComponent jrList = (BarcodeComponent) jrElement.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			jrList.setEvaluationTimeValue((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1,
-					false));
+			jrList.setEvaluationTimeValue((EvaluationTimeEnum) EnumHelper
+					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			jrList.setEvaluationGroup((String) value);
 
@@ -260,14 +267,19 @@ public class MBarcode4j extends MBarcode {
 		else if (id.equals(BarcodeComponent.PROPERTY_VERTICAL_QUIET_ZONE))
 			jrList.setVerticalQuietZone((Double) value);
 		else if (id.equals(BarcodeComponent.PROPERTY_ORIENTATION))
-			jrList.setOrientation(Orientation.getOrientation4Pos((Integer) value));
+			jrList.setOrientation(Orientation
+					.getOrientation4Pos((Integer) value));
 		else if (id.equals(BarcodeComponent.PROPERTY_TEXT_POSITION))
-			jrList.setTextPosition(TextPosition.getTextPosition4Pos((Integer) value));
+			jrList.setTextPosition(TextPosition
+					.getTextPosition4Pos((Integer) value));
 
 		else if (id.equals(BarcodeComponent.PROPERTY_PATTERN_EXPRESSION)) {
-			jrList.setPatternExpression(ExprUtil.setValues(jrList.getPatternExpression(), value));
-		} else if (id.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
-			jrList.setCodeExpression(ExprUtil.setValues(jrList.getCodeExpression(), value));
+			jrList.setPatternExpression(ExprUtil.setValues(
+					jrList.getPatternExpression(), value));
+		} else if (id
+				.equals(StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION)) {
+			jrList.setCodeExpression(ExprUtil.setValues(
+					jrList.getCodeExpression(), value));
 		} else
 			super.setPropertyValue(id, value);
 	}

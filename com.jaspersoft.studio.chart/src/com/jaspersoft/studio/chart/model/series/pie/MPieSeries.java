@@ -56,7 +56,6 @@ import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
@@ -102,7 +101,8 @@ public class MPieSeries extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -111,28 +111,34 @@ public class MPieSeries extends APropertyNode {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor keyExpD = new JRExpressionPropertyDescriptor(
-				JRDesignPieSeries.PROPERTY_KEY_EXPRESSION, Messages.common_key_expression);
+				JRDesignPieSeries.PROPERTY_KEY_EXPRESSION,
+				Messages.common_key_expression);
 		keyExpD.setDescription(Messages.MPieSeries_key_expression_description);
 		desc.add(keyExpD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
+				JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION,
+				Messages.common_label_expression);
 		lblExprD.setDescription(Messages.MPieSeries_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor valExprD = new JRExpressionPropertyDescriptor(
-				JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION, Messages.common_value_expression);
+				JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION,
+				Messages.common_value_expression);
 		valExprD.setDescription(Messages.MPieSeries_value_expression_description);
 		desc.add(valExprD);
 
-		JRPropertyDescriptor sectionHyperLinkD = new JRPropertyDescriptor(JRDesignPieSeries.PROPERTY_SECTION_HYPERLINK,
+		JRPropertyDescriptor sectionHyperLinkD = new JRPropertyDescriptor(
+				JRDesignPieSeries.PROPERTY_SECTION_HYPERLINK,
 				Messages.common_section_hyperlink);
-		sectionHyperLinkD.setDescription(Messages.MPieSeries_section_hyperlink_description);
+		sectionHyperLinkD
+				.setDescription(Messages.MPieSeries_section_hyperlink_description);
 		desc.add(sectionHyperLinkD);
 
 		defaultsMap.put(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION, null);
@@ -143,10 +149,6 @@ public class MPieSeries extends APropertyNode {
 	}
 
 	private MHyperLink mHyperLink;
-
-	private MExpression dExpression;
-	private MExpression hExpression;
-	private MExpression lExpression;
 
 	public Object getPropertyValue(Object id) {
 		JRDesignPieSeries jrElement = (JRDesignPieSeries) getValue();
@@ -159,19 +161,12 @@ public class MPieSeries extends APropertyNode {
 			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
-		if (id.equals(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION)) {
-			dExpression = ExprUtil.getExpression(this, dExpression, jrElement.getKeyExpression());
-			return dExpression;
-		}
-		if (id.equals(JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION)) {
-			hExpression = ExprUtil.getExpression(this, hExpression, jrElement.getLabelExpression());
-			return hExpression;
-		}
-		if (id.equals(JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION)) {
-			lExpression = ExprUtil.getExpression(this, lExpression, jrElement.getValueExpression());
-			return lExpression;
-		}
-
+		if (id.equals(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getKeyExpression());
+		if (id.equals(JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getLabelExpression());
+		if (id.equals(JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getValueExpression());
 		return null;
 	}
 
@@ -179,11 +174,14 @@ public class MPieSeries extends APropertyNode {
 		JRDesignPieSeries jrElement = (JRDesignPieSeries) getValue();
 
 		if (id.equals(JRDesignPieSeries.PROPERTY_KEY_EXPRESSION))
-			jrElement.setKeyExpression(ExprUtil.setValues(jrElement.getKeyExpression(), value));
+			jrElement.setKeyExpression(ExprUtil.setValues(
+					jrElement.getKeyExpression(), value));
 		else if (id.equals(JRDesignPieSeries.PROPERTY_LABEL_EXPRESSION))
-			jrElement.setLabelExpression(ExprUtil.setValues(jrElement.getKeyExpression(), value));
+			jrElement.setLabelExpression(ExprUtil.setValues(
+					jrElement.getKeyExpression(), value));
 		else if (id.equals(JRDesignPieSeries.PROPERTY_VALUE_EXPRESSION))
-			jrElement.setValueExpression(ExprUtil.setValues(jrElement.getValueExpression(), value));
+			jrElement.setValueExpression(ExprUtil.setValues(
+					jrElement.getValueExpression(), value));
 	}
 
 	public ImageDescriptor getImagePath() {

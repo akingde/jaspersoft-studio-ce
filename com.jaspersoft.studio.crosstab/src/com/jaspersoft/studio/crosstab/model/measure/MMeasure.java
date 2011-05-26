@@ -55,7 +55,6 @@ import com.jaspersoft.studio.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
@@ -91,11 +90,11 @@ public class MMeasure extends APropertyNode implements ICopyable {
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MMeasure(ANode parent, JRCrosstabMeasure jfRield, int newIndex) {
 		super(parent, newIndex);
@@ -144,7 +143,8 @@ public class MMeasure extends APropertyNode implements ICopyable {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -153,55 +153,64 @@ public class MMeasure extends APropertyNode implements ICopyable {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignCrosstabMeasure.PROPERTY_NAME,
-				Messages.common_name);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(
+				JRDesignCrosstabMeasure.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MMeasure_name_description);
 		desc.add(nameD);
 
 		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_CALCULATION, Messages.common_calculation, EnumHelper.getEnumNames(
+				JRDesignCrosstabMeasure.PROPERTY_CALCULATION,
+				Messages.common_calculation, EnumHelper.getEnumNames(
 						CalculationEnum.values(), NullEnum.NOTNULL));
 		calculationD.setDescription(Messages.MMeasure_calculation_description);
 		desc.add(calculationD);
 
 		ComboBoxPropertyDescriptor percentOfTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE, Messages.MMeasure_percentage_of_type,
-				EnumHelper.getEnumNames(CrosstabPercentageEnum.values(), NullEnum.NOTNULL));
-		percentOfTypeD.setDescription(Messages.MMeasure_percentage_of_type_description);
+				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE,
+				Messages.MMeasure_percentage_of_type, EnumHelper.getEnumNames(
+						CrosstabPercentageEnum.values(), NullEnum.NOTNULL));
+		percentOfTypeD
+				.setDescription(Messages.MMeasure_percentage_of_type_description);
 		desc.add(percentOfTypeD);
 
 		JRExpressionPropertyDescriptor valueExprD = new JRExpressionPropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION, Messages.MMeasure_value_expression);
-		valueExprD.setDescription(Messages.MMeasure_value_expression_description);
+				JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION,
+				Messages.MMeasure_value_expression);
+		valueExprD
+				.setDescription(Messages.MMeasure_value_expression_description);
 		desc.add(valueExprD);
 
 		ClassTypePropertyDescriptor valueClassD = new ClassTypePropertyDescriptor(
-				JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS, Messages.MMeasure_value_class);
+				JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS,
+				Messages.MMeasure_value_class);
 		valueClassD.setDescription(Messages.MMeasure_value_class_description);
 		desc.add(valueClassD);
 
 		ClassTypePropertyDescriptor incFactClassD = new ClassTypePropertyDescriptor(
 				JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME,
 				Messages.MMeasure_incrementer_factory_class_name);
-		incFactClassD.setDescription(Messages.MMeasure_incrementer_factory_class_name_description);
+		incFactClassD
+				.setDescription(Messages.MMeasure_incrementer_factory_class_name_description);
 		desc.add(incFactClassD);
 
 		ClassTypePropertyDescriptor percCalcClassD = new ClassTypePropertyDescriptor(
 				JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME,
 				Messages.MMeasure_percentage_calculation_class_name);
-		percCalcClassD.setDescription(Messages.MMeasure_percentage_calculation_class_name_description);
+		percCalcClassD
+				.setDescription(Messages.MMeasure_percentage_calculation_class_name_description);
 		desc.add(percCalcClassD);
 	}
-
-	private MExpression vExpression;
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabMeasure jrField = (JRDesignCrosstabMeasure) getValue();
@@ -211,10 +220,9 @@ public class MMeasure extends APropertyNode implements ICopyable {
 			return EnumHelper.getValue(jrField.getCalculationValue(), 0, false);
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE))
 			return EnumHelper.getValue(jrField.getPercentageType(), 0, false);
-		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION)) {
-			vExpression = ExprUtil.getExpression(this, vExpression, jrField.getValueExpression());
-			return vExpression;
-		}
+		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION))
+			return ExprUtil.getExpression(jrField.getValueExpression());
+
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS))
 			return jrField.getValueClass();
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
@@ -227,24 +235,31 @@ public class MMeasure extends APropertyNode implements ICopyable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabMeasure jrField = (JRDesignCrosstabMeasure) getValue();
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_NAME))
 			jrField.setName((String) value);
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_CALCULATION))
-			jrField.setCalculation((CalculationEnum) EnumHelper.getSetValue(CalculationEnum.values(), value, 0, false));
+			jrField.setCalculation((CalculationEnum) EnumHelper.getSetValue(
+					CalculationEnum.values(), value, 0, false));
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_OF_TYPE))
-			jrField.setPercentageType((CrosstabPercentageEnum) EnumHelper.getSetValue(CrosstabPercentageEnum.values(), value,
-					0, false));
+			jrField.setPercentageType((CrosstabPercentageEnum) EnumHelper
+					.getSetValue(CrosstabPercentageEnum.values(), value, 0,
+							false));
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_EXPRESSION))
-			jrField.setValueExpression(ExprUtil.setValues(jrField.getValueExpression(), value));
+			jrField.setValueExpression(ExprUtil.setValues(
+					jrField.getValueExpression(), value));
 		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS))
 			jrField.setValueClassName((String) value);
-		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
+		else if (id
+				.equals(JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
 			jrField.setIncrementerFactoryClassName((String) value);
-		else if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME))
+		else if (id
+				.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME))
 			jrField.setPercentageCalculatorClassName((String) value);
 	}
 

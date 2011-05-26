@@ -56,7 +56,6 @@ import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
@@ -102,7 +101,8 @@ public class MTimeSeries extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -111,36 +111,46 @@ public class MTimeSeries extends APropertyNode {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor timePeriodD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeries.PROPERTY_TIME_PERIOD_EXPRESSION, Messages.MTimeSeries_time_period_expression);
-		timePeriodD.setDescription(Messages.MTimeSeries_time_period_expression_description);
+				JRDesignTimeSeries.PROPERTY_TIME_PERIOD_EXPRESSION,
+				Messages.MTimeSeries_time_period_expression);
+		timePeriodD
+				.setDescription(Messages.MTimeSeries_time_period_expression_description);
 		desc.add(timePeriodD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeries.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
+				JRDesignTimeSeries.PROPERTY_LABEL_EXPRESSION,
+				Messages.common_label_expression);
 		lblExprD.setDescription(Messages.MTimeSeries_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
-		seriesExprD.setDescription(Messages.MTimeSeries_series_expression_description);
+				JRDesignTimeSeries.PROPERTY_SERIES_EXPRESSION,
+				Messages.common_series_expression);
+		seriesExprD
+				.setDescription(Messages.MTimeSeries_series_expression_description);
 		desc.add(seriesExprD);
 
 		JRExpressionPropertyDescriptor valExprD = new JRExpressionPropertyDescriptor(
-				JRDesignTimeSeries.PROPERTY_VALUE_EXPRESSION, Messages.common_value_expression);
+				JRDesignTimeSeries.PROPERTY_VALUE_EXPRESSION,
+				Messages.common_value_expression);
 		valExprD.setDescription(Messages.MTimeSeries_value_expression_description);
 		desc.add(valExprD);
 
-		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignTimeSeries.PROPERTY_ITEM_HYPERLINK,
+		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(
+				JRDesignTimeSeries.PROPERTY_ITEM_HYPERLINK,
 				Messages.common_item_hyperlink);
-		itemHyperLinkD.setDescription(Messages.MTimeSeries_item_hyperlink_description);
+		itemHyperLinkD
+				.setDescription(Messages.MTimeSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 
-		defaultsMap.put(JRDesignTimeSeries.PROPERTY_TIME_PERIOD_EXPRESSION, null);
+		defaultsMap.put(JRDesignTimeSeries.PROPERTY_TIME_PERIOD_EXPRESSION,
+				null);
 		defaultsMap.put(JRDesignTimeSeries.PROPERTY_LABEL_EXPRESSION, null);
 		defaultsMap.put(JRDesignTimeSeries.PROPERTY_SERIES_EXPRESSION, null);
 		defaultsMap.put(JRDesignTimeSeries.PROPERTY_VALUE_EXPRESSION, null);
@@ -149,11 +159,6 @@ public class MTimeSeries extends APropertyNode {
 	}
 
 	private MHyperLink mHyperLink;
-
-	private MExpression tpExpression;
-	private MExpression vExpression;
-	private MExpression lExpression;
-	private MExpression sExpression;
 
 	public Object getPropertyValue(Object id) {
 		JRDesignTimeSeries jrElement = (JRDesignTimeSeries) getValue();
@@ -166,22 +171,14 @@ public class MTimeSeries extends APropertyNode {
 			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
-		if (id.equals(JRDesignTimeSeries.PROPERTY_TIME_PERIOD_EXPRESSION)) {
-			tpExpression = ExprUtil.getExpression(this, tpExpression, jrElement.getTimePeriodExpression());
-			return tpExpression;
-		}
-		if (id.equals(JRDesignTimeSeries.PROPERTY_LABEL_EXPRESSION)) {
-			lExpression = ExprUtil.getExpression(this, lExpression, jrElement.getLabelExpression());
-			return lExpression;
-		}
-		if (id.equals(JRDesignTimeSeries.PROPERTY_SERIES_EXPRESSION)) {
-			sExpression = ExprUtil.getExpression(this, sExpression, jrElement.getSeriesExpression());
-			return sExpression;
-		}
-		if (id.equals(JRDesignTimeSeries.PROPERTY_VALUE_EXPRESSION)) {
-			vExpression = ExprUtil.getExpression(this, vExpression, jrElement.getValueExpression());
-			return vExpression;
-		}
+		if (id.equals(JRDesignTimeSeries.PROPERTY_TIME_PERIOD_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getTimePeriodExpression());
+		if (id.equals(JRDesignTimeSeries.PROPERTY_LABEL_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getLabelExpression());
+		if (id.equals(JRDesignTimeSeries.PROPERTY_SERIES_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getSeriesExpression());
+		if (id.equals(JRDesignTimeSeries.PROPERTY_VALUE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getValueExpression());
 
 		return null;
 	}
@@ -190,13 +187,17 @@ public class MTimeSeries extends APropertyNode {
 		JRDesignTimeSeries jrElement = (JRDesignTimeSeries) getValue();
 
 		if (id.equals(JRDesignTimeSeries.PROPERTY_TIME_PERIOD_EXPRESSION))
-			jrElement.setTimePeriodExpression(ExprUtil.setValues(jrElement.getTimePeriodExpression(), value));
+			jrElement.setTimePeriodExpression(ExprUtil.setValues(
+					jrElement.getTimePeriodExpression(), value));
 		else if (id.equals(JRDesignTimeSeries.PROPERTY_LABEL_EXPRESSION))
-			jrElement.setLabelExpression(ExprUtil.setValues(jrElement.getLabelExpression(), value));
+			jrElement.setLabelExpression(ExprUtil.setValues(
+					jrElement.getLabelExpression(), value));
 		else if (id.equals(JRDesignTimeSeries.PROPERTY_SERIES_EXPRESSION))
-			jrElement.setSeriesExpression(ExprUtil.setValues(jrElement.getSeriesExpression(), value));
+			jrElement.setSeriesExpression(ExprUtil.setValues(
+					jrElement.getSeriesExpression(), value));
 		else if (id.equals(JRDesignTimeSeries.PROPERTY_VALUE_EXPRESSION))
-			jrElement.setValueExpression(ExprUtil.setValues(jrElement.getValueExpression(), value));
+			jrElement.setValueExpression(ExprUtil.setValues(
+					jrElement.getValueExpression(), value));
 	}
 
 	public ImageDescriptor getImagePath() {

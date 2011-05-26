@@ -58,7 +58,6 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -69,7 +68,8 @@ import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.util.TableColumnNumerator;
 
-public class MColumn extends APropertyNode implements IPastable, IContainer, IContainerEditPart {
+public class MColumn extends APropertyNode implements IPastable, IContainer,
+		IContainerEditPart {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -96,13 +96,14 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
-	public MColumn(ANode parent, StandardBaseColumn column, String name, int index) {
+	public MColumn(ANode parent, StandardBaseColumn column, String name,
+			int index) {
 		super(parent, index);
 		setValue(column);
 		this.name = name;
@@ -167,7 +168,8 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -176,15 +178,19 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		JRExpressionPropertyDescriptor printWhenExprD = new JRExpressionPropertyDescriptor(
-				StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.MColumn_print_when_expression);
-		printWhenExprD.setDescription(Messages.MColumn_print_when_expression_description);
+				StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION,
+				Messages.MColumn_print_when_expression);
+		printWhenExprD
+				.setDescription(Messages.MColumn_print_when_expression_description);
 		desc.add(printWhenExprD);
 
-		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(StandardBaseColumn.PROPERTY_WIDTH,
+		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(
+				StandardBaseColumn.PROPERTY_WIDTH,
 				Messages.MColumn_column_width);
 		desc.add(wD);
 
@@ -192,21 +198,19 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 		wD.setCategory(Messages.MColumn_column_properties_category);
 	}
 
-	private MExpression mExpression;
-
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		StandardBaseColumn jrElement = (StandardBaseColumn) getValue();
 		if (id.equals(StandardBaseColumn.PROPERTY_WIDTH))
 			return jrElement.getWidth();
-		if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getPrintWhenExpression());
-			return mExpression;
-		}
+		if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getPrintWhenExpression());
 		return null;
 	}
 
@@ -215,7 +219,9 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		StandardBaseColumn jrElement = (StandardBaseColumn) getValue();
@@ -228,12 +234,16 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 				cross.getTableManager().setWidth(jrElement, (Integer) value);
 
 				cross.getTableManager().refresh();
-				getPropertyChangeSupport().firePropertyChange(
-						new PropertyChangeEvent(this, StandardBaseColumn.PROPERTY_WIDTH, null, value));
+				getPropertyChangeSupport()
+						.firePropertyChange(
+								new PropertyChangeEvent(this,
+										StandardBaseColumn.PROPERTY_WIDTH,
+										null, value));
 				canSet = true;
 			}
 		} else if (id.equals(StandardBaseColumn.PROPERTY_PRINT_WHEN_EXPRESSION))
-			jrElement.setPrintWhenExpression(ExprUtil.setValues(jrElement.getPrintWhenExpression(), value));
+			jrElement.setPrintWhenExpression(ExprUtil.setValues(
+					jrElement.getPrintWhenExpression(), value));
 	}
 
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
@@ -258,7 +268,8 @@ public class MColumn extends APropertyNode implements IPastable, IContainer, ICo
 			if (evt.getPropertyName().equals(section.getCellEvent())) {
 				if (evt.getSource() == this.getValue()) {
 
-					final StandardBaseColumn bc = (StandardBaseColumn) evt.getSource();
+					final StandardBaseColumn bc = (StandardBaseColumn) evt
+							.getSource();
 
 					final ANode parent = (ANode) getParent();
 					final MColumn child = this;

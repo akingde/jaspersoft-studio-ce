@@ -56,7 +56,6 @@ import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
@@ -102,7 +101,8 @@ public class MGanttSeries extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -111,66 +111,76 @@ public class MGanttSeries extends APropertyNode {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor endDateExpD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION, Messages.common_end_date_expression);
-		endDateExpD.setDescription(Messages.MGanttSeries_end_date_expression_description);
+				JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION,
+				Messages.common_end_date_expression);
+		endDateExpD
+				.setDescription(Messages.MGanttSeries_end_date_expression_description);
 		desc.add(endDateExpD);
 
 		JRExpressionPropertyDescriptor lblExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION, Messages.common_label_expression);
+				JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION,
+				Messages.common_label_expression);
 		lblExprD.setDescription(Messages.MGanttSeries_label_expression_description);
 		desc.add(lblExprD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
-		seriesExprD.setDescription(Messages.MGanttSeries_series_expression_description);
+				JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION,
+				Messages.common_series_expression);
+		seriesExprD
+				.setDescription(Messages.MGanttSeries_series_expression_description);
 		desc.add(seriesExprD);
 
 		JRExpressionPropertyDescriptor percExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_PERCENT_EXPRESSION, Messages.MGanttSeries_percent_expression);
-		percExprD.setDescription(Messages.MGanttSeries_percent_expression_description);
+				JRDesignGanttSeries.PROPERTY_PERCENT_EXPRESSION,
+				Messages.MGanttSeries_percent_expression);
+		percExprD
+				.setDescription(Messages.MGanttSeries_percent_expression_description);
 		desc.add(percExprD);
 
 		JRExpressionPropertyDescriptor startDateExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION, Messages.common_start_date_expression);
-		startDateExprD.setDescription(Messages.MGanttSeries_start_date_expression_description);
+				JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION,
+				Messages.common_start_date_expression);
+		startDateExprD
+				.setDescription(Messages.MGanttSeries_start_date_expression_description);
 		desc.add(startDateExprD);
 
 		JRExpressionPropertyDescriptor subtaskExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_SUBTASK_EXPRESSION, Messages.MGanttSeries_subtask_expression);
-		subtaskExprD.setDescription(Messages.MGanttSeries_subtask_expression_description);
+				JRDesignGanttSeries.PROPERTY_SUBTASK_EXPRESSION,
+				Messages.MGanttSeries_subtask_expression);
+		subtaskExprD
+				.setDescription(Messages.MGanttSeries_subtask_expression_description);
 		desc.add(subtaskExprD);
 
 		JRExpressionPropertyDescriptor taskExprD = new JRExpressionPropertyDescriptor(
-				JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION, Messages.MGanttSeries_task_expression);
-		taskExprD.setDescription(Messages.MGanttSeries_task_expression_description);
+				JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION,
+				Messages.MGanttSeries_task_expression);
+		taskExprD
+				.setDescription(Messages.MGanttSeries_task_expression_description);
 		desc.add(taskExprD);
 
-		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignGanttSeries.PROPERTY_ITEM_HYPERLINK,
+		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(
+				JRDesignGanttSeries.PROPERTY_ITEM_HYPERLINK,
 				Messages.common_item_hyperlink);
-		itemHyperLinkD.setDescription(Messages.MGanttSeries_item_hyperlink_description);
+		itemHyperLinkD
+				.setDescription(Messages.MGanttSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 
 		defaultsMap.put(JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION, null);
 		defaultsMap.put(JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION, null);
 		defaultsMap.put(JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION, null);
-		defaultsMap.put(JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION, null);
+		defaultsMap.put(JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION,
+				null);
 		defaultsMap.put(JRDesignGanttSeries.PROPERTY_SUBTASK_EXPRESSION, null);
 		defaultsMap.put(JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION, null);
 	}
 
 	private MHyperLink mHyperLink;
-
-	private MExpression edExpression;
-	private MExpression hExpression;
-	private MExpression lExpression;
-	private MExpression sdExpression;
-	private MExpression stExpression;
-	private MExpression tExpression;
 
 	public Object getPropertyValue(Object id) {
 		JRDesignGanttSeries jrElement = (JRDesignGanttSeries) getValue();
@@ -183,30 +193,18 @@ public class MGanttSeries extends APropertyNode {
 			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
-		if (id.equals(JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION)) {
-			edExpression = ExprUtil.getExpression(this, edExpression, jrElement.getEndDateExpression());
-			return edExpression;
-		}
-		if (id.equals(JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION)) {
-			hExpression = ExprUtil.getExpression(this, hExpression, jrElement.getLabelExpression());
-			return hExpression;
-		}
-		if (id.equals(JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION)) {
-			lExpression = ExprUtil.getExpression(this, lExpression, jrElement.getSeriesExpression());
-			return lExpression;
-		}
-		if (id.equals(JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION)) {
-			sdExpression = ExprUtil.getExpression(this, sdExpression, jrElement.getStartDateExpression());
-			return sdExpression;
-		}
-		if (id.equals(JRDesignGanttSeries.PROPERTY_SUBTASK_EXPRESSION)) {
-			stExpression = ExprUtil.getExpression(this, stExpression, jrElement.getSubtaskExpression());
-			return stExpression;
-		}
-		if (id.equals(JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION)) {
-			tExpression = ExprUtil.getExpression(this, tExpression, jrElement.getTaskExpression());
-			return tExpression;
-		}
+		if (id.equals(JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getEndDateExpression());
+		if (id.equals(JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getLabelExpression());
+		if (id.equals(JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getSeriesExpression());
+		if (id.equals(JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getStartDateExpression());
+		if (id.equals(JRDesignGanttSeries.PROPERTY_SUBTASK_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getSubtaskExpression());
+		if (id.equals(JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getTaskExpression());
 
 		return null;
 	}
@@ -215,17 +213,23 @@ public class MGanttSeries extends APropertyNode {
 		JRDesignGanttSeries jrElement = (JRDesignGanttSeries) getValue();
 
 		if (id.equals(JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION))
-			jrElement.setEndDateExpression(ExprUtil.setValues(jrElement.getEndDateExpression(), value));
+			jrElement.setEndDateExpression(ExprUtil.setValues(
+					jrElement.getEndDateExpression(), value));
 		else if (id.equals(JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION))
-			jrElement.setLabelExpression(ExprUtil.setValues(jrElement.getLabelExpression(), value));
+			jrElement.setLabelExpression(ExprUtil.setValues(
+					jrElement.getLabelExpression(), value));
 		else if (id.equals(JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION))
-			jrElement.setSeriesExpression(ExprUtil.setValues(jrElement.getSeriesExpression(), value));
+			jrElement.setSeriesExpression(ExprUtil.setValues(
+					jrElement.getSeriesExpression(), value));
 		else if (id.equals(JRDesignGanttSeries.PROPERTY_START_DATE_EXPRESSION))
-			jrElement.setStartDateExpression(ExprUtil.setValues(jrElement.getStartDateExpression(), value));
+			jrElement.setStartDateExpression(ExprUtil.setValues(
+					jrElement.getStartDateExpression(), value));
 		else if (id.equals(JRDesignGanttSeries.PROPERTY_SUBTASK_EXPRESSION))
-			jrElement.setSubtaskExpression(ExprUtil.setValues(jrElement.getSubtaskExpression(), value));
+			jrElement.setSubtaskExpression(ExprUtil.setValues(
+					jrElement.getSubtaskExpression(), value));
 		else if (id.equals(JRDesignGanttSeries.PROPERTY_TASK_EXPRESSION))
-			jrElement.setTaskExpression(ExprUtil.setValues(jrElement.getTaskExpression(), value));
+			jrElement.setTaskExpression(ExprUtil.setValues(
+					jrElement.getTaskExpression(), value));
 	}
 
 	public ImageDescriptor getImagePath() {

@@ -56,7 +56,6 @@ import com.jaspersoft.studio.chart.ChartNodeIconDescriptor;
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
@@ -102,7 +101,8 @@ public class MXYZSeries extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -111,33 +111,44 @@ public class MXYZSeries extends APropertyNode {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 
 		JRExpressionPropertyDescriptor xValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION, Messages.common_x_value_expression);
-		xValueExpD.setDescription(Messages.MXYZSeries_x_value_expression_description);
+				JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION,
+				Messages.common_x_value_expression);
+		xValueExpD
+				.setDescription(Messages.MXYZSeries_x_value_expression_description);
 		desc.add(xValueExpD);
 
 		JRExpressionPropertyDescriptor yValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION, Messages.common_y_value_expression);
-		yValueExpD.setDescription(Messages.MXYZSeries_y_value_expression_description);
+				JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION,
+				Messages.common_y_value_expression);
+		yValueExpD
+				.setDescription(Messages.MXYZSeries_y_value_expression_description);
 		desc.add(yValueExpD);
 
 		JRExpressionPropertyDescriptor zValueExpD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION, Messages.MXYZSeries_z_value_expression);
-		zValueExpD.setDescription(Messages.MXYZSeries_z_value_expression_description);
+				JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION,
+				Messages.MXYZSeries_z_value_expression);
+		zValueExpD
+				.setDescription(Messages.MXYZSeries_z_value_expression_description);
 		desc.add(zValueExpD);
 
 		JRExpressionPropertyDescriptor seriesExprD = new JRExpressionPropertyDescriptor(
-				JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION, Messages.common_series_expression);
-		seriesExprD.setDescription(Messages.MXYZSeries_series_expression_description);
+				JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION,
+				Messages.common_series_expression);
+		seriesExprD
+				.setDescription(Messages.MXYZSeries_series_expression_description);
 		desc.add(seriesExprD);
 
-		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(JRDesignXyzSeries.PROPERTY_ITEM_HYPERLINK,
+		JRPropertyDescriptor itemHyperLinkD = new JRPropertyDescriptor(
+				JRDesignXyzSeries.PROPERTY_ITEM_HYPERLINK,
 				Messages.common_item_hyperlink);
-		itemHyperLinkD.setDescription(Messages.MXYZSeries_item_hyperlink_description);
+		itemHyperLinkD
+				.setDescription(Messages.MXYZSeries_item_hyperlink_description);
 		desc.add(itemHyperLinkD);
 
 		defaultsMap.put(JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION, null);
@@ -148,11 +159,6 @@ public class MXYZSeries extends APropertyNode {
 	}
 
 	private MHyperLink mHyperLink;
-
-	private MExpression xExpression;
-	private MExpression yExpression;
-	private MExpression zExpression;
-	private MExpression sExpression;
 
 	public Object getPropertyValue(Object id) {
 		JRDesignXyzSeries jrElement = (JRDesignXyzSeries) getValue();
@@ -165,22 +171,14 @@ public class MXYZSeries extends APropertyNode {
 			setChildListener(mHyperLink);
 			return mHyperLink;
 		}
-		if (id.equals(JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION)) {
-			xExpression = ExprUtil.getExpression(this, xExpression, jrElement.getXValueExpression());
-			return xExpression;
-		}
-		if (id.equals(JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION)) {
-			yExpression = ExprUtil.getExpression(this, yExpression, jrElement.getYValueExpression());
-			return yExpression;
-		}
-		if (id.equals(JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION)) {
-			zExpression = ExprUtil.getExpression(this, zExpression, jrElement.getZValueExpression());
-			return zExpression;
-		}
-		if (id.equals(JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION)) {
-			sExpression = ExprUtil.getExpression(this, sExpression, jrElement.getSeriesExpression());
-			return sExpression;
-		}
+		if (id.equals(JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getXValueExpression());
+		if (id.equals(JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getYValueExpression());
+		if (id.equals(JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getZValueExpression());
+		if (id.equals(JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getSeriesExpression());
 
 		return null;
 	}
@@ -189,13 +187,17 @@ public class MXYZSeries extends APropertyNode {
 		JRDesignXyzSeries jrElement = (JRDesignXyzSeries) getValue();
 
 		if (id.equals(JRDesignXyzSeries.PROPERTY_X_VALUE_EXPRESSION))
-			jrElement.setXValueExpression(ExprUtil.setValues(jrElement.getXValueExpression(), value));
+			jrElement.setXValueExpression(ExprUtil.setValues(
+					jrElement.getXValueExpression(), value));
 		else if (id.equals(JRDesignXyzSeries.PROPERTY_Y_VALUE_EXPRESSION))
-			jrElement.setYValueExpression(ExprUtil.setValues(jrElement.getYValueExpression(), value));
+			jrElement.setYValueExpression(ExprUtil.setValues(
+					jrElement.getYValueExpression(), value));
 		else if (id.equals(JRDesignXyzSeries.PROPERTY_Z_VALUE_EXPRESSION))
-			jrElement.setZValueExpression(ExprUtil.setValues(jrElement.getZValueExpression(), value));
+			jrElement.setZValueExpression(ExprUtil.setValues(
+					jrElement.getZValueExpression(), value));
 		else if (id.equals(JRDesignXyzSeries.PROPERTY_SERIES_EXPRESSION))
-			jrElement.setSeriesExpression(ExprUtil.setValues(jrElement.getSeriesExpression(), value));
+			jrElement.setSeriesExpression(ExprUtil.setValues(
+					jrElement.getSeriesExpression(), value));
 	}
 
 	public ImageDescriptor getImagePath() {

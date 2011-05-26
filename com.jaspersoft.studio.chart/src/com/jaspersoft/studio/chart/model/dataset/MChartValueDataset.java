@@ -52,13 +52,13 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MChartValueDataset extends MChartDataset {
 
-	public MChartValueDataset(ANode parent, JRDesignValueDataset value, JasperDesign jasperDesign) {
+	public MChartValueDataset(ANode parent, JRDesignValueDataset value,
+			JasperDesign jasperDesign) {
 		super(parent, value, jasperDesign);
 	}
 
@@ -76,7 +76,8 @@ public class MChartValueDataset extends MChartDataset {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -85,13 +86,15 @@ public class MChartValueDataset extends MChartDataset {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor valExpD = new JRExpressionPropertyDescriptor(
-				JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION, Messages.common_value_expression);
+				JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION,
+				Messages.common_value_expression);
 		valExpD.setDescription(Messages.MChartValueDataset_value_expression_description);
 		desc.add(valExpD);
 
@@ -101,16 +104,12 @@ public class MChartValueDataset extends MChartDataset {
 
 	}
 
-	private MExpression oExpression;
-
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignValueDataset jrElement = (JRDesignValueDataset) getValue();
 
-		if (id.equals(JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION)) {
-			oExpression = ExprUtil.getExpression(this, oExpression, jrElement.getValueExpression());
-			return oExpression;
-		}
+		if (id.equals(JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getValueExpression());
 
 		return super.getPropertyValue(id);
 	}
@@ -120,7 +119,8 @@ public class MChartValueDataset extends MChartDataset {
 		JRDesignValueDataset jrElement = (JRDesignValueDataset) getValue();
 
 		if (id.equals(JRDesignValueDataset.PROPERTY_VALUE_EXPRESSION))
-			jrElement.setValueExpression(ExprUtil.setValues(jrElement.getValueExpression(), value));
+			jrElement.setValueExpression(ExprUtil.setValues(
+					jrElement.getValueExpression(), value));
 		else
 			super.setPropertyValue(id, value);
 	}

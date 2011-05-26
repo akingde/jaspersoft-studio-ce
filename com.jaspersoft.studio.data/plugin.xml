@@ -13,5 +13,22 @@
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xml.XMLDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.remotexml.RemoteXMLDataAdapterFactory"/>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.queryDesigner">
+      <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.sql.SQLQueryDesigner"
+            language="sql">
+      </queryDesigner>
+      <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.sql.SQLQueryDesigner"
+            language="SQL">
+      </queryDesigner>
+      <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.QueryDesigner"
+            language="hql">
+      </queryDesigner>
+     
+     
+   </extension>
 
 </plugin>
