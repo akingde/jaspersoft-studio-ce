@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog;
 
@@ -27,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
@@ -51,13 +46,14 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
+import com.jaspersoft.studio.utils.Misc;
 
 public class SubreportPropertyPage extends WizardPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -207,7 +203,7 @@ public class SubreportPropertyPage extends WizardPage {
 				JRSubreportParameter prop = (JRSubreportParameter) element;
 				if ("VALUE".equals(property)) //$NON-NLS-1$
 					if (prop.getExpression() != null)
-						return new MExpression(prop.getExpression());
+						return Misc.nvl(prop.getExpression(), "");
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					return prop.getName();
 				}
@@ -220,9 +216,8 @@ public class SubreportPropertyPage extends WizardPage {
 				setMessage(getDescription());
 				JRDesignSubreportParameter data = (JRDesignSubreportParameter) tableItem.getData();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
-					if (value instanceof MExpression) {
-						JRExpression e = (JRExpression) ((MExpression) value).getValue();
-						data.setExpression(e);
+					if (value instanceof String) {
+						data.setExpression(ExprUtil.setValues(data.getExpression(), value));
 					}
 				} else if ("NAME".equals(property)) { //$NON-NLS-1$
 					List<JRDesignSubreportParameter> plist = (List<JRDesignSubreportParameter>) tableViewer.getInput();

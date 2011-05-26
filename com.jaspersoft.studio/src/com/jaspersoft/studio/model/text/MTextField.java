@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.text;
 
@@ -43,7 +39,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -55,6 +50,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+
 /*
  * The Class MTextField.
  */
@@ -163,6 +159,11 @@ public class MTextField extends MTextElement {
 		patternD.setDescription(Messages.MTextField_pattern_description);
 		desc.add(patternD);
 
+		JRExpressionPropertyDescriptor pexprD = new JRExpressionPropertyDescriptor(
+				JRDesignTextField.PROPERTY_PATTERN_EXPRESSION, "Pattern Expression");
+		pexprD.setDescription("Pattern expression");
+		desc.add(pexprD);
+
 		if (mHyperLink == null)
 			mHyperLink = new MHyperLink(null);
 		mHyperLink.createPropertyDescriptors(desc, defaultsMap);
@@ -173,28 +174,24 @@ public class MTextField extends MTextElement {
 		evalGroupD.setCategory(Messages.MTextField_textfield_category);
 		blankWhenNullD.setCategory(Messages.MTextField_textfield_category);
 		stretchOverflowD.setCategory(Messages.MTextField_textfield_category);
+		pexprD.setCategory(Messages.MTextField_textfield_category);
 
 		defaultsMap.put(JRDesignTextField.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Boolean.FALSE);
 	}
 
-	private MExpression mExpression;
-	private MHyperLink mHyperLink;
-
-	private MExpression mAnchorExpression;
-	private MExpression mPageExpression;
-	private MExpression mReferenceExpression;
-	private MExpression mToolTipExpression;
 	private ParameterDTO propertyDTO;
+	private MHyperLink mHyperLink;
 
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
-		if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION)) {
-			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getExpression());
-			return mExpression;
-		}
+		if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getExpression());
+		if (id.equals(JRDesignTextField.PROPERTY_PATTERN_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getPatternExpression());
+
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, false);
 		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
@@ -224,21 +221,17 @@ public class MTextField extends MTextElement {
 			return propertyDTO;
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
-			mAnchorExpression = ExprUtil.getExpression(this, mAnchorExpression, jrElement.getHyperlinkAnchorExpression());
-			return mAnchorExpression;
+			return ExprUtil.getExpression(jrElement.getHyperlinkAnchorExpression());
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
-			mPageExpression = ExprUtil.getExpression(this, mPageExpression, jrElement.getHyperlinkPageExpression());
-			return mPageExpression;
+			return ExprUtil.getExpression(jrElement.getHyperlinkPageExpression());
+
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
-			mReferenceExpression = ExprUtil.getExpression(this, mReferenceExpression,
-					jrElement.getHyperlinkReferenceExpression());
-			return mReferenceExpression;
+			return ExprUtil.getExpression(jrElement.getHyperlinkReferenceExpression());
 		}
 		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
-			mToolTipExpression = ExprUtil.getExpression(this, mToolTipExpression, jrElement.getHyperlinkTooltipExpression());
-			return mToolTipExpression;
+			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
 		}
 
 		return super.getPropertyValue(id);
@@ -258,6 +251,8 @@ public class MTextField extends MTextElement {
 			}
 		} else if (id.equals(JRDesignTextField.PROPERTY_EXPRESSION))
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
+		else if (id.equals(JRDesignTextField.PROPERTY_PATTERN_EXPRESSION))
+			jrElement.setPatternExpression(ExprUtil.setValues(jrElement.getPatternExpression(), value));
 		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrElement.setBlankWhenNull((Boolean) value);
 		else if (id.equals(JRDesignStyle.PROPERTY_PATTERN))

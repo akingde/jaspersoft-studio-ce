@@ -43,7 +43,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -82,8 +81,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MExpression;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
+import com.jaspersoft.studio.utils.Misc;
 
 public class ParameterPage extends WizardPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -319,7 +319,7 @@ public class ParameterPage extends WizardPage {
 				JRDatasetParameter prop = (JRDatasetParameter) element;
 				if ("VALUE".equals(property)) //$NON-NLS-1$
 					if (prop.getExpression() != null)
-						return new MExpression(prop.getExpression());
+						return Misc.nvl(prop.getExpression(), "");
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					return prop.getName();
 				}
@@ -332,9 +332,8 @@ public class ParameterPage extends WizardPage {
 				setMessage(getDescription(tableItem));
 				JRDesignDatasetParameter data = (JRDesignDatasetParameter) tableItem.getData();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
-					if (value instanceof MExpression) {
-						JRExpression e = (JRExpression) ((MExpression) value).getValue();
-						data.setExpression(e);
+					if (value instanceof String) {
+						data.setExpression(ExprUtil.setValues(data.getExpression(), value));
 					}
 				}
 				if ("NAME".equals(property)) { //$NON-NLS-1$

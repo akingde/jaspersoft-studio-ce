@@ -44,7 +44,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.jface.dialogs.LocaleDialog;
-import com.jaspersoft.studio.preferences.editor.property.TableLabelProvider;
+import com.jaspersoft.studio.preferences.editor.table.TableLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;

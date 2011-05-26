@@ -123,6 +123,10 @@ public class SortFieldsTable {
 		tviewer.setInput(fields);
 	}
 
+	public List<JRDesignSortField> getFields() {
+		return (List<JRDesignSortField>) tviewer.getInput();
+	}
+
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {

@@ -57,7 +57,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
@@ -129,12 +128,7 @@ public class WizardConnectionPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 
-				MExpression mexp = (MExpression) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION);
-				if (mexp == null || mexp.getValue() == null) {
-					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName("java.sql.Connection"); //$NON-NLS-1$
-					mexp = new MExpression(jrExpression);
-				}
+				String mexp = (String) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION);
 
 				wizard.setValue(mexp);
 				WizardDialog dialog = new WizardDialog(connExprDialog.getShell(), wizard);
@@ -144,7 +138,7 @@ public class WizardConnectionPage extends WizardPage {
 					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, mexp);
 					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, null);
 
-					connExpr.setText((String) mexp.getPropertyValue(JRDesignExpression.PROPERTY_TEXT));
+					connExpr.setText(mexp);
 				}
 			}
 
@@ -154,14 +148,7 @@ public class WizardConnectionPage extends WizardPage {
 		connExpr.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				MExpression mexp = (MExpression) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION);
-				if (mexp == null || mexp.getValue() == null) {
-					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName("java.sql.Connection"); //$NON-NLS-1$
-					mexp = new MExpression(jrExpression);
-				}
-				mexp.setPropertyValue(JRDesignExpression.PROPERTY_TEXT, connExpr.getText());
-				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, mexp);
+				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, connExpr.getText());
 				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, null);
 			}
 		});
@@ -214,13 +201,7 @@ public class WizardConnectionPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 
-				MExpression mexp = (MExpression) datasetrun
-						.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION);
-				if (mexp == null || mexp.getValue() == null) {
-					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName("net.sf.jasperreports.engine.JRDataSource"); //$NON-NLS-1$
-					mexp = new MExpression(jrExpression);
-				}
+				String mexp = (String) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION);
 
 				wizard.setValue(mexp);
 				WizardDialog dialog = new WizardDialog(dsExprDialog.getShell(), wizard);
@@ -229,8 +210,6 @@ public class WizardConnectionPage extends WizardPage {
 					mexp = wizard.getValue();
 					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, null);
 					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, mexp);
-
-					dsExpr.setText((String) mexp.getPropertyValue(JRDesignExpression.PROPERTY_TEXT));
 				}
 			}
 
@@ -240,16 +219,8 @@ public class WizardConnectionPage extends WizardPage {
 		dsExpr.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				MExpression mexp = (MExpression) datasetrun
-						.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION);
-				if (mexp == null || mexp.getValue() == null) {
-					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName("net.sf.jasperreports.engine.JRDataSource"); //$NON-NLS-1$
-					mexp = new MExpression(jrExpression);
-				}
-				mexp.setPropertyValue(JRDesignExpression.PROPERTY_TEXT, connExpr.getText());
 				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, null);
-				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, mexp);
+				datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, connExpr.getText());
 			}
 		});
 
@@ -265,7 +236,6 @@ public class WizardConnectionPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				if (emptyConnection.getSelection()) {
 					JRDesignExpression jde = new JRDesignExpression();
-					jde.setValueClassName("net.sf.jasperreports.engine.JRDataSource"); //$NON-NLS-1$
 					jde.setText("new net.sf.jasperreports.engine.JREmptyDataSource()"); //$NON-NLS-1$
 
 					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, null);
@@ -295,13 +265,11 @@ public class WizardConnectionPage extends WizardPage {
 			}
 		});
 
-		PlatformUI.getWorkbench().getHelpSystem()
-				.setHelp(getControl(), "Jaspersoft.wizard");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
 	private void mainReportConnection() {
 		JRDesignExpression jde = new JRDesignExpression();
-		jde.setValueClassName("java.sql.Connection"); //$NON-NLS-1$
 		jde.setText("$P{REPORT_CONNECTION}"); //$NON-NLS-1$
 
 		datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, jde);

@@ -1,32 +1,27 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.style;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Iterator;
 
-import net.sf.jasperreports.engine.design.JRDesignConditionalStyle;
+import net.sf.jasperreports.engine.JRConditionalStyle;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -41,6 +36,7 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+
 /*
  * The Class MStyles.
  * 
@@ -121,8 +117,8 @@ public class MStyles extends ANode implements IPastable, IContainerEditPart {
 				ANode style = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
 				if (evt.getNewValue() instanceof JRDesignStyle) {
 					JRDesignStyle jrStyle = (JRDesignStyle) evt.getNewValue();
-					for (Iterator<JRDesignConditionalStyle> it = jrStyle.getConditionalStyleList().iterator(); it.hasNext();) {
-						ReportFactory.createNode(style, it.next(), -1);
+					for (JRConditionalStyle it : jrStyle.getConditionalStyleList()) {
+						ReportFactory.createNode(style, it, -1);
 					}
 				}
 			} else if (evt.getOldValue() != null && evt.getNewValue() == null) {

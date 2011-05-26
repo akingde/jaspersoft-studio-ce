@@ -73,7 +73,6 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.group.MGroup;
 import com.jaspersoft.studio.model.variable.MVariable;
@@ -204,21 +203,16 @@ public class WizardBandGroupPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 
-				MExpression mexp = (MExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
-				if (mexp == null || mexp.getValue() == null) {
-					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName(String.class.getName());
-					mexp = new MExpression(jrExpression);
-				}
+				String mexp = (String) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
 
 				wizard.setValue(mexp);
 				WizardDialog dialog = new WizardDialog(dsExprDialog.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
 					mexp = wizard.getValue();
-					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp.getValue());
+					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
 
-					dsExpr.setText((String) mexp.getPropertyValue(JRDesignExpression.PROPERTY_TEXT));
+					dsExpr.setText(mexp);
 				}
 			}
 
@@ -228,17 +222,8 @@ public class WizardBandGroupPage extends WizardPage {
 		dsExpr.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				MExpression mexp = (MExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
-				if (mexp == null || mexp.getValue() == null) {
-					JRDesignExpression jrExpression = new JRDesignExpression();
-					jrExpression.setValueClassName(String.class.getName());
-					if (mexp == null)
-						mexp = new MExpression(jrExpression);
-					else
-						mexp.setValue(jrExpression);
-				}
-				mexp.setPropertyValue(JRDesignExpression.PROPERTY_TEXT, dsExpr.getText());
-				group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
+				String mexp = (String) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
+				group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, dsExpr.getText());
 			}
 		});
 
@@ -274,18 +259,12 @@ public class WizardBandGroupPage extends WizardPage {
 					Object obj = sel.getFirstElement();
 					JRDesignExpression jrExpression = new JRDesignExpression();
 					if (obj instanceof JRDesignField) {
-						jrExpression.setValueClassName(((JRDesignField) obj).getValueClassName());
 						jrExpression.setText("$F{" + ((JRDesignField) obj).getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
 					} else if (obj instanceof JRDesignVariable) {
-						jrExpression.setValueClassName(((JRDesignVariable) obj).getValueClassName());
 						jrExpression.setText("$V{" + ((JRDesignVariable) obj).getName() + "}");//$NON-NLS-1$ //$NON-NLS-2$
 					}
 
-					MExpression mexp = (MExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
-					if (mexp == null)
-						mexp = new MExpression(jrExpression);
-					else
-						mexp.setValue(jrExpression);
+					String mexp = (String) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
 
 					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
 					dsExpr.setText(jrExpression.getText());

@@ -126,6 +126,10 @@ public class FieldsTable {
 		tviewer.setInput(fields);
 	}
 
+	public List<JRDesignField> getFields() {
+		return (List<JRDesignField>) tviewer.getInput();
+	}
+
 	private void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {

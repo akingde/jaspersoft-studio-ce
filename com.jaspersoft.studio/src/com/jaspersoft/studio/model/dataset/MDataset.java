@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.dataset;
 
@@ -42,7 +38,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -56,6 +51,7 @@ import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyD
 import com.jaspersoft.studio.property.descriptor.resource.NResourcePropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
+
 /*
  * The Class MDataset.
  * 
@@ -200,7 +196,6 @@ public class MDataset extends APropertyNode implements ICopyable {
 	}
 
 	private MQuery mQuery;
-	private MExpression mExpression;
 
 	/*
 	 * (non-Javadoc)
@@ -221,8 +216,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 			return mQuery;
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_FILTER_EXPRESSION)) {
-			mExpression = ExprUtil.getExpression(this, mExpression, jrDataset.getFilterExpression());
-			return mExpression;
+			return ExprUtil.getExpression(jrDataset.getFilterExpression());
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			return jrDataset.getScriptletClass();

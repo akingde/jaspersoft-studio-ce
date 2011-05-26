@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.subreport;
 
@@ -42,7 +38,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.JReportsDTO;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
@@ -52,6 +47,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.SubreportPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.RVPropertyDescriptor;
+
 /*
  * The Class MSubreport.
  */
@@ -174,11 +170,6 @@ public class MSubreport extends MGraphicElement {
 
 	}
 
-	private MExpression mExpression;
-	private MExpression pmExpression;
-	private MExpression cnExpression;
-	private MExpression dsExpression;
-
 	private JReportsDTO returnValuesDTO;
 
 	@Override
@@ -188,22 +179,14 @@ public class MSubreport extends MGraphicElement {
 			return jrElement.isRunToBottom();
 		if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE))
 			return jrElement.isOwnUsingCache();
-		if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION)) {
-			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getExpression());
-			return mExpression;
-		}
-		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION)) {
-			pmExpression = ExprUtil.getExpression(this, pmExpression, jrElement.getParametersMapExpression());
-			return pmExpression;
-		}
-		if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION)) {
-			cnExpression = ExprUtil.getExpression(this, cnExpression, jrElement.getConnectionExpression());
-			return cnExpression;
-		}
-		if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION)) {
-			dsExpression = ExprUtil.getExpression(this, dsExpression, jrElement.getDataSourceExpression());
-			return dsExpression;
-		}
+		if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getExpression());
+		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getParametersMapExpression());
+		if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getConnectionExpression());
+		if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getDataSourceExpression());
 		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS))
 			return jrElement.getParameters();
 		if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {

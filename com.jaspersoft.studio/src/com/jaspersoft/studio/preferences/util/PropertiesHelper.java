@@ -47,11 +47,12 @@ public class PropertiesHelper {
 	public PropertiesHelper(IProject project) {
 		service = Platform.getPreferencesService();
 		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
-		lookupOrders = new String[] { InstanceScope.SCOPE };
-		contexts = new IScopeContext[] { new InstanceScope() };
 		if (project != null) {
 			lookupOrders = new String[] { ProjectScope.SCOPE, InstanceScope.SCOPE };
 			contexts = new IScopeContext[] { new ProjectScope(project), new InstanceScope() };
+		} else {
+			lookupOrders = new String[] { InstanceScope.SCOPE };
+			contexts = new IScopeContext[] { new InstanceScope() };
 		}
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 	}

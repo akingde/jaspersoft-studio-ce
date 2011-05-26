@@ -70,10 +70,11 @@ public interface IWizardFieldsProvider {
    */
   public boolean supportsDesign();
   
-  /**
-   * Return the fields read the specified query
-   */
-  public String designQuery(String query);
+
+	// /**
+	// * Return the fields read the specified query
+	// */
+	// public String designQuery(String query);
   
 }
 

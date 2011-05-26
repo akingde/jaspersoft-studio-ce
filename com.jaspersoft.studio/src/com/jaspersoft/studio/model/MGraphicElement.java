@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model;
 
@@ -63,6 +59,7 @@ import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyD
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
+
 /*
  * The Class MGeneric.
  */
@@ -332,8 +329,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		groupChangesD.setDescription(Messages.MGraphicElement_print_when_group_changes_description);
 		desc.add(groupChangesD);
 
-		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY,
-				Messages.common_key);
+		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY, Messages.common_key);
 		keyD.setDescription(Messages.MGraphicElement_key_description);
 		desc.add(keyD);
 
@@ -350,14 +346,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		widthD.setDescription(Messages.MGraphicElement_width_description);
 		desc.add(widthD);
 
-		IntegerPropertyDescriptor xD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_X,
-				Messages.common_left);
+		IntegerPropertyDescriptor xD = new IntegerPropertyDescriptor(JRBaseElement.PROPERTY_X, Messages.common_left);
 		xD.setCategory(Messages.MGraphicElement_location_category);
 		xD.setDescription(Messages.MGraphicElement_left_description);
 		desc.add(xD);
 
-		IntegerPropertyDescriptor yD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_Y,
-				Messages.common_top);
+		IntegerPropertyDescriptor yD = new IntegerPropertyDescriptor(JRDesignElement.PROPERTY_Y, Messages.common_top);
 		yD.setCategory(Messages.MGraphicElement_location_category);
 		yD.setDescription(Messages.MGraphicElement_top_description);
 		desc.add(yD);
@@ -438,7 +432,6 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, Boolean.FALSE);
 	}
 
-	private MExpression mExpression;
 	private RWComboBoxPropertyDescriptor styleD;
 	private RComboBoxPropertyDescriptor groupChangesD;
 
@@ -452,8 +445,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		if (id.equals(JRDesignElement.PROPERTY_KEY))
 			return jrElement.getKey();
 		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION)) {
-			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getPrintWhenExpression());
-			return mExpression;
+			return ExprUtil.getExpression(jrElement.getPrintWhenExpression());
 		}
 		if (id.equals(JRDesignElement.PROPERTY_PARENT_STYLE)) {
 			if (jrElement.getStyleNameReference() != null)

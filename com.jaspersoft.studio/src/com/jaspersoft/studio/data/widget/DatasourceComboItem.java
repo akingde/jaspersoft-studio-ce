@@ -21,7 +21,6 @@ package com.jaspersoft.studio.data.widget;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -54,8 +53,6 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class DatasourceComboItem extends ContributionItem implements PropertyChangeListener, IReportViewerListener,
 		Listener {
-
-	// private List<AMDatasource> items;
 
 	/**
 	 * List of dataAdapter backing end the combo box. The combo shows the data coming from this list.
@@ -106,8 +103,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		}
 
 		// Clear the list, and get a fresh list from the DataAdapter manager
-		getDataAdapters().clear();
-		getDataAdapters().addAll(DataAdapterManager.getDataAdapters());
+		setDataAdapters(getDataAdaptersList());
 
 		// Clear the combo box...
 		combo.removeAll();
@@ -146,6 +142,10 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		// Restore listener
 		combo.addListener(SWT.Selection, this);
 		combo.addListener(SWT.DefaultSelection, this);
+	}
+
+	private List<DataAdapter> getDataAdaptersList() {
+		return DataAdapterManager.getDataAdapters();
 	}
 
 	@Override
@@ -193,14 +193,6 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		combo.select(i);
 	}
 
-	/*
-	 * private String[] getStringItems() { String[] s = new String[items.size() + 1]; s[0] = "-- " +
-	 * Messages.DatasourceComboItem_select_a_datasource + " --"; //$NON-NLS-1$ //$NON-NLS-2$ for (int i = 0; i <
-	 * items.size(); i++) { String displayText = items.get(i).getDisplayText(); if (displayText == null ||
-	 * displayText.trim().equals("")) //$NON-NLS-1$ displayText = Messages.common_empty; s[i + 1] = displayText; } return
-	 * s; }
-	 */
-
 	/**
 	 * Computes the width required by control
 	 * 
@@ -220,11 +212,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 * @return the new control
 	 */
 	protected Control createControl(Composite parent) {
-
-		// Create the dataAdapters array to store the combo items.
-		dataAdapters = new ArrayList<DataAdapter>();
-		// Get the data adapters from the DataAdapterManager
-		dataAdapters.addAll(DataAdapterManager.getDataAdapters());
+		setDataAdapters(getDataAdaptersList());
 
 		combo = new CCombo(parent, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
 
@@ -330,13 +318,6 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 					editor.runReport(da);
 				}
 			});
-
-			// final AMDatasource m = items.get(combo.getSelectionIndex() - 1);
-			// Display.getDefault().syncExec(new Runnable() {
-			// public void run() {
-			// editor.runReport(m);
-			// }
-			// });
 		}
 
 		refresh(false);
@@ -370,10 +351,6 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		}
 	}
 
-	// private void onSelection() {
-	// selecteditem = combo.getSelectionIndex();
-	// }
-
 	public void viewerStateChanged(ReportViewerEvent evt) {
 		refresh(false);
 	}
@@ -392,4 +369,5 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	private List<DataAdapter> getDataAdapters() {
 		return dataAdapters;
 	}
+
 }

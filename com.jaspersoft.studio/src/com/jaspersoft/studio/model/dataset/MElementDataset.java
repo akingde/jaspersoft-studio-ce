@@ -18,27 +18,23 @@
  * see <http://www.gnu.org/licenses/>.
  */
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.dataset;
 
@@ -63,7 +59,6 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
@@ -178,8 +173,6 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 			incGroupD.setItems(items);
 	}
 
-	private MExpression incWhenExp;
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -192,8 +185,7 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
 			return EnumHelper.getValue(jrElement.getIncrementTypeValue(), 1, false);
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION)) {
-			incWhenExp = ExprUtil.getExpression(this, incWhenExp, jrElement.getIncrementWhenExpression());
-			return incWhenExp;
+			return ExprUtil.getExpression(jrElement.getIncrementWhenExpression());
 		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_GROUP)) {
 			if (jrElement.getResetGroup() != null)

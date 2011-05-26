@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.image;
 
@@ -47,7 +43,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.MExpression;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -59,6 +54,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.utils.EnumHelper;
+
 /*
  * The Class MImage.
  */
@@ -211,13 +207,8 @@ public class MImage extends MGraphicElementLineBox {
 		defaultsMap.put(JRBaseImage.PROPERTY_LAZY, Boolean.FALSE);
 	}
 
-	private MExpression mExpression;
 	private MHyperLink mHyperLink;
 
-	private MExpression mAnchorExpression;
-	private MExpression mPageExpression;
-	private MExpression mReferenceExpression;
-	private MExpression mToolTipExpression;
 	private ParameterDTO propertyDTO;
 
 	@Override
@@ -237,8 +228,7 @@ public class MImage extends MGraphicElementLineBox {
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, false);
 		if (id.equals(JRDesignImage.PROPERTY_EXPRESSION)) {
-			mExpression = ExprUtil.getExpression(this, mExpression, jrElement.getExpression());
-			return mExpression;
+			return ExprUtil.getExpression(jrElement.getExpression());
 		}
 
 		if (id.equals(JRDesignImage.PROPERTY_EVALUATION_GROUP)) {
@@ -264,23 +254,14 @@ public class MImage extends MGraphicElementLineBox {
 			return jrElement.getLinkTarget();
 		if (id.equals(JRDesignHyperlink.PROPERTY_LINK_TYPE))
 			return jrElement.getLinkType();
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION)) {
-			mAnchorExpression = ExprUtil.getExpression(this, mAnchorExpression, jrElement.getHyperlinkAnchorExpression());
-			return mAnchorExpression;
-		}
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION)) {
-			mPageExpression = ExprUtil.getExpression(this, mPageExpression, jrElement.getHyperlinkPageExpression());
-			return mPageExpression;
-		}
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION)) {
-			mReferenceExpression = ExprUtil.getExpression(this, mReferenceExpression,
-					jrElement.getHyperlinkReferenceExpression());
-			return mReferenceExpression;
-		}
-		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION)) {
-			mToolTipExpression = ExprUtil.getExpression(this, mToolTipExpression, jrElement.getHyperlinkTooltipExpression());
-			return mToolTipExpression;
-		}
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_ANCHOR_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkAnchorExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_PAGE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkPageExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_REFERENCE_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkReferenceExpression());
+		if (id.equals(JRDesignHyperlink.PROPERTY_HYPERLINK_TOOLTIP_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getHyperlinkTooltipExpression());
 		return super.getPropertyValue(id);
 	}
 

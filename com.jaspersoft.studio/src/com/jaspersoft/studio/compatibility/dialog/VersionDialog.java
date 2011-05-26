@@ -67,7 +67,7 @@ public class VersionDialog extends Dialog {
 		label = new Label(shell, SWT.NONE);
 		label.setText("Version");
 
-		final Combo c = new Combo(shell, SWT.SINGLE);
+		final Combo c = new Combo(shell, SWT.SINGLE | SWT.READ_ONLY);
 		c.setItems(getItems());
 		c.addSelectionListener(new SelectionListener() {
 
@@ -107,6 +107,16 @@ public class VersionDialog extends Dialog {
 		gd.horizontalSpan = 2;
 		gd.widthHint = 100;
 		buttonOK.setLayoutData(gd);
+		buttonOK.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				shell.close();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
 
 		shell.addListener(SWT.Traverse, new Listener() {
 			public void handleEvent(Event event) {
