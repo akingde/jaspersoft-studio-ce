@@ -26,7 +26,8 @@
 
 <plugin>
    <extension-point id="components" name="Components" schema="schema/components.exsd"/>
-   <extension-point id="dataAdapters" name="Data Adapters" schema="schema/dataAdapters.exsd"/> 
+   <extension-point id="dataAdapters" name="Data Adapters" schema="schema/dataAdapters.exsd"/>
+   <extension-point id="queryDesigner" name="Query Designer" schema="schema/queryDesigner.exsd"/> 
 
    <extension
          id="xmlProblem"
