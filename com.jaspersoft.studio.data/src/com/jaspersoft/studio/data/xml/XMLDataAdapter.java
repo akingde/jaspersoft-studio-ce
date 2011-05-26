@@ -24,19 +24,19 @@
 package com.jaspersoft.studio.data.xml;
 
 import java.io.File;
-import java.sql.Connection;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.data.JRXmlDataSource;
+import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
+import net.sf.jasperreports.engine.util.JRXmlUtils;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.w3c.dom.Document;
-
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
-import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapter;
@@ -60,21 +60,6 @@ public class XMLDataAdapter extends DataAdapter {
 	public XMLDataAdapter() {
 	}
 	
-	@Override
-	public Connection getConnection() {
-		return super.getConnection();
-	}
-
-	@Override
-	public boolean isJDBCConnection() {
-		return false;
-	}
-
-	@Override
-	public boolean isJRDataSource() {
-		return !isUseConnection();
-	}
-
 	@Override
 	public Map<String, String> getProperties() {
 		
@@ -137,10 +122,46 @@ public class XMLDataAdapter extends DataAdapter {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public JRDataSource getJRDataSource() {
-		try {
-			net.sf.jasperreports.engine.data.JRXmlDataSource ds = new net.sf.jasperreports.engine.data.JRXmlDataSource(fileName, getSelectExpression() ); 
+	public void contributeParameters(Map<String, Object> parameters) throws JRException
+	{
+		if (isUseConnection()) {
+            
+			/*
+            if (this.getFilename().toLowerCase().startsWith("https://") ||
+                this.getFilename().toLowerCase().startsWith("http://") ||
+                this.getFilename().toLowerCase().startsWith("file:"))
+            {
+                map.put(JRXPathQueryExecuterFactory.XML_URL, this.getFilename());
+            }
+            else
+            {
+            */
+                Document document = JRXmlUtils.parse( new File(getFileName()) );
+                parameters.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, document);
+            //}
+            
+            
+            if (getLocale() != null) {
+            	parameters.put(JRXPathQueryExecuterFactory.XML_LOCALE, getLocale());
+            }
+           
+            if (getTimeZone() != null) {
+            	parameters.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, getTimeZone());
+            }
+           
+            if (getDatePattern() != null && getDatePattern().trim().length() > 0) {
+            	parameters.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, getDatePattern());
+            }
+           
+            if (getNumberPattern() != null && getNumberPattern().trim().length() > 0) {
+            	parameters.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, getNumberPattern());
+            }    
+        }
+		else
+		{
+			JRXmlDataSource ds = new JRXmlDataSource(fileName, getSelectExpression() ); 
 	           
 	        if (getLocale()!=null) {
 	        	ds.setLocale( getLocale());
@@ -158,61 +179,7 @@ public class XMLDataAdapter extends DataAdapter {
 	        	ds.setNumberPattern( getNumberPattern());
 	        }
 	           
-	        return ds; 
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public Map getSpecialParameters(Map map) throws JRException {
-		if (isUseConnection()) {
-            
-			/*
-            if (this.getFilename().toLowerCase().startsWith("https://") ||
-                this.getFilename().toLowerCase().startsWith("http://") ||
-                this.getFilename().toLowerCase().startsWith("file:"))
-            {
-                map.put(JRXPathQueryExecuterFactory.XML_URL, this.getFilename());
-            }
-            else
-            {
-            */
-                Document document = JRXmlUtils.parse( new File(getFileName()) );
-                map.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, document);
-            //}
-            
-            
-            if (getLocale() != null) {
-            	map.put(JRXPathQueryExecuterFactory.XML_LOCALE, getLocale());
-            }
-           
-            if (getTimeZone() != null) {
-                map.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, getTimeZone());
-            }
-           
-            if (getDatePattern() != null && getDatePattern().trim().length() > 0) {
-               map.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, getDatePattern());
-            }
-           
-            if (getNumberPattern() != null && getNumberPattern().trim().length() > 0) {
-               map.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, getNumberPattern());
-            }    
-        }
-        return map;
-	}
-
-	@Override
-	public void test() throws Exception {
-		try {
-			java.io.File f = new java.io.File(getFileName());
-			if (!f.exists()) {
-				throw new Exception("XML file" + " " + getFileName() + " not found.");
-			}
-            return;
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+        	parameters.put(JRParameter.REPORT_DATA_SOURCE, ds);
 		}
 	}
 

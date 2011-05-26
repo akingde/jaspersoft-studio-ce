@@ -25,15 +25,13 @@ package com.jaspersoft.studio.data.csv;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.query.JRCsvQueryExecuterFactory;
 
@@ -52,25 +50,7 @@ public class CSVDataAdapter extends DataAdapter {
     private String customDatePattern = null;
     private boolean qeMode = false;
     private List<String> columnNames = new ArrayList<String>();
-
-	@Override
-	public boolean isJDBCConnection() {
-		return false;
-	}
-	
-	@Override
-	public boolean isJRDataSource() {
-		if (isQeMode()) {
-			return false;
-		}
-		return true;
-	}
-	
-	@Override
-	public Connection getConnection() {
-		return null;
-	}
-	
+    
 	@Override
 	public Map<String, String> getProperties() {
 		
@@ -124,79 +104,22 @@ public class CSVDataAdapter extends DataAdapter {
 	}
 	
 	@Override
-	public JRDataSource getJRDataSource() {
-		
-		try {
-			return getJRDataSourceImpl();
-		}
-		catch (FileNotFoundException e) {
-			System.out.println("File not found exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		catch (JRException e) {
-			System.out.println("JRException: " + e.getMessage());
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			System.out.println("IOException: " + e.getMessage());
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return super.getJRDataSource();
-	}
-	
-	/**
-     * Real getJRDataSource implementation
-	 * @throws IOException 
-	 * @throws JRException 
-	 * @throws FileNotFoundException 
-     */
-	public JRDataSource getJRDataSourceImpl() throws FileNotFoundException, IOException, JRException {
-		
-		JRCsvDataSource ds = new JRCsvDataSource(new File(getFileName()));
-        
-		if (this.getCustomDatePattern() != null && this.getCustomDatePattern().length() > 0)
-        {
-			ds.setDateFormat( new SimpleDateFormat(getCustomDatePattern()) );
-        }
-        
-        ds.setFieldDelimiter( getFieldDelimiter().charAt(0) );
-        
-        ds.setRecordDelimiter( getRecordDelimiter() );
-        
-        ds.setUseFirstRowAsHeader( isUseFirstRowAsHeader() );
-        
-        if (!isUseFirstRowAsHeader())
-        {
-            String[] names = new String[getColumnNames().size()];
-            for (int i=0; i< names.length; ++i )
-            {
-            	names[i] = "" + getColumnNames().get(i);
-            }
-            ds.setColumnNames( names );
-        }
-        
-        return ds;
-	}
-	
-	@Override
-	public Map<Object, Object> getSpecialParameters(Map map) throws JRException {
-		
-		if (isQeMode())
+	public void contributeParameters(Map<String, Object> parameters) throws JRException
+	{
+		if (isQeMode())//FIXME check this
 		{	
 			System.out.println("Setting parameters for the CSV query executer");
-            map.put( JRCsvQueryExecuterFactory.CSV_FILE, new File(getFileName()) );
-            if (getCustomDatePattern() != null && getCustomDatePattern().length() > 0)
+			parameters.put(JRCsvQueryExecuterFactory.CSV_FILE, new File(getFileName()));
+
+			if (getCustomDatePattern() != null && getCustomDatePattern().length() > 0)
             {
-                map.put( JRCsvQueryExecuterFactory.CSV_DATE_FORMAT, new SimpleDateFormat(getCustomDatePattern()) );
+            	parameters.put( JRCsvQueryExecuterFactory.CSV_DATE_FORMAT, new SimpleDateFormat(getCustomDatePattern()) );
             }
  
             // This particular setting must be fixed in JR first
             //map.put( JRCsvQueryExecuterFactory.CSV_FIELD_DELIMITER, new java.lang.Character( getFieldDelimiter().charAt(0) ));
-            map.put( JRCsvQueryExecuterFactory.CSV_RECORD_DELIMITER, getRecordDelimiter());
-            map.put( JRCsvQueryExecuterFactory.CSV_USE_FIRST_ROW_AS_HEADER, new Boolean(isUseFirstRowAsHeader()));
+			parameters.put( JRCsvQueryExecuterFactory.CSV_RECORD_DELIMITER, getRecordDelimiter());
+			parameters.put( JRCsvQueryExecuterFactory.CSV_USE_FIRST_ROW_AS_HEADER, new Boolean(isUseFirstRowAsHeader()));
 
             if (!isUseFirstRowAsHeader())
             {
@@ -205,27 +128,44 @@ public class CSVDataAdapter extends DataAdapter {
                 {
                     names[i] = "" + getColumnNames().get(i);
                 }
-                map.put( JRCsvQueryExecuterFactory.CSV_COLUMN_NAMES_ARRAY, names);
+                parameters.put( JRCsvQueryExecuterFactory.CSV_COLUMN_NAMES_ARRAY, names);
             }
-		}
-		
-		return map;
-	}
-	
-	@Override
-	public void test() throws Exception {
-		
-		String csv_file = getFileName();
-        CSVDataAdapter con = new CSVDataAdapter();
-        java.io.File f = new java.io.File(csv_file);
-        
-        if ( !f.exists() )
-        {
-        	throw new Exception("CSV file " + csv_file + " not found.");
         }
-        
-        con.setFileName( csv_file );
-        con.getJRDataSource();
+		else
+		{
+			JRCsvDataSource ds = null;
+			try
+			{
+				ds = new JRCsvDataSource(new File(getFileName()));
+			}
+			catch (FileNotFoundException e)
+			{
+				throw new JRException(e);
+			}
+	        
+			if (this.getCustomDatePattern() != null && this.getCustomDatePattern().length() > 0)
+	        {
+				ds.setDateFormat( new SimpleDateFormat(getCustomDatePattern()) );
+	        }
+	        
+	        ds.setFieldDelimiter( getFieldDelimiter().charAt(0) );
+	        
+	        ds.setRecordDelimiter( getRecordDelimiter() );
+	        
+	        ds.setUseFirstRowAsHeader( isUseFirstRowAsHeader() );
+	        
+	        if (!isUseFirstRowAsHeader())
+	        {
+	            String[] names = new String[getColumnNames().size()];
+	            for (int i=0; i< names.length; ++i )
+	            {
+	            	names[i] = "" + getColumnNames().get(i);
+	            }
+	            ds.setColumnNames( names );
+	        }
+	        
+            parameters.put(JRParameter.REPORT_DATA_SOURCE, ds);
+		}
 	}
 	
 	@Override

@@ -89,7 +89,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 	 */
 	private DataAdapter dataAdapter;
 
-	private Map<String, Object> jasperParameter = new Hashtable<String, Object>();
+	private Map<String, Object> jasperParameters = new Hashtable<String, Object>();
 
 	private Throwable fillError = null;
 	private DatasourceComboItem dataSourceWidget;
@@ -164,21 +164,17 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 					JasperReport jasperReport = JasperCompileManager.compileReport(jd);
 					if (jasperReport != null) {
 
-						jasperParameter.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
+						jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
 
 						VirtualizerHelper.setVirtualizer(jd, ps);
 
 						// We let the data adapter to contribute its parameters.
-						dataAdapter.getSpecialParameters(jasperParameter);
+						Map<String, Object> dataAdapterParams = dataAdapter.getParameters();
+						
+						jasperParameters.putAll(dataAdapterParams);
 
 						// We create the fillHandle to run the report based on the type of data adapter....
-						if (dataAdapter.isJDBCConnection()) {
-							connection = dataAdapter.getConnection();
-							fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter, connection);
-						} else {
-							fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameter,
-									dataAdapter.getJRDataSource(jasperReport));
-						}
+						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameters);
 
 						if (fillReport(fh, monitor) == Status.CANCEL_STATUS)
 							return Status.CANCEL_STATUS;
@@ -210,7 +206,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 						}
 					}
 					// Allow the data adapter to cleanup its state
-					dataAdapter.disposeSpecialParameters(jasperParameter);
+					dataAdapter.dispose();
 
 				}
 				return Status.OK_STATUS;
@@ -225,7 +221,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 	private boolean showParameters = false;
 
 	private int askParameters() {
-		ParametersDialog pd = new ParametersDialog(Display.getCurrent().getActiveShell(), jasperDesign, jasperParameter);
+		ParametersDialog pd = new ParametersDialog(Display.getCurrent().getActiveShell(), jasperDesign, jasperParameters);
 		if (showParameters || pd.canShowParameters()) {
 			return pd.open();
 		}

@@ -28,11 +28,11 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 
-import org.w3c.dom.Document;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
+
+import org.w3c.dom.Document;
 
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.xml.XMLDataAdapter;
@@ -50,7 +50,7 @@ public class RemoteXMLDataAdapter extends XMLDataAdapter {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map getSpecialParameters(Map map) throws JRException {
+	public void contributeParameters(Map<String, Object> parameters) throws JRException {
 		
 		if (isUseConnection()) {
 			
@@ -62,31 +62,30 @@ public class RemoteXMLDataAdapter extends XMLDataAdapter {
 	        	
 	        	// JRXPathQueryExecuterFactory.XML_URL not available.
 	        	// Once this is available, remove XML_URL from this class.
-	            map.put(XML_URL, getFileName());
+	        	parameters.put(XML_URL, getFileName());
 	        }
 	        else {
 	        	
 	            Document document = JRXmlUtils.parse(new File( getFileName()));
-	            map.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, document);
+	            parameters.put(JRXPathQueryExecuterFactory.PARAMETER_XML_DATA_DOCUMENT, document);
 	        }
 	        
 	        if (getLocale() != null) {
-	        	map.put(JRXPathQueryExecuterFactory.XML_LOCALE, getLocale());
+	        	parameters.put(JRXPathQueryExecuterFactory.XML_LOCALE, getLocale());
 	        }
 	           
 	        if (getTimeZone() != null) {
-	        	map.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, getTimeZone());
+	        	parameters.put(JRXPathQueryExecuterFactory.XML_TIME_ZONE, getTimeZone());
 	        }
 	        
 	        if (getDatePattern() != null && getDatePattern().trim().length()>0) {
-	            map.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, getDatePattern());
+	        	parameters.put(JRXPathQueryExecuterFactory.XML_DATE_PATTERN, getDatePattern());
 	        }
 	           
 	        if (getNumberPattern() != null && getNumberPattern().trim().length()>0) {
-	            map.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, getNumberPattern());
+	        	parameters.put(JRXPathQueryExecuterFactory.XML_NUMBER_PATTERN, getNumberPattern());
 	        }
 	    }
-	    return map;
 	}
 
 	public void test() throws Exception {

@@ -19,15 +19,15 @@
  */
 package com.jaspersoft.studio.data.customjrds;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import org.eclipse.swt.widgets.Display;
-
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 
 import com.jaspersoft.studio.data.DataAdapter;
 import com.jaspersoft.studio.data.DataAdapterEditor;
-import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
 import com.jaspersoft.studio.utils.Misc;
 
 public class CustomJrdsDataAdapter extends DataAdapter {
@@ -56,42 +56,34 @@ public class CustomJrdsDataAdapter extends DataAdapter {
 		setMethodToCall(map.get(methodToCallKey));
 	}
 	
-	public JRDataSource getJRDataSource() {
-		
-		try {
+	public void contributeParameters(Map<String, Object> parameters) throws JRException 
+	{
+		JRDataSource ds = null;
+		try 
+		{
             Class clazz = Class.forName( getFactoryClass(), true, Thread.currentThread().getContextClassLoader() );
-            return (net.sf.jasperreports.engine.JRDataSource) clazz.getMethod( getMethodToCall(), new Class[0]).invoke(null,new Object[0]);
+            ds = (JRDataSource) clazz.getMethod( getMethodToCall(), new Class[0]).invoke(null,new Object[0]);
         }
-		catch (Throwable ex)
-        {
-            String message = "unexpected.datasource.error!!";
-			DataAdapterErrorDialog.showErrorDialog( Display.getCurrent().getActiveShell(), message, ex);
-			System.out.println(message);
-            ex.printStackTrace();
-            return super.getJRDataSource();
-        }
+		catch (ClassNotFoundException e)
+		{
+			throw new JRException(e);			
+		} 
+		catch (NoSuchMethodException e)
+		{
+			throw new JRException(e);			
+		} 
+		catch (InvocationTargetException e)
+		{
+			throw new JRException(e);			
+		} 
+		catch (IllegalAccessException e)
+		{
+			throw new JRException(e);			
+		} 
+
+		parameters.put(JRParameter.REPORT_DATA_SOURCE, ds);
 	}
 	
-	public void test() throws Exception
-    {
-        try {
-        	Object obj = Class.forName( getFactoryClass() ).newInstance();
-            obj.getClass().getMethod( getMethodToCall() , new Class[0]).invoke(obj,new Object[0]);                
-        }
-        catch (NoClassDefFoundError ex)
-        {
-            throw new Exception("NoClassDefFoundError!!\nCheck your classpath!\n" + ex.getMessage());					
-        } 
-        catch (ClassNotFoundException ex)
-        {
-        	throw new Exception("ClassNotFoundError!!\nPossible not found class: " + getFactoryClass() + "\nCheck your classpath!\n" + ex.getMessage());			
-        } 
-        catch (Exception ex)
-        {
-        	throw new Exception("General problem:\n" + ex.getMessage());						
-        }
-    }
-
 	/*
 	 * GETTERS AND SETTERS
 	 */

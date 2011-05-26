@@ -29,6 +29,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 
 import org.eclipse.swt.widgets.Display;
@@ -106,6 +107,11 @@ public class JrdsProviderDataAdapter extends DataAdapter {
 		}
 		
 		return dsp;
+	}
+
+	public void contributeParameters(Map<String, Object> parameters) throws JRException
+	{
+		throw new JRException("FIXME");		
 	}
 
 	public void test() throws Exception {

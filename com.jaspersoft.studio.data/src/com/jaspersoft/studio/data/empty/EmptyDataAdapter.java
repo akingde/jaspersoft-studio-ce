@@ -25,7 +25,8 @@ package com.jaspersoft.studio.data.empty;
 
 import java.util.Map;
 
-import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRParameter;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -73,18 +74,9 @@ public class EmptyDataAdapter extends DataAdapter {
 	}
 
 	@Override
-	public JRDataSource getJRDataSource() {
-		return new net.sf.jasperreports.engine.JREmptyDataSource(getRecords());
-	}
-
-	@Override
-	public String getName() {
-		return super.getName();
-	}
-
-	@Override
-	public void setName(String name) {
-		super.setName(name);
+	public void contributeParameters(Map<String, Object> parameters) 
+	{
+		parameters.put(JRParameter.REPORT_DATA_SOURCE, new JREmptyDataSource(getRecords()));
 	}
 
 	@Override

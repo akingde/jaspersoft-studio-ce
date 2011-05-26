@@ -21,47 +21,32 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.queryexecutor;
+package com.jaspersoft.studio.data;
 
 import java.util.Map;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import net.sf.jasperreports.engine.JRException;
 
-import com.jaspersoft.studio.data.Activator;
-import com.jaspersoft.studio.data.DataAdapter;
-import com.jaspersoft.studio.data.DataAdapterEditor;
-
-public class QueryExecutorDataAdapter extends DataAdapter {
-
-	public QueryExecutorDataAdapter() {
-		
-	}
-
-	@Override
-	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/QueryExecutorDataAdapterIcon-16.gif");
-	}
-	
-	@Override
-	public DataAdapterEditor getEditor() {
-		return new QueryExecutorDataAdapterEditor();
-	}
-
-	@Override
-	public Map<String, String> getProperties() {
-		// does nothing
-		return super.getProperties();
-	}
-
-	@Override
-	public void loadProperties(Map<String, String> map) {
-		// does nothing
-	}
-
-	@Override
-	public void contributeParameters(Map<String, Object> parameters) {
-		// does nothing
-	}
-
+/**
+ * @author Teodor Danciu (teodord@users.sourceforge.net)
+ * @version $Id: JRBaseBand.java 4319 2011-05-17 09:22:14Z teodord $
+ */
+public interface JRDataAdapter
+{
+    
+	/**
+	 *
+	 */
+	public String getName(); 
+	  
+  /**
+   *
+   */
+  public Map<String, Object> getParameters() throws JRException;
+  
+  /**
+   *
+   */
+  public void dispose();
+  
 }

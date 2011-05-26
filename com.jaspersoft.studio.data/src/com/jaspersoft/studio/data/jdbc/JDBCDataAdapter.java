@@ -32,6 +32,11 @@ import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -133,66 +138,42 @@ public class JDBCDataAdapter extends DataAdapter {
     /** Creates a new instance of JDBCConnection */
     
     
+    private Map<String, Object> parameters;
+
     public JDBCDataAdapter() {
     	setName("New JDBC Data Adapter");
     }
     
 
-    /** This method returns an instanced java.sql.Connection to the database.
-     *  If an exception occurs, the method return null.
-     *  The connection must be closed by the user.
-     *  
-     *  @return a new connction, otherwise it returns null.
-     */
-    public java.sql.Connection getConnection()  {
-    	
-    	try {
-    		return getConnectionImpl();
-    	} catch (Exception ex)
-    	{
-    		// we need to decide what to do with this exception
-    	}
-    	return null;
-    }
-    
-    private java.sql.Connection getConnectionImpl() throws Exception {
-        
-            // Try the java connection...
-            try {
-                
-            		java.sql.Driver driver = null;
-            		driver = (java.sql.Driver)(Class.forName( getJDBCDriver(), true, getDriverClassLoader())).newInstance();
-                
-                    java.util.Properties connectProps = new java.util.Properties();
-                    
-                    if ((password == null || password.equals("") ) && !isSavePassword())
-                    {
-                        password = getPassword();
-                    }
-                    
-                    connectProps.setProperty("user", username);
-                    connectProps.setProperty("password", password);
-                    
-                    Connection conn = driver.connect( url, connectProps); 
- 
-        
-                    return conn;
-			
-            } 
-			catch (Exception ex)
-			{ 
-				
-				ex.printStackTrace();
-				throw ex;
-			}
-    }    
-   
-    
 	@Override
-    public boolean isJDBCConnection() {
-        return true;
-    }
-    
+	public void contributeParameters(Map<String, Object> parameters) throws JRException
+	{
+        Connection conn = null; 
+
+        try {
+    		Driver driver = null;
+    		driver = (Driver)(Class.forName( getJDBCDriver(), true, getDriverClassLoader())).newInstance();
+        
+            Properties connectProps = new Properties();
+            
+            if ((password == null || password.equals("") ) && !isSavePassword())
+            {
+                password = getPassword();
+            }
+            
+            connectProps.setProperty("user", username);
+            connectProps.setProperty("password", password);
+            
+            conn = driver.connect( url, connectProps); 
+        }
+		catch (Exception ex)
+		{ 
+			throw new JRException(ex);
+		}
+
+		parameters.put(JRParameter.REPORT_CONNECTION, conn);
+	}
+	
     /** Getter for property database.
      * @return Value of property database.
      *
@@ -371,25 +352,6 @@ public class JDBCDataAdapter extends DataAdapter {
         this.serverAddress = serverAddress;
     }
         
-    /**
-     * Test this JDBC connection. An exception is thrown if the getConnection method fails.
-     * The type of the exception is the original produce inside the getConnectionImpl
-     * method.
-     */
-    @Override
-    public void test() throws Exception
-    {
-        // Try the JDBC connection...
-    	Connection conn = null;
-        
-    	try {
-        		conn = getConnectionImpl();
-        } finally {
-            // Clean up
-            if( conn!=null ) try{ conn.close(); } catch(Exception e) { /* anyone really care? */ }
-        }
-    }
-
     public String getQueryLanguage() {
         return "SQL";
     }

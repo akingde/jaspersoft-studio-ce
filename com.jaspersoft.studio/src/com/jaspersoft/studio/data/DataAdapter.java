@@ -42,12 +42,8 @@
  */
 package com.jaspersoft.studio.data;
 
-import java.util.Map;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-
-import net.sf.jasperreports.engine.JasperReport;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.ui.DefaultDataAdapterEditor;
@@ -56,23 +52,9 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
  *
  * @author  gtoffoli
  */
-public abstract class DataAdapter implements IIconDescriptor {
+public abstract class DataAdapter extends JRAbstractDataAdapter implements IIconDescriptor 
+{
     
-  private String name = "";
-  
-  /*
-   * Return true if this connection is a "Connection" to a database
-   * I.E. you can see JDBCConnection
-   */
-  public boolean isJDBCConnection(){ return false; }
-  
-  
-  /*
-   * Return true if this ireport connection can be used using getJRDataSource
-   * I.E. you can see JDBCConnection
-   */
-  public boolean isJRDataSource() { return true; }
-  
   /**
    * Coming from the IIconDescriptor interface.
    * Just returns the name of this data adapter
@@ -118,44 +100,6 @@ public abstract class DataAdapter implements IIconDescriptor {
 	}
 
 
-	/**
-    *  This method return an instanced connection to the database.
-    *  If isJDBCConnection() return false => getConnection() return null
-    */
-  public java.sql.Connection getConnection(){ return null; }
-
-  /**
-   *  This method return an instanced JRDataDource to the database.
-   *  It just calls getJRDataSource(), but can be redefined in special
-   *  connections.
-   */
-  public net.sf.jasperreports.engine.JRDataSource getJRDataSource(JasperReport jasper) {
-  	return getJRDataSource();
-  }
-
-  /**
-   *  This method return an instanced JRDataDource to the database.
-   *  If isJDBCConnection() return true => getJRDataSource() should return false
-   */
-  public net.sf.jasperreports.engine.JRDataSource getJRDataSource() { return new net.sf.jasperreports.engine.JREmptyDataSource(); }
-    
-  /** Getter for property name.
-   * @return Value of property name.
-   *
-   */
-  public java.lang.String getName() {
-  	return name;
-  }
-    
-  /** Setter for property name.
-   * @param name New value of property name.
-   *
-   */
-  public void setName(java.lang.String name) {
-  	this.name = name;
-  }
-    
-    
   /** All properties of an IReportConnection are stored in a XML file as Pair key/value
    *  This HashMap must contain all the properties that the IReportConnection must save in the
    *  XML.
@@ -203,34 +147,22 @@ public abstract class DataAdapter implements IIconDescriptor {
   }
    
   /**
-   * This method is call before the adapter is used and permits to add special parameters to the map
-   *
-   */
-  public Map getSpecialParameters(Map map) throws net.sf.jasperreports.engine.JRException
-  {
-  	return map;
-  }
-  
-  /**
    * This method is call after the datasource is used to dispose special parameters
    * (i.e. closing an Hibernate session create as parameter with a getSpecialParameters...
    *
    */
-  public Map disposeSpecialParameters(Map map)
+  public void dispose()
   {
-  	return map;
   }
   
   
   /**
-   * This method is used to test the configuration. To throw an exception if the test fails is not mandatory
-   * and anyway the exception will be ignored.
-   * The method is responsible to show error messages it the test has success or fails!!
    *
    */
-  public void test() throws Exception  {
-    //JOptionPane.showMessageDialog( Utilities. ,I18n.getString("messages.connectionDialog.connectionTestSuccessful","Connection test successful!"),"",JOptionPane.INFORMATION_MESSAGE);
-    return;
+  public void test() throws Exception
+  {
+  	getParameters();
+  	dispose();
   }
   
   
@@ -244,4 +176,3 @@ public abstract class DataAdapter implements IIconDescriptor {
   	return new DefaultDataAdapterEditor();
   }
 }
-
