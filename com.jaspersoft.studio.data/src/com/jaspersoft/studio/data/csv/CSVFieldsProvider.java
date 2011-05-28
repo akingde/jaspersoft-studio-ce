@@ -12,7 +12,6 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 
 public class CSVFieldsProvider implements IFieldsProvider {
 
-	@Override
 	public List<JRDesignField> getFields(DataAdapter con,
 			JRDataset reportDataset, Map<String, Object> parameters)
 			throws JRException, UnsupportedOperationException {
