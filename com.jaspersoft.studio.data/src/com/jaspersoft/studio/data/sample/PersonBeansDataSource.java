@@ -34,7 +34,6 @@ public class PersonBeansDataSource extends JRAbstractBeanDataSourceProvider {
 		super(PersonBean.class);
 	}
 
-	@Override
 	public JRDataSource create(JasperReport arg0) throws JRException {
 		
 		ArrayList<PersonBean> list = new ArrayList<PersonBean>();
@@ -46,7 +45,6 @@ public class PersonBeansDataSource extends JRAbstractBeanDataSourceProvider {
 		return new JRBeanCollectionDataSource(list);
 	}
 	
-	@Override
 	public void dispose(JRDataSource arg0) throws JRException {
 		// nothing to do
 	}

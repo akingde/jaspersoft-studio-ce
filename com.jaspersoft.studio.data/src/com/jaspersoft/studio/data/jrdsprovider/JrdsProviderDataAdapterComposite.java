@@ -62,7 +62,6 @@ public class JrdsProviderDataAdapterComposite extends Composite {
 		 */
 		textJRDSProviderClassName.addModifyListener(new ModifyListener() {
 			
-			@Override
 			public void modifyText(ModifyEvent e) {
 				jrdsProviderDataAdapter.setJRDSProviderClassName(textJRDSProviderClassName.getText().trim());
 			}

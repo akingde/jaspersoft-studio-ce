@@ -67,7 +67,6 @@ public class CustomJrdsDataAdapterComposite extends Composite {
 		 */
 		textFactoryClass.addModifyListener(new ModifyListener() {
 			
-			@Override
 			public void modifyText(ModifyEvent e) {
 				customJrdsDataAdapter.setFactoryClass(textFactoryClass.getText().trim());
 			}
@@ -75,7 +74,6 @@ public class CustomJrdsDataAdapterComposite extends Composite {
 		
 		textMethodToCall.addModifyListener(new ModifyListener() {
 			
-			@Override
 			public void modifyText(ModifyEvent e) {
 				customJrdsDataAdapter.setMethodToCall(textMethodToCall.getText().trim());
 			}
