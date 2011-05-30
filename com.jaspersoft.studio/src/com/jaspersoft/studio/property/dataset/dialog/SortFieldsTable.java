@@ -7,6 +7,7 @@ import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
+import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -70,7 +71,12 @@ public class SortFieldsTable {
 		col[1].setText("Type");
 		col[1].pack();
 
+		col[2] = new TableColumn(wtable, SWT.NONE);
+		col[2].setText("Order");
+		col[2].pack();
+
 		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
 		tlayout.addColumnData(new ColumnWeightData(100, false));
 		tlayout.addColumnData(new ColumnWeightData(100, false));
 		wtable.setLayout(tlayout);
@@ -134,6 +140,8 @@ public class SortFieldsTable {
 					return true;
 				if (property.equals("TYPE")) //$NON-NLS-1$
 					return true;
+				if (property.equals("ORDER")) //$NON-NLS-1$
+					return true;
 				return false;
 			}
 
@@ -143,6 +151,8 @@ public class SortFieldsTable {
 					return prop.getName();
 				if ("TYPE".equals(property)) //$NON-NLS-1$
 					return EnumHelper.getValue(prop.getType(), 0, false);
+				if ("ORDER".equals(property)) //$NON-NLS-1$
+					return EnumHelper.getValue(prop.getOrderValue(), 1, false);
 
 				return ""; //$NON-NLS-1$
 			}
@@ -154,6 +164,8 @@ public class SortFieldsTable {
 					field.setName((String) value);
 				} else if ("TYPE".equals(property)) { //$NON-NLS-1$
 					field.setType((SortFieldTypeEnum) EnumHelper.getSetValue(SortFieldTypeEnum.values(), value, 0, false));
+				} else if ("ORDER".equals(property)) { //$NON-NLS-1$
+					field.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
 				}
 				tviewer.update(element, new String[] { property });
 				tviewer.refresh();
@@ -161,8 +173,9 @@ public class SortFieldsTable {
 		});
 
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
-				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortFieldTypeEnum.values(), NullEnum.NOTNULL)) });
-		viewer.setColumnProperties(new String[] { "NAME", "TYPE" }); //$NON-NLS-1$ //$NON-NLS-2$
+				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortFieldTypeEnum.values(), NullEnum.NOTNULL)),
+				new ComboBoxCellEditor(parent, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL)) });
+		viewer.setColumnProperties(new String[] { "NAME", "TYPE", "ORDER" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -174,6 +187,8 @@ public class SortFieldsTable {
 				return field.getName();
 			case 1:
 				return field.getType().getName();
+			case 2:
+				return field.getOrderValue().getName();
 			}
 			return ""; //$NON-NLS-1$
 		}

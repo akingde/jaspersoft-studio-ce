@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.sortfield;
 
@@ -30,6 +26,7 @@ import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -46,6 +43,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+
 /*
  * The Class MField.
  * 
@@ -182,12 +180,18 @@ public class MSortField extends APropertyNode implements ICopyable {
 		nameD.setDescription(Messages.MSortField_name_description);
 		desc.add(nameD);
 
+		ComboBoxPropertyDescriptor typeD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, "Type",
+				EnumHelper.getEnumNames(SortFieldTypeEnum.values(), NullEnum.NOTNULL));
+		typeD.setDescription("Sort field type");
+		desc.add(typeD);
+
 		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER,
 				Messages.common_order, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
 		orderD.setDescription(Messages.MSortField_order_description);
 		desc.add(orderD);
 
 		defaultsMap.put(JRDesignSortField.PROPERTY_ORDER, EnumHelper.getValue(SortOrderEnum.ASCENDING, 1, false));
+		defaultsMap.put(JRDesignSortField.PROPERTY_TYPE, EnumHelper.getValue(SortFieldTypeEnum.FIELD, 0, false));
 	}
 
 	/*
@@ -201,6 +205,8 @@ public class MSortField extends APropertyNode implements ICopyable {
 			return jrField.getName();
 		if (id.equals(JRDesignSortField.PROPERTY_ORDER))
 			return EnumHelper.getValue(jrField.getOrderValue(), 1, false);
+		if (id.equals(JRDesignSortField.PROPERTY_TYPE))
+			return EnumHelper.getValue(jrField.getType(), 0, false);
 		return null;
 	}
 
@@ -215,8 +221,10 @@ public class MSortField extends APropertyNode implements ICopyable {
 			if (!value.equals("")) { //$NON-NLS-1$
 				jrField.setName((String) value);
 			}
-		} else if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
+		} else if (id.equals(JRDesignSortField.PROPERTY_ORDER))
 			jrField.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
+		else if (id.equals(JRDesignSortField.PROPERTY_TYPE))
+			jrField.setType((SortFieldTypeEnum) EnumHelper.getSetValue(SortFieldTypeEnum.values(), value, 0, false));
 	}
 
 	/**

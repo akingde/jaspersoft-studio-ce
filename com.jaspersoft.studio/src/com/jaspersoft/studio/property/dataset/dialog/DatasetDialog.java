@@ -46,6 +46,7 @@ import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
 import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
 import com.jaspersoft.studio.model.sortfield.command.DeleteSortFieldCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -55,6 +56,7 @@ final class DatasetDialog extends FormDialog {
 
 	DatasetDialog(Shell shell, MDataset node, IFile file) {
 		super(shell);
+		super.configureShell(shell);
 		shell.setText("Dataset & Query Dialog");
 		mdataset = node;
 		this.file = file;
@@ -72,9 +74,10 @@ final class DatasetDialog extends FormDialog {
 
 		createToolbar(mform.getForm().getBody());
 
-		SashForm sf = new SashForm(mform.getForm().getBody(), SWT.VERTICAL);
+		SashForm sf = new CSashForm(mform.getForm().getBody(), SWT.VERTICAL);
+
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.heightHint = 600;
+		gd.heightHint = 700;
 		gd.widthHint = 800;
 		sf.setLayoutData(gd);
 		sf.setLayout(new GridLayout());
@@ -83,19 +86,21 @@ final class DatasetDialog extends FormDialog {
 		createTop(sf, toolkit);
 
 		createBottom(sf, toolkit);
+		sf.setWeights(new int[] { 450, 150 });
 
 		setDataset((JRDesignDataset) mdataset.getValue());
-
 	}
 
 	private void createToolbar(Composite parent) {
 		ToolBar tb = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
+		tb.setBackground(parent.getBackground());
+		// tb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ToolBarManager manager = new ToolBarManager(tb);
 		dscombo = new DatasourceComboItem(new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
-				if(da instanceof IFieldsProvider){
-//					((IFieldsProvider) da).getFields(da, reportDataset, parameters);
+				if (da instanceof IFieldsProvider) {
+					// ((IFieldsProvider) da).getFields(da, reportDataset, parameters);
 				}
 			}
 
@@ -187,14 +192,14 @@ final class DatasetDialog extends FormDialog {
 
 	private void createBottom(Composite parent, FormToolkit toolkit) {
 		CTabFolder tabFolder = new CTabFolder(parent, SWT.BOTTOM);
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.heightHint = 150;
 		tabFolder.setLayoutData(gd);
 		tabFolder.setBackground(background);
 
 		createFields(toolkit, tabFolder);
 		createSortFields(toolkit, tabFolder);
-		createDataPreview(toolkit, tabFolder);
+		// createDataPreview(toolkit, tabFolder);
 
 		tabFolder.setSelection(0);
 	}
