@@ -17,36 +17,41 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.jrdsprovider;
+package com.jaspersoft.studio.data.customjrds;
 
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.widgets.Composite;
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataSourceDataAdapter;
+import net.sf.jasperreports.data.DataSourceDataAdapterService;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class JrdsProviderDataAdapterEditor implements DataAdapterEditor {
-
-	JrdsProviderDataAdapterComposite composite = null;
+public class CustomJrdsDataAdapterDescriptor extends DataAdapterDescriptor 
+{
 	
-	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
-		if (dataAdapter instanceof JrdsProviderDataAdapterDescriptor) {
-			composite.setDataAdapter((JrdsProviderDataAdapterDescriptor)dataAdapter);
-		}
+	private DataSourceDataAdapter dsDataAdapter = new DataSourceDataAdapter();
+	
+	@Override
+	public DataAdapter getDataAdapter() {
+		return dsDataAdapter;
 	}
 
-	public DataAdapterDescriptor getDataAdapter() {
-		return composite.getDataAdapter();
+	@Override
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		dsDataAdapter = (DataSourceDataAdapter)dataAdapter;
 	}
 
-	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
-		if (composite == null) {
-			composite = new JrdsProviderDataAdapterComposite(parent, style);
-		}
-		return composite;
+	@Override
+	public DataAdapterService getDataAdapterService() {
+		DataSourceDataAdapterService dsDataAdapterService = new DataSourceDataAdapterService();
+		dsDataAdapterService.setDataAdapter(dsDataAdapter);
+		return dsDataAdapterService;
 	}
 
-	public String getHelpContextId() {
-		return composite.getHelpContextId();
+	@Override
+	public DataAdapterEditor getEditor() {
+		return new CustomJrdsDataAdapterEditor();
 	}
+
 }

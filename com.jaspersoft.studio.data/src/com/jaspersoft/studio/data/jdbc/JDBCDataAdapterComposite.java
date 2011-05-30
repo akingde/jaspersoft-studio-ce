@@ -30,6 +30,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import net.sf.jasperreports.data.JdbcDataAdapter;
+
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -51,12 +53,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.SWTResourceManager;
 
 public class JDBCDataAdapterComposite extends Composite {
-	private JDBCDataAdapter dataAdapter = null;
+	private JDBCDataAdapterDescriptor dataAdapterDesc = null;
 	private Text textJDBCUrl;
 	private Text textServerAddress;
 	private Text textDatabase;
@@ -360,7 +362,7 @@ public class JDBCDataAdapterComposite extends Composite {
 			// Now check if the driver is in the classpath or not....
 			java.util.List<URL> paths = new ArrayList<URL>();
 			
-			for (String s : dataAdapter.getClasspathPaths())
+			for (String s : ((JdbcDataAdapter)dataAdapterDesc.getDataAdapter()).getClasspathPaths())
 			{
 				File f = new File(s);
 				if (f.exists())
@@ -429,20 +431,23 @@ public class JDBCDataAdapterComposite extends Composite {
 	 * The UI will be updated with the content of this adapter
 	 * @param dataAdapter
 	 */
-	public void setDataAdapter(JDBCDataAdapter editingDataAdapter) {
-		dataAdapter = editingDataAdapter;
+	public void setDataAdapter(JDBCDataAdapterDescriptor editingDataAdapter) 
+	{
+		dataAdapterDesc = editingDataAdapter;
 		
-		String driverName = Misc.nvl(dataAdapter.getJDBCDriver(), "");
+		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter)dataAdapterDesc.getDataAdapter();
+		
+		String driverName = Misc.nvl(jdbcDataAdapter.getDriver(), "");
 		comboJDBCDriver.getCombo().setText(driverName);
-		textUsername.setText(Misc.nvl(dataAdapter.getUsername(),""));
-		textPassword.setText(Misc.nvl(dataAdapter.getPassword(),""));
-		textJDBCUrl.setText(Misc.nvl(dataAdapter.getUrl(),""));
-		textServerAddress.setText(Misc.nvl(dataAdapter.getServerAddress(),""));
-		textDatabase.setText(Misc.nvl(dataAdapter.getDatabase(),""));
-		btnSavePassword.setSelection( dataAdapter.isSavePassword() );
+		textUsername.setText(Misc.nvl(jdbcDataAdapter.getUsername(),""));
+		textPassword.setText(Misc.nvl(jdbcDataAdapter.getPassword(),""));
+		textJDBCUrl.setText(Misc.nvl(jdbcDataAdapter.getUrl(),""));
+		textServerAddress.setText(Misc.nvl(jdbcDataAdapter.getServerAddress(),""));
+		textDatabase.setText(Misc.nvl(jdbcDataAdapter.getDatabase(),""));
+		btnSavePassword.setSelection( jdbcDataAdapter.isSavePassword() );
 		
 		listJars.removeAll();
-		for (String s : dataAdapter.getClasspathPaths())
+		for (String s : jdbcDataAdapter.getClasspathPaths())
 		{
 			listJars.add(s);
 		}
@@ -450,24 +455,28 @@ public class JDBCDataAdapterComposite extends Composite {
 		driverChanged(); //Fire a driver change event...
 	}
 	
-	public DataAdapter getDataAdapter() {
-		if(dataAdapter == null){
-			dataAdapter = new JDBCDataAdapter();
+	public DataAdapterDescriptor getDataAdapter() 
+	{
+		if(dataAdapterDesc == null){
+			dataAdapterDesc = new JDBCDataAdapterDescriptor();
 		}
-		dataAdapter.setJDBCDriver( comboJDBCDriver.getCombo().getText());
-		dataAdapter.setUsername( textUsername.getText());
-		dataAdapter.setPassword( textPassword.getText());
-		dataAdapter.setUrl( textJDBCUrl.getText());
-		dataAdapter.setDatabase( textDatabase.getText());
-		dataAdapter.setServerAddress( textServerAddress.getText());
-		dataAdapter.setSavePassword( btnSavePassword.getSelection() );
-		dataAdapter.getClasspathPaths().clear();
+
+		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter)dataAdapterDesc.getDataAdapter();
+		
+		jdbcDataAdapter.setDriver( comboJDBCDriver.getCombo().getText());
+		jdbcDataAdapter.setUsername( textUsername.getText());
+		jdbcDataAdapter.setPassword( textPassword.getText());
+		jdbcDataAdapter.setUrl( textJDBCUrl.getText());
+		jdbcDataAdapter.setDatabase( textDatabase.getText());
+		jdbcDataAdapter.setServerAddress( textServerAddress.getText());
+		jdbcDataAdapter.setSavePassword( btnSavePassword.getSelection() );
+		jdbcDataAdapter.getClasspathPaths().clear();
 		for (int i=0; i<listJars.getItemCount(); ++i)
 		{
-			dataAdapter.getClasspathPaths().add(listJars.getItem(i));
+			jdbcDataAdapter.getClasspathPaths().add(listJars.getItem(i));
 		}
 		
-		return dataAdapter;
+		return dataAdapterDesc;
 	}
 
 	public String getHelpContextId() {

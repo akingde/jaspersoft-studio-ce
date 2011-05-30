@@ -42,6 +42,10 @@
  */
 package com.jaspersoft.studio.data;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.XmlUtil;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -52,19 +56,40 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
  *
  * @author  gtoffoli
  */
-public abstract class DataAdapter extends JRAbstractDataAdapter implements IIconDescriptor 
+public abstract class DataAdapterDescriptor implements IIconDescriptor 
 {
-    
-  /**
+	/**
+	 *
+	 */
+	public abstract DataAdapter getDataAdapter();
+	  
+	/**
+	 * FIXME consider remove
+	 */
+	public abstract void setDataAdapter(DataAdapter dataAdapter);
+	  
+	/**
+	 *
+	 */
+	public abstract DataAdapterService getDataAdapterService();
+	  
+	/**
+   * FIXME consider remove
+   */
+  public String getName() {
+		return getDataAdapter() == null ? null : getDataAdapter().getName();
+	}
+
+	/**
    * Coming from the IIconDescriptor interface.
    * Just returns the name of this data adapter
    */
   public String getTitle() {
-  	if (getName() == null || getName().length() == 0)
+  	if (getDataAdapter() == null || getDataAdapter().getName() == null || getDataAdapter().getName().length() == 0)
   	{
   		return "<unnamed>";
   	}
-		return getName();
+		return getDataAdapter().getName();
 	}
 
   /**
@@ -100,72 +125,36 @@ public abstract class DataAdapter extends JRAbstractDataAdapter implements IIcon
 	}
 
 
-  /** All properties of an IReportConnection are stored in a XML file as Pair key/value
-   *  This HashMap must contain all the properties that the IReportConnection must save in the
-   *  XML.
-   *  IReport will store the content of this HashMap in the XML. Please note that all the values
-   *  and keys will be casted to String!
-   */
-  public java.util.Map<String, String> getProperties()
-  {
-  	return new java.util.HashMap<String, String>();
-  }
-  
-  /** All properties of a IReportConnection are stored in a XML file as Pair key/value
-   *  This HashMap contains all the properties found for this IReportConnection in the
-   *  XML. You must use this hashMap to initialize all attributes of your IReprotConnection
-   */
-  public void loadProperties(java.util.Map<String, String> map)
-  {
-  }
-  
   /** 
-   *  It just write a portion of XML to persiste the data adapter
+   *  It just write a portion of XML to persist the data adapter
    *  it is used by the DataAdapterManager and can be used to export this data adapter too.
+   *  FIXME consider remove
    */
   public final String toXml()
   {
-    java.util.Map<String,String> hm = this.getProperties();
-    StringBuffer xml = new StringBuffer();
-    xml.append("\t<dataAdapter name=\""+ this.getName() +"\" class=\"" + this.getClass().getName() +"\">\n");
-    java.util.Iterator<String> iterator = hm.keySet().iterator();
-    
-    while (iterator.hasNext())
-    {
-      String key = iterator.next();
-      if (key == null || hm.get(key) == null) continue;
-      xml.append("\t\t<parameter name=\""  +  key + "\"><![CDATA[" + hm.get(key) + "]]></parameter>\n");
-    }
-    xml.append("\t</dataAdapter>\n");
-        
-    return xml.toString();
+//    java.util.Map<String,String> hm = getDataAdapter().getProperties();
+//    StringBuffer xml = new StringBuffer();
+//    xml.append("\t<dataAdapter name=\""+ this.getName() +"\" class=\"" + this.getClass().getName() +"\">\n");
+//    java.util.Iterator<String> iterator = hm.keySet().iterator();
+//    
+//    while (iterator.hasNext())
+//    {
+//      String key = iterator.next();
+//      if (key == null || hm.get(key) == null) continue;
+//      xml.append("\t\t<parameter name=\""  +  key + "\"><![CDATA[" + hm.get(key) + "]]></parameter>\n");
+//    }
+//    xml.append("\t</dataAdapter>\n");
+//        
+//    return xml.toString();
+  	
+  	return XmlUtil.write(getDataAdapter());
   }    
     
   public String toString()
   {
-    return getName();
+    return getTitle();
   }
    
-  /**
-   * This method is call after the datasource is used to dispose special parameters
-   * (i.e. closing an Hibernate session create as parameter with a getSpecialParameters...
-   *
-   */
-  public void dispose()
-  {
-  }
-  
-  
-  /**
-   *
-   */
-  public void test() throws Exception
-  {
-  	getParameters();
-  	dispose();
-  }
-  
-  
   /**
    * This method is used to provide to the datasources window the GUI to configure this kind of component.
    * 

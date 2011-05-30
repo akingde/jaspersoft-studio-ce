@@ -26,20 +26,20 @@ package com.jaspersoft.studio.data.queryexecutor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class QueryExecutorDataAdapterEditor implements DataAdapterEditor {
 	
 	QueryExecutorDataAdapterComposite composite = null;
 
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		if (dataAdapter instanceof QueryExecutorDataAdapter) {
-			composite.setDataAdapter((QueryExecutorDataAdapter) dataAdapter);
+	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
+		if (dataAdapter instanceof QueryExecutorDataAdapterDescriptor) {
+			composite.setDataAdapter((QueryExecutorDataAdapterDescriptor) dataAdapter);
 		}
 	}
 
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		return composite.getDataAdapter();
 	}
 

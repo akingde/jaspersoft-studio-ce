@@ -23,34 +23,46 @@
  */
 package com.jaspersoft.studio.data.xml;
 
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.widgets.Composite;
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.XmlDataAdapter;
+import net.sf.jasperreports.data.XmlDataAdapterService;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class XMLDataAdapterEditor implements DataAdapterEditor {
+public class XMLDataAdapterDescriptor extends DataAdapterDescriptor 
+{
+	private XmlDataAdapter xmlDataAdapter = new XmlDataAdapter();
 	
-	XMLDataAdapterComposite composite = null;
-
-	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
-		if (dataAdapter instanceof XMLDataAdapterDescriptor) {
-			this.composite.setDataAdapter((XMLDataAdapterDescriptor)dataAdapter);
-		}
+	@Override
+	public DataAdapter getDataAdapter() {
+		return xmlDataAdapter;
 	}
 
-	public DataAdapterDescriptor getDataAdapter() {
-		return this.composite.getDataAdapter();
+	@Override
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		this.xmlDataAdapter = (XmlDataAdapter)dataAdapter;
 	}
 
-	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
-		if (this.composite == null) {
-			composite = new XMLDataAdapterComposite(parent, style);
-		}
-		return this.composite;
+	@Override
+	public DataAdapterService getDataAdapterService() {
+		XmlDataAdapterService xmlDataAdapterService = new XmlDataAdapterService();
+		xmlDataAdapterService.setDataAdapter(xmlDataAdapter);
+		return xmlDataAdapterService;
 	}
 
-	public String getHelpContextId() {
-		return this.composite.getHelpContextId();
+	@Override
+	public DataAdapterEditor getEditor() {
+		return new XMLDataAdapterEditor();
+	}
+
+	@Override
+	public ImageDescriptor getIcon16() {
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/XMLDataAdapterIcon-16.gif");
 	}
 }

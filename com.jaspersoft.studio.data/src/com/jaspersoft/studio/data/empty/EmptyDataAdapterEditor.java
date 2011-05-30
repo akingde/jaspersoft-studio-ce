@@ -26,21 +26,21 @@ package com.jaspersoft.studio.data.empty;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class EmptyDataAdapterEditor implements DataAdapterEditor {
 	
 	EmptyDataAdapterComposite composite = null;
 
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		if (dataAdapter instanceof EmptyDataAdapter)
+	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
+		if (dataAdapter instanceof EmptyDataAdapterDescriptor)
 		{
-			this.composite.setDataAdapter((EmptyDataAdapter) dataAdapter);
+			this.composite.setDataAdapter((EmptyDataAdapterDescriptor) dataAdapter);
 		}
 	}
 
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		return this.composite.getDataAdapter();
 	}
 

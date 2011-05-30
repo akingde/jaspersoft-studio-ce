@@ -7,7 +7,7 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 
 public interface IFieldsProvider {
 
@@ -28,7 +28,7 @@ public interface IFieldsProvider {
 	 * @throws JRException
 	 *           if an error occurs.
 	 */
-	public List<JRDesignField> getFields(DataAdapter con, JRDataset reportDataset, Map<String, Object> parameters)
+	public List<JRDesignField> getFields(DataAdapterDescriptor con, JRDataset reportDataset, Map<String, Object> parameters)
 			throws JRException, UnsupportedOperationException;
 
 }

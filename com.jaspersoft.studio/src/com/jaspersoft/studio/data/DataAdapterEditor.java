@@ -46,7 +46,7 @@ public interface DataAdapterEditor {
 	 * @param dataAdapter
 	 *          DataAdapter to edit
 	 */
-	public void setDataAdapter(DataAdapter dataAdapter);
+	public void setDataAdapter(DataAdapterDescriptor dataAdapter);
 
 	/**
 	 * This method is called when the user completes to edit the datasource or when a datasource test is required.
@@ -54,7 +54,7 @@ public interface DataAdapterEditor {
 	 * @return IReportConnection modified. IT can be the same instance get in input with setIReportConnection or a new
 	 *         one.
 	 */
-	public DataAdapter getDataAdapter();
+	public DataAdapterDescriptor getDataAdapter();
 	
 	/**
 	 * This method allows to provide a UI component to edit the data adapter. The WizardPage reference is convenient

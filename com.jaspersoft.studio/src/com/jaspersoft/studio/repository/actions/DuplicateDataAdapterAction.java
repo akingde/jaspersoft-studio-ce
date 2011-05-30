@@ -45,7 +45,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.ISharedImages;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
 
@@ -77,14 +77,14 @@ public class DuplicateDataAdapterAction extends Action {
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MDataAdapter) {
-				DataAdapter copyDataAdapter = DataAdapterManager.cloneDataAdapter(((MDataAdapter) obj).getDataAdapter());
+				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(((MDataAdapter) obj).getDataAdapter());
 				String name = "copy_of_" + copyDataAdapter.getName();
 				for (int j = 1; j < 1000; j++) {
 					if (DataAdapterManager.isDataAdapterNameValid(name))
 						break;
 					name = "copy_of_" + copyDataAdapter.getName() + j;
 				}
-				copyDataAdapter.setName(name);
+				copyDataAdapter.getDataAdapter().setName(name);
 				DataAdapterManager.addDataAdapter(copyDataAdapter);
 				treeViewer.refresh(true);
 			}

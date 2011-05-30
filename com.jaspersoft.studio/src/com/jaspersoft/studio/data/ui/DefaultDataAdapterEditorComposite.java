@@ -30,6 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.data.DataAdapter;
+
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -54,12 +56,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 
 public class DefaultDataAdapterEditorComposite extends Composite {
 	
 	private WizardPage wizardPage = null;
-	private DataAdapter dataAdapter = null;
+	private DataAdapterDescriptor dataAdapterDesc = null;
 	private TableViewer tableViewer;
 	private Table table;
 	private TableViewerColumn propertyViewerColumn;
@@ -205,12 +207,14 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	 * Set the DataAdapter and initial values for UI elements.
 	 * @param dataAdapter
 	 */
-	public void setDataAdapter(DataAdapter dataAdapter) {
+	public void setDataAdapter(DataAdapterDescriptor dataAdapterDesc) {
 		
-		this.dataAdapter = dataAdapter;
+		this.dataAdapterDesc = dataAdapterDesc;
+		
+		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
 		
 		Map<String, String> map = new HashMap<String, String>();
-		map = this.dataAdapter.getProperties();
+		//FIXMEDATA map = dataAdapter.getProperties();
 		
 		if (map.size() > 0) {
 			String[] keys = new String[map.size()];
@@ -239,19 +243,21 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 	 * Get the DataAdapter with the values from the UI elements.
 	 * @return dataAdapter
 	 */
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		
-		if(dataAdapter == null){
+		if(dataAdapterDesc == null){
 		 // dataAdapter should never be null
 		}
+		
+		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
 		
 		Map<String, String> map = new HashMap<String, String>();
 		for (String[] row : rows) {
 			map.put(row[0], row[1]);
 		}
-		dataAdapter.loadProperties(map);
+		//FIXMEDATA dataAdapter.loadProperties(map);
 		
-		return dataAdapter;
+		return dataAdapterDesc;
 	}
 
 	/**

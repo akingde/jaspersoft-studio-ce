@@ -26,20 +26,20 @@ package com.jaspersoft.studio.data.csv;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class CSVDataAdapterEditor implements DataAdapterEditor {
 	
 	CSVDataAdapterComposite composite = null;
 
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		if (dataAdapter instanceof CSVDataAdapter) {
-			this.composite.setDataAdapter((CSVDataAdapter)dataAdapter);
+	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
+		if (dataAdapter instanceof CSVDataAdapterDescriptor) {
+			this.composite.setDataAdapter((CSVDataAdapterDescriptor)dataAdapter);
 		}
 	}
 
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		return this.composite.getDataAdapter();
 	}
 

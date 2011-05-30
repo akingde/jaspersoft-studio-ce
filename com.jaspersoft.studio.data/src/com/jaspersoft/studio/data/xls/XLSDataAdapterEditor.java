@@ -26,20 +26,20 @@ package com.jaspersoft.studio.data.xls;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class XLSDataAdapterEditor implements DataAdapterEditor {
 
 	XLSDataAdapterComposite composite = null;
 	
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		if (dataAdapter instanceof XLSDataAdapter) {
-			this.composite.setDataAdapter((XLSDataAdapter)dataAdapter);
+	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
+		if (dataAdapter instanceof XLSDataAdapterDescriptor) {
+			this.composite.setDataAdapter((XLSDataAdapterDescriptor)dataAdapter);
 		}
 	}
 
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		return this.composite.getDataAdapter();
 	}
 

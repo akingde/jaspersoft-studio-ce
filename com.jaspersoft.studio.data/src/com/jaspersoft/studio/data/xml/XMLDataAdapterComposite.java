@@ -26,6 +26,8 @@ package com.jaspersoft.studio.data.xml;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import net.sf.jasperreports.data.XmlDataAdapter;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -42,7 +44,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.jface.dialogs.LocaleDialog;
 import com.jaspersoft.studio.jface.dialogs.TimeZoneDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
@@ -50,7 +52,7 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class XMLDataAdapterComposite extends Composite {
 	
-	private XMLDataAdapter xmlDataAdapter = null;
+	private XMLDataAdapterDescriptor xmlDataAdapterDesc = null;
 	private Button btnRadioButtonUseXpath = null;
 	private Button btnRadioButtonCreateDataAdapter = null;
 	private Text textFileName;
@@ -284,12 +286,14 @@ public class XMLDataAdapterComposite extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public void setDataAdapter(XMLDataAdapter dataAdapter) {
+	public void setDataAdapter(XMLDataAdapterDescriptor dataAdapter) 
+	{
+		this.xmlDataAdapterDesc = dataAdapter;
 		
-		this.xmlDataAdapter = dataAdapter;
+		XmlDataAdapter xmlDataAdapter = (XmlDataAdapter)xmlDataAdapterDesc.getDataAdapter();
 		
-		textFileName.setText(Misc.nvl( this.xmlDataAdapter.getFileName(),""));
-		if (this.xmlDataAdapter.isUseConnection()) {
+		textFileName.setText(Misc.nvl( xmlDataAdapter.getFileName(),""));
+		if (xmlDataAdapter.isUseConnection()) {
 			useConnection = true;
 			btnRadioButtonCreateDataAdapter.setSelection(true);
 			textSelectExpression.setEnabled(true);
@@ -300,12 +304,12 @@ public class XMLDataAdapterComposite extends Composite {
 			btnRadioButtonCreateDataAdapter.setSelection(false);
 			textSelectExpression.setEnabled(false);
 		}
-		textSelectExpression.setText(Misc.nvl(this.xmlDataAdapter.getSelectExpression(),""));
+		textSelectExpression.setText(Misc.nvl(xmlDataAdapter.getSelectExpression(),""));
 		
-		textDatePattern.setText( Misc.nvl(this.xmlDataAdapter.getDatePattern(), "") );
-		textNumberPattern.setText( Misc.nvl(this.xmlDataAdapter.getNumberPattern(), "") );
+		textDatePattern.setText( Misc.nvl(xmlDataAdapter.getDatePattern(), "") );
+		textNumberPattern.setText( Misc.nvl(xmlDataAdapter.getNumberPattern(), "") );
 		
-		locale = this.xmlDataAdapter.getLocale();
+		locale = xmlDataAdapter.getLocale();
 		if (locale != null) {
 			textLocale.setText(locale.getDisplayName());
 		} else {
@@ -313,7 +317,7 @@ public class XMLDataAdapterComposite extends Composite {
 			locale = Locale.getDefault();
 		}
 		
-		timeZone = this.xmlDataAdapter.getTimeZone();
+		timeZone = xmlDataAdapter.getTimeZone();
 		if (timeZone != null) {
 			textTimeZone.setText(timeZone.getID());
 		} else {
@@ -322,9 +326,11 @@ public class XMLDataAdapterComposite extends Composite {
 		}
 	}
 
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() 
+	{
+		if (xmlDataAdapterDesc == null) xmlDataAdapterDesc = new XMLDataAdapterDescriptor();
 		
-		if (xmlDataAdapter == null) xmlDataAdapter = new XMLDataAdapter();
+		XmlDataAdapter xmlDataAdapter = (XmlDataAdapter)xmlDataAdapterDesc.getDataAdapter();
 		
 		xmlDataAdapter.setFileName(textFileName.getText());
 		xmlDataAdapter.setUseConnection(useConnection);
@@ -335,7 +341,7 @@ public class XMLDataAdapterComposite extends Composite {
 		xmlDataAdapter.setLocale(locale);
 		xmlDataAdapter.setTimeZone(timeZone);
 		
-		return xmlDataAdapter;
+		return xmlDataAdapterDesc;
 	}
 
 	public String getHelpContextId() {

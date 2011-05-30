@@ -26,20 +26,20 @@ package com.jaspersoft.studio.data.remotexml;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class RemoteXMLDataAdapterEditor implements DataAdapterEditor {
 	
 	RemoteXMLDataAdapterComposite composite = null;
 
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		if (dataAdapter instanceof RemoteXMLDataAdapter) {
-			this.composite.setDataAdapter((RemoteXMLDataAdapter)dataAdapter);
+	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
+		if (dataAdapter instanceof RemoteXMLDataAdapterDescriptor) {
+			this.composite.setDataAdapter((RemoteXMLDataAdapterDescriptor)dataAdapter);
 		}
 	}
 
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		return this.composite.getDataAdapter();
 	}
 

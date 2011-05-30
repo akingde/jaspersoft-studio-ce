@@ -34,7 +34,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
@@ -43,7 +43,7 @@ import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
 
 public class DataAdapterWizard extends Wizard implements SelectionListener {
 
-	private DataAdapter dataAdapter                     = null;
+	private DataAdapterDescriptor dataAdapter                     = null;
 	private DataAdapterWizardDialog wizardDialog        = null;
 	private DataAdapterFactory selectedFactory          = null;
 	private DataAdaptersListPage dataAdapterListPage    = null;
@@ -64,7 +64,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	 * 
 	 * @param dataAdapter
 	 */
-	public DataAdapterWizard(DataAdapter dataAdapter) {
+	public DataAdapterWizard(DataAdapterDescriptor dataAdapter) {
 		this();
 		this.dataAdapter = dataAdapter;
 	}
@@ -88,7 +88,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 						DataAdapterFactory factory = dataAdapterListPage.getSelectedFactory();
 						
 						// 1. instance a new dataAdapter using the factory
-						DataAdapter newDataAdapter = factory.createDataAdapter();
+						DataAdapterDescriptor newDataAdapter = factory.createDataAdapter();
 						
 						// 2. set in the wizard page the data adapter to edit
 						if(selectedFactory != factory) {
@@ -135,7 +135,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	  
 		if (this.dataAdapter != null)
 		{
-			DataAdapter editedDataAdapter = DataAdapterManager.cloneDataAdapter( this.dataAdapter );
+			DataAdapterDescriptor editedDataAdapter = DataAdapterManager.cloneDataAdapter( this.dataAdapter );
 			dataAdapterEditorPage.setDataAdapter(editedDataAdapter);
 		}
 	}
@@ -145,7 +145,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	// Save the new adapter using the manager
 	@Override
 	public boolean performFinish() {
-		DataAdapter editedDataAdapter = dataAdapterEditorPage.getDataAdapter();
+		DataAdapterDescriptor editedDataAdapter = dataAdapterEditorPage.getDataAdapter();
 		
 		if (this.dataAdapter == null)
 		{
@@ -154,12 +154,13 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 		else  // We are modifying an existing adapter....
 		{
 			// ... let's update with the adapter just modified ...
-			this.dataAdapter.loadProperties(editedDataAdapter.getProperties());
-			if (!this.dataAdapter.getName().equals( editedDataAdapter.getName() ))
+			String oldName = this.dataAdapter.getName();
+			dataAdapter.setDataAdapter(editedDataAdapter.getDataAdapter());
+			if (!oldName.equals( editedDataAdapter.getName() ))
 			{
-				if (DataAdapterManager.isDataAdapterNameValid(editedDataAdapter.getName()))
+				if (!DataAdapterManager.isDataAdapterNameValid(editedDataAdapter.getName()))
 				{
-					this.dataAdapter.setName(editedDataAdapter.getName());
+					dataAdapter.getDataAdapter().setName(oldName);
 				}
 			}
 		}
@@ -172,7 +173,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	public void widgetSelected(SelectionEvent e) {
 		if(getContainer().getCurrentPage() == dataAdapterEditorPage) {
 			try {
-				dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().test();
+				dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapterService().test();
 				
 				MessageBox mb = new MessageBox(getContainer().getShell(), SWT.ICON_INFORMATION | SWT.OK);
         mb.setText("Test");
@@ -200,7 +201,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	 * 
 	 * @return
 	 */
-	public DataAdapter getDataAdapter()
+	public DataAdapterDescriptor getDataAdapter()
 	{
 		return this.dataAdapter;
 	}

@@ -47,7 +47,7 @@ import org.eclipse.ui.IPartListener;
 
 import com.jasperassistant.designer.viewer.IReportViewerListener;
 import com.jasperassistant.designer.viewer.ReportViewerEvent;
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.messages.Messages;
 
@@ -57,7 +57,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	/**
 	 * List of dataAdapter backing end the combo box. The combo shows the data coming from this list.
 	 */
-	private List<DataAdapter> dataAdapters;
+	private List<DataAdapterDescriptor> dataAdapters;
 
 	private int selecteditem;
 	// private boolean forceSetText;
@@ -96,7 +96,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		// Store the previous selection in selectedAdapter
 		int selectedIndex = combo.getSelectionIndex();
 
-		DataAdapter selectedAdapter = null;
+		DataAdapterDescriptor selectedAdapter = null;
 
 		if (selectedIndex > 0 && getDataAdapters().size() >= selectedIndex) {
 			selectedAdapter = getDataAdapters().get(selectedIndex - 1);
@@ -113,7 +113,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 
 		dataAdapterNames[0] = "-- " + Messages.DatasourceComboItem_select_a_datasource + " --";
 		int index = 1;
-		for (DataAdapter da : getDataAdapters()) {
+		for (DataAdapterDescriptor da : getDataAdapters()) {
 			dataAdapterNames[index] = da.getName();
 			index++;
 		}
@@ -144,7 +144,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		combo.addListener(SWT.DefaultSelection, this);
 	}
 
-	private List<DataAdapter> getDataAdaptersList() {
+	private List<DataAdapterDescriptor> getDataAdaptersList() {
 		return DataAdapterManager.getDataAdapters();
 	}
 
@@ -311,7 +311,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	private void handleWidgetDefaultSelected(SelectionEvent event) {
 		if (combo.getSelectionIndex() > 0) {
 
-			final DataAdapter da = getDataAdapters().get(combo.getSelectionIndex() - 1);
+			final DataAdapterDescriptor da = getDataAdapters().get(combo.getSelectionIndex() - 1);
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 
@@ -359,14 +359,14 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 * @param dataAdapters
 	 *          the dataAdapters to set
 	 */
-	private void setDataAdapters(List<DataAdapter> dataAdapters) {
+	private void setDataAdapters(List<DataAdapterDescriptor> dataAdapters) {
 		this.dataAdapters = dataAdapters;
 	}
 
 	/**
 	 * @return the dataAdapters
 	 */
-	private List<DataAdapter> getDataAdapters() {
+	private List<DataAdapterDescriptor> getDataAdapters() {
 		return dataAdapters;
 	}
 

@@ -23,17 +23,19 @@
  */
 package com.jaspersoft.studio.data.xml;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import net.sf.jasperreports.data.XmlDataAdapter;
+
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
 public class XMLDataAdapterFactory implements DataAdapterFactory {
 
-	public DataAdapter createDataAdapter() {
-		return new XMLDataAdapter();
+	public DataAdapterDescriptor createDataAdapter() {
+		return new XMLDataAdapterDescriptor();
 	}
 
 	public String getDataAdapterClassName() {
-		return XMLDataAdapter.class.getName();
+		return XmlDataAdapter.class.getName();
 	}
 
 	public String getDescription() {

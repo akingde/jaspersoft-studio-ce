@@ -49,7 +49,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizard;
@@ -84,7 +84,7 @@ public class CreateDataAdapterAction extends Action {
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
 			
-			DataAdapter theNewDataAdapter = wizard.getDataAdapter();
+			DataAdapterDescriptor theNewDataAdapter = wizard.getDataAdapter();
 			DataAdapterManager.addDataAdapter(theNewDataAdapter);
 			treeViewer.refresh(true);
 		}

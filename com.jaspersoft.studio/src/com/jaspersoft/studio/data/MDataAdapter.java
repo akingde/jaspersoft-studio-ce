@@ -37,13 +37,13 @@ import com.jaspersoft.studio.model.ANode;
 public class MDataAdapter extends ANode {
 
 	/** The icon descriptor. */
-	private DataAdapter dataAdapter = null;
+	private DataAdapterDescriptor dataAdapter = null;
 	
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		return dataAdapter;
 	}
 
-	public MDataAdapter(DataAdapter dataAdapter)
+	public MDataAdapter(DataAdapterDescriptor dataAdapter)
 	{
 		this.dataAdapter = dataAdapter;
 		//String description = DataAdapterManager.findFactoryByDataAdapterClass(this.dataAdapter.getClass().getName()).getDescription();

@@ -27,10 +27,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.XmlUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
@@ -53,7 +53,7 @@ import com.jaspersoft.studio.repository.RepositoryManager;
 public class DataAdapterManager {
 
 	private static List<DataAdapterFactory> dataAdapterFactories =  new ArrayList<DataAdapterFactory>();
-	private static List<DataAdapter> dataAdapters = new ArrayList<DataAdapter>();
+	private static List<DataAdapterDescriptor> dataAdapters = new ArrayList<DataAdapterDescriptor>();
 	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(new RepositoryManager());
 	
 	/*******************************
@@ -123,9 +123,9 @@ public class DataAdapterManager {
 	/**
 	 * Add a DataAdapter to the list of DataAdapters in JaspersoftStudio.
 	 * 
-	 * @param DataAdapter
+	 * @param DataAdapterService
 	 */
-	public static void addDataAdapter(DataAdapter adapter)
+	public static void addDataAdapter(DataAdapterDescriptor adapter)
 	{
 		if (!dataAdapters.contains(adapter)) {
 			dataAdapters.add(adapter);
@@ -137,9 +137,9 @@ public class DataAdapterManager {
 	/**
 	 * Remove the DataAdapter to the list of DataAdapters in JaspersoftStudio.
 	 * 
-	 * @param DataAdapter
+	 * @param DataAdapterService
 	 */
-	public static void removeDataAdapter(DataAdapter adapter)
+	public static void removeDataAdapter(DataAdapterDescriptor adapter)
 	{
 		if (dataAdapters.contains(adapter)) {
 			dataAdapters.remove(adapter);
@@ -152,9 +152,9 @@ public class DataAdapterManager {
 	/**
 	 * Return a copy of the list of DataAdapters in JaspersoftStudio.
 	 */
-	public static List<DataAdapter> getDataAdapters()
+	public static List<DataAdapterDescriptor> getDataAdapters()
 	{
-		List<DataAdapter> listOfDataAdapters = new ArrayList<DataAdapter>();
+		List<DataAdapterDescriptor> listOfDataAdapters = new ArrayList<DataAdapterDescriptor>();
 		listOfDataAdapters.addAll(dataAdapters);
 		return listOfDataAdapters;
 	}
@@ -163,7 +163,7 @@ public class DataAdapterManager {
 	 * Save a changed data adapter. The dataAdapter must be in the list
 	 * of data adapters. If not, the method will just return.
 	 */
-	public static void saveDataAdapter(DataAdapter dataAdapter)
+	public static void saveDataAdapter(DataAdapterDescriptor dataAdapter)
 	{
 		if (!dataAdapters.contains(dataAdapter)) return;
 		propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(dataAdapter, "DATAADAPTERS", null, dataAdapter)); //$NON-NLS-1$
@@ -180,8 +180,8 @@ public class DataAdapterManager {
 		try {
 			StringBuffer xml = new StringBuffer();
 			xml.append("<dataAdapters>\n"); //$NON-NLS-1$
-			for (DataAdapter da : getDataAdapters()) {
-					xml.append( da.toXml());
+			for (DataAdapterDescriptor desc : getDataAdapters()) {
+					xml.append( desc.toXml());
 			}
 			xml.append("</dataAdapters>");
 			
@@ -237,28 +237,35 @@ public class DataAdapterManager {
 					return;
 				}
 				
-				DataAdapter dataAdapter = factory.createDataAdapter();
+				DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
 				
-				dataAdapter.setName(adapterNode.getAttributes().getNamedItem("name").getNodeValue());
-				Map<String, String> map = new HashMap<String, String>();
+				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
 				
-				// Find all the property nodes in the dataAdapter node
-				NodeList parameterNodes = adapterNode.getChildNodes();
+				dataAdapter = (DataAdapter)XmlUtil.read(adapterNode, dataAdapter.getClass());
 				
-				// For each node, load the parameter name and the parameter value
-				for (int j=0; j < parameterNodes.getLength(); ++j)
-				{
-					Node parameterNode = parameterNodes.item(j);
-					if (parameterNode.getNodeType() == Node.ELEMENT_NODE && "parameter".equals(parameterNode.getNodeName()))
-					{
-						String key = parameterNode.getAttributes().getNamedItem("name").getNodeValue();
-						String value = parameterNode.getTextContent();
-						map.put(key, value);
-					}
-				}
+				dataAdapterDescriptor.setDataAdapter(dataAdapter);
 				
-				dataAdapter.loadProperties(map);
-				dataAdapters.add(dataAdapter);
+//				dataAdapter.setName(adapterNode.getAttributes().getNamedItem("name").getNodeValue());
+//				Map<String, String> map = new HashMap<String, String>();
+//				
+//				// Find all the property nodes in the dataAdapter node
+//				NodeList parameterNodes = adapterNode.getChildNodes();
+//				
+//				// For each node, load the parameter name and the parameter value
+//				for (int j=0; j < parameterNodes.getLength(); ++j)
+//				{
+//					Node parameterNode = parameterNodes.item(j);
+//					if (parameterNode.getNodeType() == Node.ELEMENT_NODE && "parameter".equals(parameterNode.getNodeName()))
+//					{
+//						String key = parameterNode.getAttributes().getNamedItem("name").getNodeValue();
+//						String value = parameterNode.getTextContent();
+//						map.put(key, value);
+//					}
+//				}
+//				
+//				dataAdapter.loadProperties(map);
+				
+				dataAdapters.add(dataAdapterDescriptor);
 			}
 			
 		} catch (JRException e) {
@@ -269,19 +276,18 @@ public class DataAdapterManager {
 	/**
 	 * Creates a copy of a data adapter looking for the right Factory.
 	 * 
-	 * A NullPointerException is rised is the dataAdapter is null or if
+	 * A NullPointerException is raised is the dataAdapter is null or if
 	 * a suitable DataAdapterFactory is not found.
 	 * 
 	 * @param dataAdapter
 	 * @return
 	 */
-	public static DataAdapter cloneDataAdapter(DataAdapter dataAdapter) {
+	public static DataAdapterDescriptor cloneDataAdapter(DataAdapterDescriptor src) {
 		
-		DataAdapterFactory factory = findFactoryByDataAdapterClass(dataAdapter.getClass().getName());
-		DataAdapter da = factory.createDataAdapter();
-		da.loadProperties( dataAdapter.getProperties()  );
-		da.setName( dataAdapter.getName() );
-		return da; 
+		DataAdapterFactory factory = findFactoryByDataAdapterClass(src.getDataAdapter().getClass().getName());
+		DataAdapterDescriptor copy = factory.createDataAdapter();
+		copy.setDataAdapter(src.getDataAdapter());
+		return copy; 
 	}
 
 	public static PropertyChangeSupport getPropertyChangeSupport() {
@@ -299,7 +305,7 @@ public class DataAdapterManager {
   	
   	if (dataAdapterName == null || "".equals(dataAdapterName.trim())) return false;
   	
-		for (DataAdapter dataAdapter : getDataAdapters()) {
+		for (DataAdapterDescriptor dataAdapter : getDataAdapters()) {
 			if (dataAdapter.getName().equals(dataAdapterName)) return false;
 		}
 		return true;

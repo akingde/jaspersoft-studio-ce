@@ -23,17 +23,19 @@
  */
 package com.jaspersoft.studio.data.csv;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import net.sf.jasperreports.data.CsvDataAdapter;
+
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
 public class CSVDataAdapterFactory implements DataAdapterFactory {
 
-	public DataAdapter createDataAdapter() {
-		return new CSVDataAdapter();
+	public DataAdapterDescriptor createDataAdapter() {
+		return new CSVDataAdapterDescriptor();
 	}
 
 	public String getDataAdapterClassName() {
-		return CSVDataAdapter.class.getName();
+		return CsvDataAdapter.class.getName();
 	}
 
 	public String getDescription() {

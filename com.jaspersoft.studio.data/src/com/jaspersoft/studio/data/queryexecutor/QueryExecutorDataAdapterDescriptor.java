@@ -21,66 +21,48 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.empty;
+package com.jaspersoft.studio.data.queryexecutor;
 
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.QueryExecuterDataAdapter;
+import net.sf.jasperreports.data.QueryExecuterDataAdapterService;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.Activator;
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class EmptyDataAdapter extends DataAdapter {
-
-	private Integer records = 1;
-
-	public EmptyDataAdapter() {
-
-	}
-
-	public EmptyDataAdapter(int records) {
-		setRecords(records);
-	}
-
-	public Integer getRecords() {
-		return records;
-	}
-
-	public void setRecords(int records) {
-		this.records = records;
+public class QueryExecutorDataAdapterDescriptor extends DataAdapterDescriptor 
+{
+	private QueryExecuterDataAdapter queryExecuterDataAdapter = new QueryExecuterDataAdapter();
+	
+	@Override
+	public DataAdapter getDataAdapter() {
+		return queryExecuterDataAdapter;
 	}
 
 	@Override
-	public Map<String, String> getProperties() {
-		Map<String, String> map = super.getProperties();
-		map.put("records", getRecords().toString());
-		return map;
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		this.queryExecuterDataAdapter = (QueryExecuterDataAdapter)dataAdapter;
 	}
 
 	@Override
-	public void loadProperties(Map<String, String> map) {
-		String s = map.get("records");
-		setRecords(Integer.parseInt(s));
+	public DataAdapterService getDataAdapterService() {
+		QueryExecuterDataAdapterService queryExecuterDataAdapterService = new QueryExecuterDataAdapterService();
+		queryExecuterDataAdapterService.setDataAdapter(queryExecuterDataAdapter);
+		return queryExecuterDataAdapterService;
 	}
 
 	@Override
 	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/EmptyDataAdapterIcon-16.gif");
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/QueryExecutorDataAdapterIcon-16.gif");
 	}
-
-	@Override
-	public void contributeParameters(Map<String, Object> parameters) 
-	{
-		parameters.put(JRParameter.REPORT_DATA_SOURCE, new JREmptyDataSource(getRecords()));
-	}
-
+	
 	@Override
 	public DataAdapterEditor getEditor() {
-		return new EmptyDataAdapterEditor();
+		return new QueryExecutorDataAdapterEditor();
 	}
 }

@@ -34,6 +34,7 @@ import java.util.List;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
+import net.sf.jasperreports.data.XlsDataAdapter;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
@@ -65,14 +66,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class XLSDataAdapterComposite extends Composite {
 
-	private XLSDataAdapter xlsDataAdapter = null;
+	private XLSDataAdapterDescriptor xlsDataAdapterDesc = null;
 	private Text textExcelFileName;
 	private Text textDatePattern;
 	private Text textNumberPattern;
@@ -404,14 +405,16 @@ public class XLSDataAdapterComposite extends Composite {
 	 * Set the XLS DataAdapter and initial values for UI elements.
 	 * @param dataAdapter
 	 */
-	public void setDataAdapter(XLSDataAdapter dataAdapter) {
+	public void setDataAdapter(XLSDataAdapterDescriptor dataAdapter) {
 		
-		this.xlsDataAdapter = dataAdapter;
+		this.xlsDataAdapterDesc = dataAdapter;
 		
-		textExcelFileName.setText( Misc.nvl( this.xlsDataAdapter.getFileName(),"") );
+		XlsDataAdapter xlsDataAdapter = (XlsDataAdapter)xlsDataAdapterDesc.getDataAdapter();
 		
-		List<String> listColumnNames = this.xlsDataAdapter.getColumnNames();
-		List<Integer> listColumnIndexes = this.xlsDataAdapter.getColumnIndexes();
+		textExcelFileName.setText( Misc.nvl( xlsDataAdapter.getFileName(),"") );
+		
+		List<String> listColumnNames = xlsDataAdapter.getColumnNames();
+		List<Integer> listColumnIndexes = xlsDataAdapter.getColumnIndexes();
 		if (    (listColumnNames != null && listColumnNames.size() > 0)
 		     && (listColumnIndexes != null && listColumnIndexes.size() > 0)
 		     && (listColumnNames.size() == listColumnIndexes.size() )) {
@@ -425,7 +428,7 @@ public class XLSDataAdapterComposite extends Composite {
 			btnDelete.setEnabled(true);
 		}
 		
-		String customDatePattern = this.xlsDataAdapter.getCustomDatePattern();
+		String customDatePattern = xlsDataAdapter.getDatePattern();
 		if (customDatePattern != null && customDatePattern.length() > 0) {
 			btnCheckUseDatePattern.setSelection(true);
 			textDatePattern.setText(customDatePattern);
@@ -435,7 +438,7 @@ public class XLSDataAdapterComposite extends Composite {
 			textDatePattern.setText(new SimpleDateFormat().toPattern());
 		}
 		
-		String customNumberPattern = this.xlsDataAdapter.getCustomNumberPattern();
+		String customNumberPattern = xlsDataAdapter.getNumberPattern();
 		if (customNumberPattern != null && customNumberPattern.length() > 0) {
 			btnCheckUseNumberPattern.setSelection(true);
 			textNumberPattern.setText(customNumberPattern);
@@ -445,18 +448,20 @@ public class XLSDataAdapterComposite extends Composite {
 			textNumberPattern.setText(new DecimalFormat().toPattern());
 		}
 		
-		btnCheckSkipFirstLine.setSelection(this.xlsDataAdapter.isUseFirstRowAsHeader());
+		btnCheckSkipFirstLine.setSelection(xlsDataAdapter.isUseFirstRowAsHeader());
 	}
 
 	/**
 	 * Get the XLS DataAdapter with the values from the UI elements.
 	 * @return
 	 */
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() 
+	{
+		XlsDataAdapter xlsDataAdapter = (XlsDataAdapter)xlsDataAdapterDesc.getDataAdapter();
 		
-		if (this.xlsDataAdapter == null) this.xlsDataAdapter = new XLSDataAdapter();
+		if (xlsDataAdapterDesc == null) xlsDataAdapterDesc = new XLSDataAdapterDescriptor();
 		
-		this.xlsDataAdapter.setFileName(textExcelFileName.getText());
+		xlsDataAdapter.setFileName(textExcelFileName.getText());
 		
 		List<String> listColumnNames = new ArrayList<String>();
 		List<Integer> listColumnIndexes = new ArrayList<Integer>();
@@ -465,14 +470,14 @@ public class XLSDataAdapterComposite extends Composite {
 			listColumnIndexes.add(Integer.valueOf(row[1]));
 		}
 		
-		this.xlsDataAdapter.setColumnNames(listColumnNames);
-		this.xlsDataAdapter.setColumnIndexes(listColumnIndexes);
+		xlsDataAdapter.setColumnNames(listColumnNames);
+		xlsDataAdapter.setColumnIndexes(listColumnIndexes);
 		
-		this.xlsDataAdapter.setCustomDatePattern(textDatePattern.getText());
-		this.xlsDataAdapter.setCustomNumberPattern(textNumberPattern.getText());
-		this.xlsDataAdapter.setUseFirstRowAsHeader(btnCheckSkipFirstLine.getSelection());
+		xlsDataAdapter.setDatePattern(textDatePattern.getText());
+		xlsDataAdapter.setNumberPattern(textNumberPattern.getText());
+		xlsDataAdapter.setUseFirstRowAsHeader(btnCheckSkipFirstLine.getSelection());
 		
-		return this.xlsDataAdapter;
+		return xlsDataAdapterDesc;
 	}
 
 	/**

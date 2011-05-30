@@ -14,7 +14,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 
 public class JDBCFieldsProvider implements IFieldsProvider {
@@ -23,11 +23,11 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		return true;
 	}
 
-	public List<JRDesignField> getFields(DataAdapter con,
+	public List<JRDesignField> getFields(DataAdapterDescriptor con,
 			JRDataset reportDataset, Map<String, Object> parameters)
 			throws JRException, UnsupportedOperationException {
 		// this will create jdbc connection
-		con.contributeParameters(parameters);
+		parameters.putAll(con.getDataAdapterService().getParameters());
 		parameters.put(JRJdbcQueryExecuterFactory.PROPERTY_JDBC_FETCH_SIZE, 0);
 		try {
 			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(reportDataset,

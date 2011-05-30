@@ -26,7 +26,7 @@ package com.jaspersoft.studio.data.jdbc;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 /*
  * @author gtoffoli
@@ -52,7 +52,7 @@ public class JDBCDataAdapterEditor implements DataAdapterEditor {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getDataAdapter()
 	 */
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 
 		if (composite != null)
 		{
@@ -72,11 +72,11 @@ public class JDBCDataAdapterEditor implements DataAdapterEditor {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterEditor#setDataAdapter(com.jaspersoft.studio.data.DataAdapter)
 	 */
-	public void setDataAdapter(DataAdapter dataAdapter) {
+	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
 		
-		if (composite != null && dataAdapter instanceof JDBCDataAdapter)
+		if (composite != null && dataAdapter instanceof JDBCDataAdapterDescriptor)
 		{
-			composite.setDataAdapter((JDBCDataAdapter)dataAdapter);
+			composite.setDataAdapter((JDBCDataAdapterDescriptor)dataAdapter);
 		}
 	}
 }

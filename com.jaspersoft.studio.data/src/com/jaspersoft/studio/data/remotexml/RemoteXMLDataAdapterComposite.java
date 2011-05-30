@@ -4,6 +4,8 @@ package com.jaspersoft.studio.data.remotexml;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import net.sf.jasperreports.data.RemoteXmlDataAdapter;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -18,7 +20,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.jface.dialogs.LocaleDialog;
 import com.jaspersoft.studio.jface.dialogs.TimeZoneDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
@@ -26,7 +28,7 @@ import com.jaspersoft.studio.utils.Misc;
 
 public class RemoteXMLDataAdapterComposite extends Composite {
 
-	private RemoteXMLDataAdapter remoteXmlDataAdapter = null;
+	private RemoteXMLDataAdapterDescriptor remoteXmlDataAdapterDesc = null;
 	private Text textFileUrl;
 	private Text textDatePattern;
 	private Text textNumberPattern;
@@ -203,15 +205,17 @@ public class RemoteXMLDataAdapterComposite extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public void setDataAdapter(RemoteXMLDataAdapter dataAdapter) {
+	public void setDataAdapter(RemoteXMLDataAdapterDescriptor dataAdapter) 
+	{
+		this.remoteXmlDataAdapterDesc = dataAdapter;
 		
-		this.remoteXmlDataAdapter = dataAdapter;
+		RemoteXmlDataAdapter remoteXmlDataAdapter = (RemoteXmlDataAdapter)remoteXmlDataAdapterDesc.getDataAdapter();
 		
-		textFileUrl.setText(Misc.nvl( this.remoteXmlDataAdapter.getFileName(),""));
-		textDatePattern.setText( Misc.nvl(this.remoteXmlDataAdapter.getDatePattern(), "") );
-		textNumberPattern.setText( Misc.nvl(this.remoteXmlDataAdapter.getNumberPattern(), "") );
+		textFileUrl.setText(Misc.nvl( remoteXmlDataAdapter.getFileName(),""));
+		textDatePattern.setText( Misc.nvl(remoteXmlDataAdapter.getDatePattern(), "") );
+		textNumberPattern.setText( Misc.nvl(remoteXmlDataAdapter.getNumberPattern(), "") );
 		
-		locale = this.remoteXmlDataAdapter.getLocale();
+		locale = remoteXmlDataAdapter.getLocale();
 		if (locale != null) {
 			textLocale.setText(locale.getDisplayName());
 		} else {
@@ -219,7 +223,7 @@ public class RemoteXMLDataAdapterComposite extends Composite {
 			locale = Locale.getDefault();
 		}
 		
-		timeZone = this.remoteXmlDataAdapter.getTimeZone();
+		timeZone = remoteXmlDataAdapter.getTimeZone();
 		if (timeZone != null) {
 			textTimeZone.setText(timeZone.getID());
 		} else {
@@ -228,9 +232,11 @@ public class RemoteXMLDataAdapterComposite extends Composite {
 		}
 	}
 
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() 
+	{
+		if (remoteXmlDataAdapterDesc == null) remoteXmlDataAdapterDesc = new RemoteXMLDataAdapterDescriptor();
 		
-		if (remoteXmlDataAdapter == null) remoteXmlDataAdapter = new RemoteXMLDataAdapter();
+		RemoteXmlDataAdapter remoteXmlDataAdapter = (RemoteXmlDataAdapter)remoteXmlDataAdapterDesc.getDataAdapter();
 		
 		remoteXmlDataAdapter.setFileName(textFileUrl.getText());
 		remoteXmlDataAdapter.setDatePattern(textDatePattern.getText());
@@ -238,7 +244,7 @@ public class RemoteXMLDataAdapterComposite extends Composite {
 		remoteXmlDataAdapter.setLocale(locale);
 		remoteXmlDataAdapter.setTimeZone(timeZone);
 		
-		return remoteXmlDataAdapter;
+		return remoteXmlDataAdapterDesc;
 	}
 
 	public String getHelpContextId() {

@@ -31,6 +31,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import net.sf.jasperreports.data.CsvDataAdapter;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -62,14 +64,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class CSVDataAdapterComposite extends Composite {
 	
-	private CSVDataAdapter csvDataAdapter = null;
+	private CSVDataAdapterDescriptor csvDataAdapterDesc = null;
 	private Text textCSVFileName;
 	private Button btnCheckQEMode;
 	private TableViewer tableViewer;
@@ -515,12 +517,14 @@ public class CSVDataAdapterComposite extends Composite {
 	 * Set the CSV DataAdapter and initial values for UI elements.
 	 * @param dataAdapter
 	 */
-	public void setDataAdapter(CSVDataAdapter dataAdapter) {
+	public void setDataAdapter(CSVDataAdapterDescriptor dataAdapterDesc) {
 		
-		csvDataAdapter = dataAdapter;
+		csvDataAdapterDesc = dataAdapterDesc;
+		
+		CsvDataAdapter csvDataAdapter = (CsvDataAdapter)dataAdapterDesc.getDataAdapter();
 		
 		textCSVFileName.setText( Misc.nvl(csvDataAdapter.getFileName(), "") );
-		btnCheckQEMode.setSelection(csvDataAdapter.isQeMode());
+		btnCheckQEMode.setSelection(csvDataAdapter.isQueryExecuterMode());
 		
 		List<String> listColumnNames = csvDataAdapter.getColumnNames();
 		if (listColumnNames != null && listColumnNames.size() > 0) {
@@ -532,10 +536,10 @@ public class CSVDataAdapterComposite extends Composite {
 			btnDelete.setEnabled(true);
 		}
 		
-		String customDatePattern = csvDataAdapter.getCustomDatePattern();
-		if (customDatePattern != null && customDatePattern.length() > 0) {
+		String datePattern = csvDataAdapter.getDatePattern();
+		if (datePattern != null && datePattern.length() > 0) {
 			btnCheckUseDatePattern.setSelection(true);
-			textDatePattern.setText(customDatePattern);
+			textDatePattern.setText(datePattern);
 			textDatePattern.setEnabled(true);
 			btnCreateDatePattern.setEnabled(true);
 		} else {
@@ -576,12 +580,14 @@ public class CSVDataAdapterComposite extends Composite {
 	 * Get the CSV DataAdapter with the values from the UI elements.
 	 * @return
 	 */
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		
-		if (csvDataAdapter == null) csvDataAdapter = new CSVDataAdapter();
+		if (csvDataAdapterDesc == null) csvDataAdapterDesc = new CSVDataAdapterDescriptor();
+		
+		CsvDataAdapter csvDataAdapter = (CsvDataAdapter)csvDataAdapterDesc.getDataAdapter();
 		
 		csvDataAdapter.setFileName(textCSVFileName.getText());
-		csvDataAdapter.setQeMode(btnCheckQEMode.getSelection());
+		csvDataAdapter.setQueryExecuterMode(btnCheckQEMode.getSelection());
 		
 		List<String> listColumnNames = new ArrayList<String>();
 		for (StringBuffer row : rows) {
@@ -589,7 +595,7 @@ public class CSVDataAdapterComposite extends Composite {
 		}
 		csvDataAdapter.setColumnNames(listColumnNames);
 		
-		csvDataAdapter.setCustomDatePattern(textDatePattern.getText());
+		csvDataAdapter.setDatePattern(textDatePattern.getText());
 		csvDataAdapter.setUseFirstRowAsHeader(btnCheckSkipFirstLine.getSelection());
 		
 		if (btnRadioFieldComma.getSelection()) csvDataAdapter.setFieldDelimiter(",");
@@ -607,7 +613,7 @@ public class CSVDataAdapterComposite extends Composite {
 		else if (btnRadioRowNewLineWin.getSelection()) csvDataAdapter.setRecordDelimiter("\r\n");
 		else if (btnRadioRowOther.getSelection()) csvDataAdapter.setRecordDelimiter( Misc.removeSlashesString(textRowOther.getText()) );
 		
-		return csvDataAdapter;
+		return csvDataAdapterDesc;
 	}
 
 	public String getHelpContextId() {

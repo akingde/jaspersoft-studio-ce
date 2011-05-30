@@ -22,20 +22,20 @@ package com.jaspersoft.studio.data.customjrds;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class CustomJrdsDataAdapterEditor implements DataAdapterEditor {
 
 	CustomJrdsDataAdapterComposite composite = null;
 	
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		if (dataAdapter instanceof CustomJrdsDataAdapter) {
-			composite.setDataAdapter((CustomJrdsDataAdapter)dataAdapter);
+	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
+		if (dataAdapter instanceof CustomJrdsDataAdapterDescriptor) {
+			composite.setDataAdapter((CustomJrdsDataAdapterDescriptor)dataAdapter);
 		}
 	}
 
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		return composite.getDataAdapter();
 	}
 

@@ -19,22 +19,23 @@
  */
 package com.jaspersoft.studio.data.jrdsprovider;
 
-import org.eclipse.swt.widgets.Composite;
+import net.sf.jasperreports.data.DataSourceProviderDataAdapter;
 
-import com.jaspersoft.studio.data.DataAdapter;
-import com.jaspersoft.studio.utils.Misc;
-
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 
 public class JrdsProviderDataAdapterComposite extends Composite {
 	
-	private JrdsProviderDataAdapter jrdsProviderDataAdapter = null;
+	private JrdsProviderDataAdapterDescriptor jrdsProviderDataAdapter = null;
 	private Text textJRDSProviderClassName;
 
 	/**
@@ -63,7 +64,7 @@ public class JrdsProviderDataAdapterComposite extends Composite {
 		textJRDSProviderClassName.addModifyListener(new ModifyListener() {
 			
 			public void modifyText(ModifyEvent e) {
-				jrdsProviderDataAdapter.setJRDSProviderClassName(textJRDSProviderClassName.getText().trim());
+				((DataSourceProviderDataAdapter)jrdsProviderDataAdapter.getDataAdapter()).setProviderClass(textJRDSProviderClassName.getText().trim());
 			}
 		});
 	}
@@ -72,17 +73,17 @@ public class JrdsProviderDataAdapterComposite extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public void setDataAdapter(JrdsProviderDataAdapter dataAdapter) {
+	public void setDataAdapter(JrdsProviderDataAdapterDescriptor dataAdapter) {
 		
 		jrdsProviderDataAdapter = dataAdapter;
-		textJRDSProviderClassName.setText( Misc.nvl(jrdsProviderDataAdapter.getJRDSProviderClassName(), "com.jaspersoft.studio.data.sample.PersonBeansDataSource") );
+		textJRDSProviderClassName.setText( Misc.nvl(((DataSourceProviderDataAdapter)jrdsProviderDataAdapter.getDataAdapter()).getProviderClass(), "com.jaspersoft.studio.data.sample.PersonBeansDataSource") );
 	}
 
-	public DataAdapter getDataAdapter() {
+	public DataAdapterDescriptor getDataAdapter() {
 		
-		if (jrdsProviderDataAdapter == null) jrdsProviderDataAdapter = new JrdsProviderDataAdapter();
+		if (jrdsProviderDataAdapter == null) jrdsProviderDataAdapter = new JrdsProviderDataAdapterDescriptor();
 		
-		jrdsProviderDataAdapter.setJRDSProviderClassName(textJRDSProviderClassName.getText().trim());
+		((DataSourceProviderDataAdapter)jrdsProviderDataAdapter.getDataAdapter()).setProviderClass(textJRDSProviderClassName.getText().trim());
 		
 		return jrdsProviderDataAdapter;
 	}

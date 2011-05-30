@@ -45,8 +45,8 @@ public class MDataAdapters extends ANode{
 
 	private void updateChildren() {
 		this.removeChildren();
-		List<DataAdapter> dataAdapters = DataAdapterManager.getDataAdapters();
-		for (DataAdapter dataAdapter : dataAdapters) {
+		List<DataAdapterDescriptor> dataAdapters = DataAdapterManager.getDataAdapters();
+		for (DataAdapterDescriptor dataAdapter : dataAdapters) {
 			MDataAdapter mDataAdapter = new MDataAdapter(dataAdapter);
 			this.addChild(mDataAdapter);
 		}

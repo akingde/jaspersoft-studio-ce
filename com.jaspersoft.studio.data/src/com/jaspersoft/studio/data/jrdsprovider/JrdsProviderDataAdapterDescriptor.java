@@ -19,34 +19,37 @@
  */
 package com.jaspersoft.studio.data.jrdsprovider;
 
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.widgets.Composite;
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataSourceProviderDataAdapter;
+import net.sf.jasperreports.data.DataSourceProviderDataAdapterService;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class JrdsProviderDataAdapterEditor implements DataAdapterEditor {
-
-	JrdsProviderDataAdapterComposite composite = null;
+public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor 
+{
+	private DataSourceProviderDataAdapter dsProviderDataAdapter = new DataSourceProviderDataAdapter();
 	
-	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
-		if (dataAdapter instanceof JrdsProviderDataAdapterDescriptor) {
-			composite.setDataAdapter((JrdsProviderDataAdapterDescriptor)dataAdapter);
-		}
+	@Override
+	public DataAdapter getDataAdapter() {
+		return dsProviderDataAdapter;
 	}
 
-	public DataAdapterDescriptor getDataAdapter() {
-		return composite.getDataAdapter();
+	@Override
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		dsProviderDataAdapter = (DataSourceProviderDataAdapter)dataAdapter;
 	}
 
-	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
-		if (composite == null) {
-			composite = new JrdsProviderDataAdapterComposite(parent, style);
-		}
-		return composite;
+	@Override
+	public DataAdapterService getDataAdapterService() {
+		DataSourceProviderDataAdapterService dsProviderDataAdapterService = new DataSourceProviderDataAdapterService();
+		dsProviderDataAdapterService.setDataAdapter(dsProviderDataAdapter);
+		return dsProviderDataAdapterService;
 	}
-
-	public String getHelpContextId() {
-		return composite.getHelpContextId();
+	
+	@Override
+	public DataAdapterEditor getEditor() {
+		return new JrdsProviderDataAdapterEditor();
 	}
 }

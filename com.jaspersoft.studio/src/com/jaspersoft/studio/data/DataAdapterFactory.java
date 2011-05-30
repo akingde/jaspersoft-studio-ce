@@ -41,6 +41,8 @@
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.data;
+
+
 /*
 *
 * @author gtoffoli
@@ -51,7 +53,7 @@ public interface DataAdapterFactory {
     * Creates a new instance of IReportConnection
     * @return an instance of IReportConnection
     */
-   public DataAdapter createDataAdapter();
+   public DataAdapterDescriptor createDataAdapter();
 
    /**
     * This method returns the class name of the DataAdapter implementation.

@@ -34,7 +34,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.IQueryDesigner;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.widget.DatasourceComboItem;
@@ -93,7 +93,7 @@ final class DatasetDialog extends FormDialog {
 		ToolBarManager manager = new ToolBarManager(tb);
 		dscombo = new DatasourceComboItem(new IDataAdapterRunnable() {
 
-			public void runReport(DataAdapter da) {
+			public void runReport(DataAdapterDescriptor da) {
 				if(da instanceof IFieldsProvider){
 //					((IFieldsProvider) da).getFields(da, reportDataset, parameters);
 				}

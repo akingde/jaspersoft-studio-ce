@@ -23,35 +23,50 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.JdbcDataAdapter;
+import net.sf.jasperreports.data.JdbcDataAdapterService;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.DataAdapterEditor;
 /*
  * @author gtoffoli
  *
  */
-public class JDBCDataAdapterFactory implements DataAdapterFactory {
-
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#createDataAdapter()
-	 */
-	public DataAdapterDescriptor createDataAdapter() {
-		return new JDBCDataAdapterDescriptor();
+public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor 
+{
+	private JdbcDataAdapter jdbcDataAdapter = new JdbcDataAdapter();
+	
+	@Override
+	public DataAdapter getDataAdapter() {
+		return jdbcDataAdapter;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
-	 */
-	public String getDataAdapterClassName() {
-		return JdbcDataAdapter.class.getName();
+	@Override
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		this.jdbcDataAdapter = (JdbcDataAdapter)dataAdapter;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
-	 */
-	public String getDescription() {
-		return "Database JDBC Connection";
+	@Override
+	public DataAdapterService getDataAdapterService() {
+		JdbcDataAdapterService jdbcDataAdapterService = new JdbcDataAdapterService();
+		jdbcDataAdapterService.setDataAdapter(jdbcDataAdapter);
+		return jdbcDataAdapterService;
 	}
 
+	@Override
+	public DataAdapterEditor getEditor() {
+		
+		return new JDBCDataAdapterEditor();
+	}
+
+	@Override
+	public ImageDescriptor getIcon16() {
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/JDBCDataAdapterIcon-16.gif");
+	}
 }

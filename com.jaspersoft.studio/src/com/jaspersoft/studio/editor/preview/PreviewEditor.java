@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Map;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
@@ -53,7 +55,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.widget.DatasourceComboItem;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.JRPrintEditor;
@@ -87,7 +89,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 	/**
 	 * This is the cached DataAdapter used by this report.
 	 */
-	private DataAdapter dataAdapter;
+	private DataAdapterDescriptor dataAdapterDesc;
 
 	private Map<String, Object> jasperParameters = new Hashtable<String, Object>();
 
@@ -100,27 +102,30 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 	 * Run a report in a Job, asking for parameters. Parameters are cached. DataAdapter is cached.
 	 * 
 	 * @param myDataAdapter
-	 *          the {@link com.jaspersoft.studio.data.DataAdapter DataAdapter} to use in order to run the report.
+	 *          the {@link com.jaspersoft.studio.data.DataAdapterDescriptor DataAdapter} to use in order to run the report.
 	 */
-	public void runReport(DataAdapter myDataAdapter) {
+	public void runReport(DataAdapterDescriptor myDataAdapterDesc) {
 
 		if (!isNotRunning())
 			return; // Nothing to do, the report is already executing, we don't want to stop it.
 
 		// Cache the DataAdapter used for this report only if it is not null.
-		if (myDataAdapter != null) {
+		if (myDataAdapterDesc != null) {
 			// $TODO should we save the reference in the JRXML ?
-			dataAdapter = myDataAdapter;
+			dataAdapterDesc = myDataAdapterDesc;
 		}
 
 		// If the DataAdapter of this preview editor is still null, abort the report execution
-		if (dataAdapter == null) {
+		if (dataAdapterDesc == null) {
 			unsetReportDocument(Messages.PreviewEditor_no_datasource, true);
 			return;
 		}
 
 		// At this point, dataAdapter is not null.
 
+		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
+		final DataAdapterService dataAdapterService = dataAdapterDesc.getDataAdapterService();
+		
 		String dsName = dataAdapter.getName();
 
 		// $TODO move askParameters inside the Job and check for classloading related problems
@@ -169,7 +174,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 						VirtualizerHelper.setVirtualizer(jd, ps);
 
 						// We let the data adapter to contribute its parameters.
-						Map<String, Object> dataAdapterParams = dataAdapter.getParameters();
+						Map<String, Object> dataAdapterParams = dataAdapterService.getParameters();
 						
 						jasperParameters.putAll(dataAdapterParams);
 
@@ -206,7 +211,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 						}
 					}
 					// Allow the data adapter to cleanup its state
-					dataAdapter.dispose();
+					dataAdapterService.dispose();
 
 				}
 				return Status.OK_STATUS;

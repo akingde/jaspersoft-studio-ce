@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.data.customjrds;
 
+import net.sf.jasperreports.data.DataSourceDataAdapter;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -28,12 +30,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
 public class CustomJrdsDataAdapterComposite extends Composite {
 	
-	private CustomJrdsDataAdapter customJrdsDataAdapter = null;
+	private CustomJrdsDataAdapterDescriptor customJrdsDataAdapterDesc = null;
 	private Text textFactoryClass;
 	private Text textMethodToCall;
 
@@ -68,14 +70,14 @@ public class CustomJrdsDataAdapterComposite extends Composite {
 		textFactoryClass.addModifyListener(new ModifyListener() {
 			
 			public void modifyText(ModifyEvent e) {
-				customJrdsDataAdapter.setFactoryClass(textFactoryClass.getText().trim());
+				((DataSourceDataAdapter)customJrdsDataAdapterDesc.getDataAdapter()).setFactoryClass(textFactoryClass.getText().trim());
 			}
 		});
 		
 		textMethodToCall.addModifyListener(new ModifyListener() {
 			
 			public void modifyText(ModifyEvent e) {
-				customJrdsDataAdapter.setMethodToCall(textMethodToCall.getText().trim());
+				((DataSourceDataAdapter)customJrdsDataAdapterDesc.getDataAdapter()).setMethodToCall(textMethodToCall.getText().trim());
 			}
 		});
 	}
@@ -84,23 +86,28 @@ public class CustomJrdsDataAdapterComposite extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public void setDataAdapter(CustomJrdsDataAdapter dataAdapter) {
+	public void setDataAdapter(CustomJrdsDataAdapterDescriptor dataAdapterDesc) 
+	{
+		customJrdsDataAdapterDesc = dataAdapterDesc;
 		
-		customJrdsDataAdapter = dataAdapter;
-		textFactoryClass.setText(Misc.nvl(customJrdsDataAdapter.getFactoryClass(), "com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory"));
-		textMethodToCall.setText(Misc.nvl(customJrdsDataAdapter.getMethodToCall(), "createDatasource"));
+		DataSourceDataAdapter dsDataAdapter = (DataSourceDataAdapter)customJrdsDataAdapterDesc.getDataAdapter();
+		
+		textFactoryClass.setText(Misc.nvl(dsDataAdapter.getFactoryClass(), "com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory"));
+		textMethodToCall.setText(Misc.nvl(dsDataAdapter.getMethodToCall(), "createDatasource"));
 	}
 
-	public DataAdapter getDataAdapter() {
-		
-		if (customJrdsDataAdapter == null) {
-			customJrdsDataAdapter = new CustomJrdsDataAdapter();
+	public DataAdapterDescriptor getDataAdapter() 
+	{
+		if (customJrdsDataAdapterDesc == null) {
+			customJrdsDataAdapterDesc = new CustomJrdsDataAdapterDescriptor();
 		}
 		
-		customJrdsDataAdapter.setFactoryClass(textFactoryClass.getText().trim());
-		customJrdsDataAdapter.setMethodToCall(textMethodToCall.getText().trim());
+		DataSourceDataAdapter dsDataAdapter = (DataSourceDataAdapter)customJrdsDataAdapterDesc.getDataAdapter();
 		
-		return customJrdsDataAdapter;
+		dsDataAdapter.setFactoryClass(textFactoryClass.getText().trim());
+		dsDataAdapter.setMethodToCall(textMethodToCall.getText().trim());
+		
+		return customJrdsDataAdapterDesc;
 	}
 
 	public String getHelpContextId() {

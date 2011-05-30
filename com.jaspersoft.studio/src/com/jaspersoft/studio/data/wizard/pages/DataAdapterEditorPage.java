@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.utils.Misc;
@@ -138,15 +138,15 @@ public class DataAdapterEditorPage extends WizardPage {
 	 * This method guesses the UI to use to edit the data adapter specified
 	 * @param newDataAdapter
 	 */
-	public void setDataAdapter(DataAdapter newDataAdapter) {
+	public void setDataAdapter(DataAdapterDescriptor newDataAdapterDescriptor) {
 
 		
 		// ?
-		if (newDataAdapter.getEditor() == dataAdapterEditor) return;
+		if (newDataAdapterDescriptor.getEditor() == dataAdapterEditor) return;
 		
-		setSubTitle(DataAdapterManager.findFactoryByDataAdapterClass(newDataAdapter.getClass().getName()).getDescription() );
+		setSubTitle(DataAdapterManager.findFactoryByDataAdapterClass(newDataAdapterDescriptor.getDataAdapter().getClass().getName()).getDescription() );
 		// 1. get the DataAdapterEditor
-		dataAdapterEditor = newDataAdapter.getEditor();
+		dataAdapterEditor = newDataAdapterDescriptor.getEditor();
 
 	  // 2. add the composite from the DataAdapterEditor to the wizard page
 		if (editorComposite != null)
@@ -158,10 +158,10 @@ public class DataAdapterEditorPage extends WizardPage {
 		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		// 4. set the new dataAdapter to the DataAdapterEditor
-		dataAdapterEditor.setDataAdapter(newDataAdapter);
+		dataAdapterEditor.setDataAdapter(newDataAdapterDescriptor);
 		
 		// 5. fill the name if the new data adapter has one
-		textName.setText(Misc.nvl(newDataAdapter.getName(),""));
+		textName.setText(Misc.nvl(newDataAdapterDescriptor.getName(),""));
 		
 		// 6. resize the dialog properly
 		customContainer.layout();
@@ -180,9 +180,9 @@ public class DataAdapterEditorPage extends WizardPage {
 		}
 	}
 
-	public DataAdapter getDataAdapter() {
-		DataAdapter da = getDataAdapterEditor().getDataAdapter();
-		da.setName(textName.getText());
+	public DataAdapterDescriptor getDataAdapter() {
+		DataAdapterDescriptor da = getDataAdapterEditor().getDataAdapter();
+		da.getDataAdapter().setName(textName.getText());
 		return da;
 	}
 	
@@ -239,7 +239,7 @@ public class DataAdapterEditorPage extends WizardPage {
 		if (dataAdapterName == null || "".equals(dataAdapterName)) return false;
 		
 		// remove the currently edited data adapter from the list
-		List<DataAdapter> dataAdapters = DataAdapterManager.getDataAdapters();
+		List<DataAdapterDescriptor> dataAdapters = DataAdapterManager.getDataAdapters();
 		int index = -1;
 		for (int i = 0; i < dataAdapters.size(); i++) {
 			if (dataAdapterEditor.getDataAdapter().getName().equals(dataAdapters.get(i).getName())) {
@@ -253,7 +253,7 @@ public class DataAdapterEditorPage extends WizardPage {
 			dataAdapters.remove(index);
 		}
 		
-		for (DataAdapter dataAdapter : dataAdapters) {
+		for (DataAdapterDescriptor dataAdapter : dataAdapters) {
 			if (dataAdapter.getName().equals(dataAdapterName)) return false;
 		}
 		return true;

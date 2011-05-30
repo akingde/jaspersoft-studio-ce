@@ -23,23 +23,37 @@
  */
 package com.jaspersoft.studio.data.remotexml;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.RemoteXmlDataAdapter;
+import net.sf.jasperreports.data.RemoteXmlDataAdapterService;
 
-import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.xml.XMLDataAdapterDescriptor;
 
-public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
-
-	public DataAdapterDescriptor createDataAdapter() {
-		return new RemoteXMLDataAdapterDescriptor();
+public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor 
+{
+	private RemoteXmlDataAdapter remoteXmlDataAdapter = new RemoteXmlDataAdapter();
+	
+	@Override
+	public DataAdapter getDataAdapter() {
+		return remoteXmlDataAdapter;
 	}
 
-	public String getDataAdapterClassName() {
-		return RemoteXmlDataAdapter.class.getName();
+	@Override
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		this.remoteXmlDataAdapter = (RemoteXmlDataAdapter)dataAdapter;
 	}
 
-	public String getDescription() {
-		return "Remote XML Data Adapter";
+	@Override
+	public DataAdapterService getDataAdapterService() {
+		RemoteXmlDataAdapterService remoteXmlDataAdapterService = new RemoteXmlDataAdapterService();
+		remoteXmlDataAdapterService.setDataAdapter(remoteXmlDataAdapter);
+		return remoteXmlDataAdapterService;
 	}
 
+	@Override
+	public DataAdapterEditor getEditor() {
+		return new RemoteXMLDataAdapterEditor();
+	}
 }

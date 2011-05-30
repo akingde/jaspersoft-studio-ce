@@ -23,13 +23,15 @@
  */
 package com.jaspersoft.studio.data.empty;
 
-import com.jaspersoft.studio.data.DataAdapter;
+import net.sf.jasperreports.data.EmptyDataAdapter;
+
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
 public class EmptyDataAdapterFactory implements DataAdapterFactory {
 
-	public DataAdapter createDataAdapter() {
-		return new EmptyDataAdapter();
+	public DataAdapterDescriptor createDataAdapter() {
+		return new EmptyDataAdapterDescriptor();
 	}
 
 	public String getDataAdapterClassName() {
