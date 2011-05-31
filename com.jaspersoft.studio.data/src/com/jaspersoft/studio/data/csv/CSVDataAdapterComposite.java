@@ -662,7 +662,7 @@ public class CSVDataAdapterComposite extends Composite {
 		String numberPattern = csvDataAdapter.getNumberPattern();
 		if (numberPattern != null && numberPattern.length() > 0) {
 			btnCheckUseNumberPattern.setSelection(true);
-			textNumberPattern.setText(datePattern);
+			textNumberPattern.setText(numberPattern);
 			textNumberPattern.setEnabled(true);
 			btnCreateNumberPattern.setEnabled(true);
 		} else {
