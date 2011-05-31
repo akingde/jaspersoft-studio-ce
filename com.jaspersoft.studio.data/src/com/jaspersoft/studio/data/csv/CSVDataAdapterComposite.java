@@ -54,8 +54,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -163,7 +161,7 @@ public class CSVDataAdapterComposite extends Composite {
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
 
-		CTabFolder tabFolder = new CTabFolder(composite_1, SWT.BORDER);
+		CTabFolder tabFolder = new CTabFolder(composite_1, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(
