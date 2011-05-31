@@ -26,7 +26,6 @@ package com.jaspersoft.studio.data.jdbc;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.JdbcDataAdapter;
-import net.sf.jasperreports.data.JdbcDataAdapterService;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -54,7 +53,7 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public DataAdapterService getDataAdapterService() {
-		JdbcDataAdapterService jdbcDataAdapterService = new JdbcDataAdapterService();
+		JDBCDataAdapterService jdbcDataAdapterService = new JDBCDataAdapterService();
 		jdbcDataAdapterService.setDataAdapter(jdbcDataAdapter);
 		return jdbcDataAdapterService;
 	}
