@@ -314,13 +314,20 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 			final DataAdapterDescriptor da = getDataAdapters().get(combo.getSelectionIndex() - 1);
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
-
+					selectedDA = da;
 					editor.runReport(da);
+
 				}
 			});
 		}
 
 		refresh(false);
+	}
+
+	private DataAdapterDescriptor selectedDA;
+
+	public DataAdapterDescriptor getSelected() {
+		return selectedDA;
 	}
 
 	/**

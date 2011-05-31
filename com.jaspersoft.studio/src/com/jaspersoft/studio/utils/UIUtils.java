@@ -40,6 +40,7 @@ public class UIUtils {
 						"Exception, if you want to see more information look into details", status);
 			}
 		});
+		t.printStackTrace();
 	}
 
 	/**

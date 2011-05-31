@@ -3,7 +3,6 @@ package com.jaspersoft.studio.property.dataset.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
@@ -120,10 +119,15 @@ public class FieldsTable {
 
 		new ListOrderButtons().createOrderButtons(bGroup, tviewer);
 
-		List<JRField> fields = dataset.getFieldsList();
+		List<JRDesignField> fields = dataset.getFieldsList();
 		if (fields == null)
-			fields = new ArrayList<JRField>();
+			fields = new ArrayList<JRDesignField>();
+		setFields(fields);
+	}
+
+	public void setFields(List<JRDesignField> fields) {
 		tviewer.setInput(fields);
+		tviewer.refresh();
 	}
 
 	public List<JRDesignField> getFields() {

@@ -23,21 +23,27 @@
  */
 package com.jaspersoft.studio.data.csv;
 
+import java.util.List;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
 import net.sf.jasperreports.data.csv.CsvDataAdapterImpl;
 import net.sf.jasperreports.data.csv.CsvDataAdapterService;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.fields.IFieldsProvider;
 
-public class CSVDataAdapterDescriptor extends DataAdapterDescriptor 
-{
+public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements
+		IFieldsProvider {
 	private CsvDataAdapter csvDataAdapter = new CsvDataAdapterImpl();
-	
+
 	@Override
 	public DataAdapter getDataAdapter() {
 		return csvDataAdapter;
@@ -45,7 +51,7 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
-		csvDataAdapter = (CsvDataAdapter)dataAdapter;
+		csvDataAdapter = (CsvDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -62,8 +68,20 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public ImageDescriptor getIcon16() {
-		//return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/XLSDataAdapterIcon-16.gif");
+		// return
+		// AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
+		// "icons/XLSDataAdapterIcon-16.gif");
 		return super.getIcon16();
 	}
-	
+
+	private IFieldsProvider fprovider;
+
+	@Override
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JRDataset reportDataset) throws JRException,
+			UnsupportedOperationException {
+		if (fprovider == null)
+			fprovider = new CSVFieldsProvider();
+		return fprovider.getFields(con, reportDataset);
+	}
 }

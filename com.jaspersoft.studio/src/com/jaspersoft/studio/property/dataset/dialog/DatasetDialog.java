@@ -35,7 +35,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.IQueryDesigner;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.widget.DatasourceComboItem;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
@@ -49,6 +48,7 @@ import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.UIUtils;
 
 final class DatasetDialog extends FormDialog {
 	private MDataset mdataset;
@@ -99,8 +99,10 @@ final class DatasetDialog extends FormDialog {
 		dscombo = new DatasourceComboItem(new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
+				gFields.setEnabled(false);
 				if (da instanceof IFieldsProvider) {
-					// ((IFieldsProvider) da).getFields(da, reportDataset, parameters);
+					gFields.setEnabled(true);
+					// TODO if auto gfields.run;
 				}
 			}
 
@@ -109,11 +111,32 @@ final class DatasetDialog extends FormDialog {
 				return true;
 			}
 		});
-		final Action gFields = new Action("Get &Fields") {
+		gFields = new Action("Get &Fields") {
+			// TODO run inside a job, modal with progress bar
 			public void run() {
-				System.out.println("FORWARD");
+				DataAdapterDescriptor da = dscombo.getSelected();
+				try {
+					// JRDesignQuery jrDesignQuery = (JRDesignQuery) newdataset.getQuery();
+					// jrDesignQuery.setLanguage(langCombo.getText());
+					// jrDesignQuery.setText(qdfactory.getDesigner(langCombo.getText()).getQuery());
+					// jrDesignQuery.getText();
+
+					JRDesignQuery jdq = new JRDesignQuery();
+					jdq.setLanguage(langCombo.getText());
+					jdq.setText(qdfactory.getDesigner(langCombo.getText()).getQuery());
+					newdataset.setQuery(jdq);
+
+					List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(), newdataset);
+					if (fields != null)
+						ftable.setFields(fields);
+				} catch (UnsupportedOperationException e) {
+					UIUtils.showError(e);
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				}
 			}
 		};
+		gFields.setEnabled(false);
 
 		manager.add(dscombo);
 		manager.add(gFields);
@@ -178,9 +201,8 @@ final class DatasetDialog extends FormDialog {
 		langComposite.setLayout(langLayout);
 
 		qdfactory = new QDesignerFactory(langComposite);
-		for (String lang : languages) {
-			IQueryDesigner iqd = qdfactory.getDesigner(lang);
-		}
+		for (String lang : languages)
+			qdfactory.getDesigner(lang);
 
 		bptab.setControl(sectionClient);
 	}
@@ -251,6 +273,7 @@ final class DatasetDialog extends FormDialog {
 	private StackLayout langLayout;
 	private Composite langComposite;
 	private QDesignerFactory qdfactory;
+	private Action gFields;
 
 	public void setDataset(JRDesignDataset ds) {
 		JRQuery query = ds.getQuery();
@@ -282,7 +305,7 @@ final class DatasetDialog extends FormDialog {
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_LANGUAGE, lang, mquery));
 			String qtext = qdfactory.getDesigner(langCombo.getText()).getQuery();
 			if (ds.getQuery().getText().equals(qtext))
-				command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, lang, mquery));
+				command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, qtext, mquery));
 		}
 
 		List<JRDesignField> dsfields = ds.getFieldsList();

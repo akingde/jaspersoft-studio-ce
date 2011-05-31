@@ -1,19 +1,18 @@
 package com.jaspersoft.studio.data.querydesigner.sql;
 
-import org.eclipse.datatools.sqltools.sqlbuilder.ParseException;
+import org.eclipse.datatools.sqltools.core.DatabaseVendorDefinitionId;
 import org.eclipse.datatools.sqltools.sqleditor.SQLEditor;
+import org.eclipse.datatools.sqltools.sqleditor.SQLEditorConnectionInfo;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.QueryDesigner;
-import com.jaspersoft.studio.eclipse.editorinput.StringEditorInput;
 
 public class SQLQueryDesigner extends QueryDesigner {
 	private Composite composite;
@@ -28,7 +27,11 @@ public class SQLQueryDesigner extends QueryDesigner {
 		// super.createControl(parent);
 		composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		composite.setLayout(new GridLayout(1, true));
+		FillLayout layout = new FillLayout(SWT.HORIZONTAL);
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		layout.spacing = 0;
+		composite.setLayout(layout);
 
 		try {
 			// SQLBuilder sqlbuilder = new SQLBuilder();
@@ -76,40 +79,44 @@ public class SQLQueryDesigner extends QueryDesigner {
 			// sqlbuilder.setInput(new SQLBuilderEditorInput(cp,
 			// StatementHelper.STATEMENT_TYPE_SELECT));
 			// sqlbuilder.createClient(composite);
-
-			// } else {
-			SQLEditor editor = new SQLEditor();
-			IEditorInput editorInput = new StringEditorInput("");
-			//
-			editor.init((IEditorSite) JaspersoftStudioPlugin.getInstance()
+			sqleditor = new SQLEditor();
+			sqleditor.init((IEditorSite) JaspersoftStudioPlugin.getInstance()
 					.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.getActiveEditor().getSite(), editorInput);
+					.getActiveEditor().getSite(), createSQLEditorInput(""));
 
 			// editor.setInput(new SQLBuilderEditorInput(cp,
 			// StatementHelper.STATEMENT_TYPE_SELECT));
-			editor.createPartControl(composite);
-
-			// }
+			sqleditor.createPartControl(composite);
 		} catch (PartInitException e) {
 			e.printStackTrace();
-		} 
-//		catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		}
+		// catch (ParseException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 
 		return composite;
 	}
 
 	private String query;
+	private SQLEditor sqleditor;
 
 	@Override
 	public void setQuery(String query) {
+		sqleditor.setInput(createSQLEditorInput(query));
 		this.query = query;
+	}
+
+	private QDSQLEditorInput createSQLEditorInput(String query) {
+		QDSQLEditorInput input = new QDSQLEditorInput(query);
+		input.setConnectionInfo(new SQLEditorConnectionInfo(
+				new DatabaseVendorDefinitionId("hsql")));
+		return input;
 	}
 
 	@Override
 	public String getQuery() {
+		query = sqleditor.getText();
 		return query;
 	}
 }

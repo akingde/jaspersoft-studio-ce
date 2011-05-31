@@ -3,11 +3,10 @@ package com.jaspersoft.studio.data.fields;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
-
-import com.jaspersoft.studio.data.DataAdapterDescriptor;
 
 public interface IFieldsProvider {
 
@@ -28,7 +27,7 @@ public interface IFieldsProvider {
 	 * @throws JRException
 	 *           if an error occurs.
 	 */
-	public List<JRDesignField> getFields(DataAdapterDescriptor con, JRDataset reportDataset, Map<String, Object> parameters)
-			throws JRException, UnsupportedOperationException;
+	public List<JRDesignField> getFields(DataAdapterService con, JRDataset reportDataset) throws JRException,
+			UnsupportedOperationException;
 
 }

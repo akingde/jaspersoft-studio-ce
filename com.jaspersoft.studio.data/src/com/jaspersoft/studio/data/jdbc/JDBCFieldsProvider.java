@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.data.jdbc;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -8,14 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
 
-import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
 public class JDBCFieldsProvider implements IFieldsProvider {
 
@@ -23,31 +26,54 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		return true;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterDescriptor con,
-			JRDataset reportDataset, Map<String, Object> parameters)
-			throws JRException, UnsupportedOperationException {
-		// this will create jdbc connection
-		parameters.putAll(con.getDataAdapterService().getParameters());
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JRDataset reportDataset) throws JRException,
+			UnsupportedOperationException {
+		Map<String, Object> parameters = con.getParameters();
+
+		ParameterUtil.setParameters(reportDataset, parameters);
 		parameters.put(JRJdbcQueryExecuterFactory.PROPERTY_JDBC_FETCH_SIZE, 0);
+		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
+
 		try {
+			Connection c = (Connection) parameters
+					.get(JRParameter.REPORT_CONNECTION);
+
 			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(reportDataset,
-					parameters);
+					ParameterUtil.convertMap(parameters));
 			qe.createDatasource();
 			ResultSet rs = qe.getResultSet();
-			ResultSetMetaData metaData = rs.getMetaData();
-			int cc = metaData.getColumnCount();
-			List<JRDesignField> columns = new ArrayList<JRDesignField>(cc);
-			for (int i = 0; i < cc; i++) {
-				JRDesignField field = new JRDesignField();
-				field.setName(metaData.getColumnName(i));
-				field.setValueClassName(getJdbcTypeClass(metaData, i));
-				field.setDescription(null);
-				columns.add(field);
+			if (rs != null) {
+				ResultSetMetaData metaData = rs.getMetaData();
+				int cc = metaData.getColumnCount();
+				List<JRDesignField> columns = new ArrayList<JRDesignField>(cc);
+				for (int i = 1; i <= cc; i++) {
+					JRDesignField field = new JRDesignField();
+					String name = metaData.getColumnName(i);
+					field.setName(name);
+
+					field.setValueClassName(getJdbcTypeClass(metaData, i));
+					try {
+						String catalog = metaData.getCatalogName(i);
+						String schema = metaData.getSchemaName(i);
+						String table = metaData.getTableName(i);
+						ResultSet rsmc = c.getMetaData().getColumns(catalog,
+								schema, table, name);
+						while (rsmc.next()) {
+							field.setDescription(rsmc.getString("REMARKS"));
+							break;
+						}
+					} catch (SQLException se) {
+						se.printStackTrace();
+					}
+					columns.add(field);
+				}
+				return columns;
 			}
-			return columns;
 		} catch (SQLException e) {
 			throw new JRException(e);
 		}
+		return null;
 	}
 
 	public static String getJdbcTypeClass(java.sql.ResultSetMetaData rsmd, int t) {
