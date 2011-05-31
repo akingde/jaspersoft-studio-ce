@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
-import net.sf.jasperreports.data.CsvDataAdapter;
+import net.sf.jasperreports.data.csv.CsvDataAdapter;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;

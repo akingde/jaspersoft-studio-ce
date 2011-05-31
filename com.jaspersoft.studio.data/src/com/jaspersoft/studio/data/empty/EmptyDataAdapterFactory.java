@@ -23,7 +23,7 @@
  */
 package com.jaspersoft.studio.data.empty;
 
-import net.sf.jasperreports.data.EmptyDataAdapter;
+import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
@@ -35,7 +35,7 @@ public class EmptyDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getDataAdapterClassName() {
-		return EmptyDataAdapter.class.getName();
+		return EmptyDataAdapterImpl.class.getName();
 	}
 
 	public String getDescription() {

@@ -23,7 +23,7 @@
  */
 package com.jaspersoft.studio.data.remotexml;
 
-import net.sf.jasperreports.data.RemoteXmlDataAdapter;
+import net.sf.jasperreports.data.xml.RemoteXmlDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
@@ -35,7 +35,7 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getDataAdapterClassName() {
-		return RemoteXmlDataAdapter.class.getName();
+		return RemoteXmlDataAdapterImpl.class.getName();
 	}
 
 	public String getDescription() {

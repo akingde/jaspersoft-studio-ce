@@ -23,7 +23,7 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
-import net.sf.jasperreports.data.JdbcDataAdapter;
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
@@ -44,7 +44,7 @@ public class JDBCDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
 	 */
 	public String getDataAdapterClassName() {
-		return JdbcDataAdapter.class.getName();
+		return JdbcDataAdapterImpl.class.getName();
 	}
 
 	/* (non-Javadoc)

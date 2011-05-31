@@ -23,10 +23,11 @@
  */
 package com.jaspersoft.studio.data.csv;
 
-import net.sf.jasperreports.data.CsvDataAdapter;
-import net.sf.jasperreports.data.CsvDataAdapterService;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.csv.CsvDataAdapter;
+import net.sf.jasperreports.data.csv.CsvDataAdapterImpl;
+import net.sf.jasperreports.data.csv.CsvDataAdapterService;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -35,7 +36,7 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class CSVDataAdapterDescriptor extends DataAdapterDescriptor 
 {
-	private CsvDataAdapter csvDataAdapter = new CsvDataAdapter();
+	private CsvDataAdapter csvDataAdapter = new CsvDataAdapterImpl();
 	
 	@Override
 	public DataAdapter getDataAdapter() {

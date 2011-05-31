@@ -23,7 +23,7 @@
  */
 package com.jaspersoft.studio.data.xls;
 
-import net.sf.jasperreports.data.XlsDataAdapter;
+import net.sf.jasperreports.data.xls.XlsDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
@@ -35,7 +35,7 @@ public class XLSDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getDataAdapterClassName() {
-		return XlsDataAdapter.class.getName();
+		return XlsDataAdapterImpl.class.getName();
 	}
 
 	public String getDescription() {

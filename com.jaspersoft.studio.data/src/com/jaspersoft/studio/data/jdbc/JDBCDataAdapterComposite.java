@@ -30,7 +30,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import net.sf.jasperreports.data.JdbcDataAdapter;
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;

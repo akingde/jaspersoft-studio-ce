@@ -19,7 +19,7 @@
  */
 package com.jaspersoft.studio.data.jrdsprovider;
 
-import net.sf.jasperreports.data.DataSourceProviderDataAdapter;
+import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;

@@ -23,7 +23,7 @@
  */
 package com.jaspersoft.studio.data.empty;
 
-import net.sf.jasperreports.data.EmptyDataAdapter;
+import net.sf.jasperreports.data.empty.EmptyDataAdapter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

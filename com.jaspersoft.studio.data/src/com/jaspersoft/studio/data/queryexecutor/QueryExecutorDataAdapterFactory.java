@@ -23,7 +23,7 @@
  */
 package com.jaspersoft.studio.data.queryexecutor;
 
-import net.sf.jasperreports.data.QueryExecuterDataAdapter;
+import net.sf.jasperreports.data.qe.QueryExecuterDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
@@ -35,7 +35,7 @@ public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getDataAdapterClassName() {
-		return QueryExecuterDataAdapter.class.getName();
+		return QueryExecuterDataAdapterImpl.class.getName();
 	}
 
 	public String getDescription() {

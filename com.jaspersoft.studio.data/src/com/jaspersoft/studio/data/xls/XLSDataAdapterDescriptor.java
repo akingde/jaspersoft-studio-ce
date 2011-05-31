@@ -25,8 +25,9 @@ package com.jaspersoft.studio.data.xls;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.XlsDataAdapter;
-import net.sf.jasperreports.data.XlsDataAdapterService;
+import net.sf.jasperreports.data.xls.XlsDataAdapter;
+import net.sf.jasperreports.data.xls.XlsDataAdapterImpl;
+import net.sf.jasperreports.data.xls.XlsDataAdapterService;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -37,7 +38,7 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class XLSDataAdapterDescriptor extends DataAdapterDescriptor 
 {
-	private XlsDataAdapter xlsDataAdapter = new XlsDataAdapter();
+	private XlsDataAdapter xlsDataAdapter = new XlsDataAdapterImpl();
 	
 	@Override
 	public DataAdapter getDataAdapter() {

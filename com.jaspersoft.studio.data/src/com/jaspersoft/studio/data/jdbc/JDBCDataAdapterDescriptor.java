@@ -25,7 +25,8 @@ package com.jaspersoft.studio.data.jdbc;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.JdbcDataAdapter;
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -39,7 +40,7 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
  */
 public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor 
 {
-	private JdbcDataAdapter jdbcDataAdapter = new JdbcDataAdapter();
+	private JdbcDataAdapter jdbcDataAdapter = new JdbcDataAdapterImpl();
 	
 	@Override
 	public DataAdapter getDataAdapter() {

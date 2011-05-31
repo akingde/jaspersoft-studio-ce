@@ -21,15 +21,16 @@ package com.jaspersoft.studio.data.jrdsprovider;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.DataSourceProviderDataAdapter;
-import net.sf.jasperreports.data.DataSourceProviderDataAdapterService;
+import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapter;
+import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterImpl;
+import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor 
 {
-	private DataSourceProviderDataAdapter dsProviderDataAdapter = new DataSourceProviderDataAdapter();
+	private DataSourceProviderDataAdapter dsProviderDataAdapter = new DataSourceProviderDataAdapterImpl();
 	
 	@Override
 	public DataAdapter getDataAdapter() {

@@ -19,7 +19,8 @@
  */
 package com.jaspersoft.studio.data.customjrds;
 
-import net.sf.jasperreports.data.DataSourceDataAdapter;
+import net.sf.jasperreports.data.ds.DataSourceDataAdapter;
+import net.sf.jasperreports.data.ds.DataSourceDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
@@ -31,7 +32,7 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 	}
 
 	public String getDataAdapterClassName() {
-		return DataSourceDataAdapter.class.getName();
+		return DataSourceDataAdapterImpl.class.getName();
 	}
 
 	public String getDescription() {

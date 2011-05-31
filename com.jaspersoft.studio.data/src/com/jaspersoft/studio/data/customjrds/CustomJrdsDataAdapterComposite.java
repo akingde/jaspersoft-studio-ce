@@ -19,7 +19,7 @@
  */
 package com.jaspersoft.studio.data.customjrds;
 
-import net.sf.jasperreports.data.DataSourceDataAdapter;
+import net.sf.jasperreports.data.ds.DataSourceDataAdapter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;

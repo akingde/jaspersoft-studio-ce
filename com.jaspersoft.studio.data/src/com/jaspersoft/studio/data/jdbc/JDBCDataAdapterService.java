@@ -23,7 +23,7 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
-import net.sf.jasperreports.data.JdbcDataAdapterService;
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapterService;
 import net.sf.jasperreports.engine.JRException;
 
 /**

@@ -26,7 +26,7 @@ package com.jaspersoft.studio.data.xml;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import net.sf.jasperreports.data.XmlDataAdapter;
+import net.sf.jasperreports.data.xml.XmlDataAdapter;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;

@@ -4,7 +4,7 @@ package com.jaspersoft.studio.data.remotexml;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import net.sf.jasperreports.data.RemoteXmlDataAdapter;
+import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;

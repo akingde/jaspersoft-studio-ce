@@ -34,7 +34,7 @@ import java.util.List;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
-import net.sf.jasperreports.data.XlsDataAdapter;
+import net.sf.jasperreports.data.xls.XlsDataAdapter;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
