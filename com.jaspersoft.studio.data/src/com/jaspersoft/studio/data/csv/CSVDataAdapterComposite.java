@@ -953,7 +953,6 @@ public class CSVDataAdapterComposite extends Composite {
 		JRCsvDataSource ds = new JRCsvDataSource(new File(
 				textCSVFileName.getText()));
 		ds.setUseFirstRowAsHeader(true);
-		ds.setReportMaxCount(2);
 
 		if (btnRadioFieldComma.getSelection())
 			ds.setFieldDelimiter(',');

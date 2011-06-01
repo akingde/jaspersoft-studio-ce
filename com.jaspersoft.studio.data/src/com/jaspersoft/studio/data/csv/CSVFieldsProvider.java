@@ -39,7 +39,6 @@ public class CSVFieldsProvider implements IFieldsProvider {
 		} else {
 			ds = (JRCsvDataSource) parameters
 					.get(JRParameter.REPORT_DATA_SOURCE);
-			ds.setReportMaxCount(2);
 		}
 		if (ds != null) {
 			ds.next();

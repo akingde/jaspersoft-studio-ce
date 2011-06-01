@@ -39,7 +39,6 @@ public class XLSFieldsProvider implements IFieldsProvider {
 		} else {
 			ds = (JRXlsDataSource) parameters
 					.get(JRParameter.REPORT_DATA_SOURCE);
-			ds.setReportMaxCount(2);
 		}
 		if (ds != null) {
 			ds.next();
