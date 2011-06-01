@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.preview;
 
@@ -27,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -67,7 +64,7 @@ public class ParametersDialog extends FormDialog {
 		inputs.add(new DateInput());
 		inputs.add(new ImageInput());
 	}
-	private List<JRDesignParameter> prompts;
+	private List<JRParameter> prompts;
 	private Map<String, Object> params;
 	private JasperDesign jDesign;
 
@@ -84,7 +81,7 @@ public class ParametersDialog extends FormDialog {
 	}
 
 	public boolean canShowParameters() {
-		for (JRDesignParameter p : prompts) {
+		for (JRParameter p : prompts) {
 			if (p.isForPrompting() && !p.isSystemDefined())
 				for (IDataInput in : inputs)
 					try {
@@ -132,9 +129,9 @@ public class ParametersDialog extends FormDialog {
 		Composite sectionClient = toolkit.createComposite(scompo);
 		sectionClient.setLayout(new GridLayout(2, false));
 
-		for (JRDesignParameter p : prompts)
+		for (JRParameter p : prompts)
 			if (!p.isForPrompting() || p.isSystemDefined())
-				createInput(toolkit, sectionClient, p);
+				createInput(toolkit, sectionClient, (JRDesignParameter) p);
 		sectionClient.pack();
 		scompo.setMinSize(sectionClient.getSize());
 		scompo.setContent(sectionClient);
@@ -153,9 +150,9 @@ public class ParametersDialog extends FormDialog {
 			Composite sectionClient = toolkit.createComposite(scompo);
 			sectionClient.setLayout(new GridLayout(2, false));
 
-			for (JRDesignParameter p : prompts)
+			for (JRParameter p : prompts)
 				if (p.isForPrompting() && !p.isSystemDefined())
-					createInput(toolkit, sectionClient, p);
+					createInput(toolkit, sectionClient, (JRDesignParameter) p);
 			sectionClient.pack();
 			scompo.setMinSize(sectionClient.getSize());
 			scompo.setContent(sectionClient);

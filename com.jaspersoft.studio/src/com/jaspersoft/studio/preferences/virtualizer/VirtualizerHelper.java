@@ -2,6 +2,7 @@ package com.jaspersoft.studio.preferences.virtualizer;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVirtualizer;
@@ -17,13 +18,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class VirtualizerHelper {
-	@SuppressWarnings("unchecked")
-	public static void setVirtualizer(JasperDesign jd, PropertiesHelper ps) {
+	public static void setVirtualizer(JasperDesign jd, PropertiesHelper ps, Map<String, Object> parammap) {
 		if (ps.getBoolean(VirtualizerPreferencePage.JSS_VIRTUALIZER_USE, false)) {
 			List<JRParameter> params = jd.getParametersList();
 			for (JRParameter p : params) {
 				if (p.getValueClassName().equals(JRVirtualizer.class.getName())) {
-					jd.getParametersMap().put(p.getName(), createVirtualizer(ps));
+					parammap.put(p.getName(), createVirtualizer(ps));
 				}
 			}
 		}

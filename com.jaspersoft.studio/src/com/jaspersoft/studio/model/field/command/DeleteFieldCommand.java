@@ -39,6 +39,7 @@
 package com.jaspersoft.studio.model.field.command;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
@@ -58,7 +59,7 @@ public class DeleteFieldCommand extends Command {
 	private JRDesignDataset jrDataset;
 
 	/** The jr field. */
-	private JRDesignField jrField;
+	private JRField jrField;
 
 	/** The element position. */
 	private int elementPosition = 0;
@@ -77,7 +78,7 @@ public class DeleteFieldCommand extends Command {
 		this.jrField = (JRDesignField) srcNode.getValue();
 	}
 
-	public DeleteFieldCommand(JRDesignDataset destNode, JRDesignField srcNode) {
+	public DeleteFieldCommand(JRDesignDataset destNode, JRField srcNode) {
 		super();
 		this.jrDataset = destNode;
 		this.jrField = srcNode;

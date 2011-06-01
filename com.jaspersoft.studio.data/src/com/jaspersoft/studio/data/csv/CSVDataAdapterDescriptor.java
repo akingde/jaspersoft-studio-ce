@@ -34,8 +34,6 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
@@ -64,14 +62,6 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new CSVDataAdapterEditor();
-	}
-
-	@Override
-	public ImageDescriptor getIcon16() {
-		// return
-		// AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
-		// "icons/XLSDataAdapterIcon-16.gif");
-		return super.getIcon16();
 	}
 
 	private IFieldsProvider fprovider;

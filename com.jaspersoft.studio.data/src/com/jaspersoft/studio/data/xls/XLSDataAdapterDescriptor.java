@@ -23,11 +23,16 @@
  */
 package com.jaspersoft.studio.data.xls;
 
+import java.util.List;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.xls.XlsDataAdapter;
 import net.sf.jasperreports.data.xls.XlsDataAdapterImpl;
 import net.sf.jasperreports.data.xls.XlsDataAdapterService;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -35,11 +40,12 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.fields.IFieldsProvider;
 
-public class XLSDataAdapterDescriptor extends DataAdapterDescriptor 
-{
+public class XLSDataAdapterDescriptor extends DataAdapterDescriptor implements
+		IFieldsProvider {
 	private XlsDataAdapter xlsDataAdapter = new XlsDataAdapterImpl();
-	
+
 	@Override
 	public DataAdapter getDataAdapter() {
 		return xlsDataAdapter;
@@ -47,7 +53,7 @@ public class XLSDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.xlsDataAdapter = (XlsDataAdapter)dataAdapter;
+		this.xlsDataAdapter = (XlsDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -64,6 +70,18 @@ public class XLSDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/XLSDataAdapterIcon-16.gif");
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
+				"icons/XLSDataAdapterIcon-16.gif");
+	}
+
+	private IFieldsProvider fprovider;
+
+	@Override
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JRDataset reportDataset) throws JRException,
+			UnsupportedOperationException {
+		if (fprovider == null)
+			fprovider = new XLSFieldsProvider();
+		return fprovider.getFields(con, reportDataset);
 	}
 }

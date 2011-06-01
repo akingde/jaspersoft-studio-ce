@@ -2,7 +2,9 @@ package com.jaspersoft.studio.property.dataset.dialog;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRQuery;
+import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
@@ -308,16 +310,16 @@ final class DatasetDialog extends FormDialog {
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, qtext, mquery));
 		}
 
-		List<JRDesignField> dsfields = ds.getFieldsList();
+		List<JRField> dsfields = ds.getFieldsList();
 		List<JRDesignField> fields = ftable.getFields();
-		for (JRDesignField f : dsfields)
+		for (JRField f : dsfields)
 			command.add(new DeleteFieldCommand(ds, f));
 		for (JRDesignField newf : fields)
 			command.add(new CreateFieldCommand(ds, newf, -1));
 
-		List<JRDesignSortField> dssfields = ds.getSortFieldsList();
+		List<JRSortField> dssfields = ds.getSortFieldsList();
 		List<JRDesignSortField> sfields = sftable.getFields();
-		for (JRDesignSortField f : dssfields)
+		for (JRSortField f : dssfields)
 			command.add(new DeleteSortFieldCommand(ds, f));
 		for (JRDesignSortField newf : sfields)
 			command.add(new CreateSortFieldCommand(ds, newf, -1));

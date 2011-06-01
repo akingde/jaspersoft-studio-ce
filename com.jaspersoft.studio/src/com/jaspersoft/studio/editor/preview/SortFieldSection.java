@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.preview;
 
@@ -28,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
@@ -64,7 +60,7 @@ public class SortFieldSection {
 	private List<JRSortField> inFields;
 	private List<JRSortField> outFields;
 
-	private List<JRDesignParameter> prompts;
+	private List<JRParameter> prompts;
 	private Map<String, Object> params;
 	private JasperDesign jDesign;
 	private Table rightTable;
@@ -72,7 +68,7 @@ public class SortFieldSection {
 	private TableViewer rightTView;
 	private TableViewer leftTView;
 
-	public SortFieldSection(List<JRDesignParameter> prompts, Map<String, Object> params, JasperDesign jDesign) {
+	public SortFieldSection(List<JRParameter> prompts, Map<String, Object> params, JasperDesign jDesign) {
 		super();
 		this.prompts = prompts;
 		this.params = params;
@@ -80,7 +76,7 @@ public class SortFieldSection {
 	}
 
 	public void createSortField(FormToolkit toolkit, CTabFolder tabFolder) {
-		for (JRDesignParameter p : prompts)
+		for (JRParameter p : prompts)
 			if (p.getName().equals("SORT_FIELDS")) {//$NON-NLS-1$
 				CTabItem sftab = new CTabItem(tabFolder, SWT.NONE);
 				sftab.setText(Messages.SortFieldSection_sort_fields);

@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.util;
 
@@ -28,10 +24,17 @@ import java.util.List;
 import java.util.ListIterator;
 
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRGenericElement;
+import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRReportTemplate;
+import net.sf.jasperreports.engine.JRScriptlet;
+import net.sf.jasperreports.engine.JRSortField;
+import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRSubreport;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -101,6 +104,7 @@ import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.model.variable.MVariables;
+
 /*
  * A factory for creating Report objects.
  * 
@@ -128,11 +132,10 @@ public class ReportFactory {
 			}
 		}
 		if (jd.getStyles() != null) {
-			for (Iterator<JRDesignStyle> it = jd.getStylesList().iterator(); it.hasNext();) {
-				JRDesignStyle jrstyle = it.next();
+			for (JRStyle jrstyle : jd.getStylesList()) {
 				ANode mstyle = createNode(nStyle, jrstyle, -1);
-				if (jrstyle.getConditionalStyleList() != null) {
-					for (Object jrc : jrstyle.getConditionalStyleList()) {
+				if (((JRDesignStyle) jrstyle).getConditionalStyleList() != null) {
+					for (Object jrc : ((JRDesignStyle) jrstyle).getConditionalStyleList()) {
 						createNode(mstyle, jrc, -1);
 					}
 				}
@@ -142,9 +145,8 @@ public class ReportFactory {
 		createDataset(report, jd.getMainDesignDataset(), false);
 
 		if (jd.getDatasetsList() != null) {
-			for (Iterator<JRDesignDataset> it = jd.getDatasetsList().iterator(); it.hasNext();) {
-				JRDesignDataset jrDataset = it.next();
-				createDataset(new MDataset(report, jrDataset, -1), jrDataset, true);
+			for (JRDataset jrDataset : jd.getDatasetsList()) {
+				createDataset(new MDataset(report, (JRDesignDataset) jrDataset, -1), (JRDesignDataset) jrDataset, true);
 			}
 
 		}
@@ -257,22 +259,22 @@ public class ReportFactory {
 		// create parameters
 		ANode nParameters = new MParameters(nDataset, dataSet, JRDesignDataset.PROPERTY_PARAMETERS);
 		if (dataSet.getParametersList() != null) {
-			for (Iterator<JRDesignParameter> it = dataSet.getParametersList().iterator(); it.hasNext();) {
-				createNode(nParameters, it.next(), -1);
+			for (JRParameter jrparam : dataSet.getParametersList()) {
+				createNode(nParameters, jrparam, -1);
 			}
 		}
 		// create fields
 		ANode nFields = new MFields(nDataset, dataSet);
 		if (dataSet.getFieldsList() != null) {
-			for (Iterator<JRDesignField> it = dataSet.getFieldsList().iterator(); it.hasNext();) {
-				createNode(nFields, it.next(), -1);
+			for (JRField jrField : dataSet.getFieldsList()) {
+				createNode(nFields, jrField, -1);
 			}
 		}
 		// create sort fields
 		ANode nSortFields = new MSortFields(nDataset, dataSet);
 		if (dataSet.getSortFieldsList() != null) {
-			for (Iterator<JRDesignSortField> it = dataSet.getSortFieldsList().iterator(); it.hasNext();) {
-				createNode(nSortFields, it.next(), -1);
+			for (JRSortField sortField : dataSet.getSortFieldsList()) {
+				createNode(nSortFields, sortField, -1);
 			}
 		}
 		// create variables
@@ -291,8 +293,8 @@ public class ReportFactory {
 			createNode(nScriptlets, jrscriptlet, -1);
 		}
 		if (dataSet.getScriptletsList() != null) {
-			for (Iterator<JRDesignScriptlet> it = dataSet.getScriptletsList().iterator(); it.hasNext();) {
-				createNode(nScriptlets, it.next(), -1);
+			for (JRScriptlet jrScriptlet : dataSet.getScriptletsList()) {
+				createNode(nScriptlets, jrScriptlet, -1);
 			}
 		}
 
@@ -300,8 +302,8 @@ public class ReportFactory {
 			// create scriplets
 			ANode nGroups = new MGroups(nDataset, dataSet);
 			if (dataSet.getGroupsList() != null) {
-				for (Iterator<JRDesignGroup> it = dataSet.getGroupsList().iterator(); it.hasNext();) {
-					createNode(nGroups, it.next(), -1);
+				for (JRGroup jrGroup : dataSet.getGroupsList()) {
+					createNode(nGroups, jrGroup, -1);
 				}
 			}
 		}

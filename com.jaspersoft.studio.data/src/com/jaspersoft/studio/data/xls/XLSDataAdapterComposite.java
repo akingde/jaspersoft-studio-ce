@@ -88,6 +88,7 @@ public class XLSDataAdapterComposite extends Composite {
 	private Button btnCheckUseNumberPattern;
 	private Button btnCreateNumberPattern;
 	private Button btnCheckSkipFirstLine;
+	private Button btnCheckQEMode;
 
 	// The data model
 	private java.util.List<String[]> rows;
@@ -125,6 +126,12 @@ public class XLSDataAdapterComposite extends Composite {
 		gd_btnBrowse.widthHint = 100;
 		btnBrowse.setLayoutData(gd_btnBrowse);
 		btnBrowse.setText("Browse");
+		
+		btnCheckQEMode = new Button(this, SWT.CHECK);
+		btnCheckQEMode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1));
+		btnCheckQEMode
+				.setText("Use query executor mode (the report must use the CSV query language)");
 		
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));
@@ -413,6 +420,9 @@ public class XLSDataAdapterComposite extends Composite {
 		
 		textExcelFileName.setText( Misc.nvl( xlsDataAdapter.getFileName(),"") );
 		
+		btnCheckQEMode.setSelection(xlsDataAdapter.isQueryExecuterMode());
+
+		
 		List<String> listColumnNames = xlsDataAdapter.getColumnNames();
 		List<Integer> listColumnIndexes = xlsDataAdapter.getColumnIndexes();
 		if (    (listColumnNames != null && listColumnNames.size() > 0)
@@ -462,6 +472,7 @@ public class XLSDataAdapterComposite extends Composite {
 		if (xlsDataAdapterDesc == null) xlsDataAdapterDesc = new XLSDataAdapterDescriptor();
 		
 		xlsDataAdapter.setFileName(textExcelFileName.getText());
+		xlsDataAdapter.setQueryExecuterMode(btnCheckQEMode.getSelection());
 		
 		List<String> listColumnNames = new ArrayList<String>();
 		List<Integer> listColumnIndexes = new ArrayList<Integer>();

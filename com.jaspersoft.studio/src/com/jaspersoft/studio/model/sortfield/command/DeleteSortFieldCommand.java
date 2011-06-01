@@ -20,8 +20,8 @@
 package com.jaspersoft.studio.model.sortfield.command;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 
 import org.eclipse.gef.commands.Command;
@@ -40,7 +40,7 @@ public class DeleteSortFieldCommand extends Command {
 	private JRDesignDataset jrDataset;
 
 	/** The jr field. */
-	private JRDesignSortField jrField;
+	private JRSortField jrField;
 
 	/** The element position. */
 	private int elementPosition = 0;
@@ -59,7 +59,7 @@ public class DeleteSortFieldCommand extends Command {
 		this.jrField = (JRDesignSortField) srcNode.getValue();
 	}
 
-	public DeleteSortFieldCommand(JRDesignDataset destNode, JRDesignSortField srcNode) {
+	public DeleteSortFieldCommand(JRDesignDataset destNode, JRSortField srcNode) {
 		super();
 		this.jrDataset = destNode;
 		this.jrField = srcNode;

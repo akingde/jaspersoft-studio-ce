@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.data.csv;
+package com.jaspersoft.studio.data.xls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,19 +6,19 @@ import java.util.Map;
 
 import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.csv.CsvDataAdapter;
+import net.sf.jasperreports.data.xls.XlsDataAdapter;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.data.JRCsvDataSource;
+import net.sf.jasperreports.engine.data.JRXlsDataSource;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.query.JRCsvQueryExecuter;
-import net.sf.jasperreports.engine.query.JRCsvQueryExecuterFactory;
+import net.sf.jasperreports.engine.query.JRXlsQueryExecuter;
+import net.sf.jasperreports.engine.query.JRXlsQueryExecuterFactory;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
-public class CSVFieldsProvider implements IFieldsProvider {
+public class XLSFieldsProvider implements IFieldsProvider {
 
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JRDataset reportDataset) throws JRException,
@@ -27,17 +27,17 @@ public class CSVFieldsProvider implements IFieldsProvider {
 		ParameterUtil.setParameters(reportDataset, parameters);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 2);
 
-		JRCsvDataSource ds = null;
+		JRXlsDataSource ds = null;
 
-		CsvDataAdapter da = (CsvDataAdapter) ((AbstractDataAdapterService) con)
+		XlsDataAdapter da = (XlsDataAdapter) ((AbstractDataAdapterService) con)
 				.getDataAdapter();
 		if (da.isQueryExecuterMode()) {
-			JRCsvQueryExecuter qe = (JRCsvQueryExecuter) new JRCsvQueryExecuterFactory()
+			JRXlsQueryExecuter qe = (JRXlsQueryExecuter) new JRXlsQueryExecuterFactory()
 					.createQueryExecuter(reportDataset,
 							ParameterUtil.convertMap(parameters));
-			ds = (JRCsvDataSource) qe.createDatasource();
+			ds = (JRXlsDataSource) qe.createDatasource();
 		} else {
-			ds = (JRCsvDataSource) parameters
+			ds = (JRXlsDataSource) parameters
 					.get(JRParameter.REPORT_DATA_SOURCE);
 			ds.setReportMaxCount(2);
 		}

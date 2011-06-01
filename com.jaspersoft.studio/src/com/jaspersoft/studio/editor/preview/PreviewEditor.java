@@ -171,7 +171,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 
 						jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
 
-						VirtualizerHelper.setVirtualizer(jd, ps);
+						VirtualizerHelper.setVirtualizer(jd, ps, jasperParameters);
 
 						// We let the data adapter to contribute its parameters.
 						Map<String, Object> dataAdapterParams = dataAdapterService.getParameters();
