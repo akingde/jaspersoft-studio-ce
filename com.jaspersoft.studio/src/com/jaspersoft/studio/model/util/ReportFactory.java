@@ -167,7 +167,7 @@ public class ReportFactory {
 			for (Object group : jd.getGroupsList()) {
 				JRDesignGroup gr = (JRDesignGroup) group;
 				if (gr.getGroupHeaderSection() != null) {
-					List<?> grhBands = ((JRDesignSection) gr.getGroupHeaderSection()).getBandsList();
+					List<JRBand> grhBands = ((JRDesignSection) gr.getGroupHeaderSection()).getBandsList();
 					if (grhBands != null) {
 						if (grhBands.isEmpty()) {
 							new MBandGroupHeader(report, gr, null, -1);
@@ -200,7 +200,7 @@ public class ReportFactory {
 			new MBand(report, null, BandTypeEnum.DETAIL, -1);
 
 		if (jd.getGroupsList() != null) {
-			for (ListIterator<?> ij = jd.getGroupsList().listIterator(jd.getGroupsList().size()); ij.hasPrevious();) {
+			for (ListIterator<JRGroup> ij = jd.getGroupsList().listIterator(jd.getGroupsList().size()); ij.hasPrevious();) {
 				JRDesignGroup gr = (JRDesignGroup) ij.previous();
 				if (gr.getGroupFooterSection() != null) {
 					List<?> grhBands = ((JRDesignSection) gr.getGroupFooterSection()).getBandsList();
@@ -279,11 +279,10 @@ public class ReportFactory {
 		}
 		// create variables
 		ANode nVariables = new MVariables(nDataset, dataSet);
-		if (dataSet.getVariablesList() != null) {
-			for (Iterator<JRVariable> it = dataSet.getVariablesList().iterator(); it.hasNext();) {
-				createNode(nVariables, (JRDesignVariable) it.next(), -1);
-			}
-		}
+		if (dataSet.getVariablesList() != null)
+			for (JRVariable jrVar : dataSet.getVariablesList())
+				createNode(nVariables, jrVar, -1);
+
 		// create scriplets
 		ANode nScriptlets = new MScriptlets(nDataset, dataSet);
 		if (dataSet.getScriptletClass() != null) {

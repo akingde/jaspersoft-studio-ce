@@ -85,8 +85,6 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 						Messages.PDFExporterPreferencePage_26));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES,
 				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES));
-		store.setDefault(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY,
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_PRINT_SCALING,
 				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PRINT_SCALING));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE, Misc.nvl(
@@ -227,8 +225,6 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 				Messages.PDFExporterPreferencePage_74, sc));
 		addField(new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES,
 				Messages.PDFExporterPreferencePage_75, sc));
-		addField(new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_FORCE_LINEBREAK_POLICY,
-				Messages.PDFExporterPreferencePage_76, sc));
 		addField(new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_TAGGED, Messages.PDFExporterPreferencePage_77, sc));
 		addField(new ComboFieldEditor(JRPdfExporterParameter.PROPERTY_PRINT_SCALING, Messages.PDFExporterPreferencePage_78,
 				new String[][] { { "Default", "default" }, { "None", "none" } }, sc)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$

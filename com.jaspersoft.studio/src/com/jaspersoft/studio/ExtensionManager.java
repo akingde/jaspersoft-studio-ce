@@ -32,7 +32,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
@@ -65,12 +64,11 @@ public class ExtensionManager {
 		}
 
 		DataAdapterManager.loadDataAdapters();
+//
+//		for (DataAdapterDescriptor da : DataAdapterManager.getDataAdapters()) {
+//			System.out.println(da.toXml());
+//		}
 
-		for (DataAdapterDescriptor da : DataAdapterManager.getDataAdapters()) {
-			System.out.println(da.toXml());
-		}
-
-		
 	}
 
 	private List<IComponentFactory> nodeFactory = new ArrayList<IComponentFactory>();

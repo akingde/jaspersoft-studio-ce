@@ -31,7 +31,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 public class UIUtils {
 
 	public static void showError(final Throwable t) {
-		Display.getCurrent().asyncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 
 				IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(),

@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.property.dataset.dialog;
 
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRField;
@@ -11,6 +12,10 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
@@ -29,6 +34,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.FormDialog;
@@ -63,6 +69,9 @@ final class DatasetDialog extends FormDialog {
 		mdataset = node;
 		this.file = file;
 		newdataset = (JRDesignDataset) ((JRDesignDataset) mdataset.getValue()).clone();
+		for (PropertyChangeListener p : newdataset.getEventSupport().getPropertyChangeListeners()) {
+			newdataset.getEventSupport().removePropertyChangeListener(p);
+		}
 	}
 
 	public boolean close() {
@@ -116,26 +125,41 @@ final class DatasetDialog extends FormDialog {
 		gFields = new Action("Get &Fields") {
 			// TODO run inside a job, modal with progress bar
 			public void run() {
-				DataAdapterDescriptor da = dscombo.getSelected();
-				try {
-					// JRDesignQuery jrDesignQuery = (JRDesignQuery) newdataset.getQuery();
-					// jrDesignQuery.setLanguage(langCombo.getText());
-					// jrDesignQuery.setText(qdfactory.getDesigner(langCombo.getText()).getQuery());
-					// jrDesignQuery.getText();
+				final String lang = langCombo.getText();
+				final DataAdapterDescriptor da = dscombo.getSelected();
+				final String query = qdfactory.getDesigner(lang).getQuery();
+				Job job = new Job("Use initiated job") {
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							JRDesignQuery jdq = new JRDesignQuery();
+							jdq.setLanguage(lang);
+							jdq.setText(query);
+							newdataset.setQuery(jdq);
 
-					JRDesignQuery jdq = new JRDesignQuery();
-					jdq.setLanguage(langCombo.getText());
-					jdq.setText(qdfactory.getDesigner(langCombo.getText()).getQuery());
-					newdataset.setQuery(jdq);
+							final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(),
+									newdataset);
+							if (fields != null) {
+								Display.getDefault().asyncExec(new Runnable() {
 
-					List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(), newdataset);
-					if (fields != null)
-						ftable.setFields(fields);
-				} catch (UnsupportedOperationException e) {
-					UIUtils.showError(e);
-				} catch (Exception e) {
-					UIUtils.showError(e);
-				}
+									public void run() {
+										setFields(fields);
+									}
+								});
+
+							}
+						} catch (UnsupportedOperationException e) {
+							e.printStackTrace();
+							UIUtils.showError(e);
+						} catch (Exception e) {
+							e.printStackTrace();
+							UIUtils.showError(e);
+						}
+						return Status.OK_STATUS;
+					}
+				};
+				job.setPriority(Job.SHORT);
+
+				job.schedule();
 			}
 		};
 		gFields.setEnabled(false);
@@ -145,6 +169,10 @@ final class DatasetDialog extends FormDialog {
 
 		manager.update(true);
 		tb.pack();
+	}
+
+	private void setFields(List<JRDesignField> fields) {
+		ftable.setFields(fields);
 	}
 
 	private void createTop(Composite parent, FormToolkit toolkit) {
@@ -313,7 +341,7 @@ final class DatasetDialog extends FormDialog {
 		List<JRField> dsfields = ds.getFieldsList();
 		List<JRDesignField> fields = ftable.getFields();
 		for (JRField f : dsfields)
-			command.add(new DeleteFieldCommand(ds, f));
+			command.add(new DeleteFieldCommand(ds, (JRDesignField) f));
 		for (JRDesignField newf : fields)
 			command.add(new CreateFieldCommand(ds, newf, -1));
 

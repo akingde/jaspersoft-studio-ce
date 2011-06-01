@@ -47,6 +47,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
+import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.repository.actions.CreateDataAdapterAction;
@@ -104,6 +105,7 @@ public class RepositoryView extends ViewPart {
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		init(site);
 		this.memento = memento;
+		new ExtensionManager().init();
 	}
 
 	public void saveState(IMemento memento) {
