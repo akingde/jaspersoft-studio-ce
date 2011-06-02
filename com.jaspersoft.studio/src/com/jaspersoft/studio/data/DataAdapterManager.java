@@ -212,60 +212,63 @@ public class DataAdapterManager {
 			
 			Document document = JRXmlUtils.parse( new InputSource(new StringReader(xml)) );
 			
-			NodeList adapterNodes = document.getDocumentElement().getElementsByTagName("dataAdapter");
+			NodeList adapterNodes = document.getDocumentElement().getChildNodes();//.getElementsByTagName("dataAdapter");
 			
 			for (int i=0; i < adapterNodes.getLength(); ++i)
 			{
 				Node adapterNode = adapterNodes.item(i);
 				
-				//1. Find out the class of this data adapter...
-				String adapterClassName = adapterNode.getAttributes().getNamedItem("class").getNodeValue();
-				
-				DataAdapterFactory factory = findFactoryByDataAdapterClass(adapterClassName);
-				
-				if (factory == null)
+				if (adapterNode.getNodeType() == Node.ELEMENT_NODE)
 				{
-					// we should at least log a warning here....
-					JaspersoftStudioPlugin.getInstance().getLog().log(
-							 new Status(Status.WARNING,
-									 				JaspersoftStudioPlugin.getUniqueIdentifier(),
-									 				Status.OK,
-									 				"No DataAdapterFactory has been found for DataAdapterClass " + adapterClassName,
-									 				null
-									 				)
-					);
-					return;
-				}
-				
-				DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
-				
-				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
-				
-				dataAdapter = (DataAdapter)XmlUtil.read(adapterNode, dataAdapter.getClass());
-				
-				dataAdapterDescriptor.setDataAdapter(dataAdapter);
-				
-//				dataAdapter.setName(adapterNode.getAttributes().getNamedItem("name").getNodeValue());
-//				Map<String, String> map = new HashMap<String, String>();
-//				
-//				// Find all the property nodes in the dataAdapter node
-//				NodeList parameterNodes = adapterNode.getChildNodes();
-//				
-//				// For each node, load the parameter name and the parameter value
-//				for (int j=0; j < parameterNodes.getLength(); ++j)
-//				{
-//					Node parameterNode = parameterNodes.item(j);
-//					if (parameterNode.getNodeType() == Node.ELEMENT_NODE && "parameter".equals(parameterNode.getNodeName()))
+					//1. Find out the class of this data adapter...
+					String adapterClassName = adapterNode.getAttributes().getNamedItem("class").getNodeValue();
+					
+					DataAdapterFactory factory = findFactoryByDataAdapterClass(adapterClassName);
+					
+					if (factory == null)
+					{
+						// we should at least log a warning here....
+						JaspersoftStudioPlugin.getInstance().getLog().log(
+								 new Status(Status.WARNING,
+										 				JaspersoftStudioPlugin.getUniqueIdentifier(),
+										 				Status.OK,
+										 				"No DataAdapterFactory has been found for DataAdapterClass " + adapterClassName,
+										 				null
+										 				)
+						);
+						return;
+					}
+					
+					DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
+					
+					DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
+					
+					dataAdapter = (DataAdapter)XmlUtil.read(adapterNode, dataAdapter.getClass());
+					
+					dataAdapterDescriptor.setDataAdapter(dataAdapter);
+					
+//					dataAdapter.setName(adapterNode.getAttributes().getNamedItem("name").getNodeValue());
+//					Map<String, String> map = new HashMap<String, String>();
+//					
+//					// Find all the property nodes in the dataAdapter node
+//					NodeList parameterNodes = adapterNode.getChildNodes();
+//					
+//					// For each node, load the parameter name and the parameter value
+//					for (int j=0; j < parameterNodes.getLength(); ++j)
 //					{
-//						String key = parameterNode.getAttributes().getNamedItem("name").getNodeValue();
-//						String value = parameterNode.getTextContent();
-//						map.put(key, value);
+//						Node parameterNode = parameterNodes.item(j);
+//						if (parameterNode.getNodeType() == Node.ELEMENT_NODE && "parameter".equals(parameterNode.getNodeName()))
+//						{
+//							String key = parameterNode.getAttributes().getNamedItem("name").getNodeValue();
+//							String value = parameterNode.getTextContent();
+//							map.put(key, value);
+//						}
 //					}
-//				}
-//				
-//				dataAdapter.loadProperties(map);
-				
-				dataAdapters.add(dataAdapterDescriptor);
+//					
+//					dataAdapter.loadProperties(map);
+					
+					dataAdapters.add(dataAdapterDescriptor);
+				}
 			}
 			
 		} catch (JRException e) {
