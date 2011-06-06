@@ -61,8 +61,7 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 
 	@Override
 	public DataAdapterService getDataAdapterService() {
-		JDBCDataAdapterService jdbcDataAdapterService = new JDBCDataAdapterService();
-		jdbcDataAdapterService.setDataAdapter(jdbcDataAdapter);
+		JDBCDataAdapterService jdbcDataAdapterService = new JDBCDataAdapterService(jdbcDataAdapter);
 		return jdbcDataAdapterService;
 	}
 

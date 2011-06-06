@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.data.customjrds;
 
-import net.sf.jasperreports.data.ds.DataSourceDataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;

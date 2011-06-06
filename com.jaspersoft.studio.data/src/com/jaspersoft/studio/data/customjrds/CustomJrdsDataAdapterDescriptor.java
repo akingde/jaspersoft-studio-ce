@@ -45,8 +45,7 @@ public class CustomJrdsDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public DataAdapterService getDataAdapterService() {
-		DataSourceDataAdapterService dsDataAdapterService = new DataSourceDataAdapterService();
-		dsDataAdapterService.setDataAdapter(dsDataAdapter);
+		DataSourceDataAdapterService dsDataAdapterService = new DataSourceDataAdapterService(dsDataAdapter);
 		return dsDataAdapterService;
 	}
 

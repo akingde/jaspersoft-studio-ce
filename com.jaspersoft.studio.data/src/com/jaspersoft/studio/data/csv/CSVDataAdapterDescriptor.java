@@ -54,8 +54,7 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements
 
 	@Override
 	public DataAdapterService getDataAdapterService() {
-		CsvDataAdapterService csvDataAdapterService = new CsvDataAdapterService();
-		csvDataAdapterService.setDataAdapter(csvDataAdapter);
+		CsvDataAdapterService csvDataAdapterService = new CsvDataAdapterService(csvDataAdapter);
 		return csvDataAdapterService;
 	}
 

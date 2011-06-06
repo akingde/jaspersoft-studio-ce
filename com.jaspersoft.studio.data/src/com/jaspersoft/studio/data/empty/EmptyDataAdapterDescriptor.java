@@ -52,8 +52,7 @@ public class EmptyDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public DataAdapterService getDataAdapterService() {
-		EmptyDataAdapterService emptyDataAdapterService = new EmptyDataAdapterService();
-		emptyDataAdapterService.setDataAdapter(emptyDataAdapter);
+		EmptyDataAdapterService emptyDataAdapterService = new EmptyDataAdapterService(emptyDataAdapter);
 		return emptyDataAdapterService;
 	}
 

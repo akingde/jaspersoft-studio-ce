@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapterService;
 import net.sf.jasperreports.engine.JRException;
 
@@ -32,6 +33,11 @@ import net.sf.jasperreports.engine.JRException;
  */
 public class JDBCDataAdapterService extends JdbcDataAdapterService 
 {
+	public JDBCDataAdapterService(JdbcDataAdapter jdbcDataAdapter)
+	{
+		super(jdbcDataAdapter);
+	}
+	
 	@Override
 	public String getPassword() throws JRException 
 	{

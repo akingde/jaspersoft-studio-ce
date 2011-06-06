@@ -23,7 +23,6 @@
  */
 package com.jaspersoft.studio.data.xml;
 
-import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
