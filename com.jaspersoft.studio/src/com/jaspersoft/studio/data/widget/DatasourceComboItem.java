@@ -120,17 +120,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		combo.setItems(dataAdapterNames);
 
 		// restore the selection...if any
-		if (selectedAdapter != null) {
-			int newSelectionIndex = getDataAdapters().indexOf(selectedAdapter);
-			if (newSelectionIndex >= 0) {
-				combo.select(newSelectionIndex + 1);
-			}
-		}
-
-		// Set a default selection
-		if (combo.getSelectionIndex() < 0 && combo.getItemCount() > 0) {
-			combo.select(0);
-		}
+		setSelected(selectedAdapter);
 
 		combo.pack();
 		Point size = combo.getSize();
@@ -142,6 +132,20 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		// Restore listener
 		combo.addListener(SWT.Selection, this);
 		combo.addListener(SWT.DefaultSelection, this);
+	}
+
+	public void setSelected(DataAdapterDescriptor selectedAdapter) {
+		if (selectedAdapter != null) {
+			int newSelectionIndex = getDataAdapters().indexOf(selectedAdapter);
+			if (newSelectionIndex >= 0) {
+				combo.select(newSelectionIndex + 1);
+			}
+		}
+
+		// Set a default selection
+		if (combo.getSelectionIndex() < 0 && combo.getItemCount() > 0) {
+			combo.select(0);
+		}
 	}
 
 	private List<DataAdapterDescriptor> getDataAdaptersList() {

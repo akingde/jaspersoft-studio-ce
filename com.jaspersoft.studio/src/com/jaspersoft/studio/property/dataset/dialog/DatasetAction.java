@@ -22,7 +22,6 @@ package com.jaspersoft.studio.property.dataset.dialog;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -31,10 +30,8 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.outline.ATreeEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -69,8 +66,8 @@ public class DatasetAction extends SelectionAction {
 	 */
 	public void run() {
 		ReportEditor part = (ReportEditor) getWorkbenchPart();
-		APropertyNode n = (APropertyNode) part.getModel().getChildren().get(0);
-		MDataset ds = (MDataset) n.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+		MReport mreport = (MReport) part.getModel().getChildren().get(0);
+		MDataset mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
 		IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
 
 		IContentOutlinePage cop = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
@@ -79,11 +76,13 @@ public class DatasetAction extends SelectionAction {
 			if (sel.getFirstElement() instanceof ATreeEditPart) {
 				Object obj = ((ATreeEditPart) sel.getFirstElement()).getModel();
 				if (obj instanceof MDataset)
-					ds = (MDataset) obj;
+					mdataset = (MDataset) obj;
 			}
 		}
 
-		DatasetDialog dlg = new DatasetDialog(Display.getCurrent().getActiveShell(), ds, file);
+		part.getAdapter(String.class);
+
+		DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mreport, file);
 		if (dlg.open() == Window.OK) {
 			part.getEditDomain().getCommandStack().execute(dlg.getCommand());
 		}

@@ -221,7 +221,9 @@ public class MDataset extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS))
 			return jrDataset.getScriptletClass();
 		if (id.equals(PROPERTY_MAP)) {
-			return jrDataset.getPropertiesMap();
+			// to avoid duplication I remove it first
+			JRPropertiesMap pmap = jrDataset.getPropertiesMap();
+			return pmap;
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
 			return EnumHelper.getValue(jrDataset.getWhenResourceMissingTypeValue(), 1, false);

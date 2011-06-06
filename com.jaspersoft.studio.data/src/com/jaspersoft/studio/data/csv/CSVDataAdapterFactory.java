@@ -23,7 +23,6 @@
  */
 package com.jaspersoft.studio.data.csv;
 
-import net.sf.jasperreports.data.csv.CsvDataAdapter;
 import net.sf.jasperreports.data.csv.CsvDataAdapterImpl;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;

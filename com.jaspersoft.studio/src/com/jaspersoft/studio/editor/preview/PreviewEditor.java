@@ -56,12 +56,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.widget.DatasourceComboItem;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.JRPrintEditor;
 import com.jaspersoft.studio.editor.preview.actions.ReloadAction;
 import com.jaspersoft.studio.editor.preview.actions.ShowParametersAction;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
 import com.jaspersoft.studio.utils.ErrorUtil;
@@ -77,6 +79,9 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 
 	public void setJasperDesign(JasperDesign jasperDesign) {
 		this.jasperDesign = jasperDesign;
+		String strda = jasperDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
+		if (strda != null)
+			dataSourceWidget.setSelected(DataAdapterManager.findDataAdapter(strda));
 	}
 
 	public JasperDesign getJasperDesign() {
@@ -95,6 +100,11 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 
 	private Throwable fillError = null;
 	private DatasourceComboItem dataSourceWidget;
+
+	public DataAdapterDescriptor getDataAdapterDesc() {
+		return dataAdapterDesc;
+	}
+
 	private ReloadAction reloadAction;
 	private ShowParametersAction showParametersAction;
 
@@ -102,7 +112,8 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 	 * Run a report in a Job, asking for parameters. Parameters are cached. DataAdapter is cached.
 	 * 
 	 * @param myDataAdapter
-	 *          the {@link com.jaspersoft.studio.data.DataAdapterDescriptor DataAdapter} to use in order to run the report.
+	 *          the {@link com.jaspersoft.studio.data.DataAdapterDescriptor DataAdapter} to use in order to run the
+	 *          report.
 	 */
 	public void runReport(DataAdapterDescriptor myDataAdapterDesc) {
 
@@ -125,7 +136,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 
 		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
 		final DataAdapterService dataAdapterService = dataAdapterDesc.getDataAdapterService();
-		
+
 		String dsName = dataAdapter.getName();
 
 		// $TODO move askParameters inside the Job and check for classloading related problems
@@ -175,7 +186,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 
 						// We let the data adapter to contribute its parameters.
 						Map<String, Object> dataAdapterParams = dataAdapterService.getParameters();
-						
+
 						jasperParameters.putAll(dataAdapterParams);
 
 						// We create the fillHandle to run the report based on the type of data adapter....

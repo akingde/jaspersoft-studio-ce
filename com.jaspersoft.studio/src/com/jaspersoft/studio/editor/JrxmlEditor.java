@@ -75,6 +75,7 @@ import org.xml.sax.SAXParseException;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
@@ -82,6 +83,7 @@ import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
@@ -139,7 +141,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private XMLEditor xmlEditor;
 
 	/** The model property change listener. */
-	private ModelPropertyChangeListener modelPropertyChangeListener = new ModelPropertyChangeListener();
+	private ModelPropertyChangeListener modelPropChangeListener = new ModelPropertyChangeListener();
 
 	/**
 	 * Creates a multi-page editor example.
@@ -162,7 +164,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					updateContentOutline(PAGE_DESIGNER);
 				}
 			});
-			reportContainer.getPropertyChangeSupport().addPropertyChangeListener(modelPropertyChangeListener);
+			reportContainer.getPropertyChangeSupport().addPropertyChangeListener(modelPropChangeListener);
 
 			int index = addPage(reportContainer, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_design);
@@ -201,7 +203,21 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Creates page 2 of the multi-page editor, which shows the sorted text.
 	 */
 	void createPage2() {
-		previewEditor = new PreviewEditor();
+		previewEditor = new PreviewEditor() {
+			public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
+				if (myDataAdapterDesc != null) {
+					getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
+					JasperDesign jasperDesign = getJasperDesign();
+					String oldp = jasperDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
+					if (!oldp.equals(myDataAdapterDesc.getName())) {
+						jasperDesign.setProperty(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
+						modelPropChangeListener.propertyChange(new PropertyChangeEvent(jasperDesign, "xzzdataset", null,
+								jasperDesign.getMainDataset()));
+					}
+				}
+				super.runReport(myDataAdapterDesc);
+			};
+		};
 		try {
 			int index = addPage(previewEditor, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_preview);
@@ -272,7 +288,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	public void doSave(IProgressMonitor monitor) {
 		IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
-		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
+		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor || !modelFresh) {
 			String version = p.getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, "last");
 			if (p.getBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, false)) {
 				VersionDialog dialog = new VersionDialog(Display.getCurrent().getActiveShell(), version);
@@ -570,6 +586,17 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private void model2xml(String version) {
 		try {
 			JasperDesign report = (JasperDesign) ((MRoot) getModel()).getValue();
+			// save the last used dataadapter in the report
+			MReport mReport = getMReport();
+			if (mReport != null) {
+				Object obj = mReport.getParameter(MReport.DEFAULT_DATAADAPTER);
+				if (obj != null && obj instanceof DataAdapterDescriptor) {
+					String dataAdapterDesc = previewEditor.getDataAdapterDesc().getName();
+					report.removeProperty(MReport.DEFAULT_DATAADAPTER);
+					report.setProperty(MReport.DEFAULT_DATAADAPTER, dataAdapterDesc);
+				}
+			}
+
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 			String xml = JRXmlWriterHelper.writeReport(report, file, file.getCharset(true), version);
 
@@ -638,11 +665,15 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	public void setModel(INode model) {
 		if (this.model != null && this.model.getChildren() != null && !this.model.getChildren().isEmpty())
-			this.model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropertyChangeListener);
+			getMReport().getPropertyChangeSupport().addPropertyChangeListener(modelPropChangeListener);
 		if (model != null && model.getChildren() != null && !model.getChildren().isEmpty())
-			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropertyChangeListener);
+			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropChangeListener);
 		this.model = model;
 		updateVisualView();
+	}
+
+	private MReport getMReport() {
+		return (MReport) this.model.getChildren().get(0);
 	}
 
 	/**

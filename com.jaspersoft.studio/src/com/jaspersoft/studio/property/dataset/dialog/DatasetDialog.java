@@ -10,12 +10,9 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
+import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.Action;
@@ -47,6 +44,7 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.widget.DatasourceComboItem;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.model.MQuery;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.command.CreateFieldCommand;
 import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
@@ -60,18 +58,32 @@ import com.jaspersoft.studio.utils.UIUtils;
 
 final class DatasetDialog extends FormDialog {
 	private MDataset mdataset;
+	private MReport mreport;
 	private IFile file;
 
-	DatasetDialog(Shell shell, MDataset node, IFile file) {
+	public DatasetDialog(Shell shell, MDataset mdataset, MReport mreport, IFile file) {
 		super(shell);
 		super.configureShell(shell);
 		shell.setText("Dataset & Query Dialog");
-		mdataset = node;
+		this.mdataset = mdataset;
+		this.mreport = mreport;
 		this.file = file;
 		newdataset = (JRDesignDataset) ((JRDesignDataset) mdataset.getValue()).clone();
-		for (PropertyChangeListener p : newdataset.getEventSupport().getPropertyChangeListeners()) {
-			newdataset.getEventSupport().removePropertyChangeListener(p);
-		}
+
+		// removeListeners(newdataset.getEventSupport());
+		// for (JRField field : newdataset.getFieldsList())
+		// removeListeners(((JRDesignField) field).getEventSupport());
+		// for (JRSortField field : newdataset.getSortFieldsList())
+		// removeListeners(((JRDesignSortField) field).getEventSupport());
+		// for (JRParameter field : newdataset.getParametersList())
+		// removeListeners(((JRDesignParameter) field).getEventSupport());
+		// for (JRVariable field : newdataset.getVariablesList())
+		// removeListeners(((JRDesignVariable) field).getEventSupport());
+	}
+
+	private void removeListeners(JRPropertyChangeSupport eventSupport) {
+		for (PropertyChangeListener p : eventSupport.getPropertyChangeListeners())
+			eventSupport.removePropertyChangeListener(p);
 	}
 
 	public boolean close() {
@@ -125,41 +137,41 @@ final class DatasetDialog extends FormDialog {
 		gFields = new Action("Get &Fields") {
 			// TODO run inside a job, modal with progress bar
 			public void run() {
+
 				final String lang = langCombo.getText();
 				final DataAdapterDescriptor da = dscombo.getSelected();
 				final String query = qdfactory.getDesigner(lang).getQuery();
-				Job job = new Job("Use initiated job") {
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							JRDesignQuery jdq = new JRDesignQuery();
-							jdq.setLanguage(lang);
-							jdq.setText(query);
-							newdataset.setQuery(jdq);
+				// Job job = new Job("Use initiated job") {
+				// protected IStatus run(IProgressMonitor monitor) {
+				try {
+					JRDesignQuery jdq = new JRDesignQuery();
+					jdq.setLanguage(lang);
+					jdq.setText(query);
+					newdataset.setQuery(jdq);
 
-							final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(),
-									newdataset);
-							if (fields != null) {
-								Display.getDefault().asyncExec(new Runnable() {
+					final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(), newdataset);
+					if (fields != null) {
+						Display.getDefault().asyncExec(new Runnable() {
 
-									public void run() {
-										setFields(fields);
-									}
-								});
-
+							public void run() {
+								setFields(fields);
 							}
-						} catch (UnsupportedOperationException e) {
-							e.printStackTrace();
-							UIUtils.showError(e);
-						} catch (Exception e) {
-							e.printStackTrace();
-							UIUtils.showError(e);
-						}
-						return Status.OK_STATUS;
-					}
-				};
-				job.setPriority(Job.SHORT);
+						});
 
-				job.schedule();
+					}
+				} catch (UnsupportedOperationException e) {
+					e.printStackTrace();
+					UIUtils.showError(e);
+				} catch (Exception e) {
+					e.printStackTrace();
+					UIUtils.showError(e);
+				}
+				// return Status.OK_STATUS;
+				// }
+				// };
+				// job.setPriority(Job.SHORT);
+				//
+				// job.schedule();
 			}
 		};
 		gFields.setEnabled(false);
@@ -169,6 +181,15 @@ final class DatasetDialog extends FormDialog {
 
 		manager.update(true);
 		tb.pack();
+
+		if (mreport != null) {
+			Object obj = mreport.getParameter(MReport.DEFAULT_DATAADAPTER);
+			if (obj != null && obj instanceof DataAdapterDescriptor) {
+				dscombo.setSelected((DataAdapterDescriptor) obj);
+				if (obj instanceof IFieldsProvider)
+					gFields.setEnabled(true);
+			}
+		}
 	}
 
 	private void setFields(List<JRDesignField> fields) {
@@ -318,24 +339,27 @@ final class DatasetDialog extends FormDialog {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void createCommand() {
-		JRDesignDataset ds = (JRDesignDataset) mdataset.getValue();
+		JRDesignDataset ds = (JRDesignDataset) (mdataset.getParent() == null ? mreport.getJasperDesign()
+				.getMainDesignDataset() : mdataset.getValue());
 		command = new CompoundCommand();
 		IPropertySource mquery = (IPropertySource) mdataset.getPropertyValue(JRDesignDataset.PROPERTY_QUERY);
 		int langind = langCombo.getSelectionIndex();
 		if (langind >= 0 && langind < languages.length) {
 			String lang = languages[langind];
-			if (ds.getQuery() == null) {
-				mquery = new MQuery(new JRDesignQuery());
-				command.add(setValueCommand(JRDesignDataset.PROPERTY_QUERY, mquery, mdataset));
-			}
-
-			if (ds.getQuery().getLanguage().equals(lang))
-				command.add(setValueCommand(JRDesignQuery.PROPERTY_LANGUAGE, lang, mquery));
 			String qtext = qdfactory.getDesigner(langCombo.getText()).getQuery();
-			if (ds.getQuery().getText().equals(qtext))
-				command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, qtext, mquery));
+			if (ds.getQuery() == null) {
+				JRDesignQuery jrQuery = new JRDesignQuery();
+				jrQuery.setLanguage(lang);
+				jrQuery.setText(qtext);
+				mquery = new MQuery(jrQuery);
+				command.add(setValueCommand(JRDesignDataset.PROPERTY_QUERY, mquery, mdataset));
+			} else {
+				if (!ds.getQuery().getLanguage().equals(lang))
+					command.add(setValueCommand(JRDesignQuery.PROPERTY_LANGUAGE, lang, mquery));
+				if (!ds.getQuery().getText().equals(qtext))
+					command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, qtext, mquery));
+			}
 		}
 
 		List<JRField> dsfields = ds.getFieldsList();

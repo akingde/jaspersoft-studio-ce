@@ -66,10 +66,9 @@ public class DataAdapterManager {
 	 * 
 	 * @param factory
 	 */
-	public static void addDataAdapterFactory(DataAdapterFactory factory)
-	{
-		if (!dataAdapterFactories.contains(factory))
-		{
+	public static void addDataAdapterFactory(DataAdapterFactory factory) {
+		if (!dataAdapterFactories.contains(factory)
+				&& findFactoryByDataAdapterClass(factory.getDataAdapterClassName()) == null) {
 			dataAdapterFactories.add(factory);
 		}
 	}
@@ -312,5 +311,13 @@ public class DataAdapterManager {
 			if (dataAdapter.getName().equals(dataAdapterName)) return false;
 		}
 		return true;
+	}
+
+	public static DataAdapterDescriptor findDataAdapter(String name) {
+		for (DataAdapterDescriptor dataAdapter : getDataAdapters()) {
+			if (dataAdapter.getName().equals(name))
+				return dataAdapter;
+		}
+		return null;
 	}
 }

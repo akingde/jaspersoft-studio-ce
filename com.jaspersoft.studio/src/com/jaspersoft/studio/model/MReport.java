@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model;
 
@@ -33,12 +29,22 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRSortField;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignSection;
+import net.sf.jasperreports.engine.design.JRDesignSortField;
+import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
@@ -68,6 +74,7 @@ import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationProp
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+
 /*
  * The Class MReport.
  * 
@@ -784,17 +791,45 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	@Override
 	public void setValue(Object value) {
 		if (getValue() != null) {
-			((JRDesignSection) ((JasperDesign) getValue()).getDetailSection()).getEventSupport()
-					.removePropertyChangeListener(this);
-			List<?> groups = ((JRDesignDataset) ((JasperDesign) getValue()).getMainDataset()).getGroupsList();
-			for (Object obj : groups)
+			JasperDesign jasperDesign = (JasperDesign) getValue();
+			JRDesignDataset jrDesignDataset = (JRDesignDataset) jasperDesign.getMainDataset();
+			jrDesignDataset.getEventSupport().removePropertyChangeListener(this);
+			((JRDesignSection) jasperDesign.getDetailSection()).getEventSupport().removePropertyChangeListener(this);
+			for (JRGroup obj : jrDesignDataset.getGroupsList())
 				removeGroupListener((JRDesignGroup) obj);
+			// for (JRField obj : jrDesignDataset.getFieldsList())
+			// ((JRDesignField) obj).getEventSupport().removePropertyChangeListener(this);
+			// for (JRSortField obj : jrDesignDataset.getSortFieldsList())
+			// ((JRDesignSortField) obj).getEventSupport().removePropertyChangeListener(this);
+			// for (JRParameter obj : jrDesignDataset.getParametersList())
+			// ((JRDesignParameter) obj).getEventSupport().removePropertyChangeListener(this);
+			// for (JRVariable obj : jrDesignDataset.getVariablesList())
+			// ((JRDesignVariable) obj).getEventSupport().removePropertyChangeListener(this);
+
+			JRPropertiesMap pmap = jrDesignDataset.getPropertiesMap();
+			pmap.getEventSupport().removePropertyChangeListener(this);
+
 			mDataset.setValue(null);
-		} else if (value != null) {
-			List<?> groups = ((JRDesignDataset) ((JasperDesign) value).getMainDataset()).getGroupsList();
-			for (Object obj : groups)
+		}
+		if (value != null) {
+			JasperDesign jasperDesign = (JasperDesign) value;
+			JRDesignDataset jrDesignDataset = (JRDesignDataset) jasperDesign.getMainDataset();
+			jrDesignDataset.getEventSupport().addPropertyChangeListener(this);
+			for (JRGroup obj : jrDesignDataset.getGroupsList())
 				addGroupListener((JRDesignGroup) obj);
-			((JRDesignSection) ((JasperDesign) value).getDetailSection()).getEventSupport().addPropertyChangeListener(this);
+			// for (JRField obj : jrDesignDataset.getFieldsList())
+			// ((JRDesignField) obj).getEventSupport().addPropertyChangeListener(this);
+			// for (JRSortField obj : jrDesignDataset.getSortFieldsList())
+			// ((JRDesignSortField) obj).getEventSupport().addPropertyChangeListener(this);
+			// for (JRParameter obj : jrDesignDataset.getParametersList())
+			// ((JRDesignParameter) obj).getEventSupport().addPropertyChangeListener(this);
+			// for (JRVariable obj : jrDesignDataset.getVariablesList())
+			// ((JRDesignVariable) obj).getEventSupport().addPropertyChangeListener(this);
+
+			JRPropertiesMap pmap = jrDesignDataset.getPropertiesMap();
+			pmap.getEventSupport().addPropertyChangeListener(this);
+
+			((JRDesignSection) jasperDesign.getDetailSection()).getEventSupport().addPropertyChangeListener(this);
 			mDataset = null;
 		}
 		super.setValue(value);
@@ -831,6 +866,22 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		JasperDesign jd = getJasperDesign();
 		return new Rectangle(jd.getLeftMargin(), jd.getTopMargin(), jd.getPageWidth() - jd.getLeftMargin()
 				- jd.getRightMargin(), jd.getPageHeight() - jd.getTopMargin() - jd.getBottomMargin());
+	}
+
+	private Map<String, Object> parameters;
+
+	public Object getParameter(String key) {
+		if (parameters == null)
+			parameters = new HashMap<String, Object>();
+		return parameters.get(key);
+	}
+
+	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter";
+
+	public void putParameter(String key, Object value) {
+		if (parameters == null)
+			parameters = new HashMap<String, Object>();
+		parameters.put(key, value);
 	}
 
 }
