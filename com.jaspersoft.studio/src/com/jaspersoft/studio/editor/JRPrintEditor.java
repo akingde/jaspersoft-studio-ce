@@ -236,7 +236,6 @@ public class JRPrintEditor extends EditorPart {
 	// ------------------------------
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-
 	}
 
 	@Override

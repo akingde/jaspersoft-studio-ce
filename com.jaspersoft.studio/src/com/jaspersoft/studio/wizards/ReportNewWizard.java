@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.wizards;
 
@@ -32,18 +28,15 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRExpressionUtil;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IContainer;
@@ -69,7 +62,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -83,7 +75,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 
 public class ReportNewWizard extends Wizard implements INewWizard {
 	private ReportTemplatesWizardPage step0;
-	private WizardNewFileCreationPage step1;
+	private NewFileCreationWizard step1;
 	private WizardDataSourcePage step2;
 	private WizardFieldsPage step3;
 	private WizardFieldsGroupByPage step4;
@@ -105,7 +97,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		step0 = new ReportTemplatesWizardPage();
 		addPage(step0);
 
-		step1 = new WizardNewFileCreationPage("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
+		step1 = new NewFileCreationWizard("newFilePage1", (IStructuredSelection) selection);//$NON-NLS-1$
 		step1.setTitle("Report file");
 		step1.setDescription(Messages.ReportNewWizardPage_description);
 		step1.setFileExtension("jrxml");//$NON-NLS-1$
@@ -124,21 +116,16 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		if (page == step3) {
-			JRField[] fields;
-			try {
-				JRDataSourceProvider dataSource = step2.getDataSource();
-				if (dataSource != null) {
-					fields = dataSource.getFields(null);
-					List<Object> flist = new ArrayList<Object>();
-					for (JRField f : fields)
-						flist.add((JRDesignField) f);
+		if (page == step0)
+			step1.validatePage();
 
-					step3.setFields(flist);
+		if (page == step3) {
+			try {
+				JRDesignDataset dataset = step2.getDataset();
+				if (dataset != null && dataset.getFieldsList() != null) {
+					step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
 				}
 			} catch (UnsupportedOperationException e) {
-				e.printStackTrace();
-			} catch (JRException e) {
 				e.printStackTrace();
 			}
 		}
@@ -273,7 +260,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 			jd.setPageFooter(jb);
 		}
 
-		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step3, step4);
+		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step2, step3, step4);
 
 		String contents = JasperCompileManager.writeReportToXml(jd);
 		return new ByteArrayInputStream(contents.getBytes());

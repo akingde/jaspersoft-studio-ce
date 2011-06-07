@@ -40,30 +40,27 @@ package com.jaspersoft.studio.property.dataset.wizard;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRDataSourceProvider;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.datasource.MDatasources;
-import com.jaspersoft.studio.repository.RepositoryManager;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 
 public class WizardDataSourcePage extends WizardPage {
-	private JRDataSourceProvider dataSource;
+	private JRDesignDataset dataset;
 
-	public JRDataSourceProvider getDataSource() {
-		return dataSource;
+	public JRDesignDataset getDataset() {
+		return dataset;
 	}
-
-	private List<AMDatasource> dsList;
-	private String[] dsListName;
 
 	public WizardDataSourcePage() {
 		super("datasourcepage"); //$NON-NLS-1$
@@ -74,29 +71,34 @@ public class WizardDataSourcePage extends WizardPage {
 
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		composite.setLayout(layout);
+		composite.setLayout(new GridLayout(1, true));
 		setControl(composite);
 
-		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText(Messages.WizardDataSourcePage_datasource + ":"); //$NON-NLS-1$
+		dataset = new JRDesignDataset(true);
+		JRDesignQuery query = new JRDesignQuery();
+		query.setLanguage("SQL");
+		dataset.setQuery(query);
 
-		dsList = RepositoryManager.getDatasources();
+		DataQueryAdapters dataquery = new DataQueryAdapters(composite, dataset, composite.getBackground()) {
 
-		Combo dsCombo = new Combo(composite, SWT.BORDER);
-		dsCombo.setItems(getDSNameList(dsList));
-		dsCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			@Override
+			public void setFields(List<JRDesignField> fields) {
+				// DatasetDialog.this.setFields(fields);
+				dataset.getFieldsList().clear();
+				for (JRDesignField field : fields)
+					try {
+						dataset.addField(field);
+					} catch (JRException e) {
+						e.printStackTrace();
+					}
+			}
+		};
+
+		dataquery.createTop(composite);
+
+		dataquery.setDataset(dataset);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
-	}
-
-	private String[] getDSNameList(List<AMDatasource> dsList) {
-		String[] dsListName = new String[dsList.size()];
-		for (int i = 0; i < dsList.size(); i++) {
-			dsListName[i] = (String) dsList.get(i).getPropertyValue(AMDatasource.PROPERTY_NAME);
-		}
-		return dsListName;
 	}
 
 }

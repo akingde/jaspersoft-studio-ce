@@ -213,6 +213,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						jasperDesign.setProperty(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
 						modelPropChangeListener.propertyChange(new PropertyChangeEvent(jasperDesign, "xzzdataset", null,
 								jasperDesign.getMainDataset()));
+						isDirty = true;
 					}
 				}
 				super.runReport(myDataAdapterDesc);

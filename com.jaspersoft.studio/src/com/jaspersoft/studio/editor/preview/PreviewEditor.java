@@ -88,6 +88,18 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 		return jasperDesign;
 	}
 
+	protected boolean isDirty = false;
+
+	@Override
+	public boolean isDirty() {
+		return isDirty;
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		return true;
+	}
+
 	// $TODO complete this class to use DataAdapters and remove the AMDataSource.
 	// private AMDatasource datasource;
 

@@ -1,38 +1,32 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.dataset.wizard;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.IWizardPage;
@@ -75,20 +69,12 @@ public class DatasetWizard extends Wizard {
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == step3) {
-			JRField[] fields;
 			try {
-				JRDataSourceProvider dataSource = step2.getDataSource();
-				if (dataSource != null) {
-					fields = dataSource.getFields(null);
-					List<Object> flist = new ArrayList<Object>();
-					for (JRField f : fields)
-						flist.add((JRDesignField) f);
-
-					step3.setFields(flist);
+				JRDesignDataset dataset = step2.getDataset();
+				if (dataset != null && dataset.getFieldsList() != null) {
+					step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
 				}
 			} catch (UnsupportedOperationException e) {
-				e.printStackTrace();
-			} catch (JRException e) {
 				e.printStackTrace();
 			}
 		}
@@ -99,11 +85,17 @@ public class DatasetWizard extends Wizard {
 
 	public MDataset getDataset() {
 		JRDesignDataset jdataset = (JRDesignDataset) dataset.getValue();
-		setUpDataset(jdataset, step3, step4);
+		setUpDataset(jdataset, step2, step3, step4);
+
 		return dataset;
 	}
 
-	public static void setUpDataset(JRDesignDataset jdataset, WizardFieldsPage step3, WizardFieldsGroupByPage step4) {
+	public static void setUpDataset(JRDesignDataset jdataset, WizardDataSourcePage step2, WizardFieldsPage step3,
+			WizardFieldsGroupByPage step4) {
+		JRDesignDataset dataset = step2.getDataset();
+		if (dataset != null) {
+			jdataset.setQuery((JRDesignQuery) dataset.getQuery());
+		}
 		if (step3.getFields() != null)
 			for (Object f : step3.getFields())
 				try {
