@@ -331,6 +331,9 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	private DataAdapterDescriptor selectedDA;
 
 	public DataAdapterDescriptor getSelected() {
+		if (selectedDA == null) {
+			selectedDA = dataAdapters.get(combo.getSelectionIndex() - 1);
+		}
 		return selectedDA;
 	}
 

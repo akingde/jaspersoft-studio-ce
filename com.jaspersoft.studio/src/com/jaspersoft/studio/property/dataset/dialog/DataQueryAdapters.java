@@ -146,7 +146,7 @@ public abstract class DataQueryAdapters {
 
 			public void runReport(DataAdapterDescriptor da) {
 				gFields.setEnabled(false);
-				if (da instanceof IFieldsProvider) {
+				if (da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
 					gFields.setEnabled(true);
 					// TODO if auto gfields.run;
 				}
@@ -164,38 +164,40 @@ public abstract class DataQueryAdapters {
 
 				final String lang = langCombo.getText();
 				final DataAdapterDescriptor da = dscombo.getSelected();
-				final String query = qdfactory.getDesigner(lang).getQuery();
-				// Job job = new Job("Use initiated job") {
-				// protected IStatus run(IProgressMonitor monitor) {
-				try {
-					JRDesignQuery jdq = new JRDesignQuery();
-					jdq.setLanguage(lang);
-					jdq.setText(query);
-					newdataset.setQuery(jdq);
+				if (da != null) {
+					final String query = qdfactory.getDesigner(lang).getQuery();
+					// Job job = new Job("Use initiated job") {
+					// protected IStatus run(IProgressMonitor monitor) {
+					try {
+						JRDesignQuery jdq = new JRDesignQuery();
+						jdq.setLanguage(lang);
+						jdq.setText(query);
+						newdataset.setQuery(jdq);
 
-					final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(), newdataset);
-					if (fields != null) {
-						Display.getDefault().asyncExec(new Runnable() {
+						final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(), newdataset);
+						if (fields != null) {
+							Display.getDefault().asyncExec(new Runnable() {
 
-							public void run() {
-								setFields(fields);
-							}
-						});
+								public void run() {
+									setFields(fields);
+								}
+							});
 
+						}
+					} catch (UnsupportedOperationException e) {
+						e.printStackTrace();
+						UIUtils.showError(e);
+					} catch (Exception e) {
+						e.printStackTrace();
+						UIUtils.showError(e);
 					}
-				} catch (UnsupportedOperationException e) {
-					e.printStackTrace();
-					UIUtils.showError(e);
-				} catch (Exception e) {
-					e.printStackTrace();
-					UIUtils.showError(e);
+					// return Status.OK_STATUS;
+					// }
+					// };
+					// job.setPriority(Job.SHORT);
+					//
+					// job.schedule();
 				}
-				// return Status.OK_STATUS;
-				// }
-				// };
-				// job.setPriority(Job.SHORT);
-				//
-				// job.schedule();
 			}
 		};
 		gFields.setEnabled(false);
