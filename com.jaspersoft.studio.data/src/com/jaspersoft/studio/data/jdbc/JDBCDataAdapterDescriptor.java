@@ -61,7 +61,8 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 
 	@Override
 	public DataAdapterService getDataAdapterService() {
-		JDBCDataAdapterService jdbcDataAdapterService = new JDBCDataAdapterService(jdbcDataAdapter);
+		JDBCDataAdapterService jdbcDataAdapterService = new JDBCDataAdapterService(
+				jdbcDataAdapter);
 		return jdbcDataAdapterService;
 	}
 
@@ -83,8 +84,18 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JRDataset reportDataset) throws JRException,
 			UnsupportedOperationException {
+		getFieldProvider();
+		return fprovider.getFields(con, reportDataset);
+	}
+
+	private void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new JDBCFieldsProvider();
-		return fprovider.getFields(con, reportDataset);
+	}
+
+	@Override
+	public boolean supportsGetFieldsOperation() {
+		getFieldProvider();
+		return fprovider.supportsGetFieldsOperation();
 	}
 }

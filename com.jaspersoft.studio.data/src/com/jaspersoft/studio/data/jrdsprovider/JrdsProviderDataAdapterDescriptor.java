@@ -19,19 +19,25 @@
  */
 package com.jaspersoft.studio.data.jrdsprovider;
 
+import java.util.List;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapter;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterImpl;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.fields.IFieldsProvider;
 
-public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor 
-{
+public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
+		implements IFieldsProvider {
 	private DataSourceProviderDataAdapter dsProviderDataAdapter = new DataSourceProviderDataAdapterImpl();
-	
+
 	@Override
 	public DataAdapter getDataAdapter() {
 		return dsProviderDataAdapter;
@@ -39,18 +45,37 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
-		dsProviderDataAdapter = (DataSourceProviderDataAdapter)dataAdapter;
+		dsProviderDataAdapter = (DataSourceProviderDataAdapter) dataAdapter;
 	}
 
 	@Override
 	public DataAdapterService getDataAdapterService() {
-		DataSourceProviderDataAdapterService dsProviderDataAdapterService = new DataSourceProviderDataAdapterService();
-		dsProviderDataAdapterService.setDataAdapter(dsProviderDataAdapter);
-		return dsProviderDataAdapterService;
+		return new DataSourceProviderDataAdapterService(dsProviderDataAdapter);
 	}
-	
+
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new JrdsProviderDataAdapterEditor();
+	}
+
+	private IFieldsProvider fprovider;
+
+	@Override
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JRDataset reportDataset) throws JRException,
+			UnsupportedOperationException {
+		getFieldProvider();
+		return fprovider.getFields(con, reportDataset);
+	}
+
+	@Override
+	public boolean supportsGetFieldsOperation() {
+		getFieldProvider();
+		return fprovider.supportsGetFieldsOperation();
+	}
+
+	private void getFieldProvider() {
+		if (fprovider == null)
+			fprovider = new JRDSProviderFieldsProvider();
 	}
 }

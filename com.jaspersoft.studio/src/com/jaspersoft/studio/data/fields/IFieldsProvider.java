@@ -1,7 +1,6 @@
 package com.jaspersoft.studio.data.fields;
 
 import java.util.List;
-import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
@@ -9,6 +8,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
 public interface IFieldsProvider {
+
+	public boolean supportsGetFieldsOperation();
 
 	/**
 	 * Returns the fields that are available from a query of a specific language The provider can use the passed in report

@@ -69,8 +69,18 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JRDataset reportDataset) throws JRException,
 			UnsupportedOperationException {
+		getFieldProvider();
+		return fprovider.getFields(con, reportDataset);
+	}
+
+	@Override
+	public boolean supportsGetFieldsOperation() {
+		getFieldProvider();
+		return fprovider.supportsGetFieldsOperation();
+	}
+
+	private void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new CSVFieldsProvider();
-		return fprovider.getFields(con, reportDataset);
 	}
 }
