@@ -597,8 +597,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		if (oldObject != null) {
 			((JRBaseChartPlot) oldObject.getPlot()).getEventSupport()
 					.removePropertyChangeListener(this);
-			((JRBaseFont) oldObject.getLegendFont()).getEventSupport()
-					.removePropertyChangeListener(this);
+			if (oldObject.getLegendFont() != null)
+				((JRBaseFont) oldObject.getLegendFont()).getEventSupport()
+						.removePropertyChangeListener(this);
 			((JRBaseFont) oldObject.getSubtitleFont()).getEventSupport()
 					.removePropertyChangeListener(this);
 			((JRBaseFont) oldObject.getTitleFont()).getEventSupport()
@@ -607,8 +608,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		if (newObject != null) {
 			((JRBaseChartPlot) newObject.getPlot()).getEventSupport()
 					.addPropertyChangeListener(this);
-			((JRBaseFont) newObject.getLegendFont()).getEventSupport()
-					.addPropertyChangeListener(this);
+			if (newObject.getLegendFont() != null)
+				((JRBaseFont) newObject.getLegendFont()).getEventSupport()
+						.addPropertyChangeListener(this);
 			((JRBaseFont) newObject.getSubtitleFont()).getEventSupport()
 					.addPropertyChangeListener(this);
 			((JRBaseFont) newObject.getTitleFont()).getEventSupport()
