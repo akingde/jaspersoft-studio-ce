@@ -12,6 +12,9 @@
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xls.XLSDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.xml.XMLDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.remotexml.RemoteXMLDataAdapterFactory"/>
+         <dataAdapter
+               ClassFactory="com.jaspersoft.studio.data.bean.BeanDataAdapterFactory">
+         </dataAdapter>
    </extension>
    <extension
          point="com.jaspersoft.studio.queryDesigner">
@@ -29,6 +32,12 @@
       </queryDesigner>
      
      
+   </extension>
+   <extension
+         point="com.jaspersoft.studio.mappingTool">
+      <mappingTool
+            MappingToolClass="com.jaspersoft.studio.data.tools.mapping.BeanMappingTool">
+      </mappingTool>
    </extension>
 
 </plugin>

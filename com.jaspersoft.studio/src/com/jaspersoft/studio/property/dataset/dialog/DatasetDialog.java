@@ -12,15 +12,22 @@ import net.sf.jasperreports.engine.design.JRDesignSortField;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -34,7 +41,9 @@ import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
 import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
 import com.jaspersoft.studio.model.sortfield.command.DeleteSortFieldCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
+import com.jaspersoft.studio.utils.Misc;
 
 final class DatasetDialog extends FormDialog {
 	private MDataset mdataset;
@@ -101,6 +110,7 @@ final class DatasetDialog extends FormDialog {
 
 		createFields(toolkit, tabFolder);
 		createSortFields(toolkit, tabFolder);
+		createFilterExpression(toolkit, tabFolder);
 		// createDataPreview(toolkit, tabFolder);
 
 		tabFolder.setSelection(0);
@@ -127,6 +137,38 @@ final class DatasetDialog extends FormDialog {
 		bptab.setControl(sftable.getControl());
 	}
 
+	private void createFilterExpression(FormToolkit toolkit, CTabFolder tabFolder) {
+		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+		bptab.setText("Filter Expression");
+
+		Composite sectionClient = toolkit.createComposite(tabFolder);
+		sectionClient.setLayout(new GridLayout(2, false));
+
+		filterExpression = new Text(sectionClient, SWT.MULTI | SWT.BORDER);
+		filterExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		Button but = new Button(sectionClient, SWT.NONE);
+		but.setText("...");
+		but.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				JRExpressionEditor wizard = new JRExpressionEditor();
+				wizard.setValue(filterExpression.getText());
+				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+				dialog.create();
+				if (dialog.open() == Dialog.OK) {
+					filterExpression.setText(wizard.getValue());
+				}
+			}
+		});
+		but.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+
+		bptab.setControl(sectionClient);
+
+		if (newdataset.getFilterExpression() != null)
+			filterExpression.setText(Misc.nvl(newdataset.getFilterExpression().getText(), ""));
+	}
+
 	private void createDataPreview(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText("Data Preview");
@@ -148,6 +190,7 @@ final class DatasetDialog extends FormDialog {
 	private FieldsTable ftable;
 	private SortFieldsTable sftable;
 	private DataQueryAdapters dataquery;
+	private Text filterExpression;
 
 	public void setDataset(JRDesignDataset ds) {
 		dataquery.setDataset(ds);
@@ -172,6 +215,7 @@ final class DatasetDialog extends FormDialog {
 			if (!ds.getQuery().getText().equals(qtext))
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, qtext, mquery));
 		}
+		command.add(setValueCommand(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, filterExpression.getText(), mdataset));
 
 		List<JRField> dsfields = ds.getFieldsList();
 		List<JRDesignField> fields = ftable.getFields();

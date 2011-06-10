@@ -7,6 +7,10 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
@@ -74,8 +78,13 @@ public abstract class DataQueryAdapters {
 		// tabFolder.setBackground(background);
 
 		createQuery(tabFolder);
+		createMappingTools(tabFolder);
 
 		tabFolder.setSelection(0);
+	}
+
+	private void createMappingTools(CTabFolder tabFolder) {
+		new DataMappingFactory(tabFolder);
 	}
 
 	private void createQuery(CTabFolder tabFolder) {
@@ -166,37 +175,38 @@ public abstract class DataQueryAdapters {
 				final DataAdapterDescriptor da = dscombo.getSelected();
 				if (da != null) {
 					final String query = qdfactory.getDesigner(lang).getQuery();
-					// Job job = new Job("Use initiated job") {
-					// protected IStatus run(IProgressMonitor monitor) {
-					try {
-						JRDesignQuery jdq = new JRDesignQuery();
-						jdq.setLanguage(lang);
-						jdq.setText(query);
-						newdataset.setQuery(jdq);
+					Job job = new Job("Use initiated job") {
+						protected IStatus run(IProgressMonitor monitor) {
+							try {
+								JRDesignQuery jdq = new JRDesignQuery();
+								jdq.setLanguage(lang);
+								jdq.setText(query);
+								newdataset.setQuery(jdq);
 
-						final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(), newdataset);
-						if (fields != null) {
-							Display.getDefault().asyncExec(new Runnable() {
+								final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(),
+										newdataset);
+								if (fields != null) {
+									Display.getDefault().asyncExec(new Runnable() {
 
-								public void run() {
-									setFields(fields);
+										public void run() {
+											setFields(fields);
+										}
+									});
+
 								}
-							});
-
+							} catch (UnsupportedOperationException e) {
+								e.printStackTrace();
+								UIUtils.showError(e);
+							} catch (Exception e) {
+								e.printStackTrace();
+								UIUtils.showError(e);
+							}
+							return Status.OK_STATUS;
 						}
-					} catch (UnsupportedOperationException e) {
-						e.printStackTrace();
-						UIUtils.showError(e);
-					} catch (Exception e) {
-						e.printStackTrace();
-						UIUtils.showError(e);
-					}
-					// return Status.OK_STATUS;
-					// }
-					// };
-					// job.setPriority(Job.SHORT);
-					//
-					// job.schedule();
+					};
+					job.setPriority(Job.SHORT);
+
+					job.schedule();
 				}
 			}
 		};

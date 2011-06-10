@@ -308,11 +308,11 @@ public class AppContextMenuProvider extends ContextMenuProvider {
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 
 		action = getActionRegistry().getAction(PageFormatAction.ID);
-		if (action.isEnabled())
+		if (action !=null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 
 		action = getActionRegistry().getAction(DatasetAction.ID);
-		if (action.isEnabled())
+		if (action != null && action.isEnabled())
 			menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 	}
 

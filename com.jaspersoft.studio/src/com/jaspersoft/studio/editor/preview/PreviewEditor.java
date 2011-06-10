@@ -22,7 +22,6 @@ package com.jaspersoft.studio.editor.preview;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Map;
@@ -146,38 +145,34 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 
 		// At this point, dataAdapter is not null.
 
-		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
-		final DataAdapterService dataAdapterService = dataAdapterDesc.getDataAdapterService();
-
-		String dsName = dataAdapter.getName();
-
 		// $TODO move askParameters inside the Job and check for classloading related problems
 		// The idea is to allow a dataadapter to contribute the parameters before they are being asked to the user.
 		int pdresult = askParameters();
 		if (pdresult != Window.OK)
 			return;
 
-		String jobName = Messages.PreviewEditor_preview_a
-				+ ": " + getJasperDesign().getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-		Job job = new Job(jobName) {
+		Job job = new Job("") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				unsetReportDocument(Messages.PreviewEditor_reloading, false);
-				monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
-				InputStream io = null;
-				fillError = null;
-
-				// In case of the data adapter is of type JDBC, we are in charge to close the
-				// connection provided, so we store it in this variable
-				java.sql.Connection connection = null;
-
+				DataAdapterService dataAdapterService = null;
 				try {
 					IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 
 					Thread.currentThread().setContextClassLoader(
 							ClassLoaderUtil.getClassLoader4Project(monitor, file.getProject()));
 					SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
+
+					DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
+					dataAdapterService = dataAdapterDesc.getDataAdapterService();
+
+					String dsName = dataAdapter.getName();
+					String jobName = Messages.PreviewEditor_preview_a
+							+ ": " + getJasperDesign().getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					setName(jobName);
+
+					unsetReportDocument(Messages.PreviewEditor_reloading, false);
+					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
+					fillError = null;
 
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
 					JRSaver.saveObject(getJasperDesign(), out);
@@ -212,12 +207,6 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 				} catch (final Throwable e) {
 					unsetReportDocument(ErrorUtil.getStackTrace(e), true);
 				} finally {
-					if (io != null)
-						try {
-							io.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
 					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
 							setNotRunning(true);
@@ -225,14 +214,6 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 					});
 					monitor.done();
 
-					// If the data adapter contributed a JDBC connection, by contract we are in charge to close it.
-					if (connection != null) {
-						try {
-							connection.close();
-						} catch (Exception exx) {
-							// if an error occurs while closing the connection, we just ignore it.
-						}
-					}
 					// Allow the data adapter to cleanup its state
 					dataAdapterService.dispose();
 

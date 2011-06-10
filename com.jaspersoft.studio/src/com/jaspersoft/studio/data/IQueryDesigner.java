@@ -5,11 +5,11 @@ import org.eclipse.swt.widgets.Control;
 
 public interface IQueryDesigner {
 
-	public abstract Control getControl();
+	public Control getControl();
 
-	public abstract void setQuery(String query);
+	public void setQuery(String query);
 
-	public abstract String getQuery();
+	public String getQuery();
 
 	public Control createControl(Composite parent);
 

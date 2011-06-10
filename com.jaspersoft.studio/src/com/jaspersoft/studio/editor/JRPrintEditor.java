@@ -462,17 +462,17 @@ public class JRPrintEditor extends EditorPart {
 				public void run() {
 					JasperPrint jrprint = getJasperPrint();
 					if (jrprint != null) {
-						// if(jrprint.getPages().isEmpty()){
-						// getReportViewer().
-						// }else
-						try {
-							getReportViewer().setDocument(jrprint);
+						if (jrprint.getPages().isEmpty()) {
+							getReportViewer().unsetDocument("Document is empty.");
+						} else
+							try {
+								getReportViewer().setDocument(jrprint);
 
-							// open document in the prefered editor
+								// open document in the prefered editor
 
-						} catch (Exception e) {
-							unsetReportDocument(ErrorUtil.getStackTrace(e), true);
-						}
+							} catch (Exception e) {
+								unsetReportDocument(ErrorUtil.getStackTrace(e), true);
+							}
 					}
 					setNotRunning(noRun);
 				}
