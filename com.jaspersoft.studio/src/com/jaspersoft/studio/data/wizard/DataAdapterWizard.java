@@ -23,6 +23,8 @@
  */
 package com.jaspersoft.studio.data.wizard;
 
+import net.sf.jasperreports.data.DataAdapterServiceUtil;
+
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -173,7 +175,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	public void widgetSelected(SelectionEvent e) {
 		if(getContainer().getCurrentPage() == dataAdapterEditorPage) {
 			try {
-				dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapterService().test();
+				DataAdapterServiceUtil.getDataAdapterService(dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter()).test();
 				
 				MessageBox mb = new MessageBox(getContainer().getShell(), SWT.ICON_INFORMATION | SWT.OK);
         mb.setText("Test");

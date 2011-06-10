@@ -140,7 +140,7 @@ public class SelectionHelper {
 		SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
 				new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
 				new File(file.getProject().getLocationURI()) }));
-		// fileResolver.setResolveAbsolutePath(true);
+		fileResolver.setResolveAbsolutePath(true);
 		return fileResolver;
 	}
 

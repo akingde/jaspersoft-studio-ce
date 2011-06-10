@@ -2,6 +2,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 
 import java.util.List;
 
+import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -183,7 +184,7 @@ public abstract class DataQueryAdapters {
 								jdq.setText(query);
 								newdataset.setQuery(jdq);
 
-								final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(da.getDataAdapterService(),
+								final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(DataAdapterServiceUtil.getDataAdapterService(da.getDataAdapter()),
 										newdataset);
 								if (fields != null) {
 									Display.getDefault().asyncExec(new Runnable() {

@@ -43,7 +43,6 @@
 package com.jaspersoft.studio.data;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.XmlUtil;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -67,11 +66,6 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor
 	 * FIXME consider remove
 	 */
 	public abstract void setDataAdapter(DataAdapter dataAdapter);
-	  
-	/**
-	 *
-	 */
-	public abstract DataAdapterService getDataAdapterService();
 	  
 	/**
    * FIXME consider remove
