@@ -26,8 +26,6 @@ package com.jaspersoft.studio.data;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceFactory;
-import net.sf.jasperreports.data.bean.BeanDataAdapter;
-import net.sf.jasperreports.data.bean.BeanDataAdapterService;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterService;
@@ -60,11 +58,7 @@ public class DataAdapterServiceFactoryImpl implements DataAdapterServiceFactory
 	{
 		DataAdapterService dataAdapterService = null;
 		
-		if (dataAdapter instanceof BeanDataAdapter)
-		{
-			dataAdapterService = new BeanDataAdapterService((BeanDataAdapter)dataAdapter);
-		}
-		else if (dataAdapter instanceof JdbcDataAdapter)
+		if (dataAdapter instanceof JdbcDataAdapter)
 		{
 			dataAdapterService = new JDBCDataAdapterService((JdbcDataAdapter)dataAdapter);
 		}
