@@ -45,6 +45,7 @@ import java.util.Map;
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseChart;
@@ -53,6 +54,7 @@ import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
@@ -419,21 +421,30 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		}
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
 			if (tFont == null) {
-				tFont = new MFont(jrElement.getTitleFont());
+				JRFont titleFont = jrElement.getTitleFont();
+				 if (titleFont == null)
+				 titleFont = new JRDesignFont(jrElement.getStyle());
+				tFont = new MFont(titleFont);
 				setChildListener(tFont);
 			}
 			return tFont;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_FONT)) {
 			if (stFont == null) {
-				stFont = new MFont(jrElement.getSubtitleFont());
+				JRFont subtitleFont = jrElement.getSubtitleFont();
+				 if (subtitleFont == null)
+				 subtitleFont = new JRDesignFont(jrElement.getStyle());
+				stFont = new MFont(subtitleFont);
 				setChildListener(stFont);
 			}
 			return stFont;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_LEGEND_FONT)) {
 			if (lFont == null) {
-				lFont = new MFont(jrElement.getLegendFont());
+				JRFont legendFont = jrElement.getLegendFont();
+				 if (legendFont == null)
+				 legendFont = new JRDesignFont(jrElement.getStyle());
+				lFont = new MFont(legendFont);
 				setChildListener(lFont);
 			}
 			return lFont;
@@ -600,10 +611,12 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			if (oldObject.getLegendFont() != null)
 				((JRBaseFont) oldObject.getLegendFont()).getEventSupport()
 						.removePropertyChangeListener(this);
-			((JRBaseFont) oldObject.getSubtitleFont()).getEventSupport()
-					.removePropertyChangeListener(this);
-			((JRBaseFont) oldObject.getTitleFont()).getEventSupport()
-					.removePropertyChangeListener(this);
+			if (oldObject.getSubtitleFont() != null)
+				((JRBaseFont) oldObject.getSubtitleFont()).getEventSupport()
+						.removePropertyChangeListener(this);
+			if (oldObject.getTitleFont() != null)
+				((JRBaseFont) oldObject.getTitleFont()).getEventSupport()
+						.removePropertyChangeListener(this);
 		}
 		if (newObject != null) {
 			((JRBaseChartPlot) newObject.getPlot()).getEventSupport()
@@ -611,10 +624,12 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			if (newObject.getLegendFont() != null)
 				((JRBaseFont) newObject.getLegendFont()).getEventSupport()
 						.addPropertyChangeListener(this);
-			((JRBaseFont) newObject.getSubtitleFont()).getEventSupport()
-					.addPropertyChangeListener(this);
-			((JRBaseFont) newObject.getTitleFont()).getEventSupport()
-					.addPropertyChangeListener(this);
+			if (newObject.getSubtitleFont() != null)
+				((JRBaseFont) newObject.getSubtitleFont()).getEventSupport()
+						.addPropertyChangeListener(this);
+			if (newObject.getTitleFont() != null)
+				((JRBaseFont) newObject.getTitleFont()).getEventSupport()
+						.addPropertyChangeListener(this);
 		}
 		super.setValue(value);
 	}
