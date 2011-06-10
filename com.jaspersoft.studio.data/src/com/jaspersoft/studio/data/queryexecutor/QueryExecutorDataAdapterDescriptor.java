@@ -24,10 +24,8 @@
 package com.jaspersoft.studio.data.queryexecutor;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.qe.QueryExecuterDataAdapter;
 import net.sf.jasperreports.data.qe.QueryExecuterDataAdapterImpl;
-import net.sf.jasperreports.data.qe.QueryExecuterDataAdapterService;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -48,13 +46,6 @@ public class QueryExecutorDataAdapterDescriptor extends DataAdapterDescriptor
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
 		this.queryExecuterDataAdapter = (QueryExecuterDataAdapter)dataAdapter;
-	}
-
-	@Override
-	public DataAdapterService getDataAdapterService() {
-		QueryExecuterDataAdapterService queryExecuterDataAdapterService = new QueryExecuterDataAdapterService();
-		queryExecuterDataAdapterService.setDataAdapter(queryExecuterDataAdapter);
-		return queryExecuterDataAdapterService;
 	}
 
 	@Override

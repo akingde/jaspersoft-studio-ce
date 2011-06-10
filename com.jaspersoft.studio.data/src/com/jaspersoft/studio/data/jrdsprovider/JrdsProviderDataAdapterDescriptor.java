@@ -25,7 +25,6 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapter;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterImpl;
-import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -46,11 +45,6 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
 		dsProviderDataAdapter = (DataSourceProviderDataAdapter) dataAdapter;
-	}
-
-	@Override
-	public DataAdapterService getDataAdapterService() {
-		return new DataSourceProviderDataAdapterService(dsProviderDataAdapter);
 	}
 
 	@Override

@@ -24,10 +24,8 @@
 package com.jaspersoft.studio.data.remotexml;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapterImpl;
-import net.sf.jasperreports.data.xml.RemoteXmlDataAdapterService;
 
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.xml.XMLDataAdapterDescriptor;
@@ -44,13 +42,6 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
 		this.remoteXmlDataAdapter = (RemoteXmlDataAdapter)dataAdapter;
-	}
-
-	@Override
-	public DataAdapterService getDataAdapterService() {
-		RemoteXmlDataAdapterService remoteXmlDataAdapterService = new RemoteXmlDataAdapterService();
-		remoteXmlDataAdapterService.setDataAdapter(remoteXmlDataAdapter);
-		return remoteXmlDataAdapterService;
 	}
 
 	@Override

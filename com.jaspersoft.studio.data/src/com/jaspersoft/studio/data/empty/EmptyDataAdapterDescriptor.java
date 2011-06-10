@@ -24,10 +24,8 @@
 package com.jaspersoft.studio.data.empty;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.empty.EmptyDataAdapter;
 import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
-import net.sf.jasperreports.data.empty.EmptyDataAdapterService;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -48,12 +46,6 @@ public class EmptyDataAdapterDescriptor extends DataAdapterDescriptor
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
 		this.emptyDataAdapter = (EmptyDataAdapter)dataAdapter;
-	}
-
-	@Override
-	public DataAdapterService getDataAdapterService() {
-		EmptyDataAdapterService emptyDataAdapterService = new EmptyDataAdapterService(emptyDataAdapter);
-		return emptyDataAdapterService;
 	}
 
 	@Override

@@ -29,7 +29,6 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.xls.XlsDataAdapter;
 import net.sf.jasperreports.data.xls.XlsDataAdapterImpl;
-import net.sf.jasperreports.data.xls.XlsDataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -54,13 +53,6 @@ public class XLSDataAdapterDescriptor extends DataAdapterDescriptor implements
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
 		this.xlsDataAdapter = (XlsDataAdapter) dataAdapter;
-	}
-
-	@Override
-	public DataAdapterService getDataAdapterService() {
-		XlsDataAdapterService xlsDataAdapterService = new XlsDataAdapterService();
-		xlsDataAdapterService.setDataAdapter(xlsDataAdapter);
-		return xlsDataAdapterService;
 	}
 
 	@Override

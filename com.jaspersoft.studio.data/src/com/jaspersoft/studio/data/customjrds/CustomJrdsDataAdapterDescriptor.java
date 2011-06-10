@@ -20,10 +20,8 @@
 package com.jaspersoft.studio.data.customjrds;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapterImpl;
-import net.sf.jasperreports.data.ds.DataSourceDataAdapterService;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
@@ -41,12 +39,6 @@ public class CustomJrdsDataAdapterDescriptor extends DataAdapterDescriptor
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
 		dsDataAdapter = (DataSourceDataAdapter)dataAdapter;
-	}
-
-	@Override
-	public DataAdapterService getDataAdapterService() {
-		DataSourceDataAdapterService dsDataAdapterService = new DataSourceDataAdapterService(dsDataAdapter);
-		return dsDataAdapterService;
 	}
 
 	@Override

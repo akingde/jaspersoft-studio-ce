@@ -21,40 +21,49 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.xml;
+package com.jaspersoft.studio.data;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.xml.XmlDataAdapter;
-import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
+import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.DataAdapterServiceFactory;
+import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterService;
 
-import com.jaspersoft.studio.data.Activator;
-import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class XMLDataAdapterDescriptor extends DataAdapterDescriptor 
+/**
+ * @author Teodor Danciu (teodord@users.sourceforge.net)
+ * @version $Id: JRBaseBand.java 4319 2011-05-17 09:22:14Z teodord $
+ */
+public class DataAdapterServiceFactoryImpl implements DataAdapterServiceFactory
 {
-	private XmlDataAdapter xmlDataAdapter = new XmlDataAdapterImpl();
+    
+	/**
+	 *
+	 */
+	private static final DataAdapterServiceFactoryImpl INSTANCE = new DataAdapterServiceFactoryImpl();
 	
-	@Override
-	public DataAdapter getDataAdapter() {
-		return xmlDataAdapter;
+	/**
+	 *
+	 */
+	public static DataAdapterServiceFactoryImpl getInstance()
+	{
+		return INSTANCE;
 	}
-
-	@Override
-	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.xmlDataAdapter = (XmlDataAdapter)dataAdapter;
+	
+	/**
+	 *
+	 */
+	public DataAdapterService getDataAdapterService(DataAdapter dataAdapter)
+	{
+		DataAdapterService dataAdapterService = null;
+		
+		if (dataAdapter instanceof JdbcDataAdapter)
+		{
+			dataAdapterService = new JDBCDataAdapterService((JdbcDataAdapter)dataAdapter);
+		}
+		
+		return dataAdapterService;
 	}
-
-	@Override
-	public DataAdapterEditor getEditor() {
-		return new XMLDataAdapterEditor();
-	}
-
-	@Override
-	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/XMLDataAdapterIcon-16.gif");
-	}
+  
 }

@@ -24,10 +24,8 @@
 package com.jaspersoft.studio.data.bean;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.bean.BeanDataAdapter;
 import net.sf.jasperreports.data.bean.BeanDataAdapterImpl;
-import net.sf.jasperreports.data.bean.BeanDataAdapterService;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -47,13 +45,6 @@ public class BeanDataAdapterDescriptor extends DataAdapterDescriptor {
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
 		this.beanDataAdapter = (BeanDataAdapter) dataAdapter;
-	}
-
-	@Override
-	public DataAdapterService getDataAdapterService() {
-		BeanDataAdapterService beanDataAdapterService = new BeanDataAdapterService(
-				beanDataAdapter);
-		return beanDataAdapterService;
 	}
 
 	@Override

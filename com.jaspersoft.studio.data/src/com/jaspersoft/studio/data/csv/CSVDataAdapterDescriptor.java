@@ -29,7 +29,6 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
 import net.sf.jasperreports.data.csv.CsvDataAdapterImpl;
-import net.sf.jasperreports.data.csv.CsvDataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -50,12 +49,6 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
 		csvDataAdapter = (CsvDataAdapter) dataAdapter;
-	}
-
-	@Override
-	public DataAdapterService getDataAdapterService() {
-		CsvDataAdapterService csvDataAdapterService = new CsvDataAdapterService(csvDataAdapter);
-		return csvDataAdapterService;
 	}
 
 	@Override

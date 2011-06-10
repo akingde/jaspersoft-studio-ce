@@ -25,7 +25,7 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 			JRDataset reportDataset) throws JRException,
 			UnsupportedOperationException {
 		con.getParameters();
-		jrdsp = ((DataSourceProviderDataAdapterService) con).getJRDSProvider();
+		jrdsp = ((DataSourceProviderDataAdapterService) con).getProvider();
 
 		JRField[] aray = jrdsp.getFields(null);
 		if (aray != null) {
