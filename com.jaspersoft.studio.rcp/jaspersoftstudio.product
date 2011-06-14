@@ -3,7 +3,6 @@
 
 <product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -13,7 +12,6 @@
 
    <windowImages/>
 
-
    <launcher name="Jaspersoft Studio">
       <solaris/>
       <win useIco="false">
@@ -21,10 +19,8 @@
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
       <plugin id="com.ibm.icu"/>
