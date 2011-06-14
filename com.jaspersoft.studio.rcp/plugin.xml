@@ -41,10 +41,6 @@
             application="com.jaspersoft.studio.rcp.application"
             name="Jaspersoft Studio">
          <property
-               name="windowImages"
-               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
-         </property>
-         <property
                name="appName"
                value="Jaspersoft Studio">
          </property>
