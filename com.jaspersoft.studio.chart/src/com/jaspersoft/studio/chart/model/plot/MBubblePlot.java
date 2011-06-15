@@ -51,6 +51,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
@@ -304,31 +305,23 @@ public class MBubblePlot extends MChartPlot {
 					.getDomainAxisMinValueExpression());
 
 		if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_FONT)) {
-			if (clFont == null) {
-				clFont = new MFont(jrElement.getXAxisLabelFont());
-				setChildListener(clFont);
-			}
+			clFont = MFontUtil.getMFont(clFont, jrElement.getXAxisLabelFont(),
+					null, this);
 			return clFont;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_FONT)) {
-			if (ctFont == null) {
-				ctFont = new MFont(jrElement.getXAxisTickLabelFont());
-				setChildListener(ctFont);
-			}
+			ctFont = MFontUtil.getMFont(ctFont,
+					jrElement.getXAxisTickLabelFont(), null, this);
 			return ctFont;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_FONT)) {
-			if (vlFont == null) {
-				vlFont = new MFont(jrElement.getYAxisLabelFont());
-				setChildListener(vlFont);
-			}
+			vlFont = MFontUtil.getMFont(vlFont, jrElement.getYAxisLabelFont(),
+					null, this);
 			return vlFont;
 		}
 		if (id.equals(JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_FONT)) {
-			if (vtFont == null) {
-				vtFont = new MFont(jrElement.getYAxisTickLabelFont());
-				setChildListener(vtFont);
-			}
+			vtFont = MFontUtil.getMFont(vtFont,
+					jrElement.getYAxisTickLabelFont(), null, this);
 			return vtFont;
 		}
 
@@ -349,7 +342,18 @@ public class MBubblePlot extends MChartPlot {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignBubblePlot jrElement = (JRDesignBubblePlot) getValue();
-		if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_COLOR)
+
+		if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_FONT)) {
+			jrElement.setXAxisLabelFont(MFontUtil.setMFont(value));
+		} else if (id
+				.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_TICK_LABEL_FONT)) {
+			jrElement.setXAxisTickLabelFont(MFontUtil.setMFont(value));
+		} else if (id.equals(JRDesignBubblePlot.PROPERTY_Y_AXIS_LABEL_FONT)) {
+			jrElement.setYAxisLabelFont(MFontUtil.setMFont(value));
+		} else if (id
+				.equals(JRDesignBubblePlot.PROPERTY_Y_AXIS_TICK_LABEL_FONT)) {
+			jrElement.setYAxisTickLabelFont(MFontUtil.setMFont(value));
+		} else if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_COLOR)
 				&& value instanceof RGB)
 			jrElement
 					.setXAxisLabelColor(Colors.getAWT4SWTRGBColor((RGB) value));

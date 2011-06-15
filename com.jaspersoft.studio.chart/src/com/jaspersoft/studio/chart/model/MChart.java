@@ -45,7 +45,6 @@ import java.util.Map;
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRElementGroup;
-import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseChart;
@@ -54,7 +53,6 @@ import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
-import net.sf.jasperreports.engine.design.JRDesignFont;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
@@ -77,6 +75,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -327,6 +326,10 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_COLOR, null);
 		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, null);
 
+		defaultsMap.put(JRDesignChart.PROPERTY_TITLE_FONT, null);
+		defaultsMap.put(JRDesignChart.PROPERTY_SUBTITLE_FONT, null);
+		defaultsMap.put(JRDesignChart.PROPERTY_LEGEND_FONT, null);
+
 		defaultsMap.put(JRBaseChart.PROPERTY_TITLE_POSITION, null);
 		defaultsMap.put(JRBaseChart.PROPERTY_LEGEND_POSITION, null);
 		defaultsMap.put(JRDesignChart.PROPERTY_EVALUATION_TIME,
@@ -420,33 +423,18 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			return mChartPlot;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
-			if (tFont == null) {
-				JRFont titleFont = jrElement.getTitleFont();
-				 if (titleFont == null)
-				 titleFont = new JRDesignFont(jrElement.getStyle());
-				tFont = new MFont(titleFont);
-				setChildListener(tFont);
-			}
+			tFont = MFontUtil.getMFont(tFont, jrElement.getTitleFont(),
+					jrElement.getStyle(), this);
 			return tFont;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_FONT)) {
-			if (stFont == null) {
-				JRFont subtitleFont = jrElement.getSubtitleFont();
-				 if (subtitleFont == null)
-				 subtitleFont = new JRDesignFont(jrElement.getStyle());
-				stFont = new MFont(subtitleFont);
-				setChildListener(stFont);
-			}
+			stFont = MFontUtil.getMFont(stFont, jrElement.getSubtitleFont(),
+					jrElement.getStyle(), this);
 			return stFont;
 		}
 		if (id.equals(JRDesignChart.PROPERTY_LEGEND_FONT)) {
-			if (lFont == null) {
-				JRFont legendFont = jrElement.getLegendFont();
-				 if (legendFont == null)
-				 legendFont = new JRDesignFont(jrElement.getStyle());
-				lFont = new MFont(legendFont);
-				setChildListener(lFont);
-			}
+			lFont = MFontUtil.getMFont(lFont, jrElement.getLegendFont(),
+					jrElement.getStyle(), this);
 			return lFont;
 		}
 
@@ -461,7 +449,14 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
-		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
+
+		if (id.equals(JRDesignChart.PROPERTY_TITLE_FONT)) {
+			jrElement.setTitleFont(MFontUtil.setMFont(value));
+		} else if (id.equals(JRDesignChart.PROPERTY_SUBTITLE_FONT)) {
+			jrElement.setSubtitleFont(MFontUtil.setMFont(value));
+		} else if (id.equals(JRDesignChart.PROPERTY_LEGEND_FONT)) {
+			jrElement.setLegendFont(MFontUtil.setMFont(value));
+		} else if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
 			jrElement.setTitlePosition((EdgeEnum) EnumHelper.getSetValue(
 					EdgeEnum.values(), value, 0, true));
 		else if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))

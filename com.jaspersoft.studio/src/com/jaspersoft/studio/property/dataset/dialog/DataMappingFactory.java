@@ -12,13 +12,14 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.data.IMappingTool;
 
 public class DataMappingFactory {
 	private Composite parent;
 	private Map<Class<? extends IMappingTool>, IMappingTool> classmap = new HashMap<Class<? extends IMappingTool>, IMappingTool>();
 
-	public DataMappingFactory(CTabFolder tabFolder) {
+	public DataMappingFactory(CTabFolder tabFolder, IFieldSetter fsetter) {
 
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				"com.jaspersoft.studio", "mappingTool"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -32,7 +33,7 @@ public class DataMappingFactory {
 				addDesigner(qd);
 
 				bptab.setControl(qd.createControl(tabFolder));
-
+				qd.setFields(fsetter);
 			} catch (CoreException ex) {
 				System.out.println(ex.getMessage());
 			}

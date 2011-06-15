@@ -265,6 +265,17 @@ public class Messages extends NLS {
 	public static String CurrencyPattern_description;
 	public static String CustomPattern_description;
 	public static String CustomPattern_Formats;
+	public static String DataQueryAdapters_actionname;
+	public static String DataQueryAdapters_getfields;
+	public static String DataQueryAdapters_jobname;
+	public static String DataQueryAdapters_languagetitle;
+	public static String DataQueryAdapters_querytab;
+	public static String DatasetDialog_datapreviewtab;
+	public static String DatasetDialog_fieldstab;
+	public static String DatasetDialog_filterexpression;
+	public static String DatasetDialog_selecttitle;
+	public static String DatasetDialog_sortingtab;
+	public static String DatasetDialog_title;
 	public static String DatasourceComboItem_select_a_datasource;
 	public static String DatePattern_description;
 	public static String DatePattern_template_formats;

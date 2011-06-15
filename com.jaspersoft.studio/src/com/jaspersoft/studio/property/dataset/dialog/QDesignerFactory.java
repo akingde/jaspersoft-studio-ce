@@ -22,7 +22,7 @@ public class QDesignerFactory {
 				"com.jaspersoft.studio", "queryDesigner"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
-				String lang = e.getAttribute("language");
+				String lang = e.getAttribute("language");//$NON-NLS-1$
 				IQueryDesigner qd = (IQueryDesigner) e.createExecutableExtension("QueryDesignerClass"); //$NON-NLS-1$
 				addDesigner(lang, qd);
 			} catch (CoreException ex) {

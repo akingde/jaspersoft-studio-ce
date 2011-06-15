@@ -43,6 +43,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.JRItemLabel;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
+import net.sf.jasperreports.engine.JRFont;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
@@ -51,6 +52,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
@@ -64,22 +66,27 @@ public class MChartItemLabel extends APropertyNode {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR,
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(
+				JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR,
 				Messages.MChartItemLabel_background_color, NullEnum.NULL);
-		backcolorD.setDescription(Messages.MChartItemLabel_background_color_description);
+		backcolorD
+				.setDescription(Messages.MChartItemLabel_background_color_description);
 		desc.add(backcolorD);
 
-		ColorPropertyDescriptor colorD = new ColorPropertyDescriptor(JRDesignItemLabel.PROPERTY_COLOR,
+		ColorPropertyDescriptor colorD = new ColorPropertyDescriptor(
+				JRDesignItemLabel.PROPERTY_COLOR,
 				Messages.MChartItemLabel_color, NullEnum.NULL);
 		colorD.setDescription(Messages.MChartItemLabel_color_description);
 		desc.add(colorD);
 
-		FontPropertyDescriptor fontD = new FontPropertyDescriptor(JRDesignItemLabel.PROPERTY_FONT,
-				Messages.MChartItemLabel_font);
+		FontPropertyDescriptor fontD = new FontPropertyDescriptor(
+				JRDesignItemLabel.PROPERTY_FONT, Messages.MChartItemLabel_font);
 		fontD.setDescription(Messages.MChartItemLabel_font_description);
 		desc.add(fontD);
 
+		defaultsMap.put(JRDesignItemLabel.PROPERTY_FONT, null);
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -96,7 +103,8 @@ public class MChartItemLabel extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -104,7 +112,9 @@ public class MChartItemLabel extends APropertyNode {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignItemLabel jrElement = (JRDesignItemLabel) getValue();
@@ -113,10 +123,8 @@ public class MChartItemLabel extends APropertyNode {
 		if (id.equals(JRDesignItemLabel.PROPERTY_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getColor());
 		if (id.equals(JRDesignItemLabel.PROPERTY_FONT)) {
-			if (vtFont == null) {
-				vtFont = new MFont(jrElement.getFont());
-				setChildListener(vtFont);
-			}
+			vtFont = MFontUtil
+					.getMFont(vtFont, jrElement.getFont(), null, this);
 			return vtFont;
 		}
 		return null;
@@ -127,15 +135,22 @@ public class MChartItemLabel extends APropertyNode {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignItemLabel jrElement = (JRDesignItemLabel) getValue();
-		if (id.equals(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR) && value instanceof RGB)
-			jrElement.setBackgroundColor(Colors.getAWT4SWTRGBColor((RGB) value));
-		else if (id.equals(JRDesignItemLabel.PROPERTY_COLOR) && value instanceof RGB)
+		if (id.equals(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR)
+				&& value instanceof RGB)
+			jrElement
+					.setBackgroundColor(Colors.getAWT4SWTRGBColor((RGB) value));
+		else if (id.equals(JRDesignItemLabel.PROPERTY_COLOR)
+				&& value instanceof RGB)
 			jrElement.setColor(Colors.getAWT4SWTRGBColor((RGB) value));
-
+		else if (id.equals(JRDesignItemLabel.PROPERTY_FONT)) {
+			jrElement.setFont(MFontUtil.setMFont(value));
+		}
 	}
 
 	public ImageDescriptor getImagePath() {

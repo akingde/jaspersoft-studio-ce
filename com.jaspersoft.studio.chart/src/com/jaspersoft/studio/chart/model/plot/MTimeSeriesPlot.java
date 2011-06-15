@@ -49,6 +49,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
@@ -314,31 +315,23 @@ public class MTimeSeriesPlot extends MChartPlot {
 					.getDomainAxisMinValueExpression());
 
 		if (id.equals(JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_FONT)) {
-			if (clFont == null) {
-				clFont = new MFont(jrElement.getTimeAxisLabelFont());
-				setChildListener(clFont);
-			}
+			clFont = MFontUtil.getMFont(clFont,
+					jrElement.getTimeAxisLabelFont(), null, this);
 			return clFont;
 		}
 		if (id.equals(JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT)) {
-			if (ctFont == null) {
-				ctFont = new MFont(jrElement.getTimeAxisTickLabelFont());
-				setChildListener(ctFont);
-			}
+			ctFont = MFontUtil.getMFont(ctFont,
+					jrElement.getTimeAxisTickLabelFont(), null, this);
 			return ctFont;
 		}
 		if (id.equals(JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LABEL_FONT)) {
-			if (vlFont == null) {
-				vlFont = new MFont(jrElement.getValueAxisLabelFont());
-				setChildListener(vlFont);
-			}
+			vlFont = MFontUtil.getMFont(vlFont,
+					jrElement.getValueAxisLabelFont(), null, this);
 			return vlFont;
 		}
 		if (id.equals(JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
-			if (vtFont == null) {
-				vtFont = new MFont(jrElement.getValueAxisTickLabelFont());
-				setChildListener(vtFont);
-			}
+			vtFont = MFontUtil.getMFont(vtFont,
+					jrElement.getValueAxisTickLabelFont(), null, this);
 			return vtFont;
 		}
 
@@ -359,7 +352,20 @@ public class MTimeSeriesPlot extends MChartPlot {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignTimeSeriesPlot jrElement = (JRDesignTimeSeriesPlot) getValue();
-		if (id.equals(JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_COLOR)
+
+		if (id.equals(JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_FONT)) {
+			jrElement.setTimeAxisLabelFont(MFontUtil.setMFont(value));
+		} else if (id
+				.equals(JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT)) {
+			jrElement.setTimeAxisTickLabelFont(MFontUtil.setMFont(value));
+		} else if (id
+				.equals(JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_LABEL_FONT)) {
+			jrElement.setValueAxisLabelFont(MFontUtil.setMFont(value));
+		} else if (id
+				.equals(JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
+			jrElement.setValueAxisTickLabelFont(MFontUtil.setMFont(value));
+		} else if (id
+				.equals(JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_COLOR)
 				&& value instanceof RGB)
 			jrElement.setTimeAxisLabelColor(Colors
 					.getAWT4SWTRGBColor((RGB) value));

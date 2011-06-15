@@ -49,6 +49,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -316,31 +317,23 @@ public class MAreaPlot extends MChartPlot {
 					.getDomainAxisMinValueExpression());
 
 		if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT)) {
-			if (clFont == null) {
-				clFont = new MFont(jrElement.getCategoryAxisLabelFont());
-				setChildListener(clFont);
-			}
+			clFont = MFontUtil.getMFont(clFont,
+					jrElement.getCategoryAxisLabelFont(), null, this);
 			return clFont;
 		}
 		if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT)) {
-			if (ctFont == null) {
-				ctFont = new MFont(jrElement.getCategoryAxisTickLabelFont());
-				setChildListener(ctFont);
-			}
+			ctFont = MFontUtil.getMFont(ctFont,
+					jrElement.getCategoryAxisTickLabelFont(), null, this);
 			return ctFont;
 		}
 		if (id.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_FONT)) {
-			if (vlFont == null) {
-				vlFont = new MFont(jrElement.getValueAxisLabelFont());
-				setChildListener(vlFont);
-			}
+			vlFont = MFontUtil.getMFont(vlFont,
+					jrElement.getValueAxisLabelFont(), null, this);
 			return vlFont;
 		}
 		if (id.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
-			if (vtFont == null) {
-				vtFont = new MFont(jrElement.getValueAxisTickLabelFont());
-				setChildListener(vtFont);
-			}
+			vtFont = MFontUtil.getMFont(vtFont,
+					jrElement.getValueAxisTickLabelFont(), null, this);
 			return vtFont;
 		}
 
@@ -361,6 +354,19 @@ public class MAreaPlot extends MChartPlot {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignAreaPlot jrElement = (JRDesignAreaPlot) getValue();
+
+		if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT)) {
+			jrElement.setCategoryAxisLabelFont(MFontUtil.setMFont(value));
+		} else if (id
+				.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT)) {
+			jrElement.setCategoryAxisTickLabelFont(MFontUtil.setMFont(value));
+		} else if (id.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_LABEL_FONT)) {
+			jrElement.setValueAxisLabelFont(MFontUtil.setMFont(value));
+		} else if (id
+				.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
+			jrElement.setCategoryAxisTickLabelFont(MFontUtil.setMFont(value));
+		} else
+
 		if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR)
 				&& value instanceof RGB)
 			jrElement.setCategoryAxisLabelColor(Colors

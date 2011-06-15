@@ -32,9 +32,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.IFieldSetter;
+import com.jaspersoft.studio.data.IQueryDesigner;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.widget.DatasourceComboItem;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -71,7 +74,7 @@ public abstract class DataQueryAdapters {
 		return tabFolder;
 	}
 
-	public void createTop(Composite parent) {
+	public void createTop(Composite parent, IFieldSetter fsetter) {
 		tabFolder = new CTabFolder(parent, SWT.TOP);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 150;
@@ -79,25 +82,25 @@ public abstract class DataQueryAdapters {
 		// tabFolder.setBackground(background);
 
 		createQuery(tabFolder);
-		createMappingTools(tabFolder);
+		createMappingTools(tabFolder, fsetter);
 
 		tabFolder.setSelection(0);
 	}
 
-	private void createMappingTools(CTabFolder tabFolder) {
-		new DataMappingFactory(tabFolder);
+	private void createMappingTools(CTabFolder tabFolder, IFieldSetter fsetter) {
+		new DataMappingFactory(tabFolder, fsetter);
 	}
 
 	private void createQuery(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Query");
+		bptab.setText(Messages.DataQueryAdapters_querytab);
 
 		Composite sectionClient = new Composite(tabFolder, SWT.NONE);
 		sectionClient.setLayout(new GridLayout(2, false));
 		sectionClient.setBackground(background);
 
 		Label label = new Label(sectionClient, SWT.NONE);
-		label.setText("Language");
+		label.setText(Messages.DataQueryAdapters_languagetitle);
 		label.setBackground(background);
 
 		langCombo = new Combo(sectionClient, SWT.SINGLE | SWT.BORDER);
@@ -142,9 +145,15 @@ public abstract class DataQueryAdapters {
 		bptab.setControl(sectionClient);
 	}
 
+	IQueryDesigner currentDesigner = null;
+
 	private void changeLanguage() {
-		langLayout.topControl = qdfactory.getDesigner(langCombo.getText()).getControl();
+		IQueryDesigner designer = qdfactory.getDesigner(langCombo.getText());
+		langLayout.topControl = designer.getControl();
 		langComposite.layout();
+		if (currentDesigner != null)
+			designer.setQuery(currentDesigner.getQuery());
+		currentDesigner = designer;
 	}
 
 	private void createToolbar(Composite parent) {
@@ -167,7 +176,7 @@ public abstract class DataQueryAdapters {
 				return true;
 			}
 		});
-		gFields = new Action("Get &Fields") {
+		gFields = new Action(Messages.DataQueryAdapters_getfields) {
 			// TODO run inside a job, modal with progress bar
 			// FIXME, because, when cloning, eventSuport is not copied,
 			public void run() {
@@ -176,7 +185,7 @@ public abstract class DataQueryAdapters {
 				final DataAdapterDescriptor da = dscombo.getSelected();
 				if (da != null) {
 					final String query = qdfactory.getDesigner(lang).getQuery();
-					Job job = new Job("Use initiated job") {
+					Job job = new Job(Messages.DataQueryAdapters_jobname) {
 						protected IStatus run(IProgressMonitor monitor) {
 							try {
 								JRDesignQuery jdq = new JRDesignQuery();
@@ -184,8 +193,8 @@ public abstract class DataQueryAdapters {
 								jdq.setText(query);
 								newdataset.setQuery(jdq);
 
-								final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(DataAdapterServiceUtil.getDataAdapterService(da.getDataAdapter()),
-										newdataset);
+								final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(
+										DataAdapterServiceUtil.getDataAdapterService(da.getDataAdapter()), newdataset);
 								if (fields != null) {
 									Display.getDefault().asyncExec(new Runnable() {
 
@@ -213,7 +222,7 @@ public abstract class DataQueryAdapters {
 		};
 		gFields.setEnabled(false);
 
-		Action alabel = new Action("Data Adapters") {
+		Action alabel = new Action(Messages.DataQueryAdapters_actionname) {
 		};
 		alabel.setEnabled(false);
 		manager.add(alabel);
@@ -233,13 +242,13 @@ public abstract class DataQueryAdapters {
 			else
 				langCombo.setItem(0, query.getLanguage());
 			changeLanguage();
-			qdfactory.getDesigner(query.getLanguage()).setQuery(query.getText());
+			currentDesigner.setQuery(query.getText());
 		}
 	}
 
 	public String getLanguage() {
 		int langind = langCombo.getSelectionIndex();
-		if (langind >= 0 && langind < languages.length)
+		if (langind < 0 || langind > languages.length)
 			langind = 0;
 		return languages[langind];
 

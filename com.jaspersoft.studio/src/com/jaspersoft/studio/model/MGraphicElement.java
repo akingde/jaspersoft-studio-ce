@@ -413,6 +413,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		propertiesD.setDescription(Messages.MGraphicElement_property_expressions_description);
 		desc.add(propertiesD);
 
+		JPropertiesPropertyDescriptor propertiesMapD = new JPropertiesPropertyDescriptor(PROPERTY_MAP,
+				Messages.common_properties);
+		propertiesMapD.setDescription(Messages.common_properties);
+		desc.add(propertiesMapD);
+
 		forecolorD.setCategory(Messages.common_graphic);
 		backcolorD.setCategory(Messages.common_graphic);
 		opaqueD.setCategory(Messages.common_graphic);
@@ -432,6 +437,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, Boolean.FALSE);
 	}
 
+	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	private RWComboBoxPropertyDescriptor styleD;
 	private RComboBoxPropertyDescriptor groupChangesD;
 
@@ -492,6 +498,12 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return new Boolean(jrElement.isPrintInFirstWholeBand());
 		if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS))
 			return new Boolean(jrElement.isPrintWhenDetailOverflows());
+
+		if (id.equals(PROPERTY_MAP)) {
+			// to avoid duplication I remove it first
+			JRPropertiesMap pmap = jrElement.getPropertiesMap();
+			return pmap;
+		}
 
 		return null;
 	}
@@ -573,6 +585,17 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			jrElement.setPrintInFirstWholeBand(((Boolean) value).booleanValue());
 		else if (id.equals(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS))
 			jrElement.setPrintWhenDetailOverflows(((Boolean) value).booleanValue());
+		else if (id.equals(PROPERTY_MAP)) {
+			JRPropertiesMap v = (JRPropertiesMap) value;
+			String[] names = jrElement.getPropertiesMap().getPropertyNames();
+			for (int i = 0; i < names.length; i++) {
+				jrElement.getPropertiesMap().removeProperty(names[i]);
+			}
+			names = v.getPropertyNames();
+			for (int i = 0; i < names.length; i++)
+				jrElement.getPropertiesMap().setProperty(names[i], v.getProperty(names[i]));
+			this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
+		}
 	}
 
 	public boolean isCopyable2(Object parent) {

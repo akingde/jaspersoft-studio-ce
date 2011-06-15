@@ -53,6 +53,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
@@ -258,10 +259,8 @@ public class MThermometerPlot extends MChartPlot {
 
 		if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY
 				+ "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
-			if (vtFont == null) {
-				vtFont = new MFont(jrElement.getValueDisplay().getFont());
-				setChildListener(vtFont);
-			}
+			vtFont = MFontUtil.getMFont(vtFont, jrElement.getValueDisplay()
+					.getFont(), null, this);
 			return vtFont;
 		}
 
@@ -291,6 +290,10 @@ public class MThermometerPlot extends MChartPlot {
 				&& value instanceof RGB)
 			jrElement.setMercuryColor(Colors.getAWT4SWTRGBColor((RGB) value));
 		else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY
+				+ "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
+			((JRDesignValueDisplay) jrElement.getValueDisplay())
+					.setFont(MFontUtil.setMFont(value));
+		} else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY
 				+ "." + JRDesignValueDisplay.PROPERTY_COLOR) //$NON-NLS-1$
 				&& value instanceof RGB) {
 			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(

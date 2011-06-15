@@ -33,6 +33,8 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.data.IFieldSetter;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -45,7 +47,7 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.Misc;
 
-final class DatasetDialog extends FormDialog {
+final class DatasetDialog extends FormDialog implements IFieldSetter {
 	private MDataset mdataset;
 	private MReport mreport;
 	private IFile file;
@@ -53,7 +55,7 @@ final class DatasetDialog extends FormDialog {
 	public DatasetDialog(Shell shell, MDataset mdataset, MReport mreport, IFile file) {
 		super(shell);
 		super.configureShell(shell);
-		shell.setText("Dataset & Query Dialog");
+		shell.setText(Messages.DatasetDialog_title);
 		this.mdataset = mdataset;
 		this.mreport = mreport;
 		this.file = file;
@@ -88,7 +90,7 @@ final class DatasetDialog extends FormDialog {
 		sf.setLayoutData(gd);
 		sf.setLayout(new GridLayout());
 
-		dataquery.createTop(sf);
+		dataquery.createTop(sf, this);
 		dataquery.setDefaultDataAdapter(mreport);
 
 		createBottom(sf, toolkit);
@@ -97,7 +99,7 @@ final class DatasetDialog extends FormDialog {
 		setDataset((JRDesignDataset) mdataset.getValue());
 	}
 
-	private void setFields(List<JRDesignField> fields) {
+	public void setFields(List<JRDesignField> fields) {
 		ftable.setFields(fields);
 	}
 
@@ -118,7 +120,7 @@ final class DatasetDialog extends FormDialog {
 
 	private void createFields(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Fields");
+		bptab.setText(Messages.DatasetDialog_fieldstab);
 
 		ftable = new FieldsTable(tabFolder, newdataset);
 
@@ -127,7 +129,7 @@ final class DatasetDialog extends FormDialog {
 
 	private void createSortFields(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Sorting");
+		bptab.setText(Messages.DatasetDialog_sortingtab);
 
 		Composite sectionClient = toolkit.createComposite(tabFolder);
 		sectionClient.setLayout(new GridLayout(2, false));
@@ -139,7 +141,7 @@ final class DatasetDialog extends FormDialog {
 
 	private void createFilterExpression(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Filter Expression");
+		bptab.setText(Messages.DatasetDialog_filterexpression);
 
 		Composite sectionClient = toolkit.createComposite(tabFolder);
 		sectionClient.setLayout(new GridLayout(2, false));
@@ -148,7 +150,7 @@ final class DatasetDialog extends FormDialog {
 		filterExpression.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Button but = new Button(sectionClient, SWT.NONE);
-		but.setText("...");
+		but.setText(Messages.DatasetDialog_selecttitle);
 		but.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -166,12 +168,12 @@ final class DatasetDialog extends FormDialog {
 		bptab.setControl(sectionClient);
 
 		if (newdataset.getFilterExpression() != null)
-			filterExpression.setText(Misc.nvl(newdataset.getFilterExpression().getText(), ""));
+			filterExpression.setText(Misc.nvl(newdataset.getFilterExpression().getText(), "")); //$NON-NLS-1$
 	}
 
 	private void createDataPreview(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Data Preview");
+		bptab.setText(Messages.DatasetDialog_datapreviewtab);
 
 		Composite sectionClient = toolkit.createComposite(tabFolder);
 		sectionClient.setLayout(new GridLayout(2, false));

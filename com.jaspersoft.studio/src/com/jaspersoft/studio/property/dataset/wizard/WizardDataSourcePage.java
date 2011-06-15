@@ -51,11 +51,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 
-public class WizardDataSourcePage extends WizardPage {
+public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 	private JRDesignDataset dataset;
 
 	public JRDesignDataset getDataset() {
@@ -83,22 +84,24 @@ public class WizardDataSourcePage extends WizardPage {
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {
-				// DatasetDialog.this.setFields(fields);
-				dataset.getFieldsList().clear();
-				for (JRDesignField field : fields)
-					try {
-						dataset.addField(field);
-					} catch (JRException e) {
-						e.printStackTrace();
-					}
+				setFields(fields);
 			}
 		};
 
-		dataquery.createTop(composite);
-
+		dataquery.createTop(composite, this);
 		dataquery.setDataset(dataset);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
+	public void setFields(List<JRDesignField> fields) {
+		// DatasetDialog.this.setFields(fields);
+		dataset.getFieldsList().clear();
+		for (JRDesignField field : fields)
+			try {
+				dataset.addField(field);
+			} catch (JRException e) {
+				e.printStackTrace();
+			}
+	}
 }

@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property;
 
@@ -32,18 +28,17 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.ForwardUndoCompoundCommand;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertySheetEntry;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
-/*/*
- * The Class JRPropertySheetEntry.
+
+/*
+ * /* The Class JRPropertySheetEntry.
  */
 public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.PropertySheetEntry {
 
@@ -240,16 +235,23 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	 *          the command
 	 */
 	void valueChanged(JRPropertySheetEntry child, final CompoundCommand command) {
-		CompoundCommand cc = new CompoundCommand();
-		command.add(cc);
-
-		SetValueCommand setCommand;
 		for (int i = 0; i < getValues().length; i++) {
-			setCommand = new SetValueCommand(child.getDisplayName());
-			setCommand.setTarget(getPropertySource(getValues()[i]));
-			setCommand.setPropertyId(child.getDescriptor().getId());
-			setCommand.setPropertyValue(child.getValues()[i]);
-			cc.add(setCommand);
+			Object newval = child.getValues()[i];
+			Object propid = child.getDescriptor().getId();
+			IPropertySource propertySource = getPropertySource(getValues()[i]);
+			Object oldval = propertySource.getPropertyValue(propid);
+			if (!(oldval instanceof INode)) {
+				if (oldval != null && newval != null && oldval.equals(newval))
+					continue;
+				if (oldval == null && newval == null)
+					continue;
+			}
+
+			SetValueCommand setCommand = new SetValueCommand(child.getDisplayName());
+			setCommand.setTarget(propertySource);
+			setCommand.setPropertyId(propid);
+			setCommand.setPropertyValue(newval);
+			command.add(setCommand);
 		}
 
 		// inform our parent
@@ -284,36 +286,5 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	}
 
 	private Object editValue;
-	private CellEditor editor;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySheetEntry#getEditor(org.eclipse.swt.widgets.Composite)
-	 */
-	public CellEditor getEditor(Composite parent) {
-		editor = super.getEditor(parent);
-		if (editor != null)
-			editor.addListener(cellEditorListener);
-		return editor;
-	}
-
-	/**
-	 * Create the CellEditorListener for this entry. It listens for value changes in the CellEditor, and cancel and finish
-	 * requests.
-	 */
-	private ICellEditorListener cellEditorListener = new ICellEditorListener() {
-		public void editorValueChanged(boolean oldValidState, boolean newValidState) {
-
-		}
-
-		public void cancelEditor() {
-
-		}
-
-		public void applyEditorValue() {
-			JRPropertySheetEntry.this.applyEditorValue();
-		}
-	};
 
 }

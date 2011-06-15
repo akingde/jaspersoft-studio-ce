@@ -54,6 +54,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.chart.messages.Messages;
 import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.model.text.MFontUtil;
 import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -233,18 +234,14 @@ public class MMeterPlot extends MChartPlot {
 				+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION))
 			return ExprUtil.getExpression(jrDataRange.getLowExpression());
 		if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT)) {
-			if (tlFont == null) {
-				tlFont = new MFont(jrElement.getTickLabelFont());
-				setChildListener(tlFont);
-			}
+			tlFont = MFontUtil.getMFont(tlFont, jrElement.getTickLabelFont(),
+					null, this);
 			return tlFont;
 		}
 		if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
 				+ "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
-			if (vdFont == null) {
-				vdFont = new MFont(jrElement.getValueDisplay().getFont());
-				setChildListener(vdFont);
-			}
+			vdFont = MFontUtil.getMFont(vdFont, jrElement.getValueDisplay()
+					.getFont(), null, this);
 			return vdFont;
 		}
 		return super.getPropertyValue(id);
@@ -264,6 +261,15 @@ public class MMeterPlot extends MChartPlot {
 		JRDesignMeterPlot jrElement = (JRDesignMeterPlot) getValue();
 		JRDesignDataRange jrDataRange = (JRDesignDataRange) jrElement
 				.getDataRange();
+
+		if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT)) {
+			jrElement.setTickLabelFont(MFontUtil.setMFont(value));
+		} else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
+				+ "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
+			((JRDesignValueDisplay) jrElement.getValueDisplay())
+					.setFont(MFontUtil.setMFont(value));
+		} else
+
 		if (id.equals(JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR)
 				&& value instanceof RGB)
 			jrElement.setMeterBackgroundColor(Colors
