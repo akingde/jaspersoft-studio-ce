@@ -35,13 +35,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
+import com.jaspersoft.studio.swt.widgets.ClassType;
 import com.jaspersoft.studio.utils.Misc;
 
 public class BeanDataAdapterComposite extends Composite {
 
 	private BeanDataAdapterDescriptor beanDataAdapter = null;
-	private Text factoryText;
+	private ClassType factoryText;
 	private Text methodText;
 	private Button useFDcheck;
 	private Button btnNewButton;
@@ -62,22 +62,9 @@ public class BeanDataAdapterComposite extends Composite {
 		lblFactory
 				.setText("Factory class (the class that will produce JavaBeans");
 
-		factoryText = new Text(this, SWT.BORDER);
-		factoryText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		factoryText = new ClassType(this);
 		factoryText
-				.setText("com.jaspersoft.ireport.examples.SampleJRDataSourceFactory");
-
-		btnNewButton = new Button(this, SWT.NONE);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				String classname = ClassTypeCellEditor.getJavaClassDialog(
-						factoryText.getShell(), null);
-				if (classname != null)
-					factoryText.setText(classname);
-			}
-		});
-		btnNewButton.setText("...");
+				.setClassType("com.jaspersoft.ireport.examples.SampleJRDataSourceFactory");
 
 		Label lblMethodName = new Label(this, SWT.NONE);
 		lblMethodName
@@ -117,7 +104,7 @@ public class BeanDataAdapterComposite extends Composite {
 		this.beanDataAdapter = beanDataAdapter;
 		BeanDataAdapter bda = (BeanDataAdapter) beanDataAdapter
 				.getDataAdapter();
-		factoryText.setText(Misc.nvl(bda.getFactoryClass(), ""));
+		factoryText.setClassType(Misc.nvl(bda.getFactoryClass(), ""));
 		methodText.setText(Misc.nvl(bda.getMethodName(), ""));
 		useFDcheck.setSelection(bda.isUseFieldDescription());
 
@@ -130,7 +117,7 @@ public class BeanDataAdapterComposite extends Composite {
 
 		BeanDataAdapter bda = (BeanDataAdapter) beanDataAdapter
 				.getDataAdapter();
-		bda.setFactoryClass(factoryText.getText().trim());
+		bda.setFactoryClass(factoryText.getClassType());
 		bda.setMethodName(methodText.getText().trim());
 
 		bda.setUseFieldDescription(useFDcheck.getSelection());
