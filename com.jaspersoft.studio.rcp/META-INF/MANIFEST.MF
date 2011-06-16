@@ -22,5 +22,5 @@ Require-Bundle: org.eclipse.ui,
  com.jaspersoft.studio.html;bundle-version="0.2.4",
  com.jaspersoft.studio.list;bundle-version="0.2.4",
  com.jaspersoft.studio.table;bundle-version="0.2.4",
- org.eclipse.equinox.launcher;bundle-version="1.1.1"
+ org.eclipse.equinox.launcher
 Bundle-ActivationPolicy: lazy
