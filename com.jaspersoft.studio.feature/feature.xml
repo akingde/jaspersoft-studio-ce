@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio"
-      version="0.2.4"
+      version="0.2.5"
       provider-name="Jaspersoft Corporation">
 
    <description url="http://jasperforge.org/projects/jaspersoftstudio">
@@ -681,6 +681,15 @@ Public License instead of this License.  But first, please read
    <url>
       <discovery label="Jaspersoft Studio" url="http://jasperforge.org/projects/jaspersoftstudio"/>
    </url>
+
+   <requires>
+      <import plugin="org.eclipse.datatools.sqltools.sqlbuilder"/>
+      <import plugin="org.eclipse.datatools.sqltools.sql"/>
+      <import plugin="org.eclipse.datatools.sqltools.sql.ui"/>
+      <import plugin="org.eclipse.datatools.sqltools.sqleditor"/>
+      <import plugin="org.eclipse.datatools.sqltools.editor.core"/>
+      <import plugin="org.eclipse.datatools.sqltools.editor.core.ui"/>
+   </requires>
 
    <plugin
          id="com.jaspersoft.studio"

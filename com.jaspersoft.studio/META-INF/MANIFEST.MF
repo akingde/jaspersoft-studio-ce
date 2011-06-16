@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio
 Bundle-SymbolicName: com.jaspersoft.studio;singleton:=true
-Bundle-Version: 0.2.4
+Bundle-Version: 0.2.5
 Bundle-Activator: com.jaspersoft.studio.JaspersoftStudioPlugin
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Localization: plugin
@@ -26,7 +26,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui;bundle-version="3.5.2",
  org.eclipse.jface.text,
  org.eclipse.gef;bundle-version="3.5.0",
- net.sf.jasperreports,
+ net.sf.jasperreports;visibility:=reexport,
  org.eclipse.help.ui;bundle-version="3.4.1"
 Bundle-ClassPath: .,
  lib/serializer.jar,

@@ -217,7 +217,10 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 			if (!ds.getQuery().getText().equals(qtext))
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, qtext, mquery));
 		}
-		command.add(setValueCommand(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, filterExpression.getText(), mdataset));
+		String fexprtext = filterExpression.getText();
+		if (fexprtext.trim().equals(""))
+			fexprtext = null;
+		command.add(setValueCommand(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, fexprtext, mdataset));
 
 		List<JRField> dsfields = ds.getFieldsList();
 		List<JRDesignField> fields = ftable.getFields();

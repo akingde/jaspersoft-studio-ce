@@ -136,6 +136,8 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 		if (myDataAdapterDesc != null) {
 			// $TODO should we save the reference in the JRXML ?
 			dataAdapterDesc = myDataAdapterDesc;
+		} else {
+			dataAdapterDesc = dataSourceWidget.getSelected();
 		}
 
 		// If the DataAdapter of this preview editor is still null, abort the report execution
@@ -192,6 +194,8 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 
 						VirtualizerHelper.setVirtualizer(jd, ps, jasperParameters);
 
+						jasperParameters.remove(JRParameter.REPORT_CONNECTION);
+						jasperParameters.remove(JRParameter.REPORT_DATA_SOURCE);
 						// We let the data adapter to contribute its parameters.
 						Map<String, Object> dataAdapterParams = dataAdapterService.getParameters();
 
