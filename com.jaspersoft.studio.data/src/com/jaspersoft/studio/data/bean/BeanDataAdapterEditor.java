@@ -30,7 +30,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class BeanDataAdapterEditor implements DataAdapterEditor {
-	
+
 	BeanDataAdapterComposite composite = null;
 
 	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
@@ -43,7 +43,8 @@ public class BeanDataAdapterEditor implements DataAdapterEditor {
 		return composite.getDataAdapter();
 	}
 
-	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
+	public Composite getComposite(Composite parent, int style,
+			WizardPage wizardPage) {
 		if (composite == null) {
 			composite = new BeanDataAdapterComposite(parent, style);
 		}
@@ -53,4 +54,5 @@ public class BeanDataAdapterEditor implements DataAdapterEditor {
 	public String getHelpContextId() {
 		return composite.getHelpContextId();
 	}
+
 }

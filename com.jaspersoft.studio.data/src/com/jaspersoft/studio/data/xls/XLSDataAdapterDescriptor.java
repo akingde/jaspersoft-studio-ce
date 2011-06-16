@@ -68,7 +68,6 @@ public class XLSDataAdapterDescriptor extends DataAdapterDescriptor implements
 
 	private IFieldsProvider fprovider;
 
-	@Override
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JRDataset reportDataset) throws JRException,
 			UnsupportedOperationException {
@@ -76,7 +75,6 @@ public class XLSDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return fprovider.getFields(con, reportDataset);
 	}
 
-	@Override
 	public boolean supportsGetFieldsOperation() {
 		getFieldProvider();
 		return fprovider.supportsGetFieldsOperation();

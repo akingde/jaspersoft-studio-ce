@@ -31,17 +31,14 @@ public class BeanMappingTool implements IMappingTool {
 	private org.eclipse.swt.widgets.List methods;
 	private PropertyDescriptor[] methodsarray;
 
-	@Override
 	public String getName() {
 		return Messages.BeanMappingTool_toolname;
 	}
 
-	@Override
 	public Control getControl() {
 		return control;
 	}
 
-	@Override
 	public Control createControl(Composite parent) {
 		control = new Composite(parent, SWT.NONE);
 		control.setLayout(new GridLayout(3, false));
@@ -52,7 +49,6 @@ public class BeanMappingTool implements IMappingTool {
 		final ClassType classType = new ClassType(control);
 		classType.addListener(new ModifyListener() {
 
-			@Override
 			public void modifyText(ModifyEvent e) {
 				try {
 					errMsg.setText(""); //$NON-NLS-1$
@@ -67,7 +63,8 @@ public class BeanMappingTool implements IMappingTool {
 
 					methods.setItems(strm);
 				} catch (ClassNotFoundException e1) {
-					errMsg.setText(Messages.BeanMappingTool_errormessage + e1.getMessage());
+					errMsg.setText(Messages.BeanMappingTool_errormessage
+							+ e1.getMessage());
 				}
 			}
 		});
@@ -83,7 +80,6 @@ public class BeanMappingTool implements IMappingTool {
 		gfbtn.setText(Messages.BeanMappingTool_selectfieldstitle);
 		gfbtn.addSelectionListener(new SelectionListener() {
 
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int[] items = methods.getSelectionIndices();
 				if (methodsarray != null && items != null) {
@@ -108,7 +104,6 @@ public class BeanMappingTool implements IMappingTool {
 				}
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
 			}
@@ -126,12 +121,10 @@ public class BeanMappingTool implements IMappingTool {
 
 	}
 
-	@Override
 	public void setJRDataset(JRDesignDataset dataset) {
 		this.dataset = dataset;
 	}
 
-	@Override
 	public JRDesignDataset getJRDataset() {
 		return dataset;
 	}
@@ -139,7 +132,6 @@ public class BeanMappingTool implements IMappingTool {
 	private IFieldSetter fsetter;
 	private Label errMsg;
 
-	@Override
 	public void setFields(IFieldSetter fsetter) {
 		this.fsetter = fsetter;
 	}

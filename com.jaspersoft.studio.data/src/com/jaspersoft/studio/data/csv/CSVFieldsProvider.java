@@ -56,7 +56,6 @@ public class CSVFieldsProvider implements IFieldsProvider {
 		return null;
 	}
 
-	@Override
 	public boolean supportsGetFieldsOperation() {
 		return true;
 	}

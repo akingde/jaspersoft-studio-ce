@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Data
 Bundle-SymbolicName: com.jaspersoft.studio.data;singleton:=true
-Bundle-Version: 0.2.4
+Bundle-Version: 0.2.5
 Bundle-Activator: com.jaspersoft.studio.data.Activator
 Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: org.eclipse.ui,
@@ -10,9 +10,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.core.filesystem,
- com.jaspersoft.studio;bundle-version="0.2.4",
- net.sf.jasperreports;bundle-version="0.2.4",
- org.eclipse.datatools.sqltools.sqlbuilder;bundle-version="1.0.3"
+ com.jaspersoft.studio;bundle-version="0.2.5",
+ org.eclipse.datatools.sqltools.sqlbuilder;bundle-version="1.0.0",
+ org.eclipse.datatools.sqltools.editor.core.ui;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: com.jaspersoft.studio
