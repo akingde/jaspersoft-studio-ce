@@ -332,7 +332,10 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 
 	public DataAdapterDescriptor getSelected() {
 		if (selectedDA == null) {
-			selectedDA = dataAdapters.get(combo.getSelectionIndex() - 1);
+			int index = combo.getSelectionIndex() - 1;
+			if (index < 0 || index >= dataAdapters.size())
+				index = 0;
+			selectedDA = dataAdapters.get(index);
 		}
 		return selectedDA;
 	}
