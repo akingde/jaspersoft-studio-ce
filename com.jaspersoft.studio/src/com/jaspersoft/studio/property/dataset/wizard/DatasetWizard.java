@@ -29,9 +29,12 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IFileEditorInput;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
 
@@ -56,7 +59,9 @@ public class DatasetWizard extends Wizard {
 		addPage(step1);
 		step1.setDataSet(dataset);
 
-		step2 = new WizardDataSourcePage();
+		IFile file = getCurrentFile();
+
+		step2 = new WizardDataSourcePage(file);
 		addPage(step2);
 
 		step3 = new WizardFieldsPage();
@@ -64,6 +69,12 @@ public class DatasetWizard extends Wizard {
 
 		step4 = new WizardFieldsGroupByPage();
 		addPage(step4);
+	}
+
+	private IFile getCurrentFile() {
+		IFile file = ((IFileEditorInput) JaspersoftStudioPlugin.getInstance().getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage().getActiveEditor().getEditorInput()).getFile();
+		return file;
 	}
 
 	@Override

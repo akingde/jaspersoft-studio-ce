@@ -104,7 +104,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		step1.setFileName("NEW_REPORT.jrxml");//$NON-NLS-1$
 		addPage(step1);
 
-		step2 = new WizardDataSourcePage();
+		step2 = new WizardDataSourcePage(null);
 		addPage(step2);
 
 		step3 = new WizardFieldsPage();
@@ -118,7 +118,10 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == step0)
 			step1.validatePage();
-
+		if (page == step2) {
+			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
+			step2.setFile(r.getProject().getFile(step1.getContainerFullPath() + "/" + step1.getFileName()));
+		}
 		if (page == step3) {
 			try {
 				JRDesignDataset dataset = step2.getDataset();

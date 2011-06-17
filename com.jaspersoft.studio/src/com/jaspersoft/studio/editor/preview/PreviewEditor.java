@@ -29,7 +29,6 @@ import java.util.Map;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -161,9 +160,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 				try {
 					IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 
-					Thread.currentThread().setContextClassLoader(
-							ClassLoaderUtil.getClassLoader4Project(monitor, file.getProject()));
-					SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
+					SimpleFileResolver fileResolver = SelectionHelper.setClassLoader(file, monitor);
 
 					DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
 					dataAdapterService = DataAdapterServiceUtil.getDataAdapterService(dataAdapterDesc.getDataAdapter());

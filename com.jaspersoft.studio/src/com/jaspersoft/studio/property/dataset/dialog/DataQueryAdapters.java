@@ -8,6 +8,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -41,13 +42,16 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class DataQueryAdapters {
 	private JRDesignDataset newdataset;
 	private Color background;
+	private IFile file;
 
-	public DataQueryAdapters(Composite parent, JRDesignDataset newdataset, Color background) {
+	public DataQueryAdapters(Composite parent, JRDesignDataset newdataset, Color background, IFile file) {
+		this.file = file;
 		createToolbar(parent);
 		this.newdataset = newdataset;
 		if (background != null)
@@ -72,6 +76,10 @@ public abstract class DataQueryAdapters {
 
 	public Composite getQueryControl() {
 		return tabFolder;
+	}
+
+	public void setFile(IFile file) {
+		this.file = file;
 	}
 
 	public void createTop(Composite parent, IFieldSetter fsetter) {
@@ -194,6 +202,8 @@ public abstract class DataQueryAdapters {
 					Job job = new Job(Messages.DataQueryAdapters_jobname) {
 						protected IStatus run(IProgressMonitor monitor) {
 							try {
+								SelectionHelper.setClassLoader(file, monitor);
+
 								JRDesignQuery jdq = new JRDesignQuery();
 								jdq.setLanguage(lang);
 								jdq.setText(query);

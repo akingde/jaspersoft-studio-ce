@@ -78,7 +78,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		background = body.getBackground();
 
-		dataquery = new DataQueryAdapters(mform.getForm().getBody(), newdataset, background) {
+		dataquery = new DataQueryAdapters(mform.getForm().getBody(), newdataset, background, file) {
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {

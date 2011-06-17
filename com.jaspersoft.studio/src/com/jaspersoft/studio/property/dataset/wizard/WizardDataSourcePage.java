@@ -45,6 +45,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -63,11 +64,15 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		return dataset;
 	}
 
-	public WizardDataSourcePage() {
+	private IFile file;
+	private DataQueryAdapters dataquery;
+
+	public WizardDataSourcePage(IFile file) {
 		super("datasourcepage"); //$NON-NLS-1$
 		setTitle(Messages.WizardDataSourcePage_datasource);
 		setImageDescriptor(MDatasources.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDataSourcePage_description);
+		this.file = file;
 	}
 
 	public void createControl(Composite parent) {
@@ -80,11 +85,11 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		query.setLanguage("SQL");
 		dataset.setQuery(query);
 
-		DataQueryAdapters dataquery = new DataQueryAdapters(composite, dataset, composite.getBackground()) {
+		dataquery = new DataQueryAdapters(composite, dataset, composite.getBackground(), file) {
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {
-				setFields(fields);
+				WizardDataSourcePage.this.setFields(fields);
 			}
 		};
 
@@ -94,9 +99,16 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
+	public void setFile(IFile file) {
+		this.file = file;
+		dataquery.setFile(file);
+
+	}
+
 	public void setFields(List<JRDesignField> fields) {
 		// DatasetDialog.this.setFields(fields);
 		dataset.getFieldsList().clear();
+		dataset.getFieldsMap().clear();
 		for (JRDesignField field : fields)
 			try {
 				dataset.addField(field);

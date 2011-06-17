@@ -20,7 +20,12 @@
 
 package com.jaspersoft.studio.utils;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+
 import org.eclipse.core.commands.operations.OperationStatus;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -35,12 +40,20 @@ public class UIUtils {
 			public void run() {
 
 				IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(),
-						OperationStatus.NOTHING_TO_REDO, t.getLocalizedMessage(), t);
-				ErrorDialog.openError(Display.getDefault().getActiveShell(), "Exception",
-						"Exception, if you want to see more information look into details", status);
+						OperationStatus.NOTHING_TO_REDO, t.getMessage(), t);
+				new ExceptionDetailsErrorDialog(Display.getDefault().getActiveShell(), "Exception",
+						"Exception, if you want to see more information look into details", status, IStatus.OK | IStatus.INFO
+								| IStatus.WARNING | IStatus.ERROR).open();
 			}
 		});
 		t.printStackTrace();
+	}
+
+	public static String getStackTrace(Throwable aThrowable) {
+		final Writer result = new StringWriter();
+		final PrintWriter printWriter = new PrintWriter(result);
+		aThrowable.printStackTrace(printWriter);
+		return result.toString();
 	}
 
 	/**
