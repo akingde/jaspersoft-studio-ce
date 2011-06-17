@@ -30,7 +30,7 @@ import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.jaspersoft.studio.data.Activator;
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
@@ -50,7 +50,7 @@ public class EmptyDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/EmptyDataAdapterIcon-16.gif");
+		return AbstractUIPlugin.imageDescriptorFromPlugin(JaspersoftStudioPlugin.getUniqueIdentifier(), "icons/EmptyDataAdapterIcon-16.gif");
 	}
 
 	@Override

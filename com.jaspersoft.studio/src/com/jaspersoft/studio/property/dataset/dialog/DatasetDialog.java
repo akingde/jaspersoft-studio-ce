@@ -62,6 +62,12 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		newdataset = (JRDesignDataset) ((JRDesignDataset) mdataset.getValue()).clone();
 	}
 
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(Messages.DatasetDialog_title);
+	}
+
 	public boolean close() {
 		createCommand();
 		return super.close();

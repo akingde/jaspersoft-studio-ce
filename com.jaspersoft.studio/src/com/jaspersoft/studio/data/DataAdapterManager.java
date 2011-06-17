@@ -31,6 +31,7 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.XmlUtil;
+import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
@@ -44,6 +45,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
+import com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory;
 import com.jaspersoft.studio.repository.RepositoryManager;
 /*
  * The main plugin class to be used in the desktop.
@@ -269,7 +272,14 @@ public class DataAdapterManager {
 					dataAdapters.add(dataAdapterDescriptor);
 				}
 			}
-			
+			if(dataAdapters.isEmpty()){
+				EmptyDataAdapterFactory edaf = new EmptyDataAdapterFactory();
+				EmptyDataAdapterDescriptor edad = edaf.createDataAdapter();
+				EmptyDataAdapterImpl dataAdapter = new EmptyDataAdapterImpl();
+				dataAdapter.setName("Empty100");
+				dataAdapter.setRecordCount(100);
+				edad.setDataAdapter(dataAdapter);
+			}
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
