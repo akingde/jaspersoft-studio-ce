@@ -54,8 +54,6 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 
 	public DatasetDialog(Shell shell, MDataset mdataset, MReport mreport, IFile file) {
 		super(shell);
-		super.configureShell(shell);
-		shell.setText(Messages.DatasetDialog_title);
 		this.mdataset = mdataset;
 		this.mreport = mreport;
 		this.file = file;

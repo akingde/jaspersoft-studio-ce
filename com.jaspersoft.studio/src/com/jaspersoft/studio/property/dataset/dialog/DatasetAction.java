@@ -32,7 +32,6 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.editor.outline.ATreeEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
 
@@ -65,26 +64,30 @@ public class DatasetAction extends SelectionAction {
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
 	public void run() {
-		ReportEditor part = (ReportEditor) getWorkbenchPart();
-		MReport mreport = (MReport) part.getModel().getChildren().get(0);
-		MDataset mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
-		IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
+		try {
+			ReportEditor part = (ReportEditor) getWorkbenchPart();
+			MReport mreport = (MReport) part.getModel().getChildren().get(0);
+			MDataset mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
+			IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
 
-		IContentOutlinePage cop = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
-		if (cop != null) {
-			IStructuredSelection sel = (IStructuredSelection) cop.getSelection();
-			if (sel.getFirstElement() instanceof ATreeEditPart) {
-				Object obj = ((ATreeEditPart) sel.getFirstElement()).getModel();
-				if (obj instanceof MDataset)
-					mdataset = (MDataset) obj;
+			IContentOutlinePage cop = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
+			if (cop != null) {
+				IStructuredSelection sel = (IStructuredSelection) cop.getSelection();
+				if (sel.getFirstElement() instanceof ATreeEditPart) {
+					Object obj = ((ATreeEditPart) sel.getFirstElement()).getModel();
+					if (obj instanceof MDataset)
+						mdataset = (MDataset) obj;
+				}
 			}
-		}
 
-		part.getAdapter(String.class);
+			part.getAdapter(String.class);
 
-		DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mreport, file);
-		if (dlg.open() == Window.OK) {
-			part.getEditDomain().getCommandStack().execute(dlg.getCommand());
+			DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mreport, file);
+			if (dlg.open() == Window.OK) {
+				part.getEditDomain().getCommandStack().execute(dlg.getCommand());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

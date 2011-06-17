@@ -683,12 +683,25 @@ Public License instead of this License.  But first, please read
    </url>
 
    <requires>
-      <import plugin="org.eclipse.datatools.sqltools.sqlbuilder"/>
-      <import plugin="org.eclipse.datatools.sqltools.sql"/>
-      <import plugin="org.eclipse.datatools.sqltools.sql.ui"/>
-      <import plugin="org.eclipse.datatools.sqltools.sqleditor"/>
-      <import plugin="org.eclipse.datatools.sqltools.editor.core"/>
-      <import plugin="org.eclipse.datatools.sqltools.editor.core.ui"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.ui.ide" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.views" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.views.properties.tabbed" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.cheatsheets"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.filesystem"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.ui" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.gef" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help.ui" version="3.4.1" match="greaterOrEqual"/>
+      <import plugin="javax.servlet"/>
+      <import plugin="net.sf.jasperreports" version="0.2.5" match="greaterOrEqual"/>
+      <import plugin="com.jaspersoft.studio" version="0.2.5" match="greaterOrEqual"/>
+      <import feature="org.eclipse.datatools.sqldevtools.feature" version="1.0.0"/>
+      <import feature="org.eclipse.datatools.sqltools.doc.user" version="1.0.0"/>
    </requires>
 
    <plugin

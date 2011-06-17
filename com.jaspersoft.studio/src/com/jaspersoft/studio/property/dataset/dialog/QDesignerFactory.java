@@ -42,7 +42,13 @@ public class QDesignerFactory {
 		IQueryDesigner iqd = classmap.get(qd.getClass());
 		if (iqd == null) {
 			iqd = qd;
-			iqd.createControl(parent);
+			try {
+
+				iqd.createControl(parent);
+			} catch (Exception e) {
+				e.printStackTrace();
+				addDesigner(lang, new QueryDesigner());
+			}
 			classmap.put(qd.getClass(), iqd);
 		}
 		languageMap.put(lang, iqd);

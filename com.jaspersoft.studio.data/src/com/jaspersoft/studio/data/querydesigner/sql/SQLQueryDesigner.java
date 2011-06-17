@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -79,11 +80,16 @@ public class SQLQueryDesigner extends QueryDesigner {
 			// sqlbuilder.setInput(new SQLBuilderEditorInput(cp,
 			// StatementHelper.STATEMENT_TYPE_SELECT));
 			// sqlbuilder.createClient(composite);
+			IWorkbenchPage activePage = JaspersoftStudioPlugin.getInstance()
+					.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			sqleditor = new SQLEditor();
-			sqleditor.init((IEditorSite) JaspersoftStudioPlugin.getInstance()
-					.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.getActiveEditor().getSite(), createSQLEditorInput(""));
-
+			if (activePage != null && activePage.getActiveEditor() != null)
+				sqleditor.init((IEditorSite) activePage.getActiveEditor()
+						.getSite(), createSQLEditorInput(""));
+			else {
+				// sqleditor.
+				// sqleditor.init(null, createSQLEditorInput(""));
+			}
 			// editor.setInput(new SQLBuilderEditorInput(cp,
 			// StatementHelper.STATEMENT_TYPE_SELECT));
 			sqleditor.createPartControl(composite);
