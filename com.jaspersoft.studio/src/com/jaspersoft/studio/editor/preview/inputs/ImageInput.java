@@ -66,7 +66,7 @@ public class ImageInput implements IDataInput {
 	public boolean createInput(Composite parent, final JRDesignParameter param, Class<?> valueClass,
 			final Map<String, Object> params) {
 		if (isForType(valueClass)) {
-			final Button txt = new Button(parent, SWT.BORDER);
+			final Button txt = new Button(parent, SWT.NONE);
 			txt.setText(Messages.ImageInput_selectimage);
 			txt.setToolTipText(param.getDescription());
 			txt.setAlignment(SWT.LEFT);
