@@ -157,7 +157,13 @@ public abstract class DataQueryAdapters {
 	}
 
 	private void createToolbar(Composite parent) {
-		ToolBar tb = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
+		Composite comp = new Composite(parent, SWT.NONE);
+		comp.setLayout(new GridLayout(2, false));
+
+		Label lbl = new Label(comp, SWT.NONE);
+		lbl.setText(Messages.DataQueryAdapters_actionname);
+
+		ToolBar tb = new ToolBar(comp, SWT.FLAT | SWT.RIGHT);
 		tb.setBackground(parent.getBackground());
 		// tb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ToolBarManager manager = new ToolBarManager(tb);
@@ -222,10 +228,6 @@ public abstract class DataQueryAdapters {
 		};
 		gFields.setEnabled(false);
 
-		Action alabel = new Action(Messages.DataQueryAdapters_actionname) {
-		};
-		alabel.setEnabled(false);
-		manager.add(alabel);
 		manager.add(dscombo);
 		manager.add(gFields);
 
