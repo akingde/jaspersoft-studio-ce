@@ -335,7 +335,10 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 			int index = combo.getSelectionIndex() - 1;
 			if (index < 0 || index >= dataAdapters.size())
 				index = 0;
-			selectedDA = dataAdapters.get(index);
+			if (dataAdapters.size() != 0) {
+				selectedDA = dataAdapters.get(index);
+				selectCombo(index + 1);
+			}
 		}
 		return selectedDA;
 	}
