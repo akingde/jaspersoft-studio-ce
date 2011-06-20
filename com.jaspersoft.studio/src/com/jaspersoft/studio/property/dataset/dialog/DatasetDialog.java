@@ -66,11 +66,13 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		newShell.setText(Messages.DatasetDialog_title);
 	}
 
+	@Override
 	public boolean close() {
 		createCommand();
 		return super.close();
 	}
 
+	@Override
 	protected void createFormContent(final IManagedForm mform) {
 		FormToolkit toolkit = mform.getToolkit();
 		Composite body = mform.getForm().getBody();

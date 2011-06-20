@@ -26,6 +26,7 @@ public class QDesignerFactory {
 				IQueryDesigner qd = (IQueryDesigner) e.createExecutableExtension("QueryDesignerClass"); //$NON-NLS-1$
 				addDesigner(lang, qd);
 			} catch (CoreException ex) {
+				ex.printStackTrace();
 				System.out.println(ex.getMessage());
 			}
 		}

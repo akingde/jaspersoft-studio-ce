@@ -65,7 +65,7 @@ public class DatasetAction extends SelectionAction {
 	 */
 	public void run() {
 		try {
-			ReportEditor part = (ReportEditor) getWorkbenchPart();
+			final ReportEditor part = (ReportEditor) getWorkbenchPart();
 			MReport mreport = (MReport) part.getModel().getChildren().get(0);
 			MDataset mdataset = (MDataset) mreport.getPropertyValue(JasperDesign.PROPERTY_MAIN_DATASET);
 			IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
@@ -82,9 +82,15 @@ public class DatasetAction extends SelectionAction {
 
 			part.getAdapter(String.class);
 
-			DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mreport, file);
+			final DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mreport, file);
 			if (dlg.open() == Window.OK) {
-				part.getEditDomain().getCommandStack().execute(dlg.getCommand());
+				Display.getCurrent().asyncExec(new Runnable() {
+
+					public void run() {
+						part.getEditDomain().getCommandStack().execute(dlg.getCommand());
+					}
+				});
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
