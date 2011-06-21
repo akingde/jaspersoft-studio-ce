@@ -40,12 +40,13 @@
       <product
             application="com.jaspersoft.studio.rcp.application"
             name="Jaspersoft Studio">
-         <property
-               name="appName"
-               value="Jaspersoft Studio">
-         </property>
-         <property name="preferenceCustomization" value="plugin_customization.ini">   
-	</property>
+         <property name="appName" value="Jaspersoft Studio"/>
+         <property name="preferenceCustomization" value="plugin_customization.ini" />   
+         <property name="windowImages" value="icons/alt_window_16.gif,icons/alt_window_32.gif"/>
+         <property name="aboutImage" value="icons/studio_logo_about.png"/> 
+         <property name="aboutText" value="The about dialog text can contain links such as http://www.eclipse.org."/>
+         
+         
          
       </product>
    </extension>

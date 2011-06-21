@@ -32,6 +32,7 @@ fdsafjkajfda
       </win>
    </launcher>
 
+   <intro introId="com.jaspersoft.studio.rcp.intro"/>
 
    <vm>
    </vm>
@@ -166,11 +167,7 @@ fdsafjkajfda
       <plugin id="org.eclipse.ui.views.properties.tabbed"/>
       <plugin id="org.eclipse.ui.workbench"/>
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
-      <plugin id="org.eclipse.wb.jdt.fragment" fragment="true"/>
    </plugins>
 
-   <configurations>
-      <plugin id="com.jaspersoft.studio.rcp" autoStart="true" startLevel="0" />
-   </configurations>
 
 </product>
