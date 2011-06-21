@@ -42,7 +42,7 @@ Special thanks to all people who support this software.
    <vm>
    </vm>
 
-   <plugins>
+      <plugins>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.jaspersoft.studio"/>
       <plugin id="com.jaspersoft.studio.barcode"/>
@@ -221,6 +221,7 @@ Special thanks to all people who support this software.
       <plugin id="org.eclipse.ui.workbench"/>
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
    </plugins>
+
 
 
 </product>
