@@ -35,7 +35,7 @@
       </application>
    </extension>
    <extension
-         id="product"
+         id="com.jaspersoft.studio.rcp.product"
          point="org.eclipse.core.runtime.products">
       <product
             application="com.jaspersoft.studio.rcp.application"
@@ -44,6 +44,9 @@
                name="appName"
                value="Jaspersoft Studio">
          </property>
+         <property name="preferenceCustomization" value="plugin_customization.ini">   
+	</property>
+         
       </product>
    </extension>
    <extension
