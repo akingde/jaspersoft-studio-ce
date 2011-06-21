@@ -29,19 +29,24 @@ import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.ide.IDE;
 
+import com.jaspersoft.studio.ReportDesignPerspective;
+
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
-    public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
+    @Override
+	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         return new ApplicationWorkbenchWindowAdvisor(configurer);
     }
     
-    public void initialize(IWorkbenchConfigurer configurer) {
+    @Override
+	public void initialize(IWorkbenchConfigurer configurer) {
         super.initialize(configurer);
         configurer.setSaveAndRestore(true);
     }
 
+	@Override
 	public String getInitialWindowPerspectiveId() {
-		return "com.jaspersoft.studio.ReportDesignPerspective";//FIXME export this from studio plugin? //$NON-NLS-1$
+		return ReportDesignPerspective.ID;//FIXME export this from studio plugin? 
 	}
 	
 	@Override

@@ -77,5 +77,26 @@
       <startup
             class="com.jaspersoft.studio.rcp.Startup"></startup>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.jaspersoft.studio.ReportDesignPerspective"
+            icon="icons/jr_icon.png"
+            id="com.jaspersoft.studio.ReportDesignPerspective"
+            name="Report Design">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="com.jaspersoft.studio.ReportDesignPerspective">
+         <newWizardShortcut
+               id="com.jaspersoft.studio.wizards.ReportNewWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.jaspersoft.studio.wizards.StyleTemplateNewWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+   </extension>
 
 </plugin>

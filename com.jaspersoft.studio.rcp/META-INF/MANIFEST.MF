@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Jaspersoft Open Studio
+Bundle-Name: Jaspersoft Studio
 Bundle-SymbolicName: com.jaspersoft.studio.rcp; singleton:=true
 Bundle-Version: 0.0.1
 Bundle-Activator: com.jaspersoft.studio.rcp.Activator
@@ -13,14 +13,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.launching;bundle-version="3.5.1",
  org.eclipse.ui.ide;bundle-version="3.5.2",
  net.sf.jasperreports;bundle-version="0.2.5",
- com.jaspersoft.studio;bundle-version="0.2.4",
- com.jaspersoft.studio.barcode;bundle-version="0.2.4",
- com.jaspersoft.studio.chart;bundle-version="0.2.4",
- com.jaspersoft.studio.crosstab;bundle-version="0.2.4",
- com.jaspersoft.studio.data;bundle-version="0.2.4",
- com.jaspersoft.studio.doc;bundle-version="0.2.4",
- com.jaspersoft.studio.html;bundle-version="0.2.4",
- com.jaspersoft.studio.list;bundle-version="0.2.4",
- com.jaspersoft.studio.table;bundle-version="0.2.4",
- org.eclipse.equinox.launcher
+ com.jaspersoft.studio;bundle-version="0.2.5",
+ com.jaspersoft.studio.barcode;bundle-version="0.2.5",
+ com.jaspersoft.studio.chart;bundle-version="0.2.5",
+ com.jaspersoft.studio.crosstab;bundle-version="0.2.5",
+ com.jaspersoft.studio.data;bundle-version="0.2.5",
+ com.jaspersoft.studio.doc;bundle-version="0.2.5",
+ com.jaspersoft.studio.html;bundle-version="0.2.5",
+ com.jaspersoft.studio.list;bundle-version="0.2.5",
+ com.jaspersoft.studio.table;bundle-version="0.2.5",
+ org.eclipse.equinox.launcher,
+ org.eclipse.core.expressions;bundle-version="3.4.200"
 Bundle-ActivationPolicy: lazy

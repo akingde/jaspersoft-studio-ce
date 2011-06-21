@@ -51,6 +51,7 @@ public class ReportDesignPerspective implements IPerspectiveFactory {
 	public static final String ID = "com.jaspersoft.studio.ReportDesignPerspective"; //$NON-NLS-1$
 
 	public void createInitialLayout(IPageLayout layout) {
+
 	}
 
 }

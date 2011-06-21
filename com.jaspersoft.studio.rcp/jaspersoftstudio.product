@@ -3,6 +3,13 @@
 
 <product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
+   <aboutInfo>
+      <image path="/com.jaspersoft.studio.rcp/icons/studio_logo.png"/>
+      <text>
+         fsdafa
+      </text>
+   </aboutInfo>
+
    <configIni use="default">
    </configIni>
 
@@ -18,6 +25,7 @@
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
@@ -107,6 +115,8 @@
       <plugin id="org.eclipse.emf.edit.ui"/>
       <plugin id="org.eclipse.equinox.app"/>
       <plugin id="org.eclipse.equinox.common"/>
+      <plugin id="org.eclipse.equinox.launcher"/>
+      <plugin id="org.eclipse.equinox.launcher.gtk.linux.x86" fragment="true"/>
       <plugin id="org.eclipse.equinox.p2.core"/>
       <plugin id="org.eclipse.equinox.p2.engine"/>
       <plugin id="org.eclipse.equinox.p2.metadata"/>
@@ -175,6 +185,7 @@
       <plugin id="org.eclipse.ui.win32" fragment="true"/>
       <plugin id="org.eclipse.ui.workbench"/>
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
+      <plugin id="org.eclipse.wb.jdt.fragment" fragment="true"/>
    </plugins>
 
 

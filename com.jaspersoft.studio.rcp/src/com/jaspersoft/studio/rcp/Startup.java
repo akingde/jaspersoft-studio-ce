@@ -45,7 +45,6 @@ import com.jaspersoft.studio.rcp.messages.Messages;
  */
 public class Startup implements IStartup {
 
-	@Override
 	public void earlyStartup() {
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("JSS_PROJECT"); //$NON-NLS-1$
 		try

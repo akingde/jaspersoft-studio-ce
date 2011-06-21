@@ -101,6 +101,7 @@
          <view
                id="com.jaspersoft.studio.Repository"
                minimized="false"
+               ratio="0.5"
                relationship="left"
                relative="org.eclipse.ui.editorss">
          </view>
@@ -125,8 +126,17 @@
                relative="org.eclipse.ui.views.ProblemView">
          </view>
          <hiddenMenuItem
+               id="org.eclipse.ui.run">
+         </hiddenMenuItem>
+         <hiddenMenuItem
                id="org.eclipse.search.menu">
          </hiddenMenuItem>
+         <newWizardShortcut
+               id="com.jaspersoft.studio.wizards.ReportNewWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.jaspersoft.studio.wizards.StyleTemplateNewWizard">
+         </newWizardShortcut>
       </perspectiveExtension>
    </extension>
    <extension
