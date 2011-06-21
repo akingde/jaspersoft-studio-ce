@@ -4,10 +4,15 @@
 <product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/com.jaspersoft.studio.rcp/content/titlebanner.gif"/>
+      <image path="/com.jaspersoft.studio.rcp/icons/studio_logo_about.png"/>
       <text>
-         fsdafa
-fdsafjkajfda
+         Jaspersoft Studio - Visual Designer for JasperReports. 
+Copyright (C) 2010 - 2011 Jaspersoft Corporation. All rights reserved. 
+
+For more information, please visit 
+http://jasperforge.org/projects/jaspersoftstudio  
+
+Special thanks to all people who support this software.
       </text>
    </aboutInfo>
 
@@ -22,7 +27,7 @@ fdsafjkajfda
 
    <splash
       location="com.jaspersoft.studio.rcp"
-      startupProgressRect="5,482,445,15"
+      startupProgressRect="5,272,445,15"
       startupMessageRect="7,252,445,20"
       startupForegroundColor="000000" />
    <launcher name="Jaspersoft Studio">

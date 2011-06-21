@@ -34,22 +34,7 @@
          </run>
       </application>
    </extension>
-   <extension
-         id="com.jaspersoft.studio.rcp.product"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="com.jaspersoft.studio.rcp.application"
-            name="Jaspersoft Studio">
-         <property name="appName" value="Jaspersoft Studio"/>
-         <property name="preferenceCustomization" value="plugin_customization.ini" />   
-         <property name="windowImages" value="icons/alt_window_16.gif,icons/alt_window_32.gif"/>
-         <property name="aboutImage" value="icons/studio_logo_about.png"/> 
-         <property name="aboutText" value="The about dialog text can contain links such as http://www.eclipse.org."/>
-         
-         
-         
-      </product>
-   </extension>
+   
    <extension
          point="org.eclipse.ui.intro">
       <intro
@@ -101,6 +86,46 @@
                id="com.jaspersoft.studio.wizards.StyleTemplateNewWizard">
          </newWizardShortcut>
       </perspectiveExtension>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.jaspersoft.studio.rcp.application"
+            name="Jaspersoft Studio">
+         <property
+               name="windowImages"
+               value="icons/jr_icon.png">
+         </property>
+         <property
+               name="aboutText"
+               value="Jaspersoft Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2010 - 2011 Jaspersoft Corporation. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://jasperforge.org/projects/jaspersoftstudio  &#x0A;&#x0A;Special thanks to all people who support this software.">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/studio_logo_about.png">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="000000">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="5,272,445,15">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="7,252,445,20">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="appName"
+               value="Jaspersoft Studio">
+         </property>
+      </product>
    </extension>
 
 </plugin>
