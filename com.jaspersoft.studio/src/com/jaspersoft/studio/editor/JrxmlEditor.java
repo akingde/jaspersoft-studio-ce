@@ -74,7 +74,6 @@ import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
-import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
@@ -86,7 +85,6 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 /*
@@ -204,6 +202,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	void createPage2() {
 		previewEditor = new PreviewEditor() {
+			@Override
 			public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
 				if (myDataAdapterDesc != null) {
 					getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
@@ -232,6 +231,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	/**
 	 * Creates the pages of the multi-page editor.
 	 */
+	@Override
 	protected void createPages() {
 		createPage0();
 		createPage1();
@@ -275,6 +275,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * The <code>MultiPageEditorPart</code> implementation of this <code>IWorkbenchPart</code> method disposes all nested
 	 * editors. Subclasses may extend.
 	 */
+	@Override
 	public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		setModel(null);
@@ -287,14 +288,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @param monitor
 	 *          the monitor
 	 */
+	@Override
 	public void doSave(IProgressMonitor monitor) {
 		IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
 		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor || !modelFresh) {
-			String version = p.getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, "last");
-			if (p.getBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, false)) {
-				VersionDialog dialog = new VersionDialog(Display.getCurrent().getActiveShell(), version);
-				version = dialog.open(resource.getProject());
-			}
+			String version = JRXmlWriterHelper.getVersion(resource, p, true);
 			model2xml(version);
 		} else {
 			try { // just go thru the model, to look what happend with our markers
@@ -323,6 +321,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Saves the multi-page editor's document as another file. Also updates the text for page 0's tab, and updates this
 	 * multi-page editor's input to correspond to the nested editor's.
 	 */
+	@Override
 	public void doSaveAs() {
 		SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
 		saveAsDialog.open();
@@ -352,6 +351,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @throws PartInitException
 	 *           the part init exception
 	 */
+	@Override
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		// FIXME: THIS IS NOT THE RIGHT PLACE TO LOAD MODEL, WE SHOULD LOAD FROM
 		// TEXT EDITOR TO AVOID 2 TIME READING THE FILE
@@ -497,6 +497,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	/*
 	 * (non-Javadoc) Method declared on IEditorPart.
 	 */
+	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
@@ -515,6 +516,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @param newPageIndex
 	 *          the new page index
 	 */
+	@Override
 	protected void pageChange(int newPageIndex) {
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR || newPageIndex == PAGE_PREVIEW) {
 			switch (newPageIndex) {

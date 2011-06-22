@@ -30,7 +30,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRImage;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -65,6 +64,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
@@ -72,6 +72,7 @@ import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class ReportNewWizard extends Wizard implements INewWizard {
 	private ReportTemplatesWizardPage step0;
@@ -93,6 +94,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 	 * Adding the page to the wizard.
 	 */
 
+	@Override
 	public void addPages() {
 		step0 = new ReportTemplatesWizardPage();
 		addPage(step0);
@@ -265,8 +267,15 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 
 		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step2, step3, step4);
 
-		String contents = JasperCompileManager.writeReportToXml(jd);
-		return new ByteArrayInputStream(contents.getBytes());
+		String contents;
+		try {
+			contents = JRXmlWriterHelper.writeReport(jd, reportFile, false);
+			return new ByteArrayInputStream(contents.getBytes());
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		}
+		// String contents = JasperCompileManager.writeReportToXml(jd);
+		return null;
 	}
 
 	private void copyTemplateResources(final IProgressMonitor monitor, final JasperDesign jd, final IFile repFile)

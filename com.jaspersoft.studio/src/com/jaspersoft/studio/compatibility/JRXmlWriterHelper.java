@@ -29,6 +29,12 @@ import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.swt.widgets.Display;
+
+import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
+import com.jaspersoft.studio.preferences.StudioPreferencePage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 /*
  * 
@@ -36,7 +42,7 @@ import org.eclipse.core.resources.IFile;
  */
 public class JRXmlWriterHelper {
 
-	private static final Map<String, Class> writers = new HashMap<String, Class>();
+	private static final Map<String, Class<? extends JRXmlWriter>> writers = new HashMap<String, Class<? extends JRXmlWriter>>();
 
 	static {
 		writers.put("4_0_1", JRXmlWriter_4_0_1.class);
@@ -75,13 +81,29 @@ public class JRXmlWriterHelper {
 		return r;
 	}
 
+	public static String writeReport(JRReport report, IFile file, boolean showDialog) throws Exception {
+
+		return JRXmlWriterHelper.writeReport(report, file, file.getCharset(true),
+				getVersion(file, new PropertiesHelper(file.getProject()), showDialog));
+	}
+
 	public static String writeReport(JRReport report, IFile file, String encoding, String version) throws Exception {
 		if (writers.containsKey(version)) {
-			Class clazz = writers.get(version);
-			return (String) clazz.getMethod("writeReport", new Class[] { JRReport.class, String.class }).invoke(null,
-					new Object[] { report, encoding });
+			Class<? extends JRXmlWriter> clazz = writers.get(version);
+			if (clazz != null)
+				return (String) clazz.getMethod("writeReport", new Class[] { JRReport.class, String.class }).invoke(null,
+						new Object[] { report, encoding });
 		}
 		return JRXmlWriter.writeReport(report, encoding);
+	}
+
+	public static String getVersion(IResource resource, PropertiesHelper ph, boolean showDialog) {
+		String version = ph.getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, "last");
+		if (showDialog && ph.getBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, false)) {
+			VersionDialog dialog = new VersionDialog(Display.getDefault().getActiveShell(), version);
+			version = dialog.open(resource.getProject());
+		}
+		return version;
 	}
 
 }
