@@ -120,6 +120,7 @@ public class CreateListCommand extends CreateElementCommand {
 	/**
 	 * Creates the object.
 	 */
+	@Override
 	protected void createObject() {
 		if (jrElement == null) {
 			ListWizard wizard = new ListWizard();

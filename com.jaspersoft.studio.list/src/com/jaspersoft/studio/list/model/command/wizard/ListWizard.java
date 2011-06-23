@@ -66,22 +66,25 @@ public class ListWizard extends Wizard {
 		this.list = new MList();
 		list.setValue(list.createJRElement(jasperDesign));
 
-		MDatasetRun mdataset = (MDatasetRun) list.getPropertyValue(MList.PREFIX + "DATASET_RUN");//$NON-NLS-1$
-		if (mdataset == null)
-			mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
+		MDatasetRun mdatasetrun = (MDatasetRun) list
+				.getPropertyValue(MList.PREFIX + "DATASET_RUN");//$NON-NLS-1$
+		if (mdatasetrun == null)
+			mdatasetrun = new MDatasetRun(new JRDesignDatasetRun(),
+					jasperDesign);
 
 		step1 = new WizardDatasetPage(jasperDesign, false);
 		addPage(step1);
-		step1.setDataSetRun(mdataset);
+		step1.setDataSetRun(mdatasetrun);
 
 		step2 = new WizardConnectionPage();
 		addPage(step2);
-		step2.setDataSetRun(mdataset);
+		step2.setDataSetRun(mdatasetrun);
 	}
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		Object dsname = step1.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+		Object dsname = step1.getDataSetRun().getPropertyValue(
+				JRDesignDatasetRun.PROPERTY_DATASET_NAME);
 		if (page == step1 && (dsname == null || dsname.equals(""))) //$NON-NLS-1$
 			page = step2;
 		return super.getNextPage(page);
