@@ -80,7 +80,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 					createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupFooter) n).getJrGroup());
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
 				} else if (btype.equals(BandTypeEnum.SUMMARY)) {
-					createVariable(tag, ResetTypeEnum.PAGE, null);
+					createVariable(tag, ResetTypeEnum.REPORT, null);
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
 				} else if (btype.equals(BandTypeEnum.PAGE_FOOTER)) {
 					createVariable(tag, ResetTypeEnum.PAGE, null);
