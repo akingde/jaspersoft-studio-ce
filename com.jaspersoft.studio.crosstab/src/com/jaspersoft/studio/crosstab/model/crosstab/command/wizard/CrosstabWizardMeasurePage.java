@@ -104,10 +104,12 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 		setDescription(Messages.CrosstabWizardMeasurePage_description);
 	}
 
+	@Override
 	protected void setLabelProvider(TableViewer tableViewer) {
 		tableViewer.setLabelProvider(new TLabelProvider());
 	}
 
+	@Override
 	protected void createColumns() {
 		TableColumn[] col = new TableColumn[2];
 		col[0] = new TableColumn(rightTable, SWT.NONE);
@@ -124,6 +126,7 @@ public class CrosstabWizardMeasurePage extends WizardFieldsPage {
 		rightTable.setLayout(tlayout);
 	}
 
+	@Override
 	protected void attachCellEditors(final TableViewer viewer, Composite parent) {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {

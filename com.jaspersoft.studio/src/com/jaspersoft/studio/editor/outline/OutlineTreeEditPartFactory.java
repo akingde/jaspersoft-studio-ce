@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.outline;
 
@@ -123,7 +119,9 @@ import com.jaspersoft.studio.model.style.command.ReorderStyleTemplateCommand;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.model.subreport.command.CreateSubreportCommand;
 import com.jaspersoft.studio.model.textfield.MPageXofY;
+import com.jaspersoft.studio.model.textfield.MPercentage;
 import com.jaspersoft.studio.model.textfield.command.CreatePageXofYCommand;
+import com.jaspersoft.studio.model.textfield.command.CreatePercentageCommand;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.model.variable.MVariables;
@@ -131,6 +129,7 @@ import com.jaspersoft.studio.model.variable.command.CreateVariableCommand;
 import com.jaspersoft.studio.model.variable.command.DeleteVariableCommand;
 import com.jaspersoft.studio.model.variable.command.ReorderVariableCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
+
 /*
  * A factory for creating OutlineTreeEditPart objects.
  */
@@ -401,6 +400,15 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				return new CreatePageXofYCommand((MFrame) parent, (MPageXofY) child, newIndex);
 			if (parent instanceof MReport)
 				return new CreatePageXofYCommand(parent, (MPageXofY) child, location, newIndex);
+		} else if (child instanceof MPercentage) {
+			if (parent instanceof MElementGroup)
+				return new CreatePercentageCommand((MElementGroup) parent, (MPercentage) child, newIndex);
+			if (parent instanceof MBand)
+				return new CreatePercentageCommand((MBand) parent, (MPercentage) child, newIndex);
+			if (parent instanceof MFrame)
+				return new CreatePercentageCommand((MFrame) parent, (MPercentage) child, newIndex);
+			if (parent instanceof MReport)
+				return new CreatePercentageCommand(parent, (MPercentage) child, location, newIndex);
 		} else if (child instanceof MSubreport) {
 			if (parent instanceof MElementGroup)
 				return new CreateSubreportCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);

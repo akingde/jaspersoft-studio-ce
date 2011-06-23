@@ -119,7 +119,6 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 
 					JRDesignExpression jre = new JRDesignExpression();
 					jre.setText(tag.txt.replaceAll("%", tag.name));
-					jre.setValueClassName(tag.classname);
 					jrVariable.setExpression(jre);
 
 					tag.name = jrVariable.getName();
@@ -144,7 +143,6 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 		srcNode.setValue(tf);
 
 		JRDesignExpression jre = new JRDesignExpression();
-		jre.setValueClassName(classExp);
 		jre.setText(txtExp);
 		tf.setExpression(jre);
 	}

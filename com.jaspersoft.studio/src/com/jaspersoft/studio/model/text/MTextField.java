@@ -26,7 +26,6 @@ import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.base.JRBaseTextField;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -111,6 +110,7 @@ public class MTextField extends MTextElement {
 		defaultsMap = defaultsMap1;
 	}
 
+	@Override
 	protected void setGroupItems(String[] items) {
 		super.setGroupItems(items);
 		if (evalGroupD != null)
@@ -125,6 +125,7 @@ public class MTextField extends MTextElement {
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
@@ -315,7 +316,7 @@ public class MTextField extends MTextElement {
 	 * @see com.jaspersoft.studio.model.MGeneric#createJRElement(net.sf.jasperreports.engine.design.JasperDesign)
 	 */
 	@Override
-	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
+	public JRDesignTextField createJRElement(JasperDesign jasperDesign) {
 		return new JRDesignTextField();
 	}
 

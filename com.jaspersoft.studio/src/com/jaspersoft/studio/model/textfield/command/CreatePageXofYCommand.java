@@ -1,34 +1,31 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.textfield.command;
 
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
-import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -42,6 +39,8 @@ import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.textfield.MPageNumber;
 import com.jaspersoft.studio.model.textfield.MPageXofY;
 import com.jaspersoft.studio.model.textfield.MTotalPages;
+import com.jaspersoft.studio.utils.SelectionHelper;
+
 /*
  * link nodes & together.
  * 
@@ -51,6 +50,8 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 
 	/** The jr design. */
 	private JasperDesign jrDesign;
+	private JRDesignTextField tfPageTotal;
+	private JRDesignTextField tfPageNumber;
 
 	/**
 	 * Instantiates a new creates the page xof y command.
@@ -125,10 +126,16 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 	/**
 	 * Creates the object.
 	 */
+	@Override
 	protected void createObject() {
 		Rectangle location = getLocation();
 		if (location == null)
-			location = new Rectangle(0, 0, 10, 10);
+			location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
+		if (location.width < 0)
+			location.width = srcNode.getDefaultWidth() * 2;
+		if (location.height < 0)
+			location.height = srcNode.getDefaultHeight();
+
 		int index = getIndex();
 		JRElementGroup jrGroup = getJrGroup();
 		if (index < 0)
@@ -136,42 +143,40 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 
 		// CREATE 2 TEXTFIELDS
 		MPageNumber mPageNumber = new MPageNumber();
-		JRDesignTextField tfPageNumber = mPageNumber.createJRElement(jrDesign);
+		tfPageNumber = mPageNumber.createJRElement(jrDesign);
 		tfPageNumber.setX(location.x);
 		tfPageNumber.setY(location.y);
-		tfPageNumber.setWidth(mPageNumber.getDefaultWidth());
-		tfPageNumber.setHeight(mPageNumber.getDefaultHeight());
+		tfPageNumber.setWidth(location.width / 2);
+		tfPageNumber.setHeight(location.height);
+		tfPageNumber.setHorizontalAlignment(HorizontalAlignEnum.RIGHT);
+		tfPageNumber.setEvaluationTime(EvaluationTimeEnum.NOW);
+		JRDesignExpression expression = new JRDesignExpression();
+		expression.setText("\"Page \" + $V{PAGE_NUMBER}");
+		tfPageNumber.setExpression(expression);
 
 		if (jrGroup instanceof JRDesignElementGroup)
 			((JRDesignElementGroup) jrGroup).addElement(index, tfPageNumber);
 		else if (jrGroup instanceof JRDesignFrame)
 			((JRDesignFrame) jrGroup).addElement(index, tfPageNumber);
-		// CREATE STATIC FIELD SEPARATOR
-		JRDesignStaticText tfStaticText = new JRDesignStaticText(jrDesign);
-		tfStaticText.setText("/"); //$NON-NLS-1$
-		tfStaticText.setHorizontalAlignment(HorizontalAlignEnum.CENTER);
-		tfStaticText.setX(location.x + tfPageNumber.getWidth());
-		tfStaticText.setY(location.y);
-		tfStaticText.setWidth(10);
-		tfStaticText.setHeight(mPageNumber.getDefaultHeight());
-
-		if (jrGroup instanceof JRDesignElementGroup)
-			((JRDesignElementGroup) jrGroup).addElement(index, tfStaticText);
-		else if (jrGroup instanceof JRDesignFrame)
-			((JRDesignFrame) jrGroup).addElement(index, tfStaticText);
 
 		// CREATE SECOND TEXT FIELD
 		MTotalPages mTotalPages = new MTotalPages();
-		JRDesignTextField tfPageTotal = mTotalPages.createJRElement(jrDesign);
-		tfPageTotal.setX(location.x + tfPageNumber.getWidth() + tfStaticText.getWidth());
+		tfPageTotal = mTotalPages.createJRElement(jrDesign);
+		tfPageTotal.setX(location.x + tfPageNumber.getWidth());
 		tfPageTotal.setY(location.y);
-		tfPageTotal.setWidth(mTotalPages.getDefaultWidth());
-		tfPageTotal.setHeight(mTotalPages.getDefaultHeight());
+		tfPageTotal.setWidth(location.width / 2);
+		tfPageTotal.setHeight(location.height);
+		tfPageTotal.setHorizontalAlignment(HorizontalAlignEnum.LEFT);
+		tfPageTotal.setEvaluationTime(EvaluationTimeEnum.REPORT);
+		expression = new JRDesignExpression();
+		expression.setText("\" of \" + $V{PAGE_NUMBER}");
+		tfPageTotal.setExpression(expression);
 
 		if (jrGroup instanceof JRDesignElementGroup)
 			((JRDesignElementGroup) jrGroup).addElement(index + 1, tfPageTotal);
 		else if (jrGroup instanceof JRDesignFrame)
 			((JRDesignFrame) jrGroup).addElement(index + 1, tfPageTotal);
+
 	}
 
 	/*
@@ -182,15 +187,24 @@ public class CreatePageXofYCommand extends CreateElementCommand {
 	@Override
 	public void execute() {
 		createObject();
+		if (firstTime) {
+			SelectionHelper.setSelection(tfPageNumber, false);
+			firstTime = false;
+		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.command.CreateElementCommand#canUndo()
-	 */
+	private boolean firstTime = true;
+
 	@Override
-	public boolean canUndo() {
-		return false;
+	public void undo() {
+		if (jrGroup instanceof JRDesignElementGroup)
+			((JRDesignElementGroup) jrGroup).removeElement(tfPageNumber);
+		else if (jrGroup instanceof JRDesignFrame)
+			((JRDesignFrame) jrGroup).removeElement(tfPageNumber);
+
+		if (jrGroup instanceof JRDesignElementGroup)
+			((JRDesignElementGroup) jrGroup).removeElement(tfPageTotal);
+		else if (jrGroup instanceof JRDesignFrame)
+			((JRDesignFrame) jrGroup).removeElement(tfPageTotal);
 	}
 }

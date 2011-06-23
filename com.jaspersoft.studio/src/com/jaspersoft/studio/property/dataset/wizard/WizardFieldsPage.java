@@ -41,32 +41,19 @@ package com.jaspersoft.studio.property.dataset.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRField;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JRVariable;
-import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-import net.sf.jasperreports.engine.design.JRDesignVariable;
-
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.field.MField;
-import com.jaspersoft.studio.model.parameter.MParameter;
-import com.jaspersoft.studio.model.variable.MVariable;
+import com.jaspersoft.studio.property.dataset.TLabelProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.MoveT2TButtons;
@@ -74,35 +61,6 @@ import com.jaspersoft.studio.swt.widgets.table.MoveT2TButtons;
 public class WizardFieldsPage extends WizardPage {
 	private List<Object> inFields;
 	private List<Object> outFields;
-
-	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
-
-		public Image getColumnImage(Object element, int columnIndex) {
-			switch (columnIndex) {
-			case 0:
-				if (element instanceof JRDesignField)
-					return JaspersoftStudioPlugin.getImage(MField.getIconDescriptor().getIcon16());
-				if (element instanceof JRDesignParameter)
-					return JaspersoftStudioPlugin.getImage(MParameter.getIconDescriptor().getIcon16());
-				if (element instanceof JRDesignVariable)
-					return JaspersoftStudioPlugin.getImage(MVariable.getIconDescriptor().getIcon16());
-			}
-			return null;
-		}
-
-		public String getColumnText(Object element, int columnIndex) {
-			switch (columnIndex) {
-			case 0:
-				if (element instanceof JRDesignField)
-					return ((JRField) element).getName();
-				if (element instanceof JRParameter)
-					return ((JRParameter) element).getName();
-				if (element instanceof JRVariable)
-					return ((JRVariable) element).getName();
-			}
-			return ""; //$NON-NLS-1$
-		}
-	}
 
 	protected Table rightTable;
 	private Table leftTable;
