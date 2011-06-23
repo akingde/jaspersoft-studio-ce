@@ -115,8 +115,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	private IWorkbenchAction helpSearchAction;
 
-	private IWorkbenchAction dynamicHelpAction;
 
+	private IWorkbenchAction dynamicHelpAction;
 	private IWorkbenchAction aboutAction;
 
 	private IWorkbenchAction openPreferencesAction;
@@ -1038,6 +1038,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		dynamicHelpAction = ActionFactory.DYNAMIC_HELP.create(window);
 		register(dynamicHelpAction);
+		
 
 		aboutAction = ActionFactory.ABOUT.create(window);
 		aboutAction

@@ -127,5 +127,16 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="com.jaspersoft.studio.rcp.actionSet"
+            label="Cheat Sheets"
+            visible="true">
+        <action label="Cheat Sheets" class="org.eclipse.ui.cheatsheets.CheatSheetExtensionFactory:helpMenuAction" menubarPath="help/group.tutorials" id="org.eclipse.ui.cheatsheets.actions.CheatSheetHelpMenuAction">
+     </action>
+
+      </actionSet>
+   </extension>
 
 </plugin>
