@@ -43,8 +43,12 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
@@ -62,6 +66,10 @@ public class SubreportWizard extends Wizard {
 	public SubreportWizard() {
 		super();
 		setWindowTitle(Messages.common_subreport);
+		IWorkbench bench = PlatformUI.getWorkbench();
+		IWorkbenchPage page = bench.getActiveWorkbenchWindow().getActivePage();
+
+		init(bench, (IStructuredSelection) page.getSelection());
 	}
 
 	@Override
@@ -72,6 +80,7 @@ public class SubreportWizard extends Wizard {
 		MDatasetRun mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
 
 		step1 = new WizardNewSubreportPage();
+		step1.init(workbench, selection);
 		addPage(step1);
 		step1.setSubreport(subreport);
 
@@ -82,6 +91,14 @@ public class SubreportWizard extends Wizard {
 		step3 = new SubreportPropertyPage();
 		addPage(step3);
 	}
+
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		this.selection = selection;
+		this.workbench = workbench;
+	}
+
+	private IWorkbench workbench;
+	private IStructuredSelection selection;
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {

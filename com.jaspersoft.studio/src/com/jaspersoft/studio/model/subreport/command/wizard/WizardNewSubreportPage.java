@@ -55,6 +55,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -67,6 +69,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
@@ -135,6 +138,7 @@ public class WizardNewSubreportPage extends WizardPage {
 
 			public void widgetSelected(SelectionEvent e) {
 				ReportNewWizard wizard = new ReportNewWizard();
+				wizard.init(workbench, selection);
 				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK)
@@ -149,9 +153,16 @@ public class WizardNewSubreportPage extends WizardPage {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
 	}
 
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		this.selection = selection;
+		this.workbench = workbench;
+	}
+
+	private IWorkbench workbench;
+	private IStructuredSelection selection;
+
 	private void setUpSubreport(IFile file) {
 		JRDesignExpression jre = new JRDesignExpression();
-		jre.setValueClassName(String.class.getName());
 		jre.setText("\"" + file.getProjectRelativePath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_EXPRESSION, jre);
 		JRDesignSubreport s = (JRDesignSubreport) subreport.getValue();
