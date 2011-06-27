@@ -62,6 +62,21 @@
       </config>
    </extension>
    <extension
+         point="org.eclipse.ui.intro.configExtension">
+      <action
+            name="cheatshdatasource"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.datasource">
+      </action>
+      <action
+            name="cheatshnewrep"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.designreport">
+      </action>
+      <action
+            name="cheatshpreview"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.runreport">
+      </action>
+   </extension>
+   <extension
          point="org.eclipse.ui.startup">
       <startup
             class="com.jaspersoft.studio.rcp.Startup"></startup>
