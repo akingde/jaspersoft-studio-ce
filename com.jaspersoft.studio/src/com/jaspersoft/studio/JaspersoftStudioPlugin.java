@@ -69,6 +69,7 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 	 * @throws Exception
 	 *           the exception
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		plugin = null;

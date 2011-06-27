@@ -26,8 +26,6 @@ package com.jaspersoft.studio.data.bean;
 import net.sf.jasperreports.data.bean.BeanDataAdapter;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -36,6 +34,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.swt.widgets.ClassType;
+import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.utils.Misc;
 
 public class BeanDataAdapterComposite extends Composite {
@@ -44,7 +43,7 @@ public class BeanDataAdapterComposite extends Composite {
 	private ClassType factoryText;
 	private Text methodText;
 	private Button useFDcheck;
-	private Button btnNewButton;
+	private ClasspathComponent cpath;
 
 	/**
 	 * Create the composite.
@@ -78,15 +77,16 @@ public class BeanDataAdapterComposite extends Composite {
 		new Label(this, SWT.NONE);
 
 		useFDcheck = new Button(this, SWT.CHECK);
-		useFDcheck.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
 		useFDcheck.setText("Use field description");
 		useFDcheck.setSelection(true);
-		new Label(this, SWT.NONE);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		useFDcheck.setLayoutData(gd);
 
+		cpath = new ClasspathComponent(this);
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		cpath.getControl().setLayoutData(gd);
 	}
 
 	@Override
@@ -104,10 +104,12 @@ public class BeanDataAdapterComposite extends Composite {
 		this.beanDataAdapter = beanDataAdapter;
 		BeanDataAdapter bda = (BeanDataAdapter) beanDataAdapter
 				.getDataAdapter();
-		factoryText.setClassType(Misc.nvl(bda.getFactoryClass(), ""));
-		methodText.setText(Misc.nvl(bda.getMethodName(), ""));
+		factoryText.setClassType(Misc.nvl(bda.getFactoryClass(),
+				"com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory"));
+		methodText
+				.setText(Misc.nvl(bda.getMethodName(), "createBeanCollection"));
 		useFDcheck.setSelection(bda.isUseFieldDescription());
-
+		cpath.setClasspaths(bda.getClasspath());
 	}
 
 	public BeanDataAdapterDescriptor getDataAdapter() {
@@ -121,6 +123,7 @@ public class BeanDataAdapterComposite extends Composite {
 		bda.setMethodName(methodText.getText().trim());
 
 		bda.setUseFieldDescription(useFDcheck.getSelection());
+		bda.setClasspath(cpath.getClasspaths());
 
 		return beanDataAdapter;
 	}

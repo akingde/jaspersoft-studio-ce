@@ -70,6 +70,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable {
 
+	@Override
 	protected JasperPrint loadJRObject(InputStream in) throws JRException {
 		return getJasperPrint();
 	}
@@ -205,6 +206,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 							return Status.CANCEL_STATUS;
 
 						setReportDocument(true);
+						dataAdapterService.dispose();
 					}
 				} catch (final Throwable e) {
 					unsetReportDocument(ErrorUtil.getStackTrace(e), true);
@@ -247,6 +249,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 		this.showParameters = showParameters;
 	}
 
+	@Override
 	public void setNotRunning(boolean norun) {
 		super.setNotRunning(norun);
 		dataSourceWidget.refresh(true);
@@ -254,6 +257,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 		showParametersAction.setEnabled(norun);
 	}
 
+	@Override
 	protected void refreshToolbar() {
 		super.refreshToolbar();
 		IToolBarManager tbManager = getTbManager();

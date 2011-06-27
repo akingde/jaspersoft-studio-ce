@@ -42,6 +42,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class DataAdapterWizard extends Wizard implements SelectionListener {
 
@@ -175,6 +176,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	public void widgetSelected(SelectionEvent e) {
 		if(getContainer().getCurrentPage() == dataAdapterEditorPage) {
 			try {
+			
 				DataAdapterServiceUtil.getDataAdapterService(dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter()).test();
 				
 				MessageBox mb = new MessageBox(getContainer().getShell(), SWT.ICON_INFORMATION | SWT.OK);

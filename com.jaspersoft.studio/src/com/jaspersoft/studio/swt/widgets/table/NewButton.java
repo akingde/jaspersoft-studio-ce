@@ -65,6 +65,8 @@ public class NewButton {
 		}
 
 		// Remove the selection and refresh the view
+		@SuppressWarnings("rawtypes")
+		@Override
 		public void widgetSelected(SelectionEvent e) {
 			StructuredSelection s = (StructuredSelection) tableViewer.getSelection();
 
@@ -75,16 +77,26 @@ public class NewButton {
 			}
 			Object selement = newElement.newElement(inlist);
 			if (selement != null) {
-				int index = -1;
-				if (!s.isEmpty())
-					index = inlist.indexOf(s.getFirstElement());
-				if (index >= 0 && index < inlist.size())
-					inlist.add(index, selement);
-				else
-					inlist.add(selement);
+				if (selement instanceof Object[]) {
+					for (Object se : (Object[]) selement) {
+						addElement(s, inlist, se);
+					}
+				} else
+					addElement(s, inlist, selement);
 				tableViewer.refresh();
 				tableViewer.setSelection(new StructuredSelection(selement));
 			}
+		}
+
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		private void addElement(StructuredSelection s, List inlist, Object selement) {
+			int index = -1;
+			if (!s.isEmpty())
+				index = inlist.indexOf(s.getFirstElement());
+			if (index >= 0 && index < inlist.size())
+				inlist.add(index, selement);
+			else
+				inlist.add(selement);
 		}
 	}
 

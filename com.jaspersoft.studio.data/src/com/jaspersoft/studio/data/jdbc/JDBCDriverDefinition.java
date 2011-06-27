@@ -127,7 +127,8 @@ public class JDBCDriverDefinition implements Comparable<JDBCDriverDefinition> {
         this.defaultDBName = defaultDBName;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         return dbName + " (" + driverName + ")";
     }

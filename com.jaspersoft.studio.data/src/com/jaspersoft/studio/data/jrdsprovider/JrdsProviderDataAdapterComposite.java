@@ -31,61 +31,82 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.utils.Misc;
 
 public class JrdsProviderDataAdapterComposite extends Composite {
-	
-	private JrdsProviderDataAdapterDescriptor jrdsProviderDataAdapter = null;
+
+	private JrdsProviderDataAdapterDescriptor jrdsDADesc = null;
 	private Text textJRDSProviderClassName;
+	private ClasspathComponent cpath;
 
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
 	public JrdsProviderDataAdapterComposite(Composite parent, int style) {
-		
+
 		/*
 		 * UI ELEMENTS
 		 */
 		super(parent, style);
-		setLayout(new GridLayout(1, false));
-		
+		setLayout(new GridLayout(2, false));
+
 		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1));
 		lblNewLabel.setText("JasperReports DataSource Provider Class Name:");
-		
+
 		textJRDSProviderClassName = new Text(this, SWT.BORDER);
-		textJRDSProviderClassName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+		textJRDSProviderClassName.setLayoutData(new GridData(SWT.FILL,
+				SWT.CENTER, true, false, 1, 1));
+
 		/*
 		 * UI ELEMENTS LISTENERS
 		 */
 		textJRDSProviderClassName.addModifyListener(new ModifyListener() {
-			
+
 			public void modifyText(ModifyEvent e) {
-				((DataSourceProviderDataAdapter)jrdsProviderDataAdapter.getDataAdapter()).setProviderClass(textJRDSProviderClassName.getText().trim());
+				((DataSourceProviderDataAdapter) jrdsDADesc.getDataAdapter())
+						.setProviderClass(textJRDSProviderClassName.getText()
+								.trim());
 			}
 		});
+
+		cpath = new ClasspathComponent(this);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		cpath.getControl().setLayoutData(gd);
 	}
 
+	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
 	public void setDataAdapter(JrdsProviderDataAdapterDescriptor dataAdapter) {
-		
-		jrdsProviderDataAdapter = dataAdapter;
-		textJRDSProviderClassName.setText( Misc.nvl(((DataSourceProviderDataAdapter)jrdsProviderDataAdapter.getDataAdapter()).getProviderClass(), "com.jaspersoft.studio.data.sample.PersonBeansDataSource") );
+		jrdsDADesc = dataAdapter;
+		DataSourceProviderDataAdapter da = (DataSourceProviderDataAdapter) jrdsDADesc
+				.getDataAdapter();
+		textJRDSProviderClassName.setText(Misc.nvl(da.getProviderClass(),
+				"com.jaspersoft.studio.data.sample.PersonBeansDataSource"));
+
+		cpath.setClasspaths(da.getClasspath());
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
-		
-		if (jrdsProviderDataAdapter == null) jrdsProviderDataAdapter = new JrdsProviderDataAdapterDescriptor();
-		
-		((DataSourceProviderDataAdapter)jrdsProviderDataAdapter.getDataAdapter()).setProviderClass(textJRDSProviderClassName.getText().trim());
-		
-		return jrdsProviderDataAdapter;
+
+		if (jrdsDADesc == null)
+			jrdsDADesc = new JrdsProviderDataAdapterDescriptor();
+
+		DataSourceProviderDataAdapter da = (DataSourceProviderDataAdapter) jrdsDADesc
+				.getDataAdapter();
+		da.setProviderClass(textJRDSProviderClassName.getText().trim());
+		da.setClasspath(cpath.getClasspaths());
+
+		return jrdsDADesc;
 	}
 
 	public String getHelpContextId() {
