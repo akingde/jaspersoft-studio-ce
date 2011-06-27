@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Run Jasper Reports">
+   <intro>
+      <description>
+         <b>Body</b>
+      </description>
+   </intro>
+   <item
+         title="Preview the report">
+      <description>
+         <b>Body</b>
+      </description>
+   </item>
+</cheatsheet>

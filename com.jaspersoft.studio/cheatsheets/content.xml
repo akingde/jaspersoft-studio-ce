@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cheatsheet title="Create JDBC Datasources">
+<cheatsheet title="Data Source Management">
 	<intro>
 		<description>This tutorial guides you through the creation of a JDBC datasource.
 		</description>
@@ -12,6 +12,12 @@
         required="false"
         serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=com.jaspersoft.studio.Repository)"/> 
 	</item>
+   <item
+         title="Configure a data source">
+      <description>
+         <b>Body</b>
+      </description>
+   </item>
 	<item title="Launch the JDBC datasource editor" skip="true">
 		<action pluginId="com.jaspersoft.studio.repository.actions.CreateDataSourceAction" 
 				class="com.jaspersoft.studio.repository.actions.CreateDataSourceAction"

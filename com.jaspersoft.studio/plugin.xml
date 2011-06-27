@@ -577,14 +577,28 @@
          point="org.eclipse.ui.cheatsheets.cheatSheetContent">
       <category
             id="com.jaspersoft.studio.cheatsheets.repository"
-            name="Repository CheatSheets">
+            name="Jasper Reports Developement">
       </category>
       <cheatsheet
             category="com.jaspersoft.studio.cheatsheets.repository"
             composite="false"
             contentFile="cheatsheets/content.xml"
-            id="com.jaspersoft.studio.cheatsheets.cheatsheet1"
-            name="Create JDBC Datasources">
+            id="com.jaspersoft.studio.cheatsheets.datasource"
+            name="Data Source Management">
+      </cheatsheet>
+      <cheatsheet
+            category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/runreport.xml"
+            id="com.jaspersoft.studio.cheatsheets.runreport"
+            name="Run Jasper Reports">
+      </cheatsheet>
+      <cheatsheet
+            category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/designreports.xml"
+            id="com.jaspersoft.studio.cheatsheets.designreport"
+            name="Design Reports">
       </cheatsheet>
    </extension>
    
