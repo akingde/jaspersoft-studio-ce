@@ -115,6 +115,11 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 					if (rtype.equals(ResetTypeEnum.GROUP))
 						jrVariable.setResetGroup(group);
 
+					if (CalculationEnum.COUNT.equals(ce) || CalculationEnum.DISTINCT_COUNT.equals(ce))
+						jrVariable.setValueClass(Integer.class);
+					// if (CalculationEnum.AVERAGE.equals(ce) || CalculationEnum.STANDARD_DEVIATION.equals(ce)
+					// || CalculationEnum.SUM.equals(ce) || CalculationEnum.VARIANCE.equals(ce))
+					// jrVariable.setValueClass(Double.class);
 					jrVariable.setValueClassName(tag.classname);
 
 					JRDesignExpression jre = new JRDesignExpression();
