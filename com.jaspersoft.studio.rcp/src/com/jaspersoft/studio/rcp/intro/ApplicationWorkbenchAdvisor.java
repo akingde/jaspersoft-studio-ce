@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.studio.rcp.intro;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
@@ -30,9 +31,17 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.ReportDesignPerspective;
+import com.jaspersoft.studio.rcp.OpenDocumentEventProcessor;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
+	
+	private OpenDocumentEventProcessor openDocProcessor;
+	 	
+	public ApplicationWorkbenchAdvisor(OpenDocumentEventProcessor openDocProcessor) {
+	 	this.openDocProcessor = openDocProcessor;
+	}
+	
     @Override
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         return new ApplicationWorkbenchWindowAdvisor(configurer);
@@ -54,5 +63,14 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		super.preStartup();
 		
 		IDE.registerAdapters(); 
+	}
+	
+	/**
+	  * Added to process SWT.OpenDocument events.
+	  * Here we actually process the OpenDocument events.
+	  */
+	public void eventLoopIdle(Display display) {
+		openDocProcessor.openFiles();
+		super.eventLoopIdle(display);
 	}
 }
