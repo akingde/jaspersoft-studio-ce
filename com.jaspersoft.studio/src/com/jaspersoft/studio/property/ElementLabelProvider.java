@@ -58,6 +58,7 @@ public class ElementLabelProvider extends LabelProvider {
 	/**
 	 * @see org.eclipse.jface.viewers.ILabelProvider#getImage(java.lang.Object)
 	 */
+	@Override
 	public Image getImage(Object objects) {
 		if (objects == null || objects.equals(StructuredSelection.EMPTY))
 			return null;
@@ -98,6 +99,7 @@ public class ElementLabelProvider extends LabelProvider {
 	/**
 	 * @see org.eclipse.jface.viewers.ILabelProvider#getText(java.lang.Object)
 	 */
+	@Override
 	public String getText(Object objects) {
 		if (objects == null || objects.equals(StructuredSelection.EMPTY)) {
 			return Messages.ElementLabelProvider_no_items_selected;
@@ -112,7 +114,10 @@ public class ElementLabelProvider extends LabelProvider {
 			if (object instanceof EditPart) {
 				ANode element = (ANode) ((EditPart) object).getModel();
 				String str = Messages.getString(name.substring(name.lastIndexOf('.') + 2));
-				return str + ": " + element.getDisplayText(); //$NON-NLS-1$
+				String displayText = element.getDisplayText().replaceAll("(\\r|\\n)+", " ");//$NON-NLS-1$ //$NON-NLS-2$
+				if(displayText.length() > 30)
+					displayText = displayText.substring(0, 30)+"...";//$NON-NLS-1$
+				return str + ": " + displayText; //$NON-NLS-1$
 			}
 			return Messages.getString(name.substring(name.lastIndexOf('.') + 1));
 		}

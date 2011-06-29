@@ -72,6 +72,7 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 	 * 
 	 * @see org.eclipse.gef.editparts.AbstractTreeEditPart#createEditPolicies()
 	 */
+	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 		installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ElementTreeEditPolicy());
@@ -108,6 +109,7 @@ public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChang
 					item.setForeground(node.getForeground());
 			}
 			String displayText = node.getDisplayText();
+			displayText = displayText.replaceAll("(\\r|\\n)+", " ");
 			if (displayText != null) {
 				if (displayText.length() > 30)
 					displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
