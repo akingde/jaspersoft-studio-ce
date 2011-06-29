@@ -48,18 +48,16 @@ public class XLSDataAdapterFactory implements DataAdapterFactory {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
+
 		return "Use a Microsoft Excel document as data";
 	}
 
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
+
 		if (size == 16)
 		{
 			return  Activator.getImage("icons/document-excel.png");

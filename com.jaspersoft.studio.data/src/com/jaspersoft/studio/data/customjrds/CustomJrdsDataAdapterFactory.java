@@ -44,7 +44,6 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return "Use your own java class to instance a JRDataSource";
@@ -53,7 +52,6 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	@Override
 	public Image getIcon(int size) {
 		// TODO Auto-generated method stub
 		if (size == 16)

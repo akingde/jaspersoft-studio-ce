@@ -44,17 +44,13 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
 		return "Use a java class which implements the JRDataSourceProvider interface";
 	}
 
 	/**
 	 */
-	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
 		if (size == 16)
 		{
 			return  Activator.getImage("icons/bean-green.png");

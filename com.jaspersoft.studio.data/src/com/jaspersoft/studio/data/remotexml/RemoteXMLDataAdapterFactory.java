@@ -48,18 +48,16 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
+
 		return "Use an XML document loaded using an URL";
 	}
 
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
+
 		if (size == 16)
 		{
 			return  Activator.getImage("icons/blue-document-code.png");

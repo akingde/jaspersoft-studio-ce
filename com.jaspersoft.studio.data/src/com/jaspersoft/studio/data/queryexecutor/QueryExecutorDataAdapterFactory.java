@@ -48,15 +48,12 @@ public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
 		return "Don't provide any connection or data source.";
 	}
 
-	@Override
+
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
 		if (size == 16)
 		{
 			return  Activator.getImage("icons/receipt.png");
