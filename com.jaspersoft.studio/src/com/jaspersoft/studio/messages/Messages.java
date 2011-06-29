@@ -267,6 +267,11 @@ public class Messages extends NLS {
 	public static String CustomPattern_Formats;
 	public static String DataAdapterManager_nodataadapterfound;
 	public static String DataAdapterManager_oneemptyrecord;
+	public static String DataAdapterWizard_errortestingdataadapter;
+	public static String DataAdapterWizard_newdataadaptername;
+	public static String DataAdapterWizard_testbutton;
+	public static String DataAdapterWizard_testsuccesful;
+	public static String DataAdapterWizard_windowtitle;
 	public static String DataQueryAdapters_actionname;
 	public static String DataQueryAdapters_getfields;
 	public static String DataQueryAdapters_jobname;

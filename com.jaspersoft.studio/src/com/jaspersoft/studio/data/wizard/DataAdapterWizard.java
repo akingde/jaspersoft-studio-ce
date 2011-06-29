@@ -38,6 +38,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
+import com.jaspersoft.studio.messages.Messages;
 
 public class DataAdapterWizard extends Wizard implements SelectionListener {
 
@@ -52,7 +53,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	 * page is shown.
 	 */
 	public DataAdapterWizard() {
-		setWindowTitle("DataAdapter Wizard");
+		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
 	}
 
 	/**
@@ -81,15 +82,18 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 						// provided by the new data adapter
 						DataAdapterFactory factory = dataAdapterListPage.getSelectedFactory();
 
+						java.text.MessageFormat fm = new java.text.MessageFormat(Messages.DataAdapterWizard_newdataadaptername);
 						// 1. instance a new dataAdapter using the factory
 						DataAdapterDescriptor newDataAdapter = factory.createDataAdapter();
+						for (int i = 1; i < 1000; i++) {
+							String name = fm.format(new Object[] { (i > 1) ? "(" + i + ")" : "" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-						String name = "New DadaAdapter ";
-						for (int i = 1; i < 1000; i++)
-							if (DataAdapterManager.isDataAdapterNameValid(name + "[" + i + "]")) {
-								newDataAdapter.getDataAdapter().setName(name + "[" + i + "]");
+							if (DataAdapterManager.isDataAdapterNameValid(name)) {
+
+								newDataAdapter.getDataAdapter().setName(name);
 								break;
 							}
+						}
 
 						// 2. set in the wizard page the data adapter to edit
 						if (selectedFactory != factory) {
@@ -171,8 +175,8 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 						dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter()).test();
 
 				MessageBox mb = new MessageBox(getContainer().getShell(), SWT.ICON_INFORMATION | SWT.OK);
-				mb.setText("Test");
-				mb.setMessage("Succesful");
+				mb.setText(Messages.DataAdapterWizard_testbutton);
+				mb.setMessage(Messages.DataAdapterWizard_testsuccesful);
 				mb.open();
 
 			} catch (Exception e1) {
@@ -180,7 +184,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 				e1.printStackTrace();
 
 				DataAdapterErrorDialog.showErrorDialog(getWizardDialog().getShell(),
-						"An error occurred while testing the data adapter and the test failed", e1);
+						Messages.DataAdapterWizard_errortestingdataadapter, e1);
 
 			}
 		}

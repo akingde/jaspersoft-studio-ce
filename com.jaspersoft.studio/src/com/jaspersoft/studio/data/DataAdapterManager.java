@@ -264,7 +264,7 @@ public class DataAdapterManager {
 			EmptyDataAdapterDescriptor edad = edaf.createDataAdapter();
 			EmptyDataAdapterImpl dataAdapter = new EmptyDataAdapterImpl();
 			dataAdapter.setName(Messages.DataAdapterManager_oneemptyrecord);
-			dataAdapter.setRecordCount(100);
+			dataAdapter.setRecordCount(1);
 			edad.setDataAdapter(dataAdapter);
 			dataAdapters.add(edad);
 		}
