@@ -50,6 +50,7 @@ public class NoActionCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 
 	}
@@ -59,6 +60,7 @@ public class NoActionCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 
 	}

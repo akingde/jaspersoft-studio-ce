@@ -84,6 +84,7 @@ public class OrphanElementGroupCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		index = jrGroup.getChildren().indexOf(jrElement);
 		if (jrGroup instanceof JRDesignElementGroup)
@@ -95,6 +96,7 @@ public class OrphanElementGroupCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		if (jrGroup instanceof JRDesignElementGroup) {
 			if (index > ((JRDesignElementGroup) jrGroup).getChildren().size())

@@ -144,7 +144,8 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor
   	return XmlUtil.write(getDataAdapter());
   }    
     
-  public String toString()
+  @Override
+	public String toString()
   {
     return getTitle();
   }

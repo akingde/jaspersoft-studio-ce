@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio"
-      version="0.2.5"
+      version="0.2.6"
       provider-name="Jaspersoft Corporation">
 
    <description url="http://jasperforge.org/projects/jaspersoftstudio">
@@ -681,6 +681,10 @@ Public License instead of this License.  But first, please read
    <url>
       <discovery label="Jaspersoft Studio" url="http://jasperforge.org/projects/jaspersoftstudio"/>
    </url>
+
+   <includes
+         id="net.sf.jasperreports"
+         version="0.0.0"/>
 
    <requires>
       <import plugin="org.eclipse.ui"/>
