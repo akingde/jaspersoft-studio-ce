@@ -73,21 +73,22 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 				BandTypeEnum btype = b.getOrigin().getBandTypeValue();
 				if (btype.equals(BandTypeEnum.DETAIL)) {
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
-				} else if (btype.equals(BandTypeEnum.COLUMN_FOOTER)) {
+				} else if (btype.equals(BandTypeEnum.COLUMN_FOOTER) || btype.equals(BandTypeEnum.COLUMN_HEADER)) {
 					createVariable(tag, ResetTypeEnum.COLUMN, null);
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
-				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER)) {
+				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER) || btype.equals(BandTypeEnum.GROUP_HEADER)) {
 					createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupFooter) n).getJrGroup());
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
-				} else if (btype.equals(BandTypeEnum.SUMMARY)) {
+				} else if (btype.equals(BandTypeEnum.SUMMARY) || btype.equals(BandTypeEnum.TITLE)) {
 					createVariable(tag, ResetTypeEnum.REPORT, null);
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
-				} else if (btype.equals(BandTypeEnum.PAGE_FOOTER)) {
+				} else if (btype.equals(BandTypeEnum.PAGE_FOOTER) || btype.equals(BandTypeEnum.PAGE_HEADER)
+						|| btype.equals(BandTypeEnum.LAST_PAGE_FOOTER)) {
 					createVariable(tag, ResetTypeEnum.PAGE, null);
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
 
 				} else {
-					createStaticText(tag.txt.replaceAll("%", tag.name));
+					createStaticText(tag.name);
 				}
 				setContext(n, srcNode, index);
 			}
@@ -118,10 +119,10 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 					if (CalculationEnum.COUNT.equals(ce) || CalculationEnum.DISTINCT_COUNT.equals(ce))
 						jrVariable.setValueClass(Integer.class);
 					else
-					// if (CalculationEnum.AVERAGE.equals(ce) || CalculationEnum.STANDARD_DEVIATION.equals(ce)
-					// || CalculationEnum.SUM.equals(ce) || CalculationEnum.VARIANCE.equals(ce))
-					// jrVariable.setValueClass(Double.class);
-					jrVariable.setValueClassName(tag.classname);
+						// if (CalculationEnum.AVERAGE.equals(ce) || CalculationEnum.STANDARD_DEVIATION.equals(ce)
+						// || CalculationEnum.SUM.equals(ce) || CalculationEnum.VARIANCE.equals(ce))
+						// jrVariable.setValueClass(Double.class);
+						jrVariable.setValueClassName(tag.classname);
 
 					JRDesignExpression jre = new JRDesignExpression();
 					jre.setText(tag.txt.replaceAll("%", tag.name));
