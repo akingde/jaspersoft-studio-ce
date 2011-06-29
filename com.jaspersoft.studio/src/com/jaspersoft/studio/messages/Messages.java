@@ -265,6 +265,8 @@ public class Messages extends NLS {
 	public static String CurrencyPattern_description;
 	public static String CustomPattern_description;
 	public static String CustomPattern_Formats;
+	public static String DataAdapterManager_nodataadapterfound;
+	public static String DataAdapterManager_oneemptyrecord;
 	public static String DataQueryAdapters_actionname;
 	public static String DataQueryAdapters_getfields;
 	public static String DataQueryAdapters_jobname;

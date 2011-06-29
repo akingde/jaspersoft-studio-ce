@@ -43,6 +43,7 @@ import org.xml.sax.InputSource;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
 import com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.repository.RepositoryManager;
 
 /*
@@ -172,7 +173,7 @@ public class DataAdapterManager {
 			for (DataAdapterDescriptor desc : getDataAdapters()) {
 				xml.append(desc.toXml());
 			}
-			xml.append("</dataAdapters>");
+			xml.append("</dataAdapters>"); //$NON-NLS-1$
 
 			prefs.put("dataAdapters", xml.toString()); //$NON-NLS-1$ 
 			prefs.flush();
@@ -191,7 +192,7 @@ public class DataAdapterManager {
 
 		Preferences prefs = new InstanceScope().getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 
-		String xml = prefs.get("dataAdapters", null);
+		String xml = prefs.get("dataAdapters", null); //$NON-NLS-1$
 
 		if (xml != null)
 		{
@@ -207,7 +208,7 @@ public class DataAdapterManager {
 	
 					if (adapterNode.getNodeType() == Node.ELEMENT_NODE) {
 						// 1. Find out the class of this data adapter...
-						String adapterClassName = adapterNode.getAttributes().getNamedItem("class").getNodeValue();
+						String adapterClassName = adapterNode.getAttributes().getNamedItem("class").getNodeValue(); //$NON-NLS-1$
 	
 						DataAdapterFactory factory = findFactoryByDataAdapterClass(adapterClassName);
 	
@@ -218,7 +219,7 @@ public class DataAdapterManager {
 									.getLog()
 									.log(
 											new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
-													"No DataAdapterFactory has been found for DataAdapterClass " + adapterClassName, null));
+													Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
 							return;
 						}
 	
@@ -262,7 +263,7 @@ public class DataAdapterManager {
 			EmptyDataAdapterFactory edaf = new EmptyDataAdapterFactory();
 			EmptyDataAdapterDescriptor edad = edaf.createDataAdapter();
 			EmptyDataAdapterImpl dataAdapter = new EmptyDataAdapterImpl();
-			dataAdapter.setName("Empty100");
+			dataAdapter.setName(Messages.DataAdapterManager_oneemptyrecord);
 			dataAdapter.setRecordCount(100);
 			edad.setDataAdapter(dataAdapter);
 			dataAdapters.add(edad);
@@ -297,7 +298,7 @@ public class DataAdapterManager {
 	 */
 	public static boolean isDataAdapterNameValid(String dataAdapterName) {
 
-		if (dataAdapterName == null || "".equals(dataAdapterName.trim()))
+		if (dataAdapterName == null || "".equals(dataAdapterName.trim())) //$NON-NLS-1$
 			return false;
 
 		for (DataAdapterDescriptor dataAdapter : getDataAdapters()) {
