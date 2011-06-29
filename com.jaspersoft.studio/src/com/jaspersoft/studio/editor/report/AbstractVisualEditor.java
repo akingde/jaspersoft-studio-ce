@@ -398,6 +398,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	@Override
 	protected CustomPalettePage createPalettePage() {
 		return new CustomPalettePage(getPaletteViewerProvider()) {
+			@Override
 			public void init(IPageSite pageSite) {
 				super.init(pageSite);
 				IAction copy = getActionRegistry().getAction(ActionFactory.COPY.getId());
@@ -416,11 +417,13 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		return new PaletteViewerProvider(getEditDomain()) {
 			private IMenuListener menuListener;
 
+			@Override
 			protected void configurePaletteViewer(PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
 				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
 			}
 
+			@Override
 			protected void hookPaletteViewer(PaletteViewer viewer) {
 				super.hookPaletteViewer(viewer);
 				final CopyTemplateAction copy = new CopyTemplateAction(AbstractVisualEditor.this);
@@ -495,27 +498,27 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		getSelectionActions().add(action.getId());
 
 		// ------------
-		action = new AlignmentAction(this, PositionConstants.LEFT);
+		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.LEFT);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction(this, PositionConstants.RIGHT);
+		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.RIGHT);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction(this, PositionConstants.TOP);
+		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.TOP);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction(this, PositionConstants.BOTTOM);
+		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.BOTTOM);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction(this, PositionConstants.CENTER);
+		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.CENTER);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
-		action = new AlignmentAction(this, PositionConstants.MIDDLE);
+		action = new AlignmentAction(this.getSite().getPart(), PositionConstants.MIDDLE);
 		registry.registerAction(action);
 		getSelectionActions().add(action.getId());
 
