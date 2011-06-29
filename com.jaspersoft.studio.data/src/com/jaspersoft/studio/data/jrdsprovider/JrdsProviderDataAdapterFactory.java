@@ -50,8 +50,7 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 		return "Use a java class which implements the JRDataSourceProvider interface";
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	/**
 	 */
 	@Override
 	public Image getIcon(int size) {

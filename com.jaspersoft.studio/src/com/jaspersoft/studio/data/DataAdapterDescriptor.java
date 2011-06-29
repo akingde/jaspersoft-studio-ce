@@ -42,11 +42,11 @@
  */
 package com.jaspersoft.studio.data;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.XmlUtil;
-
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.ui.DefaultDataAdapterEditor;
@@ -103,19 +103,11 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor
 	}
 
 	/**
-   * Coming from the IIconDescriptor interface.
-   * Return a default dataAdapter icon;
+   * Return an Image.
+   * By default this method returns a simple database icon
    */
-	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(JaspersoftStudioPlugin.getUniqueIdentifier(),"icons/data_source.gif");
-	}
-
-	/**
-   * Coming from the IIconDescriptor interface.
-   * Return a default dataAdapter icon;
-   */
-	public ImageDescriptor getIcon32() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(JaspersoftStudioPlugin.getUniqueIdentifier(),"icons/resources/dataset-32.png");
+	public Image getIcon(int size) {
+		return JaspersoftStudioPlugin.getImage("icons/database.png");
 	}
 
 
@@ -159,4 +151,40 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor
     //return new BasicDataAdapterEditor();
   	return new DefaultDataAdapterEditor();
   }
+  
+  /**
+	 * Gets the icon16.
+	 * 
+	 * @return the icon16
+	 */
+	public ImageDescriptor getIcon16()
+	{
+		Image icon = getIcon(16);
+		if (icon != null)
+		{
+			return ImageDescriptor.createFromImage( getIcon(16));
+		}
+		else
+		{
+			return ImageDescriptor.createFromImage( JaspersoftStudioPlugin.getImage("icons/database.png"));
+		}
+	}
+
+	/**
+	 * Gets the icon32.
+	 * 
+	 * @return the icon32
+	 */
+	public ImageDescriptor getIcon32()
+	{
+		Image icon = getIcon(32);
+		if (icon != null)
+		{
+			return ImageDescriptor.createFromImage( getIcon(16));
+		}
+		else
+		{
+			return ImageDescriptor.createFromImage( JaspersoftStudioPlugin.getImage("icons/database.png"));
+		}
+	}
 }

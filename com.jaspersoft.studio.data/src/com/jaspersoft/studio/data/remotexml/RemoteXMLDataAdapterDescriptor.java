@@ -23,10 +23,13 @@
  */
 package com.jaspersoft.studio.data.remotexml;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.xml.XMLDataAdapterDescriptor;
 
@@ -47,5 +50,18 @@ public class RemoteXMLDataAdapterDescriptor extends XMLDataAdapterDescriptor
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new RemoteXMLDataAdapterEditor();
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/blue-document-code.png");
+		}
+		return null;
 	}
 }

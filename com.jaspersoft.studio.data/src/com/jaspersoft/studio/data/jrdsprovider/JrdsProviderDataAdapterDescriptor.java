@@ -21,6 +21,8 @@ package com.jaspersoft.studio.data.jrdsprovider;
 
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapter;
@@ -29,6 +31,7 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
@@ -69,5 +72,17 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 	private void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new JRDSProviderFieldsProvider();
+	}
+	
+	/**
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/bean-green.png");
+		}
+		return null;
 	}
 }

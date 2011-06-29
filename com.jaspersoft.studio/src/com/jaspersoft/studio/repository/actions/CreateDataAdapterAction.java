@@ -66,8 +66,8 @@ public class CreateDataAdapterAction extends Action {
 		setText("Create DataAdapter");
 		setDescription("Create DataAdapter");
 		setToolTipText("Create DataAdapter");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.gif")); //$NON-NLS-1$
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
 	}
 
 	@Override

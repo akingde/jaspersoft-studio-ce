@@ -62,7 +62,7 @@ public class CSVDataAdapterFactory implements DataAdapterFactory {
 		// TODO Auto-generated method stub
 		if (size == 16)
 		{
-			return  Activator.getImage("icons/document-excel-csv");
+			return  Activator.getImage("icons/document-excel-csv.png");
 		}
 		return null;
 	}

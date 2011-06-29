@@ -28,6 +28,7 @@ import net.sf.jasperreports.data.bean.BeanDataAdapter;
 import net.sf.jasperreports.data.bean.BeanDataAdapterImpl;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.Activator;
@@ -47,14 +48,22 @@ public class BeanDataAdapterDescriptor extends DataAdapterDescriptor {
 		this.beanDataAdapter = (BeanDataAdapter) dataAdapter;
 	}
 
-	@Override
-	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
-				"icons/QueryExecutorDataAdapterIcon-16.gif");
-	}
-
+	
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new BeanDataAdapterEditor();
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/beans.png");
+		}
+		return null;
 	}
 }

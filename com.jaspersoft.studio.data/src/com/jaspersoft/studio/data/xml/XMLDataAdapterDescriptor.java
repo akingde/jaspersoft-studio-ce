@@ -28,6 +28,7 @@ import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.Activator;
@@ -53,8 +54,16 @@ public class XMLDataAdapterDescriptor extends DataAdapterDescriptor
 		return new XMLDataAdapterEditor();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
 	@Override
-	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/XMLDataAdapterIcon-16.gif");
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/blue-document-code.png");
+		}
+		return null;
 	}
 }

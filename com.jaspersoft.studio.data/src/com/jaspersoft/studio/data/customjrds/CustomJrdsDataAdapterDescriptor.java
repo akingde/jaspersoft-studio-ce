@@ -19,10 +19,13 @@
  */
 package com.jaspersoft.studio.data.customjrds;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
@@ -46,4 +49,16 @@ public class CustomJrdsDataAdapterDescriptor extends DataAdapterDescriptor
 		return new CustomJrdsDataAdapterEditor();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/bean-green.png");
+		}
+		return null;
+	}
 }

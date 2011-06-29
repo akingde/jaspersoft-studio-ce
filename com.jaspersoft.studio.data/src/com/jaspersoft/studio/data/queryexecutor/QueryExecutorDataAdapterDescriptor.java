@@ -28,6 +28,7 @@ import net.sf.jasperreports.data.qe.QueryExecuterDataAdapter;
 import net.sf.jasperreports.data.qe.QueryExecuterDataAdapterImpl;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.Activator;
@@ -56,5 +57,15 @@ public class QueryExecutorDataAdapterDescriptor extends DataAdapterDescriptor
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new QueryExecutorDataAdapterEditor();
+	}
+	
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/receipt.png");
+		}
+		return null;
 	}
 }

@@ -34,6 +34,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.Activator;
@@ -65,10 +66,17 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return new JDBCDataAdapterEditor();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
 	@Override
-	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
-				"icons/JDBCDataAdapterIcon-16.gif");
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/database.png");
+		}
+		return null;
 	}
 
 	private IFieldsProvider fprovider;

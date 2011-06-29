@@ -25,6 +25,8 @@ package com.jaspersoft.studio.data.csv;
 
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
@@ -33,6 +35,7 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
@@ -73,5 +76,18 @@ public class CSVDataAdapterDescriptor extends DataAdapterDescriptor implements
 	private void getFieldProvider() {
 		if (fprovider == null)
 			fprovider = new CSVFieldsProvider();
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/document-excel-csv.png");
+		}
+		return null;
 	}
 }

@@ -28,6 +28,7 @@ import net.sf.jasperreports.data.empty.EmptyDataAdapter;
 import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -49,12 +50,13 @@ public class EmptyDataAdapterDescriptor extends DataAdapterDescriptor
 	}
 
 	@Override
-	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(JaspersoftStudioPlugin.getUniqueIdentifier(), "icons/EmptyDataAdapterIcon-16.gif");
+	public Image getIcon(int size) {
+		return  JaspersoftStudioPlugin.getImage("icons/battery-empty.png");
 	}
 
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new EmptyDataAdapterEditor();
 	}
+
 }
