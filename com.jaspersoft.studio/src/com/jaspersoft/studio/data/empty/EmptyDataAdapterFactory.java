@@ -19,8 +19,11 @@
  */
 package com.jaspersoft.studio.data.empty;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
 public class EmptyDataAdapterFactory implements DataAdapterFactory {
@@ -33,7 +36,28 @@ public class EmptyDataAdapterFactory implements DataAdapterFactory {
 		return EmptyDataAdapterImpl.class.getName();
 	}
 
-	public String getDescription() {
-		return "Empty Data Adapter";
+	public String getLabel() {
+		return "Empty rows";
 	}
+	
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return "Use a set of empty rows";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  JaspersoftStudioPlugin.getImage("icons/battery-empty.png");
+		}
+		return null;
+	}
+	
+	
+
+	
 }

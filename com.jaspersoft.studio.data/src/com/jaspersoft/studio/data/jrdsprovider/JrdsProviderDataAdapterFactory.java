@@ -19,8 +19,11 @@
  */
 package com.jaspersoft.studio.data.jrdsprovider;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
@@ -34,8 +37,30 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 		return DataSourceProviderDataAdapterImpl.class.getName();
 	}
 
+	public String getLabel() {
+		return "JasperReports DataSource Provider class";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+	 */
+	@Override
 	public String getDescription() {
-		return "JRDataSourceProvider";
+		// TODO Auto-generated method stub
+		return "Use a java class which implements the JRDataSourceProvider interface";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/bean-green.png");
+		}
+		return null;
 	}
 
 }

@@ -144,7 +144,7 @@ public class DataAdapterEditorPage extends WizardPage {
 		// ?
 		if (newDataAdapterDescriptor.getEditor() == dataAdapterEditor) return;
 		
-		setSubTitle(DataAdapterManager.findFactoryByDataAdapterClass(newDataAdapterDescriptor.getDataAdapter().getClass().getName()).getDescription() );
+		setSubTitle(DataAdapterManager.findFactoryByDataAdapterClass(newDataAdapterDescriptor.getDataAdapter().getClass().getName()).getLabel() );
 		// 1. get the DataAdapterEditor
 		dataAdapterEditor = newDataAdapterDescriptor.getEditor();
 

@@ -23,8 +23,11 @@
  */
 package com.jaspersoft.studio.data.remotexml;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
@@ -38,8 +41,32 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 		return RemoteXmlDataAdapterImpl.class.getName();
 	}
 
-	public String getDescription() {
-		return "Remote XML Data Adapter";
+	public String getLabel() {
+		return "XML document (remote)";
 	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+	 */
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return "Use an XML document loaded using an URL";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/blue-document-code.png");
+		}
+		return null;
+	}
+
+	
 
 }

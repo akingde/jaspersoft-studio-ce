@@ -43,6 +43,9 @@
 package com.jaspersoft.studio.data;
 
 
+import org.eclipse.swt.graphics.Image;
+
+
 /*
 *
 * @author gtoffoli
@@ -68,7 +71,18 @@ public interface DataAdapterFactory {
    
    
    /**
-    * This method provides the name of the connection type. I.e.: JDBC connection
+    * This method provides the label of the data adapter type. I.e.: JDBC connection
     */
-   public abstract String getDescription();
+   public String getLabel();
+   
+   /**
+    * This method provides a short description of the data adapter type. I.e.: connection to a database using JDBC
+    */
+   public String getDescription();
+   
+   /**
+    * This method provides an icon for this data adapter. The icon size can be 32 or 48.
+    * 
+    */
+   public Image getIcon(int size);
 }

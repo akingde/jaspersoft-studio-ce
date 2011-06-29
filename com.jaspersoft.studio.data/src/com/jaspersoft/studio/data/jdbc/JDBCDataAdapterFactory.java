@@ -23,8 +23,11 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 /*
@@ -50,8 +53,30 @@ public class JDBCDataAdapterFactory implements DataAdapterFactory {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	public String getDescription() {
+	public String getLabel() {
 		return "Database JDBC Connection";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+	 */
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return "Use SQL queries to get data from a database";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/database.png");
+		}
+		return null;
 	}
 
 }

@@ -23,8 +23,12 @@
  */
 package com.jaspersoft.studio.data.bean;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.bean.BeanDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
@@ -38,7 +42,29 @@ public class BeanDataAdapterFactory implements DataAdapterFactory {
 		return BeanDataAdapterImpl.class.getName();
 	}
 
+	public String getLabel() {
+		return "Collection of JavaBeans";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+	 */
+	@Override
 	public String getDescription() {
-		return "JavaBean Data Adapter";
+		// TODO Auto-generated method stub
+		return "Collection or Array of JavaBeans";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/beans.png");
+		}
+		return null;
 	}
 }

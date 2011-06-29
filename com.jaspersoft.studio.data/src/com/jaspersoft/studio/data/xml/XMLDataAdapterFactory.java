@@ -23,8 +23,11 @@
  */
 package com.jaspersoft.studio.data.xml;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.xml.XmlDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
@@ -38,7 +41,29 @@ public class XMLDataAdapterFactory implements DataAdapterFactory {
 		return XmlDataAdapterImpl.class.getName();
 	}
 
+	public String getLabel() {
+		return "XML document";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+	 */
+	@Override
 	public String getDescription() {
-		return "XML Data Adapter";
+		// TODO Auto-generated method stub
+		return "Use an XML document as data";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/blue-document-code.png");
+		}
+		return null;
 	}
 }

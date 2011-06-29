@@ -19,8 +19,11 @@
  */
 package com.jaspersoft.studio.data.customjrds;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.ds.DataSourceDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
@@ -34,8 +37,30 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 		return DataSourceDataAdapterImpl.class.getName();
 	}
 
+	public String getLabel() {
+		return "Custom implementaion of JRDataSource";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+	 */
+	@Override
 	public String getDescription() {
-		return "Custom JRDataSource";
+		// TODO Auto-generated method stub
+		return "Use your own java class to instance a JRDataSource";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/bean-green.png");
+		}
+		return null;
 	}
 
 }

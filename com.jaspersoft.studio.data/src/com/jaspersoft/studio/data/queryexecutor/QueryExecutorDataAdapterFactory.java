@@ -23,8 +23,11 @@
  */
 package com.jaspersoft.studio.data.queryexecutor;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.qe.QueryExecuterDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
@@ -38,7 +41,26 @@ public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 		return QueryExecuterDataAdapterImpl.class.getName();
 	}
 
+	public String getLabel() {
+		return "Query Executor adapter";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+	 */
+	@Override
 	public String getDescription() {
-		return "Query Executor Data Adapter";
+		// TODO Auto-generated method stub
+		return "Don't provide any connection or data source.";
+	}
+
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/receipt.png");
+		}
+		return null;
 	}
 }

@@ -104,7 +104,7 @@ public class DataAdaptersListPage extends WizardPage {
 		dataAdapterFactories = DataAdapterManager.getDataAdapterFactories();
 		
 		for (DataAdapterFactory dataAdapterFactory : dataAdapterFactories) {
-			list.add(dataAdapterFactory.getDescription());
+			list.add(dataAdapterFactory.getLabel());
 		}
 	}
 

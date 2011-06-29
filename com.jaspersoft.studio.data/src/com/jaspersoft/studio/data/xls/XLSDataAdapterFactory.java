@@ -23,8 +23,11 @@
  */
 package com.jaspersoft.studio.data.xls;
 
+import org.eclipse.swt.graphics.Image;
+
 import net.sf.jasperreports.data.xls.XlsDataAdapterImpl;
 
+import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
@@ -38,7 +41,29 @@ public class XLSDataAdapterFactory implements DataAdapterFactory {
 		return XlsDataAdapterImpl.class.getName();
 	}
 
+	public String getLabel() {
+		return "Microsoft Excel (XLS)";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+	 */
+	@Override
 	public String getDescription() {
-		return "Microsoft Excel(XLS) Data Adapter";
+		// TODO Auto-generated method stub
+		return "Use a Microsoft Excel document as data";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+	 */
+	@Override
+	public Image getIcon(int size) {
+		// TODO Auto-generated method stub
+		if (size == 16)
+		{
+			return  Activator.getImage("icons/document-excel.png");
+		}
+		return null;
 	}
 }
