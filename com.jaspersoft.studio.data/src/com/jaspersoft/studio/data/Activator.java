@@ -106,10 +106,12 @@ public class Activator extends AbstractUIPlugin {
 		if (image == null) {
 			ImageDescriptor descriptor = AbstractUIPlugin
 					.imageDescriptorFromPlugin(PLUGIN_ID, path);
-			image = descriptor.createImage();
-			if (image != null)
-				imageRegistry.put(path, image);
-			else
+			if (descriptor != null) {
+				image = descriptor.createImage();
+				if (image != null)
+					imageRegistry.put(path, image);
+			}
+			if (image == null)
 				image = imageRegistry.get("icons/report.png"); //$NON-NLS-1$
 		}
 		return image;
