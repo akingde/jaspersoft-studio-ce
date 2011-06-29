@@ -146,7 +146,7 @@ public class JDPaletteFactory {
 	 *          the palette root
 	 */
 	public static void createFields(PaletteRoot paletteRoot, List<String> ignore) {
-		PaletteDrawer drawer = new PaletteDrawer(Messages.common_fields,
+		PaletteDrawer drawer = new PaletteDrawer(Messages.common_tools,
 				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/fields-16.png")); //$NON-NLS-1$
 		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
 		entries.add(createJDEntry(MPageNumber.getIconDescriptor(), MPageNumber.class));

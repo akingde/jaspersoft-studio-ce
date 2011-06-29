@@ -1030,6 +1030,8 @@ public class Messages extends NLS {
 	public static String XMLExporterPreferencePage_4;
 	public static String XMLExporterPreferencePage_5;
 	public static String XMLExporterPreferencePage_6;
+	public static String common_tools;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
