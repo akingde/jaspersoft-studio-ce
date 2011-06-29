@@ -27,9 +27,7 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.bean.BeanDataAdapter;
 import net.sf.jasperreports.data.bean.BeanDataAdapterImpl;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -59,7 +57,6 @@ public class BeanDataAdapterDescriptor extends DataAdapterDescriptor {
 	 */
 	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
 		if (size == 16)
 		{
 			return  Activator.getImage("icons/beans.png");
