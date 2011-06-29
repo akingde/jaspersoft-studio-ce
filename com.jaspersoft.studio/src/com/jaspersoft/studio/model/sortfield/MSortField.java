@@ -25,7 +25,6 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
@@ -174,6 +173,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 		nameD = new RComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_NAME, Messages.common_name, new String[] { "" }); //$NON-NLS-1$

@@ -19,12 +19,16 @@
  */
 package com.jaspersoft.studio.model.sortfield.command;
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
@@ -78,38 +82,48 @@ public class CreateSortFieldCommand extends Command {
 	@Override
 	public void execute() {
 		if (jrField == null) {
-			this.jrField = MSortField.createJRSortField(jrDataSet);
+			jrField = MSortField.createJRSortField(jrDataSet);
+			jrField.setName(getName(jrDataSet.getSortFieldsList(), "SortField"));
 		}
 		if (jrField != null) {
 			if (index < 0)
-				index = jrDataSet.getFieldsList().size();
-			if (jrField.getName() == null) {
-				JRField[] fields = jrDataSet.getFields();
-				for (int i = 0; i < fields.length; i++) {
-					String name = fields[i].getName();
-					jrField.setName(name);
-					try {
-						setSortField();
-						break;
-					} catch (JRException e) {
-						e.printStackTrace();
+				index = jrDataSet.getSortFieldsList().size();
+			try {
+				if (index < 0 || index > jrDataSet.getSortFieldsList().size())
+					jrDataSet.addSortField(jrField);
+				else
+					jrDataSet.addSortField(index, jrField);
+			} catch (JRException e) {
+				e.printStackTrace();
+				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+					String defaultName = getName(jrDataSet.getSortFieldsList(), "CopyOFSortField_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Sort Field Name",
+							"Please, enter unique sort field name", defaultName, null);
+					if (dlg.open() == InputDialog.OK) {
+						jrField.setName(dlg.getValue());
+						execute();
 					}
-				}
-			} else {
-				try {
-					setSortField();
-				} catch (JRException e) {
-					e.printStackTrace();
 				}
 			}
 		}
 	}
 
-	private void setSortField() throws JRException {
-		if (index < 0 || index > jrDataSet.getSortFieldsList().size())
-			jrDataSet.addSortField(jrField);
-		else
-			jrDataSet.addSortField(index, jrField);
+	private String getName(List<JRSortField> fields, String name) {
+		int i = 1;
+		while (i < 100000) {
+			String iname = name + i;
+			boolean found = false;
+			for (JRSortField f : fields) {
+				if (f.getName().equals(iname)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				return iname;
+			i++;
+		}
+		return name;
 	}
 
 	/*
