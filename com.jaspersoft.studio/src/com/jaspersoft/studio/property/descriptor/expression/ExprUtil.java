@@ -44,7 +44,8 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import com.jaspersoft.studio.utils.Misc;
 
 public class ExprUtil {
-	public static JRExpression setValues(JRExpression e, Object value) {
+	@SuppressWarnings("unchecked")
+	public static <T extends JRExpression> T setValues(T e, Object value) {
 		if (value == null)
 			return null;
 		String text = "";
@@ -56,7 +57,7 @@ public class ExprUtil {
 			text = (String) value;
 		}
 		expr.setText(text);
-		return expr;
+		return (T) expr;
 	}
 
 	private static JRDesignExpression createExpression(JRDesignExpression expr) {

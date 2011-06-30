@@ -73,6 +73,7 @@ import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.wizards.report.ReportGenerator;
 
 public class ReportNewWizard extends Wizard implements INewWizard {
 	private ReportTemplatesWizardPage step0;
@@ -267,6 +268,7 @@ public class ReportNewWizard extends Wizard implements INewWizard {
 		}
 
 		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step2, step3, step4);
+		new ReportGenerator().processTemplate(jd, step3.getFields(), step4.getFields());
 
 		String contents;
 		try {

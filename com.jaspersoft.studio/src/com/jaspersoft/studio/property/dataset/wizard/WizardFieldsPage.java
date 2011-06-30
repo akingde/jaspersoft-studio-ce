@@ -88,7 +88,7 @@ public class WizardFieldsPage extends WizardPage {
 			tmp.clear();
 			// remove fields from out
 			for (Object f : this.outFields) {
-				if (!outFields.contains(f))
+				if (!inFields.contains(f))
 					tmp.add(f);
 			}
 			this.outFields.removeAll(tmp);

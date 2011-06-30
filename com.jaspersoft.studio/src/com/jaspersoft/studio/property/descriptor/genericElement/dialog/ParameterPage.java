@@ -153,6 +153,7 @@ public class ParameterPage extends WizardPage {
 		addB.addSelectionListener(new SelectionAdapter() {
 
 			// Remove the selection and refresh the view
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				List<JRGenericElementParameter> list = (List<JRGenericElementParameter>) tableViewer.getInput();
 				String newName = "NEW PARAMETER"; //$NON-NLS-1$
@@ -164,7 +165,6 @@ public class ParameterPage extends WizardPage {
 				}
 				JRDesignGenericElementParameter p = new JRDesignGenericElementParameter();
 				JRDesignExpression expression = new JRDesignExpression();
-				expression.setValueClassName("java.lang.String"); //$NON-NLS-1$
 				p.setValueExpression(expression);
 				p.setName(newName); //$NON-NLS-1$
 				list.add(p);
@@ -192,6 +192,7 @@ public class ParameterPage extends WizardPage {
 		delB.addSelectionListener(new SelectionAdapter() {
 
 			// Remove the selection and refresh the view
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
 				JRGenericElementParameter property = (JRGenericElementParameter) iStructuredSelection.getFirstElement();
