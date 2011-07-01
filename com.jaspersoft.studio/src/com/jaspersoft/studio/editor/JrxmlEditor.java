@@ -86,6 +86,7 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /*
  * An example showing how to create a multi-page editor. This example has 3 pages: <ul> <li>page 0 contains a nested
@@ -460,10 +461,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (!mute) {
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
-					IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
-							"Your report file contain errors, please fix them in xml editor.", e.getCause()); //$NON-NLS-1$
-					ErrorDialog.openError(Display.getDefault().getActiveShell(),
-							Messages.JrxmlEditor_error_loading_jrxml_to_model, null, status);
+					UIUtils.showError(e);
+					// IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
+					//							"Your report file contain errors, please fix them in xml editor.", e.getCause()); //$NON-NLS-1$
+					//
+					//
+					// ErrorDialog.openError(Display.getDefault().getActiveShell(),
+					// Messages.JrxmlEditor_error_loading_jrxml_to_model, null, status);
 				}
 			});
 		}
@@ -601,7 +605,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-			String xml = JRXmlWriterHelper.writeReport(report, file, file.getCharset(true), version);
+			String xml = JRXmlWriterHelper.writeReport(report, file, JRXmlWriterHelper.fixencoding(file.getCharset(true)),
+					version);
 
 			// String xml = JRXmlWriter.writeReport(report, file.getCharset(true));//
 			// JasperCompileManager.writeReportToXml(report);

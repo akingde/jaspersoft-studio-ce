@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.encoding.EncodingMap;
 
 /*
  * 
@@ -83,11 +84,12 @@ public class JRXmlWriterHelper {
 
 	public static String writeReport(JRReport report, IFile file, boolean showDialog) throws Exception {
 
-		return JRXmlWriterHelper.writeReport(report, file, file.getCharset(true),
+		return writeReport(report, file, file.getCharset(true),
 				getVersion(file, new PropertiesHelper(file.getProject()), showDialog));
 	}
 
 	public static String writeReport(JRReport report, IFile file, String encoding, String version) throws Exception {
+		encoding = fixencoding(encoding);
 		if (writers.containsKey(version)) {
 			Class<? extends JRXmlWriter> clazz = writers.get(version);
 			if (clazz != null)
@@ -95,6 +97,19 @@ public class JRXmlWriterHelper {
 						new Object[] { report, encoding });
 		}
 		return JRXmlWriter.writeReport(report, encoding);
+	}
+
+	public static String fixencoding(String encoding) {
+		String tmp = EncodingMap.getJava2IANAMapping(encoding);
+		if (tmp != null)
+			return tmp;
+		tmp = EncodingMap.getJava2IANAMapping(encoding.toUpperCase());
+		if (tmp != null)
+			return tmp;
+		tmp = EncodingMap.getJava2IANAMapping(encoding.toLowerCase());
+		if (tmp != null)
+			return tmp;
+		return encoding;
 	}
 
 	public static String getVersion(IResource resource, PropertiesHelper ph, boolean showDialog) {

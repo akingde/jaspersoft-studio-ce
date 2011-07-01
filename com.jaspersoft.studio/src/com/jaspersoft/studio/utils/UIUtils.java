@@ -25,9 +25,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.eclipse.core.commands.operations.OperationStatus;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Spinner;
 
