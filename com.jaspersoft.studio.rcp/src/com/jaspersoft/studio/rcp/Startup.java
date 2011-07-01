@@ -46,7 +46,7 @@ import com.jaspersoft.studio.rcp.messages.Messages;
 public class Startup implements IStartup {
 
 	public void earlyStartup() {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("JSS_PROJECT"); //$NON-NLS-1$
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("MyReports"); //$NON-NLS-1$
 		try
 		{
 			if (!project.exists())
