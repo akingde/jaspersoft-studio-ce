@@ -164,21 +164,20 @@ public class ReportFactory {
 			createElementsForBand(columnHeader, jd.getColumnHeader().getChildren());
 
 		if (jd.getGroupsList() != null) {
-			for (Object group : jd.getGroupsList()) {
-				JRDesignGroup gr = (JRDesignGroup) group;
+			for (JRGroup gr : jd.getGroupsList()) {
+				MBandGroupHeader b = null;
 				if (gr.getGroupHeaderSection() != null) {
 					List<JRBand> grhBands = ((JRDesignSection) gr.getGroupHeaderSection()).getBandsList();
 					if (grhBands != null) {
-						if (grhBands.isEmpty()) {
-							new MBandGroupHeader(report, gr, null, -1);
-						} else
-							for (Iterator<?> it = grhBands.iterator(); it.hasNext();) {
-								JRDesignBand jrDB = (JRDesignBand) it.next();
-								MBandGroupHeader b = new MBandGroupHeader(report, gr, jrDB, -1);
-								createElementsForBand(b, jrDB.getChildren());
-							}
+						for (Iterator<?> it = grhBands.iterator(); it.hasNext();) {
+							JRDesignBand jrDB = (JRDesignBand) it.next();
+							b = new MBandGroupHeader(report, (JRDesignGroup) gr, jrDB, -1);
+							createElementsForBand(b, jrDB.getChildren());
+						}
 					}
 				}
+				if (b == null)
+					new MBandGroupHeader(report, (JRDesignGroup) gr, null, -1);
 			}
 		}
 
@@ -190,9 +189,6 @@ public class ReportFactory {
 					if (bandsList[k] != null) {
 						detBand = new MBand(report, bandsList[k], BandTypeEnum.DETAIL, -1);
 						createElementsForBand(detBand, bandsList[k].getChildren());
-						//
-						// for (JRElement element : bandsList[k].getElements())
-						// createNode(band, element, -1);
 					}
 				}
 		}
@@ -201,20 +197,20 @@ public class ReportFactory {
 
 		if (jd.getGroupsList() != null) {
 			for (ListIterator<JRGroup> ij = jd.getGroupsList().listIterator(jd.getGroupsList().size()); ij.hasPrevious();) {
-				JRDesignGroup gr = (JRDesignGroup) ij.previous();
+				JRGroup gr = ij.previous();
+				MBandGroupFooter b = null;
 				if (gr.getGroupFooterSection() != null) {
-					List<?> grhBands = ((JRDesignSection) gr.getGroupFooterSection()).getBandsList();
+					List<JRBand> grhBands = ((JRDesignSection) gr.getGroupFooterSection()).getBandsList();
 					if (grhBands != null) {
-						if (grhBands.isEmpty()) {
-							new MBandGroupFooter(report, gr, null, -1);
-						} else
-							for (Iterator<?> it = grhBands.iterator(); it.hasNext();) {
-								JRDesignBand jrDB = (JRDesignBand) it.next();
-								MBandGroupFooter b = new MBandGroupFooter(report, gr, jrDB, -1);
-								createElementsForBand(b, jrDB.getChildren());
-							}
+						for (Iterator<?> it = grhBands.iterator(); it.hasNext();) {
+							JRDesignBand jrDB = (JRDesignBand) it.next();
+							b = new MBandGroupFooter(report, (JRDesignGroup) gr, jrDB, -1);
+							createElementsForBand(b, jrDB.getChildren());
+						}
 					}
 				}
+				if (b == null)
+					new MBandGroupFooter(report, (JRDesignGroup) gr, null, -1);
 			}
 		}
 
@@ -236,7 +232,7 @@ public class ReportFactory {
 
 		MBand nodata = new MBand(report, jd.getNoData(), BandTypeEnum.NO_DATA, -1);
 		if (jd.getNoData() != null)
-			createElementsForBand(footer, jd.getNoData().getChildren());
+			createElementsForBand(nodata, jd.getNoData().getChildren());
 
 		MBand background = new MBand(report, jd.getBackground(), BandTypeEnum.BACKGROUND, -1);
 		if (jd.getBackground() != null)

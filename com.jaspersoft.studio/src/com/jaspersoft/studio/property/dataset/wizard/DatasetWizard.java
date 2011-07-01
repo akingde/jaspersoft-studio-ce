@@ -20,11 +20,14 @@
 package com.jaspersoft.studio.property.dataset.wizard;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -114,17 +117,26 @@ public class DatasetWizard extends Wizard {
 				} catch (JRException e) {
 					e.printStackTrace();
 				}
-		if (step4.getFields() != null) {
-			for (Object f : step4.getFields()) {
+		List<Object> groupFields = step4.getFields();
+		if (groupFields != null) {
+			for (int i = 0; i < groupFields.size(); i++) {
 				try {
-					JRDesignGroup group = new JRDesignGroup();
+					JRDesignField f = (JRDesignField) groupFields.get(i);
 					String name = ((JRField) f).getName();
-					group.setName(name);
+					JRDesignGroup group = null;
+					List<JRGroup> dsgroups = jdataset.getGroupsList();
+					if (dsgroups.size() <= i) {
+						group = new JRDesignGroup();
+						group.setName(name);
+						jdataset.addGroup(group);
+					} else {
+						group = (JRDesignGroup) dsgroups.get(i);
+						group.setName(name);
+					}
 					JRDesignExpression jre = new JRDesignExpression();
 					jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 					group.setExpression(jre);
 
-					jdataset.addGroup(group);
 				} catch (JRException e) {
 					e.printStackTrace();
 				}

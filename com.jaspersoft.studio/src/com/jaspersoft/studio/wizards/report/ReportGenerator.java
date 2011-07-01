@@ -32,44 +32,43 @@ public class ReportGenerator {
 		}
 
 		// Adjusting groups
-		for (int i = 0; i < groupFields.size(); ++i) {
-			JRField gr = (JRField) groupFields.get(i);
-			JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(i);
+		if (groupFields != null)
+			for (int i = 0; i < groupFields.size(); ++i) {
+				JRField gr = (JRField) groupFields.get(i);
+				JRDesignGroup group = (JRDesignGroup) jd.getGroupsList().get(i);
 
-			// find the two elements having as expression: G1Label and G1Field
-			if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
-				JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
-				JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G" + (i + 1) + "Label");
-				if (st == null)
-					st = findStaticTextElement(groupHeaderSection, "GroupLabel");
-				if (st == null)
-					st = findStaticTextElement(groupHeaderSection, "Group Label");
-				if (st == null)
-					st = findStaticTextElement(groupHeaderSection, "Label");
-				if (st == null)
-					st = findStaticTextElement(groupHeaderSection, "Group name");
+				// find the two elements having as expression: G1Label and G1Field
+				if (group.getGroupHeaderSection() != null && group.getGroupHeaderSection().getBands().length > 0) {
+					JRBand groupHeaderSection = group.getGroupHeaderSection().getBands()[0];
+					JRDesignStaticText st = findStaticTextElement(groupHeaderSection, "G" + (i + 1) + "Label");
+					if (st == null)
+						st = findStaticTextElement(groupHeaderSection, "GroupLabel");
+					if (st == null)
+						st = findStaticTextElement(groupHeaderSection, "Group Label");
+					if (st == null)
+						st = findStaticTextElement(groupHeaderSection, "Label");
+					if (st == null)
+						st = findStaticTextElement(groupHeaderSection, "Group name");
+					if (st != null)
+						st.setText(gr.getName());
 
-				if (st != null) {
-					st.setText(gr.getName());
-				}
+					JRDesignTextField tf = findTextFieldElement(groupHeaderSection, "G" + (i + 1) + "Field");
+					if (tf == null)
+						tf = findTextFieldElement(groupHeaderSection, "GroupField");
+					if (tf == null)
+						tf = findTextFieldElement(groupHeaderSection, "Group Field");
+					if (tf == null)
+						tf = findTextFieldElement(groupHeaderSection, "Field");
 
-				JRDesignTextField tf = findTextFieldElement(groupHeaderSection, "G" + (i + 1) + "Field");
-				if (tf == null)
-					tf = findTextFieldElement(groupHeaderSection, "GroupField");
-				if (tf == null)
-					tf = findTextFieldElement(groupHeaderSection, "Group Field");
-				if (tf == null)
-					tf = findTextFieldElement(groupHeaderSection, "Field");
-
-				if (tf != null) {
-					JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}");
-					tf.setExpression(expression);
+					if (tf != null) {
+						JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + gr.getName() + "}");
+						tf.setExpression(expression);
+					}
 				}
 			}
-		}
 
 		// Remove extra groups...
-		if (!keepExtraGroups && !noLayoutChanges) {
+		if (!keepExtraGroups && !noLayoutChanges && groupFields != null) {
 			while (groupFields.size() < jd.getGroupsList().size()) {
 				jd.removeGroup((JRDesignGroup) jd.getGroupsList().get(groupFields.size()));
 			}
@@ -113,32 +112,33 @@ public class ReportGenerator {
 			if (detailBand != null && detailBand instanceof JRDesignFrame) {
 				width = ((JRDesignFrame) detailBand).getWidth();
 			}
-			int cols = fields.size() - groupFields.size();
+			int cols = (fields != null ? fields.size() : 0) - (groupFields != null ? groupFields.size() : 0);
 			if (cols > 0) {
 				width /= cols;
 				int currentX = 0;
-				for (Object obj : fields) {
-					JRDesignField f = (JRDesignField) obj;
-					if (groupFields.contains(f))
-						continue;
-					if (labelElement != null && columnHeaderBand != null) {
-						JRDesignStaticText newLabel = (JRDesignStaticText) labelElement.clone();
-						newLabel.setText(f.getName());
-						newLabel.setX(currentX);
-						newLabel.setWidth(width);
-						addElement(columnHeaderBand, newLabel);
-					}
-					if (fieldElement != null && detailBand != null) {
-						JRDesignTextField newTextField = (JRDesignTextField) fieldElement.clone();
-						// Fix the class (the Textfield has a limited set of type options...)
-						newTextField.setExpression(ExprUtil.setValues(new JRDesignExpression(), "$F{" + f.getName() + "}"));
-						newTextField.setX(currentX);
-						newTextField.setWidth(width);
-						addElement(detailBand, newTextField);
-					}
+				if (fields != null)
+					for (Object obj : fields) {
+						JRDesignField f = (JRDesignField) obj;
+						if (groupFields != null && groupFields.contains(f))
+							continue;
+						if (labelElement != null && columnHeaderBand != null) {
+							JRDesignStaticText newLabel = (JRDesignStaticText) labelElement.clone();
+							newLabel.setText(f.getName());
+							newLabel.setX(currentX);
+							newLabel.setWidth(width);
+							addElement(columnHeaderBand, newLabel);
+						}
+						if (fieldElement != null && detailBand != null) {
+							JRDesignTextField newTextField = (JRDesignTextField) fieldElement.clone();
+							// Fix the class (the Textfield has a limited set of type options...)
+							newTextField.setExpression(ExprUtil.setValues(new JRDesignExpression(), "$F{" + f.getName() + "}"));
+							newTextField.setX(currentX);
+							newTextField.setWidth(width);
+							addElement(detailBand, newTextField);
+						}
 
-					currentX += width;
-				}
+						currentX += width;
+					}
 			}
 
 		} else if (!noLayoutChanges && reportType != null && reportType.equals("columnar") && detailBand != null) {
@@ -173,27 +173,28 @@ public class ReportGenerator {
 			if (fieldElement != null)
 				rowHeight = Math.max(rowHeight, fieldElement.getHeight());
 			// if rowHeight is still 0... no row will be added...
-			for (Object obj : fields) {
-				JRDesignField f = (JRDesignField) obj;
-				if (groupFields.contains(f))
-					continue;
-				if (labelElement != null) {
-					JRDesignStaticText newLabel = (JRDesignStaticText) labelElement.clone();
-					newLabel.setText(f.getName());
-					newLabel.setY(currentY);
-					addElement(detailBand, newLabel);
-				}
-				if (fieldElement != null) {
-					JRDesignTextField newTextField = (JRDesignTextField) fieldElement.clone();
-					JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + f.getName() + "}");
+			if (fields != null)
+				for (Object obj : fields) {
+					JRDesignField f = (JRDesignField) obj;
+					if (groupFields != null && groupFields.contains(f))
+						continue;
+					if (labelElement != null) {
+						JRDesignStaticText newLabel = (JRDesignStaticText) labelElement.clone();
+						newLabel.setText(f.getName());
+						newLabel.setY(currentY);
+						addElement(detailBand, newLabel);
+					}
+					if (fieldElement != null) {
+						JRDesignTextField newTextField = (JRDesignTextField) fieldElement.clone();
+						JRDesignExpression expression = ExprUtil.setValues(new JRDesignExpression(), "$F{" + f.getName() + "}");
 
-					newTextField.setExpression(expression);
-					newTextField.setY(currentY);
-					addElement(detailBandField, newTextField);
-				}
+						newTextField.setExpression(expression);
+						newTextField.setY(currentY);
+						addElement(detailBandField, newTextField);
+					}
 
-				currentY += rowHeight;
-			}
+					currentY += rowHeight;
+				}
 
 			setGroupHeight(detailBand, currentY);
 			setGroupHeight(detailBandField, currentY);
