@@ -42,8 +42,6 @@ public class IntroXHTMLContentProvider implements IIntroXHTMLContentProvider {
 	public void createContent(String id, Element parent) {
 		try {
 			Document doc = parent.getOwnerDocument();
-			Element ul = doc.createElement("ul");
-			ul.setAttribute("style", "list-style-type: none");
 			PriorityQueue<IFile> queue = new PriorityQueue<IFile>(10,
 					new Comparator<IFile>() {
 						public int compare(IFile arg0, IFile arg1) {
@@ -51,7 +49,6 @@ public class IntroXHTMLContentProvider implements IIntroXHTMLContentProvider {
 									- arg0.getModificationStamp()).intValue();
 						}
 					});
-
 			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot()
 					.getProjects();
 			for (IProject project : projects) {
@@ -65,32 +62,41 @@ public class IntroXHTMLContentProvider implements IIntroXHTMLContentProvider {
 					}
 				}
 			}
-
-			for (int i = 0; i < queue.size() && i < 20; i++) {
-				IFile file = queue.poll();
-				Element li = doc.createElement("li");
-				Element a = doc.createElement("a");
-
-				a.setAttribute("href", createOpenProcessHref(file));
-				a.setAttribute("style", "font-size: 11px; font-weight: bold; color: dimgrey;");
-				String fname = file.getName();
-				if (fname.length() > 25)
-					fname = fname.substring(0, 25) + "...";
-				a.appendChild(doc.createTextNode(fname));
-				li.appendChild(a);
-
+			if (queue.isEmpty()) {
 				Element div = doc.createElement("div");
-				div.setAttribute("style", "color: dimgrey;");
-				div.appendChild(doc.createTextNode("Last modified: "
-						+ new SimpleDateFormat("MMM d, yyyy HH:mm:ss")
-								.format(new Date(file.getModificationStamp()))));
-				li.appendChild(div);
+				div.setAttribute("style", "color: dimgrey; font-size: 16px;");
+				div.appendChild(doc.createTextNode("No recent files"));
+				parent.appendChild(div);
+			} else {
+				Element ul = doc.createElement("ul");
+				ul.setAttribute("style", "list-style-type: none");
+				for (int i = 0; i < queue.size() && i < 20; i++) {
+					IFile file = queue.poll();
+					Element li = doc.createElement("li");
+					Element a = doc.createElement("a");
 
-				ul.appendChild(li);
+					a.setAttribute("href", createOpenProcessHref(file));
+					a.setAttribute("style",
+							"font-size: 11px; font-weight: bold; color: dimgrey;");
+					String fname = file.getName();
+					if (fname.length() > 25)
+						fname = fname.substring(0, 25) + "...";
+					a.appendChild(doc.createTextNode(fname));
+					li.appendChild(a);
 
+					Element div = doc.createElement("div");
+					div.setAttribute("style", "color: dimgrey;");
+					div.appendChild(doc.createTextNode("Last modified: "
+							+ new SimpleDateFormat("MMM d, yyyy HH:mm:ss")
+									.format(new Date(file
+											.getModificationStamp()))));
+					li.appendChild(div);
+
+					ul.appendChild(li);
+
+				}
+				parent.appendChild(ul);
 			}
-			parent.appendChild(ul);
-
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
