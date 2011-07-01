@@ -31,6 +31,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -46,45 +48,46 @@ import com.jaspersoft.studio.rcp.messages.Messages;
 public class Startup implements IStartup {
 
 	public void earlyStartup() {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("MyReports"); //$NON-NLS-1$
-		try
-		{
-			if (!project.exists())
-			{
-				project.create(null);
+		IProject project = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject("MyReports"); //$NON-NLS-1$
+		IProgressMonitor monitor = new NullProgressMonitor();
+		try {
+			if (!project.exists()) {
+				project.create(monitor);
 			}
-			project.open(null);
+			project.open(monitor);
 
 			IProjectDescription description = project.getDescription();
 			description.setName(Messages.Startup_jss_project);
 			String[] ids = description.getNatureIds();
-			if (!Arrays.asList(ids).contains(JavaCore.NATURE_ID))
-			{
+			if (!Arrays.asList(ids).contains(JavaCore.NATURE_ID)) {
 				String[] newIds = new String[ids.length + 1];
 				System.arraycopy(ids, 0, newIds, 0, ids.length);
 				newIds[newIds.length - 1] = JavaCore.NATURE_ID;
 				description.setNatureIds(newIds);
-				project.setDescription(description, null);
+				project.setDescription(description, monitor);
 
 				IJavaProject javaproj = JavaCore.create(project);
-				javaproj.setOutputLocation(project.getFullPath(), null);
-				IClasspathEntry srcEntry = JavaCore.newSourceEntry(project.getFullPath());
-				IClasspathEntry containerEntry = JavaCore.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER));
-				javaproj.setRawClasspath(new IClasspathEntry[] { containerEntry, srcEntry }, null);
+				javaproj.setOutputLocation(project.getFullPath(), monitor);
+				IClasspathEntry srcEntry = JavaCore.newSourceEntry(project
+						.getFullPath());
+				IClasspathEntry containerEntry = JavaCore
+						.newContainerEntry(new Path(JavaRuntime.JRE_CONTAINER));
+				javaproj.setRawClasspath(new IClasspathEntry[] {
+						containerEntry, srcEntry }, monitor);
 			}
 			ids = description.getNatureIds();
-			if (!Arrays.asList(ids).contains(JasperReportsNature.NATURE_ID))
-			{
+			if (!Arrays.asList(ids).contains(JasperReportsNature.NATURE_ID)) {
 				String[] newIds = new String[ids.length + 1];
 				System.arraycopy(ids, 0, newIds, 0, ids.length);
 				newIds[newIds.length - 1] = JasperReportsNature.NATURE_ID;
 				description.setNatureIds(newIds);
-				project.setDescription(description, null);
+				project.setDescription(description, monitor);
 			}
-		}
-		catch (CoreException e)
-		{
+		} catch (CoreException e) {
 			e.printStackTrace();
+		} finally {
+			monitor.done();
 		}
 	}
 
