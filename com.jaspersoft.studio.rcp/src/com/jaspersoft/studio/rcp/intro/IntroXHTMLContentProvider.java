@@ -107,8 +107,8 @@ public class IntroXHTMLContentProvider implements IIntroXHTMLContentProvider {
 
 		return "http://org.eclipse.ui.intro/runAction?pluginId=com.jaspersoft.studio.rcp&class="
 				+ OpenFileAction.class.getName()
-				+ "&file="
-				+ file.getLocationURI().toASCIIString();
+				+ "&prj="+ file.getProject().getName() + "&file="
+				+ file.getProjectRelativePath().toPortableString();
 
 	}
 }
