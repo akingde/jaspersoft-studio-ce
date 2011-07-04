@@ -441,7 +441,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (fileExtension.equals("jasper")) { //$NON-NLS-1$
 			JasperReport report = (JasperReport) JRLoader.loadObject(in);
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			JRXmlWriter.writeReport(report, outputStream, encoding);
+			JRXmlWriter.writeReport(report, outputStream, "UTF-8"); // encoding); Again we want to force use of UTF8!!
 			return new ByteArrayInputStream(outputStream.toByteArray());
 		} else
 			return in;

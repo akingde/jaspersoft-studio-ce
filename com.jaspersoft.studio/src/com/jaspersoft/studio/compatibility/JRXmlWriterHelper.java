@@ -84,7 +84,7 @@ public class JRXmlWriterHelper {
 
 	public static String writeReport(JRReport report, IFile file, boolean showDialog) throws Exception {
 
-		return writeReport(report, file, file.getCharset(true),
+		return writeReport(report, file, file.getCharset(true),  
 				getVersion(file, new PropertiesHelper(file.getProject()), showDialog));
 	}
 
@@ -96,7 +96,7 @@ public class JRXmlWriterHelper {
 				return (String) clazz.getMethod("writeReport", new Class[] { JRReport.class, String.class }).invoke(null,
 						new Object[] { report, encoding });
 		}
-		return JRXmlWriter.writeReport(report, encoding);
+		return JRXmlWriter.writeReport(report, "UTF-8"); // GT: We want to force users to save their file using UTF-8
 	}
 
 	public static String fixencoding(String encoding) {
