@@ -101,14 +101,14 @@
          <view
                id="com.jaspersoft.studio.Repository"
                minimized="false"
-               ratio="0.5"
+               ratio="0.2"
                relationship="left"
                relative="org.eclipse.ui.editorss">
          </view>
          <view
                id="org.eclipse.ui.views.ContentOutline"
                minimized="false"
-               ratio="0.5"
+               ratio="0.2"
                relationship="bottom"
                relative="com.jaspersoft.studio.Repository">
          </view>
