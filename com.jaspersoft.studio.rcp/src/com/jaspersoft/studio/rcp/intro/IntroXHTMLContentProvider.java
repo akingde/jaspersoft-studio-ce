@@ -86,8 +86,7 @@ public class IntroXHTMLContentProvider implements IIntroXHTMLContentProvider {
 
 					Element div = doc.createElement("div");
 					div.setAttribute("style", "color: dimgrey;");
-					div.appendChild(doc.createTextNode("Last modified: "
-							+ new SimpleDateFormat("MMM d, yyyy HH:mm:ss")
+					div.appendChild(doc.createTextNode(new SimpleDateFormat("MMM d, yyyy HH:mm:ss")
 									.format(new Date(file
 											.getModificationStamp()))));
 					li.appendChild(div);

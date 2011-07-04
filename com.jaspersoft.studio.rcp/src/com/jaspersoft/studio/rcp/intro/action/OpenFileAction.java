@@ -7,9 +7,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.intro.IIntroPart;
 import org.eclipse.ui.intro.IIntroSite;
 import org.eclipse.ui.intro.config.IIntroAction;
 
@@ -42,6 +45,8 @@ public class OpenFileAction implements IIntroAction {
 			// page.activate(ep);
 			// } catch (URISyntaxException e) {
 			// e.printStackTrace();
+			
+			
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}

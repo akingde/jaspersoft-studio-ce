@@ -24,10 +24,17 @@
 package com.jaspersoft.studio.rcp.intro;
 
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartService;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.IWorkbenchPage;
 
 import com.jaspersoft.studio.rcp.messages.Messages;
 
@@ -55,5 +62,40 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowProgressIndicator(true);
 		configurer
 				.setTitle(Messages.ApplicationWorkbenchWindowAdvisor_jasper_open_studio);
+		
+		IPartService service = (IPartService) configurer.getWindow().getService(IPartService.class);
+    	service.addPartListener(new IPartListener() {
+
+			public void partActivated(IWorkbenchPart part) {
+			}
+
+			public void partBroughtToTop(IWorkbenchPart part) {
+			}
+
+			public void partClosed(IWorkbenchPart part) {
+			}
+
+			public void partDeactivated(IWorkbenchPart part) {
+				
+				String name = part.getSite().getId();
+				
+				if ("org.eclipse.ui.internal.introview".equals(name) && part != null && part instanceof IViewPart)
+				{
+					final IViewPart thePart = (IViewPart)part;
+					Display.getDefault().asyncExec(new Runnable() {
+						 public void run() {
+							 PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().hideView(thePart);
+						 }
+						});
+					
+					//PlatformUI.getWorkbench().getIntroManager().closeIntro( (IIntroPart) part );
+				}
+			}
+
+			public void partOpened(IWorkbenchPart part) {
+			}
+    	});
 	}
+	
+	
 }

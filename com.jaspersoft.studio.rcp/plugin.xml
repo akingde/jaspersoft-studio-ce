@@ -61,8 +61,7 @@
          </presentation>
       </config>
    </extension>
-  
-   <extension
+ <extension
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
@@ -70,7 +69,7 @@
             name="Jaspersoft Studio">
          <property
                name="windowImages"
-               value="icons/jr_icon.png">
+               value="icons/jss_16.png,icons/jss_icon_32.png,icons/jss_icon_48.png,icons/jss_icon_64.png,icons/jss_icon_128.png">
          </property>
          <property
                name="aboutText"
@@ -101,7 +100,8 @@
                value="plugin_customization.ini">
          </property>
       </product>
-   </extension> <extension
+   </extension> 
+   <extension
          point="org.eclipse.ui.intro.configExtension">
       <action
             name="cheatshdatasource"
@@ -135,6 +135,15 @@
             name="jaspersoftfacebook"
             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=www.facebook.com/pages/Jaspersoft-Corporation/78981369547">
       </action>
+      <action
+            name="banner"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jasperserver">
+      </action>
+      <action
+            name="tutorials"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org%2fwebsite%2fireportwebsite%2fJSS+Website%2ftutorials.html%3fheader%3dproject%26target%3djaspersoftstudio">
+      </action>
+      
       <!-- twitter.com/#!/JaspersoftS -->
       <action
             name="jaspersofttwitter"
@@ -158,7 +167,7 @@
             name="Jaspersoft Studio">
          <property
                name="windowImages"
-               value="icons/jr_icon.png">
+               value="icons/jss_16.png,icons/jss_icon_32.png,icons/jss_icon_48.png,icons/jss_icon_64.png,icons/jss_icon_128.png">
          </property>
          <property
                name="aboutText"
