@@ -140,6 +140,10 @@
             name="jaspersofttwitter"
             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;enc=base64&amp;csid=dHdpdHRlci5jb20vIyEvSmFzcGVyc29mdFMK">
       </action>
+      <action
+            name="jaspersoftserver"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jasperserver">
+      </action>
    </extension>
    <extension
          point="org.eclipse.ui.startup">
