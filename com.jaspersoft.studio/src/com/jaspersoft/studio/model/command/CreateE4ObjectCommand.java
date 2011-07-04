@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
+import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.text.MStaticText;
@@ -78,6 +79,9 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
 				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER) || btype.equals(BandTypeEnum.GROUP_HEADER)) {
 					createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupFooter) n).getJrGroup());
+					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
+				} else if (btype.equals(BandTypeEnum.GROUP_HEADER)) {
+					createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupHeader) n).getJrGroup());
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
 				} else if (btype.equals(BandTypeEnum.SUMMARY) || btype.equals(BandTypeEnum.TITLE)) {
 					createVariable(tag, ResetTypeEnum.REPORT, null);
