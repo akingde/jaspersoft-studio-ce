@@ -61,7 +61,47 @@
          </presentation>
       </config>
    </extension>
+  
    <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.jaspersoft.studio.rcp.application"
+            name="Jaspersoft Studio">
+         <property
+               name="windowImages"
+               value="icons/jr_icon.png">
+         </property>
+         <property
+               name="aboutText"
+               value="Jaspersoft Studio - Visual Designer for JasperReports. &#x0A;Copyright (C) 2010 - 2011 Jaspersoft Corporation. All rights reserved. &#x0A;&#x0A;For more information, please visit &#x0A;http://jasperforge.org/projects/jaspersoftstudio  &#x0A;&#x0A;Special thanks to all people who support this software.">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/studio_logo_about.png">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="0061A2">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="0,260,362,5">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="4,240,358,18">
+         </property>
+         <property
+               name="appName"
+               value="Jaspersoft Studio">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension> <extension
          point="org.eclipse.ui.intro.configExtension">
       <action
             name="cheatshdatasource"
@@ -74,6 +114,31 @@
       <action
             name="cheatshpreview"
             replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenCheatSheetAction&amp;csid=com.jaspersoft.studio.cheatsheets.runreport">
+      </action>
+      <action
+            name="jaspersoftsite"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org">
+      </action>
+      <action
+            name="jaspersoftsitestudio"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jaspersoftstudio">
+      </action>
+      <action
+            name="jaspersoftsitestudiobugtracker"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jaspersoftstudio/tracker/">
+      </action>
+      <action
+            name="jaspersoftsitestudioforum"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=jasperforge.org/projects/jaspersoftstudio/forum/">
+      </action>
+      <action
+            name="jaspersoftfacebook"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;csid=www.facebook.com/pages/Jaspersoft-Corporation/78981369547">
+      </action>
+      <!-- twitter.com/#!/JaspersoftS -->
+      <action
+            name="jaspersofttwitter"
+            replaces="runAction?pluginId=com.jaspersoft.studio.rcp&amp;class=com.jaspersoft.studio.rcp.intro.action.OpenInBrowserAction&amp;enc=base64&amp;csid=dHdpdHRlci5jb20vIyEvSmFzcGVyc29mdFMK">
       </action>
    </extension>
    <extension
