@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.repository;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import com.jaspersoft.studio.ExtensionManager;
+import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.repository.actions.CreateDataAdapterAction;
@@ -98,16 +101,24 @@ public class RepositoryView extends ViewPart {
 
 		// Restore state from the previous session.
 		restoreState();
+		DataAdapterManager.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
+
+			public void propertyChange(PropertyChangeEvent evt) {
+				treeViewer.refresh(true);
+			}
+		});
 	}
 
 	private IMemento memento;
 
+	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		init(site);
 		this.memento = memento;
 		new ExtensionManager().init();
 	}
 
+	@Override
 	public void saveState(IMemento memento) {
 		IStructuredSelection sel = (IStructuredSelection) treeViewer.getSelection();
 		if (sel.isEmpty())
@@ -147,6 +158,7 @@ public class RepositoryView extends ViewPart {
 		// bars.setGlobalActionHandler(IWorkbenchActionConstants.SELECT_ALL, selectAllAction);
 		// bars.setGlobalActionHandler(IWorkbenchActionConstants.DELETE, deleteItemAction);
 		treeViewer.getControl().addKeyListener(new KeyAdapter() {
+			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.character == SWT.DEL && event.stateMask == 0 && deleteDataAdapterItemAction.isEnabled()) {
 					deleteDataAdapterItemAction.run();

@@ -43,6 +43,8 @@ public class SQLQueryDesigner extends QueryDesigner {
 			sqleditor = new SQLDomainModel();
 			sqlviewer = new SQLSourceViewer(sqleditor, composite);
 			sqlviewer.initDBContext();
+			
+			
 //			sqlviewer.setContentProvider(sqleditor.createContentProvider());
 
 			// sqlviewer

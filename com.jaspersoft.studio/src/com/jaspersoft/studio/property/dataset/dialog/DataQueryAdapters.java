@@ -2,6 +2,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 
 import java.util.List;
 
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -14,6 +15,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -40,6 +42,7 @@ import com.jaspersoft.studio.data.widget.DatasourceComboItem;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.repository.actions.CreateDataAdapterAction;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
@@ -190,9 +193,18 @@ public abstract class DataQueryAdapters {
 				return true;
 			}
 		});
+
+		Action newDA = new Action("New") {
+			@Override
+			public void run() {
+				CreateDataAdapterAction createDAAction = new CreateDataAdapterAction(null);
+				createDAAction.run();
+				dscombo.setSelected(createDAAction.getNewDataAdapter());
+			}
+		};
+
 		gFields = new Action(Messages.DataQueryAdapters_getfields) {
-			// TODO run inside a job, modal with progress bar
-			// FIXME, because, when cloning, eventSuport is not copied,
+			@Override
 			public void run() {
 
 				final String lang = langCombo.getText();
@@ -200,6 +212,7 @@ public abstract class DataQueryAdapters {
 				if (da != null) {
 					final String query = qdfactory.getDesigner(lang).getQuery();
 					Job job = new Job(Messages.DataQueryAdapters_jobname) {
+						@Override
 						protected IStatus run(IProgressMonitor monitor) {
 							try {
 								SelectionHelper.setClassLoader(file, monitor);
@@ -209,16 +222,19 @@ public abstract class DataQueryAdapters {
 								jdq.setText(query);
 								newdataset.setQuery(jdq);
 
-								final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(
-										DataAdapterServiceUtil.getDataAdapterService(da.getDataAdapter()), newdataset);
-								if (fields != null) {
-									Display.getDefault().asyncExec(new Runnable() {
+								DataAdapterService das = DataAdapterServiceUtil.getDataAdapterService(da.getDataAdapter());
+								try {
+									final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, newdataset);
+									if (fields != null) {
+										Display.getDefault().asyncExec(new Runnable() {
 
-										public void run() {
-											setFields(fields);
-										}
-									});
-
+											public void run() {
+												setFields(fields);
+											}
+										});
+									}
+								} finally {
+									das.dispose();
 								}
 							} catch (UnsupportedOperationException e) {
 								e.printStackTrace();
@@ -239,6 +255,8 @@ public abstract class DataQueryAdapters {
 		gFields.setEnabled(false);
 
 		manager.add(dscombo);
+		manager.add(newDA);
+		manager.add(new Separator());
 		manager.add(gFields);
 
 		manager.update(true);
