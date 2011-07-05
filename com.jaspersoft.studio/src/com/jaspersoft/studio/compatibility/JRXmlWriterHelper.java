@@ -84,7 +84,7 @@ public class JRXmlWriterHelper {
 
 	public static String writeReport(JRReport report, IFile file, boolean showDialog) throws Exception {
 
-		return writeReport(report, file, file.getCharset(true),  
+		return writeReport(report, file, file.getCharset(true),
 				getVersion(file, new PropertiesHelper(file.getProject()), showDialog));
 	}
 
@@ -96,20 +96,21 @@ public class JRXmlWriterHelper {
 				return (String) clazz.getMethod("writeReport", new Class[] { JRReport.class, String.class }).invoke(null,
 						new Object[] { report, encoding });
 		}
-		return JRXmlWriter.writeReport(report, "UTF-8"); // GT: We want to force users to save their file using UTF-8
+		return JRXmlWriter.writeReport(report, encoding);
 	}
 
 	public static String fixencoding(String encoding) {
-		String tmp = EncodingMap.getJava2IANAMapping(encoding);
-		if (tmp != null)
-			return tmp;
-		tmp = EncodingMap.getJava2IANAMapping(encoding.toUpperCase());
-		if (tmp != null)
-			return tmp;
-		tmp = EncodingMap.getJava2IANAMapping(encoding.toLowerCase());
-		if (tmp != null)
-			return tmp;
-		return encoding;
+		return "UTF-8";
+//		String tmp = EncodingMap.getJava2IANAMapping(encoding);
+//		if (tmp != null)
+//			return tmp;
+//		tmp = EncodingMap.getJava2IANAMapping(encoding.toUpperCase());
+//		if (tmp != null)
+//			return tmp;
+//		tmp = EncodingMap.getJava2IANAMapping(encoding.toLowerCase());
+//		if (tmp != null)
+//			return tmp;
+//		return encoding;
 	}
 
 	public static String getVersion(IResource resource, PropertiesHelper ph, boolean showDialog) {

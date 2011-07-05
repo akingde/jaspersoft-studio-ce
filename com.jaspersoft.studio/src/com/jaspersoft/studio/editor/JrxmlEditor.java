@@ -100,7 +100,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * modelPropertyChange event implements this interface, and the object created with that class is registered with a
 	 * component using the component's <code>addModelPropertyChangeListener<code> method. When
 	 * the modelPropertyChange event occurs, that object's appropriate
-	 * method is invoked.
+	 * method is invoked. 
 	 * 
 	 * @see ModelPropertyChangeEvent
 	 */
@@ -441,7 +441,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (fileExtension.equals("jasper")) { //$NON-NLS-1$
 			JasperReport report = (JasperReport) JRLoader.loadObject(in);
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			JRXmlWriter.writeReport(report, outputStream, "UTF-8"); // encoding); Again we want to force use of UTF8!!
+			JRXmlWriter.writeReport(report, outputStream, encoding);
 			return new ByteArrayInputStream(outputStream.toByteArray());
 		} else
 			return in;
