@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
-import com.itextpdf.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.PdfWriter;
 
 public class PDFPermissionFieldEditor extends FieldEditor {
 	private Composite container;
@@ -169,6 +169,7 @@ public class PDFPermissionFieldEditor extends FieldEditor {
 	 * 
 	 * @see org.eclipse.jface.preference.FieldEditor#doStore()
 	 */
+	@Override
 	protected void doStore() {
 		String prop = getProperty();
 		if (hasSameProperty(prop)) {
