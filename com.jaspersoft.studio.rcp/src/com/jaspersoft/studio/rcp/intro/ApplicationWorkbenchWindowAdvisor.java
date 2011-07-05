@@ -77,18 +77,23 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 			public void partDeactivated(IWorkbenchPart part) {
 				
-				String name = part.getSite().getId();
+				try {
+					String name = part.getSite().getId();
 				
-				if ("org.eclipse.ui.internal.introview".equals(name) && part != null && part instanceof IViewPart)
+					if ("org.eclipse.ui.internal.introview".equals(name) && part != null && part instanceof IViewPart)
+					{
+						final IViewPart thePart = (IViewPart)part;
+						Display.getDefault().asyncExec(new Runnable() {
+							 public void run() {
+								 PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().hideView(thePart);
+							 }
+							});
+						
+						//PlatformUI.getWorkbench().getIntroManager().closeIntro( (IIntroPart) part );
+					}
+				} catch (Exception ex)
 				{
-					final IViewPart thePart = (IViewPart)part;
-					Display.getDefault().asyncExec(new Runnable() {
-						 public void run() {
-							 PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().hideView(thePart);
-						 }
-						});
 					
-					//PlatformUI.getWorkbench().getIntroManager().closeIntro( (IIntroPart) part );
 				}
 			}
 

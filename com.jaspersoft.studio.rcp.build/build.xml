@@ -1,6 +1,7 @@
 <project default="main">
 	<property file="build.properties"/>
 	
+	
 	<property name="baseLocation" value="${eclipse.home}"/>
 	<!-- by default, check for deltapack co-located with eclipse -->
 	<property name="deltapack" value="${eclipse.home}/deltapack/eclipse"/>
@@ -27,18 +28,15 @@
 		<!-- refresh the workspace -->
 		<eclipse.convertPath fileSystemPath="${basedir}" property="resourcePath"/>
 		<eclipse.refreshLocal resource="${resourcePath}" depth="infinite"/>
-		
-	    <!-- create the windows installer -->
-		
-		<antcall target="win32-installer"/>
+		<!--  <antcall target="win32-installer"/> -->
 	</target>
 	
+	<!-- create the windows installer -->
 	<target name="win32-installer">
 		
 		<property name="dist" value="${basedir}/dist" />
 		<property name="zipfile" value="${buildId}-win32.win32.x86"/>
 		<property name="zipdir" value="${dist}/${zipfile}" />
-
 		
 		<echo message="${basedir}/${buildId}-win32.win32.x86.zip"/>
 		<!-- cleanup the previous directory (if any) -->
@@ -64,6 +62,120 @@
 			<define name="INSTALLER_FILES_DIR" value="${zipdir}/jaspersoftstudio"/>
 			<define name="OUTPUT_FILE_NAME" value="${dist}/${jss.win32.x86.installer}"/>
 		</nsisant>
+		
+		<!-- remove the directory used to create the installer -->
+		<delete dir="${zipdir}"/>	
 
 	</target>
+	
+	<!-- create the Linux tgz -->
+	<target name="tgz-x86-installer">
+			
+			<property name="dist" value="${basedir}/dist" />
+			<property name="zipfile" value="${buildId}-linux.gtk.x86"/>
+			<property name="zipdir" value="${dist}/${zipfile}" />
+
+			<!-- cleanup the previous directory (if any) -->
+			<mkdir dir="${dist}"/>
+			
+			<delete dir="${zipdir}"/>
+			
+			<!-- Decompressing the archive created by the Eclipse build -->
+			<unzip src="${basedir}/${zipfile}.zip" dest="${zipdir}"/>
+			<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
+			<copy file="${basedir}/resources/notice.txt" todir="${zipdir}/jaspersoftstudio"/>
+			<copy file="${basedir}/resources/LICENSE.txt" todir="${zipdir}/jaspersoftstudio"/>
+			<chmod file="${zipdir}/jaspersoftstudio/Jaspersoft Studio" perm="ugo+x"/>
+			<!-- rename the folder -->
+			<move file="${zipdir}/jaspersoftstudio" tofile="${zipdir}/${jss.distro.folder}"/>
+			
+			<tar destfile="${dist}/${jss.linux.x86.tgz}" basedir="${zipdir}" compression="gzip"/>
+			<!-- remove the temp extraction directory -->
+			<delete dir="${zipdir}"/>
+	</target>
+	
+	
+	<!-- create the Mac installer tgz -->
+		<target name="mac-x86_64-installer" description="Create DMG installer using a remote Mac server (uses ssh.properties)">
+				
+			<property file="ssh.properties"/>
+				<property name="dist" value="${basedir}/dist" />
+				<property name="zipfile" value="${buildId}-macosx.cocoa.x86_64"/>
+				<property name="zipdir" value="${dist}/${zipfile}" />
+
+				<sshexec host="${sshhost}"
+					username="${sshuser}"
+					password="${sshpass}"
+					command="rm -Rf ${sshroot}/tmp-jssbuild"/>
+			
+				<sshexec host="${sshhost}"
+					username="${sshuser}"
+					password="${sshpass}"
+					command="mkdir ${sshroot}/tmp-jssbuild"/>
+
+				<scp file="${basedir}/resources/jss-package-template.tgz"
+			       todir="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild" 
+				   password="${sshpass}"/>
+
+				<scp file="${basedir}/resources/mac_distro.sh"
+				       todir="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild" 
+					   password="${sshpass}"/>
+			
+				<scp file="${basedir}/${zipfile}.zip"
+				      todir="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild" 
+					  password="${sshpass}"/>
+			
+			    <sshexec host="${sshhost}"
+						username="${sshuser}"
+						password="${sshpass}"
+						command="cd '${sshroot}/tmp-jssbuild'; chmod +x mac_distro.sh; ./mac_distro.sh ${jss.version}"/>
+			
+			    <scp file="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild/jaspersoftstudio.dmg"
+	    				localTofile="${dist}/${jss.mac.x86_64}" 
+						password="${sshpass}"/>
+				
+		</target>
+	
+	
+		<!-- create the Mac installer tgz -->
+			<target name="mac-x86-installer" description="Create DMG installer using a remote Mac server (uses ssh.properties)">
+					
+				<property file="ssh.properties"/>
+					<property name="dist" value="${basedir}/dist" />
+					<property name="zipfile" value="${buildId}-macosx.cocoa.x86"/>
+					<property name="zipdir" value="${dist}/${zipfile}" />
+
+					<sshexec host="${sshhost}"
+						username="${sshuser}"
+						password="${sshpass}"
+						command="rm -Rf ${sshroot}/tmp-jssbuild"/>
+				
+					<sshexec host="${sshhost}"
+						username="${sshuser}"
+						password="${sshpass}"
+						command="mkdir ${sshroot}/tmp-jssbuild"/>
+
+					<scp file="${basedir}/resources/jss-package-template.tgz"
+				       todir="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild" 
+					   password="${sshpass}"/>
+
+					<scp file="${basedir}/resources/mac_distro.sh"
+					       todir="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild" 
+						   password="${sshpass}"/>
+				
+					<scp file="${basedir}/${zipfile}.zip"
+					      todir="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild" 
+						  password="${sshpass}"/>
+				
+				    <sshexec host="${sshhost}"
+							username="${sshuser}"
+							password="${sshpass}"
+							command="cd '${sshroot}/tmp-jssbuild'; chmod +x mac_distro.sh; ./mac_distro.sh ${jss.version}"/>
+				
+				    <scp file="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild/jaspersoftstudio.dmg"
+		    				localTofile="${dist}/${jss.mac.x86}" 
+							password="${sshpass}"/>
+					
+			</target>
+	
 </project>

@@ -15,7 +15,7 @@
    <item
          title="Run the report">
       <description>
-         If data adapter is allready selected for this report, execution will start automaticaly.
+         If data adapter is already selected for this report, execution will start automatically.
       </description>
       </item>
       <item
