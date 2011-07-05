@@ -59,6 +59,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowFastViewBars(true);
 		configurer.setShowMenuBar(true);
 		configurer.setShowProgressIndicator(true);
+		configurer.setShowPerspectiveBar(true);
 		configurer
 				.setTitle(Messages.ApplicationWorkbenchWindowAdvisor_jasper_open_studio);
 		
