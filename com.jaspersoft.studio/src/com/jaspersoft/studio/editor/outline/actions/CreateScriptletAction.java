@@ -71,6 +71,7 @@ public class CreateScriptletAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateScriptletAction_create_scriptlet);

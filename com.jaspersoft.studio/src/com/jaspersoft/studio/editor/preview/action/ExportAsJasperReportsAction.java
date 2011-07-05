@@ -46,6 +46,7 @@ public class ExportAsJasperReportsAction extends AbstractExportAction {
 		setDefaultFileExtension("jrprint"); //$NON-NLS-1$
 	}
 
+	@Override
 	protected void exportWithProgress(File file, JRExportProgressMonitor monitor) throws Throwable {
 		final java.io.File f = file.getAbsoluteFile();
 		final Throwable[] ex = new Throwable[1];

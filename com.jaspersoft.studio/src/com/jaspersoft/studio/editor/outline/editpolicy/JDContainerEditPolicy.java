@@ -44,6 +44,7 @@ public class JDContainerEditPolicy extends ContainerEditPolicy {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.editpolicies.ContainerEditPolicy#getOrphanChildrenCommand(org.eclipse.gef.requests.GroupRequest)
 	 */
+	@Override
 	public Command getOrphanChildrenCommand(GroupRequest request) {
 		List<?> parts = request.getEditParts();
 		CompoundCommand result = new CompoundCommand("orphans"); //$NON-NLS-1$

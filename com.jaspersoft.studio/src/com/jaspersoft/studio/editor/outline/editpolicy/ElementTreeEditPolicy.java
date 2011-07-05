@@ -39,6 +39,7 @@ public class ElementTreeEditPolicy extends AbstractEditPolicy {
 	 * 
 	 * @see org.eclipse.gef.editpolicies.AbstractEditPolicy#getCommand(org.eclipse.gef.Request)
 	 */
+	@Override
 	public Command getCommand(Request req) {
 		if (REQ_MOVE.equals(req.getType()))
 			return getMoveCommand((ChangeBoundsRequest) req);

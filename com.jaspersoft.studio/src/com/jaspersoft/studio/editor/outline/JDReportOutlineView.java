@@ -124,6 +124,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * 
 	 * @see org.eclipse.ui.part.Page#init(org.eclipse.ui.part.IPageSite)
 	 */
+	@Override
 	public void init(IPageSite pageSite) {
 		super.init(pageSite);
 		ActionRegistry registry = editor.getActionRegistry();
@@ -205,6 +206,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 
 		IToolBarManager tbm = site.getActionBars().getToolBarManager();
 		showOutlineAction = new Action() {
+			@Override
 			public void run() {
 				showPage(ID_OUTLINE);
 			}
@@ -214,6 +216,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		showOutlineAction.setToolTipText(Messages.JDReportOutlineView_show_outline_tool_tip);
 		tbm.add(showOutlineAction);
 		showOverviewAction = new Action() {
+			@Override
 			public void run() {
 				showPage(ID_OVERVIEW);
 			}
@@ -232,6 +235,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * 
 	 * @see org.eclipse.gef.ui.parts.ContentOutlinePage#createControl(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public void createControl(Composite parent) {
 		pageBook = new PageBook(parent, SWT.NONE);
 		outline = getViewer().createControl(pageBook);
@@ -277,6 +281,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * 
 	 * @see org.eclipse.ui.part.Page#dispose()
 	 */
+	@Override
 	public void dispose() {
 		unhookOutlineViewer();
 		if (thumbnail != null) {
@@ -321,6 +326,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * 
 	 * @see org.eclipse.gef.ui.parts.ContentOutlinePage#getControl()
 	 */
+	@Override
 	public Control getControl() {
 		return pageBook;
 	}

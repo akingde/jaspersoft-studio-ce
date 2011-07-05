@@ -71,6 +71,7 @@ public abstract class ACreateAction extends SelectionAction {
 	 * 
 	 * @return if the command should be enabled
 	 */
+	@Override
 	protected boolean calculateEnabled() {
 		Command cmd = createCreateCommand(getSelectedObjects());
 		if (cmd == null)

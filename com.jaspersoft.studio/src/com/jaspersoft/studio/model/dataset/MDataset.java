@@ -154,6 +154,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MDataset_name_description);

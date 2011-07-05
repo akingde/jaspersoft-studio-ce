@@ -71,6 +71,7 @@ public class CreateConditionalStyleAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateConditionalStyleAction_create_conditional_style);

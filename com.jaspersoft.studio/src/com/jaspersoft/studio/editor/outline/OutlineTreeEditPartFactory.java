@@ -202,7 +202,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 		} else if (child instanceof MBand && child.getValue() != null) {
 			if (child instanceof MBandGroupHeader)
 				return new DeleteBandGroupHeaderCommand((MReport) parent, (MBandGroupHeader) child);
-			if (child instanceof MBandGroupHeader)
+			if (child instanceof MBandGroupFooter)
 				return new DeleteBandGroupFooterCommand((MReport) parent, (MBandGroupFooter) child);
 			if (((MBand) child).getBandType().equals(BandTypeEnum.DETAIL))
 				return new DeleteBandDetailCommand(parent, (MBand) child);

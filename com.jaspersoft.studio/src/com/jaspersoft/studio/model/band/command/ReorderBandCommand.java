@@ -119,6 +119,7 @@ public class ReorderBandCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrDesignSection.getBandsList().indexOf(jrBand);
 		jrDesignSection.removeBand(jrBand);
@@ -131,6 +132,7 @@ public class ReorderBandCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrDesignSection.removeBand(jrBand);
 		if (oldIndex < 0 || oldIndex > jrDesignSection.getBandsList().size())

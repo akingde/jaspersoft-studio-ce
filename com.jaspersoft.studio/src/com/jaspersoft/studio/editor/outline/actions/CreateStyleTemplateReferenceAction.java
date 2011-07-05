@@ -28,7 +28,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.style.MStyleTemplateReference;
 /*
  * The Class CreateStyleTemplateAction.
@@ -52,6 +51,7 @@ public class CreateStyleTemplateReferenceAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText("Create Reference");

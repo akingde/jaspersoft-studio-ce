@@ -57,6 +57,7 @@ public abstract class AReportViewerAction extends Action implements IReportViewe
 		return reportViewer;
 	}
 
+	@Override
 	public void run() {
 		BusyIndicator.showWhile(null, new Runnable() {
 			public void run() {

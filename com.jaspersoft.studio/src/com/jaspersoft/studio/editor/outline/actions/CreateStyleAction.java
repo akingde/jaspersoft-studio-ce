@@ -52,6 +52,7 @@ public class CreateStyleAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateStyleAction_create_style);

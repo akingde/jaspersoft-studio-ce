@@ -71,6 +71,7 @@ public class CreateGroupAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateGroupAction_create_group);

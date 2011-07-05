@@ -54,10 +54,12 @@ public class ExportMenuAction extends AReportViewerAction implements IMenuCreato
 		setMenuCreator(this);
 	}
 
+	@Override
 	protected boolean calculateEnabled() {
 		return getReportViewer().hasDocument();
 	}
 
+	@Override
 	public void run() {
 		if (defaultAction != null && defaultAction.isEnabled())
 			defaultAction.run();
@@ -67,6 +69,7 @@ public class ExportMenuAction extends AReportViewerAction implements IMenuCreato
 		return menuManager;
 	}
 
+	@Override
 	public void dispose() {
 		menuManager.dispose();
 	}

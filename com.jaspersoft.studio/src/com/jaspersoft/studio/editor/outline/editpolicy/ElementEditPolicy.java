@@ -39,6 +39,7 @@ public class ElementEditPolicy extends ComponentEditPolicy {
 	 * 
 	 * @see org.eclipse.gef.editpolicies.ComponentEditPolicy#createDeleteCommand(org.eclipse.gef.requests.GroupRequest)
 	 */
+	@Override
 	protected Command createDeleteCommand(GroupRequest request) {
 		if (request.getType() == REQ_DELETE && getHost() != null && getHost().getParent() != null) {
 			Object parent = getHost().getParent().getModel();

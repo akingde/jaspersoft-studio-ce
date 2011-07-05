@@ -56,6 +56,7 @@ public class AContainerTreeEditPart extends ATreeEditPart {
 	/**
 	 * Creates and installs pertinent EditPolicies.
 	 */
+	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.CONTAINER_ROLE, new JDContainerEditPolicy());

@@ -58,7 +58,7 @@ public class DeleteGroupReportAction extends DeleteAction {
 	 *          the editor
 	 */
 	public DeleteGroupReportAction(IEditorPart editor) {
-		super(editor);
+		super(editor.getSite().getPart());
 	}
 
 	/*

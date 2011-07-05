@@ -190,6 +190,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		IntegerPropertyDescriptor heightD = new IntegerPropertyDescriptor(JRDesignBand.PROPERTY_HEIGHT,
 				Messages.common_height);

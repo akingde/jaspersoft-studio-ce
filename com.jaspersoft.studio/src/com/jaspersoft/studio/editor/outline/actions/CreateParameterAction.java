@@ -71,6 +71,7 @@ public class CreateParameterAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateParameterAction_create_parameter);

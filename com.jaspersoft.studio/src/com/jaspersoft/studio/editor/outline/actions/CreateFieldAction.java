@@ -52,6 +52,7 @@ public class CreateFieldAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateFieldAction_create_field);
