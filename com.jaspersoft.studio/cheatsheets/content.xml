@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet title="Data Source Management">
 	<intro>
-		<description>This tutorial guides you through the creation of a JDBC datasource.
+		<description>This tutorial guides you through the creation of a JDBC Data Adapter, which allows you to create and run a report using
+		a database.
 		</description>
 	</intro>
 	<item title="Show the repository view" skip="true">
 		<description>Select Window > Show View > Other... at the top of Eclipse. In Jaspersoft 
-		Studio folder, select Repository and do OK. This will show the repository view.
+		Studio folder, select Repository and press OK. This will show the repository view.
 		</description>
   		<command
         required="false"
         serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=com.jaspersoft.studio.Repository)"/> 
 	</item>
-   <item
-         title="Configure a data source">
+   <item title="Configure a Data Adapter">
       <description>
-         <b>Body</b>
+         To create a new Data Adapter, right click the <b>Data Adapters</b> node and select <b>Create Data Adapter</b>.
+         Select Database JDBC Connection and press <b>Next &gt;</b>.
+         
+         
       </description>
-   </item>
-	<item title="Launch the JDBC datasource editor" skip="true">
-		<action pluginId="com.jaspersoft.studio.repository.actions.CreateDataSourceAction" 
-				class="com.jaspersoft.studio.repository.actions.CreateDataSourceAction"
-				/>
-		<description>In the repository view, go to Datasources > JDBC Datasources. Right-click 
-		on JDBC Datasources and do Create... . This will launch the JDBC datasource editor.  
+      <!-- <action pluginId="com.jaspersoft.studio" 
+				class="com.jaspersoft.studio.repository.actions.CreateDataAdapterAction"
+				/> -->
+	</item>   
+   <item title="Launch the JDBC datasource editor" skip="true">
+		<description>Set the correct JDBC driver name. You will have to add the jar(s) of the driver in order to be able to connect
+		to your database. When done, press <b>Test</b> to test your connection.  
 		</description>
 	</item>
 </cheatsheet>
