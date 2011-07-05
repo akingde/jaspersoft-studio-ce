@@ -69,6 +69,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	  * Added to process SWT.OpenDocument events.
 	  * Here we actually process the OpenDocument events.
 	  */
+	@Override
 	public void eventLoopIdle(Display display) {
 		openDocProcessor.openFiles();
 		super.eventLoopIdle(display);
