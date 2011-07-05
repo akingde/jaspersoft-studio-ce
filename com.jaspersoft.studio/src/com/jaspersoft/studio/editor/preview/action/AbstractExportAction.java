@@ -68,6 +68,7 @@ public abstract class AbstractExportAction extends AReportViewerAction {
 		return resource;
 	}
 
+	@Override
 	public void run() {
 		FileDialog dialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SINGLE | SWT.SAVE);
 		if (filterNames != null)
@@ -188,6 +189,7 @@ public abstract class AbstractExportAction extends AReportViewerAction {
 		this.filterPath = filterPath;
 	}
 
+	@Override
 	protected boolean calculateEnabled() {
 		return getReportViewer().hasDocument();
 	}
@@ -212,7 +214,8 @@ public abstract class AbstractExportAction extends AReportViewerAction {
 		exporter.setParameter(JRExporterParameter.OFFSET_X, ph.getInteger(JRExporterPreferencePage.EXPPARAM_OFFSET_X));
 		exporter.setParameter(JRExporterParameter.OFFSET_Y, ph.getInteger(JRExporterPreferencePage.EXPPARAM_OFFSET_X));
 
-		Pages p = new Pages().parseString(ph.getString(JRExporterPreferencePage.EXPPARAM_INDEX_PAGE));
+		String indPage = ph.getString(JRExporterPreferencePage.EXPPARAM_INDEX_PAGE, "all");
+		Pages p = new Pages().parseString(indPage);
 
 		if (p.getPage() != null)
 			exporter.setParameter(JRExporterParameter.PAGE_INDEX, p.getPage());

@@ -54,6 +54,7 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 		setDescription(Messages.JRExporterPreferencePage_6);
 	}
 
+	@Override
 	public void createFieldEditors() {
 		addField(new CEncodingFieldEditor(JRExporterParameter.PROPERTY_CHARACTER_ENCODING,
 				Messages.JRExporterPreferencePage_7, Messages.JRExporterPreferencePage_8, getFieldEditorParent()));

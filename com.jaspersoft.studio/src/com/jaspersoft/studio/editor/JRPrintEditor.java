@@ -205,6 +205,7 @@ public class JRPrintEditor extends EditorPart {
 		}
 	}
 
+	@Override
 	protected void setSite(IWorkbenchPartSite site) {
 		super.setSite(site);
 		getSite().getWorkbenchWindow().getPartService().addPartListener(partListener);
