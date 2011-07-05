@@ -43,6 +43,8 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.cheatsheets.ICheatSheetAction;
+import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -51,9 +53,13 @@ import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizard;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizardDialog;
 
-public class CreateDataAdapterAction extends Action {
+public class CreateDataAdapterAction extends Action implements ICheatSheetAction {
 	public static final String ID = "createdataAdapteraction"; //$NON-NLS-1$
 	private TreeViewer treeViewer;
+
+	public CreateDataAdapterAction() {
+		this(null);
+	}
 
 	public CreateDataAdapterAction(TreeViewer treeViewer) {
 		super();
@@ -92,6 +98,11 @@ public class CreateDataAdapterAction extends Action {
 
 	public DataAdapterDescriptor getNewDataAdapter() {
 		return newDataAdapter;
+	}
+
+	public void run(String[] params, ICheatSheetManager manager) {
+		run();
+		notifyResult(true);
 	}
 
 }

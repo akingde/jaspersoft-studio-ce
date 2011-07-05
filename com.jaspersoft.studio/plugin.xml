@@ -584,21 +584,21 @@
             composite="false"
             contentFile="cheatsheets/content.xml"
             id="com.jaspersoft.studio.cheatsheets.datasource"
-            name="Data Source Management">
-      </cheatsheet>
-      <cheatsheet
-            category="com.jaspersoft.studio.cheatsheets.repository"
-            composite="false"
-            contentFile="cheatsheets/runreport.xml"
-            id="com.jaspersoft.studio.cheatsheets.runreport"
-            name="Run Jasper Reports">
+            name="Manage Data Connections">
       </cheatsheet>
       <cheatsheet
             category="com.jaspersoft.studio.cheatsheets.repository"
             composite="false"
             contentFile="cheatsheets/designreports.xml"
             id="com.jaspersoft.studio.cheatsheets.designreport"
-            name="Design Reports">
+            name="Start Designing Reports">
+      </cheatsheet>
+      <cheatsheet
+            category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/runreport.xml"
+            id="com.jaspersoft.studio.cheatsheets.runreport"
+            name="Preview and Run Reports">
       </cheatsheet>
    </extension>
    

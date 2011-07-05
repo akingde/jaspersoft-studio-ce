@@ -6,16 +6,17 @@
          This cheat sheet shows you how to start designing reports with Jaspersoft Studio.
       </description>
    </intro>
-   <item
-         title="Open the Report Design Perspective">
+   <item title="Open the Report Design Perspective" contextId="org.eclipse.jdt.ui.open_java_perspective_action">
       <description>
          From the main menu, select Window > Open Perspective > Other..., then select the <b>Report Design</b> perspective.
       </description>
+      <action pluginId="org.eclipse.ui.cheatsheets" class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective" param1="com.jaspersoft.studio.ReportDesignPerspective"/>
+      
    </item>
    <item  title="The New Report Wizard">
       <description>
          From the main menu, select File > New > <b>Jasper Report</b>, the new JasperReport wizard will start. You will have to do the following steps:
-      </description>
+      </description>      
       	<subitem label="Select a template"/>
 		<subitem label="Select the project and report file name"/>
 		<subitem label="Configure DataAdapter, report language, edit the query" skip="true"/>
