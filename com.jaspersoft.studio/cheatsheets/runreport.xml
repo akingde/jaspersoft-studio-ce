@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet
-      title="Run Jasper Reports">
+      title="Preview and Run Reports">
    <intro>
       <description>
-         <b>Body</b>
+         This cheat sheet shows you how to run reports and export them in different formats.
       </description>
-   </intro>
+   </intro> <item
+         title="Switch to preview mode">
+      <description>
+         Open a report, and click on <b>&quot;Preview&quot;</b> tab on the bottom of the editor.
+      </description>
+   </item>
+  
    <item
+         title="Run the report">
+      <description>
+         If data adapter is allready selected for this report, execution will start automaticaly.
+      </description>
+      </item>
+      <item
          title="Preview the report">
       <description>
-         <b>Body</b>
+         Use navigation and zoom buttons from the toolbar to view report pages.
+      </description>
+      </item>
+   <item title="Export report">
+      <description>
+         On the preview editor toolbar press <b>&quot;Export&quot;</b> icon and select the format you want to export. The file dialog will ask the location where report will be exported.
       </description>
    </item>
 </cheatsheet>
