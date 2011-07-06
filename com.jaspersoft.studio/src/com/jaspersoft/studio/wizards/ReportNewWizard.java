@@ -75,7 +75,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.wizards.report.ReportGenerator;
 
-public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWizard{
+public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWizard {
 	private ReportTemplatesWizardPage step0;
 	private NewFileCreationWizard step1;
 	private WizardDataSourcePage step2;
@@ -298,7 +298,8 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 								URL uimage = (URL) en.nextElement();
 								IFile f = repFile.getParent().getFile(new Path(str));
 								try {
-									f.create(uimage.openStream(), true, monitor);
+									if (!f.exists())
+										f.create(uimage.openStream(), true, monitor);
 								} catch (CoreException e) {
 									e.printStackTrace();
 								} catch (IOException e) {
