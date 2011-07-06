@@ -28,7 +28,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -76,25 +78,28 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			}
 
 			public void partDeactivated(IWorkbenchPart part) {
-				
-				try {
-					String name = part.getSite().getId();
-				
-					if ("org.eclipse.ui.internal.introview".equals(name) && part != null && part instanceof IViewPart)
-					{
-						final IViewPart thePart = (IViewPart)part;
-						Display.getDefault().asyncExec(new Runnable() {
-							 public void run() {
-								 PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().hideView(thePart);
-							 }
-							});
-						
-						//PlatformUI.getWorkbench().getIntroManager().closeIntro( (IIntroPart) part );
-					}
-				} catch (Exception ex)
-				{
-					
+			try {
+				String name = part.getSite().getId();
+
+				if ("org.eclipse.ui.internal.introview".equals(name)
+						&& part != null && part instanceof IViewPart) {
+					final IViewPart thePart = (IViewPart) part;
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							IWorkbenchWindow activeWorkbenchWindow = PlatformUI
+									.getWorkbench().getActiveWorkbenchWindow();
+							if (activeWorkbenchWindow != null) {
+								IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+								if(activePage != null)
+								activePage.hideView(thePart);
+							}
+						}
+					});
 				}
+			} catch (Exception ex)
+			{
+			ex.printStackTrace();	
+			}
 			}
 
 			public void partOpened(IWorkbenchPart part) {
