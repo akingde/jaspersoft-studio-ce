@@ -50,6 +50,8 @@ import com.jaspersoft.studio.utils.UIUtils;
  * link nodes & together.
  * 
  * @author Chicu Veaceslav
+ * @author Giulio Toffoli	06/07/11 21.59	Fixed the way the variable name is created, the generated expression and textfield evaluation time
+
  */
 public class CreatePercentageCommand extends CreateElementCommand {
 

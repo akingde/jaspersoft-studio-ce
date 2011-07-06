@@ -12,6 +12,7 @@
 	
 	<target name="main">
 	
+		<echo message="Delta pack location: ${deltapack}"/>
 		<!-- Check that we have a deltapack -->
 		<available property="haveDeltaPack" file="${deltapack}"/>
 		<fail unless="haveDeltaPack" message="The deltapack is required to build this product.  Please edit buildProduct.xml or set the &quot;deltapack&quot; property." />
@@ -28,11 +29,10 @@
 		<!-- refresh the workspace -->
 		<eclipse.convertPath fileSystemPath="${basedir}" property="resourcePath"/>
 		<eclipse.refreshLocal resource="${resourcePath}" depth="infinite"/>
-		<!--  <antcall target="win32-installer"/> -->
 	</target>
 	
 	<!-- create the windows installer -->
-	<target name="win32-installer">
+	<target name="windows-x86-installer" description="Create the win32 x86 installer using NSIS script (NSIS required)">
 		
 		<property name="dist" value="${basedir}/dist" />
 		<property name="zipfile" value="${buildId}-win32.win32.x86"/>
@@ -56,6 +56,7 @@
 		
 		<taskdef name="nsisant"	classname="net.sf.nsisant.Task"	classpath="${basedir}/lib/nsisant-1.1.jar"/>
 		<nsisant script="${basedir}/resources/JaspersoftStudioInstaller.nsi">
+			<define name="PRDUCT_ARCH" value="x86"/>
 			<define name="PRODUCT_VERSION" value="${jss.version}"/>
 			<define name="PRODUCT_NAME" value="Jaspersoft Studio"/>
 			<define name="PRODUCT_WEB_SITE" value="http://www.jasperforge.org/projects/jaspersoftstudio"/>
@@ -68,8 +69,46 @@
 
 	</target>
 	
+	<!-- create the windows installer -->
+		<target name="windows-x86_64-installer" description="Create the win64 installer using NSIS script (NSIS required)">
+			
+			<property name="dist" value="${basedir}/dist" />
+			<property name="zipfile" value="${buildId}-win32.win32.x86_64"/>
+			<property name="zipdir" value="${dist}/${zipfile}" />
+			
+			<echo message="${basedir}/${buildId}-win32.win32.x86_64.zip"/>
+			<!-- cleanup the previous directory (if any) -->
+			<mkdir dir="${dist}"/>
+			
+			<delete dir="${zipdir}"/>
+			
+			<!-- Decompressing the archive created by the Eclipse build -->
+			<unzip src="${basedir}/${zipfile}.zip" dest="${zipdir}"/>
+			<!-- Replacing the exe launcher (it is a modified version of the original laucher (Eclipse 3.6.2)
+			     improved with Jaspersoft Studio icons -->
+			<copy file="${basedir}/resources/Jaspersoft Studio64.exe" tofile="${zipdir}/jaspersoftstudio/Jaspersoft Studio.exe" overwrite="true"/>
+			
+			<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
+			<copy file="${basedir}/resources/notice.txt" todir="${zipdir}/jaspersoftstudio"/>
+			<copy file="${basedir}/resources/LICENSE.txt" todir="${zipdir}/jaspersoftstudio"/>
+			
+			<taskdef name="nsisant"	classname="net.sf.nsisant.Task"	classpath="${basedir}/lib/nsisant-1.1.jar"/>
+			<nsisant script="${basedir}/resources/JaspersoftStudioInstaller64.nsi">
+				<define name="PRDUCT_ARCH" value="x86_64"/>
+				<define name="PRODUCT_VERSION" value="${jss.version}"/>
+				<define name="PRODUCT_NAME" value="Jaspersoft Studio"/>
+				<define name="PRODUCT_WEB_SITE" value="http://www.jasperforge.org/projects/jaspersoftstudio"/>
+				<define name="INSTALLER_FILES_DIR" value="${zipdir}/jaspersoftstudio"/>
+				<define name="OUTPUT_FILE_NAME" value="${dist}/${jss.win32.x86_64.installer}"/>
+			</nsisant>
+			
+			<!-- remove the directory used to create the installer -->
+			<delete dir="${zipdir}"/>	
+
+		</target>
+	
 	<!-- create the Linux tgz -->
-	<target name="tgz-x86-installer">
+	<target name="linux-x86-installer" description="Create the Linux (x86) tgz package (Unix system required)">
 			
 			<property name="dist" value="${basedir}/dist" />
 			<property name="zipfile" value="${buildId}-linux.gtk.x86"/>
@@ -94,9 +133,35 @@
 			<delete dir="${zipdir}"/>
 	</target>
 	
+	<!-- create the Linux tgz -->
+		<target name="linux-x86_64-installer" description="Create the Linux (x86_64) tgz package (Unix system required)">
+				
+				<property name="dist" value="${basedir}/dist" />
+				<property name="zipfile" value="${buildId}-linux.gtk.x86_64"/>
+				<property name="zipdir" value="${dist}/${zipfile}" />
+
+				<!-- cleanup the previous directory (if any) -->
+				<mkdir dir="${dist}"/>
+				
+				<delete dir="${zipdir}"/>
+				
+				<!-- Decompressing the archive created by the Eclipse build -->
+				<unzip src="${basedir}/${zipfile}.zip" dest="${zipdir}"/>
+				<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
+				<copy file="${basedir}/resources/notice.txt" todir="${zipdir}/jaspersoftstudio"/>
+				<copy file="${basedir}/resources/LICENSE.txt" todir="${zipdir}/jaspersoftstudio"/>
+				<chmod file="${zipdir}/jaspersoftstudio/Jaspersoft Studio" perm="ugo+x"/>
+				<!-- rename the folder -->
+				<move file="${zipdir}/jaspersoftstudio" tofile="${zipdir}/${jss.distro.folder}"/>
+				
+				<tar destfile="${dist}/${jss.linux.x86_64.tgz}" basedir="${zipdir}" compression="gzip"/>
+				<!-- remove the temp extraction directory -->
+				<delete dir="${zipdir}"/>
+		</target>
+	
 	
 	<!-- create the Mac installer tgz -->
-		<target name="mac-x86_64-installer" description="Create DMG installer using a remote Mac server (uses ssh.properties)">
+		<target name="mac-x86_64-installer" description="Create DMG installer for Mac x86_64 using a remote Mac server (uses ssh.properties)">
 				
 			<property file="ssh.properties"/>
 				<property name="dist" value="${basedir}/dist" />
@@ -138,7 +203,7 @@
 	
 	
 		<!-- create the Mac installer tgz -->
-			<target name="mac-x86-installer" description="Create DMG installer using a remote Mac server (uses ssh.properties)">
+			<target name="mac-x86-installer" description="Create DMG installer for Mac x86 using a remote Mac server (uses ssh.properties)">
 					
 				<property file="ssh.properties"/>
 					<property name="dist" value="${basedir}/dist" />

@@ -13,8 +13,6 @@
 
 !define UNINSTALL_SURVEY_URL "http://www.jaspersoft.com/surveys/iReportUninstall"
 
-!include LogicLib.nsh
-
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 !include fileassoc.nsh
@@ -57,19 +55,22 @@ var ICONS_GROUP
 
 ; MUI end ------
 
+
+
+
+
+
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-;OutFile "..\dist\${PRODUCT_NAME}-${PRODUCT_VERSION}-x86-windows-installer.exe"
 OutFile "${OUTPUT_FILE_NAME}"
 
-
-
-InstallDir "$PROGRAMFILES\Jaspersoft\${PRODUCT_NAME}-${PRODUCT_VERSION}"
+InstallDir "$PROGRAMFILES64\Jaspersoft\${PRODUCT_NAME}-${PRODUCT_VERSION}"
 
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
 Section "${PRODUCT_NAME}" SEC01
+
   SetShellVarContext all
   SetOutPath "$INSTDIR"
   SetOverwrite try

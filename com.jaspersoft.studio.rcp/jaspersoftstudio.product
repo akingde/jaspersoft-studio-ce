@@ -21,14 +21,11 @@ Special thanks to all people who support this software.
 
    <launcherArgs>
       <programArgs>-data @user.home/JaspersoftWorkspace</programArgs>
-      <vmArgsMac>-Xms128m
-
+      <vmArgs>-Xms128m
 -Xmx512m
-
 -XX:PermSize=128M
-
--XX:MaxPermSize=256M
--XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+-XX:MaxPermSize=256M</vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="/com.jaspersoft.studio.rcp/icons/jss_16.png" i32="/com.jaspersoft.studio.rcp/icons/jss_icon_32.png" i48="/com.jaspersoft.studio.rcp/icons/jss_icon_48.png" i64="/com.jaspersoft.studio.rcp/icons/jss_icon_64.png" i128="/com.jaspersoft.studio.rcp/icons/jss_icon_128.png"/>
@@ -787,7 +784,6 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.datatools.sqltools.data.core"/>
       <plugin id="org.eclipse.datatools.sqltools.data.ui"/>
       <plugin id="org.eclipse.datatools.sqltools.db.generic"/>
-      <plugin id="org.eclipse.datatools.sqltools.db.generic.ui"/>
       <plugin id="org.eclipse.datatools.sqltools.debugger.core"/>
       <plugin id="org.eclipse.datatools.sqltools.debugger.core.ui"/>
       <plugin id="org.eclipse.datatools.sqltools.doc.user"/>
@@ -867,8 +863,8 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.jdt.debug"/>
       <plugin id="org.eclipse.jdt.debug.ui"/>
       <plugin id="org.eclipse.jdt.launching"/>
-      <plugin id="org.eclipse.jdt.launching.macosx" fragment=""/>
-      <plugin id="org.eclipse.jdt.launching.ui.macosx" fragment=""/>
+      <plugin id="org.eclipse.jdt.launching.macosx"/>
+      <plugin id="org.eclipse.jdt.launching.ui.macosx"/>
       <plugin id="org.eclipse.jdt.ui"/>
       <plugin id="org.eclipse.jface"/>
       <plugin id="org.eclipse.jface.databinding"/>
