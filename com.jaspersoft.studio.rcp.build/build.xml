@@ -160,7 +160,7 @@
 		</target>
 	
 	
-	<!-- create the Mac installer tgz -->
+		<!-- create the Mac installer  -->
 		<target name="mac-x86_64-installer" description="Create DMG installer for Mac x86_64 using a remote Mac server (uses ssh.properties)">
 				
 			<property file="ssh.properties"/>
@@ -202,7 +202,7 @@
 		</target>
 	
 	
-		<!-- create the Mac installer tgz -->
+		<!-- create the Mac installer -->
 			<target name="mac-x86-installer" description="Create DMG installer for Mac x86 using a remote Mac server (uses ssh.properties)">
 					
 				<property file="ssh.properties"/>
