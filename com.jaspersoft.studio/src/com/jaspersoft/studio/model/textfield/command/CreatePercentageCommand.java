@@ -133,42 +133,65 @@ public class CreatePercentageCommand extends CreateElementCommand {
 				super.createObject();
 				if (field != null) {
 					JRDesignTextField tf = (JRDesignTextField) jrElement;
-					JRDesignExpression expression = new JRDesignExpression();
-					if (field instanceof JRField)
-						expression.setText(createExpression(((JRField) field).getName(), ((JRField) field).getValueClass()));
-					if (field instanceof JRVariable)
-						expression.setText(createExpression(((JRVariable) field).getName(), ((JRVariable) field).getValueClass()));
-					tf.setExpression(expression);
-					tf.setPattern("#,##0.00%");
-
+					
+					
+					// Create the expressions based of the reset type selected by the user...
+					JRDesignVariable variable = null;
 					try {
 						if (field instanceof JRField)
-							jasperDesign.addVariable(createVariable(((JRField) field).getName(),
-									((JRField) field).getValueClassName(), rtype, group));
-						if (field instanceof JRVariable)
-							jasperDesign.addVariable(createVariable(((JRVariable) field).getName(),
-									((JRVariable) field).getValueClassName(), rtype, group));
+						{
+							variable = createVariable(((JRField) field).getName(),
+									((JRField) field).getValueClassName(), rtype, group);
+							
+						}
+						else if (field instanceof JRVariable)
+						{
+							variable = createVariable(((JRVariable) field).getName(),
+									((JRVariable) field).getValueClassName(), rtype, group);
+						}
+						
+						if (variable == null)
+						{
+							return; // we don't want to continue in this case...
+						}
+						
+						jasperDesign.addVariable(variable);
+						
 					} catch (Exception e) {
 						UIUtils.showError(e);
+						
 					}
+					
+					JRDesignExpression expression = new JRDesignExpression();
+					if (field instanceof JRField)
+						expression.setText(createExpression(((JRField) field).getName(), variable.getName(), ((JRField) field).getValueClass()));
+					if (field instanceof JRVariable)
+						expression.setText(createExpression(((JRVariable) field).getName(), variable.getName(), ((JRVariable) field).getValueClass()));
+					tf.setExpression(expression);
+					tf.setPattern("#,##0.00%");
+					
+					// Set the evaluation time of this textfield to AUTO
+					tf.setEvaluationTime( net.sf.jasperreports.engine.type.EvaluationTimeEnum.AUTO);
+
+					
 				}
 			}
 		}
 	}
 
-	private String createExpression(String name, Class<?> clazz) {
+	private String createExpression(String name, String vname, Class<?> clazz) {
 		if (clazz.isAssignableFrom(Integer.class))
-			return "new Integer($F{" + name + "}.intValue() / $V{" + name + "_SUM}).intValue())";
+			return "new Integer($F{" + name + "}.intValue() / $V{" + vname + "}.intValue())";
 		if (clazz.isAssignableFrom(Byte.class))
-			return "new Byte($F{" + name + "}.byteValue() / $V{" + name + "_SUM}).byteValue())";
+			return "new Byte($F{" + name + "}.byteValue() / $V{" + vname + "}.byteValue())";
 		if (clazz.isAssignableFrom(Short.class))
-			return "new Short($F{" + name + "}.shortValue() / $V{" + name + "_SUM}).shortValue())";
+			return "new Short($F{" + name + "}.shortValue() / $V{" + vname + "}.shortValue())";
 		if (clazz.isAssignableFrom(Float.class))
-			return "new Float($F{" + name + "}.floatValue() / $V{" + name + "_SUM}).floatValue())";
+			return "new Float($F{" + name + "}.floatValue() / $V{" + vname + "}.floatValue())";
 		if (clazz.isAssignableFrom(Double.class))
-			return "new Double($F{" + name + "}.doubleValue() / $V{" + name + "_SUM}).doubleValue())";
+			return "new Double($F{" + name + "}.doubleValue() / $V{" + vname + "}.doubleValue())";
 		if (clazz.isAssignableFrom(BigDecimal.class))
-			return "new BigDecimal($F{" + name + "}).devide(new BigDecimal( $V{" + name + "_SUM} ))";
+			return "$F{" + name + "}.devide(new BigDecimal( $V{" + vname + "} ))";
 
 		return "";
 	}
@@ -196,7 +219,16 @@ public class CreatePercentageCommand extends CreateElementCommand {
 			throws Exception {
 		jrVariable = new JRDesignVariable();
 		jrVariable.setCalculation(CalculationEnum.SUM);
-		jrVariable.setName(ModelUtils.getDefaultName(jasperDesign.getVariablesMap(), name + "_SUM"));
+		
+		String vname = name + "_SUM";
+		int i=0;
+		while (jasperDesign.getVariablesMap().containsKey(vname))
+		{
+			i++;
+			vname = name + "_" + i + "_SUM";
+		}
+		
+		jrVariable.setName(vname);
 		jrVariable.setResetType(rtype);
 		if (rtype.equals(ResetTypeEnum.GROUP))
 			jrVariable.setResetGroup(group);
