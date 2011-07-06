@@ -24,23 +24,14 @@ import java.util.ArrayList;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * @author gtoffoli
