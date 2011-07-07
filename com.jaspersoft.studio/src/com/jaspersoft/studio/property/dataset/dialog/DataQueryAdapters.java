@@ -77,6 +77,11 @@ public abstract class DataQueryAdapters {
 		return composite;
 	}
 
+	public void dispose() {
+		qdfactory.dispose();
+		datamappingfactory.dispose();
+	}
+
 	public Composite getQueryControl() {
 		return tabFolder;
 	}
@@ -99,7 +104,7 @@ public abstract class DataQueryAdapters {
 	}
 
 	private void createMappingTools(CTabFolder tabFolder, IFieldSetter fsetter) {
-		new DataMappingFactory(tabFolder, fsetter);
+		datamappingfactory = new DataMappingFactory(tabFolder, fsetter);
 	}
 
 	private void createQuery(CTabFolder tabFolder) {
@@ -157,6 +162,7 @@ public abstract class DataQueryAdapters {
 	}
 
 	IQueryDesigner currentDesigner = null;
+	private DataMappingFactory datamappingfactory;
 
 	private void changeLanguage() {
 		IQueryDesigner designer = qdfactory.getDesigner(langCombo.getText());

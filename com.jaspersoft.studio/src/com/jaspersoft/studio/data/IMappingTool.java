@@ -13,6 +13,8 @@ public interface IMappingTool {
 
 	public Control createControl(Composite parent);
 
+	public void dispose();
+	
 	public void setFields(IFieldSetter fsetter);
 
 	public void setJRDataset(JRDesignDataset dataset);

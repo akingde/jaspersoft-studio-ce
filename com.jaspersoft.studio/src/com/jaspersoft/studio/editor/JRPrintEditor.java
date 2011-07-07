@@ -450,11 +450,9 @@ public class JRPrintEditor extends EditorPart {
 	protected void unsetReportDocument(final String msg, final boolean noRun) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-			
-					getReportViewer().unsetDocument(msg);
-					setNotRunning(noRun);
-					System.out.println(msg);
-
+				getReportViewer().unsetDocument(msg); 
+				setNotRunning(noRun);
+				System.out.println(msg);
 			}
 		});
 	}

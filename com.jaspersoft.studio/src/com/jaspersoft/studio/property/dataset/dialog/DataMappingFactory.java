@@ -40,6 +40,12 @@ public class DataMappingFactory {
 		}
 	}
 
+	public void dispose() {
+		// dispose mapping tools;
+		for (IMappingTool mp : classmap.values())
+			mp.dispose();
+	}
+
 	public Collection<IMappingTool> getMappingTools() {
 		return classmap.values();
 	}

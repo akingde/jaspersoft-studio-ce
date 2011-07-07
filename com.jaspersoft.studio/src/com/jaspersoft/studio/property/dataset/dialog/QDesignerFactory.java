@@ -32,6 +32,11 @@ public class QDesignerFactory {
 		}
 	}
 
+	public void dispose() {
+		for (IQueryDesigner qd : classmap.values())
+			qd.dispose();
+	}
+
 	public IQueryDesigner getDesigner(String lang) {
 		IQueryDesigner qd = languageMap.get(lang);
 		if (qd == null)

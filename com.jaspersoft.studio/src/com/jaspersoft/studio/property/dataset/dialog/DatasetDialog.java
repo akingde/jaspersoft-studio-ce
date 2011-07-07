@@ -69,6 +69,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 	@Override
 	public boolean close() {
 		createCommand();
+		dataquery.dispose();
 		return super.close();
 	}
 

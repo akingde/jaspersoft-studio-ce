@@ -42,4 +42,8 @@ public class QueryDesigner implements IQueryDesigner {
 	public String getQuery() {
 		return control.getText();
 	}
+
+	public void dispose() {
+
+	}
 }
