@@ -51,7 +51,7 @@ public class JDBCDataAdapterComposite extends Composite {
 	private Text textUsername;
 	private Text textPassword;
 
-//	private Button btnSavePassword;
+	// private Button btnSavePassword;
 	private ComboViewer comboJDBCDriver;
 
 	private JDBCDriverDefinition currentdriver = null;
@@ -151,8 +151,6 @@ public class JDBCDataAdapterComposite extends Composite {
 		textServerAddress.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
 		new Label(grpJdbc, SWT.NONE);
-		
-		
 
 		Label lblDatabase = new Label(grpJdbc, SWT.NONE);
 		lblDatabase.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
@@ -162,21 +160,19 @@ public class JDBCDataAdapterComposite extends Composite {
 		textDatabase = new Text(grpJdbc, SWT.BORDER);
 		textDatabase.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-		
-textServerAddress.addModifyListener(new ModifyListener() {
-			
+
+		textServerAddress.addModifyListener(new ModifyListener() {
+
 			public void modifyText(ModifyEvent e) {
-				btnWizardActionPerformed( );
+				btnWizardActionPerformed();
 			}
 		});
-textDatabase.addModifyListener(new ModifyListener() {
-	
-	public void modifyText(ModifyEvent e) {
-		btnWizardActionPerformed( );
-	}
-});
+		textDatabase.addModifyListener(new ModifyListener() {
 
-		
+			public void modifyText(ModifyEvent e) {
+				btnWizardActionPerformed();
+			}
+		});
 
 		Label lblUsername = new Label(this, SWT.NONE);
 		lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
@@ -201,9 +197,9 @@ textDatabase.addModifyListener(new ModifyListener() {
 		gd_textPassword.widthHint = 200;
 		textPassword.setLayoutData(gd_textPassword);
 
-//		btnSavePassword = new Button(this, SWT.CHECK);
-//		btnSavePassword.setText("Save Password");
-//		new Label(this, SWT.NONE);
+		// btnSavePassword = new Button(this, SWT.CHECK);
+		// btnSavePassword.setText("Save Password");
+		// new Label(this, SWT.NONE);
 
 		Label lblAttentionPasswordsAre = new Label(this, SWT.NONE);
 		lblAttentionPasswordsAre.setLayoutData(new GridData(SWT.LEFT,
@@ -275,7 +271,7 @@ textDatabase.addModifyListener(new ModifyListener() {
 		textServerAddress.setText(Misc.nvl(jdbcDataAdapter.getServerAddress(),
 				""));
 		textDatabase.setText(Misc.nvl(jdbcDataAdapter.getDatabase(), ""));
-//		btnSavePassword.setSelection(jdbcDataAdapter.isSavePassword());
+		// btnSavePassword.setSelection(jdbcDataAdapter.isSavePassword());
 
 		cpath.setClasspaths(jdbcDataAdapter.getClasspath());
 	}
@@ -294,7 +290,7 @@ textDatabase.addModifyListener(new ModifyListener() {
 		jdbcDataAdapter.setUrl(textJDBCUrl.getText());
 		jdbcDataAdapter.setDatabase(textDatabase.getText());
 		jdbcDataAdapter.setServerAddress(textServerAddress.getText());
-//		jdbcDataAdapter.setSavePassword(btnSavePassword.getSelection());
+		jdbcDataAdapter.setSavePassword(true);//btnSavePassword.getSelection());
 
 		jdbcDataAdapter.setClasspath(cpath.getClasspaths());
 
