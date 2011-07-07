@@ -563,7 +563,7 @@
             class="com.jaspersoft.studio.wizards.ReportNewWizard"
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.wizards.ReportNewWizard"
-            name="Jasper Report">
+            name="JasperReport">
       </wizard>
       <wizard
             category="com.jaspersoft.studio"
