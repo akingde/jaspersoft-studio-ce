@@ -70,7 +70,7 @@ public class CheckBoxLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		return element == null || !(element instanceof Boolean) ? canBeNull.getName() : ""; //$NON-NLS-1$
+		return element == null || !(element instanceof Boolean) ? canBeNull.getName() : element.toString(); //$NON-NLS-1$
 	}
 
 	/**
