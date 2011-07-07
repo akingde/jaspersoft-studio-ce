@@ -146,7 +146,7 @@ public class MTextField extends MTextElement {
 		desc.add(blankWhenNullD);
 
 		CheckBoxPropertyDescriptor stretchOverflowD = new CheckBoxPropertyDescriptor(
-				JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Messages.MTextField_stretch_with_overflow, NullEnum.NOTNULL);
+				JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Messages.MTextField_stretch_with_overflow);
 		stretchOverflowD.setDescription(Messages.MTextField_stretch_with_overflow_description);
 		desc.add(stretchOverflowD);
 

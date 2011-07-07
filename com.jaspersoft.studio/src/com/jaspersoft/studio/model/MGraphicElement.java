@@ -318,6 +318,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		styleD = new RWComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PARENT_STYLE, Messages.common_parent_style,
 				new String[] { "" }, NullEnum.NULL); //$NON-NLS-1$

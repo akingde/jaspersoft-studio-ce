@@ -53,6 +53,7 @@ import org.eclipse.gef.commands.Command;
 import com.jaspersoft.studio.list.model.MList;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.SelectionHelper;
+
 /*
  * link nodes & together.
  * 
@@ -63,7 +64,7 @@ public class CreateElementCommand extends Command {
 	private MGraphicElement srcNode;
 	private JRDesignElement jrElement;
 
-	private StandardListComponent jrGroup;
+	private StandardListComponent listcomponent;
 
 	private Rectangle location;
 
@@ -73,18 +74,20 @@ public class CreateElementCommand extends Command {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateElementCommand(MList destNode, MGraphicElement srcNode, Rectangle position, int index) {
+	public CreateElementCommand(MList destNode, MGraphicElement srcNode,
+			Rectangle position, int index) {
 		super();
 		this.srcNode = srcNode;
 		this.jrElement = (JRDesignElement) srcNode.getValue();
-		JRDesignComponentElement jrElement = (JRDesignComponentElement) destNode.getValue();
-		this.jrGroup = (StandardListComponent) jrElement.getComponent();
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) destNode
+				.getValue();
+		this.listcomponent = (StandardListComponent) jrElement.getComponent();
 		this.index = index;
 		this.location = position;
 	}
@@ -103,7 +106,8 @@ public class CreateElementCommand extends Command {
 
 	protected void setElementBounds() {
 		if (location == null)
-			location = new Rectangle(0, 0, srcNode.getDefaultWidth(), srcNode.getDefaultHeight());
+			location = new Rectangle(0, 0, srcNode.getDefaultWidth(),
+					srcNode.getDefaultHeight());
 		if (location.width < 0)
 			location.width = srcNode.getDefaultWidth();
 		if (location.height < 0)
@@ -113,10 +117,15 @@ public class CreateElementCommand extends Command {
 		jrElement.setY(location.y);
 		jrElement.setWidth(location.width);
 		jrElement.setHeight(location.height);
+
+		DesignListContents contents = (DesignListContents) listcomponent
+				.getContents();
+		contents.setHeight(jrElement.getHeight());
+		contents.setWidth(jrElement.getWidth());
 	}
 
 	public void setJrGroup(StandardListComponent jrGroup) {
-		this.jrGroup = jrGroup;
+		this.listcomponent = jrGroup;
 	}
 
 	/*
@@ -128,7 +137,8 @@ public class CreateElementCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
-			DesignListContents dlist = (DesignListContents) jrGroup.getContents();
+			DesignListContents dlist = (DesignListContents) listcomponent
+					.getContents();
 			if (index < 0 || index > dlist.getChildren().size())
 				dlist.addElement(jrElement);
 			else
@@ -149,7 +159,7 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public boolean canUndo() {
-		if (jrGroup == null || jrElement == null)
+		if (listcomponent == null || jrElement == null)
 			return false;
 		return true;
 	}
@@ -161,7 +171,8 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		DesignListContents dlist = (DesignListContents) jrGroup.getContents();
+		DesignListContents dlist = (DesignListContents) listcomponent
+				.getContents();
 		dlist.removeElement(jrElement);
 
 	}

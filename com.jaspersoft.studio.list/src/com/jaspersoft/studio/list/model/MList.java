@@ -48,6 +48,7 @@ import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
@@ -261,13 +262,16 @@ public class MList extends MGraphicElement implements IPastable,
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement component = new JRDesignComponentElement();
 		StandardListComponent componentImpl = new StandardListComponent();
-		componentImpl.setContents(new DesignListContents());
+		DesignListContents contents = new DesignListContents();
+		contents.setHeight(100);
+		contents.setWidth(100);
+		componentImpl.setContents(contents);
 
 		component.setComponent(componentImpl);
-		component
-				.setComponentKey(new ComponentKey(
-						"http://jasperreports.sourceforge.net/jasperreports/components",
-						"jr", "list"));
+		ComponentKey componentKey = new ComponentKey(
+				"http://jasperreports.sourceforge.net/jasperreports/components",
+				"jr", "list");
+		component.setComponentKey(componentKey);
 		return component;
 	}
 
@@ -302,13 +306,13 @@ public class MList extends MGraphicElement implements IPastable,
 	}
 
 	public JRElementGroup getJRElementGroup() {
-		return getJRElementGroup(getValue());
+		return getJRElementGroup((JRDesignComponentElement) getValue());
 	}
 
-	private JRElementGroup getJRElementGroup(Object value) {
+	private JRElementGroup getJRElementGroup(JRDesignComponentElement value) {
 		JRElementGroup res = null;
 		if (value != null) {
-			JRDesignComponentElement jrElement = (JRDesignComponentElement) value;
+			JRDesignComponentElement jrElement = value;
 			StandardListComponent jrList = (StandardListComponent) jrElement
 					.getComponent();
 			res = jrList.getContents();
@@ -319,24 +323,39 @@ public class MList extends MGraphicElement implements IPastable,
 	@Override
 	public void setValue(Object value) {
 		if (getValue() != null) {
-			if (getJRElementGroup() instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) getJRElementGroup()).getEventSupport()
+			JRDesignComponentElement jrcomp = (JRDesignComponentElement) getValue();
+			jrcomp.getEventSupport().removePropertyChangeListener(this);
+			JRElementGroup elementGroup = getJRElementGroup(jrcomp);
+			if (elementGroup instanceof JRChangeEventsSupport)
+				((JRChangeEventsSupport) elementGroup).getEventSupport()
 						.removePropertyChangeListener(this);
 		} else if (value != null) {
-			JRElementGroup elementGroup = getJRElementGroup(value);
-			if (value instanceof JRChangeEventsSupport)
+			JRDesignComponentElement jrcomp = (JRDesignComponentElement) value;
+			jrcomp.getEventSupport().addPropertyChangeListener(this);
+			JRElementGroup elementGroup = getJRElementGroup(jrcomp);
+			if (elementGroup instanceof JRChangeEventsSupport)
 				((JRChangeEventsSupport) elementGroup).getEventSupport()
 						.addPropertyChangeListener(this);
-			super.setValue(value);
-			return;
 		}
 		super.setValue(value);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName()
-				.equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
+		if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_HEIGHT)) {
+			JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+			StandardListComponent jrList = (StandardListComponent) jrElement
+					.getComponent();
+			((DesignListContents) jrList.getContents()).setHeight((Integer) evt
+					.getNewValue());
+		} else if (evt.getPropertyName().equals(JRDesignElement.PROPERTY_WIDTH)) {
+			JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+			StandardListComponent jrList = (StandardListComponent) jrElement
+					.getComponent();
+			((DesignListContents) jrList.getContents()).setWidth((Integer) evt
+					.getNewValue());
+		} else if (evt.getPropertyName().equals(
+				JRDesignElementGroup.PROPERTY_CHILDREN)) {
 			if (evt.getSource() == getJRElementGroup()) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;
@@ -377,5 +396,4 @@ public class MList extends MGraphicElement implements IPastable,
 					evt.getOldValue(), evt.getNewValue());
 		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
-
 }

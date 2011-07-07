@@ -93,8 +93,8 @@ public class SetConstraintCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
-
 		if (jrElement != null) {
 			oldBounds = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
 			// check position,
@@ -229,6 +229,7 @@ public class SetConstraintCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		if (jrElement != null) {
 			if (pBand != null && cBand != null)
@@ -251,6 +252,7 @@ public class SetConstraintCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#getLabel()
 	 */
+	@Override
 	public String getLabel() {
 		if (oldBounds != null && (oldBounds.x != newBounds.x || oldBounds.y != newBounds.y))
 			return "set location"; //$NON-NLS-1$

@@ -71,6 +71,7 @@ public class SetValueCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#canExecute()
 	 */
+	@Override
 	public boolean canExecute() {
 		return true;
 	}
@@ -80,6 +81,7 @@ public class SetValueCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		undoValue = getTarget().getPropertyValue(propertyName);
 		getTarget().setPropertyValue(propertyName, propertyValue);
@@ -109,6 +111,7 @@ public class SetValueCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
+	@Override
 	public void redo() {
 		execute();
 	}
@@ -138,6 +141,7 @@ public class SetValueCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		if (resetOnUndo)
 			getTarget().resetPropertyValue(propertyName);

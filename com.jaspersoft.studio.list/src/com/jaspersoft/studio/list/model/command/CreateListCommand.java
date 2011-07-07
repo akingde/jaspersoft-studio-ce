@@ -42,6 +42,9 @@
  */
 package com.jaspersoft.studio.list.model.command;
 
+import net.sf.jasperreports.components.list.DesignListContents;
+import net.sf.jasperreports.components.list.StandardListComponent;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -63,13 +66,14 @@ public class CreateListCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateListCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
+	public CreateListCommand(MElementGroup destNode, MGraphicElement srcNode,
+			int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -77,11 +81,11 @@ public class CreateListCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateListCommand(MFrame destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
@@ -91,11 +95,11 @@ public class CreateListCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateListCommand(MBand destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
@@ -105,15 +109,16 @@ public class CreateListCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param position
-	 *          the position
+	 *            the position
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateListCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
+	public CreateListCommand(ANode destNode, MGraphicElement srcNode,
+			Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
 
@@ -124,18 +129,28 @@ public class CreateListCommand extends CreateElementCommand {
 	protected void createObject() {
 		if (jrElement == null) {
 			ListWizard wizard = new ListWizard();
-			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getCurrent()
+					.getActiveShell(), wizard);
 			wizard.init(jasperDesign);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getList();
 				if (srcNode.getValue() == null)
-					jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+					jrElement = srcNode.createJRElement(srcNode
+							.getJasperDesign());
 				else {
 					jrElement = (JRDesignElement) srcNode.getValue();
 				}
-				if (jrElement != null)
+				if (jrElement != null) {
 					setElementBounds();
+					JRDesignComponentElement jrel = (JRDesignComponentElement) jrElement;
+					StandardListComponent jrList = (StandardListComponent) jrel
+							.getComponent();
+					DesignListContents contents = (DesignListContents) jrList
+							.getContents();
+					contents.setHeight(jrElement.getHeight());
+					contents.setWidth(jrElement.getWidth());
+				}
 			}
 		}
 	}
