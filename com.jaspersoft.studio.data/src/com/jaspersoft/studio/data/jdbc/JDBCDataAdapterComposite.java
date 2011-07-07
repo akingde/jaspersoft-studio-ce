@@ -29,8 +29,8 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -53,7 +53,6 @@ public class JDBCDataAdapterComposite extends Composite {
 	private Text textPassword;
 
 	private Button btnSavePassword;
-	private Button btnWizard;
 	private ComboViewer comboJDBCDriver;
 
 	private JDBCDriverDefinition currentdriver = null;
@@ -153,6 +152,8 @@ public class JDBCDataAdapterComposite extends Composite {
 		textServerAddress.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
 		new Label(grpJdbc, SWT.NONE);
+		
+		
 
 		Label lblDatabase = new Label(grpJdbc, SWT.NONE);
 		lblDatabase.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
@@ -162,17 +163,21 @@ public class JDBCDataAdapterComposite extends Composite {
 		textDatabase = new Text(grpJdbc, SWT.BORDER);
 		textDatabase.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-
-		btnWizard = new Button(grpJdbc, SWT.NONE);
-		btnWizard.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				btnWizardActionPerformed(e);
-
+		
+textServerAddress.addModifyListener(new ModifyListener() {
+			
+			public void modifyText(ModifyEvent e) {
+				btnWizardActionPerformed( );
 			}
 		});
-		btnWizard.setText("Wizard");
+textDatabase.addModifyListener(new ModifyListener() {
+	
+	public void modifyText(ModifyEvent e) {
+		btnWizardActionPerformed( );
+	}
+});
+
+		
 
 		Label lblUsername = new Label(this, SWT.NONE);
 		lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
@@ -225,10 +230,8 @@ public class JDBCDataAdapterComposite extends Composite {
 									.getCombo().getSelectionIndex()];
 							comboJDBCDriver.getCombo().setText(
 									currentdriver.getDriverName());
-							btnWizard.setEnabled(true);
-							btnWizardActionPerformed(null);
+							btnWizardActionPerformed();
 						} else {
-							btnWizard.setEnabled(false);
 							currentdriver = null;
 						}
 
@@ -240,7 +243,7 @@ public class JDBCDataAdapterComposite extends Composite {
 	/**
 	 * @param e
 	 */
-	protected void btnWizardActionPerformed(SelectionEvent e) {
+	protected void btnWizardActionPerformed() {
 		if (currentdriver != null) {
 			textJDBCUrl.setText(currentdriver.getUrl(
 					textServerAddress.getText(), textDatabase.getText()));
