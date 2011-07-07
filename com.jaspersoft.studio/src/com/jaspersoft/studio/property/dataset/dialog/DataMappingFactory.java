@@ -10,13 +10,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.data.IMappingTool;
 
 public class DataMappingFactory {
-	private Composite parent;
 	private Map<Class<? extends IMappingTool>, IMappingTool> classmap = new HashMap<Class<? extends IMappingTool>, IMappingTool>();
 
 	public DataMappingFactory(CTabFolder tabFolder, IFieldSetter fsetter) {
@@ -41,9 +39,8 @@ public class DataMappingFactory {
 	}
 
 	public void dispose() {
-		// dispose mapping tools;
-		for (IMappingTool mp : classmap.values())
-			mp.dispose();
+		for (IMappingTool mt : classmap.values())
+			mt.dispose();
 	}
 
 	public Collection<IMappingTool> getMappingTools() {

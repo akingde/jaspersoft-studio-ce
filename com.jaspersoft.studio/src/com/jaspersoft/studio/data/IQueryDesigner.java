@@ -12,7 +12,7 @@ public interface IQueryDesigner {
 	public String getQuery();
 
 	public Control createControl(Composite parent);
-	
-	public void dispose();
 
+	public void dispose();
+	
 }

@@ -104,7 +104,8 @@ public class RepositoryView extends ViewPart {
 		DataAdapterManager.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
 
 			public void propertyChange(PropertyChangeEvent evt) {
-				treeViewer.refresh(true);
+				if (!treeViewer.getTree().isDisposed())
+					treeViewer.refresh(true);
 			}
 		});
 	}

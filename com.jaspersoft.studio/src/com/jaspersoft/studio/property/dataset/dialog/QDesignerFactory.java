@@ -33,7 +33,7 @@ public class QDesignerFactory {
 	}
 
 	public void dispose() {
-		for (IQueryDesigner qd : classmap.values())
+		for (IQueryDesigner qd : languageMap.values())
 			qd.dispose();
 	}
 

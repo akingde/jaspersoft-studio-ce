@@ -63,6 +63,11 @@ public abstract class DataQueryAdapters {
 		this.background = parent.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
 	}
 
+	public void dispose(){
+		qdfactory.dispose();
+		dmfactory.dispose();
+	}
+	
 	private Composite composite;
 	private DatasourceComboItem dscombo;
 	private Action gFields;
@@ -75,11 +80,6 @@ public abstract class DataQueryAdapters {
 
 	public Composite getControl() {
 		return composite;
-	}
-
-	public void dispose() {
-		qdfactory.dispose();
-		datamappingfactory.dispose();
 	}
 
 	public Composite getQueryControl() {
@@ -104,7 +104,7 @@ public abstract class DataQueryAdapters {
 	}
 
 	private void createMappingTools(CTabFolder tabFolder, IFieldSetter fsetter) {
-		datamappingfactory = new DataMappingFactory(tabFolder, fsetter);
+		dmfactory = new DataMappingFactory(tabFolder, fsetter);
 	}
 
 	private void createQuery(CTabFolder tabFolder) {
@@ -162,7 +162,7 @@ public abstract class DataQueryAdapters {
 	}
 
 	IQueryDesigner currentDesigner = null;
-	private DataMappingFactory datamappingfactory;
+	private DataMappingFactory dmfactory;
 
 	private void changeLanguage() {
 		IQueryDesigner designer = qdfactory.getDesigner(langCombo.getText());

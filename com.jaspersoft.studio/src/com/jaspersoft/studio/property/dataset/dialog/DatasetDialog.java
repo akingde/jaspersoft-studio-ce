@@ -178,15 +178,15 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 			filterExpression.setText(Misc.nvl(newdataset.getFilterExpression().getText(), "")); //$NON-NLS-1$
 	}
 
-	private void createDataPreview(FormToolkit toolkit, CTabFolder tabFolder) {
-		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText(Messages.DatasetDialog_datapreviewtab);
-
-		Composite sectionClient = toolkit.createComposite(tabFolder);
-		sectionClient.setLayout(new GridLayout(2, false));
-
-		bptab.setControl(sectionClient);
-	}
+	// private void createDataPreview(FormToolkit toolkit, CTabFolder tabFolder) {
+	// CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+	// bptab.setText(Messages.DatasetDialog_datapreviewtab);
+	//
+	// Composite sectionClient = toolkit.createComposite(tabFolder);
+	// sectionClient.setLayout(new GridLayout(2, false));
+	//
+	// bptab.setControl(sectionClient);
+	// }
 
 	private CompoundCommand command;
 	private Color background;
