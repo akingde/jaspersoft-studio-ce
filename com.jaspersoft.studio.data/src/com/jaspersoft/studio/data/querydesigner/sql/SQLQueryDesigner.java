@@ -43,9 +43,8 @@ public class SQLQueryDesigner extends QueryDesigner {
 			sqleditor = new SQLDomainModel();
 			sqlviewer = new SQLSourceViewer(sqleditor, composite);
 			sqlviewer.initDBContext();
-			
-			
-//			sqlviewer.setContentProvider(sqleditor.createContentProvider());
+
+			// sqlviewer.setContentProvider(sqleditor.createContentProvider());
 
 			// sqlviewer
 			// .setContentProvider(sqlDomainModel.createContentProvider());
@@ -132,6 +131,13 @@ public class SQLQueryDesigner extends QueryDesigner {
 	private String query;
 	private SQLDomainModel sqleditor;
 	private SQLSourceViewer sqlviewer;
+
+	@Override
+	public void dispose() {
+		if (sqleditor != null)
+
+			super.dispose();
+	}
 
 	@Override
 	public void setQuery(String query) {

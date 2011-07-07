@@ -136,4 +136,8 @@ public class BeanMappingTool implements IMappingTool {
 		this.fsetter = fsetter;
 	}
 
+	public void dispose() {
+
+	}
+
 }
