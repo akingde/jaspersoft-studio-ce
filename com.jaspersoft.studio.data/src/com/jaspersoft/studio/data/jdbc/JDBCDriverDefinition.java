@@ -33,18 +33,24 @@ public class JDBCDriverDefinition implements Comparable<JDBCDriverDefinition> {
     private String dbName = "";
     private String driverName = "";
     private String defaultDBName = "MYDATABASE";
+    private String defaultServer = "MYSERVER";
 
     public JDBCDriverDefinition(String dbName, String driverName, String urlPattern)
     {
-        this(dbName, driverName, urlPattern, "MYDATABASE");
+        this(dbName, driverName, urlPattern, "MYDATABASE", "MYSERVER");
     }
 
     public JDBCDriverDefinition(String dbName, String driverName, String urlPattern, String defaultDBName)
+    {
+        this(dbName, driverName, urlPattern, defaultDBName, "MYSERVER");
+    }
+    public JDBCDriverDefinition(String dbName, String driverName, String urlPattern, String defaultDBName, String defaultServer)
     {
         this.dbName = dbName;
         this.driverName = driverName;
         this.urlPattern = urlPattern;
         this.defaultDBName = defaultDBName;
+        this.defaultServer = defaultServer;
     }
 
     public String getUrl(String server, String database)
@@ -54,6 +60,12 @@ public class JDBCDriverDefinition implements Comparable<JDBCDriverDefinition> {
             database = getDefaultDBName();
         }
         database = database.trim();
+        
+        if (server == null || server.trim().length() == 0)
+        {
+        	server = getDefaultServer();
+        }
+        server = server.trim();
         return MessageFormat.format(getUrlPattern(), new Object[]{server,database});
     }
 
@@ -127,7 +139,11 @@ public class JDBCDriverDefinition implements Comparable<JDBCDriverDefinition> {
         this.defaultDBName = defaultDBName;
     }
 
-    @Override
+    public String getDefaultServer() {
+		return defaultServer;
+	}
+
+	@Override
 	public String toString()
     {
         return dbName + " (" + driverName + ")";
