@@ -33,7 +33,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -52,7 +51,7 @@ public class JDBCDataAdapterComposite extends Composite {
 	private Text textUsername;
 	private Text textPassword;
 
-	private Button btnSavePassword;
+//	private Button btnSavePassword;
 	private ComboViewer comboJDBCDriver;
 
 	private JDBCDriverDefinition currentdriver = null;
@@ -202,9 +201,9 @@ textDatabase.addModifyListener(new ModifyListener() {
 		gd_textPassword.widthHint = 200;
 		textPassword.setLayoutData(gd_textPassword);
 
-		btnSavePassword = new Button(this, SWT.CHECK);
-		btnSavePassword.setText("Save Password");
-		new Label(this, SWT.NONE);
+//		btnSavePassword = new Button(this, SWT.CHECK);
+//		btnSavePassword.setText("Save Password");
+//		new Label(this, SWT.NONE);
 
 		Label lblAttentionPasswordsAre = new Label(this, SWT.NONE);
 		lblAttentionPasswordsAre.setLayoutData(new GridData(SWT.LEFT,
@@ -276,7 +275,7 @@ textDatabase.addModifyListener(new ModifyListener() {
 		textServerAddress.setText(Misc.nvl(jdbcDataAdapter.getServerAddress(),
 				""));
 		textDatabase.setText(Misc.nvl(jdbcDataAdapter.getDatabase(), ""));
-		btnSavePassword.setSelection(jdbcDataAdapter.isSavePassword());
+//		btnSavePassword.setSelection(jdbcDataAdapter.isSavePassword());
 
 		cpath.setClasspaths(jdbcDataAdapter.getClasspath());
 	}
@@ -295,7 +294,7 @@ textDatabase.addModifyListener(new ModifyListener() {
 		jdbcDataAdapter.setUrl(textJDBCUrl.getText());
 		jdbcDataAdapter.setDatabase(textDatabase.getText());
 		jdbcDataAdapter.setServerAddress(textServerAddress.getText());
-		jdbcDataAdapter.setSavePassword(btnSavePassword.getSelection());
+//		jdbcDataAdapter.setSavePassword(btnSavePassword.getSelection());
 
 		jdbcDataAdapter.setClasspath(cpath.getClasspaths());
 
