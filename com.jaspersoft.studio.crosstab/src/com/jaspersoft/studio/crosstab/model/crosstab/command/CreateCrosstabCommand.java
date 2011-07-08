@@ -120,6 +120,7 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 	/**
 	 * Creates the object.
 	 */
+	@Override
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard

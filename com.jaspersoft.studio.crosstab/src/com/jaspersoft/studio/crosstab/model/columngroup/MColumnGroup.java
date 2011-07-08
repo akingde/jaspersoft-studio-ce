@@ -145,6 +145,7 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
@@ -166,6 +167,7 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabColumnGroup jrField = (JRDesignCrosstabColumnGroup) getValue();
 		if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_POSITION))
@@ -180,6 +182,7 @@ public class MColumnGroup extends MCrosstabGroup implements ICopyable {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabColumnGroup jrField = (JRDesignCrosstabColumnGroup) getValue();
 		if (id.equals(JRDesignCrosstabColumnGroup.PROPERTY_POSITION))

@@ -65,6 +65,7 @@ import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroup;
 import com.jaspersoft.studio.crosstab.model.columngroup.MColumnGroups;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.utils.ModelUtils;
+
 /*
  * link nodes & together.
  * 
@@ -83,15 +84,16 @@ public class CreateColumnGroupCommand extends Command {
 	 * Instantiates a new creates the parameter command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param position
-	 *          the position
+	 *            the position
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateColumnGroupCommand(MColumnGroups destNode, MColumnGroup srcNode, int index) {
+	public CreateColumnGroupCommand(MColumnGroups destNode,
+			MColumnGroup srcNode, int index) {
 		super();
 		this.jrCrosstab = (JRDesignCrosstab) destNode.getValue();
 		this.index = index;
@@ -108,7 +110,8 @@ public class CreateColumnGroupCommand extends Command {
 	@Override
 	public void execute() {
 		if (jrGroup == null) {
-			jrGroup = createColumnGroup(jasperDesign, jrCrosstab, Messages.CreateColumnGroupCommand_column_group);
+			jrGroup = createColumnGroup(jasperDesign, jrCrosstab,
+					Messages.CreateColumnGroupCommand_column_group);
 		}
 		if (jrGroup != null) {
 			try {
@@ -118,10 +121,14 @@ public class CreateColumnGroupCommand extends Command {
 			} catch (JRException e) {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
-					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getColumnGroupIndicesMap(), "CopyOFColumnGroup_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
+					String defaultName = ModelUtils.getDefaultName(
+							jrCrosstab.getColumnGroupIndicesMap(),
+							"CopyOFColumnGroup_"); //$NON-NLS-1$
+					InputDialog dlg = new InputDialog(
+							Display.getCurrent().getActiveShell(),
 							Messages.CreateColumnGroupCommand_column_group_name,
-							Messages.CreateColumnGroupCommand_column_group_name_dialog, defaultName, null);
+							Messages.CreateColumnGroupCommand_column_group_name_dialog,
+							defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrGroup.setName(dlg.getValue());
 						execute();
@@ -132,14 +139,14 @@ public class CreateColumnGroupCommand extends Command {
 		jrCrosstab.getCellsList();
 	}
 
-	public static JRDesignCrosstabColumnGroup createColumnGroup(JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab,
-			String name) {
+	public static JRDesignCrosstabColumnGroup createColumnGroup(
+			JasperDesign jasperDesign, JRDesignCrosstab jrCrosstab, String name) {
 		JRDesignCrosstabColumnGroup jrGroup = new JRDesignCrosstabColumnGroup();
-		jrGroup.setName(ModelUtils.getDefaultName(jrCrosstab.getColumnGroupIndicesMap(), name));
+		jrGroup.setName(ModelUtils.getDefaultName(
+				jrCrosstab.getColumnGroupIndicesMap(), name));
 		jrGroup.setHeight(20);
 
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
 		exp.setText(""); //$NON-NLS-1$
 		JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
 		bucket.setExpression(exp);
@@ -150,16 +157,17 @@ public class CreateColumnGroupCommand extends Command {
 		jrGroup.setHeader(headerCell);
 
 		exp = new JRDesignExpression();
-		exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
 		exp.setText("$V{" + jrGroup.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		JRDesignTextField tf = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
+		JRDesignTextField tf = (JRDesignTextField) new MTextField()
+				.createJRElement(jasperDesign);
 		tf.setX(0);
 		tf.setY(0);
 		tf.setWidth(60);
 		tf.setHeight(jrGroup.getHeight());
 		if ("Crosstab Data Text" != null && jasperDesign.getStylesMap().containsKey("Crosstab Data Text")) { //$NON-NLS-1$ //$NON-NLS-2$
-			tf.setStyle((JRStyle) jasperDesign.getStylesMap().get("Crosstab Data Text")); //$NON-NLS-1$
+			tf.setStyle((JRStyle) jasperDesign.getStylesMap().get(
+					"Crosstab Data Text")); //$NON-NLS-1$
 		}
 		tf.setExpression(exp);
 
@@ -178,8 +186,8 @@ public class CreateColumnGroupCommand extends Command {
 		return jrGroup;
 	}
 
-	public static void addColumnGroup(JRDesignCrosstab jrCross, JRDesignCrosstabColumnGroup jrRowGr, int index)
-			throws JRException {
+	public static void addColumnGroup(JRDesignCrosstab jrCross,
+			JRDesignCrosstabColumnGroup jrRowGr, int index) throws JRException {
 		if (index >= 0 && index <= jrCross.getColumnGroupsList().size())
 			jrCross.addColumnGroup(index, jrRowGr);
 		else

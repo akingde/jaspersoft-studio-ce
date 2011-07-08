@@ -125,6 +125,7 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		return lst;
 	}
 
+	@Override
 	protected void createEditorActions(ActionRegistry registry) {
 		IAction action = new CreateMeasureAction(this);
 		registry.registerAction(action);

@@ -84,6 +84,7 @@ public class ReorderParameterCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrCrosstab.getParametersList().indexOf(jrParameter);
 
@@ -103,6 +104,7 @@ public class ReorderParameterCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		try {
 			jrCrosstab.removeParameter(jrParameter);

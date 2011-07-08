@@ -46,7 +46,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
@@ -97,6 +96,7 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 	 * 
 	 * @param request the request
 	 */
+	@Override
 	protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
 		IFigure feedback = getDragSourceFeedbackFigure();
 
@@ -139,6 +139,7 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 	 * 
 	 * @return the new feedback figure
 	 */
+	@Override
 	protected IFigure createDragSourceFeedbackFigure() {
 		// Use a ghost rectangle for feedback
 		RectangleFigure r = new ElementFeedbackFigure();

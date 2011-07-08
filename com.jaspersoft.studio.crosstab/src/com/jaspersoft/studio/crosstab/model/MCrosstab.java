@@ -159,6 +159,7 @@ public class MCrosstab extends MGraphicElement implements IContainer,
 	 * @param desc
 	 *            the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
@@ -316,6 +317,7 @@ public class MCrosstab extends MGraphicElement implements IContainer,
 		return 200;
 	}
 
+	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignCrosstab jrDesignElement = new JRDesignCrosstab(jasperDesign);
 		JRDesignCrosstabDataset dataset = new JRDesignCrosstabDataset();

@@ -80,6 +80,7 @@ public class ReorderElementGroupCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrCell.getChildren().indexOf(jrElement);
 		jrCell.removeElementGroup(jrElement);
@@ -95,6 +96,7 @@ public class ReorderElementGroupCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrCell.removeElementGroup(jrElement);
 

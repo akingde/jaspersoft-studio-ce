@@ -68,6 +68,7 @@ public class CreateCrosstabWhenNoDataAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateCrosstabWhenNoDataAction_create_when_no_data_cell);

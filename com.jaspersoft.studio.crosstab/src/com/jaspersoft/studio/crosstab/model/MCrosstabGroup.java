@@ -117,6 +117,7 @@ public abstract class MCrosstabGroup extends APropertyNode implements IPropertyS
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		ComboBoxPropertyDescriptor totalPositionD = new ComboBoxPropertyDescriptor(
 				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION, Messages.common_total_position, EnumHelper.getEnumNames(

@@ -68,6 +68,7 @@ public class CreateRowGroupAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateRowGroupAction_create_row_group);

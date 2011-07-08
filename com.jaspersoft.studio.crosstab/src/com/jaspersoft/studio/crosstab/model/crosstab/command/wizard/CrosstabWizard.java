@@ -280,7 +280,6 @@ public class CrosstabWizard extends Wizard {
 					int h = c.getHeight() / measures.length;
 					for (int i = 0; i < measures.length; i++) {
 						JRDesignExpression exp = new JRDesignExpression();
-						exp.setValueClassName(measures[i].getValueClassName()); //$NON-NLS-1$
 						exp.setText("$V{" + measures[i].getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 
 						JRDesignTextField tf = (JRDesignTextField) new MTextField()
@@ -336,20 +335,16 @@ public class CrosstabWizard extends Wizard {
 			Object f) {
 		String name = "";
 		String txt = "";
-		String className = "";
 		if (f instanceof JRField) {
 			JRField fi = (JRField) f;
-			className = fi.getValueClassName();
 			name = fi.getName();
 			txt = "$F{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 		} else if (f instanceof JRParameter) {
 			JRParameter fi = (JRParameter) f;
-			className = fi.getValueClassName();
 			name = fi.getName();
 			txt = "$P{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 		} else if (f instanceof JRVariable) {
 			JRVariable fi = (JRVariable) f;
-			className = fi.getValueClassName();
 			name = fi.getName();
 			txt = "$V{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -357,8 +352,6 @@ public class CrosstabWizard extends Wizard {
 		JRDesignCrosstabRowGroup rowGroup = CreateRowGroupCommand
 				.createRowGroup(jasperDesign, jdc, name);
 
-		((JRDesignExpression) rowGroup.getBucket().getExpression())
-				.setValueClassName(className);
 		((JRDesignExpression) rowGroup.getBucket().getExpression())
 				.setText(txt);
 		return rowGroup;
@@ -368,27 +361,21 @@ public class CrosstabWizard extends Wizard {
 			JRDesignCrosstab jdc, Object f) {
 		String name = "";
 		String txt = "";
-		String className = "";
 		if (f instanceof JRField) {
 			JRField fi = (JRField) f;
-			className = fi.getValueClassName();
 			name = fi.getName();
 			txt = "$F{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 		} else if (f instanceof JRParameter) {
 			JRParameter fi = (JRParameter) f;
-			className = fi.getValueClassName();
 			name = fi.getName();
 			txt = "$P{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 		} else if (f instanceof JRVariable) {
 			JRVariable fi = (JRVariable) f;
-			className = fi.getValueClassName();
 			name = fi.getName();
 			txt = "$V{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		JRDesignCrosstabColumnGroup colGroup = CreateColumnGroupCommand
 				.createColumnGroup(jasperDesign, jdc, name);
-		((JRDesignExpression) colGroup.getBucket().getExpression())
-				.setValueClassName(className);
 		((JRDesignExpression) colGroup.getBucket().getExpression())
 				.setText(txt);
 
@@ -399,19 +386,20 @@ public class CrosstabWizard extends Wizard {
 
 		JRDesignExpression jre = new JRDesignExpression();
 		String name = "";
+		String classname = "";
 		if (f instanceof JRField) {
 			JRField fi = (JRField) f;
-			jre.setValueClassName(fi.getValueClassName());
 			name = fi.getName();
+			classname = fi.getValueClassName();
 			jre.setText("$F{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 		} else if (f instanceof JRParameter) {
 			JRParameter fi = (JRParameter) f;
-			jre.setValueClassName(fi.getValueClassName());
 			name = fi.getName();
+			classname = fi.getValueClassName();
 			jre.setText("$P{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 		} else if (f instanceof JRVariable) {
 			JRVariable fi = (JRVariable) f;
-			jre.setValueClassName(fi.getValueClassName());
+			classname = fi.getValueClassName();
 			name = fi.getName();
 			jre.setText("$V{" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -428,7 +416,7 @@ public class CrosstabWizard extends Wizard {
 						CalculationEnum.DISTINCT_COUNT))
 			m.setValueClassName(Integer.class.getName());
 		else
-			m.setValueClassName(m.getValueExpression().getValueClassName());
+			m.setValueClassName(classname);
 		return m;
 	}
 

@@ -83,6 +83,7 @@ public class ReorderMeasureCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrCrosstab.getMesuresList().indexOf(jrMeasure);
 
@@ -103,6 +104,7 @@ public class ReorderMeasureCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrCrosstab.getMesuresList().remove(jrMeasure);
 		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_MEASURES, jrMeasure,

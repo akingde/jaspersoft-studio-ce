@@ -142,7 +142,6 @@ public class CreateRowGroupCommand extends Command {
 		jrGroup.setWidth(60);
 
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
 		exp.setText(""); //$NON-NLS-1$
 		JRDesignCrosstabBucket bucket = new JRDesignCrosstabBucket();
 		bucket.setExpression(exp);
@@ -159,7 +158,6 @@ public class CreateRowGroupCommand extends Command {
 		// baseCell.getContents().getHeight() : 30);
 
 		exp = new JRDesignExpression();
-		exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
 		exp.setText("$V{" + jrGroup.getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		JRDesignTextField tf = (JRDesignTextField) new MTextField()

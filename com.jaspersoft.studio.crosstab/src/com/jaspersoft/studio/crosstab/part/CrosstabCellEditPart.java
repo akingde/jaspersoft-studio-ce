@@ -89,6 +89,7 @@ public class CrosstabCellEditPart extends FigureEditPart implements IContainerPa
 	 * 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
+	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 
@@ -143,6 +144,7 @@ public class CrosstabCellEditPart extends FigureEditPart implements IContainerPa
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new CrosstabCellMoveEditPolicy());
 	}
 
+	@Override
 	protected void setupFigure(IFigure rect) {
 		MCell model = (MCell) getModel();
 		if (model instanceof IGraphicElement && model.getValue() != null) {

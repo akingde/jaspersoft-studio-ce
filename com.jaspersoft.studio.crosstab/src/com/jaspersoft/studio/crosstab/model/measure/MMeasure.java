@@ -155,6 +155,7 @@ public class MMeasure extends APropertyNode implements ICopyable {
 	 * @param desc
 	 *            the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
 		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(

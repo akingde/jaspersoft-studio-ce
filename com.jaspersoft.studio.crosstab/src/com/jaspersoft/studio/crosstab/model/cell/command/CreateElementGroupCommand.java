@@ -113,7 +113,6 @@ public class CreateElementGroupCommand extends Command {
 		// }
 	}
 
-	private boolean firstTime = true;
 
 	/*
 	 * (non-Javadoc)

@@ -68,6 +68,7 @@ public class CreateColumnGroupAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateColumnGroupAction_create_column_group);

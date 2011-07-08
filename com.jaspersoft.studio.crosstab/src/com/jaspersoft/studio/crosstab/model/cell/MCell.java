@@ -211,6 +211,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
 				Messages.MCell_opaque, EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.NOTNULL));

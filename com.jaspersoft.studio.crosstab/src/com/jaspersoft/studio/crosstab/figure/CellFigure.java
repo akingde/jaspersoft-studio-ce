@@ -59,6 +59,7 @@ public class CellFigure extends FrameFigure {
 		setSize(getElementWidth(), getElementHeight());
 	}
 
+	@Override
 	protected JRLineBox getLineBox() {
 		JRLineBox box = null;
 		box = cell.getLineBox();

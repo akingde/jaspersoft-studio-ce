@@ -98,6 +98,7 @@ public class MCrosstabDataset extends MElementDataset {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignCrosstabDataset jrElement = (JRDesignCrosstabDataset) getValue();
 		if (id.equals(JRDesignCrosstabDataset.PROPERTY_DATA_PRE_SORTED))
@@ -111,6 +112,7 @@ public class MCrosstabDataset extends MElementDataset {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabDataset jrElement = (JRDesignCrosstabDataset) getValue();
 		if (id.equals(JRDesignCrosstabDataset.PROPERTY_DATA_PRE_SORTED))
@@ -119,10 +121,12 @@ public class MCrosstabDataset extends MElementDataset {
 			super.setPropertyValue(id, value);
 	}
 
+	@Override
 	public ImageDescriptor getImagePath() {
 		return null;
 	}
 
+	@Override
 	public String getDisplayText() {
 		return null;
 	}

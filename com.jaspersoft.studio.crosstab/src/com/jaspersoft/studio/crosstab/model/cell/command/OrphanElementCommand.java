@@ -77,6 +77,7 @@ public class OrphanElementCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		index = jrCell.getChildren().indexOf(jrElement);
 		jrCell.removeElement(jrElement);
@@ -87,6 +88,7 @@ public class OrphanElementCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		if (index >= 0 && index <= jrCell.getChildren().size())
 			jrCell.addElement(index, jrElement);

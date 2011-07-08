@@ -80,6 +80,7 @@ public class ReorderColumnGroupCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrCrosstab.getColumnGroupsList().indexOf(jrColumnGroup);
 
@@ -99,6 +100,7 @@ public class ReorderColumnGroupCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrCrosstab.getColumnGroupsList().remove(jrColumnGroup);
 		jrCrosstab.getEventSupport().fireCollectionElementRemovedEvent(JRDesignCrosstab.PROPERTY_COLUMN_GROUPS,

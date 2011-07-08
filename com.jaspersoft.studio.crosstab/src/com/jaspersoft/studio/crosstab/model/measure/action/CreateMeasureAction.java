@@ -68,6 +68,7 @@ public class CreateMeasureAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateMeasureAction_create_measure);
