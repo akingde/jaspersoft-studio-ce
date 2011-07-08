@@ -51,7 +51,7 @@ public class PropertyTypeMaper implements ITypeMapper {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.views.properties.tabbed.ITypeMapper#mapType(java.lang.Object)
 	 */
-	public Class mapType(Object object) {
+	public Class<?> mapType(Object object) {
 		return object.getClass();
 	}
 
