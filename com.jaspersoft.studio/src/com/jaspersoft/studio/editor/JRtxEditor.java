@@ -66,6 +66,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.style.StyleTemplateEditor;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
@@ -120,8 +121,8 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 		try {
 			if (model != null) {
 				JRSimpleTemplate report = (JRSimpleTemplate) model.getChildren().get(0).getValue();
-				String xml = JRXmlTemplateWriter.writeTemplate(report, ((IFileEditorInput) getEditorInput()).getFile()
-						.getCharset(true));
+				IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+				String xml = JRXmlTemplateWriter.writeTemplate(report, JRXmlWriterHelper.fixencoding(file.getCharset(true)));
 				xml = xml.replaceFirst("<jasperTemplate ", "<!-- Created with Jaspersoft Studio -->\n<jasperTemplate "); //$NON-NLS-1$ //$NON-NLS-2$
 				IDocumentProvider dp = xmlEditor.getDocumentProvider();
 				IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
