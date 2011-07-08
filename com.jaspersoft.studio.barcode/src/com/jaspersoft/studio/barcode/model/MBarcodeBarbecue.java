@@ -112,7 +112,6 @@ public class MBarcodeBarbecue extends MBarcode {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		StandardBarbecueComponent component = new StandardBarbecueComponent();
 		JRDesignExpression exp = new JRDesignExpression();
-		exp.setValueClassName("java.lang.String"); //$NON-NLS-1$
 		exp.setText("\"1234\""); //$NON-NLS-1$
 		component.setCodeExpression(exp);
 		el.setComponent(component);
@@ -178,6 +177,7 @@ public class MBarcodeBarbecue extends MBarcode {
 	 * @param desc
 	 *            the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);

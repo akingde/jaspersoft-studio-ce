@@ -114,6 +114,7 @@ public class CreateBarcodeCommand extends CreateElementCommand {
 	/**
 	 * Creates the object.
 	 */
+	@Override
 	protected void createObject() {
 		if (getJrElement() == null) {
 			// here put a wizard
