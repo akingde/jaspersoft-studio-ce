@@ -30,7 +30,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;

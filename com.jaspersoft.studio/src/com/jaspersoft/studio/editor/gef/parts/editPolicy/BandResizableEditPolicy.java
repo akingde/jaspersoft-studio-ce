@@ -88,7 +88,6 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 	 * 
 	 * @see org.eclipse.gef.editpolicies.ResizableEditPolicy#createSelectionHandles()
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	protected List createSelectionHandles() {
 		List list = new ArrayList();

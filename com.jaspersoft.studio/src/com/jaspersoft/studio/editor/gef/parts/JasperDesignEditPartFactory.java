@@ -23,8 +23,6 @@
  */
 package com.jaspersoft.studio.editor.gef.parts;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -34,7 +32,6 @@ import net.sf.jasperreports.engine.util.SimpleFileResolver;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.GraphicalViewer;
 
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;

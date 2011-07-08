@@ -73,7 +73,7 @@ public class TextEditManager extends DirectEditManager {
 	private MTextElement textElement;
 	private CellEditorActionHandler actionHandler;
 	private IAction copy, cut, paste, undo, redo, find, selectAll, delete;
-	private double cachedZoom = -1.0;
+//	private double cachedZoom = -1.0;
 	private Font scaledFont;
 	private ZoomListener zoomListener = new ZoomListener() {
 		public void zoomChanged(double newZoom) {
