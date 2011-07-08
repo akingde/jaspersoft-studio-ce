@@ -366,7 +366,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					if (p == null || !p.isSystemDefined())
 						return new CreateParameterCommand((MParameters) parent, (MParameter) child, newIndex);
 				}
-			} else if (child.getValue() != null
+			}
+			if (child.getValue() != null
 					&& (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
@@ -375,7 +376,8 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 				JRDesignVariable p = (JRDesignVariable) child.getValue();
 				if (p == null || !p.isSystemDefined())
 					return new CreateVariableCommand((MVariables) parent, (MVariable) child, newIndex);
-			} else if (child.getValue() != null
+			}
+			if (child.getValue() != null
 					&& (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}

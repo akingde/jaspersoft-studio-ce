@@ -50,10 +50,10 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 	private IContentOutlinePage currentPage;
 	private IContentOutlinePage emptyPage;
 	private IActionBars actionBars;
-	private EditorPart editor;
+//	private EditorPart editor;
 
 	public MultiOutlineView(EditorPart editor) {
-		this.editor = editor;
+//		this.editor = editor;
 		listeners = new ArrayList<ISelectionChangedListener>();
 
 	}
