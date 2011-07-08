@@ -52,7 +52,6 @@ import net.sf.jasperreports.components.table.util.TableUtil;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.table.TableManager;
 import com.jaspersoft.studio.table.messages.Messages;
 import com.jaspersoft.studio.table.model.AMCollection;
 import com.jaspersoft.studio.table.model.MTable;

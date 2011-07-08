@@ -89,6 +89,7 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 	 * 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#createEditPolicies()
 	 */
+	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
@@ -156,6 +157,7 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 		return true;
 	}
 
+	@Override
 	protected void setupFigure(IFigure rect) {
 		MCell model = (MCell) getModel();
 		if (model instanceof IGraphicElement && model.getValue() != null) {

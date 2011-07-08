@@ -140,6 +140,7 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
@@ -198,6 +199,7 @@ public class MTable extends MGraphicElement implements IContainer, IContainerEdi
 		return 200;
 	}
 
+	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement jrElement = new JRDesignComponentElement();
 		StandardTable component = new StandardTable();

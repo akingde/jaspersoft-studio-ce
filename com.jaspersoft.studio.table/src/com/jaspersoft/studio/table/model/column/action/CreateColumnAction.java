@@ -68,6 +68,7 @@ public class CreateColumnAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateColumnAction_create_column);

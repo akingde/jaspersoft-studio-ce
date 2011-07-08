@@ -80,10 +80,12 @@ public class MColumnGroupCell extends MCell {
 		super(parent, jrDataset, cell, name, index);
 	}
 
+	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
 
+	@Override
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
 	}

@@ -112,8 +112,7 @@ public class CreateElementGroupCommand extends Command {
 		// firstTime = false;
 		// }
 	}
-
-	private boolean firstTime = true;
+ 
 
 	/*
 	 * (non-Javadoc)

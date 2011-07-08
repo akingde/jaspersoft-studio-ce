@@ -43,8 +43,8 @@ import net.sf.jasperreports.components.table.StandardTable;
 
 import org.eclipse.gef.commands.Command;
 
-import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.messages.Messages;
+import com.jaspersoft.studio.table.model.MTable;
 import com.jaspersoft.studio.table.model.column.MColumn;
 /*
  * The Class ReorderParameterCommand.
@@ -80,6 +80,7 @@ public class ReorderColumnCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrTable.getColumns().indexOf(jrColumn);
 
@@ -95,6 +96,7 @@ public class ReorderColumnCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrTable.removeColumn(jrColumn);
 		if (oldIndex >= 0 && oldIndex < jrTable.getColumns().size())

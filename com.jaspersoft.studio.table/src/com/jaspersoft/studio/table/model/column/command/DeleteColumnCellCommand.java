@@ -66,6 +66,7 @@ public class DeleteColumnCellCommand extends Command {
 	private String groupName;
 	private Cell jrCell;
 
+	@SuppressWarnings("unchecked")
 	public DeleteColumnCellCommand(ANode parent, MColumn srcNode) {
 		super();
 		if (parent instanceof MColumnGroup)

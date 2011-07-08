@@ -118,7 +118,6 @@ public abstract class AMCollection extends MCollection {
 	public abstract String getCellEvent();
 
 	public abstract void createColumn(ANode mth, BaseColumn bc, int i, int index);
-
-	private boolean flagRefreshCells = false;
+ 
 
 }

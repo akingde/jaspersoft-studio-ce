@@ -80,6 +80,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * 
 	 * @see org.eclipse.gef.EditPolicy#activate()
 	 */
+	@Override
 	public void activate() {
 		super.activate();
 		// setHandle(new CellResizeHandle((GraphicalEditPart) getHost()));
@@ -92,6 +93,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * 
 	 * @see org.eclipse.gef.EditPolicy#deactivate()
 	 */
+	@Override
 	public void deactivate() {
 		if (getHandle() != null) {
 			getLayer(LayerConstants.HANDLE_LAYER).remove(getHandle());
@@ -109,6 +111,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * 
 	 * @see org.eclipse.gef.EditPolicy#understandsRequest(Request)
 	 */
+	@Override
 	public boolean understandsRequest(Request request) {
 		if (REQ_RESIZE.equals(request.getType()))
 			return true;
@@ -135,6 +138,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * 
 	 * @see org.eclipse.gef.EditPolicy#eraseSourceFeedback(Request)
 	 */
+	@Override
 	public void eraseSourceFeedback(Request request) {
 		if (REQ_RESIZE.equals(request.getType()))
 			eraseChangeBoundsFeedback((ChangeBoundsRequest) request);
@@ -145,6 +149,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * 
 	 * @see org.eclipse.gef.EditPolicy#getCommand(Request)
 	 */
+	@Override
 	public Command getCommand(Request request) {
 		if (REQ_RESIZE.equals(request.getType()))
 			return getResizeCommand((ChangeBoundsRequest) request);

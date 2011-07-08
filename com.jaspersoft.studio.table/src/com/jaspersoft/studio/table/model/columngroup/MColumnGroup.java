@@ -83,10 +83,12 @@ public class MColumnGroup extends MColumn {
 		super(parent, jrDataset, name, index);
 	}
 
+	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
 	}
 
+	@Override
 	public String getToolTip() {
 		return getIconDescriptor().getToolTip();
 	}

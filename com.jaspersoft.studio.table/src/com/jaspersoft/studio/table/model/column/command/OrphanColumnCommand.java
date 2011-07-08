@@ -78,6 +78,7 @@ public class OrphanColumnCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		index = jrTable.getColumns().indexOf(jrColumn);
 		jrTable.removeColumn(jrColumn);
@@ -88,6 +89,7 @@ public class OrphanColumnCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		if (index >= 0 && index <= jrTable.getColumns().size())
 			jrTable.addColumn(index, jrColumn);

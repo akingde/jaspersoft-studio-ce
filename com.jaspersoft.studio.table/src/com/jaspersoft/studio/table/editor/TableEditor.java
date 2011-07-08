@@ -122,6 +122,7 @@ public class TableEditor extends AbstractVisualEditor {
 		return lst;
 	}
 
+	@Override
 	protected void createEditorActions(ActionRegistry registry) {
 		IAction action = new CreateColumnAction(this);
 		registry.registerAction(action);

@@ -120,6 +120,7 @@ public class CreateTableCommand extends CreateElementCommand {
 	/**
 	 * Creates the object.
 	 */
+	@Override
 	protected void createObject() {
 		if (jrElement == null) {
 			TableWizard wizard = new TableWizard();

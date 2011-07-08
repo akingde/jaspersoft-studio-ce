@@ -64,6 +64,7 @@ public class CreateColumnCellCommand extends Command {
 	private String groupName;
 	private Cell jrCell;
 
+	@SuppressWarnings("unchecked")
 	public CreateColumnCellCommand(ANode parent, MColumn srcNode) {
 		super();
 		type = (Class<ANode>) parent.getClass();

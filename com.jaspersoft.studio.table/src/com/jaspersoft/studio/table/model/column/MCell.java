@@ -153,6 +153,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
@@ -184,6 +185,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		if (cell != null) {
 			if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
@@ -213,6 +215,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		if (cell != null) {
 			if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
@@ -232,6 +235,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 				AMCollection section = getSection();
 				if (section != null && height.intValue() >= 0) {
 
+					@SuppressWarnings("unchecked")
 					Class<AMCollection> classType = (Class<AMCollection>) section.getClass();
 					String grName = null;
 					if (section instanceof MTableGroupHeader)
@@ -261,10 +265,12 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 		return 20;
 	}
 
+	@Override
 	public JRDesignElement createJRElement(JasperDesign jasperDesign) {
 		return null;
 	}
 
+	@Override
 	public MTable getMTable() {
 		INode node = getParent();
 		while (node != null) {
@@ -314,6 +320,7 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 		super.setValue(value);
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
 			if (evt.getSource() == cell) {
