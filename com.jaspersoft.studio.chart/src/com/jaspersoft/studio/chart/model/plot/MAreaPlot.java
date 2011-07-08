@@ -66,6 +66,7 @@ public class MAreaPlot extends MChartPlot {
 		super(value);
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MAreaPlot_area_plot;
 	}
@@ -264,6 +265,7 @@ public class MAreaPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignAreaPlot jrElement = (JRDesignAreaPlot) getValue();
 		if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
@@ -352,6 +354,7 @@ public class MAreaPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignAreaPlot jrElement = (JRDesignAreaPlot) getValue();
 

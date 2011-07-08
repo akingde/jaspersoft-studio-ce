@@ -113,6 +113,7 @@ public class MPieSeries extends APropertyNode {
 	 * @param desc
 	 *            the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
 

@@ -44,6 +44,8 @@ package com.jaspersoft.studio.chart.property.descriptor.seriescolor;
 
 import java.util.SortedSet;
 
+import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -63,11 +65,13 @@ public class SeriesColorCellEditor extends DialogCellEditor {
 		super(parent, style);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		SeriesColorEditor wizard = new SeriesColorEditor();
-		wizard.setValue((SortedSet<?>) getValue());
-		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
+		wizard.setValue((SortedSet<JRBaseSeriesColor>) getValue());
+		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(),
+				wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
 			return wizard.getValue();

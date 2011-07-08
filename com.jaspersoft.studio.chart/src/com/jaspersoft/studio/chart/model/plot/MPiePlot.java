@@ -57,6 +57,7 @@ public class MPiePlot extends MChartPlot {
 	public MPiePlot(JRPiePlot value) {
 		super(value);
 	}
+	@Override
 	public String getDisplayText() {
 		return Messages.MPiePlot_pie_plot;
 	}
@@ -114,6 +115,7 @@ public class MPiePlot extends MChartPlot {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignPiePlot jrElement = (JRDesignPiePlot) getValue();
 		if (id.equals(JRDesignPiePlot.PROPERTY_SHOW_LABELS))
@@ -142,6 +144,7 @@ public class MPiePlot extends MChartPlot {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignPiePlot jrElement = (JRDesignPiePlot) getValue();
 		if (id.equals(JRDesignPiePlot.PROPERTY_SHOW_LABELS))

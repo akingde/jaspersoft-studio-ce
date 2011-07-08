@@ -61,10 +61,12 @@ public class ChartNodeIconDescriptor extends NodeIconDescriptor {
 	/** The resource bundle icons. */
 	private static ResourceBundle resourceBundleIcons;
 
+	@Override
 	public ResourceBundle getResourceBundleIcons() {
 		return resourceBundleIcons;
 	}
 
+	@Override
 	public void setResourceBundleIcons(ResourceBundle resourceBundleIcons) {
 		ChartNodeIconDescriptor.resourceBundleIcons = resourceBundleIcons;
 	}

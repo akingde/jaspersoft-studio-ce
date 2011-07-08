@@ -68,6 +68,7 @@ public class MThermometerPlot extends MChartPlot {
 		super(value);
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MThermometerPlot_thermometer_plot;
 	}
@@ -208,6 +209,7 @@ public class MThermometerPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignThermometerPlot jrElement = (JRDesignThermometerPlot) getValue();
 		JRDesignDataRange jrDataRange = (JRDesignDataRange) jrElement
@@ -276,6 +278,7 @@ public class MThermometerPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignThermometerPlot jrElement = (JRDesignThermometerPlot) getValue();
 		JRDesignDataRange jrDataRange = (JRDesignDataRange) jrElement

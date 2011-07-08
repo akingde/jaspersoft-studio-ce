@@ -43,7 +43,6 @@
 package com.jaspersoft.studio.chart.property.descriptor.seriescolor.dialog;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -94,7 +93,8 @@ import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.utils.Colors;
 
 public class SeriesColorPage extends WizardPage {
-	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
+	private final class TLabelProvider extends LabelProvider implements
+			ITableLabelProvider {
 		ColorLabelProvider clb = new ColorLabelProvider(NullEnum.NOTNULL);
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -108,13 +108,15 @@ public class SeriesColorPage extends WizardPage {
 		public String getColumnText(Object element, int columnIndex) {
 			switch (columnIndex) {
 			case 0:
-				return clb.getText(Colors.getSWTRGB4AWTGBColor(((JRBaseSeriesColor) element).getColor()));
+				return clb.getText(Colors
+						.getSWTRGB4AWTGBColor(((JRBaseSeriesColor) element)
+								.getColor()));
 			}
 			return ""; //$NON-NLS-1$
 		}
 	}
 
-	private SortedSet value;
+	private SortedSet<JRBaseSeriesColor> value;
 	private Table table;
 	private TableViewer tableViewer;
 
@@ -127,8 +129,10 @@ public class SeriesColorPage extends WizardPage {
 	@Override
 	public void dispose() {
 		// clear all properties
-		List<JRBaseSeriesColor> props = (List<JRBaseSeriesColor>) tableViewer.getInput();
-		value = new TreeSet(props);
+		@SuppressWarnings("unchecked")
+		List<JRBaseSeriesColor> props = (List<JRBaseSeriesColor>) tableViewer
+				.getInput();
+		value = new TreeSet<JRBaseSeriesColor>(props);
 		int i = 0;
 		for (JRBaseSeriesColor p : props) {
 			value.add(new JRBaseSeriesColor(i, p.getColor()));
@@ -137,10 +141,10 @@ public class SeriesColorPage extends WizardPage {
 		super.dispose();
 	}
 
-	public void setValue(SortedSet<?> value) {
+	public void setValue(SortedSet<JRBaseSeriesColor> value) {
 		this.value = value;
 		if (value == null) {
-			value = new TreeSet();
+			value = new TreeSet<JRBaseSeriesColor>();
 		}
 		if (table != null)
 			fillTable(table);
@@ -173,22 +177,28 @@ public class SeriesColorPage extends WizardPage {
 
 		Button addB = new Button(composite, SWT.PUSH | SWT.CENTER);
 		addB.setText(Messages.SeriesColorPage_add);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING
+				| GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 100;
 		addB.setLayoutData(gridData);
 		addB.addSelectionListener(new SelectionAdapter() {
 
 			// Remove the selection and refresh the view
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				List list = (List<?>) tableViewer.getInput();
-				ColorDialog dialog = new ColorDialog(Display.getCurrent().getActiveShell());
+				@SuppressWarnings("unchecked")
+				List<JRSeriesColor> list = (List<JRSeriesColor>) tableViewer
+						.getInput();
+				ColorDialog dialog = new ColorDialog(Display.getCurrent()
+						.getActiveShell());
 				dialog.setRGB(new RGB(255, 0, 255));
 				if (dialog.open() == null)
 					return;
 				int selection = table.getSelectionIndex();
 				if (selection < 0)
 					selection = list.size();
-				JRSeriesColor p = new JRBaseSeriesColor(selection, Colors.getAWT4SWTRGBColor(dialog.getRGB()));
+				JRSeriesColor p = new JRBaseSeriesColor(selection, Colors
+						.getAWT4SWTRGBColor(dialog.getRGB()));
 				list.add(selection, p);
 				tableViewer.add(p);
 				tableViewer.setSelection(new StructuredSelection(p));
@@ -200,19 +210,23 @@ public class SeriesColorPage extends WizardPage {
 
 		Button delB = new Button(composite, SWT.PUSH | SWT.CENTER);
 		delB.setText(Messages.SeriesColorPage_delete);
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING
+				| GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 100;
 		delB.setLayoutData(gridData);
 		delB.addSelectionListener(new SelectionAdapter() {
 
 			// Remove the selection and refresh the view
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
-				JRBaseSeriesColor property = (JRBaseSeriesColor) iStructuredSelection.getFirstElement();
-				int selection = table.getSelectionIndex();
+				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer
+						.getSelection();
+				JRBaseSeriesColor property = (JRBaseSeriesColor) iStructuredSelection
+						.getFirstElement();
 				Object input = tableViewer.getInput();
 				if (input instanceof List<?>) {
-					List list = (List) input;
+					@SuppressWarnings("unchecked")
+					List<JRBaseSeriesColor> list = (List<JRBaseSeriesColor>) input;
 					int index = list.indexOf(property);
 					list.remove(property);
 					tableViewer.remove(property);
@@ -235,18 +249,23 @@ public class SeriesColorPage extends WizardPage {
 
 		Button upB = new Button(composite, SWT.PUSH | SWT.CENTER);
 		upB.setText(Messages.SeriesColorPage_move_up);
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING
+				| GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 100;
 		upB.setLayoutData(gridData);
 		upB.addSelectionListener(new SelectionAdapter() {
 
 			// Remove the selection and refresh the view
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
-				JRBaseSeriesColor property = (JRBaseSeriesColor) iStructuredSelection.getFirstElement();
+				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer
+						.getSelection();
+				JRBaseSeriesColor property = (JRBaseSeriesColor) iStructuredSelection
+						.getFirstElement();
 				Object input = tableViewer.getInput();
 				if (input instanceof List<?>) {
-					List list = (List<?>) input;
+					@SuppressWarnings("unchecked")
+					List<JRBaseSeriesColor> list = (List<JRBaseSeriesColor>) input;
 					int index = list.indexOf(property);
 					if (index > 0) {
 						int sel = index - 1;
@@ -258,7 +277,8 @@ public class SeriesColorPage extends WizardPage {
 						// Object sp = list.get(sel);
 						//
 						// if (sp != null) {
-						tableViewer.setSelection(new StructuredSelection(property));
+						tableViewer.setSelection(new StructuredSelection(
+								property));
 						// cursor.setSelection(table.getSelectionIndex(), 0);
 						// }
 					}
@@ -268,18 +288,23 @@ public class SeriesColorPage extends WizardPage {
 
 		Button downB = new Button(composite, SWT.PUSH | SWT.CENTER);
 		downB.setText(Messages.SeriesColorPage_move_down);
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_BEGINNING);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING
+				| GridData.VERTICAL_ALIGN_BEGINNING);
 		gridData.widthHint = 100;
 		downB.setLayoutData(gridData);
 		downB.addSelectionListener(new SelectionAdapter() {
 
 			// Remove the selection and refresh the view
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer.getSelection();
-				JRBaseSeriesColor property = (JRBaseSeriesColor) iStructuredSelection.getFirstElement();
+				IStructuredSelection iStructuredSelection = (IStructuredSelection) tableViewer
+						.getSelection();
+				JRBaseSeriesColor property = (JRBaseSeriesColor) iStructuredSelection
+						.getFirstElement();
 				Object input = tableViewer.getInput();
 				if (input instanceof List<?>) {
-					List list = (List<?>) input;
+					@SuppressWarnings("unchecked")
+					List<JRBaseSeriesColor> list = (List<JRBaseSeriesColor>) input;
 					int index = list.indexOf(property);
 					if (index <= list.size()) {
 						list.remove(property);
@@ -293,8 +318,10 @@ public class SeriesColorPage extends WizardPage {
 						Object sp = list.get(sel);
 
 						if (sp != null) {
-							tableViewer.setSelection(new StructuredSelection(sp));
-							// cursor.setSelection(table.getSelectionIndex(), 0);
+							tableViewer
+									.setSelection(new StructuredSelection(sp));
+							// cursor.setSelection(table.getSelectionIndex(),
+							// 0);
 						}
 					}
 				}
@@ -304,7 +331,8 @@ public class SeriesColorPage extends WizardPage {
 	}
 
 	private void buildTable(Composite composite) {
-		table = new Table(composite, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
+		table = new Table(composite, SWT.BORDER | SWT.SINGLE
+				| SWT.FULL_SELECTION);
 		table.setToolTipText("");
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -362,7 +390,8 @@ public class SeriesColorPage extends WizardPage {
 			public void dispose() {
 			}
 
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			public void inputChanged(Viewer viewer, Object oldInput,
+					Object newInput) {
 
 			}
 		});
@@ -396,8 +425,7 @@ public class SeriesColorPage extends WizardPage {
 
 	private void fillTable(Table table) {
 		List<JRBaseSeriesColor> lst = new ArrayList<JRBaseSeriesColor>();
-		for (Iterator it = value.iterator(); it.hasNext();) {
-			JRBaseSeriesColor bsc = (JRBaseSeriesColor) it.next();
+		for (JRBaseSeriesColor bsc : lst) {
 			lst.add(new JRBaseSeriesColor(bsc.getSeriesOrder(), bsc.getColor()));
 		}
 		tableViewer.setInput(lst);
@@ -451,8 +479,10 @@ public class SeriesColorPage extends WizardPage {
 						tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
 						tip.setLayout(new FillLayout());
 						label = new Label(tip, SWT.NONE);
-						label.setForeground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
-						label.setBackground(table.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+						label.setForeground(table.getShell().getDisplay()
+								.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
+						label.setBackground(table.getShell().getDisplay()
+								.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 						label.setData("_TABLEITEM", item); //$NON-NLS-1$
 
 						label.setText(description);

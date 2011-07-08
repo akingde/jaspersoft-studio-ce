@@ -58,6 +58,7 @@ public class MPie3DPlot extends MChartPlot {
 	public MPie3DPlot(JRPie3DPlot value) {
 		super(value);
 	}
+	@Override
 	public String getDisplayText() {
 		return Messages.MPie3DPlot_pie3d_plot;
 	}
@@ -119,6 +120,7 @@ public class MPie3DPlot extends MChartPlot {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignPie3DPlot jrElement = (JRDesignPie3DPlot) getValue();
 		if (id.equals(JRDesignPie3DPlot.PROPERTY_SHOW_LABELS))
@@ -149,6 +151,7 @@ public class MPie3DPlot extends MChartPlot {
 	 * 
 	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignPie3DPlot jrElement = (JRDesignPie3DPlot) getValue();
 		if (id.equals(JRDesignPie3DPlot.PROPERTY_SHOW_LABELS))

@@ -79,6 +79,7 @@ public class ReorderGanttSeriesCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 
@@ -94,6 +95,7 @@ public class ReorderGanttSeriesCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrGroup.removeGanttSeries(jrElement);
 		if (oldIndex >= 0 && oldIndex < jrGroup.getSeriesList().size())

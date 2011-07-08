@@ -64,6 +64,7 @@ public class MScatterPlot extends MChartPlot {
 		super(value);
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MScatterPlot_scatter_plot;
 	}
@@ -244,6 +245,7 @@ public class MScatterPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignScatterPlot jrElement = (JRDesignScatterPlot) getValue();
 		if (id.equals(JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_COLOR))
@@ -328,6 +330,7 @@ public class MScatterPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignScatterPlot jrElement = (JRDesignScatterPlot) getValue();
 

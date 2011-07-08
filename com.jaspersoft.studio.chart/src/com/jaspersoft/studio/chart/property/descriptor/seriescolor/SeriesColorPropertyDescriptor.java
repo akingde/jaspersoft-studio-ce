@@ -54,6 +54,7 @@ public class SeriesColorPropertyDescriptor extends NTextPropertyDescriptor {
 		super(id, displayName);
 	}
 
+	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
 		CellEditor editor = new SeriesColorCellEditor(parent);
 		return editor;

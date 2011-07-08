@@ -88,6 +88,7 @@ public class MChartValueDataset extends MChartDataset {
 	 * @param desc
 	 *            the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);

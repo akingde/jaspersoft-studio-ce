@@ -38,7 +38,6 @@
  */
 package com.jaspersoft.studio.chart.model.plot;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -70,33 +69,46 @@ public class MChartPlot extends APropertyNode {
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseChartPlot.PROPERTY_BACKCOLOR, Messages.MChartPlot_backcolor,
-				NullEnum.INHERITED);
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_BACKCOLOR,
+				Messages.MChartPlot_backcolor, NullEnum.INHERITED);
 		backcolorD.setDescription(Messages.MChartPlot_backcolor_description);
 		desc.add(backcolorD);
 
-		FloatPropertyDescriptor backAlphaD = new FloatPropertyDescriptor(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA,
+		FloatPropertyDescriptor backAlphaD = new FloatPropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA,
 				Messages.MChartPlot_background_alpha_percent);
-		backAlphaD.setDescription(Messages.MChartPlot_background_alpha_percent_description);
+		backAlphaD
+				.setDescription(Messages.MChartPlot_background_alpha_percent_description);
 		desc.add(backAlphaD);
 
-		FloatPropertyDescriptor foreAlphaD = new FloatPropertyDescriptor(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA,
+		FloatPropertyDescriptor foreAlphaD = new FloatPropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA,
 				Messages.MChartPlot_foreground_alpha_percent);
-		foreAlphaD.setDescription(Messages.MChartPlot_foreground_alpha_percent_description);
+		foreAlphaD
+				.setDescription(Messages.MChartPlot_foreground_alpha_percent_description);
 		desc.add(foreAlphaD);
 
-		DoublePropertyDescriptor labelRotationD = new DoublePropertyDescriptor(JRBaseChartPlot.PROPERTY_LABEL_ROTATION,
+		DoublePropertyDescriptor labelRotationD = new DoublePropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_LABEL_ROTATION,
 				Messages.MChartPlot_label_rotation);
-		labelRotationD.setDescription(Messages.MChartPlot_label_rotation_description);
+		labelRotationD
+				.setDescription(Messages.MChartPlot_label_rotation_description);
 		desc.add(labelRotationD);
 
-		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(JRBaseChartPlot.PROPERTY_ORIENTATION,
-				Messages.MChartPlot_orientation, new String[] { Messages.MChartPlot_horizontal, Messages.MChartPlot_vertical });
-		orientationD.setDescription(Messages.MChartPlot_orientation_description);
+		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_ORIENTATION,
+				Messages.MChartPlot_orientation, new String[] {
+						Messages.MChartPlot_horizontal,
+						Messages.MChartPlot_vertical });
+		orientationD
+				.setDescription(Messages.MChartPlot_orientation_description);
 		desc.add(orientationD);
 
-		SeriesColorPropertyDescriptor scpd = new SeriesColorPropertyDescriptor(JRBaseChartPlot.PROPERTY_SERIES_COLORS,
+		SeriesColorPropertyDescriptor scpd = new SeriesColorPropertyDescriptor(
+				JRBaseChartPlot.PROPERTY_SERIES_COLORS,
 				Messages.MChartPlot_series_colors);
 		scpd.setDescription(Messages.MChartPlot_series_colors_description);
 		desc.add(scpd);
@@ -119,7 +131,8 @@ public class MChartPlot extends APropertyNode {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -127,8 +140,11 @@ public class MChartPlot extends APropertyNode {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
+	@SuppressWarnings("deprecation")
 	public Object getPropertyValue(Object id) {
 		JRBaseChartPlot jrElement = (JRBaseChartPlot) getValue();
 		if (id.equals(JRBaseChartPlot.PROPERTY_BACKCOLOR))
@@ -154,8 +170,11 @@ public class MChartPlot extends APropertyNode {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void setPropertyValue(Object id, Object value) {
 		JRBaseChartPlot jrElement = (JRBaseChartPlot) getValue();
 		if (id.equals(JRBaseChartPlot.PROPERTY_BACKCOLOR)) {
@@ -174,9 +193,9 @@ public class MChartPlot extends APropertyNode {
 				jrElement.setOrientation(PlotOrientation.VERTICAL);
 		} else if (id.equals(JRBaseChartPlot.PROPERTY_SERIES_COLORS)) {
 			jrElement.clearSeriesColors();
-			SortedSet set = (SortedSet) value;
-			for (Iterator it = set.iterator(); it.hasNext();) {
-				jrElement.addSeriesColor((JRSeriesColor) it.next());
+			SortedSet<JRSeriesColor> set = (SortedSet<JRSeriesColor>) value;
+			for (JRSeriesColor sc : set) {
+				jrElement.addSeriesColor(sc);
 			}
 		}
 	}

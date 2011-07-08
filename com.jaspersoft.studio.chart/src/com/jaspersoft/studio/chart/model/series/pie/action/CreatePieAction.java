@@ -68,6 +68,7 @@ public class CreatePieAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreatePieAction_create_pie_series);

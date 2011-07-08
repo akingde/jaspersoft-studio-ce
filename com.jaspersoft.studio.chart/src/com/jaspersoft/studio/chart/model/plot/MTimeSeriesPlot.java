@@ -64,6 +64,7 @@ public class MTimeSeriesPlot extends MChartPlot {
 		super(value);
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MTimeSeriesPlot_timeseries_plot;
 	}
@@ -259,6 +260,7 @@ public class MTimeSeriesPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignTimeSeriesPlot jrElement = (JRDesignTimeSeriesPlot) getValue();
 		if (id.equals(JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_LABEL_COLOR))
@@ -350,6 +352,7 @@ public class MTimeSeriesPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignTimeSeriesPlot jrElement = (JRDesignTimeSeriesPlot) getValue();
 

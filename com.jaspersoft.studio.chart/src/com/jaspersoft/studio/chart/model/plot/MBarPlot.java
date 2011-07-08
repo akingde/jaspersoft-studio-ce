@@ -75,6 +75,7 @@ public class MBarPlot extends MChartPlot {
 		return defaultsMap;
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MBarPlot_bar_plot;
 	}
@@ -279,6 +280,7 @@ public class MBarPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignBarPlot jrElement = (JRDesignBarPlot) getValue();
 		if (id.equals(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
@@ -382,6 +384,7 @@ public class MBarPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignBarPlot jrElement = (JRDesignBarPlot) getValue();
 

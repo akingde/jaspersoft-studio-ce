@@ -73,6 +73,7 @@ public class MLinePlot extends MChartPlot {
 		return defaultsMap;
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MLinePlot_line_plot;
 	}
@@ -263,6 +264,7 @@ public class MLinePlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignLinePlot jrElement = (JRDesignLinePlot) getValue();
 		if (id.equals(JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
@@ -355,6 +357,7 @@ public class MLinePlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignLinePlot jrElement = (JRDesignLinePlot) getValue();
 

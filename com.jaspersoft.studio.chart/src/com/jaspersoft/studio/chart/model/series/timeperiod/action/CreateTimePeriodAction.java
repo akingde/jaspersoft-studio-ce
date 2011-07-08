@@ -68,6 +68,7 @@ public class CreateTimePeriodAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateTimePeriodAction_create_time_period_series);

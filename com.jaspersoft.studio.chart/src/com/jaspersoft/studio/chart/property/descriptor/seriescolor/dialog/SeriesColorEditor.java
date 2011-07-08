@@ -44,12 +44,14 @@ package com.jaspersoft.studio.chart.property.descriptor.seriescolor.dialog;
 
 import java.util.SortedSet;
 
+import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
+
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.chart.messages.Messages;
 
 public class SeriesColorEditor extends Wizard {
-	private SortedSet<?> value;
+	private SortedSet<JRBaseSeriesColor> value;
 	private SeriesColorPage page0;
 
 	public SortedSet<?> getValue() {
@@ -58,7 +60,7 @@ public class SeriesColorEditor extends Wizard {
 		return value;
 	}
 
-	public void setValue(SortedSet<?> value) {
+	public void setValue(SortedSet<JRBaseSeriesColor> value) {
 		if (page0 != null)
 			page0.setValue(value);
 		this.value = value;

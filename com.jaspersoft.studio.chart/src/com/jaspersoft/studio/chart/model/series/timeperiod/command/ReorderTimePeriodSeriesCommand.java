@@ -79,6 +79,7 @@ public class ReorderTimePeriodSeriesCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 
@@ -94,6 +95,7 @@ public class ReorderTimePeriodSeriesCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		if (oldIndex >= 0 && oldIndex < jrGroup.getSeriesList().size())
 			jrGroup.addTimePeriodSeries(oldIndex, jrElement);

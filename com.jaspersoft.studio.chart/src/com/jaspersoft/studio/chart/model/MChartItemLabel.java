@@ -43,7 +43,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.JRItemLabel;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
-import net.sf.jasperreports.engine.JRFont;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;

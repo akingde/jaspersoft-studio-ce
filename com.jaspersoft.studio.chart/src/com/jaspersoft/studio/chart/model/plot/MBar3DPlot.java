@@ -67,6 +67,7 @@ public class MBar3DPlot extends MChartPlot {
 		super(value);
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MBar3DPlot_bar3d_plot;
 	}
@@ -278,6 +279,7 @@ public class MBar3DPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignBar3DPlot jrElement = (JRDesignBar3DPlot) getValue();
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR))
@@ -380,6 +382,7 @@ public class MBar3DPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignBar3DPlot jrElement = (JRDesignBar3DPlot) getValue();
 

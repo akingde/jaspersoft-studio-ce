@@ -71,6 +71,7 @@ public class MMeterPlot extends MChartPlot {
 		super(value);
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MMeterPlot_meter_plot;
 	}
@@ -198,6 +199,7 @@ public class MMeterPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignMeterPlot jrElement = (JRDesignMeterPlot) getValue();
 		JRDesignDataRange jrDataRange = (JRDesignDataRange) jrElement
@@ -257,6 +259,7 @@ public class MMeterPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignMeterPlot jrElement = (JRDesignMeterPlot) getValue();
 		JRDesignDataRange jrDataRange = (JRDesignDataRange) jrElement

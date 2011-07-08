@@ -79,6 +79,7 @@ public class ReorderCategorySeriesCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrGroup.getSeriesList().indexOf(jrElement);
 		jrGroup.removeCategorySeries(jrElement);
@@ -95,6 +96,7 @@ public class ReorderCategorySeriesCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrGroup.removeCategorySeries(jrElement);
 

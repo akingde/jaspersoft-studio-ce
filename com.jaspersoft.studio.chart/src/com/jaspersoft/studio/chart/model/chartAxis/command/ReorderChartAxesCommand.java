@@ -83,6 +83,7 @@ public class ReorderChartAxesCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrGroup.getAxes().indexOf(jrElement);
 
@@ -98,6 +99,7 @@ public class ReorderChartAxesCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrGroup.removeAxis(jrElement);
 		if (oldIndex >= 0 && oldIndex < jrGroup.getAxes().size())

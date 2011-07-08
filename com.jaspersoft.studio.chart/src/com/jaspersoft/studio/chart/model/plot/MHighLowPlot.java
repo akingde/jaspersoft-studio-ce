@@ -64,6 +64,7 @@ public class MHighLowPlot extends MChartPlot {
 		super(value);
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MHighLowPlot_highlow_plot;
 	}
@@ -258,6 +259,7 @@ public class MHighLowPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignHighLowPlot jrElement = (JRDesignHighLowPlot) getValue();
 		if (id.equals(JRDesignHighLowPlot.PROPERTY_TIME_AXIS_LABEL_COLOR))
@@ -348,6 +350,7 @@ public class MHighLowPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignHighLowPlot jrElement = (JRDesignHighLowPlot) getValue();
 

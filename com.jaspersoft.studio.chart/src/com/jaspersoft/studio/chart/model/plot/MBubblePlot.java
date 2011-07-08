@@ -67,6 +67,7 @@ public class MBubblePlot extends MChartPlot {
 		super(value);
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MBubblePlot_bubble_plot;
 	}
@@ -253,6 +254,7 @@ public class MBubblePlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignBubblePlot jrElement = (JRDesignBubblePlot) getValue();
 		if (id.equals(JRDesignBubblePlot.PROPERTY_X_AXIS_LABEL_COLOR))
@@ -340,6 +342,7 @@ public class MBubblePlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignBubblePlot jrElement = (JRDesignBubblePlot) getValue();
 

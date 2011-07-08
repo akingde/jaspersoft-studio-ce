@@ -64,6 +64,7 @@ public class MCandlestickPlot extends MChartPlot {
 		super(value);
 	}
 
+	@Override
 	public String getDisplayText() {
 		return Messages.MCandlestickPlot_candlestick_plot;
 	}
@@ -252,6 +253,7 @@ public class MCandlestickPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
+	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignCandlestickPlot jrElement = (JRDesignCandlestickPlot) getValue();
 		if (id.equals(JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_COLOR))
@@ -340,6 +342,7 @@ public class MCandlestickPlot extends MChartPlot {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
+	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCandlestickPlot jrElement = (JRDesignCandlestickPlot) getValue();
 

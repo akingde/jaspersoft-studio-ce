@@ -45,7 +45,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.chart.model.MChart;
 import com.jaspersoft.studio.chart.model.command.wizard.ChartWizard;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -121,6 +120,7 @@ public class CreateChartCommand extends CreateElementCommand {
 	/**
 	 * Creates the object.
 	 */
+	@Override
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard

@@ -163,6 +163,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 	 * @param desc
 	 *            the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);

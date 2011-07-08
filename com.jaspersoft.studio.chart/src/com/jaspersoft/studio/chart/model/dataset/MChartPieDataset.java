@@ -98,6 +98,7 @@ public class MChartPieDataset extends MChartDataset {
 	 * @param desc
 	 *            the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
@@ -189,7 +190,6 @@ public class MChartPieDataset extends MChartDataset {
 
 	}
 
-	private MHyperLink mHyperLink;
 	private MHyperLink omHyperLink;
 
 	@Override

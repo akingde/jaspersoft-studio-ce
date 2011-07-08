@@ -68,6 +68,7 @@ public class CreateXYZAction extends ACreateAction {
 	/**
 	 * Initializes this action's text and images.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 		setText(Messages.CreateXYZAction_create_xyz_series);
