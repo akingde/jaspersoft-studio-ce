@@ -60,6 +60,7 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertySource2;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -278,6 +279,8 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	@Override
 	public Object getAdapter(Class type) {
 		if (type == IPropertySource.class)
+			return getPropertySheetPage();
+		if (type == IPropertySource2.class)
 			return getPropertySheetPage();
 		if (type == IPropertySheetPage.class)
 			return getPropertySheetPage();
