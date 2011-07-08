@@ -51,6 +51,7 @@ Special thanks to all people who support this software.
    </vm>
 
    <license>
+        <url>http://www.gnu.org/licenses/agpl-3.0.html</url>
         <text>
    GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
@@ -863,8 +864,8 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.jdt.debug"/>
       <plugin id="org.eclipse.jdt.debug.ui"/>
       <plugin id="org.eclipse.jdt.launching"/>
-      <plugin id="org.eclipse.jdt.launching.macosx"/>
-      <plugin id="org.eclipse.jdt.launching.ui.macosx"/>
+      <plugin id="org.eclipse.jdt.launching.macosx" fragment=""/>
+      <plugin id="org.eclipse.jdt.launching.ui.macosx" fragment=""/>
       <plugin id="org.eclipse.jdt.ui"/>
       <plugin id="org.eclipse.jface"/>
       <plugin id="org.eclipse.jface.databinding"/>
