@@ -13,16 +13,16 @@ import com.jaspersoft.studio.preferences.fonts.FontsPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class JSSFontExtensionRegistry implements ExtensionsRegistry {
-	private JRPropertiesMap properties;
+	// private JRPropertiesMap properties;
 	private List<FontFamily> lst;
 	private String strproperties;
 	private PropertiesHelper ph;
 
 	public JSSFontExtensionRegistry(JRPropertiesMap properties) {
-		this.properties = properties;
+		// this.properties = properties;
 	}
 
-	public List getExtensions(Class extensionType) {
+	public List<?> getExtensions(Class<?> extensionType) {
 		// FIXME: this method is called many times during report executions
 		// we should cache, the list, but, if user ads some font, they will not be visible
 		// maybe JR should cache font list, not us

@@ -57,7 +57,6 @@ public class PropertiesPreferencePage extends FieldEditorOverlayPage {
 		addField(new PropertyListFieldEditor("abcd", "Jasper Reports Properties", getFieldEditorParent()));
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void getDefaults(IPreferenceStore store) {
 		List<PropertySuffix> lst = JRProperties.getProperties("");
 		Collections.sort(lst, new PropertyComparator());

@@ -57,7 +57,6 @@ public class PropertiesHelper {
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setProperties(JasperDesign jd) {
 		JRPropertiesMap map = jd.getPropertiesMap();
 		List<PropertySuffix> lst = JRProperties.getProperties("");
@@ -71,7 +70,6 @@ public class PropertiesHelper {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public Properties getProperties() {
 		Properties p = new Properties();
 		List<PropertySuffix> lst = JRProperties.getProperties("");

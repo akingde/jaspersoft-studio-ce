@@ -21,7 +21,6 @@ package com.jaspersoft.studio.preferences.fonts.wizard;
 
 import net.sf.jasperreports.engine.fonts.FontFamily;
 
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 public class FontConfigWizard extends Wizard {
