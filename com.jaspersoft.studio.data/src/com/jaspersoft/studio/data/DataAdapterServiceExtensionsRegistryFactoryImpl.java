@@ -41,7 +41,7 @@ public class DataAdapterServiceExtensionsRegistryFactoryImpl implements Extensio
 	private static final ExtensionsRegistry extensionsRegistry = 
 		new ExtensionsRegistry()
 		{
-			public List getExtensions(Class extensionType) 
+			public List<?> getExtensions(Class<?> extensionType) 
 			{
 				if (DataAdapterServiceFactory.class.equals(extensionType))
 				{

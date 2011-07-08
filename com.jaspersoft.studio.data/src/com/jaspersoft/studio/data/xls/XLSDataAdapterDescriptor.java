@@ -33,9 +33,7 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;

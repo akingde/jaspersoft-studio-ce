@@ -73,10 +73,9 @@ public class SampleJRDataSourceFactory {
         return new JRBeanCollectionDataSource(createBeanCollection());
     }    
     
-    @SuppressWarnings("unchecked")
-    public static Vector createBeanCollection()
+    public static Vector<?> createBeanCollection()
     {
-    	java.util.Vector coll = new java.util.Vector();
+    	java.util.Vector<PersonBean> coll = new java.util.Vector<PersonBean>();
        
         PersonBean person = new PersonBean();
         person.setFirstName("Giulio");
