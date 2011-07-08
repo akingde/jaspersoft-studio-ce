@@ -89,7 +89,7 @@ public class CreateChartAxesCommand extends Command {
 		if (jrElement == null) {
 			// here put a wizard
 			ChartAxesWizard wizard = new ChartAxesWizard();
-			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				byte type = wizard.getChartAxis();

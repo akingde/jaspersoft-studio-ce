@@ -35,7 +35,6 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
@@ -73,7 +72,12 @@ public class ParametersDialog extends FormDialog {
 		this.jDesign = jDesign;
 		this.prompts = jDesign.getParametersList();
 		this.params = params;
-		shell.setText("Parameters");
+	}
+
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(Messages.ParametersDialog_report_parameters);
 	}
 
 	public Map<String, Object> getParameters() {
@@ -97,7 +101,7 @@ public class ParametersDialog extends FormDialog {
 
 	@Override
 	protected void createFormContent(final IManagedForm mform) {
-		getShell().setText(Messages.ParametersDialog_report_parameters);
+
 		mform.getForm().setText(Messages.ParametersDialog_report_parameters);
 		FormToolkit toolkit = mform.getToolkit();
 
@@ -163,7 +167,7 @@ public class ParametersDialog extends FormDialog {
 	private void createInput(FormToolkit toolkit, Composite sectionClient, JRDesignParameter p) {
 		for (IDataInput in : inputs) {
 			if (in.isForType(p.getValueClass())) {
-				Label lbl = toolkit.createLabel(sectionClient, Messages.getString(p.getName()) + ":", SWT.RIGHT); //$NON-NLS-1$
+				toolkit.createLabel(sectionClient, Messages.getString(p.getName()) + ":", SWT.RIGHT); //$NON-NLS-1$
 				// lbl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 				in.createInput(sectionClient, p, p.getValueClass(), params);
 				break;

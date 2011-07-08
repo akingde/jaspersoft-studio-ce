@@ -132,7 +132,7 @@ public class ReportTemplatesWizardPage extends WizardPage {
 		scale.addListener(SWT.Selection, new Listener() {
 
 			public void handleEvent(Event event) {
-				Display.getCurrent().asyncExec(new Runnable() {
+				Display.getDefault().asyncExec(new Runnable() {
 
 					public void run() {
 						double c = 1 + 0.1 * scale.getSelection();

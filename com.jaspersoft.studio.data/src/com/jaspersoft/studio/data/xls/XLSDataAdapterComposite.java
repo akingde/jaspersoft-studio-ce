@@ -67,9 +67,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class XLSDataAdapterComposite extends Composite {
 
@@ -252,7 +252,7 @@ public class XLSDataAdapterComposite extends Composite {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell());
+				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
 				fd.setFileName(textExcelFileName.getText());
 				fd.setFilterExtensions(new String[]{"*.xls","*.*"});
 				String selection = fd.open();
@@ -269,12 +269,7 @@ public class XLSDataAdapterComposite extends Composite {
 				try {
 					getExcelColumns();
 				} catch (Exception e1) {
-					e1.printStackTrace();
-
-			        DataAdapterErrorDialog.showErrorDialog(
-			        		Display.getCurrent().getActiveShell(), 
-			        		"Excel errors",
-			        		e1);
+					UIUtils.showError(e1);
 				}
 			}
 		});

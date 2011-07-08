@@ -100,7 +100,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * modelPropertyChange event implements this interface, and the object created with that class is registered with a
 	 * component using the component's <code>addModelPropertyChangeListener<code> method. When
 	 * the modelPropertyChange event occurs, that object's appropriate
-	 * method is invoked. 
+	 * method is invoked.
 	 * 
 	 * @see ModelPropertyChangeEvent
 	 */
@@ -168,7 +168,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			int index = addPage(reportContainer, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_design);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
+			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
 					null, e.getStatus());
 		}
 	}
@@ -193,7 +193,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						}
 					});
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_text_editor,
+			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_text_editor,
 					null, e.getStatus());
 		}
 	}
@@ -223,7 +223,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			int index = addPage(previewEditor, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_preview);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
+			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
 					null, e.getStatus());
 		}
 
@@ -251,7 +251,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public Object getAdapter(Class type) {
 		if (type == IContentOutlinePage.class) {
 			outlinePage = new MultiOutlineView(this);
-			Display.getCurrent().asyncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 
 				public void run() {
 					updateContentOutline(getActivePage());
@@ -459,7 +459,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	public void handleJRException(IEditorInput editorInput, final JRException e, boolean mute) {
 		if (!mute) {
-			Display.getCurrent().asyncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					UIUtils.showError(e);
 					// IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
@@ -487,7 +487,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
 			marker.setAttribute(IMarker.USER_EDITABLE, false);
 
-			Display.getCurrent().asyncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					gotoMarker(marker);
 					setActivePage(PAGE_XMLEDITOR);
@@ -616,7 +616,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			doc.set(xml);
 			xmlFresh = true;
 		} catch (final Exception e) {
-			Display.getCurrent().asyncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
 							"Error transforming model to xml.", e.getCause()); //$NON-NLS-1$

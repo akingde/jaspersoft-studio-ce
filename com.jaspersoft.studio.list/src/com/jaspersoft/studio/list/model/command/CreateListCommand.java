@@ -129,7 +129,7 @@ public class CreateListCommand extends CreateElementCommand {
 	protected void createObject() {
 		if (jrElement == null) {
 			ListWizard wizard = new ListWizard();
-			WizardDialog dialog = new WizardDialog(Display.getCurrent()
+			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			wizard.init(jasperDesign);
 			dialog.create();

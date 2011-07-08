@@ -125,7 +125,7 @@ public class CreateColumnGroupCommand extends Command {
 							jrCrosstab.getColumnGroupIndicesMap(),
 							"CopyOFColumnGroup_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(
-							Display.getCurrent().getActiveShell(),
+							Display.getDefault().getActiveShell(),
 							Messages.CreateColumnGroupCommand_column_group_name,
 							Messages.CreateColumnGroupCommand_column_group_name_dialog,
 							defaultName, null);

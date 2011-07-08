@@ -37,8 +37,8 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
-import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class DataAdapterWizard extends Wizard implements SelectionListener {
 
@@ -180,12 +180,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 				mb.open();
 
 			} catch (Exception e1) {
-
-				e1.printStackTrace();
-
-				DataAdapterErrorDialog.showErrorDialog(getWizardDialog().getShell(),
-						Messages.DataAdapterWizard_errortestingdataadapter, e1);
-
+				UIUtils.showError(e1);
 			}
 		}
 	}

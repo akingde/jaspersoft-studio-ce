@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WLocaleList;
 import org.eclipse.swt.widgets.Button;
 
@@ -73,7 +74,7 @@ public class LocaleDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell shell) {
     super.configureShell(shell);
-    shell.setText("Locales");
+    shell.setText(Messages.LocaleDialog_0);
   }
 
 	/**
@@ -94,7 +95,7 @@ public class LocaleDialog extends Dialog {
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		
 		tbtmPredefinedLocales = new CTabItem(tabFolder, SWT.NONE);
-		tbtmPredefinedLocales.setText("Predefined Locales");
+		tbtmPredefinedLocales.setText(Messages.LocaleDialog_1);
 		
 		Composite compositePredefinedLocales = new Composite(tabFolder, SWT.NONE);
 		tbtmPredefinedLocales.setControl(compositePredefinedLocales);
@@ -106,7 +107,7 @@ public class LocaleDialog extends Dialog {
 		wLocaleList = new WLocaleList(compositePredefinedLocales, SWT.NONE);
 		
 		tbtmCustomLocale = new CTabItem(tabFolder, SWT.NONE);
-		tbtmCustomLocale.setText("Custom Locale");
+		tbtmCustomLocale.setText(Messages.LocaleDialog_2);
 		
 		Composite compositeCustomLocale = new Composite(tabFolder, SWT.NONE);
 		tbtmCustomLocale.setControl(compositeCustomLocale);
@@ -114,7 +115,7 @@ public class LocaleDialog extends Dialog {
 		compositeCustomLocale.setLayout(gl_compositeCustomLocale);
 		
 		Label lblNewLabel = new Label(compositeCustomLocale, SWT.NONE);
-		lblNewLabel.setText("Language" + " *");
+		lblNewLabel.setText(Messages.LocaleDialog_3 + Messages.LocaleDialog_4);
 		
 		textCustomLanguageCode = new Text(compositeCustomLocale, SWT.BORDER);
 		GridData gd_txtCustomLanguageCode = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
@@ -122,10 +123,10 @@ public class LocaleDialog extends Dialog {
 		textCustomLanguageCode.setLayoutData(gd_txtCustomLanguageCode);
 		
 		Label lblNewLabel_1 = new Label(compositeCustomLocale, SWT.NONE);
-		lblNewLabel_1.setText("ISO Language Code\r\n(lower case, two-letter code. i.e. \"en\")");
+		lblNewLabel_1.setText(Messages.LocaleDialog_5);
 		
 		Label lblNewLabel_2 = new Label(compositeCustomLocale, SWT.NONE);
-		lblNewLabel_2.setText("Country");
+		lblNewLabel_2.setText(Messages.LocaleDialog_6);
 		
 		textCustomCountryCode = new Text(compositeCustomLocale, SWT.BORDER);
 		GridData gd_textCustomCountryCode = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
@@ -133,10 +134,10 @@ public class LocaleDialog extends Dialog {
 		textCustomCountryCode.setLayoutData(gd_textCustomCountryCode);
 		
 		Label lblNewLabel_3 = new Label(compositeCustomLocale, SWT.NONE);
-		lblNewLabel_3.setText("Optional ISO Country Code\r\n(upper case, two-letter code, i.e. \"US\")");
+		lblNewLabel_3.setText(Messages.LocaleDialog_7);
 		
 		Label lblNewLabel_4 = new Label(compositeCustomLocale, SWT.NONE);
-		lblNewLabel_4.setText("Variant");
+		lblNewLabel_4.setText(Messages.LocaleDialog_8);
 		
 		textCustomVariantCode = new Text(compositeCustomLocale, SWT.BORDER);
 		GridData gd_textCustomVariantCode = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
@@ -144,7 +145,7 @@ public class LocaleDialog extends Dialog {
 		textCustomVariantCode.setLayoutData(gd_textCustomVariantCode);
 		
 		Label lblNewLabel_5 = new Label(compositeCustomLocale, SWT.NONE);
-		lblNewLabel_5.setText("Optional specific code");
+		lblNewLabel_5.setText(Messages.LocaleDialog_9);
 		new Label(compositeCustomLocale, SWT.NONE);
 		new Label(compositeCustomLocale, SWT.NONE);
 		new Label(compositeCustomLocale, SWT.NONE);
@@ -159,7 +160,7 @@ public class LocaleDialog extends Dialog {
 		
 		Label lblNewLabel_6 = new Label(compositeCustomLocale, SWT.NONE);
 		lblNewLabel_6.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false, false, 1, 1));
-		lblNewLabel_6.setText("* " + "required field");
+		lblNewLabel_6.setText(Messages.LocaleDialog_10 + Messages.LocaleDialog_11);
 		
 		// UI elements listeners
 		tabFolder.addSelectionListener(new SelectionAdapter() {
@@ -240,7 +241,7 @@ public class LocaleDialog extends Dialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		
-		buttonDefaultLocale = createButton(parent, 2, "Default", false);
+		buttonDefaultLocale = createButton(parent, 2, Messages.LocaleDialog_12, false);
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 		

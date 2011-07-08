@@ -84,7 +84,7 @@ public class RepositoryView extends ViewPart {
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			public void doubleClick(DoubleClickEvent event) {
-				Display.getCurrent().asyncExec(new Runnable() {
+				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						new EditDataAdapterAction(treeViewer).run();
 					}

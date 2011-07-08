@@ -51,6 +51,7 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+
 /*
  * link nodes & together.
  * 
@@ -63,7 +64,8 @@ public class CreateBarcodeCommand extends CreateElementCommand {
 	 * @param srcNode
 	 * @param index
 	 */
-	public CreateBarcodeCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
+	public CreateBarcodeCommand(MElementGroup destNode,
+			MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -71,13 +73,14 @@ public class CreateBarcodeCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateBarcodeCommand(MFrame destNode, MGraphicElement srcNode, int index) {
+	public CreateBarcodeCommand(MFrame destNode, MGraphicElement srcNode,
+			int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -85,13 +88,14 @@ public class CreateBarcodeCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateBarcodeCommand(MBand destNode, MGraphicElement srcNode, int index) {
+	public CreateBarcodeCommand(MBand destNode, MGraphicElement srcNode,
+			int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -99,15 +103,16 @@ public class CreateBarcodeCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param position
-	 *          the position
+	 *            the position
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateBarcodeCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
+	public CreateBarcodeCommand(ANode destNode, MGraphicElement srcNode,
+			Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
 
@@ -119,12 +124,14 @@ public class CreateBarcodeCommand extends CreateElementCommand {
 		if (getJrElement() == null) {
 			// here put a wizard
 			BarcodeWizard wizard = new BarcodeWizard();
-			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getDefault()
+					.getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getBarcode();
 				if (srcNode.getValue() == null)
-					jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+					jrElement = srcNode.createJRElement(srcNode
+							.getJasperDesign());
 				else
 					jrElement = (JRDesignElement) srcNode.getValue();
 

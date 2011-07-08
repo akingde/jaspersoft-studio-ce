@@ -34,6 +34,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.messages.Messages;
+
 public class PropertyDialog extends Dialog {
 	
 	private String[] propertyAndValue = null;
@@ -55,7 +57,7 @@ public class PropertyDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell shell) {
     super.configureShell(shell);
-    shell.setText("Property");
+    shell.setText(Messages.PropertyDialog_0);
   }
 	
 	/**
@@ -73,17 +75,17 @@ public class PropertyDialog extends Dialog {
 		container.setLayout(fl_container);
 		
 		Group grpProperty = new Group(container, SWT.NONE);
-		grpProperty.setText("Property");
+		grpProperty.setText(Messages.PropertyDialog_1);
 		grpProperty.setLayout(new GridLayout(2, false));
 		
 		Label lblNewLabel = new Label(grpProperty, SWT.NONE);
-		lblNewLabel.setText("Property Name" + " :");
+		lblNewLabel.setText(Messages.PropertyDialog_2);
 		
 		textProperty = new Text(grpProperty, SWT.BORDER);
 		textProperty.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblNewLabel_1 = new Label(grpProperty, SWT.NONE);
-		lblNewLabel_1.setText("Property Value" + " :");
+		lblNewLabel_1.setText(Messages.PropertyDialog_3);
 		
 		textValue = new Text(grpProperty, SWT.BORDER);
 		textValue.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));

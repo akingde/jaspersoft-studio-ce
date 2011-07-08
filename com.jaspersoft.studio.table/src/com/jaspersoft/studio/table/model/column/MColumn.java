@@ -276,7 +276,7 @@ public class MColumn extends APropertyNode implements IPastable, IContainer,
 					final MColumn child = this;
 					final int newIndex = parent.getChildren().indexOf(this);
 
-					Display.getCurrent().asyncExec(new Runnable() {
+					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							parent.removeChild(child);
 

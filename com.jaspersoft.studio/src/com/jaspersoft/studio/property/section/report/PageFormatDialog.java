@@ -36,6 +36,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
@@ -52,15 +53,21 @@ final class PageFormatDialog extends FormDialog {
 
 	PageFormatDialog(Shell shell, ANode node, IFile file) {
 		super(shell);
-		shell.setText("Page Format");
+		
 		jnode = (MReport) node.getRoot();
 		this.jd = node.getJasperDesign();
 		this.file = file;
 	}
+	
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(Messages.PageFormatDialog_0);
+	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		mform.getForm().setText("Page Format");
+		mform.getForm().setText(Messages.PageFormatDialog_1);
 
 		FormToolkit toolkit = mform.getToolkit();
 
@@ -84,24 +91,24 @@ final class PageFormatDialog extends FormDialog {
 
 	private void createColumns(IManagedForm mform, FormToolkit toolkit) {
 		Group bright = new Group(mform.getForm().getBody(), SWT.NONE);
-		bright.setText("Columns");
+		bright.setText(Messages.PageFormatDialog_2);
 		bright.setBackground(mform.getForm().getBody().getBackground());
 		bright.setLayoutData(new GridData(GridData.FILL_BOTH));
 		bright.setLayout(new GridLayout(3, false));
 
-		toolkit.createLabel(bright, "Columns");
+		toolkit.createLabel(bright, Messages.PageFormatDialog_3);
 		cols = new Spinner(bright, SWT.BORDER);
 		cols.setValues(1, 1, Integer.MAX_VALUE, 0, 1, 10);
-		cols.setToolTipText("Columns");
+		cols.setToolTipText(Messages.PageFormatDialog_4);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		cols.setLayoutData(gd);
 
 		cwidth = new ValueUnitsWidget();
-		cwidth.createComponent(bright, "Column Width", "Column Width");
+		cwidth.createComponent(bright, Messages.PageFormatDialog_5, Messages.PageFormatDialog_6);
 
 		space = new ValueUnitsWidget();
-		space.createComponent(bright, "Space", "Space between columns");
+		space.createComponent(bright, Messages.PageFormatDialog_7, Messages.PageFormatDialog_8);
 
 		uvWidgets.add(cwidth);
 		uvWidgets.add(space);
@@ -123,22 +130,22 @@ final class PageFormatDialog extends FormDialog {
 
 	private void createMargins(IManagedForm mform, FormToolkit toolkit) {
 		Group bleft = new Group(mform.getForm().getBody(), SWT.NONE);
-		bleft.setText("Margins");
+		bleft.setText(Messages.PageFormatDialog_9);
 		bleft.setBackground(mform.getForm().getBody().getBackground());
 		bleft.setLayoutData(new GridData(GridData.FILL_BOTH));
 		bleft.setLayout(new GridLayout(3, false));
 
 		tmargin = new ValueUnitsWidget();
-		tmargin.createComponent(bleft, "Top", "Top margin");
+		tmargin.createComponent(bleft, Messages.PageFormatDialog_10, Messages.PageFormatDialog_11);
 
 		bmargin = new ValueUnitsWidget();
-		bmargin.createComponent(bleft, "Bottom", "Bottom margin");
+		bmargin.createComponent(bleft, Messages.PageFormatDialog_12, Messages.PageFormatDialog_13);
 
 		lmargin = new ValueUnitsWidget();
-		lmargin.createComponent(bleft, "Left", "Left margin");
+		lmargin.createComponent(bleft, Messages.PageFormatDialog_14, Messages.PageFormatDialog_15);
 
 		rmargin = new ValueUnitsWidget();
-		rmargin.createComponent(bleft, "Right", "Right margin");
+		rmargin.createComponent(bleft, Messages.PageFormatDialog_16, Messages.PageFormatDialog_17);
 
 		uvWidgets.add(tmargin);
 		uvWidgets.add(bmargin);
@@ -163,12 +170,12 @@ final class PageFormatDialog extends FormDialog {
 
 	private void createOrientation(IManagedForm mform, FormToolkit toolkit) {
 		Group mleft = new Group(mform.getForm().getBody(), SWT.NONE);
-		mleft.setText("Page Orientation");
+		mleft.setText(Messages.PageFormatDialog_18);
 		mleft.setBackground(mform.getForm().getBody().getBackground());
 		mleft.setLayoutData(new GridData(GridData.FILL_BOTH));
 		mleft.setLayout(new GridLayout(2, false));
-		portrait = toolkit.createButton(mleft, "Portrait", SWT.RADIO);
-		landscape = toolkit.createButton(mleft, "Landscape", SWT.RADIO);
+		portrait = toolkit.createButton(mleft, Messages.PageFormatDialog_19, SWT.RADIO);
+		landscape = toolkit.createButton(mleft, Messages.PageFormatDialog_20, SWT.RADIO);
 
 		portrait.setSelection(true);
 
@@ -269,7 +276,7 @@ final class PageFormatDialog extends FormDialog {
 		tleft.setBackground(mform.getForm().getBody().getBackground());
 		tleft.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		toolkit.createLabel(tleft, "Format");
+		toolkit.createLabel(tleft, Messages.PageFormatDialog_21);
 		pformat = new CCombo(tleft, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
 		pformat.setItems(PageSize.getFormats());
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -277,16 +284,16 @@ final class PageFormatDialog extends FormDialog {
 		pformat.setLayoutData(gd);
 
 		pwidth = new ValueUnitsWidget();
-		pwidth.createComponent(tleft, "Width", "Page Width");
+		pwidth.createComponent(tleft, Messages.PageFormatDialog_22, Messages.PageFormatDialog_23);
 
 		pheigh = new ValueUnitsWidget();
-		pheigh.createComponent(tleft, "Height", "Page Height");
+		pheigh.createComponent(tleft, Messages.PageFormatDialog_24, Messages.PageFormatDialog_25);
 
 		uvWidgets.add(pwidth);
 		uvWidgets.add(pheigh);
 
 		uw = new UnitsWidget();
-		uw.createComponent(tleft, "Units", "Units", 2);
+		uw.createComponent(tleft, Messages.PageFormatDialog_26, Messages.PageFormatDialog_27, 2);
 		uw.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

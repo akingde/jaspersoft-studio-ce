@@ -128,7 +128,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 				doc.set(xml);
 			}
 		} catch (final Exception e) {
-			Display.getCurrent().asyncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
 							"Error transforming model to xml.", e.getCause()); //$NON-NLS-1$
@@ -308,7 +308,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 	public Object getAdapter(Class type) {
 		if (type == IContentOutlinePage.class) {
 			outlinePage = new MultiOutlineView(this);
-			Display.getCurrent().asyncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 
 				public void run() {
 					updateContentOutline(getActivePage());
@@ -339,7 +339,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 			int index = addPage(styleEditor, getEditorInput());
 			setPageText(index, "Preview");
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
+			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
 					null, e.getStatus());
 		}
 		styleEditor.setModel(model);
@@ -364,7 +364,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 						}
 					});
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getCurrent().getActiveShell(), Messages.common_error_creating_nested_text_editor,
+			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_text_editor,
 					null, e.getStatus());
 		}
 	}

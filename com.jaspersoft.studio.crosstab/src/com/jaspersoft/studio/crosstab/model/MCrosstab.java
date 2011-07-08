@@ -449,7 +449,7 @@ public class MCrosstab extends MGraphicElement implements IContainer,
 					&& !flagRefreshCells) {
 				flagRefreshCells = true;
 				CrosstabComponentFactory.deleteCellNodes(MCrosstab.this);
-				Display.getCurrent().asyncExec(new Runnable() {
+				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						CrosstabComponentFactory.createCellNodes(
 								(JRDesignCrosstab) getValue(), MCrosstab.this);

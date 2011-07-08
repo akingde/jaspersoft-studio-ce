@@ -44,10 +44,16 @@ public class SizeGridAction extends Action {
 
 		private SizeDialog(Shell shell, Dimension d) {
 			super(shell);
-			shell.setText(Messages.SizeGridAction_grid_editor);
+
 			setText(Messages.SizeGridAction_grid_editor);
 			w = d.width;
 			h = d.height;
+		}
+
+		@Override
+		protected void configureShell(Shell newShell) {
+			super.configureShell(newShell);
+			newShell.setText(Messages.SizeGridAction_grid_editor);
 		}
 
 		@Override
@@ -63,6 +69,7 @@ public class SizeGridAction extends Action {
 			width.setValues(w, 0, Integer.MAX_VALUE, 0, 1, 10);
 			width.setToolTipText(Messages.SizeGridAction_grid_space_width_tool_tip);
 			width.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent e) {
 					w = width.getSelection();
 				}
@@ -74,6 +81,7 @@ public class SizeGridAction extends Action {
 			height.setValues(h, 0, Integer.MAX_VALUE, 0, 1, 10);
 			height.setToolTipText(Messages.SizeGridAction_grid_space_height_tool_tip);
 			height.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent e) {
 					h = height.getSelection();
 				}
@@ -109,13 +117,14 @@ public class SizeGridAction extends Action {
 	/**
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
+	@Override
 	public void run() {
 		Dimension dp = (Dimension) diagramViewer.getProperty(SnapToGrid.PROPERTY_GRID_SPACING);
 		if (dp == null)
 			dp = new Dimension(10, 10);
 		final Dimension d = dp;
 
-		SizeDialog dlg = new SizeDialog(Display.getCurrent().getActiveShell(), d);
+		SizeDialog dlg = new SizeDialog(Display.getDefault().getActiveShell(), d);
 		if (dlg.open() == Window.OK) {
 			diagramViewer.setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(dlg.getWidth(), dlg.getHeight()));
 		}

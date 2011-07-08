@@ -145,7 +145,7 @@ public class TableComponentFactory implements IComponentFactory {
 					final PropertyChangeListener listener = new PropertyChangeListener() {
 
 						public void propertyChange(PropertyChangeEvent evt) {
-							Display.getCurrent().asyncExec(new Runnable() {
+							Display.getDefault().asyncExec(new Runnable() {
 
 								public void run() {
 									refreshTable(finaltable);

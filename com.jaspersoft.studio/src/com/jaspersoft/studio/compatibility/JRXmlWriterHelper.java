@@ -30,12 +30,12 @@ import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
-import com.jaspersoft.studio.utils.encoding.EncodingMap;
 
 /*
  * 
@@ -101,23 +101,25 @@ public class JRXmlWriterHelper {
 
 	public static String fixencoding(String encoding) {
 		return "UTF-8";
-//		String tmp = EncodingMap.getJava2IANAMapping(encoding);
-//		if (tmp != null)
-//			return tmp;
-//		tmp = EncodingMap.getJava2IANAMapping(encoding.toUpperCase());
-//		if (tmp != null)
-//			return tmp;
-//		tmp = EncodingMap.getJava2IANAMapping(encoding.toLowerCase());
-//		if (tmp != null)
-//			return tmp;
-//		return encoding;
+		// String tmp = EncodingMap.getJava2IANAMapping(encoding);
+		// if (tmp != null)
+		// return tmp;
+		// tmp = EncodingMap.getJava2IANAMapping(encoding.toUpperCase());
+		// if (tmp != null)
+		// return tmp;
+		// tmp = EncodingMap.getJava2IANAMapping(encoding.toLowerCase());
+		// if (tmp != null)
+		// return tmp;
+		// return encoding;
 	}
 
 	public static String getVersion(IResource resource, PropertiesHelper ph, boolean showDialog) {
 		String version = ph.getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, "last");
 		if (showDialog && ph.getBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, false)) {
-			VersionDialog dialog = new VersionDialog(Display.getDefault().getActiveShell(), version);
-			version = dialog.open(resource.getProject());
+			VersionDialog dialog = new VersionDialog(Display.getDefault().getActiveShell(), version, resource.getProject());
+			if (dialog.open() == Dialog.OK) {
+				version = dialog.getVersion();
+			}
 		}
 		return version;
 	}

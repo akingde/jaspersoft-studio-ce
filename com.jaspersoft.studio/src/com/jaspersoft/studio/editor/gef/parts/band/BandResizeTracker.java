@@ -84,7 +84,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 			return;
 		if (exposeHelper.step(getLocation())) {
 			handleAutoexpose();
-			Display.getCurrent().asyncExec(new QueuedAutoexpose());
+			Display.getDefault().asyncExec(new QueuedAutoexpose());
 		} else
 			setAutoexposeHelper(null);
 	}
@@ -116,7 +116,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 		exposeHelper = helper;
 		if (exposeHelper == null)
 			return;
-		Display.getCurrent().asyncExec(new QueuedAutoexpose());
+		Display.getDefault().asyncExec(new QueuedAutoexpose());
 	}
 
 	/**

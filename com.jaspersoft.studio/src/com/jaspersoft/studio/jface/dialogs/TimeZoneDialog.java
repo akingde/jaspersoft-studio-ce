@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTimeZoneList;
 import org.eclipse.swt.widgets.Button;
 
@@ -59,7 +60,7 @@ public class TimeZoneDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell shell) {
     super.configureShell(shell);
-    shell.setText("Time Zones");
+    shell.setText(Messages.TimeZoneDialog_0);
   }
 
 	/**
@@ -77,7 +78,7 @@ public class TimeZoneDialog extends Dialog {
 		container.setLayout(fl_container);
 		
 		Group grpTimeZones = new Group(container, SWT.NONE);
-		grpTimeZones.setText("Time Zones");
+		grpTimeZones.setText(Messages.TimeZoneDialog_1);
 		FillLayout fl_grpTimeZones = new FillLayout(SWT.HORIZONTAL);
 		fl_grpTimeZones.marginWidth = 5;
 		fl_grpTimeZones.marginHeight = 5;
@@ -112,7 +113,7 @@ public class TimeZoneDialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		btnDefaultTimeZone = createButton(parent, 2, "Default", false);
+		btnDefaultTimeZone = createButton(parent, 2, Messages.TimeZoneDialog_2, false);
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 		

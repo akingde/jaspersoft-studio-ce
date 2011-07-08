@@ -46,7 +46,7 @@ public class HtmlFigureEditPart extends FigureEditPart {
 			MHtml m = (MHtml) getModel();
 			wizard.setValue((String) m
 					.getPropertyValue(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION));
-			WizardDialog dialog = new WizardDialog(Display.getCurrent()
+			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {

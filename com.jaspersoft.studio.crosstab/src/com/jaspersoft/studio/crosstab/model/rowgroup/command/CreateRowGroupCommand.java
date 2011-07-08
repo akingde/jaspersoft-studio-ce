@@ -121,7 +121,7 @@ public class CreateRowGroupCommand extends Command {
 							jrCrosstab.getRowGroupIndicesMap(),
 							"CopyOFRowGroup_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(
-							Display.getCurrent().getActiveShell(),
+							Display.getDefault().getActiveShell(),
 							Messages.CreateRowGroupCommand_row_group_name,
 							Messages.CreateRowGroupCommand_row_group_dialog_text,
 							defaultName, null);

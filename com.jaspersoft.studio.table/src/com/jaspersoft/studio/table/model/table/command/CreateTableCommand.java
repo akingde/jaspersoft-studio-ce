@@ -124,7 +124,7 @@ public class CreateTableCommand extends CreateElementCommand {
 	protected void createObject() {
 		if (jrElement == null) {
 			TableWizard wizard = new TableWizard();
-			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 			wizard.init(jasperDesign);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {

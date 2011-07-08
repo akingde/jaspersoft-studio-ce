@@ -132,6 +132,7 @@ public class DataAdapterErrorDialog extends IconAndMessageDialog {
 	 * of the error details area. Note that the Details button will only be
 	 * visible if the error being displayed specifies child details.
 	 */
+	@Override
 	protected void buttonPressed(int id) {
 		if (id == IDialogConstants.DETAILS_ID) {
 			// was the details button pressed?
@@ -144,6 +145,7 @@ public class DataAdapterErrorDialog extends IconAndMessageDialog {
 	/*
 	 * (non-Javadoc) Method declared in Window.
 	 */
+	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		shell.setText(title);
@@ -154,6 +156,7 @@ public class DataAdapterErrorDialog extends IconAndMessageDialog {
 	 * 
 	 * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		// create OK and Details buttons
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
@@ -214,6 +217,7 @@ public class DataAdapterErrorDialog extends IconAndMessageDialog {
 	 * If the old behavior is desired by subclasses, get the returned composite's
 	 * layout data and set grabExcessVerticalSpace to true.
 	 */
+	@Override
 	protected Control createDialogArea(Composite parent) {
 		// Create a composite with standard margins and spacing
 		// Add the messageArea to this composite so that as subclasses add widgets to the messageArea
@@ -241,6 +245,7 @@ public class DataAdapterErrorDialog extends IconAndMessageDialog {
 	/*
 	 * @see IconAndMessageDialog#createDialogAndButtonArea(Composite)
 	 */
+	@Override
 	protected void createDialogAndButtonArea(Composite parent) {
 		super.createDialogAndButtonArea(parent);
 		if (this.dialogArea instanceof Composite) {
@@ -257,6 +262,7 @@ public class DataAdapterErrorDialog extends IconAndMessageDialog {
 	 * 
 	 * @see org.eclipse.jface.dialogs.IconAndMessageDialog#getImage()
 	 */
+	@Override
 	protected Image getImage() {
 		if (status != null) {
 			if (status.getSeverity() == IStatus.WARNING) {
@@ -358,6 +364,7 @@ public class DataAdapterErrorDialog extends IconAndMessageDialog {
 	 * 
 	 * @see org.eclipse.jface.window.Window#close()
 	 */
+	@Override
 	public boolean close() {
 		if (clipboard != null) {
 			clipboard.dispose();
@@ -422,7 +429,8 @@ public class DataAdapterErrorDialog extends IconAndMessageDialog {
      * (non-Javadoc)
      * @see org.eclipse.jface.dialogs.Dialog#isResizable()
      */
-    protected boolean isResizable() {
+    @Override
+		protected boolean isResizable() {
     	return true;
     }
 

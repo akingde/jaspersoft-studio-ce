@@ -19,32 +19,32 @@ public class SQLQueryDesigner extends QueryDesigner {
 
 	@Override
 	public Control getControl() {
-		if (sqleditor == null)
+//		if (sqleditor == null)
 			return super.getControl();
-		return composite;
+//		return composite;
 	}
 
 	@Override
 	public Control createControl(Composite parent) {
-		if (false) {
+//		if (false) {
 			// IEditorPart actEditor = JaspersoftStudioPlugin.getInstance()
 			// .getWorkbench().getActiveWorkbenchWindow().getActivePage()
 			// .getActiveEditor();
 			// if (actEditor != null) {
 			// super.createControl(parent);
-			composite = new Composite(parent, SWT.NONE);
-			composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-			FillLayout layout = new FillLayout(SWT.HORIZONTAL);
-			layout.marginHeight = 0;
-			layout.marginWidth = 0;
-			layout.spacing = 0;
-			composite.setLayout(layout);
+//			composite = new Composite(parent, SWT.NONE);
+//			composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+//			FillLayout layout = new FillLayout(SWT.HORIZONTAL);
+//			layout.marginHeight = 0;
+//			layout.marginWidth = 0;
+//			layout.spacing = 0;
+//			composite.setLayout(layout);
+//
+//			sqleditor = new SQLDomainModel();
+//			sqlviewer = new SQLSourceViewer(sqleditor, composite);
+//			sqlviewer.initDBContext();
 
-			sqleditor = new SQLDomainModel();
-			sqlviewer = new SQLSourceViewer(sqleditor, composite);
-			sqlviewer.initDBContext();
-
-			// sqlviewer.setContentProvider(sqleditor.createContentProvider());
+//			sqlviewer.setContentProvider(sqleditor.createContentProvider());
 
 			// sqlviewer
 			// .setContentProvider(sqlDomainModel.createContentProvider());
@@ -121,55 +121,55 @@ public class SQLQueryDesigner extends QueryDesigner {
 			// e.printStackTrace();
 			// }
 
-			return composite;
-			// } else
-			// return super.createControl(parent);
-		} else
+//			return composite;
+//			// } else
+//			// return super.createControl(parent);
+//		} else
 			return super.createControl(parent);
 	}
 
 	private String query;
-	private SQLDomainModel sqleditor;
-	private SQLSourceViewer sqlviewer;
+//	private SQLDomainModel sqleditor;
+//	private SQLSourceViewer sqlviewer;
 
 	@Override
 	public void dispose() {
-		if (sqleditor != null)
+//		if (sqleditor != null)
 
 			super.dispose();
 	}
 
 	@Override
 	public void setQuery(String query) {
-		if (sqleditor != null) {
-			QuerySelectStatement createQuerySelectStatement = StatementHelper
-					.createQuerySelectStatement("Select Query");
-			createQuerySelectStatement.setQueryExpr(StatementHelper
-					.createQueryExpressionRoot());
-			// sqleditor.setSQLStatement(createQuerySelectStatement);
-			// sqleditor.setEditorText(query);
-			sqlviewer.setInput(createQuerySelectStatement);
-			// sqlviewer.setInput("select * from abcd");
-			// sqleditor.setInput(createSQLEditorInput(query));
-			this.query = query;
-		} else
+//		if (sqleditor != null) {
+//			QuerySelectStatement createQuerySelectStatement = StatementHelper
+//					.createQuerySelectStatement("Select Query");
+//			createQuerySelectStatement.setQueryExpr(StatementHelper
+//					.createQueryExpressionRoot());
+//			// sqleditor.setSQLStatement(createQuerySelectStatement);
+//			// sqleditor.setEditorText(query);
+//			sqlviewer.setInput(createQuerySelectStatement);
+//			// sqlviewer.setInput("select * from abcd");
+//			// sqleditor.setInput(createSQLEditorInput(query));
+//			this.query = query;
+//		} else
 			super.setQuery(query);
 	}
 
-	private QDSQLEditorInput createSQLEditorInput(String query) {
-		QDSQLEditorInput input = new QDSQLEditorInput(query);
-		input.setConnectionInfo(new SQLEditorConnectionInfo(
-				new DatabaseVendorDefinitionId("hsql")));
-		return input;
-	}
+//	private QDSQLEditorInput createSQLEditorInput(String query) {
+//		QDSQLEditorInput input = new QDSQLEditorInput(query);
+//		input.setConnectionInfo(new SQLEditorConnectionInfo(
+//				new DatabaseVendorDefinitionId("hsql")));
+//		return input;
+//	}
 
 	@Override
 	public String getQuery() {
-		if (sqleditor != null) {
-			if (sqleditor.getSQLStatement() != null)
-				query = sqleditor.getSQLStatement().getSQL();
-			return query;
-		} else
+//		if (sqleditor != null) {
+//			if (sqleditor.getSQLStatement() != null)
+//				query = sqleditor.getSQLStatement().getSQL();
+//			return query;
+//		} else
 			return super.getQuery();
 	}
 }

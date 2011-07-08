@@ -211,7 +211,7 @@ public class XMLDataAdapterComposite extends Composite {
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell());
+				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
 				fd.setFileName(textFileName.getText());
 				fd.setFilterExtensions(new String[]{"*.xml","*.*"});
 				String selection = fd.open();

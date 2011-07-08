@@ -70,6 +70,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class CSVDataAdapterComposite extends Composite {
 
@@ -164,7 +165,7 @@ public class CSVDataAdapterComposite extends Composite {
 		CTabFolder tabFolder = new CTabFolder(composite_1, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
-		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(
+		tabFolder.setSelectionBackground(Display.getDefault().getSystemColor(
 				SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 
 		CTabItem tbtmColumns = new CTabItem(tabFolder, SWT.NONE);
@@ -443,7 +444,7 @@ public class CSVDataAdapterComposite extends Composite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getCurrent()
+				FileDialog fd = new FileDialog(Display.getDefault()
 						.getActiveShell());
 				fd.setFileName(textCSVFileName.getText());
 				fd.setFilterExtensions(new String[] { "*.csv", "*.*" });
@@ -461,16 +462,9 @@ public class CSVDataAdapterComposite extends Composite {
 				try {
 					getCSVColumns();
 				} catch (IOException e1) {
-					e1.printStackTrace();
-
-					DataAdapterErrorDialog.showErrorDialog(Display.getCurrent()
-							.getActiveShell(), "CSV IOException", e1);
-
+					UIUtils.showError(e1);
 				} catch (Exception e2) {
-					e2.printStackTrace();
-
-					DataAdapterErrorDialog.showErrorDialog(Display.getCurrent()
-							.getActiveShell(), "CSV Exception", e2);
+					UIUtils.showError(e2);
 				}
 			}
 		});

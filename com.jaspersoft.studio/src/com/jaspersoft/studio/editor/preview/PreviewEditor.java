@@ -234,7 +234,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 	private boolean showParameters = false;
 
 	private int askParameters() {
-		ParametersDialog pd = new ParametersDialog(Display.getCurrent().getActiveShell(), jasperDesign, jasperParameters);
+		ParametersDialog pd = new ParametersDialog(Display.getDefault().getActiveShell(), jasperDesign, jasperParameters);
 		if (showParameters || pd.canShowParameters()) {
 			return pd.open();
 		}

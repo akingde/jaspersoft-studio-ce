@@ -107,7 +107,7 @@ public class CreateMeasureCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(), "CopyOFMeasure_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(),
+					InputDialog dlg = new InputDialog(Display.getDefault().getActiveShell(),
 							Messages.CreateMeasureCommand_parameter_name, Messages.CreateMeasureCommand_dialog_text, defaultName,
 							null);
 					if (dlg.open() == InputDialog.OK) {

@@ -113,7 +113,7 @@ public class CreateParameterCommand extends Command {
 				e.printStackTrace();
 				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getParametersMap(), "CopyOFParameter_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), Messages.CreateParameterCommand_parameter_name,
+					InputDialog dlg = new InputDialog(Display.getDefault().getActiveShell(), Messages.CreateParameterCommand_parameter_name,
 							Messages.CreateParameterCommand_dialog_text, defaultName, null);
 					if (dlg.open() == InputDialog.OK) {
 						jrParameter.setName(dlg.getValue());

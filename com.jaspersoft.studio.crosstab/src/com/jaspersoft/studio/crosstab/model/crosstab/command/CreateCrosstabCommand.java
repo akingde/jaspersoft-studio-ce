@@ -126,7 +126,7 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 			// here put a wizard
 			CrosstabWizard wizard = new CrosstabWizard();
 			wizard.init(jasperDesign);
-			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getCrosstab();

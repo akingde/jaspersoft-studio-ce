@@ -189,7 +189,7 @@ public class SeriesColorPage extends WizardPage {
 				@SuppressWarnings("unchecked")
 				List<JRSeriesColor> list = (List<JRSeriesColor>) tableViewer
 						.getInput();
-				ColorDialog dialog = new ColorDialog(Display.getCurrent()
+				ColorDialog dialog = new ColorDialog(Display.getDefault()
 						.getActiveShell());
 				dialog.setRGB(new RGB(255, 0, 255));
 				if (dialog.open() == null)

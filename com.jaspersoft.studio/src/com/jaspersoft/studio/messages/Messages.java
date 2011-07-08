@@ -486,6 +486,19 @@ public class Messages extends NLS {
 	public static String JrxmlEditorContributor_show_ruler;
 	public static String JrxmlEditorContributor_view;
 	public static String LinePenSection_pen_width_tool_tip;
+	public static String LocaleDialog_0;
+	public static String LocaleDialog_1;
+	public static String LocaleDialog_10;
+	public static String LocaleDialog_11;
+	public static String LocaleDialog_12;
+	public static String LocaleDialog_2;
+	public static String LocaleDialog_3;
+	public static String LocaleDialog_4;
+	public static String LocaleDialog_5;
+	public static String LocaleDialog_6;
+	public static String LocaleDialog_7;
+	public static String LocaleDialog_8;
+	public static String LocaleDialog_9;
 	public static String LocationSection_position;
 	public static String LocationSection_position_type_tool_tip;
 	public static String LocationSection_x_position_tool_tip;
@@ -818,6 +831,34 @@ public class Messages extends NLS {
 	public static String PaddingSection_left_padding_tool_tip;
 	public static String PaddingSection_right_padding_tool_tip;
 	public static String PaddingSection_top_padding_tool_tip;
+	public static String PageFormatDialog_0;
+	public static String PageFormatDialog_1;
+	public static String PageFormatDialog_10;
+	public static String PageFormatDialog_11;
+	public static String PageFormatDialog_12;
+	public static String PageFormatDialog_13;
+	public static String PageFormatDialog_14;
+	public static String PageFormatDialog_15;
+	public static String PageFormatDialog_16;
+	public static String PageFormatDialog_17;
+	public static String PageFormatDialog_18;
+	public static String PageFormatDialog_19;
+	public static String PageFormatDialog_2;
+	public static String PageFormatDialog_20;
+	public static String PageFormatDialog_21;
+	public static String PageFormatDialog_22;
+	public static String PageFormatDialog_23;
+	public static String PageFormatDialog_24;
+	public static String PageFormatDialog_25;
+	public static String PageFormatDialog_26;
+	public static String PageFormatDialog_27;
+	public static String PageFormatDialog_3;
+	public static String PageFormatDialog_4;
+	public static String PageFormatDialog_5;
+	public static String PageFormatDialog_6;
+	public static String PageFormatDialog_7;
+	public static String PageFormatDialog_8;
+	public static String PageFormatDialog_9;
 	public static String PageMarginSection_bottom_margin_tool_tip;
 	public static String PageMarginSection_left_margin_tool_tip;
 	public static String PageMarginSection_margin;
@@ -909,6 +950,10 @@ public class Messages extends NLS {
 	public static String PreviewEditor_reloading;
 	public static String PreviewEditor_report_fill_canceled;
 	public static String PreviewEditor_starting;
+	public static String PropertyDialog_0;
+	public static String PropertyDialog_1;
+	public static String PropertyDialog_2;
+	public static String PropertyDialog_3;
 	public static String ReloadAction_reload;
 	public static String ReloadAction_reload_description;
 	public static String ReloadAction_reload_tool_tip;
@@ -997,6 +1042,9 @@ public class Messages extends NLS {
 	public static String TextSection_line_spacing_tool_tip;
 	public static String TextSection_rotation_tool_tip;
 	public static String TimePattern_description;
+	public static String TimeZoneDialog_0;
+	public static String TimeZoneDialog_1;
+	public static String TimeZoneDialog_2;
 	public static String WizardBandGroupLayoutPage_add_group_footer;
 	public static String WizardBandGroupLayoutPage_add_group_header;
 	public static String WizardBandGroupLayoutPage_description;
@@ -1038,6 +1086,12 @@ public class Messages extends NLS {
 	public static String XMLExporterPreferencePage_5;
 	public static String XMLExporterPreferencePage_6;
 	public static String common_tools;
+
+	public static String VersionDialog_checkbox;
+	public static String VersionDialog_label;
+	public static String VersionDialog_label2;
+	public static String VersionDialog_title;
+	public static String VersionDialog_warning;
 
 	static {
 		// initialize resource bundle
