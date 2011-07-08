@@ -178,7 +178,6 @@ public class ParameterPage extends WizardPage {
 				}
 				JRDesignDatasetParameter p = new JRDesignDatasetParameter();
 				JRDesignExpression expression = new JRDesignExpression();
-				expression.setValueClassName("java.lang.String"); //$NON-NLS-1$
 				p.setExpression(expression);
 				p.setName(newName); //$NON-NLS-1$
 				list.add(p);
@@ -289,7 +288,7 @@ public class ParameterPage extends WizardPage {
 	private void attachContentProvider(TableViewer viewer) {
 		viewer.setContentProvider(new IStructuredContentProvider() {
 			public Object[] getElements(Object inputElement) {
-				return ((List<JRDatasetParameter>) inputElement).toArray();
+				return ((List<?>) inputElement).toArray();
 			}
 
 			public void dispose() {

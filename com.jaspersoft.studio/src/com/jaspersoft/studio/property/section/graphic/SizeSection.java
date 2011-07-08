@@ -23,7 +23,6 @@
  */
 package com.jaspersoft.studio.property.section.graphic;
 
-import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.type.StretchTypeEnum;
 

@@ -62,8 +62,6 @@ import com.jaspersoft.studio.editor.gef.ui.actions.RZoomComboContributionItem;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
-import com.jaspersoft.studio.property.section.report.PageFormatAction;
 
 /*
  * Manages the installation/deinstallation of global actions for multi-page editors. Responsible for the redirection of

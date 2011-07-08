@@ -25,7 +25,6 @@ package com.jaspersoft.studio.property.section.text;
 
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 
-import org.eclipse.gef.internal.InternalImages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;

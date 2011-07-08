@@ -218,16 +218,16 @@ public class PageSize {
 		// Go through the hashmap and compare width and height with the point pair.
 		// If found, return the hashmap key.
 		// else return empty string.
-		for (Iterator i = pageFormats.entrySet().iterator(); i.hasNext();) {
+		for (Iterator<Map.Entry<String, Point>> i = pageFormats.entrySet().iterator(); i.hasNext();) {
 
-			Map.Entry entry = (Map.Entry) i.next();
+			Map.Entry<String, Point> entry = i.next();
 
-			if (((Point) entry.getValue()).x == width) {
+			if (entry.getValue().x == width) {
 
-				if (((Point) entry.getValue()).y == height) {
+				if (entry.getValue().y == height) {
 
 					// correct pageFormat found.
-					format = (String) entry.getKey();
+					format = entry.getKey();
 				}
 			}
 		}
@@ -249,16 +249,16 @@ public class PageSize {
 		// Go through the hashmap and compare width and height with the point pair.
 		// If found, return the hashmap key.
 		// else return empty string.
-		for (Iterator i = pageFormats.entrySet().iterator(); i.hasNext();) {
+		for (Iterator<Map.Entry<String, Point>> i = pageFormats.entrySet().iterator(); i.hasNext();) {
 
-			Map.Entry entry = (Map.Entry) i.next();
+			Map.Entry<String, Point> entry = i.next();
 
-			if (((Point) entry.getValue()).x == width) {
+			if (entry.getValue().x == width) {
 
-				if (((Point) entry.getValue()).y == height) {
+				if (entry.getValue().y == height) {
 
 					// correct pageFormat found.
-					format = (String) entry.getKey();
+					format = entry.getKey();
 				}
 			}
 		}

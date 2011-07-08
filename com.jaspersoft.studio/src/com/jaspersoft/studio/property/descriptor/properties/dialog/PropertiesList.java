@@ -45,8 +45,6 @@ package com.jaspersoft.studio.property.descriptor.properties.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jaspersoft.studio.messages.Messages;
-
 public class PropertiesList {
 
 	private static List<PropertyDTO> props;

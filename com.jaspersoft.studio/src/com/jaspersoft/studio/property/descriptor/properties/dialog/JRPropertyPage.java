@@ -24,9 +24,7 @@
 package com.jaspersoft.studio.property.descriptor.properties.dialog;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
@@ -347,26 +345,26 @@ public class JRPropertyPage extends WizardPage {
 		table.addListener(SWT.MouseHover, tableListener);
 	}
 
-	private String[] getPropertyItems(String[] items, String dto) {
-		List<PropertyDTO> props = (List<PropertyDTO>) tableViewer.getInput();
-		Set<String> set = new HashSet<String>();
-		for (PropertyDTO p : props)
-			if (!dto.equals(p.getProperty()))
-				set.add(p.getProperty());
-		List<String> l = new ArrayList<String>();
-		boolean isDTO = false;
-		String[] names = getDefaultPropertyItems();
-		for (int i = 0; i < names.length; i++) {
-			if (!set.contains(names[i]))
-				l.add(names[i]);
-			if (dto.equals(names[i])) {
-				isDTO = true;
-			}
-		}
-		l.add(0, !isDTO ? "" : dto); //$NON-NLS-1$
-		// default - exclude existing
-		return l.toArray(new String[l.size()]);
-	}
+//	private String[] getPropertyItems(String[] items, String dto) {
+//		List<PropertyDTO> props = (List<PropertyDTO>) tableViewer.getInput();
+//		Set<String> set = new HashSet<String>();
+//		for (PropertyDTO p : props)
+//			if (!dto.equals(p.getProperty()))
+//				set.add(p.getProperty());
+//		List<String> l = new ArrayList<String>();
+//		boolean isDTO = false;
+//		String[] names = getDefaultPropertyItems();
+//		for (int i = 0; i < names.length; i++) {
+//			if (!set.contains(names[i]))
+//				l.add(names[i]);
+//			if (dto.equals(names[i])) {
+//				isDTO = true;
+//			}
+//		}
+//		l.add(0, !isDTO ? "" : dto); //$NON-NLS-1$
+//		// default - exclude existing
+//		return l.toArray(new String[l.size()]);
+//	}
 
 	private String[] getDefaultPropertyItems() {
 		defaultProperties = getDefaultProperties();

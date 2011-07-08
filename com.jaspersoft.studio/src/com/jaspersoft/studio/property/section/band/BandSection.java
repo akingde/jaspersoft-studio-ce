@@ -24,7 +24,6 @@
 package com.jaspersoft.studio.property.section.band;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.type.SplitTypeEnum;
 
 import org.eclipse.swt.SWT;

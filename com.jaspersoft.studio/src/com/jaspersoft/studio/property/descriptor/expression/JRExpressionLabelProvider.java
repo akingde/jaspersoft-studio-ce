@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.property.descriptor.expression;
 
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
 import org.eclipse.jface.viewers.LabelProvider;
 
 /*

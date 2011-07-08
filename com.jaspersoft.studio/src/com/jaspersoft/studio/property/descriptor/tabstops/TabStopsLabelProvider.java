@@ -43,7 +43,7 @@ public class TabStopsLabelProvider extends LabelProvider {
 		if (element == null)
 			return ""; //$NON-NLS-1$
 		if (element instanceof List)
-			return "[" + Messages.common_properties + ": " + ((List) element).size() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			return "[" + Messages.common_properties + ": " + ((List<?>) element).size() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return element.toString();
 	}
 

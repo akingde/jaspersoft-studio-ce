@@ -26,7 +26,6 @@ package com.jaspersoft.studio.property.descriptor.pen;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 
 public class PenCellEditor extends DialogCellEditor {
 
@@ -40,8 +39,6 @@ public class PenCellEditor extends DialogCellEditor {
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		Shell shell = cellEditorWindow.getShell();
-		// TODO put a dialog here
 		return null;
 	}
 

@@ -23,8 +23,6 @@
  */
 package com.jaspersoft.studio.property.descriptor.subreport.parameter;
 
-import java.util.Map;
-
 import net.sf.jasperreports.engine.JRSubreportParameter;
 
 import org.eclipse.jface.dialogs.Dialog;

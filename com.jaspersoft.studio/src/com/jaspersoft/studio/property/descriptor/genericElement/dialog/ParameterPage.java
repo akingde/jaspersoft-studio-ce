@@ -280,7 +280,7 @@ public class ParameterPage extends WizardPage {
 	private void attachContentProvider(TableViewer viewer) {
 		viewer.setContentProvider(new IStructuredContentProvider() {
 			public Object[] getElements(Object inputElement) {
-				return ((List<JRGenericElementParameter>) inputElement).toArray();
+				return ((List<?>) inputElement).toArray();
 			}
 
 			public void dispose() {

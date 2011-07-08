@@ -155,7 +155,6 @@ public class ParameterPage extends WizardPage {
 				name += "_" + i;//$NON-NLS-1$
 				param.setName(name);
 				JRDesignExpression expression = new JRDesignExpression();
-				expression.setValueClassName(Object.class.getName());
 				expression.setText("");//$NON-NLS-1$
 				param.setValueExpression(expression);
 
