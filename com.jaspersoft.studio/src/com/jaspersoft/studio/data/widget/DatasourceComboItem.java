@@ -59,7 +59,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 */
 	private List<DataAdapterDescriptor> dataAdapters;
 
-	private int selecteditem;
+//	private int selecteditem;
 	// private boolean forceSetText;
 	private CCombo combo;
 	private ToolItem toolitem;

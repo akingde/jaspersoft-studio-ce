@@ -30,8 +30,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.data.DataAdapter;
-
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -211,7 +209,7 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		
 		this.dataAdapterDesc = dataAdapterDesc;
 		
-		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
+//		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
 		
 		Map<String, String> map = new HashMap<String, String>();
 		//FIXMEDATA map = dataAdapter.getProperties();
@@ -249,7 +247,7 @@ public class DefaultDataAdapterEditorComposite extends Composite {
 		 // dataAdapter should never be null
 		}
 		
-		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
+//		DataAdapter dataAdapter = dataAdapterDesc.getDataAdapter();
 		
 		Map<String, String> map = new HashMap<String, String>();
 		for (String[] row : rows) {
