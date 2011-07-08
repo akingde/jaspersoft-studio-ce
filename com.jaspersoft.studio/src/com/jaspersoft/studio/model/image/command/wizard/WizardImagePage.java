@@ -110,7 +110,6 @@ public class WizardImagePage extends WizardPage {
 				if (fd.open() == Dialog.OK) {
 					File obj = (File) fd.getFirstResult();
 					JRDesignExpression jre = new JRDesignExpression();
-					jre.setValueClassName(String.class.getName());
 					jre.setText("\"" + obj.getLocationURI().getPath() + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 					mimage.setPropertyValue(JRDesignImage.PROPERTY_EXPRESSION, jre);
 				}

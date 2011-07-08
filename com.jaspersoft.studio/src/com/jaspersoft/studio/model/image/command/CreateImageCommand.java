@@ -63,6 +63,7 @@ public class CreateImageCommand extends CreateElementCommand {
 	/**
 	 * Creates the object.
 	 */
+	@Override
 	protected void createObject() {
 		if (getJrElement() == null) {
 			FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(Display.getCurrent().getActiveShell(),
@@ -79,7 +80,6 @@ public class CreateImageCommand extends CreateElementCommand {
 					setElementBounds();
 
 				JRDesignExpression jre = new JRDesignExpression();
-				jre.setValueClassName(String.class.getName());
 				jre.setText("\"" + file.getProjectRelativePath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 				((JRDesignImage) jrElement).setExpression(jre);
 

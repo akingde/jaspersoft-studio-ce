@@ -136,6 +136,7 @@ public class MVariableSystem extends APropertyNode {
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MVariableSystem_name_description);

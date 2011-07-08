@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -99,7 +98,6 @@ public class CreateStyleTemplateCommand extends Command {
 				this.jrTemplate = MStyleTemplate.createJRTemplate();
 
 				JRDesignExpression jre = new JRDesignExpression();
-				jre.setValueClassName(String.class.getName());
 				jre.setText("\"" + file.getProjectRelativePath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 				((JRDesignReportTemplate) jrTemplate).setSourceExpression(jre);
 

@@ -83,6 +83,7 @@ public class OrphanConditionalStyleCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		index = jrStyle.getConditionalStyleList().indexOf(jrConditionalStyle);
 		jrStyle.removeConditionalStyle(jrConditionalStyle);
@@ -91,6 +92,7 @@ public class OrphanConditionalStyleCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		if (index < 0 || index > jrStyle.getConditionalStyleList().size())
 			jrStyle.addConditionalStyle(jrConditionalStyle);

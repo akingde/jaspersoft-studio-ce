@@ -69,6 +69,7 @@ public class ReorderStyleCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrDesign.getStylesList().indexOf(jrStyle);
 		try {
@@ -87,6 +88,7 @@ public class ReorderStyleCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		try {
 			jrDesign.removeStyle(jrStyle);

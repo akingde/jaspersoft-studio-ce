@@ -116,6 +116,7 @@ public class MSubreport extends MGraphicElement {
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
@@ -178,7 +179,7 @@ public class MSubreport extends MGraphicElement {
 		if (id.equals(JRBaseSubreport.PROPERTY_RUN_TO_BOTTOM))
 			return jrElement.isRunToBottom();
 		if (id.equals(JRBaseSubreport.PROPERTY_USING_CACHE))
-			return jrElement.isOwnUsingCache();
+			return jrElement.getUsingCache();
 		if (id.equals(JRDesignSubreport.PROPERTY_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getExpression());
 		if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION))
@@ -237,6 +238,7 @@ public class MSubreport extends MGraphicElement {
 		} else if (id.equals(JRDesignSubreport.PROPERTY_RETURN_VALUES)) {
 			returnValuesDTO = (JReportsDTO) value;
 			if (returnValuesDTO.getValue() instanceof List) {
+				@SuppressWarnings("unchecked")
 				List<JRSubreportReturnValue> list = (List<JRSubreportReturnValue>) returnValuesDTO.getValue();
 				jrElement.getReturnValuesList().clear();
 				for (JRSubreportReturnValue j : list)

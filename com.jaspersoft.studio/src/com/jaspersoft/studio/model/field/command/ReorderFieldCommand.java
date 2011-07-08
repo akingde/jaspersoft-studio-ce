@@ -86,6 +86,7 @@ public class ReorderFieldCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		try {
 			oldIndex = jrDataset.getFieldsList().indexOf(jrField);
@@ -102,6 +103,7 @@ public class ReorderFieldCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		try {
 			jrDataset.removeField(jrField);

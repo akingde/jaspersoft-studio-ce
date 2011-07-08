@@ -44,10 +44,10 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
 import com.jaspersoft.studio.model.band.MBandGroupHeader;
 import com.jaspersoft.studio.model.field.MField;
-import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.model.parameter.MParameterSystem;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
-import com.jaspersoft.studio.model.variable.MVariable;
+import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.wizards.obj2text.Obj2TextWizard;
 
@@ -165,10 +165,10 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 				Tag tag = new Tag("$F{%}", f.getValueClassName(), f.getName());//$NON-NLS-1$ //$NON-NLS-2$
 				tag.isField = true;
 				return tag;
-			} else if (n instanceof MParameter) {
+			} else if (n instanceof MParameterSystem) {
 				JRParameter f = (JRParameter) n.getValue();
 				return new Tag("$P{%}", f.getValueClassName(), f.getName());//$NON-NLS-1$ //$NON-NLS-2$
-			} else if (n instanceof MVariable) {
+			} else if (n instanceof MVariableSystem) {
 				JRVariable f = (JRVariable) n.getValue();
 				return new Tag("$V{%}", f.getValueClassName(), f.getName());//$NON-NLS-1$ //$NON-NLS-2$
 			}

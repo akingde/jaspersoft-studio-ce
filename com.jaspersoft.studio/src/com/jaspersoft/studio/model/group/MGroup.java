@@ -135,6 +135,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignGroup.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MGroup_name_description);

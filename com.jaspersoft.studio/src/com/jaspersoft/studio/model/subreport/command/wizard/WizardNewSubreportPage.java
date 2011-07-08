@@ -55,7 +55,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
@@ -176,7 +175,6 @@ public class WizardNewSubreportPage extends WizardPage {
 					sp.setName(p.getName());
 
 					JRDesignExpression jrep = new JRDesignExpression();
-					jrep.setValueClassName(Object.class.getName());
 					jrep.setText("");
 					sp.setExpression(jrep);
 

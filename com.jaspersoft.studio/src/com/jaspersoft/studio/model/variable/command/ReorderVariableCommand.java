@@ -86,6 +86,7 @@ public class ReorderVariableCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrDataset.getVariablesList().indexOf(jrVariable);
 
@@ -103,6 +104,7 @@ public class ReorderVariableCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		try {
 			jrDataset.removeVariable(jrVariable);

@@ -115,6 +115,7 @@ public class MImage extends MGraphicElementLineBox {
 		defaultsMap = defaultsMap1;
 	}
 
+	@Override
 	protected void setGroupItems(String[] items) {
 		super.setGroupItems(items);
 		if (evalGroupD != null)
@@ -129,6 +130,7 @@ public class MImage extends MGraphicElementLineBox {
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
@@ -246,7 +248,7 @@ public class MImage extends MGraphicElementLineBox {
 			return propertyDTO;
 		}
 		if (id.equals(JRBaseImage.PROPERTY_USING_CACHE))
-			return jrElement.isOwnUsingCache();
+			return jrElement.getUsingCache();
 		if (id.equals(JRBaseImage.PROPERTY_LAZY))
 			return new Boolean(jrElement.isLazy());
 		// hyperlink --------------------------------------

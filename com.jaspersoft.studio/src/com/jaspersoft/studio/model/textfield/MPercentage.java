@@ -39,7 +39,6 @@
 package com.jaspersoft.studio.model.textfield;
 
 import net.sf.jasperreports.engine.JRTextField;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 

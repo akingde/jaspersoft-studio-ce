@@ -84,6 +84,7 @@ public class ReorderConditionalStyleCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrStyle.getConditionalStyleList().indexOf(jrConditionalStyle);
 
@@ -97,6 +98,7 @@ public class ReorderConditionalStyleCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrStyle.removeConditionalStyle(jrConditionalStyle);
 		if (oldIndex < 0 || oldIndex > jrStyle.getConditionalStyleList().size())

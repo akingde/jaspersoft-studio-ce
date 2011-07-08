@@ -67,6 +67,7 @@ public class ReorderStyleTemplateCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		oldIndex = jrDesign.getTemplatesList().indexOf(jrTemplate);
 
@@ -82,6 +83,7 @@ public class ReorderStyleTemplateCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		jrDesign.removeTemplate(jrTemplate);
 		if (oldIndex < 0 || oldIndex > jrDesign.getTemplatesList().size())

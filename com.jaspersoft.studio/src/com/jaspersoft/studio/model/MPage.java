@@ -122,6 +122,7 @@ public class MPage extends APropertyNode implements IGraphicElement, IContainerE
 	 * @param desc
 	 *          the desc
 	 */
+	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 
 	}

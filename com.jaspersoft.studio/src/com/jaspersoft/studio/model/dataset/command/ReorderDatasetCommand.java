@@ -69,6 +69,7 @@ public class ReorderDatasetCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
 		try {
 			oldIndex = jrDesign.getDatasetsList().indexOf(jrField);
@@ -87,6 +88,7 @@ public class ReorderDatasetCommand extends Command {
 	 * 
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		try {
 			jrDesign.removeDataset(jrField);
