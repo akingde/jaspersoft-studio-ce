@@ -43,7 +43,6 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.model.textfield.MPercentage;
 import com.jaspersoft.studio.model.textfield.command.wizard.PercentageWizard;
-import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
 
 /*
@@ -183,17 +182,17 @@ public class CreatePercentageCommand extends CreateElementCommand {
 
 	private String createExpression(String name, String vname, Class<?> clazz) {
 		if (clazz.isAssignableFrom(Integer.class))
-			return "new Integer($F{" + name + "}.intValue() / $V{" + vname + "}.intValue())";
+			return "new Double($F{" + name + "}.intValue() / $V{" + vname + "}.intValue())";
 		if (clazz.isAssignableFrom(Byte.class))
-			return "new Byte($F{" + name + "}.byteValue() / $V{" + vname + "}.byteValue())";
+			return "new Double($F{" + name + "}.byteValue() / $V{" + vname + "}.byteValue())";
 		if (clazz.isAssignableFrom(Short.class))
-			return "new Short($F{" + name + "}.shortValue() / $V{" + vname + "}.shortValue())";
+			return "new Double($F{" + name + "}.shortValue() / $V{" + vname + "}.shortValue())";
 		if (clazz.isAssignableFrom(Float.class))
 			return "new Float($F{" + name + "}.floatValue() / $V{" + vname + "}.floatValue())";
 		if (clazz.isAssignableFrom(Double.class))
 			return "new Double($F{" + name + "}.doubleValue() / $V{" + vname + "}.doubleValue())";
 		if (clazz.isAssignableFrom(BigDecimal.class))
-			return "$F{" + name + "}.devide(new BigDecimal( $V{" + vname + "} ))";
+			return "$F{" + name + "} / $V{" + vname + "}";
 
 		return "";
 	}
