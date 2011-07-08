@@ -1,7 +1,6 @@
 package com.jaspersoft.studio.swt.widgets;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.draw2d.Cursors;
@@ -45,7 +44,7 @@ public class CSashForm extends SashForm {
 
 	private class SashInfo {
 		public Sash sash;
-		public boolean enabled; // Whether this sashinfo is enabled (i.e. if there is more than one, this will be disabled).
+//		public boolean enabled; // Whether this sashinfo is enabled (i.e. if there is more than one, this will be disabled).
 		public int restoreWeight = NO_WEIGHT; // If slammed to an edge this is the restore weight. -1 means not slammed.
 																					// This is the restoreWeight in the 2nd section form, i.e. weights[1].
 		public int cursorOver = NO_ARROW; // Which arrow is cursor over,
@@ -280,8 +279,8 @@ public class CSashForm extends SashForm {
 					newSash = (Sash) children[i];
 				else {
 					// We have more than one sash, so need to disable current sash, if we have one.
-					if (currentSashInfo != null)
-						currentSashInfo.enabled = false;
+//					if (currentSashInfo != null)
+//						currentSashInfo.enabled = false;
 					return; // Don't go on.
 				}
 		}
@@ -1002,7 +1001,7 @@ public class CSashForm extends SashForm {
 	 */
 	public void addCustomSashFormListener(ICustomSashFormListener listener) {
 		if (customSashFormListeners == null)
-			customSashFormListeners = new ArrayList();
+			customSashFormListeners = new ArrayList<ICustomSashFormListener>();
 		customSashFormListeners.add(listener);
 	}
 
@@ -1025,8 +1024,7 @@ public class CSashForm extends SashForm {
 			if (weights != null && weights.length == 2) {
 				int firstControlWeight = weights[0];
 				int secondControlWeight = weights[1];
-				for (Iterator listenerItr = customSashFormListeners.iterator(); listenerItr.hasNext();) {
-					ICustomSashFormListener listener = (ICustomSashFormListener) listenerItr.next();
+				for (ICustomSashFormListener listener :customSashFormListeners) {
 					listener.dividerMoved(firstControlWeight, secondControlWeight);
 				}
 			}

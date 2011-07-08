@@ -222,7 +222,7 @@ public class WizardBandGroupPage extends WizardPage {
 		dsExpr.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				String mexp = (String) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
+				// String mexp = (String) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
 				group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, dsExpr.getText());
 			}
 		});

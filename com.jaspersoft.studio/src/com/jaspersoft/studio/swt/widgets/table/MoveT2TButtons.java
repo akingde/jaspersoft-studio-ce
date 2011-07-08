@@ -42,10 +42,7 @@
  */
 package com.jaspersoft.studio.swt.widgets.table;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import net.sf.jasperreports.engine.JRSortField;
 
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
