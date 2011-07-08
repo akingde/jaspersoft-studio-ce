@@ -202,7 +202,7 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				JRDatasetRun j = jrElement.getDatasetRun();
 				if (j == null) {
 					j = new JRDesignDatasetRun();
-					jrElement.setDatasetRun(j);
+					// jrElement.setDatasetRun(j);
 				}
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
 				setChildListener(mDatasetRun);
@@ -248,6 +248,13 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setResetGroup(group);
 			}
+		} else if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
+			MDatasetRun mdr = (MDatasetRun) value;
+			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
+			if (dr.getDatasetName() != null)
+				jrElement.setDatasetRun(dr);
+			else
+				jrElement.setDatasetRun(null);
 		}
 	}
 

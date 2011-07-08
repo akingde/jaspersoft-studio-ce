@@ -54,8 +54,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.parameter.ParameterPropertyDescriptor;
@@ -90,8 +89,8 @@ public class MDatasetRun extends APropertyNode {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		subdatasetnameD = new RWComboBoxPropertyDescriptor(JRDesignDatasetRun.PROPERTY_DATASET_NAME,
-				Messages.MDatasetRun_dataset_name, new String[] { "" }, NullEnum.NOTNULL); //$NON-NLS-1$
+		subdatasetnameD = new RComboBoxPropertyDescriptor(JRDesignDatasetRun.PROPERTY_DATASET_NAME,
+				Messages.MDatasetRun_dataset_name, new String[] { "" }); //$NON-NLS-1$
 		subdatasetnameD.setDescription(Messages.MDatasetRun_dataset_name_description);
 		desc.add(subdatasetnameD);
 
@@ -121,11 +120,11 @@ public class MDatasetRun extends APropertyNode {
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
 		if (subdatasetnameD != null) {
-			JasperDesign jd = getJasperDesign();
-			List<JRDataset> datasets = jd.getDatasetsList();
-			String[] sds = new String[datasets.size()];
-			for (int i = 0; i < sds.length; i++) {
-				sds[i] = datasets.get(i).getName();
+			List<JRDataset> datasets = jasperDesign.getDatasetsList();
+			String[] sds = new String[datasets.size() + 1];
+			sds[0] = "";
+			for (int i = 0; i < datasets.size(); i++) {
+				sds[i + 1] = datasets.get(i).getName();
 			}
 			subdatasetnameD.setItems(sds);
 		}
@@ -163,7 +162,7 @@ public class MDatasetRun extends APropertyNode {
 	}
 
 	private ParameterDTO propertyDTO;
-	private RWComboBoxPropertyDescriptor subdatasetnameD;
+	private RComboBoxPropertyDescriptor subdatasetnameD;
 
 	/*
 	 * (non-Javadoc)
@@ -194,10 +193,10 @@ public class MDatasetRun extends APropertyNode {
 				propertyDTO = v;
 			}
 		} else if (id.equals(JRDesignDatasetRun.PROPERTY_DATASET_NAME)) {
-			if (value == null)
-				jrElement.setDatasetName(null);
-			else if (!value.equals("")) //$NON-NLS-1$
+			if (value != null && !value.equals(""))//$NON-NLS-1$
 				jrElement.setDatasetName((String) value);
+			else
+				jrElement.setDatasetName(null);
 		}
 	}
 
