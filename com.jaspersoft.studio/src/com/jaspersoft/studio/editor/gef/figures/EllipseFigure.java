@@ -25,7 +25,6 @@ package com.jaspersoft.studio.editor.gef.figures;
 
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JREllipse;
-import net.sf.jasperreports.engine.JRPen;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 /*
  * The Class EllipseFigure.

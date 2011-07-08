@@ -122,7 +122,7 @@ public class ReportPageFigure extends FreeformLayeredPane implements HandleBound
 
 			int leftMargin = jrDesign.getLeftMargin();
 			int rightMargin = jrDesign.getRightMargin();
-			int topMargin = jrDesign.getTopMargin();
+//			int topMargin = jrDesign.getTopMargin();
 			// int bottomMargin = jrDesign.getBottomMargin();
 
 			Rectangle rectangle = new Rectangle(clientArea.x, clientArea.y, pageWidth, pageHeight);
