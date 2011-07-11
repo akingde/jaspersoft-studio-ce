@@ -618,10 +618,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		} catch (final Exception e) {
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
-					IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
-							"Error transforming model to xml.", e.getCause()); //$NON-NLS-1$
-					ErrorDialog.openError(Display.getDefault().getActiveShell(),
-							Messages.JrxmlEditor_error_loading_jrxml_to_model, null, status);
+					UIUtils.showError(e);
 				}
 			});
 		}

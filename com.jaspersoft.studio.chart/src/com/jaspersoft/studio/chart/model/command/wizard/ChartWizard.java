@@ -71,7 +71,8 @@ public class ChartWizard extends Wizard {
 
 		step1 = new WizardDatasetPage(jasperDesign);
 		addPage(step1);
-		MDatasetRun mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
+		MDatasetRun mdataset = new MDatasetRun(new JRDesignDatasetRun(),
+				jasperDesign);
 		step1.setDataSetRun(mdataset);
 
 		step2 = new WizardConnectionPage();
@@ -81,7 +82,8 @@ public class ChartWizard extends Wizard {
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		Object dsname = step1.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+		Object dsname = step1.getDataSetRun().getPropertyValue(
+				JRDesignDatasetRun.PROPERTY_DATASET_NAME);
 		if (page == step1 && (dsname == null || dsname.equals(""))) //$NON-NLS-1$
 			page = step2;
 		return super.getNextPage(page);
@@ -89,12 +91,17 @@ public class ChartWizard extends Wizard {
 
 	public MChart getChart() {
 		this.chart = new MChart();
-		JRDesignChart jrChart = (JRDesignChart) MChart.createJRElement(jasperDesign, page0.getChartType());
+		JRDesignChart jrChart = (JRDesignChart) MChart.createJRElement(
+				jasperDesign, page0.getChartType());
 		chart.setValue(jrChart);
-		JRDesignChartDataset jrDataSet = (JRDesignChartDataset) jrChart.getDataset();
-		jrDataSet.setDatasetRun((JRDatasetRun) step1.getDataSetRun().getValue());
-		if (jrDataSet.getDatasetRun().getDatasetName() == null)
-			jrDataSet.setDatasetRun(null);
+		JRDesignChartDataset jrDataSet = (JRDesignChartDataset) jrChart
+				.getDataset();
+		if (jrDataSet != null) {
+			jrDataSet.setDatasetRun((JRDatasetRun) step1.getDataSetRun()
+					.getValue());
+			if (jrDataSet.getDatasetRun().getDatasetName() == null)
+				jrDataSet.setDatasetRun(null);
+		}
 
 		return chart;
 	}

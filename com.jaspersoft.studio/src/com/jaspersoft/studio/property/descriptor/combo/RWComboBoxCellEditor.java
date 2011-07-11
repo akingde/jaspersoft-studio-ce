@@ -91,6 +91,7 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 	/*
 	 * (non-Javadoc) Method declared on CellEditor.
 	 */
+	@Override
 	protected Control createControl(Composite parent) {
 		comboBox = (CCombo) super.createControl(parent);
 		return comboBox;
@@ -102,6 +103,7 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 	 * 
 	 * @return the zero-based index of the current selection wrapped as an <code>Integer</code>
 	 */
+	@Override
 	protected Object doGetValue() {
 		int selectionIndex = comboBox.getSelectionIndex();
 		if (selectionIndex < 0) {
@@ -124,6 +126,7 @@ public class RWComboBoxCellEditor extends ComboBoxCellEditor {
 	 * @param value
 	 *          the zero-based index of the selection wrapped as an <code>Integer</code>
 	 */
+	@Override
 	protected void doSetValue(Object value) {
 		if (comboBox != null && value instanceof String) {
 			String[] items = getItems();

@@ -43,6 +43,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.JRBar3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignBar3DPlot;
+import net.sf.jasperreports.charts.design.JRDesignItemLabel;
 
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -360,6 +361,8 @@ public class MBar3DPlot extends MChartPlot {
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_ITEM_LABEL)) {
 			if (ilFont == null) {
+				if(jrElement.getItemLabel() == null)
+					jrElement.setItemLabel(new JRDesignItemLabel(null, jrElement.getChart()));
 				ilFont = new MChartItemLabel(jrElement.getItemLabel());
 				setChildListener(ilFont);
 			}

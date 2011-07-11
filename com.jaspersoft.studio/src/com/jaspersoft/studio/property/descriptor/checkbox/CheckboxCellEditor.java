@@ -109,7 +109,6 @@ public class CheckboxCellEditor extends CellEditor {
 				value = !value;
 			fireApplyEditorValue();
 		}
-
 	}
 
 	@Override

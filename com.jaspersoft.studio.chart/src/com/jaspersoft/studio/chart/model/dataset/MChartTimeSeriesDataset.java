@@ -60,7 +60,8 @@ import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDesc
 
 public class MChartTimeSeriesDataset extends MChartDataset {
 
-	public MChartTimeSeriesDataset(ANode parent, JRDesignTimeSeriesDataset value, JasperDesign jasperDesign) {
+	public MChartTimeSeriesDataset(ANode parent,
+			JRDesignTimeSeriesDataset value, JasperDesign jasperDesign) {
 		super(parent, value, jasperDesign);
 	}
 
@@ -78,7 +79,8 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -87,18 +89,22 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ClassTypePropertyDescriptor timePeriodD = new ClassTypePropertyDescriptor(
-				JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD, Messages.MChartTimeSeriesDataset_time_period);
-		timePeriodD.setDescription(Messages.MChartTimeSeriesDataset_time_period_description);
+				JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD,
+				Messages.MChartTimeSeriesDataset_time_period);
+		timePeriodD
+				.setDescription(Messages.MChartTimeSeriesDataset_time_period_description);
 		desc.add(timePeriodD);
 
-		timePeriodD.setCategory(Messages.MChartTimeSeriesDataset_chart_time_period_dataset_category);
+		timePeriodD
+				.setCategory(Messages.MChartTimeSeriesDataset_chart_time_period_dataset_category);
 
 		defaultsMap.put(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD, null);
 	}
@@ -107,8 +113,12 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 	public Object getPropertyValue(Object id) {
 		JRDesignTimeSeriesDataset jrElement = (JRDesignTimeSeriesDataset) getValue();
 
-		if (id.equals(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD))
-			return jrElement.getTimePeriod().toString();
+		if (id.equals(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD)) {
+			Class<?> timePeriod = jrElement.getTimePeriod();
+			if (timePeriod != null)
+				return timePeriod.toString();
+			return null;
+		}
 
 		return super.getPropertyValue(id);
 	}
@@ -138,10 +148,12 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;
 					if (evt instanceof CollectionElementAddedEvent) {
-						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+						newIndex = ((CollectionElementAddedEvent) evt)
+								.getAddedIndex();
 					}
 					ReportFactory.createNode(this, evt.getNewValue(), newIndex);
-				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+				} else if (evt.getOldValue() != null
+						&& evt.getNewValue() == null) {
 					// delete
 					for (INode n : getChildren()) {
 						if (n.getValue() == evt.getOldValue()) {
