@@ -42,16 +42,24 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.charts.base.JRBaseXyDataset;
 import net.sf.jasperreports.charts.design.JRDesignBar3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignBarPlot;
+import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
+import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
+import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignPiePlot;
+import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
+import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.charts.type.EdgeEnum;
+import net.sf.jasperreports.charts.type.ValueLocationEnum;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.JRRuntimeException;
@@ -572,6 +580,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			byte chartType) {
 		JRDesignChart jrDesignElement = new JRDesignChart(jasperDesign,
 				chartType);
+		if (chartType == JRDesignChart.CHART_TYPE_XYBAR)
+			jrDesignElement.setDataset(new JRDesignXyDataset(null));
+
 		JRChartPlot plot = jrDesignElement.getPlot();
 		if (plot instanceof JRDesignBar3DPlot) {
 			((JRDesignBar3DPlot) plot).setItemLabel(new JRDesignItemLabel(null,
@@ -585,6 +596,20 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		} else if (plot instanceof JRDesignBarPlot) {
 			((JRDesignBarPlot) plot).setItemLabel(new JRDesignItemLabel(null,
 					jrDesignElement));
+		} else if (plot instanceof JRDesignThermometerPlot) {
+			JRDesignThermometerPlot tplot = (JRDesignThermometerPlot) plot;
+			tplot.setHighRange(new JRDesignDataRange(null));
+			tplot.setLowRange(new JRDesignDataRange(null));
+			tplot.setMediumRange(new JRDesignDataRange(null));
+			tplot.setDataRange(new JRDesignDataRange(null));
+			tplot.setValueLocation(ValueLocationEnum.LEFT);
+		} else if (plot instanceof JRDesignMeterPlot) {
+			JRDesignMeterPlot tplot = (JRDesignMeterPlot) plot;
+			try {
+				tplot.setDataRange(new JRDesignDataRange(null));
+			} catch (JRException e) {
+				e.printStackTrace();
+			}
 		}
 
 		if (jrDesignElement.getDataset() instanceof JRDesignHighLowDataset) {
