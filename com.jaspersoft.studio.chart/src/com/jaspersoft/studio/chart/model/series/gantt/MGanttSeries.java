@@ -196,6 +196,8 @@ public class MGanttSeries extends APropertyNode {
 		}
 		if (id.equals(JRDesignGanttSeries.PROPERTY_END_DATE_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getEndDateExpression());
+		if (id.equals(JRDesignGanttSeries.PROPERTY_PERCENT_EXPRESSION))
+			return ExprUtil.getExpression(jrElement.getPercentExpression());
 		if (id.equals(JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getLabelExpression());
 		if (id.equals(JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION))
@@ -219,6 +221,9 @@ public class MGanttSeries extends APropertyNode {
 		else if (id.equals(JRDesignGanttSeries.PROPERTY_LABEL_EXPRESSION))
 			jrElement.setLabelExpression(ExprUtil.setValues(
 					jrElement.getLabelExpression(), value));
+		else if (id.equals(JRDesignGanttSeries.PROPERTY_PERCENT_EXPRESSION))
+			jrElement.setPercentExpression(ExprUtil.setValues(
+					jrElement.getPercentExpression(), value));
 		else if (id.equals(JRDesignGanttSeries.PROPERTY_SERIES_EXPRESSION))
 			jrElement.setSeriesExpression(ExprUtil.setValues(
 					jrElement.getSeriesExpression(), value));
