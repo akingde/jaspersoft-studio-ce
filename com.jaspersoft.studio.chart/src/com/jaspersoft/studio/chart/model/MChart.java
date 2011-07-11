@@ -54,6 +54,7 @@ import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
+import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.base.JRBaseFont;
@@ -612,6 +613,78 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 	 */
 	@Override
 	public String getDisplayText() {
+		if (getValue() != null) {
+			JRDesignChart chart = (JRDesignChart) getValue();
+			String chartype = "";
+			switch (chart.getChartType()) {
+			case JRDesignChart.CHART_TYPE_AREA:
+				chartype = "Area";
+				break;
+			case JRDesignChart.CHART_TYPE_BAR:
+				chartype = "Bar";
+				break;
+			case JRDesignChart.CHART_TYPE_BAR3D:
+				chartype = "Bar 3D";
+				break;
+			case JRDesignChart.CHART_TYPE_BUBBLE:
+				chartype = "Bubble";
+				break;
+			case JRDesignChart.CHART_TYPE_CANDLESTICK:
+				chartype = "Candlestick";
+				break;
+			case JRDesignChart.CHART_TYPE_HIGHLOW:
+				chartype = "High Low";
+				break;
+			case JRDesignChart.CHART_TYPE_LINE:
+				chartype = "Line";
+				break;
+			case JRDesignChart.CHART_TYPE_METER:
+				chartype = "Meter";
+				break;
+			case JRDesignChart.CHART_TYPE_MULTI_AXIS:
+				chartype = "Multi Axis";
+				break;
+			case JRDesignChart.CHART_TYPE_PIE:
+				chartype = "Pie";
+				break;
+			case JRDesignChart.CHART_TYPE_PIE3D:
+				chartype = "Pie 3D";
+				break;
+			case JRDesignChart.CHART_TYPE_SCATTER:
+				chartype = "Scatter";
+				break;
+			case JRDesignChart.CHART_TYPE_STACKEDBAR:
+				chartype = "Stacked Bar";
+				break;
+			case JRDesignChart.CHART_TYPE_STACKEDBAR3D:
+				chartype = "Stacked Bar 3D";
+				break;
+			case JRDesignChart.CHART_TYPE_THERMOMETER:
+				chartype = "Thermometer";
+				break;
+			case JRDesignChart.CHART_TYPE_TIMESERIES:
+				chartype = "Time Series";
+				break;
+			case JRDesignChart.CHART_TYPE_XYAREA:
+				chartype = "XY Area";
+				break;
+			case JRDesignChart.CHART_TYPE_XYBAR:
+				chartype = "XY Bar";
+				break;
+			case JRDesignChart.CHART_TYPE_XYLINE:
+				chartype = "XY Line";
+				break;
+			case JRDesignChart.CHART_TYPE_STACKEDAREA:
+				chartype = "Stacked Area";
+				break;
+			case JRDesignChart.CHART_TYPE_GANTT:
+				chartype = "Gantt";
+				break;
+			default:
+				throw new JRRuntimeException("Chart type not supported.");
+			}
+			return chartype;
+		}
 		return getIconDescriptor().getTitle();
 	}
 
