@@ -44,6 +44,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignBar3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignBarPlot;
+import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
@@ -583,13 +584,6 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				chartType);
 		if (chartType == JRDesignChart.CHART_TYPE_XYBAR)
 			jrDesignElement.setDataset(new JRDesignXyDataset(null));
-		if (jrDesignElement.getDataset() instanceof JRDesignPieDataset) {
-			JRDesignPieSeries pieSeries = new JRDesignPieSeries();
-			pieSeries.setKeyExpression(ExprUtil.setValues(
-					new JRDesignExpression(), ""));
-			((JRDesignPieDataset) jrDesignElement.getDataset())
-					.addPieSeries(pieSeries);
-		}
 
 		JRChartPlot plot = jrDesignElement.getPlot();
 		if (plot instanceof JRDesignBar3DPlot) {
@@ -611,10 +605,13 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			tplot.setMediumRange(new JRDesignDataRange(null));
 			tplot.setDataRange(new JRDesignDataRange(null));
 			tplot.setValueLocation(ValueLocationEnum.LEFT);
+			tplot.setValueDisplay(new JRDesignValueDisplay(null,
+					jrDesignElement));
 		} else if (plot instanceof JRDesignMeterPlot) {
 			JRDesignMeterPlot tplot = (JRDesignMeterPlot) plot;
 			try {
-				tplot.setValueDisplay(new JRDesignValueDisplay(null, jrDesignElement));
+				tplot.setValueDisplay(new JRDesignValueDisplay(null,
+						jrDesignElement));
 				tplot.setDataRange(new JRDesignDataRange(null));
 			} catch (JRException e) {
 				e.printStackTrace();
@@ -636,6 +633,14 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 					"100"));
 			jds.setDateExpression(ExprUtil.setValues(new JRDesignExpression(),
 					"new Date()"));
+		} else if (jrDesignElement.getDataset() instanceof JRDesignPieDataset) {
+			JRDesignPieSeries pieSeries = new JRDesignPieSeries();
+			pieSeries.setKeyExpression(ExprUtil.setValues(
+					new JRDesignExpression(), ""));
+			((JRDesignPieDataset) jrDesignElement.getDataset())
+					.addPieSeries(pieSeries);
+		} else if (jrDesignElement.getDataset() instanceof JRDesignCategoryDataset) {
+
 		}
 		return jrDesignElement;
 	}
