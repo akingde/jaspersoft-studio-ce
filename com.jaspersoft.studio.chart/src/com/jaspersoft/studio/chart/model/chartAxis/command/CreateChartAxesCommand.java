@@ -99,7 +99,7 @@ public class CreateChartAxesCommand extends Command {
 				byte type = wizard.getChartAxis();
 				JRDesignChart chart = (JRDesignChart) jrChart.getChart();
 				jrElement = new JRDesignChartAxis(chart);
-				jrElement.setChart(new JRDesignChart(jDesign, type));
+				jrElement.setChart(MChart.createJRElement(jDesign, type));
 			}
 		}
 	}

@@ -70,7 +70,6 @@ import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
@@ -579,7 +578,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		return 200;
 	}
 
-	public static JRDesignElement createJRElement(JasperDesign jasperDesign,
+	public static JRDesignChart createJRElement(JasperDesign jasperDesign,
 			byte chartType) {
 		JRDesignChart jrDesignElement = new JRDesignChart(jasperDesign,
 				chartType);
