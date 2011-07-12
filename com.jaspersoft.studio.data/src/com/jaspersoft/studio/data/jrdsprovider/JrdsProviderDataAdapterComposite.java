@@ -58,10 +58,14 @@ public class JrdsProviderDataAdapterComposite extends Composite {
 		lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		lblNewLabel.setText("JasperReports DataSource Provider Class Name:");
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		lblNewLabel.setLayoutData(gd);
 
 		textJRDSProviderClassName = new Text(this, SWT.BORDER);
-		textJRDSProviderClassName.setLayoutData(new GridData(SWT.FILL,
-				SWT.CENTER, true, false, 1, 1));
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		textJRDSProviderClassName.setLayoutData(gd);
 
 		/*
 		 * UI ELEMENTS LISTENERS
@@ -76,7 +80,7 @@ public class JrdsProviderDataAdapterComposite extends Composite {
 		});
 
 		cpath = new ClasspathComponent(this);
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 3;
 		cpath.getControl().setLayoutData(gd);
 	}
