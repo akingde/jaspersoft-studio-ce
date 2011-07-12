@@ -48,7 +48,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 
 public class CheckboxCellEditor extends CellEditor {
 	private NullEnum canBeNull = NullEnum.NOTNULL;
-	private Boolean value;
+	private Boolean value = Boolean.FALSE;
 
 	public CheckboxCellEditor() {
 		super();

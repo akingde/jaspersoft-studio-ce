@@ -115,9 +115,8 @@ public class JRPrintEditor extends EditorPart {
 		public boolean visit(IResourceDelta delta) {
 			if (delta == null || !delta.getResource().equals(((IFileEditorInput) getEditorInput()).getFile()))
 				return true;
-
+			Display display = getSite().getShell().getDisplay();
 			if (delta.getKind() == IResourceDelta.REMOVED) {
-				Display display = getSite().getShell().getDisplay();
 				if ((IResourceDelta.MOVED_TO & delta.getFlags()) == 0) { // if the file was deleted
 					// NOTE: The case where an open, unsaved file is deleted is being handled by the
 					// PartListener added to the Workbench in the initialize() method.
@@ -139,7 +138,6 @@ public class JRPrintEditor extends EditorPart {
 				// the file was overwritten somehow (could have been replaced by another
 				// version in the respository)
 				final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getFullPath());
-				Display display = getSite().getShell().getDisplay();
 				display.asyncExec(new Runnable() {
 					public void run() {
 						setInput(new FileEditorInput(newFile));

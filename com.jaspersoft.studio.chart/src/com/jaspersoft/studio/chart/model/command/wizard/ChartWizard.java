@@ -99,7 +99,8 @@ public class ChartWizard extends Wizard {
 		if (jrDataSet != null) {
 			jrDataSet.setDatasetRun((JRDatasetRun) step1.getDataSetRun()
 					.getValue());
-			if (jrDataSet.getDatasetRun().getDatasetName() == null)
+			if (jrDataSet.getDatasetRun() != null
+					&& jrDataSet.getDatasetRun().getDatasetName() == null)
 				jrDataSet.setDatasetRun(null);
 		}
 

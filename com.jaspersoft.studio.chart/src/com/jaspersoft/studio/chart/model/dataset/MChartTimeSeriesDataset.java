@@ -112,13 +112,13 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignTimeSeriesDataset jrElement = (JRDesignTimeSeriesDataset) getValue();
-
-		if (id.equals(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD)) {
-			Class<?> timePeriod = jrElement.getTimePeriod();
-			if (timePeriod != null)
-				return timePeriod.toString();
-			return null;
-		}
+		if (jrElement != null)
+			if (id.equals(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD)) {
+				Class<?> timePeriod = jrElement.getTimePeriod();
+				if (timePeriod != null)
+					return timePeriod.toString();
+				return null;
+			}
 
 		return super.getPropertyValue(id);
 	}

@@ -84,6 +84,8 @@ public class DatasetWizard extends Wizard {
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == step3) {
 			try {
+				if(step3.getFields() == null || step3.getFields().isEmpty())
+					step2.getFields();
 				JRDesignDataset dataset = step2.getDataset();
 				if (dataset != null && dataset.getFieldsList() != null) {
 					step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));

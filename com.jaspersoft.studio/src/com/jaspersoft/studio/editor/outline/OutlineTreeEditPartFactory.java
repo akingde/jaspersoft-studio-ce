@@ -381,16 +381,18 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					&& (parent instanceof MBand || parent instanceof MGraphicElement || parent instanceof MReport)) {
 				return new CreateE4ObjectCommand(child, parent, location, newIndex);
 			}
-		} else if (child instanceof MStyle) {
-			if (parent instanceof MStyles)
-				return new CreateStyleCommand((MStyles) parent, (MStyle) child, newIndex);
-		} else if (child.getValue() != null && !(parent instanceof IContainer) && parent instanceof MGraphicElement) {
-			SetValueCommand cmd = new SetValueCommand();
-			cmd.setTarget((IPropertySource) parent);
-			cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
-			JRStyle style = (JRStyle) child.getValue();
-			cmd.setPropertyValue(style.getName());
-			return cmd;
+		} else {
+			if (child instanceof MStyle) {
+				if (parent instanceof MStyles)
+					return new CreateStyleCommand((MStyles) parent, (MStyle) child, newIndex);
+			} else if (child.getValue() != null && !(parent instanceof IContainer) && parent instanceof MGraphicElement) {
+				SetValueCommand cmd = new SetValueCommand();
+				cmd.setTarget((IPropertySource) parent);
+				cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
+				JRStyle style = (JRStyle) child.getValue();
+				cmd.setPropertyValue(style.getName());
+				return cmd;
+			}
 		}
 
 		if (child instanceof MPageXofY) {
