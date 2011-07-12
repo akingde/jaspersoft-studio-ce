@@ -42,16 +42,16 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.charts.base.JRBaseXyDataset;
 import net.sf.jasperreports.charts.design.JRDesignBar3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignBarPlot;
-import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
+import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.charts.design.JRDesignPiePlot;
+import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
 import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.charts.type.EdgeEnum;
@@ -582,6 +582,13 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				chartType);
 		if (chartType == JRDesignChart.CHART_TYPE_XYBAR)
 			jrDesignElement.setDataset(new JRDesignXyDataset(null));
+		if (jrDesignElement.getDataset() instanceof JRDesignPieDataset) {
+			JRDesignPieSeries pieSeries = new JRDesignPieSeries();
+			pieSeries.setKeyExpression(ExprUtil.setValues(
+					new JRDesignExpression(), ""));
+			((JRDesignPieDataset) jrDesignElement.getDataset())
+					.addPieSeries(pieSeries);
+		}
 
 		JRChartPlot plot = jrDesignElement.getPlot();
 		if (plot instanceof JRDesignBar3DPlot) {
