@@ -200,7 +200,7 @@ public abstract class DataQueryAdapters {
 			}
 		});
 
-		Action newDA = new Action("New") {
+		Action newDA = new Action(Messages.DataQueryAdapters_newaction) {
 			@Override
 			public void run() {
 				CreateDataAdapterAction createDAAction = new CreateDataAdapterAction(null);

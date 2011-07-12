@@ -276,6 +276,7 @@ public class Messages extends NLS {
 	public static String DataQueryAdapters_getfields;
 	public static String DataQueryAdapters_jobname;
 	public static String DataQueryAdapters_languagetitle;
+	public static String DataQueryAdapters_newaction;
 	public static String DataQueryAdapters_querytab;
 	public static String DatasetDialog_datapreviewtab;
 	public static String DatasetDialog_fieldstab;

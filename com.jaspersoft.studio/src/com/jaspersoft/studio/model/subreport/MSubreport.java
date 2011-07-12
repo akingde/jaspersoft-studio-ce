@@ -215,11 +215,15 @@ public class MSubreport extends MGraphicElement {
 			jrElement.setExpression(ExprUtil.setValues(jrElement.getExpression(), value));
 		else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS_MAP_EXPRESSION))
 			jrElement.setParametersMapExpression(ExprUtil.setValues(jrElement.getParametersMapExpression(), value));
-		else if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION))
+		else if (id.equals(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION)) {
+			if (value instanceof String)
+				value = value != null && ((String) value).equals("") ? null : value;
 			jrElement.setConnectionExpression(ExprUtil.setValues(jrElement.getConnectionExpression(), value));
-		else if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION))
+		} else if (id.equals(JRDesignSubreport.PROPERTY_DATASOURCE_EXPRESSION)) {
+			if (value instanceof String)
+				value = value != null && ((String) value).equals("") ? null : value;
 			jrElement.setDataSourceExpression(ExprUtil.setValues(jrElement.getDataSourceExpression(), value));
-		else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
+		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
 			if (value.getClass().isArray()) {
 				JRSubreportParameter[] v = (JRSubreportParameter[]) value;
 				Set<String> names = new HashSet<String>();

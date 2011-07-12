@@ -162,7 +162,9 @@ public class WizardNewSubreportPage extends WizardPage {
 
 	private void setUpSubreport(IFile file) {
 		JRDesignExpression jre = new JRDesignExpression();
-		jre.setText("\"" + file.getProjectRelativePath().toPortableString() + "\"");//$NON-NLS-1$ //$NON-NLS-2$
+		String filepath = file.getProjectRelativePath().toPortableString();
+		filepath = filepath.replaceAll(".jrxml", ".jasper");
+		jre.setText("\"" + filepath + "\"");//$NON-NLS-1$ //$NON-NLS-2$
 		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_EXPRESSION, jre);
 		JRDesignSubreport s = (JRDesignSubreport) subreport.getValue();
 		try {
