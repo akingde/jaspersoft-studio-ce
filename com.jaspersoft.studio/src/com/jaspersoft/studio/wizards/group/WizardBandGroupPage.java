@@ -180,6 +180,30 @@ public class WizardBandGroupPage extends WizardPage {
 		gd.horizontalSpan = 3;
 		lbl.setLayoutData(gd);
 
+		leftTable = new Table(composite, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
+		gd = new GridData(GridData.FILL_VERTICAL);
+		gd.widthHint = 250;
+		gd.heightHint = 400;
+		leftTable.setLayoutData(gd);
+		leftTable.setHeaderVisible(true);
+
+		TableColumn[] col = new TableColumn[1];
+		col[0] = new TableColumn(leftTable, SWT.NONE);
+		col[0].setText(Messages.common_report_objects);
+		col[0].pack();
+
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		leftTable.setLayout(tlayout);
+
+		leftTView = new TableViewer(leftTable);
+		leftTView.setContentProvider(new ListContentProvider());
+		leftTView.setLabelProvider(new TLabelProvider());
+
+		Button addField = new Button(composite, SWT.PUSH);
+		addField.setText(" > "); //$NON-NLS-1$
+		addField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		Composite expCompo = new Composite(composite, SWT.NONE);
 		layout = new GridLayout();
 		layout.numColumns = 2;
@@ -226,30 +250,6 @@ public class WizardBandGroupPage extends WizardPage {
 				group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, dsExpr.getText());
 			}
 		});
-
-		Button addField = new Button(composite, SWT.PUSH);
-		addField.setText(" < "); //$NON-NLS-1$
-		addField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		leftTable = new Table(composite, SWT.V_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
-		gd = new GridData(GridData.FILL_VERTICAL);
-		gd.widthHint = 250;
-		gd.heightHint = 400;
-		leftTable.setLayoutData(gd);
-		leftTable.setHeaderVisible(true);
-
-		TableColumn[] col = new TableColumn[1];
-		col[0] = new TableColumn(leftTable, SWT.NONE);
-		col[0].setText(Messages.common_report_objects);
-		col[0].pack();
-
-		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(100, false));
-		leftTable.setLayout(tlayout);
-
-		leftTView = new TableViewer(leftTable);
-		leftTView.setContentProvider(new ListContentProvider());
-		leftTView.setLabelProvider(new TLabelProvider());
 
 		addField.addSelectionListener(new SelectionListener() {
 
