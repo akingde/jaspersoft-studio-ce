@@ -53,6 +53,7 @@ import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.charts.design.JRDesignPiePlot;
 import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
+import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.charts.type.ValueLocationEnum;
@@ -613,6 +614,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		} else if (plot instanceof JRDesignMeterPlot) {
 			JRDesignMeterPlot tplot = (JRDesignMeterPlot) plot;
 			try {
+				tplot.setValueDisplay(new JRDesignValueDisplay(null, jrDesignElement));
 				tplot.setDataRange(new JRDesignDataRange(null));
 			} catch (JRException e) {
 				e.printStackTrace();
