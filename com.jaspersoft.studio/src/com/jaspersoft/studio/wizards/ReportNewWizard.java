@@ -127,6 +127,10 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		}
 		if (page == step3) {
 			try {
+				// if we don't have fields, call getFields from the QueryDesigner automatically
+				if(step3.getFields() == null || step3.getFields().isEmpty())
+					step2.getFields();
+				
 				JRDesignDataset dataset = step2.getDataset();
 				if (dataset != null && dataset.getFieldsList() != null) {
 					step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));

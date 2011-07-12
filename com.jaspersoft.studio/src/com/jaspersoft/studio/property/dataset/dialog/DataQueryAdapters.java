@@ -1,9 +1,11 @@
 package com.jaspersoft.studio.property.dataset.dialog;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -11,12 +13,11 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -63,11 +64,11 @@ public abstract class DataQueryAdapters {
 		this.background = parent.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
 	}
 
-	public void dispose(){
+	public void dispose() {
 		qdfactory.dispose();
 		dmfactory.dispose();
 	}
-	
+
 	private Composite composite;
 	private DatasourceComboItem dscombo;
 	private Action gFields;
@@ -215,12 +216,13 @@ public abstract class DataQueryAdapters {
 
 				final String lang = langCombo.getText();
 				final DataAdapterDescriptor da = dscombo.getSelected();
-				if (da != null) {
+				if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
 					final String query = qdfactory.getDesigner(lang).getQuery();
-					Job job = new Job(Messages.DataQueryAdapters_jobname) {
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							try {
+					ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+					try {
+						dialog.run(true, true, new IRunnableWithProgress() {
+							public void run(IProgressMonitor monitor) {
+								monitor.beginTask(Messages.DataQueryAdapters_jobname, -1);
 								SelectionHelper.setClassLoader(file, monitor);
 
 								JRDesignQuery jdq = new JRDesignQuery();
@@ -232,29 +234,32 @@ public abstract class DataQueryAdapters {
 								try {
 									final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, newdataset);
 									if (fields != null) {
+										monitor.setTaskName("Setting Fields");
 										Display.getDefault().asyncExec(new Runnable() {
 
 											public void run() {
+
 												setFields(fields);
 											}
 										});
+										monitor.setTaskName("Fields set");
 									}
+								} catch (UnsupportedOperationException e) {
+									UIUtils.showError(e);
+								} catch (JRException e) {
+									UIUtils.showError(e);
 								} finally {
 									das.dispose();
 								}
-							} catch (UnsupportedOperationException e) {
-								e.printStackTrace();
-								UIUtils.showError(e);
-							} catch (Exception e) {
-								e.printStackTrace();
-								UIUtils.showError(e);
+								monitor.done();
 							}
-							return Status.OK_STATUS;
-						}
-					};
-					job.setPriority(Job.SHORT);
+						});
 
-					job.schedule();
+					} catch (InvocationTargetException e) {
+						UIUtils.showError(e);
+					} catch (InterruptedException e) {
+						UIUtils.showError(e);
+					}
 				}
 			}
 		};
@@ -267,6 +272,10 @@ public abstract class DataQueryAdapters {
 
 		manager.update(true);
 		tb.pack();
+	}
+
+	public void getFields() {
+		gFields.run();
 	}
 
 	public void setDataset(JRDesignDataset ds) {

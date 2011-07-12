@@ -81,6 +81,11 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		super.dispose();
 	}
 
+	public void getFields() {
+		if (dataquery != null)
+			dataquery.getFields();
+	}
+
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
