@@ -20,7 +20,7 @@ Special thanks to all people who support this software.
    </configIni>
 
    <launcherArgs>
-      <programArgs>-data @user.home/JaspersoftWorkspace</programArgs>
+      <programArgs>-data @user.home/JaspersoftWorkspace  -clean</programArgs>
       <vmArgs>-Xms128m
 -Xmx512m
 -XX:PermSize=128M
@@ -751,6 +751,7 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.core.expressions"/>
       <plugin id="org.eclipse.core.filebuffers"/>
       <plugin id="org.eclipse.core.filesystem"/>
+      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true"/>
       <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true"/>
       <plugin id="org.eclipse.core.filesystem.macosx" fragment="true"/>
       <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
