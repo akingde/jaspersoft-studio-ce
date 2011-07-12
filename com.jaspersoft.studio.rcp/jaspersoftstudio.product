@@ -740,6 +740,7 @@ Public License instead of this License.  But first, please read
       <plugin id="org.apache.jasper"/>
       <plugin id="org.apache.lucene"/>
       <plugin id="org.apache.lucene.analysis"/>
+      <plugin id="org.apache.lucene.core"/>
       <plugin id="org.eclipse.compare"/>
       <plugin id="org.eclipse.compare.core"/>
       <plugin id="org.eclipse.core.commands"/>
@@ -750,7 +751,6 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.core.expressions"/>
       <plugin id="org.eclipse.core.filebuffers"/>
       <plugin id="org.eclipse.core.filesystem"/>
-      <plugin id="org.eclipse.core.filesystem.linux.x86" fragment="true"/>
       <plugin id="org.eclipse.core.filesystem.linux.x86_64" fragment="true"/>
       <plugin id="org.eclipse.core.filesystem.macosx" fragment="true"/>
       <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
@@ -834,7 +834,6 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.equinox.jsp.jasper"/>
       <plugin id="org.eclipse.equinox.jsp.jasper.registry"/>
       <plugin id="org.eclipse.equinox.launcher"/>
-      <plugin id="org.eclipse.equinox.launcher.carbon.macosx" fragment="true"/>
       <plugin id="org.eclipse.equinox.launcher.cocoa.macosx" fragment="true"/>
       <plugin id="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" fragment="true"/>
       <plugin id="org.eclipse.equinox.launcher.gtk.linux.x86" fragment="true"/>
@@ -851,6 +850,7 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.equinox.security"/>
       <plugin id="org.eclipse.equinox.security.macosx" fragment="true"/>
       <plugin id="org.eclipse.equinox.security.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.equinox.security.win32.x86_64" fragment="true"/>
       <plugin id="org.eclipse.gef"/>
       <plugin id="org.eclipse.help"/>
       <plugin id="org.eclipse.help.appserver"/>
@@ -864,8 +864,8 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.jdt.debug"/>
       <plugin id="org.eclipse.jdt.debug.ui"/>
       <plugin id="org.eclipse.jdt.launching"/>
-      <plugin id="org.eclipse.jdt.launching.macosx" fragment=""/>
-      <plugin id="org.eclipse.jdt.launching.ui.macosx" fragment=""/>
+      <plugin id="org.eclipse.jdt.launching.macosx"/>
+      <plugin id="org.eclipse.jdt.launching.ui.macosx"/>
       <plugin id="org.eclipse.jdt.ui"/>
       <plugin id="org.eclipse.jface"/>
       <plugin id="org.eclipse.jface.databinding"/>
