@@ -49,6 +49,7 @@ import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
+import net.sf.jasperreports.charts.design.JRDesignMultiAxisPlot;
 import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.charts.design.JRDesignPiePlot;
@@ -616,6 +617,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
+		} else if (plot instanceof JRDesignMultiAxisPlot) {
+			((JRDesignMultiAxisPlot) plot).setChart(jrDesignElement);
 		}
 
 		if (jrDesignElement.getDataset() instanceof JRDesignHighLowDataset) {

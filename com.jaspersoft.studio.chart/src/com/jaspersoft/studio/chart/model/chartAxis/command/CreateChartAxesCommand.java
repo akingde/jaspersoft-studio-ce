@@ -41,6 +41,7 @@ package com.jaspersoft.studio.chart.model.chartAxis.command;
 import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import net.sf.jasperreports.charts.design.JRDesignMultiAxisPlot;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
@@ -49,6 +50,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.chart.model.MChart;
 import com.jaspersoft.studio.chart.model.chartAxis.MChartAxes;
+
 /*
  * link nodes & together.
  * 
@@ -56,30 +58,31 @@ import com.jaspersoft.studio.chart.model.chartAxis.MChartAxes;
  */
 public class CreateChartAxesCommand extends Command {
 
-	private MChartAxes srcNode;
-
 	private JRDesignChartAxis jrElement;
 
 	private JRDesignMultiAxisPlot jrChart;
 
 	private int index;
+	private JasperDesign jDesign;
 
 	/**
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateChartAxesCommand(MChart destNode, MChartAxes srcNode, int newIndex) {
+	public CreateChartAxesCommand(MChart destNode, MChartAxes srcNode,
+			int newIndex) {
 		super();
-		this.srcNode = srcNode;
 		this.jrElement = (JRDesignChartAxis) srcNode.getValue();
-		this.jrChart = (JRDesignMultiAxisPlot) ((JRDesignChart) destNode.getValue()).getPlot();
+		this.jrChart = (JRDesignMultiAxisPlot) ((JRDesignChart) destNode
+				.getValue()).getPlot();
 		this.index = newIndex;
+		this.jDesign = destNode.getJasperDesign();
 	}
 
 	/**
@@ -89,12 +92,14 @@ public class CreateChartAxesCommand extends Command {
 		if (jrElement == null) {
 			// here put a wizard
 			ChartAxesWizard wizard = new ChartAxesWizard();
-			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getDefault()
+					.getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				byte type = wizard.getChartAxis();
-				jrElement = new JRDesignChartAxis((JRDesignChart) jrChart.getChart());
-				jrElement.setChart(new JRDesignChart(srcNode.getJasperDesign(), type));
+				JRDesignChart chart = (JRDesignChart) jrChart.getChart();
+				jrElement = new JRDesignChartAxis(chart);
+				jrElement.setChart(new JRDesignChart(jDesign, type));
 			}
 		}
 	}
