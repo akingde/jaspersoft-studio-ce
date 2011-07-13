@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Html Component
 Bundle-SymbolicName: com.jaspersoft.studio.html;singleton:=true
-Bundle-Version: 0.2.6
+Bundle-Version: 1.0.0
 Bundle-Activator: com.jaspersoft.studio.html.Activator
 Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: org.eclipse.ui,
