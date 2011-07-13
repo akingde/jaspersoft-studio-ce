@@ -77,7 +77,7 @@ public class CreateE4ObjectCommand extends CreateElementCommand {
 				} else if (btype.equals(BandTypeEnum.COLUMN_FOOTER) || btype.equals(BandTypeEnum.COLUMN_HEADER)) {
 					createVariable(tag, ResetTypeEnum.COLUMN, null);
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
-				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER) || btype.equals(BandTypeEnum.GROUP_HEADER)) {
+				} else if (btype.equals(BandTypeEnum.GROUP_FOOTER)) {
 					createVariable(tag, ResetTypeEnum.GROUP, ((MBandGroupFooter) n).getJrGroup());
 					createTextField(tag.txt.replaceAll("%", tag.name), tag.classname);
 				} else if (btype.equals(BandTypeEnum.GROUP_HEADER)) {
