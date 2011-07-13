@@ -40,6 +40,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
 import com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory;
@@ -145,6 +146,9 @@ public class DataAdapterManager {
 	 * Return a copy of the list of DataAdapters in JaspersoftStudio.
 	 */
 	public static List<DataAdapterDescriptor> getDataAdapters() {
+		if(!loaded){
+			new ExtensionManager().init();
+		}
 		List<DataAdapterDescriptor> listOfDataAdapters = new ArrayList<DataAdapterDescriptor>();
 		listOfDataAdapters.addAll(dataAdapters);
 		return listOfDataAdapters;
@@ -182,11 +186,12 @@ public class DataAdapterManager {
 			e.printStackTrace();
 		}
 	}
-
+	private static boolean loaded=false;
 	/**
 	 * Calling this method will force saving the list of adapters in the Eclipse preferences
 	 */
 	public static void loadDataAdapters() {
+		loaded = true;
 		// Clear up the list of data adapters...
 		dataAdapters.clear();
 

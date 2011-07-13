@@ -52,6 +52,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
@@ -84,6 +85,12 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 	public void getFields() {
 		if (dataquery != null)
 			dataquery.getFields();
+	}
+
+	public DataAdapterDescriptor getDataAdapter() {
+		if (dataquery != null)
+			return dataquery.getDataAdapter();
+		return null;
 	}
 
 	public void createControl(Composite parent) {

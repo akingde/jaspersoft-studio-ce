@@ -35,7 +35,6 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
-import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -46,7 +45,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -72,7 +70,6 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.xml.sax.SAXParseException;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
@@ -209,10 +206,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
 					JasperDesign jasperDesign = getJasperDesign();
 					String oldp = jasperDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
-					if (oldp != null && !oldp.equals(myDataAdapterDesc.getName())) {
+					if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
 						jasperDesign.setProperty(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
-						modelPropChangeListener.propertyChange(new PropertyChangeEvent(jasperDesign, "xzzdataset", null,
-								jasperDesign.getMainDataset()));
+						modelPropChangeListener.propertyChange(new PropertyChangeEvent(jasperDesign, "xzzdataset", null, oldp));
 						isDirty = true;
 					}
 				}
@@ -315,6 +311,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 		xmlEditor.doSave(monitor);
 		reportContainer.doSave(monitor);
+		previewEditor.doSave(monitor);
 		firePropertyChange(PROP_DIRTY);
 	}
 
@@ -462,12 +459,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					UIUtils.showError(e);
-					// IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
-					//							"Your report file contain errors, please fix them in xml editor.", e.getCause()); //$NON-NLS-1$
-					//
-					//
-					// ErrorDialog.openError(Display.getDefault().getActiveShell(),
-					// Messages.JrxmlEditor_error_loading_jrxml_to_model, null, status);
 				}
 			});
 		}

@@ -66,6 +66,7 @@ import org.eclipse.ui.ide.IDE;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
@@ -270,7 +271,8 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 			jb.setHeight(100);
 			jd.setPageFooter(jb);
 		}
-
+		jd.setProperty(MReport.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName());
+		
 		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step2, step3, step4);
 		new ReportGenerator().processTemplate(jd, step3.getFields(), step4.getFields());
 
@@ -281,6 +283,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
+		
 		// String contents = JasperCompileManager.writeReportToXml(jd);
 		return null;
 	}

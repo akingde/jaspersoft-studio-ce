@@ -258,6 +258,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	/**
 	 * @see org.eclipse.jface.action.ContributionItem#dispose()
 	 */
+	@Override
 	public void dispose() {
 		if (partListener == null)
 			return;
@@ -275,6 +276,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 * @param parent
 	 *          The parent of the control to fill
 	 */
+	@Override
 	public final void fill(Composite parent) {
 		createControl(parent);
 	}
@@ -288,6 +290,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 * @param index
 	 *          Menu index
 	 */
+	@Override
 	public final void fill(Menu parent, int index) {
 		Assert.isTrue(false, "Can't add a control to a menu");//$NON-NLS-1$
 	}

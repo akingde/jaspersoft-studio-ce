@@ -70,6 +70,10 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable {
 
+	public PreviewEditor() {
+		super(false);
+	}
+
 	@Override
 	protected JasperPrint loadJRObject(InputStream in) throws JRException {
 		return getJasperPrint();
@@ -98,6 +102,16 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
+	}
+
+	@Override
+	public void doSaveAs() {
+		isDirty = false;
+	}
+
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		isDirty = false;
 	}
 
 	// $TODO complete this class to use DataAdapters and remove the AMDataSource.

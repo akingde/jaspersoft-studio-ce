@@ -101,6 +101,13 @@ import com.jaspersoft.studio.utils.ErrorUtil;
 
 public class JRPrintEditor extends EditorPart {
 
+	public JRPrintEditor(boolean listenResource) {
+		if (listenResource) {
+			partListener = new ResourcePartListener();
+			resourceListener = new ResourceTracker();
+		}
+	}
+
 	class ResourceTracker implements IResourceChangeListener, IResourceDeltaVisitor {
 		public void resourceChanged(IResourceChangeEvent event) {
 			IResourceDelta delta = event.getDelta();
@@ -149,7 +156,7 @@ public class JRPrintEditor extends EditorPart {
 		}
 	}
 
-	private IPartListener partListener = new IPartListener() {
+	class ResourcePartListener implements IPartListener {
 		// If an open, unsaved file was deleted, query the user to either do a "Save As"
 		// or close the editor.
 		public void partActivated(IWorkbenchPart part) {
@@ -171,13 +178,17 @@ public class JRPrintEditor extends EditorPart {
 		public void partOpened(IWorkbenchPart part) {
 		}
 	};
-	private ResourceTracker resourceListener = new ResourceTracker();
+
+	private IPartListener partListener;
+	private ResourceTracker resourceListener;
 
 	@Override
 	public void dispose() {
-		getSite().getWorkbenchWindow().getPartService().removePartListener(partListener);
+		if (partListener != null)
+			getSite().getWorkbenchWindow().getPartService().removePartListener(partListener);
 		partListener = null;
-		((IFileEditorInput) getEditorInput()).getFile().getWorkspace().removeResourceChangeListener(resourceListener);
+		if (resourceListener != null)
+			((IFileEditorInput) getEditorInput()).getFile().getWorkspace().removeResourceChangeListener(resourceListener);
 		super.dispose();
 	}
 
@@ -186,14 +197,14 @@ public class JRPrintEditor extends EditorPart {
 		// resourceListener is not necessary. But it is being done here for the sake
 		// of proper implementation. Plus, the resourceListener needs to be added
 		// to the workspace the first time around.
-		if (getEditorInput() != null) {
+		if (resourceListener != null && getEditorInput() != null) {
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 			file.getWorkspace().removeResourceChangeListener(resourceListener);
 		}
 
 		super.setInput(input);
 
-		if (getEditorInput() != null) {
+		if (resourceListener != null && getEditorInput() != null) {
 			if (getEditorInput() instanceof IFileEditorInput) {
 				IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 				file.getWorkspace().addResourceChangeListener(resourceListener);
@@ -206,7 +217,8 @@ public class JRPrintEditor extends EditorPart {
 	@Override
 	protected void setSite(IWorkbenchPartSite site) {
 		super.setSite(site);
-		getSite().getWorkbenchWindow().getPartService().addPartListener(partListener);
+		if (partListener != null)
+			getSite().getWorkbenchWindow().getPartService().addPartListener(partListener);
 	}
 
 	@Override
@@ -448,7 +460,7 @@ public class JRPrintEditor extends EditorPart {
 	protected void unsetReportDocument(final String msg, final boolean noRun) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				getReportViewer().unsetDocument(msg); 
+				getReportViewer().unsetDocument(msg);
 				setNotRunning(noRun);
 				System.out.println(msg);
 			}

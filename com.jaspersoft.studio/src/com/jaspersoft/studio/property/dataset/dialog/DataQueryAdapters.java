@@ -315,4 +315,8 @@ public abstract class DataQueryAdapters {
 			}
 		}
 	}
+
+	public DataAdapterDescriptor getDataAdapter() {
+		return dscombo.getSelected();
+	}
 }
