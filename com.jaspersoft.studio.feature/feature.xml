@@ -704,8 +704,8 @@ Public License instead of this License.  But first, please read
       <import plugin="com.jaspersoft.studio" version="0.2.5" match="greaterOrEqual"/>
       <import feature="org.eclipse.datatools.sqldevtools.feature" version="1.0.0"/>
       <import feature="org.eclipse.datatools.sqltools.doc.user" version="1.0.0"/>
-      <import feature="net.sf.jasperreports" version="0.0.1"/>
       <import feature="org.eclipse.help" version="1.2.0.v20100427-7e7jEKFEx2XlnZinYPtgz03"/>
+      <import plugin="org.eclipse.ui.navigator"/>
    </requires>
 
    <plugin

@@ -30,7 +30,33 @@
    <extension-point id="queryDesigner" name="Query Designer" schema="schema/queryDesigner.exsd"/> 
    <extension-point id="mappingTool" name="Mapping Tool" schema="schema/mappingTool.exsd"/>
 
+<extension point="org.eclipse.ui.navigator.navigatorContent">
+    <commonFilter
+        description="Hides *.jasper compiled files"
+        id="com.jaspersoft.studio.commonFilter.hideJasper"
+        name="*.jasper compiled reports"
+        activeByDefault="false">
+        <filterExpression>
+            <and>
+                <adapt type="org.eclipse.core.resources.IResource">
+                    <test property="org.eclipse.core.resources.name" value="*.jasper"/>
+                </adapt>
+            </and>
+        </filterExpression>
+    </commonFilter>
+</extension>
+<extension point="org.eclipse.ui.navigator.viewer">
+    <viewerContentBinding
+          viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+          <includes>
+            <contentExtension pattern="com.jaspersoft.studio.commonFilter.hideJasper"/> 
+          </includes>
+    </viewerContentBinding>
+</extension>
+
+
    <extension
+  
          id="xmlProblem"
          name="XML Problem"
          point="org.eclipse.core.resources.markers">
