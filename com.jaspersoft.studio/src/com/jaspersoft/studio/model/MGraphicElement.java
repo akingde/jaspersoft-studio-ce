@@ -63,7 +63,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 /*
  * The Class MGeneric.
  */
-public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement {
+public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable {
 	private ReportRulerGuide verticalGuide, horizontalGuide;
 
 	/*

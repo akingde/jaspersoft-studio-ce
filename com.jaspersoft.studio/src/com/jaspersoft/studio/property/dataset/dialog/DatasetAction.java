@@ -30,7 +30,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.jaspersoft.studio.editor.outline.ATreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
@@ -73,8 +73,8 @@ public class DatasetAction extends SelectionAction {
 			IContentOutlinePage cop = (IContentOutlinePage) part.getAdapter(IContentOutlinePage.class);
 			if (cop != null) {
 				IStructuredSelection sel = (IStructuredSelection) cop.getSelection();
-				if (sel.getFirstElement() instanceof ATreeEditPart) {
-					Object obj = ((ATreeEditPart) sel.getFirstElement()).getModel();
+				if (sel.getFirstElement() instanceof TreeEditPart) {
+					Object obj = ((TreeEditPart) sel.getFirstElement()).getModel();
 					if (obj instanceof MDataset)
 						mdataset = (MDataset) obj;
 				}

@@ -38,10 +38,15 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.outline.part.ContainerTreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.NotDragableTreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -142,13 +147,21 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 	 */
 	public EditPart createEditPart(EditPart context, Object model) {
 		EditPart editPart = null;
-		if (model instanceof IContainerEditPart)
-			editPart = new AContainerTreeEditPart();
-		else if (model instanceof MGraphicElement)
-			editPart = new AContainerTreeEditPart();
-
-		else
-			editPart = new ATreeEditPart();
+		if (model instanceof IDragable) {
+			if (model instanceof IContainerEditPart)
+				editPart = new ContainerTreeEditPart();
+			else if (model instanceof MGraphicElement)
+				editPart = new ContainerTreeEditPart();
+			else
+				editPart = new TreeEditPart();
+		} else {
+			if (model instanceof IContainerEditPart)
+				editPart = new NotDragableContainerTreeEditPart();
+			else if (model instanceof MGraphicElement)
+				editPart = new NotDragableContainerTreeEditPart();
+			else
+				editPart = new NotDragableTreeEditPart();
+		}
 		if (editPart != null)
 			editPart.setModel(model);
 		return editPart;
@@ -385,13 +398,14 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (child instanceof MStyle) {
 				if (parent instanceof MStyles)
 					return new CreateStyleCommand((MStyles) parent, (MStyle) child, newIndex);
-			} else if (child.getValue() != null && !(parent instanceof IContainer) && parent instanceof MGraphicElement) {
-				SetValueCommand cmd = new SetValueCommand();
-				cmd.setTarget((IPropertySource) parent);
-				cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
-				JRStyle style = (JRStyle) child.getValue();
-				cmd.setPropertyValue(style.getName());
-				return cmd;
+				if (child.getValue() != null && !(parent instanceof IContainer) && parent instanceof MGraphicElement) {
+					SetValueCommand cmd = new SetValueCommand();
+					cmd.setTarget((IPropertySource) parent);
+					cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
+					JRStyle style = (JRStyle) child.getValue();
+					cmd.setPropertyValue(style.getName());
+					return cmd;
+				}
 			}
 		}
 

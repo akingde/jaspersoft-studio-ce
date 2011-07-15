@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.outline;
+package com.jaspersoft.studio.editor.outline.part;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -39,7 +39,7 @@ import com.jaspersoft.studio.model.INode;
 /*
  * The Class ATreeEditPart.
  */
-public class ATreeEditPart extends AbstractTreeEditPart implements PropertyChangeListener {
+public class TreeEditPart extends AbstractTreeEditPart implements PropertyChangeListener {
 
 	/*
 	 * (non-Javadoc)

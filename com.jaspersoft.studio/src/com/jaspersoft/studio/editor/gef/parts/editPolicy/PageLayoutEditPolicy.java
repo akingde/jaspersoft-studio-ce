@@ -1,27 +1,27 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.parts.editPolicy;
+
+import java.util.Collection;
+
+import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
@@ -34,6 +34,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToGuides;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.handles.HandleBounds;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
@@ -50,6 +51,8 @@ import com.jaspersoft.studio.editor.gef.rulers.command.ChangeGuideCommand;
 import com.jaspersoft.studio.editor.outline.OutlineTreeEditPartFactory;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGuidebleElement;
+import com.jaspersoft.studio.model.MGraphicElement;
+
 /*
  * The Class PageLayoutEditPolicy.
  */
@@ -155,22 +158,60 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
 		if (request.getType() == REQ_CREATE && getHost() instanceof AJDEditPart) {
-
 			Rectangle constraint = (Rectangle) getConstraintFor(request);
 
-			if (request.getNewObject() instanceof CreateElementAction) {
+			ANode parent = (ANode) getHost().getModel();
+			Rectangle copyconstraint = constraint.getCopy();
+			if (request.getNewObject() instanceof Collection<?>) {
+				CompoundCommand ccmd = new CompoundCommand();
+				for (Object it : (Collection<?>) request.getNewObject()) {
+					Command cmd = getCreateCommand(parent, it, copyconstraint.getCopy());
+					if (cmd != null) {
+						ccmd.add(cmd);
+						copyconstraint.translate(70, 0);
+					}
+				}
+				if (!ccmd.isEmpty())
+					return ccmd;
+			} else if (request.getNewObject() instanceof CreateElementAction) {
 				CreateElementAction action = (CreateElementAction) request.getNewObject();
-				action.dropInto(getHost().getModel(), constraint.getCopy(), -1);
+				action.dropInto(getHost().getModel(), copyconstraint, -1);
 				action.run();
 				return action.getCommand();
-			} else if (request.getNewObject() instanceof ANode) {
-				return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(),
-						(ANode) request.getNewObject(), constraint.getCopy(), -1);
-			}
+			} else
+				return getCreateCommand(parent, request.getNewObject(), copyconstraint);
 		}
 
 		// Command cmd = chainGuideAttachmentCommand(request, newPart, create, true);
 		// return chainGuideAttachmentCommand(request, newPart, cmd, false);
+		return null;
+	}
+
+	private Command getCreateCommand(ANode parent, Object obj, Rectangle constraint) {
+		if (obj instanceof ANode) {
+			ANode aNode = (ANode) obj;
+			if (aNode instanceof MGraphicElement) {
+				Object value = aNode.getValue();
+				if (value != null && value instanceof JRDesignGraphicElement) {
+					JRDesignGraphicElement jrDesignGraphicElement = (JRDesignGraphicElement) value;
+					try {
+						aNode = aNode.getClass().newInstance();
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+						return null;
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+						return null;
+					}
+					aNode.setValue(jrDesignGraphicElement.clone());
+
+					constraint.width = jrDesignGraphicElement.getWidth();
+					constraint.height = jrDesignGraphicElement.getHeight();
+				}
+			}
+			Command cmd = OutlineTreeEditPartFactory.getCreateCommand(parent, aNode, constraint, -1);
+			return cmd;
+		}
 		return null;
 	}
 
@@ -192,6 +233,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 		return cmd;
 	}
 
+	@Override
 	protected Command createChangeConstraintCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
 		Command result = createChangeConstraintCommand(child, constraint);
 		if (child instanceof IContainerPart)

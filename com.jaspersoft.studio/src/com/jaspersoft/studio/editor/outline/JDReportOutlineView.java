@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.editor.outline;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -69,10 +70,12 @@ import com.jaspersoft.studio.editor.action.ShowPropertyViewAction;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
+import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IDragable;
 
 /*
  * The Class JDReportOutlineView.
@@ -189,15 +192,21 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		getViewer().addDragSourceListener(new TemplateTransferDragSourceListener(getViewer()) {
 			@Override
 			protected Object getTemplate() {
+				List<Object> models = new ArrayList<Object>();
 				Object obj = super.getTemplate();
 				if (obj == null) {
 					List<?> selection = getViewer().getSelectedEditParts();
-					if (selection.size() == 1) {
-						EditPart editpart = (EditPart) getViewer().getSelectedEditParts().get(0);
-						obj = editpart.getModel();
+					for (Object it : selection) {
+						if (it instanceof EditPart) {
+							EditPart editpart = (EditPart) getViewer().getSelectedEditParts().get(0);
+							Object model = editpart.getModel();
+							if (model instanceof IDragable) {
+								models.add(model);
+							}
+						}
 					}
 				}
-				return obj;
+				return models;
 			}
 		});
 
@@ -262,8 +271,8 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 						TreeItem[] ti = t.getSelection();
 						if (ti != null && ti.length > 0) {
 							Object obj = ti[0].getData();
-							if (obj instanceof ATreeEditPart) {
-								ATreeEditPart atep = (ATreeEditPart) obj;
+							if (obj instanceof TreeEditPart) {
+								TreeEditPart atep = (TreeEditPart) obj;
 								if (atep.getModel() instanceof ANode) {
 									EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,
 											(ANode) atep.getModel());

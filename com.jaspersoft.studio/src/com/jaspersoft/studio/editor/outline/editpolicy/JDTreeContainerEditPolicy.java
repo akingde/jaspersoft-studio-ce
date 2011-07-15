@@ -49,8 +49,7 @@ public class JDTreeContainerEditPolicy extends TreeContainerEditPolicy {
 	 * @return the command
 	 */
 	protected Command createCreateCommand(ANode child, int index) {
-		return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(), child, new Rectangle(0, 0, 0, 0),
-				index);
+		return OutlineTreeEditPartFactory.getCreateCommand((ANode) getHost().getModel(), child, null, index);
 	}
 
 	/*

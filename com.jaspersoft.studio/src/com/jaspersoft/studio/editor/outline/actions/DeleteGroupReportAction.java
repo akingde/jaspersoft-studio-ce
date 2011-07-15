@@ -36,7 +36,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
-import com.jaspersoft.studio.editor.outline.ATreeEditPart;
+import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MReport;
@@ -97,7 +97,7 @@ public class DeleteGroupReportAction extends DeleteAction {
 		for (int i = 0; i < objects.size(); i++) {
 			EditPart part = (EditPart) objects.get(i);
 			Command cmd = null;
-			if (part instanceof ATreeEditPart || part instanceof BandEditPart) {
+			if (part instanceof TreeEditPart || part instanceof BandEditPart) {
 				ANode node = (ANode) part.getModel();
 				if (node instanceof MBandGroupHeader) {
 					cmd = new DeleteGroupCommand((MReport) node.getParent(), (MBandGroupHeader) node);

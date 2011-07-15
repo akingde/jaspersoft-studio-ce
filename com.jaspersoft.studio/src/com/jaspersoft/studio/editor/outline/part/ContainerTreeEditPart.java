@@ -40,7 +40,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.outline;
+package com.jaspersoft.studio.editor.outline.part;
 
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.RootEditPart;
@@ -51,7 +51,7 @@ import com.jaspersoft.studio.editor.outline.editpolicy.JDTreeContainerEditPolicy
 /*
  * The Class AContainerTreeEditPart.
  */
-public class AContainerTreeEditPart extends ATreeEditPart {
+public class ContainerTreeEditPart extends TreeEditPart {
 
 	/**
 	 * Creates and installs pertinent EditPolicies.

@@ -37,6 +37,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
+
 /*
  * link nodes & together.
  * 
@@ -186,9 +187,9 @@ public class CreateElementCommand extends Command {
 	protected void setElementBounds() {
 		if (location == null)
 			location = new Rectangle(jrElement.getX(), jrElement.getY(), jrElement.getWidth(), jrElement.getHeight());
-		if (location.width < 0)
+		if (location.width <= 0)
 			location.width = srcNode.getDefaultWidth();
-		if (location.height < 0)
+		if (location.height <= 0)
 			location.height = srcNode.getDefaultHeight();
 
 		jrElement.setX(location.x);
