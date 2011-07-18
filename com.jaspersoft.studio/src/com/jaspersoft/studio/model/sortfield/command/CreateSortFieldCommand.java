@@ -19,19 +19,18 @@
  */
 package com.jaspersoft.studio.model.sortfield.command;
 
-import java.util.List;
-
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.sortfield.MSortField;
 import com.jaspersoft.studio.model.sortfield.MSortFields;
+import com.jaspersoft.studio.model.sortfield.command.wizard.SortFieldWizard;
 
 /*
  * link nodes & together.
@@ -81,10 +80,7 @@ public class CreateSortFieldCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		if (jrField == null) {
-			jrField = MSortField.createJRSortField(jrDataSet);
-			jrField.setName(getName(jrDataSet.getSortFieldsList(), "SortField"));
-		}
+		createObject();
 		if (jrField != null) {
 			if (index < 0)
 				index = jrDataSet.getSortFieldsList().size();
@@ -95,35 +91,22 @@ public class CreateSortFieldCommand extends Command {
 					jrDataSet.addSortField(index, jrField);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
-					String defaultName = getName(jrDataSet.getSortFieldsList(), "CopyOFSortField_"); //$NON-NLS-1$
-					InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Sort Field Name",
-							"Please, enter unique sort field name", defaultName, null);
-					if (dlg.open() == InputDialog.OK) {
-						jrField.setName(dlg.getValue());
-						execute();
-					}
-				}
 			}
 		}
 	}
 
-	private String getName(List<JRSortField> fields, String name) {
-		int i = 1;
-		while (i < 100000) {
-			String iname = name + i;
-			boolean found = false;
-			for (JRSortField f : fields) {
-				if (f.getName().equals(iname)) {
-					found = true;
-					break;
-				}
+	private void createObject() {
+		if (jrField == null) {
+			jrField = MSortField.createJRSortField(jrDataSet);
+			SortFieldWizard wizard = new SortFieldWizard();
+			wizard.init(jrDataSet, jrField);
+			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+			dialog.create();
+			if (dialog.open() != Dialog.OK) {
+				jrField = null;
+				return;
 			}
-			if (!found)
-				return iname;
-			i++;
 		}
-		return name;
 	}
 
 	/*
@@ -143,6 +126,7 @@ public class CreateSortFieldCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		jrDataSet.removeSortField(jrField);
+		if (jrField != null)
+			jrDataSet.removeSortField(jrField);
 	}
 }

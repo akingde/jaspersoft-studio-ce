@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
@@ -37,8 +38,10 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
+import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -101,6 +104,13 @@ public class MSortField extends APropertyNode implements ICopyable {
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
 	public ImageDescriptor getImagePath() {
+		if (getValue() != null) {
+			JRDesignSortField sortField = (JRDesignSortField) getValue();
+			if (sortField.getType().equals(SortFieldTypeEnum.FIELD))
+				return MField.getIconDescriptor().getIcon16();
+			if (sortField.getType().equals(SortFieldTypeEnum.VARIABLE))
+				return MVariable.getIconDescriptor().getIcon16();
+		}
 		return getIconDescriptor().getIcon16();
 	}
 
@@ -138,12 +148,24 @@ public class MSortField extends APropertyNode implements ICopyable {
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		if (nameD != null) {
 			JRDesignDataset jrDataset = getDataSet();
-			JRField[] fields = jrDataset.getFields();
-			String[] items = new String[fields.length];
-			for (int j = 0; j < fields.length; j++) {
-				items[j] = fields[j].getName();
+			if (getValue() != null) {
+				JRDesignSortField sortField = (JRDesignSortField) getValue();
+				String[] items = null;
+				if (sortField.getType().equals(SortFieldTypeEnum.FIELD)) {
+					JRField[] fields = jrDataset.getFields();
+					items = new String[fields.length];
+					for (int j = 0; j < fields.length; j++) {
+						items[j] = fields[j].getName();
+					}
+				} else {
+					JRVariable[] vars = jrDataset.getVariables();
+					items = new String[vars.length];
+					for (int j = 0; j < vars.length; j++) {
+						items[j] = vars[j].getName();
+					}
+				}
+				nameD.setItems(items);
 			}
-			nameD.setItems(items);
 		}
 	}
 
@@ -223,8 +245,24 @@ public class MSortField extends APropertyNode implements ICopyable {
 			}
 		} else if (id.equals(JRDesignSortField.PROPERTY_ORDER))
 			jrField.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
-		else if (id.equals(JRDesignSortField.PROPERTY_TYPE))
-			jrField.setType((SortFieldTypeEnum) EnumHelper.getSetValue(SortFieldTypeEnum.values(), value, 0, false));
+		else if (id.equals(JRDesignSortField.PROPERTY_TYPE)) {
+			SortFieldTypeEnum type = (SortFieldTypeEnum) EnumHelper.getSetValue(SortFieldTypeEnum.values(), value, 0, false);
+			if (!type.equals(jrField.getType())) {
+				jrField.setType(type);
+				JRDesignDataset ds = getDataSet();
+				String newName = "";
+				if (type.equals(SortFieldTypeEnum.FIELD)) {
+					List<JRField> f = ds.getFieldsList();
+					if (!f.isEmpty())
+						newName = f.get(0).getName();
+				} else {
+					List<JRVariable> f = ds.getVariablesList();
+					if (!f.isEmpty())
+						newName = f.get(0).getName();
+				}
+				jrField.setName(newName);
+			}
+		}
 	}
 
 	/**

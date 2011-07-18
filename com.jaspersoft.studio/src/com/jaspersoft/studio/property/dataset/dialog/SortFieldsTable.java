@@ -9,6 +9,7 @@ import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -18,15 +19,22 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.model.field.MField;
+import com.jaspersoft.studio.model.sortfield.MSortField;
+import com.jaspersoft.studio.model.sortfield.command.wizard.SortFieldWizard;
+import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -34,7 +42,6 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 public class SortFieldsTable {
 	private TableViewer tviewer;
@@ -94,30 +101,16 @@ public class SortFieldsTable {
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input) {
-				JRDesignSortField f = new JRDesignSortField();
-				f.setName(getName());
-				f.setType(SortFieldTypeEnum.FIELD);
-				return f;
+				JRDesignSortField jrField = MSortField.createJRSortField(dataset);
+				SortFieldWizard wizard = new SortFieldWizard();
+				wizard.init(dataset, jrField);
+				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+				dialog.create();
+				if (dialog.open() != Dialog.OK)
+					return null;
+				return jrField;
 			}
 
-			private String getName() {
-				List<JRDesignSortField> list = (List<JRDesignSortField>) tviewer.getInput();
-				String name = "Field";
-				boolean match = false;
-				String tmp = name;
-				for (int i = 1; i < 100000; i++) {
-					tmp = ModelUtils.getNameFormat(name, i);
-
-					for (JRDesignSortField f : list) {
-						match = f.getName().equals(tmp);
-						if (match)
-							break;
-					}
-					if (!match)
-						break;
-				}
-				return tmp;
-			}
 		});
 		new DeleteButton().createDeleteButton(bGroup, tviewer);
 
@@ -137,9 +130,9 @@ public class SortFieldsTable {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
 				if (property.equals("NAME")) //$NON-NLS-1$
-					return true;
+					return false;
 				if (property.equals("TYPE")) //$NON-NLS-1$
-					return true;
+					return false;
 				if (property.equals("ORDER")) //$NON-NLS-1$
 					return true;
 				return false;
@@ -194,7 +187,15 @@ public class SortFieldsTable {
 		}
 
 		public Image getColumnImage(Object element, int columnIndex) {
-			return null;
+			JRDesignSortField field = (JRDesignSortField) element;
+			switch (columnIndex) {
+			case 0:
+				if (field.getType().equals(SortFieldTypeEnum.FIELD))
+					return JaspersoftStudioPlugin.getImage(MField.getIconDescriptor().getIcon16());
+				else
+					return JaspersoftStudioPlugin.getImage(MVariable.getIconDescriptor().getIcon16());
+			}
+			return null; //$NON-NLS-1$
 		}
 	}
 }

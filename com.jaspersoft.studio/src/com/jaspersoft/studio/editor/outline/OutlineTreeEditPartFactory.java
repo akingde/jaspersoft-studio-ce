@@ -23,6 +23,7 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -480,8 +481,11 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (parent instanceof MStyles)
 				return new CreateStyleTemplateCommand((MStyles) parent, (MStyleTemplate) child, 0);
 		} else if (child instanceof MSortField) {
-			if (parent instanceof MSortFields)
-				return new CreateSortFieldCommand((MSortFields) parent, (MSortField) child, newIndex);
+			if (parent instanceof MSortFields) {
+				JRDesignDataset ds = (JRDesignDataset) parent.getValue();
+				if ((ds.getVariablesList().size() + ds.getFieldsList().size()) >= parent.getChildren().size())
+					return new CreateSortFieldCommand((MSortFields) parent, (MSortField) child, newIndex);
+			}
 		} else if (child instanceof MGroup) {
 			if (parent instanceof MGroups)
 				return new CreateGroupCommand((MGroups) parent, (MGroup) child, newIndex);
