@@ -185,7 +185,7 @@ public abstract class DataQueryAdapters {
 		tb.setBackground(parent.getBackground());
 		// tb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ToolBarManager manager = new ToolBarManager(tb);
-		dscombo = new DatasourceComboItem(new IDataAdapterRunnable() {
+		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
 				gFields.setEnabled(false);
@@ -199,7 +199,8 @@ public abstract class DataQueryAdapters {
 				// TODO Auto-generated method stub
 				return true;
 			}
-		});
+		};
+		dscombo = new DatasourceComboItem(adapterRunReport);
 
 		Action newDA = new Action(Messages.DataQueryAdapters_newaction) {
 			@Override

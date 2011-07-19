@@ -146,6 +146,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		if (combo.getSelectionIndex() < 0 && combo.getItemCount() > 0) {
 			combo.select(0);
 		}
+		handleWidgetDefaultSelected(null);
 	}
 
 	private List<DataAdapterDescriptor> getDataAdaptersList() {
