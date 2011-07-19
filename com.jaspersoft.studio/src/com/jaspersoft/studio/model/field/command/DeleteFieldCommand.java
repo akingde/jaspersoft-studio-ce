@@ -39,8 +39,10 @@
 package com.jaspersoft.studio.model.field.command;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 
 import org.eclipse.gef.commands.Command;
 
@@ -59,6 +61,8 @@ public class DeleteFieldCommand extends Command {
 
 	/** The jr field. */
 	private JRDesignField jrField;
+	private JRSortField jrSortField;
+	private int oldSortFieldindex = 0;
 
 	/** The element position. */
 	private int elementPosition = 0;
@@ -92,6 +96,18 @@ public class DeleteFieldCommand extends Command {
 	public void execute() {
 		elementPosition = jrDataset.getFieldsList().indexOf(jrField);
 		jrDataset.removeField(jrField);
+
+		if (jrSortField == null)
+			for (JRSortField sf : jrDataset.getSortFieldsList()) {
+				if (sf.getType().equals(SortFieldTypeEnum.FIELD) && sf.getName().equals(jrField.getName())) {
+					jrSortField = sf;
+					break;
+				}
+			}
+		if (jrSortField != null) {
+			oldSortFieldindex = jrDataset.getSortFieldsList().indexOf(jrSortField);
+			jrDataset.removeSortField(jrSortField);
+		}
 	}
 
 	/*
@@ -118,6 +134,13 @@ public class DeleteFieldCommand extends Command {
 				jrDataset.addField(jrField);
 			else
 				jrDataset.addField(elementPosition, jrField);
+
+			if (jrSortField != null) {
+				if (oldSortFieldindex >= 0 && oldSortFieldindex < jrDataset.getSortFieldsList().size())
+					jrDataset.addSortField(oldSortFieldindex, jrSortField);
+				else
+					jrDataset.addSortField(jrSortField);
+			}
 		} catch (JRException e) {
 			e.printStackTrace();
 		}
