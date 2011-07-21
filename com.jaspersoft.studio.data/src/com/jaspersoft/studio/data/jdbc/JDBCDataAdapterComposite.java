@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2011 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.data.jdbc;
 
@@ -29,18 +25,21 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
+import com.jaspersoft.studio.swt.widgets.PropertiesComponent;
 import com.jaspersoft.studio.utils.Misc;
 
 public class JDBCDataAdapterComposite extends Composite {
@@ -106,6 +105,7 @@ public class JDBCDataAdapterComposite extends Composite {
 			new JDBCDriverDefinition("Vertica", "com.vertica.Driver",
 					"jdbc:vertica://{0}:5433/{1}") };
 	private ClasspathComponent cpath;
+	private PropertiesComponent cproperties;
 
 	/**
 	 * Create the composite.
@@ -136,81 +136,18 @@ public class JDBCDataAdapterComposite extends Composite {
 		textJDBCUrl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 2, 1));
 
-		Group grpJdbc = new Group(this, SWT.NONE);
-		grpJdbc.setLayout(new GridLayout(3, false));
-		grpJdbc.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-				3, 1));
-		grpJdbc.setText("JDBC URL Wizard");
+		CTabFolder tabFolder = new CTabFolder(this, SWT.NONE);
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 3, 1));
+		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(
+				SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 
-		Label lblServerAddress = new Label(grpJdbc, SWT.NONE);
-		lblServerAddress.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
-				false, false, 1, 1));
-		lblServerAddress.setText("Server Address");
+		createLocationTab(tabFolder);
 
-		textServerAddress = new Text(grpJdbc, SWT.BORDER);
-		textServerAddress.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
-		new Label(grpJdbc, SWT.NONE);
+		createPropertiesTab(tabFolder);
 
-		Label lblDatabase = new Label(grpJdbc, SWT.NONE);
-		lblDatabase.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
-		lblDatabase.setText("Database");
-
-		textDatabase = new Text(grpJdbc, SWT.BORDER);
-		textDatabase.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-
-		textServerAddress.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				btnWizardActionPerformed();
-			}
-		});
-		textDatabase.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				btnWizardActionPerformed();
-			}
-		});
-
-		Label lblUsername = new Label(this, SWT.NONE);
-		lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
-		lblUsername.setText("Username");
-
-		textUsername = new Text(this, SWT.BORDER);
-		GridData gd_textUsername = new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1);
-		gd_textUsername.widthHint = 200;
-		textUsername.setLayoutData(gd_textUsername);
-		new Label(this, SWT.NONE);
-
-		Label lblPassword = new Label(this, SWT.NONE);
-		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
-		lblPassword.setText("Password");
-
-		textPassword = new Text(this, SWT.BORDER | SWT.PASSWORD);
-		GridData gd_textPassword = new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 1, 1);
-		gd_textPassword.widthHint = 200;
-		textPassword.setLayoutData(gd_textPassword);
-
-		// btnSavePassword = new Button(this, SWT.CHECK);
-		// btnSavePassword.setText("Save Password");
-		// new Label(this, SWT.NONE);
-
-		Label lblAttentionPasswordsAre = new Label(this, SWT.NONE);
-		lblAttentionPasswordsAre.setLayoutData(new GridData(SWT.LEFT,
-				SWT.CENTER, false, false, 2, 1));
-		lblAttentionPasswordsAre
-				.setText("Attention! Passwords are saved in clear text");
-
-		cpath = new ClasspathComponent(this);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 3;
-		cpath.getControl().setLayoutData(gd);
+		createClasspathTab(tabFolder);
+		tabFolder.setSelection(0);
 
 		for (int i = 0; i < definitions.length; ++i) {
 			comboJDBCDriver.add(definitions[i]);
@@ -233,6 +170,103 @@ public class JDBCDataAdapterComposite extends Composite {
 					}
 
 				});
+	}
+
+	private void createClasspathTab(CTabFolder tabFolder) {
+		CTabItem tbtmNewItem_1 = new CTabItem(tabFolder, SWT.NONE);
+		tbtmNewItem_1.setText("Driver Classpath");
+
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout());
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tbtmNewItem_1.setControl(composite);
+
+		cpath = new ClasspathComponent(composite);
+		cpath.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+
+	private void createPropertiesTab(CTabFolder tabFolder) {
+		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.NONE);
+		tbtmNewItem.setText("Connection Properties");
+
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout());
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tbtmNewItem.setControl(composite);
+
+		cproperties = new PropertiesComponent(composite);
+		cproperties.getControl()
+				.setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+
+	private void createLocationTab(CTabFolder tabFolder) {
+		CTabItem tbtmNewItem_2 = new CTabItem(tabFolder, SWT.NONE);
+		tbtmNewItem_2.setText("Database Location");
+
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tbtmNewItem_2.setControl(composite);
+
+		Label lblServerAddress = new Label(composite, SWT.NONE);
+		lblServerAddress.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1));
+		lblServerAddress.setText("Server Address");
+
+		textServerAddress = new Text(composite, SWT.BORDER);
+		textServerAddress.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
+
+		Label lblDatabase = new Label(composite, SWT.NONE);
+		lblDatabase.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblDatabase.setText("Database");
+
+		textDatabase = new Text(composite, SWT.BORDER);
+		textDatabase.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+
+		textServerAddress.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				btnWizardActionPerformed();
+			}
+		});
+		textDatabase.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				btnWizardActionPerformed();
+			}
+		});
+
+		Label lblUsername = new Label(composite, SWT.NONE);
+		lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblUsername.setText("Username");
+
+		textUsername = new Text(composite, SWT.BORDER);
+		textUsername.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+
+		Label lblPassword = new Label(composite, SWT.NONE);
+		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblPassword.setText("Password");
+
+		textPassword = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+		textPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+
+		// btnSavePassword = new Button(this, SWT.CHECK);
+		// btnSavePassword.setText("Save Password");
+		// new Label(this, SWT.NONE);
+
+		Label lblAttentionPasswordsAre = new Label(composite, SWT.NONE);
+		lblAttentionPasswordsAre.setLayoutData(new GridData(SWT.LEFT,
+				SWT.CENTER, false, false, 2, 1));
+		lblAttentionPasswordsAre
+				.setText("Attention! Passwords are saved in clear text");
+
 	}
 
 	/**
@@ -274,6 +308,7 @@ public class JDBCDataAdapterComposite extends Composite {
 		// btnSavePassword.setSelection(jdbcDataAdapter.isSavePassword());
 
 		cpath.setClasspaths(jdbcDataAdapter.getClasspath());
+		cproperties.setProperties(jdbcDataAdapter.getProperties());
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
@@ -290,9 +325,10 @@ public class JDBCDataAdapterComposite extends Composite {
 		jdbcDataAdapter.setUrl(textJDBCUrl.getText());
 		jdbcDataAdapter.setDatabase(textDatabase.getText());
 		jdbcDataAdapter.setServerAddress(textServerAddress.getText());
-		jdbcDataAdapter.setSavePassword(true);//btnSavePassword.getSelection());
+		jdbcDataAdapter.setSavePassword(true);// btnSavePassword.getSelection());
 
 		jdbcDataAdapter.setClasspath(cpath.getClasspaths());
+		jdbcDataAdapter.setProperties(cproperties.getProperties());
 
 		return dataAdapterDesc;
 	}
