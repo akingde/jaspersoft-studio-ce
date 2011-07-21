@@ -17,6 +17,33 @@
             plugin="com.jaspersoft.studio.doc">
     </contexts>
 </extension>
-   
+    <extension
+         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+      <category
+            id="com.jaspersoft.studio.cheatsheets.repository"
+            name="Jasper Reports Developement">
+      </category>
+      <cheatsheet
+            category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/content.xml"
+            id="com.jaspersoft.studio.cheatsheets.datasource"
+            name="Manage Data Connections">
+      </cheatsheet>
+      <cheatsheet
+            category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/designreports.xml"
+            id="com.jaspersoft.studio.cheatsheets.designreport"
+            name="Start Designing Reports">
+      </cheatsheet>
+      <cheatsheet
+            category="com.jaspersoft.studio.cheatsheets.repository"
+            composite="false"
+            contentFile="cheatsheets/runreport.xml"
+            id="com.jaspersoft.studio.cheatsheets.runreport"
+            name="Preview and Run Reports">
+      </cheatsheet>
+   </extension>
 
 </plugin>
