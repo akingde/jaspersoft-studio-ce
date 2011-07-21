@@ -30,29 +30,7 @@
    <extension-point id="queryDesigner" name="Query Designer" schema="schema/queryDesigner.exsd"/> 
    <extension-point id="mappingTool" name="Mapping Tool" schema="schema/mappingTool.exsd"/>
 
-<extension point="org.eclipse.ui.navigator.navigatorContent">
-    <commonFilter
-        description="Hides *.jasper compiled files"
-        id="com.jaspersoft.studio.commonFilter.hideJasper"
-        name="*.jasper compiled reports"
-        activeByDefault="false">
-        <filterExpression>
-            <and>
-                <adapt type="org.eclipse.core.resources.IResource">
-                    <test property="org.eclipse.core.resources.name" value="*.jasper"/>
-                </adapt>
-            </and>
-        </filterExpression>
-    </commonFilter>
-</extension>
-<extension point="org.eclipse.ui.navigator.viewer">
-    <viewerContentBinding
-          viewerId="org.eclipse.ui.navigator.ProjectExplorer">
-          <includes>
-            <contentExtension pattern="com.jaspersoft.studio.commonFilter.hideJasper"/> 
-          </includes>
-    </viewerContentBinding>
-</extension>
+
 
 
    <extension
@@ -599,34 +577,7 @@
             name="Style Template File">
       </wizard>
    </extension>
-   <extension
-         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
-      <category
-            id="com.jaspersoft.studio.cheatsheets.repository"
-            name="Jasper Reports Developement">
-      </category>
-      <cheatsheet
-            category="com.jaspersoft.studio.cheatsheets.repository"
-            composite="false"
-            contentFile="cheatsheets/content.xml"
-            id="com.jaspersoft.studio.cheatsheets.datasource"
-            name="Manage Data Connections">
-      </cheatsheet>
-      <cheatsheet
-            category="com.jaspersoft.studio.cheatsheets.repository"
-            composite="false"
-            contentFile="cheatsheets/designreports.xml"
-            id="com.jaspersoft.studio.cheatsheets.designreport"
-            name="Start Designing Reports">
-      </cheatsheet>
-      <cheatsheet
-            category="com.jaspersoft.studio.cheatsheets.repository"
-            composite="false"
-            contentFile="cheatsheets/runreport.xml"
-            id="com.jaspersoft.studio.cheatsheets.runreport"
-            name="Preview and Run Reports">
-      </cheatsheet>
-   </extension>
+  
    
 
 </plugin>
