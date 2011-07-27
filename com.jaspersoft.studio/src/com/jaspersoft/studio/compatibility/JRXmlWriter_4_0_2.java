@@ -215,9 +215,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 	 */
 	protected JRXmlWriter_4_0_2(JRReport report, String encoding)
 	{
-                super(report,encoding);
-		this.report = report;
-		this.encoding = encoding;
+		super(report, encoding);
 	}
 
 
@@ -937,10 +935,10 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 		writer.addAttribute(JRXmlConstants.ATTRIBUTE_textAlignment, textElement.getOwnHorizontalAlignmentValue());
 		writer.addAttribute(JRXmlConstants.ATTRIBUTE_verticalAlignment, textElement.getOwnVerticalAlignmentValue());
 		writer.addAttribute(JRXmlConstants.ATTRIBUTE_rotation, textElement.getOwnRotationValue());
-		writer.addAttribute(JRXmlConstants.ATTRIBUTE_lineSpacing, textElement.getOwnLineSpacingValue());
 		writer.addAttribute(JRXmlConstants.ATTRIBUTE_markup, textElement.getOwnMarkup());
 
 		writeFont(textElement);
+		writeParagraph(textElement.getParagraph());
 
 		writer.closeElement();
 	}
