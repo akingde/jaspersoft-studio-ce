@@ -543,6 +543,10 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
+      <category
+            id="net.sf.jasperreports"
+            name="Jaspersoft Studio">
+      </category>
       <view
             category="net.sf.jasperreports"
             class="com.jaspersoft.studio.repository.RepositoryView"
@@ -551,10 +555,6 @@
             name="Repository"
             restorable="true">
       </view>
-      <category
-            id="net.sf.jasperreports"
-            name="Jaspersoft Studio">
-      </category>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">

@@ -243,7 +243,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
 				jrband.setSplitType((SplitTypeEnum) EnumHelper.getSetValue(SplitTypeEnum.values(), value, 1, true));
 			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION))
-				jrband.setPrintWhenExpression(ExprUtil.setValues(jrband.getPrintWhenExpression(), value));
+				jrband.setPrintWhenExpression(ExprUtil.setValues(jrband.getPrintWhenExpression(), value, null));
 		}
 	}
 

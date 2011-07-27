@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRDatasetParameter;
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignDatasetParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -81,7 +82,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -331,8 +331,8 @@ public class ParameterPage extends WizardPage {
 				setMessage(getDescription(tableItem));
 				JRDesignDatasetParameter data = (JRDesignDatasetParameter) tableItem.getData();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
-					if (value instanceof String) {
-						data.setExpression(ExprUtil.setValues(data.getExpression(), value));
+					if (value instanceof JRExpression) {
+						data.setExpression((JRExpression) value);
 					}
 				}
 				if ("NAME".equals(property)) { //$NON-NLS-1$

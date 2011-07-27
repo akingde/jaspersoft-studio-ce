@@ -227,7 +227,7 @@ public class WizardBandGroupPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 
-				String mexp = (String) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
+				JRDesignExpression mexp = (JRDesignExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
 
 				wizard.setValue(mexp);
 				WizardDialog dialog = new WizardDialog(dsExprDialog.getShell(), wizard);
@@ -236,7 +236,7 @@ public class WizardBandGroupPage extends WizardPage {
 					mexp = wizard.getValue();
 					group.setPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION, mexp);
 
-					dsExpr.setText(mexp);
+					dsExpr.setText(mexp.getText());
 				}
 			}
 

@@ -24,6 +24,7 @@
 package com.jaspersoft.studio.html.parts;
 
 import net.sf.jasperreports.components.html.HtmlComponent;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -44,7 +45,7 @@ public class HtmlFigureEditPart extends FigureEditPart {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			JRExpressionEditor wizard = new JRExpressionEditor();
 			MHtml m = (MHtml) getModel();
-			wizard.setValue((String) m
+			wizard.setValue((JRDesignExpression) m
 					.getPropertyValue(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION));
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);

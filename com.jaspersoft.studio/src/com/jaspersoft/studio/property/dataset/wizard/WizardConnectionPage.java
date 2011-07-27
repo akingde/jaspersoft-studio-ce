@@ -128,7 +128,8 @@ public class WizardConnectionPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 
-				String mexp = (String) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION);
+				JRDesignExpression mexp = (JRDesignExpression) datasetrun
+						.getPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION);
 
 				wizard.setValue(mexp);
 				WizardDialog dialog = new WizardDialog(connExprDialog.getShell(), wizard);
@@ -138,7 +139,7 @@ public class WizardConnectionPage extends WizardPage {
 					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, mexp);
 					datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION, null);
 
-					connExpr.setText(mexp);
+					connExpr.setText(mexp.getText());
 				}
 			}
 
@@ -201,7 +202,8 @@ public class WizardConnectionPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 
-				String mexp = (String) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION);
+				JRDesignExpression mexp = (JRDesignExpression) datasetrun
+						.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION);
 
 				wizard.setValue(mexp);
 				WizardDialog dialog = new WizardDialog(dsExprDialog.getShell(), wizard);

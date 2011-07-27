@@ -172,7 +172,7 @@ public class MGroup extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignGroup.PROPERTY_NAME))
 			jrGroup.setName((String) value);
 		else if (id.equals(JRDesignGroup.PROPERTY_EXPRESSION))
-			jrGroup.setExpression(ExprUtil.setValues(jrGroup.getExpression(), value));
+			jrGroup.setExpression(ExprUtil.setValues(jrGroup.getExpression(), value, null));
 	}
 
 	/**

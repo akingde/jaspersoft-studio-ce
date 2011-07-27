@@ -57,6 +57,14 @@ public class PropertiesHelper {
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 	}
 
+	public void setString(String key, String value, String scope) {
+		service.getRootNode().node(scope).node(qualifier).put(key, value);
+	}
+
+	public void setBoolean(String key, boolean value, String scope) {
+		service.getRootNode().node(scope).node(qualifier).putBoolean(key, value);
+	}
+
 	public void setProperties(JasperDesign jd) {
 		JRPropertiesMap map = jd.getPropertiesMap();
 		List<PropertySuffix> lst = JRProperties.getProperties("");

@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignHyperlinkParameter;
@@ -233,8 +234,8 @@ public class ParameterPage extends WizardPage {
 				setMessage(getDescription());
 				JRDesignHyperlinkParameter data = (JRDesignHyperlinkParameter) tableItem.getData();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
-					if (value instanceof String) {
-						data.setValueExpression(ExprUtil.setValues(data.getValueExpression(), value));
+					if (value instanceof JRExpression) {
+						data.setValueExpression((JRExpression) value);
 					} else {
 						value.getClass();
 					}

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignSubreportParameter;
@@ -46,7 +47,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -215,8 +215,8 @@ public class SubreportPropertyPage extends WizardPage {
 				setMessage(getDescription());
 				JRDesignSubreportParameter data = (JRDesignSubreportParameter) tableItem.getData();
 				if ("VALUE".equals(property)) { //$NON-NLS-1$
-					if (value instanceof String) {
-						data.setExpression(ExprUtil.setValues(data.getExpression(), value));
+					if (value instanceof JRExpression) {
+						data.setExpression((JRExpression) value);
 					}
 				} else if ("NAME".equals(property)) { //$NON-NLS-1$
 					List<JRDesignSubreportParameter> plist = (List<JRDesignSubreportParameter>) tableViewer.getInput();

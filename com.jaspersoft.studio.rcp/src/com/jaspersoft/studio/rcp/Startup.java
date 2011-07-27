@@ -32,14 +32,18 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.ui.IStartup;
 
+import com.jaspersoft.studio.rcp.heartbeat.Heartbeat;
 import com.jaspersoft.studio.rcp.messages.Messages;
 
 /**
@@ -89,6 +93,19 @@ public class Startup implements IStartup {
 		} finally {
 			monitor.done();
 		}
+
+		Job job = new Job("Check New Version") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+
+				Heartbeat.run();
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.setSystem(true);
+		job.schedule();
+
 	}
 
 }

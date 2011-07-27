@@ -23,7 +23,7 @@ package com.jaspersoft.studio.editor.preview;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapter;
@@ -122,7 +122,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 	 */
 	private DataAdapterDescriptor dataAdapterDesc;
 
-	private Map<String, Object> jasperParameters = new Hashtable<String, Object>();
+	private Map<String, Object> jasperParameters = new HashMap<String, Object>();
 
 	private Throwable fillError = null;
 	private DatasourceComboItem dataSourceWidget;
@@ -266,7 +266,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 	@Override
 	public void setNotRunning(boolean norun) {
 		super.setNotRunning(norun);
-		dataSourceWidget.refresh(true);
+		dataSourceWidget.refresh(false);
 		reloadAction.setEnabled(norun);
 		showParametersAction.setEnabled(norun);
 	}

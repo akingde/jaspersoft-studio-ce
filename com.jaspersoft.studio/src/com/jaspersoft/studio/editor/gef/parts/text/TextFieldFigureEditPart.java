@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.editor.gef.parts.text;
 
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 
 import org.eclipse.gef.Request;
@@ -43,7 +44,7 @@ public class TextFieldFigureEditPart extends FigureEditPart {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			JRExpressionEditor wizard = new JRExpressionEditor();
 			MTextField m = (MTextField) getModel();
-			wizard.setValue((String) m.getPropertyValue(JRDesignTextField.PROPERTY_EXPRESSION));
+			wizard.setValue((JRDesignExpression) m.getPropertyValue(JRDesignTextField.PROPERTY_EXPRESSION));
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
