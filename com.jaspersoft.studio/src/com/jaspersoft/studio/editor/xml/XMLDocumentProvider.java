@@ -1,30 +1,25 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.xml;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -56,9 +51,11 @@ import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.editor.JrxmlEditor;
-/*/*
- * The Class XMLDocumentProvider.
+
+/*
+ * /* The Class XMLDocumentProvider.
  */
 public class XMLDocumentProvider extends FileDocumentProvider {
 
@@ -67,6 +64,7 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	 * 
 	 * @see org.eclipse.ui.editors.text.StorageDocumentProvider#createDocument(java.lang.Object)
 	 */
+	@Override
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
 		if (document != null) {
@@ -92,27 +90,21 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	 *           if the given editor input cannot be accessed
 	 * @since 2.0
 	 */
+	@Override
 	protected boolean setDocumentContent(IDocument document, IEditorInput editorInput, String encoding)
 			throws CoreException {
 		InputStream stream = null;
 		try {
-
-			if (editorInput instanceof FileStoreEditorInput) {
-				String path = ((FileStoreEditorInput) editorInput).getURI().getPath();
-				stream = new FileInputStream(path);
-				setDocumentContent(document, JrxmlEditor.getXML(editorInput, encoding, stream), encoding);
-				return true;
-			} else if (editorInput instanceof IFileEditorInput) {
+			if (editorInput instanceof IFileEditorInput) {
 				String fileExtention = JrxmlEditor.getFileExtension(editorInput);
 				if (fileExtention.equals("jasper")) { //$NON-NLS-1$
 					IFile file = ((IFileEditorInput) editorInput).getFile();
 					stream = file.getContents(false);
-					setDocumentContent(document, JrxmlEditor.getXML(editorInput, encoding, stream), encoding);
+					setDocumentContent(document,
+							JrxmlEditor.getXML(editorInput, encoding, stream, JRXmlWriterHelper.LAST_VERSION), encoding);
 				} else
 					return super.setDocumentContent(document, editorInput, encoding);
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (JRException e) {
 			e.printStackTrace();
 		} finally {

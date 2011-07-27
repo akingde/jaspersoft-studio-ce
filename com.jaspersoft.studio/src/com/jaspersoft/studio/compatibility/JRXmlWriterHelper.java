@@ -91,6 +91,9 @@ public class JRXmlWriterHelper {
 
 	public static String writeReport(JRReport report, IFile file, String encoding, String version) throws Exception {
 		encoding = fixencoding(encoding);
+		if (!writers.containsKey(version)) {
+			version = LAST_VERSION;
+		}
 		if (writers.containsKey(version)) {
 			Class<? extends JRXmlWriter> clazz = writers.get(version);
 			if (clazz != null)
@@ -122,9 +125,10 @@ public class JRXmlWriterHelper {
 				version = dialog.getVersion();
 			}
 		}
-		if(version == "last")
-			return "4_0_2";
+		if (version == "last")
+			return LAST_VERSION;
 		return version;
 	}
 
+	public static final String LAST_VERSION = "4_0_2";
 }

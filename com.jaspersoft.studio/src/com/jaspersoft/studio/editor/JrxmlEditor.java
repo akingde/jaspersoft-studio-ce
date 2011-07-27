@@ -22,7 +22,6 @@ package com.jaspersoft.studio.editor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -33,7 +32,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.engine.xml.JRXmlWriter;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -292,7 +290,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void doSave(IProgressMonitor monitor) {
 		IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
 		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor || !modelFresh) {
-			String version = JRXmlWriterHelper.getVersion(resource, p, true);
+			version = JRXmlWriterHelper.getVersion(resource, p, true);
 			model2xml(version);
 		} else {
 			try { // just go thru the model, to look what happend with our markers
@@ -404,7 +402,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 			JasperDesign jd = null;
 
-			in = JrxmlEditor.getXML(editorInput, file.getCharset(true), in);
+			in = getXML(editorInput, file.getCharset(true), in, version);
 			jd = JRXmlLoader.load(in);
 			setModel(ReportFactory.createReport(jd, file));
 		} catch (JRException e) {
@@ -436,15 +434,21 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		return fileExtention;
 	}
 
-	public static InputStream getXML(IEditorInput editorInput, String encoding, InputStream in) throws JRException {
+	public static InputStream getXML(IEditorInput editorInput, String encoding, InputStream in, String version)
+			throws JRException {
 		String fileExtension = getFileExtension(editorInput);
 		if (fileExtension.equals("jasper")) { //$NON-NLS-1$
 			JasperReport report = (JasperReport) JRLoader.loadObject(in);
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			JRXmlWriter.writeReport(report, outputStream, encoding);
-			return new ByteArrayInputStream(outputStream.toByteArray());
-		} else
-			return in;
+			// ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			String str;
+			try {
+				str = JRXmlWriterHelper.writeReport(report, null, JRXmlWriterHelper.fixencoding(encoding), version);
+				return new ByteArrayInputStream(str.getBytes());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return in;
 	}
 
 	/**
@@ -562,6 +566,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	private int activePage = 0;
 
 	private PropertiesHelper p;
+
+	private String version = "last";
 
 	/**
 	 * Xml2model.

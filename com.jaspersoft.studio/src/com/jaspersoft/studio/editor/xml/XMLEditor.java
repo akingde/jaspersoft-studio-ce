@@ -35,6 +35,7 @@ public class XMLEditor extends TextEditor {
 
 	/** The action registry. */
 	private ActionRegistry actionRegistry = new ActionRegistry() {
+		@Override
 		public org.eclipse.jface.action.IAction getAction(Object key) {
 			return XMLEditor.this.getAction((String) key);
 		};
@@ -55,6 +56,7 @@ public class XMLEditor extends TextEditor {
 	 * 
 	 * @see org.eclipse.ui.editors.text.TextEditor#dispose()
 	 */
+	@Override
 	public void dispose() {
 		colorManager.dispose();
 		super.dispose();
