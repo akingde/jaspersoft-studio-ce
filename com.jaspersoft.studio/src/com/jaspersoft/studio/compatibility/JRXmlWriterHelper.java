@@ -46,6 +46,7 @@ public class JRXmlWriterHelper {
 	private static final Map<String, Class<? extends JRXmlWriter>> writers = new HashMap<String, Class<? extends JRXmlWriter>>();
 
 	static {
+		writers.put("4_0_2", JRXmlWriter_4_0_2.class);
 		writers.put("4_0_1", JRXmlWriter_4_0_1.class);
 		writers.put("3_7_4", JRXmlWriter_3_7_4.class);
 		writers.put("3_7_3", JRXmlWriter_3_7_3.class);
@@ -121,6 +122,8 @@ public class JRXmlWriterHelper {
 				version = dialog.getVersion();
 			}
 		}
+		if(version == "last")
+			return "4_0_2";
 		return version;
 	}
 

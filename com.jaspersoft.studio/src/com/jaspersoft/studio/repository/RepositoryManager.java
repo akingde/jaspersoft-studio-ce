@@ -22,7 +22,6 @@ package com.jaspersoft.studio.repository;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,11 +41,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.data.JRCsvDataSource;
-import net.sf.jasperreports.engine.data.JRXlsDataSource;
-import net.sf.jasperreports.engine.data.JRXmlDataSource;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -328,62 +322,4 @@ public class RepositoryManager {
 		return driver;
 	}
 
-	public static JRDataSource createFileDataSource(InputStream io, MFileDataSource datasource) {
-		JRCsvDataSource jrds = new JRCsvDataSource(io);
-		String p = (String) datasource.getPropertyValue(MFileDataSource.PROPERTY_RECORDDELIMITER);
-		String crlf = p.replace("\\r", "\r").replace("\\n", "\n").replace("\\t", "\t"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		jrds.setRecordDelimiter(crlf);
-
-		char c = (Character) datasource.getPropertyValue(MFileDataSource.PROPERTY_COLUMNDELIMITER);
-		jrds.setFieldDelimiter(c);
-
-		boolean b = (Boolean) datasource.getPropertyValue(MFileDataSource.PROPERTY_FIRSTROWASHEADER);
-		jrds.setUseFirstRowAsHeader(b);
-
-		p = (String) datasource.getPropertyValue(MFileDataSource.PROPERTY_COLUMNNAMES);
-		if (p != null && !p.trim().equals("")) { //$NON-NLS-1$
-			p = p.replaceAll(" ", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			StringTokenizer st = new StringTokenizer(p, ","); //$NON-NLS-1$
-			List<String> cols = new ArrayList<String>();
-			while (st.hasMoreTokens()) {
-				String nextToken = st.nextToken();
-				nextToken = nextToken.replace('"', ' ').trim();
-				cols.add(nextToken);
-			}
-			jrds.setColumnNames(cols.toArray(new String[cols.size()]));
-			// .setColumnNames(new String[] { "city", "id", "name", "address", "state" });
-		}
-		return jrds;
-	}
-
-	public static JRDataSource createXlsDataSource(InputStream io, MXLSDataSource datasource) throws JRException,
-			IOException {
-		JRXlsDataSource jrds = new JRXlsDataSource(io);
-
-		boolean b = (Boolean) datasource.getPropertyValue(MXLSDataSource.PROPERTY_FIRSTROWASHEADER);
-		jrds.setUseFirstRowAsHeader(b);
-
-		String p = (String) datasource.getPropertyValue(MXLSDataSource.PROPERTY_COLUMNNAMES);
-		if (p != null && !p.trim().equals("")) { //$NON-NLS-1$
-			p = p.replaceAll(" ", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			StringTokenizer st = new StringTokenizer(p, ","); //$NON-NLS-1$
-			List<String> cols = new ArrayList<String>();
-			while (st.hasMoreTokens()) {
-				String nextToken = st.nextToken();
-				nextToken = nextToken.replace('"', ' ').trim();
-				cols.add(nextToken);
-			}
-			jrds.setColumnNames(cols.toArray(new String[cols.size()]));
-			// .setColumnNames(new String[] { "city", "id", "name", "address", "state" });
-			// FIXME
-			// jrds.setColumnIndexes(columnIndexes);
-			// jrds.setColumnNames(columnNames, columnIndexes)
-		}
-		return jrds;
-	}
-
-	public static JRDataSource createXMLDataSource(IEditorPart editorPart, InputStream io, String select)
-			throws JRException {
-		return new JRXmlDataSource(io, select);
-	}
 }
