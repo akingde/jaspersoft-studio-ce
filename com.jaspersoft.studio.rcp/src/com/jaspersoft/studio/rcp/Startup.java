@@ -43,6 +43,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.ui.IStartup;
 
+import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.rcp.heartbeat.Heartbeat;
 import com.jaspersoft.studio.rcp.messages.Messages;
 
@@ -53,7 +54,7 @@ public class Startup implements IStartup {
 
 	public void earlyStartup() {
 		IProject project = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject("MyReports"); //$NON-NLS-1$
+				.getProject(JrxmlEditor.DEFAULT_PROJECT); //$NON-NLS-1$
 		IProgressMonitor monitor = new NullProgressMonitor();
 		try {
 			if (!project.exists()) {

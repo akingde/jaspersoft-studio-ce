@@ -22,11 +22,11 @@
    <extension
          point="com.jaspersoft.studio.queryDesigner">
       <queryDesigner
-            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.sql.SQLQueryDesigner"
+            QueryDesignerClass="com.jaspersoft.studio.data.QueryDesigner"
             language="sql">
       </queryDesigner>
       <queryDesigner
-            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.sql.SQLQueryDesigner"
+            QueryDesignerClass="com.jaspersoft.studio.data.QueryDesigner"
             language="SQL">
       </queryDesigner>
       <queryDesigner

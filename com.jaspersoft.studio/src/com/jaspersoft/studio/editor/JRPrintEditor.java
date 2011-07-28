@@ -275,7 +275,7 @@ public class JRPrintEditor extends EditorPart {
 					}
 				}
 				if (project == null)
-					ResourcesPlugin.getWorkspace().getRoot().getProject("JSSPROJECT");
+					ResourcesPlugin.getWorkspace().getRoot().getProject(JrxmlEditor.DEFAULT_PROJECT);
 				// Create a project if one doesn't exist and open it.
 				if (!project.exists())
 					project.create(null);

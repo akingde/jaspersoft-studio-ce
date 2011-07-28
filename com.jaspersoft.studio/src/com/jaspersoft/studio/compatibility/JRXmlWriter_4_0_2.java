@@ -216,6 +216,8 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 	protected JRXmlWriter_4_0_2(JRReport report, String encoding)
 	{
 		super(report, encoding);
+		this.report = report;
+		this.encoding = encoding;
 	}
 
 

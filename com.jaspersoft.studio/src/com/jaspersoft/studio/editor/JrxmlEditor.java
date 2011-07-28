@@ -91,6 +91,8 @@ import com.jaspersoft.studio.utils.UIUtils;
  */
 public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor {
 
+	public static final String DEFAULT_PROJECT = "MyReports";
+
 	/**
 	 * The listener interface for receiving modelPropertyChange events. The class that is interested in processing a
 	 * modelPropertyChange event implements this interface, and the object created with that class is registered with a
@@ -372,7 +374,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					}
 				}
 				if (project == null)
-					ResourcesPlugin.getWorkspace().getRoot().getProject("JSSPROJECT");
+					project = ResourcesPlugin.getWorkspace().getRoot().getProject(DEFAULT_PROJECT);
 				// Create a project if one doesn't exist and open it.
 				if (!project.exists())
 					project.create(null);
