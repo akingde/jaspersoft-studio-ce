@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.swt.widgets.PropertiesComponent;
 import com.jaspersoft.studio.utils.Misc;
@@ -56,54 +57,54 @@ public class JDBCDataAdapterComposite extends Composite {
 	private JDBCDriverDefinition currentdriver = null;
 
 	private static JDBCDriverDefinition[] definitions = new JDBCDriverDefinition[] {
-			new JDBCDriverDefinition("Cloudscape", "COM.cloudscape.JDBCDriver",
-					"jdbc:cloudscape:/{1}"),
-			new JDBCDriverDefinition("IBM DB2",
-					"COM.ibm.db2.jdbc.app.DB2Driver", "jdbc:db2:{0}/{1}"),
-			new JDBCDriverDefinition("inetdae7", "com.inet.tds.TdsDriver",
-					"jdbc:inetdae7:{0}:1433/{1}"),
-			new JDBCDriverDefinition("Informix", "com.informix.jdbc.IfxDriver",
-					"jdbc:informix-sqli://{0}:informixserver={1}"),
-			new JDBCDriverDefinition("Ingres", "com.ingres.jdbc.IngresDriver",
-					"jdbc:ingres://{0}:II7/{1}"),
-			new JDBCDriverDefinition("HSQLDB (file)", "org.hsqldb.jdbcDriver",
-					"jdbc:hsqldb:[PATH_TO_DB_FILES]/{1}"),
-			new JDBCDriverDefinition("HSQLDB (server)",
-					"org.hsqldb.jdbcDriver", "jdbc:hsqldb:hsql://{0}"),
-			new JDBCDriverDefinition("JDBC-ODBC Bridge",
-					"sun.jdbc.odbc.JdbcOdbcDriver", "jdbc:odbc:{1}", "DSNAME"),
-			new JDBCDriverDefinition("JDBC-ODBC Bridge",
-					"com.ms.jdbc.odbc.JdbcOdbcDriver", "jdbc:odbc:{1}",
-					"DSNAME"),
-			new JDBCDriverDefinition("MS SQLServer",
-					"com.internetcds.jdbc.tds.Driver",
-					"jdbc:freetds:sqlserver://{0}/{1}"),
-			new JDBCDriverDefinition("MS SQLServer (2000)",
-					"com.microsoft.jdbc.sqlserver.SQLServerDriver",
-					"jdbc:microsoft:sqlserver://{0}:1433;DatabaseName={1}"),
-			new JDBCDriverDefinition("MS SQLServer (2005)",
-					"com.microsoft.sqlserver.jdbc.SQLServerDriver",
-					"jdbc:sqlserver://{0}:1433;databaseName={1}"),
-			new JDBCDriverDefinition("MS SQLServer",
-					"net.sourceforge.jtds.jdbc.Driver",
-					"jdbc:jtds:sqlserver://{0}/{1}"),
-			new JDBCDriverDefinition("MS SQLServer",
-					"com.merant.datadirect.jdbc.sqlserver.SQLServerDriver",
-					"jdbc:sqlserver://{0}:1433/{1}"),
-			new JDBCDriverDefinition("MySQL", "org.gjt.mm.mysql.Driver",
-					"jdbc:mysql://{0}/{1}"),
-			new JDBCDriverDefinition("MySQL", "com.mysql.jdbc.Driver",
-					"jdbc:mysql://{0}/{1}"),
-			new JDBCDriverDefinition("Oracle",
-					"oracle.jdbc.driver.OracleDriver",
-					"jdbc:oracle:thin:@{0}:1521:{1}"),
-			new JDBCDriverDefinition("PostgreSQL", "org.postgresql.Driver",
-					"jdbc:postgresql://{0}:5432/{1}"),
-			new JDBCDriverDefinition("Sybase",
-					"com.sybase.jdbc2.jdbc.SybDriver",
-					"jdbc:sybase:Tds:{0}:2638/{1}"),
-			new JDBCDriverDefinition("Vertica", "com.vertica.Driver",
-					"jdbc:vertica://{0}:5433/{1}") };
+			new JDBCDriverDefinition("Cloudscape", "COM.cloudscape.JDBCDriver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:cloudscape:/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("IBM DB2", //$NON-NLS-1$
+					"COM.ibm.db2.jdbc.app.DB2Driver", "jdbc:db2:{0}/{1}"), //$NON-NLS-1$ //$NON-NLS-2$
+			new JDBCDriverDefinition("inetdae7", "com.inet.tds.TdsDriver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:inetdae7:{0}:1433/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("Informix", "com.informix.jdbc.IfxDriver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:informix-sqli://{0}:informixserver={1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("Ingres", "com.ingres.jdbc.IngresDriver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:ingres://{0}:II7/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("HSQLDB (file)", "org.hsqldb.jdbcDriver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:hsqldb:[PATH_TO_DB_FILES]/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("HSQLDB (server)", //$NON-NLS-1$
+					"org.hsqldb.jdbcDriver", "jdbc:hsqldb:hsql://{0}"), //$NON-NLS-1$ //$NON-NLS-2$
+			new JDBCDriverDefinition("JDBC-ODBC Bridge", //$NON-NLS-1$
+					"sun.jdbc.odbc.JdbcOdbcDriver", "jdbc:odbc:{1}", "DSNAME"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			new JDBCDriverDefinition("JDBC-ODBC Bridge", //$NON-NLS-1$
+					"com.ms.jdbc.odbc.JdbcOdbcDriver", "jdbc:odbc:{1}", //$NON-NLS-1$ //$NON-NLS-2$
+					"DSNAME"), //$NON-NLS-1$
+			new JDBCDriverDefinition("MS SQLServer", //$NON-NLS-1$
+					"com.internetcds.jdbc.tds.Driver", //$NON-NLS-1$
+					"jdbc:freetds:sqlserver://{0}/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("MS SQLServer (2000)", //$NON-NLS-1$
+					"com.microsoft.jdbc.sqlserver.SQLServerDriver", //$NON-NLS-1$
+					"jdbc:microsoft:sqlserver://{0}:1433;DatabaseName={1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("MS SQLServer (2005)", //$NON-NLS-1$
+					"com.microsoft.sqlserver.jdbc.SQLServerDriver", //$NON-NLS-1$
+					"jdbc:sqlserver://{0}:1433;databaseName={1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("MS SQLServer", //$NON-NLS-1$
+					"net.sourceforge.jtds.jdbc.Driver", //$NON-NLS-1$
+					"jdbc:jtds:sqlserver://{0}/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("MS SQLServer", //$NON-NLS-1$
+					"com.merant.datadirect.jdbc.sqlserver.SQLServerDriver", //$NON-NLS-1$
+					"jdbc:sqlserver://{0}:1433/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("MySQL", "org.gjt.mm.mysql.Driver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:mysql://{0}/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("MySQL", "com.mysql.jdbc.Driver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:mysql://{0}/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("Oracle", //$NON-NLS-1$
+					"oracle.jdbc.driver.OracleDriver", //$NON-NLS-1$
+					"jdbc:oracle:thin:@{0}:1521:{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("PostgreSQL", "org.postgresql.Driver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:postgresql://{0}:5432/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("Sybase", //$NON-NLS-1$
+					"com.sybase.jdbc2.jdbc.SybDriver", //$NON-NLS-1$
+					"jdbc:sybase:Tds:{0}:2638/{1}"), //$NON-NLS-1$
+			new JDBCDriverDefinition("Vertica", "com.vertica.Driver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:vertica://{0}:5433/{1}") }; //$NON-NLS-1$
 	private ClasspathComponent cpath;
 	private PropertiesComponent cproperties;
 
@@ -120,7 +121,7 @@ public class JDBCDataAdapterComposite extends Composite {
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		lblNewLabel.setText("JDBC Driver");
+		lblNewLabel.setText(Messages.JDBCDataAdapterComposite_driverlabel);
 
 		comboJDBCDriver = new ComboViewer(this, SWT.NONE);
 		Combo combo = comboJDBCDriver.getCombo();
@@ -130,7 +131,7 @@ public class JDBCDataAdapterComposite extends Composite {
 		Label lblNewLabel_1 = new Label(this, SWT.NONE);
 		lblNewLabel_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		lblNewLabel_1.setText("JDBC Url");
+		lblNewLabel_1.setText(Messages.JDBCDataAdapterComposite_urllabel);
 
 		textJDBCUrl = new Text(this, SWT.BORDER);
 		textJDBCUrl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -174,7 +175,7 @@ public class JDBCDataAdapterComposite extends Composite {
 
 	private void createClasspathTab(CTabFolder tabFolder) {
 		CTabItem tbtmNewItem_1 = new CTabItem(tabFolder, SWT.NONE);
-		tbtmNewItem_1.setText("Driver Classpath");
+		tbtmNewItem_1.setText(Messages.JDBCDataAdapterComposite_classpath);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout());
@@ -187,7 +188,8 @@ public class JDBCDataAdapterComposite extends Composite {
 
 	private void createPropertiesTab(CTabFolder tabFolder) {
 		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.NONE);
-		tbtmNewItem.setText("Connection Properties");
+		tbtmNewItem
+				.setText(Messages.JDBCDataAdapterComposite_connectionproperties);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout());
@@ -201,7 +203,8 @@ public class JDBCDataAdapterComposite extends Composite {
 
 	private void createLocationTab(CTabFolder tabFolder) {
 		CTabItem tbtmNewItem_2 = new CTabItem(tabFolder, SWT.NONE);
-		tbtmNewItem_2.setText("Database Location");
+		tbtmNewItem_2
+				.setText(Messages.JDBCDataAdapterComposite_databaselocation);
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
@@ -211,7 +214,8 @@ public class JDBCDataAdapterComposite extends Composite {
 		Label lblServerAddress = new Label(composite, SWT.NONE);
 		lblServerAddress.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
 				false, false, 1, 1));
-		lblServerAddress.setText("Server Address");
+		lblServerAddress
+				.setText(Messages.JDBCDataAdapterComposite_serveraddress);
 
 		textServerAddress = new Text(composite, SWT.BORDER);
 		textServerAddress.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
@@ -220,7 +224,7 @@ public class JDBCDataAdapterComposite extends Composite {
 		Label lblDatabase = new Label(composite, SWT.NONE);
 		lblDatabase.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		lblDatabase.setText("Database");
+		lblDatabase.setText(Messages.JDBCDataAdapterComposite_database);
 
 		textDatabase = new Text(composite, SWT.BORDER);
 		textDatabase.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -242,7 +246,7 @@ public class JDBCDataAdapterComposite extends Composite {
 		Label lblUsername = new Label(composite, SWT.NONE);
 		lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		lblUsername.setText("Username");
+		lblUsername.setText(Messages.JDBCDataAdapterComposite_username);
 
 		textUsername = new Text(composite, SWT.BORDER);
 		textUsername.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -251,7 +255,7 @@ public class JDBCDataAdapterComposite extends Composite {
 		Label lblPassword = new Label(composite, SWT.NONE);
 		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
-		lblPassword.setText("Password");
+		lblPassword.setText(Messages.JDBCDataAdapterComposite_password);
 
 		textPassword = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 		textPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -265,7 +269,7 @@ public class JDBCDataAdapterComposite extends Composite {
 		lblAttentionPasswordsAre.setLayoutData(new GridData(SWT.LEFT,
 				SWT.CENTER, false, false, 2, 1));
 		lblAttentionPasswordsAre
-				.setText("Attention! Passwords are saved in clear text");
+				.setText(Messages.JDBCDataAdapterComposite_attention);
 
 	}
 
@@ -291,7 +295,7 @@ public class JDBCDataAdapterComposite extends Composite {
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc
 				.getDataAdapter();
 
-		String driverName = Misc.nvl(jdbcDataAdapter.getDriver(), "");
+		String driverName = Misc.nvl(jdbcDataAdapter.getDriver(), ""); //$NON-NLS-1$
 		comboJDBCDriver.getCombo().setText(driverName);
 
 		for (JDBCDriverDefinition d : definitions) {
@@ -299,13 +303,14 @@ public class JDBCDataAdapterComposite extends Composite {
 				currentdriver = d;
 		}
 
-		textUsername.setText(Misc.nvl(jdbcDataAdapter.getUsername(), ""));
-		textPassword.setText(Misc.nvl(jdbcDataAdapter.getPassword(), ""));
-		textJDBCUrl.setText(Misc.nvl(jdbcDataAdapter.getUrl(), ""));
+		textUsername.setText(Misc.nvl(jdbcDataAdapter.getUsername(), "")); //$NON-NLS-1$
+		textPassword.setText(Misc.nvl(jdbcDataAdapter.getPassword(), "")); //$NON-NLS-1$
 		textServerAddress.setText(Misc.nvl(jdbcDataAdapter.getServerAddress(),
-				""));
-		textDatabase.setText(Misc.nvl(jdbcDataAdapter.getDatabase(), ""));
+				"")); //$NON-NLS-1$
+		textDatabase.setText(Misc.nvl(jdbcDataAdapter.getDatabase(), "")); //$NON-NLS-1$
 		// btnSavePassword.setSelection(jdbcDataAdapter.isSavePassword());
+
+		textJDBCUrl.setText(Misc.nvl(jdbcDataAdapter.getUrl(), "")); //$NON-NLS-1$
 
 		cpath.setClasspaths(jdbcDataAdapter.getClasspath());
 		cproperties.setProperties(jdbcDataAdapter.getProperties());
@@ -334,6 +339,6 @@ public class JDBCDataAdapterComposite extends Composite {
 	}
 
 	public String getHelpContextId() {
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 }
