@@ -27,6 +27,16 @@ public class Messages extends NLS {
 	public static String BeanMappingTool_labeltitle;
 	public static String BeanMappingTool_selectfieldstitle;
 	public static String BeanMappingTool_toolname;
+	public static String JDBCDataAdapterComposite_attention;
+	public static String JDBCDataAdapterComposite_classpath;
+	public static String JDBCDataAdapterComposite_connectionproperties;
+	public static String JDBCDataAdapterComposite_database;
+	public static String JDBCDataAdapterComposite_databaselocation;
+	public static String JDBCDataAdapterComposite_driverlabel;
+	public static String JDBCDataAdapterComposite_password;
+	public static String JDBCDataAdapterComposite_serveraddress;
+	public static String JDBCDataAdapterComposite_urllabel;
+	public static String JDBCDataAdapterComposite_username;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
