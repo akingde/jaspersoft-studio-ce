@@ -118,7 +118,15 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		sf.setLayoutData(gd);
 		sf.setLayout(new GridLayout());
 
-		dataquery.createTop(sf, this);
+		CTabFolder ctf = dataquery.createTop(sf, this);
+		Composite c = dataquery.createToolbar(ctf);
+
+		int tabHeight = c.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+		tabHeight = Math.max(tabHeight, ctf.getTabHeight());
+		ctf.setTabHeight(tabHeight);
+
+		ctf.setTopRight(c);
+
 		dataquery.setDefaultDataAdapter(mreport);
 
 		createBottom(sf, toolkit);

@@ -153,15 +153,11 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		final String containerName = step1.getContainerFullPath().toPortableString();
 		final String fileName = step1.getFileName();
 
-		Job job = new Job("Create new Report") {
+		Job job = new Job("Creating the new Report") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				// IRunnableWithProgress op = new IRunnableWithProgress() {
-				// public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
-
 					doFinish(containerName, fileName, monitor);
-
 				} catch (CoreException e) {
 					UIUtils.showError(e);
 					return Status.CANCEL_STATUS;
@@ -171,16 +167,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		};
 		job.setUser(true);
 		job.schedule();
-		// try {
-		// getContainer().run(false, false, op);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// return false;
-		// } catch (InvocationTargetException e) {
-		// Throwable realException = e.getTargetException();
-		// UIUtils.showError(realException);
-		// return false;
-		// }
+
 		return true;
 	}
 
@@ -279,13 +266,19 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 			jb.setHeight(100);
 			jd.setPageFooter(jb);
 		}
-		DataAdapterDescriptor dataAdapter = step2.getDataAdapter();
-		if (dataAdapter != null)
-			jd.setProperty(MReport.DEFAULT_DATAADAPTER, dataAdapter.getName());
+		final JasperDesign jasper = jd;
+		Display.getDefault().syncExec(new Runnable() {
 
-		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step2, step3, step4);
-		new ReportGenerator().processTemplate(jd, step3.getFields(), step4.getFields());
+			public void run() {
+				DataAdapterDescriptor dataAdapter = step2.getDataAdapter();
+				if (dataAdapter != null)
+					jasper.setProperty(MReport.DEFAULT_DATAADAPTER, dataAdapter.getName());
 
+				DatasetWizard.setUpDataset(jasper.getMainDesignDataset(), step2, step3, step4);
+				new ReportGenerator().processTemplate(jasper, step3.getFields(), step4.getFields());
+
+			}
+		});
 		String contents;
 		try {
 			contents = JRXmlWriterHelper.writeReport(jd, reportFile, false);
@@ -293,8 +286,6 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
-
-		// String contents = JasperCompileManager.writeReportToXml(jd);
 		return null;
 	}
 

@@ -48,6 +48,7 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
@@ -110,8 +111,18 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 				WizardDataSourcePage.this.setFields(fields);
 			}
 		};
+		
 
-		dataquery.createTop(composite, this);
+		CTabFolder ctf = dataquery.createTop(composite, this);
+		
+		Composite c = dataquery.createToolbar(ctf);
+		
+		int tabHeight = c.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+		tabHeight = Math.max(tabHeight, ctf.getTabHeight());
+		ctf.setTabHeight(tabHeight);
+
+		ctf.setTopRight(c);
+
 		dataquery.setDataset(dataset);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
