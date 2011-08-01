@@ -129,6 +129,9 @@
                relationship="stack"
                relative="org.eclipse.ui.views.ProblemView">
          </view>
+         <hiddenToolBarItem
+               id="org.eclipse.ui.workbench.navigate">
+         </hiddenToolBarItem>
          <hiddenMenuItem
                id="org.eclipse.ui.run">
          </hiddenMenuItem>
