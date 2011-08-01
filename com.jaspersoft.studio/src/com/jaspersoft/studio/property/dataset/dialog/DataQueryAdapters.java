@@ -280,7 +280,7 @@ public abstract class DataQueryAdapters {
 						});
 
 					} catch (InvocationTargetException e) {
-						UIUtils.showError(e);
+						UIUtils.showError(e.getTargetException());
 					} catch (InterruptedException e) {
 						UIUtils.showError(e);
 					}

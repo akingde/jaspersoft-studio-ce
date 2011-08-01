@@ -22,7 +22,6 @@ package com.jaspersoft.studio.wizards;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -49,12 +48,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -65,6 +63,7 @@ import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
@@ -129,9 +128,9 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		if (page == step3) {
 			try {
 				// if we don't have fields, call getFields from the QueryDesigner automatically
-				if(step3.getFields() == null || step3.getFields().isEmpty())
+				if (step3.getFields() == null || step3.getFields().isEmpty())
 					step2.getFields();
-				
+
 				JRDesignDataset dataset = step2.getDataset();
 				if (dataset != null && dataset.getFieldsList() != null) {
 					step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
@@ -153,26 +152,35 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 	public boolean performFinish() {
 		final String containerName = step1.getContainerFullPath().toPortableString();
 		final String fileName = step1.getFileName();
-		IRunnableWithProgress op = new IRunnableWithProgress() {
-			public void run(IProgressMonitor monitor) throws InvocationTargetException {
+
+		Job job = new Job("Create new Report") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				// IRunnableWithProgress op = new IRunnableWithProgress() {
+				// public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
+
 					doFinish(containerName, fileName, monitor);
+
 				} catch (CoreException e) {
-					throw new InvocationTargetException(e);
-				} finally {
-					monitor.done();
+					UIUtils.showError(e);
+					return Status.CANCEL_STATUS;
 				}
+				return Status.OK_STATUS;
 			}
 		};
-		try {
-			getContainer().run(true, false, op);
-		} catch (InterruptedException e) {
-			return false;
-		} catch (InvocationTargetException e) {
-			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage()); //$NON-NLS-1$
-			return false;
-		}
+		job.setUser(true);
+		job.schedule();
+		// try {
+		// getContainer().run(false, false, op);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// return false;
+		// } catch (InvocationTargetException e) {
+		// Throwable realException = e.getTargetException();
+		// UIUtils.showError(realException);
+		// return false;
+		// }
 		return true;
 	}
 
@@ -205,7 +213,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		}
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing..."); //$NON-NLS-1$
-		getShell().getDisplay().asyncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
@@ -271,8 +279,10 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 			jb.setHeight(100);
 			jd.setPageFooter(jb);
 		}
-		jd.setProperty(MReport.DEFAULT_DATAADAPTER, step2.getDataAdapter().getName());
-		
+		DataAdapterDescriptor dataAdapter = step2.getDataAdapter();
+		if (dataAdapter != null)
+			jd.setProperty(MReport.DEFAULT_DATAADAPTER, dataAdapter.getName());
+
 		DatasetWizard.setUpDataset(jd.getMainDesignDataset(), step2, step3, step4);
 		new ReportGenerator().processTemplate(jd, step3.getFields(), step4.getFields());
 
@@ -283,7 +293,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
-		
+
 		// String contents = JasperCompileManager.writeReportToXml(jd);
 		return null;
 	}
