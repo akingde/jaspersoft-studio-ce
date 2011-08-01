@@ -279,9 +279,8 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 
 			}
 		});
-		String contents;
 		try {
-			contents = JRXmlWriterHelper.writeReport(jd, reportFile, false);
+			String contents = JRXmlWriterHelper.writeReport(jd, reportFile, false);
 			return new ByteArrayInputStream(contents.getBytes());
 		} catch (Exception e) {
 			UIUtils.showError(e);

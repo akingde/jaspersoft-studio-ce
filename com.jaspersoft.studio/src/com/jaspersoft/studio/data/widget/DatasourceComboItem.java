@@ -320,7 +320,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 		if (combo.getSelectionIndex() > 0) {
 
 			final DataAdapterDescriptor da = getDataAdapters().get(combo.getSelectionIndex() - 1);
-			Display.getDefault().syncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
 					selectedDA = da;
 					editor.runReport(da);
