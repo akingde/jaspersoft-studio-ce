@@ -48,6 +48,8 @@ public class Messages extends NLS {
 	public static String MTable_dataset_run;
 	public static String MTable_dataset_run_description;
 	public static String MTable_table_properties_category;
+	public static String MTable_whennodatadescription;
+	public static String MTable_whennodatalabel;
 	public static String MTableGroupFooter_group_footer;
 	public static String MTableGroupHeader_group_header;
 	public static String ReorderColumnCommand_reorder_columns;
