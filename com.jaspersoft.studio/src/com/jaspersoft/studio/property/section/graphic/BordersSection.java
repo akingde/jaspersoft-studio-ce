@@ -209,7 +209,8 @@ public class BordersSection extends AbstractSection {
 				cd.setText(Messages.common_line_color);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR));
 				RGB newColor = cd.open();
-				changeProperty(property, JRBasePen.PROPERTY_LINE_COLOR, newColor);
+				if (newColor != null)
+					changeProperty(property, JRBasePen.PROPERTY_LINE_COLOR, newColor);
 			}
 		});
 		GridData gd = new GridData();

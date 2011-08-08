@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.section.graphic;
 
@@ -56,6 +52,7 @@ import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.UIUtils;
+
 /*
  * The location section on the location tab.
  * 
@@ -114,7 +111,8 @@ public class LinePenSection extends AbstractSection {
 				cd.setText(Messages.common_line_color);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR));
 				RGB newColor = cd.open();
-				changeProperty(JRBasePen.PROPERTY_LINE_COLOR, newColor);
+				if (newColor != null)
+					changeProperty(JRBasePen.PROPERTY_LINE_COLOR, newColor);
 			}
 		});
 		gd = new GridData();
@@ -167,9 +165,10 @@ public class LinePenSection extends AbstractSection {
 
 			lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
 			Float propertyValue = (Float) element.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
-			
-			UIUtils.setSpinnerSelection( lineWidth , null, (int)((propertyValue == null) ? 0 : propertyValue.doubleValue() * Math.pow(10, 1)));
-			
+
+			UIUtils.setSpinnerSelection(lineWidth, null, (int) ((propertyValue == null) ? 0 : propertyValue.doubleValue()
+					* Math.pow(10, 1)));
+
 			lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
 		}
 		isRefreshing = false;

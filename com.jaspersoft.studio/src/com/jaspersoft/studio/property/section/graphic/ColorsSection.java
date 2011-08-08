@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.section.graphic;
 
@@ -46,6 +42,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+
 /*
  * The location section on the location tab.
  * 
@@ -70,7 +67,7 @@ public class ColorsSection extends AbstractSection {
 		GridLayout layout = new GridLayout(6, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_backcolor+":", SWT.RIGHT); //$NON-NLS-1$
+		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_backcolor + ":", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.widthHint = 100;
 		label.setLayoutData(gd);
@@ -82,14 +79,15 @@ public class ColorsSection extends AbstractSection {
 				cd.setText(Messages.ColorsSection_element_backcolor);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBaseStyle.PROPERTY_BACKCOLOR));
 				RGB newColor = cd.open();
-				changeProperty(JRBaseStyle.PROPERTY_BACKCOLOR, newColor);
+				if (newColor != null)
+					changeProperty(JRBaseStyle.PROPERTY_BACKCOLOR, newColor);
 			}
 		});
 		backButton.setToolTipText(Messages.ColorsSection_element_backcolor_tool_tip);
 		gd = new GridData();
 		gd.widthHint = 30;
 		backButton.setLayoutData(gd);
-		getWidgetFactory().createCLabel(composite, Messages.common_forecolor+":", SWT.RIGHT); //$NON-NLS-1$
+		getWidgetFactory().createCLabel(composite, Messages.common_forecolor + ":", SWT.RIGHT); //$NON-NLS-1$
 
 		foreButton = new Button(composite, SWT.FLAT);
 		foreButton.addSelectionListener(new SelectionAdapter() {
@@ -98,7 +96,8 @@ public class ColorsSection extends AbstractSection {
 				cd.setText(Messages.ColorsSection_element_forecolor);
 				cd.setRGB((RGB) getElement().getPropertyValue(JRBaseStyle.PROPERTY_FORECOLOR));
 				RGB newColor = cd.open();
-				changeProperty(JRBaseStyle.PROPERTY_FORECOLOR, newColor);
+				if (newColor != null)
+					changeProperty(JRBaseStyle.PROPERTY_FORECOLOR, newColor);
 			}
 		});
 		foreButton.setToolTipText(Messages.ColorsSection_element_forecolor_tool_tip);
@@ -106,7 +105,7 @@ public class ColorsSection extends AbstractSection {
 		gd.widthHint = 30;
 		foreButton.setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(composite, Messages.ColorsSection_transparency+":"); //$NON-NLS-1$
+		getWidgetFactory().createCLabel(composite, Messages.ColorsSection_transparency + ":"); //$NON-NLS-1$
 		modeType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		modeType.setItems(EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
 		modeType.addSelectionListener(new SelectionListener() {
