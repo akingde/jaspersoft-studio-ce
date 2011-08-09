@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="com.jaspersoft.studio.components">
+      <component
+            ClassFactory="com.jaspersoft.studio.components.barcode.BarcodeComponentFactory">
+      </component>
+      <component
+            ClassFactory="com.jaspersoft.studio.components.list.ListComponentFactory">
+      </component>
+       <component
+            ClassFactory="com.jaspersoft.studio.components.chart.ChartComponentFactory">
+      </component>
+      <component
+            ClassFactory="com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory">
+      </component>
+      <component
+            ClassFactory="com.jaspersoft.studio.components.table.TableComponentFactory">
+      </component>
+   </extension>
+
+</plugin>
