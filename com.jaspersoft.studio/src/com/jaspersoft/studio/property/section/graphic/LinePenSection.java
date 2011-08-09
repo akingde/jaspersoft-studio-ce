@@ -22,10 +22,6 @@ package com.jaspersoft.studio.property.section.graphic;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.type.LineStyleEnum;
 
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.gef.EditPart;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -39,10 +35,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLinePen;
@@ -66,25 +60,11 @@ public class LinePenSection extends AbstractSection {
 	private Spinner lineWidth;
 
 	@Override
-	protected void setInputC(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			Assert.isTrue(selection instanceof IStructuredSelection);
-			Object input = ((IStructuredSelection) selection).getFirstElement();
-			Assert.isTrue(input instanceof EditPart);
-			Object model = ((EditPart) input).getModel();
-			Assert.isTrue(model instanceof MGraphicElementLinePen || model instanceof MStyle);
-			model = ((APropertyNode) model).getPropertyValue(MGraphicElementLinePen.LINE_PEN);
-
-			EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
-			if (provider != null)
-				setEditDomain(provider.getEditDomain());
-			if (getElement() != model) {
-				if (getElement() != null)
-					getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
-				setElement((APropertyNode) model);
-				getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
-			}
-		}
+	protected APropertyNode getModelFromEditPart(Object item) {
+		APropertyNode model = super.getModelFromEditPart(item);
+		if (model != null && model instanceof MGraphicElementLinePen || model instanceof MStyle)
+			model = (APropertyNode) model.getPropertyValue(MGraphicElementLinePen.LINE_PEN);
+		return model;
 	}
 
 	/**
@@ -172,5 +152,10 @@ public class LinePenSection extends AbstractSection {
 			lineStyle.select(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
 		}
 		isRefreshing = false;
+	}
+
+	@Override
+	public boolean isDisposed() {
+		return lineWidth.isDisposed();
 	}
 }

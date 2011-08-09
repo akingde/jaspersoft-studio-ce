@@ -36,6 +36,9 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -340,28 +343,35 @@ public class BordersSection extends AbstractSection {
 
 	public void changeProperty(String prop, String property, Object newValue) {
 		if (!isRefreshing) {
-			APropertyNode m = getElement();
-			MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
-			if (prop.equals(property))
-				changeProperty(property, newValue, lb);
-			else {
-				if (prop.equals(JRBaseLineBox.PROPERTY_PADDING)) {
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN);
-					changeProperty(property, newValue, lp);
-				} else if (prop.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)) {
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
-					changeProperty(property, newValue, lp);
-				} else if (prop.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)) {
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
-					changeProperty(property, newValue, lp);
-				} else if (prop.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)) {
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
-					changeProperty(property, newValue, lp);
-				} else if (prop.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)) {
-					MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
-					changeProperty(property, newValue, lp);
+			CompoundCommand cc = new CompoundCommand("Change padding");
+			for (APropertyNode m : getElements()) {
+				MLineBox lb = (MLineBox) m.getPropertyValue(MGraphicElementLineBox.LINE_BOX);
+				Command c = null;
+				if (prop.equals(property))
+					c = changeProperty(property, newValue, lb);
+				else {
+					if (prop.equals(JRBaseLineBox.PROPERTY_PADDING)) {
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN);
+						c = changeProperty(property, newValue, lp);
+					} else if (prop.equals(JRBaseLineBox.PROPERTY_TOP_PADDING)) {
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_TOP);
+						c = changeProperty(property, newValue, lp);
+					} else if (prop.equals(JRBaseLineBox.PROPERTY_BOTTOM_PADDING)) {
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_BOTTOM);
+						c = changeProperty(property, newValue, lp);
+					} else if (prop.equals(JRBaseLineBox.PROPERTY_LEFT_PADDING)) {
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_LEFT);
+						c = changeProperty(property, newValue, lp);
+					} else if (prop.equals(JRBaseLineBox.PROPERTY_RIGHT_PADDING)) {
+						MLinePen lp = (MLinePen) lb.getPropertyValue(MLineBox.LINE_PEN_RIGHT);
+						c = changeProperty(property, newValue, lp);
+					}
 				}
+				if (c != null)
+					cc.add(c);
 			}
+			CommandStack cs = getEditDomain().getCommandStack();
+			cs.execute(cc);
 		}
 	}
 
@@ -435,5 +445,10 @@ public class BordersSection extends AbstractSection {
 	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);
 	private RectangleFigure borderPreview;
 	private Canvas square;
+
+	@Override
+	public boolean isDisposed() {
+		return rightBorder.isDisposed();
+	}
 
 }

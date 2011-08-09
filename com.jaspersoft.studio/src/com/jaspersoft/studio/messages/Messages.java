@@ -958,6 +958,14 @@ public class Messages extends NLS {
 	public static String ReloadAction_reload;
 	public static String ReloadAction_reload_description;
 	public static String ReloadAction_reload_tool_tip;
+	public static String ReportNewWizard_0;
+	public static String ReportNewWizard_1;
+	public static String ReportNewWizard_2;
+	public static String ReportNewWizard_3;
+	public static String ReportNewWizard_4;
+	public static String ReportNewWizard_5;
+	public static String ReportNewWizard_6;
+	public static String ReportNewWizard_7;
 	public static String ReportNewWizard_new_report;
 	public static String ReportNewWizardPage_container;
 	public static String ReportNewWizardPage_description;

@@ -345,7 +345,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 					selectCombo(index + 1);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				if (dataAdapters.size() > 0)
 					return dataAdapters.get(0);
 				return null;

@@ -143,4 +143,9 @@ public class ColorsSection extends AbstractSection {
 		}
 		isRefreshing = false;
 	}
+
+	@Override
+	public boolean isDisposed() {
+		return backButton.isDisposed();
+	}
 }
