@@ -163,6 +163,8 @@ public class CreateElementCommand extends Command {
 	 * @return the a node
 	 */
 	protected ANode fixPosition(ANode destNode, ANode srcNode, Rectangle position) {
+		if(position == null)
+			position = new Rectangle(0, 0, 70, 30);
 		// calculate position, fix position relative to parent
 		MBand band = ModelUtils.getBand4Point(destNode, new Point(position.x, position.y));
 		// set proposed bounds
