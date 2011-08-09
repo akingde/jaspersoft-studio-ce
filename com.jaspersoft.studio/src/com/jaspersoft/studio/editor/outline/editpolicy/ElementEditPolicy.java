@@ -38,7 +38,7 @@ public class ElementEditPolicy extends ComponentEditPolicy {
 	 */
 	@Override
 	protected Command createDeleteCommand(GroupRequest request) {
-		System.out.println("Delete edit policy" + getHost());
+		//System.out.println("Delete edit policy" + getHost());
 		if (request.getType() == REQ_DELETE && getHost() != null && getHost().getParent() != null) {
 			Object parent = getHost().getParent().getModel();
 			if (parent != null && parent instanceof ANode)
