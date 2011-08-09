@@ -22,47 +22,36 @@ package com.jaspersoft.studio.components.map.model;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.charts.type.EdgeEnum;
-import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardMapComponent;
-import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.component.ComponentKey;
-import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
 import com.jaspersoft.studio.components.map.MapNodeIconDescriptor;
 import com.jaspersoft.studio.components.map.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MGraphicElement;
-import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /**
  * 
  * @author sanda zaharia
- *
+ * 
  */
- public class MMap extends MGraphicElement {
+public class MMap extends MGraphicElement {
 
 	public MMap() {
 		super();
@@ -86,40 +75,98 @@ import com.jaspersoft.studio.utils.EnumHelper;
 		return iconDescriptor;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getDisplayText()
+	 */
+	@Override
+	public String getDisplayText() {
+		return getIconDescriptor().getTitle();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getImagePath()
+	 */
+	@Override
+	public ImageDescriptor getImagePath() {
+		return getIconDescriptor().getIcon16();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.jaspersoft.studio.model.MGeneric#getToolTip()
+	 */
+	@Override
+	public String getToolTip() {
+		return getIconDescriptor().getToolTip();
+	}
+
+	private IPropertyDescriptor[] descriptors;
+	private static Map<String, Object> defaultsMap;
+
+	@Override
+	public Map<String, Object> getDefaultsMap() {
+		return defaultsMap;
+	}
+
+	@Override
+	public IPropertyDescriptor[] getDescriptors() {
+		return descriptors;
+	}
+
+	@Override
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
+		descriptors = descriptors1;
+		defaultsMap = defaultsMap1;
+	}
+
 	/**
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor latitudeExprD = new JRExpressionPropertyDescriptor(
-				StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION, Messages.MMap_latitude);
-		latitudeExprD.setDescription(com.jaspersoft.studio.components.map.messages.Messages.MMap_latitude_description);
+				StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION,
+				Messages.MMap_latitude);
+		latitudeExprD.setDescription(Messages.MMap_latitude_description);
 		desc.add(latitudeExprD);
 
 		JRExpressionPropertyDescriptor longitudeExprD = new JRExpressionPropertyDescriptor(
-				StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION, Messages.MMap_longitude);
+				StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION,
+				Messages.MMap_longitude);
 		longitudeExprD.setDescription(Messages.MMap_longitude_description);
 		desc.add(longitudeExprD);
 
 		JRExpressionPropertyDescriptor zoomExprD = new JRExpressionPropertyDescriptor(
-				StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, Messages.MMap_zoom);
+				StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
+				Messages.MMap_zoom);
 		zoomExprD.setDescription(Messages.MMap_zoom_description);
 		desc.add(zoomExprD);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
-				StandardMapComponent.PROPERTY_EVALUATION_TIME, Messages.MMap_evaluation_time, EnumHelper.getEnumNames(
+				StandardMapComponent.PROPERTY_EVALUATION_TIME,
+				Messages.MMap_evaluation_time, EnumHelper.getEnumNames(
 						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
-		evaluationTimeD.setDescription(Messages.MMap_evaluation_time_description);
+		evaluationTimeD
+				.setDescription(Messages.MMap_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
-		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardMapComponent.PROPERTY_EVALUATION_GROUP,
+		evaluationGroupNameD = new RComboBoxPropertyDescriptor(
+				StandardMapComponent.PROPERTY_EVALUATION_GROUP,
 				Messages.MMap_evaluation_group, new String[] { "" }); //$NON-NLS-2$
-		evaluationGroupNameD.setDescription(Messages.MMap_evaluation_group_description);
+		evaluationGroupNameD
+				.setDescription(Messages.MMap_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
 		evaluationTimeD.setCategory(Messages.MMap_common_map_properties);
@@ -128,10 +175,57 @@ import com.jaspersoft.studio.utils.EnumHelper;
 		longitudeExprD.setCategory(Messages.MMap_common_map_properties);
 		zoomExprD.setCategory(Messages.MMap_common_map_properties);
 
-		defaultsMap.put(StandardMapComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
-		defaultsMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION, MapComponent.DEFAULT_ZOOM);
+		defaultsMap.put(StandardMapComponent.PROPERTY_EVALUATION_TIME,
+				EvaluationTimeEnum.NOW);
+		defaultsMap.put(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION,
+				MapComponent.DEFAULT_ZOOM);
 	}
-	
+
+	@Override
+	public Object getPropertyValue(Object id) {
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		StandardMapComponent component = (StandardMapComponent) jrElement
+				.getComponent();
+
+		if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
+			return EnumHelper.getValue(component.getEvaluationTime(), 1, false);
+		if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP))
+			return component.getEvaluationGroup();
+
+		if (id.equals(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION))
+			return ExprUtil.getExpression(component.getLongitudeExpression());
+		if (id.equals(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION))
+			return ExprUtil.getExpression(component.getLatitudeExpression());
+		if (id.equals(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION))
+			return ExprUtil.getExpression(component.getZoomExpression());
+		return super.getPropertyValue(id);
+	}
+
+	@Override
+	public void setPropertyValue(Object id, Object value) {
+		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
+		StandardMapComponent jrList = (StandardMapComponent) jrElement
+				.getComponent();
+
+		if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_TIME))
+			jrList.setEvaluationTime((EvaluationTimeEnum) EnumHelper
+					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
+		else if (id.equals(StandardMapComponent.PROPERTY_EVALUATION_GROUP))
+			jrList.setEvaluationGroup((String) value);
+		else if (id.equals(StandardMapComponent.PROPERTY_LONGITUDE_EXPRESSION)) {
+			jrList.setLongitudeExpression(ExprUtil.setValues(
+					jrList.getLongitudeExpression(), value, null));
+		} else if (id.equals(StandardMapComponent.PROPERTY_LATITUDE_EXPRESSION)) {
+			jrList.setLatitudeExpression(ExprUtil.setValues(
+					jrList.getLatitudeExpression(), value, null));
+
+		} else if (id.equals(StandardMapComponent.PROPERTY_ZOOM_EXPRESSION)) {
+			jrList.setZoomExpression(ExprUtil.setValues(
+					jrList.getZoomExpression(), value, null));
+
+		} else
+			super.setPropertyValue(id, value);
+	}
 
 	@Override
 	protected void setGroupItems(String[] items) {
@@ -147,11 +241,13 @@ import com.jaspersoft.studio.utils.EnumHelper;
 		if (getValue() != null) {
 			Object obj = getComponent();
 			if (obj instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport().removePropertyChangeListener(this);
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.removePropertyChangeListener(this);
 		} else if (value != null) {
 			Object obj = getComponent(value);
 			if (value instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport().addPropertyChangeListener(this);
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.addPropertyChangeListener(this);
 			super.setValue(value);
 			return;
 		}
@@ -169,7 +265,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 		}
 		return null;
 	}
-	
+
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement designMap = new JRDesignComponentElement();
@@ -184,11 +280,11 @@ import com.jaspersoft.studio.utils.EnumHelper;
 		exp3.setText("Integer.valueOf(" + MapComponent.DEFAULT_ZOOM + ")"); //$NON-NLS-1$
 		component.setZoomExpression(exp3);
 		designMap.setComponent(component);
-		designMap.setComponentKey(new ComponentKey(
-				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
-				"map")); //$NON-NLS-1$
+		designMap
+				.setComponentKey(new ComponentKey(
+						"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
+						"map")); //$NON-NLS-1$
 		return designMap;
 	}
 
-	
 }
