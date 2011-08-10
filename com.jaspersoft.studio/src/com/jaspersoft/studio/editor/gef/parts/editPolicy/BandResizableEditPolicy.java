@@ -91,7 +91,7 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
 
 		MoveHandle hand = new MoveHandle((GraphicalEditPart) getHost());
-		hand.setBorder(new Line1Border(ColorConstants.darkBlue, 3));
+		hand.setBorder(new Line1Border(ColorConstants.darkBlue, 4));
 
 		list.add(hand);
 		// NonResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), list);
