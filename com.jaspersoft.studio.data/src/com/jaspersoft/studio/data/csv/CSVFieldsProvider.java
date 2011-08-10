@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.data.csv;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,8 @@ public class CSVFieldsProvider implements IFieldsProvider {
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JRDataset reportDataset) throws JRException,
 			UnsupportedOperationException {
-		Map<String, Object> parameters = con.getParameters();
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		con.contributeParameters(parameters);
 		ParameterUtil.setParameters(reportDataset, parameters);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 2);
 

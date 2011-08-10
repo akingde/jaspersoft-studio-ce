@@ -25,6 +25,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,8 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JRDataset reportDataset) throws JRException,
 			UnsupportedOperationException {
-		Map<String, Object> parameters = con.getParameters();
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		con.contributeParameters(parameters);
 
 		ParameterUtil.setParameters(reportDataset, parameters);
 		parameters.put(JRJdbcQueryExecuterFactory.PROPERTY_JDBC_FETCH_SIZE, 0);

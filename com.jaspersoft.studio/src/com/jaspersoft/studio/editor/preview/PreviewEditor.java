@@ -209,9 +209,7 @@ public class PreviewEditor extends JRPrintEditor implements IDataAdapterRunnable
 						jasperParameters.remove(JRParameter.REPORT_CONNECTION);
 						jasperParameters.remove(JRParameter.REPORT_DATA_SOURCE);
 						// We let the data adapter to contribute its parameters.
-						Map<String, Object> dataAdapterParams = dataAdapterService.getParameters();
-
-						jasperParameters.putAll(dataAdapterParams);
+						dataAdapterService.contributeParameters(jasperParameters);
 
 						// We create the fillHandle to run the report based on the type of data adapter....
 						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameters);
