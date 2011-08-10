@@ -27,18 +27,18 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.AbstractHandle;
+import org.eclipse.gef.handles.MoveHandle;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
+import com.jaspersoft.studio.editor.gef.figures.borders.Line1Border;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementFeedbackFigure;
-import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
 /*
  * The Class BandResizableEditPolicy.
  */
@@ -60,11 +60,18 @@ public class CrosstabCellResizableEditPolicy extends ResizableEditPolicy {
 	@Override
 	protected List<AbstractHandle> createSelectionHandles() {
 		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.EAST));
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.WEST));
 
+		MoveHandle hand = new MoveHandle((GraphicalEditPart) getHost());
+		hand.setBorder(new Line1Border(ColorConstants.darkBlue, 4));
+
+		list.add(hand);
+		
+//		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
+//		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
+//		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
+//		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.EAST));
+//		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.WEST));
+//
 		return list;
 	}
 

@@ -201,7 +201,7 @@ public class BandResizeTracker extends SimpleDragTracker {
 	 * 
 	 * @see org.eclipse.gef.tools.AbstractTool#createOperationSet()
 	 */
-	protected List createOperationSet() {
+	protected List<EditPart> createOperationSet() {
 		List<EditPart> editparts = null;
 		if (editpart == null) {
 			editparts = Collections.emptyList();

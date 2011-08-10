@@ -22,12 +22,14 @@ package com.jaspersoft.studio.components.table.part.editpolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.AbstractHandle;
+import org.eclipse.gef.handles.MoveHandle;
 
-import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle2;
+import com.jaspersoft.studio.editor.gef.figures.borders.Line1Border;
+
 /*
  * The Class BandResizableEditPolicy.
  */
@@ -44,15 +46,27 @@ public class TableCellResizableEditPolicy extends ResizableEditPolicy {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.gef.editpolicies.ResizableEditPolicy#createSelectionHandles()
+	 * @see
+	 * org.eclipse.gef.editpolicies.ResizableEditPolicy#createSelectionHandles()
 	 */
 	@Override
 	protected List<AbstractHandle> createSelectionHandles() {
 		List<AbstractHandle> list = new ArrayList<AbstractHandle>();
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.NORTH));
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.EAST));
-		list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.WEST));
+
+		MoveHandle hand = new MoveHandle((GraphicalEditPart) getHost());
+		hand.setBorder(new Line1Border(ColorConstants.darkBlue, 4));
+
+		list.add(hand);
+
+		// List<AbstractHandle> list = new ArrayList<AbstractHandle>();
+		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(),
+		// PositionConstants.SOUTH));
+		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(),
+		// PositionConstants.NORTH));
+		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(),
+		// PositionConstants.EAST));
+		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(),
+		// PositionConstants.WEST));
 
 		return list;
 	}
