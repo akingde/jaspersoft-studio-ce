@@ -271,13 +271,13 @@ public class MMap extends MGraphicElement {
 		JRDesignComponentElement designMap = new JRDesignComponentElement();
 		StandardMapComponent component = new StandardMapComponent();
 		JRDesignExpression exp1 = new JRDesignExpression();
-		exp1.setText("Float.valueOf(0f)"); //$NON-NLS-1$
+		exp1.setText("0f"); //$NON-NLS-1$
 		JRDesignExpression exp2 = new JRDesignExpression();
-		exp2.setText("Float.valueOf(0f)"); //$NON-NLS-1$
+		exp2.setText("0f"); //$NON-NLS-1$
 		component.setLatitudeExpression(exp1);
 		component.setLongitudeExpression(exp2);
 		JRDesignExpression exp3 = new JRDesignExpression();
-		exp3.setText("Integer.valueOf(" + MapComponent.DEFAULT_ZOOM + ")"); //$NON-NLS-1$
+		exp3.setText(String.valueOf(MapComponent.DEFAULT_ZOOM));
 		component.setZoomExpression(exp3);
 		designMap.setComponent(component);
 		designMap
