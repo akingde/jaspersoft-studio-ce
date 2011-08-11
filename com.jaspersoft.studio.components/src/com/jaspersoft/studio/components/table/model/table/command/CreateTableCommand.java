@@ -19,6 +19,10 @@
  */
 package com.jaspersoft.studio.components.table.model.table.command;
 
+import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -33,6 +37,9 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+import com.jaspersoft.studio.model.dataset.command.CreateDatasetCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
+
 /*
  * link nodes & together.
  * 
@@ -44,13 +51,14 @@ public class CreateTableCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateTableCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
+	public CreateTableCommand(MElementGroup destNode, MGraphicElement srcNode,
+			int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -58,13 +66,14 @@ public class CreateTableCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateTableCommand(MFrame destNode, MGraphicElement srcNode, int index) {
+	public CreateTableCommand(MFrame destNode, MGraphicElement srcNode,
+			int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -72,11 +81,11 @@ public class CreateTableCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateTableCommand(MBand destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
@@ -86,15 +95,16 @@ public class CreateTableCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param position
-	 *          the position
+	 *            the position
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateTableCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
+	public CreateTableCommand(ANode destNode, MGraphicElement srcNode,
+			Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
 
@@ -105,13 +115,15 @@ public class CreateTableCommand extends CreateElementCommand {
 	protected void createObject() {
 		if (jrElement == null) {
 			TableWizard wizard = new TableWizard();
-			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+			WizardDialog dialog = new WizardDialog(Display.getDefault()
+					.getActiveShell(), wizard);
 			wizard.init(jasperDesign);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getTable();
 				if (srcNode.getValue() == null)
-					jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+					jrElement = srcNode.createJRElement(srcNode
+							.getJasperDesign());
 				else {
 					jrElement = (JRDesignElement) srcNode.getValue();
 				}
@@ -119,6 +131,35 @@ public class CreateTableCommand extends CreateElementCommand {
 					setElementBounds();
 			}
 		}
+		fixDatasetRun();
 	}
 
+	private void fixDatasetRun() {
+		if (jrElement != null) {
+			JRDesignComponentElement jrcElement = (JRDesignComponentElement) jrElement;
+			StandardTable jrTable = (StandardTable) jrcElement.getComponent();
+			String dsname = (String) jrTable.getDatasetRun().getDatasetName();
+			if (dsname == null || dsname.trim().isEmpty()) {
+				// create an empty dataset
+				JRDesignDataset jrDataset = new JRDesignDataset(false);
+				jrDataset.setName(ModelUtils.getDefaultName(
+						jasperDesign.getDatasetMap(), "Empty Dataset"));
+				datasetCommand = new CreateDatasetCommand(jasperDesign,
+						jrDataset);
+				datasetCommand.execute();
+				((JRDesignDatasetRun) jrTable.getDatasetRun())
+						.setDatasetName(jrDataset.getName());
+			}
+
+		}
+	}
+
+	private CreateDatasetCommand datasetCommand;
+
+	@Override
+	public void undo() {
+		if (datasetCommand != null)
+			datasetCommand.undo();
+		super.undo();
+	}
 }

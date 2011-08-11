@@ -197,10 +197,8 @@ public class MList extends MGraphicElement implements IPastable,
 						.getDatasetRun();
 				if (j == null) {
 					j = new JRDesignDatasetRun();
-					jrList.setDatasetRun(j);
 				}
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
-				setChildListener(mDatasetRun);
 			}
 			return mDatasetRun;
 
@@ -228,7 +226,14 @@ public class MList extends MGraphicElement implements IPastable,
 		else if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
 			((DesignListContents) jrList.getContents())
 					.setWidth((Integer) value);
-
+		else if (id.equals(PREFIX + "DATASET_RUN")) {
+			MDatasetRun mdr = (MDatasetRun) value;
+			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
+			if (dr.getDatasetName() != null)
+				jrList.setDatasetRun(dr);
+			else
+				jrList.setDatasetRun(null);
+		}
 		else
 			super.setPropertyValue(id, value);
 	}

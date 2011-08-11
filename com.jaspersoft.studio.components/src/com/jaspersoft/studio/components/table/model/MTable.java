@@ -189,6 +189,14 @@ public class MTable extends MGraphicElement implements IContainer,
 			jrTable.setWhenNoDataType((WhenNoDataTypeTableEnum) EnumHelper
 					.getSetValue(WhenNoDataTypeTableEnum.values(), value, 1,
 							true));
+		else if (id.equals(StandardTable.PROPERTY_DATASET_RUN)) {
+			MDatasetRun mdr = (MDatasetRun) value;
+			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
+			if (dr.getDatasetName() != null)
+				jrTable.setDatasetRun(dr);
+			else
+				jrTable.setDatasetRun(null);
+		}
 		super.setPropertyValue(id, value);
 	}
 

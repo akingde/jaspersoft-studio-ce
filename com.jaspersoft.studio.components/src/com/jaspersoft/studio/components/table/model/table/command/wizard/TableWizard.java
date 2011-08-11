@@ -63,7 +63,8 @@ public class TableWizard extends Wizard {
 		this.table = new MTable();
 		table.setValue(table.createJRElement(jasperDesign));
 
-		MDatasetRun mdataset = (MDatasetRun) table.getPropertyValue(StandardTable.PROPERTY_DATASET_RUN);
+		MDatasetRun mdataset = (MDatasetRun) table
+				.getPropertyValue(StandardTable.PROPERTY_DATASET_RUN);
 		if (mdataset == null)
 			mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
 
@@ -84,12 +85,14 @@ public class TableWizard extends Wizard {
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		String dsname = (String) step1.getDataSetRun().getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+		String dsname = (String) step1.getDataSetRun().getPropertyValue(
+				JRDesignDatasetRun.PROPERTY_DATASET_NAME);
 		if (page == step1 && jasperDesign.getDatasetsList().size() == 0)
 			page = step2;
 		if (page == step2) {
 			if (dsname != null && !dsname.equals(""))//$NON-NLS-1$
-				step3.setFields(new ArrayList<Object>(ModelUtils.getFields4Datasource(jasperDesign, dsname)));
+				step3.setFields(new ArrayList<Object>(ModelUtils
+						.getFields4Datasource(jasperDesign, dsname)));
 			else
 				page = step3;
 		}
@@ -101,22 +104,26 @@ public class TableWizard extends Wizard {
 		StandardTable tbl = CreateColumnCommand.getTable(table);
 		if (tbl != null && lst != null)
 			for (Object f : lst) {
-				StandardColumn col = CreateColumnCommand.addColumn(jasperDesign, tbl, step4.isTableHeader(),
-						step4.isTableFooter(), step4.isColumnHeader(), step4.isColumnFooter(), step4.isGroupHeader(),
+				StandardColumn col = CreateColumnCommand.addColumn(
+						jasperDesign, tbl, step4.isTableHeader(),
+						step4.isTableFooter(), step4.isColumnHeader(),
+						step4.isColumnFooter(), step4.isGroupHeader(),
 						step4.isGroupFooter());
 
 				DesignCell colHeadCell = (DesignCell) col.getColumnHeader();
 				DesignCell detCell = (DesignCell) col.getDetailCell();
 
 				if (step4.isColumnHeader()) {
-					JRDesignStaticText sText = (JRDesignStaticText) new MStaticText().createJRElement(jasperDesign);
+					JRDesignStaticText sText = (JRDesignStaticText) new MStaticText()
+							.createJRElement(jasperDesign);
 					sText.setWidth(col.getWidth());
 					sText.setHeight(colHeadCell.getHeight());
 					sText.setText(((JRField) f).getName());
 					colHeadCell.addElement(sText);
 				}
 
-				JRDesignTextField fText = (JRDesignTextField) new MTextField().createJRElement(jasperDesign);
+				JRDesignTextField fText = (JRDesignTextField) new MTextField()
+						.createJRElement(jasperDesign);
 				fText.setWidth(col.getWidth());
 				fText.setHeight(detCell.getHeight());
 				JRDesignExpression jre = new JRDesignExpression();
