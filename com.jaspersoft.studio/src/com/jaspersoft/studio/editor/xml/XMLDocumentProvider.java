@@ -44,7 +44,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
-import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.EditorsUI;
@@ -53,6 +52,7 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.xml.scanners.XMLPartitionScanner;
 
 /*
  * /* The Class XMLDocumentProvider.
@@ -67,12 +67,21 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 	@Override
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
-		if (document != null) {
-			IDocumentPartitioner partitioner = new FastPartitioner(new XMLPartitionScanner(), new String[] {
-					XMLPartitionScanner.XML_TAG, XMLPartitionScanner.XML_COMMENT });
-			partitioner.connect(document);
-			document.setDocumentPartitioner(partitioner);
-		}
+		if (document != null)
+    {
+			IDocumentPartitioner partitioner = new XMLPartitioner(new XMLPartitionScanner(), new String[]
+        {
+                XMLPartitionScanner.XML_START_TAG,
+                XMLPartitionScanner.XML_PI,
+                XMLPartitionScanner.XML_DOCTYPE,
+                XMLPartitionScanner.XML_END_TAG,
+                XMLPartitionScanner.XML_TEXT,
+                XMLPartitionScanner.XML_CDATA,
+                XMLPartitionScanner.XML_COMMENT
+        });
+        partitioner.connect(document);
+        document.setDocumentPartitioner(partitioner);
+    }
 		return document;
 	}
 

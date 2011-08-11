@@ -20,12 +20,10 @@
 package com.jaspersoft.studio.editor.xml;
 
 import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
-import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
+import com.jaspersoft.studio.editor.xml.outline.EditorContentOutlinePage;
 
 /*
  * The Class XMLEditor.
@@ -75,7 +73,7 @@ public class XMLEditor extends TextEditor {
 		return actionRegistry;
 	}
 
-	private IContentOutlinePage outlinePage;
+	private EditorContentOutlinePage outlinePage;
 
 	/*
 	 * (non-Javadoc)
@@ -94,9 +92,18 @@ public class XMLEditor extends TextEditor {
 
 	protected IContentOutlinePage getOutlineView() {
 		if (outlinePage == null) {
-			outlinePage = new EmptyOutlinePage();
-//			outlinePage = new XMLContentOutlinePage(this);
+			outlinePage = new EditorContentOutlinePage(this);
+			if (getEditorInput() != null)
+				outlinePage.setInput(getEditorInput());
 		}
 		return outlinePage;
+	}
+
+	@Override
+	protected void handleEditorInputChanged() {
+		super.handleEditorInputChanged();
+		if (outlinePage != null) {
+			outlinePage.update();
+		}
 	}
 }

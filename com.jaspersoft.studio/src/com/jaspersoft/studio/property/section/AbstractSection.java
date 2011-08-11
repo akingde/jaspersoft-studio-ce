@@ -24,7 +24,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -58,27 +57,28 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	protected void setInputC(IWorkbenchPart part, ISelection selection) {
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		element = null;
-		elements = new ArrayList<APropertyNode>();
-		List<?> selected = ((IStructuredSelection) selection).toList();
-		for (Object item : selected) {
-			if (item instanceof EditPart) {
-				APropertyNode model = getModelFromEditPart(item);
-				if (model != null) {
-					if (element == null) {
-						EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
-						if (provider != null)
-							setEditDomain(provider.getEditDomain());
-						if (getElement() != model) {
-							if (getElement() != null)
-								getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
-							setElement((APropertyNode) model);
-							getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+		if (selection instanceof IStructuredSelection) {
+			element = null;
+			elements = new ArrayList<APropertyNode>();
+			List<?> selected = ((IStructuredSelection) selection).toList();
+			for (Object item : selected) {
+				if (item instanceof EditPart) {
+					APropertyNode model = getModelFromEditPart(item);
+					if (model != null) {
+						if (element == null) {
+							EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);
+							if (provider != null)
+								setEditDomain(provider.getEditDomain());
+							if (getElement() != model) {
+								if (getElement() != null)
+									getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+								setElement((APropertyNode) model);
+								getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+							}
 						}
-					}
 
-					elements.add((APropertyNode) model);
+						elements.add((APropertyNode) model);
+					}
 				}
 			}
 		}
