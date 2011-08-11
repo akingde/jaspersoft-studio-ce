@@ -1,30 +1,32 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.xml;
 
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+
+import com.jaspersoft.studio.editor.outline.JDReportOutlineView;
+import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
+
 /*
  * The Class XMLEditor.
  */
@@ -73,6 +75,8 @@ public class XMLEditor extends TextEditor {
 		return actionRegistry;
 	}
 
+	private IContentOutlinePage outlinePage;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -80,10 +84,19 @@ public class XMLEditor extends TextEditor {
 	 */
 	@Override
 	public Object getAdapter(Class adapter) {
-		if (adapter == ActionRegistry.class) {
+		if (adapter == ActionRegistry.class)
 			return getActionRegistry();
-		}
+		if (IContentOutlinePage.class.equals(adapter))
+			return getOutlineView();
+
 		return super.getAdapter(adapter);
 	}
 
+	protected IContentOutlinePage getOutlineView() {
+		if (outlinePage == null) {
+			outlinePage = new EmptyOutlinePage();
+//			outlinePage = new XMLContentOutlinePage(this);
+		}
+		return outlinePage;
+	}
 }

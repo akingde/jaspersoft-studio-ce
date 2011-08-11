@@ -50,7 +50,6 @@ import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -71,6 +70,7 @@ import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.preview.PreviewEditor;
 import com.jaspersoft.studio.editor.report.ReportContainer;
@@ -231,7 +231,22 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void createPages() {
-		CTabFolder tbFolder = (CTabFolder) getContainer();
+//		CTabFolder ctfolder = (CTabFolder) getContainer();
+//		ctfolder.setUnselectedCloseVisible(true);
+//
+//		ToolBar toolBar = new ToolBar(ctfolder, SWT.FLAT | SWT.HORIZONTAL | SWT.WRAP | SWT.RIGHT);
+//		ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+//		item.setText("+ ");
+//		item = new ToolItem(toolBar, SWT.PUSH);
+//		item.setText("- ");
+//		item = new ToolItem(toolBar, SWT.PUSH);
+//		item.setText(">> ");
+//
+//		int tabHeight = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//		tabHeight = Math.max(tabHeight, ctfolder.getTabHeight());
+//		ctfolder.setTabHeight(tabHeight);
+//
+//		ctfolder.setTopRight(toolBar);
 
 		createPage0();
 		createPage1();
@@ -265,8 +280,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (outlinePage == null)
 			return;
 		IContentOutlinePage outline = null;
-		if (page == PAGE_DESIGNER)
-			outline = (IContentOutlinePage) reportContainer.getAdapter(IContentOutlinePage.class);
+
+		outline = (IContentOutlinePage) getEditor(page).getAdapter(IContentOutlinePage.class);
+		if (outline == null)
+			outline = new EmptyOutlinePage();
+
 		outlinePage.setPageActive(outline);
 
 	}
