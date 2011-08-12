@@ -31,9 +31,7 @@ import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomInRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomOutRetargetAction;
-import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -41,19 +39,12 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
-import org.eclipse.ui.ide.IDEActionFactory;
-import org.eclipse.ui.internal.handlers.IActionCommandMappingService;
-import org.eclipse.ui.menus.CommandContributionItem;
-import org.eclipse.ui.menus.CommandContributionItemParameter;
+import org.eclipse.ui.editors.text.TextEditorActionContributor;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
 import com.jaspersoft.studio.editor.action.snap.SizeGridAction;
 import com.jaspersoft.studio.editor.action.snap.SnapToGridAction;
@@ -89,7 +80,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	public JrxmlEditorContributor() {
 		super();
-		createActions();
 	}
 
 	/**
@@ -220,18 +210,11 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		removeZoom(bars.getToolBarManager());
 		bars.clearGlobalActionHandlers();
 		if (activeEditor instanceof ITextEditor) {
-			ITextEditor editor = (ITextEditor) activeEditor;
-			bars.setGlobalActionHandler(ActionFactory.DELETE.getId(), getAction(editor, ITextEditorActionConstants.DELETE));
-			bars.setGlobalActionHandler(ActionFactory.UNDO.getId(), getAction(editor, ITextEditorActionConstants.UNDO));
-			bars.setGlobalActionHandler(ActionFactory.REDO.getId(), getAction(editor, ITextEditorActionConstants.REDO));
-			bars.setGlobalActionHandler(ActionFactory.CUT.getId(), getAction(editor, ITextEditorActionConstants.CUT));
-			bars.setGlobalActionHandler(ActionFactory.COPY.getId(), getAction(editor, ITextEditorActionConstants.COPY));
-			bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), getAction(editor, ITextEditorActionConstants.PASTE));
-			bars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(),
-					getAction(editor, ITextEditorActionConstants.SELECT_ALL));
-			bars.setGlobalActionHandler(ActionFactory.FIND.getId(), getAction(editor, ITextEditorActionConstants.FIND));
-			bars.setGlobalActionHandler(IDEActionFactory.BOOKMARK.getId(),
-					getAction(editor, IDEActionFactory.BOOKMARK.getId()));
+			if (textEditorContributor == null) {
+				textEditorContributor = new TextEditorActionContributor();
+				textEditorContributor.init(bars, activeEditor.getSite().getPage());
+			}
+			textEditorContributor.setActiveEditor(activeEditor);
 		} else if (activeEditor instanceof ReportContainer || activeEditor instanceof AbstractVisualEditor) {
 			addZoom(bars.getToolBarManager());
 			if (activeEditor instanceof AbstractVisualEditor) {
@@ -245,6 +228,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 				for (String id : globalActionKeys) {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 				}
+
 		}
 		bars.updateActionBars();
 	}
@@ -260,25 +244,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	protected IAction getAction(ITextEditor editor, String actionID) {
 		return (editor == null ? null : editor.getAction(actionID));
-	}
-
-	/**
-	 * Creates the actions.
-	 */
-	private void createActions() {
-		// sampleAction = new Action() {
-		// public void run() {
-		// MessageDialog
-		// .openInformation(
-		// null,
-		//								"Jasper Studio", Messages.JrxmlEditorContributor_sample_action_executed); //$NON-NLS-1$
-		// }
-		// };
-		// sampleAction.setText(Messages.JrxmlEditorContributor_sample_action);
-		// sampleAction
-		// .setToolTipText(Messages.JrxmlEditorContributor_sample_action_tool_tip);
-		// sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-		// .getImageDescriptor(IDE.SharedImages.IMG_OBJS_TASK_TSK));
 	}
 
 	/**
@@ -334,10 +299,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	public void contributeToMenu(IMenuManager manager) {
 		super.contributeToMenu(manager);
-		if (manager.findUsingPath(IWorkbenchActionConstants.M_EDIT) == null) {
-			MenuManager editMenu = createEditMenu();
-			manager.insertAfter(IWorkbenchActionConstants.M_FILE, editMenu);
-		}
 
 		MenuManager viewMenu = new MenuManager(Messages.JrxmlEditorContributor_view);
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_IN));
@@ -360,42 +321,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 
 	}
 
-	/**
-	 * Creates and returns the Edit menu.
-	 * 
-	 * @return the menu manager
-	 */
-	private MenuManager createEditMenu() {
-		MenuManager menu = new MenuManager(Messages.JrxmlEditorContributor_edit, IWorkbenchActionConstants.M_EDIT);
-		menu.add(new GroupMarker(IWorkbenchActionConstants.EDIT_START));
-
-		menu.add(getAction(ActionFactory.UNDO.getId()));
-		menu.add(getAction(ActionFactory.REDO.getId()));
-		menu.add(new GroupMarker(IWorkbenchActionConstants.UNDO_EXT));
-		menu.add(new Separator());
-
-		menu.add(getCutItem());
-		menu.add(getCopyItem());
-		menu.add(getPasteItem());
-		menu.add(new GroupMarker(IWorkbenchActionConstants.CUT_EXT));
-		menu.add(new Separator());
-
-		menu.add(getAction(ActionFactory.DELETE.getId()));
-		menu.add(getSelectAllItem());
-		menu.add(new Separator());
-
-		menu.add(getFindItem());
-		menu.add(new GroupMarker(IWorkbenchActionConstants.FIND_EXT));
-		menu.add(new Separator());
-
-		menu.add(getBookmarkItem());
-		menu.add(getTaskItem());
-		menu.add(new GroupMarker(IWorkbenchActionConstants.ADD_EXT));
-
-		menu.add(new GroupMarker(IWorkbenchActionConstants.EDIT_END));
-		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-		return menu;
-	}
+	private TextEditorActionContributor textEditorContributor = null;
 
 	/*
 	 * (non-Javadoc)
@@ -405,6 +331,10 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 */
 	@Override
 	public void contributeToStatusLine(IStatusLineManager statusLineManager) {
+		super.contributeToStatusLine(statusLineManager);
+		if (textEditorContributor != null)
+			textEditorContributor.contributeToStatusLine(statusLineManager);
+
 		statusLineManager.setMessage(""); //$NON-NLS-1$
 	}
 
@@ -427,120 +357,4 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		registry = null;
 	}
 
-	/**
-	 * Gets the cut item.
-	 * 
-	 * @return the cut item
-	 */
-	private IContributionItem getCutItem() {
-		return getItem(ActionFactory.CUT.getId(), ActionFactory.CUT.getCommandId(), ISharedImages.IMG_TOOL_CUT,
-				ISharedImages.IMG_TOOL_CUT_DISABLED, Messages.common_cut, Messages.common_cut, null);
-	}
-
-	/**
-	 * Gets the copy item.
-	 * 
-	 * @return the copy item
-	 */
-	private IContributionItem getCopyItem() {
-		return getItem(ActionFactory.COPY.getId(), ActionFactory.COPY.getCommandId(), ISharedImages.IMG_TOOL_COPY,
-				ISharedImages.IMG_TOOL_COPY_DISABLED, Messages.common_copy, Messages.common_copy, null);
-	}
-
-	/**
-	 * Gets the paste item.
-	 * 
-	 * @return the paste item
-	 */
-	private IContributionItem getPasteItem() {
-		return getItem(ActionFactory.PASTE.getId(), ActionFactory.PASTE.getCommandId(), ISharedImages.IMG_TOOL_PASTE,
-				ISharedImages.IMG_TOOL_PASTE_DISABLED, Messages.common_paste, Messages.common_paste, null);
-	}
-
-	/**
-	 * Gets the select all item.
-	 * 
-	 * @return the select all item
-	 */
-	private IContributionItem getSelectAllItem() {
-		return getItem(ActionFactory.SELECT_ALL.getId(), ActionFactory.SELECT_ALL.getCommandId(), null, null,
-				Messages.JrxmlEditorContributor_select_all, Messages.JrxmlEditorContributor_select_all, null);
-	}
-
-	/**
-	 * Gets the find item.
-	 * 
-	 * @return the find item
-	 */
-	private IContributionItem getFindItem() {
-		return getItem(ActionFactory.FIND.getId(), ActionFactory.FIND.getCommandId(), null, null,
-				Messages.JrxmlEditorContributor_find_replace, Messages.JrxmlEditorContributor_find_replace, null);
-	}
-
-	/**
-	 * Gets the bookmark item.
-	 * 
-	 * @return the bookmark item
-	 */
-	private IContributionItem getBookmarkItem() {
-		return getItem(IDEActionFactory.BOOKMARK.getId(), IDEActionFactory.BOOKMARK.getCommandId(), null, null,
-				Messages.JrxmlEditorContributor_add_bookmark, Messages.JrxmlEditorContributor_add_bookmark, null);
-	}
-
-	/**
-	 * Gets the task item.
-	 * 
-	 * @return the task item
-	 */
-	private IContributionItem getTaskItem() {
-		return getItem(IDEActionFactory.ADD_TASK.getId(), IDEActionFactory.ADD_TASK.getCommandId(), null, null,
-				Messages.JrxmlEditorContributor_add_task, Messages.JrxmlEditorContributor_add_task, null);
-	}
-
-	/**
-	 * Gets the item.
-	 * 
-	 * @param actionId
-	 *          the action id
-	 * @param commandId
-	 *          the command id
-	 * @param image
-	 *          the image
-	 * @param disabledImage
-	 *          the disabled image
-	 * @param label
-	 *          the label
-	 * @param tooltip
-	 *          the tooltip
-	 * @param helpContextId
-	 *          the help context id
-	 * @return the item
-	 */
-	private IContributionItem getItem(String actionId, String commandId, String image, String disabledImage,
-			String label, String tooltip, String helpContextId) {
-		ISharedImages sharedImages = getWindow().getWorkbench().getSharedImages();
-
-		IActionCommandMappingService acms = (IActionCommandMappingService) getWindow().getService(
-				IActionCommandMappingService.class);
-		acms.map(actionId, commandId);
-
-		CommandContributionItemParameter commandParm = new CommandContributionItemParameter(getWindow(), actionId,
-				commandId, null, sharedImages.getImageDescriptor(image), sharedImages.getImageDescriptor(disabledImage), null,
-				label, null, tooltip, CommandContributionItem.STYLE_PUSH, null, false);
-		return new CommandContributionItem(commandParm);
-	}
-
-	/** The window. */
-	private IWorkbenchWindow window;
-
-	/**
-	 * Returns the window to which this action builder is contributing.
-	 * 
-	 * @return the window
-	 */
-	private IWorkbenchWindow getWindow() {
-		if (this.window == null)
-			this.window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		return window;
-	}
 }
