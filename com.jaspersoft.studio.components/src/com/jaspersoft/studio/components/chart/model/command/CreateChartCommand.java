@@ -26,7 +26,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.studio.components.chart.model.command.wizard.ChartWizard;
+import com.jaspersoft.studio.components.chart.wizard.ChartWizard;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;

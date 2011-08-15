@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.model.command.wizard;
+package com.jaspersoft.studio.components.chart.wizard;
 
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignChart;
