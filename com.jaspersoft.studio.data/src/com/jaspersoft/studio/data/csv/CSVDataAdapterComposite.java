@@ -63,8 +63,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.jface.dialogs.DataAdapterErrorDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
+import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
 
@@ -194,7 +194,7 @@ public class CSVDataAdapterComposite extends Composite {
 		composite_3.setBounds(0, 0, 64, 64);
 
 		tableViewer = new TableViewer(composite_3, SWT.BORDER
-				| SWT.FULL_SELECTION | SWT.MULTI);
+				| SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		tableViewer.setContentProvider(new CSVContentProvider());
 		tableViewer.setInput(rows);
 
@@ -235,6 +235,8 @@ public class CSVDataAdapterComposite extends Composite {
 		btnDelete.setLayoutData(gd_btnDelete);
 		btnDelete.setText("Delete");
 		btnDelete.setEnabled(false);
+
+		new ListOrderButtons().createOrderButtons(composite_4, tableViewer);
 
 		Group grpOther = new Group(composite_2, SWT.NONE);
 		grpOther.setText("Other");
@@ -739,7 +741,11 @@ public class CSVDataAdapterComposite extends Composite {
 			csvDataAdapter.setFieldDelimiter("\n");
 		else if (btnRadioFieldOther.getSelection())
 			csvDataAdapter.setFieldDelimiter(Misc
-					.removeSlashesString(textFieldOther.getText()));
+					.removeSlashesString(textFieldOther.getText() + " "));
+		if (csvDataAdapter.getFieldDelimiter() == null
+				|| csvDataAdapter.getFieldDelimiter().isEmpty())
+			;
+		csvDataAdapter.setFieldDelimiter(";");
 
 		if (btnRadioRowComma.getSelection())
 			csvDataAdapter.setRecordDelimiter(",");
@@ -957,7 +963,7 @@ public class CSVDataAdapterComposite extends Composite {
 		if (btnRadioFieldOther.getSelection())
 			ds.setFieldDelimiter(Misc.removeSlashesString(
 					textFieldOther.getText() + " ").charAt(0));
-		if (ds.getFieldDelimiter() == "".charAt(0))
+		if (ds.getFieldDelimiter() == ' ')
 			ds.setFieldDelimiter(';');
 
 		if (btnRadioRowComma.getSelection())
