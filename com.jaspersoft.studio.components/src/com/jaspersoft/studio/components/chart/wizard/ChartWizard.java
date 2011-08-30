@@ -19,10 +19,8 @@
  */
 package com.jaspersoft.studio.components.chart.wizard;
 
-import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignChartDataset;
-import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.IWizardPage;
@@ -30,72 +28,56 @@ import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
-import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
-import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
 
 public class ChartWizard extends Wizard {
-	private ChartWizardPage page0;
-	private WizardDatasetPage step1;
-	private WizardConnectionPage step2;
+	private ChartTypeWizardPage page0;
+	private ChartDataPage step1;
+	private ChartVisualPage step2;
 	private MChart chart;
 
-	public ChartWizard() {
+	private int width;
+	private int height;
+
+	public ChartWizard(MChart chart, JasperDesign jasperDesign) {
 		super();
 		setWindowTitle(Messages.common_chart_wizard);
+		this.chart = chart;
+		this.jasperDesign = jasperDesign;
+		JRChart jrChart = (JRChart) chart.getValue();
+		width = jrChart.getWidth();
+		height = jrChart.getHeight();
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new ChartWizardPage();
+		page0 = new ChartTypeWizardPage(chart);
 		addPage(page0);
 
-		step1 = new WizardDatasetPage(jasperDesign);
+		step1 = new ChartDataPage(chart, jasperDesign);
 		addPage(step1);
-		MDatasetRun mdataset = new MDatasetRun(new JRDesignDatasetRun(),
-				jasperDesign);
-		step1.setDataSetRun(mdataset);
 
-		step2 = new WizardConnectionPage();
+		step2 = new ChartVisualPage(chart, jasperDesign);
 		addPage(step2);
-		step2.setDataSetRun(mdataset);
 	}
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		Object dsname = step1.getDataSetRun().getPropertyValue(
-				JRDesignDatasetRun.PROPERTY_DATASET_NAME);
-		if (page == step1 && (dsname == null || dsname.equals(""))) //$NON-NLS-1$
-			page = step2;
+
 		return super.getNextPage(page);
 	}
 
 	public MChart getChart() {
-		this.chart = new MChart();
-		JRDesignChart jrChart = (JRDesignChart) MChart.createJRElement(
-				jasperDesign, page0.getChartType());
-		chart.setValue(jrChart);
-		JRDesignChartDataset jrDataSet = (JRDesignChartDataset) jrChart
-				.getDataset();
-		if (jrDataSet != null) {
-			jrDataSet.setDatasetRun((JRDatasetRun) step1.getDataSetRun()
-					.getValue());
-			if (jrDataSet.getDatasetRun() != null
-					&& jrDataSet.getDatasetRun().getDatasetName() == null)
-				jrDataSet.setDatasetRun(null);
-		}
-
+		JRDesignChart jrChart = (JRDesignChart) chart.getValue();
+		jrChart.setWidth(width);
+		jrChart.setHeight(height);
 		return chart;
 	}
 
 	@Override
 	public boolean performFinish() {
-		return true;
+		return (page0.canFlipToNextPage() && step1.canFlipToNextPage());
 	}
 
 	private JasperDesign jasperDesign;
 
-	public void init(JasperDesign jd) {
-		this.jasperDesign = jd;
-	}
 }

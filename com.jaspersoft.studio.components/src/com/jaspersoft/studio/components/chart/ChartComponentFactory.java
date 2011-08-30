@@ -105,6 +105,7 @@ import com.jaspersoft.studio.components.chart.model.series.xyzseries.action.Crea
 import com.jaspersoft.studio.components.chart.model.series.xyzseries.command.CreateXYZSeriesCommand;
 import com.jaspersoft.studio.components.chart.model.series.xyzseries.command.DeleteXYZSeriesCommand;
 import com.jaspersoft.studio.components.chart.model.series.xyzseries.command.ReorderXYZSeriesCommand;
+import com.jaspersoft.studio.components.chart.wizard.action.ChartWizardAction;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -323,6 +324,7 @@ public class ChartComponentFactory implements IComponentFactory {
 		lst.add(new CreateTimeAction(part));
 		lst.add(new CreateXYAction(part));
 		lst.add(new CreateXYZAction(part));
+		lst.add(new ChartWizardAction(part));
 		return lst;
 	}
 
@@ -336,6 +338,7 @@ public class ChartComponentFactory implements IComponentFactory {
 		lst.add(CreateTimeAction.ID);
 		lst.add(CreateXYAction.ID);
 		lst.add(CreateXYZAction.ID);
+		lst.add(ChartWizardAction.ID);
 		return lst;
 	}
 

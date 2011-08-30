@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -37,31 +38,29 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.components.chart.model.MChart;
 
-public class ChartWizardPage extends WizardPage {
+public class ChartTypeWizardPage extends WizardPage {
+	private MChart chart;
 	private byte chartType = JRDesignChart.CHART_TYPE_LINE;
 	private Table chartTable;
 
-	public byte getChartType() {
-		return chartType;
-	}
-
-	protected ChartWizardPage() {
+	protected ChartTypeWizardPage(MChart chart) {
 		super("chartwizard"); //$NON-NLS-1$
 		setTitle(Messages.common_chart_wizard);
 		setDescription(Messages.ChartWizardPage_chart_wizard_description);
+		this.chart = chart;
+		this.chartType = ((JRDesignChart) chart.getValue()).getChartType();
 	}
 
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
-		composite.setLayout(layout);
+		composite.setLayout(new GridLayout());
 		setControl(composite);
 
 		chartTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI
 				| SWT.FULL_SELECTION | SWT.BORDER);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 500;
 		gd.widthHint = 300;
 		chartTable.setLayoutData(gd);
@@ -79,7 +78,6 @@ public class ChartWizardPage extends WizardPage {
 		tlayout.addColumnData(new ColumnWeightData(100, false));
 		chartTable.setLayout(tlayout);
 
-		chartTable.select(0);
 		chartTable.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -89,11 +87,47 @@ public class ChartWizardPage extends WizardPage {
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
-				e.getSource();
+				widgetSelected(e);
 			}
 		});
+
+		setTableSelection();
 		PlatformUI.getWorkbench().getHelpSystem()
 				.setHelp(getControl(), "Jaspersoft.wizard"); //$NON-NLS-1$
+	}
+
+	private void setTableSelection() {
+		for (TableItem ti : chartTable.getItems()) {
+			if (((Byte) ti.getData()).intValue() == chartType) {
+				chartTable.setSelection(ti);
+				break;
+			}
+		}
+	}
+
+	@Override
+	public IWizardPage getNextPage() {
+		JRDesignChart old = (JRDesignChart) chart.getValue();
+		if (chartType != old.getChartType()) {
+			old.setChartType(chartType);
+		}
+		return super.getNextPage();
+	}
+
+	@Override
+	public boolean canFlipToNextPage() {
+		JRDesignChart old = (JRDesignChart) chart.getValue();
+		if (chartType != old.getChartType()) {
+			old.setChartType(chartType);
+		}
+		return super.canFlipToNextPage();
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (visible)
+			chartTable.setFocus();
 	}
 
 	private void fillTableb4j(Table table) {

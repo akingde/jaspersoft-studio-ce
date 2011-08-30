@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.components.chart.model.command;
 
+import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -26,6 +27,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.wizard.ChartWizard;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -33,6 +35,7 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+
 /*
  * link nodes & together.
  * 
@@ -44,13 +47,14 @@ public class CreateChartCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateChartCommand(MElementGroup destNode, MGraphicElement srcNode, int index) {
+	public CreateChartCommand(MElementGroup destNode, MGraphicElement srcNode,
+			int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -58,13 +62,14 @@ public class CreateChartCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateChartCommand(MFrame destNode, MGraphicElement srcNode, int index) {
+	public CreateChartCommand(MFrame destNode, MGraphicElement srcNode,
+			int index) {
 		super(destNode, srcNode, index);
 	}
 
@@ -72,11 +77,11 @@ public class CreateChartCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
 	public CreateChartCommand(MBand destNode, MGraphicElement srcNode, int index) {
 		super(destNode, srcNode, index);
@@ -86,15 +91,16 @@ public class CreateChartCommand extends CreateElementCommand {
 	 * Instantiates a new creates the element command.
 	 * 
 	 * @param destNode
-	 *          the dest node
+	 *            the dest node
 	 * @param srcNode
-	 *          the src node
+	 *            the src node
 	 * @param position
-	 *          the position
+	 *            the position
 	 * @param index
-	 *          the index
+	 *            the index
 	 */
-	public CreateChartCommand(ANode destNode, MGraphicElement srcNode, Rectangle position, int index) {
+	public CreateChartCommand(ANode destNode, MGraphicElement srcNode,
+			Rectangle position, int index) {
 		super(destNode, srcNode, position, index);
 	}
 
@@ -104,15 +110,18 @@ public class CreateChartCommand extends CreateElementCommand {
 	@Override
 	protected void createObject() {
 		if (jrElement == null) {
-			// here put a wizard
-			ChartWizard wizard = new ChartWizard();
-			wizard.init(jasperDesign);
-			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
+			JRDesignChart newchart = MChart.createJRElement(jasperDesign,
+					JRDesignChart.CHART_TYPE_AREA);
+
+			ChartWizard wizard = new ChartWizard(
+					new MChart(null, newchart, -1), jasperDesign);
+			WizardDialog dialog = new WizardDialog(Display.getDefault()
+					.getActiveShell(), wizard);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getChart();
 				if (srcNode.getValue() == null)
-					jrElement = srcNode.createJRElement(srcNode.getJasperDesign());
+					jrElement = newchart;
 				else
 					jrElement = (JRDesignElement) srcNode.getValue();
 			}
