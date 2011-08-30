@@ -313,12 +313,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		viewMenu.add(getAction(SizeGridAction.ID));
 
 		manager.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
-
-		// IMenuManager menu = new MenuManager(
-		// Messages.JrxmlEditorContributor_editor_menu);
-		// manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
-		// menu.add(sampleAction);
-
 	}
 
 	private TextEditorActionContributor textEditorContributor = null;

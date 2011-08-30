@@ -89,7 +89,7 @@ public class ModelUtils {
 		return null;
 	}
 
-	public static String[] getDataSources(JasperDesign jd, boolean all) {
+	public static String[] getDataSets(JasperDesign jd, boolean all) {
 		List<JRDataset> datasetsList = new ArrayList<JRDataset>(jd.getDatasetsList());
 		if (all)
 			datasetsList.add(0, jd.getMainDataset());

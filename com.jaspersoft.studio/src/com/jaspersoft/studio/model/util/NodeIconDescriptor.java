@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.util;
 
@@ -34,6 +30,7 @@ import java.util.ResourceBundle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+
 /*
  * The Class NodeIconDescriptor.
  * 
@@ -69,12 +66,13 @@ public class NodeIconDescriptor implements IIconDescriptor {
 
 	public NodeIconDescriptor(String name, AbstractUIPlugin plugin) {
 		this.plugin = plugin;
-
-		this.ICON_TITLE = getFromBundle(name + ".title", ICON_TITLE); //$NON-NLS-1$
-		this.ICON_DESCRIPTION = getFromBundle(name + ".description", ICON_DESCRIPTION); //$NON-NLS-1$
-		this.ICON_TOOLTIP = getFromBundle(name + ".description", ICON_TOOLTIP); //$NON-NLS-1$
-		this.ICON_16 = getFromBundle(name + ".icon16", ICON_16); //$NON-NLS-1$
-		this.ICON_32 = getFromBundle(name + ".icon32", ICON_32); //$NON-NLS-1$
+		if (name != null && !name.isEmpty()) {
+			this.ICON_TITLE = getFromBundle(name + ".title", ICON_TITLE); //$NON-NLS-1$
+			this.ICON_DESCRIPTION = getFromBundle(name + ".description", ICON_DESCRIPTION); //$NON-NLS-1$
+			this.ICON_TOOLTIP = getFromBundle(name + ".description", ICON_TOOLTIP); //$NON-NLS-1$
+			this.ICON_16 = getFromBundle(name + ".icon16", ICON_16); //$NON-NLS-1$
+			this.ICON_32 = getFromBundle(name + ".icon32", ICON_32); //$NON-NLS-1$
+		}
 	}
 
 	/** The resource bundle icons. */
@@ -220,12 +218,12 @@ public class NodeIconDescriptor implements IIconDescriptor {
 		return this.ICON_TOOLTIP;
 	}
 
-  // This method returns the correct locale suffix. It will test from the most specific to
+	// This method returns the correct locale suffix. It will test from the most specific to
 	// the most general: fr_FR > fr > no suffix.
 	private String getLocale() {
 		String dLocale = Locale.getDefault().toString();
 		int charIndex = dLocale.indexOf("_");
-		String[] suffixes = {"", "_" + dLocale, "_" + dLocale.substring(0, charIndex)};
+		String[] suffixes = { "", "_" + dLocale, "_" + dLocale.substring(0, charIndex) };
 		int suffixesIndex = 0;
 		URL url1 = plugin.getBundle().getResource("resources/icons" + suffixes[1] + ".properties");
 		URL url2 = plugin.getBundle().getResource("resources/icons" + suffixes[2] + ".properties");

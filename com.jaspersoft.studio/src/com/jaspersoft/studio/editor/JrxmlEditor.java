@@ -554,13 +554,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// }
 				updateVisualView();
 				modelFresh = true;
-				// getSite().setSelectionProvider(reportContainer.getActiveEditor().getSite().getSelectionProvider());
+//				 getSite().setSelectionProvider(reportContainer.getActiveEditor().getSite().getSelectionProvider());
 				break;
 			case PAGE_XMLEDITOR:
 				if (!modelFresh)
 					model2xml();
 
-				// getSite().setSelectionProvider(xmlEditor.getSelectionProvider());
+//				 getSite().setSelectionProvider(xmlEditor.getSelectionProvider());
 				break;
 			case PAGE_PREVIEW:
 				if (activePage == PAGE_XMLEDITOR)
@@ -573,7 +573,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					model2xml();
 
 				model2preview();
-				// getSite().setSelectionProvider(previewEditor.getSite().getSelectionProvider());
+//				 getSite().setSelectionProvider(previewEditor.getSite().getSelectionProvider());
 				break;
 			}
 		}

@@ -38,6 +38,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -134,6 +135,17 @@ public class SelectionHelper {
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static SimpleFileResolver getFileResolver() {
+		IEditorPart ep = getActiveJRXMLEditor();
+		if (ep != null && ep.getEditorInput() instanceof IFileEditorInput) {
+			IFileEditorInput fe = ((IFileEditorInput) ep.getEditorInput());
+			return getFileResolver(fe.getFile());
+		}
+		SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(".") })); //$NON-NLS-1$
+		fileResolver.setResolveAbsolutePath(true);
+		return fileResolver;
 	}
 
 	public static SimpleFileResolver getFileResolver(IFile file) {

@@ -18,27 +18,23 @@
  * see <http://www.gnu.org/licenses/>.
  */
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.preview.inputs;
 
@@ -108,7 +104,7 @@ public class BigNumericInput implements IDataInput {
 						if (param.getValueClass().equals(Long.class)) {
 							Long.parseLong(number);
 						} else if (param.getValueClass().equals(BigInteger.class)) {
-							new BigInteger(number); //$NON-NLS-1$
+							new BigInteger(number);
 						} else if (param.getValueClass().equals(BigDecimal.class)) {
 							e.doit = BigDecimalValidator.getInstance().isValid(number);
 						} else if (param.getValueClass().equals(Float.class)) {
@@ -129,7 +125,7 @@ public class BigNumericInput implements IDataInput {
 						if (param.getValueClass().equals(Long.class)) {
 							n = new Long(num.getText());
 						} else if (param.getValueClass().equals(BigInteger.class)) {
-							n = new BigInteger(num.getText()); //$NON-NLS-1$
+							n = new BigInteger(num.getText());
 						} else if (param.getValueClass().equals(BigDecimal.class)) {
 							n = new BigDecimal(num.getText());
 						} else if (param.getValueClass().equals(Float.class)) {

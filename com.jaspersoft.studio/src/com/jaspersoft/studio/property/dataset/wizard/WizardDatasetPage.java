@@ -112,7 +112,7 @@ public class WizardDatasetPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		String[] dsNames = ModelUtils.getDataSources(jasperDesign, all);
+		String[] dsNames = ModelUtils.getDataSets(jasperDesign, all);
 
 		datasets = new List(composite, SWT.BORDER | SWT.READ_ONLY);
 		datasets.setItems(dsNames);

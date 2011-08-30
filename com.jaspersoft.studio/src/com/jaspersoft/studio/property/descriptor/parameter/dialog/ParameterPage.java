@@ -83,7 +83,6 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
-import com.jaspersoft.studio.utils.Misc;
 
 public class ParameterPage extends WizardPage {
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -318,7 +317,7 @@ public class ParameterPage extends WizardPage {
 				JRDatasetParameter prop = (JRDatasetParameter) element;
 				if ("VALUE".equals(property)) //$NON-NLS-1$
 					if (prop.getExpression() != null)
-						return Misc.nvl(prop.getExpression(), "");
+						return prop.getExpression();
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					return prop.getName();
 				}

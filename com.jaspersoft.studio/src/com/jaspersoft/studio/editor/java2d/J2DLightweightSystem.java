@@ -64,10 +64,11 @@ public final class J2DLightweightSystem extends LightweightSystem
    */
   public final void setControl(Canvas canvas)
   {
+  	super.setControl(canvas);
 	  if (canvas != null) {
 		  getUpdateManager().setGraphicsSource(new J2DGraphicsSource(canvas));
 	  }
-	  super.setControl(canvas);
+	  
   }
 
   /* (non-Javadoc)

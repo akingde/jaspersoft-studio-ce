@@ -50,7 +50,6 @@ public class QDesignerFactory {
 				addDesigner(lang, qd);
 			} catch (CoreException ex) {
 				ex.printStackTrace();
-				System.out.println(ex.getMessage());
 			}
 		}
 	}
