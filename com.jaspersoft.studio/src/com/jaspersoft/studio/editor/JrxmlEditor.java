@@ -690,7 +690,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	public void setModel(INode model) {
 		if (this.model != null && this.model.getChildren() != null && !this.model.getChildren().isEmpty())
-			getMReport().getPropertyChangeSupport().addPropertyChangeListener(modelPropChangeListener);
+			getMReport().getPropertyChangeSupport().removePropertyChangeListener(modelPropChangeListener);
 		if (model != null && model.getChildren() != null && !model.getChildren().isEmpty())
 			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropChangeListener);
 		this.model = model;

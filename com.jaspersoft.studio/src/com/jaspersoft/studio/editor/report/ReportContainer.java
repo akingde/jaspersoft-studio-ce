@@ -205,7 +205,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 */
 	public void setModel(INode model) {
 		if (this.model != null && this.model.getChildren() != null && !this.model.getChildren().isEmpty())
-			this.model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+			this.model.getChildren().get(0).getPropertyChangeSupport().removePropertyChangeListener(modelListener);
 		if (model != null && model.getChildren() != null && !model.getChildren().isEmpty())
 			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelListener);
 		this.model = model;
@@ -250,7 +250,19 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		int ind = editors.indexOf(ave);
 		removePage(ind);
 		editors.remove(ind);
-		ccMap.remove(evt.getOldValue());
+		if (evt != null) {
+			ccMap.remove(evt.getOldValue());
+		} else {
+			Object okey = null;
+			for (Object key : ccMap.keySet()) {
+				AbstractVisualEditor value = ccMap.get(key);
+				if (value != null && value == ave) {
+					okey = key;
+					break;
+				}
+			}
+			ccMap.remove(okey);
+		}
 		ave.dispose();
 	}
 
@@ -258,9 +270,21 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 * Update visual view.
 	 */
 	public void updateVisualView() {
-		AbstractVisualEditor ave = getMainEditor();
-		if (ave != null)
+		if (!editors.isEmpty()) {
+			editors.get(0).setModel(this.model);
+			while (editors.size() > 1) {
+				AbstractVisualEditor ave = editors.get(1);
+				removeEditorPage(null, ave);
+			}
+
+		}
+		for (AbstractVisualEditor ave : editors) {
 			ave.setModel(this.model);
+		}
+
+		// AbstractVisualEditor ave = getMainEditor();
+		// if (ave != null)
+		// ave.setModel(this.model);
 	}
 
 	public AbstractVisualEditor getMainEditor() {
