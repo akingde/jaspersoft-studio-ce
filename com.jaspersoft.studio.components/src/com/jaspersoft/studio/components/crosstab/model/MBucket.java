@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
+import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
@@ -34,6 +35,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -138,6 +140,14 @@ public class MBucket extends APropertyNode {
 				Messages.MBucket_expression);
 		exprD.setDescription(Messages.MBucket_expression_description);
 		desc.add(exprD);
+
+		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(
+				JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, "Value Class Name");
+		classD.setDescription("Bucket value class name");
+		desc.add(classD);
+
+		defaultsMap.put(JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS, null);
+
 	}
 
 	/*
@@ -157,6 +167,8 @@ public class MBucket extends APropertyNode {
 			return ExprUtil.getExpression(jrField.getOrderByExpression());
 		if (id.equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION))
 			return ExprUtil.getExpression(jrField.getExpression());
+		if (id.equals(JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS))
+			return jrField.getValueClassName();
 		return null;
 	}
 
@@ -183,5 +195,7 @@ public class MBucket extends APropertyNode {
 		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION))
 			jrField.setExpression((JRDesignExpression) ExprUtil.setValues(
 					jrField.getExpression(), value));
+		else if (id.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS))
+			jrField.setValueClassName((String) value);
 	}
 }
