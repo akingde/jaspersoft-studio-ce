@@ -21,8 +21,6 @@ package com.jaspersoft.studio.data.csv;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -102,7 +100,7 @@ public class CSVDataAdapterComposite extends Composite {
 	private Text textRowOther;
 
 	// The data model
-	private java.util.List<StringBuffer> rows;
+	private java.util.List<String> rows;
 
 	/**
 	 * Create the composite.
@@ -119,7 +117,7 @@ public class CSVDataAdapterComposite extends Composite {
 		setLayout(new GridLayout(1, false));
 
 		// data model init
-		rows = new ArrayList<StringBuffer>();
+		rows = new ArrayList<String>();
 
 		Composite composite = new Composite(this, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(3, false);
@@ -534,7 +532,7 @@ public class CSVDataAdapterComposite extends Composite {
 
 				boolean bool = ((Button) e.widget).getSelection();
 				if (!bool) {
-					textDatePattern.setText(new SimpleDateFormat().toPattern());
+					textDatePattern.setText("");
 				}
 				textDatePattern.setEnabled(bool);
 				btnCreateDatePattern.setEnabled(bool);
@@ -566,7 +564,7 @@ public class CSVDataAdapterComposite extends Composite {
 
 				boolean bool = ((Button) e.widget).getSelection();
 				if (!bool) {
-					textNumberPattern.setText(new DecimalFormat().toPattern());
+					textNumberPattern.setText("");
 				}
 				textNumberPattern.setEnabled(bool);
 				btnCreateNumberPattern.setEnabled(bool);
@@ -634,7 +632,7 @@ public class CSVDataAdapterComposite extends Composite {
 		List<String> listColumnNames = csvDataAdapter.getColumnNames();
 		if (listColumnNames != null && listColumnNames.size() > 0) {
 			for (String str : listColumnNames) {
-				rows.add(new StringBuffer(str));
+				rows.add(str);
 			}
 			tableViewer.refresh();
 			setTableSelection(-1);
@@ -648,7 +646,7 @@ public class CSVDataAdapterComposite extends Composite {
 			textDatePattern.setEnabled(true);
 			btnCreateDatePattern.setEnabled(true);
 		} else {
-			textDatePattern.setText(new SimpleDateFormat().toPattern());
+			textDatePattern.setText("");
 		}
 
 		String numberPattern = csvDataAdapter.getNumberPattern();
@@ -658,7 +656,7 @@ public class CSVDataAdapterComposite extends Composite {
 			textNumberPattern.setEnabled(true);
 			btnCreateNumberPattern.setEnabled(true);
 		} else {
-			textNumberPattern.setText(new DecimalFormat().toPattern());
+			textNumberPattern.setText("");
 		}
 
 		String fieldDelimiter = csvDataAdapter.getFieldDelimiter();
@@ -718,14 +716,16 @@ public class CSVDataAdapterComposite extends Composite {
 		csvDataAdapter.setFileName(textCSVFileName.getText());
 		csvDataAdapter.setQueryExecuterMode(btnCheckQEMode.getSelection());
 
-		List<String> listColumnNames = new ArrayList<String>();
-		for (StringBuffer row : rows) {
-			listColumnNames.add(row.toString());
-		}
-		csvDataAdapter.setColumnNames(listColumnNames);
+		csvDataAdapter.setColumnNames(rows);
 
-		csvDataAdapter.setDatePattern(textDatePattern.getText());
-		csvDataAdapter.setNumberPattern(textNumberPattern.getText());
+		if (btnCheckUseDatePattern.getSelection())
+			csvDataAdapter.setDatePattern(textDatePattern.getText());
+		else
+			csvDataAdapter.setDatePattern(null);
+		if (btnCheckUseNumberPattern.getSelection())
+			csvDataAdapter.setNumberPattern(textNumberPattern.getText());
+		else
+			csvDataAdapter.setNumberPattern(null);
 		csvDataAdapter.setUseFirstRowAsHeader(btnCheckSkipFirstLine
 				.getSelection());
 
@@ -744,8 +744,7 @@ public class CSVDataAdapterComposite extends Composite {
 					.removeSlashesString(textFieldOther.getText() + " "));
 		if (csvDataAdapter.getFieldDelimiter() == null
 				|| csvDataAdapter.getFieldDelimiter().isEmpty())
-			;
-		csvDataAdapter.setFieldDelimiter(";");
+			csvDataAdapter.setFieldDelimiter(";");
 
 		if (btnRadioRowComma.getSelection())
 			csvDataAdapter.setRecordDelimiter(",");
@@ -838,7 +837,7 @@ public class CSVDataAdapterComposite extends Composite {
 	 * 
 	 * @return StringBuffer
 	 */
-	private StringBuffer createDataModelEntry() {
+	private String createDataModelEntry() {
 
 		int i = 0;
 		StringBuffer column = new StringBuffer("COLUMN_" + i);
@@ -849,7 +848,7 @@ public class CSVDataAdapterComposite extends Composite {
 			column.append("COLUMN_" + i);
 		}
 
-		return column;
+		return column.toString();
 	}
 
 	/**
@@ -988,10 +987,13 @@ public class CSVDataAdapterComposite extends Composite {
 		rows.clear();
 		ds.next();
 		Map<String, Integer> names = ds.getColumnNames();
+		String[] strrows = new String[names.keySet().size()];
 		if (names != null)
 			for (String key : names.keySet()) {
-				rows.add(new StringBuffer(key));
+				strrows[names.get(key)] = key;
 			}
+		for (String s : strrows)
+			rows.add(s);
 
 		tableViewer.refresh();
 		setTableSelection(-1);
@@ -1011,8 +1013,8 @@ public class CSVDataAdapterComposite extends Composite {
 		if (column == null || "".equals(column))
 			return false;
 
-		for (StringBuffer row : rows) {
-			if (row.toString().equals(column)) {
+		for (String row : rows) {
+			if (row.equals(column)) {
 				return false;
 			}
 		}
