@@ -89,8 +89,10 @@ public class PasteCommand extends Command {
 					} else if (n instanceof MGraphicElement) {
 						MGraphicElement mge = (MGraphicElement) n;
 						JRDesignElement de = (JRDesignElement) mge.getValue();
-						de.setX(de.getX() + 5);
-						de.setY(de.getY() + 5);
+						if (parent == node.getParent()) {
+							de.setX(de.getX() + 5);
+							de.setY(de.getY() + 5);
+						}
 					}
 					// create command
 					Command cmdc = OutlineTreeEditPartFactory.getCreateCommand((ANode) parent, n, (Rectangle) null, -1);
