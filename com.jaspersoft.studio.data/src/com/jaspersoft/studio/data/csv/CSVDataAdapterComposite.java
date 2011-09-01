@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import net.sf.jasperreports.data.csv.CsvDataAdapter;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
@@ -987,13 +989,13 @@ public class CSVDataAdapterComposite extends Composite {
 		rows.clear();
 		ds.next();
 		Map<String, Integer> names = ds.getColumnNames();
-		String[] strrows = new String[names.keySet().size()];
-		if (names != null)
-			for (String key : names.keySet()) {
-				strrows[names.get(key)] = key;
-			}
-		for (String s : strrows)
-			rows.add(s);
+		if (names != null) {
+			SortedMap<Integer, String> map = new TreeMap<Integer, String>();
+			for (String key : names.keySet())
+				map.put(names.get(key), key);
+			for (Integer key : map.keySet())
+				rows.add(map.get(key));
+		}
 
 		tableViewer.refresh();
 		setTableSelection(-1);
