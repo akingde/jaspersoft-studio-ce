@@ -105,6 +105,7 @@ import com.jaspersoft.studio.components.chart.model.series.xyzseries.action.Crea
 import com.jaspersoft.studio.components.chart.model.series.xyzseries.command.CreateXYZSeriesCommand;
 import com.jaspersoft.studio.components.chart.model.series.xyzseries.command.DeleteXYZSeriesCommand;
 import com.jaspersoft.studio.components.chart.model.series.xyzseries.command.ReorderXYZSeriesCommand;
+import com.jaspersoft.studio.components.chart.part.ChartEditPart;
 import com.jaspersoft.studio.components.chart.wizard.action.ChartWizardAction;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
@@ -343,6 +344,8 @@ public class ChartComponentFactory implements IComponentFactory {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
+		if (model instanceof MChart)
+			return new ChartEditPart();
 		return null;
 	}
 

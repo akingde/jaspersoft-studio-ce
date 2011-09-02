@@ -561,71 +561,91 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 
 	public static JRDesignChart createJRElement(JasperDesign jasperDesign,
 			byte chartType) {
-		JRDesignChart jrDesignElement = new JRDesignChart(jasperDesign,
-				chartType);
-		if (chartType == JRDesignChart.CHART_TYPE_XYBAR)
-			jrDesignElement.setDataset(new JRDesignXyDataset(null));
+		JRDesignChart jrChart = new JRDesignChart(jasperDesign, chartType);
+		setupChart(jrChart);
 
-		JRChartPlot plot = jrDesignElement.getPlot();
+		return jrChart;
+	}
+
+	public static void setupChart(JRDesignChart jrChart) {
+		if (jrChart.getChartType() == JRDesignChart.CHART_TYPE_XYBAR)
+			jrChart.setDataset(new JRDesignXyDataset(null));
+		// dataset initialisation
+		if (jrChart.getDataset() instanceof JRDesignHighLowDataset) {
+			JRDesignHighLowDataset jds = (JRDesignHighLowDataset) jrChart
+					.getDataset();
+			if (jds.getCloseExpression() == null)
+				jds.setCloseExpression(ExprUtil.setValues(
+						new JRDesignExpression(), "100"));
+			if (jds.getOpenExpression() == null)
+				jds.setOpenExpression(ExprUtil.setValues(
+						new JRDesignExpression(), "100"));
+			if (jds.getVolumeExpression() == null)
+				jds.setVolumeExpression(ExprUtil.setValues(
+						new JRDesignExpression(), "100"));
+			if (jds.getHighExpression() == null)
+				jds.setHighExpression(ExprUtil.setValues(
+						new JRDesignExpression(), "100"));
+			if (jds.getLowExpression() == null)
+				jds.setLowExpression(ExprUtil.setValues(
+						new JRDesignExpression(), "100"));
+			if (jds.getDateExpression() == null)
+				jds.setDateExpression(ExprUtil.setValues(
+						new JRDesignExpression(), "new Date()"));
+		} else if (jrChart.getDataset() instanceof JRDesignPieDataset) {
+			JRDesignPieSeries pieSeries = new JRDesignPieSeries();
+			pieSeries.setKeyExpression(ExprUtil.setValues(
+					new JRDesignExpression(), ""));
+			((JRDesignPieDataset) jrChart.getDataset()).addPieSeries(pieSeries);
+		} else if (jrChart.getDataset() instanceof JRDesignCategoryDataset) {
+
+		}
+		// plot initialisation
+		JRChartPlot plot = jrChart.getPlot();
 		if (plot instanceof JRDesignBar3DPlot) {
-			((JRDesignBar3DPlot) plot).setItemLabel(new JRDesignItemLabel(null,
-					jrDesignElement));
+			if (((JRDesignBar3DPlot) plot).getItemLabel() == null)
+				((JRDesignBar3DPlot) plot).setItemLabel(new JRDesignItemLabel(
+						null, jrChart));
 		} else if (plot instanceof JRDesignPiePlot) {
-			((JRDesignPiePlot) plot).setItemLabel(new JRDesignItemLabel(null,
-					jrDesignElement));
+			if (((JRDesignPiePlot) plot).getItemLabel() == null)
+				((JRDesignPiePlot) plot).setItemLabel(new JRDesignItemLabel(
+						null, jrChart));
 		} else if (plot instanceof JRDesignPie3DPlot) {
-			((JRDesignPie3DPlot) plot).setItemLabel(new JRDesignItemLabel(null,
-					jrDesignElement));
+			if (((JRDesignPie3DPlot) plot).getItemLabel() == null)
+				((JRDesignPie3DPlot) plot).setItemLabel(new JRDesignItemLabel(
+						null, jrChart));
 		} else if (plot instanceof JRDesignBarPlot) {
-			((JRDesignBarPlot) plot).setItemLabel(new JRDesignItemLabel(null,
-					jrDesignElement));
+			if (((JRDesignBarPlot) plot).getItemLabel() == null)
+				((JRDesignBarPlot) plot).setItemLabel(new JRDesignItemLabel(
+						null, jrChart));
 		} else if (plot instanceof JRDesignThermometerPlot) {
 			JRDesignThermometerPlot tplot = (JRDesignThermometerPlot) plot;
-			tplot.setHighRange(new JRDesignDataRange(null));
-			tplot.setLowRange(new JRDesignDataRange(null));
-			tplot.setMediumRange(new JRDesignDataRange(null));
-			tplot.setDataRange(new JRDesignDataRange(null));
-			tplot.setValueLocation(ValueLocationEnum.LEFT);
-			tplot.setValueDisplay(new JRDesignValueDisplay(null,
-					jrDesignElement));
+			if (tplot.getHighRange() == null)
+				tplot.setHighRange(new JRDesignDataRange(null));
+			if (tplot.getLowRange() == null)
+				tplot.setLowRange(new JRDesignDataRange(null));
+			if (tplot.getMediumRange() == null)
+				tplot.setMediumRange(new JRDesignDataRange(null));
+			if (tplot.getDataRange() == null)
+				tplot.setDataRange(new JRDesignDataRange(null));
+			if (tplot.getValueLocationValue() == null)
+				tplot.setValueLocation(ValueLocationEnum.LEFT);
+			if (tplot.getValueDisplay() == null)
+				tplot.setValueDisplay(new JRDesignValueDisplay(null, jrChart));
 		} else if (plot instanceof JRDesignMeterPlot) {
 			JRDesignMeterPlot tplot = (JRDesignMeterPlot) plot;
 			try {
-				tplot.setValueDisplay(new JRDesignValueDisplay(null,
-						jrDesignElement));
-				tplot.setDataRange(new JRDesignDataRange(null));
+				if (tplot.getValueDisplay() == null)
+					tplot.setValueDisplay(new JRDesignValueDisplay(null,
+							jrChart));
+				if (tplot.getDataRange() == null)
+					tplot.setDataRange(new JRDesignDataRange(null));
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
 		} else if (plot instanceof JRDesignMultiAxisPlot) {
-			((JRDesignMultiAxisPlot) plot).setChart(jrDesignElement);
+			((JRDesignMultiAxisPlot) plot).setChart(jrChart);
 		}
-
-		if (jrDesignElement.getDataset() instanceof JRDesignHighLowDataset) {
-			JRDesignHighLowDataset jds = (JRDesignHighLowDataset) jrDesignElement
-					.getDataset();
-			jds.setCloseExpression(ExprUtil.setValues(new JRDesignExpression(),
-					"100"));
-			jds.setOpenExpression(ExprUtil.setValues(new JRDesignExpression(),
-					"100"));
-			jds.setVolumeExpression(ExprUtil.setValues(
-					new JRDesignExpression(), "100"));
-			jds.setHighExpression(ExprUtil.setValues(new JRDesignExpression(),
-					"100"));
-			jds.setLowExpression(ExprUtil.setValues(new JRDesignExpression(),
-					"100"));
-			jds.setDateExpression(ExprUtil.setValues(new JRDesignExpression(),
-					"new Date()"));
-		} else if (jrDesignElement.getDataset() instanceof JRDesignPieDataset) {
-			JRDesignPieSeries pieSeries = new JRDesignPieSeries();
-			pieSeries.setKeyExpression(ExprUtil.setValues(
-					new JRDesignExpression(), ""));
-			((JRDesignPieDataset) jrDesignElement.getDataset())
-					.addPieSeries(pieSeries);
-		} else if (jrDesignElement.getDataset() instanceof JRDesignCategoryDataset) {
-
-		}
-		return jrDesignElement;
 	}
 
 	/*

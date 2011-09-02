@@ -58,8 +58,13 @@ public class DSTimeSeries extends ADSComponent {
 	private CCombo seriesCombo;
 	private CCombo timePeriodCombo;
 
-	public DSTimeSeries(Composite composite) {
-		super(composite);
+	public DSTimeSeries(Composite composite, DatasetSeriesWidget dsWidget) {
+		super(composite, dsWidget);
+	}
+
+	@Override
+	public String getName() {
+		return "Time Series Dataset";
 	}
 
 	@Override
@@ -97,11 +102,16 @@ public class DSTimeSeries extends ADSComponent {
 			seriesCombo.setItems(srnames);
 			seriesCombo.select(selection);
 			handleSelectSeries(selection);
+		} else {
+			seriesCombo.setItems(new String[0]);
+			handleSelectSeries(-1);
 		}
 	}
 
 	private void handleSelectSeries(int selection) {
-		JRTimeSeries serie = dataset.getSeriesList().get(selection);
+		JRTimeSeries serie = null;
+		if (selection >= 0 && selection < dataset.getSeriesList().size())
+			serie = dataset.getSeriesList().get(selection);
 
 		valueWidget.bindObject(serie, "ValueExpression");
 		timePeriod.bindObject(serie, "TimePeriodExpression");

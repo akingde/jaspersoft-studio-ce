@@ -56,7 +56,6 @@ public class DatasetSeriesWidget {
 
 	public DatasetSeriesWidget(Composite parent) {
 		createDataset(parent);
-		bindData();
 		sfResolver = SelectionHelper.getFileResolver();
 	}
 
@@ -66,29 +65,34 @@ public class DatasetSeriesWidget {
 		sComposite.setLayout(stacklayout);
 		sComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		map.put(JRDesignCategoryDataset.class, new DSCategory(sComposite));
-		map.put(JRDesignGanttDataset.class, new DSGantt(sComposite));
-		map.put(JRDesignHighLowDataset.class, new DSHighLow(sComposite));
-		map.put(JRDesignPieDataset.class, new DSPie(sComposite));
-		map.put(JRDesignTimePeriodDataset.class, new DSTimePeriod(sComposite));
-		map.put(JRDesignTimeSeriesDataset.class, new DSTimeSeries(sComposite));
-		map.put(JRDesignValueDataset.class, new DSValue(sComposite));
-		map.put(JRDesignXyDataset.class, new DSXy(sComposite));
-		map.put(JRDesignXyzDataset.class, new DSXyz(sComposite));
+		map.put(JRDesignCategoryDataset.class, new DSCategory(sComposite, this));
+		map.put(JRDesignGanttDataset.class, new DSGantt(sComposite, this));
+		map.put(JRDesignHighLowDataset.class, new DSHighLow(sComposite, this));
+		map.put(JRDesignPieDataset.class, new DSPie(sComposite, this));
+		map.put(JRDesignTimePeriodDataset.class, new DSTimePeriod(sComposite,
+				this));
+		map.put(JRDesignTimeSeriesDataset.class, new DSTimeSeries(sComposite,
+				this));
+		map.put(JRDesignValueDataset.class, new DSValue(sComposite, this));
+		map.put(JRDesignXyDataset.class, new DSXy(sComposite, this));
+		map.put(JRDesignXyzDataset.class, new DSXyz(sComposite, this));
 		// here we can add other datasources ...
 
 		stacklayout.topControl = map.get(JRDesignCategoryDataset.class)
 				.getControl();
 	}
 
-	private void bindData() {
-
+	public String getName(Class<? extends JRDesignElementDataset> key) {
+		ADSComponent c = map.get(key);
+		if (c != null) {
+			return c.getName();
+		}
+		return "noname";
 	}
 
-	public void setDataset(JRDesignElementDataset eDataset,
-			JasperDesign jrDesign, JRDesignChart jrChart) {
-		this.eDataset = eDataset;
-		if (this.jrDesign != jrDesign) {
+	public void setDataset(JasperDesign jrDesign, JRDesignChart jrChart) {
+		this.eDataset = (JRDesignElementDataset) jrChart.getDataset();
+		if (jrDesign != null && this.jrDesign != jrDesign) {
 			this.jrDesign = jrDesign;
 			dv = new DrawVisitor(jrDesign, null);
 		}

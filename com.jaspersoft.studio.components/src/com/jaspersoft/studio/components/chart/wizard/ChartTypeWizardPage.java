@@ -107,9 +107,10 @@ public class ChartTypeWizardPage extends WizardPage {
 
 	@Override
 	public IWizardPage getNextPage() {
-		JRDesignChart old = (JRDesignChart) chart.getValue();
-		if (chartType != old.getChartType()) {
-			old.setChartType(chartType);
+		JRDesignChart oldChart = (JRDesignChart) chart.getValue();
+		if (chartType != oldChart.getChartType()) {
+			oldChart.setChartType(chartType);
+			MChart.setupChart(oldChart);
 		}
 		return super.getNextPage();
 	}

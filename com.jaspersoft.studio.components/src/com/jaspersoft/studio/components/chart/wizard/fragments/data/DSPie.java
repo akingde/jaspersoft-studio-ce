@@ -63,8 +63,13 @@ public class DSPie extends ADSComponent {
 	private Spinner maxSlice;
 	private Button obtn;
 
-	public DSPie(Composite composite) {
-		super(composite);
+	public DSPie(Composite composite, DatasetSeriesWidget dsWidget) {
+		super(composite, dsWidget);
+	}
+
+	@Override
+	public String getName() {
+		return "Pie Dataset";
 	}
 
 	@Override
@@ -94,11 +99,16 @@ public class DSPie extends ADSComponent {
 			seriesCombo.setItems(srnames);
 			seriesCombo.select(selection);
 			handleSelectSeries(selection);
+		} else {
+			seriesCombo.setItems(new String[0]);
+			handleSelectSeries(-1);
 		}
 	}
 
 	private void handleSelectSeries(int selection) {
-		JRPieSeries serie = dataset.getSeriesList().get(selection);
+		JRPieSeries serie = null;
+		if (selection >= 0 && selection < dataset.getSeriesList().size())
+			serie = dataset.getSeriesList().get(selection);
 
 		valueWidget.bindObject(serie, "ValueExpression");
 		key.bindObject(serie, "KeyExpression");

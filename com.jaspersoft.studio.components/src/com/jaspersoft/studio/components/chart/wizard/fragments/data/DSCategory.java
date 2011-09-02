@@ -53,8 +53,13 @@ public class DSCategory extends ADSComponent {
 	private ExpressionWidget labelWidget;
 	private CCombo seriesCombo;
 
-	public DSCategory(Composite composite) {
-		super(composite);
+	public DSCategory(Composite composite, DatasetSeriesWidget dsWidget) {
+		super(composite, dsWidget);
+	}
+
+	@Override
+	public String getName() {
+		return "Category Dataset";
 	}
 
 	@Override
@@ -79,11 +84,16 @@ public class DSCategory extends ADSComponent {
 			seriesCombo.setItems(srnames);
 			seriesCombo.select(selection);
 			handleSelectSeries(selection);
+		} else {
+			seriesCombo.setItems(new String[0]);
+			handleSelectSeries(-1);
 		}
 	}
 
 	private void handleSelectSeries(int selection) {
-		JRCategorySeries serie = dataset.getSeriesList().get(selection);
+		JRCategorySeries serie = null;
+		if (selection >= 0 && selection < dataset.getSeriesList().size())
+			serie = dataset.getSeriesList().get(selection);
 
 		valueWidget.bindObject(serie, "ValueExpression");
 		categWidget.bindObject(serie, "CategoryExpression");

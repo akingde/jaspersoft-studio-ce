@@ -56,8 +56,13 @@ public class DSGantt extends ADSComponent {
 	private ExpressionWidget task;
 	private CCombo seriesCombo;
 
-	public DSGantt(Composite composite) {
-		super(composite);
+	public DSGantt(Composite composite, DatasetSeriesWidget dsWidget) {
+		super(composite, dsWidget);
+	}
+
+	@Override
+	public String getName() {
+		return "Gantt Dataset";
 	}
 
 	@Override
@@ -82,11 +87,16 @@ public class DSGantt extends ADSComponent {
 			seriesCombo.setItems(srnames);
 			seriesCombo.select(selection);
 			handleSelectSeries(selection);
+		} else {
+			seriesCombo.setItems(new String[0]);
+			handleSelectSeries(-1);
 		}
 	}
 
 	private void handleSelectSeries(int selection) {
-		JRGanttSeries serie = dataset.getSeriesList().get(selection);
+		JRGanttSeries serie = null;
+		if (selection >= 0 && selection < dataset.getSeriesList().size())
+			serie = dataset.getSeriesList().get(selection);
 
 		task.bindObject(serie, "TaskExpression");
 		subtask.bindObject(serie, "SubtaskExpression");

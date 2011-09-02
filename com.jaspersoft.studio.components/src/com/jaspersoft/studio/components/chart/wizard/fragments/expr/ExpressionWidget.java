@@ -77,10 +77,11 @@ public class ExpressionWidget {
 	private void setExpression(JRDesignExpression exp) {
 		this.expression = exp;
 		try {
-			obj.getClass()
-					.getMethod("set" + property,
-							new Class[] { JRExpression.class })
-					.invoke(obj, new Object[] { exp });
+			if (obj != null)
+				obj.getClass()
+						.getMethod("set" + property,
+								new Class[] { JRExpression.class })
+						.invoke(obj, new Object[] { exp });
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -126,9 +127,11 @@ public class ExpressionWidget {
 		this.obj = obj;
 		this.property = property;
 		try {
-			JRDesignExpression expr = (JRDesignExpression) obj.getClass()
-					.getMethod("get" + property, new Class[0])
-					.invoke(obj, new Object[0]);
+			JRDesignExpression expr = null;
+			if (obj != null)
+				expr = (JRDesignExpression) obj.getClass()
+						.getMethod("get" + property, new Class[0])
+						.invoke(obj, new Object[0]);
 			setExpression(expr);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();

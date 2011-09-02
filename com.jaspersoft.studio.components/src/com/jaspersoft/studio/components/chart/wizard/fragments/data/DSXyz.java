@@ -54,8 +54,13 @@ public class DSXyz extends ADSComponent {
 
 	private CCombo seriesCombo;
 
-	public DSXyz(Composite composite) {
-		super(composite);
+	public DSXyz(Composite composite, DatasetSeriesWidget dsWidget) {
+		super(composite, dsWidget);
+	}
+
+	@Override
+	public String getName() {
+		return "XYZ Dataset";
 	}
 
 	@Override
@@ -80,11 +85,16 @@ public class DSXyz extends ADSComponent {
 			seriesCombo.setItems(srnames);
 			seriesCombo.select(selection);
 			handleSelectSeries(selection);
+		} else {
+			seriesCombo.setItems(new String[0]);
+			handleSelectSeries(-1);
 		}
 	}
 
 	private void handleSelectSeries(int selection) {
-		JRXyzSeries serie = dataset.getSeriesList().get(selection);
+		JRXyzSeries serie = null;
+		if (selection >= 0 && selection < dataset.getSeriesList().size())
+			serie = dataset.getSeriesList().get(selection);
 
 		xvalueWidget.bindObject(serie, "XValueExpression");
 		yvalueWidget.bindObject(serie, "YValueExpression");

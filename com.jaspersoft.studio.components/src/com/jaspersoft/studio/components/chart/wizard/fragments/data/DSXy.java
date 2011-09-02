@@ -53,8 +53,13 @@ public class DSXy extends ADSComponent {
 	private ExpressionWidget yvalueWidget;
 	private CCombo seriesCombo;
 
-	public DSXy(Composite composite) {
-		super(composite);
+	public DSXy(Composite composite, DatasetSeriesWidget dsWidget) {
+		super(composite, dsWidget);
+	}
+
+	@Override
+	public String getName() {
+		return "XY Dataset";
 	}
 
 	@Override
@@ -79,11 +84,16 @@ public class DSXy extends ADSComponent {
 			seriesCombo.setItems(srnames);
 			seriesCombo.select(selection);
 			handleSelectSeries(selection);
+		} else {
+			seriesCombo.setItems(new String[0]);
+			handleSelectSeries(-1);
 		}
 	}
 
 	private void handleSelectSeries(int selection) {
-		JRXySeries serie = dataset.getSeriesList().get(selection);
+		JRXySeries serie = null;
+		if (selection >= 0 && selection < dataset.getSeriesList().size())
+			serie = dataset.getSeriesList().get(selection);
 
 		xvalueWidget.bindObject(serie, "XValueExpression");
 		yvalueWidget.bindObject(serie, "YValueExpression");

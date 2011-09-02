@@ -35,17 +35,15 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.ElementDatas
 public class ChartDataPage extends WizardPage {
 	private JRDesignChart jrChart;
 	private JasperDesign jrDesign;
-	private JRDesignElementDataset jrDataset;
 	private ElementDatasetWidget eDataset;
 	private DatasetSeriesWidget eDatasetSeries;
 
 	protected ChartDataPage(MChart chart, JasperDesign jrDesign) {
 		super("chartdataconfiguration");
 		setTitle("Chart Data Configuration");
-		setDescription("Configure your chart use data");
+		setDescription("Configure how data are used by your chart");
 		this.jrChart = (JRDesignChart) chart.getValue();
 		this.jrDesign = jrDesign;
-		this.jrDataset = (JRDesignElementDataset) jrChart.getDataset();
 	}
 
 	public void createControl(Composite parent) {
@@ -59,9 +57,9 @@ public class ChartDataPage extends WizardPage {
 	}
 
 	public void updateData() {
-		this.jrDataset = (JRDesignElementDataset) jrChart.getDataset();
-		eDatasetSeries.setDataset(jrDataset, jrDesign, jrChart);
-		eDataset.setDataset(jrDataset, jrDesign);
+		eDatasetSeries.setDataset(jrDesign, jrChart);
+		eDataset.setDataset((JRDesignElementDataset) jrChart.getDataset(),
+				jrDesign);
 	}
 
 	@Override

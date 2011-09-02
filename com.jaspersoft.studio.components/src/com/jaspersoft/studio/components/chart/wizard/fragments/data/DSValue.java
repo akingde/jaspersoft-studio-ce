@@ -37,8 +37,13 @@ public class DSValue extends ADSComponent {
 	private JRDesignValueDataset dataset;
 	private ExpressionWidget valueWidget;
 
-	public DSValue(Composite composite) {
-		super(composite);
+	public DSValue(Composite composite, DatasetSeriesWidget dsWidget) {
+		super(composite, dsWidget);
+	}
+
+	@Override
+	public String getName() {
+		return "Value Dataset";
 	}
 
 	@Override

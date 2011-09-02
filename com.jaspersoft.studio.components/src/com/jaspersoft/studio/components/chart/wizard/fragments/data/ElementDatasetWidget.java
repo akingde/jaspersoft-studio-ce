@@ -49,6 +49,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
@@ -64,6 +65,7 @@ public class ElementDatasetWidget {
 	private Button btnIncrement;
 	private ToolItem prmItem;
 	private ToolItem prmMapItem;
+	private DatasetRunWidget dsRun;
 
 	public ElementDatasetWidget(Composite parent) {
 		createDataset(parent);
@@ -81,14 +83,17 @@ public class ElementDatasetWidget {
 		final String[] ds = ModelUtils.getDataSets(jrDesign, true);
 		dsCombo.setItems(ds);
 		dsCombo.select(0);
-		if (eDataset.getDatasetRun() != null)
+		if (eDataset.getDatasetRun() != null) {
 			for (int i = 0; i < ds.length; i++) {
 				if (ds[i].equals(eDataset.getDatasetRun().getDatasetName())) {
 					dsCombo.select(i);
 					break;
 				}
 			}
-		enableParameters();
+			dsRun.setData((JRDesignDatasetRun) eDataset.getDatasetRun());
+		}
+
+		enableMainDatasetRun();
 		fillIncrement();
 		fillResetGroup();
 	}
@@ -177,7 +182,8 @@ public class ElementDatasetWidget {
 					datasetRun.setDatasetName(dsCombo.getText());
 					eDataset.setDatasetRun(datasetRun);
 				}
-				enableParameters();
+				dsRun.setData((JRDesignDatasetRun) eDataset.getDatasetRun());
+				enableMainDatasetRun();
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -245,10 +251,11 @@ public class ElementDatasetWidget {
 		});
 	}
 
-	private void enableParameters() {
+	private void enableMainDatasetRun() {
 		boolean en = dsCombo.getSelectionIndex() != 0;
 		prmItem.setEnabled(en);
 		prmMapItem.setEnabled(en);
+		dsRun.setEnabled(en);
 	}
 
 	private void bindResetGroup() {
@@ -338,24 +345,13 @@ public class ElementDatasetWidget {
 	public void createDataset(Composite composite) {
 		Composite grDataset = new Composite(composite, SWT.NONE);
 		grDataset.setLayoutData(new GridData(GridData.FILL_BOTH));
-		grDataset.setLayout(new GridLayout(3, false));
+		grDataset.setLayout(new GridLayout());
 
-		new Label(grDataset, SWT.NONE).setText("Dataset");
+		CTabFolder ctFolder = new CTabFolder(grDataset, SWT.TOP);
+		ctFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		dsCombo = new Combo(grDataset, SWT.BORDER);
-		dsCombo.setItems(new String[] { "main dataset", "Dataset 1" });
-		dsCombo.setLayoutData(new GridData());
-
-		Button newDataset = new Button(grDataset, SWT.PUSH);
-		newDataset.setText("new");
-
-		CTabFolder ctFolder = new CTabFolder(grDataset, SWT.BOTTOM);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 3;
-		ctFolder.setLayoutData(gd);
-
-		createFields(ctFolder);
-		createData(ctFolder);
+		// createFields(ctFolder);
+		// createData(ctFolder);
 		createParametersMap(ctFolder);
 		createConnection(ctFolder);
 
@@ -364,20 +360,33 @@ public class ElementDatasetWidget {
 
 	private void createConnection(CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Connection");
+		bptab.setText("Dataset");
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(2, true));
 
-		new Label(composite, SWT.NONE).setText("Increment on");
-		cbIncrement = new Combo(composite, SWT.BORDER);
-		btnIncrement = new Button(composite, SWT.PUSH);
+		Composite leftComposite = new Composite(composite, SWT.NONE);
+		leftComposite.setLayout(new GridLayout(3, false));
+		leftComposite.setLayoutData(new GridData(GridData.FILL_BOTH
+				| GridData.VERTICAL_ALIGN_BEGINNING));
+
+		new Label(leftComposite, SWT.NONE).setText("Increment on");
+		cbIncrement = new Combo(leftComposite, SWT.BORDER | SWT.READ_ONLY
+				| SWT.SINGLE);
+		cbIncrement.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		btnIncrement = new Button(leftComposite, SWT.PUSH);
 		btnIncrement.setText("...");
+		btnIncrement.setToolTipText("Increment When Expression");
 
-		new Label(composite, SWT.NONE).setText("Reset on");
-		cbReset = new Combo(composite, SWT.BORDER);
+		new Label(leftComposite, SWT.NONE).setText("Reset on");
+		cbReset = new Combo(leftComposite, SWT.BORDER | SWT.READ_ONLY
+				| SWT.SINGLE);
+		cbReset.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		new Label(composite, SWT.NONE);
+		new Label(leftComposite, SWT.NONE);
+
+		dsRun = new DatasetRunWidget(composite);
+		dsRun.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		bptab.setControl(composite);
 	}
@@ -408,8 +417,24 @@ public class ElementDatasetWidget {
 	}
 
 	private void createParametersMap(CTabFolder ctfolder) {
+		Composite composite = new Composite(ctfolder, SWT.NONE);
+		GridLayout layout = new GridLayout(10, false);
+		layout.verticalSpacing = 1;
+		layout.marginWidth = 1;
+		layout.marginTop = 1;
+		layout.marginBottom = 1;
+		composite.setLayout(layout);
 
-		ToolBar toolBar = new ToolBar(ctfolder, SWT.FLAT | SWT.HORIZONTAL
+		Label lbl = new Label(composite, SWT.NONE);
+		lbl.setText("Dataset");
+
+		dsCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE);
+		dsCombo.setItems(new String[] { "main dataset" });
+
+		Button newDataset = new Button(composite, SWT.PUSH);
+		newDataset.setText("new");
+
+		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.HORIZONTAL
 				| SWT.WRAP | SWT.RIGHT);
 		prmItem = new ToolItem(toolBar, SWT.PUSH);
 		prmItem.setText("Parameters");
@@ -417,10 +442,10 @@ public class ElementDatasetWidget {
 		prmMapItem = new ToolItem(toolBar, SWT.PUSH);
 		prmMapItem.setText("Parameters Map");
 
-		int tabHeight = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+		int tabHeight = composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 		tabHeight = Math.max(tabHeight, ctfolder.getTabHeight());
 		ctfolder.setTabHeight(tabHeight);
 
-		ctfolder.setTopRight(toolBar);
+		ctfolder.setTopRight(composite);
 	}
 }

@@ -43,8 +43,13 @@ public class DSHighLow extends ADSComponent {
 	private ExpressionWidget high;
 	private ExpressionWidget low;
 
-	public DSHighLow(Composite composite) {
-		super(composite);
+	public DSHighLow(Composite composite, DatasetSeriesWidget dsWidget) {
+		super(composite, dsWidget);
+	}
+
+	@Override
+	public String getName() {
+		return "High Low Dataset";
 	}
 
 	@Override

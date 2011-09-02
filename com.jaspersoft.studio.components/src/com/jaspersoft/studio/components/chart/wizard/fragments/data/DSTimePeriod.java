@@ -54,8 +54,13 @@ public class DSTimePeriod extends ADSComponent {
 	private ExpressionWidget endDate;
 	private CCombo seriesCombo;
 
-	public DSTimePeriod(Composite composite) {
-		super(composite);
+	public DSTimePeriod(Composite composite, DatasetSeriesWidget dsWidget) {
+		super(composite, dsWidget);
+	}
+
+	@Override
+	public String getName() {
+		return "Time Period Dataset";
 	}
 
 	@Override
@@ -80,11 +85,16 @@ public class DSTimePeriod extends ADSComponent {
 			seriesCombo.setItems(srnames);
 			seriesCombo.select(selection);
 			handleSelectSeries(selection);
+		} else {
+			seriesCombo.setItems(new String[0]);
+			handleSelectSeries(-1);
 		}
 	}
 
 	private void handleSelectSeries(int selection) {
-		JRTimePeriodSeries serie = dataset.getSeriesList().get(selection);
+		JRTimePeriodSeries serie = null;
+		if (selection >= 0 && selection < dataset.getSeriesList().size())
+			serie = dataset.getSeriesList().get(selection);
 
 		valueWidget.bindObject(serie, "ValueExpression");
 		starDate.bindObject(serie, "StartDateExpression");

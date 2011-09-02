@@ -19,37 +19,54 @@
  */
 package com.jaspersoft.studio.components.chart.wizard.fragments.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
+import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
+import net.sf.jasperreports.charts.design.JRDesignXyDataset;
+import net.sf.jasperreports.engine.JRChart;
+import net.sf.jasperreports.engine.JRChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.components.chart.figure.ChartFigure;
-import com.jaspersoft.studio.components.chart.wizard.fragments.expr.ExpressionWidget;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class ADSComponent {
 	private Control control;
 	protected Label imgLabel;
 	private ChartFigure chartFigure;
 	private Canvas canvasChart;
+	private JRDesignChart jrChart;
+	private DatasetSeriesWidget dsWidget;
 
-	public ADSComponent(Composite composite) {
+	public ADSComponent(Composite composite, DatasetSeriesWidget dsWidget) {
 		createControl(composite);
+		this.dsWidget = dsWidget;
 	}
+
+	public abstract String getName();
 
 	public void setData(DrawVisitor drawVisitor, JRDesignChart jrChart,
 			SimpleFileResolver fResolver) {
+		this.jrChart = jrChart;
 		jrChart.setWidth(500);
 		jrChart.setHeight(325);
 		chartFigure.setJRElement(jrChart, drawVisitor, fResolver);
@@ -64,8 +81,48 @@ public abstract class ADSComponent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 
-		new Label(composite, SWT.NONE).setLayoutData(new GridData(
-				GridData.FILL_HORIZONTAL));
+		final Button b = new Button(composite, SWT.PUSH | SWT.FLAT);
+		b.setText(getName());
+		b.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				Map<Class<? extends JRDesignElementDataset>, String> map = new HashMap<Class<? extends JRDesignElementDataset>, String>();
+				if (jrChart.getChartType() == JRChart.CHART_TYPE_XYBAR) {
+					map.put(JRDesignTimePeriodDataset.class,
+							dsWidget.getName(JRDesignTimePeriodDataset.class));
+					map.put(JRDesignTimeSeriesDataset.class,
+							dsWidget.getName(JRDesignTimeSeriesDataset.class));
+					map.put(JRDesignXyDataset.class,
+							dsWidget.getName(JRDesignXyDataset.class));
+
+				}
+				if (!map.isEmpty()) {
+					Class<? extends JRDesignElementDataset> selclass = (Class<? extends JRDesignElementDataset>) jrChart
+							.getDataset().getClass();
+					ChartDatasetDialog dialog = new ChartDatasetDialog(b
+							.getShell(), map, selclass);
+					if (dialog.open() == Window.OK) {
+						Class<? extends JRDesignElementDataset> newselclass = dialog
+								.getSelection();
+						if (!selclass.equals(newselclass))
+							try {
+								JRChartDataset jrded = (JRChartDataset) newselclass
+										.getConstructor(JRChartDataset.class)
+										.newInstance(jrChart.getDataset());
+								jrChart.setDataset(jrded);
+								dsWidget.setDataset(null, jrChart);
+							} catch (Exception e1) {
+								UIUtils.showError(e1);
+							}
+					}
+				}
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+
 		createChartTop(composite);
 		new Label(composite, SWT.NONE).setLayoutData(new GridData(
 				GridData.FILL_HORIZONTAL));
