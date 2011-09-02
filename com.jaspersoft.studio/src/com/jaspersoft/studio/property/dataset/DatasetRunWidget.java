@@ -1,5 +1,8 @@
 package com.jaspersoft.studio.property.dataset;
 
+import java.sql.Connection;
+
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
@@ -290,6 +293,7 @@ public class DatasetRunWidget {
 			JRDesignExpression jde = (JRDesignExpression) datasetrun.getDataSourceExpression();
 			if (jde == null)
 				jde = new JRDesignExpression();
+			jde.setValueClass(JRDataSource.class);
 			jde.setText("new net.sf.jasperreports.engine.JREmptyDataSource()"); //$NON-NLS-1$
 
 			datasetrun.setConnectionExpression(null);
@@ -303,6 +307,7 @@ public class DatasetRunWidget {
 			JRDesignExpression jde = (JRDesignExpression) datasetrun.getConnectionExpression();
 			if (jde == null)
 				jde = new JRDesignExpression();
+			jde.setValueClass(Connection.class);
 			jde.setText("$P{REPORT_CONNECTION}"); //$NON-NLS-1$
 
 			datasetrun.setConnectionExpression(jde);
