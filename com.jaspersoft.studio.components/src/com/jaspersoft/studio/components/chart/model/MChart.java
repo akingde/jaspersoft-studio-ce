@@ -90,6 +90,7 @@ import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.Para
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.Misc;
 
 /*
  * The Class MChart.
@@ -97,6 +98,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 public class MChart extends MGraphicElementLineBox implements IContainer,
 		IContainerEditPart {
 
+	public static final String PLOTPROPERTY = "PLOTPROPERTY";
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -282,7 +284,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		desc.add(legendFontD);
 
 		PlotPropertyDescriptor plotD = new PlotPropertyDescriptor(
-				"PLOTPROPERTY", Messages.MChart_plot); //$NON-NLS-1$
+				PLOTPROPERTY, Messages.MChart_plot); //$NON-NLS-1$
 		plotD.setDescription(Messages.MChart_plot_description);
 		desc.add(plotD);
 
@@ -358,10 +360,10 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		JRDesignChart jrElement = (JRDesignChart) getValue();
 
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
-			return EnumHelper.getValue(jrElement.getTitlePositionValue(), 0,
+			return EnumHelper.getValue(jrElement.getTitlePositionValue(), 1,
 					true);
 		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))
-			return EnumHelper.getValue(jrElement.getLegendPositionValue(), 0,
+			return EnumHelper.getValue(jrElement.getLegendPositionValue(), 1,
 					true);
 		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1,
@@ -416,7 +418,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			return ExprUtil.getExpression(jrElement
 					.getHyperlinkTooltipExpression());
 
-		if (id.equals("PLOTPROPERTY")) { //$NON-NLS-1$
+		if (id.equals(PLOTPROPERTY)) { //$NON-NLS-1$
 			if (mChartPlot == null) {
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
 				setChildListener(mChartPlot);
@@ -459,20 +461,22 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			jrElement.setLegendFont(MFontUtil.setMFont(value));
 		} else if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
 			jrElement.setTitlePosition((EdgeEnum) EnumHelper.getSetValue(
-					EdgeEnum.values(), value, 0, true));
+					EdgeEnum.values(), value, 1, true));
 		else if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))
 			jrElement.setLegendPosition((EdgeEnum) EnumHelper.getSetValue(
-					EdgeEnum.values(), value, 0, true));
+					EdgeEnum.values(), value, 1, true));
 		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper
 					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
 		else if (id.equals(JRBaseChart.PROPERTY_SHOW_LEGEND))
 			jrElement.setShowLegend((Boolean) value);
-		else if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE))
+		else if (id.equals(JRBaseChart.PROPERTY_RENDER_TYPE)) {
+			value = Misc.nullValue((String) value);
 			jrElement.setRenderType((String) value);
-		else if (id.equals(JRBaseChart.PROPERTY_THEME))
+		} else if (id.equals(JRBaseChart.PROPERTY_THEME)) {
+			value = Misc.nullValue((String) value);
 			jrElement.setTheme((String) value);
-		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_GROUP)) {
+		} else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_GROUP)) {
 			if (!value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(
 						value);
@@ -496,6 +500,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				jrElement.setLegendBackgroundColor(Colors
 						.getAWT4SWTRGBColor((RGB) value));
 		} else if (id.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS)) {
+			value = Misc.nullValue((String) value);
 			jrElement.setCustomizerClass((String) value);
 		} else if (id.equals(JRDesignChart.PROPERTY_TITLE_EXPRESSION)) {
 			jrElement.setTitleExpression(ExprUtil.setValues(

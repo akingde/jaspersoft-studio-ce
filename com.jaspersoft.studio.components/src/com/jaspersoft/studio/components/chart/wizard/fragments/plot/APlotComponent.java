@@ -59,11 +59,19 @@ public abstract class APlotComponent {
 
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
+
+		new Label(composite, SWT.NONE).setLayoutData(new GridData(
+				GridData.FILL_HORIZONTAL));
+		createChartTop(composite);
+		new Label(composite, SWT.NONE).setLayoutData(new GridData(
+				GridData.FILL_HORIZONTAL));
 
 		createChartLeft(composite);
 
 		createChartPreview(composite);
+
+		createChartRight(composite);
 
 		new Label(composite, SWT.NONE).setLayoutData(new GridData(
 				GridData.FILL_HORIZONTAL));
@@ -73,6 +81,10 @@ public abstract class APlotComponent {
 		this.control = composite;
 	}
 
+	protected abstract Control createChartRight(Composite parent);
+
+	protected abstract Control createChartTop(Composite parent);
+
 	protected abstract Control createChartLeft(Composite parent);
 
 	protected abstract Control createChartBottom(Composite parent);
@@ -80,7 +92,7 @@ public abstract class APlotComponent {
 	protected Control createChartPreview(Composite composite) {
 		canvasChart = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE
 				| SWT.NO_BACKGROUND);
-		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END
+		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER
 				| GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.widthHint = 500;
 		gd.heightHint = 325;

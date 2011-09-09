@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.components.chart.wizard.fragments.data.series;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.charts.JRGanttSeries;
@@ -53,7 +54,7 @@ public class GanttSeries implements ISeriesFactory<JRGanttSeries> {
 	}
 
 	public void setList(List<JRGanttSeries> vlist) {
-		this.vlist = vlist;
+		this.vlist = new ArrayList<JRGanttSeries>(vlist);
 	}
 
 }

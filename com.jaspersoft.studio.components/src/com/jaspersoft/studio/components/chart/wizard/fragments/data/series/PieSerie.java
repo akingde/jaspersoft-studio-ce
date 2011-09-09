@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.components.chart.wizard.fragments.data.series;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.charts.JRPieSeries;
@@ -52,6 +53,6 @@ public class PieSerie implements ISeriesFactory<JRPieSeries> {
 	}
 
 	public void setList(List<JRPieSeries> vlist) {
-		this.vlist = vlist;
+		this.vlist = new ArrayList<JRPieSeries>(vlist);
 	}
 }

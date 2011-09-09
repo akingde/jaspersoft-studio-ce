@@ -29,8 +29,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.chart.model.MChart;
-import com.jaspersoft.studio.components.chart.wizard.fragments.data.DatasetSeriesWidget;
-import com.jaspersoft.studio.components.chart.wizard.fragments.data.ElementDatasetWidget;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.ElementDatasetWidget;
 
 public class ChartDataPage extends WizardPage {
 	private JRDesignChart jrChart;

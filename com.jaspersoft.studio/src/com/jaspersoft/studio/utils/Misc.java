@@ -127,4 +127,11 @@ public class Misc {
 				return i;
 		return -1;
 	}
+
+	public static String nullValue(String value) {
+		if (value != null && value.trim().isEmpty())
+			return null;
+
+		return value;
+	}
 }

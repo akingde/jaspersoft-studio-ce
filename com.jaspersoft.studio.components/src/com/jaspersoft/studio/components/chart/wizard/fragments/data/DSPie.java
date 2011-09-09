@@ -42,16 +42,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.SeriesDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.PieSerie;
-import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.SeriesDialog;
-import com.jaspersoft.studio.components.chart.wizard.fragments.expr.ExpressionWidget;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 
 public class DSPie extends ADSComponent {
 	private JRDesignPieDataset dataset;
@@ -141,29 +141,30 @@ public class DSPie extends ADSComponent {
 			}
 		});
 
-		Button btn = new Button(yCompo, SWT.PUSH);
+		final Button btn = new Button(yCompo, SWT.PUSH);
 		btn.setText("...");
 		btn.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				PieSerie serie = new PieSerie();
-				SeriesDialog dlg = new SeriesDialog(Display.getCurrent()
-						.getActiveShell(), serie);
+				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
 				List<JRPieSeries> oldList = dataset.getSeriesList();
+				int oldsel = seriesCombo.getSelectionIndex();
+				JRPieSeries selected = null;
+				if (oldsel >= 0)
+					selected = oldList.get(oldsel);
 				serie.setList(oldList);
 				if (dlg.open() == Window.OK) {
 					List<JRPieSeries> newlist = serie.getList();
-					for (JRPieSeries item : oldList) {
-						if (!newlist.contains(item))
-							dataset.removePieSeries(item);
-					}
-					for (int i = 0; i < newlist.size(); i++) {
-						JRPieSeries ser = newlist.get(i);
-						if (!oldList.contains(ser))
-							dataset.addPieSeries(ser);
-					}
+					for (JRPieSeries item : dataset.getSeries())
+						dataset.removePieSeries(item);
+					for (JRPieSeries item : serie.getList())
+						dataset.addPieSeries(item);
 
-					setSeries(0);
+					int sel = selected != null
+							&& newlist.indexOf(selected) >= 0 ? newlist
+							.indexOf(selected) : 0;
+					setSeries(sel);
 				}
 			}
 

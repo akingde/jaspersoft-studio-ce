@@ -28,8 +28,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -64,13 +64,15 @@ public class FontSection extends AbstractSection {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		GridLayout layout = new GridLayout(7, false);
-		composite.setLayout(layout);
+		// GridLayout layout = new GridLayout(7, false);
+		composite.setLayout(new RowLayout());
 
 		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_font + ":", SWT.RIGHT); //$NON-NLS-1$
-		GridData gd = new GridData();
-		gd.widthHint = 100;
-		label.setLayoutData(gd);
+		// GridData gd = new GridData();
+		// gd.widthHint = 100;
+		RowData rd = new RowData();
+		rd.width = 102;
+		label.setLayoutData(rd);
 
 		fontName = new CCombo(composite, SWT.BORDER | SWT.FLAT);
 		fontName.setItems(ModelUtils.getFontNames());

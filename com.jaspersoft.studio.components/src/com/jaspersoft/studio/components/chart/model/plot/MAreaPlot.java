@@ -192,15 +192,14 @@ public class MAreaPlot extends MChartPlot {
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		catAxisVertTickLabelD
 				.setDescription(Messages.MAreaPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignAreaPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
-				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				Messages.common_value_axis_vertical_tick_labels, NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MAreaPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
@@ -348,7 +347,7 @@ public class MAreaPlot extends MChartPlot {
 			jrElement.setValueAxisLabelFont(MFontUtil.setMFont(value));
 		} else if (id
 				.equals(JRDesignAreaPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT)) {
-			jrElement.setCategoryAxisTickLabelFont(MFontUtil.setMFont(value));
+			jrElement.setValueAxisTickLabelFont(MFontUtil.setMFont(value));
 		} else
 
 		if (id.equals(JRDesignAreaPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR)

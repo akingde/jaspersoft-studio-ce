@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.wizard.fragments.data;
+package com.jaspersoft.studio.components.chart.wizard.fragments.data.widget;
 
 import java.util.ArrayList;
 import java.util.List;

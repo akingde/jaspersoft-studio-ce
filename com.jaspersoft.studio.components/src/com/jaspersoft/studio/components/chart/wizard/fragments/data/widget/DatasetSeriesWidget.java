@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.wizard.fragments.data;
+package com.jaspersoft.studio.components.chart.wizard.fragments.data.widget;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +42,16 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.ADSComponent;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSCategory;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSGantt;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSHighLow;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSPie;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSTimePeriod;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSTimeSeries;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSValue;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSXy;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSXyz;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class DatasetSeriesWidget {

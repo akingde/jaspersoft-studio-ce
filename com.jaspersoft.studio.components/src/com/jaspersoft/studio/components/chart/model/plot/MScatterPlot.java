@@ -217,6 +217,20 @@ public class MScatterPlot extends MChartPlot {
 				.setDescription(Messages.MScatterPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
+		CheckBoxPropertyDescriptor showShapesD = new CheckBoxPropertyDescriptor(
+				JRDesignScatterPlot.PROPERTY_SHOW_SHAPES,
+				Messages.common_show_shapes, NullEnum.NULL);
+		showShapesD
+				.setDescription(Messages.MTimeSeriesPlot_show_shapes_description);
+		desc.add(showShapesD);
+
+		CheckBoxPropertyDescriptor showLinesD = new CheckBoxPropertyDescriptor(
+				JRDesignScatterPlot.PROPERTY_SHOW_LINES,
+				Messages.common_show_lines, NullEnum.NULL);
+		showLinesD
+				.setDescription(Messages.MTimeSeriesPlot_show_lines_description);
+		desc.add(showLinesD);
+
 	}
 
 	/*
@@ -295,6 +309,10 @@ public class MScatterPlot extends MChartPlot {
 					jrElement.getYAxisTickLabelFont(), null, this);
 			return vtFont;
 		}
+		if (id.equals(JRDesignScatterPlot.PROPERTY_SHOW_LINES))
+			return jrElement.getShowLines();
+		if (id.equals(JRDesignScatterPlot.PROPERTY_SHOW_SHAPES))
+			return jrElement.getShowShapes();
 
 		return super.getPropertyValue(id);
 	}
@@ -386,6 +404,11 @@ public class MScatterPlot extends MChartPlot {
 				.equals(JRDesignScatterPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION))
 			jrElement.setDomainAxisMinValueExpression(ExprUtil.setValues(
 					jrElement.getDomainAxisMinValueExpression(), value));
+
+		else if (id.equals(JRDesignScatterPlot.PROPERTY_SHOW_LINES))
+			jrElement.setShowLines((Boolean) value);
+		else if (id.equals(JRDesignScatterPlot.PROPERTY_SHOW_SHAPES))
+			jrElement.setShowShapes((Boolean) value);
 		else
 			super.setPropertyValue(id, value);
 	}

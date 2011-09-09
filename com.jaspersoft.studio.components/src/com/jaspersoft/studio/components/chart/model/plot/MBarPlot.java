@@ -219,14 +219,14 @@ public class MBarPlot extends MChartPlot {
 
 		CheckBoxPropertyDescriptor showTickLabelsD = new CheckBoxPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_SHOW_TICK_LABELS,
-				Messages.MBarPlot_show_tick_labels, NullEnum.NOTNULL);
+				Messages.MBarPlot_show_tick_labels, NullEnum.NULL);
 		showTickLabelsD
 				.setDescription(Messages.MBarPlot_show_tick_labels_description);
 		desc.add(showTickLabelsD);
 
 		CheckBoxPropertyDescriptor showTickMarksD = new CheckBoxPropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_SHOW_TICK_MARKS,
-				Messages.MBarPlot_show_tick_marks, NullEnum.NOTNULL);
+				Messages.MBarPlot_show_tick_marks, NullEnum.NULL);
 		showTickMarksD
 				.setDescription(Messages.MBarPlot_show_tick_marks_description);
 		desc.add(showTickMarksD);

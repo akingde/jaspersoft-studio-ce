@@ -31,7 +31,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.jaspersoft.studio.components.chart.wizard.fragments.expr.ExpressionWidget;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 
 public class DSHighLow extends ADSComponent {
 	private JRDesignHighLowDataset dataset;

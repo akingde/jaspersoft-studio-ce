@@ -56,8 +56,7 @@ public class ExprUtil {
 		JRDesignExpression expr = (JRDesignExpression) e;
 		expr = createExpression(expr);
 		if (value instanceof JRDesignExpression) {
-			text = ((JRDesignExpression) value).getText();
-			expr.setValueClassName(((JRDesignExpression) value).getValueClassName());
+			return (T) value;
 		} else if (value instanceof String) {
 			text = (String) value;
 		}

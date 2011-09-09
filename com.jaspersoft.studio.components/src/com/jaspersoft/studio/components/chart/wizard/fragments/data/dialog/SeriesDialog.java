@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.components.chart.wizard.fragments.data.series;
+package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.ISeriesFactory;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -95,8 +96,6 @@ public class SeriesDialog extends FormDialog {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
-		// cursor = new TableCursor(table, SWT.NONE);
-
 		tableViewer = new TableViewer(table);
 		attachContentProvider(tableViewer);
 		attachLabelProvider(tableViewer);
@@ -110,11 +109,8 @@ public class SeriesDialog extends FormDialog {
 		column[0] = new TableColumn(table, SWT.NONE);
 		column[0].setText("Name expression");
 
-		// fillTable(table);
-		for (int i = 0, n = column.length; i < n; i++) {
+		for (int i = 0, n = column.length; i < n; i++)
 			column[i].pack();
-		}
-
 	}
 
 	private void attachLabelProvider(TableViewer viewer) {

@@ -36,7 +36,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.SeriesColorPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
@@ -71,13 +70,6 @@ public class MChartPlot extends APropertyNode {
 		foreAlphaD
 				.setDescription(Messages.MChartPlot_foreground_alpha_percent_description);
 		desc.add(foreAlphaD);
-
-		DoublePropertyDescriptor labelRotationD = new DoublePropertyDescriptor(
-				JRBaseChartPlot.PROPERTY_LABEL_ROTATION,
-				Messages.MChartPlot_label_rotation);
-		labelRotationD
-				.setDescription(Messages.MChartPlot_label_rotation_description);
-		desc.add(labelRotationD);
 
 		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(
 				JRBaseChartPlot.PROPERTY_ORIENTATION,
@@ -125,7 +117,6 @@ public class MChartPlot extends APropertyNode {
 	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
 	 * .lang.Object)
 	 */
-	@SuppressWarnings("deprecation")
 	public Object getPropertyValue(Object id) {
 		JRBaseChartPlot jrElement = (JRBaseChartPlot) getValue();
 		if (id.equals(JRBaseChartPlot.PROPERTY_BACKCOLOR))
@@ -134,8 +125,6 @@ public class MChartPlot extends APropertyNode {
 			return jrElement.getBackgroundAlphaFloat();
 		if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA))
 			return jrElement.getForegroundAlphaFloat();
-		if (id.equals(JRBaseChartPlot.PROPERTY_LABEL_ROTATION))
-			return jrElement.getLabelRotationDouble();
 		if (id.equals(JRBaseChartPlot.PROPERTY_ORIENTATION)) {
 			if (jrElement.getOrientation().equals(PlotOrientation.HORIZONTAL))
 				return 0;
@@ -155,28 +144,27 @@ public class MChartPlot extends APropertyNode {
 	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
 	 * .lang.Object, java.lang.Object)
 	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void setPropertyValue(Object id, Object value) {
 		JRBaseChartPlot jrElement = (JRBaseChartPlot) getValue();
 		if (id.equals(JRBaseChartPlot.PROPERTY_BACKCOLOR)) {
 			if (value instanceof RGB)
 				jrElement.setBackcolor(Colors.getAWT4SWTRGBColor((RGB) value));
-		} else if (id.equals(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA))
+		} else if (id.equals(JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA)) {
 			jrElement.setBackgroundAlpha((Float) value);
-		else if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA))
+		} else if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA)) {
 			jrElement.setForegroundAlpha((Float) value);
-		else if (id.equals(JRBaseChartPlot.PROPERTY_LABEL_ROTATION))
-			jrElement.setLabelRotation((Double) value);
-		else if (id.equals(JRBaseChartPlot.PROPERTY_ORIENTATION)) {
+		} else if (id.equals(JRBaseChartPlot.PROPERTY_ORIENTATION)) {
 			if (value.equals(new Integer(0)))
 				jrElement.setOrientation(PlotOrientation.HORIZONTAL);
 			else
 				jrElement.setOrientation(PlotOrientation.VERTICAL);
 		} else if (id.equals(JRBaseChartPlot.PROPERTY_SERIES_COLORS)) {
 			jrElement.clearSeriesColors();
-			SortedSet<JRSeriesColor> set = (SortedSet<JRSeriesColor>) value;
-			for (JRSeriesColor sc : set) {
-				jrElement.addSeriesColor(sc);
+			if (value instanceof SortedSet) {
+				SortedSet<JRSeriesColor> set = (SortedSet<JRSeriesColor>) value;
+				for (JRSeriesColor sc : set) {
+					jrElement.addSeriesColor(sc);
+				}
 			}
 		}
 	}

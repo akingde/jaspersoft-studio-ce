@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.components.chart.wizard.fragments.data.series;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.charts.JRCategorySeries;
@@ -8,7 +9,6 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.widgets.TableItem;
-
 
 public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 
@@ -54,6 +54,6 @@ public class CategorySerie implements ISeriesFactory<JRCategorySeries> {
 	}
 
 	public void setList(List<JRCategorySeries> vlist) {
-		this.vlist = vlist;
+		this.vlist = new ArrayList<JRCategorySeries>(vlist);
 	}
 }

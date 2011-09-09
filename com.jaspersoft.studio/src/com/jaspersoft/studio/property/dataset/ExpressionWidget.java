@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.components.chart.wizard.fragments.expr;
+package com.jaspersoft.studio.property.dataset;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -22,9 +22,13 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
 public class ExpressionWidget {
+	private String label;
+
 	public ExpressionWidget(Composite parent, String label) {
+		this.label = label;
 		createControl(parent);
-		expLabel.setText(label);
+		if (label != null)
+			expLabel.setText(label);
 	}
 
 	public void setEnabled(boolean enabled) {
@@ -33,7 +37,8 @@ public class ExpressionWidget {
 	}
 
 	private void createControl(Composite parent) {
-		expLabel = new Label(parent, SWT.NONE);
+		if (label != null)
+			expLabel = new Label(parent, SWT.NONE);
 
 		expText = new Text(parent, SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -42,7 +47,7 @@ public class ExpressionWidget {
 		expText.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				setExpressionText(expText.getText());
+				setExpressionText(expText.getText(), null);
 			}
 		});
 
@@ -53,14 +58,10 @@ public class ExpressionWidget {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue(expression);
-				WizardDialog dialog = new WizardDialog(Display.getDefault()
-						.getActiveShell(), wizard);
+				WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
-					setExpressionText(wizard.getValue().getText());
-					if (expression != null)
-						expression.setValueClassName(wizard.getValue()
-								.getValueClassName());
+					setExpressionText(wizard.getValue().getText(), wizard.getValue().getValueClassName());
 				}
 			}
 
@@ -74,13 +75,22 @@ public class ExpressionWidget {
 	private Text expText;
 	private Label expLabel;
 
-	private void setExpression(JRDesignExpression exp) {
+	public void setExpression(JRDesignExpression exp) {
 		this.expression = exp;
+		setOnParent(exp);
+		if (exp != null) {
+			expText.setText(exp.getText());
+			expText.setToolTipText(expText.getText());
+		} else {
+			expText.setText("");
+			expText.setToolTipText("");
+		}
+	}
+
+	protected void setOnParent(JRDesignExpression exp) {
 		try {
 			if (obj != null)
-				obj.getClass()
-						.getMethod("set" + property,
-								new Class[] { JRExpression.class })
+				obj.getClass().getMethod("set" + property, new Class[] { JRExpression.class })
 						.invoke(obj, new Object[] { exp });
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -93,29 +103,27 @@ public class ExpressionWidget {
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
-		if (exp != null) {
-			expText.setText(exp.getText());
-			expText.setToolTipText(expText.getText());
-		} else {
-			expText.setText("");
-			expText.setToolTipText("");
-		}
 	}
 
 	private boolean isModMode = false;
 
-	private void setExpressionText(String exptxt) {
+	private void setExpressionText(String exptxt, String valueClass) {
 		if (!isModMode) {
 			isModMode = true;
-			if (exptxt != null && !exptxt.isEmpty()) {
-				if (expression == null)
-					expression = new JRDesignExpression();
-				expression.setText(exptxt);
-			} else {
-				expression = null;
+			try {
+				if (exptxt != null && !exptxt.isEmpty()) {
+					if (expression == null)
+						expression = new JRDesignExpression();
+					expression.setText(exptxt);
+				} else {
+					expression = null;
+				}
+				if (valueClass != null && expression != null)
+					expression.setValueClassName(valueClass);
+				setExpression(expression);
+			} finally {
+				isModMode = false;
 			}
-			setExpression(expression);
-			isModMode = false;
 		}
 	}
 
@@ -129,9 +137,7 @@ public class ExpressionWidget {
 		try {
 			JRDesignExpression expr = null;
 			if (obj != null)
-				expr = (JRDesignExpression) obj.getClass()
-						.getMethod("get" + property, new Class[0])
-						.invoke(obj, new Object[0]);
+				expr = (JRDesignExpression) obj.getClass().getMethod("get" + property, new Class[0]).invoke(obj, new Object[0]);
 			setExpression(expr);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();

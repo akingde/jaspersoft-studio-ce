@@ -46,6 +46,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.components.chart.figure.ChartFigure;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.ChartDatasetDialog;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.utils.UIUtils;
 

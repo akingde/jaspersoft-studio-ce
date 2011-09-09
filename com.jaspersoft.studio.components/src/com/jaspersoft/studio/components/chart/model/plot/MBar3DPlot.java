@@ -306,7 +306,8 @@ public class MBar3DPlot extends MChartPlot {
 			return ExprUtil.getExpression(jrElement
 					.getCategoryAxisLabelExpression());
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION))
-			ExprUtil.getExpression(jrElement.getValueAxisLabelExpression());
+			return ExprUtil.getExpression(jrElement
+					.getValueAxisLabelExpression());
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION))
 			return ExprUtil.getExpression(jrElement
 					.getRangeAxisMaxValueExpression());
@@ -342,8 +343,9 @@ public class MBar3DPlot extends MChartPlot {
 		}
 		if (id.equals(JRDesignBar3DPlot.PROPERTY_ITEM_LABEL)) {
 			if (ilFont == null) {
-				if(jrElement.getItemLabel() == null)
-					jrElement.setItemLabel(new JRDesignItemLabel(null, jrElement.getChart()));
+				if (jrElement.getItemLabel() == null)
+					jrElement.setItemLabel(new JRDesignItemLabel(null,
+							jrElement.getChart()));
 				ilFont = new MChartItemLabel(jrElement.getItemLabel());
 				setChildListener(ilFont);
 			}

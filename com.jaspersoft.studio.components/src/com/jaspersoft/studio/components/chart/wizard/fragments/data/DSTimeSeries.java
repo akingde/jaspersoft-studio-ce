@@ -40,12 +40,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.SeriesDialog;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.SeriesDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.TimeSerie;
-import com.jaspersoft.studio.components.chart.wizard.fragments.expr.ExpressionWidget;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
@@ -142,29 +142,30 @@ public class DSTimeSeries extends ADSComponent {
 			}
 		});
 
-		Button btn = new Button(yCompo, SWT.PUSH);
+		final Button btn = new Button(yCompo, SWT.PUSH);
 		btn.setText("...");
 		btn.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				TimeSerie serie = new TimeSerie();
-				SeriesDialog dlg = new SeriesDialog(Display.getCurrent()
-						.getActiveShell(), serie);
+				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
 				List<JRTimeSeries> oldList = dataset.getSeriesList();
+				int oldsel = seriesCombo.getSelectionIndex();
+				JRTimeSeries selected = null;
+				if (oldsel >= 0)
+					selected = oldList.get(oldsel);
 				serie.setList(oldList);
 				if (dlg.open() == Window.OK) {
 					List<JRTimeSeries> newlist = serie.getList();
-					for (JRTimeSeries item : oldList) {
-						if (!newlist.contains(item))
-							dataset.removeTimeSeries(item);
-					}
-					for (int i = 0; i < newlist.size(); i++) {
-						JRTimeSeries ser = newlist.get(i);
-						if (!oldList.contains(ser))
-							dataset.addTimeSeries(ser);
-					}
+					for (JRTimeSeries item : dataset.getSeries())
+						dataset.removeTimeSeries(item);
+					for (JRTimeSeries item : serie.getList())
+						dataset.addTimeSeries(item);
 
-					setSeries(0);
+					int sel = selected != null
+							&& newlist.indexOf(selected) >= 0 ? newlist
+							.indexOf(selected) : 0;
+					setSeries(sel);
 				}
 			}
 

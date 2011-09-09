@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.components.chart.wizard.fragments.data.series;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.charts.JRXyzSeries;
@@ -52,6 +53,6 @@ public class XyzSerie implements ISeriesFactory<JRXyzSeries> {
 	}
 
 	public void setList(List<JRXyzSeries> vlist) {
-		this.vlist = vlist;
+		this.vlist = new ArrayList<JRXyzSeries>(vlist);
 	}
 }

@@ -39,12 +39,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.SeriesDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.CategorySerie;
-import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.SeriesDialog;
-import com.jaspersoft.studio.components.chart.wizard.fragments.expr.ExpressionWidget;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 
 public class DSCategory extends ADSComponent {
 	private JRDesignCategoryDataset dataset;
@@ -124,29 +124,30 @@ public class DSCategory extends ADSComponent {
 			}
 		});
 
-		Button btn = new Button(yCompo, SWT.PUSH);
+		final Button btn = new Button(yCompo, SWT.PUSH);
 		btn.setText("...");
 		btn.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				CategorySerie serie = new CategorySerie();
-				SeriesDialog dlg = new SeriesDialog(Display.getDefault()
-						.getActiveShell(), serie);
+				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
 				List<JRCategorySeries> oldList = dataset.getSeriesList();
+				int oldsel = seriesCombo.getSelectionIndex();
+				JRCategorySeries selected = null;
+				if (oldsel >= 0)
+					selected = oldList.get(oldsel);
 				serie.setList(oldList);
 				if (dlg.open() == Window.OK) {
 					List<JRCategorySeries> newlist = serie.getList();
-					for (JRCategorySeries item : oldList) {
-						if (!newlist.contains(item))
-							dataset.removeCategorySeries(item);
-					}
-					for (int i = 0; i < newlist.size(); i++) {
-						JRCategorySeries ser = newlist.get(i);
-						if (!oldList.contains(ser))
-							dataset.addCategorySeries(ser);
-					}
+					for (JRCategorySeries item : dataset.getSeries())
+						dataset.removeCategorySeries(item);
+					for (JRCategorySeries item : newlist)
+						dataset.addCategorySeries(item);
 
-					setSeries(0);
+					int sel = selected != null
+							&& newlist.indexOf(selected) >= 0 ? newlist
+							.indexOf(selected) : 0;
+					setSeries(sel);
 				}
 			}
 

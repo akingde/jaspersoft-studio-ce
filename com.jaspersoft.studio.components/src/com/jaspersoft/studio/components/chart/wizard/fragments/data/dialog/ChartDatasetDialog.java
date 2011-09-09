@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.components.chart.wizard.fragments.data;
+package com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog;
 
 import java.util.ArrayList;
 import java.util.Map;

@@ -153,7 +153,20 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 				if (c != null)
 					cc.add(c);
 			}
-			cs.execute(cc);
+			if (!cc.getCommands().isEmpty())
+				cs.execute(cc);
+		}
+	}
+
+	public void changePropertyOn(String property, Object newValue, APropertyNode n) {
+		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
+			CommandStack cs = getEditDomain().getCommandStack();
+			CompoundCommand cc = new CompoundCommand("Set " + property);
+			Command c = changeProperty(property, newValue, n);
+			if (c != null)
+				cc.add(c);
+			if (!cc.getCommands().isEmpty())
+				cs.execute(cc);
 		}
 	}
 

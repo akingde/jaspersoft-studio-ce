@@ -56,4 +56,28 @@ public class UIBarPlot extends APlotComponent {
 		return yCompo;
 	}
 
+	@Override
+	protected Control createChartRight(Composite parent) {
+		Composite yCompo = new Composite(parent, SWT.NONE);
+		yCompo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		yCompo.setLayout(new GridLayout(3, false));
+
+		Label yLabel = new Label(yCompo, SWT.NONE);
+		yLabel.setText("some x plot configuration");
+
+		return yCompo;
+	}
+
+	@Override
+	protected Control createChartTop(Composite parent) {
+		Composite yCompo = new Composite(parent, SWT.NONE);
+		yCompo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		yCompo.setLayout(new GridLayout(3, false));
+
+		Label yLabel = new Label(yCompo, SWT.NONE);
+		yLabel.setText("some x plot configuration");
+
+		return yCompo;
+	}
+
 }

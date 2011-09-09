@@ -55,9 +55,10 @@ public class BeanDataAdapterComposite extends Composite {
 		lblFactory.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 2, 1));
 		lblFactory
-				.setText("Factory class (the class that will produce JavaBeans");
+				.setText("Factory class (the class that will produce JavaBeans)");
 
-		factoryText = new ClassType(this);
+		factoryText = new ClassType(this,
+				"Factory class (the class that will produce JavaBeans)");
 		factoryText
 				.setClassType("com.jaspersoft.ireport.examples.SampleJRDataSourceFactory");
 

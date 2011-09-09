@@ -67,7 +67,7 @@ public class JRExpressionPage extends WizardPage {
 		gd.horizontalSpan = 2;
 		lbl1.setLayoutData(gd);
 
-		valueType = new ClassType(composite);
+		valueType = new ClassType(composite, "Expression Class type (deprecated)");
 		valueType.addListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {

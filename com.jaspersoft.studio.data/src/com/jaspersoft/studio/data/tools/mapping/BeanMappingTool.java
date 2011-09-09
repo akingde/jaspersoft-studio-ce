@@ -65,7 +65,7 @@ public class BeanMappingTool implements IMappingTool {
 		Label label = new Label(control, SWT.NONE);
 		label.setText(Messages.BeanMappingTool_labeltitle);
 
-		final ClassType classType = new ClassType(control);
+		final ClassType classType = new ClassType(control, "");
 		classType.addListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {

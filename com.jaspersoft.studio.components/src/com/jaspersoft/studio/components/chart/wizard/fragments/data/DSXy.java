@@ -39,12 +39,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.SeriesDialog;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.SeriesDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XySerie;
-import com.jaspersoft.studio.components.chart.wizard.fragments.expr.ExpressionWidget;
+import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 
 public class DSXy extends ADSComponent {
 	private JRDesignXyDataset dataset;
@@ -124,29 +124,30 @@ public class DSXy extends ADSComponent {
 			}
 		});
 
-		Button btn = new Button(yCompo, SWT.PUSH);
+		final Button btn = new Button(yCompo, SWT.PUSH);
 		btn.setText("...");
 		btn.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				XySerie serie = new XySerie();
-				SeriesDialog dlg = new SeriesDialog(Display.getCurrent()
-						.getActiveShell(), serie);
+				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
 				List<JRXySeries> oldList = dataset.getSeriesList();
+				int oldsel = seriesCombo.getSelectionIndex();
+				JRXySeries selected = null;
+				if (oldsel >= 0)
+					selected = oldList.get(oldsel);
 				serie.setList(oldList);
 				if (dlg.open() == Window.OK) {
 					List<JRXySeries> newlist = serie.getList();
-					for (JRXySeries item : oldList) {
-						if (!newlist.contains(item))
-							dataset.removeXySeries(item);
-					}
-					for (int i = 0; i < newlist.size(); i++) {
-						JRXySeries ser = newlist.get(i);
-						if (!oldList.contains(ser))
-							dataset.addXySeries(ser);
-					}
+					for (JRXySeries item : dataset.getSeries())
+						dataset.removeXySeries(item);
+					for (JRXySeries item : serie.getList())
+						dataset.addXySeries(item);
 
-					setSeries(0);
+					int sel = selected != null
+							&& newlist.indexOf(selected) >= 0 ? newlist
+							.indexOf(selected) : 0;
+					setSeries(sel);
 				}
 			}
 
