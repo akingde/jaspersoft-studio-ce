@@ -37,14 +37,15 @@ public class DataAdapterServiceExtensionsRegistryFactoryImpl implements Extensio
 	private static final ExtensionsRegistry extensionsRegistry = 
 		new ExtensionsRegistry()
 		{
-			public List<?> getExtensions(Class<?> extensionType) 
+			public <T> List<T> getExtensions(Class<T> extensionType) 
 			{
 				if (DataAdapterServiceFactory.class.equals(extensionType))
 				{
-					return Collections.singletonList(DataAdapterServiceFactoryImpl.getInstance());
+					return (List<T>) Collections.singletonList(DataAdapterServiceFactoryImpl.getInstance());
 				}
 				return null;
 			}
+
 		};
 	
 	public ExtensionsRegistry createRegistry(String registryId, JRPropertiesMap properties) 
