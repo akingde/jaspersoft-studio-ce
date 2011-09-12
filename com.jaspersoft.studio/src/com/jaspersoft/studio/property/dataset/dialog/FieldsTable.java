@@ -113,7 +113,7 @@ public class FieldsTable {
 
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
-			public Object newElement(List<?> input) {
+			public Object newElement(List<?> input, int pos) {
 				JRDesignField f = new JRDesignField();
 				f.setName(getName());
 				f.setValueClass(String.class);

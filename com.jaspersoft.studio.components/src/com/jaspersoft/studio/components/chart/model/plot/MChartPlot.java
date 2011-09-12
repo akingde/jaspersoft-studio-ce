@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.components.chart.model.plot;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -159,13 +160,14 @@ public class MChartPlot extends APropertyNode {
 			else
 				jrElement.setOrientation(PlotOrientation.VERTICAL);
 		} else if (id.equals(JRBaseChartPlot.PROPERTY_SERIES_COLORS)) {
-			jrElement.clearSeriesColors();
-			if (value instanceof SortedSet) {
-				SortedSet<JRSeriesColor> set = (SortedSet<JRSeriesColor>) value;
-				for (JRSeriesColor sc : set) {
-					jrElement.addSeriesColor(sc);
-				}
-			}
+			jrElement.setSeriesColors((Collection<JRSeriesColor>) value);
+			// jrElement.clearSeriesColors();
+			// if (value instanceof SortedSet) {
+			// SortedSet<JRSeriesColor> set = (SortedSet<JRSeriesColor>) value;
+			// for (JRSeriesColor sc : set) {
+			// jrElement.addSeriesColor(sc);
+			// }
+			// }
 		}
 	}
 

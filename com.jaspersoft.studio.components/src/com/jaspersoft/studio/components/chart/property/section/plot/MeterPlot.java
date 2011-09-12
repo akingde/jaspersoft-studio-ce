@@ -1,9 +1,31 @@
+/*
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2011 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.components.chart.property.section.plot;
+
+import java.util.List;
 
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.charts.type.MeterShapeEnum;
+import net.sf.jasperreports.charts.util.JRMeterInterval;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
@@ -17,6 +39,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
 import com.jaspersoft.studio.components.chart.property.widget.BtnColor;
+import com.jaspersoft.studio.components.chart.property.widget.BtnMeterInterval;
 import com.jaspersoft.studio.components.chart.property.widget.BtnNumber;
 import com.jaspersoft.studio.components.chart.property.widget.BtnExpression;
 import com.jaspersoft.studio.components.chart.property.widget.BtnFont;
@@ -200,6 +223,18 @@ public class MeterPlot extends APlot {
 		dRangeHigh = new BtnExpression(cmp, section,
 				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION);
+
+		composite = new Composite(parent, SWT.NONE);
+		composite.setBackground(parent.getBackground());
+		composite.setLayout(new RowLayout());
+
+		lbl = section.getWidgetFactory().createCLabel(composite, "", SWT.RIGHT);
+		rd = new RowData();
+		rd.width = 101;
+		lbl.setLayoutData(rd);
+
+		mInterval = new BtnMeterInterval(composite, section,
+				JRDesignMeterPlot.PROPERTY_INTERVALS, "Meter Intervals");
 	}
 
 	private BtnText units;
@@ -218,9 +253,13 @@ public class MeterPlot extends APlot {
 
 	private BtnExpression dRangeLow;
 	private BtnExpression dRangeHigh;
+	private BtnMeterInterval mInterval;
 
 	@Override
 	public void setData(MChartPlot mplot) {
+		mInterval.setData((List<JRMeterInterval>) mplot
+				.getPropertyValue(JRDesignMeterPlot.PROPERTY_INTERVALS));
+
 		units.setData((String) mplot
 				.getPropertyValue(JRDesignMeterPlot.PROPERTY_UNITS));
 

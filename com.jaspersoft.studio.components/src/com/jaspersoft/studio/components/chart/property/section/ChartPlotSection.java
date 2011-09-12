@@ -19,8 +19,13 @@
  */
 package com.jaspersoft.studio.components.chart.property.section;
 
-import net.sf.jasperreports.engine.base.JRBaseChartPlot;
+import java.util.SortedSet;
 
+import net.sf.jasperreports.engine.base.JRBaseChartPlot;
+import net.sf.jasperreports.engine.base.JRBaseChartPlot.JRBaseSeriesColor;
+
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -29,11 +34,13 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
+import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.dialog.SeriesColorEditor;
 import com.jaspersoft.studio.components.chart.property.section.plot.APlot;
 import com.jaspersoft.studio.components.chart.property.section.plot.PlotFactory;
 import com.jaspersoft.studio.components.chart.property.widget.BtnColor;
@@ -135,6 +142,31 @@ public class ChartPlotSection extends AbstractSection {
 		});
 		modeType.setToolTipText(Messages.ColorsSection_transparency_tool_tip);
 
+		final Button colorSeries = new Button(composite, SWT.PUSH);
+		colorSeries.setText("Series Colors");
+		colorSeries.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				APropertyNode element = getElement();
+				if (element != null) {
+					SeriesColorEditor wizard = new SeriesColorEditor();
+					wizard.setValue((SortedSet<JRBaseSeriesColor>) element
+							.getPropertyValue(JRBaseChartPlot.PROPERTY_SERIES_COLORS));
+
+					WizardDialog dialog = new WizardDialog(colorSeries
+							.getShell(), wizard);
+					dialog.create();
+					if (dialog.open() == Dialog.OK) {
+						changeProperty(JRBaseChartPlot.PROPERTY_SERIES_COLORS,
+								wizard.getValue());
+					}
+				}
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
 	}
 
 	private APlot plot;

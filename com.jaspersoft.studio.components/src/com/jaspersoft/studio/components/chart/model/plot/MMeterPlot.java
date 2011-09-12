@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.components.chart.model.plot;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.charts.type.MeterShapeEnum;
+import net.sf.jasperreports.charts.util.JRMeterInterval;
 import net.sf.jasperreports.engine.JRException;
 
 import org.eclipse.swt.graphics.RGB;
@@ -227,6 +230,13 @@ public class MMeterPlot extends MChartPlot {
 					.getFont(), null, this);
 			return vdFont;
 		}
+		if (id.equals(JRDesignMeterPlot.PROPERTY_INTERVALS)) {
+			List<JRMeterInterval> lst = jrElement.getIntervals();
+			if (lst != null) {
+				return new ArrayList<JRMeterInterval>(lst);
+			}
+			return lst;
+		}
 		return super.getPropertyValue(id);
 	}
 
@@ -245,8 +255,9 @@ public class MMeterPlot extends MChartPlot {
 		JRDesignMeterPlot jrElement = (JRDesignMeterPlot) getValue();
 		JRDesignDataRange jrDataRange = (JRDesignDataRange) jrElement
 				.getDataRange();
-
-		if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT)) {
+		if (id.equals(JRDesignMeterPlot.PROPERTY_INTERVALS)) {
+			jrElement.setIntervals((Collection<JRMeterInterval>) value);
+		} else if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT)) {
 			jrElement.setTickLabelFont(MFontUtil.setMFont(value));
 		} else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
 				+ "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$

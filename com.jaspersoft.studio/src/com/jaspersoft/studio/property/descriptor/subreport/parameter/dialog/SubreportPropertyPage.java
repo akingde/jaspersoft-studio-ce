@@ -128,7 +128,7 @@ public class SubreportPropertyPage extends WizardPage {
 
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-			public Object newElement(List<?> input) {
+			public Object newElement(List<?> input, int pos) {
 				JRDesignSubreportParameter param = new JRDesignSubreportParameter();
 				int i = 0;
 				String name = "NEW_PARAMETER";//$NON-NLS-1$

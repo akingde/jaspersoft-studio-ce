@@ -128,7 +128,7 @@ public class ClasspathComponent {
 
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
-			public Object newElement(List<?> input) {
+			public Object newElement(List<?> input, int pos) {
 				FileDialog dialog = new FileDialog(Display.getDefault().getActiveShell(), SWT.OPEN | SWT.MULTI);
 				dialog.setFilterNames(new String[] { "JAR Files", "All Files (*.*)" });
 				dialog.setFilterExtensions(new String[] { "*.jar", "*.*" });

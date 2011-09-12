@@ -96,7 +96,7 @@ public class FontLocalesPage extends WizardPage {
 
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-			public Object newElement(List<?> input) {
+			public Object newElement(List<?> input, int pos) {
 				LocaleDialog ld = new LocaleDialog(Display.getCurrent().getActiveShell(), null);
 				if (ld.open() == Dialog.OK) {
 					Locale l = ld.getLocale();

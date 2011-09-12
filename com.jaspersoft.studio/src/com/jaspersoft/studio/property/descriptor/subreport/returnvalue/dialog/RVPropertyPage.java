@@ -156,7 +156,7 @@ public class RVPropertyPage extends WizardPage {
 
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-			public Object newElement(List<?> input) {
+			public Object newElement(List<?> input, int pos) {
 				List<JRDesignSubreportReturnValue> list = (List<JRDesignSubreportReturnValue>) tableViewer.getInput();
 
 				JRDesignSubreportReturnValue p = new JRDesignSubreportReturnValue();

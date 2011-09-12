@@ -19,58 +19,27 @@
  */
 package com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.dialog;
 
-import net.sf.jasperreports.engine.JRDatasetParameter;
-import net.sf.jasperreports.engine.design.JasperDesign;
+import java.awt.Color;
+
 /*
  * @author Chicu Veaceslav
  * 
  */
 public class SeriesColorDTO {
-	public SeriesColorDTO() {
+
+	public SeriesColorDTO(Color value) {
 		super();
-	}
-
-	public SeriesColorDTO(String property, String description) {
-		super();
-		this.property = property;
-		this.description = description;
-	}
-
-	private String property;
-	private String description;
-	private JRDatasetParameter[] value;
-	private JasperDesign jd;
-
-	public void setJasperDesign(JasperDesign jd) {
-		this.jd = jd;
-	}
-
-	public JasperDesign getJasperDesign() {
-		return jd;
-	}
-
-	public JRDatasetParameter[] getValue() {
-		return value;
-	}
-
-	public void setValue(JRDatasetParameter[] value) {
 		this.value = value;
 	}
 
-	public String getProperty() {
-		return property;
+	public Color getValue() {
+		return value;
 	}
 
-	public void setProperty(String property) {
-		this.property = property;
+	public void setValue(Color value) {
+		this.value = value;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	private Color value;
 
 }

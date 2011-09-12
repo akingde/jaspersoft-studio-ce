@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.descriptor.properties.dialog;
 
@@ -135,7 +131,7 @@ public class JRPropertyPage extends WizardPage {
 
 		new NewButton().createNewButtons(bGroup, tableViewer, new INewElement() {
 
-			public Object newElement(List<?> input) {
+			public Object newElement(List<?> input, int pos) {
 				List<PropertyDTO> list = (List<PropertyDTO>) tableViewer.getInput();
 				int i = 1;
 				String name = "newproperty"; //$NON-NLS-1$
@@ -345,26 +341,26 @@ public class JRPropertyPage extends WizardPage {
 		table.addListener(SWT.MouseHover, tableListener);
 	}
 
-//	private String[] getPropertyItems(String[] items, String dto) {
-//		List<PropertyDTO> props = (List<PropertyDTO>) tableViewer.getInput();
-//		Set<String> set = new HashSet<String>();
-//		for (PropertyDTO p : props)
-//			if (!dto.equals(p.getProperty()))
-//				set.add(p.getProperty());
-//		List<String> l = new ArrayList<String>();
-//		boolean isDTO = false;
-//		String[] names = getDefaultPropertyItems();
-//		for (int i = 0; i < names.length; i++) {
-//			if (!set.contains(names[i]))
-//				l.add(names[i]);
-//			if (dto.equals(names[i])) {
-//				isDTO = true;
-//			}
-//		}
-//		l.add(0, !isDTO ? "" : dto); //$NON-NLS-1$
-//		// default - exclude existing
-//		return l.toArray(new String[l.size()]);
-//	}
+	// private String[] getPropertyItems(String[] items, String dto) {
+	// List<PropertyDTO> props = (List<PropertyDTO>) tableViewer.getInput();
+	// Set<String> set = new HashSet<String>();
+	// for (PropertyDTO p : props)
+	// if (!dto.equals(p.getProperty()))
+	// set.add(p.getProperty());
+	// List<String> l = new ArrayList<String>();
+	// boolean isDTO = false;
+	// String[] names = getDefaultPropertyItems();
+	// for (int i = 0; i < names.length; i++) {
+	// if (!set.contains(names[i]))
+	// l.add(names[i]);
+	// if (dto.equals(names[i])) {
+	// isDTO = true;
+	// }
+	// }
+	//		l.add(0, !isDTO ? "" : dto); //$NON-NLS-1$
+	// // default - exclude existing
+	// return l.toArray(new String[l.size()]);
+	// }
 
 	private String[] getDefaultPropertyItems() {
 		defaultProperties = getDefaultProperties();

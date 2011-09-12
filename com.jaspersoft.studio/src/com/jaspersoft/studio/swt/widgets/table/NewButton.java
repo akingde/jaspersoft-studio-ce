@@ -75,24 +75,24 @@ public class NewButton {
 				inlist = new ArrayList();
 				tableViewer.setInput(inlist);
 			}
-			Object selement = newElement.newElement(inlist);
+			int index = -1;
+			if (!s.isEmpty())
+				index = inlist.indexOf(s.getFirstElement());
+			Object selement = newElement.newElement(inlist, index);
 			if (selement != null) {
 				if (selement instanceof Object[]) {
 					for (Object se : (Object[]) selement) {
-						addElement(s, inlist, se);
+						addElement(index, inlist, se);
 					}
 				} else
-					addElement(s, inlist, selement);
+					addElement(index, inlist, selement);
 				tableViewer.refresh();
 				tableViewer.setSelection(new StructuredSelection(selement));
 			}
 		}
 
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		private void addElement(StructuredSelection s, List inlist, Object selement) {
-			int index = -1;
-			if (!s.isEmpty())
-				index = inlist.indexOf(s.getFirstElement());
+		private void addElement(int index, List inlist, Object selement) {
 			if (index >= 0 && index < inlist.size())
 				inlist.add(index, selement);
 			else
