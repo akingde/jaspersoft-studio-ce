@@ -47,7 +47,7 @@ public class JRExpressionCellEditor extends DialogCellEditor {
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
 			JRDesignExpression value = wizard.getValue();
-//			updateContents(value);
+			// updateContents(value);
 			return value;
 		}
 		return null;

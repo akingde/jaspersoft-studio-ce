@@ -34,24 +34,35 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 public class BtnEvaluationTime {
 	private CCombo evalTime;
 
 	public BtnEvaluationTime(Composite parent, AbstractSection section,
-			String property, String tooltip, String[] items) {
-		createComponent(parent, section, property, tooltip, items);
+			String property, String tooltip) {
+		createComponent(parent, section, property, tooltip);
 	}
 
 	public void createComponent(Composite parent,
-			final AbstractSection section, final String property,
-			String tooltip, String[] items) {
+			final AbstractSection section, final String property, String tooltip) {
 		evalTime = new CCombo(parent, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		evalTime.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				String group = null;
 				Integer et = new Integer(1);
+
+				String str = evalTime.getItem(evalTime.getSelectionIndex());
+				if (str.startsWith(GROUPPREFIX)) {
+					group = str.substring(GROUPPREFIX.length());
+					et = EnumHelper
+							.getValue(EvaluationTimeEnum.GROUP, 1, false);
+				} else {
+					et = EnumHelper.getValue(EvaluationTimeEnum.getByName(str),
+							1, false);
+				}
+
 				section.changeProperty(JRDesignChart.PROPERTY_EVALUATION_TIME,
 						et);
 				section.changeProperty(JRDesignChart.PROPERTY_EVALUATION_GROUP,
@@ -67,20 +78,27 @@ public class BtnEvaluationTime {
 
 	public void setData(Integer et, String group, String[] items) {
 		evalTime.setItems(items);
-		// String[] items = theme.getItems();
-		// int selection = 0;
-		// for (int i = 0; i < items.length; i++) {
-		// if (items[i].equals(b)) {
-		// selection = i;
-		// break;
-		// }
-		// }
-		// theme.select(selection);
-		// if (selection == 0 && b != null)
-		// theme.setItem(0, b);
+		int selection = 0;
+		EvaluationTimeEnum sel = (EvaluationTimeEnum) EnumHelper.getSetValue(
+				EvaluationTimeEnum.values(), et, 1, false);
+
+		for (int i = 0; i < items.length; i++) {
+			if (items[i].equals(sel.getName())) {
+				selection = i;
+				break;
+			}
+			if (items[i].startsWith(GROUPPREFIX)
+					&& sel.equals(EvaluationTimeEnum.GROUP)) {
+				if (items[i].substring(GROUPPREFIX.length()).equals(group)) {
+					selection = i;
+					break;
+				}
+			}
+		}
+		evalTime.select(selection);
 	}
 
-	public String[] getItems(JRDataset dataset) {
+	public static String[] getItems(JRDataset dataset) {
 		List<String> lsIncs = new ArrayList<String>();
 		for (EvaluationTimeEnum en : EvaluationTimeEnum.values()) {
 			if (en.equals(EvaluationTimeEnum.GROUP)) {

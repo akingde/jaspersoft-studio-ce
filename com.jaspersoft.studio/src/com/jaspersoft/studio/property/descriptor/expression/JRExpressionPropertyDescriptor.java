@@ -33,6 +33,7 @@ public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor {
 
 	public JRExpressionPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
+		setLabelProvider(new JRExpressionLabelProvider());
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {

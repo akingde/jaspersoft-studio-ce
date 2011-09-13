@@ -19,11 +19,12 @@
  */
 package com.jaspersoft.studio.components.chart.property.section;
 
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
@@ -32,6 +33,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.widget.BtnClassType;
+import com.jaspersoft.studio.components.chart.property.widget.BtnEvaluationTime;
 import com.jaspersoft.studio.components.chart.property.widget.BtnRWCombo;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -42,7 +44,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Chicu Veaceslav
  */
 public class ChartSection extends AbstractSection {
-	private CCombo evaluationTime;
+	private BtnEvaluationTime evaluationTime;
 	private BtnRWCombo rendererType;
 	private Composite composite;
 	private BtnRWCombo theme;
@@ -110,33 +112,21 @@ public class ChartSection extends AbstractSection {
 						"eye.candy.sixties" });
 
 		// --------------------
-		// composite = new Composite(parent, SWT.NONE);
-		// composite.setBackground(parent.getBackground());
-		// composite.setLayout(new RowLayout());
-		//
-		// lbl = getWidgetFactory().createCLabel(composite,
-		// Messages.MChart_evaluation_time);
-		// rd = new RowData();
-		// rd.width = 130;
-		// lbl.setLayoutData(rd);
+		composite = new Composite(parent, SWT.NONE);
+		composite.setBackground(parent.getBackground());
+		composite.setLayout(new RowLayout());
 
-		// evaluationTime = new CCombo(composite, SWT.BORDER | SWT.FLAT
-		// | SWT.READ_ONLY);
-		// evaluationTime.setItems(EnumHelper.getEnumNames(EdgeEnum.values(),
-		// NullEnum.NULL));
-		// evaluationTime.addSelectionListener(new SelectionListener() {
-		//
-		// public void widgetSelected(SelectionEvent e) {
-		// changeProperty(JRDesignChart.PROPERTY_EVALUATION_TIME,
-		// new Integer(evaluationTime.getSelectionIndex()));
-		// }
-		//
-		// public void widgetDefaultSelected(SelectionEvent e) {
-		// widgetSelected(e);
-		// }
-		// });
-		// evaluationTime
-		// .setToolTipText(com.jaspersoft.studio.components.chart.messages.Messages.MChart_evaluation_time_description);
+		lbl = getWidgetFactory().createCLabel(composite,
+				Messages.MChart_evaluation_time);
+		rd = new RowData();
+		rd.width = 130;
+		lbl.setLayoutData(rd);
+
+		evaluationTime = new BtnEvaluationTime(
+				composite,
+				this,
+				JRDesignChart.PROPERTY_EVALUATION_TIME,
+				com.jaspersoft.studio.components.chart.messages.Messages.MChart_evaluation_time_description);
 	}
 
 	/**
@@ -154,12 +144,31 @@ public class ChartSection extends AbstractSection {
 
 			theme.setData((String) element
 					.getPropertyValue(JRBaseChart.PROPERTY_THEME));
+
+			JRDesignChart chart = (JRDesignChart) element.getValue();
+			JasperDesign jasperDesign = element.getJasperDesign();
+			JRDataset dataset = null;
+			if (chart.getDataset().getDatasetRun() != null) {
+				String dsname = chart.getDataset().getDatasetRun()
+						.getDatasetName();
+				dataset = jasperDesign.getDatasetMap().get(dsname);
+			}
+			if (dataset == null)
+				dataset = jasperDesign.getMainDataset();
+
+			evaluationTime
+					.setData(
+							(Integer) element
+									.getPropertyValue(JRDesignChart.PROPERTY_EVALUATION_TIME),
+							(String) element
+									.getPropertyValue(JRDesignChart.PROPERTY_EVALUATION_GROUP),
+							BtnEvaluationTime.getItems(dataset));
 		}
 		isRefreshing = false;
 	}
 
 	@Override
 	public boolean isDisposed() {
-		return evaluationTime.isDisposed();
+		return composite.isDisposed();
 	}
 }
