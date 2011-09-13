@@ -56,14 +56,14 @@ public class ExprUtil {
 		JRDesignExpression expr = (JRDesignExpression) e;
 		expr = createExpression(expr);
 		if (value instanceof JRDesignExpression) {
-			return (T) value;
+			return checkEmpty((T) value);
 		} else if (value instanceof String) {
 			text = (String) value;
 		}
 		expr.setText(text);
 		if (valueClassName != null)
 			expr.setValueClassName(valueClassName);
-		return (T) expr;
+		return checkEmpty((T) expr);
 	}
 
 	private static JRDesignExpression createExpression(JRDesignExpression expr) {
@@ -77,6 +77,12 @@ public class ExprUtil {
 		if (jrExpression != null)
 			return Misc.nvl(jrExpression.getText(), "");
 		return "";
+	}
+
+	private static <T extends JRExpression> T checkEmpty(T e) {
+		if (e.getText().trim().isEmpty())
+			return null;
+		return e;
 	}
 
 	public static JRExpression getExpression(JRExpression jrExpression) {

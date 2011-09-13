@@ -610,11 +610,11 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 
 				if ((mBand instanceof MBandGroupHeader && groupName != null
 						&& sourceOrigin.getBandTypeValue().equals(BandTypeEnum.GROUP_HEADER) && groupName
-						.equals(((MBandGroupHeader) mBand).getJrGroup().getName()))
+							.equals(((MBandGroupHeader) mBand).getJrGroup().getName()))
 
 						|| (mBand instanceof MBandGroupFooter && groupName != null
 								&& sourceOrigin.getBandTypeValue().equals(BandTypeEnum.GROUP_FOOTER) && groupName
-								.equals(((MBandGroupFooter) mBand).getJrGroup().getName()))
+									.equals(((MBandGroupFooter) mBand).getJrGroup().getName()))
 
 						|| (sourceOrigin.getBandTypeValue().equals(BandTypeEnum.DETAIL) && BandTypeEnum.DETAIL.equals(mBand
 								.getBandType()))) {
@@ -801,8 +801,8 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 
 			JRPropertiesMap pmap = jrDesignDataset.getPropertiesMap();
 			pmap.getEventSupport().removePropertyChangeListener(this);
-
-			mDataset.setValue(null);
+			if (mDataset != null)
+				mDataset.setValue(null);
 		}
 		if (value != null) {
 			JasperDesign jasperDesign = (JasperDesign) value;

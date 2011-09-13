@@ -436,6 +436,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap.put(JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, Boolean.FALSE);
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, Boolean.FALSE);
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, Boolean.FALSE);
+		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, null);
 	}
 
 	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$

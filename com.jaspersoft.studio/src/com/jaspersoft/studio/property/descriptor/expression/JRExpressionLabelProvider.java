@@ -36,8 +36,10 @@ public class JRExpressionLabelProvider extends LabelProvider {
 	public String getText(Object element) {
 		if (element != null && element instanceof String)
 			return (String) element;
-		if (element != null && element instanceof JRExpression)
-			return ((JRExpression) element).getText();
+		if (element != null && element instanceof JRExpression) {
+			String text = ((JRExpression) element).getText();
+			return text;
+		}
 		return ""; //$NON-NLS-1$
 	}
 

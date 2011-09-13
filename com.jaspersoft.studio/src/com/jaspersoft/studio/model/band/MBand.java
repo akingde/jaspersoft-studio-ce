@@ -209,6 +209,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 
 		defaultsMap.put(JRDesignBand.PROPERTY_HEIGHT, CONST_HEIGHT);
 		defaultsMap.put(JRDesignBand.PROPERTY_SPLIT_TYPE, null);
+		defaultsMap.put(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION, null);
 	}
 
 	/*

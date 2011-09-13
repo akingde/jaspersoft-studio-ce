@@ -50,15 +50,17 @@ import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
 public class WizardConnectionPage extends WizardPage {
 	private MDatasetRun datasetrun;
 	private DatasetRunWidget dsRun;
+	private JRDesignDatasetRun jrDsRun;
 
 	public void setDataSetRun(MDatasetRun datasetrun) {
 		this.datasetrun = datasetrun;
-		JRDesignDatasetRun ct = (JRDesignDatasetRun) datasetrun.getValue();
-		if (ct == null) {
-			ct = new JRDesignDatasetRun();
-			datasetrun.setValue(ct);
+		jrDsRun = (JRDesignDatasetRun) datasetrun.getValue();
+		if (jrDsRun == null) {
+			jrDsRun = new JRDesignDatasetRun();
+			datasetrun.setValue(jrDsRun);
 		}
-		dsRun.setData(ct);
+		if (dsRun != null)
+			dsRun.setData(jrDsRun);
 	}
 
 	public MDatasetRun getDataSetRun() {
@@ -73,5 +75,8 @@ public class WizardConnectionPage extends WizardPage {
 
 	public void createControl(Composite parent) {
 		dsRun = new DatasetRunWidget(parent);
+
+		setControl(dsRun.getControl());
+		dsRun.setData(jrDsRun);
 	}
 }
