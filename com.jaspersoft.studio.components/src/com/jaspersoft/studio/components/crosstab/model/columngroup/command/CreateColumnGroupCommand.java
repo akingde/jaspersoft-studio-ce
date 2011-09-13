@@ -101,7 +101,7 @@ public class CreateColumnGroupCommand extends Command {
 
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+				if (e.getMessage().startsWith("A group or measure having the same name already exists in the crosstab.")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(
 							jrCrosstab.getColumnGroupIndicesMap(),
 							"CopyOFColumnGroup_"); //$NON-NLS-1$

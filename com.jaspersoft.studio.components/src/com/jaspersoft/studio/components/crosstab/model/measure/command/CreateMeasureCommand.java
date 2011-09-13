@@ -86,7 +86,7 @@ public class CreateMeasureCommand extends Command {
 				// jrCrosstab.addParameter(index, jrParameter);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+				if (e.getMessage().startsWith("A group or measure having the same name already exists in the crosstab")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(jrCrosstab.getMeasureIndicesMap(), "CopyOFMeasure_"); //$NON-NLS-1$
 					InputDialog dlg = new InputDialog(Display.getDefault().getActiveShell(),
 							Messages.CreateMeasureCommand_parameter_name, Messages.CreateMeasureCommand_dialog_text, defaultName,

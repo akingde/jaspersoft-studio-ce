@@ -97,7 +97,7 @@ public class CreateRowGroupCommand extends Command {
 				addRowGroup(jrCrosstab, jrGroup, index);
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("Duplicate declaration")) { //$NON-NLS-1$
+				if (e.getMessage().startsWith("A group or measure having the same name already exists in the crosstab.")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(
 							jrCrosstab.getRowGroupIndicesMap(),
 							"CopyOFRowGroup_"); //$NON-NLS-1$
