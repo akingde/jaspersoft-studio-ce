@@ -48,8 +48,12 @@ public class ExportAsPdfAction extends AbstractExportAction {
 	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
 		JRPdfExporter exp = new JRPdfExporter();
 		// common
-		exp.setParameter(JRPdfExporterParameter.PDF_VERSION,
-				ph.getCharacter(PDFExporterPreferencePage.NSF_EXPORT_PDF_VERSION));
+		exp.setParameter(JRPdfExporterParameter.PDF_VERSION, ph.getCharacter(JRPdfExporterParameter.PROPERTY_PDF_VERSION));
+		exp.setParameter(JRPdfExporterParameter.PDFA_CONFORMANCE,
+				ph.getCharacter(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE));
+		exp.setParameter(JRPdfExporterParameter.PDFA_ICC_PROFILE_PATH,
+				ph.getCharacter(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH));
+
 		exp.setParameter(JRPdfExporterParameter.IS_COMPRESSED, ph.getBoolean(JRPdfExporterParameter.PROPERTY_COMPRESSED));
 		exp.setParameter(JRPdfExporterParameter.IS_CREATING_BATCH_MODE_BOOKMARKS,
 				ph.getBoolean(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS));

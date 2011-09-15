@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.preferences.exporter;
 
@@ -28,6 +24,7 @@ import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PathEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -35,6 +32,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
@@ -46,11 +44,11 @@ import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+
 /*
  * 
  */
 public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
-	public static final String NSF_EXPORT_PDF_VERSION = "net.sf.jasperreports.export.pdf.version"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_PDF_COLLAPSE_MISSING_BOOKMARK_LEVELS = "net.sf.jasperreports.export.pdf.collapse.missing.bookmark.levels"; //$NON-NLS-1$
 
 	// fonts
@@ -74,8 +72,8 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(NSF_EXPORT_PDF_VERSION,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_VERSION), Messages.PDFExporterPreferencePage_25));
+		store.setDefault(JRPdfExporterParameter.PROPERTY_PDF_VERSION, Misc.nvl(
+				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDF_VERSION), Messages.PDFExporterPreferencePage_25));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_COMPRESSED,
 				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_COMPRESSED));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS,
@@ -124,6 +122,12 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_METADATA_KEYWORDS), Messages.PDFExporterPreferencePage_36));
 		store.setDefault(NSF_EXPORT_PDF_METADATA_CREATOR,
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_METADATA_CREATOR), Messages.PDFExporterPreferencePage_37));
+		// PDF/A
+		store.setDefault(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE, Misc.nvl(
+				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE),
+				JRPdfExporterParameter.PDFA_CONFORMANCE_NONE));
+		store.setDefault(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH,
+				Misc.nvl(JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH), ""));
 	}
 
 	/**
@@ -146,6 +150,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		ptab.setText(Messages.PDFExporterPreferencePage_38);
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
+		ptab.setControl(sc);
 
 		addField(new StringFieldEditor(NSF_EXPORT_PDF_METADATA_TITLE, Messages.PDFExporterPreferencePage_39, sc));
 		addField(new StringFieldEditor(NSF_EXPORT_PDF_METADATA_AUTHOR, Messages.PDFExporterPreferencePage_40, sc));
@@ -153,7 +158,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		addField(new StringFieldEditor(NSF_EXPORT_PDF_METADATA_KEYWORDS, Messages.PDFExporterPreferencePage_42, sc));
 		addField(new StringFieldEditor(NSF_EXPORT_PDF_METADATA_CREATOR, Messages.PDFExporterPreferencePage_43, sc));
 
-		ptab.setControl(sc);
+		sc.setLayout(new GridLayout(3, false));
 	}
 
 	private void createTabSecurity(CTabFolder tabFolder) {
@@ -185,21 +190,23 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 		ptab.setText(Messages.PDFExporterPreferencePage_50);
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
+		ptab.setControl(sc);
 
+		addField(new BooleanFieldEditor(NSF_EXPORT_PDF_EMBEDDED, Messages.PDFExporterPreferencePage_52, sc));
 		addField(new ComboFieldEditor(NSF_EXPORT_PDF_ENCODING, Messages.PDFExporterPreferencePage_51,
 				ModelUtils.getPdfEncodings2(), sc));
-		addField(new BooleanFieldEditor(NSF_EXPORT_PDF_EMBEDDED, Messages.PDFExporterPreferencePage_52, sc));
+
 		addField(new ComboFieldEditor(NSF_EXPORT_PDF_FONT_NAME, Messages.PDFExporterPreferencePage_53,
 				ModelUtils.getPDFFontNames2(), sc));
 
-		Composite fp = new Composite(sc, SWT.NONE);
+		Composite fdircompo = new Composite(sc, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
-		fp.setLayoutData(gd);
-		addField(new PathEditor(NSF_EXPORT_PDF_FONTDIR, Messages.PDFExporterPreferencePage_54,
-				Messages.PDFExporterPreferencePage_55, fp));
-
-		ptab.setControl(sc);
+		gd.horizontalSpan = 5;
+		fdircompo.setLayoutData(gd);
+		PathEditor pe = new PathEditor(NSF_EXPORT_PDF_FONTDIR, Messages.PDFExporterPreferencePage_54,
+				Messages.PDFExporterPreferencePage_55, fdircompo);
+		addField(pe);
+		fdircompo.setLayout(new GridLayout(4, false));
 	}
 
 	private void createTabCommons(CTabFolder tabFolder) {
@@ -208,14 +215,29 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
 
-		addField(new ComboFieldEditor(NSF_EXPORT_PDF_VERSION, Messages.PDFExporterPreferencePage_57, new String[][] {
-				{ Messages.PDFExporterPreferencePage_58, Messages.PDFExporterPreferencePage_59 },
-				{ Messages.PDFExporterPreferencePage_60, Messages.PDFExporterPreferencePage_61 },
-				{ Messages.PDFExporterPreferencePage_62, Messages.PDFExporterPreferencePage_63 },
-				{ Messages.PDFExporterPreferencePage_64, Messages.PDFExporterPreferencePage_65 },
-				{ Messages.PDFExporterPreferencePage_66, Messages.PDFExporterPreferencePage_67 },
-				{ Messages.PDFExporterPreferencePage_68, Messages.PDFExporterPreferencePage_69 },
-				{ Messages.PDFExporterPreferencePage_70, Messages.PDFExporterPreferencePage_71 } }, sc));
+		addField(new ComboFieldEditor(JRPdfExporterParameter.PROPERTY_PDF_VERSION, Messages.PDFExporterPreferencePage_57,
+				new String[][] { { Messages.PDFExporterPreferencePage_58, Messages.PDFExporterPreferencePage_59 },
+						{ Messages.PDFExporterPreferencePage_60, Messages.PDFExporterPreferencePage_61 },
+						{ Messages.PDFExporterPreferencePage_62, Messages.PDFExporterPreferencePage_63 },
+						{ Messages.PDFExporterPreferencePage_64, Messages.PDFExporterPreferencePage_65 },
+						{ Messages.PDFExporterPreferencePage_66, Messages.PDFExporterPreferencePage_67 },
+						{ Messages.PDFExporterPreferencePage_68, Messages.PDFExporterPreferencePage_69 },
+						{ Messages.PDFExporterPreferencePage_70, Messages.PDFExporterPreferencePage_71 } }, sc));
+
+		addField(new ComboFieldEditor(
+				JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE,
+				"PDF/A Conformance",
+				new String[][] { { JRPdfExporterParameter.PDFA_CONFORMANCE_NONE, "none" },
+						{ JRPdfExporterParameter.PDFA_CONFORMANCE_1A, "1A" }, { JRPdfExporterParameter.PDFA_CONFORMANCE_1B, "1B" } },
+				sc));
+
+		Composite fcompo = new Composite(sc, SWT.NONE);
+		fcompo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		FileFieldEditor ffe = new FileFieldEditor(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH,
+				"ICC Profile File", fcompo);
+		ffe.setFileExtensions(new String[] { ".dtd" }); //$NON-NLS-1$
+		addField(ffe);
 
 		addField(new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_COMPRESSED, Messages.PDFExporterPreferencePage_72,
 				sc));
