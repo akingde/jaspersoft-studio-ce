@@ -236,7 +236,7 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 
 		FileFieldEditor ffe = new FileFieldEditor(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH,
 				"ICC Profile File", fcompo);
-		ffe.setFileExtensions(new String[] { ".dtd" }); //$NON-NLS-1$
+		ffe.setFileExtensions(new String[] { ".icc" }); //$NON-NLS-1$
 		addField(ffe);
 
 		addField(new BooleanFieldEditor(JRPdfExporterParameter.PROPERTY_COMPRESSED, Messages.PDFExporterPreferencePage_72,
