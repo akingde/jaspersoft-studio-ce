@@ -32,13 +32,13 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.components.chart.property.widget.BtnColor;
-import com.jaspersoft.studio.components.chart.property.widget.BtnExpression;
-import com.jaspersoft.studio.components.chart.property.widget.BtnFont;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SPColor;
+import com.jaspersoft.studio.property.section.widgets.SPExpression;
+import com.jaspersoft.studio.property.section.widgets.SPFont;
 
 /*
  * The location section on the location tab.
@@ -47,9 +47,9 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  */
 public class SubTitleSection extends AbstractSection {
 
-	private BtnColor foreButton;
-	private BtnExpression expr;
-	private BtnFont btnFont;
+	private SPColor foreButton;
+	private SPExpression expr;
+	private SPFont btnFont;
 	private Composite composite;
 
 	/**
@@ -84,10 +84,10 @@ public class SubTitleSection extends AbstractSection {
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
 
-		expr = new BtnExpression(cmp, this,
+		expr = new SPExpression(cmp, this,
 				JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION);
 
-		btnFont = new BtnFont(parent, this,
+		btnFont = new SPFont(parent, this,
 				JRDesignChart.PROPERTY_SUBTITLE_FONT);
 
 		composite = new Composite(parent, SWT.NONE);
@@ -100,7 +100,7 @@ public class SubTitleSection extends AbstractSection {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		foreButton = new BtnColor(composite, this,
+		foreButton = new SPColor(composite, this,
 				JRBaseChart.PROPERTY_SUBTITLE_COLOR,
 				Messages.ColorsSection_element_forecolor_tool_tip);
 	}

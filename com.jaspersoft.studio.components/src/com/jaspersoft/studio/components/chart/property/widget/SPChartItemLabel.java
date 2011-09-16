@@ -32,10 +32,12 @@ import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SPColor;
+import com.jaspersoft.studio.property.section.widgets.SPFont;
 
-public class BtnChartItemLabel {
+public class SPChartItemLabel {
 
-	public BtnChartItemLabel(Composite parent, AbstractSection section,
+	public SPChartItemLabel(Composite parent, AbstractSection section,
 			String property) {
 		createComponent(parent, section, property);
 	}
@@ -52,26 +54,26 @@ public class BtnChartItemLabel {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		ilColor = new BtnColor(composite, section,
+		ilColor = new SPColor(composite, section,
 				JRDesignItemLabel.PROPERTY_COLOR,
 				Messages.MChartItemLabel_color_description);
 
 		section.getWidgetFactory().createCLabel(composite, "Background",
 				SWT.RIGHT);
 
-		ilBGColor = new BtnColor(composite, section,
+		ilBGColor = new SPColor(composite, section,
 				JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR,
 				Messages.MChartItemLabel_background_color_description);
 
 		section.getWidgetFactory().createCLabel(composite, "Font", SWT.RIGHT);
 
-		ilFont = new BtnFont(composite, section,
+		ilFont = new SPFont(composite, section,
 				JRDesignItemLabel.PROPERTY_FONT, false);
 	}
 
-	private BtnColor ilColor;
-	private BtnColor ilBGColor;
-	private BtnFont ilFont;
+	private SPColor ilColor;
+	private SPColor ilBGColor;
+	private SPFont ilFont;
 
 	public void setData(MChartItemLabel element) {
 		if (element != null) {

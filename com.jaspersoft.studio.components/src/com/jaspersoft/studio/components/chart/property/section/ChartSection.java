@@ -32,11 +32,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
-import com.jaspersoft.studio.components.chart.property.widget.BtnClassType;
-import com.jaspersoft.studio.components.chart.property.widget.BtnEvaluationTime;
-import com.jaspersoft.studio.components.chart.property.widget.BtnRWCombo;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SPClassType;
+import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
+import com.jaspersoft.studio.property.section.widgets.SPRWCombo;
 
 /*
  * The location section on the location tab.
@@ -44,11 +44,11 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Chicu Veaceslav
  */
 public class ChartSection extends AbstractSection {
-	private BtnEvaluationTime evaluationTime;
-	private BtnRWCombo rendererType;
+	private SPEvaluationTime evaluationTime;
+	private SPRWCombo rendererType;
 	private Composite composite;
-	private BtnRWCombo theme;
-	private BtnClassType classtype;
+	private SPRWCombo theme;
+	private SPClassType classtype;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -73,7 +73,7 @@ public class ChartSection extends AbstractSection {
 		rd.width = 130;
 		lbl.setLayoutData(rd);
 
-		classtype = new BtnClassType(composite, this,
+		classtype = new SPClassType(composite, this,
 				JRDesignChart.PROPERTY_CUSTOMIZER_CLASS,
 				Messages.MChart_customizer_class_description);
 
@@ -90,7 +90,7 @@ public class ChartSection extends AbstractSection {
 		rd.width = 130;
 		lbl.setLayoutData(rd);
 
-		rendererType = new BtnRWCombo(composite, this,
+		rendererType = new SPRWCombo(composite, this,
 				JRBaseChart.PROPERTY_RENDER_TYPE,
 				Messages.MChart_renderer_type_description, new String[] { "",
 						"draw", "image", "svg" });
@@ -106,7 +106,7 @@ public class ChartSection extends AbstractSection {
 		rd.width = 130;
 		lbl.setLayoutData(rd);
 
-		theme = new BtnRWCombo(composite, this, JRBaseChart.PROPERTY_THEME,
+		theme = new SPRWCombo(composite, this, JRBaseChart.PROPERTY_THEME,
 				Messages.MChart_theme_description, new String[] { "", "aegian",
 						"default", "default.spring", "generic",
 						"eye.candy.sixties" });
@@ -122,10 +122,11 @@ public class ChartSection extends AbstractSection {
 		rd.width = 130;
 		lbl.setLayoutData(rd);
 
-		evaluationTime = new BtnEvaluationTime(
+		evaluationTime = new SPEvaluationTime(
 				composite,
 				this,
 				JRDesignChart.PROPERTY_EVALUATION_TIME,
+				JRDesignChart.PROPERTY_EVALUATION_GROUP,
 				com.jaspersoft.studio.components.chart.messages.Messages.MChart_evaluation_time_description);
 	}
 
@@ -162,7 +163,7 @@ public class ChartSection extends AbstractSection {
 									.getPropertyValue(JRDesignChart.PROPERTY_EVALUATION_TIME),
 							(String) element
 									.getPropertyValue(JRDesignChart.PROPERTY_EVALUATION_GROUP),
-							BtnEvaluationTime.getItems(dataset));
+							SPEvaluationTime.getItems(dataset));
 		}
 		isRefreshing = false;
 	}

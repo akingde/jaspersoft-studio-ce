@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.property.widget;
+package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -27,10 +27,10 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class BtnRWCombo {
+public class SPRCombo {
 	private CCombo theme;
 
-	public BtnRWCombo(Composite parent, AbstractSection section,
+	public SPRCombo(Composite parent, AbstractSection section,
 			String property, String tooltip, String[] items) {
 		createComponent(parent, section, property, tooltip, items);
 	}
@@ -38,13 +38,12 @@ public class BtnRWCombo {
 	public void createComponent(Composite parent,
 			final AbstractSection section, final String property,
 			String tooltip, String[] items) {
-		theme = new CCombo(parent, SWT.BORDER | SWT.FLAT);
+		theme = new CCombo(parent, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		theme.setItems(items);
 		theme.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				section.changeProperty(property,
-						theme.getItem(theme.getSelectionIndex()));
+				section.changeProperty(property, theme.getSelectionIndex());
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -53,17 +52,7 @@ public class BtnRWCombo {
 		theme.setToolTipText(tooltip);
 	}
 
-	public void setData(String b) {
-		String[] items = theme.getItems();
-		int selection = 0;
-		for (int i = 0; i < items.length; i++) {
-			if (items[i].equals(b)) {
-				selection = i;
-				break;
-			}
-		}
-		theme.select(selection);
-		if (selection == 0 && b != null)
-			theme.setItem(0, b);
+	public void setData(Integer b) {
+		theme.select(b);
 	}
 }

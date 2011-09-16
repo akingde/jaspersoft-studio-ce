@@ -32,7 +32,7 @@ import com.jaspersoft.studio.components.chart.model.MChart;
 public class ChartWizard extends Wizard {
 	private ChartTypeWizardPage page0;
 	private ChartDataPage step1;
-	private ChartVisualPage step2;
+	// private ChartVisualPage step2;
 	private MChart chart;
 
 	private int width;
@@ -56,8 +56,8 @@ public class ChartWizard extends Wizard {
 		step1 = new ChartDataPage(chart, jasperDesign);
 		addPage(step1);
 
-		step2 = new ChartVisualPage(chart, jasperDesign);
-		addPage(step2);
+		// step2 = new ChartVisualPage(chart, jasperDesign);
+		// addPage(step2);
 	}
 
 	@Override

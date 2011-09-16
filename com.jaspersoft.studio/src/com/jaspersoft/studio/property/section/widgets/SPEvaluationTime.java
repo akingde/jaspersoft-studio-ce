@@ -17,14 +17,13 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.property.widget;
+package com.jaspersoft.studio.property.section.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRGroup;
-import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 import org.eclipse.swt.SWT;
@@ -36,16 +35,16 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public class BtnEvaluationTime {
+public class SPEvaluationTime {
 	private CCombo evalTime;
 
-	public BtnEvaluationTime(Composite parent, AbstractSection section,
-			String property, String tooltip) {
-		createComponent(parent, section, property, tooltip);
+	public SPEvaluationTime(Composite parent, AbstractSection section,
+			String propEvalTime, String propEvalGroup, String tooltip) {
+		createComponent(parent, section, propEvalTime, propEvalGroup, tooltip);
 	}
 
 	public void createComponent(Composite parent,
-			final AbstractSection section, final String property, String tooltip) {
+			final AbstractSection section, final String propEvalTime, final String propEvalGroup, String tooltip) {
 		evalTime = new CCombo(parent, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		evalTime.addSelectionListener(new SelectionListener() {
 
@@ -63,9 +62,9 @@ public class BtnEvaluationTime {
 							1, false);
 				}
 
-				section.changeProperty(JRDesignChart.PROPERTY_EVALUATION_TIME,
+				section.changeProperty(propEvalTime,
 						et);
-				section.changeProperty(JRDesignChart.PROPERTY_EVALUATION_GROUP,
+				section.changeProperty(propEvalGroup,
 						group);
 			}
 

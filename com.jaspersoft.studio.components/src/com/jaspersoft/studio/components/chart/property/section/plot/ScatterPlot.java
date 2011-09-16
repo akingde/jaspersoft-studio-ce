@@ -34,13 +34,13 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
-import com.jaspersoft.studio.components.chart.property.widget.Btn3Boolean;
-import com.jaspersoft.studio.components.chart.property.widget.BtnColor;
-import com.jaspersoft.studio.components.chart.property.widget.BtnExpression;
-import com.jaspersoft.studio.components.chart.property.widget.BtnFont;
-import com.jaspersoft.studio.components.chart.property.widget.BtnText;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SP3Boolean;
+import com.jaspersoft.studio.property.section.widgets.SPColor;
+import com.jaspersoft.studio.property.section.widgets.SPExpression;
+import com.jaspersoft.studio.property.section.widgets.SPFont;
+import com.jaspersoft.studio.property.section.widgets.SPText;
 
 public class ScatterPlot extends APlot {
 
@@ -48,8 +48,8 @@ public class ScatterPlot extends APlot {
 		super(parent, section);
 	}
 
-	private Btn3Boolean showLines;
-	private Btn3Boolean showShapes;
+	private SP3Boolean showLines;
+	private SP3Boolean showShapes;
 
 	@Override
 	protected void createComponent(Composite parent, AbstractSection section) {
@@ -60,7 +60,7 @@ public class ScatterPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				Messages.common_show_lines, SWT.RIGHT);
 
-		showLines = new Btn3Boolean(
+		showLines = new SP3Boolean(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_SHOW_LINES,
@@ -69,7 +69,7 @@ public class ScatterPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				Messages.common_show_shapes, SWT.RIGHT);
 
-		showShapes = new Btn3Boolean(
+		showShapes = new SP3Boolean(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_SHOW_SHAPES,
@@ -103,7 +103,7 @@ public class ScatterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		caxLineColor = new BtnColor(
+		caxLineColor = new SPColor(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LINE_COLOR,
@@ -127,17 +127,17 @@ public class ScatterPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		caxLblExpr = new BtnExpression(cmp, section,
+		caxLblExpr = new SPExpression(cmp, section,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_EXPRESSION);
 
 		section.getWidgetFactory().createCLabel(composite, "Font", SWT.RIGHT);
 
-		caxLblFont = new BtnFont(composite, section,
+		caxLblFont = new SPFont(composite, section,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_FONT, false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		caxLblColor = new BtnColor(
+		caxLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_COLOR,
@@ -153,12 +153,12 @@ public class ScatterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		caxTickLblFont = new BtnFont(composite, section,
+		caxTickLblFont = new SPFont(composite, section,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_TICK_LABEL_FONT, false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		caxTickLblColor = new BtnColor(
+		caxTickLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_TICK_LABEL_COLOR,
@@ -166,7 +166,7 @@ public class ScatterPlot extends APlot {
 
 		section.getWidgetFactory().createCLabel(composite, "Mask", SWT.RIGHT);
 
-		caxTickLblMask = new BtnText(
+		caxTickLblMask = new SPText(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_TICK_LABEL_MASK,
@@ -184,7 +184,7 @@ public class ScatterPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				"Show Vertical Tick Label", SWT.RIGHT);
 
-		caxTickLblShow = new Btn3Boolean(
+		caxTickLblShow = new SP3Boolean(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS,
@@ -211,7 +211,7 @@ public class ScatterPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		caxRangeMin = new BtnExpression(cmp, section,
+		caxRangeMin = new SPExpression(cmp, section,
 				JRDesignScatterPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION);
 
 		section.getWidgetFactory().createCLabel(composite, "Max value",
@@ -225,32 +225,32 @@ public class ScatterPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		caxRangeMax = new BtnExpression(cmp, section,
+		caxRangeMax = new SPExpression(cmp, section,
 				JRDesignScatterPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION);
 
 	}
 
-	private BtnColor caxLineColor;
-	private BtnColor caxLblColor;
-	private BtnFont caxLblFont;
-	private BtnColor caxTickLblColor;
-	private BtnFont caxTickLblFont;
-	private Btn3Boolean caxTickLblShow;
-	private BtnText caxTickLblMask;
-	private BtnExpression caxLblExpr;
-	private BtnExpression caxRangeMin;
-	private BtnExpression caxRangeMax;
+	private SPColor caxLineColor;
+	private SPColor caxLblColor;
+	private SPFont caxLblFont;
+	private SPColor caxTickLblColor;
+	private SPFont caxTickLblFont;
+	private SP3Boolean caxTickLblShow;
+	private SPText caxTickLblMask;
+	private SPExpression caxLblExpr;
+	private SPExpression caxRangeMin;
+	private SPExpression caxRangeMax;
 
-	private BtnColor vaxLineColor;
-	private BtnColor vaxLblColor;
-	private BtnFont vaxLblFont;
-	private BtnColor vaxTickLblColor;
-	private BtnFont vaxTickLblFont;
-	private Btn3Boolean vaxTickLblShow;
-	private BtnText vaxTickLblMask;
-	private BtnExpression vaxLblExpr;
-	private BtnExpression vaxRangeMin;
-	private BtnExpression vaxRangeMax;
+	private SPColor vaxLineColor;
+	private SPColor vaxLblColor;
+	private SPFont vaxLblFont;
+	private SPColor vaxTickLblColor;
+	private SPFont vaxTickLblFont;
+	private SP3Boolean vaxTickLblShow;
+	private SPText vaxTickLblMask;
+	private SPExpression vaxLblExpr;
+	private SPExpression vaxRangeMin;
+	private SPExpression vaxRangeMax;
 
 	private void createValue(Composite parent, AbstractSection section) {
 		Section sectioncmp = section.getWidgetFactory().createSection(
@@ -275,7 +275,7 @@ public class ScatterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		vaxLineColor = new BtnColor(
+		vaxLineColor = new SPColor(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LINE_COLOR,
@@ -299,17 +299,17 @@ public class ScatterPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		vaxLblExpr = new BtnExpression(cmp, section,
+		vaxLblExpr = new SPExpression(cmp, section,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_EXPRESSION);
 
 		section.getWidgetFactory().createCLabel(composite, "Font", SWT.RIGHT);
 
-		vaxLblFont = new BtnFont(composite, section,
+		vaxLblFont = new SPFont(composite, section,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_FONT, false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		vaxLblColor = new BtnColor(
+		vaxLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_COLOR,
@@ -325,12 +325,12 @@ public class ScatterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		vaxTickLblFont = new BtnFont(composite, section,
+		vaxTickLblFont = new SPFont(composite, section,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_TICK_LABEL_FONT, false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		vaxTickLblColor = new BtnColor(
+		vaxTickLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_TICK_LABEL_COLOR,
@@ -338,7 +338,7 @@ public class ScatterPlot extends APlot {
 
 		section.getWidgetFactory().createCLabel(composite, "Mask", SWT.RIGHT);
 
-		vaxTickLblMask = new BtnText(
+		vaxTickLblMask = new SPText(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_TICK_LABEL_MASK,
@@ -356,7 +356,7 @@ public class ScatterPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				"Show Vertical Tick Label", SWT.RIGHT);
 
-		vaxTickLblShow = new Btn3Boolean(
+		vaxTickLblShow = new SP3Boolean(
 				composite,
 				section,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_VERTICAL_TICK_LABELS,
@@ -383,7 +383,7 @@ public class ScatterPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		vaxRangeMin = new BtnExpression(cmp, section,
+		vaxRangeMin = new SPExpression(cmp, section,
 				JRDesignScatterPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION);
 
 		section.getWidgetFactory().createCLabel(composite, "Max value",
@@ -397,7 +397,7 @@ public class ScatterPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		vaxRangeMax = new BtnExpression(cmp, section,
+		vaxRangeMax = new SPExpression(cmp, section,
 				JRDesignScatterPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION);
 	}
 

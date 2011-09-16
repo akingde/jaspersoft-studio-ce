@@ -33,13 +33,13 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
-import com.jaspersoft.studio.components.chart.property.widget.Btn3Boolean;
-import com.jaspersoft.studio.components.chart.property.widget.BtnColor;
-import com.jaspersoft.studio.components.chart.property.widget.BtnExpression;
-import com.jaspersoft.studio.components.chart.property.widget.BtnFont;
-import com.jaspersoft.studio.components.chart.property.widget.BtnText;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SP3Boolean;
+import com.jaspersoft.studio.property.section.widgets.SPColor;
+import com.jaspersoft.studio.property.section.widgets.SPExpression;
+import com.jaspersoft.studio.property.section.widgets.SPFont;
+import com.jaspersoft.studio.property.section.widgets.SPText;
 
 public class CandlestickPlot extends APlot {
 
@@ -47,7 +47,7 @@ public class CandlestickPlot extends APlot {
 		super(parent, section);
 	}
 
-	private Btn3Boolean showVolume;
+	private SP3Boolean showVolume;
 
 	@Override
 	protected void createComponent(Composite parent, AbstractSection section) {
@@ -65,7 +65,7 @@ public class CandlestickPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		showVolume = new Btn3Boolean(
+		showVolume = new SP3Boolean(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_SHOW_VOLUME,
@@ -99,7 +99,7 @@ public class CandlestickPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		caxLineColor = new BtnColor(
+		caxLineColor = new SPColor(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LINE_COLOR,
@@ -123,17 +123,17 @@ public class CandlestickPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		caxLblExpr = new BtnExpression(cmp, section,
+		caxLblExpr = new SPExpression(cmp, section,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_EXPRESSION);
 
 		section.getWidgetFactory().createCLabel(composite, "Font", SWT.RIGHT);
 
-		caxLblFont = new BtnFont(composite, section,
+		caxLblFont = new SPFont(composite, section,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_FONT, false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		caxLblColor = new BtnColor(
+		caxLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_LABEL_COLOR,
@@ -149,13 +149,13 @@ public class CandlestickPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		caxTickLblFont = new BtnFont(composite, section,
+		caxTickLblFont = new SPFont(composite, section,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_FONT,
 				false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		caxTickLblColor = new BtnColor(
+		caxTickLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_COLOR,
@@ -163,7 +163,7 @@ public class CandlestickPlot extends APlot {
 
 		section.getWidgetFactory().createCLabel(composite, "Mask", SWT.RIGHT);
 
-		caxTickLblMask = new BtnText(
+		caxTickLblMask = new SPText(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_TICK_LABEL_MASK,
@@ -181,7 +181,7 @@ public class CandlestickPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				"Show Vertical Tick Label", SWT.RIGHT);
 
-		caxTickLblShow = new Btn3Boolean(
+		caxTickLblShow = new SP3Boolean(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS,
@@ -208,7 +208,7 @@ public class CandlestickPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		caxRangeMin = new BtnExpression(
+		caxRangeMin = new SPExpression(
 				cmp,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION);
@@ -224,34 +224,34 @@ public class CandlestickPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		caxRangeMax = new BtnExpression(
+		caxRangeMax = new SPExpression(
 				cmp,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION);
 
 	}
 
-	private BtnColor caxLineColor;
-	private BtnColor caxLblColor;
-	private BtnFont caxLblFont;
-	private BtnColor caxTickLblColor;
-	private BtnFont caxTickLblFont;
-	private Btn3Boolean caxTickLblShow;
-	private BtnText caxTickLblMask;
-	private BtnExpression caxLblExpr;
-	private BtnExpression caxRangeMin;
-	private BtnExpression caxRangeMax;
+	private SPColor caxLineColor;
+	private SPColor caxLblColor;
+	private SPFont caxLblFont;
+	private SPColor caxTickLblColor;
+	private SPFont caxTickLblFont;
+	private SP3Boolean caxTickLblShow;
+	private SPText caxTickLblMask;
+	private SPExpression caxLblExpr;
+	private SPExpression caxRangeMin;
+	private SPExpression caxRangeMax;
 
-	private BtnColor vaxLineColor;
-	private BtnColor vaxLblColor;
-	private BtnFont vaxLblFont;
-	private BtnColor vaxTickLblColor;
-	private BtnFont vaxTickLblFont;
-	private Btn3Boolean vaxTickLblShow;
-	private BtnText vaxTickLblMask;
-	private BtnExpression vaxLblExpr;
-	private BtnExpression vaxRangeMin;
-	private BtnExpression vaxRangeMax;
+	private SPColor vaxLineColor;
+	private SPColor vaxLblColor;
+	private SPFont vaxLblFont;
+	private SPColor vaxTickLblColor;
+	private SPFont vaxTickLblFont;
+	private SP3Boolean vaxTickLblShow;
+	private SPText vaxTickLblMask;
+	private SPExpression vaxLblExpr;
+	private SPExpression vaxRangeMin;
+	private SPExpression vaxRangeMax;
 
 	private void createValue(Composite parent, AbstractSection section) {
 		Section sectioncmp = section.getWidgetFactory().createSection(
@@ -276,7 +276,7 @@ public class CandlestickPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		vaxLineColor = new BtnColor(
+		vaxLineColor = new SPColor(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LINE_COLOR,
@@ -300,17 +300,17 @@ public class CandlestickPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		vaxLblExpr = new BtnExpression(cmp, section,
+		vaxLblExpr = new SPExpression(cmp, section,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION);
 
 		section.getWidgetFactory().createCLabel(composite, "Font", SWT.RIGHT);
 
-		vaxLblFont = new BtnFont(composite, section,
+		vaxLblFont = new SPFont(composite, section,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		vaxLblColor = new BtnColor(
+		vaxLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR,
@@ -326,13 +326,13 @@ public class CandlestickPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		vaxTickLblFont = new BtnFont(composite, section,
+		vaxTickLblFont = new SPFont(composite, section,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT,
 				false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		vaxTickLblColor = new BtnColor(
+		vaxTickLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR,
@@ -340,7 +340,7 @@ public class CandlestickPlot extends APlot {
 
 		section.getWidgetFactory().createCLabel(composite, "Mask", SWT.RIGHT);
 
-		vaxTickLblMask = new BtnText(
+		vaxTickLblMask = new SPText(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK,
@@ -358,7 +358,7 @@ public class CandlestickPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				"Show Vertical Tick Label", SWT.RIGHT);
 
-		vaxTickLblShow = new Btn3Boolean(
+		vaxTickLblShow = new SP3Boolean(
 				composite,
 				section,
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
@@ -385,7 +385,7 @@ public class CandlestickPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		vaxRangeMin = new BtnExpression(cmp, section,
+		vaxRangeMin = new SPExpression(cmp, section,
 				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION);
 
 		section.getWidgetFactory().createCLabel(composite, "Max value",
@@ -399,7 +399,7 @@ public class CandlestickPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		vaxRangeMax = new BtnExpression(cmp, section,
+		vaxRangeMax = new SPExpression(cmp, section,
 				JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION);
 	}
 

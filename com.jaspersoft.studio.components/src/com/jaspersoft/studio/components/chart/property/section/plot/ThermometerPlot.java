@@ -35,14 +35,14 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
-import com.jaspersoft.studio.components.chart.property.widget.BtnColor;
-import com.jaspersoft.studio.components.chart.property.widget.BtnExpression;
-import com.jaspersoft.studio.components.chart.property.widget.BtnFont;
-import com.jaspersoft.studio.components.chart.property.widget.BtnRCombo;
-import com.jaspersoft.studio.components.chart.property.widget.BtnText;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SPColor;
+import com.jaspersoft.studio.property.section.widgets.SPExpression;
+import com.jaspersoft.studio.property.section.widgets.SPFont;
+import com.jaspersoft.studio.property.section.widgets.SPRCombo;
+import com.jaspersoft.studio.property.section.widgets.SPText;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class ThermometerPlot extends APlot {
@@ -63,7 +63,7 @@ public class ThermometerPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		needleLblColor = new BtnColor(composite, section,
+		needleLblColor = new SPColor(composite, section,
 				JRDesignThermometerPlot.PROPERTY_MERCURY_COLOR,
 				Messages.MThermometerPlot_mercury_color_description);
 
@@ -84,13 +84,13 @@ public class ThermometerPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		valFont = new BtnFont(composite, section,
+		valFont = new SPFont(composite, section,
 				JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
 						+ JRDesignValueDisplay.PROPERTY_FONT, false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		valColor = new BtnColor(
+		valColor = new SPColor(
 				composite,
 				section,
 				JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
@@ -99,7 +99,7 @@ public class ThermometerPlot extends APlot {
 
 		section.getWidgetFactory().createCLabel(composite, "Mask", SWT.RIGHT);
 
-		valMask = new BtnText(
+		valMask = new SPText(
 				composite,
 				section,
 				JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
@@ -109,7 +109,7 @@ public class ThermometerPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				Messages.MThermometerPlot_value_location, SWT.RIGHT);
 
-		location = new BtnRCombo(composite, section,
+		location = new SPRCombo(composite, section,
 				JRDesignThermometerPlot.PROPERTY_VALUE_LOCATION,
 				Messages.MThermometerPlot_value_location_description,
 				EnumHelper.getEnumNames(ValueLocationEnum.values(),
@@ -146,7 +146,7 @@ public class ThermometerPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		dRangeLow = new BtnExpression(cmp, section,
+		dRangeLow = new SPExpression(cmp, section,
 				JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION);
 
@@ -160,7 +160,7 @@ public class ThermometerPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		dRangeHigh = new BtnExpression(cmp, section,
+		dRangeHigh = new SPExpression(cmp, section,
 				JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION);
 	}
@@ -189,7 +189,7 @@ public class ThermometerPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		lRangeLow = new BtnExpression(cmp, section,
+		lRangeLow = new SPExpression(cmp, section,
 				JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION);
 
@@ -203,7 +203,7 @@ public class ThermometerPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		lRangeHigh = new BtnExpression(cmp, section,
+		lRangeHigh = new SPExpression(cmp, section,
 				JRDesignThermometerPlot.PROPERTY_LOW_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION);
 	}
@@ -232,7 +232,7 @@ public class ThermometerPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		mRangeLow = new BtnExpression(cmp, section,
+		mRangeLow = new SPExpression(cmp, section,
 				JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION);
 
@@ -246,7 +246,7 @@ public class ThermometerPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		mRangeHigh = new BtnExpression(cmp, section,
+		mRangeHigh = new SPExpression(cmp, section,
 				JRDesignThermometerPlot.PROPERTY_MEDIUM_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION);
 	}
@@ -275,7 +275,7 @@ public class ThermometerPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		hRangeLow = new BtnExpression(cmp, section,
+		hRangeLow = new SPExpression(cmp, section,
 				JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION);
 
@@ -289,28 +289,28 @@ public class ThermometerPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		hRangeHigh = new BtnExpression(cmp, section,
+		hRangeHigh = new SPExpression(cmp, section,
 				JRDesignThermometerPlot.PROPERTY_HIGH_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION);
 	}
 
-	private BtnColor needleLblColor;
-	private BtnRCombo location;
-	private BtnFont valFont;
-	private BtnColor valColor;
-	private BtnText valMask;
+	private SPColor needleLblColor;
+	private SPRCombo location;
+	private SPFont valFont;
+	private SPColor valColor;
+	private SPText valMask;
 
-	private BtnExpression dRangeLow;
-	private BtnExpression dRangeHigh;
+	private SPExpression dRangeLow;
+	private SPExpression dRangeHigh;
 
-	private BtnExpression lRangeLow;
-	private BtnExpression lRangeHigh;
+	private SPExpression lRangeLow;
+	private SPExpression lRangeHigh;
 
-	private BtnExpression hRangeLow;
-	private BtnExpression hRangeHigh;
+	private SPExpression hRangeLow;
+	private SPExpression hRangeHigh;
 
-	private BtnExpression mRangeLow;
-	private BtnExpression mRangeHigh;
+	private SPExpression mRangeLow;
+	private SPExpression mRangeHigh;
 
 	@Override
 	public void setData(MChartPlot mplot) {

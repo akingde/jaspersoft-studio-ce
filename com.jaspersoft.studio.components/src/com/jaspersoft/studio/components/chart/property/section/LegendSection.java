@@ -30,14 +30,14 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.components.chart.property.widget.Btn3Boolean;
-import com.jaspersoft.studio.components.chart.property.widget.BtnColor;
-import com.jaspersoft.studio.components.chart.property.widget.BtnEdgeEnum;
-import com.jaspersoft.studio.components.chart.property.widget.BtnFont;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SP3Boolean;
+import com.jaspersoft.studio.property.section.widgets.SPColor;
+import com.jaspersoft.studio.property.section.widgets.SPEdgeEnum;
+import com.jaspersoft.studio.property.section.widgets.SPFont;
 
 /*
  * The location section on the location tab.
@@ -45,11 +45,11 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Chicu Veaceslav
  */
 public class LegendSection extends AbstractSection {
-	private Btn3Boolean showLegend;
-	private BtnColor backButton;
-	private BtnColor foreButton;
-	private BtnEdgeEnum btnEdgeEnum;
-	private BtnFont btnFont;
+	private SP3Boolean showLegend;
+	private SPColor backButton;
+	private SPColor foreButton;
+	private SPEdgeEnum btnEdgeEnum;
+	private SPFont btnFont;
 	private Composite composite;
 
 	/**
@@ -78,13 +78,13 @@ public class LegendSection extends AbstractSection {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		showLegend = new Btn3Boolean(
+		showLegend = new SP3Boolean(
 				composite,
 				this,
 				JRBaseChart.PROPERTY_SHOW_LEGEND,
 				com.jaspersoft.studio.components.chart.messages.Messages.MChart_show_legend_description);
 
-		btnFont = new BtnFont(parent, this, JRDesignChart.PROPERTY_LEGEND_FONT);
+		btnFont = new SPFont(parent, this, JRDesignChart.PROPERTY_LEGEND_FONT);
 
 		composite = new Composite(parent, SWT.NONE);
 		composite.setBackground(parent.getBackground());
@@ -96,18 +96,18 @@ public class LegendSection extends AbstractSection {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		foreButton = new BtnColor(composite, this,
+		foreButton = new SPColor(composite, this,
 				JRBaseChart.PROPERTY_LEGEND_COLOR,
 				Messages.ColorsSection_element_forecolor_tool_tip);
 
 		getWidgetFactory().createCLabel(composite, Messages.common_backcolor,
 				SWT.RIGHT);
 
-		backButton = new BtnColor(composite, this,
+		backButton = new SPColor(composite, this,
 				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR,
 				Messages.ColorsSection_element_backcolor_tool_tip);
 
-		btnEdgeEnum = new BtnEdgeEnum(parent, this,
+		btnEdgeEnum = new SPEdgeEnum(parent, this,
 				JRBaseChart.PROPERTY_LEGEND_POSITION);
 	}
 

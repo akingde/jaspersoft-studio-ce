@@ -43,11 +43,11 @@ import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
 import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.dialog.SeriesColorEditor;
 import com.jaspersoft.studio.components.chart.property.section.plot.APlot;
 import com.jaspersoft.studio.components.chart.property.section.plot.PlotFactory;
-import com.jaspersoft.studio.components.chart.property.widget.BtnColor;
-import com.jaspersoft.studio.components.chart.property.widget.BtnNumber;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SPColor;
+import com.jaspersoft.studio.property.section.widgets.SPNumber;
 
 /*
  * The location section on the location tab.
@@ -56,10 +56,10 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  */
 public class ChartPlotSection extends AbstractSection {
 	private CCombo modeType;
-	private BtnColor backButton;
+	private SPColor backButton;
 	private Composite pcomposite;
-	private BtnNumber bgAlpha;
-	private BtnNumber fgAlpha;
+	private SPNumber bgAlpha;
+	private SPNumber fgAlpha;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -85,7 +85,7 @@ public class ChartPlotSection extends AbstractSection {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		backButton = new BtnColor(
+		backButton = new SPColor(
 				composite,
 				this,
 				JRBaseChartPlot.PROPERTY_BACKCOLOR,
@@ -96,7 +96,7 @@ public class ChartPlotSection extends AbstractSection {
 						composite,
 						com.jaspersoft.studio.components.chart.messages.Messages.MChartPlot_background_alpha_percent);
 
-		bgAlpha = new BtnNumber(
+		bgAlpha = new SPNumber(
 				composite,
 				this,
 				JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA,
@@ -107,7 +107,7 @@ public class ChartPlotSection extends AbstractSection {
 						composite,
 						com.jaspersoft.studio.components.chart.messages.Messages.MChartPlot_foreground_alpha_percent);
 
-		fgAlpha = new BtnNumber(
+		fgAlpha = new SPNumber(
 				composite,
 				this,
 				JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA,

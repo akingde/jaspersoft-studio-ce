@@ -32,10 +32,10 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
-import com.jaspersoft.studio.components.chart.property.widget.Btn3Boolean;
-import com.jaspersoft.studio.components.chart.property.widget.BtnChartItemLabel;
-import com.jaspersoft.studio.components.chart.property.widget.BtnText;
+import com.jaspersoft.studio.components.chart.property.widget.SPChartItemLabel;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SP3Boolean;
+import com.jaspersoft.studio.property.section.widgets.SPText;
 
 public class PiePlot extends APlot {
 
@@ -43,10 +43,10 @@ public class PiePlot extends APlot {
 		super(parent, section);
 	}
 
-	private Btn3Boolean showLabels;
-	private Btn3Boolean circular;
-	private BtnText labelFormat;
-	private BtnText labelLegendFormat;
+	private SP3Boolean showLabels;
+	private SP3Boolean circular;
+	private SPText labelFormat;
+	private SPText labelLegendFormat;
 
 	@Override
 	protected void createComponent(Composite parent, AbstractSection section) {
@@ -60,7 +60,7 @@ public class PiePlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		showLabels = new Btn3Boolean(composite, section,
+		showLabels = new SP3Boolean(composite, section,
 				JRDesignPiePlot.PROPERTY_SHOW_LABELS,
 				Messages.common_show_labels);
 
@@ -70,7 +70,7 @@ public class PiePlot extends APlot {
 						com.jaspersoft.studio.components.chart.messages.Messages.MPiePlot_circular_description,
 						SWT.RIGHT);
 
-		circular = new Btn3Boolean(
+		circular = new SP3Boolean(
 				composite,
 				section,
 				JRDesignPiePlot.PROPERTY_CIRCULAR,
@@ -86,7 +86,7 @@ public class PiePlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		labelFormat = new BtnText(
+		labelFormat = new SPText(
 				composite,
 				section,
 				JRDesignPiePlot.PROPERTY_LABEL_FORMAT,
@@ -95,7 +95,7 @@ public class PiePlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				Messages.common_legend_label_format, SWT.RIGHT);
 
-		labelLegendFormat = new BtnText(
+		labelLegendFormat = new SPText(
 				composite,
 				section,
 				JRDesignPiePlot.PROPERTY_LEGEND_LABEL_FORMAT,
@@ -117,12 +117,12 @@ public class PiePlot extends APlot {
 
 		sectioncmp.setClient(parent);
 
-		chItemLabel = new BtnChartItemLabel(parent, section,
+		chItemLabel = new SPChartItemLabel(parent, section,
 				JRDesignPiePlot.PROPERTY_ITEM_LABEL);
 
 	}
 
-	private BtnChartItemLabel chItemLabel;
+	private SPChartItemLabel chItemLabel;
 
 	@Override
 	public void setData(MChartPlot mplot) {

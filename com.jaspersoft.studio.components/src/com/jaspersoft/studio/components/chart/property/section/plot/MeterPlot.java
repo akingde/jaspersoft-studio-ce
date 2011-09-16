@@ -38,16 +38,16 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
-import com.jaspersoft.studio.components.chart.property.widget.BtnColor;
-import com.jaspersoft.studio.components.chart.property.widget.BtnMeterInterval;
-import com.jaspersoft.studio.components.chart.property.widget.BtnNumber;
-import com.jaspersoft.studio.components.chart.property.widget.BtnExpression;
-import com.jaspersoft.studio.components.chart.property.widget.BtnFont;
-import com.jaspersoft.studio.components.chart.property.widget.BtnRCombo;
-import com.jaspersoft.studio.components.chart.property.widget.BtnText;
+import com.jaspersoft.studio.components.chart.property.widget.SPMeterInterval;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.SPColor;
+import com.jaspersoft.studio.property.section.widgets.SPExpression;
+import com.jaspersoft.studio.property.section.widgets.SPFont;
+import com.jaspersoft.studio.property.section.widgets.SPNumber;
+import com.jaspersoft.studio.property.section.widgets.SPRCombo;
+import com.jaspersoft.studio.property.section.widgets.SPText;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MeterPlot extends APlot {
@@ -68,14 +68,14 @@ public class MeterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		units = new BtnText(composite, section,
+		units = new SPText(composite, section,
 				JRDesignMeterPlot.PROPERTY_UNITS,
 				Messages.MMeterPlot_units_description);
 
 		section.getWidgetFactory().createCLabel(composite,
 				Messages.MMeterPlot_shape);
 
-		shape = new BtnRCombo(composite, section,
+		shape = new SPRCombo(composite, section,
 				JRDesignMeterPlot.PROPERTY_SHAPE,
 				Messages.MMeterPlot_shape_description, EnumHelper.getEnumNames(
 						MeterShapeEnum.values(), NullEnum.NOTNULL));
@@ -90,12 +90,12 @@ public class MeterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		tickLblFont = new BtnFont(composite, section,
+		tickLblFont = new SPFont(composite, section,
 				JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT, false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		tickLblColor = new BtnColor(
+		tickLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignMeterPlot.PROPERTY_TICK_COLOR,
@@ -107,7 +107,7 @@ public class MeterPlot extends APlot {
 						com.jaspersoft.studio.components.chart.messages.Messages.MMeterPlot_tick_interval,
 						SWT.RIGHT);
 
-		tickInterval = new BtnNumber(
+		tickInterval = new SPNumber(
 				composite,
 				section,
 				JRDesignMeterPlot.PROPERTY_TICK_INTERVAL,
@@ -123,7 +123,7 @@ public class MeterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		needleLblColor = new BtnColor(
+		needleLblColor = new SPColor(
 				composite,
 				section,
 				JRDesignMeterPlot.PROPERTY_NEEDLE_COLOR,
@@ -139,7 +139,7 @@ public class MeterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		meterBgColor = new BtnColor(
+		meterBgColor = new SPColor(
 				composite,
 				section,
 				JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR,
@@ -148,7 +148,7 @@ public class MeterPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				Messages.MMeterPlot_meter_angle, SWT.RIGHT);
 
-		meterAngle = new BtnNumber(
+		meterAngle = new SPNumber(
 				composite,
 				section,
 				JRDesignMeterPlot.PROPERTY_METER_ANGLE,
@@ -164,13 +164,13 @@ public class MeterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		valFont = new BtnFont(composite, section,
+		valFont = new SPFont(composite, section,
 				JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
 						+ JRDesignValueDisplay.PROPERTY_FONT, false);
 
 		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
 
-		valColor = new BtnColor(
+		valColor = new SPColor(
 				composite,
 				section,
 				JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
@@ -179,7 +179,7 @@ public class MeterPlot extends APlot {
 
 		section.getWidgetFactory().createCLabel(composite, "Mask", SWT.RIGHT);
 
-		valMask = new BtnText(
+		valMask = new SPText(
 				composite,
 				section,
 				JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
@@ -206,7 +206,7 @@ public class MeterPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		dRangeLow = new BtnExpression(cmp, section,
+		dRangeLow = new SPExpression(cmp, section,
 				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_LOW_EXPRESSION);
 
@@ -220,7 +220,7 @@ public class MeterPlot extends APlot {
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-		dRangeHigh = new BtnExpression(cmp, section,
+		dRangeHigh = new SPExpression(cmp, section,
 				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION);
 
@@ -233,27 +233,27 @@ public class MeterPlot extends APlot {
 		rd.width = 101;
 		lbl.setLayoutData(rd);
 
-		mInterval = new BtnMeterInterval(composite, section,
+		mInterval = new SPMeterInterval(composite, section,
 				JRDesignMeterPlot.PROPERTY_INTERVALS, "Meter Intervals");
 	}
 
-	private BtnText units;
-	private BtnFont tickLblFont;
-	private BtnColor tickLblColor;
-	private BtnNumber tickInterval;
+	private SPText units;
+	private SPFont tickLblFont;
+	private SPColor tickLblColor;
+	private SPNumber tickInterval;
 
-	private BtnColor needleLblColor;
-	private BtnColor meterBgColor;
-	private BtnNumber meterAngle;
-	private BtnRCombo shape;
+	private SPColor needleLblColor;
+	private SPColor meterBgColor;
+	private SPNumber meterAngle;
+	private SPRCombo shape;
 
-	private BtnFont valFont;
-	private BtnColor valColor;
-	private BtnText valMask;
+	private SPFont valFont;
+	private SPColor valColor;
+	private SPText valMask;
 
-	private BtnExpression dRangeLow;
-	private BtnExpression dRangeHigh;
-	private BtnMeterInterval mInterval;
+	private SPExpression dRangeLow;
+	private SPExpression dRangeHigh;
+	private SPMeterInterval mInterval;
 
 	@Override
 	public void setData(MChartPlot mplot) {

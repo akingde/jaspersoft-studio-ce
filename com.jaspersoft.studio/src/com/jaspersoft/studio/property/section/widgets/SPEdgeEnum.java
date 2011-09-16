@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.property.widget;
+package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -32,13 +32,13 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class BtnEdgeEnum {
+public class SPEdgeEnum {
 	private Button btnAlignLeft;
 	private Button btnAlignTop;
 	private Button btnAlignBottom;
 	private Button btnAlignRight;
 
-	public BtnEdgeEnum(Composite parent, AbstractSection section,
+	public SPEdgeEnum(Composite parent, AbstractSection section,
 			String property) {
 		createComponent(parent, section, property);
 	}

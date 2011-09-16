@@ -22,6 +22,9 @@
       <component
             ClassFactory="com.jaspersoft.studio.components.map.MapComponentFactory">
       </component>
+      <component
+            ClassFactory="com.jaspersoft.studio.components.sort.SortComponentFactory">
+      </component>
    </extension>
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">

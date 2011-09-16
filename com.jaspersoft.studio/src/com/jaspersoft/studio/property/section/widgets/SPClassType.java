@@ -17,35 +17,44 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.property.widget;
+package com.jaspersoft.studio.property.section.widgets;
 
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.swt.widgets.ClassType;
 
-public class BtnExpression {
-	private ExpressionWidget expr;
+public class SPClassType {
+	private ClassType clWidget;
 
-	public BtnExpression(Composite parent, AbstractSection section,
-			String property) {
-		createComponent(parent, section, property);
+	public SPClassType(Composite parent, AbstractSection section,
+			String property, String tooltip) {
+		createComponent(parent, section, property, tooltip);
 	}
 
 	public void createComponent(Composite parent,
-			final AbstractSection section, final String property) {
-		expr = new ExpressionWidget(parent, null) {
-			@Override
-			protected void setOnParent(JRDesignExpression exp) {
-				section.changeProperty(property, exp != null ? exp.clone()
-						: null);
+			final AbstractSection section, final String property, String tooltip) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setBackground(parent.getBackground());
+		GridLayout layout = new GridLayout(3, false);
+		layout.marginHeight = 0;
+		layout.marginLeft = 0;
+		composite.setLayout(layout);
+
+		clWidget = new ClassType(composite, tooltip);
+		clWidget.addListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				section.changeProperty(property, clWidget.getClassType());
 			}
-		};
+		});
 	}
 
-	public void setData(JRDesignExpression b) {
-		expr.setExpression(b);
+	public void setData(String b) {
+		clWidget.setClassType(b);
 	}
 }

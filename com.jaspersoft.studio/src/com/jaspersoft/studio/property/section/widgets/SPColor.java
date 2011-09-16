@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.property.widget;
+package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,11 +33,11 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class BtnColor {
+public class SPColor {
 	private Button foreButton;
 	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);
 
-	public BtnColor(Composite parent, AbstractSection section, String property,
+	public SPColor(Composite parent, AbstractSection section, String property,
 			String tooltip) {
 		createComponent(parent, section, property, tooltip);
 	}

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.property.widget;
+package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -27,10 +27,10 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class Btn3Boolean {
+public class SP3Boolean {
 	private CCombo cmb3Bool;
 
-	public Btn3Boolean(Composite parent, AbstractSection section,
+	public SP3Boolean(Composite parent, AbstractSection section,
 			String property, String tooltip) {
 		createComponent(parent, section, property, tooltip);
 	}

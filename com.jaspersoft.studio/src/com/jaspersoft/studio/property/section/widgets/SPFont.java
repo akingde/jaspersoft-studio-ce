@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.components.chart.property.widget;
+package com.jaspersoft.studio.property.section.widgets;
 
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -42,7 +42,7 @@ import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public class BtnFont {
+public class SPFont {
 	private CCombo fontName;
 	private CCombo fontSize;
 	private Button boldButton;
@@ -50,11 +50,11 @@ public class BtnFont {
 	private Button underlineButton;
 	private Button strikeTroughtButton;
 
-	public BtnFont(Composite parent, AbstractSection section, String property) {
+	public SPFont(Composite parent, AbstractSection section, String property) {
 		this(parent, section, property, true);
 	}
 
-	public BtnFont(Composite parent, AbstractSection section, String property,
+	public SPFont(Composite parent, AbstractSection section, String property,
 			boolean withLabel) {
 		createComponent(parent, section, property, withLabel);
 	}
