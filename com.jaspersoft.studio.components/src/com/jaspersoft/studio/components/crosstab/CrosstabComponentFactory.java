@@ -41,7 +41,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.components.crosstab.editor.CrosstabEditor;
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
 import com.jaspersoft.studio.components.crosstab.figure.CrosstabFigure;
@@ -104,6 +103,9 @@ import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.parameter.MParameter;
 import com.jaspersoft.studio.model.util.ModelUtil;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.plugin.IComponentFactory;
+import com.jaspersoft.studio.plugin.IPaletteContributor;
+import com.jaspersoft.studio.plugin.PaletteContributor;
 
 public class CrosstabComponentFactory implements IComponentFactory {
 
@@ -304,10 +306,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public List<Class<?>> getPaletteEntries() {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		list.add(MCrosstab.class);
-		return list;
+	public IPaletteContributor getPaletteEntries() {
+		PaletteContributor pc = new PaletteContributor();
+		pc.add(IPaletteContributor.KEY_COMMON_CONTAINER, MCrosstab.class);
+		return pc;
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child,

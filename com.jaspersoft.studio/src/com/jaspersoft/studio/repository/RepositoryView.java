@@ -49,10 +49,10 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
+import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.repository.actions.CreateDataAdapterAction;
 import com.jaspersoft.studio.repository.actions.DeleteDataAdapterAction;
 import com.jaspersoft.studio.repository.actions.DuplicateDataAdapterAction;

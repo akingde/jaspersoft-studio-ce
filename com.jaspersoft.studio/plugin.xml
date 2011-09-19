@@ -29,7 +29,7 @@
    <extension-point id="dataAdapters" name="Data Adapters" schema="schema/dataAdapters.exsd"/>
    <extension-point id="queryDesigner" name="Query Designer" schema="schema/queryDesigner.exsd"/> 
    <extension-point id="mappingTool" name="Mapping Tool" schema="schema/mappingTool.exsd"/>
-
+<extension-point id="palette" name="Palette" schema="schema/palette.exsd"/>
 
 
 

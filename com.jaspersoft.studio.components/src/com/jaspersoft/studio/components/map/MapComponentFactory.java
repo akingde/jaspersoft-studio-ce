@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.components.map;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.map.MapComponent;
@@ -32,7 +31,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.components.map.figure.MapFigure;
 import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.components.map.model.command.CreateMapCommand;
@@ -44,13 +42,17 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.plugin.IComponentFactory;
+import com.jaspersoft.studio.plugin.IPaletteContributor;
+import com.jaspersoft.studio.plugin.PaletteContributor;
 
 public class MapComponentFactory implements IComponentFactory {
 
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
-		if (jrObject instanceof JRDesignComponentElement 
-			&&((JRDesignComponentElement) jrObject).getComponent() instanceof MapComponent){
-				return new MMap(parent, (JRDesignComponentElement) jrObject, newIndex);
+		if (jrObject instanceof JRDesignComponentElement
+				&& ((JRDesignComponentElement) jrObject).getComponent() instanceof MapComponent) {
+			return new MMap(parent, (JRDesignComponentElement) jrObject,
+					newIndex);
 		}
 		return null;
 	}
@@ -66,24 +68,30 @@ public class MapComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public List<Class<?>> getPaletteEntries() {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		list.add(MMap.class);
-		return list;
+	public IPaletteContributor getPaletteEntries() {
+		PaletteContributor pc = new PaletteContributor();
+		pc.add(MMap.class);
+		return pc;
 	}
 
-	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
+	public Command getCreateCommand(ANode parent, ANode child,
+			Rectangle location, int newIndex) {
 		if (child instanceof MMap) {
 			if (parent instanceof MElementGroup)
-				return new CreateMapCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+				return new CreateMapCommand((MElementGroup) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MBand)
-				return new CreateMapCommand((MBand) parent, (MGraphicElement) child, newIndex);
+				return new CreateMapCommand((MBand) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateMapCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+				return new CreateMapCommand((MFrame) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreateMapCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateMapCommand(parent, (MGraphicElement) child,
+						location, newIndex);
 			if (parent instanceof IGroupElement) {
-				return new CreateMapCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateMapCommand(parent, (MGraphicElement) child,
+						location, newIndex);
 			}
 		}
 		return null;

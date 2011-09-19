@@ -37,7 +37,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.outline.part.ContainerTreeEditPart;
 import com.jaspersoft.studio.editor.outline.part.NotDragableContainerTreeEditPart;
@@ -134,6 +133,7 @@ import com.jaspersoft.studio.model.variable.MVariables;
 import com.jaspersoft.studio.model.variable.command.CreateVariableCommand;
 import com.jaspersoft.studio.model.variable.command.DeleteVariableCommand;
 import com.jaspersoft.studio.model.variable.command.ReorderVariableCommand;
+import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.property.SetValueCommand;
 
 /*

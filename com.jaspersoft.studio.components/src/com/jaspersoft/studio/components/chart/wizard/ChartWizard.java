@@ -23,7 +23,6 @@ import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
@@ -32,7 +31,6 @@ import com.jaspersoft.studio.components.chart.model.MChart;
 public class ChartWizard extends Wizard {
 	private ChartTypeWizardPage page0;
 	private ChartDataPage step1;
-	// private ChartVisualPage step2;
 	private MChart chart;
 
 	private int width;
@@ -55,15 +53,6 @@ public class ChartWizard extends Wizard {
 
 		step1 = new ChartDataPage(chart, jasperDesign);
 		addPage(step1);
-
-		// step2 = new ChartVisualPage(chart, jasperDesign);
-		// addPage(step2);
-	}
-
-	@Override
-	public IWizardPage getNextPage(IWizardPage page) {
-
-		return super.getNextPage(page);
 	}
 
 	public MChart getChart() {
@@ -75,7 +64,7 @@ public class ChartWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		return (page0.canFlipToNextPage() && step1.canFlipToNextPage());
+		return (page0.canFlipToNextPage() && step1.isPageComplete());
 	}
 
 	private JasperDesign jasperDesign;

@@ -52,7 +52,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.components.chart.action.CreateChartAxisAction;
 import com.jaspersoft.studio.components.chart.figure.ChartFigure;
 import com.jaspersoft.studio.components.chart.model.MChart;
@@ -115,6 +114,9 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.plugin.IComponentFactory;
+import com.jaspersoft.studio.plugin.IPaletteContributor;
+import com.jaspersoft.studio.plugin.PaletteContributor;
 
 public class ChartComponentFactory implements IComponentFactory {
 
@@ -190,10 +192,10 @@ public class ChartComponentFactory implements IComponentFactory {
 		return ch;
 	}
 
-	public List<Class<?>> getPaletteEntries() {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		list.add(MChart.class);
-		return list;
+	public IPaletteContributor getPaletteEntries() {
+		PaletteContributor pc = new PaletteContributor();
+		pc.add(MChart.class);
+		return pc;
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child,

@@ -3,7 +3,7 @@
 <schema targetNamespace="com.jaspersoft.studio" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="com.jaspersoft.studio" id="components" name="Components"/>
+         <meta.schema plugin="com.jaspersoft.studio" id="palette" name="Palette"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">
-            <element ref="component"/>
+            <element ref="group"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -44,19 +44,45 @@
                </appInfo>
             </annotation>
          </attribute>
+         
       </complexType>
    </element>
 
-   <element name="component">
+   <element name="group">
       <complexType>
-         <attribute name="ClassFactory" type="string" use="required">
+         <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  group key id
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="Name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  palette group name
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":com.jaspersoft.studio.plugin.IComponentFactory"/>
+                  <meta.attribute translatable="true"/>
                </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="image" type="string">
+            <annotation>
+               <documentation>
+                  If an image is provided, the icon image is displayed on the tab when the tab is active.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         
+         <attribute name="afterGroup" type="string">
+            <annotation>
+               <documentation>
+                  When there is more than one group in the palette, tabs are sorted by the afterTab attribute.
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.draw2d.IFigure;
 
-import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MEllipse;
@@ -40,6 +39,7 @@ import com.jaspersoft.studio.model.image.MImage;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.plugin.ExtensionManager;
 /*
  * A factory for creating Figure objects.
  * 

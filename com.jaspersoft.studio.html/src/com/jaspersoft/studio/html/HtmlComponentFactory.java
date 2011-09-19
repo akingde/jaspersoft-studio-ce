@@ -20,7 +20,6 @@
 
 package com.jaspersoft.studio.html;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.html.HtmlComponent;
@@ -33,7 +32,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.html.command.CreateHtmlCommand;
 import com.jaspersoft.studio.html.figure.HtmlFigure;
@@ -46,12 +44,16 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.plugin.IComponentFactory;
+import com.jaspersoft.studio.plugin.IPaletteContributor;
+import com.jaspersoft.studio.plugin.PaletteContributor;
 
 public class HtmlComponentFactory implements IComponentFactory {
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement) {
 			if (((JRDesignComponentElement) jrObject).getComponent() instanceof HtmlComponent) {
-				return new MHtml(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MHtml(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 			}
 		}
 		return null;
@@ -68,25 +70,31 @@ public class HtmlComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public List<Class<?>> getPaletteEntries() {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		list.add(MHtml.class);
-		return list;
+	public IPaletteContributor getPaletteEntries() {
+		PaletteContributor pc = new PaletteContributor();
+		pc.add(MHtml.class);
+		return pc;
 	}
 
-	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
+	public Command getCreateCommand(ANode parent, ANode child,
+			Rectangle location, int newIndex) {
 		if (child instanceof MHtml) {
 			if (parent instanceof MElementGroup)
-				return new CreateHtmlCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+				return new CreateHtmlCommand((MElementGroup) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MBand)
-				return new CreateHtmlCommand((MBand) parent, (MGraphicElement) child, newIndex);
+				return new CreateHtmlCommand((MBand) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateHtmlCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+				return new CreateHtmlCommand((MFrame) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreateHtmlCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateHtmlCommand(parent, (MGraphicElement) child,
+						location, newIndex);
 
 			if (parent instanceof IGroupElement) {
-				return new CreateHtmlCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateHtmlCommand(parent, (MGraphicElement) child,
+						location, newIndex);
 			}
 		}
 		return null;

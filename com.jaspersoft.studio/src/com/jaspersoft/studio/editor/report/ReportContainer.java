@@ -60,7 +60,6 @@ import org.eclipse.ui.views.properties.IPropertySource2;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IJROBjectEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -69,6 +68,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MPage;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
+import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
@@ -245,10 +245,12 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	}
 
 	private void removeEditorPage(PropertyChangeEvent evt, AbstractVisualEditor ave) {
-		ave.getModel().getPropertyChangeSupport().addPropertyChangeListener(modelListener);
+		if (ave.getModel() != null && modelListener != null)
+			ave.getModel().getPropertyChangeSupport().addPropertyChangeListener(modelListener);
 		ave.setModel(null);
 		int ind = editors.indexOf(ave);
-		removePage(ind);
+		if (ind >= 0 && ind < getPageCount())
+			removePage(ind);
 		editors.remove(ind);
 		if (evt != null) {
 			ccMap.remove(evt.getOldValue());

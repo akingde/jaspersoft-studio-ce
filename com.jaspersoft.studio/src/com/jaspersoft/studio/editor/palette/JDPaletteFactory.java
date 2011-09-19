@@ -1,31 +1,28 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.palette;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.MarqueeToolEntry;
@@ -34,11 +31,10 @@ import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.PaletteToolbar;
 import org.eclipse.gef.palette.SelectionToolEntry;
+import org.eclipse.jface.resource.ImageDescriptor;
 
-import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MBreak;
 import com.jaspersoft.studio.model.MEllipse;
 import com.jaspersoft.studio.model.MFrame;
@@ -56,6 +52,10 @@ import com.jaspersoft.studio.model.textfield.MPercentage;
 import com.jaspersoft.studio.model.textfield.MTime;
 import com.jaspersoft.studio.model.textfield.MTotalPages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
+import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.plugin.IPaletteContributor;
+import com.jaspersoft.studio.plugin.PaletteGroup;
+
 /*
  * A factory for creating JDPalette objects.
  */
@@ -68,10 +68,83 @@ public class JDPaletteFactory {
 	 */
 	public static PaletteRoot createPalette(List<String> ignore) {
 		PaletteRoot paletteRoot = new PaletteRoot();
-		createToolBar(paletteRoot);
-		createElements(paletteRoot, ignore);
-		createFields(paletteRoot, ignore);
 
+		createToolBar(paletteRoot);
+
+		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
+		List<PaletteGroup> pgroups = m.getPaletteGroups();
+
+		Map<String, PaletteGroup> map = new TreeMap<String, PaletteGroup>();
+		PaletteGroup pgc = new PaletteGroup();
+		pgc.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
+		pgc.setName(Messages.common_elements);
+		pgc.setImage("icons/resources/elementgroup-16.png");
+		map.put(pgc.getId(), pgc);
+
+		pgc = new PaletteGroup();
+		pgc.setId(IPaletteContributor.KEY_COMMON_CONTAINER);
+		pgc.setName("Complex components");
+		pgc.setImage("icons/resources/elementgroup-16.png");
+		pgc.setAfterGroup(IPaletteContributor.KEY_COMMON_ELEMENTS);
+		map.put(pgc.getId(), pgc);
+
+		pgc = new PaletteGroup();
+		pgc.setId(IPaletteContributor.KEY_COMMON_TOOLS);
+		pgc.setName(Messages.common_tools);
+		pgc.setImage("icons/resources/fields-16.png");
+		map.put(pgc.getId(), pgc);
+		for (PaletteGroup p : pgroups) {
+			map.put(p.getId(), p);
+		}
+		Map<String, List<PaletteEntry>> mapEntry = m.getPaletteEntries();
+		for (String key : mapEntry.keySet()) {
+			if (!key.isEmpty() && map.get(key) == null) {
+				pgc = new PaletteGroup();
+				pgc.setId(key);
+				pgc.setName("Unknown Group");
+				pgc.setImage("");
+				map.put(pgc.getId(), pgc);
+			}
+		}
+
+		pgroups = new ArrayList<PaletteGroup>(map.values());
+		List<PaletteGroup> ordpgrps = new ArrayList<PaletteGroup>(pgroups);
+
+		for (PaletteGroup p : pgroups) {
+			if (p.getAfterGroup() != null && !p.getAfterGroup().trim().isEmpty() && !p.getId().equals(p.getAfterGroup())) {
+				PaletteGroup opbefore = null;
+				for (PaletteGroup op : ordpgrps) {
+					if (op.getId().equals(p.getAfterGroup())) {
+						opbefore = op;
+						break;
+					}
+				}
+				ordpgrps.remove(p);
+				int ind = -1;
+				if (opbefore != null)
+					ind = ordpgrps.indexOf(opbefore) + 1;
+				if (ind >= 0 && ind < ordpgrps.size())
+					ordpgrps.add(ind, p);
+				else
+					ordpgrps.add(p);
+			}
+		}
+
+		for (PaletteGroup p : ordpgrps) {
+			if (p.getId().equals(IPaletteContributor.KEY_COMMON_ELEMENTS)) {
+				PaletteDrawer drawer = createElements(paletteRoot, ignore, p, mapEntry);
+				getEntries4Key(drawer, ignore, "", mapEntry);
+				continue;
+			} else if (p.getId().equals(IPaletteContributor.KEY_COMMON_CONTAINER)) {
+				createContainers(paletteRoot, ignore, p, mapEntry);
+				continue;
+			} else if (p.getId().equals(IPaletteContributor.KEY_COMMON_TOOLS)) {
+				createFields(paletteRoot, ignore, p, mapEntry);
+				continue;
+			}
+			PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
+			getEntries4Key(drawer, ignore, p.getId(), mapEntry);
+		}
 		return paletteRoot;
 	}
 
@@ -84,59 +157,37 @@ public class JDPaletteFactory {
 	 *          the aclass
 	 * @return the palette entry
 	 */
-	private static PaletteEntry createJDEntry(IIconDescriptor iconDescriptor, Class<?> aclass) {
+	public static PaletteEntry createJDEntry(IIconDescriptor iconDescriptor, Class<?> aclass) {
 		return new CombinedTemplateCreationEntry(iconDescriptor.getTitle(), iconDescriptor.getDescription(), aclass,
 				new JDPaletteCreationFactory(aclass), iconDescriptor.getIcon16(), iconDescriptor.getIcon32());
 	}
 
-	/**
-	 * Creates a new JDPalette object.
-	 * 
-	 * @param paletteRoot
-	 *          the palette root
-	 */
-	public static void createElements(PaletteRoot paletteRoot, List<String> ignore) {
-		PaletteDrawer drawer = new PaletteDrawer(Messages.common_elements,
-				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/elementgroup-16.png")); //$NON-NLS-1$
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
+	public static PaletteDrawer createElements(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
+			Map<String, List<PaletteEntry>> map) {
+		PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
 
-		entries.add(createJDEntry(MEllipse.getIconDescriptor(), MEllipse.class));
-		entries.add(createJDEntry(MRectangle.getIconDescriptor(), MRectangle.class));
-		entries.add(createJDEntry(MLine.getIconDescriptor(), MLine.class));
-		entries.add(createJDEntry(MImage.getIconDescriptor(), MImage.class));
-		entries.add(createJDEntry(MTextField.getIconDescriptor(), MTextField.class));
-		entries.add(createJDEntry(MStaticText.getIconDescriptor(), MStaticText.class));
-		entries.add(createJDEntry(MFrame.getIconDescriptor(), MFrame.class));
-		entries.add(createJDEntry(MBreak.getIconDescriptor(), MBreak.class));
-		entries.add(createJDEntry(MSubreport.getIconDescriptor(), MSubreport.class));
-		entries.add(createJDEntry(MGenericElement.getIconDescriptor(), MGenericElement.class));
+		drawer.add(createJDEntry(MEllipse.getIconDescriptor(), MEllipse.class));
+		drawer.add(createJDEntry(MRectangle.getIconDescriptor(), MRectangle.class));
+		drawer.add(createJDEntry(MLine.getIconDescriptor(), MLine.class));
+		drawer.add(createJDEntry(MImage.getIconDescriptor(), MImage.class));
+		drawer.add(createJDEntry(MTextField.getIconDescriptor(), MTextField.class));
+		drawer.add(createJDEntry(MStaticText.getIconDescriptor(), MStaticText.class));
+		drawer.add(createJDEntry(MBreak.getIconDescriptor(), MBreak.class));
+		drawer.add(createJDEntry(MGenericElement.getIconDescriptor(), MGenericElement.class));
 
-		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
-		List<Class<?>> lp = m.getPaletteEntries();
-		for (Class<?> mn : lp) {
-			if (ANode.class.isAssignableFrom(mn)) {
-				try {
-					if (ignore == null || !ignore.contains(mn.getCanonicalName()))
-						entries
-								.add(createJDEntry(
-										(IIconDescriptor) mn.getDeclaredMethod("getIconDescriptor", new Class[0]).invoke(mn, new Object[0]), //$NON-NLS-1$
-										mn));
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		getEntries4Key(drawer, ignore, p.getId(), map);
+		return drawer;
+	}
 
-		drawer.addAll(entries);
-		paletteRoot.add(drawer);
+	public static PaletteDrawer createContainers(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
+			Map<String, List<PaletteEntry>> map) {
+		PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
+
+		drawer.add(createJDEntry(MFrame.getIconDescriptor(), MFrame.class));
+		drawer.add(createJDEntry(MSubreport.getIconDescriptor(), MSubreport.class));
+
+		getEntries4Key(drawer, ignore, p.getId(), map);
+		return drawer;
 	}
 
 	/**
@@ -145,19 +196,36 @@ public class JDPaletteFactory {
 	 * @param paletteRoot
 	 *          the palette root
 	 */
-	public static void createFields(PaletteRoot paletteRoot, List<String> ignore) {
-		PaletteDrawer drawer = new PaletteDrawer(Messages.common_tools,
-				JaspersoftStudioPlugin.getImageDescriptor("icons/resources/fields-16.png")); //$NON-NLS-1$
-		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
-		entries.add(createJDEntry(MPageNumber.getIconDescriptor(), MPageNumber.class));
-		entries.add(createJDEntry(MTotalPages.getIconDescriptor(), MTotalPages.class));
-		entries.add(createJDEntry(MDate.getIconDescriptor(), MDate.class));
-		entries.add(createJDEntry(MTime.getIconDescriptor(), MTime.class));
-		entries.add(createJDEntry(MPercentage.getIconDescriptor(), MPercentage.class));
-		entries.add(createJDEntry(MPageXofY.getIconDescriptor(), MPageXofY.class));
+	public static void createFields(PaletteRoot paletteRoot, List<String> ignore, PaletteGroup p,
+			Map<String, List<PaletteEntry>> map) {
+		PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
 
-		drawer.addAll(entries);
+		drawer.add(createJDEntry(MPageNumber.getIconDescriptor(), MPageNumber.class));
+		drawer.add(createJDEntry(MTotalPages.getIconDescriptor(), MTotalPages.class));
+		drawer.add(createJDEntry(MDate.getIconDescriptor(), MDate.class));
+		drawer.add(createJDEntry(MTime.getIconDescriptor(), MTime.class));
+		drawer.add(createJDEntry(MPercentage.getIconDescriptor(), MPercentage.class));
+		drawer.add(createJDEntry(MPageXofY.getIconDescriptor(), MPageXofY.class));
+
+		getEntries4Key(drawer, ignore, p.getId(), map);
+	}
+
+	public static PaletteDrawer createGroup(PaletteRoot paletteRoot, List<String> ignore, String name,
+			ImageDescriptor imageDescriptor) {
+		PaletteDrawer drawer = new PaletteDrawer(name, imageDescriptor);
 		paletteRoot.add(drawer);
+		return drawer;
+	}
+
+	private static void getEntries4Key(PaletteDrawer drawer, List<String> ignore, String id,
+			Map<String, List<PaletteEntry>> map) {
+		List<PaletteEntry> plist = map.get(id);
+		if (plist != null)
+			for (PaletteEntry entry : plist) {
+				if (ignore != null && ignore.contains(entry.getType()))
+					continue;
+				drawer.add(entry);
+			}
 	}
 
 	/**

@@ -64,7 +64,6 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.core.resources.IFile;
 
-import com.jaspersoft.studio.ExtensionManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -104,6 +103,7 @@ import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.model.variable.MVariables;
+import com.jaspersoft.studio.plugin.ExtensionManager;
 
 /*
  * A factory for creating Report objects.

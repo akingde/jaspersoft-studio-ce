@@ -29,6 +29,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.utils.ModelUtils;
 /*
  * The main plugin class to be used in the desktop.

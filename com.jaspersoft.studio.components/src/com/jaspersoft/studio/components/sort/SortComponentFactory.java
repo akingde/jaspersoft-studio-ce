@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.components.sort;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.sort.SortComponent;
@@ -32,7 +31,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.components.sort.figure.SortFigure;
 import com.jaspersoft.studio.components.sort.model.MSort;
 import com.jaspersoft.studio.components.sort.model.command.CreateSortCommand;
@@ -44,6 +42,9 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.plugin.IComponentFactory;
+import com.jaspersoft.studio.plugin.IPaletteContributor;
+import com.jaspersoft.studio.plugin.PaletteContributor;
 
 public class SortComponentFactory implements IComponentFactory {
 
@@ -67,10 +68,10 @@ public class SortComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public List<Class<?>> getPaletteEntries() {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		list.add(MSort.class);
-		return list;
+	public IPaletteContributor getPaletteEntries() {
+		PaletteContributor pc = new PaletteContributor();
+		pc.add("com.jaspersoft.studio.components.WEBCOMPONENTS", MSort.class);
+		return pc;
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child,

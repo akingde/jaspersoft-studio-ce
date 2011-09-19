@@ -17,10 +17,12 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio;
+package com.jaspersoft.studio.plugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -29,6 +31,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
@@ -64,11 +67,41 @@ public class ExtensionManager {
 		}
 
 		DataAdapterManager.loadDataAdapters();
-//
-//		for (DataAdapterDescriptor da : DataAdapterManager.getDataAdapters()) {
-//			System.out.println(da.toXml());
-//		}
+	}
 
+	public List<PaletteGroup> getPaletteGroups() {
+		List<PaletteGroup> paletteGroup = new ArrayList<PaletteGroup>();
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio", "palette"); //$NON-NLS-1$ //$NON-NLS-2$
+		for (IConfigurationElement e : config) {
+			PaletteGroup p = new PaletteGroup();
+			p.setId(e.getAttribute("id")); //$NON-NLS-1$
+			p.setName(e.getAttribute("Name")); //$NON-NLS-1$
+			p.setImage(e.getAttribute("image")); //$NON-NLS-1$
+			p.setAfterGroup(e.getAttribute("afterGroup")); //$NON-NLS-1$
+			paletteGroup.add(p);
+		}
+		return paletteGroup;
+	}
+
+	public Map<String, List<PaletteEntry>> getPaletteEntries() {
+		Map<String, List<PaletteEntry>> map = new HashMap<String, List<PaletteEntry>>();
+		for (IComponentFactory f : nodeFactory) {
+			IPaletteContributor ipc = f.getPaletteEntries();
+			if (ipc != null) {
+				Map<String, List<PaletteEntry>> paletteEntries = ipc.getPaletteEntries();
+				if (paletteEntries != null) {
+					for (String key : paletteEntries.keySet()) {
+						List<PaletteEntry> ol = map.get(key);
+						if (ol == null)
+							map.put(key, paletteEntries.get(key));
+						else
+							ol.addAll(paletteEntries.get(key));
+					}
+				}
+			}
+		}
+		return map;
 	}
 
 	private List<IComponentFactory> nodeFactory = new ArrayList<IComponentFactory>();
@@ -89,16 +122,6 @@ public class ExtensionManager {
 				return lst;
 		}
 		return null;
-	}
-
-	public List<Class<?>> getPaletteEntries() {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		for (IComponentFactory f : nodeFactory) {
-			List<Class<?>> lst = f.getPaletteEntries();
-			if (lst != null)
-				list.addAll(lst);
-		}
-		return list;
 	}
 
 	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {

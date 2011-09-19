@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.components.barcode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.components.barbecue.BarbecueComponent;
@@ -46,7 +45,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
-import com.jaspersoft.studio.IComponentFactory;
 import com.jaspersoft.studio.components.barcode.command.CreateBarcodeCommand;
 import com.jaspersoft.studio.components.barcode.figure.BarcodeFigure;
 import com.jaspersoft.studio.components.barcode.model.MBarcode;
@@ -74,41 +72,59 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.plugin.IComponentFactory;
+import com.jaspersoft.studio.plugin.IPaletteContributor;
+import com.jaspersoft.studio.plugin.PaletteContributor;
 
 public class BarcodeComponentFactory implements IComponentFactory {
 
 	public ANode createNode(ANode parent, Object jrObject, int newIndex) {
 		if (jrObject instanceof JRDesignComponentElement) {
 			if (((JRDesignComponentElement) jrObject).getComponent() instanceof BarbecueComponent)
-				return new MBarcodeBarbecue(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MBarcodeBarbecue(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof CodabarComponent)
-				return new MCodabar(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MCodabar(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof Code128Component)
-				return new MCode128(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MCode128(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof Code39Component)
-				return new MCode39(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MCode39(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof DataMatrixComponent)
-				return new MDataMatrix(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MDataMatrix(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof EAN128Component)
-				return new MEAN128(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MEAN128(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof EAN13Component)
-				return new MEAN13(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MEAN13(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof EAN8Component)
-				return new MEAN8(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MEAN8(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof Interleaved2Of5Component)
-				return new MInterleaved2Of5(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MInterleaved2Of5(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof PDF417Component)
-				return new MPDF417(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MPDF417(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof POSTNETComponent)
-				return new MPOSTNET(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MPOSTNET(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof RoyalMailCustomerComponent)
-				return new MRoyalMail(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MRoyalMail(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof UPCAComponent)
-				return new MUPCA(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MUPCA(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof UPCEComponent)
-				return new MUPCE(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MUPCE(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof USPSIntelligentMailComponent)
-				return new MUSPSIntelligent(parent, (JRDesignComponentElement) jrObject, newIndex);
+				return new MUSPSIntelligent(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
 		}
 		return null;
 	}
@@ -124,25 +140,31 @@ public class BarcodeComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public List<Class<?>> getPaletteEntries() {
-		List<Class<?>> list = new ArrayList<Class<?>>();
-		list.add(MBarcodeBarbecue.class);
-		return list;
+	public IPaletteContributor getPaletteEntries() {
+		PaletteContributor pc = new PaletteContributor();
+		pc.add(MBarcodeBarbecue.class);
+		return pc;
 	}
 
-	public Command getCreateCommand(ANode parent, ANode child, Rectangle location, int newIndex) {
+	public Command getCreateCommand(ANode parent, ANode child,
+			Rectangle location, int newIndex) {
 		if (child instanceof MBarcode) {
 			if (parent instanceof MElementGroup)
-				return new CreateBarcodeCommand((MElementGroup) parent, (MGraphicElement) child, newIndex);
+				return new CreateBarcodeCommand((MElementGroup) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MBand)
-				return new CreateBarcodeCommand((MBand) parent, (MGraphicElement) child, newIndex);
+				return new CreateBarcodeCommand((MBand) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MFrame)
-				return new CreateBarcodeCommand((MFrame) parent, (MGraphicElement) child, newIndex);
+				return new CreateBarcodeCommand((MFrame) parent,
+						(MGraphicElement) child, newIndex);
 			if (parent instanceof MReport)
-				return new CreateBarcodeCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateBarcodeCommand(parent,
+						(MGraphicElement) child, location, newIndex);
 
 			if (parent instanceof IGroupElement) {
-				return new CreateBarcodeCommand(parent, (MGraphicElement) child, location, newIndex);
+				return new CreateBarcodeCommand(parent,
+						(MGraphicElement) child, location, newIndex);
 			}
 		}
 		return null;
