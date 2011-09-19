@@ -126,7 +126,7 @@ public class DSTimePeriod extends ADSComponent {
 			}
 		});
 
-		final Button btn = new Button(yCompo, SWT.PUSH);
+		final Button btn = new Button(yCompo, SWT.PUSH | SWT.FLAT);
 		btn.setText("...");
 		btn.addSelectionListener(new SelectionListener() {
 

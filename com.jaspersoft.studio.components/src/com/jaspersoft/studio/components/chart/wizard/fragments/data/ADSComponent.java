@@ -152,7 +152,7 @@ public abstract class ADSComponent {
 	protected abstract Control createChartBottom(Composite parent);
 
 	protected Control createChartPreview(Composite composite) {
-		canvasChart = new Canvas(composite, SWT.BORDER | SWT.NO_REDRAW_RESIZE
+		canvasChart = new Canvas(composite, SWT.NO_REDRAW_RESIZE
 				| SWT.NO_BACKGROUND);
 		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END
 				| GridData.VERTICAL_ALIGN_BEGINNING);
