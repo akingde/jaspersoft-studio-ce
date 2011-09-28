@@ -105,13 +105,17 @@ public class MChartTimeSeriesDataset extends MChartDataset {
 		JRDesignTimeSeriesDataset jrElement = (JRDesignTimeSeriesDataset) getValue();
 
 		if (id.equals(JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD)) {
-			Class<?> v = null;
-			if (value != null) {
-				try {
-					v = Class.forName((String) value);
-					jrElement.setTimePeriod(v);
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
+			if (value instanceof Class<?>) {
+				jrElement.setTimePeriod((Class<?>) value);
+			} else {
+				Class<?> v = null;
+				if (value != null) {
+					try {
+						v = Class.forName((String) value);
+						jrElement.setTimePeriod(v);
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		} else

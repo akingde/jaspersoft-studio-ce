@@ -21,6 +21,7 @@ package com.jaspersoft.studio.components.chart.model.command;
 
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.dialogs.Dialog;
@@ -114,7 +115,9 @@ public class CreateChartCommand extends CreateElementCommand {
 					JRDesignChart.CHART_TYPE_AREA);
 
 			ChartWizard wizard = new ChartWizard(
-					new MChart(null, newchart, -1), jasperDesign);
+					new MChart(null, newchart, -1),
+					(JRDesignElementDataset) newchart.getDataset(),
+					jasperDesign);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

@@ -20,7 +20,8 @@
 package com.jaspersoft.studio.components.chart.wizard.fragments.data;
 
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
-import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
@@ -54,11 +55,11 @@ public class DSHighLow extends ADSComponent {
 	}
 
 	@Override
-	public void setData(DrawVisitor drawVisitor, JRDesignChart jrChart,
-			SimpleFileResolver fResolver) {
-		Assert.isTrue(jrChart.getDataset() instanceof JRDesignHighLowDataset);
-		super.setData(drawVisitor, jrChart, fResolver);
-		dataset = (JRDesignHighLowDataset) jrChart.getDataset();
+	public void setData(DrawVisitor drawVisitor, JRDesignElement jrChart,
+			JRDesignElementDataset eDataset, SimpleFileResolver fResolver) {
+		Assert.isTrue(eDataset instanceof JRDesignHighLowDataset);
+		super.setData(drawVisitor, jrChart, eDataset, fResolver);
+		dataset = (JRDesignHighLowDataset) eDataset;
 
 		series.bindObject(dataset, "SeriesExpression");
 		volume.bindObject(dataset, "VolumeExpression");

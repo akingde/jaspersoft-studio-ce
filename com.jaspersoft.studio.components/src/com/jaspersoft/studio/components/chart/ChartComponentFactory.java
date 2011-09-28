@@ -194,7 +194,7 @@ public class ChartComponentFactory implements IComponentFactory {
 
 	public IPaletteContributor getPaletteEntries() {
 		PaletteContributor pc = new PaletteContributor();
-		pc.add(MChart.class);
+		pc.add("com.jaspersoft.studio.components.CHARTCOMPONENTS", MChart.class);
 		return pc;
 	}
 

@@ -27,10 +27,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 import net.sf.jasperreports.components.sort.SortComponent;
-import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
@@ -40,7 +38,7 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
-import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 
 /**
@@ -48,26 +46,13 @@ import com.jaspersoft.studio.editor.java2d.J2DGraphics;
  * @author veaceslav chicu
  * 
  */
-public class SortFigure extends FrameFigure {
+public class SortFigure extends JRComponentFigure {
 
 	/**
 	 * Instantiates a new map figure.
 	 */
 	public SortFigure() {
 		super();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.
-	 * jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
-	 */
-	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 	}
 
 	@Override

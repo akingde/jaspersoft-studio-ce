@@ -125,7 +125,7 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
 	 */
 	@Override
-	protected List getModelChildren() {
+	protected List<?> getModelChildren() {
 		List<Object> list = new ArrayList<Object>();
 		if (getModel() != null)
 			for (INode node : ((ANode) getModel()).getChildren()) {
@@ -142,4 +142,5 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
 	}
+ 
 }

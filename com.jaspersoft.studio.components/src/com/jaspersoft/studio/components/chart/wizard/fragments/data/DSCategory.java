@@ -24,7 +24,8 @@ import java.util.List;
 import net.sf.jasperreports.charts.JRCategorySeries;
 import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
 import net.sf.jasperreports.engine.JRExpression;
-import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
@@ -63,11 +64,11 @@ public class DSCategory extends ADSComponent {
 	}
 
 	@Override
-	public void setData(DrawVisitor drawVisitor, JRDesignChart jrChart,
-			SimpleFileResolver fResolver) {
-		Assert.isTrue(jrChart.getDataset() instanceof JRDesignCategoryDataset);
-		super.setData(drawVisitor, jrChart, fResolver);
-		dataset = (JRDesignCategoryDataset) jrChart.getDataset();
+	public void setData(DrawVisitor drawVisitor, JRDesignElement jrChart,
+			JRDesignElementDataset eDataset, SimpleFileResolver fResolver) {
+		Assert.isTrue(eDataset instanceof JRDesignCategoryDataset);
+		super.setData(drawVisitor, jrChart, eDataset, fResolver);
+		this.dataset = (JRDesignCategoryDataset) eDataset;
 		setSeries(0);
 	}
 

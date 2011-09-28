@@ -186,7 +186,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getNewValue() != null && evt.getOldValue() == null) {
-				createEditorPage(evt.getNewValue());
+//				createEditorPage(evt.getNewValue());
 			} else if (evt.getNewValue() == null && evt.getOldValue() != null) {
 				AbstractVisualEditor obj = ccMap.get(evt.getOldValue());
 				if (obj != null)

@@ -314,7 +314,8 @@ public class MList extends MGraphicElement implements IPastable,
 			if (elementGroup instanceof JRChangeEventsSupport)
 				((JRChangeEventsSupport) elementGroup).getEventSupport()
 						.removePropertyChangeListener(this);
-		} else if (value != null) {
+		}
+		if (value != null) {
 			JRDesignComponentElement jrcomp = (JRDesignComponentElement) value;
 			jrcomp.getEventSupport().addPropertyChangeListener(this);
 			JRElementGroup elementGroup = getJRElementGroup(jrcomp);

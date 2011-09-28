@@ -198,17 +198,13 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
-			if (mDatasetRun == null) {
-				JRDatasetRun j = jrElement.getDatasetRun();
-				if (j == null) {
-					j = new JRDesignDatasetRun();
-					// jrElement.setDatasetRun(j);
-				}
-				mDatasetRun = new MDatasetRun(j, getJasperDesign());
-				setChildListener(mDatasetRun);
+			JRDatasetRun j = jrElement.getDatasetRun();
+			if (j == null) {
+				j = new JRDesignDatasetRun();
 			}
+			mDatasetRun = new MDatasetRun(j, getJasperDesign());
+			setChildListener(mDatasetRun);
 			return mDatasetRun;
-
 		}
 		return null;
 	}
@@ -249,12 +245,16 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				jrElement.setResetGroup(group);
 			}
 		} else if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
-			MDatasetRun mdr = (MDatasetRun) value;
-			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
-			if (dr.getDatasetName() != null)
-				jrElement.setDatasetRun(dr);
-			else
+			if (value == null) {
 				jrElement.setDatasetRun(null);
+			} else {
+				MDatasetRun mdr = (MDatasetRun) value;
+				JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
+				if (dr.getDatasetName() != null)
+					jrElement.setDatasetRun(dr);
+				else
+					jrElement.setDatasetRun(null);
+			}
 		}
 	}
 

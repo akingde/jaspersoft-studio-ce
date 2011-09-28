@@ -19,7 +19,7 @@
  */
 package com.jaspersoft.studio.components.chart.wizard;
 
-import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -28,22 +28,24 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.ElementDatasetWidget;
 
 public class ChartDataPage extends WizardPage {
-	private JRDesignChart jrChart;
+	private JRDesignElement jrChart;
 	private JasperDesign jrDesign;
-	private ElementDatasetWidget eDataset;
+	private ElementDatasetWidget ewDataset;
+	private JRDesignElementDataset edataset;
 	private DatasetSeriesWidget eDatasetSeries;
 
-	protected ChartDataPage(MChart chart, JasperDesign jrDesign) {
+	protected ChartDataPage(JRDesignElement jrChart,
+			JRDesignElementDataset edataset, JasperDesign jrDesign) {
 		super("chartdataconfiguration");
 		setTitle("Chart Data Configuration");
 		setDescription("Configure how data are used by your chart");
-		this.jrChart = (JRDesignChart) chart.getValue();
+		this.jrChart = jrChart;
 		this.jrDesign = jrDesign;
+		this.edataset = edataset;
 	}
 
 	public void createControl(Composite parent) {
@@ -53,13 +55,12 @@ public class ChartDataPage extends WizardPage {
 
 		eDatasetSeries = new DatasetSeriesWidget(composite);
 
-		eDataset = new ElementDatasetWidget(composite);
+		ewDataset = new ElementDatasetWidget(composite);
 	}
 
 	public void updateData() {
-		eDatasetSeries.setDataset(jrDesign, jrChart);
-		eDataset.setDataset((JRDesignElementDataset) jrChart.getDataset(),
-				jrDesign);
+		eDatasetSeries.setDataset(jrDesign, jrChart, edataset);
+		ewDataset.setDataset(edataset, jrDesign);
 	}
 
 	@Override

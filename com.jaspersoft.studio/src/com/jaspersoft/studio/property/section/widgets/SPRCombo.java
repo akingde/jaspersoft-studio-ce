@@ -28,31 +28,40 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPRCombo {
-	private CCombo theme;
+	protected CCombo rcombo;
 
-	public SPRCombo(Composite parent, AbstractSection section,
-			String property, String tooltip, String[] items) {
+	public SPRCombo(Composite parent, AbstractSection section, String property, String tooltip, String[] items) {
 		createComponent(parent, section, property, tooltip, items);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property,
-			String tooltip, String[] items) {
-		theme = new CCombo(parent, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		theme.setItems(items);
-		theme.addSelectionListener(new SelectionListener() {
+	public void createComponent(Composite parent, final AbstractSection section, final String property, String tooltip,
+			String[] items) {
+		rcombo = new CCombo(parent, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
+		rcombo.setItems(items);
+		rcombo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				section.changeProperty(property, theme.getSelectionIndex());
+				changeProperty(section, property);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		theme.setToolTipText(tooltip);
+		rcombo.setToolTipText(tooltip);
+	}
+
+	protected void changeProperty(AbstractSection section, final String property) {
+		section.changeProperty(property, rcombo.getSelectionIndex());
 	}
 
 	public void setData(Integer b) {
-		theme.select(b);
+		rcombo.select(b);
+
+	}
+
+	public void setData(Integer b, String[] items) {
+		rcombo.setItems(items);
+		rcombo.select(b);
+
 	}
 }

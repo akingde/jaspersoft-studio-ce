@@ -19,52 +19,76 @@
  */
 package com.jaspersoft.studio.components.chart.wizard;
 
-import net.sf.jasperreports.engine.JRChart;
-import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
+import com.jaspersoft.studio.model.MGraphicElement;
 
 public class ChartWizard extends Wizard {
 	private ChartTypeWizardPage page0;
 	private ChartDataPage step1;
-	private MChart chart;
+	private MGraphicElement chart;
+	private JRDesignElementDataset edataset;
 
 	private int width;
 	private int height;
+	private boolean skipFirstPage = false;
 
-	public ChartWizard(MChart chart, JasperDesign jasperDesign) {
+	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset,
+			JasperDesign jasperDesign, boolean skipFirstPage) {
+		this(chart, edataset, jasperDesign);
+		this.skipFirstPage = skipFirstPage;
+	}
+
+	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset,
+			JasperDesign jasperDesign) {
 		super();
 		setWindowTitle(Messages.common_chart_wizard);
 		this.chart = chart;
 		this.jasperDesign = jasperDesign;
-		JRChart jrChart = (JRChart) chart.getValue();
+		this.edataset = edataset;
+		JRDesignElement jrChart = (JRDesignElement) chart.getValue();
 		width = jrChart.getWidth();
 		height = jrChart.getHeight();
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new ChartTypeWizardPage(chart);
-		addPage(page0);
+		if (chart instanceof MChart) {
+			page0 = new ChartTypeWizardPage((MChart) chart);
+			addPage(page0);
+		}
 
-		step1 = new ChartDataPage(chart, jasperDesign);
+		step1 = new ChartDataPage((JRDesignElement) chart.getValue(), edataset,
+				jasperDesign);
 		addPage(step1);
 	}
 
-	public MChart getChart() {
-		JRDesignChart jrChart = (JRDesignChart) chart.getValue();
+	public MGraphicElement getChart() {
+		JRDesignElement jrChart = (JRDesignElement) chart.getValue();
 		jrChart.setWidth(width);
 		jrChart.setHeight(height);
 		return chart;
 	}
 
 	@Override
+	public IWizardPage getStartingPage() {
+		if (skipFirstPage && page0 != null)
+			return step1;
+		return super.getStartingPage();
+	}
+
+	@Override
 	public boolean performFinish() {
-		return (page0.canFlipToNextPage() && step1.isPageComplete());
+		if (page0 != null)
+			return (page0.canFlipToNextPage() && step1.isPageComplete());
+		return step1.isPageComplete();
 	}
 
 	private JasperDesign jasperDesign;

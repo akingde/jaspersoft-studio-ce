@@ -28,6 +28,7 @@ import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRChartDataset;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
@@ -48,16 +49,21 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.components.chart.figure.ChartFigure;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.ChartDatasetDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class ADSComponent {
 	private Control control;
 	protected Label imgLabel;
-	private ChartFigure chartFigure;
+	private FrameFigure chartFigure;
 	private Canvas canvasChart;
-	private JRDesignChart jrChart;
+	private JRDesignElement jrElement;
+	private JRDesignElementDataset eDataset;
 	private DatasetSeriesWidget dsWidget;
+	private LightweightSystem lws;
+	private Button btDatasetType;
 
 	public ADSComponent(Composite composite, DatasetSeriesWidget dsWidget) {
 		createControl(composite);
@@ -66,13 +72,21 @@ public abstract class ADSComponent {
 
 	public abstract String getName();
 
-	public void setData(DrawVisitor drawVisitor, JRDesignChart jrChart,
-			SimpleFileResolver fResolver) {
-		this.jrChart = jrChart;
+	public void setData(DrawVisitor drawVisitor, JRDesignElement jrChart,
+			JRDesignElementDataset eDataset, SimpleFileResolver fResolver) {
+		this.jrElement = jrChart;
+		this.eDataset = eDataset;
 		jrChart.setWidth(500);
 		jrChart.setHeight(325);
+		setChartFigure();
 		chartFigure.setJRElement(jrChart, drawVisitor, fResolver);
 		canvasChart.redraw();
+		btDatasetType.setEnabled(false);
+		if (jrElement instanceof JRDesignChart) {
+			JRDesignChart jrDChart = (JRDesignChart) jrElement;
+			if (jrDChart.getChartType() == JRChart.CHART_TYPE_XYBAR)
+				btDatasetType.setEnabled(true);
+		}
 	}
 
 	public Control getControl() {
@@ -83,39 +97,44 @@ public abstract class ADSComponent {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 
-		final Button b = new Button(composite, SWT.PUSH | SWT.FLAT);
-		b.setText(getName());
-		b.addSelectionListener(new SelectionListener() {
+		btDatasetType = new Button(composite, SWT.PUSH | SWT.FLAT);
+		btDatasetType.setText(getName());
+		btDatasetType.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
 				Map<Class<? extends JRDesignElementDataset>, String> map = new HashMap<Class<? extends JRDesignElementDataset>, String>();
-				if (jrChart.getChartType() == JRChart.CHART_TYPE_XYBAR) {
-					map.put(JRDesignTimePeriodDataset.class,
-							dsWidget.getName(JRDesignTimePeriodDataset.class));
-					map.put(JRDesignTimeSeriesDataset.class,
-							dsWidget.getName(JRDesignTimeSeriesDataset.class));
-					map.put(JRDesignXyDataset.class,
-							dsWidget.getName(JRDesignXyDataset.class));
+				if (jrElement instanceof JRDesignChart) {
+					JRDesignChart jrDChart = (JRDesignChart) jrElement;
+					if (jrDChart.getChartType() == JRChart.CHART_TYPE_XYBAR) {
+						map.put(JRDesignTimePeriodDataset.class, dsWidget
+								.getName(JRDesignTimePeriodDataset.class));
+						map.put(JRDesignTimeSeriesDataset.class, dsWidget
+								.getName(JRDesignTimeSeriesDataset.class));
+						map.put(JRDesignXyDataset.class,
+								dsWidget.getName(JRDesignXyDataset.class));
 
-				}
-				if (!map.isEmpty()) {
-					Class<? extends JRDesignElementDataset> selclass = (Class<? extends JRDesignElementDataset>) jrChart
-							.getDataset().getClass();
-					ChartDatasetDialog dialog = new ChartDatasetDialog(b
-							.getShell(), map, selclass);
-					if (dialog.open() == Window.OK) {
-						Class<? extends JRDesignElementDataset> newselclass = dialog
-								.getSelection();
-						if (!selclass.equals(newselclass))
-							try {
-								JRChartDataset jrded = (JRChartDataset) newselclass
-										.getConstructor(JRChartDataset.class)
-										.newInstance(jrChart.getDataset());
-								jrChart.setDataset(jrded);
-								dsWidget.setDataset(null, jrChart);
-							} catch (Exception e1) {
-								UIUtils.showError(e1);
-							}
+					}
+					if (!map.isEmpty()) {
+						Class<? extends JRDesignElementDataset> selclass = (Class<? extends JRDesignElementDataset>) jrDChart
+								.getDataset().getClass();
+						ChartDatasetDialog dialog = new ChartDatasetDialog(
+								btDatasetType.getShell(), map, selclass);
+						if (dialog.open() == Window.OK) {
+							Class<? extends JRDesignElementDataset> newselclass = dialog
+									.getSelection();
+							if (!selclass.equals(newselclass))
+								try {
+									JRChartDataset jrded = (JRChartDataset) newselclass
+											.getConstructor(
+													JRChartDataset.class)
+											.newInstance(jrDChart.getDataset());
+									jrDChart.setDataset(jrded);
+									dsWidget.setDataset(null, jrElement,
+											eDataset);
+								} catch (Exception e1) {
+									UIUtils.showError(e1);
+								}
+						}
 					}
 				}
 			}
@@ -160,11 +179,20 @@ public abstract class ADSComponent {
 		gd.heightHint = 325;
 		canvasChart.setLayoutData(gd);
 
-		LightweightSystem lws = new J2DLightweightSystem();
+		lws = new J2DLightweightSystem();
 		lws.setControl(canvasChart);
 
-		chartFigure = new ChartFigure();
-		lws.setContents(chartFigure);
+		setChartFigure();
+
 		return canvasChart;
+	}
+
+	private void setChartFigure() {
+		if (jrElement instanceof JRChart)
+			chartFigure = new ChartFigure();
+		else
+			// if (jrElement instanceof JRCommonElement)
+			chartFigure = new JRComponentFigure();
+		lws.setContents(chartFigure);
 	}
 }

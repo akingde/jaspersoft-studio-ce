@@ -21,6 +21,7 @@ package com.jaspersoft.studio.components.chart.model.command;
 
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -71,7 +72,7 @@ public class EditChartCommand extends Command {
 			JRDesignChart clone = (JRDesignChart) oldChart.clone();
 
 			ChartWizard wizard = new ChartWizard(new MChart(null, clone, -1),
-					jrDesign);
+					(JRDesignElementDataset) clone.getDataset(), jrDesign, true);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

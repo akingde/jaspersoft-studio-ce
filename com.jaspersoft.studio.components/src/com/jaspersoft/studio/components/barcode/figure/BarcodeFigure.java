@@ -19,34 +19,19 @@
  */
 package com.jaspersoft.studio.components.barcode.figure;
 
-import net.sf.jasperreports.engine.JRComponentElement;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 
-import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 /*
  * @author Chicu Veaceslav
  * @version $Id$
  */
-public class BarcodeFigure extends FrameFigure {
+public class BarcodeFigure extends JRComponentFigure {
 
 	/**
 	 * Instantiates a new text field figure.
 	 */
 	public BarcodeFigure() {
 		super();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
-	 */
-	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 	}
 
 }

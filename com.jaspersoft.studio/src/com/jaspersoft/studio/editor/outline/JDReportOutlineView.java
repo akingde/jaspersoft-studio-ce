@@ -34,12 +34,14 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.LayerConstants;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.CreationFactory;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.jface.action.Action;
@@ -71,6 +73,7 @@ import com.jaspersoft.studio.editor.gef.parts.MainDesignerRootEditPart;
 import com.jaspersoft.studio.editor.menu.AppContextMenuProvider;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.palette.JDPaletteCreationFactory;
+import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -272,10 +275,19 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 						if (ti != null && ti.length > 0) {
 							Object obj = ti[0].getData();
 							if (obj instanceof TreeEditPart) {
-								TreeEditPart atep = (TreeEditPart) obj;
-								if (atep.getModel() instanceof ANode) {
-									EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,
-											(ANode) atep.getModel());
+
+								EditPart part = (EditPart) ((AbstractVisualEditor) editor).getGraphicalViewer().getEditPartRegistry()
+										.get(((TreeEditPart) obj).getModel());
+								if (part != null) {
+									SelectionRequest request = new SelectionRequest();
+									request.setType(RequestConstants.REQ_OPEN);
+									part.performRequest(request);
+								} else {
+									TreeEditPart atep = (TreeEditPart) obj;
+									if (atep.getModel() instanceof ANode) {
+										EditableFigureEditPart.openEditor(((ANode) atep.getModel()).getValue(), (IEditorPart) editor,
+												(ANode) atep.getModel());
+									}
 								}
 							}
 						}

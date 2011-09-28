@@ -42,6 +42,9 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.messages.Messages;
 
 public class DatasetRunWidget {
+	public static final String[] ITEMS = new String[] { Messages.WizardConnectionPage_noconnection_text,
+			Messages.WizardConnectionPage_connection_text, Messages.WizardConnectionPage_datasource_text,
+			Messages.WizardConnectionPage_mainreport_text, Messages.WizardConnectionPage_empty_connection_text };
 	private JRDesignDatasetRun datasetrun;
 
 	public DatasetRunWidget(Composite parent) {
@@ -98,9 +101,7 @@ public class DatasetRunWidget {
 		dsRunComposite.setLayout(new GridLayout(3, false));
 
 		cmb = new Combo(dsRunComposite, SWT.READ_ONLY | SWT.BORDER | SWT.SINGLE);
-		cmb.setItems(new String[] { Messages.WizardConnectionPage_noconnection_text,
-				Messages.WizardConnectionPage_connection_text, Messages.WizardConnectionPage_datasource_text,
-				Messages.WizardConnectionPage_mainreport_text, Messages.WizardConnectionPage_empty_connection_text });
+		cmb.setItems(ITEMS);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		cmb.setLayoutData(gd);

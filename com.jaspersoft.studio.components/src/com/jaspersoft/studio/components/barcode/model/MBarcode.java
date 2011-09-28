@@ -39,7 +39,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public abstract class MBarcode extends MGraphicElement implements IRotatable{
+public abstract class MBarcode extends MGraphicElement implements IRotatable {
 
 	public MBarcode() {
 		super();
@@ -63,7 +63,8 @@ public abstract class MBarcode extends MGraphicElement implements IRotatable{
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -72,33 +73,40 @@ public abstract class MBarcode extends MGraphicElement implements IRotatable{
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		JRExpressionPropertyDescriptor codeExprD = new JRExpressionPropertyDescriptor(
-				StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION, Messages.MBarcode_code_expression);
+				StandardBarbecueComponent.PROPERTY_CODE_EXPRESSION,
+				Messages.MBarcode_code_expression);
 		codeExprD.setDescription(Messages.MBarcode_code_expression_description);
 		desc.add(codeExprD);
 
 		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
-				StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, Messages.MBarcode_evaluation_time, EnumHelper.getEnumNames(
+				StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
+				Messages.MBarcode_evaluation_time, EnumHelper.getEnumNames(
 						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
-		evaluationTimeD.setDescription(Messages.MBarcode_evaluation_time_description);
+		evaluationTimeD
+				.setDescription(Messages.MBarcode_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
-		evaluationGroupNameD = new RComboBoxPropertyDescriptor(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP,
+		evaluationGroupNameD = new RComboBoxPropertyDescriptor(
+				StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP,
 				Messages.MBarcode_evaluation_group, new String[] { "" }); //$NON-NLS-1$
-		evaluationGroupNameD.setDescription(Messages.MBarcode_evaluation_group_description);
+		evaluationGroupNameD
+				.setDescription(Messages.MBarcode_evaluation_group_description);
 		desc.add(evaluationGroupNameD);
 
 		evaluationTimeD.setCategory(Messages.common_properties_category);
 		evaluationGroupNameD.setCategory(Messages.common_properties_category);
 		codeExprD.setCategory(Messages.common_properties_category);
 
-		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME, EvaluationTimeEnum.NOW);
+		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
+				EvaluationTimeEnum.NOW);
 	}
 
 	@Override
@@ -115,13 +123,14 @@ public abstract class MBarcode extends MGraphicElement implements IRotatable{
 		if (getValue() != null) {
 			Object obj = getComponent();
 			if (obj instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport().removePropertyChangeListener(this);
-		} else if (value != null) {
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.removePropertyChangeListener(this);
+		}
+		if (value != null) {
 			Object obj = getComponent(value);
 			if (value instanceof JRChangeEventsSupport)
-				((JRChangeEventsSupport) obj).getEventSupport().addPropertyChangeListener(this);
-			super.setValue(value);
-			return;
+				((JRChangeEventsSupport) obj).getEventSupport()
+						.addPropertyChangeListener(this);
 		}
 		super.setValue(value);
 	}

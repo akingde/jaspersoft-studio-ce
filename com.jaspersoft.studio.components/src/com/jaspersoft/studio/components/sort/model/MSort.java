@@ -288,13 +288,12 @@ public class MSort extends MGraphicElement {
 			if (obj instanceof JRChangeEventsSupport)
 				((JRChangeEventsSupport) obj).getEventSupport()
 						.removePropertyChangeListener(this);
-		} else if (value != null) {
+		}
+		if (value != null) {
 			Object obj = getComponent(value);
 			if (value instanceof JRChangeEventsSupport)
 				((JRChangeEventsSupport) obj).getEventSupport()
 						.addPropertyChangeListener(this);
-			super.setValue(value);
-			return;
 		}
 		super.setValue(value);
 	}

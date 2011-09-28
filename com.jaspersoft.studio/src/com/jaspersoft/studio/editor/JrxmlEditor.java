@@ -231,22 +231,22 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	protected void createPages() {
-//		CTabFolder ctfolder = (CTabFolder) getContainer();
-//		ctfolder.setUnselectedCloseVisible(true);
-//
-//		ToolBar toolBar = new ToolBar(ctfolder, SWT.FLAT | SWT.HORIZONTAL | SWT.WRAP | SWT.RIGHT);
-//		ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-//		item.setText("+ ");
-//		item = new ToolItem(toolBar, SWT.PUSH);
-//		item.setText("- ");
-//		item = new ToolItem(toolBar, SWT.PUSH);
-//		item.setText(">> ");
-//
-//		int tabHeight = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-//		tabHeight = Math.max(tabHeight, ctfolder.getTabHeight());
-//		ctfolder.setTabHeight(tabHeight);
-//
-//		ctfolder.setTopRight(toolBar);
+		// CTabFolder ctfolder = (CTabFolder) getContainer();
+		// ctfolder.setUnselectedCloseVisible(true);
+		//
+		// ToolBar toolBar = new ToolBar(ctfolder, SWT.FLAT | SWT.HORIZONTAL | SWT.WRAP | SWT.RIGHT);
+		// ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		// item.setText("+ ");
+		// item = new ToolItem(toolBar, SWT.PUSH);
+		// item.setText("- ");
+		// item = new ToolItem(toolBar, SWT.PUSH);
+		// item.setText(">> ");
+		//
+		// int tabHeight = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+		// tabHeight = Math.max(tabHeight, ctfolder.getTabHeight());
+		// ctfolder.setTabHeight(tabHeight);
+		//
+		// ctfolder.setTopRight(toolBar);
 
 		createPage0();
 		createPage1();
@@ -554,13 +554,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// }
 				updateVisualView();
 				modelFresh = true;
-//				 getSite().setSelectionProvider(reportContainer.getActiveEditor().getSite().getSelectionProvider());
+				// getSite().setSelectionProvider(reportContainer.getActiveEditor().getSite().getSelectionProvider());
 				break;
 			case PAGE_XMLEDITOR:
 				if (!modelFresh)
 					model2xml();
 
-//				 getSite().setSelectionProvider(xmlEditor.getSelectionProvider());
+				// getSite().setSelectionProvider(xmlEditor.getSelectionProvider());
 				break;
 			case PAGE_PREVIEW:
 				if (activePage == PAGE_XMLEDITOR)
@@ -569,11 +569,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					} catch (JRException e) {
 						handleJRException(getEditorInput(), e, false);
 					}
-				else if (!modelFresh)
+				else
 					model2xml();
 
 				model2preview();
-//				 getSite().setSelectionProvider(previewEditor.getSite().getSelectionProvider());
+				// getSite().setSelectionProvider(previewEditor.getSite().getSelectionProvider());
 				break;
 			}
 		}

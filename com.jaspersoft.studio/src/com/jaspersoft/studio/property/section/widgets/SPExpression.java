@@ -29,23 +29,24 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 public class SPExpression {
 	private ExpressionWidget expr;
 
-	public SPExpression(Composite parent, AbstractSection section,
-			String property) {
+	public SPExpression(Composite parent, AbstractSection section, String property) {
 		createComponent(parent, section, property);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property) {
+	public void createComponent(Composite parent, final AbstractSection section, final String property) {
 		expr = new ExpressionWidget(parent, null) {
 			@Override
 			protected void setOnParent(JRDesignExpression exp) {
-				section.changeProperty(property, exp != null ? exp.clone()
-						: null);
+				section.changeProperty(property, exp != null ? exp.clone() : null);
 			}
 		};
 	}
 
 	public void setData(JRDesignExpression b) {
 		expr.setExpression(b);
+	}
+
+	public void setEnabled(boolean enabled) {
+		expr.setEnabled(enabled);
 	}
 }

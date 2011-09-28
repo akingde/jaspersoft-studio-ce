@@ -31,7 +31,8 @@ import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
 import net.sf.jasperreports.charts.design.JRDesignValueDataset;
 import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.charts.design.JRDesignXyzDataset;
-import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
@@ -52,12 +53,13 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSTimeSeries
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSValue;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSXy;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSXyz;
+import com.jaspersoft.studio.components.chartspider.wizard.action.DSSpider;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class DatasetSeriesWidget {
 	private JRDesignElementDataset eDataset;
 	private JasperDesign jrDesign;
-	private JRDesignChart jrChart;
+	private JRDesignElement jrChart;
 	private Map<Class<? extends JRDesignElementDataset>, ADSComponent> map = new HashMap<Class<? extends JRDesignElementDataset>, ADSComponent>();
 	private StackLayout stacklayout;
 	private Composite sComposite;
@@ -87,6 +89,7 @@ public class DatasetSeriesWidget {
 		map.put(JRDesignXyDataset.class, new DSXy(sComposite, this));
 		map.put(JRDesignXyzDataset.class, new DSXyz(sComposite, this));
 		// here we can add other datasources ...
+		map.put(StandardSpiderDataset.class, new DSSpider(sComposite, this));
 
 		stacklayout.topControl = map.get(JRDesignCategoryDataset.class)
 				.getControl();
@@ -100,8 +103,9 @@ public class DatasetSeriesWidget {
 		return "noname";
 	}
 
-	public void setDataset(JasperDesign jrDesign, JRDesignChart jrChart) {
-		this.eDataset = (JRDesignElementDataset) jrChart.getDataset();
+	public void setDataset(JasperDesign jrDesign, JRDesignElement jrChart,
+			JRDesignElementDataset eDataset) {
+		this.eDataset = eDataset;
 		if (jrDesign != null && this.jrDesign != jrDesign) {
 			this.jrDesign = jrDesign;
 			dv = new DrawVisitor(jrDesign, null);
@@ -113,7 +117,7 @@ public class DatasetSeriesWidget {
 	private void fillData() {
 		ADSComponent c = map.get(eDataset.getClass());
 		if (c != null) {
-			c.setData(dv, jrChart, sfResolver);
+			c.setData(dv, jrChart, eDataset, sfResolver);
 			stacklayout.topControl = c.getControl();
 		} else {
 			// a label, with not implemented ...

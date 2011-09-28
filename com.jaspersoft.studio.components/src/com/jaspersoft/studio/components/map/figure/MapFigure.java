@@ -19,36 +19,20 @@
  */
 package com.jaspersoft.studio.components.map.figure;
 
-import net.sf.jasperreports.engine.JRComponentElement;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-
-import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 
 /**
  * 
  * @author sanda zaharia
  * 
  */
-public class MapFigure extends FrameFigure {
+public class MapFigure extends JRComponentFigure {
 
 	/**
 	 * Instantiates a new map figure.
 	 */
 	public MapFigure() {
 		super();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
-	 */
-	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 	}
 
 }

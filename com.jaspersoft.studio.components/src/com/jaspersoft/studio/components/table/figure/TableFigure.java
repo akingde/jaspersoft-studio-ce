@@ -19,31 +19,15 @@
  */
 package com.jaspersoft.studio.components.table.figure;
 
-import net.sf.jasperreports.engine.JRComponentElement;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 
-import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
-
-public class TableFigure extends FrameFigure {
+public class TableFigure extends JRComponentFigure {
 
 	/**
 	 * Instantiates a new text field figure.
 	 */
 	public TableFigure() {
 		super();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
-	 */
-	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 	}
 
 }

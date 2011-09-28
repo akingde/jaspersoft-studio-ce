@@ -31,12 +31,19 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.property.section.widgets.SPExpression;
 
 /*
  * Abstract class for a section in a tab in the properties view.
@@ -188,4 +195,27 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	public abstract boolean isDisposed();
+
+	protected SPExpression createExpression(Composite parent, String property, String name, int width) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setBackground(parent.getBackground());
+		composite.setLayout(new RowLayout());
+	
+		CLabel lbl = getWidgetFactory()
+				.createCLabel(composite, name, SWT.RIGHT);
+		RowData rd = new RowData();
+		rd.width = width;
+		lbl.setLayoutData(rd);
+	
+		Composite cmp = new Composite(composite, SWT.NONE);
+		GridLayout gl = new GridLayout(3, false);
+		gl.marginTop = 0;
+		gl.marginHeight = 0;
+		gl.marginWidth = 0;
+		gl.marginLeft = 0;
+		cmp.setLayout(gl);
+		cmp.setBackground(parent.getBackground());
+	
+		return new SPExpression(cmp, this, property);
+	}
 }

@@ -38,34 +38,19 @@
  */
 package com.jaspersoft.studio.html.figure;
 
-import net.sf.jasperreports.engine.JRComponentElement;
-import net.sf.jasperreports.engine.JRElement;
-import net.sf.jasperreports.engine.export.draw.DrawVisitor;
+import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 
-import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 /*
  * @author Chicu Veaceslav
  * @version $Id$
  */
-public class HtmlFigure extends FrameFigure {
+public class HtmlFigure extends JRComponentFigure {
 
 	/**
 	 * Instantiates a new text field figure.
 	 */
 	public HtmlFigure() {
 		super();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
-	 * net.sf.jasperreports.engine.JRElement)
-	 */
-	@Override
-	protected void draw(DrawVisitor drawVisitor, JRElement jrElement) {
-		drawVisitor.visitComponentElement((JRComponentElement) jrElement);
 	}
 
 }

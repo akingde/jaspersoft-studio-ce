@@ -431,8 +431,8 @@ public class ElementDatasetWidget {
 		dsCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE);
 		dsCombo.setItems(new String[] { "main dataset" });
 
-		Button newDataset = new Button(composite, SWT.PUSH);
-		newDataset.setText("new");
+//		Button newDataset = new Button(composite, SWT.PUSH);
+//		newDataset.setText("new");
 
 		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.HORIZONTAL
 				| SWT.WRAP | SWT.RIGHT);

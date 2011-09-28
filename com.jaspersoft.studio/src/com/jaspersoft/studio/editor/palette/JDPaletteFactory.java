@@ -78,20 +78,20 @@ public class JDPaletteFactory {
 		PaletteGroup pgc = new PaletteGroup();
 		pgc.setId(IPaletteContributor.KEY_COMMON_ELEMENTS);
 		pgc.setName(Messages.common_elements);
-		pgc.setImage("icons/resources/elementgroup-16.png");
+		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
 		map.put(pgc.getId(), pgc);
 
 		pgc = new PaletteGroup();
 		pgc.setId(IPaletteContributor.KEY_COMMON_CONTAINER);
-		pgc.setName("Complex components");
-		pgc.setImage("icons/resources/elementgroup-16.png");
+		pgc.setName(Messages.JDPaletteFactory_complex_components);
+		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
 		pgc.setAfterGroup(IPaletteContributor.KEY_COMMON_ELEMENTS);
 		map.put(pgc.getId(), pgc);
 
 		pgc = new PaletteGroup();
 		pgc.setId(IPaletteContributor.KEY_COMMON_TOOLS);
 		pgc.setName(Messages.common_tools);
-		pgc.setImage("icons/resources/fields-16.png");
+		pgc.setImage("icons/resources/fields-16.png"); //$NON-NLS-1$
 		map.put(pgc.getId(), pgc);
 		for (PaletteGroup p : pgroups) {
 			map.put(p.getId(), p);
@@ -101,8 +101,8 @@ public class JDPaletteFactory {
 			if (!key.isEmpty() && map.get(key) == null) {
 				pgc = new PaletteGroup();
 				pgc.setId(key);
-				pgc.setName("Unknown Group");
-				pgc.setImage("");
+				pgc.setName(Messages.JDPaletteFactory_unknown_group);
+				pgc.setImage(""); //$NON-NLS-1$
 				map.put(pgc.getId(), pgc);
 			}
 		}
@@ -133,7 +133,7 @@ public class JDPaletteFactory {
 		for (PaletteGroup p : ordpgrps) {
 			if (p.getId().equals(IPaletteContributor.KEY_COMMON_ELEMENTS)) {
 				PaletteDrawer drawer = createElements(paletteRoot, ignore, p, mapEntry);
-				getEntries4Key(drawer, ignore, "", mapEntry);
+				getEntries4Key(drawer, ignore, "", mapEntry); //$NON-NLS-1$
 				continue;
 			} else if (p.getId().equals(IPaletteContributor.KEY_COMMON_CONTAINER)) {
 				createContainers(paletteRoot, ignore, p, mapEntry);

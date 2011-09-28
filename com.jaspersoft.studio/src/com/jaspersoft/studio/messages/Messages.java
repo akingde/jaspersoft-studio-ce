@@ -452,6 +452,8 @@ public class Messages extends NLS {
 	public static String JDBCDatasourcePage_jars;
 	public static String JDBCDatasourcePage_jdbc_datasource;
 	public static String JDBCDatasourcePage_test_connection;
+	public static String JDPaletteFactory_complex_components;
+	public static String JDPaletteFactory_unknown_group;
 	public static String JDReportOutlineView_show_outline_tool_tip;
 	public static String JDReportOutlineView_show_overview_tool_tip;
 	public static String JRExporterPreferencePage_10;
