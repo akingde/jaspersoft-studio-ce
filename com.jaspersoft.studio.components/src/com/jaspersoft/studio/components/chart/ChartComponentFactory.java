@@ -126,9 +126,6 @@ public class ChartComponentFactory implements IComponentFactory {
 		if (jrObject instanceof JRDesignChartAxis) {
 			MChartAxes mChartAxes = new MChartAxes(parent,
 					(JRChartAxis) jrObject, newIndex);
-			JRChart chart = ((JRDesignChartAxis) jrObject).getChart();
-
-			createNode(mChartAxes, chart.getDataset(), -1);
 			return mChartAxes;
 		}
 		if (jrObject instanceof JRDesignChartDataset)
@@ -180,9 +177,13 @@ public class ChartComponentFactory implements IComponentFactory {
 		else if (jrObject instanceof JRDesignXyzDataset)
 			ch.addAll(((JRDesignXyzDataset) jrObject).getSeriesList());
 
-		else if (jrObject instanceof JRChart) {
+		else if (jrObject instanceof JRDesignChartAxis)
+			ch.add(((JRDesignChartAxis) jrObject).getChart().getDataset());
+
+		if (jrObject instanceof JRChart) {
 			ch.add(((JRChart) jrObject).getDataset());
-		} else if (jrObject instanceof JRChart
+		}
+		if (jrObject instanceof JRChart
 				&& ((JRChart) jrObject).getPlot() instanceof JRMultiAxisPlot) {
 			JRMultiAxisPlot slc = (JRMultiAxisPlot) ((JRChart) jrObject)
 					.getPlot();

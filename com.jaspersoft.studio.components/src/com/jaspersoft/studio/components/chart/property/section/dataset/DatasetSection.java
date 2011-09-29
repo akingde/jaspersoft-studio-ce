@@ -387,11 +387,14 @@ public class DatasetSection extends AbstractSection {
 					connection.setEnabled(true);
 					drcombo.select(2);
 				}
+
+				if (datasetRun.getConnectionExpression() != null)
+					connection.setData((JRDesignExpression) datasetRun
+							.getConnectionExpression());
+				else if (datasetRun.getDataSourceExpression() != null)
+					connection.setData((JRDesignExpression) datasetRun
+							.getDataSourceExpression());
 			}
-			if (datasetRun.getConnectionExpression() != null)
-				connection.setData((JRDesignExpression) datasetRun.getConnectionExpression());
-			else if (datasetRun.getDataSourceExpression() != null)
-				connection.setData((JRDesignExpression) datasetRun.getDataSourceExpression());
 		}
 		isRefreshing = false;
 	}
