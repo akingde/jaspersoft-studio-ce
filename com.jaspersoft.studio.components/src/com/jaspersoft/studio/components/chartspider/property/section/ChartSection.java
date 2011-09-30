@@ -22,6 +22,7 @@ package com.jaspersoft.studio.components.chartspider.property.section;
 import net.sf.jasperreports.components.spiderchart.SpiderChartComponent;
 import net.sf.jasperreports.components.spiderchart.StandardChartSettings;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
@@ -153,8 +154,10 @@ public class ChartSection extends AbstractSection {
 					.setData((RGB) element
 							.getPropertyValue(StandardChartSettings.PROPERTY_BACKCOLOR));
 
-			SpiderChartComponent chart = (SpiderChartComponent) element
+			JRDesignComponentElement comp = (JRDesignComponentElement) element
 					.getValue();
+			SpiderChartComponent chart = (SpiderChartComponent) comp
+					.getComponent();
 			JasperDesign jasperDesign = element.getJasperDesign();
 			JRDataset dataset = null;
 			if (chart.getDataset().getDatasetRun() != null) {
