@@ -134,112 +134,168 @@ public class ChartTypeWizardPage extends WizardPage {
 	private void fillTableb4j(Table table) {
 		table.setRedraw(false);
 
-		TableItem ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_area_chart);
-		ti.setImage(Activator.getImage("/icons/area.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_AREA);
+		getTableItem(JRDesignChart.CHART_TYPE_AREA, table);
+		getTableItem(JRDesignChart.CHART_TYPE_STACKEDAREA, table);
+		getTableItem(JRDesignChart.CHART_TYPE_XYAREA, table);
 
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_bar_chart);
-		ti.setImage(Activator.getImage("/icons/bar.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_BAR);
+		getTableItem(JRDesignChart.CHART_TYPE_BAR, table);
+		getTableItem(JRDesignChart.CHART_TYPE_BAR3D, table);
+		getTableItem(JRDesignChart.CHART_TYPE_XYBAR, table);
+		getTableItem(JRDesignChart.CHART_TYPE_STACKEDBAR, table);
+		getTableItem(JRDesignChart.CHART_TYPE_STACKEDBAR3D, table);
 
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_bar3d_chart);
-		ti.setImage(Activator.getImage("/icons/bar3d.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_BAR3D);
+		getTableItem(JRDesignChart.CHART_TYPE_LINE, table);
+		getTableItem(JRDesignChart.CHART_TYPE_XYLINE, table);
 
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_bubble_chart);
-		ti.setImage(Activator.getImage("/icons/bubble.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_BUBBLE);
+		getTableItem(JRDesignChart.CHART_TYPE_PIE, table);
+		getTableItem(JRDesignChart.CHART_TYPE_PIE3D, table);
 
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_candlestick_chart);
-		ti.setImage(Activator.getImage("/icons/candlestick.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_CANDLESTICK);
+		getTableItem(JRDesignChart.CHART_TYPE_BUBBLE, table);
+		getTableItem(JRDesignChart.CHART_TYPE_CANDLESTICK, table);
+		getTableItem(JRDesignChart.CHART_TYPE_TIMESERIES, table);
+		getTableItem(JRDesignChart.CHART_TYPE_HIGHLOW, table);
+		getTableItem(JRDesignChart.CHART_TYPE_SCATTER, table);
 
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_gantt);
-		ti.setImage(Activator.getImage("/icons/gantt.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_GANTT);
+		getTableItem(JRDesignChart.CHART_TYPE_THERMOMETER, table);
+		getTableItem(JRDesignChart.CHART_TYPE_METER, table);
 
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_highlow_chart);
-		ti.setImage(Activator.getImage("/icons/highlow.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_HIGHLOW);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_line_chart);
-		ti.setImage(Activator.getImage("/icons/line.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_LINE);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_meter_chart);
-		ti.setImage(Activator.getImage("/icons/meter.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_METER);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_multiaxes_chart);
-		ti.setImage(Activator.getImage("/icons/multiaxis.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_MULTI_AXIS);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_pie_chart);
-		ti.setImage(Activator.getImage("/icons/pie.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_PIE);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_pie3d_chart);
-		ti.setImage(Activator.getImage("/icons/pie3d.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_PIE3D);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_scatter_chart);
-		ti.setImage(Activator.getImage("/icons/scatter.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_SCATTER);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_stacked_area);
-		ti.setImage(Activator.getImage("/icons/stackedarea.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_STACKEDAREA);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_stacked_bar);
-		ti.setImage(Activator.getImage("/icons/stackedbar.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_stacked_bar3D);
-		ti.setImage(Activator.getImage("/icons/stackedbar3d.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR3D);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_thermometer_chart);
-		ti.setImage(Activator.getImage("/icons/thermometer.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_THERMOMETER);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_timeseries_chart);
-		ti.setImage(Activator.getImage("/icons/timeseries.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_TIMESERIES);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_xy_area);
-		ti.setImage(Activator.getImage("/icons/xyarea.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_XYAREA);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_xy_bar);
-		ti.setImage(Activator.getImage("/icons/xybar.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_XYBAR);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_xy_line);
-		ti.setImage(Activator.getImage("/icons/xyline.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_XYLINE);
+		getTableItem(JRDesignChart.CHART_TYPE_GANTT, table);
+		getTableItem(JRDesignChart.CHART_TYPE_MULTI_AXIS, table);
 
 		table.setRedraw(true);
 	}
 
+	public static TableItem getTableItem(byte chartype, Table table) {
+		switch (chartype) {
+		case JRDesignChart.CHART_TYPE_AREA:
+			TableItem ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_area_chart);
+			ti.setImage(Activator.getImage("/icons/area.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_AREA);
+			return ti;
+
+		case JRDesignChart.CHART_TYPE_BAR:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_bar_chart);
+			ti.setImage(Activator.getImage("/icons/bar.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_BAR);
+			return ti;
+		case JRDesignChart.CHART_TYPE_BAR3D:
+
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_bar3d_chart);
+			ti.setImage(Activator.getImage("/icons/bar3d.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_BAR3D);
+			return ti;
+		case JRDesignChart.CHART_TYPE_BUBBLE:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_bubble_chart);
+			ti.setImage(Activator.getImage("/icons/bubble.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_BUBBLE);
+			return ti;
+		case JRDesignChart.CHART_TYPE_CANDLESTICK:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_candlestick_chart);
+			ti.setImage(Activator.getImage("/icons/candlestick.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_CANDLESTICK);
+			return ti;
+		case JRDesignChart.CHART_TYPE_GANTT:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_gantt);
+			ti.setImage(Activator.getImage("/icons/gantt.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_GANTT);
+			return ti;
+		case JRDesignChart.CHART_TYPE_HIGHLOW:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_highlow_chart);
+			ti.setImage(Activator.getImage("/icons/highlow.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_HIGHLOW);
+			return ti;
+		case JRDesignChart.CHART_TYPE_LINE:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_line_chart);
+			ti.setImage(Activator.getImage("/icons/line.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_LINE);
+			return ti;
+		case JRDesignChart.CHART_TYPE_METER:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_meter_chart);
+			ti.setImage(Activator.getImage("/icons/meter.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_METER);
+			return ti;
+		case JRDesignChart.CHART_TYPE_MULTI_AXIS:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_multiaxes_chart);
+			ti.setImage(Activator.getImage("/icons/multiaxis.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_MULTI_AXIS);
+			return ti;
+		case JRDesignChart.CHART_TYPE_PIE:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_pie_chart);
+			ti.setImage(Activator.getImage("/icons/pie.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_PIE);
+			return ti;
+		case JRDesignChart.CHART_TYPE_PIE3D:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_pie3d_chart);
+			ti.setImage(Activator.getImage("/icons/pie3d.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_PIE3D);
+			return ti;
+		case JRDesignChart.CHART_TYPE_SCATTER:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_scatter_chart);
+			ti.setImage(Activator.getImage("/icons/scatter.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_SCATTER);
+			return ti;
+		case JRDesignChart.CHART_TYPE_STACKEDAREA:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_stacked_area);
+			ti.setImage(Activator.getImage("/icons/stackedarea.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_STACKEDAREA);
+			return ti;
+		case JRDesignChart.CHART_TYPE_STACKEDBAR:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_stacked_bar);
+			ti.setImage(Activator.getImage("/icons/stackedbar.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR);
+			return ti;
+		case JRDesignChart.CHART_TYPE_STACKEDBAR3D:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_stacked_bar3D);
+			ti.setImage(Activator.getImage("/icons/stackedbar3d.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_STACKEDBAR3D);
+			return ti;
+		case JRDesignChart.CHART_TYPE_THERMOMETER:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_thermometer_chart);
+			ti.setImage(Activator.getImage("/icons/thermometer.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_THERMOMETER);
+			return ti;
+		case JRDesignChart.CHART_TYPE_TIMESERIES:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_timeseries_chart);
+			ti.setImage(Activator.getImage("/icons/timeseries.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_TIMESERIES);
+			return ti;
+		case JRDesignChart.CHART_TYPE_XYAREA:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_xy_area);
+			ti.setImage(Activator.getImage("/icons/xyarea.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_XYAREA);
+			return ti;
+		case JRDesignChart.CHART_TYPE_XYBAR:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_xy_bar);
+			ti.setImage(Activator.getImage("/icons/xybar.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_XYBAR);
+			return ti;
+		case JRDesignChart.CHART_TYPE_XYLINE:
+			ti = new TableItem(table, SWT.NONE);
+			ti.setText(Messages.common_xy_line);
+			ti.setImage(Activator.getImage("/icons/xyline.png")); //$NON-NLS-1$
+			ti.setData(JRDesignChart.CHART_TYPE_XYLINE);
+			return ti;
+		}
+		return null;
+	}
 }

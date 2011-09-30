@@ -19,6 +19,19 @@
  */
 package com.jaspersoft.studio.components.chart.model.chartAxis.command;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import net.sf.jasperreports.charts.JRAreaPlot;
+import net.sf.jasperreports.charts.JRBar3DPlot;
+import net.sf.jasperreports.charts.JRBarPlot;
+import net.sf.jasperreports.charts.JRBubblePlot;
+import net.sf.jasperreports.charts.JRCandlestickPlot;
+import net.sf.jasperreports.charts.JRHighLowPlot;
+import net.sf.jasperreports.charts.JRLinePlot;
+import net.sf.jasperreports.charts.JRScatterPlot;
+import net.sf.jasperreports.charts.JRTimeSeriesPlot;
+import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.jface.wizard.WizardPage;
@@ -30,21 +43,23 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.components.chart.wizard.ChartTypeWizardPage;
 
 public class ChartAxesWizardPage extends WizardPage {
 	private byte chartAxes;
 	private Table chartTable;
+	private Class<? extends JRChartPlot> chartPlot;
 
 	public byte getChartAxis() {
 		return chartAxes;
 	}
 
-	protected ChartAxesWizardPage() {
+	protected ChartAxesWizardPage(Class<? extends JRChartPlot> chartPlot) {
 		super("chartaxiswizard"); //$NON-NLS-1$
 		setTitle(Messages.common_chartaxis_wizard);
 		setDescription(Messages.ChartAxesWizardPage_chartaxis_wizard_description);
+		this.chartPlot = chartPlot;
 	}
 
 	@Override
@@ -83,72 +98,38 @@ public class ChartAxesWizardPage extends WizardPage {
 	private void fillTableb4j(Table table) {
 		table.setRedraw(false);
 
-		TableItem ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_line_chart);
-		ti.setImage(Activator.getImage("/icons/line.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_LINE);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_area_chart);
-		ti.setImage(Activator.getImage("/icons/area.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_AREA);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_bar_chart);
-		ti.setImage(Activator.getImage("/icons/bar.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_BAR);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_bar3d_chart);
-		ti.setImage(Activator.getImage("/icons/bar3d.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_BAR3D);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_bubble_chart);
-		ti.setImage(Activator.getImage("/icons/bubble.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_BUBBLE);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_candlestick_chart);
-		ti.setImage(Activator.getImage("/icons/candlestick.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_CANDLESTICK);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_highlow_chart);
-		ti.setImage(Activator.getImage("/icons/highlow.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_HIGHLOW);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_meter_chart);
-		ti.setImage(Activator.getImage("/icons/meter.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_METER);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_pie3d_chart);
-		ti.setImage(Activator.getImage("/icons/pie3d.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_PIE3D);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_pie_chart);
-		ti.setImage(Activator.getImage("/icons/pie.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_PIE);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_scatter_chart);
-		ti.setImage(Activator.getImage("/icons/scatter.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_SCATTER);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_thermometer_chart);
-		ti.setImage(Activator.getImage("/icons/thermometer.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_THERMOMETER);
-
-		ti = new TableItem(table, SWT.NONE);
-		ti.setText(Messages.common_timeseries_chart);
-		ti.setImage(Activator.getImage("/icons/timeseries.png")); //$NON-NLS-1$
-		ti.setData(JRDesignChart.CHART_TYPE_TIMESERIES);
+		for (byte ctype : plotmap.keySet()) {
+			// if (chartPlot != null
+			// && !plotmap.get(ctype).isAssignableFrom(chartPlot))
+			// continue;
+			// hmm here we should use the same from jfreechart
+			ChartTypeWizardPage.getTableItem(ctype, table);
+		}
 
 		table.setRedraw(true);
+	}
+
+	private static Map<Byte, Class<? extends JRChartPlot>> plotmap = new LinkedHashMap<Byte, Class<? extends JRChartPlot>>();
+	static {
+		plotmap.put(JRDesignChart.CHART_TYPE_LINE, JRLinePlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_XYLINE, JRLinePlot.class);
+
+		plotmap.put(JRDesignChart.CHART_TYPE_AREA, JRAreaPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_XYAREA, JRAreaPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_STACKEDAREA, JRAreaPlot.class);
+
+		plotmap.put(JRDesignChart.CHART_TYPE_BAR, JRBarPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_STACKEDBAR, JRBarPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_XYBAR, JRBarPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_BAR3D, JRBar3DPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_STACKEDBAR3D, JRBar3DPlot.class);
+
+		plotmap.put(JRDesignChart.CHART_TYPE_BUBBLE, JRBubblePlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_CANDLESTICK,
+				JRCandlestickPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_HIGHLOW, JRHighLowPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_SCATTER, JRScatterPlot.class);
+		plotmap.put(JRDesignChart.CHART_TYPE_TIMESERIES, JRTimeSeriesPlot.class);
 	}
 
 }

@@ -19,8 +19,12 @@
  */
 package com.jaspersoft.studio.components.chart.model.chartAxis.command;
 
+import java.util.List;
+
+import net.sf.jasperreports.charts.JRChartAxis;
 import net.sf.jasperreports.charts.design.JRDesignChartAxis;
 import net.sf.jasperreports.charts.design.JRDesignMultiAxisPlot;
+import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -72,7 +76,11 @@ public class CreateChartAxesCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard
-			ChartAxesWizard wizard = new ChartAxesWizard();
+			List<JRChartAxis> axes = jrChart.getAxes();
+			Class<? extends JRChartPlot> chartplotclass = null;
+			if (!axes.isEmpty())
+				chartplotclass = axes.get(0).getChart().getPlot().getClass();
+			ChartAxesWizard wizard = new ChartAxesWizard(chartplotclass);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();
