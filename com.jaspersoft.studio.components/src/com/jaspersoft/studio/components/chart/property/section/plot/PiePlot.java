@@ -76,9 +76,7 @@ public class PiePlot extends APlot {
 				JRDesignPiePlot.PROPERTY_CIRCULAR,
 				com.jaspersoft.studio.components.chart.messages.Messages.MPiePlot_circular_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite,
 				Messages.common_label_format, SWT.RIGHT);

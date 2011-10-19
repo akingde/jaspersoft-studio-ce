@@ -45,7 +45,6 @@ import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
 import com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
-import com.jaspersoft.studio.repository.RepositoryManager;
 
 /*
  * The main plugin class to be used in the desktop.
@@ -56,7 +55,8 @@ public class DataAdapterManager {
 
 	private static List<DataAdapterFactory> dataAdapterFactories = new ArrayList<DataAdapterFactory>();
 	private static List<DataAdapterDescriptor> dataAdapters = new ArrayList<DataAdapterDescriptor>();
-	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(new RepositoryManager());
+	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
+			JaspersoftStudioPlugin.getInstance());
 
 	/*******************************
 	 ** Data Adapter Factories Part **
@@ -146,7 +146,7 @@ public class DataAdapterManager {
 	 * Return a copy of the list of DataAdapters in JaspersoftStudio.
 	 */
 	public static List<DataAdapterDescriptor> getDataAdapters() {
-		if(!loaded){
+		if (!loaded) {
 			new ExtensionManager().init();
 		}
 		List<DataAdapterDescriptor> listOfDataAdapters = new ArrayList<DataAdapterDescriptor>();
@@ -186,7 +186,9 @@ public class DataAdapterManager {
 			e.printStackTrace();
 		}
 	}
-	private static boolean loaded=false;
+
+	private static boolean loaded = false;
+
 	/**
 	 * Calling this method will force saving the list of adapters in the Eclipse preferences
 	 */
@@ -199,24 +201,23 @@ public class DataAdapterManager {
 
 		String xml = prefs.get("dataAdapters", null); //$NON-NLS-1$
 
-		if (xml != null)
-		{
+		if (xml != null) {
 
 			try {
-	
+
 				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xml)));
-	
+
 				NodeList adapterNodes = document.getDocumentElement().getChildNodes();// .getElementsByTagName("dataAdapter");
-	
+
 				for (int i = 0; i < adapterNodes.getLength(); ++i) {
 					Node adapterNode = adapterNodes.item(i);
-	
+
 					if (adapterNode.getNodeType() == Node.ELEMENT_NODE) {
 						// 1. Find out the class of this data adapter...
 						String adapterClassName = adapterNode.getAttributes().getNamedItem("class").getNodeValue(); //$NON-NLS-1$
-	
+
 						DataAdapterFactory factory = findFactoryByDataAdapterClass(adapterClassName);
-	
+
 						if (factory == null) {
 							// we should at least log a warning here....
 							JaspersoftStudioPlugin
@@ -227,15 +228,15 @@ public class DataAdapterManager {
 													Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
 							return;
 						}
-	
+
 						DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
-	
+
 						DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
-	
+
 						dataAdapter = (DataAdapter) XmlUtil.read(adapterNode, dataAdapter.getClass());
-	
+
 						dataAdapterDescriptor.setDataAdapter(dataAdapter);
-	
+
 						// dataAdapter.setName(adapterNode.getAttributes().getNamedItem("name").getNodeValue());
 						// Map<String, String> map = new HashMap<String, String>();
 						//
@@ -255,11 +256,11 @@ public class DataAdapterManager {
 						// }
 						//
 						// dataAdapter.loadProperties(map);
-	
+
 						dataAdapters.add(dataAdapterDescriptor);
 					}
 				}
-				
+
 			} catch (JRException e) {
 				e.printStackTrace();
 			}

@@ -151,10 +151,12 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
 			jrElement.setHorizontalAlignment((HorizontalAlignEnum) EnumHelper.getSetValue(HorizontalAlignEnum.values(),
 					value, 1, true));
-		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			jrElement.setVerticalAlignment((VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), value, 1,
-					true));
-		else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
+		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT)) {
+			VerticalAlignEnum va = (VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), value, 1, true);
+			if (va != null && va.equals(VerticalAlignEnum.JUSTIFIED))
+				va = VerticalAlignEnum.MIDDLE;
+			jrElement.setVerticalAlignment(va);
+		} else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			jrElement.setRotation((RotationEnum) EnumHelper.getSetValue(RotationEnum.values(), value, 0, true));
 
 		getMFont().setPropertyValue(id, value);

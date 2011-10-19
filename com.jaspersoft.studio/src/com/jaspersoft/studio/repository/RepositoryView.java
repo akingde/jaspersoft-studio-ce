@@ -27,6 +27,7 @@ import java.util.List;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -50,6 +51,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.plugin.ExtensionManager;
@@ -79,7 +82,7 @@ public class RepositoryView extends ViewPart {
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
-		treeViewer.setInput(RepositoryManager.getResources()); // pass a non-null that will be ignored
+		treeViewer.setInput(getResources()); // pass a non-null that will be ignored
 		treeViewer.expandToLevel(2);
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -208,8 +211,16 @@ public class RepositoryView extends ViewPart {
 	 * Create toolbar.
 	 */
 	private void createToolbar() {
-		// IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
-		// mgr.add(addItemAction);
+		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+
+		List<IRepositoryViewProvider> rprovs = new ExtensionManager().getRepositoryProviders();
+		for (IRepositoryViewProvider rp : rprovs) {
+			Action[] actions = rp.getActions(treeViewer);
+			if (actions != null) {
+				for (Action a : actions)
+					mgr.add(a);
+			}
+		}
 	}
 
 	private void createContextMenu() {
@@ -252,4 +263,14 @@ public class RepositoryView extends ViewPart {
 		treeViewer.getControl().setFocus();
 	}
 
+	public ANode getResources() {
+		MRoot rootNode = new MRoot(null, null);
+
+		List<IRepositoryViewProvider> rprovs = new ExtensionManager().getRepositoryProviders();
+		for (IRepositoryViewProvider rp : rprovs) {
+			rp.getNode(rootNode);
+		}
+
+		return rootNode;
+	}
 }

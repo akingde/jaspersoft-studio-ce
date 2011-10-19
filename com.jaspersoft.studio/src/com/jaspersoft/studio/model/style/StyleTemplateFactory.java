@@ -67,15 +67,18 @@ public class StyleTemplateFactory {
 	public static ANode createTemplate(ANode parent, JRDesignReportTemplate jrObject, int newIndex, IFile file) {
 		MStyleTemplate mStyleTemplate = new MStyleTemplate(parent, (JRDesignReportTemplate) jrObject, newIndex);
 		String str = ExpressionUtil.eval(jrObject.getSourceExpression(), parent.getJasperDesign());
-		Set<String> set = new HashSet<String>();
-		if (file == null) {
-			IEditorPart ep = SelectionHelper.getActiveJRXMLEditor();
-			if (ep != null)
-				file = ((IFileEditorInput) ep.getEditorInput()).getFile();
-		}
-		createTemplateReference(mStyleTemplate, str, -1, set, false, file);
+		if (str != null) {
+			Set<String> set = new HashSet<String>();
+			if (file == null) {
+				IEditorPart ep = SelectionHelper.getActiveJRXMLEditor();
+				if (ep != null)
+					file = ((IFileEditorInput) ep.getEditorInput()).getFile();
+			}
+			createTemplateReference(mStyleTemplate, str, -1, set, false, file);
 
-		return mStyleTemplate;
+			return mStyleTemplate;
+		}
+		return null;
 	}
 
 	public static void createTemplateReference(ANode parent, String location, int newIndex, Set<String> set,
@@ -156,29 +159,31 @@ public class StyleTemplateFactory {
 		JRDesignReportTemplate drt = (JRDesignReportTemplate) mst.getValue();
 		JasperDesign jd = node.getJasperDesign();
 		String str = ExpressionUtil.eval(drt.getSourceExpression(), jd);
+		if (str != null) {
+			if (refFile == null)
+				refFile = ((IFileEditorInput) SelectionHelper.getActiveJRXMLEditor().getEditorInput()).getFile();
 
-		if (refFile == null)
-			refFile = ((IFileEditorInput) SelectionHelper.getActiveJRXMLEditor().getEditorInput()).getFile();
+			for (int i = plist.size() - 1; i >= 0; i--) {
+				Object obj = plist.get(i);
+				if (obj instanceof JRDesignReportTemplate) {
+					str = ExpressionUtil.eval(((JRDesignReportTemplate) obj).getSourceExpression(), jd);
+				} else if (obj instanceof JRTemplateReference) {
+					str = ((JRTemplateReference) obj).getLocation();
+				}
 
-		for (int i = plist.size() - 1; i >= 0; i--) {
-			Object obj = plist.get(i);
-			if (obj instanceof JRDesignReportTemplate) {
-				str = ExpressionUtil.eval(((JRDesignReportTemplate) obj).getSourceExpression(), jd);
-			} else if (obj instanceof JRTemplateReference) {
-				str = ((JRTemplateReference) obj).getLocation();
+				SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(refFile);
+				File fileToBeOpened = fileResolver.resolveFile(str);
+				if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
+					IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
+					if (fs != null && fs.length > 0) {
+						refFile = fs[0];
+					} else
+						break;
+				}
 			}
-
-			SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(refFile);
-			File fileToBeOpened = fileResolver.resolveFile(str);
-			if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
-				IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());
-				if (fs != null && fs.length > 0) {
-					refFile = fs[0];
-				} else
-					break;
-			}
+			return refFile;
 		}
-		return refFile;
+		return null;
 	}
 
 }

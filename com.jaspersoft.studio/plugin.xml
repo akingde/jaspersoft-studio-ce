@@ -30,6 +30,7 @@
    <extension-point id="queryDesigner" name="Query Designer" schema="schema/queryDesigner.exsd"/> 
    <extension-point id="mappingTool" name="Mapping Tool" schema="schema/mappingTool.exsd"/>
 <extension-point id="palette" name="Palette" schema="schema/palette.exsd"/>
+<extension-point id="repositoryview" name="repositoryview" schema="schema/repositoryview.exsd"/>
 
 
 
@@ -50,6 +51,7 @@
       <editor
             class="com.jaspersoft.studio.editor.JrxmlEditor"
             contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            default="true"
             extensions="jrxml"
             icon="icons/jrxml_icon.png"
             id="com.jaspersoft.studio.editor.JrxmlEditor"
@@ -58,13 +60,14 @@
       <editor
             class="com.jaspersoft.studio.editor.JrxmlEditor"
             contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            default="true"
             extensions="jasper"
             icon="icons/resources/jasperreports_jasper.png"
             id="com.jaspersoft.studio.editor.JrxmlEditor.jasper"
             name="JasperReports Designer">
       </editor>
       <editor
-            class="com.jaspersoft.studio.editor.JRPrintEditor"
+            class="com.jaspersoft.studio.editor.preview.PreviewJRPrint"
             default="false"
             extensions="jrprint"
             icon="icons/report.png"
@@ -72,7 +75,7 @@
             name="JasperPrint Viewer">
       </editor>
       <editor
-            class="com.jaspersoft.studio.editor.JRPxmlEditor"
+            class="com.jaspersoft.studio.editor.preview.PreviewJRPrint"
             default="false"
             extensions="jrpxml"
             icon="icons/report.png"
@@ -87,6 +90,22 @@
             icon="icons/resources/jasperreports_jrtx.png"
             id="com.jaspersoft.studio.JRtxEditor"
             name="Jasper Style Template Editor">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.preview.PreviewContainer"
+            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            extensions="jasper"
+            icon="icons/resources/jasperreports_jasper.png"
+            id="com.jaspersoft.studio.editor.preview.PreviewContainer.jasper"
+            name="JasperReports Preview">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.preview.PreviewContainer"
+            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            extensions="jrxml"
+            icon="icons/jrxml_icon.png"
+            id="com.jaspersoft.studio.editor.preview.PreviewContainer.jrxml"
+            name="JasperReports Preview">
       </editor>
    </extension>
    <extension
@@ -592,6 +611,12 @@
                 <objectClass name="org.eclipse.core.resources.IResource"/> 
             </enablement>
         </decorator>
+    </extension>
+    <extension
+          point="com.jaspersoft.studio.repositoryview">
+       <repositoryview
+             ClassFactory="com.jaspersoft.studio.data.DataAdapterProvider">
+       </repositoryview>
     </extension>
    
  

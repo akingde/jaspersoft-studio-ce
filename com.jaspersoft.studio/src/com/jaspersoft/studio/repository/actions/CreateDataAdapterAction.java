@@ -40,7 +40,6 @@ package com.jaspersoft.studio.repository.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.cheatsheets.ICheatSheetAction;
@@ -49,13 +48,11 @@ import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
-import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizard;
 import com.jaspersoft.studio.data.wizard.DataAdapterWizardDialog;
 
 public class CreateDataAdapterAction extends Action implements ICheatSheetAction {
 	public static final String ID = "createdataAdapteraction"; //$NON-NLS-1$
-	private TreeViewer treeViewer;
 
 	public CreateDataAdapterAction() {
 		this(null);
@@ -63,22 +60,12 @@ public class CreateDataAdapterAction extends Action implements ICheatSheetAction
 
 	public CreateDataAdapterAction(TreeViewer treeViewer) {
 		super();
-		this.treeViewer = treeViewer;
 		setId(ID);
 		setText("Create DataAdapter");
 		setDescription("Create DataAdapter");
 		setToolTipText("Create DataAdapter");
 		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
 		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
-	}
-
-	@Override
-	public boolean isEnabled() {
-		if (treeViewer != null) {
-			Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
-			return firstElement != null && firstElement instanceof MDataAdapters;
-		}
-		return super.isEnabled();
 	}
 
 	@Override

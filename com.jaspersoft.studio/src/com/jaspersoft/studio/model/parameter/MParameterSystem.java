@@ -58,7 +58,7 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 	 */
 	public static IIconDescriptor getIconDescriptor() {
 		if (iconDescriptor == null)
-			iconDescriptor = new NodeIconDescriptor("parameter"); //$NON-NLS-1$
+			iconDescriptor = new NodeIconDescriptor("parameter-report"); //$NON-NLS-1$
 		return iconDescriptor;
 	}
 

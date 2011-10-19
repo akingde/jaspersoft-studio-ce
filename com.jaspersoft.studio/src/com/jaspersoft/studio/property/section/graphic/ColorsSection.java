@@ -20,28 +20,24 @@
 package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.type.ModeEnum;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.ColorDialog;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.section.widgets.SPColor;
 
 /*
  * The location section on the location tab.
@@ -49,11 +45,11 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * @author Chicu Veaceslav
  */
 public class ColorsSection extends AbstractSection {
-	private CCombo modeType;
-	private Button backButton;
+	private SPColor backButton;
 	private Composite composite;
-	private Button foreButton;
-	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);
+	private SPColor foreButton;
+	private ToolItem transparentButton;
+	private ToolItem opaqueButton;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -62,62 +58,51 @@ public class ColorsSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		GridLayout layout = new GridLayout(6, false);
-		composite.setLayout(layout);
+		parent = new Composite(parent, SWT.NONE);
+		parent.setLayout(new RowLayout(SWT.VERTICAL));
+		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_backcolor + ":", SWT.RIGHT); //$NON-NLS-1$
-		GridData gd = new GridData();
-		gd.widthHint = 100;
-		label.setLayoutData(gd);
+		composite = createNewRow(parent);
 
-		backButton = new Button(composite, SWT.FLAT);
-		backButton.addSelectionListener(new SelectionAdapter() {
+		CLabel lbl = getWidgetFactory().createCLabel(composite, Messages.common_forecolor + ":", SWT.RIGHT); //$NON-NLS-1$
+		RowData rd = new RowData();
+		rd.width = 100;
+		lbl.setLayoutData(rd);
+
+		foreButton = new SPColor(composite, this, JRBaseStyle.PROPERTY_FORECOLOR,
+				Messages.ColorsSection_element_forecolor_tool_tip);
+
+		getWidgetFactory().createCLabel(composite, Messages.common_backcolor + ":", SWT.RIGHT); //$NON-NLS-1$
+
+		backButton = new SPColor(composite, this, JRBaseStyle.PROPERTY_BACKCOLOR,
+				Messages.ColorsSection_element_backcolor_tool_tip);
+
+		lbl = getWidgetFactory().createCLabel(composite, Messages.ColorsSection_transparency + ":"); //$NON-NLS-1$
+		lbl.setToolTipText(Messages.ColorsSection_transparency_tool_tip);
+
+		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		toolBar.setBackground(composite.getBackground());
+
+		transparentButton = new ToolItem(toolBar, SWT.CHECK);
+		transparentButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/color-transparent.png"));
+		transparentButton.setToolTipText("Transparent");
+
+		transparentButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				ColorDialog cd = new ColorDialog(composite.getShell());
-				cd.setText(Messages.ColorsSection_element_backcolor);
-				cd.setRGB((RGB) getElement().getPropertyValue(JRBaseStyle.PROPERTY_BACKCOLOR));
-				RGB newColor = cd.open();
-				if (newColor != null)
-					changeProperty(JRBaseStyle.PROPERTY_BACKCOLOR, newColor);
+				changeProperty(JRBaseStyle.PROPERTY_MODE, transparentButton.getSelection() ? new Integer(2) : null);
 			}
 		});
-		backButton.setToolTipText(Messages.ColorsSection_element_backcolor_tool_tip);
-		gd = new GridData();
-		gd.widthHint = 30;
-		backButton.setLayoutData(gd);
-		getWidgetFactory().createCLabel(composite, Messages.common_forecolor + ":", SWT.RIGHT); //$NON-NLS-1$
 
-		foreButton = new Button(composite, SWT.FLAT);
-		foreButton.addSelectionListener(new SelectionAdapter() {
+		opaqueButton = new ToolItem(toolBar, SWT.CHECK);
+		opaqueButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/color-opaque.png"));
+		opaqueButton.setToolTipText("Opaque");
+
+		opaqueButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				ColorDialog cd = new ColorDialog(composite.getShell());
-				cd.setText(Messages.ColorsSection_element_forecolor);
-				cd.setRGB((RGB) getElement().getPropertyValue(JRBaseStyle.PROPERTY_FORECOLOR));
-				RGB newColor = cd.open();
-				if (newColor != null)
-					changeProperty(JRBaseStyle.PROPERTY_FORECOLOR, newColor);
+				changeProperty(JRBaseStyle.PROPERTY_MODE, opaqueButton.getSelection() ? new Integer(1) : null);
 			}
 		});
-		foreButton.setToolTipText(Messages.ColorsSection_element_forecolor_tool_tip);
-		gd = new GridData();
-		gd.widthHint = 30;
-		foreButton.setLayoutData(gd);
 
-		getWidgetFactory().createCLabel(composite, Messages.ColorsSection_transparency + ":"); //$NON-NLS-1$
-		modeType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		modeType.setItems(EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
-		modeType.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBaseStyle.PROPERTY_MODE, new Integer(modeType.getSelectionIndex()));
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-		modeType.setToolTipText(Messages.ColorsSection_transparency_tool_tip);
 	}
 
 	/**
@@ -128,24 +113,29 @@ public class ColorsSection extends AbstractSection {
 		APropertyNode element = getElement();
 		if (element != null) {
 			RGB backcolor = (RGB) element.getPropertyValue(JRBaseStyle.PROPERTY_BACKCOLOR);
-
-			if (backcolor != null)
-				backButton.setImage(colorLabelProvider.getImage(backcolor));
-			else
-				backButton.setImage(null);
+			backButton.setData(backcolor);
 
 			RGB foreColor = (RGB) element.getPropertyValue(JRBaseStyle.PROPERTY_FORECOLOR);
-			if (foreColor != null)
-				foreButton.setImage(colorLabelProvider.getImage(foreColor));
-			else
-				foreButton.setImage(null);
-			modeType.select(((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_MODE)).intValue());
+			foreButton.setData(foreColor);
+
+			transparentButton.setSelection(false);
+			opaqueButton.setSelection(false);
+
+			int intmode = ((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_MODE)).intValue();
+			switch (intmode) {
+			case 2:
+				transparentButton.setSelection(true);
+				break;
+			case 1:
+				opaqueButton.setSelection(true);
+				break;
+			}
 		}
 		isRefreshing = false;
 	}
 
 	@Override
 	public boolean isDisposed() {
-		return backButton.isDisposed();
+		return composite.isDisposed();
 	}
 }

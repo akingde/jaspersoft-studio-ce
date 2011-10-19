@@ -26,6 +26,7 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 
 /*
@@ -41,7 +42,9 @@ public class ColorLabelProvider extends LabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if (element != null && element instanceof RGB) {
+		if (element == null)
+			return JaspersoftStudioPlugin.getImage("icons/resources/null.png");
+		if (element instanceof RGB) {
 			RGB rgb = (RGB) element;
 			RGB black = new RGB(0, 0, 0);
 			PaletteData dataPalette = new PaletteData(new RGB[] { black, black, rgb });

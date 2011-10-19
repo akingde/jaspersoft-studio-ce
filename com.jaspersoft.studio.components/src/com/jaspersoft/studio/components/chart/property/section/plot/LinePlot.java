@@ -99,9 +99,7 @@ public class LinePlot extends APlot {
 
 		sectioncmp.setClient(parent);
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		Composite composite = section.createNewRow(parent);
 
 		CLabel lbl = section.getWidgetFactory().createCLabel(composite,
 				"Axis Color", SWT.RIGHT);
@@ -115,9 +113,7 @@ public class LinePlot extends APlot {
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR,
 				com.jaspersoft.studio.components.chart.messages.Messages.MLinePlot_category_axis_line_color_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Label",
 				SWT.RIGHT);
@@ -149,9 +145,7 @@ public class LinePlot extends APlot {
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR,
 				com.jaspersoft.studio.components.chart.messages.Messages.MLinePlot_category_axis_label_color_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Tick Label",
 				SWT.RIGHT);
@@ -187,9 +181,7 @@ public class LinePlot extends APlot {
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION,
 				com.jaspersoft.studio.components.chart.messages.Messages.MLinePlot_category_axis_tick_label_rotation_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "", SWT.RIGHT);
 		rd = new RowData();
@@ -205,9 +197,7 @@ public class LinePlot extends APlot {
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
 				com.jaspersoft.studio.components.chart.messages.Messages.MLinePlot_category_axis_vertical_tick_labels_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Domain",
 				SWT.RIGHT);
@@ -281,9 +271,7 @@ public class LinePlot extends APlot {
 
 		sectioncmp.setClient(parent);
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		Composite composite = section.createNewRow(parent);
 
 		CLabel lbl = section.getWidgetFactory().createCLabel(composite,
 				"Axis Color", SWT.RIGHT);
@@ -297,9 +285,7 @@ public class LinePlot extends APlot {
 				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LINE_COLOR,
 				com.jaspersoft.studio.components.chart.messages.Messages.MLinePlot_value_axis_line_color_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Label",
 				SWT.RIGHT);
@@ -331,9 +317,7 @@ public class LinePlot extends APlot {
 				JRDesignLinePlot.PROPERTY_VALUE_AXIS_LABEL_COLOR,
 				com.jaspersoft.studio.components.chart.messages.Messages.MLinePlot_value_axis_label_color_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Tick Label",
 				SWT.RIGHT);
@@ -360,9 +344,7 @@ public class LinePlot extends APlot {
 				JRDesignLinePlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK,
 				com.jaspersoft.studio.components.chart.messages.Messages.MLinePlot_value_axis_tick_label_mask_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "", SWT.RIGHT);
 		rd = new RowData();
@@ -378,9 +360,7 @@ public class LinePlot extends APlot {
 				JRDesignLinePlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
 				com.jaspersoft.studio.components.chart.messages.Messages.MLinePlot_value_axis_vertical_tick_labels_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Range",
 				SWT.RIGHT);

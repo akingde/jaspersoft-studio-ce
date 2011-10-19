@@ -65,9 +65,7 @@ public class SubTitleSection extends AbstractSection {
 		parent.setBackground(parent.getDisplay()
 				.getSystemColor(SWT.COLOR_WHITE));
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		CLabel lbl = getWidgetFactory().createCLabel(composite,
 				"Subitle:", SWT.RIGHT); //$NON-NLS-1$
@@ -87,12 +85,9 @@ public class SubTitleSection extends AbstractSection {
 		expr = new SPExpression(cmp, this,
 				JRDesignChart.PROPERTY_SUBTITLE_EXPRESSION);
 
-		btnFont = new SPFont(parent, this,
-				JRDesignChart.PROPERTY_SUBTITLE_FONT);
+		btnFont = new SPFont(parent, this, JRDesignChart.PROPERTY_SUBTITLE_FONT);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		lbl = getWidgetFactory().createCLabel(composite,
 				Messages.common_forecolor + ":", SWT.RIGHT); //$NON-NLS-1$

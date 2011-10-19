@@ -25,79 +25,71 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPEdgeEnum {
-	private Button btnAlignLeft;
-	private Button btnAlignTop;
-	private Button btnAlignBottom;
-	private Button btnAlignRight;
+	private ToolItem btnAlignLeft;
+	private ToolItem btnAlignTop;
+	private ToolItem btnAlignBottom;
+	private ToolItem btnAlignRight;
 
-	public SPEdgeEnum(Composite parent, AbstractSection section,
-			String property) {
+	public SPEdgeEnum(Composite parent, AbstractSection section, String property) {
 		createComponent(parent, section, property);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property) {
+	public void createComponent(Composite parent, final AbstractSection section, final String property) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackground(parent.getBackground());
 		composite.setLayout(new RowLayout());
 
-		CLabel lbl = section.getWidgetFactory().createCLabel(composite,
-				Messages.LocationSection_position, SWT.RIGHT);
+		CLabel lbl = section.getWidgetFactory().createCLabel(composite, Messages.LocationSection_position, SWT.RIGHT);
 		RowData rd = new RowData();
 		rd.width = 100;
 		lbl.setLayoutData(rd);
 
-		btnAlignLeft = new Button(composite, SWT.FLAT | SWT.TOGGLE);
+		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		toolBar.setBackground(composite.getBackground());
+
+		btnAlignLeft = new ToolItem(toolBar, SWT.CHECK);
 		btnAlignLeft.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				section.changeProperty(property,
-						new Integer(btnAlignLeft.getSelection() ? 3 : 0));
+				section.changeProperty(property, new Integer(btnAlignLeft.getSelection() ? 3 : 0));
 			}
 		});
-		btnAlignLeft.setImage(JaspersoftStudioPlugin
-				.getImage("icons/resources/eclipse/align-edge-left.gif"));//$NON-NLS-1$
+		btnAlignLeft.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-edge-left.gif"));//$NON-NLS-1$
 		btnAlignLeft.setToolTipText(Messages.TextSection_align_left_tool_tip);
 
-		btnAlignTop = new Button(composite, SWT.FLAT | SWT.TOGGLE);
+		btnAlignTop = new ToolItem(toolBar, SWT.CHECK);
 		btnAlignTop.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				section.changeProperty(property,
-						new Integer(btnAlignTop.getSelection() ? 1 : 0));
+				section.changeProperty(property, new Integer(btnAlignTop.getSelection() ? 1 : 0));
 			}
 		});
-		btnAlignTop.setImage(JaspersoftStudioPlugin
-				.getImage("icons/resources/eclipse/align-edge-top.gif")); //$NON-NLS-1$
+		btnAlignTop.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-edge-top.gif")); //$NON-NLS-1$
 		btnAlignTop.setToolTipText(Messages.TextSection_align_top_tool_tip);
 
-		btnAlignBottom = new Button(composite, SWT.FLAT | SWT.TOGGLE);
+		btnAlignBottom = new ToolItem(toolBar, SWT.CHECK);
 		btnAlignBottom.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				section.changeProperty(property,
-						new Integer(btnAlignBottom.getSelection() ? 2 : 0));
+				section.changeProperty(property, new Integer(btnAlignBottom.getSelection() ? 2 : 0));
 			}
 		});
-		btnAlignBottom.setImage(JaspersoftStudioPlugin
-				.getImage("icons/resources/eclipse/align-edge-bottom.gif")); //$NON-NLS-1$
-		btnAlignBottom
-				.setToolTipText(Messages.TextSection_align_bottom_tool_tip);
+		btnAlignBottom.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-edge-bottom.gif")); //$NON-NLS-1$
+		btnAlignBottom.setToolTipText(Messages.TextSection_align_bottom_tool_tip);
 
-		btnAlignRight = new Button(composite, SWT.FLAT | SWT.TOGGLE);
+		btnAlignRight = new ToolItem(toolBar, SWT.CHECK);
 		btnAlignRight.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				section.changeProperty(property,
-						new Integer(btnAlignRight.getSelection() ? 4 : 0));
+				section.changeProperty(property, new Integer(btnAlignRight.getSelection() ? 4 : 0));
 			}
 		});
-		btnAlignRight.setImage(JaspersoftStudioPlugin
-				.getImage("icons/resources/eclipse/align-edge-right.gif")); //$NON-NLS-1$
+		btnAlignRight.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/align-edge-right.gif")); //$NON-NLS-1$
 		btnAlignRight.setToolTipText(Messages.TextSection_align_right_tool_tip);
 	}
 

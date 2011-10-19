@@ -31,8 +31,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
@@ -45,31 +46,29 @@ import com.jaspersoft.studio.utils.ModelUtils;
 public class SPFont {
 	private CCombo fontName;
 	private CCombo fontSize;
-	private Button boldButton;
-	private Button italicButton;
-	private Button underlineButton;
-	private Button strikeTroughtButton;
+	private ToolItem boldButton;
+	private ToolItem italicButton;
+	private ToolItem underlineButton;
+	private ToolItem strikeTroughtButton;
 
 	public SPFont(Composite parent, AbstractSection section, String property) {
 		this(parent, section, property, true);
 	}
 
-	public SPFont(Composite parent, AbstractSection section, String property,
-			boolean withLabel) {
+	public SPFont(Composite parent, AbstractSection section, String property, boolean withLabel) {
 		createComponent(parent, section, property, withLabel);
 	}
 
-	private void createComponent(Composite parent,
-			final AbstractSection section, final String property,
-			boolean withLabel) {
+	private void createComponent(Composite parent, final AbstractSection section, final String property, boolean withLabel) {
 		Composite composite = parent;
 		if (withLabel) {
 			composite = new Composite(parent, SWT.NONE);
 			composite.setBackground(parent.getBackground());
-			composite.setLayout(new RowLayout());
+			RowLayout rl = new RowLayout();
+			rl.fill = true;
+			composite.setLayout(rl);
 
-			CLabel label = section.getWidgetFactory().createCLabel(composite,
-					Messages.common_font + ":", SWT.RIGHT); //$NON-NLS-1$
+			CLabel label = section.getWidgetFactory().createCLabel(composite, Messages.common_font + ":", SWT.RIGHT); //$NON-NLS-1$
 
 			RowData rd = new RowData();
 			rd.width = 102;
@@ -85,8 +84,7 @@ public class SPFont {
 				if (e.time - time > 100) {
 					String value = fontName.getText();
 					if (!value.equals("______________")) //$NON-NLS-1$
-						changeProperty(section, property,
-								JRBaseStyle.PROPERTY_FONT_NAME, value);
+						changeProperty(section, property, JRBaseStyle.PROPERTY_FONT_NAME, value);
 				}
 				time = e.time;
 			}
@@ -102,8 +100,7 @@ public class SPFont {
 				if (e.time - time > 100) {
 					String value = fontSize.getText();
 					if (IntegerCellEditorValidator.instance().isValid(value) == null)
-						changeProperty(section, property,
-								JRBaseStyle.PROPERTY_FONT_SIZE, value);
+						changeProperty(section, property, JRBaseStyle.PROPERTY_FONT_SIZE, value);
 				}
 				time = e.time;
 			}
@@ -111,70 +108,63 @@ public class SPFont {
 
 		fontSize.setToolTipText(Messages.FontSection_font_size_tool_tip);
 
-		boldButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
-		boldButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(section, property, JRBaseStyle.PROPERTY_BOLD,
-						new Boolean(boldButton.getSelection()));
-			}
-		});
-		boldButton.setImage(JaspersoftStudioPlugin
-				.getImage("icons/resources/bold.png"));
+		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		toolBar.setBackground(composite.getBackground());
+
+		boldButton = new ToolItem(toolBar, SWT.CHECK);
+		boldButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/bold.png"));
 		boldButton.setToolTipText(Messages.FontSection_bold_tool_tip);
 
-		italicButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
+		boldButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				changeProperty(section, property, JRBaseStyle.PROPERTY_BOLD, new Boolean(boldButton.getSelection()));
+			}
+		});
+
+		italicButton = new ToolItem(toolBar, SWT.CHECK);
 		italicButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				changeProperty(section, property, JRBaseStyle.PROPERTY_ITALIC,
-						new Boolean(italicButton.getSelection()));
+				changeProperty(section, property, JRBaseStyle.PROPERTY_ITALIC, new Boolean(italicButton.getSelection()));
 			}
 		});
-		italicButton.setImage(JaspersoftStudioPlugin
-				.getImage("icons/resources/italic.png")); //$NON-NLS-1$
+		italicButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/italic.png")); //$NON-NLS-1$
 		italicButton.setToolTipText(Messages.FontSection_italic_tool_tip);
 
-		underlineButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
+		underlineButton = new ToolItem(toolBar, SWT.CHECK);
 		underlineButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				changeProperty(section, property,
-						JRBaseStyle.PROPERTY_UNDERLINE, new Boolean(
-								underlineButton.getSelection()));
+				changeProperty(section, property, JRBaseStyle.PROPERTY_UNDERLINE, new Boolean(underlineButton.getSelection()));
 			}
 		});
-		underlineButton.setImage(JaspersoftStudioPlugin
-				.getImage("icons/resources/underline.png")); //$NON-NLS-1$
+		underlineButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/underline.png")); //$NON-NLS-1$
 		underlineButton.setToolTipText(Messages.FontSection_underline_tool_tip);
 
-		strikeTroughtButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
+		strikeTroughtButton = new ToolItem(toolBar, SWT.CHECK);
 		strikeTroughtButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				changeProperty(section, property,
-						JRBaseStyle.PROPERTY_STRIKE_THROUGH, new Boolean(
-								strikeTroughtButton.getSelection()));
+				changeProperty(section, property, JRBaseStyle.PROPERTY_STRIKE_THROUGH,
+						new Boolean(strikeTroughtButton.getSelection()));
 			}
 		});
-		strikeTroughtButton.setImage(JaspersoftStudioPlugin
-				.getImage("icons/resources/strikethrought.png")); //$NON-NLS-1$
-		strikeTroughtButton
-				.setToolTipText(Messages.FontSection_strike_through_tool_tip);
+		strikeTroughtButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/strikethrought.png")); //$NON-NLS-1$
+		strikeTroughtButton.setToolTipText(Messages.FontSection_strike_through_tool_tip);
+
 	}
 
-	private void changeProperty(AbstractSection section, String property,
-			String prop, Object value) {
+	private void changeProperty(AbstractSection section, String property, String prop, Object value) {
 		section.changePropertyOn(prop, value, mfont);
-		section.changePropertyOn(property,
-				new MFont((JRFont) mfont.getValue()), parent);
+		if (property != null && parentNode != null)
+			section.changePropertyOn(property, new MFont((JRFont) mfont.getValue()), parentNode);
 	}
 
-	private MFont mfont;
-	private APropertyNode parent;
+	private APropertyNode mfont;
+	private APropertyNode parentNode;
 
-	public void setData(APropertyNode parent, MFont element) {
-		this.parent = parent;
+	public void setData(APropertyNode parentNode, APropertyNode element) {
+		this.parentNode = parentNode;
 		this.mfont = element;
 		if (element != null) {
-			String strfontname = (String) element
-					.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
+			String strfontname = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
 			fontName.setText(strfontname != null ? strfontname : ""); //$NON-NLS-1$
 			String[] items = fontName.getItems();
 			for (int i = 0; i < items.length; i++) {
@@ -184,8 +174,7 @@ public class SPFont {
 				}
 			}
 
-			String strfontsize = (String) element
-					.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
+			String strfontsize = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
 			items = fontSize.getItems();
 			fontSize.setText(strfontsize != null ? strfontsize : ""); //$NON-NLS-1$
 			for (int i = 0; i < items.length; i++) {
@@ -195,18 +184,14 @@ public class SPFont {
 				}
 			}
 
-			Boolean b = (Boolean) element
-					.getPropertyValue(JRBaseStyle.PROPERTY_BOLD);
+			Boolean b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_BOLD);
 			boldButton.setSelection(b != null ? b.booleanValue() : false);
 			b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_ITALIC);
 			italicButton.setSelection(b != null ? b.booleanValue() : false);
-			b = (Boolean) element
-					.getPropertyValue(JRBaseStyle.PROPERTY_UNDERLINE);
+			b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_UNDERLINE);
 			underlineButton.setSelection(b != null ? b.booleanValue() : false);
-			b = (Boolean) element
-					.getPropertyValue(JRBaseStyle.PROPERTY_STRIKE_THROUGH);
-			strikeTroughtButton.setSelection(b != null ? b.booleanValue()
-					: false);
+			b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_STRIKE_THROUGH);
+			strikeTroughtButton.setSelection(b != null ? b.booleanValue() : false);
 		}
 	}
 }

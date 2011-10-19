@@ -118,7 +118,7 @@ public class SelectionHelper {
 
 	public static final void openEditor(IFile file, String path) {
 		try {
-			if (path != null) {
+			if (file != null && path != null) {
 				// String pathname = FileUtils.findRelativePath(rpath, path);
 				SimpleFileResolver fileResolver = getFileResolver(file);
 

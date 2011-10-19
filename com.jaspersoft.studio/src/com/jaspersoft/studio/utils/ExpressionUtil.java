@@ -30,10 +30,15 @@ import org.eclipse.jdt.core.IJavaProject;
 
 public class ExpressionUtil {
 	public static final String eval(JRExpression expr, JasperDesign jd) {
+		if (expr == null)
+			return null;
 		if (jd == null)
 			return JRExpressionUtil.getSimpleExpressionText(expr);
 
-		return eval(expr, jd, jd.getMainDesignDataset(), null).toString();
+		Object eval = eval(expr, jd, jd.getMainDesignDataset(), null);
+		if (eval != null)
+			return eval.toString();
+		return null;
 	}
 
 	public static final Object eval(JRExpression expr, JasperDesign jd, JRDataset jrd, IJavaProject javaProject) {

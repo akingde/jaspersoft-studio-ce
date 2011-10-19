@@ -28,8 +28,8 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -50,6 +50,7 @@ public class LocationSection extends AbstractSection {
 	private Spinner xText;
 	private Spinner yText;
 	private CCombo positionType;
+	private Composite composite;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -58,15 +59,16 @@ public class LocationSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		GridLayout layout = new GridLayout(5, false);
-		composite.setLayout(layout);
+		parent = new Composite(parent, SWT.NONE);
+		parent.setLayout(new RowLayout(SWT.VERTICAL));
+		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
+		composite = createNewRow(parent);
 
 		CLabel label = getWidgetFactory().createCLabel(composite, Messages.LocationSection_position + ":", SWT.RIGHT); //$NON-NLS-1$
-		GridData gd = new GridData();
-		gd.widthHint = 100;
-		label.setLayoutData(gd);
+		RowData rd = new RowData();
+		rd.width = 100;
+		label.setLayoutData(rd);
 
 		xText = new Spinner(composite, SWT.BORDER);
 		xText.setValues(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
@@ -77,9 +79,9 @@ public class LocationSection extends AbstractSection {
 		yText.setToolTipText(Messages.LocationSection_y_position_tool_tip);
 
 		label = getWidgetFactory().createCLabel(composite, Messages.common_position_type + ":"); //$NON-NLS-1$
-		gd = new GridData();
-		gd.widthHint = 100;
-		label.setLayoutData(gd);
+		rd = new RowData();
+		rd.width = 100;
+		label.setLayoutData(rd);
 
 		positionType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		positionType.setItems(EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
@@ -121,6 +123,6 @@ public class LocationSection extends AbstractSection {
 
 	@Override
 	public boolean isDisposed() {
-		return positionType.isDisposed();
+		return composite.isDisposed();
 	}
 }

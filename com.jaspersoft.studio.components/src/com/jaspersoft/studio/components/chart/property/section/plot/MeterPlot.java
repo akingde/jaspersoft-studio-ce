@@ -80,9 +80,7 @@ public class MeterPlot extends APlot {
 				Messages.MMeterPlot_shape_description, EnumHelper.getEnumNames(
 						MeterShapeEnum.values(), NullEnum.NOTNULL));
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Tick",
 				SWT.RIGHT);
@@ -113,9 +111,7 @@ public class MeterPlot extends APlot {
 				JRDesignMeterPlot.PROPERTY_TICK_INTERVAL,
 				com.jaspersoft.studio.components.chart.messages.Messages.MMeterPlot_tick_interval_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite,
 				Messages.MMeterPlot_needle_color, SWT.RIGHT);
@@ -129,9 +125,7 @@ public class MeterPlot extends APlot {
 				JRDesignMeterPlot.PROPERTY_NEEDLE_COLOR,
 				com.jaspersoft.studio.components.chart.messages.Messages.MMeterPlot_needle_color_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite,
 				Messages.MMeterPlot_meter_background_color, SWT.RIGHT);
@@ -154,9 +148,7 @@ public class MeterPlot extends APlot {
 				JRDesignMeterPlot.PROPERTY_METER_ANGLE,
 				com.jaspersoft.studio.components.chart.messages.Messages.MMeterPlot_meter_angle_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Value",
 				SWT.RIGHT);
@@ -186,9 +178,7 @@ public class MeterPlot extends APlot {
 						+ JRDesignValueDisplay.PROPERTY_MASK,
 				com.jaspersoft.studio.components.chart.messages.Messages.MMeterPlot_value_mask_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Data Range",
 				SWT.RIGHT);
@@ -224,9 +214,7 @@ public class MeterPlot extends APlot {
 				JRDesignMeterPlot.PROPERTY_DATA_RANGE + "."
 						+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "", SWT.RIGHT);
 		rd = new RowData();

@@ -32,14 +32,12 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 public class SPNumber {
 	private Text ftext;
 
-	public SPNumber(Composite parent, AbstractSection section,
-			String property, String tooltip) {
+	public SPNumber(Composite parent, AbstractSection section, String property, String tooltip) {
 		createComponent(parent, section, property, tooltip);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property, String tooltip) {
-		ftext = new Text(parent, SWT.BORDER);
+	public void createComponent(Composite parent, final AbstractSection section, final String property, String tooltip) {
+		ftext = new Text(parent, SWT.BORDER | SWT.FLAT);
 		ftext.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -86,12 +84,12 @@ public class SPNumber {
 	}
 
 	public void setDataNumber(Number f) {
-		if (f != null){
+		if (f != null) {
 			int oldpos = ftext.getCaretPosition();
 			ftext.setText(f.toString());
 			if (f.toString().length() >= oldpos)
 				ftext.setSelection(oldpos, oldpos);
-		}else
+		} else
 			ftext.setText("");
 	}
 }

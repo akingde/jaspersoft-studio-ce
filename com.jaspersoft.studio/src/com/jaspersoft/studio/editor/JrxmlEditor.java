@@ -72,7 +72,7 @@ import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.editor.outline.page.EmptyOutlinePage;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
-import com.jaspersoft.studio.editor.preview.PreviewEditor;
+import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.report.ReportContainer;
 import com.jaspersoft.studio.editor.xml.XMLEditor;
 import com.jaspersoft.studio.messages.Messages;
@@ -200,12 +200,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Creates page 2 of the multi-page editor, which shows the sorted text.
 	 */
 	void createPage2() {
-		previewEditor = new PreviewEditor() {
+		previewEditor = new PreviewContainer(false) {
 			@Override
 			public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
 				if (myDataAdapterDesc != null) {
 					getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
-					JasperDesign jasperDesign = getJasperDesign();
+					JasperDesign jasperDesign = getMReport().getJasperDesign();
 					String oldp = jasperDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
 					if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
 						jasperDesign.setProperty(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
@@ -530,7 +530,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	/** The xml fresh. */
 	private boolean xmlFresh = true;
 
-	private PreviewEditor previewEditor;
+	private PreviewContainer previewEditor;
 
 	/**
 	 * Calculates the contents of page 2 when the it is activated.
@@ -652,7 +652,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		previewEditor.setJasperDesign((JasperDesign) ((MRoot) getModel()).getValue());
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				previewEditor.runReport(null);
+//				previewEditor.runReport(null);
 			}
 		});
 	}

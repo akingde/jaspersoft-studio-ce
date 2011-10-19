@@ -70,13 +70,7 @@ public class ThermometerPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				Messages.MMeterPlot_shape);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
-
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Value",
 				SWT.RIGHT);
@@ -126,9 +120,7 @@ public class ThermometerPlot extends APlot {
 		Composite composite;
 		CLabel lbl;
 		RowData rd;
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Data Range",
 				SWT.RIGHT);
@@ -169,9 +161,7 @@ public class ThermometerPlot extends APlot {
 		Composite composite;
 		CLabel lbl;
 		RowData rd;
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Low Range",
 				SWT.RIGHT);
@@ -212,9 +202,7 @@ public class ThermometerPlot extends APlot {
 		Composite composite;
 		CLabel lbl;
 		RowData rd;
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite,
 				"Medium Range", SWT.RIGHT);
@@ -255,9 +243,7 @@ public class ThermometerPlot extends APlot {
 		Composite composite;
 		CLabel lbl;
 		RowData rd;
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = section.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "High Range",
 				SWT.RIGHT);

@@ -65,9 +65,7 @@ public class LegendSection extends AbstractSection {
 		parent.setBackground(parent.getDisplay()
 				.getSystemColor(SWT.COLOR_WHITE));
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		CLabel lbl = getWidgetFactory()
 				.createCLabel(
@@ -86,9 +84,7 @@ public class LegendSection extends AbstractSection {
 
 		btnFont = new SPFont(parent, this, JRDesignChart.PROPERTY_LEGEND_FONT);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		lbl = getWidgetFactory().createCLabel(composite,
 				Messages.common_forecolor + ":", SWT.RIGHT); //$NON-NLS-1$
@@ -107,7 +103,9 @@ public class LegendSection extends AbstractSection {
 				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR,
 				Messages.ColorsSection_element_backcolor_tool_tip);
 
-		btnEdgeEnum = new SPEdgeEnum(parent, this,
+		composite = createNewRow(parent);
+
+		btnEdgeEnum = new SPEdgeEnum(composite, this,
 				JRBaseChart.PROPERTY_LEGEND_POSITION);
 	}
 

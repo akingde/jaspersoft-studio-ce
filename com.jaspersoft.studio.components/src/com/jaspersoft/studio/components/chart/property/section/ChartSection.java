@@ -63,9 +63,7 @@ public class ChartSection extends AbstractSection {
 		parent.setBackground(parent.getDisplay()
 				.getSystemColor(SWT.COLOR_WHITE));
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		CLabel lbl = getWidgetFactory().createCLabel(composite,
 				Messages.MChart_customizer_class, SWT.RIGHT);
@@ -79,10 +77,7 @@ public class ChartSection extends AbstractSection {
 
 		// ------------------
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(composite.getDisplay().getSystemColor(
-				SWT.COLOR_WHITE));
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		lbl = getWidgetFactory().createCLabel(composite,
 				Messages.MChart_renderer_type);
@@ -96,10 +91,7 @@ public class ChartSection extends AbstractSection {
 						"draw", "image", "svg" });
 		// ------------
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(composite.getDisplay().getSystemColor(
-				SWT.COLOR_WHITE));
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		lbl = getWidgetFactory().createCLabel(composite, Messages.MChart_theme); //$NON-NLS-1$
 		rd = new RowData();
@@ -112,9 +104,7 @@ public class ChartSection extends AbstractSection {
 						"eye.candy.sixties" });
 
 		// --------------------
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		lbl = getWidgetFactory().createCLabel(composite,
 				Messages.MChart_evaluation_time);

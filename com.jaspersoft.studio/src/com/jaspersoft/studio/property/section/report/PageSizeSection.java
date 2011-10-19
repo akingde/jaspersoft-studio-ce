@@ -26,11 +26,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -48,8 +49,9 @@ import com.jaspersoft.studio.utils.UIUtils;
 public class PageSizeSection extends AbstractSection {
 	private Spinner height;
 	private Spinner width;
-	private Button landscapeButton;
-	private Button portraitButton;
+	private ToolItem landscapeButton;
+	private ToolItem portraitButton;
+	private Composite composite;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -58,15 +60,16 @@ public class PageSizeSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		GridLayout layout = new GridLayout(5, false);
-		composite.setLayout(layout);
+		parent = new Composite(parent, SWT.NONE);
+		parent.setLayout(new RowLayout(SWT.VERTICAL));
+		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
+		composite = createNewRow(parent);
 
 		CLabel label = getWidgetFactory().createCLabel(composite, Messages.PageSizeSection_page_size + ":", SWT.RIGHT); //$NON-NLS-1$
-		GridData gd = new GridData();
-		gd.widthHint = 100;
-		label.setLayoutData(gd);
+		RowData rd = new RowData();
+		rd.width = 100;
+		label.setLayoutData(rd);
 
 		width = new Spinner(composite, SWT.BORDER);
 		width.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
@@ -86,7 +89,10 @@ public class PageSizeSection extends AbstractSection {
 			}
 		});
 
-		portraitButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
+		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
+		toolBar.setBackground(composite.getBackground());
+
+		portraitButton = new ToolItem(toolBar, SWT.RADIO);
 		portraitButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_ORIENTATION, OrientationEnum.PORTRAIT);
@@ -96,7 +102,7 @@ public class PageSizeSection extends AbstractSection {
 		portraitButton.setText(Messages.common_portrait);
 		portraitButton.setToolTipText(Messages.PageSizeSection_portrait_tool_tip);
 
-		landscapeButton = new Button(composite, SWT.FLAT | SWT.TOGGLE);
+		landscapeButton = new ToolItem(toolBar, SWT.RADIO);
 		landscapeButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				changeProperty(JasperDesign.PROPERTY_ORIENTATION, OrientationEnum.LANDSCAPE);
@@ -133,6 +139,6 @@ public class PageSizeSection extends AbstractSection {
 
 	@Override
 	public boolean isDisposed() {
-		return portraitButton.isDisposed();
+		return composite.isDisposed();
 	}
 }

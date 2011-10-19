@@ -43,6 +43,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.UUID;
 
 public class FileUtils {
 	public static String findRelativePath(String base, String path) throws IOException {
@@ -83,7 +84,7 @@ public class FileUtils {
 		}
 
 		FileChannel source = null;
-		FileChannel destination = null; 
+		FileChannel destination = null;
 		try {
 			source = new FileInputStream(sourceFile).getChannel();
 			destination = new FileOutputStream(destFile).getChannel();
@@ -96,5 +97,47 @@ public class FileUtils {
 				destination.close();
 			}
 		}
+	}
+
+	public static File createTempDir() throws IOException {
+		final File sysTempDir = new File(System.getProperty("java.io.tmpdir"));
+		File newTempDir;
+		final int maxAttempts = 9;
+		int attemptCount = 0;
+		do {
+			attemptCount++;
+			if (attemptCount > maxAttempts) {
+				throw new IOException("The highly improbable has occurred! Failed to "
+						+ "create a unique temporary directory after " + maxAttempts + " attempts.");
+			}
+			String dirName = UUID.randomUUID().toString();
+			newTempDir = new File(sysTempDir, dirName);
+		} while (newTempDir.exists());
+
+		if (newTempDir.mkdirs()) {
+			return newTempDir;
+		} else {
+			throw new IOException("Failed to create temp dir named " + newTempDir.getAbsolutePath());
+		}
+	}
+
+	/**
+	 * Recursively delete file or directory
+	 * 
+	 * @param fileOrDir
+	 *          the file or dir to delete
+	 * @return true iff all files are successfully deleted
+	 */
+	public static boolean recursiveDelete(File fileOrDir) {
+		if (fileOrDir.isDirectory()) {
+			// recursively delete contents
+			for (File innerFile : fileOrDir.listFiles()) {
+				if (!recursiveDelete(innerFile)) {
+					return false;
+				}
+			}
+		}
+
+		return fileOrDir.delete();
 	}
 }

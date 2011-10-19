@@ -24,7 +24,6 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -75,7 +74,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 *          the initial string displayed in the combo
 	 */
 	public DatasourceComboItem(IDataAdapterRunnable editor) {
-		super(GEFActionConstants.ZOOM_TOOLBAR_WIDGET);
+		super("datasourceadaptercomboitem");
 		this.editor = editor;
 	}
 
@@ -345,7 +344,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 					selectCombo(index + 1);
 				}
 			} catch (Exception e) {
-				//e.printStackTrace();
+				// e.printStackTrace();
 				if (dataAdapters.size() > 0)
 					return dataAdapters.get(0);
 				return null;
@@ -399,6 +398,10 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	 */
 	private List<DataAdapterDescriptor> getDataAdapters() {
 		return dataAdapters;
+	}
+
+	public void setEnabled(boolean enabled) {
+		combo.setEnabled(enabled);
 	}
 
 }

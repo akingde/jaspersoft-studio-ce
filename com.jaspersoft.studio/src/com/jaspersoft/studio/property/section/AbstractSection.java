@@ -200,13 +200,12 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackground(parent.getBackground());
 		composite.setLayout(new RowLayout());
-	
-		CLabel lbl = getWidgetFactory()
-				.createCLabel(composite, name, SWT.RIGHT);
+
+		CLabel lbl = getWidgetFactory().createCLabel(composite, name, SWT.RIGHT);
 		RowData rd = new RowData();
 		rd.width = width;
 		lbl.setLayoutData(rd);
-	
+
 		Composite cmp = new Composite(composite, SWT.NONE);
 		GridLayout gl = new GridLayout(3, false);
 		gl.marginTop = 0;
@@ -215,7 +214,16 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		gl.marginLeft = 0;
 		cmp.setLayout(gl);
 		cmp.setBackground(parent.getBackground());
-	
+
 		return new SPExpression(cmp, this, property);
+	}
+
+	public Composite createNewRow(Composite parent) {
+		Composite cmp = new Composite(parent, SWT.NONE);
+		cmp.setBackground(parent.getBackground());
+		RowLayout rl = new RowLayout();
+		rl.fill = true;
+		cmp.setLayout(rl);
+		return cmp;
 	}
 }

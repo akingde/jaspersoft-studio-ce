@@ -39,6 +39,7 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 
 public class ExtensionManager {
 	public void init() {
@@ -67,6 +68,22 @@ public class ExtensionManager {
 		}
 
 		DataAdapterManager.loadDataAdapters();
+	}
+
+	public List<IRepositoryViewProvider> getRepositoryProviders() {
+		List<IRepositoryViewProvider> paletteGroup = new ArrayList<IRepositoryViewProvider>();
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio", "repositoryview"); //$NON-NLS-1$ //$NON-NLS-2$
+		for (IConfigurationElement e : config) {
+			try {
+				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+				if (o instanceof IRepositoryViewProvider)
+					paletteGroup.add((IRepositoryViewProvider) o);
+			} catch (CoreException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+		return paletteGroup;
 	}
 
 	public List<PaletteGroup> getPaletteGroups() {

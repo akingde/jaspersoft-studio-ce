@@ -60,6 +60,7 @@ public class ChartPlotSection extends AbstractSection {
 	private Composite pcomposite;
 	private SPNumber bgAlpha;
 	private SPNumber fgAlpha;
+	private Composite composite;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -75,9 +76,7 @@ public class ChartPlotSection extends AbstractSection {
 				.getSystemColor(SWT.COLOR_WHITE));
 		this.pcomposite = parent;
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		CLabel lbl = getWidgetFactory().createCLabel(composite,
 				Messages.common_backcolor + ":", SWT.RIGHT); //$NON-NLS-1$
@@ -113,9 +112,7 @@ public class ChartPlotSection extends AbstractSection {
 				JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA,
 				com.jaspersoft.studio.components.chart.messages.Messages.MChartPlot_foreground_alpha_percent_description);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		lbl = getWidgetFactory()
 				.createCLabel(

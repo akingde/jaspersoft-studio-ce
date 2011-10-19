@@ -23,10 +23,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -34,21 +34,22 @@ import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPColor {
-	private Button foreButton;
+	private ToolItem foreButton;
 	private ColorLabelProvider colorLabelProvider = new ColorLabelProvider(null);
 
-	public SPColor(Composite parent, AbstractSection section, String property,
-			String tooltip) {
+	public SPColor(Composite parent, AbstractSection section, String property, String tooltip) {
 		createComponent(parent, section, property, tooltip);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property, String tooltip) {
-		foreButton = new Button(parent, SWT.FLAT);
-		foreButton.setLayoutData(new RowData(30, 30));
+	public void createComponent(final Composite parent, final AbstractSection section, final String property,
+			String tooltip) {
+		ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		toolBar.setBackground(parent.getBackground());
+
+		foreButton = new ToolItem(toolBar, SWT.PUSH);
 		foreButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				ColorDialog cd = new ColorDialog(foreButton.getShell());
+				ColorDialog cd = new ColorDialog(parent.getShell());
 				cd.setText(Messages.ColorsSection_element_forecolor);
 				cd.setRGB((RGB) section.getElement().getPropertyValue(property));
 				RGB newColor = cd.open();
@@ -57,24 +58,25 @@ public class SPColor {
 			}
 		});
 		foreButton.setToolTipText(tooltip);
+		// foreButton.setWidth(toolBar.get)
+		toolBar.pack();
 	}
 
 	private APropertyNode parent;
 
 	public void setData(APropertyNode parent, RGB b) {
 		this.parent = parent;
-		if (b != null)
-			foreButton.setImage(colorLabelProvider.getImage(b));
-		else
-			foreButton.setImage(null);
+		// if (b != null)
+		foreButton.setImage(colorLabelProvider.getImage(b));
+		// else
+		// foreButton.setImage(null);
 	}
 
 	public void setData(RGB b) {
 		setData(null, b);
 	}
 
-	private void changeProperty(final AbstractSection section,
-			final String property, RGB newColor) {
+	private void changeProperty(final AbstractSection section, final String property, RGB newColor) {
 		if (parent == null)
 			section.changeProperty(property, newColor);
 		else

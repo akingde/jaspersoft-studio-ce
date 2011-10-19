@@ -66,9 +66,7 @@ public class TitleSection extends AbstractSection {
 		parent.setBackground(parent.getDisplay()
 				.getSystemColor(SWT.COLOR_WHITE));
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		CLabel lbl = getWidgetFactory().createCLabel(composite,
 				"Title:", SWT.RIGHT); //$NON-NLS-1$
@@ -90,9 +88,7 @@ public class TitleSection extends AbstractSection {
 
 		btnFont = new SPFont(parent, this, JRDesignChart.PROPERTY_TITLE_FONT);
 
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+		composite = createNewRow(parent);
 
 		lbl = getWidgetFactory().createCLabel(composite,
 				Messages.common_forecolor + ":", SWT.RIGHT); //$NON-NLS-1$
