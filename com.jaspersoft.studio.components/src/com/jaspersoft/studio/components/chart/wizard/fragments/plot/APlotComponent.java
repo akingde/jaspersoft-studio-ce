@@ -36,6 +36,7 @@ import com.jaspersoft.studio.components.chart.figure.ChartFigure;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 
 public abstract class APlotComponent {
+	private static final int HEIGHT = 100;
 	private Control control;
 	protected Label imgLabel;
 	private ChartFigure chartFigure;
@@ -48,7 +49,7 @@ public abstract class APlotComponent {
 	public void setData(DrawVisitor drawVisitor, JRDesignChart jrChart,
 			SimpleFileResolver fResolver) {
 		jrChart.setWidth(500);
-		jrChart.setHeight(325);
+		jrChart.setHeight(HEIGHT);
 		chartFigure.setJRElement(jrChart, drawVisitor, fResolver);
 		canvasChart.redraw();
 	}
@@ -95,7 +96,7 @@ public abstract class APlotComponent {
 		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER
 				| GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.widthHint = 500;
-		gd.heightHint = 325;
+		gd.heightHint = HEIGHT;
 		canvasChart.setLayoutData(gd);
 
 		LightweightSystem lws = new J2DLightweightSystem();

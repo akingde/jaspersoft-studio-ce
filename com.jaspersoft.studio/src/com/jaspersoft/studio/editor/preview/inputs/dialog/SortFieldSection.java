@@ -87,7 +87,7 @@ public class SortFieldSection {
 				leftTable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 				leftTable.setBackground(tabFolder.getBackground());
 				GridData gd = new GridData(GridData.FILL_VERTICAL);
-				gd.widthHint = 250;
+				gd.widthHint = 150;
 				leftTable.setLayoutData(gd);
 				leftTable.setHeaderVisible(true);
 

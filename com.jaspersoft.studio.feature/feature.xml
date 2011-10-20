@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio"
-      version="1.0.2"
+      version="1.0.3"
       provider-name="Jaspersoft Corporation">
 
    <description url="http://jasperforge.org/projects/jaspersoftstudio">
@@ -697,14 +697,28 @@ Public License instead of this License.  But first, please read
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.core.filesystem"/>
       <import plugin="org.eclipse.jdt.core"/>
-      <import plugin="org.eclipse.jdt.ui" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.gef" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="javax.servlet"/>
-      <import plugin="com.jaspersoft.studio" version="0.2.5" match="greaterOrEqual"/>
-      <import feature="org.eclipse.datatools.sqldevtools.feature" version="1.0.0"/>
-      <import feature="org.eclipse.help" version="1.2.0.v20100427-7e7jEKFEx2XlnZinYPtgz03"/>
-      <import plugin="org.eclipse.datatools.connectivity"/>
+      <import feature="org.eclipse.datatools.sqldevtools.feature" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.ui" version="3.5.2" match="greaterOrEqual"/>
+      <import plugin="org.apache.xerces" version="2.9.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.xml.resolver" version="1.2.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.xml.serializer" version="2.7.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.team.core" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.navigator"/>
+      <import plugin="org.eclipse.equinox.http.jetty" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help.appserver" version="3.1.400" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help.base" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help.ui" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help.webapp" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="com.jaspersoft.studio" version="0.0.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.gef" version="3.5.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.datatools.sqltools.sqlbuilder" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.datatools.connectivity.oda.consumer" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.datatools.connectivity.oda.design.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.datatools.sqltools.editor.core.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.datatools.sqltools.data.core" version="1.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
