@@ -777,54 +777,6 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.core.runtime.compatibility.auth"/>
       <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
       <plugin id="org.eclipse.core.variables"/>
-      <plugin id="org.eclipse.datatools.connectivity"/>
-      <plugin id="org.eclipse.datatools.connectivity.console.profile"/>
-      <plugin id="org.eclipse.datatools.connectivity.db.generic"/>
-      <plugin id="org.eclipse.datatools.connectivity.db.generic.ui"/>
-      <plugin id="org.eclipse.datatools.connectivity.oda"/>
-      <plugin id="org.eclipse.datatools.connectivity.oda.consumer"/>
-      <plugin id="org.eclipse.datatools.connectivity.oda.design"/>
-      <plugin id="org.eclipse.datatools.connectivity.oda.design.ui"/>
-      <plugin id="org.eclipse.datatools.connectivity.oda.profile"/>
-      <plugin id="org.eclipse.datatools.connectivity.sqm.core"/>
-      <plugin id="org.eclipse.datatools.connectivity.sqm.core.ui"/>
-      <plugin id="org.eclipse.datatools.connectivity.sqm.server.ui"/>
-      <plugin id="org.eclipse.datatools.connectivity.ui"/>
-      <plugin id="org.eclipse.datatools.help"/>
-      <plugin id="org.eclipse.datatools.modelbase.dbdefinition"/>
-      <plugin id="org.eclipse.datatools.modelbase.sql"/>
-      <plugin id="org.eclipse.datatools.modelbase.sql.edit"/>
-      <plugin id="org.eclipse.datatools.modelbase.sql.query"/>
-      <plugin id="org.eclipse.datatools.modelbase.sql.query.edit"/>
-      <plugin id="org.eclipse.datatools.modelbase.sql.xml.query"/>
-      <plugin id="org.eclipse.datatools.sqltools.common.ui"/>
-      <plugin id="org.eclipse.datatools.sqltools.data.core"/>
-      <plugin id="org.eclipse.datatools.sqltools.data.ui"/>
-      <plugin id="org.eclipse.datatools.sqltools.db.generic"/>
-      <plugin id="org.eclipse.datatools.sqltools.debugger.core"/>
-      <plugin id="org.eclipse.datatools.sqltools.debugger.core.ui"/>
-      <plugin id="org.eclipse.datatools.sqltools.doc.user"/>
-      <plugin id="org.eclipse.datatools.sqltools.doc.user.contexts"/>
-      <plugin id="org.eclipse.datatools.sqltools.editor.core"/>
-      <plugin id="org.eclipse.datatools.sqltools.editor.core.ui"/>
-      <plugin id="org.eclipse.datatools.sqltools.parsers.sql"/>
-      <plugin id="org.eclipse.datatools.sqltools.parsers.sql.lexer"/>
-      <plugin id="org.eclipse.datatools.sqltools.parsers.sql.query"/>
-      <plugin id="org.eclipse.datatools.sqltools.parsers.sql.xml.query"/>
-      <plugin id="org.eclipse.datatools.sqltools.plan"/>
-      <plugin id="org.eclipse.datatools.sqltools.result"/>
-      <plugin id="org.eclipse.datatools.sqltools.result.ui"/>
-      <plugin id="org.eclipse.datatools.sqltools.routineeditor"/>
-      <plugin id="org.eclipse.datatools.sqltools.routineeditor.ui"/>
-      <plugin id="org.eclipse.datatools.sqltools.schemaobjecteditor"/>
-      <plugin id="org.eclipse.datatools.sqltools.schemaobjecteditor.ui"/>
-      <plugin id="org.eclipse.datatools.sqltools.schemaobjecteditor.ui.pages"/>
-      <plugin id="org.eclipse.datatools.sqltools.sql"/>
-      <plugin id="org.eclipse.datatools.sqltools.sql.ui"/>
-      <plugin id="org.eclipse.datatools.sqltools.sqlbuilder"/>
-      <plugin id="org.eclipse.datatools.sqltools.sqleditor"/>
-      <plugin id="org.eclipse.datatools.sqltools.sqlscrapbook"/>
-      <plugin id="org.eclipse.datatools.sqltools.tabledataeditor"/>
       <plugin id="org.eclipse.debug.core"/>
       <plugin id="org.eclipse.debug.ui"/>
       <plugin id="org.eclipse.draw2d"/>
@@ -924,6 +876,7 @@ Public License instead of this License.  But first, please read
       <plugin id="org.eclipse.ui.win32" fragment="true"/>
       <plugin id="org.eclipse.ui.workbench"/>
       <plugin id="org.eclipse.ui.workbench.texteditor"/>
+      <plugin id="org.eclipse.wb.jdt.fragment" fragment="true"/>
       <plugin id="org.mortbay.jetty.server"/>
       <plugin id="org.mortbay.jetty.util"/>
    </plugins>

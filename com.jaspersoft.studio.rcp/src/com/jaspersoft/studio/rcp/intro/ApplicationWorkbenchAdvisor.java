@@ -108,7 +108,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		super.preStartup();
 
 		IDE.registerAdapters();
-
 	}
 
 	/**

@@ -75,7 +75,7 @@ public class DatasetSeriesWidget {
 		sComposite = new Composite(composite, SWT.NONE);
 		stacklayout = new StackLayout();
 		sComposite.setLayout(stacklayout);
-		sComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		sComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		map.put(JRDesignCategoryDataset.class, new DSCategory(sComposite, this));
 		map.put(JRDesignGanttDataset.class, new DSGantt(sComposite, this));

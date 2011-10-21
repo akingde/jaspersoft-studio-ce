@@ -26,6 +26,7 @@ import java.io.Writer;
 
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Spinner;
 
@@ -45,6 +46,15 @@ public class UIUtils {
 			}
 		});
 		t.printStackTrace();
+	}
+
+	public static void showWarning(final String message) {
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+
+				MessageDialog.openWarning(Display.getDefault().getActiveShell(), "Warning", message);
+			}
+		});
 	}
 
 	public static String getStackTrace(Throwable aThrowable) {

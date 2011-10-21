@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.preview.view.control;
 
@@ -73,6 +69,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class ReportControler {
 	public static final String EXECUTION_INFO = "Execution Info";
@@ -97,7 +94,7 @@ public class ReportControler {
 	private List<JRParameter> prompts;
 	private Map<String, Object> jasperParameters;
 	private JasperDesign jDesign;
-
+	private PropertiesHelper ph;
 	private LinkedHashMap<String, APreview> viewmap;
 
 	public ReportControler() {
@@ -116,6 +113,7 @@ public class ReportControler {
 	}
 
 	public LinkedHashMap<String, APreview> createControls(Composite composite, PropertiesHelper ph) {
+		this.ph = ph;
 		viewmap = new LinkedHashMap<String, APreview>();
 		viewmap.put(FORM_PARAMETERS, new VParameters(composite, ph));
 		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, ph));
@@ -162,18 +160,16 @@ public class ReportControler {
 	}
 
 	public void runReport(PreviewContainer pcontainer) {
+		pcontainer.setJasperPrint(null);
+		fillError = null;
+
 		errorPage = (VErrorPreview) viewmap.get(EXECUTION_INFO);
 		errorPage.clearMessages();
 		stime = System.currentTimeMillis();
 		addMessage("Start");
 
-		if (!prmInput.checkFieldsFilled()) {
-			addMessage("You have some input parameters, that you have to fill first");
-			finishReport(pcontainer);
-		} else {
-			pcontainer.setNotRunning(false);
-			runJob(pcontainer);
-		}
+		pcontainer.setNotRunning(false);
+		runJob(pcontainer);
 	}
 
 	public void finishReport(final PreviewContainer pcontainer) {
@@ -192,52 +188,39 @@ public class ReportControler {
 	}
 
 	private void runJob(final PreviewContainer pcontainer) {
-		Job job = new Job("") {
+		pcontainer.setJasperPrint(null);
+		fillError = null;
+		Job job = new Job(Messages.PreviewEditor_preview_a + ": " + jDesign.getName() + Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				DataAdapterService dataAdapterService = null;
 				try {
 					IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
 
-					SimpleFileResolver fileResolver = SelectionHelper.setClassLoader(file, monitor);
-
-					DataAdapter dataAdapter = pcontainer.getDataAdapterDesc().getDataAdapter();
-					dataAdapterService = DataAdapterServiceUtil.getDataAdapterService(pcontainer.getDataAdapterDesc()
-							.getDataAdapter());
-
-					String dsName = dataAdapter.getName();
-					String jobName = Messages.PreviewEditor_preview_a
-							+ ": " + jDesign.getName() + Messages.PreviewEditor_preview_b + "[" + dsName + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					setName(jobName);
-
-					addMessage(Messages.PreviewEditor_reloading);
 					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
-					fillError = null;
 
-					ByteArrayOutputStream out = new ByteArrayOutputStream();
-					JRSaver.saveObject(jDesign, out);
-					JasperDesign jd = (JasperDesign) JRLoader.loadObject(new ByteArrayInputStream(out.toByteArray()));
+					JasperDesign jd = copyJasperDesign();
 
-					PropertiesHelper ps = new PropertiesHelper(file.getProject());
-					ps.setProperties(jd);
+					setupProperties(jd);
 
-					pcontainer.setJasperPrint(null);
-					AsynchronousFillHandle fh = null;
-					addMessage("Start compiling");
-					JasperReport jasperReport = JasperCompileManager.compileReport(jd);
+					JasperReport jasperReport = compileJasperDesign(jd);
 					if (jasperReport != null) {
 						addMessage("Compilation successful");
-						jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
-						addMessage("Setting virtualizer");
-						VirtualizerHelper.setVirtualizer(jd, ps, jasperParameters);
-						addMessage("Setting connection");
-						jasperParameters.remove(JRParameter.REPORT_CONNECTION);
-						jasperParameters.remove(JRParameter.REPORT_DATA_SOURCE);
-						// We let the data adapter to contribute its parameters.
-						dataAdapterService.contributeParameters(jasperParameters);
+
+						if (!prmInput.checkFieldsFilled()) {
+							addMessage("You have some input parameters, that you have to fill first");
+							UIUtils.showWarning("You have some input parameters, that you have to fill first");
+						}
+
+						setupFileRezolver(monitor, file);
+
+						setupVirtualizer(jd, ph);
+
+						dataAdapterService = setupDataAdapter(pcontainer);
+
 						addMessage("Start report execution");
 						// We create the fillHandle to run the report based on the type of data adapter....
-						fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameters);
+						AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameters);
 
 						if (fillReport(fh, monitor, pcontainer) == Status.CANCEL_STATUS)
 							return Status.CANCEL_STATUS;
@@ -250,17 +233,54 @@ public class ReportControler {
 					monitor.done();
 
 					// Allow the data adapter to cleanup its state
-					dataAdapterService.dispose();
+					if (dataAdapterService != null)
+						dataAdapterService.dispose();
 					finishReport(pcontainer);
 				}
 				return Status.OK_STATUS;
 			}
 
 		};
-
-		// Ready to run our Job!
 		job.setPriority(Job.LONG);
 		job.schedule();
+	}
+
+	private JasperReport compileJasperDesign(JasperDesign jd) throws JRException {
+		addMessage("Start compiling");
+		JasperReport jasperReport = JasperCompileManager.compileReport(jd);
+		return jasperReport;
+	}
+
+	private void setupProperties(JasperDesign jd) {
+		ph.setProperties(jd);
+	}
+
+	private JasperDesign copyJasperDesign() throws JRException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		JRSaver.saveObject(jDesign, out);
+		JasperDesign jd = (JasperDesign) JRLoader.loadObject(new ByteArrayInputStream(out.toByteArray()));
+		return jd;
+	}
+
+	private void setupFileRezolver(IProgressMonitor monitor, IFile file) {
+		SimpleFileResolver fileResolver = SelectionHelper.setClassLoader(file, monitor);
+		jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
+	}
+
+	private void setupVirtualizer(JasperDesign jd, PropertiesHelper ps) {
+		addMessage("Setting virtualizer");
+		VirtualizerHelper.setVirtualizer(jd, ps, jasperParameters);
+	}
+
+	private DataAdapterService setupDataAdapter(final PreviewContainer pcontainer) throws JRException {
+		addMessage("Setting connection");
+		DataAdapter dataAdapter = pcontainer.getDataAdapterDesc().getDataAdapter();
+		jasperParameters.remove(JRParameter.REPORT_CONNECTION);
+		jasperParameters.remove(JRParameter.REPORT_DATA_SOURCE);
+		// We let the data adapter to contribute its parameters.
+		DataAdapterService dataAdapterService = DataAdapterServiceUtil.getDataAdapterService(dataAdapter);
+		dataAdapterService.contributeParameters(jasperParameters);
+		return dataAdapterService;
 	}
 
 	private IStatus fillReport(AsynchronousFillHandle fh, IProgressMonitor monitor, final PreviewContainer pcontainer)

@@ -19,9 +19,9 @@
  */
 package com.jaspersoft.studio.data.querydesigner.sql;
 
-import org.eclipse.datatools.sqltools.core.DatabaseVendorDefinitionId;
-import org.eclipse.datatools.sqltools.sqleditor.SQLEditor;
-import org.eclipse.datatools.sqltools.sqleditor.SQLEditorConnectionInfo;
+//import org.eclipse.datatools.sqltools.core.DatabaseVendorDefinitionId;
+//import org.eclipse.datatools.sqltools.sqleditor.SQLEditor;
+//import org.eclipse.datatools.sqltools.sqleditor.SQLEditorConnectionInfo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -39,9 +39,9 @@ public class SQLQueryDesigner extends QueryDesigner {
 
 	@Override
 	public Control getControl() {
-		if (sqleditor == null)
+//		if (sqleditor == null)
 			return super.getControl();
-		return composite;
+//		return composite;
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class SQLQueryDesigner extends QueryDesigner {
 			layout.spacing = 0;
 			composite.setLayout(layout);
 
-			try {
+//			try {
 				// SQLBuilder sqlbuilder = new SQLBuilder();
 				// String driverURL =
 				// "jdbc:derby:/home/slavic/mydb;create=true";
@@ -107,16 +107,16 @@ public class SQLQueryDesigner extends QueryDesigner {
 				// StatementHelper.STATEMENT_TYPE_SELECT));
 				// sqlbuilder.createClient(composite);
 
-				sqleditor = new SQLEditor();
-				sqleditor.init((IEditorSite) actEditor.getSite(),
-						createSQLEditorInput(""));
-				sqleditor.createPartControl(composite);
+//				sqleditor = new SQLEditor();
+//				sqleditor.init((IEditorSite) actEditor.getSite(),
+//						createSQLEditorInput(""));
+//				sqleditor.createPartControl(composite);
 				// editor.setInput(new SQLBuilderEditorInput(cp,
 				// StatementHelper.STATEMENT_TYPE_SELECT));
 
-			} catch (PartInitException e) {
-				e.printStackTrace();
-			}
+//			} catch (PartInitException e) {
+//				e.printStackTrace();
+//			}
 			// catch (ParseException e) {
 			// // TODO Auto-generated catch block
 			// e.printStackTrace();
@@ -129,35 +129,35 @@ public class SQLQueryDesigner extends QueryDesigner {
 
 	@Override
 	public void dispose() {
-		sqleditor.dispose();
+//		sqleditor.dispose();
 		super.dispose();
 	}
 
 	private String query;
-	private SQLEditor sqleditor;
+//	private SQLEditor sqleditor;
 
 	@Override
 	public void setQuery(String query) {
-		if (sqleditor != null) {
-			sqleditor.setInput(createSQLEditorInput(query));
-			this.query = query;
-		} else
+//		if (sqleditor != null) {
+//			sqleditor.setInput(createSQLEditorInput(query));
+//			this.query = query;
+//		} else
 			super.setQuery(query);
 	}
 
-	private QDSQLEditorInput createSQLEditorInput(String query) {
-		QDSQLEditorInput input = new QDSQLEditorInput(query);
-		input.setConnectionInfo(new SQLEditorConnectionInfo(
-				new DatabaseVendorDefinitionId("hsql")));
-		return input;
-	}
+//	private QDSQLEditorInput createSQLEditorInput(String query) {
+//		QDSQLEditorInput input = new QDSQLEditorInput(query);
+//		input.setConnectionInfo(new SQLEditorConnectionInfo(
+//				new DatabaseVendorDefinitionId("hsql")));
+//		return input;
+//	}
 
 	@Override
 	public String getQuery() {
-		if (sqleditor != null) {
-			query = sqleditor.getText();
-			return query;
-		} else
+//		if (sqleditor != null) {
+//			query = sqleditor.getText();
+//			return query;
+//		} else
 			return super.getQuery();
 	}
 }

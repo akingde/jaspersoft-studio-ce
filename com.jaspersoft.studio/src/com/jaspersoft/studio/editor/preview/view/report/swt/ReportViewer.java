@@ -31,7 +31,6 @@ import javax.swing.event.EventListenerList;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JRHyperlinkListener;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -77,9 +76,9 @@ public class ReportViewer implements IReportViewer {
 	 * @see com.jasperassistant.designer.viewer.IReportViewer#setDocument(net.sf.jasperreports.engine.JasperPrint)
 	 */
 	public void setDocument(JasperPrint document) {
-		Assert.isNotNull(document, "ReportViewer.documentNotNull"); //$NON-NLS-1$
-		Assert.isNotNull(document.getPages(), "ReportViewer.documentNotEmpty"); //$NON-NLS-1$
-		Assert.isTrue(!document.getPages().isEmpty(), "ReportViewer.documentNotEmpty"); //$NON-NLS-1$
+//		Assert.isNotNull(document, "ReportViewer.documentNotNull"); //$NON-NLS-1$
+//		Assert.isNotNull(document.getPages(), "ReportViewer.documentNotEmpty"); //$NON-NLS-1$
+//		Assert.isTrue(!document.getPages().isEmpty(), "ReportViewer.documentNotEmpty"); //$NON-NLS-1$
 
 		this.document = document;
 		this.pageIndex = Math.min(Math.max(0, pageIndex), getPageCount() - 1);

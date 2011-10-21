@@ -344,7 +344,7 @@ public class ElementDatasetWidget {
 
 	public void createDataset(Composite composite) {
 		Composite grDataset = new Composite(composite, SWT.NONE);
-		grDataset.setLayoutData(new GridData(GridData.FILL_BOTH));
+		grDataset.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		grDataset.setLayout(new GridLayout());
 
 		CTabFolder ctFolder = new CTabFolder(grDataset, SWT.TOP);

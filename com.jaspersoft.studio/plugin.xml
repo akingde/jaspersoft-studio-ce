@@ -124,9 +124,16 @@
          <view
                id="com.jaspersoft.studio.Repository"
                minimized="false"
-               ratio="0.4"
+               ratio="0.25"
                relationship="left"
                relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               id="org.eclipse.ui.navigator.ProjectExplorer"
+               minimized="false"
+               ratio="0.25"
+               relationship="stack"
+               relative="com.jaspersoft.studio.Repository">
          </view>
          <view
                id="org.eclipse.ui.views.ContentOutline"
@@ -136,17 +143,17 @@
                relative="com.jaspersoft.studio.Repository">
          </view>
          <view
-               id="org.eclipse.ui.views.ProblemView"
+               id="org.eclipse.ui.views.PropertySheet"
                minimized="false"
-               ratio="0.33"
+               ratio="0.66"
                relationship="bottom"
                relative="org.eclipse.ui.editorss">
          </view>
          <view
-               id="org.eclipse.ui.views.PropertySheet"
+               id="org.eclipse.ui.views.ProblemView"
                minimized="false"
                relationship="stack"
-               relative="org.eclipse.ui.views.ProblemView">
+               relative="org.eclipse.ui.views.PropertySheet">
          </view>
          <hiddenToolBarItem
                id="org.eclipse.ui.workbench.navigate">

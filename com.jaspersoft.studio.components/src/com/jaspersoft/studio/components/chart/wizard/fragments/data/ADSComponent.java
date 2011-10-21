@@ -36,6 +36,8 @@ import net.sf.jasperreports.engine.util.SimpleFileResolver;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -76,10 +78,10 @@ public abstract class ADSComponent {
 			JRDesignElementDataset eDataset, SimpleFileResolver fResolver) {
 		this.jrElement = jrChart;
 		this.eDataset = eDataset;
-		jrChart.setWidth(500);
-		jrChart.setHeight(325);
+		jrElement.setWidth(canvasChart.getSize().x);
+		jrElement.setHeight(canvasChart.getSize().y);
 		setChartFigure();
-		chartFigure.setJRElement(jrChart, drawVisitor, fResolver);
+		chartFigure.setJRElement(jrElement, drawVisitor, fResolver);
 		canvasChart.redraw();
 		btDatasetType.setEnabled(false);
 		if (jrElement instanceof JRDesignChart) {
@@ -173,14 +175,23 @@ public abstract class ADSComponent {
 	protected Control createChartPreview(Composite composite) {
 		canvasChart = new Canvas(composite, SWT.NO_REDRAW_RESIZE
 				| SWT.NO_BACKGROUND);
-		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END
-				| GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.widthHint = 500;
-		gd.heightHint = 325;
+		GridData gd = new GridData(GridData.FILL_BOTH);
 		canvasChart.setLayoutData(gd);
 
 		lws = new J2DLightweightSystem();
 		lws.setControl(canvasChart);
+		canvasChart.addControlListener(new ControlListener() {
+
+			public void controlResized(ControlEvent e) {
+				if (jrElement != null) {
+					jrElement.setWidth(canvasChart.getSize().x);
+					jrElement.setHeight(canvasChart.getSize().y);
+				}
+			}
+
+			public void controlMoved(ControlEvent e) {
+			}
+		});
 
 		setChartFigure();
 
