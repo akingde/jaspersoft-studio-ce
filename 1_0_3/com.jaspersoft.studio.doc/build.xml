@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.jaspersoft.studio.doc" default="build.jars" basedir=".">
+
+	<property name="p2.build.repo" value="file:${buildDirectory}/buildRepo"/>
+	<property name="basews" value="${ws}"/>
+	<property name="baseos" value="${os}"/>
+	<property name="basearch" value="${arch}"/>
+	<property name="basenl" value="${nl}"/>
+	<property name="bundleId" value="com.jaspersoft.studio.doc"/>
+	<property name="bundleVersion" value="1.0.3"/>
+	<property name="p2.publishonerror" value="false"/>
+
+	<!-- Compiler settings. -->
+	<property name="javacFailOnError" value="false"/>
+	<property name="javacDebugInfo" value="on"/>
+	<property name="javacVerbose" value="false"/>
+	<property name="logExtension" value=".log"/>
+	<property name="compilerArg" value=""/>
+	<property name="compilation.prereq.log" value="${buildDirectory}/prereqErrors.log"/>
+	<property name="javacSource" value="1.3"/>
+	<property name="javacTarget" value="1.2"/>
+	<condition property="dir_bootclasspath" value="${java.home}/../Classes">
+		<os family="mac"/>
+	</condition>
+	<property name="dir_bootclasspath" value="${java.home}/lib"/>
+	<path id="path_bootclasspath">
+		<fileset dir="${dir_bootclasspath}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	<property name="bootclasspath" refid="path_bootclasspath"/>
+	<condition property="bundleBootClasspath" value="${J2SE-1.5}"	>
+		<isset property="J2SE-1.5"/>
+	</condition>
+	<condition property="bundleJavacSource" value="1.5"	>
+		<isset property="J2SE-1.5"/>
+	</condition>
+	<condition property="bundleJavacTarget" value="1.5"	>
+		<isset property="J2SE-1.5"/>
+	</condition>
+	<property name="bundleJavacSource" value="${javacSource}"/>
+	<property name="bundleJavacTarget" value="${javacTarget}"/>
+	<property name="bundleBootClasspath" value="${bootclasspath}"/>
+
+	<target name="init" depends="properties">
+		<condition property="pluginTemp" value="${buildTempFolder}/plugins"		>
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="pluginTemp" value="${basedir}"/>
+		<condition property="build.result.folder" value="${pluginTemp}/com.jaspersoft.studio.doc_1.0.3"		>
+			<isset property="buildTempFolder"/>
+		</condition>
+		<property name="build.result.folder" value="${basedir}"/>
+		<property name="temp.folder" value="${basedir}/temp.folder"/>
+		<property name="plugin.destination" value="${basedir}"/>
+		<condition property="p2.publish.parts" value="true"		>
+			<istrue value="${p2.gathering}"/>
+		</condition>
+		<property name="compilation.problem.marker" value="${build.result.folder}/compilation.problem"/>
+		<condition property="compilation.problem.marker.exists" value="true"		>
+			<and>
+			<available file="${compilation.problem.marker}"/>
+			<isfalse value="${p2.publishonerror}"/>
+			</and>
+		</condition>
+	</target>
+
+	<target name="properties" if="eclipse.running">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+
+	</target>
+
+	<target name="build.update.jar" depends="init" description="Build the plug-in: com.jaspersoft.studio.doc for an update site.">
+		<delete dir="${temp.folder}"/>
+		<mkdir dir="${temp.folder}"/>
+		<antcall target="build.jars"/>
+		<antcall target="gather.bin.parts">
+			<param name="destination.temp.folder" value="${temp.folder}/"/>
+		</antcall>
+		<jar destfile="${plugin.destination}/com.jaspersoft.studio.doc_1.0.3.jar" basedir="${temp.folder}/com.jaspersoft.studio.doc_1.0.3" filesetmanifest="merge"/>
+		<delete dir="${temp.folder}"/>
+	</target>
+
+	<target name="@dot.nestedJars">
+		<mkdir dir="${buildDirectory}/nestedJars/com.ibm.icu_4.4.2.v20110208"/>
+		<unzip src="../../eclipse-jasper/plugins/com.ibm.icu_4.4.2.v20110208.jar" dest="${buildDirectory}/nestedJars/com.ibm.icu_4.4.2.v20110208" overwrite="false">
+			<patternset includes="icu-data.jar"/>
+		</unzip>
+		<mkdir dir="${buildDirectory}/nestedJars/org.eclipse.equinox.registry_3.5.100.v20110502"/>
+		<unzip src="../../eclipse-jasper/plugins/org.eclipse.equinox.registry_3.5.100.v20110502.jar" dest="${buildDirectory}/nestedJars/org.eclipse.equinox.registry_3.5.100.v20110502" overwrite="false">
+			<patternset includes="runtime_registry_compatibility.jar"/>
+		</unzip>
+		<mkdir dir="${buildDirectory}/nestedJars/org.eclipse.ui.workbench_3.7.0.I20110519-0100"/>
+		<unzip src="../../eclipse-jasper/plugins/org.eclipse.ui.workbench_3.7.0.I20110519-0100.jar" dest="${buildDirectory}/nestedJars/org.eclipse.ui.workbench_3.7.0.I20110519-0100" overwrite="false">
+			<patternset includes="e4-workbench.jar"/>
+		</unzip>
+		<mkdir dir="${buildDirectory}/nestedJars/org.eclipse.ui.workbench_3.7.0.I20110519-0100"/>
+		<unzip src="../../eclipse-jasper/plugins/org.eclipse.ui.workbench_3.7.0.I20110519-0100.jar" dest="${buildDirectory}/nestedJars/org.eclipse.ui.workbench_3.7.0.I20110519-0100" overwrite="false">
+			<patternset includes="compatibility.jar"/>
+		</unzip>
+		<mkdir dir="${buildDirectory}/nestedJars/org.eclipse.ui.ide_3.7.0.I20110519-0100"/>
+		<unzip src="../../eclipse-jasper/plugins/org.eclipse.ui.ide_3.7.0.I20110519-0100.jar" dest="${buildDirectory}/nestedJars/org.eclipse.ui.ide_3.7.0.I20110519-0100" overwrite="false">
+			<patternset includes="e4-ide.jar"/>
+		</unzip>
+		<mkdir dir="${buildDirectory}/nestedJars/org.eclipse.ui.win32_3.2.200.I20100509-0800"/>
+		<unzip src="../../updatesite/deltapack/eclipse/plugins/org.eclipse.ui.win32_3.2.200.I20100509-0800.jar" dest="${buildDirectory}/nestedJars/org.eclipse.ui.win32_3.2.200.I20100509-0800" overwrite="false">
+			<patternset includes="e4-ide.jar"/>
+		</unzip>
+		<mkdir dir="${buildDirectory}/nestedJars/com.ning.async-http-client_1.6.3.201106072137"/>
+		<unzip src="../../eclipse-jasper/plugins/com.ning.async-http-client_1.6.3.201106072137.jar" dest="${buildDirectory}/nestedJars/com.ning.async-http-client_1.6.3.201106072137" overwrite="false">
+			<patternset includes="async-http-client-1.6.3.jar"/>
+		</unzip>
+		<mkdir dir="${buildDirectory}/nestedJars/org.jboss.netty_3.2.4.Final-201106072137"/>
+		<unzip src="../../eclipse-jasper/plugins/org.jboss.netty_3.2.4.Final-201106072137.jar" dest="${buildDirectory}/nestedJars/org.jboss.netty_3.2.4.Final-201106072137" overwrite="false">
+			<patternset includes="netty-3.2.4.Final.jar"/>
+		</unzip>
+	</target>
+	<target name="@dot" depends="init,@dot.nestedJars" unless="@dot" description="Create jar: com.jaspersoft.studio.doc @dot.">
+		<delete dir="${build.result.folder}/@dot"/>
+		<mkdir dir="${build.result.folder}/@dot"/>
+		<path id="@dot.classpath">
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.cheatsheets_3.4.100.v20110425.jar"/>
+			<pathelement path="${buildDirectory}/nestedJars/com.ibm.icu_4.4.2.v20110208/icu-data.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/com.ibm.icu_4.4.2.v20110208.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.osgi_3.7.0.v20110613.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui_3.7.0.I20110602-0100.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.ui.cocoa_1.1.0.I20101109-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.runtime_3.7.0.v20110110.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.common_3.6.0.v20110523.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.jobs_3.5.100.v20110404.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.runtime.compatibility.registry_3.5.0.v20110505/runtime_registry_compatibility.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.runtime.compatibility.registry_3.5.0.v20110505"/>
+			<pathelement path="${buildDirectory}/nestedJars/org.eclipse.equinox.registry_3.5.100.v20110502/runtime_registry_compatibility.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.registry_3.5.100.v20110502.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.preferences_3.4.0.v20110502.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.contenttype_3.4.100.v20110423-0524.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.runtime.compatibility.auth_3.2.200.v20110110.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.app_1.3.100.v20110321.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.osgi.services_3.3.0.v20110513.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/javax.servlet_2.5.0.v201103041518.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.swt_3.7.0.v3735b.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.7.0.v3735b.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.swt.cocoa.macosx_3.7.0.v3735b.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.swt.win32.win32.x86_64_3.7.0.v3735b.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.swt.win32.win32.x86_3.7.0.v3735b.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.swt.gtk.linux.x86_3.7.0.v3735b.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.swt.gtk.linux.x86_64_3.7.0.v3735b.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.jface_3.7.0.I20110522-1430.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.commands_3.6.0.I20110111-0800.jar"/>
+			<pathelement path="${buildDirectory}/nestedJars/org.eclipse.ui.workbench_3.7.0.I20110519-0100/e4-workbench.jar"/>
+			<pathelement path="${buildDirectory}/nestedJars/org.eclipse.ui.workbench_3.7.0.I20110519-0100/compatibility.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.workbench_3.7.0.I20110519-0100.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20110413-1600/compatibility.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20110413-1600/e4-workbench.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.workbench.compatibility_3.2.100.I20110413-1600"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.help_3.5.100.v20110426.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.expressions_3.4.300.v20110228.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.jface.databinding_1.5.0.I20100907-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.databinding.observable_1.4.0.I20110222-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.databinding.property_1.4.0.I20110222-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.databinding_1.4.0.I20110111-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.resources_3.7.100.v20110510-0712.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.core.resources.win32.x86_3.5.100.v20110423-0524.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ant.core_3.2.300.v20110511.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.variables_3.2.500.v20110511.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.filesystem_1.3.100.v20110423-0524.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.core.filesystem.macosx_1.3.0.v20110423-0524.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.core.filesystem.win32.x86_1.1.300.v20110423-0524.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.core.filesystem.win32.x86_64_1.1.300.v20110423-0524.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.core.filesystem.linux.x86_1.4.0.v20110423-0524.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.filesystem.linux.x86_64_1.2.0.v20110423-0524.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.forms_3.5.100.v20110425.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.help.base_3.6.0.v201106131736.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.http.jetty_2.0.100.v20110502.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.http.servlet_1.1.200.v20110502.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.mortbay.jetty.util_6.1.23.v201012071420.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.slf4j.api_1.6.1.v20100831-0715.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/ch.qos.logback.slf4j_0.9.27.v20110224-1110.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/ch.qos.logback.classic_0.9.27.v20110224-1110.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.logback.appender_1.0.0.20110607-2117.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/ch.qos.logback.core_0.9.27.v20110224-1110.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/javax.mail.glassfish_1.4.1.v201005082020.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.net4j.jms.api_3.0.0.v20110516-1727/lib/jms.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.console_3.5.100.v20110511.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.jface.text_3.7.0.v20110505-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.text_3.5.100.v20110505-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.workbench.texteditor_3.7.0.v20110505-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.compare.core_3.5.200.I20110208-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.core.ui_1.0.0.20110607-2117.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ltk.core.refactoring_3.5.200.v20110505-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.filebuffers_3.5.200.v20110505-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.core_1.0.0.20110607-2117.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.search_3.7.0.v20110505-0800.jar"/>
+			<pathelement path="${buildDirectory}/nestedJars/org.eclipse.ui.ide_3.7.0.I20110519-0100/e4-ide.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.ide_3.7.0.I20110519-0100.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.ui.win32_3.2.200.I20100509-0800.jar"/>
+			<pathelement path="${buildDirectory}/nestedJars/org.eclipse.ui.win32_3.2.200.I20100509-0800/e4-ide.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.views_3.6.0.I20110412-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.p2.engine_2.1.0.v20110511.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.p2.core_2.1.0.v20110502-1955.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.p2.metadata_2.1.0.v20110510.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.p2.metadata.repository_1.2.0.v20110511-1359.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.p2.repository_2.1.0.v20110601.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.equinox.security_1.1.0.v20110502.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.equinox.security.win32.x86_64_1.0.0.v20110502.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.equinox.security.win32.x86_1.0.200.v20100503.jar"/>
+			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.equinox.security.macosx_1.100.100.v20100503.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ltk.ui.refactoring_3.6.0.v20110505-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.navigator_3.5.100.I20110524-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.compare_3.5.200.I20110525-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.editors_3.7.0.v20110517-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.team.core_3.6.0.I20110525-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.team.ui_3.6.100.I20110525-0800.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/local-patches.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-embedder-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-settings-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-plugin-api-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-model-builder-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/plexus-sec-dispatcher-1.3.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/plexus-cipher-1.4.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-core-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-model-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-settings-builder-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-repository-metadata-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-artifact-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-aether-provider-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/plexus-interpolation-1.14.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/maven-compat-3.0.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/commons-cli-1.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/wagon-file-1.0-beta-7.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-plexus-shim-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/plexus-component-annotations-1.5.5.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/javax.inject-1.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-bean-reflect-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-bean-inject-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-bean-locators-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-bean-binders-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-bean-scanners-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-bean-converters-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-plexus-metadata-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-plexus-converters-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-plexus-locators-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-plexus-binders-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/guice-plexus-scanners-2.0.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/plexus-classworlds-2.4.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/plexus-utils-2.0.6.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/sisu-guice-2.9.4-no_aop.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/plexus-build-api-0.0.7.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/aether-connector-wagon-1.11.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/aether-api-1.11.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/aether-spi-1.11.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/aether-util-1.11.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/wagon-provider-api-1.0-beta-6.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/aether-impl-1.11.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/aether-connector-asynchttpclient-1.11.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.runtime_1.0.0.20110607-2117/jars/wagon-ahc-1.2.0.jar"/>
+			<pathelement path="${buildDirectory}/nestedJars/com.ning.async-http-client_1.6.3.201106072137/async-http-client-1.6.3.jar"/>
+			<pathelement path="${buildDirectory}/nestedJars/org.jboss.netty_3.2.4.Final-201106072137/netty-3.2.4.Final.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/jchardet-1.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/dom4j-1.6.1.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/jdom-1.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/commons-io-1.3.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/plexus-velocity-1.1.3.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/commons-collections-3.2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/archetype-common-2.0-alpha-4.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/commons-lang-2.1.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/oro-2.0.8.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.archetype.common_1.0.0.20110607-2117/jars/velocity-1.5.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.indexer_1.0.0.20110607-2117/local-patches.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.indexer_1.0.0.20110607-2117/jars/indexer-artifact-3.1.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.indexer_1.0.0.20110607-2117/jars/indexer-core-3.1.0.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.indexer_1.0.0.20110607-2117/jars/lucene-core-2.4.1.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.maven.indexer_1.0.0.20110607-2117/jars/lucene-highlighter-2.4.1.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.m2e.model.edit_1.0.0.20110607-2117.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.emf.ecore_2.7.0.v20110605-0747.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.emf.common_2.7.0.v20110605-0747.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.emf.ecore.xmi_2.7.0.v20110520-1406.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.emf.edit_2.7.0.v20110606-0949.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.emf.ecore.change_2.7.0.v20110408-2116.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.emf.ecore.edit_2.7.0.v20110606-0949.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.common.emf_1.2.100.v201101101900.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.common.frameworks_1.2.100.v201105122000.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.common.environment_1.0.400.v200912181832.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.osgi.util_3.2.200.v20110110.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/javax.xml_1.3.4.v201005080400.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.common.core_1.2.0.v200908252030.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.sse.core_1.1.600.v201105162116.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.common.uriresolver_1.1.401.v201004280700.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.validation_1.2.300.v201104190230.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.common.project.facet.core_1.4.200.v201103170332.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.xml.core_1.1.600.v201104251227.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.xerces_2.9.0.v201101211617.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.xml.resolver_1.2.0.v201005080400.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.xml.serializer_2.7.1.v201005080400.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.jem.util_2.1.100.v201103021400.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.common.emfworkbench.integration_1.2.100.v201011172300.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.wst.xsd.core_1.1.600.v201104070312.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.xsd_2.7.0.v20110606-0949.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.mortbay.jetty.server_6.1.23.v201012071420.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.jasper_5.5.17.v201101211617.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/javax.servlet.jsp_2.0.0.v201101211617.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.commons.el_1.0.0.v201101211617.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.commons.logging_1.0.4.v201101211617.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-antlr.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-apache-bcel.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-apache-bsf.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-apache-log4j.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-apache-oro.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-apache-regexp.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-apache-resolver.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-apache-xalan2.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-commons-logging.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-commons-net.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-jai.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-javamail.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-jdepend.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-jmf.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-jsch.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-junit.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-junit4.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-launcher.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-netrexx.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-swing.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant-testutil.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.ant_1.8.2.v20110505-1300/lib/ant.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.lucene_2.9.1.v201101211721.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.lucene.core_2.9.1.v201101211721.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.lucene.analysis_2.9.1.v201101211721.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.lucene.highlighter_2.9.1.v20100421-0704.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.lucene.memory_2.9.1.v20100421-0704.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.lucene.queries_2.9.1.v20100421-0704.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.lucene.snowball_2.9.1.v20100421-0704.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.lucene.spellchecker_2.9.1.v20100421-0704.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.apache.lucene.misc_2.9.1.v20100421-0704.jar"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.help.ui_3.5.100.v20110425.jar"/>
+		</path>
+		<!-- compile the source code -->
+		<javac destdir="${build.result.folder}/@dot" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}" errorProperty="compilation.error.occured"		>
+			<compilerarg line="${compilerArg}" compiler="${build.compiler}"/>
+			<classpath refid="@dot.classpath" />
+			<src path="src/"			/>
+			<compilerarg value="@${basedir}/javaCompiler...args" compiler="org.eclipse.jdt.core.JDTCompilerAdapter"			/>
+			<compilerarg line="-log &apos;${build.result.folder}/@dot${logExtension}&apos;" compiler="org.eclipse.jdt.core.JDTCompilerAdapter"			/>
+		</javac>
+		<antcall target="checkCompilationResults"/>
+		<!-- Copy necessary resources -->
+		<copy todir="${build.result.folder}/@dot" failonerror="true" overwrite="false">
+			<fileset dir="src/">
+				<exclude name="**/*.java"/>
+				<exclude name="**/package.htm*"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="src.zip" depends="init" unless="src.zip">
+		<mkdir dir="${build.result.folder}"/>
+		<antcall target="zip.src.zip"/>
+	</target>
+	<target name="zip.src.zip">
+		<zip destfile="${build.result.folder}/src.zip" filesonly="false" whenempty="skip" update="false">
+			<fileset dir="src/">
+				<include name="**/*.java"/>
+			</fileset>
+		</zip>
+	</target>
+	<target name="copy.src.zip">
+		<copy todir="${source.destination.folder}/" failonerror="true" overwrite="true">
+			<fileset dir="src/">
+				<include name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build.jars" depends="init" description="Compile classes and build nested jars for the plug-in: com.jaspersoft.studio.doc.">
+		<delete file="${compilation.problem.marker}" quiet="true"/>
+		<available property="@dot" file="${build.result.folder}/@dot"/>
+		<antcall target="@dot"/>
+	</target>
+
+	<target name="checkCompilationResults" if="compilation.error.occured">
+		<echo file="${compilation.problem.marker}" message="com.jaspersoft.studio.doc_1.0.3${line.separator}compilation.error.occured=${compilation.error.occured}"/>
+		<eclipse.logCompileError bundle="com.jaspersoft.studio.doc_1.0.3" log="${compilation.prereq.log}">
+		</eclipse.logCompileError>
+	</target>
+
+	<target name="build.sources" depends="init">
+		<available property="src.zip" file="${build.result.folder}/src.zip"/>
+		<antcall target="src.zip"/>
+	</target>
+
+	<target name="publish.bin.parts" depends="init" if="p2.publish.parts" unless="compilation.problem.marker.exists">
+		<mkdir dir="${build.result.folder}/com.jaspersoft.studio.doc_1.0.3"/>
+		<copy todir="${build.result.folder}" failonerror="true" overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="META-INF/MANIFEST.MF"/>
+				<include name="plugin.xml"/>
+				<include name="fragment.xml"/>
+			</fileset>
+		</copy>
+		<eclipse.versionReplacer path="${build.result.folder}" version="1.0.3"/>
+		<antcall target="apitools.generation">
+			<param name="target.folder" value="${build.result.folder}"/>
+			<param name="projectLocation" value="${basedir}"/>
+			<param name="binary.folders" value="${build.result.folder}/@dot"/>
+			<param name="projectName" value="${bundleId}_${bundleVersion}"/>
+		</antcall>
+		<eclipse.gatherBundle 
+		   metadataRepository="${p2.build.repo}"
+		   artifactRepository="${p2.build.repo}"
+		   buildResultFolder="${build.result.folder}"
+		   unpack="false"
+		   baseDirectory="${basedir}"
+		/>
+	</target>
+
+	<target name="gather.bin.parts" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3"/>
+		<copy todir="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3" failonerror="true" overwrite="false">
+			<fileset dir="${build.result.folder}/@dot">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<copy todir="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3" failonerror="true" overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="plugin.xml"/>
+				<include name="META-INF/"/>
+				<include name="html/"/>
+				<include name="*.xml"/>
+				<include name="cheatsheets/"/>
+			</fileset>
+		</copy>
+		<eclipse.versionReplacer path="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3" version="1.0.3"/>
+		<antcall target="apitools.generation">
+			<param name="target.folder" value="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3"/>
+			<param name="projectLocation" value="${basedir}"/>
+			<param name="binary.folders" value="${build.result.folder}/@dot"/>
+			<param name="projectName" value="${bundleId}_${bundleVersion}"/>
+		</antcall>
+	</target>
+
+	<target name="build.zips" depends="init">
+	</target>
+
+	<target name="gather.sources" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3"/>
+		<copy file="${build.result.folder}/src.zip" todir="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3" failonerror="false" overwrite="false"/>
+		<antcall target="copy.src.includes">
+			<param name="source.destination.folder" value="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3"/>
+		</antcall>
+	</target>
+
+	<target name="gather.individual.sources" depends="init">
+		<antcall target="copy.src.zip">
+			<param name="source.destination.folder" value="${destination.temp.folder}"/>
+		</antcall>
+		<antcall target="copy.src.includes">
+			<param name="source.destination.folder" value="${destination.temp.folder}"/>
+		</antcall>
+	</target>
+
+	<target name="copy.src.includes" depends="init">
+	</target>
+
+	<target name="gather.logs" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3"/>
+		<copy todir="${destination.temp.folder}/com.jaspersoft.studio.doc_1.0.3" failonerror="false" overwrite="false">
+			<fileset dir="${build.result.folder}">
+				<include name="@dot${logExtension}"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean" depends="init" description="Clean the plug-in: com.jaspersoft.studio.doc of all the zips, jars and logs created.">
+		<delete dir="${build.result.folder}/@dot"/>
+		<delete file="${build.result.folder}/src.zip"/>
+		<delete file="${plugin.destination}/com.jaspersoft.studio.doc_1.0.3.jar"/>
+		<delete file="${plugin.destination}/com.jaspersoft.studio.doc_1.0.3.zip"/>
+		<delete dir="${temp.folder}"/>
+		<delete file="${compilation.problem.marker}" quiet="true"/>
+	</target>
+
+	<target name="refresh" depends="init" if="eclipse.running" description="Refresh this folder.">
+		<eclipse.convertPath fileSystemPath="/home/slavic/workspaceM/com.jaspersoft.studio.doc" property="resourcePath"/>
+		<eclipse.refreshLocal resource="${resourcePath}" depth="infinite"/>
+	</target>
+
+	<target name="zip.plugin" depends="init" description="Create a zip containing all the elements for the plug-in: com.jaspersoft.studio.doc.">
+		<delete dir="${temp.folder}"/>
+		<mkdir dir="${temp.folder}"/>
+		<antcall target="build.jars"/>
+		<antcall target="build.sources"/>
+		<antcall target="gather.bin.parts">
+			<param name="destination.temp.folder" value="${temp.folder}/"/>
+		</antcall>
+		<antcall target="gather.sources">
+			<param name="destination.temp.folder" value="${temp.folder}/"/>
+		</antcall>
+		<delete>
+			<fileset dir="${temp.folder}">
+				<include name="**/*.bin${logExtension}"/>
+			</fileset>
+		</delete>
+		<zip destfile="${plugin.destination}/com.jaspersoft.studio.doc_1.0.3.zip" basedir="${temp.folder}" filesonly="true" whenempty="skip" update="false"/>
+		<delete dir="${temp.folder}"/>
+	</target>
+
+	<target name="apitools.generation" if="generateAPIDescription">
+		<apitooling.apigeneration  projectName="${projectName}" project="${projectLocation}" binary="${binary.folders}" target="${target.folder}" extramanifests="${extraManifests}" allownonapiproject="${allowNonApiProject}"		/>
+	</target>
+
+</project>
