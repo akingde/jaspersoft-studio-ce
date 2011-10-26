@@ -169,7 +169,7 @@ public class DataAdapterManager {
 	 * Calling this method will force saving the list of adapters in the Eclipse preferences
 	 */
 	public static void saveDataAdapters() {
-		Preferences prefs = new InstanceScope().getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+		Preferences prefs = InstanceScope.INSTANCE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 
 		try {
 			StringBuffer xml = new StringBuffer();
@@ -197,7 +197,7 @@ public class DataAdapterManager {
 		// Clear up the list of data adapters...
 		dataAdapters.clear();
 
-		Preferences prefs = new InstanceScope().getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+		Preferences prefs = InstanceScope.INSTANCE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 
 		String xml = prefs.get("dataAdapters", null); //$NON-NLS-1$
 
@@ -236,26 +236,6 @@ public class DataAdapterManager {
 						dataAdapter = (DataAdapter) XmlUtil.read(adapterNode, dataAdapter.getClass());
 
 						dataAdapterDescriptor.setDataAdapter(dataAdapter);
-
-						// dataAdapter.setName(adapterNode.getAttributes().getNamedItem("name").getNodeValue());
-						// Map<String, String> map = new HashMap<String, String>();
-						//
-						// // Find all the property nodes in the dataAdapter node
-						// NodeList parameterNodes = adapterNode.getChildNodes();
-						//
-						// // For each node, load the parameter name and the parameter value
-						// for (int j=0; j < parameterNodes.getLength(); ++j)
-						// {
-						// Node parameterNode = parameterNodes.item(j);
-						// if (parameterNode.getNodeType() == Node.ELEMENT_NODE && "parameter".equals(parameterNode.getNodeName()))
-						// {
-						// String key = parameterNode.getAttributes().getNamedItem("name").getNodeValue();
-						// String value = parameterNode.getTextContent();
-						// map.put(key, value);
-						// }
-						// }
-						//
-						// dataAdapter.loadProperties(map);
 
 						dataAdapters.add(dataAdapterDescriptor);
 					}

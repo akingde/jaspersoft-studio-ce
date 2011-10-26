@@ -25,17 +25,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -50,28 +52,24 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.plugin.ExtensionManager;
-import com.jaspersoft.studio.repository.actions.CreateDataAdapterAction;
-import com.jaspersoft.studio.repository.actions.DeleteDataAdapterAction;
-import com.jaspersoft.studio.repository.actions.DuplicateDataAdapterAction;
-import com.jaspersoft.studio.repository.actions.EditDataAdapterAction;
 
 public class RepositoryView extends ViewPart {
 	public RepositoryView() {
 	}
 
 	private TreeViewer treeViewer;
+	private PropertyChangeListener propChangeListener = new PropertyChangeListener() {
 
-	// Actions for data adapters
-	private Action createDataAdapterItemAction;
-	private Action editDataAdapterItemAction;
-	private Action deleteDataAdapterItemAction;
-	private Action duplicateDataAdapterItemAction;
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (!treeViewer.getTree().isDisposed())
+				treeViewer.refresh(true);
+		}
+	};
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -89,9 +87,23 @@ public class RepositoryView extends ViewPart {
 			public void doubleClick(DoubleClickEvent event) {
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						new EditDataAdapterAction(treeViewer).run();
+						rprovs = getExtensionManager();
+						for (IRepositoryViewProvider rp : rprovs) {
+							rp.doubleClick(treeViewer);
+						}
 					}
 				});
+			}
+		});
+		treeViewer.addTreeListener(new ITreeViewerListener() {
+
+			public void treeExpanded(TreeExpansionEvent event) {
+				rprovs = getExtensionManager();
+				for (IRepositoryViewProvider rp : rprovs)
+					rp.handleTreeEvent(event);
+			}
+
+			public void treeCollapsed(TreeExpansionEvent event) {
 			}
 		});
 
@@ -104,16 +116,24 @@ public class RepositoryView extends ViewPart {
 
 		// Restore state from the previous session.
 		restoreState();
-		DataAdapterManager.getPropertyChangeSupport().addPropertyChangeListener(new PropertyChangeListener() {
+		rprovs = getExtensionManager();
+		for (IRepositoryViewProvider rp : rprovs) {
+			rp.addPropertyChangeListener(propChangeListener);
+		}
+	}
 
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (!treeViewer.getTree().isDisposed())
-					treeViewer.refresh(true);
-			}
-		});
+	@Override
+	public void dispose() {
+		rprovs = getExtensionManager();
+		for (IRepositoryViewProvider rp : rprovs) {
+			rp.removePropertyChangeListener(propChangeListener);
+		}
+		super.dispose();
 	}
 
 	private IMemento memento;
+	private List<IRepositoryViewProvider> rprovs;
+	private ExtensionManager extensionManager;
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -154,7 +174,7 @@ public class RepositoryView extends ViewPart {
 			}
 		}
 		memento = null;
-		updateActionEnablement();
+		// updateActionEnablement();
 	}
 
 	private void hookGlobalActions() {
@@ -164,39 +184,16 @@ public class RepositoryView extends ViewPart {
 		treeViewer.getControl().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
-				if (event.character == SWT.DEL && event.stateMask == 0 && deleteDataAdapterItemAction.isEnabled()) {
-					deleteDataAdapterItemAction.run();
+				rprovs = getExtensionManager();
+				for (IRepositoryViewProvider rp : rprovs) {
+					rp.hookKeyEvent(event);
 				}
 			}
 		});
 	}
 
 	public void createActions() {
-		// data adapters actions
-		createDataAdapterItemAction = new CreateDataAdapterAction(treeViewer);
-		editDataAdapterItemAction = new EditDataAdapterAction(treeViewer);
-		deleteDataAdapterItemAction = new DeleteDataAdapterAction(treeViewer);
-		duplicateDataAdapterItemAction = new DuplicateDataAdapterAction(treeViewer);
 
-		// selectAllAction = new Action("Select All") {
-		// public void run() {
-		// ISelection s = treeViewer.getSelection();
-		// if (s instanceof TreeSelection) {
-		// }
-		// }
-		// };
-
-		// Add selection listener.
-		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event) {
-				updateActionEnablement();
-			}
-		});
-	}
-
-	private void updateActionEnablement() {
-		IStructuredSelection sel = (IStructuredSelection) treeViewer.getSelection();
-		editDataAdapterItemAction.setEnabled(sel.size() > 0);
 	}
 
 	/**
@@ -213,7 +210,7 @@ public class RepositoryView extends ViewPart {
 	private void createToolbar() {
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
 
-		List<IRepositoryViewProvider> rprovs = new ExtensionManager().getRepositoryProviders();
+		rprovs = getExtensionManager();
 		for (IRepositoryViewProvider rp : rprovs) {
 			Action[] actions = rp.getActions(treeViewer);
 			if (actions != null) {
@@ -242,20 +239,40 @@ public class RepositoryView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager mgr) {
-
-		// data adapters actions
-		if (createDataAdapterItemAction.isEnabled())
-			mgr.add(createDataAdapterItemAction);
-		if (editDataAdapterItemAction.isEnabled())
-			mgr.add(editDataAdapterItemAction);
-		if (duplicateDataAdapterItemAction.isEnabled())
-			mgr.add(duplicateDataAdapterItemAction);
-
-		mgr.add(new Separator());
-		if (deleteDataAdapterItemAction.isEnabled())
-			mgr.add(deleteDataAdapterItemAction);
-		// mgr.add(new Separator());
-		// mgr.add(selectAllAction);
+		TreeSelection s = (TreeSelection) treeViewer.getSelection();
+		TreePath[] p = s.getPaths();
+		List<IAction> alist = null;
+		for (int i = 0; i < p.length; i++) {
+			Object obj = p[i].getLastSegment();
+			if (obj instanceof ANode) {
+				rprovs = getExtensionManager();
+				List<IAction> tlist = new ArrayList<IAction>();
+				for (IRepositoryViewProvider rp : rprovs) {
+					List<IAction> t = rp.fillContextMenu(treeViewer, (ANode) obj);
+					if (t != null)
+						tlist.addAll(t);
+				}
+				if (tlist == null || tlist.isEmpty())
+					return;
+				if (alist == null) {
+					alist = tlist;
+				} else {
+					List<IAction> todelete = new ArrayList<IAction>();
+					for (IAction a : alist) {
+						if (!tlist.contains(a)) {
+							todelete.add(a);
+						}
+					}
+					alist.removeAll(todelete);
+					if (alist.isEmpty())
+						return;
+				}
+			}
+		}
+		if (alist != null) {
+			for (IAction act : alist)
+				mgr.add(act);
+		}
 	}
 
 	@Override
@@ -266,11 +283,19 @@ public class RepositoryView extends ViewPart {
 	public ANode getResources() {
 		MRoot rootNode = new MRoot(null, null);
 
-		List<IRepositoryViewProvider> rprovs = new ExtensionManager().getRepositoryProviders();
+		rprovs = getExtensionManager();
 		for (IRepositoryViewProvider rp : rprovs) {
 			rp.getNode(rootNode);
 		}
 
 		return rootNode;
+	}
+
+	private List<IRepositoryViewProvider> getExtensionManager() {
+		if (extensionManager == null)
+			extensionManager = new ExtensionManager();
+		if (rprovs == null)
+			rprovs = extensionManager.getRepositoryProviders();
+		return rprovs;
 	}
 }
