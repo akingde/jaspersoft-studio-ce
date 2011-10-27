@@ -22,6 +22,8 @@ package com.jaspersoft.studio.property.section.widgets;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -32,27 +34,34 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 public class SPText {
 	private Text ftext;
 
-	public SPText(Composite parent, AbstractSection section, String property,
-			String tooltip) {
+	public SPText(Composite parent, AbstractSection section, String property, String tooltip) {
 		createComponent(parent, section, property, tooltip);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property, String tooltip) {
+	public void createComponent(Composite parent, final AbstractSection section, final String property, String tooltip) {
 		ftext = new Text(parent, SWT.BORDER);
 
 		ftext.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				section.changeProperty(property, ftext.getText());
+				handleTextChanged(section, property);
 			}
+
 		});
 		ftext.setToolTipText(tooltip);
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			rd.width = 100;
 			ftext.setLayoutData(rd);
+		} else if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.widthHint = 200;
+			ftext.setLayoutData(gd);
 		}
+	}
+
+	protected void handleTextChanged(final AbstractSection section, final String property) {
+		section.changeProperty(property, ftext.getText());
 	}
 
 	public void setData(String f) {

@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.data.wizard;
 
@@ -41,47 +37,33 @@ public class DataAdapterWizardDialog extends WizardDialog {
 
 	List<SelectionListener> listeners = new ArrayList<SelectionListener>();
 	Button testButton = null;
-	
+
 	public DataAdapterWizardDialog(Shell parentShell, IWizard newWizard) {
 		super(parentShell, newWizard);
 	}
-	
-	public void addTestListener(SelectionListener listener)
-	{
-		if (!listeners.contains(listener))
-		{
+
+	public void addTestListener(SelectionListener listener) {
+		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
-		
+
 	}
-	
-	public void removeTestListener(SelectionListener listener)
-	{
+
+	public void removeTestListener(SelectionListener listener) {
 		listeners.remove(listener);
 	}
 
 	private void fireTestPressed(SelectionEvent e) {
-		for (SelectionListener listener : listeners)
-		{
+		for (SelectionListener listener : listeners) {
 			listener.widgetSelected(e);
 		}
-		
+
 	}
-	
+
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		Composite panel = new Composite(parent, SWT.NONE);
-		panel.setFont(parent.getFont());
-		((GridLayout)parent.getLayout()).numColumns=1;
-		parent.layout();
-		GridLayout layout = new GridLayout();
-		layout.numColumns=1;
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		layout.horizontalSpacing = 0;
-		layout.verticalSpacing = 0;
-		panel.setLayout(layout);
-		testButton = new Button(panel, SWT.NONE);
+		((GridLayout) parent.getLayout()).numColumns = 1;
+		testButton = new Button(parent, SWT.NONE);
 		testButton.setFont(parent.getFont());
 		testButton.setText("Test");
 		setButtonLayoutData(testButton);
@@ -92,10 +74,9 @@ public class DataAdapterWizardDialog extends WizardDialog {
 			}
 
 		});
-		super.createButtonsForButtonBar(panel);
-		panel.setLayout(layout);	
+		super.createButtonsForButtonBar(parent);
 	}
-	
+
 	public void setTestButtonEnabled(boolean b) {
 		testButton.setEnabled(b);
 	}

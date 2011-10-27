@@ -36,6 +36,10 @@ public class Misc {
 			return obj.toString();
 	}
 
+	public static String nvl(String obj) {
+		return nvl(obj, "");
+	}
+
 	public static Object nvl(Object obj, Object def) {
 		if (obj == null)
 			return def;

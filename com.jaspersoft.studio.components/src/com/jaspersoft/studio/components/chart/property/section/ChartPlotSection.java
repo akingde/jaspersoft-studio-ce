@@ -28,11 +28,9 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -78,11 +76,8 @@ public class ChartPlotSection extends AbstractSection {
 
 		composite = createNewRow(parent);
 
-		CLabel lbl = getWidgetFactory().createCLabel(composite,
-				Messages.common_backcolor + ":", SWT.RIGHT); //$NON-NLS-1$
-		RowData rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
+		createLabel(composite, getWidgetFactory(), Messages.common_backcolor
+				+ ":", 101); //$NON-NLS-1$
 
 		backButton = new SPColor(
 				composite,
@@ -114,14 +109,11 @@ public class ChartPlotSection extends AbstractSection {
 
 		composite = createNewRow(parent);
 
-		lbl = getWidgetFactory()
-				.createCLabel(
-						composite,
-						com.jaspersoft.studio.components.chart.messages.Messages.MChartPlot_orientation,
-						SWT.RIGHT);
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
+		createLabel(
+				composite,
+				getWidgetFactory(),
+				com.jaspersoft.studio.components.chart.messages.Messages.MChartPlot_orientation,
+				101);
 
 		modeType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
 		modeType.setItems(new String[] {

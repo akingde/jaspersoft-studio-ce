@@ -606,24 +606,23 @@
             name="Style Template File">
       </wizard>
    </extension>
-    <extension point="org.eclipse.ui.decorators"> 
-        <decorator
-            id="com.jaspersoft.studio.ui.binarydecorator" 
-            label="Binary file Decorator" 
-            state="false" 
-            lightweight="true" 
-            icon="icons/full/ovr16/binary_co.png" 
-            location="TOP_LEFT"> 
-            <enablement>
-                <objectClass name="org.eclipse.core.resources.IResource"/> 
-            </enablement>
-        </decorator>
-    </extension>
     <extension
           point="com.jaspersoft.studio.repositoryview">
        <repositoryview
              ClassFactory="com.jaspersoft.studio.data.DataAdapterProvider">
        </repositoryview>
+    </extension>
+    <extension
+          id="com.jaspersoft.designer.property.repository"
+          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+       <propertyContributor
+             contributorId="com.jaspersoft.studio.Repository"
+             labelProvider="com.jaspersoft.studio.property.ElementLabelProvider"
+             typeMapper="com.jaspersoft.studio.property.ElementTypeMapper">
+          <propertyCategory
+                category="element">
+          </propertyCategory>
+       </propertyContributor>
     </extension>
    
  

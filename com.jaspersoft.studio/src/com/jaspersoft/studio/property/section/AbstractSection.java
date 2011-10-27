@@ -33,12 +33,14 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -218,12 +220,28 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return new SPExpression(cmp, this, property);
 	}
 
-	public Composite createNewRow(Composite parent) {
+	public static Composite createNewRow(Composite parent) {
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setBackground(parent.getBackground());
 		RowLayout rl = new RowLayout();
 		rl.fill = true;
 		cmp.setLayout(rl);
 		return cmp;
+	}
+
+	public static CLabel createLabel(Composite parent, TabbedPropertySheetWidgetFactory widgetFactory, String txt,
+			int width) {
+		CLabel lbl = widgetFactory.createCLabel(parent, txt, SWT.RIGHT);
+		if (parent.getLayout() instanceof RowLayout) {
+			RowData rd = new RowData();
+			rd.width = width;
+			lbl.setLayoutData(rd);
+		} else if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+			if (width > 0)
+				gd.minimumWidth = width;
+			lbl.setLayoutData(gd);
+		}
+		return lbl;
 	}
 }

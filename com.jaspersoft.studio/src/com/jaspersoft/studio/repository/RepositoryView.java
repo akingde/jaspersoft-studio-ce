@@ -51,6 +51,11 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertySource2;
+import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
@@ -58,7 +63,7 @@ import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 
-public class RepositoryView extends ViewPart {
+public class RepositoryView extends ViewPart implements ITabbedPropertySheetPageContributor {
 	public RepositoryView() {
 	}
 
@@ -72,6 +77,30 @@ public class RepositoryView extends ViewPart {
 	};
 
 	@Override
+	public Object getAdapter(Class type) {
+		if (type == IPropertySource.class)
+			return getPropertySheetPage();
+		if (type == IPropertySource2.class)
+			return getPropertySheetPage();
+		if (type == IPropertySheetPage.class)
+			return getPropertySheetPage();
+		return super.getAdapter(type);
+	}
+
+	/** The property sheet page. */
+	private IPropertySheetPage propertySheetPage;
+
+	public IPropertySheetPage getPropertySheetPage() {
+		if (propertySheetPage == null)
+			propertySheetPage = new TabbedPropertySheetPage(this, true);
+		return propertySheetPage;
+	}
+
+	public String getContributorId() {
+		return getSite().getId();
+	}
+
+	@Override
 	public void createPartControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
@@ -82,6 +111,7 @@ public class RepositoryView extends ViewPart {
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		treeViewer.setInput(getResources()); // pass a non-null that will be ignored
 		treeViewer.expandToLevel(2);
+		getSite().setSelectionProvider(treeViewer);
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			public void doubleClick(DoubleClickEvent event) {
