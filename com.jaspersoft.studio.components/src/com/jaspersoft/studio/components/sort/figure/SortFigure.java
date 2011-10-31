@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
-import net.sf.jasperreports.engine.util.JRColorUtil;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -98,11 +97,6 @@ public class SortFigure extends JRComponentFigure {
 					.getComponent();
 
 			int size = 10;
-			try {
-				size = Integer.parseInt(c.getHandlerFontSize());
-			} catch (Exception ex) {
-				size = 10;
-			}
 
 			Font f = new java.awt.Font("Dialog", Font.PLAIN, size);
 
@@ -112,7 +106,7 @@ public class SortFigure extends JRComponentFigure {
 
 			Color col = Color.white;
 			if (c.getHandlerColor() != null)
-				col = JRColorUtil.getColor(c.getHandlerColor(), null);
+				col = c.getHandlerColor();
 
 			gr.setColor(col);
 

@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.components.sort.model;
 
-import java.awt.Color;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +29,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
+import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
-import net.sf.jasperreports.engine.util.JRColorUtil;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
@@ -176,14 +175,10 @@ public class MSort extends MGraphicElement {
 		vertAlign.setDescription("Handler vertical alignement");
 		desc.add(vertAlign);
 
-		NTextPropertyDescriptor font = new NTextPropertyDescriptor(
-				SortComponent.PROPERTY_HANDLER_FONT_SIZE,
-				Messages.common_font_size);
-		font.setDescription(Messages.common_font_size);
-		desc.add(font);
-
-		NTextPropertyDescriptor sortFieldType = new NTextPropertyDescriptor(
-				SortComponent.PROPERTY_COLUMN_TYPE, "SortField Type");
+		ComboBoxPropertyDescriptor sortFieldType = new ComboBoxPropertyDescriptor(
+				SortComponent.PROPERTY_COLUMN_TYPE, "SortField Type",
+				EnumHelper.getEnumNames(SortFieldTypeEnum.values(),
+						NullEnum.NOTNULL));
 		sortFieldType.setDescription("SortField type");
 		desc.add(sortFieldType);
 
@@ -193,7 +188,6 @@ public class MSort extends MGraphicElement {
 		desc.add(sortFieldName);
 
 		color.setCategory("Sort Properties");
-		font.setCategory("Sort Properties");
 		sortFieldType.setCategory("Sort Properties");
 		sortFieldName.setCategory("Sort Properties");
 
@@ -217,15 +211,12 @@ public class MSort extends MGraphicElement {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		SortComponent component = (SortComponent) jrElement.getComponent();
 
-		if (id.equals(SortComponent.PROPERTY_HANDLER_FONT_SIZE))
-			return component.getHandlerFontSize();
 		if (id.equals(SortComponent.PROPERTY_HANDLER_COLOR))
-			return Colors.getSWTRGB4AWTGBColor(JRColorUtil.getColor(
-					component.getHandlerColor(), Color.WHITE));
+			return Colors.getSWTRGB4AWTGBColor(component.getHandlerColor());
 		if (id.equals(SortComponent.PROPERTY_COLUMN_NAME))
 			return component.getSortFieldName();
 		if (id.equals(SortComponent.PROPERTY_COLUMN_TYPE))
-			return component.getSortFieldType();
+			return EnumHelper.getValue(component.getSortFieldType(), 1, false);
 
 		if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(component.getEvaluationTime(), 1, false);
@@ -245,15 +236,13 @@ public class MSort extends MGraphicElement {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
 		SortComponent component = (SortComponent) jrElement.getComponent();
 
-		if (id.equals(SortComponent.PROPERTY_HANDLER_FONT_SIZE))
-			component.setHandlerFontSize((String) value);
-		else if (id.equals(SortComponent.PROPERTY_HANDLER_COLOR))
-			component.setHandlerColor(JRColorUtil.getColorHexa(Colors
-					.getAWT4SWTRGBColor((RGB) value)));
+		if (id.equals(SortComponent.PROPERTY_HANDLER_COLOR))
+			component.setHandlerColor(Colors.getAWT4SWTRGBColor((RGB) value));
 		else if (id.equals(SortComponent.PROPERTY_COLUMN_NAME))
 			component.setSortFieldName((String) value);
 		else if (id.equals(SortComponent.PROPERTY_COLUMN_TYPE))
-			component.setSortFieldType((String) value);
+			component.setSortFieldType((SortFieldTypeEnum) EnumHelper
+					.getSetValue(SortFieldTypeEnum.values(), value, 1, false));
 
 		else if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME))
 			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper
