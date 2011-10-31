@@ -43,6 +43,8 @@ public class VirtualizerPreferencePage extends FieldEditorOverlayPage {
 	public static final String JSS_VIRTUALIZER_BLOCK_SIZE = "com.jaspersoft.studio.virtualizer.block.size"; //$NON-NLS-1$
 	public static final String JSS_VIRTUALIZER_MIN_GROW_COUNT = "com.jaspersoft.studio.virtualizer.min.grow.count"; //$NON-NLS-1$
 
+	public static final String JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE = "net.sf.jasperreports.virtual.page.element.size"; //$NON-NLS-1$
+
 	private BooleanFieldEditor bfeONEXIT;
 	private ComboFieldEditor cfeType;
 	private SpinnerFieldEditor msfe;
@@ -50,6 +52,7 @@ public class VirtualizerPreferencePage extends FieldEditorOverlayPage {
 	private BooleanFieldEditor bfeUSE;
 	private SpinnerFieldEditor sfeBLOCKSIZE;
 	private SpinnerFieldEditor sfeMINGROWCOUNT;
+	private SpinnerFieldEditor sfePAGEELSIZE;
 
 	public VirtualizerPreferencePage() {
 		super(GRID);
@@ -68,6 +71,12 @@ public class VirtualizerPreferencePage extends FieldEditorOverlayPage {
 		bfeONEXIT = new BooleanFieldEditor(NSF_FILES_DELETE_ONEXIT, "Delete Temporary Files On Exit",
 				getFieldEditorParent());
 		addField(bfeONEXIT);
+
+		sfePAGEELSIZE = new SpinnerFieldEditor(JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE, "Page Element Size",
+				getFieldEditorParent(), 0);
+		sfePAGEELSIZE.setMinimum(1);
+		sfePAGEELSIZE.setMaximum(Integer.MAX_VALUE);
+		addField(sfePAGEELSIZE);
 
 		cfeType = new ComboFieldEditor(JSS_VIRTUALIZER_TYPE, "Type", new String[][] {
 				{ "File Virtualizer", JRFileVirtualizer.class.getName() },
@@ -129,6 +138,7 @@ public class VirtualizerPreferencePage extends FieldEditorOverlayPage {
 		cfeType.setEnabled(newVal, getFieldEditorParent());
 		msfe.setEnabled(newVal, getFieldEditorParent());
 		enableSwapVirtualizer(newVal && isSwap);
+		sfePAGEELSIZE.setEnabled(newVal, getFieldEditorParent());
 	}
 
 	/*
@@ -147,6 +157,7 @@ public class VirtualizerPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JSS_VIRTUALIZER_TMP, ""); //$NON-NLS-1$
 		store.setDefault(JSS_VIRTUALIZER_BLOCK_SIZE, 100);
 		store.setDefault(JSS_VIRTUALIZER_MIN_GROW_COUNT, 100);
+		store.setDefault(JSS_VIRTUALIZER_PAGE_ELEMENT_SIZE, 1);
 	}
 
 	@Override

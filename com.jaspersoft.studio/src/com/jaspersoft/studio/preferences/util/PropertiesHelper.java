@@ -49,10 +49,10 @@ public class PropertiesHelper {
 		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
 		if (project != null) {
 			lookupOrders = new String[] { ProjectScope.SCOPE, InstanceScope.SCOPE };
-			contexts = new IScopeContext[] { new ProjectScope(project), new InstanceScope() };
+			contexts = new IScopeContext[] { new ProjectScope(project), InstanceScope.INSTANCE };
 		} else {
 			lookupOrders = new String[] { InstanceScope.SCOPE };
-			contexts = new IScopeContext[] { new InstanceScope() };
+			contexts = new IScopeContext[] { InstanceScope.INSTANCE };
 		}
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 	}
