@@ -98,7 +98,7 @@ public class CrosstabEditor extends AbstractVisualEditor {
 	protected List<String> getIgnorePalleteElements() {
 		List<String> lst = new ArrayList<String>();
 		lst.add(MCrosstab.class.getCanonicalName());
-		lst.add("com.jaspersoft.studio.chart.model.MChart"); //$NON-NLS-1$
+		lst.add("com.jaspersoft.studio.components.chart.model.MChart"); //$NON-NLS-1$
 		return lst;
 	}
 

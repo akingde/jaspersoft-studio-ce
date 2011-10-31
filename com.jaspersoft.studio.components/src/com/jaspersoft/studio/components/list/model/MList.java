@@ -25,11 +25,13 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
@@ -192,14 +194,12 @@ public class MList extends MGraphicElement implements IPastable,
 			return jrList.getContents().getWidth();
 
 		if (id.equals(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN)) { //$NON-NLS-1$
-			if (mDatasetRun == null) {
-				JRDesignDatasetRun j = (JRDesignDatasetRun) jrList
-						.getDatasetRun();
-				if (j == null) {
-					j = new JRDesignDatasetRun();
-				}
-				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+			JRDatasetRun j = jrList.getDatasetRun();
+			if (j == null) {
+				j = new JRDesignDatasetRun();
 			}
+			mDatasetRun = new MDatasetRun(j, getJasperDesign());
+			setChildListener(mDatasetRun);
 			return mDatasetRun;
 
 		}
@@ -226,13 +226,17 @@ public class MList extends MGraphicElement implements IPastable,
 		else if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
 			((DesignListContents) jrList.getContents())
 					.setWidth((Integer) value);
-		else if (id.equals(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN)) {
-			MDatasetRun mdr = (MDatasetRun) value;
-			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
-			if (dr.getDatasetName() != null)
-				jrList.setDatasetRun(dr);
-			else
+		else if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
+			if (value == null) {
 				jrList.setDatasetRun(null);
+			} else {
+				MDatasetRun mdr = (MDatasetRun) value;
+				JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
+				if (dr.getDatasetName() != null)
+					jrList.setDatasetRun(dr);
+				else
+					jrList.setDatasetRun(null);
+			}
 		} else
 			super.setPropertyValue(id, value);
 	}
