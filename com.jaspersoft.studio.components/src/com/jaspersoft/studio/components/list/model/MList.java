@@ -162,7 +162,8 @@ public class MList extends MGraphicElement implements IPastable,
 		desc.add(widthD);
 
 		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(PREFIX
-				+ "DATASET_RUN", Messages.MList_dataset_run); //$NON-NLS-1$
+				+ StandardListComponent.PROPERTY_DATASET_RUN,
+				Messages.MList_dataset_run); //$NON-NLS-1$
 		datasetRunD.setDescription(Messages.MList_dataset_run_description);
 		datasetRunD.setCategory(Messages.MList_list_properties_category);
 		desc.add(datasetRunD);
@@ -226,7 +227,8 @@ public class MList extends MGraphicElement implements IPastable,
 		else if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
 			((DesignListContents) jrList.getContents())
 					.setWidth((Integer) value);
-		else if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
+		else if (id
+				.equals(PREFIX + JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			if (value == null) {
 				jrList.setDatasetRun(null);
 			} else {
