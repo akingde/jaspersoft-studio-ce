@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.jaspersoft.studio.repositoryview">
+      <repositoryview
+            ClassFactory="com.jaspersoft.studio.server.ServerProvider">
+      </repositoryview>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs
+            contributorId="com.jaspersoft.studio.Repository">
+         <propertyTab
+               category="element"
+               id="com.jaspersoft.studio.server.ResourceDescriptor.Basic"
+               label="Basic">
+         </propertyTab>
+      </propertyTabs>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections
+            contributorId="com.jaspersoft.studio.Repository">
+         <propertySection
+               class="com.jaspersoft.studio.server.properties.CommonSection"
+               id="com.jaspersoft.studio.server.ResourceDescriptor.Basic.name"
+               tab="com.jaspersoft.studio.server.ResourceDescriptor.Basic">
+            <input
+                  type="com.jaspersoft.studio.server.model.MResource">
+            </input>
+         </propertySection>
+      </propertySections>
+   </extension>
+
+
+</plugin>
