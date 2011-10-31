@@ -33,12 +33,14 @@ import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
+import com.jaspersoft.studio.utils.parameter.SimpleValueParameter;
 
 public class JDBCFieldsProvider implements IFieldsProvider {
 
@@ -59,9 +61,13 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		try {
 			Connection c = (Connection) parameters
 					.get(JRParameter.REPORT_CONNECTION);
-
+			
+			// JasperReports query executer instances require REPORT_PARAMETERS_MAP parameter to be defined and not null
+			Map<String,JRValueParameter> tmpMap=ParameterUtil.convertMap(parameters);
+			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(new HashMap<>() ));
+			
 			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(reportDataset,
-					ParameterUtil.convertMap(parameters));
+					tmpMap);
 			qe.createDatasource();
 			ResultSet rs = qe.getResultSet();
 			if (rs != null) {
