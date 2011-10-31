@@ -41,6 +41,7 @@ import org.eclipse.ui.IWorkbench;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.number.FloatFieldEditor;
+import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.utils.Misc;
@@ -131,7 +132,7 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		iedit.setValidRange(1, 65536);
 		addField(iedit);
 
-		addField(new TextFieldEditor(NSF_EXPORT_XLS_FREEZ_COLUMN, "Freez On Column (A, AB, etc.)", sc));
+		addField(new NStringFieldEditor(NSF_EXPORT_XLS_FREEZ_COLUMN, "Freez On Column (A, AB, etc.)", sc));
 
 		FloatFieldEditor fedit = new FloatFieldEditor(NSF_EXPORT_XLS_COLUMN_WIDTH_RATIO, "Column Freez Ratio", sc);
 		fedit.setValidRange(0f, Float.MAX_VALUE);
