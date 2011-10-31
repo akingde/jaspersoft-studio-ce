@@ -64,7 +64,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 			
 			// JasperReports query executer instances require REPORT_PARAMETERS_MAP parameter to be defined and not null
 			Map<String,JRValueParameter> tmpMap=ParameterUtil.convertMap(parameters);
-			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(new HashMap<>() ));
+			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(new HashMap<String,JRValueParameter>() ));
 			
 			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(reportDataset,
 					tmpMap);
