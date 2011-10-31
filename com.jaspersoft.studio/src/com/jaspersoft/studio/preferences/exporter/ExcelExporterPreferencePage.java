@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.preferences.exporter;
 
@@ -44,9 +40,11 @@ import org.eclipse.ui.IWorkbench;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.editor.number.FloatFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.utils.Misc;
+
 /*
  * 
  */
@@ -66,10 +64,18 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static final String NSF_EXPORT_XLS_FIT_HEIGHT = "net.sf.jasperreports.export.xls.fit.height"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_FIT_WIDTH = "net.sf.jasperreports.export.xls.fit.width"; //$NON-NLS-1$
+
 	// cell
 	public static final String NSF_EXPORT_XLS_CELL_HIDDEN = "net.sf.jasperreports.export.xls.cell.hidden"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_CELL_LOCKED = "net.sf.jasperreports.export.xls.cell.locked"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_CELL_WRAP_TEXT = "net.sf.jasperreports.export.xls.wrap.text"; //$NON-NLS-1$
+
+	public static final String NSF_EXPORT_XLS_AUTO_FILTER = "net.sf.jasperreports.export.xls.auto.filter";//$NON-NLS-1$
+
+	public static final String NSF_EXPORT_XLS_FREEZ_ROW = "net.sf.jasperreports.export.xls.freeze.row";//$NON-NLS-1$
+	public static final String NSF_EXPORT_XLS_FREEZ_COLUMN = "net.sf.jasperreports.export.xls.freeze.column";//$NON-NLS-1$
+
+	public static final String NSF_EXPORT_XLS_COLUMN_WIDTH_RATIO = "net.sf.jasperreports.export.xls.column.width.ratio";//$NON-NLS-1$
 
 	public ExcelExporterPreferencePage() {
 		super(GRID);
@@ -117,6 +123,19 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 				Messages.ExcelExporterPreferencePage_36, sc);
 		((Text) se.getTextControl(sc)).setEchoChar('*');
 		addField(se);
+
+		addField(new ComboFieldEditor(NSF_EXPORT_XLS_AUTO_FILTER, "Auto Filter", new String[][] { { "", "" },
+				{ "Start", "Start" }, { "Stop", "Stop" } }, sc));
+
+		IntegerFieldEditor iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FREEZ_ROW, "Freez On Row", sc);
+		iedit.setValidRange(1, 65536);
+		addField(iedit);
+
+		addField(new TextFieldEditor(NSF_EXPORT_XLS_FREEZ_COLUMN, "Freez On Column (A, AB, etc.)", sc));
+
+		FloatFieldEditor fedit = new FloatFieldEditor(NSF_EXPORT_XLS_COLUMN_WIDTH_RATIO, "Column Freez Ratio", sc);
+		fedit.setValidRange(0f, Float.MAX_VALUE);
+		addField(fedit);
 
 		ptab.setControl(sc);
 	}
@@ -232,10 +251,10 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE,
 				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD,
-				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD))); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_USE_TMP_FILE, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_USE_TMP_FILE), "")); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT))); //$NON-NLS-1$
 		// COMMON
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN,
 				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN));
@@ -259,20 +278,20 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET));
 
 		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER))); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_LEFT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_LEFT), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_LEFT))); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_RIGHT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_RIGHT), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_RIGHT))); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_SHEET_HEADER_CENTER,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_CENTER), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_CENTER))); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_SHEET_HEADER_LEFT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_LEFT), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_LEFT))); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_SHEET_HEADER_RIGHT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_RIGHT), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_RIGHT))); //$NON-NLS-1$
 
-		store.setDefault(NSF_EXPORT_XLS_FIT_HEIGHT, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FIT_HEIGHT), "")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_FIT_WIDTH, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FIT_WIDTH), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_FIT_HEIGHT, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FIT_HEIGHT))); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_FIT_WIDTH, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FIT_WIDTH))); //$NON-NLS-1$
 		// CELL
 		store.setDefault(NSF_EXPORT_XLS_CELL_HIDDEN,
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_HIDDEN), "false")); //$NON-NLS-1$
@@ -285,6 +304,11 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER,
 				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER));
 		store.setDefault(NSF_EXPORT_XLS_CELL_WRAP_TEXT, JRProperties.getProperty(NSF_EXPORT_XLS_CELL_WRAP_TEXT));
+
+		store.setDefault(NSF_EXPORT_XLS_AUTO_FILTER, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_AUTO_FILTER)));
+		store.setDefault(NSF_EXPORT_XLS_FREEZ_ROW, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FREEZ_ROW)));
+		store.setDefault(NSF_EXPORT_XLS_FREEZ_COLUMN, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FREEZ_COLUMN)));
+
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED,
 				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED), "false")); //$NON-NLS-1$
 	}
