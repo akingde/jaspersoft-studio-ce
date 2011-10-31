@@ -119,7 +119,7 @@ public class MDatasetRun extends APropertyNode {
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
 		super.postDescriptors(descriptors);
-		if (subdatasetnameD != null) {
+		if (subdatasetnameD != null && jasperDesign != null) {
 			List<JRDataset> datasets = jasperDesign.getDatasetsList();
 			String[] sds = new String[datasets.size() + 1];
 			sds[0] = "";
