@@ -24,8 +24,6 @@ public class ReferenceSection extends ASection {
 				SWT.BORDER | SWT.READ_ONLY);
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		AbstractSection.createLabel(parent, getWidgetFactory(),
-				"Referenced Resource Detail", 120);
 	}
 
 	@Override

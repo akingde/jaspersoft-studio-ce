@@ -30,23 +30,26 @@ public class ReportUnitSection extends ASection {
 		cictype.setItems(new String[] { "Popup screen", "Separate page",
 				"Top of page", "In page" });
 
-		AbstractSection.createLabel(parent, getWidgetFactory(),
-				"JSP To Report View (leave blank for default)", 120);
-
-		jspview = getWidgetFactory().createText(parent, "", SWT.BORDER);
-		jspview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		AbstractSection.createLabel(parent, getWidgetFactory(),
-				"JSP To Run InputControls (leave blank for default)", 120);
-
-		jspic = getWidgetFactory().createText(parent, "", SWT.BORDER);
-		jspic.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 		AbstractSection.createLabel(parent, getWidgetFactory(), "", 120);
 
 		ispromp = getWidgetFactory().createButton(parent, "Always Prompt",
 				SWT.CHECK);
 		ispromp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		AbstractSection.createLabel(parent, getWidgetFactory(),
+				"JSP To Report View", 120);
+
+		jspview = getWidgetFactory().createText(parent, "", SWT.BORDER);
+		jspview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		jspview.setToolTipText("within /WEB-INF/jsp, leave blank for default");
+
+		AbstractSection.createLabel(parent, getWidgetFactory(),
+				"JSP To Run InputControls", 120);
+
+		jspic = getWidgetFactory().createText(parent, "", SWT.BORDER);
+		jspic.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		jspic.setToolTipText("within /WEB-INF/jsp, leave blank for default");
+
 	}
 
 	@Override
