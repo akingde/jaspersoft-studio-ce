@@ -157,4 +157,15 @@ public class MResource extends APropertyNode {
 		return node;
 	}
 
+	public INode isInsideReportUnit() {
+		INode node = this;
+		while (!(node instanceof MServerProfile) && !(node instanceof MRoot)
+				&& !(node instanceof MReportUnit)) {
+			if (node.getParent() == null || node == null)
+				return this;
+			node = node.getParent();
+		}
+		return node;
+	}
+
 }

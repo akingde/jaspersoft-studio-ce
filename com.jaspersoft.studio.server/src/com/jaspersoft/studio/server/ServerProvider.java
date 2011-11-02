@@ -29,27 +29,24 @@ import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.server.action.CreateServerAction;
+import com.jaspersoft.studio.server.action.DeleteResourceAction;
 import com.jaspersoft.studio.server.action.DeleteServerAction;
 import com.jaspersoft.studio.server.action.DuplicateServerAction;
 import com.jaspersoft.studio.server.action.EditServerAction;
-import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class ServerProvider implements IRepositoryViewProvider {
 	private CreateServerAction createServerAction;
 	private EditServerAction editServerAction;
 	private DeleteServerAction deleteServerAction;
 	private DuplicateServerAction duplicateServerAction;
+	private DeleteResourceAction deleteAction;
 
 	public Action[] getActions(TreeViewer treeViewer) {
 		createActions(treeViewer);
@@ -65,6 +62,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 			deleteServerAction = new DeleteServerAction(treeViewer);
 		if (duplicateServerAction == null)
 			duplicateServerAction = new DuplicateServerAction(treeViewer);
+		if (deleteAction == null)
+			deleteAction = new DeleteResourceAction(treeViewer);
 	}
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
@@ -78,9 +77,11 @@ public class ServerProvider implements IRepositoryViewProvider {
 				lst.add(editServerAction);
 			if (duplicateServerAction.isEnabled())
 				lst.add(duplicateServerAction);
-
 			if (deleteServerAction.isEnabled())
 				lst.add(deleteServerAction);
+		} else if (node instanceof MResource) {
+			if (deleteAction.isEnabled())
+				lst.add(deleteAction);
 		}
 		return lst;
 	}
@@ -100,26 +101,6 @@ public class ServerProvider implements IRepositoryViewProvider {
 		MServers servers = new MServers(root);
 
 		ServerManager.loadServerProfiles(servers);
-
-		// get from somewere the nodes
-		// ServerProfile sp = new ServerProfile();
-		// sp.setName("Server 1");
-		// sp.setUrl("http://localhost:9090/jasperserver-pro/services/repository");
-		// sp.setUser("jasperadmin|organization_1");
-		// sp.setPass("jasperadmin");
-		// MServerProfile srv = new MServerProfile(servers, sp);
-		//
-		// try {
-		// listFolder(srv, connect(sp), "/");
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		// ServerProfile sp1 = new ServerProfile();
-		// sp1.setName("Server2");
-		// new MServerProfile(servers, sp1);
-		// ServerProfile sp2 = new ServerProfile();
-		// sp2.setName("Server3");
-		// new MServerProfile(servers, sp2);
 
 		return servers;
 	}

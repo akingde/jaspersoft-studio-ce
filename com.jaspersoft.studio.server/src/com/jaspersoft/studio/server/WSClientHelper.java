@@ -9,6 +9,8 @@ import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -92,6 +94,18 @@ public class WSClientHelper {
 	public static void saveResource(WSClient client, ResourceDescriptor rd)
 			throws Exception {
 		client.addOrModifyResource(rd, null);
+	}
+
+	public static void deleteResource(MResource res) throws Exception {
+		ResourceDescriptor rd = res.getValue();
+		MServerProfile sp = (MServerProfile) res.getRoot();
+		INode n = res.isInsideReportUnit();
+		if (n instanceof MReportUnit)
+			sp.getWsClient().delete(rd,
+					((MReportUnit) n).getValue().getUriString());
+		else
+			sp.getWsClient().delete(rd);
+		((ANode) res.getParent()).removeChild(res);
 	}
 
 	static int depth = 0; // This variable is used to print tabs...

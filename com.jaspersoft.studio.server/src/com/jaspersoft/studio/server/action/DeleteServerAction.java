@@ -73,7 +73,6 @@ public class DeleteServerAction extends Action {
 
 	@Override
 	public void run() {
-
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
