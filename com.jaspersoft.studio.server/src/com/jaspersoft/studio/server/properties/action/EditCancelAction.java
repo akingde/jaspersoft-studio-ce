@@ -1,22 +1,18 @@
 package com.jaspersoft.studio.server.properties.action;
 
-import org.eclipse.jface.action.Action;
-
 import com.jaspersoft.studio.server.properties.ASection;
 
-public class EditCancelAction extends Action {
+public class EditCancelAction extends AAction {
 	public static final String ID = "cancelproperties-js";
-	private ASection section;
 
-	public EditCancelAction(ASection section) {
-		super();
+	public EditCancelAction() {
+		super("Cancel");
 		setId(ID);
-		setText("Cancel");
-		this.section = section;
 	}
 
 	@Override
 	public void run() {
-		section.cancelEditProperties();
+		for (ASection s : sections)
+			s.cancelEditProperties();
 	}
 }

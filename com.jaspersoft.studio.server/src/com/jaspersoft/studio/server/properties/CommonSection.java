@@ -22,7 +22,6 @@ public class CommonSection extends ASection {
 	private Text tdesc;
 	private Text tcdate;
 
-	@Override
 	public void createSectionControls(Composite parent,
 			TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		AbstractSection.createLabel(parent, getWidgetFactory(),

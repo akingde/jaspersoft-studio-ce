@@ -37,9 +37,47 @@ public abstract class ASection extends AbstractPropertySection {
 				SWT.COLOR_WHITE));
 
 		createSectionControls(composite, aTabbedPropertySheetPage);
-
 		createActions(aTabbedPropertySheetPage);
 		bindingContext = new DataBindingContext();
+	}
+
+	private IToolBarManager tb;
+	private EditPropertyAction editAction;
+	private EditOkAction saveAction;
+	private EditCancelAction cancelAction;
+
+	protected void createActions(
+			TabbedPropertySheetPage aTabbedPropertySheetPage) {
+		tb = aTabbedPropertySheetPage.getSite().getActionBars()
+				.getToolBarManager();
+		editAction = (EditPropertyAction) tb.find(EditPropertyAction.ID);
+		if (editAction == null) {
+			editAction = new EditPropertyAction();
+			tb.add(editAction);
+		}
+		editAction.addSection(this);
+
+		cancelAction = (EditCancelAction) tb.find(EditCancelAction.ID);
+		if (cancelAction == null)
+			cancelAction = new EditCancelAction();
+		cancelAction.addSection(this);
+
+		saveAction = (EditOkAction) tb.find(EditOkAction.ID);
+		if (saveAction == null)
+			saveAction = new EditOkAction();
+		saveAction.addSection(this);
+	}
+
+	private void removeActions() {
+		tb.remove(EditPropertyAction.ID);
+		tb.remove(EditCancelAction.ID);
+		tb.remove(EditOkAction.ID);
+	}
+
+	@Override
+	public void aboutToBeHidden() {
+		removeActions();
+		super.aboutToBeHidden();
 	}
 
 	protected abstract void createSectionControls(Composite parent,
@@ -54,8 +92,8 @@ public abstract class ASection extends AbstractPropertySection {
 		Object input = ((IStructuredSelection) selection).getFirstElement();
 		Assert.isTrue(input instanceof MResource);
 		this.res = (MResource) input;
-		setEditMode(res.isEditMode());
 		rebind();
+		setEditMode(res.isEditMode());
 	}
 
 	protected void rebind() {
@@ -76,26 +114,21 @@ public abstract class ASection extends AbstractPropertySection {
 	}
 
 	protected MResource res;
-	private IToolBarManager tb;
-	private EditPropertyAction editAction;
-	private EditOkAction saveAction;
-	private EditCancelAction cancelAction;
 	protected DataBindingContext bindingContext;
 
-	protected void createActions(
-			TabbedPropertySheetPage aTabbedPropertySheetPage) {
-		tb = aTabbedPropertySheetPage.getSite().getActionBars()
-				.getToolBarManager();
-		editAction = new EditPropertyAction(this);
-		tb.add(editAction);
-		cancelAction = new EditCancelAction(this);
-		saveAction = new EditOkAction(this);
-
-		tb.update(true);
+	@Override
+	public void aboutToBeShown() {
+		if (res != null)
+			setEditMode(res.isEditMode());
+		super.aboutToBeShown();
 	}
 
 	public void editProperties() {
 		setEditMode(true);
+	}
+
+	public void cancelEditProperties() {
+		setEditMode(false);
 	}
 
 	public void saveProperties() {
@@ -111,11 +144,7 @@ public abstract class ASection extends AbstractPropertySection {
 		}
 	}
 
-	public void cancelEditProperties() {
-		setEditMode(false);
-	}
-
-	private void setEditMode(boolean edit) {
+	protected void setEditMode(boolean edit) {
 		removeActions();
 		if (edit) {
 			tb.add(cancelAction);
@@ -126,24 +155,5 @@ public abstract class ASection extends AbstractPropertySection {
 		tb.update(true);
 		enableFields(edit);
 		res.setEditMode(edit);
-	}
-
-	private void removeActions() {
-		tb.remove(EditPropertyAction.ID);
-		tb.remove(EditCancelAction.ID);
-		tb.remove(EditOkAction.ID);
-	}
-
-	@Override
-	public void aboutToBeShown() {
-		if (res != null)
-			setEditMode(res.isEditMode());
-		super.aboutToBeShown();
-	}
-
-	@Override
-	public void aboutToBeHidden() {
-		removeActions();
-		super.aboutToBeHidden();
 	}
 }

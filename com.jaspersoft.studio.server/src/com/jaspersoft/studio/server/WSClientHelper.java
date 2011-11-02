@@ -9,6 +9,7 @@ import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
 
@@ -66,14 +67,8 @@ public class WSClientHelper {
 
 		for (ResourceDescriptor r : children) {
 			ANode node = ResourceFactory.getResource(parent, r);
-
-			for (int i = 0; i < WSClientHelper.depth; ++i)
-				System.out.print("  ");
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
-				System.out.println("[" + r.getLabel() + "]");
-				WSClientHelper.depth++;
 				listFolder(node, client, r.getUriString(), monitor);
-				WSClientHelper.depth--;
 			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 				r = client.get(r, null);
 				List<ResourceDescriptor> children2 = r.getChildren();
@@ -83,11 +78,15 @@ public class WSClientHelper {
 					else
 						ResourceFactory.getResource(node, res);
 				}
-			} else {
-				System.out.println("" + r.getLabel() + "");
 			}
 		}
 		return children;
+	}
+
+	public static ResourceDescriptor getResource(MResource res,
+			ResourceDescriptor rd) throws Exception {
+		MServerProfile sp = (MServerProfile) res.getRoot();
+		return sp.getWsClient().get(rd, null);
 	}
 
 	public static void saveResource(WSClient client, ResourceDescriptor rd)

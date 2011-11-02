@@ -29,15 +29,21 @@ import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.server.action.CreateServerAction;
 import com.jaspersoft.studio.server.action.DeleteServerAction;
 import com.jaspersoft.studio.server.action.DuplicateServerAction;
 import com.jaspersoft.studio.server.action.EditServerAction;
+import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class ServerProvider implements IRepositoryViewProvider {
 	private CreateServerAction createServerAction;
@@ -130,7 +136,33 @@ public class ServerProvider implements IRepositoryViewProvider {
 	public void handleTreeEvent(TreeExpansionEvent event) {
 		if (event.getElement() instanceof MServerProfile) {
 
+		} else if (event.getElement() instanceof MResource) {
+			lazyLoadResource(event);
 		}
+
 	}
 
+	private void lazyLoadResource(final TreeExpansionEvent event) {
+		// Display.getDefault().asyncExec(new Runnable() {
+		//
+		// public void run() {
+		// MResource r = (MResource) event.getElement();
+		// for (INode cr : r.getChildren()) {
+		// if (!(cr instanceof MFolder)
+		// && !(cr instanceof MReportUnit)
+		// && cr instanceof MResource) {
+		// MResource res = (MResource) cr;
+		// try {
+		// cr.setValue(WSClientHelper.getResource(res,
+		// res.getValue()));
+		// } catch (Exception e) {
+		// UIUtils.showError(e);
+		// }
+		// }
+		// }
+		//
+		// }
+		// });
+
+	}
 }
