@@ -42,66 +42,67 @@ import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
 
 public class ResourceFactory {
-	public static ANode getResource(ANode parent, ResourceDescriptor resource) {
+	public static ANode getResource(ANode parent, ResourceDescriptor resource,
+			int index) {
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
-			return new MFolder(parent, resource);
+			return new MFolder(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
-			return new MInputControl(parent, resource);
+			return new MInputControl(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_JRXML))
-			return new MJrxml(parent, resource);
+			return new MJrxml(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_IMAGE))
-			return new MRImage(parent, resource);
+			return new MRImage(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
-			return new MReference(parent, resource);
+			return new MReference(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
-			return new MReportUnit(parent, resource);
+			return new MReportUnit(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_LOV))
-			return new MListOfValues(parent, resource);
+			return new MListOfValues(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_UNKNOW))
-			return new MUnknown(parent, resource);
+			return new MUnknown(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_CLASS_JAR))
-			return new MJar(parent, resource);
+			return new MJar(parent, resource, index);
 
 		if (resource.getWsType()
 				.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE))
-			return new MResourceBundle(parent, resource);
+			return new MResourceBundle(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_QUERY))
-			return new MRQuery(parent, resource);
+			return new MRQuery(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATA_TYPE))
-			return new MDataType(parent, resource);
+			return new MDataType(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_FONT))
-			return new MRFont(parent, resource);
+			return new MRFont(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
-			return new MRStyleTemplate(parent, resource);
+			return new MRStyleTemplate(parent, resource, index);
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE))
-			return new MRDatasource(parent, resource);
+			return new MRDatasource(parent, resource, index);
 		if (resource.getWsType()
 				.equals(ResourceDescriptor.TYPE_DATASOURCE_BEAN))
-			return new MRDatasourceBean(parent, resource);
+			return new MRDatasourceBean(parent, resource, index);
 
 		if (resource.getWsType().equals(
 				ResourceDescriptor.TYPE_DATASOURCE_CUSTOM))
-			return new MRDatasourceCustom(parent, resource);
+			return new MRDatasourceCustom(parent, resource, index);
 
 		if (resource.getWsType()
 				.equals(ResourceDescriptor.TYPE_DATASOURCE_JDBC))
-			return new MRDatasourceJDBC(parent, resource);
+			return new MRDatasourceJDBC(parent, resource, index);
 		if (resource.getWsType()
 				.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI))
-			return new MRDatasourceJNDI(parent, resource);
-		return new MUnknown(parent, resource);
+			return new MRDatasourceJNDI(parent, resource, index);
+		return new MUnknown(parent, resource, index);
 	}
 }

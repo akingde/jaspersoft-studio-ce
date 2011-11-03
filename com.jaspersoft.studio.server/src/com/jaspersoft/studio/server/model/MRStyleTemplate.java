@@ -28,8 +28,8 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MRStyleTemplate extends MResource {
 
-	public MRStyleTemplate(ANode parent, ResourceDescriptor rd) {
-		super(parent, rd);
+	public MRStyleTemplate(ANode parent, ResourceDescriptor rd, int index) {
+		super(parent, rd, index);
 	}
 
 	public static IIconDescriptor getIconDescriptor() {

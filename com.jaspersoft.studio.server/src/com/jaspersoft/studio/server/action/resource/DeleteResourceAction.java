@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.server.action;
+package com.jaspersoft.studio.server.action.resource;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -12,7 +12,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.WSClientHelper;
@@ -28,7 +27,6 @@ public class DeleteResourceAction extends Action {
 		setId(DELETERESOURCEDESCRIPTOR);
 		setText(Messages.common_delete);
 		setToolTipText(Messages.common_delete);
-		setId(ActionFactory.DELETE.getId());
 		ISharedImages sharedImages = PlatformUI.getWorkbench()
 				.getSharedImages();
 		setImageDescriptor(sharedImages

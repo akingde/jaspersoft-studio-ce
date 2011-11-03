@@ -54,6 +54,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class NewButton {
 
+	private Button delB;
+
 	private final class NewListener extends SelectionAdapter {
 
 		private TableViewer tableViewer;
@@ -101,9 +103,13 @@ public class NewButton {
 	}
 
 	public void createNewButtons(Composite composite, TableViewer tableViewer, INewElement newElement) {
-		Button delB = new Button(composite, SWT.PUSH);
+		delB = new Button(composite, SWT.PUSH);
 		delB.setText(Messages.common_add);
 		delB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delB.addSelectionListener(new NewListener(tableViewer, newElement));
+	}
+
+	public void setEnabled(boolean enable) {
+		delB.setEnabled(enable);
 	}
 }

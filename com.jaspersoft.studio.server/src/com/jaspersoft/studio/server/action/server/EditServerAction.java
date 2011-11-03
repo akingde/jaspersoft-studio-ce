@@ -40,28 +40,38 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.action;
+package com.jaspersoft.studio.server.action.server;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.wizard.ServerProfileWizard;
+import com.jaspersoft.studio.server.wizard.ServerProfileWizardDialog;
+import com.jaspersoft.studio.utils.UIUtils;
 
-public class DeleteServerAction extends Action {
+public class EditServerAction extends Action {
+	public static final String ID = "editServerAction"; //$NON-NLS-1$
 	private TreeViewer treeViewer;
 
-	public DeleteServerAction(TreeViewer treeViewer) {
+	public EditServerAction(TreeViewer treeViewer) {
 		super();
 		this.treeViewer = treeViewer;
-		setText("Delete JasperServer Connection");
-		setDescription("Delete JasperServer Connection");
-		setToolTipText("Delete JasperServer connection");
+		setId(ID);
+		setText("Edit JasperServer Connection");
+		setDescription("Edit JasperServer Connection");
+		setToolTipText("Edit JasperServer Connection");
 		setImageDescriptor(Activator
-				.getImageDescriptor("icons/server--minus.png")); //$NON-NLS-1$
+				.getImageDescriptor("icons/server--pencil.png")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -73,13 +83,36 @@ public class DeleteServerAction extends Action {
 
 	@Override
 	public void run() {
-		TreeSelection s = (TreeSelection) treeViewer.getSelection();
-		TreePath[] p = s.getPaths();
-		for (int i = 0; i < p.length; i++) {
-			Object obj = p[i].getLastSegment();
-			if (obj instanceof MServerProfile) {
-				ServerManager.removeServerProfile((MServerProfile) obj);
-				treeViewer.refresh(true);
+		Object obj = ((TreeSelection) treeViewer.getSelection())
+				.getFirstElement();
+		if (obj instanceof MServerProfile) {
+			MServerProfile dataAdapter = (MServerProfile) obj;
+			ServerProfile sp = dataAdapter.getValue();
+			try {
+				ServerProfileWizard wizard = new ServerProfileWizard(
+						new MServerProfile(null, (ServerProfile) sp.clone()));
+				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(
+						Display.getDefault().getActiveShell(), wizard);
+				wizard.bindTestButton(dialog);
+				dialog.create();
+				if (dialog.open() == Dialog.OK) {
+
+					MServerProfile modifiedDataAdapter = wizard
+							.getServerProfile();
+					dataAdapter.setValue(modifiedDataAdapter.getValue());
+					dataAdapter.setWsClient(modifiedDataAdapter.getWsClient());
+					dataAdapter.removeChildren();
+					for (INode cn : modifiedDataAdapter.getChildren())
+						dataAdapter.addChild((ANode) cn);
+					ServerManager.saveServerProfile(dataAdapter);
+
+					treeViewer.refresh(true);
+					TreeSelection s = (TreeSelection) treeViewer.getSelection();
+					TreePath[] p = s.getPaths();
+					treeViewer.expandToLevel(p[0], 1);
+				}
+			} catch (CloneNotSupportedException e) {
+				UIUtils.showError(e);
 			}
 		}
 	}

@@ -25,11 +25,12 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class MFolder extends MResource {
 
-	public MFolder(ANode parent, ResourceDescriptor rd) {
-		super(parent, rd);
+	public MFolder(ANode parent, ResourceDescriptor rd, int index) {
+		super(parent, rd, index);
 	}
 
 	private static IIconDescriptor iconDescriptor;
@@ -43,5 +44,12 @@ public class MFolder extends MResource {
 	@Override
 	public ImageDescriptor getImagePath() {
 		return getIconDescriptor().getIcon16();
+	}
+
+	@Override
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MFolder || parent instanceof MServerProfile)
+			return true;
+		return false;
 	}
 }

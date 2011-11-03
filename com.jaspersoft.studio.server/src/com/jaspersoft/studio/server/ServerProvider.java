@@ -32,11 +32,16 @@ import org.eclipse.swt.events.KeyEvent;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
-import com.jaspersoft.studio.server.action.CreateServerAction;
-import com.jaspersoft.studio.server.action.DeleteResourceAction;
-import com.jaspersoft.studio.server.action.DeleteServerAction;
-import com.jaspersoft.studio.server.action.DuplicateServerAction;
-import com.jaspersoft.studio.server.action.EditServerAction;
+import com.jaspersoft.studio.repository.actions.Separator;
+import com.jaspersoft.studio.server.action.resource.CopyResourceAction;
+import com.jaspersoft.studio.server.action.resource.CutResourceAction;
+import com.jaspersoft.studio.server.action.resource.DeleteResourceAction;
+import com.jaspersoft.studio.server.action.resource.PasteResourceAction;
+import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
+import com.jaspersoft.studio.server.action.server.CreateServerAction;
+import com.jaspersoft.studio.server.action.server.DeleteServerAction;
+import com.jaspersoft.studio.server.action.server.DuplicateServerAction;
+import com.jaspersoft.studio.server.action.server.EditServerAction;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
@@ -47,6 +52,11 @@ public class ServerProvider implements IRepositoryViewProvider {
 	private DeleteServerAction deleteServerAction;
 	private DuplicateServerAction duplicateServerAction;
 	private DeleteResourceAction deleteAction;
+	private RefreshResourcesAction refreshAction;
+
+	private CutResourceAction cutAction;
+	private CopyResourceAction copyAction;
+	private PasteResourceAction pasteAction;
 
 	public Action[] getActions(TreeViewer treeViewer) {
 		createActions(treeViewer);
@@ -64,6 +74,15 @@ public class ServerProvider implements IRepositoryViewProvider {
 			duplicateServerAction = new DuplicateServerAction(treeViewer);
 		if (deleteAction == null)
 			deleteAction = new DeleteResourceAction(treeViewer);
+		if (refreshAction == null)
+			refreshAction = new RefreshResourcesAction(treeViewer);
+
+		if (cutAction == null)
+			cutAction = new CutResourceAction(treeViewer);
+		if (copyAction == null)
+			copyAction = new CopyResourceAction(treeViewer);
+		if (pasteAction == null)
+			pasteAction = new PasteResourceAction(treeViewer);
 	}
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
@@ -80,6 +99,18 @@ public class ServerProvider implements IRepositoryViewProvider {
 			if (deleteServerAction.isEnabled())
 				lst.add(deleteServerAction);
 		} else if (node instanceof MResource) {
+
+			if (cutAction.isEnabled())
+				lst.add(cutAction);
+			if (copyAction.isEnabled())
+				lst.add(copyAction);
+			if (pasteAction.isEnabled())
+				lst.add(pasteAction);
+			lst.add(new Separator());
+
+			if (refreshAction.isEnabled())
+				lst.add(refreshAction);
+			lst.add(new Separator());
 			if (deleteAction.isEnabled())
 				lst.add(deleteAction);
 		}

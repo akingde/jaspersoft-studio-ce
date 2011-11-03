@@ -36,66 +36,95 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.action;
+package com.jaspersoft.studio.server.action.server;
+
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.ui.ISharedImages;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.cheatsheets.ICheatSheetAction;
+import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.server.wizard.ServerProfileWizard;
+import com.jaspersoft.studio.server.wizard.ServerProfileWizardDialog;
 
-public class DuplicateServerAction extends Action {
-	public static final String ID = "duplicateServerAction"; //$NON-NLS-1$
+public class CreateServerAction extends Action implements ICheatSheetAction {
+	public static final String ID = "createServerAction"; //$NON-NLS-1$
 	private TreeViewer treeViewer;
 
-	public DuplicateServerAction(TreeViewer treeViewer) {
+	public CreateServerAction() {
+		this(null);
+	}
+
+	public CreateServerAction(TreeViewer treeViewer) {
 		super();
-		this.treeViewer = treeViewer;
 		setId(ID);
-		setText("Duplicate JasperServer Connection");
-		setDescription("Duplicate JasperServer Connection");
-		setToolTipText("Duplicate JasperServer connection");
-		setImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
+		setText("Create JasperServer Connection");
+		setDescription("Create JasperServer connection");
+		setToolTipText("Create JasperServer connection");
+		setImageDescriptor(Activator
+				.getImageDescriptor("icons/server--plus.png")); //$NON-NLS-1$
+		this.treeViewer = treeViewer;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		Object firstElement = ((TreeSelection) treeViewer.getSelection())
-				.getFirstElement();
-		return firstElement != null && (firstElement instanceof MServerProfile);
+		return super.isEnabled();
 	}
 
 	@Override
 	public void run() {
-		TreeSelection s = (TreeSelection) treeViewer.getSelection();
-		TreePath[] p = s.getPaths();
-		for (int i = 0; i < p.length; i++) {
-			Object obj = p[i].getLastSegment();
-			if (obj instanceof MServerProfile) {
-				try {
-					ServerProfile copy = (ServerProfile) ((MServerProfile) obj)
-							.getValue().clone();
-					copy.setName("Copy_Of_" + copy.getName());
+		MRoot root = (MRoot) treeViewer.getInput();
+		List<INode> lst = root.getChildren();
+		for (INode n : lst) {
+			if (n instanceof MServers) {
+				ServerProfileWizard wizard = new ServerProfileWizard(
+						new MServerProfile(null, new ServerProfile()));
+				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(
+						Display.getDefault().getActiveShell(), wizard);
+				wizard.bindTestButton(dialog);
+				dialog.create();
+				if (dialog.open() == Dialog.OK) {
+					newDataAdapter = wizard.getServerProfile();
+					MServerProfile newprofile = new MServerProfile(
+							(MServers) n, newDataAdapter.getValue());
+					for (INode cn : newDataAdapter.getChildren())
+						newprofile.addChild((ANode) cn);
+					newprofile.setWsClient(newDataAdapter.getWsClient());
+					ServerManager.addServerProfile(newprofile);
 
-					MServerProfile copyDataAdapter = new MServerProfile(
-							(ANode) ((MServerProfile) obj).getParent(), copy);
-					ServerManager.addServerProfile(copyDataAdapter);
 					treeViewer.refresh(true);
-				} catch (CloneNotSupportedException e) {
-					UIUtils.showError(e);
+					TreeSelection s = (TreeSelection) treeViewer.getSelection();
+					TreePath[] p = s.getPaths();
+					treeViewer.expandToLevel(p[0], 1);
 				}
-
+				break;
 			}
 		}
+
 	}
+
+	private MServerProfile newDataAdapter;
+
+	public MServerProfile getNewServer() {
+		return newDataAdapter;
+	}
+
+	public void run(String[] params, ICheatSheetManager manager) {
+		run();
+		notifyResult(true);
+	}
+
 }

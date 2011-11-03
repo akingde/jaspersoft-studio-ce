@@ -28,8 +28,8 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 public class MUnknown extends MResource {
 
-	public MUnknown(ANode parent, ResourceDescriptor rd) {
-		super(parent, rd);
+	public MUnknown(ANode parent, ResourceDescriptor rd, int index) {
+		super(parent, rd, index);
 	}
 
 	private static IIconDescriptor iconDescriptor;

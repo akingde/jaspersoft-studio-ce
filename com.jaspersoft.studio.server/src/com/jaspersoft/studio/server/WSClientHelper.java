@@ -63,12 +63,18 @@ public class WSClientHelper {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
 		rd.setUriString(folderUri);
+		return listFolder(parent, -1, client, monitor, rd);
+	}
+
+	private static List<ResourceDescriptor> listFolder(ANode parent, int index,
+			WSClient client, IProgressMonitor monitor, ResourceDescriptor rd)
+			throws Exception {
 		monitor.subTask("Listing " + rd.getUriString());
 
 		List<ResourceDescriptor> children = client.list(rd);
 
 		for (ResourceDescriptor r : children) {
-			ANode node = ResourceFactory.getResource(parent, r);
+			ANode node = ResourceFactory.getResource(parent, r, index);
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
 				listFolder(node, client, r.getUriString(), monitor);
 			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
@@ -78,7 +84,7 @@ public class WSClientHelper {
 					if (res.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
 						listFolder(node, client, res.getUriString(), monitor);
 					else
-						ResourceFactory.getResource(node, res);
+						ResourceFactory.getResource(node, res, index);
 				}
 			}
 		}
@@ -106,6 +112,21 @@ public class WSClientHelper {
 		else
 			sp.getWsClient().delete(rd);
 		((ANode) res.getParent()).removeChild(res);
+	}
+
+	public static void refreshResource(MResource res, IProgressMonitor monitor)
+			throws Exception {
+		ResourceDescriptor rd = res.getValue();
+		MServerProfile sp = (MServerProfile) res.getRoot();
+		ResourceDescriptor newrd = sp.getWsClient().get(rd, null);
+		if (newrd != null) {
+			res.setValue(newrd);
+			res.removeChildren();
+
+			listFolder(res, -1, sp.getWsClient(), monitor, newrd);
+		} else {
+			connectGetData((MServerProfile) res.getRoot(), monitor);
+		}
 	}
 
 	static int depth = 0; // This variable is used to print tabs...

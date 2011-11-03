@@ -28,8 +28,8 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 public class MListOfValues extends MResource {
 
-	public MListOfValues(ANode parent, ResourceDescriptor rd) {
-		super(parent, rd);
+	public MListOfValues(ANode parent, ResourceDescriptor rd, int index) {
+		super(parent, rd, index);
 	}
 
 	private static IIconDescriptor iconDescriptor;

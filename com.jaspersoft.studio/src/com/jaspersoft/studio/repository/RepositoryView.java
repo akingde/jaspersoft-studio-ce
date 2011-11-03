@@ -62,6 +62,7 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
 import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.repository.actions.Separator;
 
 public class RepositoryView extends ViewPart implements ITabbedPropertySheetPageContributor {
 	public RepositoryView() {
@@ -300,8 +301,12 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 			}
 		}
 		if (alist != null) {
-			for (IAction act : alist)
-				mgr.add(act);
+			for (IAction act : alist) {
+				if (act instanceof Separator)
+					mgr.add(new org.eclipse.jface.action.Separator());
+				else
+					mgr.add(act);
+			}
 		}
 	}
 

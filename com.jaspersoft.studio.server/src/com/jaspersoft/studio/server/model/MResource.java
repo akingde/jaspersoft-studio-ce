@@ -33,6 +33,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.ICopyable;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -45,10 +46,10 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
  * @author schicu
  *
  */
-public class MResource extends APropertyNode {
+public class MResource extends APropertyNode implements ICopyable {
 
-	public MResource(ANode parent, ResourceDescriptor rd) {
-		super(parent, -1);
+	public MResource(ANode parent, ResourceDescriptor rd, int index) {
+		super(parent, index);
 		setValue(rd);
 	}
 
@@ -166,6 +167,13 @@ public class MResource extends APropertyNode {
 			node = node.getParent();
 		}
 		return node;
+	}
+
+	public boolean isCopyable2(Object parent) {
+		if (parent instanceof MFolder || parent instanceof MReportUnit
+				|| parent instanceof MServerProfile)
+			return true;
+		return false;
 	}
 
 }

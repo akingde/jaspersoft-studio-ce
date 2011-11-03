@@ -34,6 +34,8 @@ import com.jaspersoft.studio.messages.Messages;
 
 public class DeleteButton {
 
+	private Button delB;
+
 	private final class DeleteListener extends SelectionAdapter {
 
 		private TableViewer tableViewer;
@@ -62,9 +64,13 @@ public class DeleteButton {
 	}
 
 	public void createDeleteButton(Composite composite, TableViewer tableViewer) {
-		Button delB = new Button(composite, SWT.PUSH);
+		delB = new Button(composite, SWT.PUSH);
 		delB.setText(Messages.common_delete);
 		delB.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delB.addSelectionListener(new DeleteListener(tableViewer));
+	}
+
+	public void setEnabled(boolean enabled) {
+		delB.setEnabled(enabled);
 	}
 }

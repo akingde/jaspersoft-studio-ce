@@ -28,8 +28,8 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 public class MInputControl extends MResource {
 
-	public MInputControl(ANode parent, ResourceDescriptor rd) {
-		super(parent, rd);
+	public MInputControl(ANode parent, ResourceDescriptor rd, int index) {
+		super(parent, rd, index);
 	}
 
 	private static IIconDescriptor iconDescriptor;

@@ -28,8 +28,8 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 public class MResourceBundle extends MResource {
 
-	public MResourceBundle(ANode parent, ResourceDescriptor rd) {
-		super(parent, rd);
+	public MResourceBundle(ANode parent, ResourceDescriptor rd, int index) {
+		super(parent, rd, index);
 	}
 
 	private static IIconDescriptor iconDescriptor;

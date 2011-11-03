@@ -28,8 +28,8 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 public class MRDatasource extends MResource {
 
-	public MRDatasource(ANode parent, ResourceDescriptor rd) {
-		super(parent, rd);
+	public MRDatasource(ANode parent, ResourceDescriptor rd, int index) {
+		super(parent, rd, index);
 	}
 
 	private static IIconDescriptor iconDescriptor;
