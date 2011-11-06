@@ -17,12 +17,39 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.properties;
+package com.jaspersoft.studio.server.model;
 
-public class ImageSection extends AResourceSection {
+import java.io.File;
+import java.io.IOException;
 
-	@Override
-	protected String[] getFilter() {
-		return new String[] { "*.png", "*.jpg", "*.jpeg", "*.gif" };
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.UIUtils;
+
+public abstract class AFileResource extends MResource {
+
+	public AFileResource(ANode parent, ResourceDescriptor rd, int index) {
+		super(parent, rd, index);
 	}
+
+	private File file;
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public String getFileName() {
+		if (file != null)
+			try {
+				return file.getCanonicalPath();
+			} catch (IOException e) {
+				UIUtils.showError(e);
+			}
+		return "";
+	}
+
 }

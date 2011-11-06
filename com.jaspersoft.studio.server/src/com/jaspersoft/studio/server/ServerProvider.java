@@ -38,6 +38,7 @@ import com.jaspersoft.studio.server.action.resource.CutResourceAction;
 import com.jaspersoft.studio.server.action.resource.DeleteResourceAction;
 import com.jaspersoft.studio.server.action.resource.PasteResourceAction;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
+import com.jaspersoft.studio.server.action.resource.RunReportUnitAction;
 import com.jaspersoft.studio.server.action.server.CreateServerAction;
 import com.jaspersoft.studio.server.action.server.DeleteServerAction;
 import com.jaspersoft.studio.server.action.server.DuplicateServerAction;
@@ -57,6 +58,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 	private CutResourceAction cutAction;
 	private CopyResourceAction copyAction;
 	private PasteResourceAction pasteAction;
+
+	private RunReportUnitAction runReportUnitAction;
 
 	public Action[] getActions(TreeViewer treeViewer) {
 		createActions(treeViewer);
@@ -83,6 +86,9 @@ public class ServerProvider implements IRepositoryViewProvider {
 			copyAction = new CopyResourceAction(treeViewer);
 		if (pasteAction == null)
 			pasteAction = new PasteResourceAction(treeViewer);
+
+		if (runReportUnitAction == null)
+			runReportUnitAction = new RunReportUnitAction(treeViewer);
 	}
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
@@ -92,13 +98,23 @@ public class ServerProvider implements IRepositoryViewProvider {
 			if (createServerAction.isEnabled())
 				lst.add(createServerAction);
 		} else if (node instanceof MServerProfile) {
+			if (pasteAction.isEnabled())
+				lst.add(pasteAction);
+			lst.add(new Separator());
+
 			if (editServerAction.isEnabled())
 				lst.add(editServerAction);
 			if (duplicateServerAction.isEnabled())
 				lst.add(duplicateServerAction);
+			lst.add(new Separator());
 			if (deleteServerAction.isEnabled())
 				lst.add(deleteServerAction);
+
 		} else if (node instanceof MResource) {
+			if (((MResource) node).isInsideReportUnit()
+					&& runReportUnitAction.isEnabled())
+				lst.add(runReportUnitAction);
+			lst.add(new Separator());
 
 			if (cutAction.isEnabled())
 				lst.add(cutAction);
@@ -113,6 +129,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 			lst.add(new Separator());
 			if (deleteAction.isEnabled())
 				lst.add(deleteAction);
+
 		}
 		return lst;
 	}

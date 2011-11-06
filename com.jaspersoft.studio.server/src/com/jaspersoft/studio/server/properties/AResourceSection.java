@@ -19,9 +19,10 @@
  */
 package com.jaspersoft.studio.server.properties;
 
+import java.io.File;
+
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -30,75 +31,88 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.server.model.MFolder;
-import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
+import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.utils.UIUtils;
 
-public class ReferenceSection extends ASection {
-
+public abstract class AResourceSection extends ASection {
 	private Text trefuri;
-	private Button bbrowse;
+	private Button bimport;
+	private Button bexport;
 
 	@Override
 	protected void createSectionControls(Composite parent,
 			TabbedPropertySheetPage aTabbedPropertySheetPage) {
 
-		AbstractSection.createLabel(parent, getWidgetFactory(),
-				"Referenced Descriptor", -1);
-
 		Composite cmp = new Composite(parent, SWT.NONE);
+		cmp.setLayout(new GridLayout(3, false));
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		cmp.setLayout(layout);
 		cmp.setBackground(parent.getBackground());
 
-		trefuri = getWidgetFactory().createText(cmp, "",
-				SWT.BORDER | SWT.READ_ONLY);
-		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		bbrowse = new Button(cmp, SWT.PUSH);
-		bbrowse.setText("...");
-		bbrowse.addSelectionListener(new SelectionAdapter() {
+		bexport = new Button(cmp, SWT.PUSH);
+		bexport.setText("Download File");
+		bexport.setImage(Activator.getImage("icons/drive-download.png"));
+		bexport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				Shell shell = Display.getDefault().getActiveShell();
-				RepositoryDialog rd = new RepositoryDialog(shell, res.getRoot()) {
-
-					@Override
-					public boolean isResourceCompatible(MResource r) {
-						return !(r instanceof MFolder);
-					}
-
-				};
-				if (rd.open() == Dialog.OK) {
-					MResource rs = rd.getResource();
-					if (rs != null) {
-						res.getValue().setReferenceUri(
-								rs.getValue().getUriString());
-						bindingContext.updateTargets();
+				FileDialog fd = new FileDialog(Display.getDefault()
+						.getActiveShell(), SWT.SAVE);
+				fd.setFilterExtensions(getFilter());
+				fd.setText("Save Resource To File ...");
+				String filename = fd.open();
+				if (filename != null) {
+					try {
+						WSClientHelper.getResource(res, res.getValue(),
+								filename);
+					} catch (Exception e1) {
+						UIUtils.showError(e1);
 					}
 				}
 			}
 
 		});
+
+		bimport = new Button(cmp, SWT.PUSH);
+		bimport.setText("Upload File");
+		bimport.setImage(Activator.getImage("icons/drive-upload.png"));
+		bimport.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fd = new FileDialog(Display.getDefault()
+						.getActiveShell(), SWT.OPEN);
+				fd.setFilterExtensions(getFilter());
+				fd.setText("Select Resource File ...");
+				String filename = fd.open();
+				if (filename != null) {
+					((AFileResource) res).setFile(new File(filename));
+					bindingContext.updateTargets();
+				}
+			}
+
+		});
+
+		trefuri = getWidgetFactory().createText(cmp, "",
+				SWT.BORDER | SWT.READ_ONLY);
+		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	@Override
 	public void enableFields(boolean enable) {
 		trefuri.setEditable(enable);
-		bbrowse.setEnabled(enable);
+		bimport.setEnabled(enable);
 	}
 
 	@Override
 	protected void bind() {
 		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE),
-				PojoObservables.observeValue(res.getValue(), "referenceUri"));
+				PojoObservables.observeValue(res, "fileName"));
 	}
+
+	protected abstract String[] getFilter();
 
 }

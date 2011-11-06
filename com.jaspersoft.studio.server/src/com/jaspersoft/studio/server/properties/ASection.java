@@ -1,3 +1,22 @@
+/*
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2011 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.server.properties;
 
 import org.eclipse.core.databinding.Binding;
@@ -13,10 +32,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.properties.action.EditCancelAction;
 import com.jaspersoft.studio.server.properties.action.EditOkAction;
 import com.jaspersoft.studio.server.properties.action.EditPropertyAction;
@@ -41,7 +58,7 @@ public abstract class ASection extends AbstractPropertySection {
 		bindingContext = new DataBindingContext();
 	}
 
-	private IToolBarManager tb;
+	protected IToolBarManager tb;
 	private EditPropertyAction editAction;
 	private EditOkAction saveAction;
 	private EditCancelAction cancelAction;
@@ -68,7 +85,7 @@ public abstract class ASection extends AbstractPropertySection {
 		saveAction.addSection(this);
 	}
 
-	private void removeActions() {
+	protected void removeActions() {
 		tb.remove(EditPropertyAction.ID);
 		tb.remove(EditCancelAction.ID);
 		tb.remove(EditOkAction.ID);
@@ -132,15 +149,11 @@ public abstract class ASection extends AbstractPropertySection {
 	}
 
 	public void saveProperties() {
-		INode n = res.getRoot();
-		if (n != null && n instanceof MServerProfile) {
-			try {
-				WSClientHelper.saveResource(((MServerProfile) n).getWsClient(),
-						res.getValue());
-				setEditMode(false);
-			} catch (Exception e) {
-				UIUtils.showError(e);
-			}
+		try {
+			WSClientHelper.saveResource(res);
+			setEditMode(false);
+		} catch (Exception e) {
+			UIUtils.showError(e);
 		}
 	}
 

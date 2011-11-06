@@ -1,15 +1,40 @@
+/*
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2011 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.server;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -25,7 +50,10 @@ public class WSClientHelper {
 		ServerProfile sp = msp.getValue();
 		server.setName(sp.getName());
 		server.setUrl(sp.getUrl());
-		server.setUsername(sp.getUser());
+		String username = sp.getUser();
+		if (sp.getOrganisation() != null)
+			username += "|" + sp.getOrganisation();
+		server.setUsername(username);
 		server.setPassword(sp.getPass());
 		if (msp.getWsClient() == null)
 			msp.setWsClient(new WSClient(server));
@@ -93,19 +121,34 @@ public class WSClientHelper {
 
 	public static ResourceDescriptor getResource(MResource res,
 			ResourceDescriptor rd) throws Exception {
-		MServerProfile sp = (MServerProfile) res.getRoot();
-		return sp.getWsClient().get(rd, null);
+		return getResource(res, rd, null);
 	}
 
-	public static void saveResource(WSClient client, ResourceDescriptor rd)
-			throws Exception {
-		client.addOrModifyResource(rd, null);
+	public static ResourceDescriptor getResource(MResource res,
+			ResourceDescriptor rd, String file) throws Exception {
+		MServerProfile sp = (MServerProfile) res.getRoot();
+		File f = null;
+		if (file != null)
+			f = new File(file);
+		return sp.getWsClient().get(rd, f);
+	}
+
+	public static void saveResource(MResource res) throws Exception {
+		INode n = res.getRoot();
+		if (n != null && n instanceof MServerProfile) {
+			MServerProfile sp = (MServerProfile) n;
+			File file = null;
+			if (res instanceof AFileResource)
+				file = ((AFileResource) res).getFile();
+			sp.getWsClient().addOrModifyResource(res.getValue(), file);
+		}
+
 	}
 
 	public static void deleteResource(MResource res) throws Exception {
 		ResourceDescriptor rd = res.getValue();
 		MServerProfile sp = (MServerProfile) res.getRoot();
-		INode n = res.isInsideReportUnit();
+		INode n = res.getReportUnit();
 		if (n instanceof MReportUnit)
 			sp.getWsClient().delete(rd,
 					((MReportUnit) n).getValue().getUriString());
@@ -127,6 +170,21 @@ public class WSClientHelper {
 		} else {
 			connectGetData((MServerProfile) res.getRoot(), monitor);
 		}
+	}
+
+	public static Map<String, Object> runReportUnit(MReportUnit res)
+			throws Exception {
+		ResourceDescriptor rd = res.getValue();
+		MServerProfile sp = (MServerProfile) res.getRoot();
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("parameter1", "A");
+
+		List<Argument> args = new ArrayList<Argument>();
+		args.add(new Argument(Argument.RUN_OUTPUT_FORMAT,
+				Argument.RUN_OUTPUT_FORMAT_PDF));
+
+		return sp.getWsClient().runReport(rd, parameters, args);
 	}
 
 	static int depth = 0; // This variable is used to print tabs...

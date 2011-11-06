@@ -25,6 +25,16 @@ public class ServerProfile implements Resource, Cloneable {
 	private String name;
 	private String url;
 	private String user;
+	private String organisation;
+
+	public String getOrganisation() {
+		return organisation;
+	}
+
+	public void setOrganisation(String organisation) {
+		this.organisation = organisation;
+	}
+
 	private String pass;
 
 	public String getName() {

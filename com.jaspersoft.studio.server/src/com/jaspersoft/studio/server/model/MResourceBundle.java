@@ -26,7 +26,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
-public class MResourceBundle extends MResource {
+public class MResourceBundle extends AFileResource {
 
 	public MResourceBundle(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);

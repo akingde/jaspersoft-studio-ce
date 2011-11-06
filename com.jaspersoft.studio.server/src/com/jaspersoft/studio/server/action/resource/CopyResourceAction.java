@@ -1,3 +1,22 @@
+/*
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2011 Jaspersoft Corporation. All rights reserved.
+ * http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
 package com.jaspersoft.studio.server.action.resource;
 
 import java.util.ArrayList;
@@ -15,12 +34,12 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 
 public class CopyResourceAction extends Action {
-	private static final String DELETERESOURCEDESCRIPTOR = "DELETERESOURCEDESCRIPTOR";
+	private static final String ID = "COPYRESOURCEDESCRIPTOR";
 	private TreeViewer treeViewer;
 
 	public CopyResourceAction(TreeViewer treeViewer) {
 		super();
-		setId(DELETERESOURCEDESCRIPTOR);
+		setId(ID);
 		setText(Messages.common_copy);
 		setToolTipText(Messages.common_copy);
 		ISharedImages sharedImages = PlatformUI.getWorkbench()

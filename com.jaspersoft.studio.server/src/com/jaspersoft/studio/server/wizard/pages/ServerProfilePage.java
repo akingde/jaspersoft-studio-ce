@@ -62,6 +62,10 @@ public class ServerProfilePage extends WizardPage {
 		Text turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		new Label(composite, SWT.NONE).setText("Organisation");
+		Text torg = new Text(composite, SWT.BORDER);
+		torg.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		new Label(composite, SWT.NONE).setText("User");
 		Text tuser = new Text(composite, SWT.BORDER);
 		tuser.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -79,6 +83,9 @@ public class ServerProfilePage extends WizardPage {
 				PojoObservables.observeValue(sprofile.getValue(), "url"),
 				new UpdateValueStrategy()
 						.setAfterConvertValidator(new URLValidator()), null);
+		dbc.bindValue(SWTObservables.observeText(torg, SWT.Modify),
+				PojoObservables.observeValue(sprofile.getValue(),
+						"organisation"));
 		dbc.bindValue(SWTObservables.observeText(tuser, SWT.Modify),
 				PojoObservables.observeValue(sprofile.getValue(), "user"),
 				new UpdateValueStrategy()

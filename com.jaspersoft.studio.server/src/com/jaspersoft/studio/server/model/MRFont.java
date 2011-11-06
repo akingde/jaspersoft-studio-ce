@@ -26,7 +26,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
-public class MRFont extends MResource {
+public class MRFont extends AFileResource {
 
 	public MRFont(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);

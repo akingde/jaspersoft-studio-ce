@@ -26,7 +26,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
-public class MRStyleTemplate extends MResource {
+public class MRStyleTemplate extends AFileResource {
 
 	public MRStyleTemplate(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);

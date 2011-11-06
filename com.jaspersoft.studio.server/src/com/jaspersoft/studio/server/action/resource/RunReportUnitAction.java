@@ -19,7 +19,10 @@
  */
 package com.jaspersoft.studio.server.action.resource;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -30,25 +33,28 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class RefreshResourcesAction extends Action {
-	private static final String ID = "REFRESHRESOURCEDESCRIPTOR";
+public class RunReportUnitAction extends Action {
+	private static final String ID = "RUNREPORTUNIT";
 	private TreeViewer treeViewer;
 
-	public RefreshResourcesAction(TreeViewer treeViewer) {
+	public RunReportUnitAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText("Refresh");
-		setToolTipText(Messages.common_delete);
+		setText("Run Report Unit");
+		setDescription("Run Report Unit");
+		setToolTipText("Run the report unit");
 		setImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/eclipseicons/reload.gif"));
+				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 		setDisabledImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/eclipseicons/reloaddgif"));
+				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
 		this.treeViewer = treeViewer;
 	}
 
@@ -68,15 +74,32 @@ public class RefreshResourcesAction extends Action {
 								InterruptedException {
 							try {
 								MResource res = (MResource) obj;
-								WSClientHelper.refreshResource(res, monitor);
-								Display.getDefault().asyncExec(new Runnable() {
 
-									public void run() {
-										treeViewer.refresh(true);
-										treeViewer.setSelection(s);
+								INode node = res.getReportUnit();
+								if (node != null && node instanceof MReportUnit) {
+									Map<String, Object> files = WSClientHelper
+											.runReportUnit((MReportUnit) node);
+									for (String key : files.keySet()) {
+										FileContent fc = (FileContent) files
+												.get(key);
+										if (key.equals("report")) {
+											FileOutputStream htmlFile = new FileOutputStream(
+													"c:\\myreport.html");
+											htmlFile.write(fc.getData());
+											htmlFile.close();
+										} else {
+											File f = new File("c:\\images");
+											if (!f.exists())
+												f.mkdirs();
+
+											FileOutputStream imageFile = new FileOutputStream(
+													"c:\\images\\" + key);
+											imageFile.write(fc.getData());
+											imageFile.close();
+										}
+
 									}
-								});
-
+								}
 							} catch (Throwable e) {
 								throw new InvocationTargetException(e);
 							} finally {
@@ -90,6 +113,7 @@ public class RefreshResourcesAction extends Action {
 				} catch (InterruptedException e) {
 					UIUtils.showError(e);
 				}
+				break;
 			}
 		}
 	}
