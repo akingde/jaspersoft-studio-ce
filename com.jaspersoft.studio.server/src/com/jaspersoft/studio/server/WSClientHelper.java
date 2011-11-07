@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.server;
 
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
@@ -167,8 +169,8 @@ public class WSClientHelper {
 		((ANode) res.getParent()).removeChild(res);
 	}
 
-	public static void refreshResource(MResource res, IProgressMonitor monitor)
-			throws Exception {
+	public static void refreshResource(final MResource res,
+			IProgressMonitor monitor) throws Exception {
 		ResourceDescriptor rd = res.getValue();
 		MServerProfile sp = (MServerProfile) res.getRoot();
 		ResourceDescriptor newrd = sp.getWsClient().get(rd, null);
@@ -180,6 +182,15 @@ public class WSClientHelper {
 		} else {
 			connectGetData((MServerProfile) res.getRoot(), monitor);
 		}
+
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				ServerManager.getPropertyChangeSupport().firePropertyChange(
+						new PropertyChangeEvent(res, "MODEL", null, res));
+			}
+		});
+
 	}
 
 	public static Map<String, Object> runReportUnit(MReportUnit res)
