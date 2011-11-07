@@ -140,15 +140,26 @@ public class WSClientHelper {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile sp = (MServerProfile) n;
-			File file = null;
-			if (res instanceof AFileResource)
-				file = ((AFileResource) res).getFile();
 			ResourceDescriptor rd = res.getValue();
 			if (rd.getIsNew()) {
 				rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 			}
+			File file = null;
+			if (res instanceof AFileResource)
+				file = ((AFileResource) res).getFile();
+			rd.setHasData(file != null);
 
-			sp.getWsClient().addOrModifyResource(rd, file);
+			if (res.isInsideReportUnit()) {
+				INode mru = res.getReportUnit();
+				if (mru != null && mru instanceof MReportUnit) {
+					String ruuri = ((ResourceDescriptor) mru.getValue())
+							.getUriString();
+					rd.setParentFolder(ruuri + "_files/" + rd.getName());
+
+					sp.getWsClient().modifyReportUnitResource(ruuri, rd, file);
+				}
+			} else
+				sp.getWsClient().addOrModifyResource(rd, file);
 
 			refreshResource((MResource) res.getParent(), monitor);
 		}

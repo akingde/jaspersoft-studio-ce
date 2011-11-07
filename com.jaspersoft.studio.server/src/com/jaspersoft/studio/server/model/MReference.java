@@ -45,6 +45,7 @@ public class MReference extends MResource {
 
 	public static ResourceDescriptor createDescriptor(MResource parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		rd.setIsReference(true);
 		rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);
 		return rd;
 	}
