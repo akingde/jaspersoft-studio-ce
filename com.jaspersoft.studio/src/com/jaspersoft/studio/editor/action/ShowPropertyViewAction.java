@@ -22,6 +22,7 @@ package com.jaspersoft.studio.editor.action;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IPageLayout;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -29,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.UIUtils;
 
 /*
  * /* The Class BringBackwardAction.
@@ -65,11 +67,11 @@ public class ShowPropertyViewAction extends SelectionAction {
 	public void run() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
-			page.showView(IPageLayout.ID_PROP_SHEET);
-
+			IViewPart p = page.showView(IPageLayout.ID_PROP_SHEET);
+			p.setFocus();
 			// page.showView("org.eclipse.ui.views.properties");
 		} catch (PartInitException e) {
-			e.printStackTrace();
+			UIUtils.showError(e);
 		}
 	}
 

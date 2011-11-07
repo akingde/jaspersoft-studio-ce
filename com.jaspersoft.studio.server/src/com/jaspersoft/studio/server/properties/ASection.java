@@ -19,15 +19,21 @@
  */
 package com.jaspersoft.studio.server.properties;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -150,8 +156,36 @@ public abstract class ASection extends AbstractPropertySection {
 
 	public void saveProperties() {
 		try {
-			WSClientHelper.saveResource(res);
-			setEditMode(false);
+			ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
+					.getDefault().getActiveShell());
+			try {
+				pm.run(true, true, new IRunnableWithProgress() {
+					public void run(IProgressMonitor monitor)
+							throws InvocationTargetException,
+							InterruptedException {
+						try {
+							WSClientHelper.saveResource(res, monitor);
+
+							Display.getDefault().asyncExec(new Runnable() {
+
+								public void run() {
+									setEditMode(false);
+								}
+							});
+						} catch (Throwable e) {
+							throw new InvocationTargetException(e);
+						} finally {
+							monitor.done();
+						}
+					}
+
+				});
+			} catch (InvocationTargetException e) {
+				UIUtils.showError(e);
+			} catch (InterruptedException e) {
+				UIUtils.showError(e);
+			}
+
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}

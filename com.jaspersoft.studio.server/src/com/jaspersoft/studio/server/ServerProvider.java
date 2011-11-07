@@ -33,6 +33,7 @@ import org.eclipse.swt.events.KeyEvent;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.repository.actions.Separator;
+import com.jaspersoft.studio.server.action.resource.AddResourceAction;
 import com.jaspersoft.studio.server.action.resource.CopyResourceAction;
 import com.jaspersoft.studio.server.action.resource.CutResourceAction;
 import com.jaspersoft.studio.server.action.resource.DeleteResourceAction;
@@ -43,6 +44,8 @@ import com.jaspersoft.studio.server.action.server.CreateServerAction;
 import com.jaspersoft.studio.server.action.server.DeleteServerAction;
 import com.jaspersoft.studio.server.action.server.DuplicateServerAction;
 import com.jaspersoft.studio.server.action.server.EditServerAction;
+import com.jaspersoft.studio.server.model.MFolder;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
@@ -58,6 +61,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 	private CutResourceAction cutAction;
 	private CopyResourceAction copyAction;
 	private PasteResourceAction pasteAction;
+
+	private AddResourceAction addAction;
 
 	private RunReportUnitAction runReportUnitAction;
 
@@ -87,6 +92,9 @@ public class ServerProvider implements IRepositoryViewProvider {
 		if (pasteAction == null)
 			pasteAction = new PasteResourceAction(treeViewer);
 
+		if (addAction == null)
+			addAction = new AddResourceAction(treeViewer);
+
 		if (runReportUnitAction == null)
 			runReportUnitAction = new RunReportUnitAction(treeViewer);
 	}
@@ -98,6 +106,10 @@ public class ServerProvider implements IRepositoryViewProvider {
 			if (createServerAction.isEnabled())
 				lst.add(createServerAction);
 		} else if (node instanceof MServerProfile) {
+			if (addAction.isEnabled())
+				lst.add(addAction);
+			lst.add(new Separator());
+
 			if (pasteAction.isEnabled())
 				lst.add(pasteAction);
 			lst.add(new Separator());
@@ -111,6 +123,11 @@ public class ServerProvider implements IRepositoryViewProvider {
 				lst.add(deleteServerAction);
 
 		} else if (node instanceof MResource) {
+			if (addAction.isEnabled()
+					&& (node instanceof MFolder || node instanceof MReportUnit))
+				lst.add(addAction);
+			lst.add(new Separator());
+
 			if (((MResource) node).isInsideReportUnit()
 					&& runReportUnitAction.isEnabled())
 				lst.add(runReportUnitAction);
@@ -129,7 +146,6 @@ public class ServerProvider implements IRepositoryViewProvider {
 			lst.add(new Separator());
 			if (deleteAction.isEnabled())
 				lst.add(deleteAction);
-
 		}
 		return lst;
 	}

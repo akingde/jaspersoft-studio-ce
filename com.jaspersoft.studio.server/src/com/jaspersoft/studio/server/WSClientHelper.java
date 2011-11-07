@@ -133,14 +133,22 @@ public class WSClientHelper {
 		return sp.getWsClient().get(rd, f);
 	}
 
-	public static void saveResource(MResource res) throws Exception {
+	public static void saveResource(MResource res, IProgressMonitor monitor)
+			throws Exception {
 		INode n = res.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile sp = (MServerProfile) n;
 			File file = null;
 			if (res instanceof AFileResource)
 				file = ((AFileResource) res).getFile();
-			sp.getWsClient().addOrModifyResource(res.getValue(), file);
+			ResourceDescriptor rd = res.getValue();
+			if (rd.getIsNew()) {
+				rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
+			}
+
+			sp.getWsClient().addOrModifyResource(rd, file);
+
+			refreshResource((MResource) res.getParent(), monitor);
 		}
 
 	}
@@ -148,12 +156,14 @@ public class WSClientHelper {
 	public static void deleteResource(MResource res) throws Exception {
 		ResourceDescriptor rd = res.getValue();
 		MServerProfile sp = (MServerProfile) res.getRoot();
-		INode n = res.getReportUnit();
-		if (n instanceof MReportUnit)
-			sp.getWsClient().delete(rd,
-					((MReportUnit) n).getValue().getUriString());
-		else
-			sp.getWsClient().delete(rd);
+		if (!rd.getIsNew()) {
+			INode n = res.getReportUnit();
+			if (n instanceof MReportUnit)
+				sp.getWsClient().delete(rd,
+						((MReportUnit) n).getValue().getUriString());
+			else
+				sp.getWsClient().delete(rd);
+		}
 		((ANode) res.getParent()).removeChild(res);
 	}
 

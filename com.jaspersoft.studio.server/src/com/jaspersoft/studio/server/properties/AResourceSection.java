@@ -21,6 +21,9 @@ package com.jaspersoft.studio.server.properties;
 
 import java.io.File;
 
+import net.sf.jasperreports.engine.JRRenderable;
+import net.sf.jasperreports.engine.util.JRTypeSniffer;
+
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
@@ -38,6 +41,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class AResourceSection extends ASection {
@@ -69,10 +73,35 @@ public abstract class AResourceSection extends ASection {
 					try {
 						WSClientHelper.getResource(res, res.getValue(),
 								filename);
+						File file = new File(filename);
+						int dotPos = filename.lastIndexOf(".");
+						String strFilename = filename.substring(0, dotPos);
+						switch (JRTypeSniffer.getImageType(FileUtils
+								.getBytes(file))) {
+						case JRRenderable.IMAGE_TYPE_GIF:
+							fileRenamed(file, strFilename, ".gif");
+							break;
+						case JRRenderable.IMAGE_TYPE_JPEG:
+							fileRenamed(file, strFilename, ".jpeg");
+							break;
+						case JRRenderable.IMAGE_TYPE_PNG:
+							fileRenamed(file, strFilename, ".png");
+							break;
+						case JRRenderable.IMAGE_TYPE_TIFF:
+							fileRenamed(file, strFilename, ".tiff");
+							break;
+						}
 					} catch (Exception e1) {
 						UIUtils.showError(e1);
 					}
 				}
+			}
+
+			private void fileRenamed(File file, String strFilename, String ext) {
+				String fname = strFilename + ext;
+				file.renameTo(new File(fname));
+				UIUtils.showWarning("Attention! file type is different, so it was renamed to:\n "
+						+ fname);
 			}
 
 		});

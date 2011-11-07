@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.server.model;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -41,7 +39,13 @@ public class MUnknown extends MResource {
 	}
 
 	@Override
-	public ImageDescriptor getImagePath() {
-		return getIconDescriptor().getIcon16();
+	protected IIconDescriptor getThisIconDescriptor() {
+		return getIconDescriptor();
+	}
+
+	public static ResourceDescriptor createDescriptor(MResource parent) {
+		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		rd.setWsType(ResourceDescriptor.TYPE_UNKNOW);
+		return rd;
 	}
 }

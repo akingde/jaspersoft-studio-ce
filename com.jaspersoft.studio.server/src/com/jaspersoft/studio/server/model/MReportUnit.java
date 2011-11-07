@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.server.model;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -42,8 +40,8 @@ public class MReportUnit extends MResource {
 	}
 
 	@Override
-	public ImageDescriptor getImagePath() {
-		return getIconDescriptor().getIcon16();
+	protected IIconDescriptor getThisIconDescriptor() {
+		return getIconDescriptor();
 	}
 
 	@Override
@@ -51,5 +49,11 @@ public class MReportUnit extends MResource {
 		if (parent instanceof MFolder || parent instanceof MServerProfile)
 			return true;
 		return false;
+	}
+
+	public static ResourceDescriptor createDescriptor(MResource parent) {
+		ResourceDescriptor rd = MResource.createDescriptor(parent);
+		rd.setWsType(ResourceDescriptor.TYPE_REPORTUNIT);
+		return rd;
 	}
 }

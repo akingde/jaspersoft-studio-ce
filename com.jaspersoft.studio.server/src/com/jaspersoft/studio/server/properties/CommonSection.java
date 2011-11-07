@@ -43,16 +43,16 @@ public class CommonSection extends ASection {
 
 	public void createSectionControls(Composite parent,
 			TabbedPropertySheetPage aTabbedPropertySheetPage) {
+		AbstractSection.createLabel(parent, getWidgetFactory(), "ID", 120);
+		tid = getWidgetFactory().createText(parent, "",
+				SWT.BORDER | SWT.READ_ONLY);
+		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		AbstractSection.createLabel(parent, getWidgetFactory(),
 				"Parent Folder", 120);
 		tparent = getWidgetFactory().createText(parent, "",
 				SWT.BORDER | SWT.READ_ONLY);
 		tparent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		AbstractSection.createLabel(parent, getWidgetFactory(), "ID", 120);
-		tid = getWidgetFactory().createText(parent, "",
-				SWT.BORDER | SWT.READ_ONLY);
-		tid.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		AbstractSection.createLabel(parent, getWidgetFactory(), "Type:", 120);
 		ttype = getWidgetFactory().createText(parent, "",
@@ -82,7 +82,7 @@ public class CommonSection extends ASection {
 		bindingContext.bindValue(SWTObservables.observeText(tparent, SWT.NONE),
 				PojoObservables.observeValue(res.getValue(), "parentFolder"));
 
-		bindingContext.bindValue(SWTObservables.observeText(tid, SWT.NONE),
+		bindingContext.bindValue(SWTObservables.observeText(tid, SWT.Modify),
 				PojoObservables.observeValue(res.getValue(), "name"));
 
 		bindingContext.bindValue(SWTObservables.observeText(tcdate, SWT.NONE),
@@ -98,6 +98,7 @@ public class CommonSection extends ASection {
 	}
 
 	public void enableFields(boolean enable) {
+		tid.setEditable(enable && res.getValue().getIsNew());
 		tname.setEditable(enable);
 		tdesc.setEditable(enable);
 	}

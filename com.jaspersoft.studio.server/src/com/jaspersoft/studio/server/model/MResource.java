@@ -67,18 +67,26 @@ public class MResource extends APropertyNode implements ICopyable {
 		return iconDescriptor;
 	}
 
+	protected IIconDescriptor getThisIconDescriptor() {
+		return getIconDescriptor();
+	}
+
 	@Override
 	public ResourceDescriptor getValue() {
 		return (ResourceDescriptor) super.getValue();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.INode#getDisplayText()
-	 */
 	public String getDisplayText() {
-		return getValue().getLabel();
+		if (getValue().getLabel() != null)
+			return getValue().getLabel();
+		return getThisIconDescriptor().getTitle();
+	}
+
+	@Override
+	public String getToolTip() {
+		if (getValue().getDescription() != null)
+			return getValue().getDescription();
+		return getThisIconDescriptor().getToolTip();
 	}
 
 	/*
@@ -87,17 +95,7 @@ public class MResource extends APropertyNode implements ICopyable {
 	 * @see com.jaspersoft.studio.model.INode#getImagePath()
 	 */
 	public ImageDescriptor getImagePath() {
-		return getIconDescriptor().getIcon16();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.model.INode#getToolTip()
-	 */
-	@Override
-	public String getToolTip() {
-		return getValue().getDescription();
+		return getThisIconDescriptor().getIcon16();
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -135,6 +133,13 @@ public class MResource extends APropertyNode implements ICopyable {
 
 	public void setPropertyValue(Object id, Object value) {
 
+	}
+
+	public static ResourceDescriptor createDescriptor(MResource parent) {
+		ResourceDescriptor rd = new ResourceDescriptor();
+		rd.setIsNew(true);
+		rd.setParentFolder(parent.getValue().getUriString());
+		return rd;
 	}
 
 	private boolean isEditMode = false;

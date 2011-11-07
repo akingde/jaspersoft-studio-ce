@@ -140,4 +140,17 @@ public class FileUtils {
 
 		return fileOrDir.delete();
 	}
+
+	public static byte[] getBytes(File file) throws IOException {
+		byte[] b = new byte[(int) file.length()];
+		FileInputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			in.read(b);
+		} finally {
+			if (in != null)
+				in.close();
+		}
+		return b;
+	}
 }
