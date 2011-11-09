@@ -103,9 +103,24 @@ public class ReportControler {
 	public void setJasperDesign(JasperDesign jDesign) {
 		this.jDesign = jDesign;
 		this.prompts = jDesign.getParametersList();
-		this.jasperParameters = new HashMap<String, Object>();
+		setParameters(jDesign);
 		if (viewmap != null)
 			fillForms();
+	}
+
+	private void setParameters(JasperDesign jDesign) {
+		if (jasperParameters == null)
+			jasperParameters = new HashMap<String, Object>();
+		else {
+			Map<String, Object> map = new HashMap<String, Object>();
+			List<JRParameter> prm = jDesign.getParametersList();
+			for (JRParameter p : prm) {
+				Object obj = jasperParameters.get(p.getName());
+				if (obj != null && obj.getClass().equals(p.getValueClass()))
+					map.put(p.getName(), obj);
+			}
+			jasperParameters = map;
+		}
 	}
 
 	public JasperDesign getjDesign() {
