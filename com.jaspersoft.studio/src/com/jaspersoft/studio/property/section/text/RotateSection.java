@@ -128,20 +128,22 @@ public class RotateSection extends AbstractSection {
 			rightButton.setSelection(false);
 			upDownButton.setSelection(false);
 
-			int introt = ((Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_ROTATION)).intValue();
-			switch (introt) {
-			case 1:
-				noneButton.setSelection(true);
-				break;
-			case 2:
-				leftButton.setSelection(true);
-				break;
-			case 3:
-				rightButton.setSelection(true);
-				break;
-			case 4:
-				upDownButton.setSelection(true);
-				break;
+			Integer introt =   (Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_ROTATION);
+			if(introt != null){
+				switch (introt) {
+				case 1:
+					noneButton.setSelection(true);
+					break;
+				case 2:
+					leftButton.setSelection(true);
+					break;
+				case 3:
+					rightButton.setSelection(true);
+					break;
+				case 4:
+					upDownButton.setSelection(true);
+					break;
+				}
 			}
 		}
 		isRefreshing = false;
