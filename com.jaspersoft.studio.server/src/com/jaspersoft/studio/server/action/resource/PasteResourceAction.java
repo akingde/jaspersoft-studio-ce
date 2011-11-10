@@ -160,11 +160,24 @@ public class PasteResourceAction extends Action {
 						ResourceDescriptor prd = (ResourceDescriptor) parent
 								.getValue();
 						prd.getChildren().add(origin);
-						WSClientHelper.saveResource((MResource) parent,
-								monitor, false);
+
+						String ruuri = prd.getUriString();
+						origin.setParentFolder(ruuri + "_files/"
+								+ origin.getName());
+						origin.setIsNew(true);
+						String oldName = origin.getName();
+						String oldLabel = origin.getLabel();
+
+						origin.setName(getRName(oldName, prd.getChildren()));
+						origin.setLabel(origin.getName());
+
+						ws.modifyReportUnitResource(prd.getUriString(), origin,
+								null);
+
+						origin.setName(oldName);
+						origin.setLabel(oldLabel);
 
 						if (m.isCut()) {
-							INode mpar = m.getParent();
 							m.setCut(false);
 							WSClientHelper.deleteResource(m);
 						}
@@ -176,6 +189,20 @@ public class PasteResourceAction extends Action {
 				break;
 		}
 		refreshNode(parent, monitor);
+	}
+
+	private String getRName(String name, List<?> children) {
+		String n = name;
+		int j = 0;
+		for (int i = 0; i < children.size(); i++) {
+			ResourceDescriptor r = (ResourceDescriptor) children.get(i);
+			if (n.equals(r.getName())) {
+				n = name + "_" + j;
+				i = 0;
+				j++;
+			}
+		}
+		return n;
 	}
 
 	private void refreshNode(INode p, IProgressMonitor monitor)
