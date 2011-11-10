@@ -90,8 +90,12 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 		List<INode> lst = root.getChildren();
 		for (INode n : lst) {
 			if (n instanceof MServers) {
+				ServerProfile srv = new ServerProfile();
+				srv.setName("JS SERVER");
+				srv.setUrl("http://localhost:8080/jasperserver/services/repository");
+				srv.setUser("username");
 				ServerProfileWizard wizard = new ServerProfileWizard(
-						new MServerProfile(null, new ServerProfile()));
+						new MServerProfile(null, srv));
 				ServerProfileWizardDialog dialog = new ServerProfileWizardDialog(
 						Display.getDefault().getActiveShell(), wizard);
 				wizard.bindTestButton(dialog);
