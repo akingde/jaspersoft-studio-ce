@@ -146,24 +146,28 @@ public class PasteResourceAction extends Action {
 						if (m.isCut()) {
 							ws.move(origin, newname);
 							m.setCut(false);
-							refreshNode(m.getParent(), monitor);
 						} else {
 							ResourceDescriptor newrd = ws.copy(origin, newname);
 							newrd.setLabel(origin.getLabel() + " Copy");
-							ws.putResource(newrd, null);
+							String newuri = dURI
+									+ (dURI.endsWith("/") ? "" : "/")
+									+ newrd.getName();
+							newrd.setUriString(newuri);
+
+							ws.addOrModifyResource(newrd, null);
 						}
 					} else if (parent instanceof MReportUnit) {
-						// ResourceDescriptor prd = (ResourceDescriptor) parent
-						// .getValue();
+						ResourceDescriptor prd = (ResourceDescriptor) parent
+								.getValue();
+						prd.getChildren().add(origin);
+						WSClientHelper.saveResource((MResource) parent,
+								monitor, false);
 
-						// ws.modifyReportUnitResource(prd.getUriString(),
-						// origin,
-						// null);
-						// if (m.isCut()) {
-						// m.setCut(false);
-						//
-						// refreshNode(m.getParent(), monitor);
-						// }
+						if (m.isCut()) {
+							INode mpar = m.getParent();
+							m.setCut(false);
+							WSClientHelper.deleteResource(m);
+						}
 					}
 				}
 			}
