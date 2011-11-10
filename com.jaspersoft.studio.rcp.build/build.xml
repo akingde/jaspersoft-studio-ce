@@ -4,7 +4,7 @@
 	
 	<property name="baseLocation" value="${eclipse.home}"/>
 	<!-- by default, check for deltapack co-located with eclipse -->
-	<property name="deltapack" value="${eclipse.home}/deltapack/eclipse"/>
+	<property name="deltapack" value="/home/slavic/updatesite/deltapack/eclipse"/>
 	<property name="builder" value="${basedir}" />
 	<property name="buildDirectory" value="${basedir}/buildDirectory"/>
 	<property name="pluginPath" value="${basedir}/..${path.separator}${deltapack}" />
@@ -128,7 +128,7 @@
 			<!-- rename the folder -->
 			<move file="${zipdir.linux.x86}/jaspersoftstudio" tofile="${zipdir.linux.x86}/${jss.distro.folder}"/>
 			
-			<tar destfile="${dist}/${jss.linux.x86.tgz}" basedir="${zipdir.linux.x86}" compression="gzip"/>
+			<tar destfile="${dist}/${jss.linux.x86.tgz}" basedir="${zipdir.linux.x86}" compression="gzip" longfile="gnu"/>
 			<!-- remove the temp extraction directory -->
 			<delete dir="${zipdir.linux.x86}"/>
 	</target>
@@ -154,7 +154,16 @@
 				<!-- rename the folder -->
 				<move file="${zipdir.linux.x86_64}/jaspersoftstudio" tofile="${zipdir.linux.x86_64}/${jss.distro.folder}"/>
 				
-				<tar destfile="${dist}/${jss.linux.x86_64.tgz}" basedir="${zipdir.linux.x86_64}" compression="gzip"/>
+				<tar destfile="${dist}/${jss.linux.x86_64.tgz}" basedir="${zipdir.linux.x86_64}" compression="gzip" longfile="gnu">
+					<tarfileset dir="${jss.distro.folder}/.." filemode="755">
+					    <include name="${jss.distro.folder}/Jaspersoft*"/>
+					  </tarfileset>
+					  <tarfileset dir="${jss.distro.folder}/..">
+					    <include name="${jss.distro.folder}/**"/>
+					    <exclude name="${jss.distro.folder}/Jaspersoft*"/>
+					  </tarfileset>
+				</tar>
+
 				<!-- remove the temp extraction directory -->
 				<delete dir="${zipdir.linux.x86_64}"/>
 		</target>
