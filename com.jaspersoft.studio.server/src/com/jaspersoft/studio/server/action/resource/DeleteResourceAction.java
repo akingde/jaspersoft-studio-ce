@@ -28,9 +28,11 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.WSClientHelper;
@@ -38,12 +40,12 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class DeleteResourceAction extends Action {
-	private static final String ID = "DELETERESOURCEDESCRIPTOR";
 	private TreeViewer treeViewer;
 
 	public DeleteResourceAction(TreeViewer treeViewer) {
 		super();
-		setId(ID);
+		setId(ActionFactory.DELETE.getId());
+		setAccelerator(SWT.DEL);
 		setText(Messages.common_delete);
 		setToolTipText(Messages.common_delete);
 		ISharedImages sharedImages = PlatformUI.getWorkbench()
@@ -59,6 +61,8 @@ public class DeleteResourceAction extends Action {
 	public void run() {
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
+		if (!UIUtils.showDeleteConfirmation())
+			return;
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
 			if (obj instanceof MResource) {

@@ -29,6 +29,7 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
@@ -37,12 +38,11 @@ import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RefreshResourcesAction extends Action {
-	private static final String ID = "REFRESHRESOURCEDESCRIPTOR";
 	private TreeViewer treeViewer;
 
 	public RefreshResourcesAction(TreeViewer treeViewer) {
 		super();
-		setId(ID);
+		setId(ActionFactory.REFRESH.getId());
 		setText("Refresh");
 		setToolTipText(Messages.common_delete);
 		setImageDescriptor(JaspersoftStudioPlugin

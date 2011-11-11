@@ -30,9 +30,11 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -48,13 +50,12 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class PasteResourceAction extends Action {
-	private static final String ID = "PASTERESOURCEDESCRIPTOR";
 	private TreeViewer treeViewer;
 	private TreeSelection s;
 
 	public PasteResourceAction(TreeViewer treeViewer) {
 		super();
-		setId(ID);
+		setId(ActionFactory.PASTE.getId());
 		setText(Messages.common_paste);
 		setToolTipText(Messages.common_paste);
 		ISharedImages sharedImages = PlatformUI.getWorkbench()

@@ -42,8 +42,8 @@ public class AddResourceAction extends Action {
 	public AddResourceAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText(Messages.common_add);
-		setToolTipText(Messages.common_add);
+		setText(Messages.common_new);
+		setToolTipText(Messages.common_new);
 		ISharedImages sharedImages = PlatformUI.getWorkbench()
 				.getSharedImages();
 		setImageDescriptor(sharedImages

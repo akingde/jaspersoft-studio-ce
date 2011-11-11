@@ -46,10 +46,13 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.ui.actions.ActionFactory;
 
+import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class DeleteServerAction extends Action {
 	private TreeViewer treeViewer;
@@ -57,7 +60,8 @@ public class DeleteServerAction extends Action {
 	public DeleteServerAction(TreeViewer treeViewer) {
 		super();
 		this.treeViewer = treeViewer;
-		setText("Delete JasperServer Connection");
+		setId(ActionFactory.DELETE.getId());
+		setText(Messages.common_delete);
 		setDescription("Delete JasperServer Connection");
 		setToolTipText("Delete JasperServer connection");
 		setImageDescriptor(Activator
@@ -75,6 +79,8 @@ public class DeleteServerAction extends Action {
 	public void run() {
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
+		if (!UIUtils.showDeleteConfirmation())
+			return;
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MServerProfile) {

@@ -29,17 +29,17 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.server.model.MResource;
 
 public class CopyResourceAction extends Action {
-	private static final String ID = "COPYRESOURCEDESCRIPTOR";
 	private TreeViewer treeViewer;
 
 	public CopyResourceAction(TreeViewer treeViewer) {
 		super();
-		setId(ID);
+		setId(ActionFactory.COPY.getId());
 		setText(Messages.common_copy);
 		setToolTipText(Messages.common_copy);
 		ISharedImages sharedImages = PlatformUI.getWorkbench()

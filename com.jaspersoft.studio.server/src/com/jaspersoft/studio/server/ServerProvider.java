@@ -144,21 +144,25 @@ public class ServerProvider implements IRepositoryViewProvider {
 				lst.add(copyAction);
 			if (pasteAction.isEnabled())
 				lst.add(pasteAction);
+
+			if (deleteAction.isEnabled())
+				lst.add(deleteAction);
 			lst.add(new Separator());
 
 			if (refreshAction.isEnabled())
 				lst.add(refreshAction);
-			lst.add(new Separator());
-			if (deleteAction.isEnabled())
-				lst.add(deleteAction);
+			// lst.add(new Separator());
+
 		}
 		return lst;
 	}
 
-	public void hookKeyEvent(KeyEvent event) {
-		if (event.character == SWT.DEL && event.stateMask == 0
-				&& deleteServerAction.isEnabled()) {
-			deleteServerAction.run();
+	public void hookKeyEvent(TreeViewer treeViewer, KeyEvent event) {
+		if (event.character == SWT.DEL && event.stateMask == 0) {
+			if (deleteServerAction.isEnabled())
+				deleteServerAction.run();
+			if (deleteAction.isEnabled())
+				deleteAction.run();
 		}
 	}
 
