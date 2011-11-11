@@ -43,6 +43,7 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -55,6 +56,7 @@ public class DeleteDataAdapterAction extends Action {
 
 	public DeleteDataAdapterAction(TreeViewer treeViewer) {
 		super();
+		setId(ActionFactory.DELETE.getId());
 		this.treeViewer = treeViewer;
 		setText("Delete DataAdapter");
 		setDescription("Delete DataAdapter");

@@ -32,8 +32,10 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeViewerListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreePath;
@@ -47,6 +49,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
@@ -106,13 +109,13 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 
-		treeViewer = new TreeViewer(composite, SWT.VIRTUAL);
+		treeViewer = new TreeViewer(composite);
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		treeViewer.setInput(getResources()); // pass a non-null that will be ignored
 		treeViewer.expandToLevel(2);
-		getSite().setSelectionProvider(treeViewer);
+		getViewSite().setSelectionProvider(treeViewer);
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			public void doubleClick(DoubleClickEvent event) {
@@ -135,6 +138,21 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 			}
 
 			public void treeCollapsed(TreeExpansionEvent event) {
+			}
+		});
+		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			public void selectionChanged(SelectionChangedEvent event) {
+				IActionBars actionBars = getViewSite().getActionBars();
+				actionBars.clearGlobalActionHandlers();
+
+				List<IAction> alist = fillContextMenu();
+				if (alist != null) {
+					for (IAction act : alist) {
+						if (!(act instanceof Separator))
+							actionBars.setGlobalActionHandler(act.getId(), act);
+					}
+				}
 			}
 		});
 
@@ -253,11 +271,12 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 
 	private void createContextMenu() {
 		// Create menu manager.
-		MenuManager menuMgr = new MenuManager();
+		MenuManager menuMgr = new MenuManager("Resources Menu", getViewSite().getId());
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager mgr) {
-				fillContextMenu(mgr);
+				mgr.removeAll();
+				fillMenu(mgr, fillContextMenu());
 			}
 		});
 
@@ -266,11 +285,10 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		treeViewer.getControl().setMenu(menu);
 
 		// Register menu for extension.
-		getSite().registerContextMenu(menuMgr, treeViewer);
+		getViewSite().registerContextMenu(menuMgr, treeViewer);
 	}
 
-	private void fillContextMenu(IMenuManager mgr) {
-		mgr.removeAll();
+	private List<IAction> fillContextMenu() {
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
 		List<IAction> alist = null;
@@ -285,7 +303,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 						tlist.addAll(t);
 				}
 				if (tlist == null || tlist.isEmpty())
-					return;
+					return null;
 				if (alist == null) {
 					alist = tlist;
 				} else {
@@ -297,16 +315,21 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 					}
 					alist.removeAll(todelete);
 					if (alist.isEmpty())
-						return;
+						return null;
 				}
 			}
 		}
+		return alist;
+	}
+
+	private void fillMenu(IMenuManager mgr, List<IAction> alist) {
 		if (alist != null) {
 			for (IAction act : alist) {
 				if (act instanceof Separator)
 					mgr.add(new org.eclipse.jface.action.Separator());
-				else
+				else {
 					mgr.add(act);
+				}
 			}
 		}
 	}

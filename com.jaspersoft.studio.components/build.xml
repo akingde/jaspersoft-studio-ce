@@ -7,7 +7,7 @@
 	<property name="basearch" value="${arch}"/>
 	<property name="basenl" value="${nl}"/>
 	<property name="bundleId" value="com.jaspersoft.studio.components"/>
-	<property name="bundleVersion" value="1.0.3"/>
+	<property name="bundleVersion" value="1.0.4"/>
 	<property name="p2.publishonerror" value="false"/>
 
 	<!-- Compiler settings. -->
@@ -47,7 +47,7 @@
 			<isset property="buildTempFolder"/>
 		</condition>
 		<property name="pluginTemp" value="${basedir}"/>
-		<condition property="build.result.folder" value="${pluginTemp}/com.jaspersoft.studio.components_1.0.3"		>
+		<condition property="build.result.folder" value="${pluginTemp}/com.jaspersoft.studio.components_1.0.4"		>
 			<isset property="buildTempFolder"/>
 		</condition>
 		<property name="build.result.folder" value="${basedir}"/>
@@ -77,7 +77,7 @@
 		<antcall target="gather.bin.parts">
 			<param name="destination.temp.folder" value="${temp.folder}/"/>
 		</antcall>
-		<jar destfile="${plugin.destination}/com.jaspersoft.studio.components_1.0.3.jar" basedir="${temp.folder}/com.jaspersoft.studio.components_1.0.3" filesetmanifest="merge"/>
+		<jar destfile="${plugin.destination}/com.jaspersoft.studio.components_1.0.4.jar" basedir="${temp.folder}/com.jaspersoft.studio.components_1.0.4" filesetmanifest="merge"/>
 		<delete dir="${temp.folder}"/>
 	</target>
 
@@ -169,19 +169,15 @@
 			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.core.filesystem.linux.x86_1.4.0.v20110423-0524.jar"/>
 			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.filesystem.linux.x86_64_1.2.0.v20110423-0524.jar"/>
 			<pathelement path="../com.jaspersoft.studio/build/classes/"/>
-			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.3/build/classes/"/>
+			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.4/build/classes/"/>
 			<pathelement path="${build.result.folder}/../com.jaspersoft.studio/@dot"/>
-			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.3/@dot"/>
-			<pathelement path="../com.jaspersoft.studio/lib/xml-apis.jar"/>
-			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.3/lib/xml-apis.jar"/>
-			<pathelement path="../com.jaspersoft.studio/lib/xsltc.jar"/>
-			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.3/lib/xsltc.jar"/>
+			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.4/@dot"/>
 			<pathelement path="../com.jaspersoft.studio/lib/commons-validator-1.3.1.jar"/>
-			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.3/lib/commons-validator-1.3.1.jar"/>
+			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.4/lib/commons-validator-1.3.1.jar"/>
 			<pathelement path="../com.jaspersoft.studio/lib/bsh-2.0b4.jar"/>
-			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.3/lib/bsh-2.0b4.jar"/>
+			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.4/lib/bsh-2.0b4.jar"/>
 			<pathelement path="../com.jaspersoft.studio/lib/iText-2.1.7.jar"/>
-			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.3/lib/iText-2.1.7.jar"/>
+			<pathelement path="${build.result.folder}/../com.jaspersoft.studio_1.0.4/lib/iText-2.1.7.jar"/>
 			<pathelement path="${buildDirectory}/nestedJars/org.eclipse.ui.ide_3.7.0.I20110519-0100/e4-ide.jar"/>
 			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.ui.ide_3.7.0.I20110519-0100.jar"/>
 			<pathelement path="../../updatesite/deltapack/eclipse/plugins/org.eclipse.ui.win32_3.2.200.I20100509-0800.jar"/>
@@ -363,8 +359,8 @@
 			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.jdt.core.manipulation_1.4.0.v20110505-0800.jar"/>
 			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.gef_3.7.0.v20110407-2050.jar"/>
 			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.draw2d_3.7.0.v20110425-2050.jar"/>
-			<pathelement path="../net.sf.jasperreports/lib/jasperreports-fonts-4.1.2.jar"/>
-			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/jasperreports-fonts-4.1.2.jar"/>
+			<pathelement path="../net.sf.jasperreports/lib/jasperreports-fonts-4.1.3.jar"/>
+			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/jasperreports-fonts-4.1.3.jar"/>
 			<pathelement path="../net.sf.jasperreports/lib/commons-beanutils-1.7.jar"/>
 			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/commons-beanutils-1.7.jar"/>
 			<pathelement path="../net.sf.jasperreports/lib/commons-collections-2.1.jar"/>
@@ -421,8 +417,6 @@
 			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/swtjasperviewer-1.2.1.jar"/>
 			<pathelement path="../net.sf.jasperreports/lib/castor-1.2.jar"/>
 			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/castor-1.2.jar"/>
-			<pathelement path="../net.sf.jasperreports/lib/jasperreports-4.1.1.jar"/>
-			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/jasperreports-4.1.1.jar"/>
 			<pathelement path="../net.sf.jasperreports/lib/jxl-2.6.10.jar"/>
 			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/jxl-2.6.10.jar"/>
 			<pathelement path="../net.sf.jasperreports/lib/poi-3.6.jar"/>
@@ -435,12 +429,13 @@
 			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/xbean.jar"/>
 			<pathelement path="../net.sf.jasperreports/lib/dom4j-1.6.1.jar"/>
 			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/dom4j-1.6.1.jar"/>
-			<pathelement path="../net.sf.jasperreports/lib/jasperreports-4.1.2.jar"/>
-			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/jasperreports-4.1.2.jar"/>
+			<pathelement path="../net.sf.jasperreports/lib/jasperreports-4.1.3.jar"/>
+			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/lib/jasperreports-4.1.3.jar"/>
 			<pathelement path="../net.sf.jasperreports/build/classes/"/>
 			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/build/classes/"/>
 			<pathelement path="${build.result.folder}/../net.sf.jasperreports/@dot"/>
 			<pathelement path="${build.result.folder}/../net.sf.jasperreports_4.1.2/@dot"/>
+			<pathelement path="../../eclipse-jasper/plugins/org.eclipse.core.databinding.beans_1.2.100.I20100824-0800.jar"/>
 		</path>
 		<!-- compile the source code -->
 		<javac destdir="${build.result.folder}/@dot" failonerror="${javacFailOnError}" verbose="${javacVerbose}" debug="${javacDebugInfo}" includeAntRuntime="no" bootclasspath="${bundleBootClasspath}" source="${bundleJavacSource}" target="${bundleJavacTarget}" errorProperty="compilation.error.occured"		>
@@ -486,10 +481,10 @@
 	</target>
 
 	<target name="checkCompilationResults" if="compilation.error.occured">
-		<echo file="${compilation.problem.marker}" message="com.jaspersoft.studio.components_1.0.3${line.separator}compilation.error.occured=${compilation.error.occured}"/>
-		<eclipse.logCompileError bundle="com.jaspersoft.studio.components_1.0.3" log="${compilation.prereq.log}">
+		<echo file="${compilation.problem.marker}" message="com.jaspersoft.studio.components_1.0.4${line.separator}compilation.error.occured=${compilation.error.occured}"/>
+		<eclipse.logCompileError bundle="com.jaspersoft.studio.components_1.0.4" log="${compilation.prereq.log}">
 			<include name="/home/slavic/workspaceM/com.jaspersoft.studio/compilation.problem"/>
-			<include name="${pluginTemp}/com.jaspersoft.studio_1.0.3/compilation.problem"/>
+			<include name="${pluginTemp}/com.jaspersoft.studio_1.0.4/compilation.problem"/>
 			<include name="/home/slavic/workspaceM/net.sf.jasperreports/compilation.problem"/>
 			<include name="${pluginTemp}/net.sf.jasperreports_4.1.2/compilation.problem"/>
 		</eclipse.logCompileError>
@@ -501,7 +496,7 @@
 	</target>
 
 	<target name="publish.bin.parts" depends="init" if="p2.publish.parts" unless="compilation.problem.marker.exists">
-		<mkdir dir="${build.result.folder}/com.jaspersoft.studio.components_1.0.3"/>
+		<mkdir dir="${build.result.folder}/com.jaspersoft.studio.components_1.0.4"/>
 		<copy todir="${build.result.folder}" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
 				<include name="META-INF/MANIFEST.MF"/>
@@ -509,7 +504,7 @@
 				<include name="fragment.xml"/>
 			</fileset>
 		</copy>
-		<eclipse.versionReplacer path="${build.result.folder}" version="1.0.3"/>
+		<eclipse.versionReplacer path="${build.result.folder}" version="1.0.4"/>
 		<antcall target="apitools.generation">
 			<param name="target.folder" value="${build.result.folder}"/>
 			<param name="projectLocation" value="${basedir}"/>
@@ -526,13 +521,13 @@
 	</target>
 
 	<target name="gather.bin.parts" depends="init" if="destination.temp.folder">
-		<mkdir dir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3"/>
-		<copy todir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3" failonerror="true" overwrite="false">
+		<mkdir dir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4"/>
+		<copy todir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4" failonerror="true" overwrite="false">
 			<fileset dir="${build.result.folder}/@dot">
 				<include name="**"/>
 			</fileset>
 		</copy>
-		<copy todir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3" failonerror="true" overwrite="true">
+		<copy todir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
 				<include name="plugin.xml"/>
 				<include name="META-INF/"/>
@@ -540,9 +535,9 @@
 				<include name="resources/"/>
 			</fileset>
 		</copy>
-		<eclipse.versionReplacer path="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3" version="1.0.3"/>
+		<eclipse.versionReplacer path="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4" version="1.0.4"/>
 		<antcall target="apitools.generation">
-			<param name="target.folder" value="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3"/>
+			<param name="target.folder" value="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4"/>
 			<param name="projectLocation" value="${basedir}"/>
 			<param name="binary.folders" value="${build.result.folder}/@dot"/>
 			<param name="projectName" value="${bundleId}_${bundleVersion}"/>
@@ -553,10 +548,10 @@
 	</target>
 
 	<target name="gather.sources" depends="init" if="destination.temp.folder">
-		<mkdir dir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3"/>
-		<copy file="${build.result.folder}/src.zip" todir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3" failonerror="false" overwrite="false"/>
+		<mkdir dir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4"/>
+		<copy file="${build.result.folder}/src.zip" todir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4" failonerror="false" overwrite="false"/>
 		<antcall target="copy.src.includes">
-			<param name="source.destination.folder" value="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3"/>
+			<param name="source.destination.folder" value="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4"/>
 		</antcall>
 	</target>
 
@@ -573,8 +568,8 @@
 	</target>
 
 	<target name="gather.logs" depends="init" if="destination.temp.folder">
-		<mkdir dir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3"/>
-		<copy todir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.3" failonerror="false" overwrite="false">
+		<mkdir dir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4"/>
+		<copy todir="${destination.temp.folder}/com.jaspersoft.studio.components_1.0.4" failonerror="false" overwrite="false">
 			<fileset dir="${build.result.folder}">
 				<include name="@dot${logExtension}"/>
 			</fileset>
@@ -584,8 +579,8 @@
 	<target name="clean" depends="init" description="Clean the plug-in: com.jaspersoft.studio.components of all the zips, jars and logs created.">
 		<delete dir="${build.result.folder}/@dot"/>
 		<delete file="${build.result.folder}/src.zip"/>
-		<delete file="${plugin.destination}/com.jaspersoft.studio.components_1.0.3.jar"/>
-		<delete file="${plugin.destination}/com.jaspersoft.studio.components_1.0.3.zip"/>
+		<delete file="${plugin.destination}/com.jaspersoft.studio.components_1.0.4.jar"/>
+		<delete file="${plugin.destination}/com.jaspersoft.studio.components_1.0.4.zip"/>
 		<delete dir="${temp.folder}"/>
 		<delete file="${compilation.problem.marker}" quiet="true"/>
 	</target>
@@ -611,7 +606,7 @@
 				<include name="**/*.bin${logExtension}"/>
 			</fileset>
 		</delete>
-		<zip destfile="${plugin.destination}/com.jaspersoft.studio.components_1.0.3.zip" basedir="${temp.folder}" filesonly="true" whenempty="skip" update="false"/>
+		<zip destfile="${plugin.destination}/com.jaspersoft.studio.components_1.0.4.zip" basedir="${temp.folder}" filesonly="true" whenempty="skip" update="false"/>
 		<delete dir="${temp.folder}"/>
 	</target>
 

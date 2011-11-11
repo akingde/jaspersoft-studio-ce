@@ -182,6 +182,7 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	 * @see org.eclipse.gef.ui.actions.ActionBarContributor#declareGlobalActionKeys()
 	 */
 	protected void declareGlobalActionKeys() {
+		addGlobalActionKey(ActionFactory.CUT.getId());
 		addGlobalActionKey(ActionFactory.COPY.getId());
 		addGlobalActionKey(ActionFactory.PASTE.getId());
 		addGlobalActionKey(ActionFactory.SELECT_ALL.getId());
