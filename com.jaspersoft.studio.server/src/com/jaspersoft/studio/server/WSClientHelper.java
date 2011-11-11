@@ -74,7 +74,7 @@ public class WSClientHelper {
 
 	public static void connectGetData(MServerProfile msp,
 			IProgressMonitor monitor) throws Exception {
-		WSClientHelper.listFolder(msp, connect(msp, monitor), "/", monitor);
+		WSClientHelper.listFolder(msp, connect(msp, monitor), "/", monitor, 0);
 	}
 
 	/**
@@ -88,31 +88,35 @@ public class WSClientHelper {
 	 * @throws IOException
 	 */
 	public static List<ResourceDescriptor> listFolder(ANode parent,
-			WSClient client, String folderUri, IProgressMonitor monitor)
-			throws Exception {
+			WSClient client, String folderUri, IProgressMonitor monitor,
+			int depth) throws Exception {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
 		rd.setUriString(folderUri);
-		return listFolder(parent, -1, client, monitor, rd);
+		if (depth < 2)
+			return listFolder(parent, -1, client, monitor, rd, depth);
+		return null;
 	}
 
 	private static List<ResourceDescriptor> listFolder(ANode parent, int index,
-			WSClient client, IProgressMonitor monitor, ResourceDescriptor rd)
-			throws Exception {
+			WSClient client, IProgressMonitor monitor, ResourceDescriptor rd,
+			int depth) throws Exception {
 		monitor.subTask("Listing " + rd.getUriString());
+		depth++;
 
 		List<ResourceDescriptor> children = client.list(rd);
 
 		for (ResourceDescriptor r : children) {
 			ANode node = ResourceFactory.getResource(parent, r, index);
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
-				listFolder(node, client, r.getUriString(), monitor);
+				listFolder(node, client, r.getUriString(), monitor, depth);
 			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 				r = client.get(r, null);
 				List<ResourceDescriptor> children2 = r.getChildren();
 				for (ResourceDescriptor res : children2) {
 					if (res.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
-						listFolder(node, client, res.getUriString(), monitor);
+						listFolder(node, client, res.getUriString(), monitor,
+								depth);
 					else
 						ResourceFactory.getResource(node, res, index);
 				}
@@ -186,24 +190,31 @@ public class WSClientHelper {
 	public static void refreshResource(final MResource res,
 			IProgressMonitor monitor) throws Exception {
 		ResourceDescriptor rd = res.getValue();
-		MServerProfile sp = (MServerProfile) res.getRoot();
-		ResourceDescriptor newrd = sp.getWsClient().get(rd, null);
-		if (newrd != null) {
-			res.setValue(newrd);
-			res.removeChildren();
+		INode n = res.getRoot();
+		if (n != null && n instanceof MServerProfile) {
+			MServerProfile sp = (MServerProfile) res.getRoot();
+			ResourceDescriptor newrd = sp.getWsClient().get(rd, null);
+			if (newrd != null) {
+				res.setValue(newrd);
+				res.removeChildren();
 
-			listFolder(res, -1, sp.getWsClient(), monitor, newrd);
-		} else {
-			connectGetData((MServerProfile) res.getRoot(), monitor);
-		}
-
-		Display.getDefault().asyncExec(new Runnable() {
-
-			public void run() {
-				ServerManager.getPropertyChangeSupport().firePropertyChange(
-						new PropertyChangeEvent(res, "MODEL", null, res));
+				listFolder(res, -1, sp.getWsClient(), monitor, newrd, 0);
+			} else {
+				connectGetData((MServerProfile) res.getRoot(), monitor);
 			}
-		});
+
+			Display.getDefault().asyncExec(new Runnable() {
+
+				public void run() {
+					ServerManager.getPropertyChangeSupport()
+							.firePropertyChange(
+									new PropertyChangeEvent(res, "MODEL", null,
+											res));
+				}
+			});
+		} else {
+			// posible problem?
+		}
 
 	}
 

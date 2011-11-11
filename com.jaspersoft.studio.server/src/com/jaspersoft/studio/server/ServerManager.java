@@ -54,6 +54,16 @@ public class ServerManager {
 		return propertyChangeSupport;
 	}
 
+	public static boolean isUniqueName(MServerProfile sprofile, String name) {
+		if (sprofile.getValue().getName().equals(name))
+			return true;
+		for (MServerProfile sp : serverProfiles) {
+			if (sp.getValue().getName().equals(name))
+				return false;
+		}
+		return true;
+	}
+
 	public static void addServerProfile(MServerProfile adapter) {
 		if (!serverProfiles.contains(adapter)) {
 			serverProfiles.add(adapter);

@@ -23,6 +23,10 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
@@ -49,6 +53,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class ServerProvider implements IRepositoryViewProvider {
 	private CreateServerAction createServerAction;
@@ -188,26 +193,22 @@ public class ServerProvider implements IRepositoryViewProvider {
 	}
 
 	private void lazyLoadResource(final TreeExpansionEvent event) {
-		// Display.getDefault().asyncExec(new Runnable() {
-		//
-		// public void run() {
-		// MResource r = (MResource) event.getElement();
-		// for (INode cr : r.getChildren()) {
-		// if (!(cr instanceof MFolder)
-		// && !(cr instanceof MReportUnit)
-		// && cr instanceof MResource) {
-		// MResource res = (MResource) cr;
-		// try {
-		// cr.setValue(WSClientHelper.getResource(res,
-		// res.getValue()));
-		// } catch (Exception e) {
-		// UIUtils.showError(e);
-		// }
-		// }
-		// }
-		//
-		// }
-		// });
-
+		Job job = new Job("Refreshing tree") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				MResource r = (MResource) event.getElement();
+				try {
+					WSClientHelper.refreshResource(r, monitor);
+					return Status.OK_STATUS;
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				}
+				return Status.CANCEL_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.setSystem(false);
+		job.setUser(true);
+		job.schedule();
 	}
 }
