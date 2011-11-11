@@ -37,7 +37,7 @@ public interface IRepositoryViewProvider {
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node);
 
-	public void hookKeyEvent(KeyEvent event);
+	public void hookKeyEvent(TreeViewer treeViewer, KeyEvent event);
 
 	public void doubleClick(TreeViewer treeViewer);
 

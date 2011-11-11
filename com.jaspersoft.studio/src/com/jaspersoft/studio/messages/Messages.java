@@ -1097,6 +1097,13 @@ public class Messages extends NLS {
 	public static String XMLExporterPreferencePage_5;
 	public static String XMLExporterPreferencePage_6;
 	public static String common_tools;
+	public static String UIUtils_0;
+	public static String UIUtils_1;
+	public static String UIUtils_2;
+	public static String UIUtils_3;
+	public static String UIUtils_4;
+	public static String UIUtils_5;
+	public static String UIUtils_6;
 
 	public static String VersionDialog_checkbox;
 	public static String VersionDialog_label;

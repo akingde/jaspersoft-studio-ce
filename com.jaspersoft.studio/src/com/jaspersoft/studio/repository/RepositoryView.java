@@ -106,7 +106,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 
-		treeViewer = new TreeViewer(composite);
+		treeViewer = new TreeViewer(composite, SWT.VIRTUAL);
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
@@ -217,7 +217,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 			public void keyPressed(KeyEvent event) {
 				rprovs = getExtensionManager();
 				for (IRepositoryViewProvider rp : rprovs) {
-					rp.hookKeyEvent(event);
+					rp.hookKeyEvent(treeViewer, event);
 				}
 			}
 		});
@@ -270,6 +270,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 	}
 
 	private void fillContextMenu(IMenuManager mgr) {
+		mgr.removeAll();
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
 		List<IAction> alist = null;

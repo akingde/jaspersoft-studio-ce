@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Spinner;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.messages.Messages;
 
 public class UIUtils {
 
@@ -40,9 +41,8 @@ public class UIUtils {
 
 				IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(),
 						OperationStatus.NOTHING_TO_REDO, t.getMessage(), t);
-				new ExceptionDetailsErrorDialog(Display.getDefault().getActiveShell(), "Exception",
-						"Exception, if you want to see more information look into details", status, IStatus.OK | IStatus.INFO
-								| IStatus.WARNING | IStatus.ERROR).open();
+				new ExceptionDetailsErrorDialog(Display.getDefault().getActiveShell(), Messages.UIUtils_0, Messages.UIUtils_1,
+						status, IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR).open();
 			}
 		});
 		t.printStackTrace();
@@ -52,9 +52,18 @@ public class UIUtils {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 
-				MessageDialog.openWarning(Display.getDefault().getActiveShell(), "Warning", message);
+				MessageDialog.openWarning(Display.getDefault().getActiveShell(), Messages.UIUtils_2, message);
 			}
 		});
+	}
+
+	/**
+	 * @return true if yes
+	 */
+	public static boolean showYesNo() {
+		MessageDialog dialog = new MessageDialog(null, Messages.common_delete, null, Messages.UIUtils_4,
+				MessageDialog.QUESTION, new String[] { Messages.UIUtils_5, Messages.UIUtils_6 }, 0);
+		return dialog.open() == 0;
 	}
 
 	public static String getStackTrace(Throwable aThrowable) {

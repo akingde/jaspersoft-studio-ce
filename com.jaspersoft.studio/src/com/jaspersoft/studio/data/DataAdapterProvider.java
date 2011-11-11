@@ -59,9 +59,10 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 		return lst;
 	}
 
-	public void hookKeyEvent(KeyEvent event) {
-		if (event.character == SWT.DEL && event.stateMask == 0 && deleteDataAdapterItemAction.isEnabled()) {
-			deleteDataAdapterItemAction.run();
+	public void hookKeyEvent(TreeViewer treeViewer, KeyEvent event) {
+		if (event.character == SWT.DEL && event.stateMask == 0) {
+			if (deleteDataAdapterItemAction.isEnabled())
+				deleteDataAdapterItemAction.run();
 		}
 	}
 
