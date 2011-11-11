@@ -41,8 +41,9 @@ public class UIUtils {
 
 				IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(),
 						OperationStatus.NOTHING_TO_REDO, t.getMessage(), t);
-				new ExceptionDetailsErrorDialog(Display.getDefault().getActiveShell(), Messages.UIUtils_0, Messages.UIUtils_1,
-						status, IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR).open();
+				new ExceptionDetailsErrorDialog(Display.getDefault().getActiveShell(), Messages.common_exception,
+						Messages.common_exception_detail, status, IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR)
+						.open();
 			}
 		});
 		t.printStackTrace();
@@ -52,7 +53,7 @@ public class UIUtils {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 
-				MessageDialog.openWarning(Display.getDefault().getActiveShell(), Messages.UIUtils_2, message);
+				MessageDialog.openWarning(Display.getDefault().getActiveShell(), Messages.common_warning, message);
 			}
 		});
 	}
@@ -60,10 +61,17 @@ public class UIUtils {
 	/**
 	 * @return true if yes
 	 */
-	public static boolean showYesNo() {
-		MessageDialog dialog = new MessageDialog(null, Messages.common_delete, null, Messages.UIUtils_4,
-				MessageDialog.QUESTION, new String[] { Messages.UIUtils_5, Messages.UIUtils_6 }, 0);
+	public static boolean showConfirmation(String title, String message) {
+		MessageDialog dialog = new MessageDialog(null, title, null, message, MessageDialog.QUESTION, new String[] {
+				Messages.common_yes, Messages.common_no }, 0);
 		return dialog.open() == 0;
+	}
+
+	/**
+	 * @return true if yes
+	 */
+	public static boolean showDeleteConfirmation() {
+		return showConfirmation(Messages.common_delete, Messages.common_confirmdelete);
 	}
 
 	public static String getStackTrace(Throwable aThrowable) {

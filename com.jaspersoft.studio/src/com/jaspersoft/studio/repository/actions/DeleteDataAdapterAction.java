@@ -74,7 +74,7 @@ public class DeleteDataAdapterAction extends Action {
 	public void run() {
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
-		if (!UIUtils.showYesNo())
+		if (!UIUtils.showDeleteConfirmation())
 			return;
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
