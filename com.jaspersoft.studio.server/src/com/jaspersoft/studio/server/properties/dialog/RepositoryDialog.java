@@ -22,7 +22,9 @@ package com.jaspersoft.studio.server.properties.dialog;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -37,6 +39,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
+import com.jaspersoft.studio.server.ServerProvider;
 import com.jaspersoft.studio.server.model.MResource;
 
 public abstract class RepositoryDialog extends Dialog {
@@ -67,7 +70,7 @@ public abstract class RepositoryDialog extends Dialog {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 
-		TreeViewer treeViewer = new TreeViewer(composite, SWT.SINGLE
+		final TreeViewer treeViewer = new TreeViewer(composite, SWT.SINGLE
 				| SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -85,6 +88,20 @@ public abstract class RepositoryDialog extends Dialog {
 				if (obj instanceof MResource
 						&& isResourceCompatible((MResource) obj))
 					setResource((MResource) obj);
+			}
+		});
+		treeViewer.addTreeListener(new ITreeViewerListener() {
+
+			private ServerProvider serverProvider;
+
+			public void treeExpanded(TreeExpansionEvent event) {
+				if (serverProvider == null)
+					serverProvider = new ServerProvider();
+				serverProvider.handleTreeEvent(event);
+			}
+
+			public void treeCollapsed(TreeExpansionEvent event) {
+
 			}
 		});
 

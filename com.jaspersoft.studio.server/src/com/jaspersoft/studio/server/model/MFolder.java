@@ -51,7 +51,7 @@ public class MFolder extends MResource {
 		return false;
 	}
 
-	public static ResourceDescriptor createDescriptor(MResource parent) {
+	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
 		return rd;

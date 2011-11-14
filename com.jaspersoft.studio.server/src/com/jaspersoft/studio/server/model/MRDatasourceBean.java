@@ -43,7 +43,7 @@ public class MRDatasourceBean extends MResource {
 		return getIconDescriptor();
 	}
 
-	public static ResourceDescriptor createDescriptor(MResource parent) {
+	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_DATASOURCE_BEAN);
 		return rd;

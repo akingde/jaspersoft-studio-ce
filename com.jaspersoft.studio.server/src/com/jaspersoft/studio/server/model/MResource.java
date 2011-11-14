@@ -135,11 +135,16 @@ public class MResource extends APropertyNode implements ICopyable {
 
 	}
 
-	public static ResourceDescriptor createDescriptor(MResource parent) {
+	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setIsNew(true);
 		rd.setIsReference(false);
-		rd.setParentFolder(parent.getValue().getUriString());
+		rd.setName("New Resource");
+		// rd.setLabel(rd.getName());
+		if (parent instanceof MResource)
+			rd.setParentFolder(((MResource) parent).getValue().getUriString());
+		else
+			rd.setParentFolder("/");
 		return rd;
 	}
 

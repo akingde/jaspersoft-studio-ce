@@ -33,6 +33,7 @@ import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
@@ -42,6 +43,7 @@ import com.jaspersoft.studio.server.action.resource.CopyResourceAction;
 import com.jaspersoft.studio.server.action.resource.CutResourceAction;
 import com.jaspersoft.studio.server.action.resource.DeleteResourceAction;
 import com.jaspersoft.studio.server.action.resource.PasteResourceAction;
+import com.jaspersoft.studio.server.action.resource.PropertiesAction;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
 import com.jaspersoft.studio.server.action.resource.RunReportUnitAction;
 import com.jaspersoft.studio.server.action.server.CreateServerAction;
@@ -62,6 +64,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 	private DuplicateServerAction duplicateServerAction;
 	private DeleteResourceAction deleteAction;
 	private RefreshResourcesAction refreshAction;
+
+	private PropertiesAction editAction;
 
 	private CutResourceAction cutAction;
 	private CopyResourceAction copyAction;
@@ -102,6 +106,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 		if (runReportUnitAction == null)
 			runReportUnitAction = new RunReportUnitAction(treeViewer);
+		if (editAction == null)
+			editAction = new PropertiesAction(treeViewer);
 	}
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
@@ -151,7 +157,10 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 			if (refreshAction.isEnabled())
 				lst.add(refreshAction);
-			// lst.add(new Separator());
+			lst.add(new Separator());
+
+			if (editAction.isEnabled())
+				lst.add(editAction);
 
 		}
 		return lst;
@@ -203,6 +212,13 @@ public class ServerProvider implements IRepositoryViewProvider {
 				MResource r = (MResource) event.getElement();
 				try {
 					WSClientHelper.refreshResource(r, monitor);
+					Display.getDefault().asyncExec(new Runnable() {
+
+						public void run() {
+							event.getTreeViewer().refresh(true);
+						}
+					});
+
 					return Status.OK_STATUS;
 				} catch (Exception e) {
 					UIUtils.showError(e);

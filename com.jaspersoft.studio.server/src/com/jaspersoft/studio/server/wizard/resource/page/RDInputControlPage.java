@@ -1,23 +1,4 @@
-/*
- * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2011 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- * 
- * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
- * 
- * This program is part of JasperReports.
- * 
- * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
- * <http://www.gnu.org/licenses/>.
- */
-package com.jaspersoft.studio.server.properties;
+package com.jaspersoft.studio.server.wizard.resource.page;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -32,48 +13,62 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MListOfValues;
 import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
+import com.jaspersoft.studio.utils.UIUtils;
 
-public class InputControlSection extends ASection {
-	private CCombo ctype;
-	private Button bmand;
-	private Button bread;
-	private Button bvisible;
-	private Text trefuri;
-	private Button bbrowse;
+public class RDInputControlPage extends AResourcePage {
+
+	public RDInputControlPage(ANode parent, MInputControl resource) {
+		super("rdinputcontrol", parent, resource);
+		setTitle("Input Control");
+		setDescription("Input Control");
+	}
 
 	@Override
-	protected void createSectionControls(Composite parent,
-			TabbedPropertySheetPage aTabbedPropertySheetPage) {
-		AbstractSection.createLabel(parent, getWidgetFactory(), "", 120);
+	protected void createTabs(TabFolder tabFolder) {
+		super.createTabs(tabFolder);
+		createDatasourceTab(tabFolder);
+	}
 
-		Composite cmp = new Composite(parent, SWT.NONE);
+	protected void createDatasourceTab(TabFolder tabFolder) {
+		TabItem item = new TabItem(tabFolder, SWT.NONE);
+		item.setText("Input Control");
+
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+		item.setControl(composite);
+
+		new Label(composite, SWT.NONE);
+
+		Composite cmp = new Composite(composite, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		cmp.setLayout(new RowLayout());
 		cmp.setBackground(parent.getBackground());
 
-		bmand = getWidgetFactory().createButton(cmp, "Mandatory", SWT.CHECK);
-		// bmand.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Button bmand = new Button(cmp, SWT.CHECK);
+		bmand.setText("Mandatory");
 
-		bread = getWidgetFactory().createButton(cmp, "Read Only", SWT.CHECK);
-		// bread.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Button bread = new Button(cmp, SWT.CHECK);
+		bread.setText("Read Only");
 
-		bvisible = getWidgetFactory().createButton(cmp, "Visible", SWT.CHECK);
-		// bvisible.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Button bvisible = new Button(cmp, SWT.CHECK);
+		bvisible.setText("Visible");
 
-		AbstractSection.createLabel(parent, getWidgetFactory(), "Type", 120);
+		UIUtils.createLabel(composite, "Type");
 
-		ctype = getWidgetFactory().createCCombo(parent,
-				SWT.BORDER | SWT.READ_ONLY);
+		CCombo ctype = new CCombo(composite, SWT.BORDER | SWT.READ_ONLY);
 		ctype.setItems(new String[] { "Boolean", "Single Value",
 				"Single Select List of Values",
 				"Single Select List of Values (Radio)",
@@ -82,21 +77,19 @@ public class InputControlSection extends ASection {
 				"Single Select Query", "Single Select Query (Radio)",
 				"Multi Select Query", "Multi Select Query (Checkbox)" });
 
-		AbstractSection.createLabel(parent, getWidgetFactory(),
-				"Referenced List of values", 120);
+		UIUtils.createLabel(composite, "Referenced List of values");
 
-		cmp = new Composite(parent, SWT.NONE);
+		cmp = new Composite(composite, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;
 		cmp.setLayout(layout);
 		cmp.setBackground(parent.getBackground());
 
-		trefuri = getWidgetFactory().createText(cmp, "",
-				SWT.BORDER | SWT.READ_ONLY);
+		Text trefuri = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
 		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		bbrowse = new Button(cmp, SWT.PUSH);
+		Button bbrowse = new Button(cmp, SWT.PUSH);
 		bbrowse.setText("...");
 		bbrowse.addSelectionListener(new SelectionAdapter() {
 
@@ -122,20 +115,7 @@ public class InputControlSection extends ASection {
 			}
 
 		});
-	}
 
-	@Override
-	public void enableFields(boolean enable) {
-		ctype.setEnabled(enable);
-		bmand.setEnabled(enable);
-		bread.setEnabled(enable);
-		bvisible.setEnabled(enable);
-		trefuri.setEditable(enable);
-		bbrowse.setEnabled(enable);
-	}
-
-	@Override
-	protected void bind() {
 		bindingContext.bindValue(SWTObservables
 				.observeSingleSelectionIndex(ctype), PojoObservables
 				.observeValue(getProxy(res.getValue()), "controlType"));

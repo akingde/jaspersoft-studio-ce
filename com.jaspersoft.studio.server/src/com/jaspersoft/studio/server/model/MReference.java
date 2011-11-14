@@ -43,7 +43,7 @@ public class MReference extends MResource {
 		return getIconDescriptor();
 	}
 
-	public static ResourceDescriptor createDescriptor(MResource parent) {
+	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setIsReference(true);
 		rd.setWsType(ResourceDescriptor.TYPE_REFERENCE);

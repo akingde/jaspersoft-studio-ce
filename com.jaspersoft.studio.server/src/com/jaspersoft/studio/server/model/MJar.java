@@ -43,7 +43,7 @@ public class MJar extends AFileResource {
 		return getIconDescriptor();
 	}
 
-	public static ResourceDescriptor createDescriptor(MResource parent) {
+	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_CLASS_JAR);
 		return rd;

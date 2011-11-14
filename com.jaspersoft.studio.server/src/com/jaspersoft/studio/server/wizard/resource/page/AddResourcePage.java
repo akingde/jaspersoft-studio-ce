@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.wizard.resource;
+package com.jaspersoft.studio.server.wizard.resource.page;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -28,6 +28,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
@@ -54,9 +55,9 @@ import com.jaspersoft.studio.server.model.MUnknown;
 
 public class AddResourcePage extends WizardPage {
 	private MResource resource;
-	private MResource parent;
+	private ANode parent;
 
-	public AddResourcePage(MResource parent) {
+	public AddResourcePage(ANode parent) {
 		super("addresource");
 		setTitle("Add JasperServer Resource");
 		setDescription("Add JasperServer resource");

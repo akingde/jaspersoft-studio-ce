@@ -19,6 +19,11 @@
  */
 package com.jaspersoft.studio.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.jface.wizard.IWizardPage;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MDataType;
@@ -38,12 +43,76 @@ import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
+import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceBeanPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJDBCPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJNDIPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourcePage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDFolderPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDFontPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDImagePage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDInputControlPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDJarPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDJrxmlPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDQueryPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDReferencePage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDResourceBundlePage;
 
 public class ResourceFactory {
-	public static ANode getResource(ANode parent, ResourceDescriptor resource,
-			int index) {
+
+	private Map<Class<? extends MResource>, IWizardPage> pagemap = new HashMap<Class<? extends MResource>, IWizardPage>();
+
+	public IWizardPage getResourcePage(ANode parent, MResource resource) {
+		IWizardPage page = pagemap.get(resource.getClass());
+		if (page == null) {
+			if (resource instanceof MFolder)
+				page = new RDFolderPage(parent, (MFolder) resource);
+			else if (resource instanceof MRImage)
+				page = new RDImagePage(parent, (MRImage) resource);
+			else if (resource instanceof MRFont)
+				page = new RDFontPage(parent, (MRFont) resource);
+			else if (resource instanceof MJar)
+				page = new RDJarPage(parent, (MJar) resource);
+			else if (resource instanceof MResourceBundle)
+				page = new RDResourceBundlePage(parent,
+						(MResourceBundle) resource);
+			else if (resource instanceof MJrxml)
+				page = new RDJrxmlPage(parent, (MJrxml) resource);
+			else if (resource instanceof MReference)
+				page = new RDReferencePage(parent, (MReference) resource);
+			else if (resource instanceof MRDatasourceJNDI)
+				page = new RDDatasourceJNDIPage(parent,
+						(MRDatasourceJNDI) resource);
+			else if (resource instanceof MRDatasourceJDBC)
+				page = new RDDatasourceJDBCPage(parent,
+						(MRDatasourceJDBC) resource);
+			else if (resource instanceof MRDatasourceBean)
+				page = new RDDatasourceBeanPage(parent,
+						(MRDatasourceBean) resource);
+			else if (resource instanceof MRDatasourceCustom)
+				page = new RDDatasourcePage(parent,
+						(MRDatasourceCustom) resource);
+			else if (resource instanceof MRDatasource)
+				page = new RDDatasourcePage(parent, (MRDatasource) resource);
+			else if (resource instanceof MReportUnit)
+				page = new RDReportUnitPage(parent, (MReportUnit) resource);
+			else if (resource instanceof MInputControl)
+				page = new RDInputControlPage(parent, (MInputControl) resource);
+
+			else if (resource instanceof MRQuery)
+				page = new RDQueryPage(parent, (MRQuery) resource);
+
+			if (page != null)
+				pagemap.put(resource.getClass(), page);
+		}
+		return page;
+	}
+
+	public static MResource getResource(ANode parent,
+			ResourceDescriptor resource, int index) {
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
 			return new MFolder(parent, resource, index);
 

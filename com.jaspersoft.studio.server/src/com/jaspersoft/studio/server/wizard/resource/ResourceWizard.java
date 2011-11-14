@@ -19,55 +19,27 @@
  */
 package com.jaspersoft.studio.server.wizard.resource;
 
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.wizard.resource.page.AddResourcePage;
-import com.jaspersoft.studio.server.wizard.resource.page.ResourceDescriptorPage;
 
-public class AddResourceWizard extends Wizard {
-	private AddResourcePage page0;
+public class ResourceWizard extends Wizard {
 
-	public AddResourceWizard(ANode parent) {
+	public ResourceWizard(MResource parent) {
 		super();
-		setWindowTitle("Add Resource wizard");
+		setWindowTitle("Resource Editor");
 		this.parent = parent;
-	}
-
-	@Override
-	public void addPages() {
-		page0 = new AddResourcePage(parent);
-		addPage(page0);
-
-		addPage(new ResourceDescriptorPage());
 	}
 
 	private ResourceFactory rfactory = new ResourceFactory();
 
 	@Override
-	public IWizardPage getNextPage(IWizardPage page) {
-		if (page == page0) {
-			MResource r = page0.getResource();
-			if (r != null) {
-				IWizardPage rpage = rfactory.getResourcePage(parent, r);
-				if (rpage != null) {
-					if (getPage(rpage.getName()) == null)
-						addPage(rpage);
-					return rpage;
-				}
-			}
-		}
-		return super.getNextPage(page);
+	public void addPages() {
+		addPage(rfactory.getResourcePage(parent, parent));
 	}
 
-	private ANode parent;
-
-	public MResource getResource() {
-		return page0.getResource();
-	}
+	private MResource parent;
 
 	@Override
 	public boolean performFinish() {

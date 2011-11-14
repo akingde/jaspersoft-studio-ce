@@ -31,59 +31,45 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.wizard.resource.AddResourceWizard;
+import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class AddResourceAction extends Action {
-	private static final String ID = "ADDRESOURCEDESCRIPTOR";
+public class PropertiesAction extends Action {
+	private static final String ID = "RESOURCEPROPERTIES";
 	private TreeViewer treeViewer;
 
-	public AddResourceAction(TreeViewer treeViewer) {
+	public PropertiesAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText(Messages.common_new);
-		setToolTipText(Messages.common_new);
-		ISharedImages sharedImages = PlatformUI.getWorkbench()
-				.getSharedImages();
-		setImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD));
-		setDisabledImageDescriptor(sharedImages
-				.getImageDescriptor(ISharedImages.IMG_TOOL_NEW_WIZARD_DISABLED));
+		setText(Messages.common_properties);
+		setDescription(Messages.common_properties);
+		setToolTipText(Messages.common_properties);
 		this.treeViewer = treeViewer;
 	}
 
 	@Override
 	public void run() {
-		TreeSelection s = (TreeSelection) treeViewer.getSelection();
+		final TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
-		for (int i = 0; i < p.length;) {
+		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
-			if (obj instanceof ANode) {
-				Shell shell = Display.getDefault().getActiveShell();
-				ANode parent = (ANode) obj;
-				AddResourceWizard wizard = new AddResourceWizard(parent);
-				WizardDialog dialog = new WizardDialog(shell, wizard);
+			if (obj instanceof MResource) {
+				ResourceWizard wizard = new ResourceWizard((MResource) obj);
+				WizardDialog dialog = new WizardDialog(Display.getDefault()
+						.getActiveShell(), wizard);
 				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					MResource res = wizard.getResource();
-					res.setParent(parent, -1);
-					dorun(res);
-				}
-			}
-			break;
-		}
 
+				dorun((MResource) obj, dialog.open());
+				break;
+			}
+		}
 	}
 
-	private void dorun(final MResource res) {
+	private void dorun(final MResource obj, final int result) {
 		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
 				.getDefault().getActiveShell());
 		try {
@@ -91,7 +77,7 @@ public class AddResourceAction extends Action {
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
 					try {
-						WSClientHelper.saveResource(res, monitor);
+						editResource(obj, monitor, result);
 					} catch (Throwable e) {
 						throw new InvocationTargetException(e);
 					} finally {
@@ -104,6 +90,15 @@ public class AddResourceAction extends Action {
 			UIUtils.showError(e);
 		} catch (InterruptedException e) {
 			UIUtils.showError(e);
+		}
+	}
+
+	private void editResource(final MResource res, IProgressMonitor monitor,
+			int result) throws Exception {
+		if (result == Dialog.OK) {
+			WSClientHelper.saveResource(res, monitor);
+		} else {
+			WSClientHelper.refreshResource(res, monitor);
 		}
 	}
 }

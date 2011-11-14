@@ -139,6 +139,24 @@ public class WSClientHelper {
 		return sp.getWsClient().get(rd, f);
 	}
 
+	public static ResourceDescriptor getReference(ANode root,
+			ResourceDescriptor rd) throws Exception {
+		MServerProfile sp = (MServerProfile) root.getRoot();
+		if (rd.getReferenceUri() != null) {
+			String ref = rd.getReferenceUri();
+			int ldel = ref.lastIndexOf("/");
+			String pfolder = ref.substring(0, ldel - 1);
+			String file = ref.substring(ldel + 1, ref.length());
+
+			ResourceDescriptor r = new ResourceDescriptor();
+			r.setParentFolder(pfolder);
+			r.setName(file);
+			r.setUriString(rd.getReferenceUri());
+			return sp.getWsClient().get(r, null);
+		}
+		return null;
+	}
+
 	public static void saveResource(MResource res, IProgressMonitor monitor)
 			throws Exception {
 		saveResource(res, monitor, true);
@@ -159,7 +177,8 @@ public class WSClientHelper {
 			rd.setHasData(file != null);
 
 			INode mru = res.getReportUnit();
-			if (mru != null && !(mru instanceof MReportUnit)) {
+			if (mru != null && !(mru instanceof MServerProfile)
+					&& !(mru instanceof MReportUnit)) {
 				String ruuri = ((ResourceDescriptor) mru.getValue())
 						.getUriString();
 				rd.setParentFolder(ruuri + "_files/" + rd.getName());
@@ -203,7 +222,7 @@ public class WSClientHelper {
 				connectGetData((MServerProfile) res.getRoot(), monitor);
 			}
 
-			Display.getDefault().asyncExec(new Runnable() {
+			Display.getDefault().syncExec(new Runnable() {
 
 				public void run() {
 					ServerManager.getPropertyChangeSupport()
@@ -232,7 +251,5 @@ public class WSClientHelper {
 
 		return sp.getWsClient().runReport(rd, parameters, args);
 	}
-
-	static int depth = 0; // This variable is used to print tabs...
 
 }
