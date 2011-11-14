@@ -50,6 +50,7 @@ import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -541,6 +542,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void pageChange(int newPageIndex) {
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR || newPageIndex == PAGE_PREVIEW) {
+			if (activePage == PAGE_DESIGNER) {
+				tmpselection = reportContainer.getActiveEditor().getSite().getSelectionProvider().getSelection();
+			}
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
 				// if (!xmlFresh) {
@@ -554,13 +558,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				// }
 				updateVisualView();
 				modelFresh = true;
-				// getSite().setSelectionProvider(reportContainer.getActiveEditor().getSite().getSelectionProvider());
+				reportContainer.getActiveEditor().getSite().getSelectionProvider().setSelection(tmpselection);
 				break;
 			case PAGE_XMLEDITOR:
 				if (!modelFresh)
 					model2xml();
-
-				// getSite().setSelectionProvider(xmlEditor.getSelectionProvider());
 				break;
 			case PAGE_PREVIEW:
 				if (activePage == PAGE_XMLEDITOR)
@@ -569,11 +571,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					} catch (JRException e) {
 						handleJRException(getEditorInput(), e, false);
 					}
-				else
+				else {
 					model2xml();
 
+				}
 				model2preview();
-				// getSite().setSelectionProvider(previewEditor.getSite().getSelectionProvider());
 				break;
 			}
 		}
@@ -583,6 +585,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		activePage = newPageIndex;
 	}
 
+	private ISelection tmpselection;
 	private int activePage = 0;
 
 	private PropertiesHelper p;
@@ -652,7 +655,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		previewEditor.setJasperDesign((JasperDesign) ((MRoot) getModel()).getValue());
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-//				previewEditor.runReport(null);
+				// previewEditor.runReport(null);
 			}
 		});
 	}

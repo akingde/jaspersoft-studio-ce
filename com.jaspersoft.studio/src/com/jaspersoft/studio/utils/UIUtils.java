@@ -27,7 +27,15 @@ import java.io.Writer;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -117,6 +125,32 @@ public class UIUtils {
 		if (!spinner.isDisposed() && spinner.getSelection() != num) {
 			spinner.setSelection(num);
 		}
+	}
+
+	public static CLabel createLabel(Composite parent, String txt) {
+		CLabel lbl = new CLabel(parent, SWT.RIGHT);
+		lbl.setText(txt);
+		if (parent.getLayout() instanceof RowLayout) {
+			RowData rd = new RowData();
+			lbl.setLayoutData(rd);
+		} else if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+			lbl.setLayoutData(gd);
+		}
+		return lbl;
+	}
+
+	public static Label createSeparator(Composite parent, int span) {
+		Label lbl = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+		if (parent.getLayout() instanceof RowLayout) {
+			RowData rd = new RowData();
+			lbl.setLayoutData(rd);
+		} else if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = span;
+			lbl.setLayoutData(gd);
+		}
+		return lbl;
 	}
 
 }
