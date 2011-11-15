@@ -77,6 +77,22 @@ public class RDInputControlPage extends AResourcePage {
 				"Single Select Query", "Single Select Query (Radio)",
 				"Multi Select Query", "Multi Select Query (Checkbox)" });
 
+		createLOV(composite);
+
+		bindingContext.bindValue(SWTObservables
+				.observeSingleSelectionIndex(ctype), PojoObservables
+				.observeValue(getProxy(res.getValue()), "controlType"));
+
+		bindingContext.bindValue(SWTObservables.observeSelection(bmand),
+				PojoObservables.observeValue(res.getValue(), "mandatory"));
+		bindingContext.bindValue(SWTObservables.observeSelection(bread),
+				PojoObservables.observeValue(res.getValue(), "readOnly"));
+		bindingContext.bindValue(SWTObservables.observeSelection(bvisible),
+				PojoObservables.observeValue(res.getValue(), "visible"));
+	}
+
+	protected void createLOV(Composite composite) {
+		Composite cmp;
 		UIUtils.createLabel(composite, "Referenced List of values");
 
 		cmp = new Composite(composite, SWT.NONE);
@@ -115,17 +131,6 @@ public class RDInputControlPage extends AResourcePage {
 			}
 
 		});
-
-		bindingContext.bindValue(SWTObservables
-				.observeSingleSelectionIndex(ctype), PojoObservables
-				.observeValue(getProxy(res.getValue()), "controlType"));
-
-		bindingContext.bindValue(SWTObservables.observeSelection(bmand),
-				PojoObservables.observeValue(res.getValue(), "mandatory"));
-		bindingContext.bindValue(SWTObservables.observeSelection(bread),
-				PojoObservables.observeValue(res.getValue(), "readOnly"));
-		bindingContext.bindValue(SWTObservables.observeSelection(bvisible),
-				PojoObservables.observeValue(res.getValue(), "visible"));
 	}
 
 	private ShiftMapProxy getProxy(ResourceDescriptor rd) {

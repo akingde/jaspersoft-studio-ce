@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.server.wizard.resource.page;
 
+import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
@@ -28,10 +29,11 @@ public class RDQueryPage extends AResourcePage {
 	@Override
 	protected void createTabs(TabFolder tabFolder) {
 		super.createTabs(tabFolder);
-		createDatasourceTab(tabFolder);
+		createDatasourceTab(bindingContext, tabFolder, res.getValue());
 	}
 
-	protected void createDatasourceTab(TabFolder tabFolder) {
+	public static void createDatasourceTab(DataBindingContext bindingContext,
+			TabFolder tabFolder, ResourceDescriptor r) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
 		item.setText("Query");
 
@@ -52,20 +54,19 @@ public class RDQueryPage extends AResourcePage {
 		tsql.setLayoutData(gd);
 
 		bindingContext.bindValue(SWTObservables.observeText(clang),
-				PojoObservables.observeValue(getProxy(res.getValue()),
-						"language"));
+				PojoObservables.observeValue(getProxy(r), "language"));
 		bindingContext.bindValue(SWTObservables.observeText(tsql, SWT.Modify),
-				PojoObservables.observeValue(res.getValue(), "sql"));
+				PojoObservables.observeValue(r, "sql"));
 	}
 
-	private QProxy getProxy(ResourceDescriptor rd) {
+	private static QProxy getProxy(ResourceDescriptor rd) {
+		QProxy proxy = new QProxy();
+
 		proxy.setResourceDescriptor(rd);
 		return proxy;
 	}
 
-	private QProxy proxy = new QProxy();
-
-	class QProxy {
+	public static class QProxy {
 		private ResourceDescriptor rd;
 
 		public void setResourceDescriptor(ResourceDescriptor rd) {

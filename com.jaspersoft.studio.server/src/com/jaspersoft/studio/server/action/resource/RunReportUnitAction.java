@@ -20,7 +20,9 @@
 package com.jaspersoft.studio.server.action.resource;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
@@ -73,33 +75,7 @@ public class RunReportUnitAction extends Action {
 								throws InvocationTargetException,
 								InterruptedException {
 							try {
-								MResource res = (MResource) obj;
-
-								INode node = res.getReportUnit();
-								if (node != null && node instanceof MReportUnit) {
-									Map<String, Object> files = WSClientHelper
-											.runReportUnit((MReportUnit) node);
-									for (String key : files.keySet()) {
-										FileContent fc = (FileContent) files
-												.get(key);
-										if (key.equals("report")) {
-											FileOutputStream htmlFile = new FileOutputStream(
-													"c:\\myreport.html");
-											htmlFile.write(fc.getData());
-											htmlFile.close();
-										} else {
-											File f = new File("c:\\images");
-											if (!f.exists())
-												f.mkdirs();
-
-											FileOutputStream imageFile = new FileOutputStream(
-													"c:\\images\\" + key);
-											imageFile.write(fc.getData());
-											imageFile.close();
-										}
-
-									}
-								}
+								dorun(obj);
 							} catch (Throwable e) {
 								throw new InvocationTargetException(e);
 							} finally {
@@ -114,6 +90,36 @@ public class RunReportUnitAction extends Action {
 					UIUtils.showError(e);
 				}
 				break;
+			}
+		}
+	}
+
+	protected void dorun(final Object obj) throws Exception,
+			FileNotFoundException, IOException {
+		MResource res = (MResource) obj;
+
+		INode node = res.getReportUnit();
+		if (node != null && node instanceof MReportUnit) {
+			Map<String, Object> files = WSClientHelper
+					.runReportUnit((MReportUnit) node);
+			for (String key : files.keySet()) {
+				FileContent fc = (FileContent) files.get(key);
+				if (key.equals("report")) {
+					FileOutputStream htmlFile = new FileOutputStream(
+							"c:\\myreport.html");
+					htmlFile.write(fc.getData());
+					htmlFile.close();
+				} else {
+					File f = new File("c:\\images");
+					if (!f.exists())
+						f.mkdirs();
+
+					FileOutputStream imageFile = new FileOutputStream(
+							"c:\\images\\" + key);
+					imageFile.write(fc.getData());
+					imageFile.close();
+				}
+
 			}
 		}
 	}

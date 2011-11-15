@@ -78,6 +78,8 @@ public class RDReportUnitPage extends AResourcePage {
 		bindingContext.bindValue(SWTObservables.observeSelection(ispromp),
 				PojoObservables.observeValue(v, "allowPrompt"));
 
+		res.getChildren();
+
 	}
 
 	private ReportProxy getProxy(ResourceDescriptor rd) {
@@ -163,16 +165,23 @@ public class RDReportUnitPage extends AResourcePage {
 		composite.setLayout(new GridLayout(3, false));
 		item.setControl(composite);
 
+		ResourceDescriptor rd = res.getValue();
+		for (Object obj : rd.getChildren()) {
+			ResourceDescriptor r = (ResourceDescriptor) obj;
+			if (r.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE)) {
+				
+			}
+		}
+
 	}
 
 	protected void createQuery(TabFolder tabFolder) {
-		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Query");
-
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout(3, false));
-		item.setControl(composite);
-
+		ResourceDescriptor rd = res.getValue();
+		for (Object obj : rd.getChildren()) {
+			ResourceDescriptor r = (ResourceDescriptor) obj;
+			if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY)) {
+				RDQueryPage.createDatasourceTab(bindingContext, tabFolder, r);
+			}
+		}
 	}
-
 }
