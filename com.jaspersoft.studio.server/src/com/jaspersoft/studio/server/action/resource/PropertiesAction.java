@@ -58,12 +58,20 @@ public class PropertiesAction extends Action {
 		for (int i = 0; i < p.length; i++) {
 			final Object obj = p[i].getLastSegment();
 			if (obj instanceof MResource) {
-				ResourceWizard wizard = new ResourceWizard((MResource) obj);
-				WizardDialog dialog = new WizardDialog(Display.getDefault()
-						.getActiveShell(), wizard);
-				dialog.create();
+				try {
+					MResource mres = (MResource) obj;
+					mres.setValue(WSClientHelper.getResource(mres,
+							mres.getValue()));
 
-				dorun((MResource) obj, dialog.open());
+					ResourceWizard wizard = new ResourceWizard(mres);
+					WizardDialog dialog = new WizardDialog(Display.getDefault()
+							.getActiveShell(), wizard);
+					dialog.create();
+
+					dorun(mres, dialog.open());
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				}
 				break;
 			}
 		}

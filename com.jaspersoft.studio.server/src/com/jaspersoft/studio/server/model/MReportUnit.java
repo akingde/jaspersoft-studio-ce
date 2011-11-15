@@ -25,7 +25,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
-public class MReportUnit extends MResource {
+public class MReportUnit extends AFileResource {
 
 	public MReportUnit(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);

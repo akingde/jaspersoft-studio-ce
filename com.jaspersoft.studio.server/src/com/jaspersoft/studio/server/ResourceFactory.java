@@ -46,6 +46,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
+import com.jaspersoft.studio.server.wizard.resource.page.RDDataTypePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceBeanPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJDBCPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJNDIPage;
@@ -101,7 +102,8 @@ public class ResourceFactory {
 				page = new RDReportUnitPage(parent, (MReportUnit) resource);
 			else if (resource instanceof MInputControl)
 				page = new RDInputControlPage(parent, (MInputControl) resource);
-
+			else if (resource instanceof MDataType)
+				page = new RDDataTypePage(parent, (MDataType) resource);
 			else if (resource instanceof MRQuery)
 				page = new RDQueryPage(parent, (MRQuery) resource);
 
@@ -158,6 +160,7 @@ public class ResourceFactory {
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE))
 			return new MRDatasource(parent, resource, index);
+
 		if (resource.getWsType()
 				.equals(ResourceDescriptor.TYPE_DATASOURCE_BEAN))
 			return new MRDatasourceBean(parent, resource, index);
@@ -172,6 +175,13 @@ public class ResourceFactory {
 		if (resource.getWsType()
 				.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI))
 			return new MRDatasourceJNDI(parent, resource, index);
+
+		if (resource.getWsType().equals("Domain"))
+			return new MUnknown(parent, resource, index);
+
+		if (resource.getWsType().equals("dashboardUnit"))
+			return new MUnknown(parent, resource, index);
+
 		return new MUnknown(parent, resource, index);
 	}
 }

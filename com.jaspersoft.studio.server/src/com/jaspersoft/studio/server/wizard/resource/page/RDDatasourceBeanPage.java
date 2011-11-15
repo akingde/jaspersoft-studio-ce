@@ -26,6 +26,8 @@ public class RDDatasourceBeanPage extends AResourcePage {
 	protected void createTabs(TabFolder tabFolder) {
 		super.createTabs(tabFolder);
 		createDatasourceTab(tabFolder);
+		if (!res.getValue().getIsNew())
+			tabFolder.setSelection(1);
 	}
 
 	protected void createDatasourceTab(TabFolder tabFolder) {

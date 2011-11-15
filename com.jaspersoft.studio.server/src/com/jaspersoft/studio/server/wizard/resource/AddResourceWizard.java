@@ -37,9 +37,16 @@ public class AddResourceWizard extends Wizard {
 		this.parent = parent;
 	}
 
+	private boolean dsonly = false;
+
+	public void setOnlyDatasource(boolean dsonly) {
+		this.dsonly = dsonly;
+	}
+
 	@Override
 	public void addPages() {
 		page0 = new AddResourcePage(parent);
+		page0.setOnlyDatasource(dsonly);
 		addPage(page0);
 
 		addPage(new ResourceDescriptorPage());

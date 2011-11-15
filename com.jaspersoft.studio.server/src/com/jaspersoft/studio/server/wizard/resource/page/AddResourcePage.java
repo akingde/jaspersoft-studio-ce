@@ -51,7 +51,6 @@ import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
-import com.jaspersoft.studio.server.model.MUnknown;
 
 public class AddResourcePage extends WizardPage {
 	private MResource resource;
@@ -90,41 +89,56 @@ public class AddResourcePage extends WizardPage {
 		setControl(treeViewer.getControl());
 	}
 
+	private boolean dsonly = false;
+
+	public void setOnlyDatasource(boolean dsonly) {
+		this.dsonly = dsonly;
+	}
+
 	private MRoot getInput() {
 		MRoot root = new MRoot(null, null);
-		if (parent instanceof MFolder) {
-			new MFolder(root, MFolder.createDescriptor(parent), -1);
-			new MReportUnit(root, MReportUnit.createDescriptor(parent), -1);
+		if (dsonly) {
+			createDatasources(root);
+		} else {
 
-			new MRDatasourceBean(root,
-					MRDatasourceBean.createDescriptor(parent), -1);
-			new MRDatasourceJDBC(root,
-					MRDatasourceJDBC.createDescriptor(parent), -1);
-			new MRDatasourceJNDI(root,
-					MRDatasourceJNDI.createDescriptor(parent), -1);
-			new MRDatasourceCustom(root,
-					MRDatasourceCustom.createDescriptor(parent), -1);
+			if (parent instanceof MFolder) {
+				new MFolder(root, MFolder.createDescriptor(parent), -1);
+				new MReportUnit(root, MReportUnit.createDescriptor(parent), -1);
 
-			new MDataType(root, MDataType.createDescriptor(parent), -1);
-			new MRQuery(root, MRQuery.createDescriptor(parent), -1);
+				createDatasources(root);
 
+				new MDataType(root, MDataType.createDescriptor(parent), -1);
+				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
+			}
+			new MJrxml(root, MJrxml.createDescriptor(parent), -1);
+			new MInputControl(root, MInputControl.createDescriptor(parent), -1);
+			new MListOfValues(root, MListOfValues.createDescriptor(parent), -1);
+			new MJar(root, MJar.createDescriptor(parent), -1);
+			new MResource(root, MResource.createDescriptor(parent), -1);
+			new MResourceBundle(root, MResourceBundle.createDescriptor(parent),
+					-1);
+			new MReference(root, MReference.createDescriptor(parent), -1);
+			new MRFont(root, MRFont.createDescriptor(parent), -1);
+			new MRImage(root, MRImage.createDescriptor(parent), -1);
+			new MRStyleTemplate(root, MRStyleTemplate.createDescriptor(parent),
+					-1);
+			// new MUnknown(root, MUnknown.createDescriptor(parent), -1);
 		}
-		new MJrxml(root, MJrxml.createDescriptor(parent), -1);
-		new MInputControl(root, MInputControl.createDescriptor(parent), -1);
-		new MListOfValues(root, MListOfValues.createDescriptor(parent), -1);
-		new MJar(root, MJar.createDescriptor(parent), -1);
-		new MResource(root, MResource.createDescriptor(parent), -1);
-		new MResourceBundle(root, MResourceBundle.createDescriptor(parent), -1);
-		new MReference(root, MReference.createDescriptor(parent), -1);
-		new MRFont(root, MRFont.createDescriptor(parent), -1);
-		new MRImage(root, MRImage.createDescriptor(parent), -1);
-		new MRStyleTemplate(root, MRStyleTemplate.createDescriptor(parent), -1);
-		new MUnknown(root, MUnknown.createDescriptor(parent), -1);
-
 		for (INode n : root.getChildren()) {
 			((MResource) n).setEditMode(true);
 		}
 
 		return root;
+	}
+
+	protected void createDatasources(MRoot root) {
+		new MRDatasourceBean(root, MRDatasourceBean.createDescriptor(parent),
+				-1);
+		new MRDatasourceJDBC(root, MRDatasourceJDBC.createDescriptor(parent),
+				-1);
+		new MRDatasourceJNDI(root, MRDatasourceJNDI.createDescriptor(parent),
+				-1);
+		new MRDatasourceCustom(root,
+				MRDatasourceCustom.createDescriptor(parent), -1);
 	}
 }

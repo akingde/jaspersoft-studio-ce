@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
@@ -29,14 +30,45 @@ public class RDReportUnitPage extends AResourcePage {
 	protected void createTabs(TabFolder tabFolder) {
 		super.createTabs(tabFolder);
 		createReportUnit(tabFolder);
-		createControlResources(tabFolder);
-		createDatasource(tabFolder);
+
+		new DatasourceSelector().createDatasource(tabFolder, parent, res);
 		createQuery(tabFolder);
+		createReportUnitControls(tabFolder);
 	}
 
 	protected void createReportUnit(TabFolder tabFolder) {
 		TabItem item = new TabItem(tabFolder, SWT.NONE);
 		item.setText("Report Unit");
+
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+		item.setControl(composite);
+
+		new JrxmlSelector().createControls(composite, parent, res);
+
+		Label lbl = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		lbl.setLayoutData(gd);
+
+		UIUtils.createLabel(composite, "JSP For Report View");
+
+		Text jspview = new Text(composite, SWT.BORDER);
+		jspview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		jspview.setToolTipText("within /WEB-INF/jsp, leave blank for default");
+
+		ReportProxy v = getProxy(res.getValue());
+		bindingContext.bindValue(
+				SWTObservables.observeText(jspview, SWT.Modify),
+				PojoObservables.observeValue(v, "jspView"));
+
+		res.getChildren();
+
+	}
+
+	protected void createReportUnitControls(TabFolder tabFolder) {
+		TabItem item = new TabItem(tabFolder, SWT.NONE);
+		item.setText("Input Controls");
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
@@ -54,12 +86,6 @@ public class RDReportUnitPage extends AResourcePage {
 		ispromp.setText("Always Prompt");
 		ispromp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		UIUtils.createLabel(composite, "JSP For Report View");
-
-		Text jspview = new Text(composite, SWT.BORDER);
-		jspview.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		jspview.setToolTipText("within /WEB-INF/jsp, leave blank for default");
-
 		UIUtils.createLabel(composite, "JSP To Run InputControls");
 
 		Text jspic = new Text(composite, SWT.BORDER);
@@ -70,9 +96,6 @@ public class RDReportUnitPage extends AResourcePage {
 		bindingContext.bindValue(
 				SWTObservables.observeSingleSelectionIndex(cictype),
 				PojoObservables.observeValue(v, "layoutControl"));
-		bindingContext.bindValue(
-				SWTObservables.observeText(jspview, SWT.Modify),
-				PojoObservables.observeValue(v, "jspView"));
 		bindingContext.bindValue(SWTObservables.observeText(jspic, SWT.Modify),
 				PojoObservables.observeValue(v, "jspIC"));
 		bindingContext.bindValue(SWTObservables.observeSelection(ispromp),
@@ -145,34 +168,6 @@ public class RDReportUnitPage extends AResourcePage {
 			return rd
 					.getResourcePropertyValueAsBoolean(ResourceDescriptor.PROP_RU_ALWAYS_PROPMT_CONTROLS);
 		}
-	}
-
-	protected void createControlResources(TabFolder tabFolder) {
-		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Controls && Resources");
-
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout(3, false));
-		item.setControl(composite);
-
-	}
-
-	protected void createDatasource(TabFolder tabFolder) {
-		TabItem item = new TabItem(tabFolder, SWT.NONE);
-		item.setText("Data Source");
-
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout(3, false));
-		item.setControl(composite);
-
-		ResourceDescriptor rd = res.getValue();
-		for (Object obj : rd.getChildren()) {
-			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_DATASOURCE)) {
-				
-			}
-		}
-
 	}
 
 	protected void createQuery(TabFolder tabFolder) {
