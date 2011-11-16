@@ -30,6 +30,7 @@ public class RDQueryPage extends AResourcePage {
 	protected void createTabs(TabFolder tabFolder) {
 		super.createTabs(tabFolder);
 		createDatasourceTab(bindingContext, tabFolder, res.getValue());
+		new SelectorDatasource().createDatasource(tabFolder, parent, res);
 	}
 
 	public static void createDatasourceTab(DataBindingContext bindingContext,
@@ -48,7 +49,7 @@ public class RDQueryPage extends AResourcePage {
 
 		UIUtils.createLabel(composite, "Query");
 
-		Text tsql = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+		Text tsql = new Text(composite, SWT.BORDER | SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
 		tsql.setLayoutData(gd);

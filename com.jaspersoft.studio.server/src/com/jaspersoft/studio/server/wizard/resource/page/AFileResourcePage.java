@@ -66,6 +66,7 @@ public abstract class AFileResourcePage extends AResourcePage {
 					((AFileResource) res).setFile(new File(filename));
 					AFileResourcePage.this.bindingContext.updateTargets();
 				}
+				handleFileChange();
 			}
 
 		});
@@ -76,7 +77,7 @@ public abstract class AFileResourcePage extends AResourcePage {
 		Button bexport = new Button(composite, SWT.PUSH | SWT.LEFT);
 		bexport.setText("Download File");
 		bexport.setImage(Activator.getImage("icons/drive-download.png"));
-		gd = new GridData();
+		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.widthHint = 200;
 		bexport.setLayoutData(gd);
 		bexport.addSelectionListener(new SelectionAdapter() {
@@ -112,6 +113,7 @@ public abstract class AFileResourcePage extends AResourcePage {
 					} catch (Exception e1) {
 						UIUtils.showError(e1);
 					}
+					handleFileChange();
 				}
 			}
 
@@ -126,6 +128,18 @@ public abstract class AFileResourcePage extends AResourcePage {
 
 		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE),
 				PojoObservables.observeValue(res, "fileName"));
+
+		createFileTab(composite);
+
+		handleFileChange();
+	}
+
+	protected void handleFileChange() {
+
+	}
+
+	protected void createFileTab(Composite tabFolder) {
+
 	}
 
 	protected abstract String[] getFilter();

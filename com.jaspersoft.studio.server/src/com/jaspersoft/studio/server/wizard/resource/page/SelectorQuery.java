@@ -1,11 +1,7 @@
 package com.jaspersoft.studio.server.wizard.resource.page;
 
-import java.io.File;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,20 +10,21 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.model.AFileResource;
-import com.jaspersoft.studio.server.model.MJrxml;
+import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
+import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class JrxmlSelector {
+public class SelectorQuery {
 	private Button brRepo;
 	private Text jsRefDS;
 	private Button brLocal;
@@ -71,7 +68,7 @@ public class JrxmlSelector {
 
 					@Override
 					public boolean isResourceCompatible(MResource r) {
-						return r instanceof MJrxml;
+						return r instanceof MRQuery;
 					}
 				};
 				if (rd.open() == Dialog.OK) {
@@ -81,14 +78,13 @@ public class JrxmlSelector {
 						try {
 							ResourceDescriptor ref = rs.getValue();
 							ref = WSClientHelper.getResource(parent, ref);
-							ref.setIsReference(true);
-							ref.setMainReport(true);
+							ref.setIsReference(false);
 							ref.setReferenceUri(ref.getUriString());
 							ref.setParentFolder(runit.getUriString() + "_files");
-							ref.setWsType(ResourceDescriptor.TYPE_JRXML);
 							ref.setUriString(ref.getParentFolder() + "/"
 									+ ref.getName());
-							replaceMainReport(res, ref);
+							ref.setWsType(ResourceDescriptor.TYPE_REFERENCE);
+							replaceQuery(res, ref);
 
 							jsRefDS.setText(ref.getUriString());
 						} catch (Exception e1) {
@@ -115,43 +111,90 @@ public class JrxmlSelector {
 		jsLocDS.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		bLoc = new Button(composite, SWT.PUSH);
-		bLoc.setText("Browse");
+		bLoc.setText("...");
 		bLoc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FilteredResourcesSelectionDialog wizard = new FilteredResourcesSelectionDialog(
-						Display.getCurrent().getActiveShell(), false,
-						ResourcesPlugin.getWorkspace().getRoot(),
-						IResource.FILE);
-				wizard.setInitialPattern("*.jrxml");//$NON-NLS-1$
-				if (wizard.open() == Dialog.OK) {
-					ResourceDescriptor jrxmlDescriptor = new ResourceDescriptor();
-					jrxmlDescriptor.setName("main_jrxml");
-					jrxmlDescriptor.setLabel("Main Jrxml");
-					jrxmlDescriptor.setWsType(ResourceDescriptor.TYPE_JRXML);
-					jrxmlDescriptor.setIsNew(true);
-					jrxmlDescriptor.setMainReport(true);
-					jrxmlDescriptor.setIsReference(false);
-					jrxmlDescriptor.setHasData(true);
+				ResourceDescriptor runit = res.getValue();
+				ResourceDescriptor ref = getQuery(runit);
+				if (ref != null
+						&& ref.getIsReference()
+						|| ref.getWsType().equals(
+								ResourceDescriptor.TYPE_REFERENCE))
+					ref = null;
+				boolean newref = false;
+				Shell shell = Display.getDefault().getActiveShell();
+				if (ref != null)
+					ref = cloneResource(ref);
+				else {
+					ref = MRQuery.createDescriptor(res);
+					ref.setIsNew(true);
+					ref.setIsReference(false);
+					ref.setParentFolder(runit.getUriString() + "_files");
 
-					replaceMainReport(res, jrxmlDescriptor);
-
-					((AFileResource) res).setFile(new File(((IFile) wizard
-							.getFirstResult()).getLocationURI()));
+					newref = true;
 				}
+				MResource r = ResourceFactory.getResource(null, ref, -1);
+				ResourceWizard wizard = new ResourceWizard(parent, r);
+				WizardDialog dialog = new WizardDialog(shell, wizard);
+				dialog.create();
+				if (dialog.open() != Dialog.OK)
+					return;
+				ref.setUriString(ref.getParentFolder() + "/" + ref.getName());
+				if (newref) {
+					replaceQuery(res, ref);
+				} else {
+					copyFields(res.getValue(), ref);
+				}
+				jsLocDS.setText(Misc.nvl(ref.getName()));
 			}
 		});
-		ResourceDescriptor r = getMainReport(res.getValue());
+		ResourceDescriptor r = getQuery(res.getValue());
 		if (r != null) {
-			if (r.getIsReference())
+			if (r.getIsReference()
+					|| r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
 				setEnabled(0);
 			else
 				setEnabled(1);
 		}
 	}
 
-	protected void replaceMainReport(final MResource res, ResourceDescriptor rd) {
-		ResourceDescriptor rdel = getMainReport(res.getValue());
+	public static ResourceDescriptor cloneResource(ResourceDescriptor rd) {
+		ResourceDescriptor rnew = new ResourceDescriptor();
+		rnew.setIsNew(rd.getIsNew());
+		rnew.setIsReference(rd.getIsReference());
+		rnew.setName(rd.getName());
+		rnew.setLabel(rd.getLabel());
+		rnew.setDescription(rd.getDescription());
+		rnew.setUriString(rd.getUriString());
+		rnew.setParentFolder(rd.getParentFolder());
+		rnew.setDataSourceType(rd.getDataSourceType());
+		rnew.setWsType(rd.getWsType());
+
+		rnew.setListOfValues(rd.getListOfValues());
+		rnew.setParameters(rd.getParameters());
+		rnew.setProperties(rd.getProperties());
+		rnew.setChildren(rd.getChildren());
+
+		return rnew;
+	}
+
+	public static void copyFields(ResourceDescriptor rd, ResourceDescriptor rnew) {
+		rnew.setQueryData(rd.getQueryData());
+		rnew.setQueryValueColumn(rd.getQueryValueColumn());
+		rnew.setQueryVisibleColumns(rd.getQueryVisibleColumns());
+
+		rnew.setName(rd.getName());
+		rnew.setLabel(rd.getLabel());
+		rnew.setDescription(rd.getDescription());
+
+		rnew.setParameters(rd.getParameters());
+		rnew.setProperties(rd.getProperties());
+		rnew.setChildren(rd.getChildren());
+	}
+
+	protected void replaceQuery(final MResource res, ResourceDescriptor rd) {
+		ResourceDescriptor rdel = getQuery(res.getValue());
 		if (rdel != null) {
 			int index = res.getValue().getChildren().indexOf(rdel);
 			if (index >= 0)
@@ -160,11 +203,11 @@ public class JrxmlSelector {
 		res.getValue().getChildren().add(rd);
 	}
 
-	private static ResourceDescriptor getMainReport(ResourceDescriptor ru) {
+	private static ResourceDescriptor getQuery(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
-			if (r.getWsType().equals(ResourceDescriptor.TYPE_JRXML)
-					&& r.isMainReport()) {
+			if (r.getWsType().equals(ResourceDescriptor.TYPE_QUERY)
+					|| r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
 				return r;
 			}
 		}
@@ -184,20 +227,23 @@ public class JrxmlSelector {
 		jsRefDS.setText("");
 		jsLocDS.setText("");
 
-		ResourceDescriptor r = getMainReport(res.getValue());
+		ResourceDescriptor r = getQuery(res.getValue());
 		switch (pos) {
 		case 0:
 			bRef.setEnabled(true);
 			brRepo.setSelection(true);
 			jsRefDS.setEnabled(true);
-			if (r != null)
+			if (r != null
+					&& (r.getIsReference() || r.getWsType().equals(
+							ResourceDescriptor.TYPE_REFERENCE)))
 				jsRefDS.setText(Misc.nvl(r.getReferenceUri()));
 			break;
 		case 1:
 			brLocal.setSelection(true);
 			bLoc.setEnabled(true);
 			jsLocDS.setEnabled(true);
-			if (r != null)
+			if (r != null && !r.getIsReference()
+					&& !r.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
 				jsLocDS.setText(Misc.nvl(r.getName()));
 			break;
 		}

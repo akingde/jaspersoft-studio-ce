@@ -31,7 +31,7 @@ public class RDReportUnitPage extends AResourcePage {
 		super.createTabs(tabFolder);
 		createReportUnit(tabFolder);
 
-		new DatasourceSelector().createDatasource(tabFolder, parent, res);
+		new SelectorDatasource().createDatasource(tabFolder, parent, res);
 		createQuery(tabFolder);
 		createReportUnitControls(tabFolder);
 	}
@@ -44,7 +44,7 @@ public class RDReportUnitPage extends AResourcePage {
 		composite.setLayout(new GridLayout(2, false));
 		item.setControl(composite);
 
-		new JrxmlSelector().createControls(composite, parent, res);
+		new SelectorJrxml().createControls(composite, parent, res);
 
 		Label lbl = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);

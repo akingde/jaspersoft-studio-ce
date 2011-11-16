@@ -26,7 +26,7 @@ import com.jaspersoft.studio.server.wizard.resource.ResourceWizard;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class DatasourceSelector {
+public class SelectorDatasource {
 	private Button brRepo;
 	private Text jsRefDS;
 	private Button brLocal;
@@ -141,7 +141,7 @@ public class DatasourceSelector {
 				} else {
 					MResource r = ResourceFactory.getResource(null,
 							cloneResource(ref), -1);
-					ResourceWizard wizard = new ResourceWizard(r);
+					ResourceWizard wizard = new ResourceWizard(parent, r);
 					WizardDialog dialog = new WizardDialog(shell, wizard);
 					dialog.create();
 					if (dialog.open() != Dialog.OK)

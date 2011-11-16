@@ -149,13 +149,17 @@ public class PasteResourceAction extends Action {
 							m.setCut(false);
 						} else {
 							ResourceDescriptor newrd = ws.copy(origin, newname);
-							newrd.setLabel(origin.getLabel() + " Copy");
-							String newuri = dURI
-									+ (dURI.endsWith("/") ? "" : "/")
-									+ newrd.getName();
-							newrd.setUriString(newuri);
+							try {
+								newrd.setLabel(newrd.getName());
+								String newuri = dURI
+										+ (dURI.endsWith("/") ? "" : "/")
+										+ newrd.getName();
+								newrd.setUriString(newuri);
 
-							ws.addOrModifyResource(newrd, null);
+								ws.addOrModifyResource(newrd, null);
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
 						}
 					} else if (parent instanceof MReportUnit) {
 						ResourceDescriptor prd = (ResourceDescriptor) parent

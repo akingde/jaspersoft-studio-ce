@@ -21,14 +21,16 @@ package com.jaspersoft.studio.server.wizard.resource;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.MResource;
 
 public class ResourceWizard extends Wizard {
 
-	public ResourceWizard(MResource parent) {
+	public ResourceWizard(ANode parent, MResource resource) {
 		super();
 		setWindowTitle("Resource Editor");
+		this.resource = resource;
 		this.parent = parent;
 	}
 
@@ -36,10 +38,12 @@ public class ResourceWizard extends Wizard {
 
 	@Override
 	public void addPages() {
-		addPage(rfactory.getResourcePage(parent, parent));
+		addPage(rfactory.getResourcePage(parent, resource));
 	}
 
-	private MResource parent;
+	private ANode parent;
+
+	private MResource resource;
 
 	@Override
 	public boolean performFinish() {

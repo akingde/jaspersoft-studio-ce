@@ -63,7 +63,7 @@ public class PropertiesAction extends Action {
 					mres.setValue(WSClientHelper.getResource(mres,
 							mres.getValue()));
 
-					ResourceWizard wizard = new ResourceWizard(mres);
+					ResourceWizard wizard = new ResourceWizard(mres, mres);
 					WizardDialog dialog = new WizardDialog(Display.getDefault()
 							.getActiveShell(), wizard);
 					dialog.create();

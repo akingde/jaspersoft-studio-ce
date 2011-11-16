@@ -57,6 +57,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.RDImagePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDInputControlPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDJarPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDJrxmlPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDLovPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDQueryPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDReferencePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitPage;
@@ -106,6 +107,8 @@ public class ResourceFactory {
 				page = new RDDataTypePage(parent, (MDataType) resource);
 			else if (resource instanceof MRQuery)
 				page = new RDQueryPage(parent, (MRQuery) resource);
+			else if (resource instanceof MListOfValues)
+				page = new RDLovPage(parent, (MListOfValues) resource);
 
 			if (page != null)
 				pagemap.put(resource.getClass(), page);

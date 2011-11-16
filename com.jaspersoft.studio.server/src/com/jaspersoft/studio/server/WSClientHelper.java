@@ -127,15 +127,20 @@ public class WSClientHelper {
 
 	public static ResourceDescriptor getResource(ANode res,
 			ResourceDescriptor rd) throws Exception {
-		return getResource(res, rd, null);
+		return getResource(res, rd, (String) null);
 	}
 
 	public static ResourceDescriptor getResource(ANode res,
 			ResourceDescriptor rd, String file) throws Exception {
-		MServerProfile sp = (MServerProfile) res.getRoot();
 		File f = null;
 		if (file != null)
 			f = new File(file);
+		return getResource(res, rd, f);
+	}
+
+	public static ResourceDescriptor getResource(ANode res,
+			ResourceDescriptor rd, File f) throws Exception {
+		MServerProfile sp = (MServerProfile) res.getRoot();
 		return sp.getWsClient().get(rd, f);
 	}
 

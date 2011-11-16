@@ -46,6 +46,7 @@ public class MRQuery extends MResource {
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_QUERY);
+		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE, "sql");
 		return rd;
 	}
 }

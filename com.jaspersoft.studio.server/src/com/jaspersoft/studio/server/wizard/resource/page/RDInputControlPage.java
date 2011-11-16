@@ -2,9 +2,9 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -12,9 +12,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
@@ -22,10 +21,6 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MInputControl;
-import com.jaspersoft.studio.server.model.MListOfValues;
-import com.jaspersoft.studio.server.model.MRQuery;
-import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RDInputControlPage extends AResourcePage {
@@ -68,7 +63,7 @@ public class RDInputControlPage extends AResourcePage {
 
 		UIUtils.createLabel(composite, "Type");
 
-		CCombo ctype = new CCombo(composite, SWT.BORDER | SWT.READ_ONLY);
+		final CCombo ctype = new CCombo(composite, SWT.BORDER | SWT.READ_ONLY);
 		ctype.setItems(new String[] { "Boolean", "Single Value",
 				"Single Select List of Values",
 				"Single Select List of Values (Radio)",
@@ -77,7 +72,28 @@ public class RDInputControlPage extends AResourcePage {
 				"Single Select Query", "Single Select Query (Radio)",
 				"Multi Select Query", "Multi Select Query (Checkbox)" });
 
-		createLOV(composite);
+		stackComposite = new Composite(composite, SWT.NONE);
+		final StackLayout stackLayout = new StackLayout();
+		stackComposite.setLayout(stackLayout);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		stackComposite.setLayoutData(gd);
+
+		cvalue = new Composite(stackComposite, SWT.NONE);
+		createLOV(stackComposite);
+		createQuery(stackComposite);
+
+		ctype.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleTypeChanged(ctype, stackLayout);
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
 
 		bindingContext.bindValue(SWTObservables
 				.observeSingleSelectionIndex(ctype), PojoObservables
@@ -89,48 +105,77 @@ public class RDInputControlPage extends AResourcePage {
 				PojoObservables.observeValue(res.getValue(), "readOnly"));
 		bindingContext.bindValue(SWTObservables.observeSelection(bvisible),
 				PojoObservables.observeValue(res.getValue(), "visible"));
+
+		handleTypeChanged(ctype, stackLayout);
 	}
 
+	protected void handleTypeChanged(CCombo ctype, StackLayout stackLayout) {
+		int s = ctype.getSelectionIndex();
+		if (s < 2)
+			stackLayout.topControl = cvalue;
+		else if (s < 6)
+			stackLayout.topControl = clov;
+		else
+			stackLayout.topControl = cquery;
+		stackComposite.layout();
+	}
+
+	private Composite stackComposite;
+	private Composite cvalue;
+	private Group clov;
+	private TabFolder cquery;
+
 	protected void createLOV(Composite composite) {
-		Composite cmp;
-		UIUtils.createLabel(composite, "Referenced List of values");
+		clov = new Group(composite, SWT.NONE);
+		clov.setText("List Of Values");
+		clov.setLayout(new GridLayout(3, false));
 
-		cmp = new Composite(composite, SWT.NONE);
-		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		cmp.setLayout(layout);
-		cmp.setBackground(parent.getBackground());
+		UIUtils.createLabel(composite, "Type");
 
-		Text trefuri = new Text(cmp, SWT.BORDER | SWT.READ_ONLY);
-		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		new SelectorLov().createControls(clov, parent, res);
+	}
 
-		Button bbrowse = new Button(cmp, SWT.PUSH);
-		bbrowse.setText("...");
-		bbrowse.addSelectionListener(new SelectionAdapter() {
+	protected void createQuery(Composite composite) {
+		cquery = new TabFolder(composite, SWT.NONE);
 
-			public void widgetSelected(SelectionEvent e) {
-				Shell shell = Display.getDefault().getActiveShell();
-				RepositoryDialog rd = new RepositoryDialog(shell, res.getRoot()) {
+		TabItem item = new TabItem(cquery, SWT.NONE);
+		item.setText("Query Resource");
 
-					@Override
-					public boolean isResourceCompatible(MResource r) {
-						return (r instanceof MListOfValues)
-								|| (r instanceof MRQuery);
-					}
+		Composite cmp = new Composite(cquery, SWT.NONE);
+		cmp.setLayout(new GridLayout(2, false));
+		item.setControl(cmp);
 
-				};
-				if (rd.open() == Dialog.OK) {
-					MResource rs = rd.getResource();
-					if (rs != null) {
-						res.getValue().setReferenceUri(
-								rs.getValue().getUriString());
-						bindingContext.updateTargets();
-					}
-				}
-			}
+		new SelectorQuery().createControls(cmp, parent, res);
 
-		});
+		item = new TabItem(cquery, SWT.NONE);
+		item.setText("Value && Visible Columns");
+
+		cmp = new Composite(cquery, SWT.NONE);
+		cmp.setLayout(new GridLayout(2, false));
+		item.setControl(cmp);
+
+		UIUtils.createLabel(cmp, "Value Column");
+
+		Text tvalue = new Text(cmp, SWT.BORDER);
+		tvalue.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		cmp = new Composite(cmp, SWT.NONE);
+		cmp.setLayout(new GridLayout(2, false));
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		cmp.setLayoutData(gd);
+
+		qvct = new QueryVisibleColumnsTable(cmp, res.getValue());
+
+		bindingContext.bindValue(
+				SWTObservables.observeText(tvalue, SWT.Modify), PojoObservables
+						.observeValue(res.getValue(), "queryValueColumn"));
+	}
+
+	@Override
+	public void dispose() {
+		qvct.dispose();
+		super.dispose();
 	}
 
 	private ShiftMapProxy getProxy(ResourceDescriptor rd) {
@@ -139,6 +184,7 @@ public class RDInputControlPage extends AResourcePage {
 	}
 
 	private ShiftMapProxy proxy = new ShiftMapProxy();
+	private QueryVisibleColumnsTable qvct;
 
 	class ShiftMapProxy {
 		private ResourceDescriptor rd;
