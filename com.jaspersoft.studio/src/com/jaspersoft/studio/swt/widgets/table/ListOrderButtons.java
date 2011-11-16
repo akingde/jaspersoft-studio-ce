@@ -73,6 +73,8 @@ public class ListOrderButtons {
 					int index = lst.indexOf(obj);
 					lst.remove(obj);
 					index = up ? index - 1 : index + 1;
+					if (index < 0)
+						index = 0;
 					if (index >= 0 && index < lst.size())
 						lst.add(index, obj);
 					else
@@ -80,6 +82,7 @@ public class ListOrderButtons {
 				}
 				tableViewer.refresh();
 				tableViewer.setSelection(s);
+				tableViewer.reveal(s.getFirstElement());
 			}
 		}
 
