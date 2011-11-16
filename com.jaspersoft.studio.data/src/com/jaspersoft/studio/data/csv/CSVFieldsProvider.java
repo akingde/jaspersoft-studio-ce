@@ -44,6 +44,7 @@ public class CSVFieldsProvider implements IFieldsProvider {
 			JRDataset reportDataset) throws JRException,
 			UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
 		ParameterUtil.setParameters(reportDataset, parameters);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 2);
@@ -62,6 +63,7 @@ public class CSVFieldsProvider implements IFieldsProvider {
 					.get(JRParameter.REPORT_DATA_SOURCE);
 		}
 		if (ds != null) {
+			ds.setUseFirstRowAsHeader(true);
 			ds.next();
 			Map<String, Integer> map = ds.getColumnNames();
 			List<JRDesignField> columns = new ArrayList<JRDesignField>(map

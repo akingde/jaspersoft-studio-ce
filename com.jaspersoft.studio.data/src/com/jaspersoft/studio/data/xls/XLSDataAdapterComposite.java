@@ -717,7 +717,6 @@ public class XLSDataAdapterComposite extends Composite {
 			tableViewer.refresh();
 			setTableSelection(-1);
 			btnDelete.setEnabled(true);
-			btnCheckSkipFirstLine.setSelection(true);
 		}
 	}
 
