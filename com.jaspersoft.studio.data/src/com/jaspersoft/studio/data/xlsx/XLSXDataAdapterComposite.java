@@ -131,7 +131,7 @@ public class XLSXDataAdapterComposite extends Composite {
 		btnCheckQEMode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		btnCheckQEMode
-				.setText("Use query executor mode (the report must use the CSV query language)");
+				.setText("Use query executor mode (the report must use the XSL query language)");
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));
