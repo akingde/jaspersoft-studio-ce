@@ -132,7 +132,7 @@ public class XLSDataAdapterComposite extends Composite {
 		btnCheckQEMode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		btnCheckQEMode
-				.setText("Use query executor mode (the report must use the CSV query language)");
+				.setText("Use query executor mode (the report must use the XLS query language)");
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));
@@ -216,7 +216,7 @@ public class XLSDataAdapterComposite extends Composite {
 		btnDelete.setEnabled(false);
 
 		new ListOrderButtons().createOrderButtons(composite_4, tableViewer);
-		
+
 		Composite composite_2 = new Composite(this, SWT.NONE);
 		composite_2.setLayout(new FillLayout(SWT.HORIZONTAL));
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
