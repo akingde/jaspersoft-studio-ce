@@ -45,12 +45,12 @@ public class ExportAsTextAction extends AbstractExportAction {
 		JRTextExporter exp = new JRTextExporter();
 
 		exp.setParameter(JRTextExporterParameter.CHARACTER_WIDTH,
-				ph.getString(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH));
+				ph.getFloat(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH, 0f));
 		exp.setParameter(JRTextExporterParameter.CHARACTER_HEIGHT,
-				ph.getString(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT));
-		exp.setParameter(JRTextExporterParameter.PAGE_WIDTH, ph.getString(JRTextExporterParameter.PROPERTY_PAGE_WIDTH));
-		exp.setParameter(JRTextExporterParameter.PAGE_HEIGHT, ph.getString(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT));
-
+				ph.getFloat(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT, 0f));
+		exp.setParameter(JRTextExporterParameter.PAGE_WIDTH, ph.getInteger(JRTextExporterParameter.PROPERTY_PAGE_WIDTH, 0));
+		exp.setParameter(JRTextExporterParameter.PAGE_HEIGHT,
+				ph.getInteger(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT, 0));
 		return exp;
 	}
 

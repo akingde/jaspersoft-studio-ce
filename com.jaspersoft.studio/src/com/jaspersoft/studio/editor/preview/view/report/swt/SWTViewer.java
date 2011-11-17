@@ -28,6 +28,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
@@ -40,7 +41,7 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class SWTViewer extends APreview implements IJRPrintable {
 
-	private ReportViewer rptviewer;
+	protected ReportViewer rptviewer;
 
 	public SWTViewer(Composite parent, PropertiesHelper ph) {
 		super(parent, ph);
@@ -53,6 +54,8 @@ public class SWTViewer extends APreview implements IJRPrintable {
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
 		composite.setLayout(layout);
+
+		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		rptviewer = new ReportViewer();
 		Control ctrl = rptviewer.createControl(composite);
@@ -72,7 +75,7 @@ public class SWTViewer extends APreview implements IJRPrintable {
 		tmanager.add(ExportMenu.getExportMenu(rptviewer, getPropertiesHelper()));
 	}
 
-	private JasperPrint jrprint;
+	protected JasperPrint jrprint;
 
 	public void setJRPRint(JasperPrint jrprint) {
 		if (this.jrprint == null || this.jrprint != jrprint) {

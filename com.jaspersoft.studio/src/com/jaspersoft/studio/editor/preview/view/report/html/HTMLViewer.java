@@ -32,7 +32,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.jaspersoft.studio.editor.preview.actions.export.ExportAsXHtmlAction;
+import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportAsHtmlAction;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
@@ -76,14 +77,22 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 		if (this.jrprint == null || this.jrprint != jrprint) {
 			rptviewer.setDocument(jrprint);
 
-			tmpFile = File.createTempFile("report", ".html", getTmpPath());
+			tmpFile = File.createTempFile("report", getExtension(), getTmpPath());
 
-			ExportAsXHtmlAction exp = new ExportAsXHtmlAction(rptviewer, getPropertiesHelper());
+			AbstractExportAction exp = createExporter(rptviewer);
 			exp.export(tmpFile);
 
 			browser.setUrl(tmpFile.toURI().toASCIIString());
 		}
 		this.jrprint = jrprint;
+	}
+
+	protected String getExtension() {
+		return ".html";
+	}
+
+	protected AbstractExportAction createExporter(ReportViewer rptv) {
+		return new ExportAsHtmlAction(rptv, getPropertiesHelper());
 	}
 
 	private File tmpDir;

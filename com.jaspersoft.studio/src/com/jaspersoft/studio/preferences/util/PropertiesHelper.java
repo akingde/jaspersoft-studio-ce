@@ -130,6 +130,20 @@ public class PropertiesHelper {
 		return new Integer(val);
 	}
 
+	public Float getFloat(String key) {
+		String val = getString(key);
+		if (val == null)
+			return null;
+		return new Float(val);
+	}
+
+	public Float getFloat(String key, Float def) {
+		Float val = getFloat(key);
+		if (val == null)
+			return def;
+		return val;
+	}
+
 	public Character getCharacter(String key) {
 		String val = getString(key);
 		if (val == null && val != "")

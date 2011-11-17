@@ -87,13 +87,13 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT,
-				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT), "0")); //$NON-NLS-1$
 		store.setDefault(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH,
-				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH), "0")); //$NON-NLS-1$
 		store.setDefault(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT,
-				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT), "0")); //$NON-NLS-1$
 		store.setDefault(JRTextExporterParameter.PROPERTY_PAGE_WIDTH,
-				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_PAGE_WIDTH), "")); //$NON-NLS-1$
+				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_PAGE_WIDTH), "0")); //$NON-NLS-1$
 
 		store.setDefault(NSF_EXPORT_TEXT_LINE_SEPARATOR, "\n"); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT,
