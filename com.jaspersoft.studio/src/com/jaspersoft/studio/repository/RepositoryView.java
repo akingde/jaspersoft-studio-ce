@@ -33,10 +33,8 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -115,7 +113,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		treeViewer.setInput(getResources()); // pass a non-null that will be ignored
 		treeViewer.expandToLevel(2);
-		getViewSite().setSelectionProvider(treeViewer);
+//		getViewSite().setSelectionProvider(treeViewer);
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			public void doubleClick(DoubleClickEvent event) {
@@ -163,8 +161,6 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		createContextMenu();
 		hookGlobalActions();
 
-		// Restore state from the previous session.
-		restoreState();
 		rprovs = getExtensionManager();
 		for (IRepositoryViewProvider rp : rprovs) {
 			rp.addPropertyChangeListener(propChangeListener);
@@ -180,56 +176,16 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		super.dispose();
 	}
 
-	private IMemento memento;
 	private List<IRepositoryViewProvider> rprovs;
 	private ExtensionManager extensionManager;
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		init(site);
-		this.memento = memento;
-		new ExtensionManager().init();
-	}
-
-	@Override
-	public void saveState(IMemento memento) {
-		IStructuredSelection sel = (IStructuredSelection) treeViewer.getSelection();
-		if (sel.isEmpty())
-			return;
-		memento = memento.createChild("selection"); //$NON-NLS-1$
-		// Iterator<E> iter = sel.iterator();
-		// while (iter.hasNext()) {
-		// Word word = (Word) iter.next();
-		// memento.createChild("descriptor", word.toString());
-		// }
-
-	}
-
-	private void restoreState() {
-		if (memento == null)
-			return;
-		memento = memento.getChild("selection"); //$NON-NLS-1$
-		if (memento != null) {
-			IMemento descriptors[] = memento.getChildren("descriptor"); //$NON-NLS-1$
-			if (descriptors.length > 0) {
-				List<IMemento> objList = new ArrayList<IMemento>(descriptors.length);
-				// for (int nX = 0; nX < descriptors.length; nX++) {
-				// String id = descriptors[nX].getID();
-				// Word word = input.find(id);
-				// if (word != null)
-				// objList.add(word);
-				// }
-				treeViewer.setSelection(new StructuredSelection(objList));
-			}
-		}
-		memento = null;
-		// updateActionEnablement();
+		getExtensionManager();
 	}
 
 	private void hookGlobalActions() {
-		// IActionBars bars = getViewSite().getActionBars();
-		// bars.setGlobalActionHandler(IWorkbenchActionConstants.SELECT_ALL, selectAllAction);
-		// bars.setGlobalActionHandler(IWorkbenchActionConstants.DELETE, deleteItemAction);
 		treeViewer.getControl().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -249,8 +205,6 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 	 * Create menu.
 	 */
 	private void createMenu() {
-		// IMenuManager mgr = getViewSite().getActionBars().getMenuManager();
-		// mgr.add(selectAllAction);
 	}
 
 	/**
@@ -271,11 +225,10 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 
 	private void createContextMenu() {
 		// Create menu manager.
-		MenuManager menuMgr = new MenuManager("Resources Menu", getViewSite().getId());
+		MenuManager menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager mgr) {
-				mgr.removeAll();
 				fillMenu(mgr, fillContextMenu());
 			}
 		});
@@ -285,7 +238,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		treeViewer.getControl().setMenu(menu);
 
 		// Register menu for extension.
-		getViewSite().registerContextMenu(menuMgr, treeViewer);
+		getSite().registerContextMenu(menuMgr, treeViewer);
 	}
 
 	private List<IAction> fillContextMenu() {
@@ -351,8 +304,10 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 	}
 
 	private List<IRepositoryViewProvider> getExtensionManager() {
-		if (extensionManager == null)
+		if (extensionManager == null) {
 			extensionManager = new ExtensionManager();
+			extensionManager.init();
+		}
 		if (rprovs == null)
 			rprovs = extensionManager.getRepositoryProviders();
 		return rprovs;

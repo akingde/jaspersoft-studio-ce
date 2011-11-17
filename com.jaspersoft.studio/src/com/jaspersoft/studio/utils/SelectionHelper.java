@@ -33,6 +33,7 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
@@ -110,6 +111,22 @@ public class SelectionHelper {
 			ep.getViewer().reveal(ep);
 		}
 
+	}
+
+	public static final void openEditor(File file) {
+		IFileStore fileStore = EFS.getLocalFileSystem().getStore(file.toURI());
+		if (!fileStore.fetchInfo().isDirectory() && fileStore.fetchInfo().exists()) {
+			IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			if (window == null)
+				window = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
+
+			IWorkbenchPage page = window.getActivePage();
+			try {
+				IDE.openEditorOnFileStore(page, fileStore);
+			} catch (PartInitException e) {
+				UIUtils.showError(e);
+			}
+		}
 	}
 
 	public static final void openEditor(FileEditorInput editorInput, String path) {
