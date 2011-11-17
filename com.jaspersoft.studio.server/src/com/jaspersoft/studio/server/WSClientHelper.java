@@ -41,6 +41,7 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.wizard.resource.page.SelectorDatasource;
 
 public class WSClientHelper {
 
@@ -107,6 +108,10 @@ public class WSClientHelper {
 		List<ResourceDescriptor> children = client.list(rd);
 
 		for (ResourceDescriptor r : children) {
+			if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
+				if (SelectorDatasource.isDatasource(r))
+					continue;
+			}
 			ANode node = ResourceFactory.getResource(parent, r, index);
 			if (r.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
 				listFolder(node, client, r.getUriString(), monitor, depth);
@@ -114,6 +119,8 @@ public class WSClientHelper {
 				r = client.get(r, null);
 				List<ResourceDescriptor> children2 = r.getChildren();
 				for (ResourceDescriptor res : children2) {
+					if (SelectorDatasource.isDatasource(res))
+						continue;
 					if (res.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
 						listFolder(node, client, res.getUriString(), monitor,
 								depth);
@@ -248,11 +255,10 @@ public class WSClientHelper {
 		MServerProfile sp = (MServerProfile) res.getRoot();
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("parameter1", "A");
 
 		List<Argument> args = new ArrayList<Argument>();
 		args.add(new Argument(Argument.RUN_OUTPUT_FORMAT,
-				Argument.RUN_OUTPUT_FORMAT_PDF));
+				Argument.RUN_OUTPUT_FORMAT_JRPRINT));
 
 		return sp.getWsClient().runReport(rd, parameters, args);
 	}

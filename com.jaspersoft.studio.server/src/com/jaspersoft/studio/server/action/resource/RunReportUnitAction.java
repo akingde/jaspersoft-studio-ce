@@ -41,6 +41,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RunReportUnitAction extends Action {
@@ -85,7 +86,7 @@ public class RunReportUnitAction extends Action {
 
 					});
 				} catch (InvocationTargetException e) {
-					UIUtils.showError(e);
+					UIUtils.showError(e.getCause());
 				} catch (InterruptedException e) {
 					UIUtils.showError(e);
 				}
@@ -104,21 +105,32 @@ public class RunReportUnitAction extends Action {
 					.runReportUnit((MReportUnit) node);
 			for (String key : files.keySet()) {
 				FileContent fc = (FileContent) files.get(key);
-				if (key.equals("report")) {
-					FileOutputStream htmlFile = new FileOutputStream(
-							"c:\\myreport.html");
+				if (key.equals("jasperPrint")) {
+					final File f = File.createTempFile("jrprint", ".jrprint");
+					f.deleteOnExit();
+					f.createNewFile();
+					FileOutputStream htmlFile = new FileOutputStream(f);
 					htmlFile.write(fc.getData());
 					htmlFile.close();
-				} else {
-					File f = new File("c:\\images");
-					if (!f.exists())
-						f.mkdirs();
+					Display.getDefault().asyncExec(new Runnable() {
 
-					FileOutputStream imageFile = new FileOutputStream(
-							"c:\\images\\" + key);
-					imageFile.write(fc.getData());
-					imageFile.close();
+						public void run() {
+							SelectionHelper.openEditor(f);
+						}
+					});
+
 				}
+
+				// else {
+				// File f = new File("c:\\images");
+				// if (!f.exists())
+				// f.mkdirs();
+				//
+				// FileOutputStream imageFile = new FileOutputStream(
+				// "c:\\images\\" + key);
+				// imageFile.write(fc.getData());
+				// imageFile.close();
+				// }
 
 			}
 		}
