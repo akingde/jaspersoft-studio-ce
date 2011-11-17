@@ -122,7 +122,8 @@ public class PreviewJRPrint extends ABasicEditor {
 							((IJRPrintable) aPreview).setJRPRint(jasperPrint);
 						} catch (Exception e) {
 							switchView(errorPreview);
-							errorPreview.setError(null, e);
+
+							errorPreview.addError(e);
 							return;
 						}
 						currentViewer = key;

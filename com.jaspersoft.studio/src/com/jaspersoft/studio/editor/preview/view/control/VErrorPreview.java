@@ -57,28 +57,9 @@ public class VErrorPreview extends APreview {
 		return composite;
 	}
 
-	public void setError(String msg, Throwable t) {
-		String text = "";
-		if (msg != null)
-			text += "message " + NL;
-		;
-		if (t != null)
-			text += ErrorUtil.getStackTrace(t);
-		txterror.setText(text);
-	}
-
 	public void addError(Throwable t) {
 		txterror.setText(txterror.getText() + SIMPLE_DATE_FORMAT.format(new Date()) + " - " + t.getMessage() + NL
 				+ ErrorUtil.getStackTrace(t) + NL);
-	}
-
-	public void addMessage(String msg) {
-		msg = SIMPLE_DATE_FORMAT.format(new Date()) + " - " + msg + NL;
-		txterror.setText(txterror.getText() + msg);
-	}
-
-	public void clearMessages() {
-		txterror.setText("");
 	}
 
 	public void setMessage(String msg) {

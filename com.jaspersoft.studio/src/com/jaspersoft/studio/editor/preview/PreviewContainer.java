@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.preview;
 
@@ -49,6 +45,7 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
+import com.jaspersoft.studio.utils.Console;
 
 public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunnable {
 
@@ -160,7 +157,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			topToolBarManager.setEnabled(false);
 			leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
-			getLeftContainer().switchView(ReportControler.EXECUTION_INFO);
+			getLeftContainer().switchView(ReportControler.FORM_PARAMETERS);
 
 			// Cache the DataAdapter used for this report only if it is not null.
 			if (myDataAdapter != null) {
@@ -170,7 +167,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				dataAdapterDesc = leftToolbar.getDataSourceWidget().getSelected();
 			}
 
-			reportControler.runReport(this);
+			reportControler.runReport();
 		}
 	}
 
@@ -195,8 +192,16 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	private ReportControler getReportControler() {
 		if (reportControler == null)
-			reportControler = new ReportControler();
+			reportControler = new ReportControler(this);
 		return reportControler;
+	}
+
+	private Console console;
+
+	public Console getConsole() {
+		if (console == null)
+			console = Console.showConsole(getEditorInput().getName());
+		return console;
 	}
 
 	public void setJasperDesign(JasperDesign jasperDesign) {

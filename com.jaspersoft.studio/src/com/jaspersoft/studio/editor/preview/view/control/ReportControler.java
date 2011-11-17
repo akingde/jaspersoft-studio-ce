@@ -54,7 +54,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
-import com.jaspersoft.studio.editor.preview.actions.SwitchViewsAction;
 import com.jaspersoft.studio.editor.preview.input.BigNumericInput;
 import com.jaspersoft.studio.editor.preview.input.BooleanInput;
 import com.jaspersoft.studio.editor.preview.input.DateInput;
@@ -68,11 +67,11 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
+import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class ReportControler {
-	public static final String EXECUTION_INFO = "Execution Info";
 
 	public static final String FORM_SORTING = "Sorting Options";
 
@@ -96,8 +95,10 @@ public class ReportControler {
 	private JasperDesign jDesign;
 	private PropertiesHelper ph;
 	private LinkedHashMap<String, APreview> viewmap;
+	private PreviewContainer pcontainer;
 
-	public ReportControler() {
+	public ReportControler(PreviewContainer pcontainer) {
+		this.pcontainer = pcontainer;
 	}
 
 	public void setJasperDesign(JasperDesign jDesign) {
@@ -133,35 +134,13 @@ public class ReportControler {
 		viewmap.put(FORM_PARAMETERS, new VParameters(composite, ph));
 		viewmap.put(FORM_REPORT_PARAMETERS, new VReportParameters(composite, ph));
 		viewmap.put(FORM_SORTING, new VSorting(composite, ph));
-		viewmap.put(SwitchViewsAction.SEPARATOR + "1", null);
-		viewmap.put(EXECUTION_INFO, new VErrorPreview(composite, ph));
 
 		if (jDesign != null)
 			fillForms();
 		return viewmap;
 	}
 
-	private VErrorPreview errorPage;
-
 	private long stime;
-
-	private void addError(final Throwable e) {
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				errorPage.addError(e);
-			}
-		});
-	}
-
-	private void addMessage(final String message) {
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				errorPage.addMessage(message);
-			}
-		});
-	}
 
 	private void fillForms() {
 		prmInput = (VParameters) viewmap.get(FORM_PARAMETERS);
@@ -174,14 +153,16 @@ public class ReportControler {
 		vs.setJasperReports(jDesign, prompts, jasperParameters);
 	}
 
-	public void runReport(PreviewContainer pcontainer) {
+	private Console c;
+
+	public void runReport() {
+		c = pcontainer.getConsole();
+		c.clearConsole();
 		pcontainer.setJasperPrint(null);
 		fillError = null;
 
-		errorPage = (VErrorPreview) viewmap.get(EXECUTION_INFO);
-		errorPage.clearMessages();
 		stime = System.currentTimeMillis();
-		addMessage("Start");
+		c.addMessage("Start");
 
 		pcontainer.setNotRunning(false);
 		runJob(pcontainer);
@@ -192,12 +173,12 @@ public class ReportControler {
 
 			public void run() {
 				long etime = System.currentTimeMillis();
-				errorPage.addMessage("end report");
+				c.addMessage("end report");
 				long ttime = etime - stime;
-				errorPage.addMessage(String.format("Total time: %1$.3f s", (double) (ttime / 1000)));
+				c.addMessage(String.format("Total time: %1$.3f s", (double) (ttime / 1000)));
 				pcontainer.setNotRunning(true);
 				if (pcontainer.getJasperPrint() != null)
-					errorPage.addMessage(String.format("Number of Pages: %d", pcontainer.getJasperPrint().getPages().size()));
+					c.addMessage(String.format("Number of Pages: %d", pcontainer.getJasperPrint().getPages().size()));
 			}
 		});
 	}
@@ -220,10 +201,10 @@ public class ReportControler {
 
 					JasperReport jasperReport = compileJasperDesign(jd);
 					if (jasperReport != null) {
-						addMessage("Compilation successful");
+						c.addMessage("Compilation successful");
 
 						if (!prmInput.checkFieldsFilled()) {
-							addMessage("You have some input parameters, that you have to fill first");
+							c.addMessage("You have some input parameters, that you have to fill first");
 							UIUtils.showWarning("You have some input parameters, that you have to fill first");
 						}
 
@@ -233,7 +214,7 @@ public class ReportControler {
 
 						dataAdapterService = setupDataAdapter(pcontainer);
 
-						addMessage("Start report execution");
+						c.addMessage("Start report execution");
 						// We create the fillHandle to run the report based on the type of data adapter....
 						AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameters);
 
@@ -243,7 +224,7 @@ public class ReportControler {
 						dataAdapterService.dispose();
 					}
 				} catch (final Throwable e) {
-					addError(e);
+					c.addError(e);
 				} finally {
 					monitor.done();
 
@@ -261,7 +242,7 @@ public class ReportControler {
 	}
 
 	private JasperReport compileJasperDesign(JasperDesign jd) throws JRException {
-		addMessage("Start compiling");
+		c.addMessage("Start compiling");
 		JasperReport jasperReport = JasperCompileManager.compileReport(jd);
 		return jasperReport;
 	}
@@ -283,12 +264,12 @@ public class ReportControler {
 	}
 
 	private void setupVirtualizer(JasperDesign jd, PropertiesHelper ps) {
-		addMessage("Setting virtualizer");
+		c.addMessage("Setting virtualizer");
 		VirtualizerHelper.setVirtualizer(jd, ps, jasperParameters);
 	}
 
 	private DataAdapterService setupDataAdapter(final PreviewContainer pcontainer) throws JRException {
-		addMessage("Setting connection");
+		c.addMessage("Setting connection");
 		DataAdapter dataAdapter = pcontainer.getDataAdapterDesc().getDataAdapter();
 		jasperParameters.remove(JRParameter.REPORT_CONNECTION);
 		jasperParameters.remove(JRParameter.REPORT_DATA_SOURCE);
@@ -317,7 +298,7 @@ public class ReportControler {
 				}
 
 				public void reportCancelled() {
-					addMessage(Messages.PreviewEditor_report_fill_canceled);
+					c.addMessage(Messages.PreviewEditor_report_fill_canceled);
 				}
 			});
 			fh.startFill();

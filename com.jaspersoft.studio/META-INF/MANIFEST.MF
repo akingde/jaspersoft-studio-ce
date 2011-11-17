@@ -33,7 +33,8 @@ Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.apache.xml.serializer;bundle-version="2.7.1";visibility:=reexport,
  org.eclipse.core.databinding;bundle-version="1.4.0";visibility:=reexport,
  org.eclipse.jface.databinding;bundle-version="1.5.0";visibility:=reexport,
- org.eclipse.core.databinding.beans;bundle-version="1.2.100";visibility:=reexport
+ org.eclipse.core.databinding.beans;bundle-version="1.2.100";visibility:=reexport,
+ org.eclipse.ui.console;bundle-version="3.5.100"
 Bundle-ClassPath: .,
  lib/commons-validator-1.3.1.jar,
  lib/bsh-2.0b4.jar,
