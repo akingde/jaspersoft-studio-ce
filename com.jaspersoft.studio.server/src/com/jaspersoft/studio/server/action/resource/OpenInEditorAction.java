@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JRRenderable;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
@@ -41,6 +43,7 @@ import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -115,13 +118,23 @@ public class OpenInEditorAction extends Action {
 			FileNotFoundException, IOException {
 		if (isFileResource(obj)) {
 			MResource res = (MResource) obj;
-			File f = File.createTempFile("jrsres", ".jrxml");
-			f.deleteOnExit();
-			f.createNewFile();
+
 			ResourceDescriptor rd = res.getValue();
+
+			String fkeyname = getKey(res);
+			String filename = fileurimap.get(fkeyname);
+
+			File f = null;
+			if (filename != null)
+				f = new File(filename);
+			else {
+				f = File.createTempFile("jrsres", ".jrxml");
+				f.deleteOnExit();
+				filename = f.getAbsolutePath();
+			}
+
 			WSClientHelper.getResource(res, rd, f);
 
-			String filename = f.getAbsolutePath();
 			if (rd.getWsType().equals(ResourceDescriptor.TYPE_IMAGE)) {
 				filename = f.getAbsolutePath();
 				int dotPos = filename.lastIndexOf(".");
@@ -143,6 +156,7 @@ public class OpenInEditorAction extends Action {
 				filename = f.getAbsolutePath();
 			}
 			final String fname = filename;
+			fileurimap.put(fkeyname, fname);
 			Display.getDefault().asyncExec(new Runnable() {
 
 				public void run() {
@@ -150,5 +164,12 @@ public class OpenInEditorAction extends Action {
 				}
 			});
 		}
+	}
+
+	private static Map<String, String> fileurimap = new HashMap<String, String>();
+
+	private static String getKey(MResource res) {
+		MServerProfile sp = (MServerProfile) res.getRoot();
+		return sp.getValue().getName() + ":" + res.getValue().getUriString();
 	}
 }
