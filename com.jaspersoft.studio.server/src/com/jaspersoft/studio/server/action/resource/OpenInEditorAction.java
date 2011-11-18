@@ -21,10 +21,11 @@ package com.jaspersoft.studio.server.action.resource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
+
+import net.sf.jasperreports.engine.JRRenderable;
+import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -35,30 +36,45 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.ireport.jasperserver.ws.FileContent;
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.model.INode;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MJrxml;
+import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class RunReportUnitAction extends Action {
-	private static final String ID = "RUNREPORTUNIT";
+public class OpenInEditorAction extends Action {
+	private static final String ID = "OPENINEDITOR";
 	private TreeViewer treeViewer;
 
-	public RunReportUnitAction(TreeViewer treeViewer) {
+	public OpenInEditorAction(TreeViewer treeViewer) {
 		super();
 		setId(ID);
-		setText("Run Report Unit");
-		setDescription("Run Report Unit");
-		setToolTipText("Run the report unit");
-		setImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin
-				.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
+		setText("Open In Editor");
+		setDescription("Open resource in the editor");
+		setToolTipText("Open resource in the editor");
 		this.treeViewer = treeViewer;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return super.isEnabled() && isDataResource();
+	}
+
+	private boolean isDataResource() {
+		final TreeSelection s = (TreeSelection) treeViewer.getSelection();
+		TreePath[] p = s.getPaths();
+		for (int i = 0; i < p.length; i++) {
+			if (!isFileResource(p[i].getLastSegment()))
+				return false;
+		}
+		return true;
+	}
+
+	private boolean isFileResource(Object obj) {
+		return (obj != null && (obj instanceof MRImage || obj instanceof MJrxml));
 	}
 
 	@Override
@@ -97,30 +113,42 @@ public class RunReportUnitAction extends Action {
 
 	protected void dorun(final Object obj) throws Exception,
 			FileNotFoundException, IOException {
-		MResource res = (MResource) obj;
+		if (isFileResource(obj)) {
+			MResource res = (MResource) obj;
+			File f = File.createTempFile("jrsres", ".jrxml");
+			f.deleteOnExit();
+			f.createNewFile();
+			ResourceDescriptor rd = res.getValue();
+			WSClientHelper.getResource(res, rd, f);
 
-		INode node = res.getReportUnit();
-		if (node != null && node instanceof MReportUnit) {
-			Map<String, Object> files = WSClientHelper
-					.runReportUnit((MReportUnit) node);
-			for (String key : files.keySet()) {
-				FileContent fc = (FileContent) files.get(key);
-				if (key.equals("jasperPrint")) {
-					final File f = File.createTempFile("jrprint", ".jrprint");
-					f.deleteOnExit();
-					f.createNewFile();
-					FileOutputStream htmlFile = new FileOutputStream(f);
-					htmlFile.write(fc.getData());
-					htmlFile.close();
-					Display.getDefault().asyncExec(new Runnable() {
-
-						public void run() {
-							SelectionHelper.openEditor(f);
-						}
-					});
-
+			String filename = f.getAbsolutePath();
+			if (rd.getWsType().equals(ResourceDescriptor.TYPE_IMAGE)) {
+				filename = f.getAbsolutePath();
+				int dotPos = filename.lastIndexOf(".");
+				String strFilename = filename.substring(0, dotPos);
+				switch (JRTypeSniffer.getImageType(FileUtils.getBytes(f))) {
+				case JRRenderable.IMAGE_TYPE_GIF:
+					f = FileUtils.fileRenamed(f, strFilename, ".gif", false);
+					break;
+				case JRRenderable.IMAGE_TYPE_JPEG:
+					f = FileUtils.fileRenamed(f, strFilename, ".jpeg", false);
+					break;
+				case JRRenderable.IMAGE_TYPE_PNG:
+					f = FileUtils.fileRenamed(f, strFilename, ".png", false);
+					break;
+				case JRRenderable.IMAGE_TYPE_TIFF:
+					f = FileUtils.fileRenamed(f, strFilename, ".tiff", false);
+					break;
 				}
+				filename = f.getAbsolutePath();
 			}
+			final String fname = filename;
+			Display.getDefault().asyncExec(new Runnable() {
+
+				public void run() {
+					SelectionHelper.openEditor(new File(fname));
+				}
+			});
 		}
 	}
 }

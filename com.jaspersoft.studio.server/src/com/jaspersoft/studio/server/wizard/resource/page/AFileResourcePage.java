@@ -98,16 +98,16 @@ public abstract class AFileResourcePage extends AResourcePage {
 						switch (JRTypeSniffer.getImageType(FileUtils
 								.getBytes(file))) {
 						case JRRenderable.IMAGE_TYPE_GIF:
-							fileRenamed(file, strFilename, ".gif");
+							FileUtils.fileRenamed(file, strFilename, ".gif");
 							break;
 						case JRRenderable.IMAGE_TYPE_JPEG:
-							fileRenamed(file, strFilename, ".jpeg");
+							FileUtils.fileRenamed(file, strFilename, ".jpeg");
 							break;
 						case JRRenderable.IMAGE_TYPE_PNG:
-							fileRenamed(file, strFilename, ".png");
+							FileUtils.fileRenamed(file, strFilename, ".png");
 							break;
 						case JRRenderable.IMAGE_TYPE_TIFF:
-							fileRenamed(file, strFilename, ".tiff");
+							FileUtils.fileRenamed(file, strFilename, ".tiff");
 							break;
 						}
 					} catch (Exception e1) {
@@ -115,13 +115,6 @@ public abstract class AFileResourcePage extends AResourcePage {
 					}
 					handleFileChange();
 				}
-			}
-
-			private void fileRenamed(File file, String strFilename, String ext) {
-				String fname = strFilename + ext;
-				file.renameTo(new File(fname));
-				UIUtils.showWarning("Attention! file type is different, so it was renamed to:\n "
-						+ fname);
 			}
 
 		});

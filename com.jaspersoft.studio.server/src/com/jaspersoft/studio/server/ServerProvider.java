@@ -42,6 +42,7 @@ import com.jaspersoft.studio.server.action.resource.AddResourceAction;
 import com.jaspersoft.studio.server.action.resource.CopyResourceAction;
 import com.jaspersoft.studio.server.action.resource.CutResourceAction;
 import com.jaspersoft.studio.server.action.resource.DeleteResourceAction;
+import com.jaspersoft.studio.server.action.resource.OpenInEditorAction;
 import com.jaspersoft.studio.server.action.resource.PasteResourceAction;
 import com.jaspersoft.studio.server.action.resource.PropertiesAction;
 import com.jaspersoft.studio.server.action.resource.RefreshResourcesAction;
@@ -74,6 +75,7 @@ public class ServerProvider implements IRepositoryViewProvider {
 	private AddResourceAction addAction;
 
 	private RunReportUnitAction runReportUnitAction;
+	private OpenInEditorAction openInEditorAction;
 
 	public Action[] getActions(TreeViewer treeViewer) {
 		createActions(treeViewer);
@@ -108,6 +110,9 @@ public class ServerProvider implements IRepositoryViewProvider {
 			runReportUnitAction = new RunReportUnitAction(treeViewer);
 		if (editAction == null)
 			editAction = new PropertiesAction(treeViewer);
+
+		if (openInEditorAction == null)
+			openInEditorAction = new OpenInEditorAction(treeViewer);
 	}
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
@@ -144,6 +149,9 @@ public class ServerProvider implements IRepositoryViewProvider {
 				lst.add(runReportUnitAction);
 			lst.add(new Separator());
 
+			if (openInEditorAction.isEnabled())
+				lst.add(openInEditorAction);
+
 			if (cutAction.isEnabled())
 				lst.add(cutAction);
 			if (copyAction.isEnabled())
@@ -176,7 +184,12 @@ public class ServerProvider implements IRepositoryViewProvider {
 	}
 
 	public void doubleClick(TreeViewer treeViewer) {
-		editServerAction.run();
+		if (editServerAction.isEnabled())
+			editServerAction.run();
+		// if (runReportUnitAction.isEnabled())
+		// runReportUnitAction.run();
+		if (openInEditorAction.isEnabled())
+			openInEditorAction.run();
 	}
 
 	public ANode getNode(ANode root) {

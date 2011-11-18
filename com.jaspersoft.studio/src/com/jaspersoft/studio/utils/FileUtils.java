@@ -200,4 +200,16 @@ public class FileUtils {
 		is.close();
 		return bytes;
 	}
+
+	public static void fileRenamed(File file, String strFilename, String ext) {
+		fileRenamed(file, strFilename, ext, true);
+	}
+
+	public static File fileRenamed(File file, String strFilename, String ext, boolean showWarning) {
+		String fname = strFilename + ext;
+		file.renameTo(new File(fname));
+		if (showWarning)
+			UIUtils.showWarning("Attention! file type is different, so it was renamed to:\n " + fname);
+		return new File(fname);
+	}
 }

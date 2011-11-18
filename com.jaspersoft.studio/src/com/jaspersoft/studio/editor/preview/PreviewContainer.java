@@ -142,13 +142,14 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		leftToolbar = new LeftToolBarManager(this, leftComposite);
 		setupDataAdapter();
 
-		Composite cleftcompo = new Composite(leftComposite, SWT.NONE);
+		final Composite cleftcompo = new Composite(leftComposite, SWT.NONE);
 		cleftcompo.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		cleftcompo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		cleftcompo.setLayout(new StackLayout());
 
 		getLeftContainer().populate(cleftcompo, getReportControler().createControls(cleftcompo, ph));
 		getLeftContainer().switchView(ReportControler.FORM_PARAMETERS);
+
 	}
 
 	public void runReport(DataAdapterDescriptor myDataAdapter) {
