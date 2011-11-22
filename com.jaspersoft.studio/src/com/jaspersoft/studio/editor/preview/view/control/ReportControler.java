@@ -177,6 +177,12 @@ public class ReportControler {
 				long ttime = etime - stime;
 				c.addMessage(String.format("Total time: %1$.3f s", (double) (ttime / 1000)));
 				pcontainer.setNotRunning(true);
+				boolean notprmfiled = !prmInput.checkFieldsFilled();
+				if (notprmfiled) {
+					c.addMessage("You have some input parameters, that you have to fill first");
+					UIUtils.showWarning("You have some input parameters, that you have to fill first");
+				}
+				pcontainer.showParameters(notprmfiled);
 				if (pcontainer.getJasperPrint() != null)
 					c.addMessage(String.format("Number of Pages: %d", pcontainer.getJasperPrint().getPages().size()));
 			}
@@ -203,10 +209,8 @@ public class ReportControler {
 					if (jasperReport != null) {
 						c.addMessage("Compilation successful");
 
-						if (!prmInput.checkFieldsFilled()) {
-							c.addMessage("You have some input parameters, that you have to fill first");
-							UIUtils.showWarning("You have some input parameters, that you have to fill first");
-						}
+						if (!prmInput.checkFieldsFilled())
+							return Status.CANCEL_STATUS;
 
 						setupFileRezolver(monitor, file);
 

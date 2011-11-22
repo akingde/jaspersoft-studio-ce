@@ -47,8 +47,10 @@ public class VErrorPreview extends APreview {
 	@Override
 	public Control createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout());
-		composite.setBackground(parent.getBackground());
+		GridLayout layout = new GridLayout();
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		composite.setLayout(layout);
 
 		txterror = new Text(composite, SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL);
 		txterror.setLayoutData(new GridData(GridData.FILL_BOTH));

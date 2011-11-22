@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRPrintXmlLoader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
@@ -37,11 +38,13 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 
+import com.jaspersoft.studio.editor.preview.toolbar.ATopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.ViewsFactory;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
+import com.jaspersoft.studio.utils.Console;
 
 public class PreviewJRPrint extends ABasicEditor {
 
@@ -156,42 +159,88 @@ public class PreviewJRPrint extends ABasicEditor {
 
 	protected TopToolBarManagerJRPrint topToolBarManager;
 
-	@Override
-	public void createPartControl(Composite parent) {
-		createRight(parent);
-	}
-
 	protected TopToolBarManagerJRPrint getTopToolBarManager(Composite container) {
 		if (topToolBarManager == null)
 			topToolBarManager = new TopToolBarManagerJRPrint(this, container);
 		return topToolBarManager;
 	}
 
+	protected ATopToolBarManager topToolBarManager1;
+
+	protected ATopToolBarManager getTopToolBarManager1(Composite container) {
+		if (topToolBarManager1 == null)
+			topToolBarManager1 = new ATopToolBarManager(this, container) {
+
+				@Override
+				protected void fillToolbar(IToolBarManager tbManager) {
+				}
+			};
+		return topToolBarManager1;
+	}
+
 	private VErrorPreview errorPreview;
 
-	protected void createRight(Composite parent) {
-		Composite container = new Composite(parent, SWT.BORDER);
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		container.setLayout(layout);
+	@Override
+	public void createPartControl(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayout(new GridLayout(2, false));
 
+		getTopToolBarManager1(container);
 		getTopToolBarManager(container);
 
-		Composite rightComposite = new Composite(container, SWT.NONE);
-		rightComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		Composite rcmp = createRight(container);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		rcmp.setLayoutData(gd);
+	}
+
+	protected Composite createRight(Composite parent) {
+		rightComposite = new Composite(parent, SWT.BORDER);
+
 		StackLayout stacklayoutView = new StackLayout();
 		rightComposite.setLayout(stacklayoutView);
 
 		getRightContainer().populate(rightComposite, ViewsFactory.createPreviews(rightComposite, ph));
 
 		errorPreview = new VErrorPreview(rightComposite, ph);
+		return rightComposite;
 	}
 
 	@Override
 	public void setFocus() {
-		if (topToolBarManager != null)
-			topToolBarManager.setFocus();
+		if (topToolBarManager1 != null)
+			topToolBarManager1.setFocus();
+	}
+
+	private boolean notRunning = true;
+
+	public void setNotRunning(boolean norun) {
+		this.notRunning = norun;
+
+		if (topToolBarManager1 != null) {
+			topToolBarManager1.refreshToolbar();
+			if (norun)
+				topToolBarManager1.setEnabled(true);
+		}
+
+		if (topToolBarManager != null) {
+			topToolBarManager.refreshToolbar();
+			if (norun)
+				topToolBarManager.setEnabled(true);
+		}
+	}
+
+	public boolean isNotRunning() {
+		return notRunning;
+	}
+
+	private Console console;
+	protected Composite rightComposite;
+
+	public Console getConsole() {
+		if (console == null)
+			console = Console.showConsole(getEditorInput().getName());
+		return console;
 	}
 
 }

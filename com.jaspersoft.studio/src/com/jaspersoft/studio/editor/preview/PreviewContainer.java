@@ -33,7 +33,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 
@@ -41,11 +40,11 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.preview.toolbar.LeftToolBarManager;
+import com.jaspersoft.studio.editor.preview.toolbar.PreviewTopToolBarManager;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
-import com.jaspersoft.studio.utils.Console;
 
 public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunnable {
 
@@ -63,8 +62,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		super.init(site, input);
+	protected void loadJRPrint(IEditorInput input) throws PartInitException {
+		setJasperPrint(null);
 		if (listenResource) {
 			InputStream in = null;
 			IFile file = null;
@@ -75,11 +74,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 				} else {
 					throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 				}
-				JasperDesign jd = null;
-
 				in = JrxmlEditor.getXML(input, file.getCharset(true), in, null);
-				jd = JRXmlLoader.load(in);
-				setJasperDesign(jd);
+				setJasperDesign(JRXmlLoader.load(in));
 			} catch (Exception e) {
 				throw new PartInitException(e.getMessage(), e);
 			} finally {
@@ -91,11 +87,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					}
 			}
 		}
-	}
-
-	@Override
-	protected void loadJRPrint(IEditorInput input) throws PartInitException {
-		setJasperPrint(null);
 	}
 
 	private MultiPageContainer leftContainer;
@@ -117,19 +108,34 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return leftContainer;
 	}
 
+	private CSashForm sashform;
+	private LeftToolBarManager leftToolbar;
+
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout());
+		container.setLayout(new GridLayout(2, false));
+
+		getTopToolBarManager1(container);
+		getTopToolBarManager(container);
 
 		sashform = new CSashForm(container, SWT.HORIZONTAL);
-		sashform.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		sashform.setLayoutData(gd);
 
 		createLeft(parent, sashform);
 
 		createRight(sashform);
 
-		sashform.setWeights(new int[] { 100, 150 });
+		sashform.setWeights(new int[] { 500, 1000 });
+	}
+
+	@Override
+	protected PreviewTopToolBarManager getTopToolBarManager1(Composite container) {
+		if (topToolBarManager1 == null)
+			topToolBarManager1 = new PreviewTopToolBarManager(this, container);
+		return (PreviewTopToolBarManager) topToolBarManager1;
 	}
 
 	protected void createLeft(Composite parent, SashForm sf) {
@@ -149,44 +155,43 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 		getLeftContainer().populate(cleftcompo, getReportControler().createControls(cleftcompo, ph));
 		getLeftContainer().switchView(ReportControler.FORM_PARAMETERS);
-
 	}
 
 	public void runReport(DataAdapterDescriptor myDataAdapter) {
 		if (isNotRunning()) {
 			// check if we can run the report
 			topToolBarManager.setEnabled(false);
+			topToolBarManager1.setEnabled(false);
 			leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
 			getLeftContainer().switchView(ReportControler.FORM_PARAMETERS);
 
 			// Cache the DataAdapter used for this report only if it is not null.
 			if (myDataAdapter != null) {
-				// $TODO should we save the reference in the JRXML ?
+				// TODO should we save the reference in the JRXML ?
 				dataAdapterDesc = myDataAdapter;
 			} else {
-				dataAdapterDesc = leftToolbar.getDataSourceWidget().getSelected();
+				dataAdapterDesc = ((PreviewTopToolBarManager) topToolBarManager1).getDataSourceWidget().getSelected();
 			}
 
 			reportControler.runReport();
 		}
 	}
 
-	private boolean notRunning = true;
-
-	public void setNotRunning(boolean norun) {
-		this.notRunning = norun;
-		if (topToolBarManager != null)
-			topToolBarManager.refreshToolbar();
-		if (norun) {
+	@Override
+	public void setNotRunning(boolean stoprun) {
+		super.setNotRunning(stoprun);
+		if (stoprun) {
 			getLeftContainer().setEnabled(true);
-			topToolBarManager.setEnabled(true);
 			leftToolbar.setEnabled(true);
 		}
 	}
 
-	public boolean isNotRunning() {
-		return notRunning;
+	public void showParameters(boolean showprm) {
+		if (showprm)
+			sashform.upRestore();
+		else
+			sashform.upHide();
 	}
 
 	private ReportControler reportControler;
@@ -197,30 +202,20 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return reportControler;
 	}
 
-	private Console console;
-
-	public Console getConsole() {
-		if (console == null)
-			console = Console.showConsole(getEditorInput().getName());
-		return console;
-	}
-
 	public void setJasperDesign(JasperDesign jasperDesign) {
 		getReportControler().setJasperDesign(jasperDesign);
 		setupDataAdapter();
 	}
 
 	private void setupDataAdapter() {
-		if (leftToolbar != null && getReportControler().getjDesign() != null) {
+		if (((PreviewTopToolBarManager) topToolBarManager1) != null && getReportControler().getjDesign() != null) {
 			String strda = getReportControler().getjDesign().getProperty(MReport.DEFAULT_DATAADAPTER);
 			if (strda != null)
-				leftToolbar.setDataAdapters(strda);
+				((PreviewTopToolBarManager) topToolBarManager1).setDataAdapters(strda);
 		}
 	}
 
 	private DataAdapterDescriptor dataAdapterDesc;
-	private SashForm sashform;
-	private LeftToolBarManager leftToolbar;
 
 	public DataAdapterDescriptor getDataAdapterDesc() {
 		return dataAdapterDesc;

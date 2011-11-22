@@ -22,13 +22,13 @@ package com.jaspersoft.studio.editor.preview.actions;
 import org.eclipse.jface.action.Action;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.editor.preview.PreviewContainer;
+import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.model.parameter.MParameter;
 
 public class ViewExecutionInfoAction extends Action {
-	private PreviewContainer rcontainer;
+	private PreviewJRPrint rcontainer;
 
-	public ViewExecutionInfoAction(PreviewContainer rcontainer) {
+	public ViewExecutionInfoAction(PreviewJRPrint rcontainer) {
 		super();
 		this.rcontainer = rcontainer;
 		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/information-white.png"));

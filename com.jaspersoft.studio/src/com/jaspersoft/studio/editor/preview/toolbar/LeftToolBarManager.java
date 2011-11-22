@@ -19,10 +19,7 @@
  */
 package com.jaspersoft.studio.editor.preview.toolbar;
 
-import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -30,30 +27,20 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 
-import com.jaspersoft.studio.data.DataAdapterManager;
-import com.jaspersoft.studio.data.widget.DatasourceComboItem;
-import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
-import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
+import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.actions.ViewExecutionInfoAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewParametersAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewReportParametersAction;
 import com.jaspersoft.studio.editor.preview.actions.ViewSortFieldsAction;
 
-public class LeftToolBarManager {
-	private PreviewContainer container;
+public class LeftToolBarManager extends ATopToolBarManager {
 
-	public LeftToolBarManager(PreviewContainer container, Composite parent) {
-		this.container = container;
-		createToolBar(parent);
+	public LeftToolBarManager(PreviewJRPrint container, Composite parent) {
+		super(container, parent);
 	}
 
-	private IToolBarManager tbManager;
-	private RunStopAction reloadAction;
-	private DatasourceComboItem dataSourceWidget;
-	private ToolBar toolBar;
 	private Label label;
 	private Composite prmtbar;
 	private ViewParametersAction vprmAction;
@@ -61,7 +48,8 @@ public class LeftToolBarManager {
 	private ViewSortFieldsAction vsortAction;
 	private ViewExecutionInfoAction vexecAction;
 
-	private void createToolBar(Composite parent) {
+	@Override
+	protected void createToolBar(Composite parent) {
 		prmtbar = new Composite(parent, SWT.NONE);
 		prmtbar.setLayout(new GridLayout(2, false));
 		prmtbar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -70,40 +58,29 @@ public class LeftToolBarManager {
 		label.setText("Parameters");
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		toolBar = new ToolBar(prmtbar, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
-		// toolBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_END));
+		topToolBar = new ToolBar(prmtbar, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 
-		tbManager = new ToolBarManager(toolBar);
+		tbManager = new ToolBarManager(topToolBar);
 
 		fillToolbar(tbManager);
 
 		refreshToolbar();
 	}
 
-	private void fillToolbar(IToolBarManager tbManager) {
-		tbManager.removeAll();
+	protected void fillToolbar(IToolBarManager tbManager) {
+		PreviewContainer pvcont = (PreviewContainer) container;
 		if (vprmAction == null)
-			vprmAction = new ViewParametersAction(container.getLeftContainer());
+			vprmAction = new ViewParametersAction(pvcont.getLeftContainer());
 		tbManager.add(vprmAction);
 		if (vprmrepAction == null)
-			vprmrepAction = new ViewReportParametersAction(container.getLeftContainer());
+			vprmrepAction = new ViewReportParametersAction(pvcont.getLeftContainer());
 		tbManager.add(vprmrepAction);
 		if (vsortAction == null)
-			vsortAction = new ViewSortFieldsAction(container.getLeftContainer());
+			vsortAction = new ViewSortFieldsAction(pvcont.getLeftContainer());
 		tbManager.add(vsortAction);
 		if (vexecAction == null)
-			vexecAction = new ViewExecutionInfoAction(container);
+			vexecAction = new ViewExecutionInfoAction(pvcont);
 		tbManager.add(vexecAction);
-
-		tbManager.add(new Separator());
-
-		if (dataSourceWidget == null)
-			dataSourceWidget = new DatasourceComboItem((IDataAdapterRunnable) container);
-		tbManager.add(dataSourceWidget);
-
-		if (reloadAction == null)
-			reloadAction = new RunStopAction((IDataAdapterRunnable) container);
-		tbManager.add(reloadAction);
 	}
 
 	public void setLabelText(String key) {
@@ -111,29 +88,4 @@ public class LeftToolBarManager {
 		prmtbar.layout();
 	}
 
-	public void refreshToolbar() {
-		tbManager.update(true);
-
-		toolBar.pack();
-	}
-
-	public void setEnabled(boolean enabled) {
-		for (IContributionItem ti : tbManager.getItems()) {
-			if (ti instanceof ToolItem)
-				((ToolItem) ti).setEnabled(enabled);
-			else if (ti instanceof ActionContributionItem)
-				((ActionContributionItem) ti).getAction().setEnabled(enabled);
-			else if (ti instanceof DatasourceComboItem)
-				((DatasourceComboItem) ti).setEnabled(enabled);
-		}
-		tbManager.update(true);
-	}
-
-	public DatasourceComboItem getDataSourceWidget() {
-		return dataSourceWidget;
-	}
-
-	public void setDataAdapters(String strda) {
-		dataSourceWidget.setSelected(DataAdapterManager.findDataAdapter(strda));
-	}
 }

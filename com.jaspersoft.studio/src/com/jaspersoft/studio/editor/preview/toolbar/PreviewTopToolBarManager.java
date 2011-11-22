@@ -20,26 +20,41 @@
 package com.jaspersoft.studio.editor.preview.toolbar;
 
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
-import com.jaspersoft.studio.editor.preview.actions.SwitchViewsAction;
+import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.widget.DatasourceComboItem;
+import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
+import com.jaspersoft.studio.editor.preview.PreviewContainer;
+import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 
-public class TopToolBarManagerJRPrint extends ATopToolBarManager {
+public class PreviewTopToolBarManager extends ATopToolBarManager {
 
-	public TopToolBarManagerJRPrint(PreviewJRPrint container, Composite parent) {
+	public PreviewTopToolBarManager(PreviewContainer container, Composite parent) {
 		super(container, parent);
 	}
 
-	protected SwitchViewsAction pvModeAction;
+	private DatasourceComboItem dataSourceWidget;
+	private RunStopAction vexecAction;
 
 	protected void fillToolbar(IToolBarManager tbManager) {
-		if (pvModeAction == null)
-			pvModeAction = new SwitchViewsAction(container.getRightContainer(), "Java", true);
-		tbManager.add(pvModeAction);
+		PreviewContainer pvcont = (PreviewContainer) container;
 
-		tbManager.add(new Separator());
+		if (dataSourceWidget == null)
+			dataSourceWidget = new DatasourceComboItem((IDataAdapterRunnable) container);
+		tbManager.add(dataSourceWidget);
+
+		if (vexecAction == null)
+			vexecAction = new RunStopAction(pvcont);
+		tbManager.add(vexecAction);
+
 	}
 
+	public DatasourceComboItem getDataSourceWidget() {
+		return dataSourceWidget;
+	}
+
+	public void setDataAdapters(String strda) {
+		dataSourceWidget.setSelected(DataAdapterManager.findDataAdapter(strda));
+	}
 }
