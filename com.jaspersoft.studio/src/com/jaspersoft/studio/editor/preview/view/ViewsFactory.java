@@ -55,10 +55,10 @@ public class ViewsFactory {
 		pmap.put("SEPARATOR1", null);
 
 		pmap.put("RTF", new RTFViewer(composite, ph));
-		pmap.put("Docx", new DocxViewer(composite, ph));
-		pmap.put("Odt", new OdtViewer(composite, ph));
-		pmap.put("Ods", new OdsViewer(composite, ph));
-		pmap.put("Power Point", new PowerPointViewer(composite, ph));
+		pmap.put("DOCx", new DocxViewer(composite, ph));
+		pmap.put("ODT", new OdtViewer(composite, ph));
+		pmap.put("ODS", new OdsViewer(composite, ph));
+		pmap.put("PPTx", new PowerPointViewer(composite, ph));
 		pmap.put("Text", new TXTViewer(composite, ph));
 
 		pmap.put("SEPARATOR2", null);

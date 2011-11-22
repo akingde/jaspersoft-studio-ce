@@ -205,10 +205,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			@Override
 			public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
 				if (myDataAdapterDesc != null) {
-					getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
 					JasperDesign jasperDesign = getMReport().getJasperDesign();
 					String oldp = jasperDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
 					if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
+						getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
 						jasperDesign.setProperty(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
 						modelPropChangeListener.propertyChange(new PropertyChangeEvent(jasperDesign, "xzzdataset", null, oldp));
 						isDirty = true;
@@ -547,7 +547,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
-				// if (!xmlFresh) {
 				if (activePage == PAGE_XMLEDITOR && !xmlFresh) {
 					try {
 						xml2model();
@@ -555,9 +554,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						handleJRException(getEditorInput(), e, false);
 					}
 				}
-				// }
-				updateVisualView();
-				modelFresh = true;
+				if (activePage != PAGE_PREVIEW) {
+					updateVisualView();
+					modelFresh = true;
+				}
 				reportContainer.getActiveEditor().getSite().getSelectionProvider().setSelection(tmpselection);
 				break;
 			case PAGE_XMLEDITOR:
@@ -572,8 +572,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						handleJRException(getEditorInput(), e, false);
 					}
 				else {
-					model2xml();
-
+					if (!modelFresh)
+						model2xml();
 				}
 				model2preview();
 				break;
@@ -653,11 +653,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	private void model2preview() {
 		previewEditor.setJasperDesign((JasperDesign) ((MRoot) getModel()).getValue());
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				// previewEditor.runReport(null);
-			}
-		});
 	}
 
 	/**

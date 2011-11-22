@@ -173,6 +173,7 @@ public class PreviewJRPrint extends ABasicEditor {
 
 				@Override
 				protected void fillToolbar(IToolBarManager tbManager) {
+
 				}
 			};
 		return topToolBarManager1;

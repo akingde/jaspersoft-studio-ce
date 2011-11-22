@@ -243,4 +243,8 @@ public abstract class ABasicEditor extends EditorPart {
 	public void doSave(IProgressMonitor monitor) {
 		isDirty = false;
 	}
+
+	public PropertiesHelper getPropertiesHelper() {
+		return ph;
+	}
 }

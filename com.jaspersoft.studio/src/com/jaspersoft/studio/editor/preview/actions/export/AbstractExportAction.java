@@ -112,9 +112,11 @@ public abstract class AbstractExportAction extends AReportViewerAction {
 			pm.run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					try {
-						int totalPages = getReportViewer().getDocument().getPages().size();
-						monitor.beginTask("Export Report", totalPages);
-						exportWithProgress(file, new ProgressMonitorAdapter(monitor, totalPages));
+						if (getReportViewer().getDocument() != null && getReportViewer().getDocument().getPages() != null) {
+							int totalPages = getReportViewer().getDocument().getPages().size();
+							monitor.beginTask("Export Report", totalPages);
+							exportWithProgress(file, new ProgressMonitorAdapter(monitor, totalPages));
+						}
 					} catch (Throwable e) {
 						throw new InvocationTargetException(e);
 					} finally {

@@ -503,18 +503,26 @@ public class CSashForm extends SashForm {
 	}
 
 	public void upRestore() {
+		if (currentSashInfo == null)
+			currentSashInfo = new SashInfo(null);
 		upRestoreClicked(currentSashInfo);
 	}
 
 	public void upHide() {
+		if (currentSashInfo == null)
+			currentSashInfo = new SashInfo(null);
 		upHideClicked(currentSashInfo);
 	}
 
 	public void downRestore() {
+		if (currentSashInfo == null)
+			currentSashInfo = new SashInfo(null);
 		downRestoreClicked(currentSashInfo);
 	}
 
-	public void downHid() {
+	public void downHide() {
+		if (currentSashInfo == null)
+			currentSashInfo = new SashInfo(null);
 		downHideClicked(currentSashInfo);
 	}
 

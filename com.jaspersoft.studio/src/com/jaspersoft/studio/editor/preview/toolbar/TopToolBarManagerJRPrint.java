@@ -41,5 +41,4 @@ public class TopToolBarManagerJRPrint extends ATopToolBarManager {
 
 		tbManager.add(new Separator());
 	}
-
 }
