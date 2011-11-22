@@ -35,6 +35,7 @@ import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.FirstPageAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.LastPageAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.NextPageAction;
+import com.jaspersoft.studio.editor.preview.view.report.swt.action.PageNumberContributionItem;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.PreviousPageAction;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
@@ -66,6 +67,7 @@ public class SWTViewer extends APreview implements IJRPrintable {
 		tmanager.add(new FirstPageAction(rptviewer));
 		tmanager.add(new PreviousPageAction(rptviewer));
 		tmanager.add(new NextPageAction(rptviewer));
+		tmanager.add(new PageNumberContributionItem(rptviewer));
 		tmanager.add(new LastPageAction(rptviewer));
 		tmanager.add(new Separator());
 
