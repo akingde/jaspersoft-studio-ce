@@ -31,15 +31,16 @@ import net.sf.jasperreports.engine.util.SimpleFileResolver;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -49,6 +50,8 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.util.StringInput;
+import com.jaspersoft.studio.editor.util.StringStorage;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
@@ -126,6 +129,20 @@ public class SelectionHelper {
 			} catch (PartInitException e) {
 				UIUtils.showError(e);
 			}
+		}
+	}
+
+	public static final void openEditor(String content, String name) {
+		IStorage storage = new StringStorage(content);
+		IStorageEditorInput input = new StringInput(storage);
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window == null)
+			window = PlatformUI.getWorkbench().getWorkbenchWindows()[0];
+		IWorkbenchPage page = window.getActivePage();
+		try {
+			page.openEditor(input, name);
+		} catch (PartInitException e) {
+			UIUtils.showError(e);
 		}
 	}
 

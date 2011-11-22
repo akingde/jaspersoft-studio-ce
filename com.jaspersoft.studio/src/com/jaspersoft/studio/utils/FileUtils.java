@@ -38,6 +38,8 @@
  */
 package com.jaspersoft.studio.utils;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -212,4 +214,18 @@ public class FileUtils {
 			UIUtils.showWarning("Attention! file type is different, so it was renamed to:\n " + fname);
 		return new File(fname);
 	}
+
+	public static String readInputStreamAsString(InputStream in) throws IOException {
+
+		BufferedInputStream bis = new BufferedInputStream(in);
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		int result = bis.read();
+		while (result != -1) {
+			byte b = (byte) result;
+			buf.write(b);
+			result = bis.read();
+		}
+		return buf.toString();
+	}
+
 }

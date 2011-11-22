@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.swt.widgets;
 
@@ -67,7 +63,8 @@ public class CSashForm extends SashForm {
 
 	private class SashInfo {
 		public Sash sash;
-//		public boolean enabled; // Whether this sashinfo is enabled (i.e. if there is more than one, this will be disabled).
+		// public boolean enabled; // Whether this sashinfo is enabled (i.e. if there is more than one, this will be
+		// disabled).
 		public int restoreWeight = NO_WEIGHT; // If slammed to an edge this is the restore weight. -1 means not slammed.
 																					// This is the restoreWeight in the 2nd section form, i.e. weights[1].
 		public int cursorOver = NO_ARROW; // Which arrow is cursor over,
@@ -302,8 +299,8 @@ public class CSashForm extends SashForm {
 					newSash = (Sash) children[i];
 				else {
 					// We have more than one sash, so need to disable current sash, if we have one.
-//					if (currentSashInfo != null)
-//						currentSashInfo.enabled = false;
+					// if (currentSashInfo != null)
+					// currentSashInfo.enabled = false;
 					return; // Don't go on.
 				}
 		}
@@ -503,6 +500,22 @@ public class CSashForm extends SashForm {
 			recomputeSashInfo(); // Get initial setting
 		}
 
+	}
+
+	public void upRestore() {
+		upRestoreClicked(currentSashInfo);
+	}
+
+	public void upHide() {
+		upHideClicked(currentSashInfo);
+	}
+
+	public void downRestore() {
+		downRestoreClicked(currentSashInfo);
+	}
+
+	public void downHid() {
+		downHideClicked(currentSashInfo);
 	}
 
 	/*
@@ -1047,7 +1060,7 @@ public class CSashForm extends SashForm {
 			if (weights != null && weights.length == 2) {
 				int firstControlWeight = weights[0];
 				int secondControlWeight = weights[1];
-				for (ICustomSashFormListener listener :customSashFormListeners) {
+				for (ICustomSashFormListener listener : customSashFormListeners) {
 					listener.dividerMoved(firstControlWeight, secondControlWeight);
 				}
 			}
