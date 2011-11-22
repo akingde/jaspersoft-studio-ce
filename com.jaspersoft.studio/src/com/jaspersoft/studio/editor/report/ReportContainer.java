@@ -125,6 +125,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	protected void createPages() {
 		CTabFolder ctfolder = (CTabFolder) getContainer();
 		ctfolder.setTabPosition(SWT.TOP);
+		ctfolder.setBorderVisible(false);
 		// ctfolder.setUnselectedCloseVisible(true);
 		// Combo combo = new Combo(ctfolder, SWT.BORDER);
 		// combo.setItems(new String[] { "abcda", "bcda" });

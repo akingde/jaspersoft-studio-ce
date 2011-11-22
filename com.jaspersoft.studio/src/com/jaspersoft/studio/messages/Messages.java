@@ -990,6 +990,8 @@ public class Messages extends NLS {
 	public static String RulersGridPreferencePage_ruler_options;
 	public static String RulersGridPreferencePage_show_grid;
 	public static String RulersGridPreferencePage_show_rulers;
+	public static String RunStopAction_runreport;
+	public static String RunStopAction_runreport_desc;
 	public static String RVPropertyPage_calculation_type;
 	public static String RVPropertyPage_description;
 	public static String RVPropertyPage_error_message_report_variables_all_used;
