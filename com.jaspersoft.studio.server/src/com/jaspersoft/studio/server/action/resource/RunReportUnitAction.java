@@ -19,30 +19,19 @@
  */
 package com.jaspersoft.studio.server.action.resource;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
-
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
-import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.ServerManager;
+import com.jaspersoft.studio.server.editor.ReportUnitEditor;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.utils.SelectionHelper;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class RunReportUnitAction extends Action {
 	private static final String ID = "RUNREPORTUNIT";
@@ -66,60 +55,22 @@ public class RunReportUnitAction extends Action {
 		final TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();
 		for (int i = 0; i < p.length; i++) {
-			final Object obj = p[i].getLastSegment();
+			Object obj = p[i].getLastSegment();
 			if (obj instanceof MResource) {
-				ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
-						.getDefault().getActiveShell());
-				try {
-					pm.run(true, true, new IRunnableWithProgress() {
-						public void run(IProgressMonitor monitor)
-								throws InvocationTargetException,
-								InterruptedException {
-							try {
-								dorun(obj);
-							} catch (Throwable e) {
-								throw new InvocationTargetException(e);
-							} finally {
-								monitor.done();
-							}
-						}
+				INode node = ((MResource) obj).getReportUnit();
+				if (node != null) {
+					final String key = ServerManager.getKey((MReportUnit) node);
+					if (key != null)
+						Display.getDefault().asyncExec(new Runnable() {
 
-					});
-				} catch (InvocationTargetException e) {
-					UIUtils.showError(e.getCause());
-				} catch (InterruptedException e) {
-					UIUtils.showError(e);
+							public void run() {
+								SelectionHelper.openEditor(key,
+										ReportUnitEditor.ID);
+
+							}
+						});
 				}
 				break;
-			}
-		}
-	}
-
-	protected void dorun(final Object obj) throws Exception,
-			FileNotFoundException, IOException {
-		MResource res = (MResource) obj;
-
-		INode node = res.getReportUnit();
-		if (node != null && node instanceof MReportUnit) {
-			Map<String, Object> files = WSClientHelper
-					.runReportUnit((MReportUnit) node);
-			for (String key : files.keySet()) {
-				FileContent fc = (FileContent) files.get(key);
-				if (key.equals("jasperPrint")) {
-					final File f = File.createTempFile("jrprint", ".jrprint");
-					f.deleteOnExit();
-					f.createNewFile();
-					FileOutputStream htmlFile = new FileOutputStream(f);
-					htmlFile.write(fc.getData());
-					htmlFile.close();
-					Display.getDefault().asyncExec(new Runnable() {
-
-						public void run() {
-							SelectionHelper.openEditor(f);
-						}
-					});
-
-				}
 			}
 		}
 	}

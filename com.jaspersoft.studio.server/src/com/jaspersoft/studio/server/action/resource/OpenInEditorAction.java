@@ -39,11 +39,11 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -121,7 +121,7 @@ public class OpenInEditorAction extends Action {
 
 			ResourceDescriptor rd = res.getValue();
 
-			String fkeyname = getKey(res);
+			String fkeyname = ServerManager.getKey(res);
 			String filename = fileurimap.get(fkeyname);
 
 			File f = null;
@@ -167,9 +167,4 @@ public class OpenInEditorAction extends Action {
 	}
 
 	private static Map<String, String> fileurimap = new HashMap<String, String>();
-
-	private static String getKey(MResource res) {
-		MServerProfile sp = (MServerProfile) res.getRoot();
-		return sp.getValue().getName() + ":" + res.getValue().getUriString();
-	}
 }

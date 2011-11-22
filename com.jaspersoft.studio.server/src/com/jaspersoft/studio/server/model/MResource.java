@@ -161,33 +161,28 @@ public class MResource extends APropertyNode implements ICopyable {
 	@Override
 	public INode getRoot() {
 		INode node = this;
-		while (!(node instanceof MServerProfile) && !(node instanceof MRoot)) {
-			if (node.getParent() == null || node == null)
-				return this;
+		while (node != null && node.getParent() != null
+				&& !(node instanceof MServerProfile)
+				&& !(node instanceof MRoot)) {
 			node = node.getParent();
 		}
 		return node;
 	}
 
 	public boolean isInsideReportUnit() {
-		INode node = this;
-		while (!(node instanceof MReportUnit)) {
-			if (node.getParent() == null || node == null)
-				return false;
-			node = node.getParent();
-		}
-		return true;
+		return getReportUnit() != null;
 	}
 
-	public INode getReportUnit() {
+	public MReportUnit getReportUnit() {
 		INode node = this;
-		while (!(node instanceof MServerProfile) && !(node instanceof MRoot)
-				&& !(node instanceof MReportUnit)) {
-			if (node.getParent() == null || node == null)
-				return this;
+		while (node != null && node.getParent() != null
+				&& !(node instanceof MServerProfile)
+				&& !(node instanceof MRoot) && !(node instanceof MReportUnit)) {
 			node = node.getParent();
 		}
-		return node;
+		if (node instanceof MReportUnit)
+			return (MReportUnit) node;
+		return null;
 	}
 
 	public boolean isCopyable2(Object parent) {

@@ -188,9 +188,8 @@ public class WSClientHelper {
 				file = ((AFileResource) res).getFile();
 			rd.setHasData(file != null);
 
-			INode mru = res.getReportUnit();
-			if (mru != null && !(mru instanceof MServerProfile)
-					&& !(mru instanceof MReportUnit)) {
+			MReportUnit mru = res.getReportUnit();
+			if (mru != null && res != mru) {
 				String ruuri = ((ResourceDescriptor) mru.getValue())
 						.getUriString();
 				rd.setParentFolder(ruuri + "_files/" + rd.getName());
@@ -208,9 +207,9 @@ public class WSClientHelper {
 		ResourceDescriptor rd = res.getValue();
 		MServerProfile sp = (MServerProfile) res.getRoot();
 		if (!rd.getIsNew()) {
-			INode n = res.getReportUnit();
+			MReportUnit n = res.getReportUnit();
 			WSClient wsClient = sp.getWsClient();
-			if (n instanceof MReportUnit && !(res instanceof MReportUnit))
+			if (n != null && !(res instanceof MReportUnit))
 				wsClient.delete(rd, ((MReportUnit) n).getValue().getUriString());
 			else
 				wsClient.delete(rd);
@@ -259,6 +258,22 @@ public class WSClientHelper {
 		List<Argument> args = new ArrayList<Argument>();
 		args.add(new Argument(Argument.RUN_OUTPUT_FORMAT,
 				Argument.RUN_OUTPUT_FORMAT_JRPRINT));
+
+		return sp.getWsClient().runReport(rd, parameters, args);
+	}
+
+	public static Map<String, Object> runReportUnit(String uri)
+			throws Exception {
+		MServerProfile sp = ServerManager.getServerProfile(uri);
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+
+		List<Argument> args = new ArrayList<Argument>();
+		args.add(new Argument(Argument.RUN_OUTPUT_FORMAT,
+				Argument.RUN_OUTPUT_FORMAT_JRPRINT));
+
+		ResourceDescriptor rd = new ResourceDescriptor();
+		rd.setUriString(uri.substring(uri.indexOf(":") + 1));
 
 		return sp.getWsClient().runReport(rd, parameters, args);
 	}

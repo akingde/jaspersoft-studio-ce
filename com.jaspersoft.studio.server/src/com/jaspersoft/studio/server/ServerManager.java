@@ -38,6 +38,7 @@ import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
@@ -147,5 +148,22 @@ public class ServerManager {
 				UIUtils.showError(e);
 			}
 		}
+	}
+
+	public static MServerProfile getServerProfile(String key) {
+		int ind = key.indexOf(":");
+		if (ind > 0) {
+			String name = key.substring(0, ind );
+			for (MServerProfile sp : serverProfiles) {
+				if (sp.getValue().getName().equals(name))
+					return sp;
+			}
+		}
+		return null;
+	}
+
+	public static String getKey(MResource res) {
+		MServerProfile sp = (MServerProfile) res.getRoot();
+		return sp.getValue().getName() + ":" + res.getValue().getUriString();
 	}
 }
