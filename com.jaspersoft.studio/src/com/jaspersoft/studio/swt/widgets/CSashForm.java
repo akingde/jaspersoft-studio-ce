@@ -441,6 +441,7 @@ public class CSashForm extends SashForm {
 					// System.out.println("mouseDown");
 					inMouseClick = true;
 					// If we're within a button, then redraw to wipe out stipple and get button push effect.
+
 					int x = e.x;
 					int y = e.y;
 					for (int i = 0; i < currentSashInfo.sashLocs.length; i++) {
@@ -503,27 +504,29 @@ public class CSashForm extends SashForm {
 	}
 
 	public void upRestore() {
-		if (currentSashInfo == null)
-			currentSashInfo = new SashInfo(null);
+		initSash();
 		upRestoreClicked(currentSashInfo);
 	}
 
 	public void upHide() {
-		if (currentSashInfo == null)
-			currentSashInfo = new SashInfo(null);
+		initSash();
 		upHideClicked(currentSashInfo);
 	}
 
 	public void downRestore() {
-		if (currentSashInfo == null)
-			currentSashInfo = new SashInfo(null);
+		initSash();
 		downRestoreClicked(currentSashInfo);
 	}
 
 	public void downHide() {
-		if (currentSashInfo == null)
-			currentSashInfo = new SashInfo(null);
+		initSash();
 		downHideClicked(currentSashInfo);
+	}
+
+	protected void initSash() {
+		if (currentSashInfo == null) {
+			currentSashInfo = new SashInfo(null);
+		}
 	}
 
 	/*
@@ -670,7 +673,8 @@ public class CSashForm extends SashForm {
 		weights[1] = sashinfo.restoreWeight;
 		sashinfo.restoreWeight = NO_WEIGHT;
 
-		setWeights(weights);
+		if (weights[1] >= 0)
+			setWeights(weights);
 		fireDividerMoved();
 	}
 
