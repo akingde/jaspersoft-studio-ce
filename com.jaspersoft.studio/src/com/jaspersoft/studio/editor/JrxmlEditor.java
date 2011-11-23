@@ -633,7 +633,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 			// String xml = JRXmlWriter.writeReport(report, file.getCharset(true));//
 			// JasperCompileManager.writeReportToXml(report);
-			xml = xml.replaceFirst("<jasperReport ", "<!-- Created with Jaspersoft Studio -->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
+			xml = xml.replaceFirst(
+					"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 			doc.set(xml);

@@ -118,17 +118,15 @@ public class JRXmlWriterHelper {
 	}
 
 	public static String getVersion(IResource resource, PropertiesHelper ph, boolean showDialog) {
-		String version = ph.getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, "last");
+		String version = ph.getString(StudioPreferencePage.JSS_COMPATIBILITY_VERSION, LAST_VERSION);
 		if (showDialog && ph.getBoolean(StudioPreferencePage.JSS_COMPATIBILITY_SHOW_DIALOG, false)) {
 			VersionDialog dialog = new VersionDialog(Display.getDefault().getActiveShell(), version, resource.getProject());
 			if (dialog.open() == Dialog.OK) {
 				version = dialog.getVersion();
 			}
 		}
-		if (version == "last")
-			return LAST_VERSION;
 		return version;
 	}
 
-	public static final String LAST_VERSION = "4_0_2";
+	public static final String LAST_VERSION = "last";
 }

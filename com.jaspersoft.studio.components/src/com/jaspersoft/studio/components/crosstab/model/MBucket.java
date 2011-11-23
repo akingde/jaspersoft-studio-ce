@@ -24,7 +24,6 @@ import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
-import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
@@ -195,7 +194,7 @@ public class MBucket extends APropertyNode {
 		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_EXPRESSION))
 			jrField.setExpression((JRDesignExpression) ExprUtil.setValues(
 					jrField.getExpression(), value));
-		else if (id.equals(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS))
+		else if (id.equals(JRDesignCrosstabBucket.PROPERTY_VALUE_CLASS))
 			jrField.setValueClassName((String) value);
 	}
 }

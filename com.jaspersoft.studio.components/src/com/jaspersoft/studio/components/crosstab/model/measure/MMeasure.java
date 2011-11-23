@@ -206,11 +206,11 @@ public class MMeasure extends APropertyNode implements ICopyable {
 			return ExprUtil.getExpression(jrField.getValueExpression());
 
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_VALUE_CLASS))
-			return jrField.getValueClass();
+			return jrField.getValueClassName();
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
-			return jrField.getIncrementerFactoryClass();
+			return jrField.getIncrementerFactoryClassName();
 		if (id.equals(JRDesignCrosstabMeasure.PROPERTY_PERCENTAGE_CALCULATION_CLASS_NAME))
-			return jrField.getPercentageCalculatorClass();
+			return jrField.getPercentageCalculatorClassName();
 		return null;
 	}
 
