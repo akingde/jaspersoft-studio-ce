@@ -43,6 +43,7 @@ import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
@@ -184,6 +185,9 @@ public class ResourceFactory {
 
 		if (resource.getWsType().equals("dashboardUnit"))
 			return new MUnknown(parent, resource, index);
+
+		if (resource.getWsType().equals("ReportOptionsResource"))
+			return new MReportUnitOptions(parent, resource, index);
 
 		return new MUnknown(parent, resource, index);
 	}

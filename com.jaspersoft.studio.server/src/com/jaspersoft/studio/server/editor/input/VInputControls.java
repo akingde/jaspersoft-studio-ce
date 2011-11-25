@@ -23,6 +23,9 @@
  */
 package com.jaspersoft.studio.server.editor.input;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
@@ -39,6 +42,11 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class VInputControls extends APreview {
+
+	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
+	static {
+		inputs.addAll(ReportControler.inputs);
+	}
 
 	protected Composite composite;
 	protected ScrolledComposite scompo;
@@ -97,7 +105,7 @@ public class VInputControls extends APreview {
 		PResourceDescriptor pres = new PResourceDescriptor(p, icm.getWsClient());
 		Class<?> vclass = pres.getValueClass();
 		if (vclass != null)
-			for (IDataInput in : ReportControler.inputs) {
+			for (IDataInput in : inputs) {
 				if (in.isForType(vclass)) {
 					Label lbl = new Label(sectionClient, SWT.RIGHT);
 					lbl.setText(Messages.getString(p.getName()) + ":"); //$NON-NLS-1$
