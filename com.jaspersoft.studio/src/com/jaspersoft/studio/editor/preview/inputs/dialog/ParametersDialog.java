@@ -47,6 +47,7 @@ import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ImageInput;
 import com.jaspersoft.studio.editor.preview.input.LocaleInput;
 import com.jaspersoft.studio.editor.preview.input.NumericInput;
+import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 import com.jaspersoft.studio.editor.preview.input.TextInput;
 import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
 import com.jaspersoft.studio.messages.Messages;
@@ -170,7 +171,7 @@ public class ParametersDialog extends FormDialog {
 			if (in.isForType(p.getValueClass())) {
 				toolkit.createLabel(sectionClient, Messages.getString(p.getName()) + ":", SWT.RIGHT); //$NON-NLS-1$
 				// lbl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				in.createInput(sectionClient, p, p.getValueClass(), params);
+				in.createInput(sectionClient, new ParameterJasper(p), params);
 				break;
 			}
 		}

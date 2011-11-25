@@ -43,8 +43,6 @@ import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.design.JRDesignParameter;
-
 import org.apache.commons.validator.routines.BigDecimalValidator;
 import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.FloatValidator;
@@ -74,8 +72,8 @@ public class BigNumericInput implements IDataInput {
 		return false;
 	}
 
-	public boolean createInput(Composite parent, final JRDesignParameter param, Class<?> valueClass,
-			final Map<String, Object> params) {
+	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
+		Class<?> valueClass = param.getValueClass();
 		if (Number.class.isAssignableFrom(valueClass)) {
 			final Text num = new Text(parent, SWT.BORDER);
 
