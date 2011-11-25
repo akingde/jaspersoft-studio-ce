@@ -36,12 +36,13 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.editor;
+package com.jaspersoft.studio.server.editor.action;
 
 import org.eclipse.jface.action.Action;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.server.editor.ReportUnitEditor;
 
 public class RunStopAction extends Action {
 	public static final String ID = "PREVIEWJRSACTION"; //$NON-NLS-1$

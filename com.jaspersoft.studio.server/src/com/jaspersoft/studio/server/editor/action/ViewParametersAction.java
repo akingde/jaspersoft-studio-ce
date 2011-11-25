@@ -21,11 +21,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.editor;
+package com.jaspersoft.studio.server.editor.action;
 
 import com.jaspersoft.studio.editor.preview.MultiPageContainer;
 import com.jaspersoft.studio.editor.preview.actions.ASwitchAction;
 import com.jaspersoft.studio.model.parameter.MParameter;
+import com.jaspersoft.studio.server.editor.ReportRunControler;
 
 public class ViewParametersAction extends ASwitchAction {
 

@@ -53,7 +53,6 @@ public class ReportUnitEditor extends PreviewJRPrint {
 			getLeftContainer().switchView(ReportRunControler.FORM_PARAMETERS);
 
 			reportControler.setReportUnit(reportUnitURI);
-			reportControler.runReport();
 		}
 	}
 

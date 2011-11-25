@@ -23,6 +23,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.toolbar.ATopToolBarManager;
+import com.jaspersoft.studio.server.editor.action.RunStopAction;
 
 public class PreviewTopToolBarManager extends ATopToolBarManager {
 

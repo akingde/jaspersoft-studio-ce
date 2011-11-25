@@ -262,12 +262,8 @@ public class WSClientHelper {
 		return sp.getWsClient().runReport(rd, parameters, args);
 	}
 
-	public static Map<String, Object> runReportUnit(String uri)
-			throws Exception {
-		MServerProfile sp = ServerManager.getServerProfile(uri);
-
-		Map<String, Object> parameters = new HashMap<String, Object>();
-
+	public static Map<String, Object> runReportUnit(String uri,
+			Map<String, Object> parameters) throws Exception {
 		List<Argument> args = new ArrayList<Argument>();
 		args.add(new Argument(Argument.RUN_OUTPUT_FORMAT,
 				Argument.RUN_OUTPUT_FORMAT_JRPRINT));
@@ -275,7 +271,19 @@ public class WSClientHelper {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setUriString(uri.substring(uri.indexOf(":") + 1));
 
-		return sp.getWsClient().runReport(rd, parameters, args);
+		return getClient(uri).runReport(rd, parameters, args);
+	}
+
+	public static ResourceDescriptor getReportUnit(String uri) throws Exception {
+		ResourceDescriptor rd = new ResourceDescriptor();
+		rd.setUriString(uri.substring(uri.indexOf(":") + 1));
+
+		return getClient(uri).get(rd, null);
+	}
+
+	public static WSClient getClient(String uri) {
+		MServerProfile sp = ServerManager.getServerProfile(uri);
+		return sp.getWsClient();
 	}
 
 }

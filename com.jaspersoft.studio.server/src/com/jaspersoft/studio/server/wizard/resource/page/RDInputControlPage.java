@@ -80,6 +80,7 @@ public class RDInputControlPage extends AResourcePage {
 		stackComposite.setLayoutData(gd);
 
 		cvalue = new Composite(stackComposite, SWT.NONE);
+		createSingleValue(stackComposite);
 		createLOV(stackComposite);
 		createQuery(stackComposite);
 
@@ -111,8 +112,10 @@ public class RDInputControlPage extends AResourcePage {
 
 	protected void handleTypeChanged(CCombo ctype, StackLayout stackLayout) {
 		int s = ctype.getSelectionIndex();
-		if (s < 2)
+		if (s < 1)
 			stackLayout.topControl = cvalue;
+		else if (s < 2)
+			stackLayout.topControl = csinglevalue;
 		else if (s < 6)
 			stackLayout.topControl = clov;
 		else
@@ -123,14 +126,21 @@ public class RDInputControlPage extends AResourcePage {
 	private Composite stackComposite;
 	private Composite cvalue;
 	private Group clov;
+	private Group csinglevalue;
 	private TabFolder cquery;
+
+	protected void createSingleValue(Composite composite) {
+		csinglevalue = new Group(composite, SWT.NONE);
+		csinglevalue.setText("Data Type");
+		csinglevalue.setLayout(new GridLayout(3, false));
+
+		new SelectorDataType().createControls(csinglevalue, parent, res);
+	}
 
 	protected void createLOV(Composite composite) {
 		clov = new Group(composite, SWT.NONE);
 		clov.setText("List Of Values");
 		clov.setLayout(new GridLayout(3, false));
-
-		UIUtils.createLabel(composite, "Type");
 
 		new SelectorLov().createControls(clov, parent, res);
 	}
