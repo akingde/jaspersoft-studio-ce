@@ -41,8 +41,8 @@ package com.jaspersoft.studio.editor.preview.input;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -61,15 +61,12 @@ public class BooleanInput implements IDataInput {
 			txt.setToolTipText(param.getDescription());
 			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			txt.setBackground(parent.getBackground());
-			txt.addSelectionListener(new SelectionListener() {
-
+			txt.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent e) {
 					params.put(param.getName(), new Boolean(txt.getSelection()));
 				}
 
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
 			});
 			if (params.get(param.getName()) != null)
 				txt.setSelection((Boolean) params.get(param.getName()));

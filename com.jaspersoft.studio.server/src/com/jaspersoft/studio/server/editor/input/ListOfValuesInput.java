@@ -1,9 +1,12 @@
 package com.jaspersoft.studio.server.editor.input;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -17,16 +20,18 @@ import com.jaspersoft.studio.utils.UIUtils;
 
 public class ListOfValuesInput implements IDataInput {
 
+	private Table table;
+
 	public boolean isForType(Class<?> valueClass) {
 		if (List.class.isAssignableFrom(valueClass))
 			return true;
 		return false;
 	}
 
-	public boolean createInput(Composite parent, IParameter param,
-			Map<String, Object> params) {
+	public boolean createInput(Composite parent, final IParameter param,
+			final Map<String, Object> params) {
 		PResourceDescriptor rdprm = (PResourceDescriptor) param;
-		ResourceDescriptor rd = rdprm.getResourceDescriptor();
+		final ResourceDescriptor rd = rdprm.getResourceDescriptor();
 
 		ResourceDescriptor rd2 = (ResourceDescriptor) rd.getChildren().get(0);
 		List<ListItem> items = null;
@@ -56,11 +61,51 @@ public class ListOfValuesInput implements IDataInput {
 		} else
 			return false;
 
+		table.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TableItem[] ti = table.getSelection();
+				if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
+						|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
+
+					List<Object> lst = new ArrayList<Object>();
+					for (TableItem item : ti)
+						lst.add(item.getData());
+
+					params.put(param.getName(), lst);
+				} else {
+					params.put(param.getName(), ti[0].getData());
+				}
+			}
+		});
+		Object p = params.get(param.getName());
+		if (p != null) {
+			if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
+					|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
+				if (p instanceof List) {
+					List<TableItem> titems = new ArrayList<TableItem>();
+					List<Object> lst = (List<Object>) p;
+					for (TableItem ti : table.getItems()) {
+						if (lst.contains(ti.getData()))
+							titems.add(ti);
+					}
+					table.setSelection(titems.toArray(new TableItem[titems
+							.size()]));
+				}
+
+			} else {
+				for (TableItem ti : table.getItems()) {
+					if (ti.getData().equals(p))
+						table.setSelection(ti);
+				}
+			}
+		}
+
 		return true;
 	}
 
 	private void createList(Composite parent, List<ListItem> list, int style) {
-		Table table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL
+		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL
 				| SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		if (list.size() > 4)
@@ -69,7 +114,9 @@ public class ListOfValuesInput implements IDataInput {
 		for (ListItem item : list) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(item.getLabel());
+			ti.setData(item.getValue());
 		}
+		table.select(0);
 	}
 
 }
