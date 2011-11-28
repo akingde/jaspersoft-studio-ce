@@ -190,9 +190,11 @@ public class WSClientHelper {
 
 			MReportUnit mru = res.getReportUnit();
 			if (mru != null && res != mru) {
-				String ruuri = ((ResourceDescriptor) mru.getValue())
-						.getUriString();
-				rd.setParentFolder(ruuri + "_files/" + rd.getName());
+				String ruuri = mru.getValue().getUriString();
+				 
+				System.out.println(rd.getUriString());
+
+				System.out.println(rd.getParentFolder());
 
 				sp.getWsClient().modifyReportUnitResource(ruuri, rd, file);
 			} else

@@ -198,7 +198,17 @@ public class RDInputControlPage extends AResourcePage {
 
 	class ShiftMapProxy {
 		private ResourceDescriptor rd;
-		private final int[] shift = new int[] { 1, 2, 3, 8, 6, 10, 4, 9, 7, 11 };
+		private final int[] shift = new int[] {
+				ResourceDescriptor.IC_TYPE_BOOLEAN,
+				ResourceDescriptor.IC_TYPE_SINGLE_VALUE,
+				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES,
+				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO,
+				ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES,
+				ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX,
+				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY,
+				ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO,
+				ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY,
+				ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX };
 
 		public void setResourceDescriptor(ResourceDescriptor rd) {
 			this.rd = rd;

@@ -28,11 +28,9 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
@@ -40,12 +38,15 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class VInputControls extends APreview {
 
 	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
 	static {
 		inputs.addAll(ReportControler.inputs);
+		inputs.add(new ListOfValuesInput());
+		inputs.add(new QueryInput());
 	}
 
 	protected Composite composite;
@@ -107,11 +108,8 @@ public class VInputControls extends APreview {
 		if (vclass != null)
 			for (IDataInput in : inputs) {
 				if (in.isForType(vclass)) {
-					Label lbl = new Label(sectionClient, SWT.RIGHT);
-					lbl.setText(Messages.getString(p.getName()) + ":"); //$NON-NLS-1$
-					lbl.setBackground(sectionClient.getBackground());
-					lbl.setLayoutData(new GridData(
-							GridData.HORIZONTAL_ALIGN_END));
+					UIUtils.createLabel(sectionClient,
+							Messages.getString(p.getName()) + ":"); //$NON-NLS-1$ 
 
 					in.createInput(sectionClient, pres, icm.getParameters());
 					break;

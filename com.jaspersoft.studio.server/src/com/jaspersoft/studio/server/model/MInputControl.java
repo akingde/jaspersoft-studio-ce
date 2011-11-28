@@ -46,6 +46,7 @@ public class MInputControl extends MResource {
 	public static ResourceDescriptor createDescriptor(ANode parent) {
 		ResourceDescriptor rd = MResource.createDescriptor(parent);
 		rd.setWsType(ResourceDescriptor.TYPE_INPUT_CONTROL);
+		rd.setControlType(ResourceDescriptor.IC_TYPE_BOOLEAN);
 		return rd;
 	}
 }
