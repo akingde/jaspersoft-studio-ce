@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.server.editor.input;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,7 +20,19 @@ public class PResourceDescriptor implements IParameter {
 	}
 
 	public String getName() {
+		return p.getName();
+	}
+
+	public String getLabel() {
 		return p.getLabel();
+	}
+
+	public boolean isMandatory() {
+		return p.isMandatory();
+	}
+
+	public boolean isReadOnly() {
+		return p.isReadOnly();
 	}
 
 	public Class<?> getValueClass() {
@@ -60,7 +73,7 @@ public class PResourceDescriptor implements IParameter {
 				if (rdtype.getDataType() == ResourceDescriptor.DT_TYPE_TEXT)
 					return String.class;
 				if (rdtype.getDataType() == ResourceDescriptor.DT_TYPE_NUMBER)
-					return Number.class;
+					return BigDecimal.class;
 			}
 		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_BOOLEAN) {
 			return java.lang.Boolean.class;

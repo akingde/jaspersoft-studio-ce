@@ -177,4 +177,8 @@ public class FileInput implements IDataInput {
 		}
 		return null;
 	}
+
+	public boolean isLabeled() {
+		return false;
+	}
 }

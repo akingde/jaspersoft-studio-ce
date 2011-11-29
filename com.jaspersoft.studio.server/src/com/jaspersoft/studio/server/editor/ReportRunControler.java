@@ -138,11 +138,11 @@ public class ReportRunControler {
 								}
 							}
 						}
-						finishReport();
 					} catch (Throwable e) {
 						throw new InvocationTargetException(e);
 					} finally {
 						monitor.done();
+						finishReport();
 					}
 				}
 

@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.editor.preview.input.ADataInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -60,9 +61,12 @@ public class QueryInput implements IDataInput {
 			createList(parent, SWT.MULTI, qvalues, qcolumns);
 		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
 			createList(parent, SWT.MULTI | SWT.CHECK, qvalues, qcolumns);
-		}
+		} else
+			return false;
 
-		table.addSelectionListener(new SelectionAdapter() {
+		ADataInput.setMandatory(param, table);
+
+		SelectionAdapter listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] ti = table.getSelection();
@@ -76,7 +80,8 @@ public class QueryInput implements IDataInput {
 					params.put(param.getName(), ti[0].getData());
 				}
 			}
-		});
+		};
+		table.addSelectionListener(listener);
 
 		Object p = params.get(param.getName());
 		if (p != null) {
@@ -101,6 +106,8 @@ public class QueryInput implements IDataInput {
 			}
 		}
 
+		listener.widgetSelected(null);
+
 		return true;
 	}
 
@@ -113,6 +120,7 @@ public class QueryInput implements IDataInput {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		if (list.size() > 4)
 			gd.heightHint = 100;
+		gd.horizontalIndent = 8;
 		table.setLayoutData(gd);
 
 		for (String c : columns) {
@@ -132,5 +140,9 @@ public class QueryInput implements IDataInput {
 		for (TableColumn tc : table.getColumns())
 			tc.pack();
 		table.select(0);
+	}
+
+	public boolean isLabeled() {
+		return false;
 	}
 }

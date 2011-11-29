@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.editor.preview.input.ADataInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -61,7 +62,9 @@ public class ListOfValuesInput implements IDataInput {
 		} else
 			return false;
 
-		table.addSelectionListener(new SelectionAdapter() {
+		ADataInput.setMandatory(param, table);
+
+		SelectionAdapter listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] ti = table.getSelection();
@@ -77,7 +80,8 @@ public class ListOfValuesInput implements IDataInput {
 					params.put(param.getName(), ti[0].getData());
 				}
 			}
-		});
+		};
+		table.addSelectionListener(listener);
 		Object p = params.get(param.getName());
 		if (p != null) {
 			if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
@@ -101,6 +105,8 @@ public class ListOfValuesInput implements IDataInput {
 			}
 		}
 
+		listener.widgetSelected(null);
+
 		return true;
 	}
 
@@ -110,6 +116,7 @@ public class ListOfValuesInput implements IDataInput {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		if (list.size() > 4)
 			gd.heightHint = 100;
+		gd.horizontalIndent = 8;
 		table.setLayoutData(gd);
 		for (ListItem item : list) {
 			TableItem ti = new TableItem(table, SWT.NONE);
@@ -117,6 +124,10 @@ public class ListOfValuesInput implements IDataInput {
 			ti.setData(item.getValue());
 		}
 		table.select(0);
+	}
+
+	public boolean isLabeled() {
+		return false;
 	}
 
 }

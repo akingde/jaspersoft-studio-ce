@@ -59,17 +59,32 @@ public class TextInput implements IDataInput {
 		if (isForType(valueClass)) {
 			final Text txt = new Text(parent, SWT.BORDER);
 			txt.setToolTipText(param.getDescription());
-			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			txt.addModifyListener(new ModifyListener() {
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalIndent = 8;
+			txt.setLayoutData(gd);
+			ADataInput.setMandatory(param, txt);
+
+			ModifyListener listener = new ModifyListener() {
 
 				public void modifyText(ModifyEvent e) {
 					params.put(param.getName(), txt.getText());
 				}
-			});
+			};
+			txt.addModifyListener(listener);
 			if (params.get(param.getName()) != null)
 				txt.setText((String) params.get(param.getName()));
+			listener.modifyText(null);
 			return true;
 		}
 		return false;
+	}
+
+	public boolean isLabeled() {
+		return false;
+	}
+
+	public void setReadOnly(boolean readonly) {
+		// TODO Auto-generated method stub
+
 	}
 }

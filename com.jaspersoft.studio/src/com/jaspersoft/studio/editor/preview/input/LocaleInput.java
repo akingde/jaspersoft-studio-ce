@@ -79,4 +79,8 @@ public class LocaleInput implements IDataInput {
 		}
 		return false;
 	}
+
+	public boolean isLabeled() {
+		return false;
+	}
 }

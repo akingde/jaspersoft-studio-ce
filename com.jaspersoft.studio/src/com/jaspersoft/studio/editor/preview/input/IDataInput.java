@@ -47,4 +47,6 @@ public interface IDataInput {
 
 	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params);
 
+	public boolean isLabeled();
+
 }

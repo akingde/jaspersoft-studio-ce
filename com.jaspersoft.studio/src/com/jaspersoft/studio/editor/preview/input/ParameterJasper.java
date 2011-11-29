@@ -21,4 +21,15 @@ public class ParameterJasper implements IParameter {
 		return param.getDescription();
 	}
 
+	public String getLabel() {
+		return param.getName();
+	}
+
+	public boolean isMandatory() {
+		return false;
+	}
+
+	public boolean isReadOnly() {
+		return false;
+	}
 }

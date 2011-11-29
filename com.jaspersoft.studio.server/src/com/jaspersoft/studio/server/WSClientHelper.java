@@ -191,7 +191,7 @@ public class WSClientHelper {
 			MReportUnit mru = res.getReportUnit();
 			if (mru != null && res != mru) {
 				String ruuri = mru.getValue().getUriString();
-				 
+
 				System.out.println(rd.getUriString());
 
 				System.out.println(rd.getParentFolder());
@@ -228,9 +228,12 @@ public class WSClientHelper {
 			ResourceDescriptor newrd = sp.getWsClient().get(rd, null);
 			if (newrd != null) {
 				res.setValue(newrd);
-				res.removeChildren();
+				MReportUnit runit = res.getReportUnit();
+				if (runit == null || res instanceof MReportUnit) {
+					res.removeChildren();
 
-				listFolder(res, -1, sp.getWsClient(), monitor, newrd, 0);
+					listFolder(res, -1, sp.getWsClient(), monitor, newrd, 0);
+				}
 			} else {
 				connectGetData((MServerProfile) res.getRoot(), monitor);
 			}

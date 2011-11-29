@@ -67,6 +67,7 @@ public class ImageInput implements IDataInput {
 			GridData gd = new GridData();
 			gd.heightHint = 70;
 			gd.widthHint = 300;
+			gd.horizontalIndent = 8;
 			txt.setLayoutData(gd);
 			txt.addSelectionListener(new SelectionListener() {
 
@@ -179,5 +180,9 @@ public class ImageInput implements IDataInput {
 			return data;
 		}
 		return null;
+	}
+
+	public boolean isLabeled() {
+		return false;
 	}
 }

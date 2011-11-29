@@ -27,17 +27,16 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.ParameterJasper;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class VParameters extends APreview {
 
@@ -101,14 +100,12 @@ public class VParameters extends APreview {
 	}
 
 	protected void createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params) {
+		ParameterJasper pres = new ParameterJasper(p);
 		for (IDataInput in : ReportControler.inputs) {
-			if (in.isForType(p.getValueClass())) {
-				Label lbl = new Label(sectionClient, SWT.RIGHT);
-				lbl.setText(Messages.getString(p.getName()) + ":"); //$NON-NLS-1$
-				lbl.setBackground(sectionClient.getBackground());
-				lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-
-				in.createInput(sectionClient, new ParameterJasper(p), params);
+			if (in.isForType(pres.getValueClass())) {
+				if (!in.isLabeled())
+					UIUtils.createLabel(sectionClient, Messages.getString(pres.getLabel()));
+				in.createInput(sectionClient, pres, params);
 				break;
 			}
 		}

@@ -46,6 +46,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 public class BooleanInput implements IDataInput {
 	public boolean isForType(Class<?> valueClass) {
@@ -57,21 +58,34 @@ public class BooleanInput implements IDataInput {
 	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
 		Class<?> valueClass = param.getValueClass();
 		if (isForType(valueClass)) {
+			new Label(parent, SWT.NONE);
+
 			final Button txt = new Button(parent, SWT.CHECK);
+			txt.setText(param.getLabel());
 			txt.setToolTipText(param.getDescription());
-			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalIndent = 8;
+			txt.setLayoutData(gd);
 			txt.setBackground(parent.getBackground());
-			txt.addSelectionListener(new SelectionAdapter() {
+			SelectionAdapter listener = new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					params.put(param.getName(), new Boolean(txt.getSelection()));
 				}
 
-			});
+			};
+			txt.addSelectionListener(listener);
 			if (params.get(param.getName()) != null)
 				txt.setSelection((Boolean) params.get(param.getName()));
+
+			listener.widgetSelected(null);
+
 			return true;
 		}
 		return false;
+	}
+
+	public boolean isLabeled() {
+		return true;
 	}
 }

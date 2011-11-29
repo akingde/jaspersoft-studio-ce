@@ -87,7 +87,7 @@ public class NumericInput implements IDataInput {
 				else
 					val = (int) (value.doubleValue() * Math.pow(10000, 1));
 			num.setValues(val, min, max, digits, increment, pageIncrement);
-			num.addSelectionListener(new SelectionAdapter() {
+			SelectionAdapter listener = new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					Number n = null;
 					if (param.getValueClass().equals(Integer.class)) {
@@ -99,10 +99,22 @@ public class NumericInput implements IDataInput {
 					}
 					params.put(param.getName(), n);
 				}
-			});
-			num.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			};
+			num.addSelectionListener(listener);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalIndent = 8;
+			num.setLayoutData(gd);
+
+			ADataInput.setMandatory(param, num);
+
+			listener.widgetSelected(null);
+
 			return true;
 		}
+		return false;
+	}
+
+	public boolean isLabeled() {
 		return false;
 	}
 }

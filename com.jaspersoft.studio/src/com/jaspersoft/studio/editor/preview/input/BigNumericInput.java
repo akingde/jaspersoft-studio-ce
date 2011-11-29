@@ -76,6 +76,7 @@ public class BigNumericInput implements IDataInput {
 		Class<?> valueClass = param.getValueClass();
 		if (Number.class.isAssignableFrom(valueClass)) {
 			final Text num = new Text(parent, SWT.BORDER);
+			ADataInput.setMandatory(param, num);
 
 			num.setToolTipText(param.getDescription());
 			Number value = (Number) params.get(param.getName());
@@ -115,7 +116,7 @@ public class BigNumericInput implements IDataInput {
 					}
 				}
 			});
-			num.addModifyListener(new ModifyListener() {
+			ModifyListener listener = new ModifyListener() {
 
 				public void modifyText(ModifyEvent e) {
 					try {
@@ -136,10 +137,18 @@ public class BigNumericInput implements IDataInput {
 
 					}
 				}
-			});
-			num.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			};
+			num.addModifyListener(listener);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalIndent = 8;
+			num.setLayoutData(gd);
+			listener.modifyText(null);
 			return true;
 		}
+		return false;
+	}
+
+	public boolean isLabeled() {
 		return false;
 	}
 }

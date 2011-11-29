@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
+import com.jaspersoft.studio.editor.preview.input.DateInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
@@ -44,6 +45,7 @@ public class VInputControls extends APreview {
 
 	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
 	static {
+		inputs.add(new DateInput(true));
 		inputs.addAll(ReportControler.inputs);
 		inputs.add(new ListOfValuesInput());
 		inputs.add(new QueryInput());
@@ -108,8 +110,9 @@ public class VInputControls extends APreview {
 		if (vclass != null)
 			for (IDataInput in : inputs) {
 				if (in.isForType(vclass)) {
-					UIUtils.createLabel(sectionClient,
-							Messages.getString(p.getName()) + ":"); //$NON-NLS-1$ 
+					if (!in.isLabeled())
+						UIUtils.createLabel(sectionClient,
+								Messages.getString(pres.getLabel()));
 
 					in.createInput(sectionClient, pres, icm.getParameters());
 					break;

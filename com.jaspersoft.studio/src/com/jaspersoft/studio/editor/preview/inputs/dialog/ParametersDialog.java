@@ -61,7 +61,7 @@ public class ParametersDialog extends FormDialog {
 		inputs.add(new TimeZoneInput());
 		inputs.add(new NumericInput());
 		inputs.add(new BigNumericInput());
-		inputs.add(new DateInput());
+		inputs.add(new DateInput(false));
 		inputs.add(new ImageInput());
 	}
 	private List<JRParameter> prompts;

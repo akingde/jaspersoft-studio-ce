@@ -128,6 +128,10 @@ public class UIUtils {
 	}
 
 	public static CLabel createLabel(Composite parent, String txt) {
+		return createLabel(parent, txt, -1);
+	}
+
+	public static CLabel createLabel(Composite parent, String txt, int span) {
 		CLabel lbl = new CLabel(parent, SWT.RIGHT);
 		lbl.setText(txt);
 		lbl.setBackground(parent.getBackground());
@@ -136,13 +140,15 @@ public class UIUtils {
 			lbl.setLayoutData(rd);
 		} else if (parent.getLayout() instanceof GridLayout) {
 			GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+			if (span > 0)
+				gd.horizontalSpan = span;
 			lbl.setLayoutData(gd);
 		}
 		return lbl;
 	}
 
 	public static Label createSeparator(Composite parent, int span) {
-		Label lbl = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+		Label lbl = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.WRAP);
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			lbl.setLayoutData(rd);
