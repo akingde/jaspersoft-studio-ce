@@ -37,6 +37,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -229,7 +230,7 @@ public class WSClientHelper {
 			if (newrd != null) {
 				res.setValue(newrd);
 				MReportUnit runit = res.getReportUnit();
-				if (runit == null || res instanceof MReportUnit) {
+				if (res instanceof MFolder || res instanceof MReportUnit) {
 					res.removeChildren();
 
 					listFolder(res, -1, sp.getWsClient(), monitor, newrd, 0);
