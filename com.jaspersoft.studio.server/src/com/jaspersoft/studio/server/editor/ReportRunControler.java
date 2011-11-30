@@ -43,38 +43,45 @@ public class ReportRunControler {
 
 	public void setReportUnit(String key) {
 		this.reportUnit = key;
-		cli = WSClientHelper.getClient(reportUnit);
-		icm = new InputControlsManager(reportUnit);
-		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
-				.getDefault().getActiveShell());
-		try {
-			pm.run(true, true, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					try {
-						rdrepunit = WSClientHelper.getReportUnit(reportUnit);
-						List<ResourceDescriptor> list = cli.list(rdrepunit);
-						icm.getInputControls(list, cli);
-						icm.getDefaults(rdrepunit);
-						Display.getDefault().asyncExec(new Runnable() {
-							public void run() {
-								if (viewmap != null && prmInput == null)
-									fillForms();
-								runReport();
-							}
-						});
-					} catch (Throwable e) {
-						throw new InvocationTargetException(e);
-					} finally {
-						monitor.done();
+		if (viewmap != null && prmInput == null) {
+			cli = WSClientHelper.getClient(reportUnit);
+			icm = new InputControlsManager(reportUnit);
+			ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
+					.getDefault().getActiveShell());
+			try {
+				pm.run(true, true, new IRunnableWithProgress() {
+					public void run(IProgressMonitor monitor)
+							throws InvocationTargetException,
+							InterruptedException {
+						try {
+							rdrepunit = WSClientHelper
+									.getReportUnit(reportUnit);
+							List<ResourceDescriptor> list = cli.list(rdrepunit);
+							icm.getInputControls(list, cli);
+							icm.getDefaults(rdrepunit);
+							Display.getDefault().asyncExec(new Runnable() {
+								public void run() {
+									if (viewmap != null) {
+										fillForms();
+									}
+									runReport();
+								}
+							});
+						} catch (Throwable e) {
+							throw new InvocationTargetException(e);
+						} finally {
+							monitor.done();
+						}
 					}
-				}
 
-			});
-		} catch (InvocationTargetException e) {
-			UIUtils.showError(e.getCause());
-		} catch (InterruptedException e) {
-			UIUtils.showError(e);
+				});
+			} catch (InvocationTargetException e) {
+				UIUtils.showError(e.getCause());
+			} catch (InterruptedException e) {
+				UIUtils.showError(e);
+			}
+		} else {
+			runReport();
 		}
 	}
 
