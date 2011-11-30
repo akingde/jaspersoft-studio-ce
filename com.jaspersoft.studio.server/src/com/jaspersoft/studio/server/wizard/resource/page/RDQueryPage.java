@@ -52,6 +52,7 @@ public class RDQueryPage extends AResourcePage {
 		Text tsql = new Text(composite, SWT.BORDER | SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.minimumHeight = 100;
+		gd.widthHint = 400;
 		tsql.setLayoutData(gd);
 
 		bindingContext.bindValue(SWTObservables.observeText(clang),
