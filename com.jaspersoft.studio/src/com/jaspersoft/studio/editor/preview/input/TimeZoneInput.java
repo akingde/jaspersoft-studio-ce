@@ -42,46 +42,42 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.swt.widgets.WTimeZone;
 
-public class TimeZoneInput implements IDataInput {
+public class TimeZoneInput extends ADataInput {
+	private WTimeZone txt;
+
 	public boolean isForType(Class<?> valueClass) {
-		if (TimeZone.class.isAssignableFrom(valueClass))
-			return true;
-		return false;
+		return TimeZone.class.isAssignableFrom(valueClass);
 	}
 
-	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
-		Class<?> valueClass = param.getValueClass();
-		if (TimeZone.class.isAssignableFrom(valueClass)) {
-			final WTimeZone txt = new WTimeZone(parent, SWT.DROP_DOWN | SWT.BORDER);
+	@Override
+	public void createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
+		super.createInput(parent, param, params);
+		if (TimeZone.class.isAssignableFrom(param.getValueClass())) {
+			txt = new WTimeZone(parent, SWT.DROP_DOWN | SWT.BORDER);
 			txt.setBackground(txt.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			txt.setToolTipText(param.getDescription());
 			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			if (params.get(param.getName()) != null)
-				txt.setSelection((TimeZone) params.get(param.getName()));
-			txt.addSelectionListener(new SelectionListener() {
-
+			txt.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent e) {
-					params.put(param.getName(), txt.getTimeZone());
+					updateModel(txt.getTimeZone());
 				}
 
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
 			});
-			return true;
+			updateInput();
 		}
-		return false;
-
 	}
 
-	public boolean isLabeled() {
-		return false;
+	public void updateInput() {
+		Object value = params.get(param.getName());
+		if (value != null && value instanceof TimeZone)
+			txt.setSelection((TimeZone) params.get(param.getName()));
 	}
 }

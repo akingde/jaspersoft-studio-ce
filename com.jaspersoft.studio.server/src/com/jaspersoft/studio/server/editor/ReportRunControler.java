@@ -44,7 +44,7 @@ public class ReportRunControler {
 	public void setReportUnit(String key) {
 		this.reportUnit = key;
 		cli = WSClientHelper.getClient(reportUnit);
-		icm = new InputControlsManager();
+		icm = new InputControlsManager(reportUnit);
 		ProgressMonitorDialog pm = new ProgressMonitorDialog(Display
 				.getDefault().getActiveShell());
 		try {
@@ -58,7 +58,7 @@ public class ReportRunControler {
 						icm.getDefaults(rdrepunit);
 						Display.getDefault().asyncExec(new Runnable() {
 							public void run() {
-								if (viewmap != null)
+								if (viewmap != null && prmInput == null)
 									fillForms();
 								runReport();
 							}

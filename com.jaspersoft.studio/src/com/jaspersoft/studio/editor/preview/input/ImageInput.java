@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
-import java.io.IOException;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -33,7 +32,6 @@ import javax.imageio.ImageIO;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -50,26 +48,27 @@ import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class ImageInput implements IDataInput {
+public class ImageInput extends ADataInput {
+	private Button btn;
+
 	public boolean isForType(Class<?> valueClass) {
-		if (Image.class.isAssignableFrom(valueClass))
-			return true;
-		return false;
+		return Image.class.isAssignableFrom(valueClass);
 	}
 
-	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
-		Class<?> valueClass = param.getValueClass();
-		if (isForType(valueClass)) {
-			final Button txt = new Button(parent, SWT.NONE);
-			txt.setText(Messages.ImageInput_selectimage);
-			txt.setToolTipText(param.getDescription());
-			txt.setAlignment(SWT.LEFT);
+	@Override
+	public void createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
+		super.createInput(parent, param, params);
+		if (isForType(param.getValueClass())) {
+			btn = new Button(parent, SWT.NONE);
+			btn.setText(Messages.ImageInput_selectimage);
+			btn.setToolTipText(param.getDescription());
+			btn.setAlignment(SWT.LEFT);
 			GridData gd = new GridData();
 			gd.heightHint = 70;
 			gd.widthHint = 300;
 			gd.horizontalIndent = 8;
-			txt.setLayoutData(gd);
-			txt.addSelectionListener(new SelectionListener() {
+			btn.setLayoutData(gd);
+			btn.addSelectionListener(new SelectionListener() {
 
 				public void widgetSelected(SelectionEvent e) {
 					FilteredResourcesSelectionDialog fd = new FilteredResourcesSelectionDialog(Display.getCurrent()
@@ -80,12 +79,9 @@ public class ImageInput implements IDataInput {
 						Image image;
 						try {
 							image = ImageIO.read(file.getContents());
-							params.put(param.getName(), image);
-
-							setButtonImage(txt, image);
-						} catch (IOException e1) {
-							UIUtils.showError(e1);
-						} catch (CoreException e1) {
+							updateModel(image);
+							setButtonImage(btn, image);
+						} catch (Exception e1) {
 							UIUtils.showError(e1);
 						}
 					}
@@ -95,13 +91,14 @@ public class ImageInput implements IDataInput {
 
 				}
 			});
-
-			if (params.get(param.getName()) != null)
-				setButtonImage(txt, (Image) params.get(param.getName()));
-
-			return true;
+			updateInput();
 		}
-		return false;
+	}
+
+	public void updateInput() {
+		Object value = params.get(param.getName());
+		if (value != null && value instanceof Image)
+			setButtonImage(btn, (Image) value);
 	}
 
 	private void setButtonImage(final Button txt, Image image) {
@@ -182,7 +179,4 @@ public class ImageInput implements IDataInput {
 		return null;
 	}
 
-	public boolean isLabeled() {
-		return false;
-	}
 }

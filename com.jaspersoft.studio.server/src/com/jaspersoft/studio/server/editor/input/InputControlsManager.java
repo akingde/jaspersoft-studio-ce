@@ -1,21 +1,37 @@
 package com.jaspersoft.studio.server.editor.input;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRQueryChunk;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
+import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
+import com.jaspersoft.studio.editor.preview.input.IDataInput;
+import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.wizard.resource.page.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class InputControlsManager {
+	private HashMap<String, List<String>> cascadingDepMap = new HashMap<String, List<String>>();
 	private List<ResourceDescriptor> inputcontrols;
 	private Map<String, Object> defaults;
 	private WSClient wsclient;
+	private String reportUnit;
+
+	public InputControlsManager(String reportUnit) {
+		this.reportUnit = reportUnit;
+	}
 
 	public WSClient getWsClient() {
 		return wsclient;
@@ -104,9 +120,132 @@ public class InputControlsManager {
 				ic = cl.get(ic, null, args);
 
 				inputcontrols.add(i, ic);
+				cascadingDependencies(ic);
 			}
 		}
 		return inputcontrols;
+	}
+
+	private void cascadingDependencies(ResourceDescriptor ic) {
+		List<ResourceDescriptor> children = ic.getChildren();
+		for (ResourceDescriptor sub_ic : children) {
+			if (!isRDQuery(sub_ic))
+				continue;
+			String queryString = sub_ic.getSql();
+			String lang = sub_ic.getResourceProperty(
+					ResourceDescriptor.PROP_QUERY_LANGUAGE).getValue();
+			if (queryString != null && !queryString.isEmpty()) {
+				List<String> parameters = new ArrayList<String>();
+				JRDesignQuery query = new JRDesignQuery();
+				query.setText(queryString);
+				if (lang != null)
+					query.setLanguage(lang);
+				for (JRQueryChunk chunk : query.getChunks()) {
+					switch (chunk.getType()) {
+					case JRQueryChunk.TYPE_TEXT:
+						break;
+					case JRQueryChunk.TYPE_PARAMETER_CLAUSE:
+					case JRQueryChunk.TYPE_PARAMETER:
+						String paramName = chunk.getText();
+						if (!parameters.contains(paramName))
+							parameters.add(paramName);
+						break;
+					case JRQueryChunk.TYPE_CLAUSE_TOKENS:
+						String[] tokens = chunk.getTokens();
+						if (tokens.length > 2) {
+							for (String t : tokens) {
+								t = t.trim();
+								if (!parameters.contains(t))
+									parameters.add(t);
+							}
+						}
+						break;
+					}
+				}
+				if (!parameters.isEmpty())
+					cascadingDepMap.put(ic.getName(), parameters);
+			}
+			break;
+		}
+	}
+
+	private List<IDataInput> icontrols = new ArrayList<IDataInput>();
+
+	public List<IDataInput> getControls() {
+		return icontrols;
+	}
+
+	private PropertyChangeListener propChangeListener = new PropertyChangeListener() {
+
+		public void propertyChange(PropertyChangeEvent evt) {
+			Object source = evt.getSource();
+			if (source instanceof IDataInput) {
+				IDataInput control = (IDataInput) source;
+				actionPerformed(control);
+			}
+		}
+	};
+
+	public PropertyChangeListener getPropertyChangeListener() {
+		return propChangeListener;
+	}
+
+	public void actionPerformed(IDataInput ic) {
+		try {
+			String updateICName = ic.getParameter().getName();
+			// get the first input control having this param in the list...
+			for (IDataInput icToUpdate : icontrols) {
+				if (icToUpdate == ic)
+					continue;
+				String icName = icToUpdate.getParameter().getName();
+				if (cascadingDepMap.get(icName) == null
+						|| !cascadingDepMap.get(icName).contains(updateICName)) {
+					continue;
+				}
+
+				Map<String, Object> parameters = new HashMap<String, Object>();
+				List<String> parametersICs = cascadingDepMap.get(icName);
+				for (String paramName : parametersICs) {
+					Object value = getParameters().get(paramName);
+					parameters.put(paramName, value);
+				}
+				updateControl(icToUpdate, parameters);
+				break;
+			}
+		} catch (Exception ex) {
+			UIUtils.showError(ex);
+		}
+	}
+
+	private void updateControl(IDataInput ic, Map<String, Object> parameters)
+			throws Exception {
+		List<Argument> args = new ArrayList<Argument>();
+		args.add(new Argument(Argument.IC_GET_QUERY_DATA, ""));
+		args.add(new Argument(Argument.RU_REF_URI, WSClientHelper
+				.getReportUnitUri(reportUnit)));
+
+		PResourceDescriptor presd = (PResourceDescriptor) ic.getParameter();
+		ResourceDescriptor rd = presd.getResourceDescriptor();
+		rd.getParameters().clear();
+		rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_DATA, null);
+
+		for (String key : parameters.keySet()) {
+			Object value = parameters.get(key);
+			if (value instanceof Collection) {
+				for (String item : ((Collection<String>) value)) {
+					ListItem l = new ListItem(key, item);
+					l.setIsListItem(true);
+					rd.getParameters().add(l);
+				}
+			} else {
+				rd.getParameters().add(new ListItem(key, value));
+			}
+		}
+		presd.setResourceDescriptor(getWsClient().get(rd, null, args));
+		if (ic instanceof QueryInput)
+			((QueryInput) ic).fillTable();
+		else if (ic instanceof ListOfValuesInput)
+			((ListOfValuesInput) ic).fillTable();
 	}
 
 	public boolean isAnyVisible() {

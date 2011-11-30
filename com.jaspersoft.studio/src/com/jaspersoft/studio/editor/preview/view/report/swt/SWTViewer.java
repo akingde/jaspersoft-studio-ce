@@ -66,8 +66,8 @@ public class SWTViewer extends APreview implements IJRPrintable {
 	public void contribute2ToolBar(IToolBarManager tmanager) {
 		tmanager.add(new FirstPageAction(rptviewer));
 		tmanager.add(new PreviousPageAction(rptviewer));
-		tmanager.add(new NextPageAction(rptviewer));
 		tmanager.add(new PageNumberContributionItem(rptviewer));
+		tmanager.add(new NextPageAction(rptviewer));
 		tmanager.add(new LastPageAction(rptviewer));
 		tmanager.add(new Separator());
 

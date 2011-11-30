@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
-import com.jaspersoft.studio.editor.preview.input.DateInput;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
@@ -45,7 +44,7 @@ public class VInputControls extends APreview {
 
 	public static List<IDataInput> inputs = new ArrayList<IDataInput>();
 	static {
-		inputs.add(new DateInput(true));
+		inputs.add(new DateInput());
 		inputs.addAll(ReportControler.inputs);
 		inputs.add(new ListOfValuesInput());
 		inputs.add(new QueryInput());
@@ -81,6 +80,9 @@ public class VInputControls extends APreview {
 
 	public void createInputControls(InputControlsManager icm) {
 		this.icm = icm;
+		for (IDataInput di : icm.getControls())
+			di.dispose();
+		icm.getControls().clear();
 		for (Control c : composite.getChildren())
 			c.dispose();
 
@@ -105,19 +107,21 @@ public class VInputControls extends APreview {
 
 	protected void createInput(Composite sectionClient, ResourceDescriptor p,
 			InputControlsManager icm) {
-		PResourceDescriptor pres = new PResourceDescriptor(p, icm.getWsClient());
+		PResourceDescriptor pres = new PResourceDescriptor(p, icm);
 		Class<?> vclass = pres.getValueClass();
 		if (vclass != null)
 			for (IDataInput in : inputs) {
 				if (in.isForType(vclass)) {
+					in = in.getInstance();
 					if (!in.isLabeled())
 						UIUtils.createLabel(sectionClient,
 								Messages.getString(pres.getLabel()));
 
 					in.createInput(sectionClient, pres, icm.getParameters());
+					in.addChangeListener(icm.getPropertyChangeListener());
+					icm.getControls().add(in);
 					break;
 				}
 			}
 	}
-
 }

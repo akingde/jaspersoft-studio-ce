@@ -274,16 +274,20 @@ public class WSClientHelper {
 				Argument.RUN_OUTPUT_FORMAT_JRPRINT));
 
 		ResourceDescriptor rd = new ResourceDescriptor();
-		rd.setUriString(uri.substring(uri.indexOf(":") + 1));
+		rd.setUriString(getReportUnitUri(uri));
 
 		return getClient(uri).runReport(rd, parameters, args);
 	}
 
 	public static ResourceDescriptor getReportUnit(String uri) throws Exception {
 		ResourceDescriptor rd = new ResourceDescriptor();
-		rd.setUriString(uri.substring(uri.indexOf(":") + 1));
+		rd.setUriString(getReportUnitUri(uri));
 
 		return getClient(uri).get(rd, null);
+	}
+
+	public static String getReportUnitUri(String uri) {
+		return uri.substring(uri.indexOf(":") + 1);
 	}
 
 	public static WSClient getClient(String uri) {

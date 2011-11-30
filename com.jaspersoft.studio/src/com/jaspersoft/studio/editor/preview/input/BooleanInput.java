@@ -48,43 +48,45 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class BooleanInput implements IDataInput {
+public class BooleanInput extends ADataInput {
+	private Button bbuton;
+
 	public boolean isForType(Class<?> valueClass) {
-		if (Boolean.class.isAssignableFrom(valueClass))
-			return true;
-		return false;
+		return Boolean.class.isAssignableFrom(valueClass);
 	}
 
-	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
-		Class<?> valueClass = param.getValueClass();
-		if (isForType(valueClass)) {
+	@Override
+	public void createInput(Composite parent, IParameter param, Map<String, Object> params) {
+		super.createInput(parent, param, params);
+		if (isForType(param.getValueClass())) {
 			new Label(parent, SWT.NONE);
 
-			final Button txt = new Button(parent, SWT.CHECK);
-			txt.setText(param.getLabel());
-			txt.setToolTipText(param.getDescription());
+			bbuton = new Button(parent, SWT.CHECK);
+			bbuton.setText(param.getLabel());
+			bbuton.setToolTipText(param.getDescription());
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
-			txt.setLayoutData(gd);
-			txt.setBackground(parent.getBackground());
+			bbuton.setLayoutData(gd);
+			bbuton.setBackground(parent.getBackground());
 			SelectionAdapter listener = new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					params.put(param.getName(), new Boolean(txt.getSelection()));
+					updateModel(new Boolean(bbuton.getSelection()));
 				}
-
 			};
-			txt.addSelectionListener(listener);
-			if (params.get(param.getName()) != null)
-				txt.setSelection((Boolean) params.get(param.getName()));
-
+			bbuton.addSelectionListener(listener);
+			updateInput();
 			listener.widgetSelected(null);
-
-			return true;
 		}
-		return false;
 	}
 
+	public void updateInput() {
+		Object value = params.get(param.getName());
+		if (value != null && value instanceof Boolean)
+			bbuton.setSelection((Boolean) value);
+	}
+
+	@Override
 	public boolean isLabeled() {
 		return true;
 	}

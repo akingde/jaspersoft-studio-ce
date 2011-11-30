@@ -55,33 +55,24 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-public class BigNumericInput implements IDataInput {
+public class BigNumericInput extends ADataInput {
+	private Text num;
+
 	public boolean isForType(Class<?> valueClass) {
-		if (Long.class.isAssignableFrom(valueClass))
-			return true;
-		if (BigInteger.class.isAssignableFrom(valueClass))
-			return true;
-		if (BigDecimal.class.isAssignableFrom(valueClass))
-			return true;
-		if (Float.class.isAssignableFrom(valueClass))
-			return true;
-		if (Double.class.isAssignableFrom(valueClass))
-			return true;
-		if (Number.class.isAssignableFrom(valueClass))
-			return true;
-		return false;
+		return (Long.class.isAssignableFrom(valueClass) || BigInteger.class.isAssignableFrom(valueClass)
+				|| BigDecimal.class.isAssignableFrom(valueClass) || Float.class.isAssignableFrom(valueClass)
+				|| Double.class.isAssignableFrom(valueClass) || Number.class.isAssignableFrom(valueClass));
 	}
 
-	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
-		Class<?> valueClass = param.getValueClass();
-		if (Number.class.isAssignableFrom(valueClass)) {
-			final Text num = new Text(parent, SWT.BORDER);
-			ADataInput.setMandatory(param, num);
+	@Override
+	public void createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
+		super.createInput(parent, param, params);
+		if (Number.class.isAssignableFrom(param.getValueClass())) {
+			num = new Text(parent, SWT.BORDER);
+			setMandatory(param, num);
 
 			num.setToolTipText(param.getDescription());
-			Number value = (Number) params.get(param.getName());
-			if (value != null)
-				num.setText(NumberFormat.getInstance().format(value));
+			updateInput();
 			num.addListener(SWT.Verify, new Listener() {
 
 				public void handleEvent(Event e) {
@@ -132,7 +123,7 @@ public class BigNumericInput implements IDataInput {
 						} else if (param.getValueClass().equals(Double.class)) {
 							n = new Double(num.getText());
 						}
-						params.put(param.getName(), n);
+						updateModel(n);
 					} catch (NumberFormatException ne) {
 
 					}
@@ -142,13 +133,13 @@ public class BigNumericInput implements IDataInput {
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			num.setLayoutData(gd);
-			listener.modifyText(null);
-			return true;
 		}
-		return false;
 	}
 
-	public boolean isLabeled() {
-		return false;
+	public void updateInput() {
+		Object value = params.get(param.getName());
+		if (value != null && value instanceof Number)
+			num.setText(NumberFormat.getInstance().format(value));
 	}
+
 }

@@ -12,4 +12,5 @@ public interface IParameter {
 	public boolean isMandatory();
 
 	public boolean isReadOnly();
+
 }

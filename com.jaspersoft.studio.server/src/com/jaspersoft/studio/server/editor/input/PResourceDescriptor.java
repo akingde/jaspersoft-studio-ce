@@ -12,11 +12,19 @@ import com.jaspersoft.studio.utils.UIUtils;
 
 public class PResourceDescriptor implements IParameter {
 	private ResourceDescriptor p;
-	private WSClient client;
+	private InputControlsManager icm;
 
-	public PResourceDescriptor(ResourceDescriptor p, WSClient client) {
+	public PResourceDescriptor(ResourceDescriptor p, InputControlsManager icm) {
 		this.p = p;
-		this.client = client;
+		this.icm = icm;
+	}
+
+	public void setResourceDescriptor(ResourceDescriptor p) {
+		this.p = p;
+	}
+
+	public InputControlsManager getInputControlManager() {
+		return icm;
 	}
 
 	public String getName() {
@@ -49,7 +57,7 @@ public class PResourceDescriptor implements IParameter {
 	}
 
 	public WSClient getWsClient() {
-		return client;
+		return icm.getWsClient();
 	}
 
 	public String getDescription() {
@@ -63,7 +71,7 @@ public class PResourceDescriptor implements IParameter {
 			if (rdtype.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
 				ResourceDescriptor tmpRd = new ResourceDescriptor();
 				tmpRd.setUriString(rdtype.getReferenceUri());
-				rdtype = client.get(tmpRd, null);
+				rdtype = getWsClient().get(tmpRd, null);
 			}
 			if (rdtype != null) {
 				if (rdtype.getDataType() == ResourceDescriptor.DT_TYPE_DATE)
@@ -84,4 +92,5 @@ public class PResourceDescriptor implements IParameter {
 		}
 		return rd.getClass();
 	}
+
 }

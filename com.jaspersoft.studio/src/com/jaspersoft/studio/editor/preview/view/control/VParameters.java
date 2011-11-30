@@ -103,6 +103,7 @@ public class VParameters extends APreview {
 		ParameterJasper pres = new ParameterJasper(p);
 		for (IDataInput in : ReportControler.inputs) {
 			if (in.isForType(pres.getValueClass())) {
+				in = in.getInstance();
 				if (!in.isLabeled())
 					UIUtils.createLabel(sectionClient, Messages.getString(pres.getLabel()));
 				in.createInput(sectionClient, pres, params);

@@ -41,31 +41,35 @@ package com.jaspersoft.studio.editor.preview.input;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 
-public class NumericInput implements IDataInput {
+public class NumericInput extends ADataInput {
+	private Spinner num;
+	private int min;
+	private int max;
+	private int digits;
+	private int increment;
+	private int pageIncrement;
+
 	public boolean isForType(Class<?> valueClass) {
-		if (Integer.class.isAssignableFrom(valueClass))
-			return true;
-		if (Short.class.isAssignableFrom(valueClass))
-			return true;
-		if (Byte.class.isAssignableFrom(valueClass))
-			return true;
-		return false;
+		return Integer.class.isAssignableFrom(valueClass) || Short.class.isAssignableFrom(valueClass)
+				|| Byte.class.isAssignableFrom(valueClass);
 	}
 
-	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
+	@Override
+	public void createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
+		super.createInput(parent, param, params);
 		Class<?> valueClass = param.getValueClass();
-		if (Number.class.isAssignableFrom(valueClass)) {
-			int min = 0;
-			int max = 0;
-			int digits = 0;
-			int increment = 1;
-			int pageIncrement = 10;
+		if (Number.class.isAssignableFrom(param.getValueClass())) {
+			min = 0;
+			max = 0;
+			digits = 0;
+			increment = 1;
+			pageIncrement = 10;
 			if (valueClass.equals(Integer.class)) {
 				min = Integer.MIN_VALUE;
 				max = Integer.MAX_VALUE;
@@ -77,44 +81,46 @@ public class NumericInput implements IDataInput {
 				max = (int) Byte.MAX_VALUE;
 			}
 
-			final Spinner num = new Spinner(parent, SWT.BORDER);
+			num = new Spinner(parent, SWT.BORDER);
 			num.setToolTipText(param.getDescription());
-			Number value = (Number) params.get(param.getName());
-			int val = 0;
-			if (value != null)
-				if (digits == 0)
-					val = value.intValue();
-				else
-					val = (int) (value.doubleValue() * Math.pow(10000, 1));
-			num.setValues(val, min, max, digits, increment, pageIncrement);
-			SelectionAdapter listener = new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
+			updateInput();
+			final ModifyListener listener2 = new ModifyListener() {
+
+				public void modifyText(ModifyEvent e) {
+					num.removeModifyListener(this);
 					Number n = null;
 					if (param.getValueClass().equals(Integer.class)) {
-						n = new Integer(num.getSelection());
+						n = new Integer(num.getText());
 					} else if (param.getValueClass().equals(Byte.class)) {
-						n = new Byte((byte) num.getSelection());
+						n = new Byte(num.getText());
 					} else if (param.getValueClass().equals(Short.class)) {
-						n = new Short((short) num.getSelection());
+						n = new Short(num.getText());
 					}
-					params.put(param.getName(), n);
+					updateModel(n);
+					updateInput();
+					num.addModifyListener(this);
 				}
 			};
-			num.addSelectionListener(listener);
+			num.addModifyListener(listener2);
+
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			num.setLayoutData(gd);
 
-			ADataInput.setMandatory(param, num);
-
-			listener.widgetSelected(null);
-
-			return true;
+			setMandatory(param, num);
 		}
-		return false;
 	}
 
-	public boolean isLabeled() {
-		return false;
+	public void updateInput() {
+		Object value = params.get(param.getName());
+		if (value != null && value instanceof Number) {
+			int val = 0;
+			if (value != null)
+				if (digits == 0)
+					val = ((Number) value).intValue();
+				else
+					val = (int) (((Number) value).doubleValue() * Math.pow(10000, 1));
+			num.setValues(val, min, max, digits, increment, pageIncrement);
+		}
 	}
 }

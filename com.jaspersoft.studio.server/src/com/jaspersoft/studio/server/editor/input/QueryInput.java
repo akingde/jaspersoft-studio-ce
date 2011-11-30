@@ -16,25 +16,95 @@ import org.eclipse.swt.widgets.TableItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQueryDataRow;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.input.ADataInput;
-import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class QueryInput implements IDataInput {
+public class QueryInput extends ADataInput {
 
 	private Table table;
+	private ResourceDescriptor rd;
 
 	public boolean isForType(Class<?> valueClass) {
-		if (ResourceDescriptor.class.isAssignableFrom(valueClass))
-			return true;
-		return false;
+		return ResourceDescriptor.class.isAssignableFrom(valueClass);
 	}
 
-	public boolean createInput(Composite parent, final IParameter param,
+	@Override
+	public void createInput(Composite parent, final IParameter param,
 			final Map<String, Object> params) {
+		super.createInput(parent, param, params);
 		PResourceDescriptor rdprm = (PResourceDescriptor) param;
-		final ResourceDescriptor rd = rdprm.getResourceDescriptor();
+		rd = rdprm.getResourceDescriptor();
 
+		if (rd.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY) {
+			createList(parent, SWT.SINGLE);
+		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO) {
+			createList(parent, SWT.SINGLE | SWT.RADIO);
+		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY) {
+			createList(parent, SWT.MULTI);
+		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
+			createList(parent, SWT.MULTI | SWT.CHECK);
+		} else
+			return;
+
+		setMandatory(param, table);
+
+		SelectionAdapter listener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TableItem[] ti = table.getSelection();
+				if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
+						|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
+					List<Object> lst = new ArrayList<Object>();
+					for (TableItem item : ti)
+						lst.add(item.getData());
+					updateModel(lst);
+				} else
+					updateModel(ti.length > 0 ? ti[0].getData() : null);
+			}
+		};
+		table.addSelectionListener(listener);
+
+		updateInput();
+
+		listener.widgetSelected(null);
+	}
+
+	public void updateInput() {
+		Object value = params.get(param.getName());
+		if (value != null) {
+			if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
+					|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
+				if (value instanceof List) {
+					List<TableItem> titems = new ArrayList<TableItem>();
+					List<Object> lst = (List<Object>) value;
+					for (TableItem ti : table.getItems())
+						if (lst.contains(ti.getData()))
+							titems.add(ti);
+					table.setSelection(titems.toArray(new TableItem[titems
+							.size()]));
+				}
+			} else
+				for (TableItem ti : table.getItems()) {
+					if (ti.getData().equals(value))
+						table.setSelection(ti);
+				}
+		}
+	}
+
+	private void createList(Composite parent, int style) {
+		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL
+				| SWT.BORDER);
+		table.setLinesVisible(true);
+		table.setHeaderVisible(true);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalIndent = 8;
+		table.setLayoutData(gd);
+
+		fillTable();
+	}
+
+	public void fillTable() {
+		PResourceDescriptor rdprm = (PResourceDescriptor) param;
 		ResourceDescriptor rd2 = (ResourceDescriptor) rd.getChildren().get(0);
 		List<InputControlQueryDataRow> qvalues = null;
 		String[] qcolumns = null;
@@ -47,88 +117,19 @@ public class QueryInput implements IDataInput {
 				qcolumns = tmpRd.getQueryVisibleColumns();
 			} catch (Exception ex) {
 				UIUtils.showError(ex);
-				return false;
+				return;
 			}
 		} else {
 			qvalues = rd.getQueryData();
 			qcolumns = rd.getQueryVisibleColumns();
 		}
-		if (rd.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY) {
-			createList(parent, SWT.SINGLE, qvalues, qcolumns);
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO) {
-			createList(parent, SWT.SINGLE | SWT.RADIO, qvalues, qcolumns);
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY) {
-			createList(parent, SWT.MULTI, qvalues, qcolumns);
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
-			createList(parent, SWT.MULTI | SWT.CHECK, qvalues, qcolumns);
-		} else
-			return false;
 
-		ADataInput.setMandatory(param, table);
-
-		SelectionAdapter listener = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TableItem[] ti = table.getSelection();
-				if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
-						|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
-					List<Object> lst = new ArrayList<Object>();
-					for (TableItem item : ti)
-						lst.add(item.getData());
-					params.put(param.getName(), lst);
-				} else {
-					params.put(param.getName(), ti[0].getData());
-				}
-			}
-		};
-		table.addSelectionListener(listener);
-
-		Object p = params.get(param.getName());
-		if (p != null) {
-			if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
-					|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
-				if (p instanceof List) {
-					List<TableItem> titems = new ArrayList<TableItem>();
-					List<Object> lst = (List<Object>) p;
-					for (TableItem ti : table.getItems()) {
-						if (lst.contains(ti.getData()))
-							titems.add(ti);
-					}
-					table.setSelection(titems.toArray(new TableItem[titems
-							.size()]));
-				}
-
-			} else {
-				for (TableItem ti : table.getItems()) {
-					if (ti.getData().equals(p))
-						table.setSelection(ti);
-				}
-			}
-		}
-
-		listener.widgetSelected(null);
-
-		return true;
-	}
-
-	private void createList(Composite parent, int style,
-			List<InputControlQueryDataRow> list, String[] columns) {
-		table = new Table(parent, style | SWT.V_SCROLL | SWT.H_SCROLL
-				| SWT.BORDER);
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		if (list.size() > 4)
-			gd.heightHint = 100;
-		gd.horizontalIndent = 8;
-		table.setLayoutData(gd);
-
-		for (String c : columns) {
+		for (String c : qcolumns) {
 			TableColumn column = new TableColumn(table, SWT.NONE);
 			column.setText(c);
 		}
 
-		for (InputControlQueryDataRow item : list) {
+		for (InputControlQueryDataRow item : qvalues) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			List<String> cvals = item.getColumnValues();
 			for (int i = 0; i < cvals.size(); i++) {
@@ -139,10 +140,9 @@ public class QueryInput implements IDataInput {
 
 		for (TableColumn tc : table.getColumns())
 			tc.pack();
-		table.select(0);
+
+		if (qvalues.size() > 4)
+			((GridData) table.getLayoutData()).heightHint = 100;
 	}
 
-	public boolean isLabeled() {
-		return false;
-	}
 }

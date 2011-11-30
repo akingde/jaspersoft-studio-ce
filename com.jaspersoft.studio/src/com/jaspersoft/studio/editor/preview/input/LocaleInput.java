@@ -42,45 +42,43 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.swt.widgets.WLocale;
 
-public class LocaleInput implements IDataInput {
+public class LocaleInput extends ADataInput {
+	private WLocale wlocal;
+
 	public boolean isForType(Class<?> valueClass) {
-		if (Locale.class.isAssignableFrom(valueClass))
-			return true;
-		return false;
+		return Locale.class.isAssignableFrom(valueClass);
 	}
 
-	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
-		Class<?> valueClass = param.getValueClass();
-		if (Locale.class.isAssignableFrom(valueClass)) {
-			final WLocale txt = new WLocale(parent, SWT.DROP_DOWN | SWT.BORDER);
-			txt.setToolTipText(param.getDescription());
-			txt.setBackground(txt.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-			txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	@Override
+	public void createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
+		super.createInput(parent, param, params);
+		if (Locale.class.isAssignableFrom(param.getValueClass())) {
+			wlocal = new WLocale(parent, SWT.DROP_DOWN | SWT.BORDER);
+			wlocal.setToolTipText(param.getDescription());
+			wlocal.setBackground(wlocal.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			wlocal.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			if (params.get(param.getName()) != null)
-				txt.setSelection((Locale) params.get(param.getName()));
-			txt.addSelectionListener(new SelectionListener() {
-
+				wlocal.setSelection((Locale) params.get(param.getName()));
+			wlocal.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent e) {
-					params.put(param.getName(), txt.getLocale());
+					updateModel(wlocal.getLocale());
 				}
 
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
 			});
-			return true;
 		}
-		return false;
 	}
 
-	public boolean isLabeled() {
-		return false;
+	public void updateInput() {
+		Object value = params.get(param.getName());
+		if (value != null && value instanceof Locale)
+			wlocal.setSelection((Locale) value);
 	}
 }

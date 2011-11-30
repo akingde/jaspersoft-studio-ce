@@ -53,19 +53,23 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 
-public class DateInput implements IDataInput {
+public class DateInput extends ADataInput {
+
+	public DateInput() {
+		this(false);
+	}
 
 	public DateInput(boolean isNumeric) {
 		this.isNumeric = isNumeric;
 	}
 
 	public boolean isForType(Class<?> valueClass) {
-		if (Date.class.isAssignableFrom(valueClass))
-			return true;
-		return false;
+		return Date.class.isAssignableFrom(valueClass);
 	}
 
-	public boolean createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
+	@Override
+	public void createInput(Composite parent, final IParameter param, final Map<String, Object> params) {
+		super.createInput(parent, param, params);
 		Class<?> valueClass = param.getValueClass();
 		if (Date.class.isAssignableFrom(valueClass)) {
 			if (param.getValueClass().equals(java.sql.Date.class)) {
@@ -76,10 +80,7 @@ public class DateInput implements IDataInput {
 					|| param.getValueClass().equals(java.util.Date.class)) {
 				createTimestamp(parent, param, params);
 			}
-			return true;
 		}
-		return false;
-
 	}
 
 	protected void createTimestamp(Composite parent, final IParameter param, final Map<String, Object> params) {
@@ -92,116 +93,89 @@ public class DateInput implements IDataInput {
 		c.setLayout(layout);
 		c.setBackground(c.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-		ADataInput.setMandatory(param, c);
+		setMandatory(param, c);
 
-		final DateTime date = new DateTime(c, SWT.DATE | SWT.LONG | SWT.BORDER);
-		final DateTime time = new DateTime(c, SWT.TIME | SWT.LONG | SWT.BORDER);
+		date = new DateTime(c, SWT.DATE | SWT.LONG | SWT.BORDER);
+		time = new DateTime(c, SWT.TIME | SWT.LONG | SWT.BORDER);
 		SelectionAdapter listener = new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				Timestamp d = java.sql.Timestamp
 						.valueOf(String
 								.format(
 										"%04d-%02d-%02d %02d:%02d:%02d", date.getYear(), date.getMonth(), date.getDay(), time.getHours(), time.getMinutes(), time.getSeconds())); //$NON-NLS-1$ 
-				if (isNumeric)
-					params.put(param.getName(), d.getTime());
-				else
-					params.put(param.getName(), d);
+				updateModel(isNumeric ? d.getTime() : d);
 			}
 		};
 		date.addSelectionListener(listener);
 		time.addSelectionListener(listener);
-		Object d = params.get(param.getName());
-		if (d != null) {
-			GregorianCalendar cal = new GregorianCalendar();
-			if (d instanceof Date) {
-				cal.setTimeInMillis(((Date) d).getTime());
-			} else if (d instanceof Long) {
-				cal.setTimeInMillis((Long) d);
-				isNumeric = true;
-			}
-
-			date.setYear(cal.get(Calendar.YEAR));
-			date.setMonth(cal.get(Calendar.MONTH) + 1);
-			date.setDay(cal.get(Calendar.DATE));
-
-			time.setHours(cal.get(Calendar.HOUR));
-			time.setMinutes(cal.get(Calendar.MINUTE));
-			time.setSeconds(cal.get(Calendar.SECOND));
-		}
+		updateInput();
 		listener.widgetSelected(null);
 	}
 
 	protected void createDateTime(Composite parent, final IParameter param, final Map<String, Object> params) {
-		final DateTime time = new DateTime(parent, SWT.TIME | SWT.LONG | SWT.BORDER);
+		time = new DateTime(parent, SWT.TIME | SWT.LONG | SWT.BORDER);
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
 		time.setLayoutData(gd);
-		ADataInput.setMandatory(param, time);
+
+		setMandatory(param, time);
+
 		SelectionAdapter listener = new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				Time d = java.sql.Time.valueOf(String.format(
 						"%02d:%02d:%02d", time.getHours(), time.getMinutes(), time.getSeconds())); //$NON-NLS-1$ 
-				if (isNumeric)
-					params.put(param.getName(), d.getTime());
-				else
-					params.put(param.getName(), d);
+				updateModel(isNumeric ? d.getTime() : d);
 			}
 		};
 		time.addSelectionListener(listener);
-		Object d = params.get(param.getName());
-		if (d != null) {
-			GregorianCalendar cal = new GregorianCalendar();
-			if (d instanceof Date) {
-				cal.setTimeInMillis(((Date) d).getTime());
-			} else if (d instanceof Long) {
-				cal.setTimeInMillis((Long) d);
-				isNumeric = true;
-			}
-
-			time.setHours(cal.get(Calendar.HOUR));
-			time.setMinutes(cal.get(Calendar.MINUTE));
-			time.setSeconds(cal.get(Calendar.SECOND));
-		}
+		updateInput();
 		listener.widgetSelected(null);
 	}
 
 	protected void createDate(Composite parent, final IParameter param, final Map<String, Object> params) {
-		final DateTime date = new DateTime(parent, SWT.DATE | SWT.LONG | SWT.BORDER);
+		date = new DateTime(parent, SWT.DATE | SWT.LONG | SWT.BORDER);
 		GridData gd = new GridData();
 		gd.horizontalIndent = 8;
 		date.setLayoutData(gd);
-		ADataInput.setMandatory(param, date);
 
-		Object d = params.get(param.getName());
-		if (d != null) {
-			GregorianCalendar cal = new GregorianCalendar();
-			if (d instanceof Date) {
-				cal.setTimeInMillis(((Date) d).getTime());
-			} else if (d instanceof Long) {
-				cal.setTimeInMillis((Long) d);
-				isNumeric = true;
-			}
+		setMandatory(param, date);
 
-			date.setYear(cal.get(Calendar.YEAR));
-			date.setMonth(cal.get(Calendar.MONTH) + 1);
-			date.setDay(cal.get(Calendar.DATE));
-		}
+		updateInput();
 		SelectionAdapter listener = new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				Date d = java.sql.Date.valueOf(String.format("%04d-%02d-%02d", date.getYear(), date.getMonth(), date.getDay())); //$NON-NLS-1$ 
-				if (isNumeric)
-					params.put(param.getName(), d.getTime());
-				else
-					params.put(param.getName(), d);
+				updateModel(isNumeric ? d.getTime() : d);
 			}
 		};
 		date.addSelectionListener(listener);
 		listener.widgetSelected(null);
 	}
 
-	private boolean isNumeric = false;
-
-	public boolean isLabeled() {
-		return false;
+	public void updateInput() {
+		Object d = params.get(param.getName());
+		if (d != null && d instanceof Boolean) {
+			GregorianCalendar cal = new GregorianCalendar();
+			if (d instanceof Date) {
+				cal.setTimeInMillis(((Date) d).getTime());
+			} else if (d instanceof Long) {
+				cal.setTimeInMillis((Long) d);
+				isNumeric = true;
+			}
+			if (date != null) {
+				date.setYear(cal.get(Calendar.YEAR));
+				date.setMonth(cal.get(Calendar.MONTH) + 1);
+				date.setDay(cal.get(Calendar.DATE));
+			}
+			if (time != null) {
+				time.setHours(cal.get(Calendar.HOUR));
+				time.setMinutes(cal.get(Calendar.MINUTE));
+				time.setSeconds(cal.get(Calendar.SECOND));
+			}
+		}
 	}
+
+	private boolean isNumeric = false;
+	private DateTime date;
+	private DateTime time;
+
 }
