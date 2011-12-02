@@ -31,10 +31,13 @@ import net.sf.jasperreports.engine.util.SimpleFileResolver;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -199,5 +202,20 @@ public class SelectionHelper {
 			e.printStackTrace();
 		}
 		return SelectionHelper.getFileResolver(file);
+	}
+	
+	/**
+	 * Gets the currently selected {@link IJavaProject} instance, based upon the current opened JRXMLEditor window.
+	 * 
+	 * @return the {@link IJavaProject} if exists, <code>null</code> otherwise
+	 */
+	public static IJavaProject getJavaProjectFromCurrentJRXMLEditor() {
+		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
+		if (activeJRXMLEditor!=null && activeJRXMLEditor.getEditorInput() instanceof IFileEditorInput){
+			IProject prj = ((IFileEditorInput) activeJRXMLEditor.getEditorInput()).getFile().getProject();
+			IJavaProject javaProj = JavaCore.create(prj);
+			return javaProj;
+		}
+		return null;
 	}
 }

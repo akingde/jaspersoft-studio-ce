@@ -97,10 +97,16 @@ public class ExpressionWidget {
 	public void setExpression(JRDesignExpression exp) {
 		this.expression = exp;
 		setOnParent(exp);
-		if (exp != null) {
-			expText.setText(exp.getText());
-			expText.setToolTipText(expText.getText());
-		} else {
+		
+		if (exp != null && exp.getText() != null) {
+			
+			if (!exp.getText().equals(expText.getText()))
+			{
+				expText.setText(exp.getText());
+				expText.setToolTipText(expText.getText());
+			}
+		}
+		else{
 			expText.setText("");
 			expText.setToolTipText("");
 		}

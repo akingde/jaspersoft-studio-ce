@@ -203,8 +203,8 @@ public class FileUtils {
 		return bytes;
 	}
 
-	public static void fileRenamed(File file, String strFilename, String ext) {
-		fileRenamed(file, strFilename, ext, true);
+	public static File fileRenamed(File file, String strFilename, String ext) {
+		return fileRenamed(file, strFilename, ext, true);
 	}
 
 	public static File fileRenamed(File file, String strFilename, String ext, boolean showWarning) {

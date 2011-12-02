@@ -31,6 +31,7 @@
    <extension-point id="mappingTool" name="Mapping Tool" schema="schema/mappingTool.exsd"/>
 <extension-point id="palette" name="Palette" schema="schema/palette.exsd"/>
 <extension-point id="repositoryview" name="repositoryview" schema="schema/repositoryview.exsd"/>
+<extension-point id="hyperlinkTypes" name="Hyperlink Types" schema="schema/hyperlinkTypes.exsd"/>
 
 
 
@@ -624,7 +625,17 @@
           </propertyCategory>
        </propertyContributor>
     </extension>
-   
+    <!--
+    <extension
+          id="hyperlinkID1"
+          name="hyperlinkNAME1"
+          point="com.jaspersoft.studio.hyperlinkTypes">
+       <hyperlinkType
+             id="newContributedType"
+             type="BlaBla">
+       </hyperlinkType>
+    </extension>
+   -->
  
   
    
