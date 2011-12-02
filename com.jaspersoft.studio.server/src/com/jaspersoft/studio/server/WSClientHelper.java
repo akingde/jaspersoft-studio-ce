@@ -30,6 +30,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.ireport.jasperserver.ws.JServer;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
@@ -229,7 +230,6 @@ public class WSClientHelper {
 			ResourceDescriptor newrd = sp.getWsClient().get(rd, null);
 			if (newrd != null) {
 				res.setValue(newrd);
-				MReportUnit runit = res.getReportUnit();
 				if (res instanceof MFolder || res instanceof MReportUnit) {
 					res.removeChildren();
 
@@ -254,7 +254,7 @@ public class WSClientHelper {
 
 	}
 
-	public static Map<String, Object> runReportUnit(MReportUnit res)
+	public static Map<String, FileContent> runReportUnit(MReportUnit res)
 			throws Exception {
 		ResourceDescriptor rd = res.getValue();
 		MServerProfile sp = (MServerProfile) res.getRoot();
@@ -268,7 +268,7 @@ public class WSClientHelper {
 		return sp.getWsClient().runReport(rd, parameters, args);
 	}
 
-	public static Map<String, Object> runReportUnit(String uri,
+	public static Map<String, FileContent> runReportUnit(String uri,
 			Map<String, Object> parameters) throws Exception {
 		List<Argument> args = new ArrayList<Argument>();
 		args.add(new Argument(Argument.RUN_OUTPUT_FORMAT,

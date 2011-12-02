@@ -98,18 +98,23 @@ public abstract class AFileResourcePage extends AResourcePage {
 						switch (JRTypeSniffer.getImageType(FileUtils
 								.getBytes(file))) {
 						case JRRenderable.IMAGE_TYPE_GIF:
-							FileUtils.fileRenamed(file, strFilename, ".gif");
+							file = FileUtils.fileRenamed(file, strFilename,
+									".gif");
 							break;
 						case JRRenderable.IMAGE_TYPE_JPEG:
-							FileUtils.fileRenamed(file, strFilename, ".jpeg");
+							file = FileUtils.fileRenamed(file, strFilename,
+									".jpeg");
 							break;
 						case JRRenderable.IMAGE_TYPE_PNG:
-							FileUtils.fileRenamed(file, strFilename, ".png");
+							file = FileUtils.fileRenamed(file, strFilename,
+									".png");
 							break;
 						case JRRenderable.IMAGE_TYPE_TIFF:
-							FileUtils.fileRenamed(file, strFilename, ".tiff");
+							file = FileUtils.fileRenamed(file, strFilename,
+									".tiff");
 							break;
 						}
+						((AFileResource) res).setFile(file);
 					} catch (Exception e1) {
 						UIUtils.showError(e1);
 					}

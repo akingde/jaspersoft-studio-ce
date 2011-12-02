@@ -121,7 +121,7 @@ public class ReportRunControler {
 						throws InvocationTargetException, InterruptedException {
 					try {
 						if (prmInput.checkFieldsFilled()) {
-							Map<String, Object> files = WSClientHelper
+							Map<String, FileContent> files = WSClientHelper
 									.runReportUnit(reportUnit,
 											icm.getParameters());
 							for (String key : files.keySet()) {

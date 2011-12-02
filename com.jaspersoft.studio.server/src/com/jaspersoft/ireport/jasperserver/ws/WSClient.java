@@ -25,14 +25,6 @@ package com.jaspersoft.ireport.jasperserver.ws;
 
 
 
-import com.jaspersoft.ireport.jasperserver.ws.permissions.PermissionsManagement;
-import com.jaspersoft.ireport.jasperserver.ws.permissions.PermissionsManagementServiceLocator;
-import com.jaspersoft.ireport.jasperserver.ws.scheduler.ReportScheduler;
-import com.jaspersoft.ireport.jasperserver.ws.scheduler.ReportSchedulerService;
-import com.jaspersoft.ireport.jasperserver.ws.scheduler.ReportSchedulerServiceLocator;
-import com.jaspersoft.ireport.jasperserver.ws.userandroles.UserAndRoleManagement;
-import com.jaspersoft.ireport.jasperserver.ws.userandroles.UserAndRoleManagementService;
-import com.jaspersoft.ireport.jasperserver.ws.userandroles.UserAndRoleManagementServiceLocator;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,11 +42,16 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
-
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.attachments.AttachmentPart;
 import org.apache.axis.client.Call;
 
+import com.jaspersoft.ireport.jasperserver.ws.permissions.PermissionsManagement;
+import com.jaspersoft.ireport.jasperserver.ws.permissions.PermissionsManagementServiceLocator;
+import com.jaspersoft.ireport.jasperserver.ws.scheduler.ReportScheduler;
+import com.jaspersoft.ireport.jasperserver.ws.scheduler.ReportSchedulerServiceLocator;
+import com.jaspersoft.ireport.jasperserver.ws.userandroles.UserAndRoleManagement;
+import com.jaspersoft.ireport.jasperserver.ws.userandroles.UserAndRoleManagementServiceLocator;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ListItem;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.OperationResult;
@@ -105,7 +102,7 @@ public class WSClient {
     /**
      * List all datasources. It returns a list of resourceDescriptors.
      */
-    public java.util.List listDatasources() throws Exception {
+    public java.util.List<ResourceDescriptor> listDatasources() throws Exception {
         
         Request req = new Request();
                             
@@ -124,7 +121,7 @@ public class WSClient {
     /**
      * It returns a list of resourceDescriptors.
      */
-    public java.util.List list(ResourceDescriptor descriptor) throws Exception
+    public java.util.List<ResourceDescriptor> list(ResourceDescriptor descriptor) throws Exception
     {
         Request req = new Request();
 
@@ -183,8 +180,7 @@ public class WSClient {
     /**
      * It returns a list of resourceDescriptors.
      */
-    public java.util.List list(String xmlRequest) throws Exception {
-    	
+    public java.util.List<ResourceDescriptor> list(String xmlRequest) throws Exception {
         try {
             
             String result = getManagementService().list( xmlRequest );
@@ -255,7 +251,7 @@ public class WSClient {
      * of avoid the attachment trasmission.
      *
      */
-    public ResourceDescriptor get(ResourceDescriptor descriptor, File outputFile, java.util.List args) throws Exception
+    public ResourceDescriptor get(ResourceDescriptor descriptor, File outputFile, java.util.List<Argument> args) throws Exception
     {
 
         try {
@@ -367,7 +363,7 @@ public class WSClient {
      * 1 - Generic error
      *  
      */
-    public Map runReport(ResourceDescriptor descriptor, java.util.Map<String, Object> parameters, List args) throws Exception
+    public Map<String, FileContent> runReport(ResourceDescriptor descriptor, java.util.Map<String, Object> parameters, List<Argument> args) throws Exception
     {
 
         try {
@@ -406,7 +402,7 @@ public class WSClient {
             
             if (or.getReturnCode() != 0) throw new Exception( or.getReturnCode() + " - " + or.getMessage() );
             
-            Map results = new HashMap();
+            Map<String, FileContent> results = new HashMap<String, FileContent>();
             
             Object[] resAtts = ((org.apache.axis.client.Stub)getManagementService()).getAttachments();
             boolean attachFound = false;

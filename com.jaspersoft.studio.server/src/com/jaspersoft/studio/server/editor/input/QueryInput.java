@@ -17,12 +17,11 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.InputControlQuer
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.input.ADataInput;
 import com.jaspersoft.studio.editor.preview.input.IParameter;
-import com.jaspersoft.studio.utils.UIUtils;
 
 public class QueryInput extends ADataInput {
 
 	private Table table;
-	private ResourceDescriptor rd;
+	private PResourceDescriptor rdprm;
 
 	public boolean isForType(Class<?> valueClass) {
 		return ResourceDescriptor.class.isAssignableFrom(valueClass);
@@ -32,16 +31,15 @@ public class QueryInput extends ADataInput {
 	public void createInput(Composite parent, final IParameter param,
 			final Map<String, Object> params) {
 		super.createInput(parent, param, params);
-		PResourceDescriptor rdprm = (PResourceDescriptor) param;
-		rd = rdprm.getResourceDescriptor();
+		rdprm = (PResourceDescriptor) param;
 
-		if (rd.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY) {
+		if (getRD().getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY) {
 			createList(parent, SWT.SINGLE);
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO) {
+		} else if (getRD().getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_QUERY_RADIO) {
 			createList(parent, SWT.SINGLE | SWT.RADIO);
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY) {
+		} else if (getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY) {
 			createList(parent, SWT.MULTI);
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
+		} else if (getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
 			createList(parent, SWT.MULTI | SWT.CHECK);
 		} else
 			return;
@@ -52,8 +50,8 @@ public class QueryInput extends ADataInput {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] ti = table.getSelection();
-				if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
-						|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
+				if (getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
+						|| getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
 					List<Object> lst = new ArrayList<Object>();
 					for (TableItem item : ti)
 						lst.add(item.getData());
@@ -69,11 +67,15 @@ public class QueryInput extends ADataInput {
 		listener.widgetSelected(null);
 	}
 
+	protected ResourceDescriptor getRD() {
+		return rdprm.getResourceDescriptor();
+	}
+
 	public void updateInput() {
 		Object value = params.get(param.getName());
 		if (value != null) {
-			if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
-					|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
+			if (getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY
+					|| getRD().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) {
 				if (value instanceof List) {
 					List<TableItem> titems = new ArrayList<TableItem>();
 					List<Object> lst = (List<Object>) value;
@@ -98,31 +100,20 @@ public class QueryInput extends ADataInput {
 		table.setHeaderVisible(true);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalIndent = 8;
+		gd.minimumHeight = 100;
 		table.setLayoutData(gd);
 
 		fillTable();
 	}
 
 	public void fillTable() {
-		PResourceDescriptor rdprm = (PResourceDescriptor) param;
-		ResourceDescriptor rd2 = (ResourceDescriptor) rd.getChildren().get(0);
-		List<InputControlQueryDataRow> qvalues = null;
-		String[] qcolumns = null;
-		if (rd2.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
-			ResourceDescriptor tmpRd = new ResourceDescriptor();
-			tmpRd.setUriString(rd2.getReferenceUri());
-			try {
-				tmpRd = rdprm.getWsClient().get(tmpRd, null);
-				qvalues = tmpRd.getQueryData();
-				qcolumns = tmpRd.getQueryVisibleColumns();
-			} catch (Exception ex) {
-				UIUtils.showError(ex);
-				return;
-			}
-		} else {
-			qvalues = rd.getQueryData();
-			qcolumns = rd.getQueryVisibleColumns();
-		}
+		table.removeAll();
+
+		List<InputControlQueryDataRow> qvalues = getRD().getQueryData();
+		String[] qcolumns = getRD().getQueryVisibleColumns();
+
+		for (TableColumn tc : table.getColumns())
+			tc.dispose();
 
 		for (String c : qcolumns) {
 			TableColumn column = new TableColumn(table, SWT.NONE);
@@ -143,6 +134,7 @@ public class QueryInput extends ADataInput {
 
 		if (qvalues.size() > 4)
 			((GridData) table.getLayoutData()).heightHint = 100;
-	}
 
+		table.getParent().layout();
+	}
 }

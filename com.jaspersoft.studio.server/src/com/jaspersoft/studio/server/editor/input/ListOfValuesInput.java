@@ -21,7 +21,11 @@ import com.jaspersoft.studio.utils.UIUtils;
 public class ListOfValuesInput extends ADataInput {
 
 	private Table table;
-	private ResourceDescriptor rd;
+	private PResourceDescriptor rdprm;
+
+	public ResourceDescriptor getRd() {
+		return rdprm.getResourceDescriptor();
+	}
 
 	public boolean isForType(Class<?> valueClass) {
 		return List.class.isAssignableFrom(valueClass);
@@ -31,16 +35,15 @@ public class ListOfValuesInput extends ADataInput {
 	public void createInput(Composite parent, final IParameter param,
 			final Map<String, Object> params) {
 		super.createInput(parent, param, params);
-		PResourceDescriptor rdprm = (PResourceDescriptor) param;
-		rd = rdprm.getResourceDescriptor();
+		rdprm = (PResourceDescriptor) param;
 
-		if (rd.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES) {
+		if (getRd().getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES) {
 			createList(parent, SWT.SINGLE);
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO) {
+		} else if (getRd().getControlType() == ResourceDescriptor.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO) {
 			createList(parent, SWT.SINGLE | SWT.RADIO);
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES) {
+		} else if (getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES) {
 			createList(parent, SWT.MULTI);
-		} else if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
+		} else if (getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
 			createList(parent, SWT.MULTI | SWT.CHECK);
 		} else
 			return;
@@ -51,8 +54,8 @@ public class ListOfValuesInput extends ADataInput {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] ti = table.getSelection();
-				if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
-						|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
+				if (getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
+						|| getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
 
 					List<Object> lst = new ArrayList<Object>();
 					for (TableItem item : ti)
@@ -71,8 +74,8 @@ public class ListOfValuesInput extends ADataInput {
 	public void updateInput() {
 		Object value = params.get(param.getName());
 		if (value != null) {
-			if (rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
-					|| rd.getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
+			if (getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES
+					|| getRd().getControlType() == ResourceDescriptor.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) {
 				if (value instanceof List) {
 					List<TableItem> titems = new ArrayList<TableItem>();
 					List<Object> lst = (List<Object>) value;
@@ -95,6 +98,7 @@ public class ListOfValuesInput extends ADataInput {
 				| SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalIndent = 8;
+		gd.minimumHeight = 100;
 		table.setLayoutData(gd);
 		fillTable();
 	}
@@ -102,7 +106,8 @@ public class ListOfValuesInput extends ADataInput {
 	public void fillTable() {
 		PResourceDescriptor rdprm = (PResourceDescriptor) param;
 
-		ResourceDescriptor rd2 = (ResourceDescriptor) rd.getChildren().get(0);
+		ResourceDescriptor rd2 = (ResourceDescriptor) getRd().getChildren()
+				.get(0);
 		List<ListItem> items = null;
 
 		if (rd2.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE)) {
@@ -119,6 +124,8 @@ public class ListOfValuesInput extends ADataInput {
 			items = rd2.getListOfValues();
 		}
 
+		table.removeAll();
+
 		for (ListItem item : items) {
 			TableItem ti = new TableItem(table, SWT.NONE);
 			ti.setText(item.getLabel());
@@ -126,6 +133,8 @@ public class ListOfValuesInput extends ADataInput {
 		}
 		if (items.size() > 4)
 			((GridData) table.getLayoutData()).heightHint = 100;
+
+		table.getParent().layout();
 	}
 
 }

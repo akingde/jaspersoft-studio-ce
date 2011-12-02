@@ -5,11 +5,19 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.engine.JRQueryChunk;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.Argument;
@@ -178,10 +186,20 @@ public class InputControlsManager {
 	private PropertyChangeListener propChangeListener = new PropertyChangeListener() {
 
 		public void propertyChange(PropertyChangeEvent evt) {
-			Object source = evt.getSource();
+			final Object source = evt.getSource();
 			if (source instanceof IDataInput) {
-				IDataInput control = (IDataInput) source;
-				actionPerformed(control);
+				Job job = new Job("Update Cascading Input Controls") {
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						IDataInput control = (IDataInput) source;
+						actionPerformed(control, new HashSet<IDataInput>());
+						return Status.OK_STATUS;
+					}
+
+				};
+				job.setSystem(true);
+				job.setUser(false);
+				job.schedule();
 			}
 		}
 	};
@@ -190,12 +208,12 @@ public class InputControlsManager {
 		return propChangeListener;
 	}
 
-	public void actionPerformed(IDataInput ic) {
+	public void actionPerformed(IDataInput ic, Set<IDataInput> controls) {
 		try {
 			String updateICName = ic.getParameter().getName();
 			// get the first input control having this param in the list...
 			for (IDataInput icToUpdate : icontrols) {
-				if (icToUpdate == ic)
+				if (icToUpdate == ic || controls.contains(icToUpdate))
 					continue;
 				String icName = icToUpdate.getParameter().getName();
 				if (cascadingDepMap.get(icName) == null
@@ -210,6 +228,8 @@ public class InputControlsManager {
 					parameters.put(paramName, value);
 				}
 				updateControl(icToUpdate, parameters);
+				controls.add(icToUpdate);
+				actionPerformed(icToUpdate, controls);
 				break;
 			}
 		} catch (Exception ex) {
@@ -217,8 +237,8 @@ public class InputControlsManager {
 		}
 	}
 
-	private void updateControl(IDataInput ic, Map<String, Object> parameters)
-			throws Exception {
+	private void updateControl(final IDataInput ic,
+			Map<String, Object> parameters) throws Exception {
 		List<Argument> args = new ArrayList<Argument>();
 		args.add(new Argument(Argument.IC_GET_QUERY_DATA, ""));
 		args.add(new Argument(Argument.RU_REF_URI, WSClientHelper
@@ -231,21 +251,28 @@ public class InputControlsManager {
 
 		for (String key : parameters.keySet()) {
 			Object value = parameters.get(key);
-			if (value instanceof Collection) {
-				for (String item : ((Collection<String>) value)) {
-					ListItem l = new ListItem(key, item);
-					l.setIsListItem(true);
-					rd.getParameters().add(l);
+			if (value != null)
+				if (value instanceof Collection) {
+					for (String item : ((Collection<String>) value)) {
+						ListItem l = new ListItem(key, item);
+						l.setIsListItem(true);
+						rd.getParameters().add(l);
+					}
+				} else {
+					rd.getParameters().add(new ListItem(key, value));
 				}
-			} else {
-				rd.getParameters().add(new ListItem(key, value));
-			}
 		}
 		presd.setResourceDescriptor(getWsClient().get(rd, null, args));
-		if (ic instanceof QueryInput)
-			((QueryInput) ic).fillTable();
-		else if (ic instanceof ListOfValuesInput)
-			((ListOfValuesInput) ic).fillTable();
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				if (ic instanceof QueryInput)
+					((QueryInput) ic).fillTable();
+				else if (ic instanceof ListOfValuesInput)
+					((ListOfValuesInput) ic).fillTable();
+			}
+		});
+
 	}
 
 	public boolean isAnyVisible() {
