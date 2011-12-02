@@ -625,17 +625,7 @@
           </propertyCategory>
        </propertyContributor>
     </extension>
-    <!--
-    <extension
-          id="hyperlinkID1"
-          name="hyperlinkNAME1"
-          point="com.jaspersoft.studio.hyperlinkTypes">
-       <hyperlinkType
-             id="newContributedType"
-             type="BlaBla">
-       </hyperlinkType>
-    </extension>
-   -->
+     
  
   
    
