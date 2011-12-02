@@ -33,7 +33,9 @@ public class RDResourceBundlePage extends AFileResourcePage {
 	protected void createFileTab(Composite composite) {
 		txt = new Text(composite, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP
 				| SWT.READ_ONLY);
-		txt.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		txt.setLayoutData(gd);
 	}
 
 	@Override

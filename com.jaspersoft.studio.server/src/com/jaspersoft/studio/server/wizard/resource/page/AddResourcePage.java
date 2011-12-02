@@ -49,6 +49,7 @@ import com.jaspersoft.studio.server.model.MRQuery;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 
@@ -109,6 +110,8 @@ public class AddResourcePage extends WizardPage {
 
 				new MDataType(root, MDataType.createDescriptor(parent), -1);
 				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
+				new MReportUnitOptions(root,
+						MReportUnitOptions.createDescriptor(parent), -1);
 			}
 			new MJrxml(root, MJrxml.createDescriptor(parent), -1);
 			new MInputControl(root, MInputControl.createDescriptor(parent), -1);
@@ -122,6 +125,7 @@ public class AddResourcePage extends WizardPage {
 			new MRImage(root, MRImage.createDescriptor(parent), -1);
 			new MRStyleTemplate(root, MRStyleTemplate.createDescriptor(parent),
 					-1);
+
 			// new MUnknown(root, MUnknown.createDescriptor(parent), -1);
 		}
 		for (INode n : root.getChildren()) {

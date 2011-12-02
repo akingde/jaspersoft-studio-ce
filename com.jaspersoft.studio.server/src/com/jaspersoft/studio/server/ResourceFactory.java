@@ -61,6 +61,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.RDJrxmlPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDLovPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDQueryPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDReferencePage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitOptionsPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDResourceBundlePage;
 
@@ -110,6 +111,9 @@ public class ResourceFactory {
 				page = new RDQueryPage(parent, (MRQuery) resource);
 			else if (resource instanceof MListOfValues)
 				page = new RDLovPage(parent, (MListOfValues) resource);
+			else if (resource instanceof MReportUnitOptions)
+				page = new RDReportUnitOptionsPage(parent,
+						(MReportUnitOptions) resource);
 
 			if (page != null)
 				pagemap.put(resource.getClass(), page);

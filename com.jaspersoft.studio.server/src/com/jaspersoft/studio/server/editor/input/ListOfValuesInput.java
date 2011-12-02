@@ -61,7 +61,7 @@ public class ListOfValuesInput extends ADataInput {
 					for (TableItem item : ti)
 						lst.add(item.getData());
 					updateModel(lst);
-				} else {
+				} else if (ti.length > 0) {
 					updateModel(ti[0].getData());
 				}
 			}

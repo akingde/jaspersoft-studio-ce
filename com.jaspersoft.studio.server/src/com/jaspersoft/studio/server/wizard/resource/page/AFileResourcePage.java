@@ -45,41 +45,12 @@ public abstract class AFileResourcePage extends AResourcePage {
 		item.setText("File");
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		item.setControl(composite);
-
-		Button bimport = new Button(composite, SWT.PUSH | SWT.LEFT);
-		bimport.setText("Upload File");
-		bimport.setImage(Activator.getImage("icons/drive-upload.png"));
-		GridData gd = new GridData();
-		gd.widthHint = 200;
-		bimport.setLayoutData(gd);
-		bimport.addSelectionListener(new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell(), SWT.OPEN);
-				fd.setFilterExtensions(getFilter());
-				fd.setText("Select Resource File ...");
-				String filename = fd.open();
-				if (filename != null) {
-					((AFileResource) res).setFile(new File(filename));
-					AFileResourcePage.this.bindingContext.updateTargets();
-				}
-				handleFileChange();
-			}
-
-		});
-
-		Text trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
-		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button bexport = new Button(composite, SWT.PUSH | SWT.LEFT);
 		bexport.setText("Download File");
 		bexport.setImage(Activator.getImage("icons/drive-download.png"));
-		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.widthHint = 200;
-		bexport.setLayoutData(gd);
 		bexport.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -123,6 +94,29 @@ public abstract class AFileResourcePage extends AResourcePage {
 			}
 
 		});
+
+		Button bimport = new Button(composite, SWT.PUSH | SWT.LEFT);
+		bimport.setText("Upload File");
+		bimport.setImage(Activator.getImage("icons/drive-upload.png"));
+		bimport.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fd = new FileDialog(Display.getDefault()
+						.getActiveShell(), SWT.OPEN);
+				fd.setFilterExtensions(getFilter());
+				fd.setText("Select Resource File ...");
+				String filename = fd.open();
+				if (filename != null) {
+					((AFileResource) res).setFile(new File(filename));
+					AFileResourcePage.this.bindingContext.updateTargets();
+				}
+				handleFileChange();
+			}
+
+		});
+
+		Text trefuri = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+		trefuri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		bindingContext.bindValue(SWTObservables.observeText(trefuri, SWT.NONE),
 				PojoObservables.observeValue(res, "fileName"));

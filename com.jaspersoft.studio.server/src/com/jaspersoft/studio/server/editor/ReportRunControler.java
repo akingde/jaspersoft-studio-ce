@@ -58,6 +58,8 @@ public class ReportRunControler {
 									.getReportUnit(reportUnit);
 							List<ResourceDescriptor> list = cli.list(rdrepunit);
 							icm.getInputControls(list, cli);
+							
+							// TODO search all the repository
 							icm.getDefaults(rdrepunit);
 							Display.getDefault().asyncExec(new Runnable() {
 								public void run() {
