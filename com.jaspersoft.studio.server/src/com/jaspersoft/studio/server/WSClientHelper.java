@@ -24,8 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
@@ -108,8 +110,11 @@ public class WSClientHelper {
 		depth++;
 
 		List<ResourceDescriptor> children = client.list(rd);
-
+		Set<String> set = new HashSet<String>();
 		for (ResourceDescriptor r : children) {
+			if (set.contains(r.getUriString()))
+				continue;
+			set.add(r.getUriString());
 			if (rd.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 				if (SelectorDatasource.isDatasource(r))
 					continue;
@@ -119,8 +124,12 @@ public class WSClientHelper {
 				listFolder(node, client, r.getUriString(), monitor, depth);
 			} else if (r.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
 				r = client.get(r, null);
+				Set<String> setRU = new HashSet<String>();
 				List<ResourceDescriptor> children2 = r.getChildren();
 				for (ResourceDescriptor res : children2) {
+					if (setRU.contains(res.getUriString()))
+						continue;
+					setRU.add(res.getUriString());
 					if (SelectorDatasource.isDatasource(res))
 						continue;
 					if (res.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
@@ -197,6 +206,9 @@ public class WSClientHelper {
 				System.out.println(rd.getUriString());
 
 				System.out.println(rd.getParentFolder());
+				if(rd.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)){
+					rd.setIsNew(true);
+				}
 
 				sp.getWsClient().modifyReportUnitResource(ruuri, rd, file);
 			} else
