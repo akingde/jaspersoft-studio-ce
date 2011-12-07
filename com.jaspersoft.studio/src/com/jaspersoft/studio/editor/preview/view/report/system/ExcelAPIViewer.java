@@ -21,27 +21,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.preview.view.report.html;
+package com.jaspersoft.studio.editor.preview.view.report.system;
 
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
-import com.jaspersoft.studio.editor.preview.actions.export.ExportAsCsvMetadataAction;
+import com.jaspersoft.studio.editor.preview.actions.export.ExportAsExcelAPIAction;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
-public class CSVMetadataViewer extends AFileViewer {
-	public CSVMetadataViewer(Composite parent, PropertiesHelper ph) {
+public class ExcelAPIViewer extends ASystemViewer {
+
+	public ExcelAPIViewer(Composite parent, PropertiesHelper ph) {
 		super(parent, ph);
 	}
 
 	@Override
 	protected AbstractExportAction createExporter(ReportViewer rptv) {
-		return new ExportAsCsvMetadataAction(rptv, getPropertiesHelper());
+		return new ExportAsExcelAPIAction(rptv, getPropertiesHelper());
 	}
 
 	@Override
 	protected String getExtension() {
-		return ".csv";
+		return ".xls";
 	}
+
 }

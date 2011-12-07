@@ -33,6 +33,10 @@ public class MultiPageContainer {
 	private List<String> keys;
 	private Composite composite;
 
+	public APreview getViewer(String key) {
+		return pmap.get(key);
+	}
+
 	public void switchView(String key) {
 		switchView(pmap.get(key));
 	}

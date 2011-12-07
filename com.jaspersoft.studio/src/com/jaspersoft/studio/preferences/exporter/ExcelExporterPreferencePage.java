@@ -52,6 +52,7 @@ import com.jaspersoft.studio.utils.Misc;
 public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 	// jexcelapi
 	public static final String NSF_EXPORT_XLS_USE_TMP_FILE = "net.sf.jasperreports.export.xls.use.temp.file"; //$NON-NLS-1$
+	public static final String NSF_EXPORT_XLS_USE_TIMEZONE = "net.sf.jasperreports.export.xls.use.timezone"; //$NON-NLS-1$
 	public static final String NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT = "net.sf.jasperreports.export.xls.cell.complex.format"; //$NON-NLS-1$
 
 	// sheet
@@ -105,6 +106,8 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 
 		Composite sc = new Composite(tabFolder, SWT.NONE);
 
+		addField(new BooleanFieldEditor(NSF_EXPORT_XLS_USE_TIMEZONE, "Use Report Time Zone", sc));
+
 		addField(new BooleanFieldEditor(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
 				Messages.ExcelExporterPreferencePage_30, sc));
 
@@ -129,7 +132,7 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 				{ "Start", "Start" }, { "Stop", "Stop" } }, sc));
 
 		IntegerFieldEditor iedit = new IntegerFieldEditor(NSF_EXPORT_XLS_FREEZ_ROW, "Freez On Row", sc);
-		iedit.setValidRange(1, 65536);
+		iedit.setValidRange(0, 65536);
 		addField(iedit);
 
 		addField(new NStringFieldEditor(NSF_EXPORT_XLS_FREEZ_COLUMN, "Freez On Column (A, AB, etc.)", sc));
@@ -254,6 +257,8 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD,
 				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD))); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_USE_TMP_FILE, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_USE_TMP_FILE), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_USE_TIMEZONE, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_USE_TIMEZONE), "")); //$NON-NLS-1$
+		
 		store.setDefault(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT,
 				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT))); //$NON-NLS-1$
 		// COMMON

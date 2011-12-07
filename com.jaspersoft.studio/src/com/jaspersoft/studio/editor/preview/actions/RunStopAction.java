@@ -39,20 +39,30 @@
 package com.jaspersoft.studio.editor.preview.actions;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
+import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.messages.Messages;
 
-public class RunStopAction extends Action {
-	public static final String ID = "PREVIEWRELOADACTION"; //$NON-NLS-1$
-	private IDataAdapterRunnable editor;
+public class RunStopAction extends Action implements IMenuCreator {
+	public static final String MODERUN_LOCAL = "RUNLOCAL";
+	public static final String MODERUN_JIVE = "RUNJIVE";
 
-	public RunStopAction(IDataAdapterRunnable editor) {
+	public static final String ID = "PREVIEWRELOADACTION"; //$NON-NLS-1$
+	private PreviewContainer editor;
+
+	public RunStopAction(PreviewContainer editor) {
 		super();
 		this.editor = editor;
 		setId(ID);
-		setText(Messages.RunStopAction_runreport);
+		setMenuCreator(this);
 		setDescription(Messages.RunStopAction_runreport_desc);
 		setToolTipText(Messages.RunStopAction_runreport_desc);
 		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/resources/eclipse/start_task.gif")); //$NON-NLS-1$
@@ -67,5 +77,46 @@ public class RunStopAction extends Action {
 	@Override
 	public void run() {
 		editor.runReport(null);
+	}
+
+	private Menu listMenu;
+
+	public void dispose() {
+		if (listMenu != null)
+			listMenu.dispose();
+	}
+
+	public Menu getMenu(Control parent) {
+		if (listMenu != null)
+			listMenu.dispose();
+		listMenu = new Menu(parent);
+
+		SelectionAdapter listener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MenuItem menuItem = (MenuItem) e.getSource();
+				menuItem.setSelection(true);
+				editor.setMode((String) menuItem.getData("run.key"));
+				run();
+			}
+		};
+
+		MenuItem m1 = new MenuItem(listMenu, SWT.RADIO);
+		m1.setText("Run Report");
+		m1.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/start_task.gif"));
+		m1.addSelectionListener(listener);
+		m1.setData("run.key", MODERUN_LOCAL);
+
+//		m1 = new MenuItem(listMenu, SWT.RADIO);
+//		m1.setText("Run Interactive Report (Jive)");
+//		m1.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/start_task.gif"));
+//		m1.addSelectionListener(listener);
+//		m1.setData("run.key", MODERUN_JIVE);
+
+		return listMenu;
+	}
+
+	public Menu getMenu(Menu parent) {
+		return null;
 	}
 }

@@ -51,6 +51,11 @@ public class URLContributionItem extends ContributionItem implements PropertyCha
 		super("urlitem");
 		this.url = url;
 	}
+	
+	public void setUrl(String url){
+		this.url = url;
+		refresh();
+	}
 
 	/**
 	 * Computes the width required by control

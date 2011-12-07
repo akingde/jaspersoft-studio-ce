@@ -45,6 +45,8 @@ public class ExportAsXlsAction extends AbstractExportAction {
 	protected JRAbstractExporter getExporter(PropertiesHelper ph) {
 		JRXlsExporter exporter = new JRXlsExporter();
 
+		
+		
 		exporter.setParameter(JRXlsAbstractExporterParameter.IS_ONE_PAGE_PER_SHEET,
 				ph.getBoolean(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET));
 		exporter.setParameter(JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,

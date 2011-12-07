@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
+import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 import com.jaspersoft.studio.editor.preview.input.BigNumericInput;
 import com.jaspersoft.studio.editor.preview.input.BooleanInput;
 import com.jaspersoft.studio.editor.preview.input.DateInput;
@@ -63,6 +64,7 @@ import com.jaspersoft.studio.editor.preview.input.LocaleInput;
 import com.jaspersoft.studio.editor.preview.input.NumericInput;
 import com.jaspersoft.studio.editor.preview.input.TextInput;
 import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
+import com.jaspersoft.studio.editor.preview.jive.JettyUtil;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
@@ -158,7 +160,8 @@ public class ReportControler {
 	public void runReport() {
 		c = pcontainer.getConsole();
 		c.clearConsole();
-		pcontainer.setJasperPrint(null);
+		if (pcontainer.getMode().equals(RunStopAction.MODERUN_LOCAL))
+			pcontainer.setJasperPrint(null);
 		fillError = null;
 
 		stime = System.currentTimeMillis();
@@ -190,14 +193,13 @@ public class ReportControler {
 	}
 
 	private void runJob(final PreviewContainer pcontainer) {
-		pcontainer.setJasperPrint(null);
 		fillError = null;
 		Job job = new Job(Messages.PreviewEditor_preview_a + ": " + jDesign.getName() + Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				DataAdapterService dataAdapterService = null;
 				try {
-					IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
+					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
 
 					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
 
@@ -212,20 +214,24 @@ public class ReportControler {
 						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;
 
-						setupFileRezolver(monitor, file);
+						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE))
+							runJive(pcontainer, file);
+						else {
+							setupFileRezolver(monitor, file);
 
-						setupVirtualizer(jd, ph);
+							setupVirtualizer(jd, ph);
 
-						dataAdapterService = setupDataAdapter(pcontainer);
+							dataAdapterService = setupDataAdapter(pcontainer);
 
-						c.addMessage("Start report execution");
-						// We create the fillHandle to run the report based on the type of data adapter....
-						AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameters);
+							c.addMessage("Start report execution");
+							// We create the fillHandle to run the report based on the type of data adapter....
+							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameters);
 
-						if (fillReport(fh, monitor, pcontainer) == Status.CANCEL_STATUS)
-							return Status.CANCEL_STATUS;
+							if (fillReport(fh, monitor, pcontainer) == Status.CANCEL_STATUS)
+								return Status.CANCEL_STATUS;
 
-						dataAdapterService.dispose();
+							dataAdapterService.dispose();
+						}
 					}
 				} catch (final Throwable e) {
 					c.addError(e);
@@ -243,6 +249,21 @@ public class ReportControler {
 		};
 		job.setPriority(Job.LONG);
 		job.schedule();
+	}
+
+	protected void runJive(final PreviewContainer pcontainer, final IFile file) {
+		JettyUtil.startJetty(file.getProject());
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				try {
+					String url = JettyUtil.getURL(file);
+					pcontainer.getJiveViewer().setURL(url);
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				}
+			}
+		});
 	}
 
 	private JasperReport compileJasperDesign(JasperDesign jd) throws JRException {

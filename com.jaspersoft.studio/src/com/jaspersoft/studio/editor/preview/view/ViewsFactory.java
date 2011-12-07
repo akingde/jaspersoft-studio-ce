@@ -23,21 +23,21 @@ import java.util.LinkedHashMap;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.editor.preview.view.report.html.CSVMetadataViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.CSVViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.DocxViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.ExcelAPIViewer;
+import com.jaspersoft.studio.editor.preview.view.report.file.CSVMetadataViewer;
+import com.jaspersoft.studio.editor.preview.view.report.file.CSVViewer;
+import com.jaspersoft.studio.editor.preview.view.report.file.TXTViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.HTMLViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.OdsViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.OdtViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.PdfViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.PowerPointViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.RTFViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.TXTViewer;
 import com.jaspersoft.studio.editor.preview.view.report.html.XHTMLViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.XlsViewer;
-import com.jaspersoft.studio.editor.preview.view.report.html.XlsxViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.DocxViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.ExcelAPIViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.OdsViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.OdtViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.PdfViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.PowerPointViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.RTFViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.XlsViewer;
+import com.jaspersoft.studio.editor.preview.view.report.system.XlsxViewer;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class ViewsFactory {
@@ -49,7 +49,8 @@ public class ViewsFactory {
 
 		pmap.put("HTML", new HTMLViewer(composite, ph));
 		pmap.put("xHTML", new XHTMLViewer(composite, ph));
-
+		pmap.put("SEPARATOR1", null);
+		pmap.put("SEPARATOR1", null);
 		pmap.put("PDF", new PdfViewer(composite, ph));
 
 		pmap.put("SEPARATOR1", null);

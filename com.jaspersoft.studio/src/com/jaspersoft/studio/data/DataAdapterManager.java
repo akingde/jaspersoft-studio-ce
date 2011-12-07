@@ -45,6 +45,7 @@ import com.jaspersoft.studio.data.empty.EmptyDataAdapterDescriptor;
 import com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 /*
  * The main plugin class to be used in the desktop.
@@ -169,7 +170,7 @@ public class DataAdapterManager {
 	 * Calling this method will force saving the list of adapters in the Eclipse preferences
 	 */
 	public static void saveDataAdapters() {
-		Preferences prefs = InstanceScope.INSTANCE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 
 		try {
 			StringBuffer xml = new StringBuffer();
@@ -197,7 +198,7 @@ public class DataAdapterManager {
 		// Clear up the list of data adapters...
 		dataAdapters.clear();
 
-		Preferences prefs = InstanceScope.INSTANCE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
+		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 
 		String xml = prefs.get("dataAdapters", null); //$NON-NLS-1$
 

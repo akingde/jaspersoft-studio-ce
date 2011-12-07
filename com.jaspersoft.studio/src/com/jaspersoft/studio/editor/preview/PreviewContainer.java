@@ -26,6 +26,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
@@ -39,10 +41,14 @@ import org.eclipse.ui.PartInitException;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
+import com.jaspersoft.studio.editor.preview.actions.SwitchViewsAction;
 import com.jaspersoft.studio.editor.preview.toolbar.LeftToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.PreviewTopToolBarManager;
+import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.report.html.JiveViewer;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 
@@ -138,6 +144,21 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return (PreviewTopToolBarManager) topToolBarManager1;
 	}
 
+	protected TopToolBarManagerJRPrint getTopToolBarManager(Composite container) {
+		if (topToolBarManager == null)
+			topToolBarManager = new TopToolBarManagerJRPrint(this, container) {
+				protected void fillToolbar(IToolBarManager tbManager) {
+					if (runMode.equals(RunStopAction.MODERUN_LOCAL)) {
+						if (pvModeAction == null)
+							pvModeAction = new SwitchViewsAction(container.getRightContainer(), "Java", true);
+						tbManager.add(pvModeAction);
+					}
+					tbManager.add(new Separator());
+				}
+			};
+		return topToolBarManager;
+	}
+
 	protected void createLeft(Composite parent, SashForm sf) {
 		Composite leftComposite = new Composite(sf, SWT.BORDER);
 		GridLayout layout = new GridLayout();
@@ -155,6 +176,17 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 		getLeftContainer().populate(cleftcompo, getReportControler().createControls(cleftcompo, ph));
 		getLeftContainer().switchView(ReportControler.FORM_PARAMETERS);
+	}
+
+	private JiveViewer jiveViewer;
+
+	@Override
+	protected Composite createRight(Composite parent) {
+		Composite composite = super.createRight(parent);
+
+		jiveViewer = new JiveViewer(rightComposite, ph);
+
+		return composite;
 	}
 
 	public void runReport(DataAdapterDescriptor myDataAdapter) {
@@ -219,6 +251,24 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	public DataAdapterDescriptor getDataAdapterDesc() {
 		return dataAdapterDesc;
+	}
+
+	private String runMode = RunStopAction.MODERUN_LOCAL;
+
+	public void setMode(String mode) {
+		this.runMode = mode;
+		if (mode.equals(RunStopAction.MODERUN_JIVE))
+			getRightContainer().switchView(jiveViewer);
+		else if (mode.equals(RunStopAction.MODERUN_LOCAL))
+			getRightContainer().switchView(getDefaultViewerKey());
+	}
+
+	public String getMode() {
+		return runMode;
+	}
+
+	public JiveViewer getJiveViewer() {
+		return jiveViewer;
 	}
 
 }

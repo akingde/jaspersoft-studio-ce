@@ -39,6 +39,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 
 public class PropertiesHelper {
 
+	public static final InstanceScope INSTANCE_SCOPE = new InstanceScope();
 	private IPreferencesService service;
 	private String qualifier;
 	private String[] lookupOrders;
@@ -49,10 +50,10 @@ public class PropertiesHelper {
 		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
 		if (project != null) {
 			lookupOrders = new String[] { ProjectScope.SCOPE, InstanceScope.SCOPE };
-			contexts = new IScopeContext[] { new ProjectScope(project), InstanceScope.INSTANCE };
+			contexts = new IScopeContext[] { new ProjectScope(project), INSTANCE_SCOPE };
 		} else {
 			lookupOrders = new String[] { InstanceScope.SCOPE };
-			contexts = new IScopeContext[] { InstanceScope.INSTANCE };
+			contexts = new IScopeContext[] { INSTANCE_SCOPE };
 		}
 		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
 	}

@@ -94,12 +94,14 @@ public class PreviewJRPrint extends ABasicEditor {
 		this.jasperPrint = jasperPrint;
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				JasperPrint jrprint = getJasperPrint();
-				if (jrprint != null) {
-					getRightContainer().switchView(getDefaultViewer());
-				} else {
-					errorPreview.setMessage("Document is empty");
-					getRightContainer().switchView(errorPreview);
+				if (getDefaultViewer() instanceof IJRPrintable) {
+					JasperPrint jrprint = getJasperPrint();
+					if (jrprint != null) {
+						getRightContainer().switchView(getDefaultViewerKey());
+					} else {
+						errorPreview.setMessage("Document is empty");
+						getRightContainer().switchView(errorPreview);
+					}
 				}
 			}
 		});
@@ -107,10 +109,14 @@ public class PreviewJRPrint extends ABasicEditor {
 
 	private String currentViewer;
 
-	public String getDefaultViewer() {
+	public String getDefaultViewerKey() {
 		if (currentViewer == null)
 			currentViewer = ViewsFactory.VIEWER_JAVA;
 		return currentViewer;
+	}
+
+	public APreview getDefaultViewer() {
+		return getRightContainer().getViewer(getDefaultViewerKey());
 	}
 
 	private MultiPageContainer rightContainer;
@@ -129,10 +135,9 @@ public class PreviewJRPrint extends ABasicEditor {
 							errorPreview.addError(e);
 							return;
 						}
-						currentViewer = key;
 					}
+					currentViewer = key;
 					super.switchView(key);
-
 				}
 
 				@Override
