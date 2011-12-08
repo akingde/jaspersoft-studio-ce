@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.validator.EmptyStringValidator;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
 
@@ -94,8 +95,9 @@ public class ServerProfilePage extends WizardPage {
 		Text tpass = new Text(gr, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		ServerProfile value = sprofile.getValue();
 		dbc.bindValue(SWTObservables.observeText(tname, SWT.Modify),
-				PojoObservables.observeValue(sprofile.getValue(), "name"), //$NON-NLS-1$
+				PojoObservables.observeValue(value, "name"), //$NON-NLS-1$
 				new UpdateValueStrategy()
 						.setAfterConvertValidator(new EmptyStringValidator() {
 							@Override
@@ -111,19 +113,18 @@ public class ServerProfilePage extends WizardPage {
 							}
 						}), null);
 		dbc.bindValue(SWTObservables.observeText(turl, SWT.Modify),
-				PojoObservables.observeValue(sprofile.getValue(), "url"), //$NON-NLS-1$
+				PojoObservables.observeValue(value, "url"), //$NON-NLS-1$
 				new UpdateValueStrategy()
 						.setAfterConvertValidator(new URLValidator()), null);
 		dbc.bindValue(SWTObservables.observeText(torg, SWT.Modify),
-				PojoObservables.observeValue(sprofile.getValue(),
-						"organisation")); //$NON-NLS-1$
+				PojoObservables.observeValue(value, "organisation")); //$NON-NLS-1$
 		dbc.bindValue(
 				SWTObservables.observeText(tuser, SWT.Modify),
-				PojoObservables.observeValue(sprofile.getValue(), "user"), //$NON-NLS-1$
+				PojoObservables.observeValue(value, "user"), //$NON-NLS-1$
 				new UpdateValueStrategy()
 						.setAfterConvertValidator(new EmptyStringValidator()),
 				null);
 		dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
-				PojoObservables.observeValue(sprofile.getValue(), "pass")); //$NON-NLS-1$
+				PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
 	}
 }

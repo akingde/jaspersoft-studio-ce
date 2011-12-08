@@ -72,7 +72,20 @@ public class WSClientHelper {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
 		rd.setUriString("/");
-		connect(msp, monitor).list(rd);
+
+		ServerProfile sp = msp.getValue();
+		JServer server = new JServer();
+		server.setName(sp.getName());
+		server.setUrl(sp.getUrl());
+		String username = sp.getUser();
+		if (sp.getOrganisation() != null)
+			username += "|" + sp.getOrganisation();
+		server.setUsername(username);
+		server.setPassword(sp.getPass());
+
+		WSClient client = new WSClient(server);
+		if (client.list(rd) == null)
+			return false;
 		monitor.subTask("Connected");
 		return true;
 	}
@@ -206,7 +219,8 @@ public class WSClientHelper {
 				System.out.println(rd.getUriString());
 
 				System.out.println(rd.getParentFolder());
-				if(rd.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL)){
+				if (rd.getWsType()
+						.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
 					rd.setIsNew(true);
 				}
 

@@ -112,7 +112,8 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 					treeViewer.refresh(true);
 					TreeSelection s = (TreeSelection) treeViewer.getSelection();
 					TreePath[] p = s.getPaths();
-					treeViewer.expandToLevel(p[0], 1);
+					if (p.length > 0)
+						treeViewer.expandToLevel(p[0], 1);
 				}
 				break;
 			}
