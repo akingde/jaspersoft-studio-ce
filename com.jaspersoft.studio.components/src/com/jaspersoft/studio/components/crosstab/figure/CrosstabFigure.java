@@ -25,9 +25,9 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.XYLayout;
 
-import com.jaspersoft.studio.editor.gef.figures.AElementBoundsFigure;
+import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 
-public class CrosstabFigure extends AElementBoundsFigure {
+public class CrosstabFigure extends FrameFigure {
 
 	/**
 	 * Instantiates a new text field figure.
@@ -41,7 +41,8 @@ public class CrosstabFigure extends AElementBoundsFigure {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.jasperreports.engine.export.draw.DrawVisitor,
+	 * com.jaspersoft.studio.editor.gef.figures.ComponentFigure#draw(net.sf.
+	 * jasperreports.engine.export.draw.DrawVisitor,
 	 * net.sf.jasperreports.engine.JRElement)
 	 */
 	@Override

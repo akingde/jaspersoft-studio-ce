@@ -53,7 +53,7 @@ import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
@@ -63,7 +63,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public class MCrosstab extends MGraphicElement implements IContainer,
+public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		IContainerEditPart, IGroupElement {
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

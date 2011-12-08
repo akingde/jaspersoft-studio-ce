@@ -29,7 +29,6 @@ import net.sf.jasperreports.data.XmlUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -38,6 +37,7 @@ import org.xml.sax.InputSource;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
@@ -94,7 +94,7 @@ public class ServerManager {
 	}
 
 	public static void saveServerProfiles() {
-		Preferences prefs = InstanceScope.INSTANCE
+		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE
 				.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 
 		try {
@@ -119,7 +119,7 @@ public class ServerManager {
 		root.removeChildren();
 		serverProfiles.clear();
 
-		Preferences prefs = InstanceScope.INSTANCE
+		Preferences prefs = PropertiesHelper.INSTANCE_SCOPE
 				.getNode(JaspersoftStudioPlugin.getUniqueIdentifier());
 
 		String xml = prefs.get(PREF_TAG, null); //$NON-NLS-1$

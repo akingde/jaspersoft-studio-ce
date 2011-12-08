@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Server
+Bundle-Name: JasperReports Server Integration
 Bundle-SymbolicName: com.jaspersoft.studio.server;singleton:=true
-Bundle-Version: 1.0.4
+Bundle-Version: 1.0.5
 Bundle-Activator: com.jaspersoft.studio.server.Activator
-Bundle-Vendor: JASPERSOFT
+Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: com.jaspersoft.studio
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
