@@ -25,9 +25,12 @@ public class JiveViewer extends APreview implements IURLViewable {
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
 		composite.setLayout(layout);
-
-		browser = new Browser(composite, SWT.NONE);
-		browser.setLayoutData(new GridData(GridData.FILL_BOTH));
+		try {
+			browser = new Browser(composite, SWT.NONE);
+			browser.setLayoutData(new GridData(GridData.FILL_BOTH));
+		} catch (Error e) {
+			e.printStackTrace();
+		}
 		return composite;
 	}
 

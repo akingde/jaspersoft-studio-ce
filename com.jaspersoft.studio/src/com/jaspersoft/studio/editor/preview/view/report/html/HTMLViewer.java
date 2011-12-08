@@ -55,10 +55,13 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
 		composite.setLayout(layout);
-
-		browser = new Browser(composite, SWT.NONE);
-		browser.setLayoutData(new GridData(GridData.FILL_BOTH));
-		rptviewer = new ReportViewer();
+		try {
+			Browser browser = new Browser(composite, SWT.NONE);
+			browser.setLayoutData(new GridData(GridData.FILL_BOTH));
+			rptviewer = new ReportViewer();
+		} catch (Error e) {
+			e.printStackTrace();
+		}
 		return composite;
 	}
 
