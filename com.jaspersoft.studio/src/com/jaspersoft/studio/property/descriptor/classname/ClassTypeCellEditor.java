@@ -28,7 +28,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.internal.core.BinaryType;
 import org.eclipse.jdt.internal.core.search.BasicSearchEngine;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
@@ -119,8 +118,7 @@ public class ClassTypeCellEditor extends ATextDialogCellEditor {
 			dialog.setMessage(Messages.ClassTypeCellEditor_dialog_message);
 			if (dialog.open() == Window.OK) {
 				if (dialog.getResult() != null && dialog.getResult().length > 0) {
-					BinaryType bt = (BinaryType) dialog.getResult()[0];
-
+					IType bt = (IType) dialog.getResult()[0];
 					return bt.getFullyQualifiedName();
 				}
 			}

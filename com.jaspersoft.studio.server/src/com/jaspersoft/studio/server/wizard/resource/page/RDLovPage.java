@@ -55,9 +55,6 @@ public class RDLovPage extends AResourcePage {
 
 	private Table table;
 	private TableViewer tableViewer;
-	private NewButton bnew;
-	private DeleteButton bdel;
-	private ListOrderButtons border;
 
 	public RDLovPage(ANode parent, MListOfValues resource) {
 		super("rdlov", parent, resource);
@@ -92,7 +89,7 @@ public class RDLovPage extends AResourcePage {
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		bGroup.setBackground(parent.getBackground());
 
-		bnew = new NewButton();
+		NewButton bnew = new NewButton();
 		bnew.createNewButtons(bGroup, tableViewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
@@ -101,9 +98,10 @@ public class RDLovPage extends AResourcePage {
 
 		});
 
-		bdel = new DeleteButton();
+		DeleteButton bdel = new DeleteButton();
 		bdel.createDeleteButton(bGroup, tableViewer);
-		border = new ListOrderButtons();
+
+		ListOrderButtons border = new ListOrderButtons();
 		border.createOrderButtons(bGroup, tableViewer);
 
 		tableViewer.setInput(res.getValue().getListOfValues());
