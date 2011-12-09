@@ -406,7 +406,8 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			if (value != null && value instanceof String) {
 				StringTokenizer st = new StringTokenizer((String) value, ";"); //$NON-NLS-1$
 				while (st.hasMoreTokens()) {
-					jrDesign.addImport(st.nextToken());
+					String imp = st.nextToken();
+					jrDesign.addImport(imp);
 				}
 			}
 		}
