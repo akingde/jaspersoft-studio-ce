@@ -97,7 +97,7 @@ public class MChartItemLabel extends APropertyNode {
 	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
-		JRDesignItemLabel jrElement = (JRDesignItemLabel) getValue();
+		JRItemLabel jrElement = (JRItemLabel) getValue();
 		if (id.equals(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getBackgroundColor());
 		if (id.equals(JRDesignItemLabel.PROPERTY_COLOR))
