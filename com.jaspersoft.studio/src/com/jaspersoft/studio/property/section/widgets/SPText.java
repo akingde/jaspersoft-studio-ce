@@ -73,4 +73,8 @@ public class SPText {
 		} else
 			ftext.setText("");
 	}
+
+	public String getText() {
+		return ftext.getText();
+	}
 }

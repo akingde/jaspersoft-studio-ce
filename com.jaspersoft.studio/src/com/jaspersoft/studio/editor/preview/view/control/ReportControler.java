@@ -30,7 +30,7 @@ import java.util.Map;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
+import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -50,7 +50,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
@@ -200,12 +199,14 @@ public class ReportControler {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				DataAdapterService dataAdapterService = null;
+				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 				try {
 					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
 
 					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
 
-					Thread.currentThread().setContextClassLoader(new JavaProjectClassLoader(JavaCore.create(file.getProject())));
+					Thread.currentThread().setContextClassLoader(
+							ClassLoaderUtil.getClassLoader4Project(monitor, file.getProject()));
 
 					JasperDesign jd = copyJasperDesign();
 
@@ -246,6 +247,7 @@ public class ReportControler {
 					if (dataAdapterService != null)
 						dataAdapterService.dispose();
 					finishReport(pcontainer);
+					Thread.currentThread().setContextClassLoader(oldLoader);
 				}
 				return Status.OK_STATUS;
 			}
