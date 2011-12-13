@@ -17,45 +17,38 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.bean;
+package com.jaspersoft.studio.data.json;
 
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.widgets.Composite;
 
-import net.sf.jasperreports.data.bean.BeanDataAdapterImpl;
-
-import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class BeanDataAdapterFactory implements DataAdapterFactory {
+public class JsonDataAdapterEditor implements DataAdapterEditor {
 
-	public DataAdapterDescriptor createDataAdapter() {
-		return new BeanDataAdapterDescriptor();
-	}
+	JsonDataAdapterComposite composite = null;
 
-	public String getDataAdapterClassName() {
-		return BeanDataAdapterImpl.class.getName();
-	}
-
-	public String getLabel() {
-		return "Collection of JavaBeans";
-	}
-
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
-	 */
-	public String getDescription() { 
-		return "Collection or Array of JavaBeans";
-	}
-
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
-	 */
-	public Image getIcon(int size) { 
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/beans.png");
+	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
+		if (dataAdapter instanceof JsonDataAdapterDescriptor) {
+			composite.setDataAdapter((JsonDataAdapterDescriptor) dataAdapter);
 		}
-		return null;
 	}
+
+	public DataAdapterDescriptor getDataAdapter() {
+		return composite.getDataAdapter();
+	}
+
+	public Composite getComposite(Composite parent, int style,
+			WizardPage wizardPage) {
+		if (composite == null) {
+			composite = new JsonDataAdapterComposite(parent, style);
+		}
+		return composite;
+	}
+
+	public String getHelpContextId() {
+		return composite.getHelpContextId();
+	}
+
 }

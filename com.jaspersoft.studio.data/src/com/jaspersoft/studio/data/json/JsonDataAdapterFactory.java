@@ -17,44 +17,47 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.bean;
+package com.jaspersoft.studio.data.json;
+
+import net.sf.jasperreports.data.json.JsonDataAdapterImpl;
 
 import org.eclipse.swt.graphics.Image;
-
-import net.sf.jasperreports.data.bean.BeanDataAdapterImpl;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
-public class BeanDataAdapterFactory implements DataAdapterFactory {
+public class JsonDataAdapterFactory implements DataAdapterFactory {
 
 	public DataAdapterDescriptor createDataAdapter() {
-		return new BeanDataAdapterDescriptor();
+		return new JsonDataAdapterDescriptor();
 	}
 
 	public String getDataAdapterClassName() {
-		return BeanDataAdapterImpl.class.getName();
+		return JsonDataAdapterImpl.class.getName();
 	}
 
 	public String getLabel() {
-		return "Collection of JavaBeans";
+		return "JSON File";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	public String getDescription() { 
-		return "Collection or Array of JavaBeans";
+	public String getDescription() {
+		return "JSON File";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	public Image getIcon(int size) { 
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/beans.png");
+	public Image getIcon(int size) {
+		if (size == 16) {
+			return Activator.getImage("icons/json.png");
 		}
 		return null;
 	}

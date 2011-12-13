@@ -17,44 +17,45 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.bean;
+package com.jaspersoft.studio.data.json;
+
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.json.JsonDataAdapter;
+import net.sf.jasperreports.data.json.JsonDataAdapterImpl;
 
 import org.eclipse.swt.graphics.Image;
 
-import net.sf.jasperreports.data.bean.BeanDataAdapterImpl;
-
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.DataAdapterFactory;
+import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class BeanDataAdapterFactory implements DataAdapterFactory {
+public class JsonDataAdapterDescriptor extends DataAdapterDescriptor {
+	private JsonDataAdapterImpl beanDataAdapter = new JsonDataAdapterImpl();
 
-	public DataAdapterDescriptor createDataAdapter() {
-		return new BeanDataAdapterDescriptor();
+	@Override
+	public JsonDataAdapter getDataAdapter() {
+		return beanDataAdapter;
 	}
 
-	public String getDataAdapterClassName() {
-		return BeanDataAdapterImpl.class.getName();
+	@Override
+	public void setDataAdapter(DataAdapter dataAdapter) {
+		this.beanDataAdapter = (JsonDataAdapterImpl) dataAdapter;
 	}
 
-	public String getLabel() {
-		return "Collection of JavaBeans";
+	@Override
+	public DataAdapterEditor getEditor() {
+		return new JsonDataAdapterEditor();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
-	 */
-	public String getDescription() { 
-		return "Collection or Array of JavaBeans";
-	}
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	public Image getIcon(int size) { 
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/beans.png");
+	@Override
+	public Image getIcon(int size) {
+		if (size == 16) {
+			return Activator.getImage("icons/json.png");
 		}
 		return null;
 	}
