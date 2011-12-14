@@ -76,7 +76,7 @@ public class ServerProfilePage extends WizardPage {
 		new Label(composite, SWT.NONE);
 		new Label(composite, SWT.NONE);
 
-		Group gr = new Group(composite, SWT.BORDER);
+		Group gr = new Group(composite, SWT.NONE);
 		gr.setText(Messages.ServerProfilePage_8);
 		gr.setLayout(new GridLayout(2, false));
 		gd = new GridData(GridData.FILL_BOTH);
