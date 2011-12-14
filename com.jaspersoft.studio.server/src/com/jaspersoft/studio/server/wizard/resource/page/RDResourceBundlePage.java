@@ -26,7 +26,7 @@ public class RDResourceBundlePage extends AFileResourcePage {
 
 	@Override
 	protected String[] getFilter() {
-		return new String[] { "*.propeties*" };
+		return new String[] { "*.properties" };
 	}
 
 	@Override
