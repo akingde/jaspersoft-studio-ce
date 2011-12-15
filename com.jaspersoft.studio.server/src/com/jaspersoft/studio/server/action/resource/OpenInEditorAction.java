@@ -122,6 +122,8 @@ public class OpenInEditorAction extends Action {
 			ResourceDescriptor rd = res.getValue();
 
 			String fkeyname = ServerManager.getKey(res);
+			if(fkeyname == null)
+				return;
 			String filename = fileurimap.get(fkeyname);
 
 			File f = null;

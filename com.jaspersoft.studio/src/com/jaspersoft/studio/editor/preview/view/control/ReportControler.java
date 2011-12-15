@@ -30,7 +30,6 @@ import java.util.Map;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -205,8 +204,7 @@ public class ReportControler {
 
 					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
 
-					Thread.currentThread().setContextClassLoader(
-							ClassLoaderUtil.getClassLoader4Project(monitor, file.getProject()));
+					setupFileRezolver(monitor, file);
 
 					JasperDesign jd = copyJasperDesign();
 
@@ -222,7 +220,6 @@ public class ReportControler {
 						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE))
 							runJive(pcontainer, file);
 						else {
-							setupFileRezolver(monitor, file);
 
 							setupVirtualizer(jd, ph);
 
