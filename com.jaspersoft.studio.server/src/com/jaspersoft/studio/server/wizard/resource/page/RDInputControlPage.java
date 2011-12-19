@@ -3,7 +3,6 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,6 +10,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -63,7 +63,7 @@ public class RDInputControlPage extends AResourcePage {
 
 		UIUtils.createLabel(composite, "Type");
 
-		final CCombo ctype = new CCombo(composite, SWT.BORDER | SWT.READ_ONLY);
+		final Combo ctype = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
 		ctype.setItems(new String[] { "Boolean", "Single Value",
 				"Single Select List of Values",
 				"Single Select List of Values (Radio)",
@@ -110,7 +110,7 @@ public class RDInputControlPage extends AResourcePage {
 		handleTypeChanged(ctype, stackLayout);
 	}
 
-	protected void handleTypeChanged(CCombo ctype, StackLayout stackLayout) {
+	protected void handleTypeChanged(Combo ctype, StackLayout stackLayout) {
 		int s = ctype.getSelectionIndex();
 		if (s < 1)
 			stackLayout.topControl = cvalue;

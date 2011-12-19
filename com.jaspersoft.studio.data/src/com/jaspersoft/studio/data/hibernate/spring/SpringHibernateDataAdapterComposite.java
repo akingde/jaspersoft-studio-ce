@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.hibernate;
+package com.jaspersoft.studio.data.hibernate.spring;
 
-import net.sf.jasperreports.data.hibernate.HibernateDataAdapter;
+import net.sf.jasperreports.data.hibernate.spring.SpringHibernateDataAdapter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -36,12 +36,11 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.utils.Misc;
 
-public class HibernateDataAdapterComposite extends Composite {
+public class SpringHibernateDataAdapterComposite extends Composite {
 
-	private HibernateDataAdapterDescriptor hbmDataAdapterDesc = null;
-	private Text xmlFileName;
-	private Text propFileName;
-	private Button btnUseAnnotation;
+	private SpringHibernateDataAdapterDescriptor hbmDADesc = null;
+	private Text springConfig;
+	private Text beanIDtxt;
 
 	/**
 	 * Create the composite.
@@ -49,7 +48,7 @@ public class HibernateDataAdapterComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public HibernateDataAdapterComposite(Composite parent, int style) {
+	public SpringHibernateDataAdapterComposite(Composite parent, int style) {
 
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
@@ -63,10 +62,10 @@ public class HibernateDataAdapterComposite extends Composite {
 		composite.setLayout(gl_composite);
 
 		Label lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setText("Hibernate (.cfg.xml) File:");
+		lblNewLabel.setText("Spring Configuration:");
 
-		xmlFileName = new Text(composite, SWT.BORDER);
-		xmlFileName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		springConfig = new Text(composite, SWT.BORDER);
+		springConfig.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button btnBrowse = new Button(composite, SWT.NONE);
 		btnBrowse.setText("...");
@@ -76,38 +75,21 @@ public class HibernateDataAdapterComposite extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(Display.getDefault()
 						.getActiveShell());
-				fd.setFileName(xmlFileName.getText());
+				fd.setFileName(springConfig.getText());
 				fd.setFilterExtensions(new String[] { "*.cfg.xml", "*.*" });
 				String selection = fd.open();
 				if (selection != null)
-					xmlFileName.setText(selection);
+					springConfig.setText(selection);
 			}
 		});
 
 		lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setText("hibernate.properties File:");
+		lblNewLabel.setText("Session Factory Bean ID:");
 
-		propFileName = new Text(composite, SWT.BORDER);
-		propFileName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		btnBrowse = new Button(composite, SWT.PUSH);
-		btnBrowse.setText("...");
-
-		btnBrowse.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault()
-						.getActiveShell());
-				fd.setFileName(xmlFileName.getText());
-				fd.setFilterExtensions(new String[] { "*.properties", "*.*" });
-				String selection = fd.open();
-				if (selection != null)
-					propFileName.setText(selection);
-			}
-		});
-
-		btnUseAnnotation = new Button(composite, SWT.CHECK);
-		btnUseAnnotation.setText("Use Annotation");
+		beanIDtxt = new Text(composite, SWT.BORDER);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		beanIDtxt.setLayoutData(gd);
 
 	}
 
@@ -116,30 +98,26 @@ public class HibernateDataAdapterComposite extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public void setDataAdapter(HibernateDataAdapterDescriptor dataAdapter) {
-		this.hbmDataAdapterDesc = dataAdapter;
+	public void setDataAdapter(SpringHibernateDataAdapterDescriptor dataAdapter) {
+		this.hbmDADesc = dataAdapter;
 
-		HibernateDataAdapter xmlDataAdapter = hbmDataAdapterDesc
-				.getDataAdapter();
+		SpringHibernateDataAdapter xmlDataAdapter = hbmDADesc.getDataAdapter();
 
-		xmlFileName.setText(Misc.nvl(xmlDataAdapter.getXMLFileName(), ""));
-		propFileName.setText(Misc.nvl(xmlDataAdapter.getPropertiesFileName(),
-				""));
-		btnUseAnnotation.setSelection(xmlDataAdapter.isUseAnnotation());
+		springConfig.setText(Misc.nvl(xmlDataAdapter.getSpringConfig(), ""));
+		beanIDtxt.setText(Misc.nvl(xmlDataAdapter.getBeanId(), ""));
 
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
-		if (hbmDataAdapterDesc == null)
-			hbmDataAdapterDesc = new HibernateDataAdapterDescriptor();
+		if (hbmDADesc == null)
+			hbmDADesc = new SpringHibernateDataAdapterDescriptor();
 
-		HibernateDataAdapter dataAdapter = hbmDataAdapterDesc.getDataAdapter();
+		SpringHibernateDataAdapter dataAdapter = hbmDADesc.getDataAdapter();
 
-		dataAdapter.setXMLFileName(xmlFileName.getText());
-		dataAdapter.setPropertiesFileName(propFileName.getText());
-		dataAdapter.setUseAnnotation(btnUseAnnotation.getSelection());
+		dataAdapter.setSpringConfig(springConfig.getText());
+		dataAdapter.setBeanId(beanIDtxt.getText());
 
-		return hbmDataAdapterDesc;
+		return hbmDADesc;
 	}
 
 	public String getHelpContextId() {

@@ -211,11 +211,37 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 	public void handleTreeEvent(TreeExpansionEvent event) {
 		if (event.getElement() instanceof MServerProfile) {
-
+			listServer(event);
 		} else if (event.getElement() instanceof MResource) {
 			lazyLoadResource(event);
 		}
+	}
 
+	private void listServer(final TreeExpansionEvent event) {
+		Job job = new Job("Refreshing tree") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				MServerProfile r = (MServerProfile) event.getElement();
+				try {
+					WSClientHelper.connectGetData(r, monitor);
+					Display.getDefault().asyncExec(new Runnable() {
+
+						public void run() {
+							event.getTreeViewer().refresh(true);
+						}
+					});
+
+					return Status.OK_STATUS;
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				}
+				return Status.CANCEL_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.setSystem(false);
+		job.setUser(true);
+		job.schedule();
 	}
 
 	private void lazyLoadResource(final TreeExpansionEvent event) {

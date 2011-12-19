@@ -92,6 +92,7 @@ public class WSClientHelper {
 
 	public static void connectGetData(MServerProfile msp,
 			IProgressMonitor monitor) throws Exception {
+		msp.removeChildren();
 		WSClientHelper.listFolder(msp, connect(msp, monitor), "/", monitor, 0);
 	}
 
@@ -216,15 +217,12 @@ public class WSClientHelper {
 			if (mru != null && res != mru) {
 				String ruuri = mru.getValue().getUriString();
 
-				System.out.println(rd.getUriString());
-
-				System.out.println(rd.getParentFolder());
 				if (rd.getWsType()
 						.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
-					rd.setIsNew(true);
+					sp.getWsClient().addOrModifyResource(rd, file);
+				} else {
+					sp.getWsClient().modifyReportUnitResource(ruuri, rd, file);
 				}
-
-				sp.getWsClient().modifyReportUnitResource(ruuri, rd, file);
 			} else
 				sp.getWsClient().addOrModifyResource(rd, file);
 			if (refresh)

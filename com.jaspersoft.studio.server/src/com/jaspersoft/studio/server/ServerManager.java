@@ -39,6 +39,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.MServers;
@@ -141,7 +142,9 @@ public class ServerManager {
 						ServerProfile sprof = (ServerProfile) XmlUtil.read(
 								adapterNode, MServerProfile.MAPPINGFILE);
 
-						serverProfiles.add(new MServerProfile(root, sprof));
+						MServerProfile sp = new MServerProfile(root, sprof);
+						new MDummy(sp);
+						serverProfiles.add(sp);
 					}
 				}
 

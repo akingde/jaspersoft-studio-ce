@@ -161,4 +161,5 @@ Export-Package: com.jaspersoft.studio,
  com.lowagie.text,
  com.lowagie.text.pdf,
  org.apache.commons.validator.routines,
- org.eclipse.nebula.widgets.gallery
+ org.eclipse.nebula.widgets.gallery,
+ org.eclipse.nebula.widgets.tablecombo

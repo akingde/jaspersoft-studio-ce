@@ -24,6 +24,9 @@
          <dataAdapter
                ClassFactory="com.jaspersoft.studio.data.hibernate.HibernateDataAdapterFactory">
          </dataAdapter>
+         <dataAdapter
+               ClassFactory="com.jaspersoft.studio.data.hibernate.spring.SpringHibernateDataAdapterFactory">
+         </dataAdapter>
    </extension>
    <extension
          point="com.jaspersoft.studio.queryDesigner">

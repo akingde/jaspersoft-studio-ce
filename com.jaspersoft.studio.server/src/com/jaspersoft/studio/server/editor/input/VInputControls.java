@@ -31,6 +31,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
@@ -38,7 +39,8 @@ import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
+import com.jaspersoft.studio.server.editor.input.query.QueryInput;
 
 public class VInputControls extends APreview {
 
@@ -66,7 +68,7 @@ public class VInputControls extends APreview {
 		scompo.setMinWidth(100);
 
 		composite = new Composite(scompo, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(1, false));
 		composite.setBackground(parent.getBackground());
 
 		scompo.setContent(composite);
@@ -113,10 +115,11 @@ public class VInputControls extends APreview {
 			for (IDataInput in : inputs) {
 				if (in.isForType(vclass)) {
 					in = in.getInstance();
-					if (!in.isLabeled())
-						UIUtils.createLabel(sectionClient,
-								Messages.getString(pres.getLabel()));
-
+					if (!in.isLabeled()) {
+						Label lbl = new Label(sectionClient, SWT.NONE);
+						lbl.setText(Messages.getString(pres.getLabel()));
+						lbl.setBackground(lbl.getParent().getBackground());
+					}
 					in.createInput(sectionClient, pres, icm.getParameters());
 					in.addChangeListener(icm.getPropertyChangeListener());
 					icm.getControls().add(in);

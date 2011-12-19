@@ -26,6 +26,8 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceProperty;
 import com.jaspersoft.studio.editor.preview.input.IDataInput;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.editor.input.lov.ListOfValuesInput;
+import com.jaspersoft.studio.server.editor.input.query.QueryInput;
 import com.jaspersoft.studio.server.wizard.resource.page.SelectorDatasource;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
