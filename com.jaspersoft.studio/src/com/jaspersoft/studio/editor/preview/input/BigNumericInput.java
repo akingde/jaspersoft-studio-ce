@@ -43,7 +43,6 @@ import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.Map;
 
-import org.apache.commons.validator.routines.BigDecimalValidator;
 import org.apache.commons.validator.routines.DoubleValidator;
 import org.apache.commons.validator.routines.FloatValidator;
 import org.eclipse.swt.SWT;
@@ -57,6 +56,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class BigNumericInput extends ADataInput {
 	private Text num;
+	private Number min;
+	private Number max;
 
 	public boolean isForType(Class<?> valueClass) {
 		return (Long.class.isAssignableFrom(valueClass) || BigInteger.class.isAssignableFrom(valueClass)
@@ -95,35 +96,36 @@ public class BigNumericInput extends ADataInput {
 							Long.parseLong(number);
 						} else if (param.getValueClass().equals(BigInteger.class)) {
 							new BigInteger(number);
-						} else if (param.getValueClass().equals(BigDecimal.class)) {
-							e.doit = BigDecimalValidator.getInstance().isValid(number);
 						} else if (param.getValueClass().equals(Float.class)) {
 							e.doit = FloatValidator.getInstance().isValid(number);
 						} else if (param.getValueClass().equals(Double.class)) {
 							e.doit = DoubleValidator.getInstance().isValid(number);
 						}
+
+						// if (min != null && compareTo(n, min) > 0) {
+						// return;
+						// }
+						// if (max != null && compareTo(n, max) < 0) {
+						// return;
+						// }
+
 					} catch (NumberFormatException ne) {
 						e.doit = false;
 					}
 				}
 			});
+			if (param.getMinValue() != null) {
+				min = getNumber(param.getMinValue());
+			}
+			if (param.getMaxValue() != null) {
+				max = getNumber(param.getMaxValue());
+			}
+
 			ModifyListener listener = new ModifyListener() {
 
 				public void modifyText(ModifyEvent e) {
 					try {
-						Number n = null;
-						if (param.getValueClass().equals(Long.class)) {
-							n = new Long(num.getText());
-						} else if (param.getValueClass().equals(BigInteger.class)) {
-							n = new BigInteger(num.getText());
-						} else if (param.getValueClass().equals(BigDecimal.class)) {
-							n = new BigDecimal(num.getText());
-						} else if (param.getValueClass().equals(Float.class)) {
-							n = new Float(num.getText());
-						} else if (param.getValueClass().equals(Double.class)) {
-							n = new Double(num.getText());
-						}
-						updateModel(n);
+						updateModel(getNumber(num.getText()));
 					} catch (NumberFormatException ne) {
 
 					}
@@ -134,6 +136,32 @@ public class BigNumericInput extends ADataInput {
 			gd.horizontalIndent = 8;
 			num.setLayoutData(gd);
 		}
+	}
+
+	protected int compareTo(Number n1, Number n2) {
+		if (param.getValueClass().equals(Long.class)) {
+			return ((Long) n1).compareTo((Long) n2);
+		} else if (param.getValueClass().equals(BigInteger.class)) {
+			return ((BigInteger) n1).compareTo((BigInteger) n2);
+		} else if (param.getValueClass().equals(Float.class)) {
+			return ((Float) n1).compareTo((Float) n2);
+		} else if (param.getValueClass().equals(Double.class)) {
+			return ((Double) n1).compareTo((Double) n2);
+		}
+		return 0;
+	}
+
+	protected Number getNumber(String number) {
+		if (param.getValueClass().equals(Long.class)) {
+			return new Long(number);
+		} else if (param.getValueClass().equals(BigInteger.class)) {
+			return new BigInteger(number);
+		} else if (param.getValueClass().equals(Float.class)) {
+			return new Float(number);
+		} else if (param.getValueClass().equals(Double.class)) {
+			return new Double(number);
+		}
+		return null;
 	}
 
 	public void updateInput() {

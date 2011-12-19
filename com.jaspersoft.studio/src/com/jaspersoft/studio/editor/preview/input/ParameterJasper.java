@@ -32,4 +32,24 @@ public class ParameterJasper implements IParameter {
 	public boolean isReadOnly() {
 		return false;
 	}
+
+	public boolean isStrictMin() {
+		return false;
+	}
+
+	public String getMinValue() {
+		return null;
+	}
+
+	public boolean isStrictMax() {
+		return false;
+	}
+
+	public String getMaxValue() {
+		return null;
+	}
+
+	public String getPattern() {
+		return null;
+	}
 }

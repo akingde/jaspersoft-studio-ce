@@ -12,9 +12,15 @@ public interface IParameter {
 	public boolean isMandatory();
 
 	public boolean isReadOnly();
-	
-	
-	
-	
+
+	public boolean isStrictMin();
+
+	public String getMinValue();
+
+	public boolean isStrictMax();
+
+	public String getMaxValue();
+
+	public String getPattern();
 
 }

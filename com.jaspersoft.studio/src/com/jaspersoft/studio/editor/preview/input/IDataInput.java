@@ -63,4 +63,5 @@ public interface IDataInput {
 	public void removeChangeListener(PropertyChangeListener listener);
 
 	public void dispose();
+
 }

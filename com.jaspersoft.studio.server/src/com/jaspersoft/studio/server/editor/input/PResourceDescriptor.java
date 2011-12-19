@@ -93,4 +93,24 @@ public class PResourceDescriptor implements IParameter {
 		return rd.getClass();
 	}
 
+	public boolean isStrictMin() {
+		return p.isStrictMin();
+	}
+
+	public String getMinValue() {
+		return p.getMinValue();
+	}
+
+	public boolean isStrictMax() {
+		return p.isStrictMax();
+	}
+
+	public String getMaxValue() {
+		return p.getMaxValue();
+	}
+
+	public String getPattern() {
+		return p.getPattern();
+	}
+
 }

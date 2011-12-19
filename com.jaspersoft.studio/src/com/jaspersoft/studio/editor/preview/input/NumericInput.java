@@ -103,6 +103,19 @@ public class NumericInput extends ADataInput {
 			};
 			num.addModifyListener(listener2);
 
+			if (param.getMinValue() != null) {
+				int minval = new Integer(param.getMinValue()).intValue();
+				if (!param.isStrictMin())
+					minval++;
+				num.setMinimum(minval);
+			}
+			if (param.getMaxValue() != null) {
+				int maxval = new Integer(param.getMaxValue()).intValue();
+				if (!param.isStrictMax())
+					maxval--;
+				num.setMaximum(maxval);
+			}
+
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.horizontalIndent = 8;
 			num.setLayoutData(gd);
