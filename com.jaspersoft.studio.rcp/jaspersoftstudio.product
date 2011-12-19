@@ -726,6 +726,7 @@ Public License instead of this License.  But first, please read
       <plugin id="com.jaspersoft.studio.doc"/>
       <plugin id="com.jaspersoft.studio.html"/>
       <plugin id="com.jaspersoft.studio.rcp"/>
+      <plugin id="com.jaspersoft.studio.server"/>
       <plugin id="javax.servlet"/>
       <plugin id="javax.servlet.jsp"/>
       <plugin id="javax.xml"/>
