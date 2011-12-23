@@ -44,7 +44,7 @@ import com.jaspersoft.studio.swt.widgets.PropertiesComponent;
 import com.jaspersoft.studio.utils.Misc;
 
 public class JDBCDataAdapterComposite extends Composite {
-	private JDBCDataAdapterDescriptor dataAdapterDesc = null;
+	protected JDBCDataAdapterDescriptor dataAdapterDesc = null;
 	private Text textJDBCUrl;
 	private Text textServerAddress;
 	private Text textDatabase;
@@ -118,6 +118,8 @@ public class JDBCDataAdapterComposite extends Composite {
 		super(parent, style);
 		setLayout(new GridLayout(3, false));
 
+		createPreWidgets(this);
+		
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
@@ -173,6 +175,10 @@ public class JDBCDataAdapterComposite extends Composite {
 				});
 	}
 
+	protected void createPreWidgets(Composite parent){
+		
+	}
+	
 	private void createClasspathTab(CTabFolder tabFolder) {
 		CTabItem tbtmNewItem_1 = new CTabItem(tabFolder, SWT.NONE);
 		tbtmNewItem_1.setText(Messages.JDBCDataAdapterComposite_classpath);

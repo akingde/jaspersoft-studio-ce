@@ -17,62 +17,49 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data.jdbc;
+package com.jaspersoft.studio.data.mondrian;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.DataAdapterEditor;
+import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterEditor;
+
 /*
  * @author gtoffoli
  *
  */
-public class JDBCDataAdapterEditor implements DataAdapterEditor {
+public class MondrianDataAdapterEditor extends JDBCDataAdapterEditor {
 
-	protected JDBCDataAdapterComposite composite = null;
-	
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getComposite(org.eclipse.swt.widgets.Composite, int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.data.DataAdapterEditor#getComposite(org.eclipse
+	 * .swt.widgets.Composite, int)
 	 */
-	public Composite getComposite(Composite parent, int style, WizardPage wizardPage) {
-		
-		if (composite == null || composite.getParent() != parent)
-		{
-			if (composite != null) composite.dispose();
-			composite = new JDBCDataAdapterComposite(parent, style);
+	public Composite getComposite(Composite parent, int style,
+			WizardPage wizardPage) {
+		if (composite == null || composite.getParent() != parent) {
+			if (composite != null)
+				composite.dispose();
+			composite = new MondrianDataAdapterComposite(parent, style);
 		}
 		return composite;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getDataAdapter()
-	 */
-	public DataAdapterDescriptor getDataAdapter() {
-
-		if (composite != null)
-		{
-			return composite.getDataAdapter();
-		}
-		
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getHelpContextId()
-	 */
-	public String getHelpContextId() {
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterEditor#setDataAdapter(com.jaspersoft.studio.data.DataAdapter)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.data.DataAdapterEditor#setDataAdapter(com.jaspersoft
+	 * .studio.data.DataAdapter)
 	 */
 	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
-		
-		if (composite != null && dataAdapter instanceof JDBCDataAdapterDescriptor)
-		{
-			composite.setDataAdapter((JDBCDataAdapterDescriptor)dataAdapter);
+		if (composite != null
+				&& dataAdapter instanceof MondrianDataAdapterDescriptor) {
+			composite
+					.setDataAdapter((MondrianDataAdapterDescriptor) dataAdapter);
 		}
 	}
 }
