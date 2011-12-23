@@ -16,7 +16,6 @@
  */
 package com.jaspersoft.studio.editor.preview.jive;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,18 +50,22 @@ public final class JettyUtil {
 			server = new Server(port);
 			HandlerList handlerList = new HandlerList();
 			server.setHandler(handlerList);
+		}
+		if (hmap.get(project) == null) {
 			try {
+				server.stop();
+
+				List<Handler> handlers = createContext(project);
+				hmap.put(project, handlers);
+				for (Handler h : handlers)
+					((HandlerList) server.getHandler()).addHandler(h);
+
 				server.start();
 			} catch (Exception e) {
 				throw new JRRuntimeException(e);
 			}
 		}
-		if (hmap.get(project) == null) {
-			List<Handler> handlers = createContext(project);
-			hmap.put(project, handlers);
-			for (Handler h : handlers)
-				((HandlerList) server.getHandler()).addHandler(h);
-		}
+
 	}
 
 	public static String getURL(IFile file) {
@@ -83,8 +86,10 @@ public final class JettyUtil {
 		context.setContextPath("/" + project.getName());
 		context.setClassLoader(ReportPreviewUtil.createProjectClassLoader(project));
 
+		context.addServlet(new ServletHolder(DiagnosticServlet.class), "/servlets/diag");
+
 		ServletHolder reportServletHolder = new ServletHolder(ReportServlet.class);
-		reportServletHolder.setInitParameter("repository.root", new File(waFolder).getAbsolutePath());
+		reportServletHolder.setInitParameter("repository.root", waFolder);
 		context.addServlet(reportServletHolder, "/servlets/report");
 
 		context.addServlet(new ServletHolder(ImageServlet.class), "/servlets/image");

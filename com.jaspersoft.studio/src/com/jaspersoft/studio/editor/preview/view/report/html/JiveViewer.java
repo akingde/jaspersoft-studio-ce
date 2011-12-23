@@ -47,5 +47,7 @@ public class JiveViewer extends APreview implements IURLViewable {
 		browser.setUrl(url);
 		if (urlcontributionbar != null)
 			urlcontributionbar.setUrl(url);
+
+		browser.setUrl(url);
 	}
 }

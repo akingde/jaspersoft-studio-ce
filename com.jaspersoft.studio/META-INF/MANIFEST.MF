@@ -11,10 +11,8 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-NativeCode: 
  libnative/Linux/i386/libj2d-gtk-linux-i386-2.0.0.so ; osname=Linux ; processor=x86; processor=i386 ,
  libnative/Linux/64bit/libj2d-gtk-linux-i386-2.0.0.so ; osname=Linux ; processor=x86_64 ; processor=amd64 ,
- libnative/Windows/i386/J2DWin32ImageRenderer.dll ; osname=Windows95 ; osname="Windows Server 2008 R2"; osname="Windows Server 2008 R1" ; osname=Windows 95 ; osname=Win95 ; osname=Windows98 ; osname=Windows 98 ; osname=Win98 ; osname=WindowsNT ; osname=Windows NT ; osname=WinNT ; osname=WindowsCE ; osname=Winndows CE ; osname=WinCE ; osname=WindowsXP ; osname=Windows XP ; osname=WinXP ; osname=WindowsVista ; osname=Windows Vista ; osname=Windows2003 ; osname=Windows 7 ; processor = i386 ; processor = x86 ;
- libnative/Windows/64bit/J2DWin32ImageRenderer.dll ; osname=WindowsNT ; osname="Windows Server 2008 R2"; osname="Windows Server 2008 R1" ; osname=Windows NT ; osname=WinNT ; osname=WindowsXP ; osname=Windows XP ; osname=WinXP ; osname=WindowsVista ; osname=Windows Vista ; osname=Windows2003 ; osname=Windows 7 ; osname=Win7 ; processor=x86_64 ; processor = amd64;
- libnative/MacOSX/i386/J2DWin32ImageRenderer.dll ;  osname="macosx"; processor = i386 ; processor = x86;
- libnative/MacOSX/64bit/J2DWin32ImageRenderer.dll ;  osname="macosx"; processor=x86_64 ; processor = amd64
+ libnative/Windows/i386/J2DWin32ImageRenderer.dll ; osname=Windows95 ; osname="Windows Server 2008 R2"; osname=Windows 95 ; osname=Win95 ; osname=Windows98 ; osname=Windows 98 ; osname=Win98 ; osname=WindowsNT ; osname=Windows NT ; osname=WinNT ; osname=WindowsCE ; osname=Winndows CE ; osname=WinCE ; osname=WindowsXP ; osname=Windows XP ; osname=WinXP ; osname=WindowsVista ; osname=Windows Vista ; osname=Windows2003 ; osname=Windows 7 ; processor = i386 ; processor = x86 ; osname="macosx";
+ libnative/Windows/64bit/J2DWin32ImageRenderer.dll ; osname=WindowsNT ; osname="Windows Server 2008 R2"; osname=Windows NT ; osname=WinNT ; osname=WindowsXP ; osname=Windows XP ; osname=WinXP ; osname=WindowsVista ; osname=Windows Vista ; osname=Windows2003 ; osname=Windows 7 ; osname=Win7 ; osname="macosx"; processor=x86_64 ; processor = amd64
 Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.eclipse.ui.editors;visibility:=reexport,
  org.eclipse.ui.ide;bundle-version="3.5.0";visibility:=reexport,
@@ -43,7 +41,8 @@ Require-Bundle: org.eclipse.ui;visibility:=reexport,
 Bundle-ClassPath: .,
  lib/commons-validator-1.3.1.jar,
  lib/bsh-2.0b4.jar,
- lib/iText-2.1.7.jar
+ lib/iText-2.1.7.jar,
+ lib/velocity-1.7-dep.jar
 Import-Package: org.eclipse.ui,
  org.eclipse.ui.part
 Eclipse-RegisterBuddy: net.sf.jasperreports

@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.Map;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -16,6 +17,7 @@ public abstract class ADataInput implements IDataInput {
 	protected Map<String, Object> params;
 	protected IParameter param;
 	private PropertyChangeSupport pcsupport = new PropertyChangeSupport(this);
+	private static ControlDecoration errControlDeco;
 
 	public void addChangeListener(PropertyChangeListener listener) {
 		pcsupport.addPropertyChangeListener(listener);
@@ -68,5 +70,20 @@ public abstract class ADataInput implements IDataInput {
 			controlDecoration.setImage(FieldDecorationRegistry.getDefault()
 					.getFieldDecoration(FieldDecorationRegistry.DEC_REQUIRED).getImage());
 		}
+	}
+
+	public static void setError(Control num, String message) {
+		if (errControlDeco == null) {
+			errControlDeco = new ControlDecoration(num, SWT.LEFT | SWT.BOTTOM);
+			FieldDecoration fieldDecoration = FieldDecorationRegistry.getDefault().getFieldDecoration(
+					FieldDecorationRegistry.DEC_ERROR);
+			errControlDeco.setImage(fieldDecoration.getImage());
+		}
+		errControlDeco.show();
+		errControlDeco.setDescriptionText(message);
+	}
+
+	public static void hideError(Control num) {
+		errControlDeco.hide();
 	}
 }

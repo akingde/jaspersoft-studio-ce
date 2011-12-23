@@ -72,12 +72,16 @@ public class BigNumericInput extends ADataInput {
 			num = new Text(parent, SWT.BORDER);
 			setMandatory(param, num);
 
+			setError(num, "");
+			hideError(num);
+
 			num.setToolTipText(param.getDescription());
 			updateInput();
 			num.addListener(SWT.Verify, new Listener() {
 
 				public void handleEvent(Event e) {
 					try {
+						hideError(num);
 						String number = e.text;
 						String oldText = ((Text) e.widget).getText();
 						if (e.start == 0)
@@ -102,12 +106,20 @@ public class BigNumericInput extends ADataInput {
 							e.doit = DoubleValidator.getInstance().isValid(number);
 						}
 
-						// if (min != null && compareTo(n, min) > 0) {
-						// return;
-						// }
-						// if (max != null && compareTo(n, max) < 0) {
-						// return;
-						// }
+						if (min != null)
+							if (param.isStrictMin()) {
+								if (compareTo(getNumber(number), min) <= 0)
+									setError(num, "Value can not be smaller than: " + min);
+							} else if (compareTo(getNumber(number), min) < 0) {
+								setError(num, "Value can not be smaller than: " + min);
+							}
+						if (max != null) {
+							if (param.isStrictMax()) {
+								if (compareTo(getNumber(number), max) >= 0)
+									setError(num, "Value can not be greater than: " + max);
+							} else if (compareTo(getNumber(number), max) > 0)
+								setError(num, "Value can not be greater than: " + max);
+						}
 
 					} catch (NumberFormatException ne) {
 						e.doit = false;
