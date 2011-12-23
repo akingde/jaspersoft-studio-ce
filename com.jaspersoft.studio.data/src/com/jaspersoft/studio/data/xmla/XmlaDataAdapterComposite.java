@@ -126,26 +126,10 @@ public class XmlaDataAdapterComposite extends Composite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String usr = Misc.nvl(textUsername.getText());
-				String pass = Misc.nvl(textPassword.getText());
-				Authenticator
-						.setDefault(new CustomHTTPAuthenticator(usr, pass));
-
 				String url = xmlaUri.getText();
 				ServerMetadata smd = new ServerMetadata(url);
 
-				datasource.removeAll();
-				catalog.removeAll();
-				cube.removeAll();
-				dstes = smd.discoverDataSources();
-				if (dstes == null || dstes.length == 0)
-					return;
-
-				String[] dsources = new String[dstes.length];
-				for (int i = 0; i < dstes.length; i++)
-					dsources[i] = dstes[i].getDataSourceInfo();
-				datasource.setItems(dsources);
-				datasource.select(0);
+				handleMetaDataChanged(smd);
 
 			}
 		});
@@ -153,18 +137,7 @@ public class XmlaDataAdapterComposite extends Composite {
 		datasource.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				catalog.removeAll();
-				cube.removeAll();
-				int ind = datasource.getSelectionIndex();
-				catalogs = dstes[ind].getChildren();
-				if (catalogs == null || catalogs.length == 0)
-					return;
-
-				String[] scat = new String[catalogs.length];
-				for (int i = 0; i < catalogs.length; i++)
-					scat[i] = ((CatalogElement) catalogs[i]).toString();
-				catalog.setItems(scat);
-				catalog.select(0);
+				handleDatasourceChanged();
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -175,17 +148,7 @@ public class XmlaDataAdapterComposite extends Composite {
 		catalog.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				cube.removeAll();
-				int ind = catalog.getSelectionIndex();
-				DataSourceTreeElement[] cubes = catalogs[ind].getChildren();
-				if (cubes == null || cubes.length == 0)
-					return;
-
-				String[] scubes = new String[cubes.length];
-				for (int i = 0; i < cubes.length; i++)
-					scubes[i] = ((CubeElement) cubes[i]).toString();
-				cube.setItems(scubes);
-				cube.select(0);
+				handleCatalogChanged();
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -233,5 +196,50 @@ public class XmlaDataAdapterComposite extends Composite {
 
 	public String getHelpContextId() {
 		return "";
+	}
+
+	protected void handleDatasourceChanged() {
+		catalog.removeAll();
+		cube.removeAll();
+		int ind = datasource.getSelectionIndex();
+		catalogs = dstes[ind].getChildren();
+		if (catalogs == null || catalogs.length == 0)
+			return;
+
+		String[] scat = new String[catalogs.length];
+		for (int i = 0; i < catalogs.length; i++)
+			scat[i] = ((CatalogElement) catalogs[i]).toString();
+		catalog.setItems(scat);
+		catalog.select(0);
+		handleCatalogChanged();
+	}
+
+	protected void handleCatalogChanged() {
+		cube.removeAll();
+		int ind = catalog.getSelectionIndex();
+		DataSourceTreeElement[] cubes = catalogs[ind].getChildren();
+		if (cubes == null || cubes.length == 0)
+			return;
+
+		String[] scubes = new String[cubes.length];
+		for (int i = 0; i < cubes.length; i++)
+			scubes[i] = ((CubeElement) cubes[i]).toString();
+		cube.setItems(scubes);
+		cube.select(0);
+	}
+
+	protected void handleMetaDataChanged(ServerMetadata smd) {
+		datasource.removeAll();
+		catalog.removeAll();
+		cube.removeAll();
+		dstes = smd.discoverDataSources();
+		if (dstes == null || dstes.length == 0)
+			return;
+
+		String[] dsources = new String[dstes.length];
+		for (int i = 0; i < dstes.length; i++)
+			dsources[i] = dstes[i].getDataSourceInfo();
+		datasource.setItems(dsources);
+		datasource.select(0);
 	}
 }
