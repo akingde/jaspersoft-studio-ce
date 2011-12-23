@@ -152,7 +152,6 @@ public class XmlaDataAdapterComposite extends Composite {
 
 		datasource.addSelectionListener(new SelectionListener() {
 
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				catalog.removeAll();
 				cube.removeAll();
@@ -168,7 +167,6 @@ public class XmlaDataAdapterComposite extends Composite {
 				catalog.select(0);
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
 			}
@@ -176,7 +174,6 @@ public class XmlaDataAdapterComposite extends Composite {
 
 		catalog.addSelectionListener(new SelectionListener() {
 
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				cube.removeAll();
 				int ind = catalog.getSelectionIndex();
@@ -191,7 +188,6 @@ public class XmlaDataAdapterComposite extends Composite {
 				cube.select(0);
 			}
 
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
 			}
