@@ -20,7 +20,12 @@
 package com.jaspersoft.studio.data.wizard;
 
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
+import net.sf.jasperreports.engine.util.CompositeClassloader;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -169,7 +174,20 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	 */
 	public void widgetSelected(SelectionEvent e) {
 		if (getContainer().getCurrentPage() == dataAdapterEditorPage) {
+			ClassLoader oldCL = Thread.currentThread().getContextClassLoader();
 			try {
+				ClassLoader cl = null;
+				IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+				for (IProject p : prjs) {
+					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+						if (cl == null)
+							cl = new JavaProjectClassLoader(JavaCore.create(p));
+						else
+							cl = new CompositeClassloader(cl, new JavaProjectClassLoader(JavaCore.create(p)));
+					}
+				}
+				if (cl != null)
+					Thread.currentThread().setContextClassLoader(cl);
 
 				DataAdapterServiceUtil.getDataAdapterService(
 						dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter()).test();
@@ -181,6 +199,8 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 
 			} catch (Exception e1) {
 				UIUtils.showError(e1);
+			} finally {
+				Thread.currentThread().setContextClassLoader(oldCL);
 			}
 		}
 	}

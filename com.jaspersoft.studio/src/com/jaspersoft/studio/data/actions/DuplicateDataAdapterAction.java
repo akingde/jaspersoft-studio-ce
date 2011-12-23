@@ -36,60 +36,58 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.repository.actions;
+package com.jaspersoft.studio.data.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.cheatsheets.ICheatSheetAction;
-import org.eclipse.ui.cheatsheets.ICheatSheetManager;
+import org.eclipse.ui.ISharedImages;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
-import com.jaspersoft.studio.data.wizard.DataAdapterWizard;
-import com.jaspersoft.studio.data.wizard.DataAdapterWizardDialog;
+import com.jaspersoft.studio.data.MDataAdapter;
 
-public class CreateDataAdapterAction extends Action implements ICheatSheetAction {
-	public static final String ID = "createdataAdapteraction"; //$NON-NLS-1$
+public class DuplicateDataAdapterAction extends Action {
+	public static final String ID = "duplicatedataAdapteraction"; //$NON-NLS-1$
+	private TreeViewer treeViewer;
 
-	public CreateDataAdapterAction() {
-		this(null);
+	public DuplicateDataAdapterAction(TreeViewer treeViewer) {
+		super();
+		this.treeViewer = treeViewer;
+		setId(ID);
+		setText("Duplicate DataAdapter");
+		setDescription("Duplicate DataAdapter");
+		setToolTipText("Duplicate DataAdapter");
+		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1$
+		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor(ISharedImages.IMG_TOOL_COPY)); //$NON-NLS-1
 	}
 
-	public CreateDataAdapterAction(TreeViewer treeViewer) {
-		super();
-		setId(ID);
-		setText("Create DataAdapter");
-		setDescription("Create DataAdapter");
-		setToolTipText("Create DataAdapter");
-		setImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
-		setDisabledImageDescriptor(JaspersoftStudioPlugin.getImageDescriptor("icons/data_source_add.png")); //$NON-NLS-1$
+	@Override
+	public boolean isEnabled() {
+		Object firstElement = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+		return firstElement != null && (firstElement instanceof MDataAdapter);
 	}
 
 	@Override
 	public void run() {
-		DataAdapterWizard wizard = new DataAdapterWizard();
-		DataAdapterWizardDialog dialog = new DataAdapterWizardDialog(Display.getCurrent().getActiveShell(), wizard);
-		wizard.setWizardDialog(dialog);
-		dialog.create();
-		if (dialog.open() == Dialog.OK) {
-
-			newDataAdapter = wizard.getDataAdapter();
-			DataAdapterManager.addDataAdapter(newDataAdapter);
+		TreeSelection s = (TreeSelection) treeViewer.getSelection();
+		TreePath[] p = s.getPaths();
+		for (int i = 0; i < p.length; i++) {
+			Object obj = p[i].getLastSegment();
+			if (obj instanceof MDataAdapter) {
+				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(((MDataAdapter) obj).getDataAdapter());
+				String name = "copy_of_" + copyDataAdapter.getName();
+				for (int j = 1; j < 1000; j++) {
+					if (DataAdapterManager.isDataAdapterNameValid(name))
+						break;
+					name = "copy_of_" + copyDataAdapter.getName() + j;
+				}
+				copyDataAdapter.getDataAdapter().setName(name);
+				DataAdapterManager.addDataAdapter(copyDataAdapter);
+				treeViewer.refresh(true);
+			}
 		}
 	}
-
-	private DataAdapterDescriptor newDataAdapter;
-
-	public DataAdapterDescriptor getNewDataAdapter() {
-		return newDataAdapter;
-	}
-
-	public void run(String[] params, ICheatSheetManager manager) {
-		run();
-		notifyResult(true);
-	}
-
 }

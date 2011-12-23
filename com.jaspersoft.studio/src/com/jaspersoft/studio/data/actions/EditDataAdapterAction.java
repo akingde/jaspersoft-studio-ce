@@ -40,7 +40,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.repository.actions;
+package com.jaspersoft.studio.data.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;

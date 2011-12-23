@@ -58,6 +58,13 @@ public class DeleteResourceAction extends Action {
 	}
 
 	@Override
+	public boolean isEnabled() {
+		Object firstElement = ((TreeSelection) treeViewer.getSelection())
+				.getFirstElement();
+		return firstElement != null && (firstElement instanceof MResource);
+	}
+
+	@Override
 	public void run() {
 		TreeSelection s = (TreeSelection) treeViewer.getSelection();
 		TreePath[] p = s.getPaths();

@@ -34,12 +34,12 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 
+import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
+import com.jaspersoft.studio.data.actions.DeleteDataAdapterAction;
+import com.jaspersoft.studio.data.actions.DuplicateDataAdapterAction;
+import com.jaspersoft.studio.data.actions.EditDataAdapterAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
-import com.jaspersoft.studio.repository.actions.CreateDataAdapterAction;
-import com.jaspersoft.studio.repository.actions.DeleteDataAdapterAction;
-import com.jaspersoft.studio.repository.actions.DuplicateDataAdapterAction;
-import com.jaspersoft.studio.repository.actions.EditDataAdapterAction;
 
 public class DataAdapterProvider implements IRepositoryViewProvider {
 	private CreateDataAdapterAction createDataAdapterItemAction;

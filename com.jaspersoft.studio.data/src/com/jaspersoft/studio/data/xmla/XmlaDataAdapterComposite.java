@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.data.xmla;
 
-import java.net.Authenticator;
-
 import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
 
 import org.eclipse.swt.SWT;

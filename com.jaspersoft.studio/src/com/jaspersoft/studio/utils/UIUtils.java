@@ -79,7 +79,7 @@ public class UIUtils {
 	 * @return true if yes
 	 */
 	public static boolean showDeleteConfirmation() {
-		return showConfirmation(Messages.common_delete, Messages.common_confirmdelete);
+		return showConfirmation(Messages.common_delete.replace("&", ""), Messages.common_confirmdelete);
 	}
 
 	public static String getStackTrace(Throwable aThrowable) {
