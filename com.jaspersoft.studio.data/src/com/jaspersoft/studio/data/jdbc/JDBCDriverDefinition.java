@@ -29,16 +29,16 @@ public class JDBCDriverDefinition implements Comparable<JDBCDriverDefinition> {
     private String dbName = "";
     private String driverName = "";
     private String defaultDBName = "MYDATABASE";
-    private String defaultServer = "MYSERVER";
+    private String defaultServer = "localhost";
 
     public JDBCDriverDefinition(String dbName, String driverName, String urlPattern)
     {
-        this(dbName, driverName, urlPattern, "MYDATABASE", "MYSERVER");
+        this(dbName, driverName, urlPattern, "MYDATABASE", "localhost");
     }
 
     public JDBCDriverDefinition(String dbName, String driverName, String urlPattern, String defaultDBName)
     {
-        this(dbName, driverName, urlPattern, defaultDBName, "MYSERVER");
+        this(dbName, driverName, urlPattern, defaultDBName, "localhost");
     }
     public JDBCDriverDefinition(String dbName, String driverName, String urlPattern, String defaultDBName, String defaultServer)
     {

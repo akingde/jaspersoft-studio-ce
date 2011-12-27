@@ -24,6 +24,7 @@ import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -56,7 +57,11 @@ public class JDBCDataAdapterComposite extends Composite {
 
 	private JDBCDriverDefinition currentdriver = null;
 
-	private static JDBCDriverDefinition[] definitions = new JDBCDriverDefinition[] {
+	public final static JDBCDriverDefinition[] definitions = new JDBCDriverDefinition[] {
+			new JDBCDriverDefinition("HSQLDB (server)", //$NON-NLS-1$
+					"org.hsqldb.jdbcDriver", "jdbc:hsqldb:hsql://{0}"), //$NON-NLS-1$ //$NON-NLS-2$
+			new JDBCDriverDefinition("HSQLDB (file)", "org.hsqldb.jdbcDriver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:hsqldb:[PATH_TO_DB_FILES]/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("Cloudscape", "COM.cloudscape.JDBCDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:cloudscape:/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("IBM DB2", //$NON-NLS-1$
@@ -67,10 +72,6 @@ public class JDBCDataAdapterComposite extends Composite {
 					"jdbc:informix-sqli://{0}:informixserver={1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("Ingres", "com.ingres.jdbc.IngresDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:ingres://{0}:II7/{1}"), //$NON-NLS-1$
-			new JDBCDriverDefinition("HSQLDB (file)", "org.hsqldb.jdbcDriver", //$NON-NLS-1$ //$NON-NLS-2$
-					"jdbc:hsqldb:[PATH_TO_DB_FILES]/{1}"), //$NON-NLS-1$
-			new JDBCDriverDefinition("HSQLDB (server)", //$NON-NLS-1$
-					"org.hsqldb.jdbcDriver", "jdbc:hsqldb:hsql://{0}"), //$NON-NLS-1$ //$NON-NLS-2$
 			new JDBCDriverDefinition("JDBC-ODBC Bridge", //$NON-NLS-1$
 					"sun.jdbc.odbc.JdbcOdbcDriver", "jdbc:odbc:{1}", "DSNAME"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			new JDBCDriverDefinition("JDBC-ODBC Bridge", //$NON-NLS-1$
@@ -104,7 +105,10 @@ public class JDBCDataAdapterComposite extends Composite {
 					"com.sybase.jdbc2.jdbc.SybDriver", //$NON-NLS-1$
 					"jdbc:sybase:Tds:{0}:2638/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("Vertica", "com.vertica.Driver", //$NON-NLS-1$ //$NON-NLS-2$
-					"jdbc:vertica://{0}:5433/{1}") }; //$NON-NLS-1$
+					"jdbc:vertica://{0}:5433/{1}"),
+			new JDBCDriverDefinition(
+					"Hadoop Hive", "org.apache.hadoop.hive.jdbc.HiveDriver", //$NON-NLS-1$ //$NON-NLS-2$
+					"jdbc:hive://{0}:10000/default", "default", "localhost") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	private ClasspathComponent cpath;
 	private PropertiesComponent cproperties;
 
@@ -119,7 +123,7 @@ public class JDBCDataAdapterComposite extends Composite {
 		setLayout(new GridLayout(3, false));
 
 		createPreWidgets(this);
-		
+
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
@@ -156,29 +160,31 @@ public class JDBCDataAdapterComposite extends Composite {
 			comboJDBCDriver.add(definitions[i]);
 		}
 
-		comboJDBCDriver
-				.addSelectionChangedListener(new ISelectionChangedListener() {
+		ISelectionChangedListener listener = new ISelectionChangedListener() {
 
-					public void selectionChanged(SelectionChangedEvent event) {
-						if (comboJDBCDriver.getCombo().getSelectionIndex() >= 0) {
-							currentdriver = definitions[comboJDBCDriver
-									.getCombo().getSelectionIndex()];
-							comboJDBCDriver.getCombo().setText(
-									currentdriver.getDriverName());
-							btnWizardActionPerformed();
-						} else {
-							currentdriver = null;
-						}
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (comboJDBCDriver.getCombo().getSelectionIndex() >= 0) {
+					currentdriver = definitions[comboJDBCDriver.getCombo()
+							.getSelectionIndex()];
+					comboJDBCDriver.getCombo().setText(
+							currentdriver.getDriverName());
+					btnWizardActionPerformed();
+				} else {
+					currentdriver = null;
+				}
 
-					}
+			}
 
-				});
+		};
+		comboJDBCDriver.addSelectionChangedListener(listener);
+		comboJDBCDriver.setSelection(new StructuredSelection(definitions[0]));
+		listener.selectionChanged(null);
 	}
 
-	protected void createPreWidgets(Composite parent){
-		
+	protected void createPreWidgets(Composite parent) {
+
 	}
-	
+
 	private void createClasspathTab(CTabFolder tabFolder) {
 		CTabItem tbtmNewItem_1 = new CTabItem(tabFolder, SWT.NONE);
 		tbtmNewItem_1.setText(Messages.JDBCDataAdapterComposite_classpath);
@@ -301,12 +307,15 @@ public class JDBCDataAdapterComposite extends Composite {
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc
 				.getDataAdapter();
 
-		String driverName = Misc.nvl(jdbcDataAdapter.getDriver(), ""); //$NON-NLS-1$
+		String driverName = Misc.nvl(jdbcDataAdapter.getDriver(),
+				"org.hsqldb.jdbcDriver"); //$NON-NLS-1$
 		comboJDBCDriver.getCombo().setText(driverName);
 
 		for (JDBCDriverDefinition d : definitions) {
-			if (d.getDriverName().equals(driverName))
+			if (d.getDriverName().equals(driverName)){
 				currentdriver = d;
+				break;
+			}
 		}
 
 		textUsername.setText(Misc.nvl(jdbcDataAdapter.getUsername(), "")); //$NON-NLS-1$
@@ -320,6 +329,9 @@ public class JDBCDataAdapterComposite extends Composite {
 
 		cpath.setClasspaths(jdbcDataAdapter.getClasspath());
 		cproperties.setProperties(jdbcDataAdapter.getProperties());
+
+		if (jdbcDataAdapter.getDriver() == null)
+			btnWizardActionPerformed();
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {

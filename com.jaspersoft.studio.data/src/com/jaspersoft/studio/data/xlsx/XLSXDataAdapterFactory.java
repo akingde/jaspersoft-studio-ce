@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.data.xlsx;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.xlsx.XlsxDataAdapterImpl;
 
 import org.eclipse.swt.graphics.Image;
@@ -58,6 +60,11 @@ public class XLSXDataAdapterFactory implements DataAdapterFactory {
 		{
 			return  Activator.getImage("icons/document-excel.png");
 		}
+		return null;
+	}
+
+	@Override
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
 		return null;
 	}
 }

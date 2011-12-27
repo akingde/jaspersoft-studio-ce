@@ -19,9 +19,11 @@
  */
 package com.jaspersoft.studio.data.jrdsprovider;
 
-import org.eclipse.swt.graphics.Image;
-
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapterImpl;
+
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -55,6 +57,11 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 		{
 			return  Activator.getImage("icons/bean-green.png");
 		}
+		return null;
+	}
+
+	@Override
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
 		return null;
 	}
 

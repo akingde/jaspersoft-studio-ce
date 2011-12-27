@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.data.json;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.json.JsonDataAdapterImpl;
 
 import org.eclipse.swt.graphics.Image;
@@ -59,6 +61,11 @@ public class JsonDataAdapterFactory implements DataAdapterFactory {
 		if (size == 16) {
 			return Activator.getImage("icons/json.png");
 		}
+		return null;
+	}
+
+	@Override
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
 		return null;
 	}
 }

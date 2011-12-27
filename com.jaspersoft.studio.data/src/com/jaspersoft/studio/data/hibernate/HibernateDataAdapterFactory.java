@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.data.hibernate;
 
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.hibernate.HibernateDataAdapterImpl;
 
 import org.eclipse.swt.graphics.Image;
@@ -59,6 +61,11 @@ public class HibernateDataAdapterFactory implements DataAdapterFactory {
 		if (size == 16) {
 			return Activator.getImage("icons/hibernate.png");
 		}
+		return null;
+	}
+
+	@Override
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
 		return null;
 	}
 }

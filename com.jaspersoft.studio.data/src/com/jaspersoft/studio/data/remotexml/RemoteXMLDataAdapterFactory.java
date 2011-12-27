@@ -19,9 +19,11 @@
  */
 package com.jaspersoft.studio.data.remotexml;
 
-import org.eclipse.swt.graphics.Image;
-
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.xml.RemoteXmlDataAdapterImpl;
+
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -58,6 +60,11 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 		{
 			return  Activator.getImage("icons/blue-document-code.png");
 		}
+		return null;
+	}
+
+	@Override
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
 		return null;
 	}
 

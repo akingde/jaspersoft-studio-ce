@@ -19,9 +19,11 @@
  */
 package com.jaspersoft.studio.data.csv;
 
-import org.eclipse.swt.graphics.Image;
-
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.csv.CsvDataAdapterImpl;
+
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -44,20 +46,23 @@ public class CSVDataAdapterFactory implements DataAdapterFactory {
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	public String getDescription() {
-		// TODO Auto-generated method stub
+	public String getDescription() { 
 		return "Use the content of a CSV file as data";
 	}
 
 	/* (non-Javadoc)
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
+	public Image getIcon(int size) { 
 		if (size == 16)
 		{
 			return  Activator.getImage("icons/document-excel-csv.png");
 		}
+		return null;
+	}
+
+	@Override
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
 		return null;
 	}
 

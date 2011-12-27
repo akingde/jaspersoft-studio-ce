@@ -18,3 +18,5 @@ Bundle-ClassPath: lib/mondrian-3.1.1.12687.jar,
  lib/rex-20080421.jar,
  lib/log4j-1.2.15.jar,
  .
+Export-Package: com.jaspersoft.studio.data.jdbc,
+ com.jaspersoft.studio.data.messages

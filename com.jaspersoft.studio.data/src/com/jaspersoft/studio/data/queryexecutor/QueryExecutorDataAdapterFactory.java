@@ -19,9 +19,11 @@
  */
 package com.jaspersoft.studio.data.queryexecutor;
 
-import org.eclipse.swt.graphics.Image;
-
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.qe.QueryExecuterDataAdapterImpl;
+
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -54,6 +56,11 @@ public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 		{
 			return  Activator.getImage("icons/receipt.png");
 		}
+		return null;
+	}
+
+	@Override
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
 		return null;
 	}
 }

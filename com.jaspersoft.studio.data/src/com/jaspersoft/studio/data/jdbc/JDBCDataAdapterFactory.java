@@ -19,55 +19,73 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
-import org.eclipse.swt.graphics.Image;
-
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
+
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
+
 /*
  * @author gtoffoli
  *
  */
 public class JDBCDataAdapterFactory implements DataAdapterFactory {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#createDataAdapter()
 	 */
 	public DataAdapterDescriptor createDataAdapter() {
 		return new JDBCDataAdapterDescriptor();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
 	 */
 	public String getDataAdapterClassName() {
 		return JdbcDataAdapterImpl.class.getName();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getLabel() {
 		return "Database JDBC Connection";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
 		return "Use SQL queries to get data from a database";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
 	public Image getIcon(int size) {
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/database.png");
+		if (size == 16) {
+			return Activator.getImage("icons/database.png");
 		}
+		return null;
+	}
+
+	@Override
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}
 

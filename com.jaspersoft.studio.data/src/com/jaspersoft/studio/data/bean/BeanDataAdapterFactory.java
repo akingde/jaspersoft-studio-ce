@@ -19,9 +19,11 @@
  */
 package com.jaspersoft.studio.data.bean;
 
-import org.eclipse.swt.graphics.Image;
-
+import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.bean.BeanDataAdapterImpl;
+
+import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -56,6 +58,11 @@ public class BeanDataAdapterFactory implements DataAdapterFactory {
 		{
 			return  Activator.getImage("icons/beans.png");
 		}
+		return null;
+	}
+
+	@Override
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}
 }

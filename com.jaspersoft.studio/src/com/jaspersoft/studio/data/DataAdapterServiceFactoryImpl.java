@@ -21,45 +21,38 @@ package com.jaspersoft.studio.data;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.DataAdapterServiceFactory;
-import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
-
-import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterService;
-
+import net.sf.jasperreports.data.DefaultDataAdapterServiceFactory;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  * @version $Id: JRBaseBand.java 4319 2011-05-17 09:22:14Z teodord $
  */
-public class DataAdapterServiceFactoryImpl implements DataAdapterServiceFactory
-{
-    
+public class DataAdapterServiceFactoryImpl extends DefaultDataAdapterServiceFactory {
+
 	/**
 	 *
 	 */
 	private static final DataAdapterServiceFactoryImpl INSTANCE = new DataAdapterServiceFactoryImpl();
-	
+
 	/**
 	 *
 	 */
-	public static DataAdapterServiceFactoryImpl getInstance()
-	{
+	public static DataAdapterServiceFactoryImpl getInstance() {
 		return INSTANCE;
 	}
-	
+
 	/**
 	 *
 	 */
-	public DataAdapterService getDataAdapterService(DataAdapter dataAdapter)
-	{
+	public DataAdapterService getDataAdapterService(DataAdapter dataAdapter) {
 		DataAdapterService dataAdapterService = null;
-		
-		if (dataAdapter instanceof JdbcDataAdapter)
-		{
-			dataAdapterService = new JDBCDataAdapterService((JdbcDataAdapter)dataAdapter);
-		}
-		
+
+		DataAdapterFactory daf = DataAdapterManager.findFactoryByDataAdapterClass(dataAdapter.getClass().getName());
+		if (daf != null)
+			dataAdapterService = daf.createDataAdapterService(dataAdapter);
+		if (daf == null)
+			return super.getDataAdapterService(dataAdapter);
 		return dataAdapterService;
 	}
-  
+
 }
