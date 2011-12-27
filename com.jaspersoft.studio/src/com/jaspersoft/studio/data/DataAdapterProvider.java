@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.data;
 
@@ -38,14 +34,17 @@ import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
 import com.jaspersoft.studio.data.actions.DeleteDataAdapterAction;
 import com.jaspersoft.studio.data.actions.DuplicateDataAdapterAction;
 import com.jaspersoft.studio.data.actions.EditDataAdapterAction;
+import com.jaspersoft.studio.data.actions.ExportDataAdapterAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
+import com.jaspersoft.studio.repository.actions.Separator;
 
 public class DataAdapterProvider implements IRepositoryViewProvider {
 	private CreateDataAdapterAction createDataAdapterItemAction;
 	private EditDataAdapterAction editDataAdapterItemAction;
 	private DeleteDataAdapterAction deleteDataAdapterItemAction;
 	private DuplicateDataAdapterAction duplicateDataAdapterItemAction;
+	private ExportDataAdapterAction exportDataAdapterItemAction;
 
 	public Action[] getActions(TreeViewer treeViewer) {
 		createActions(treeViewer);
@@ -61,6 +60,9 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 			deleteDataAdapterItemAction = new DeleteDataAdapterAction(treeViewer);
 		if (duplicateDataAdapterItemAction == null)
 			duplicateDataAdapterItemAction = new DuplicateDataAdapterAction(treeViewer);
+
+		if (exportDataAdapterItemAction == null)
+			exportDataAdapterItemAction = new ExportDataAdapterAction(treeViewer);
 	}
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
@@ -78,6 +80,11 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 
 			if (deleteDataAdapterItemAction.isEnabled())
 				lst.add(deleteDataAdapterItemAction);
+
+			lst.add(new Separator());
+			
+			if (exportDataAdapterItemAction.isEnabled())
+				lst.add(exportDataAdapterItemAction);
 		}
 		return lst;
 	}

@@ -56,7 +56,7 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 		layout.marginHeight = 0;
 		composite.setLayout(layout);
 		try {
-			Browser browser = new Browser(composite, SWT.NONE);
+			browser = new Browser(composite, SWT.NONE);
 			browser.setLayoutData(new GridData(GridData.FILL_BOTH));
 			rptviewer = new ReportViewer();
 		} catch (Error e) {
@@ -77,7 +77,7 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 	private ReportViewer rptviewer;
 
 	public void setJRPRint(JasperPrint jrprint) throws Exception {
-		if (this.jrprint == null || this.jrprint != jrprint) {
+		if (this.jrprint != jrprint) {
 			rptviewer.setDocument(jrprint);
 
 			tmpFile = File.createTempFile("report", getExtension(), getTmpPath());

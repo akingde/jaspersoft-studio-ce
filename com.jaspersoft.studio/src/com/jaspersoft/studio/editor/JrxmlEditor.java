@@ -344,6 +344,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public void doSaveAs() {
 		SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
+		saveAsDialog.setOriginalFile(((FileEditorInput)getEditorInput()).getFile());
 		saveAsDialog.open();
 		IPath path = saveAsDialog.getResult();
 		if (path != null) {
