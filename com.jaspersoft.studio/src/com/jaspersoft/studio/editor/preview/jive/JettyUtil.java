@@ -31,8 +31,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.HandlerList;
-import org.mortbay.jetty.handler.ResourceHandler;
+import org.mortbay.jetty.handler.ContextHandlerCollection;
+import org.mortbay.jetty.handler.HandlerCollection;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
@@ -44,43 +44,47 @@ public final class JettyUtil {
 	private static Server server;
 	private static Map<IProject, List<Handler>> hmap = new HashMap<IProject, List<Handler>>();
 	private static int port = 8888;
+	private static ContextHandlerCollection contextHandlerCollection;
 
 	public static void startJetty(IProject project) {
-		if (server == null) {
-			server = new Server(port);
-			HandlerList handlerList = new HandlerList();
-			server.setHandler(handlerList);
-		}
-		if (hmap.get(project) == null) {
-			try {
-				server.stop();
+		try {
+			if (server == null) {
+				server = new Server(port);
+				HandlerCollection hc = new HandlerCollection();
+				contextHandlerCollection = new ContextHandlerCollection();
+				hc.setHandlers(new Handler[] { contextHandlerCollection });
+				server.setHandler(hc);
+
+				server.start();
+
+			}
+			if (hmap.get(project) == null) {
+
+				// server.stop();
 
 				List<Handler> handlers = createContext(project);
 				hmap.put(project, handlers);
-				for (Handler h : handlers)
-					((HandlerList) server.getHandler()).addHandler(h);
-
-				server.start();
-			} catch (Exception e) {
-				throw new JRRuntimeException(e);
+				for (Handler h : handlers) {
+					contextHandlerCollection.addHandler(h);
+					h.start();
+				}
 			}
+		} catch (Exception e) {
+			throw new JRRuntimeException(e);
 		}
-
 	}
 
-	public static String getURL(IFile file) {
+	public static String getURL(IFile file, String uuid) {
 		String ctxName = file.getProject().getName();
 
-		return String.format("http://localhost:%d/%s/servlets/report?%s=%s", port, ctxName,
-				ReportServlet.REQUEST_PARAMETER_REPORT_JRXML, file.getProjectRelativePath().toString());
+		return String.format("http://localhost:%d/%s/servlets/report?%s=%s&%s=%s", port, ctxName,
+				ReportServlet.REQUEST_PARAMETER_REPORT_JRXML, file.getProjectRelativePath().toString(),
+				SReportServlet.PRM_JSSContext, uuid);
 	}
 
 	private static List<Handler> createContext(IProject project) {
 		List<Handler> handlers = new ArrayList<Handler>();
-		// ResourceHandler resourceHandler = new ResourceHandler();
-		// resourceHandler.setWelcomeFiles(new String[] { "index.html" });
 		String waFolder = project.getLocation().toOSString() + "/";
-		// resourceHandler.setResourceBase(waFolder);
 
 		Context context = new Context(Context.SESSIONS);
 		context.setContextPath("/" + project.getName());
@@ -88,9 +92,15 @@ public final class JettyUtil {
 
 		context.addServlet(new ServletHolder(DiagnosticServlet.class), "/servlets/diag");
 
-		context.addServlet(new ServletHolder(SResourceServlet.class), "/images/*");
-		context.addServlet(new ServletHolder(SResourceServlet.class), "/jquery/*");
-		context.addServlet(new ServletHolder(SResourceServlet.class), "/jasperreports/*");
+		ServletHolder rs = new ServletHolder(SResourceServlet.class);
+		rs.setInitParameter("cacheControl", "max-age=0,public");
+		context.addServlet(rs, "/images/*");
+		rs = new ServletHolder(SResourceServlet.class);
+		rs.setInitParameter("cacheControl", "max-age=0,public");
+		context.addServlet(rs, "/jquery/*");
+		rs = new ServletHolder(SResourceServlet.class);
+		rs.setInitParameter("cacheControl", "max-age=0,public");
+		context.addServlet(rs, "/jasperreports/*");
 
 		ServletHolder reportServletHolder = new ServletHolder(SReportServlet.class);
 		reportServletHolder.setInitParameter("repository.root", waFolder);
@@ -99,7 +109,6 @@ public final class JettyUtil {
 		context.addServlet(new ServletHolder(ImageServlet.class), "/servlets/image");
 		context.addServlet(new ServletHolder(ResourceServlet.class), ResourceServlet.DEFAULT_PATH);
 
-		// handlers.add(resourceHandler);
 		handlers.add(context);
 		return handlers;
 	}

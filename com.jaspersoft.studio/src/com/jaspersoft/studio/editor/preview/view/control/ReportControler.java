@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
@@ -267,9 +268,10 @@ public class ReportControler {
 					prm.put(SReportServlet.PRM_JRPARAMETERS, jasperParameters);
 					prm.put(SReportServlet.PRM_JASPERREPORT, jasperReport);
 
-					Context.putContext(SReportServlet.PRM_JSSContext, prm);
+					UUID randomUUID = UUID.randomUUID();
+					Context.putContext(randomUUID.toString(), prm);
 
-					String url = JettyUtil.getURL(file);
+					String url = JettyUtil.getURL(file, randomUUID.toString());
 					pcontainer.getJiveViewer().setURL(url);
 				} catch (Exception e) {
 					UIUtils.showError(e);

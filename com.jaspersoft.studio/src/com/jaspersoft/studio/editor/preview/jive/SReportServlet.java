@@ -19,7 +19,7 @@ import net.sf.jasperreports.web.servlets.ReportServlet;
 
 public class SReportServlet extends ReportServlet {
 	public static String PRM_JSSContext = "jss.context";
-	public static String PRM_JRPARAMETERS = "prm.INPUTPARAMETERS";
+	public static String PRM_JRPARAMETERS = "prm.in";
 	public static String PRM_JASPERREPORT = "jasperreport";
 
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -28,7 +28,7 @@ public class SReportServlet extends ReportServlet {
 	public void runReport(HttpServletRequest request, WebReportContext webReportContext) throws JRException {
 		Map<String, Object> prm = webReportContext.getParameterValues();
 
-		Map<String, Object> cprm = Context.getContext(PRM_JSSContext);
+		Map<String, Object> cprm = Context.getContext(request.getParameter(PRM_JSSContext));
 		if (cprm != null) {
 
 			Object das = cprm.get(PRM_JRPARAMETERS);
