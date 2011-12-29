@@ -77,16 +77,20 @@ public final class JettyUtil {
 
 	private static List<Handler> createContext(IProject project) {
 		List<Handler> handlers = new ArrayList<Handler>();
-		ResourceHandler resourceHandler = new ResourceHandler();
-		resourceHandler.setWelcomeFiles(new String[] { "index.html" });
+		// ResourceHandler resourceHandler = new ResourceHandler();
+		// resourceHandler.setWelcomeFiles(new String[] { "index.html" });
 		String waFolder = project.getLocation().toOSString() + "/";
-		resourceHandler.setResourceBase(waFolder);
+		// resourceHandler.setResourceBase(waFolder);
 
 		Context context = new Context(Context.SESSIONS);
 		context.setContextPath("/" + project.getName());
 		context.setClassLoader(ReportPreviewUtil.createProjectClassLoader(project));
 
 		context.addServlet(new ServletHolder(DiagnosticServlet.class), "/servlets/diag");
+
+		context.addServlet(new ServletHolder(SResourceServlet.class), "/images/*");
+		context.addServlet(new ServletHolder(SResourceServlet.class), "/jquery/*");
+		context.addServlet(new ServletHolder(SResourceServlet.class), "/jasperreports/*");
 
 		ServletHolder reportServletHolder = new ServletHolder(SReportServlet.class);
 		reportServletHolder.setInitParameter("repository.root", waFolder);
@@ -95,7 +99,7 @@ public final class JettyUtil {
 		context.addServlet(new ServletHolder(ImageServlet.class), "/servlets/image");
 		context.addServlet(new ServletHolder(ResourceServlet.class), ResourceServlet.DEFAULT_PATH);
 
-		handlers.add(resourceHandler);
+		// handlers.add(resourceHandler);
 		handlers.add(context);
 		return handlers;
 	}

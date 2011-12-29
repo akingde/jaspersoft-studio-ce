@@ -263,8 +263,6 @@ public class ReportControler {
 			public void run() {
 				try {
 					Map<String, Object> prm = new HashMap<String, Object>();
-					DataAdapter dataAdapter = pcontainer.getDataAdapterDesc().getDataAdapter();
-					DataAdapterService dataAdapterService = DataAdapterServiceUtil.getDataAdapterService(dataAdapter);
 
 					prm.put(SReportServlet.PRM_JRPARAMETERS, jasperParameters);
 					prm.put(SReportServlet.PRM_JASPERREPORT, jasperReport);
