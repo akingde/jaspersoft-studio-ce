@@ -72,7 +72,7 @@ public final class JettyUtil {
 		String ctxName = file.getProject().getName();
 
 		return String.format("http://localhost:%d/%s/servlets/report?%s=%s", port, ctxName,
-				ReportServlet.REQUEST_PARAMETER_REPORT_URI, file.getProjectRelativePath().toString());
+				ReportServlet.REQUEST_PARAMETER_REPORT_JRXML, file.getProjectRelativePath().toString());
 	}
 
 	private static List<Handler> createContext(IProject project) {
@@ -88,7 +88,7 @@ public final class JettyUtil {
 
 		context.addServlet(new ServletHolder(DiagnosticServlet.class), "/servlets/diag");
 
-		ServletHolder reportServletHolder = new ServletHolder(ReportServlet.class);
+		ServletHolder reportServletHolder = new ServletHolder(SReportServlet.class);
 		reportServletHolder.setInitParameter("repository.root", waFolder);
 		context.addServlet(reportServletHolder, "/servlets/report");
 

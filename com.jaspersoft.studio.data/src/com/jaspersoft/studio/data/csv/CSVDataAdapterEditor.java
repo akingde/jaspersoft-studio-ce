@@ -30,7 +30,7 @@ public class CSVDataAdapterEditor implements DataAdapterEditor {
 	CSVDataAdapterComposite composite = null;
 
 	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
-		if (dataAdapter instanceof CSVDataAdapterDescriptor) {
+		if (composite != null && dataAdapter instanceof CSVDataAdapterDescriptor) {
 			this.composite.setDataAdapter((CSVDataAdapterDescriptor)dataAdapter);
 		}
 	}

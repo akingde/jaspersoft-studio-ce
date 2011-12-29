@@ -64,7 +64,9 @@ import com.jaspersoft.studio.editor.preview.input.LocaleInput;
 import com.jaspersoft.studio.editor.preview.input.NumericInput;
 import com.jaspersoft.studio.editor.preview.input.TextInput;
 import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
+import com.jaspersoft.studio.editor.preview.jive.Context;
 import com.jaspersoft.studio.editor.preview.jive.JettyUtil;
+import com.jaspersoft.studio.editor.preview.jive.SReportServlet;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
@@ -217,10 +219,10 @@ public class ReportControler {
 						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;
 
-						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE))
-							runJive(pcontainer, file);
-						else {
-
+						if (pcontainer.getMode().equals(RunStopAction.MODERUN_JIVE)) {
+							setupDataAdapter(pcontainer);
+							runJive(pcontainer, file, jasperReport);
+						} else {
 							setupVirtualizer(jd, ph);
 
 							dataAdapterService = setupDataAdapter(pcontainer);
@@ -254,12 +256,21 @@ public class ReportControler {
 		job.schedule();
 	}
 
-	protected void runJive(final PreviewContainer pcontainer, final IFile file) {
+	protected void runJive(final PreviewContainer pcontainer, final IFile file, final JasperReport jasperReport) {
 		JettyUtil.startJetty(file.getProject());
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
 				try {
+					Map<String, Object> prm = new HashMap<String, Object>();
+					DataAdapter dataAdapter = pcontainer.getDataAdapterDesc().getDataAdapter();
+					DataAdapterService dataAdapterService = DataAdapterServiceUtil.getDataAdapterService(dataAdapter);
+
+					prm.put(SReportServlet.PRM_JRPARAMETERS, jasperParameters);
+					prm.put(SReportServlet.PRM_JASPERREPORT, jasperReport);
+
+					Context.putContext(SReportServlet.PRM_JSSContext, prm);
+
 					String url = JettyUtil.getURL(file);
 					pcontainer.getJiveViewer().setURL(url);
 				} catch (Exception e) {

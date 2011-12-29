@@ -21,6 +21,7 @@ package com.jaspersoft.studio.data;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -165,6 +166,10 @@ public class DataAdapterManager {
 		saveDataAdapters();
 	}
 
+	public static String toDataAdapterFile(DataAdapterDescriptor dataAdapter) {
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + dataAdapter.toXml();
+	}
+
 	/**
 	 * Calling this method will force saving the list of adapters in the Eclipse preferences
 	 */
@@ -202,9 +207,7 @@ public class DataAdapterManager {
 		String xml = prefs.get("dataAdapters", null); //$NON-NLS-1$
 
 		if (xml != null) {
-
 			try {
-
 				Document document = JRXmlUtils.parse(new InputSource(new StringReader(xml)));
 
 				NodeList adapterNodes = document.getDocumentElement().getChildNodes();// .getElementsByTagName("dataAdapter");
@@ -226,7 +229,7 @@ public class DataAdapterManager {
 									.log(
 											new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
 													Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
-							return;
+							continue;
 						}
 
 						DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
@@ -240,7 +243,6 @@ public class DataAdapterManager {
 						dataAdapters.add(dataAdapterDescriptor);
 					}
 				}
-
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
@@ -298,6 +300,32 @@ public class DataAdapterManager {
 		for (DataAdapterDescriptor dataAdapter : getDataAdapters()) {
 			if (dataAdapter.getName().equals(name))
 				return dataAdapter;
+		}
+		return null;
+	}
+
+	public static DataAdapterDescriptor readDataADapter(InputStream in) {
+		try {
+			Document document = JRXmlUtils.parse(in);
+			String adapterClassName = document.getDocumentElement().getAttribute("class");
+			DataAdapterFactory factory = findFactoryByDataAdapterClass(adapterClassName);
+			if (factory == null) {
+				// we should at least log a warning here....
+				JaspersoftStudioPlugin
+						.getInstance()
+						.getLog()
+						.log(
+								new Status(Status.WARNING, JaspersoftStudioPlugin.getUniqueIdentifier(), Status.OK,
+										Messages.DataAdapterManager_nodataadapterfound + adapterClassName, null));
+			} else {
+				DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
+				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
+				dataAdapter = (DataAdapter) XmlUtil.read(document.getDocumentElement(), dataAdapter.getClass());
+				dataAdapterDescriptor.setDataAdapter(dataAdapter);
+				return dataAdapterDescriptor;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

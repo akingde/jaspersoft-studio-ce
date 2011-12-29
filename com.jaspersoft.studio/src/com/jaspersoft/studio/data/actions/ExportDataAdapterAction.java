@@ -56,6 +56,7 @@ import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
 import com.jaspersoft.studio.utils.UIUtils;
 
@@ -92,7 +93,7 @@ public class ExportDataAdapterAction extends Action {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MDataAdapter) {
 				SaveAsDialog saveAsDialog = new SaveAsDialog(Display.getDefault().getActiveShell());
-				saveAsDialog.setOriginalName(((MDataAdapter) obj).getDataAdapter().getName() + ".xml");
+				saveAsDialog.setOriginalName(((MDataAdapter) obj).getDataAdapter().getName().replace(" ", "") + ".xml");
 				saveAsDialog.open();
 				IPath path = saveAsDialog.getResult();
 				if (path != null)
@@ -110,7 +111,7 @@ public class ExportDataAdapterAction extends Action {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						try {
 							DataAdapterDescriptor m = ((MDataAdapter) obj).getDataAdapter();
-							String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + m.toXml();
+							String xml = DataAdapterManager.toDataAdapterFile(m);
 							file.create(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, monitor);
 						} catch (Throwable e) {
 							throw new InvocationTargetException(e);

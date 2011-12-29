@@ -108,6 +108,15 @@
             id="com.jaspersoft.studio.editor.preview.PreviewContainer.jrxml"
             name="JasperReports Preview">
       </editor>
+      <editor
+            class="com.jaspersoft.studio.data.DataAdapterEditorPart"
+            default="false"
+            extensions="xml"
+            icon="icons/data_source.png"
+            id="com.jaspersoft.studio.data.DataAdapterEditorPart"
+            matchingStrategy="com.jaspersoft.studio.data.MatchDataAdapter"
+            name="DataAdapter Editor">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
