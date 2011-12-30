@@ -67,7 +67,7 @@ import com.jaspersoft.studio.editor.preview.input.TextInput;
 import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
 import com.jaspersoft.studio.editor.preview.jive.Context;
 import com.jaspersoft.studio.editor.preview.jive.JettyUtil;
-import com.jaspersoft.studio.editor.preview.jive.SReportServlet;
+import com.jaspersoft.studio.editor.preview.jive.servlet.SReportServlet;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;

@@ -1,8 +1,10 @@
-package com.jaspersoft.studio.editor.preview.jive;
+package com.jaspersoft.studio.editor.preview.jive.servlet;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.jaspersoft.studio.editor.preview.jive.Context;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRException;
@@ -28,9 +30,9 @@ public class SReportServlet extends ReportServlet {
 	public void runReport(HttpServletRequest request, WebReportContext webReportContext) throws JRException {
 		Map<String, Object> prm = webReportContext.getParameterValues();
 
-		Map<String, Object> cprm = Context.getContext(request.getParameter(PRM_JSSContext));
+		String jsskey = request.getParameter(PRM_JSSContext);
+		Map<String, Object> cprm = Context.getContext(jsskey);
 		if (cprm != null) {
-
 			Object das = cprm.get(PRM_JRPARAMETERS);
 			if (das != null)
 				prm.putAll((Map<String, Object>) das);
@@ -69,6 +71,7 @@ public class SReportServlet extends ReportServlet {
 
 				webReportContext.setParameterValue(WebReportContext.REPORT_CONTEXT_PARAMETER_JASPER_PRINT, jasperPrint);
 			}
+			Context.unsetContext(jsskey);
 		} else
 			super.runReport(request, webReportContext);
 	}

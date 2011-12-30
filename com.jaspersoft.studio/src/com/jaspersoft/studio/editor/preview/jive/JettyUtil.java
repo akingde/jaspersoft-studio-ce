@@ -36,6 +36,9 @@ import org.mortbay.jetty.handler.HandlerCollection;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
+import com.jaspersoft.studio.editor.preview.jive.servlet.SReportServlet;
+import com.jaspersoft.studio.editor.preview.jive.servlet.SResourceServlet;
+
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  * @version $Id: JasperDesignPreviewView.java 27 2009-11-11 12:40:27Z teodord $
