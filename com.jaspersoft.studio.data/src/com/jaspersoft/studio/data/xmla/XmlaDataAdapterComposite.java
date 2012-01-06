@@ -19,8 +19,11 @@
  */
 package com.jaspersoft.studio.data.xmla;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xmla.XmlaDataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -38,13 +41,12 @@ import rex.graphics.datasourcetree.elements.CubeElement;
 import rex.graphics.datasourcetree.elements.DataSourceTreeElement;
 import rex.metadata.ServerMetadata;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.messages.Messages;
-import com.jaspersoft.studio.utils.Misc;
 
-public class XmlaDataAdapterComposite extends Composite {
+public class XmlaDataAdapterComposite extends ADataAdapterComposite {
 
-	private XmlaDataAdapterDescriptor hbmDataAdapterDesc = null;
 	private Text xmlaUri;
 	private Text textUsername;
 	private Text textPassword;
@@ -66,22 +68,22 @@ public class XmlaDataAdapterComposite extends Composite {
 		setLayout(new GridLayout(3, false));
 
 		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setText("XML/A Server URL");
+		lblNewLabel.setText(Messages.XmlaDataAdapterComposite_0);
 
 		xmlaUri = new Text(this, SWT.BORDER);
 		xmlaUri.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button bGetMetadata = new Button(this, SWT.PUSH);
-		bGetMetadata.setText("Get Metadata");
+		bGetMetadata.setText(Messages.XmlaDataAdapterComposite_1);
 
-		new Label(this, SWT.NONE).setText("Datasource");
+		new Label(this, SWT.NONE).setText(Messages.XmlaDataAdapterComposite_2);
 		datasource = new Combo(this, SWT.READ_ONLY | SWT.BORDER);
 		datasource.setItems(new String[] {});
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		datasource.setLayoutData(gd);
 
-		new Label(this, SWT.NONE).setText("Catalog");
+		new Label(this, SWT.NONE).setText(Messages.XmlaDataAdapterComposite_3);
 		catalog = new Combo(this, SWT.READ_ONLY | SWT.BORDER);
 		catalog.setItems(new String[] {});
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -92,7 +94,7 @@ public class XmlaDataAdapterComposite extends Composite {
 		gd.horizontalSpan = 3;
 		new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(gd);
 
-		new Label(this, SWT.NONE).setText("Cube");
+		new Label(this, SWT.NONE).setText(Messages.XmlaDataAdapterComposite_4);
 
 		cube = new Combo(this, SWT.READ_ONLY | SWT.BORDER);
 		cube.setItems(new String[] {});
@@ -156,30 +158,30 @@ public class XmlaDataAdapterComposite extends Composite {
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
-	public void setDataAdapter(XmlaDataAdapterDescriptor dataAdapter) {
-		this.hbmDataAdapterDesc = dataAdapter;
-
-		XmlaDataAdapter xmlDataAdapter = hbmDataAdapterDesc.getDataAdapter();
-
-		xmlaUri.setText(Misc.nvl(xmlDataAdapter.getXmlaUrl(), ""));
-		datasource.setText(Misc.nvl(xmlDataAdapter.getDatasource(), ""));
-
-		catalog.setText(Misc.nvl(xmlDataAdapter.getCatalog(), ""));
-		cube.setText(Misc.nvl(xmlDataAdapter.getCube(), ""));
-
-		textUsername.setText(Misc.nvl(xmlDataAdapter.getUsername(), ""));
-		textPassword.setText(Misc.nvl(xmlDataAdapter.getPassword(), ""));
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		bindingContext.bindValue(
+				SWTObservables.observeText(xmlaUri, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "xmlaUrl")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(datasource),
+				PojoObservables.observeValue(dataAdapter, "datasource")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(catalog),
+				PojoObservables.observeValue(dataAdapter, "catalog")); //$NON-NLS-1$
+		bindingContext.bindValue(SWTObservables.observeSelection(cube),
+				PojoObservables.observeValue(dataAdapter, "cube")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(textUsername, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(textPassword, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
-		if (hbmDataAdapterDesc == null)
-			hbmDataAdapterDesc = new XmlaDataAdapterDescriptor();
+		if (dataAdapterDesc == null)
+			dataAdapterDesc = new XmlaDataAdapterDescriptor();
 
-		XmlaDataAdapter dataAdapter = hbmDataAdapterDesc.getDataAdapter();
+		XmlaDataAdapter dataAdapter = (XmlaDataAdapter) dataAdapterDesc
+				.getDataAdapter();
 
 		dataAdapter.setXmlaUrl(xmlaUri.getText());
 		dataAdapter.setDatasource(datasource.getText());
@@ -189,11 +191,7 @@ public class XmlaDataAdapterComposite extends Composite {
 		dataAdapter.setUsername(textUsername.getText());
 		dataAdapter.setPassword(textPassword.getText());
 
-		return hbmDataAdapterDesc;
-	}
-
-	public String getHelpContextId() {
-		return "";
+		return dataAdapterDesc;
 	}
 
 	protected void handleDatasourceChanged() {

@@ -22,8 +22,12 @@ package com.jaspersoft.studio.data.xml;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 
+import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -40,15 +44,19 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.jface.dialogs.LocaleDialog;
 import com.jaspersoft.studio.jface.dialogs.TimeZoneDialog;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
-import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.swt.binding.LocaleToStringConverter;
+import com.jaspersoft.studio.swt.binding.String2LocaleConverter;
+import com.jaspersoft.studio.swt.binding.String2TimeZoneConverter;
+import com.jaspersoft.studio.swt.binding.TimeZone2StringConverter;
 
-public class XMLDataAdapterComposite extends Composite {
-	
-	private XMLDataAdapterDescriptor xmlDataAdapterDesc = null;
+public class XMLDataAdapterComposite extends ADataAdapterComposite {
+
 	private Button btnRadioButtonUseXpath = null;
 	private Button btnRadioButtonCreateDataAdapter = null;
 	private Text textFileName;
@@ -63,129 +71,152 @@ public class XMLDataAdapterComposite extends Composite {
 
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
 	public XMLDataAdapterComposite(Composite parent, int style) {
-		
+
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
-		
+
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
+				1, 1));
 		GridLayout gl_composite = new GridLayout(3, false);
 		gl_composite.marginWidth = 0;
 		gl_composite.marginHeight = 0;
 		composite.setLayout(gl_composite);
-		
+
 		Label lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel.setText("XML File" + " :");
-		
+		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblNewLabel.setText(Messages.XMLDataAdapterComposite_0);
+
 		textFileName = new Text(composite, SWT.BORDER);
-		textFileName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+		textFileName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+
 		Button btnBrowse = new Button(composite, SWT.NONE);
-		GridData gd_btnBrowse = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnBrowse = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
 		gd_btnBrowse.widthHint = 100;
 		btnBrowse.setLayoutData(gd_btnBrowse);
-		btnBrowse.setText("Browse");
-		
+		btnBrowse.setText(Messages.XMLDataAdapterComposite_1);
+
 		Composite composite_1 = new Composite(this, SWT.NONE);
-		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));
-		
+
 		btnRadioButtonUseXpath = new Button(composite_1, SWT.RADIO);
-		btnRadioButtonUseXpath.setText("Use the report Xpath expression when filling the report");
-		
+		btnRadioButtonUseXpath.setText(Messages.XMLDataAdapterComposite_2);
+
 		btnRadioButtonCreateDataAdapter = new Button(composite_1, SWT.RADIO);
-		btnRadioButtonCreateDataAdapter.setText("Create datasource using this expression" + " :");
+		btnRadioButtonCreateDataAdapter
+				.setText(Messages.XMLDataAdapterComposite_3);
 		btnRadioButtonCreateDataAdapter.setSelection(true);
-		
+
 		Composite composite_2 = new Composite(composite_1, SWT.NONE);
 		GridLayout gl_composite_2 = new GridLayout(2, false);
 		gl_composite_2.marginWidth = 0;
 		gl_composite_2.marginHeight = 0;
 		composite_2.setLayout(gl_composite_2);
-		
+
 		Label lblNewLabel_1 = new Label(composite_2, SWT.NONE);
-		lblNewLabel_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel_1.setText("Select Expression" + " :");
-		
+		lblNewLabel_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblNewLabel_1.setText(Messages.XMLDataAdapterComposite_4);
+
 		textSelectExpression = new Text(composite_2, SWT.BORDER);
-		textSelectExpression.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+		textSelectExpression.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
+
 		@SuppressWarnings("unused")
 		Label separator = new Label(composite_1, SWT.SEPARATOR | SWT.HORIZONTAL);
-		
+
 		Composite composite_3 = new Composite(this, SWT.NONE);
-		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
 		GridLayout gl_composite_3 = new GridLayout(3, false);
 		gl_composite_3.marginWidth = 0;
 		gl_composite_3.marginHeight = 0;
 		composite_3.setLayout(gl_composite_3);
-		
+
 		Label lblNewLabel_2 = new Label(composite_3, SWT.NONE);
-		lblNewLabel_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel_2.setText("Date pattern" + " :");
-		
+		lblNewLabel_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblNewLabel_2.setText(Messages.XMLDataAdapterComposite_5);
+
 		textDatePattern = new Text(composite_3, SWT.BORDER);
-		textDatePattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+		textDatePattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+
 		Button btnCreateDatePattern = new Button(composite_3, SWT.NONE);
-		GridData gd_btnCreateDatePattern = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnCreateDatePattern = new GridData(SWT.LEFT, SWT.CENTER,
+				false, false, 1, 1);
 		gd_btnCreateDatePattern.widthHint = 100;
 		btnCreateDatePattern.setLayoutData(gd_btnCreateDatePattern);
-		btnCreateDatePattern.setText("Create");
-		
+		btnCreateDatePattern.setText(Messages.XMLDataAdapterComposite_6);
+
 		Label lblNewLabel_3 = new Label(composite_3, SWT.NONE);
-		lblNewLabel_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel_3.setText("Number pattern" + " :");
-		
+		lblNewLabel_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblNewLabel_3.setText(Messages.XMLDataAdapterComposite_7);
+
 		textNumberPattern = new Text(composite_3, SWT.BORDER);
-		textNumberPattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+		textNumberPattern.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, false, 1, 1));
+
 		Button btnCreateNumberPattern = new Button(composite_3, SWT.NONE);
-		GridData gd_btnCreateNumberPattern = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnCreateNumberPattern = new GridData(SWT.LEFT, SWT.CENTER,
+				false, false, 1, 1);
 		gd_btnCreateNumberPattern.widthHint = 100;
 		btnCreateNumberPattern.setLayoutData(gd_btnCreateNumberPattern);
-		btnCreateNumberPattern.setText("Create");
-		
+		btnCreateNumberPattern.setText(Messages.XMLDataAdapterComposite_8);
+
 		Group grpLocaleTime = new Group(this, SWT.SHADOW_NONE);
-		grpLocaleTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		grpLocaleTime.setText("Locale" + " / " + "Time zone");
+		grpLocaleTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
+		grpLocaleTime.setText(Messages.XMLDataAdapterComposite_9);
 		GridLayout gl_grpLocaleTime = new GridLayout(3, false);
 		gl_grpLocaleTime.marginWidth = 0;
 		gl_grpLocaleTime.marginHeight = 0;
 		grpLocaleTime.setLayout(gl_grpLocaleTime);
-		
+
 		Label lblNewLabel_4 = new Label(grpLocaleTime, SWT.NONE);
-		lblNewLabel_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel_4.setText("Locale" + " :");
-		
+		lblNewLabel_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblNewLabel_4.setText(Messages.XMLDataAdapterComposite_10);
+
 		textLocale = new Text(grpLocaleTime, SWT.BORDER);
-		textLocale.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		textLocale.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
 		textLocale.setEnabled(false);
-		
+
 		Button btnSelectLocale = new Button(grpLocaleTime, SWT.NONE);
-		GridData gd_btnSelectLocale = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnSelectLocale = new GridData(SWT.LEFT, SWT.CENTER, false,
+				false, 1, 1);
 		gd_btnSelectLocale.widthHint = 100;
 		btnSelectLocale.setLayoutData(gd_btnSelectLocale);
-		btnSelectLocale.setText("Select" + "...");
-		
+		btnSelectLocale.setText(Messages.XMLDataAdapterComposite_11);
+
 		Label lblNewLabel_5 = new Label(grpLocaleTime, SWT.NONE);
-		lblNewLabel_5.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel_5.setText("Time zone" + " :");
-		
+		lblNewLabel_5.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
+		lblNewLabel_5.setText(Messages.XMLDataAdapterComposite_12);
+
 		textTimeZone = new Text(grpLocaleTime, SWT.BORDER);
-		textTimeZone.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		textTimeZone.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false, 1, 1));
 		textTimeZone.setEnabled(false);
-		
+
 		Button btnSelectTimeZone = new Button(grpLocaleTime, SWT.NONE);
-		GridData gd_btnSelectTimeZone = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnSelectTimeZone = new GridData(SWT.LEFT, SWT.CENTER,
+				false, false, 1, 1);
 		gd_btnSelectTimeZone.widthHint = 100;
 		btnSelectTimeZone.setLayoutData(gd_btnSelectTimeZone);
-		btnSelectTimeZone.setText("Select" + "...");
+		btnSelectTimeZone.setText(Messages.XMLDataAdapterComposite_13);
 
 		// UI elements listener
 		btnRadioButtonUseXpath.addSelectionListener(new SelectionAdapter() {
@@ -195,27 +226,29 @@ public class XMLDataAdapterComposite extends Composite {
 				useConnection = false;
 			}
 		});
-		
-		btnRadioButtonCreateDataAdapter.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				textSelectExpression.setEnabled(true);
-				useConnection = true;
-			}
-		});
-		
+
+		btnRadioButtonCreateDataAdapter
+				.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						textSelectExpression.setEnabled(true);
+						useConnection = true;
+					}
+				});
+
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(Display.getDefault().getActiveShell());
+				FileDialog fd = new FileDialog(Display.getDefault()
+						.getActiveShell());
 				fd.setFileName(textFileName.getText());
-				fd.setFilterExtensions(new String[]{"*.xml","*.*"});
+				fd.setFilterExtensions(new String[] { "*.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
 				if (selection != null)
 					textFileName.setText(selection);
 			}
 		});
-		
+
 		btnCreateDatePattern.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -231,7 +264,7 @@ public class XMLDataAdapterComposite extends Composite {
 				}
 			}
 		});
-		
+
 		btnCreateNumberPattern.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -247,29 +280,30 @@ public class XMLDataAdapterComposite extends Composite {
 				}
 			}
 		});
-		
+
 		btnSelectLocale.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				LocaleDialog localeDialog = new LocaleDialog(getShell(), locale);
 				localeDialog.create();
-				
+
 				if (localeDialog.open() == Dialog.OK) {
 					locale = localeDialog.getLocale();
 					textLocale.setText(locale.getDisplayName());
 				}
 			}
 		});
-		
+
 		btnSelectTimeZone.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				TimeZoneDialog timeZoneDialog = new TimeZoneDialog(getShell(), timeZone);
+				TimeZoneDialog timeZoneDialog = new TimeZoneDialog(getShell(),
+						timeZone);
 				timeZoneDialog.create();
-				
+
 				if (timeZoneDialog.open() == Dialog.OK) {
 					timeZone = timeZoneDialog.getTimeZone();
-					if(timeZone != null) {
+					if (timeZone != null) {
 						textTimeZone.setText(timeZone.getID());
 					}
 				}
@@ -278,17 +312,42 @@ public class XMLDataAdapterComposite extends Composite {
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		XmlDataAdapter xmlDataAdapter = (XmlDataAdapter) dataAdapter;
 
-	public void setDataAdapter(XMLDataAdapterDescriptor dataAdapter) 
-	{
-		this.xmlDataAdapterDesc = dataAdapter;
-		
-		XmlDataAdapter xmlDataAdapter = (XmlDataAdapter)xmlDataAdapterDesc.getDataAdapter();
-		
-		textFileName.setText(Misc.nvl( xmlDataAdapter.getFileName(),""));
+		bindingContext.bindValue(
+				SWTObservables.observeText(textFileName, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "fileName")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(textSelectExpression, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "selectExpression")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(textDatePattern, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "datePattern")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(textNumberPattern, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "numberPattern")); //$NON-NLS-1$
+
+		bindingContext.bindValue(SWTObservables
+				.observeSelection(btnRadioButtonCreateDataAdapter),
+				PojoObservables.observeValue(dataAdapter, "useConnection")); //$NON-NLS-1$
+
+		bindingContext
+				.bindValue(
+						SWTObservables.observeText(textLocale, SWT.Modify),
+						PojoObservables.observeValue(dataAdapter, "locale"), new UpdateValueStrategy() //$NON-NLS-1$
+								.setConverter(new String2LocaleConverter()),
+						new UpdateValueStrategy()
+								.setConverter(new LocaleToStringConverter()));
+
+		bindingContext
+				.bindValue(
+						SWTObservables.observeText(textTimeZone, SWT.Modify),
+						PojoObservables.observeValue(dataAdapter, "timeZone"), new UpdateValueStrategy() //$NON-NLS-1$
+								.setConverter(new String2TimeZoneConverter()),
+						new UpdateValueStrategy()
+								.setConverter(new TimeZone2StringConverter()));
+
 		if (xmlDataAdapter.isUseConnection()) {
 			useConnection = true;
 			btnRadioButtonCreateDataAdapter.setSelection(true);
@@ -300,47 +359,45 @@ public class XMLDataAdapterComposite extends Composite {
 			btnRadioButtonCreateDataAdapter.setSelection(false);
 			textSelectExpression.setEnabled(false);
 		}
-		textSelectExpression.setText(Misc.nvl(xmlDataAdapter.getSelectExpression(),""));
-		
-		textDatePattern.setText( Misc.nvl(xmlDataAdapter.getDatePattern(), "") );
-		textNumberPattern.setText( Misc.nvl(xmlDataAdapter.getNumberPattern(), "") );
-		
+
 		locale = xmlDataAdapter.getLocale();
 		if (locale != null) {
 			textLocale.setText(locale.getDisplayName());
 		} else {
-			textLocale.setText("Default" + " ( " + Locale.getDefault().getDisplayName() + " )");
+			textLocale.setText(Messages.RemoteXMLDataAdapterComposite_15
+					+ Locale.getDefault().getDisplayName()
+					+ Messages.RemoteXMLDataAdapterComposite_16);
 			locale = Locale.getDefault();
 		}
-		
+
 		timeZone = xmlDataAdapter.getTimeZone();
 		if (timeZone != null) {
 			textTimeZone.setText(timeZone.getID());
 		} else {
-			textTimeZone.setText("Default" + " ( " + TimeZone.getDefault().getID() + " )");
+			textTimeZone.setText(Messages.RemoteXMLDataAdapterComposite_15
+					+ TimeZone.getDefault().getID()
+					+ Messages.RemoteXMLDataAdapterComposite_16);
 			timeZone = TimeZone.getDefault();
 		}
 	}
 
-	public DataAdapterDescriptor getDataAdapter() 
-	{
-		if (xmlDataAdapterDesc == null) xmlDataAdapterDesc = new XMLDataAdapterDescriptor();
-		
-		XmlDataAdapter xmlDataAdapter = (XmlDataAdapter)xmlDataAdapterDesc.getDataAdapter();
-		
+	public DataAdapterDescriptor getDataAdapter() {
+		if (dataAdapterDesc == null)
+			dataAdapterDesc = new XMLDataAdapterDescriptor();
+
+		XmlDataAdapter xmlDataAdapter = (XmlDataAdapter) dataAdapterDesc
+				.getDataAdapter();
+
 		xmlDataAdapter.setFileName(textFileName.getText());
 		xmlDataAdapter.setUseConnection(useConnection);
 		xmlDataAdapter.setSelectExpression(textSelectExpression.getText());
-		
+
 		xmlDataAdapter.setDatePattern(textDatePattern.getText());
 		xmlDataAdapter.setNumberPattern(textNumberPattern.getText());
 		xmlDataAdapter.setLocale(locale);
 		xmlDataAdapter.setTimeZone(timeZone);
-		
-		return xmlDataAdapterDesc;
+
+		return dataAdapterDesc;
 	}
 
-	public String getHelpContextId() {
-		return "";
-	}
 }

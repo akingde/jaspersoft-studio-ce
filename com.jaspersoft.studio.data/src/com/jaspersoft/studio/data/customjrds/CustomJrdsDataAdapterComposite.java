@@ -19,25 +19,27 @@
  */
 package com.jaspersoft.studio.data.customjrds;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.ds.DataSourceDataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.swt.widgets.ClassType;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
-import com.jaspersoft.studio.utils.Misc;
 
-public class CustomJrdsDataAdapterComposite extends Composite {
+public class CustomJrdsDataAdapterComposite extends ADataAdapterComposite {
 
-	private CustomJrdsDataAdapterDescriptor customJrdsDataAdapterDesc = null;
-	private Text textFactoryClass;
+	private ClassType textFactoryClass;
 	private Text textMethodToCall;
 	private ClasspathComponent cpath;
 
@@ -56,21 +58,18 @@ public class CustomJrdsDataAdapterComposite extends Composite {
 		setLayout(new GridLayout(2, false));
 
 		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setText("Factory Class:");
+		lblNewLabel.setText(Messages.CustomJrdsDataAdapterComposite_0);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		lblNewLabel.setLayoutData(gd);
 
-		textFactoryClass = new Text(this, SWT.BORDER);
-		textFactoryClass.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
-		textFactoryClass.setLayoutData(gd);
+		textFactoryClass = new ClassType(this,
+				Messages.CustomJrdsDataAdapterComposite_1);
+		textFactoryClass
+				.setClassType(Messages.CustomJrdsDataAdapterComposite_2);
 
 		Label lblNewLabel_1 = new Label(this, SWT.NONE);
-		lblNewLabel_1
-				.setText("The called static method to retrieve the JRDataSource:");
+		lblNewLabel_1.setText(Messages.CustomJrdsDataAdapterComposite_3);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		lblNewLabel_1.setLayoutData(gd);
@@ -81,26 +80,6 @@ public class CustomJrdsDataAdapterComposite extends Composite {
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		textMethodToCall.setLayoutData(gd);
-		/*
-		 * UI ELEMENTS LISTENERS
-		 */
-		textFactoryClass.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				((DataSourceDataAdapter) customJrdsDataAdapterDesc
-						.getDataAdapter()).setFactoryClass(textFactoryClass
-						.getText().trim());
-			}
-		});
-
-		textMethodToCall.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				((DataSourceDataAdapter) customJrdsDataAdapterDesc
-						.getDataAdapter()).setMethodToCall(textMethodToCall
-						.getText().trim());
-			}
-		});
 
 		cpath = new ClasspathComponent(this);
 		gd = new GridData(GridData.FILL_BOTH);
@@ -109,41 +88,33 @@ public class CustomJrdsDataAdapterComposite extends Composite {
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		bindingContext.bindValue(SWTObservables.observeText(
+				textFactoryClass.getControl(), SWT.Modify), PojoObservables
+				.observeValue(dataAdapter, "factoryClass")); //$NON-NLS-1$
 
-	public void setDataAdapter(CustomJrdsDataAdapterDescriptor dataAdapterDesc) {
-		customJrdsDataAdapterDesc = dataAdapterDesc;
+		bindingContext.bindValue(
+				SWTObservables.observeText(textMethodToCall, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "methodToCall")); //$NON-NLS-1$
 
-		DataSourceDataAdapter dsDataAdapter = (DataSourceDataAdapter) customJrdsDataAdapterDesc
-				.getDataAdapter();
+		DataSourceDataAdapter dsDataAdapter = (DataSourceDataAdapter) dataAdapter;
 
-		textFactoryClass.setText(Misc.nvl(dsDataAdapter.getFactoryClass(),
-				"com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory"));
-		textMethodToCall.setText(Misc.nvl(dsDataAdapter.getMethodToCall(),
-				"createDatasource"));
 		cpath.setClasspaths(dsDataAdapter.getClasspath());
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
-		if (customJrdsDataAdapterDesc == null) {
-			customJrdsDataAdapterDesc = new CustomJrdsDataAdapterDescriptor();
+		if (dataAdapterDesc == null) {
+			dataAdapterDesc = new CustomJrdsDataAdapterDescriptor();
 		}
 
-		DataSourceDataAdapter dsDataAdapter = (DataSourceDataAdapter) customJrdsDataAdapterDesc
+		DataSourceDataAdapter dsDataAdapter = (DataSourceDataAdapter) dataAdapterDesc
 				.getDataAdapter();
 
-		dsDataAdapter.setFactoryClass(textFactoryClass.getText().trim());
+		dsDataAdapter.setFactoryClass(textFactoryClass.getClassType().trim());
 		dsDataAdapter.setMethodToCall(textMethodToCall.getText().trim());
 
 		dsDataAdapter.setClasspath(cpath.getClasspaths());
 
-		return customJrdsDataAdapterDesc;
-	}
-
-	public String getHelpContextId() {
-		// TODO Auto-generated method stub
-		return null;
+		return dataAdapterDesc;
 	}
 }

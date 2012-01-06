@@ -19,8 +19,11 @@
  */
 package com.jaspersoft.studio.data.hibernate.spring;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.hibernate.spring.SpringHibernateDataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,12 +36,12 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.data.messages.Messages;
 
-public class SpringHibernateDataAdapterComposite extends Composite {
+public class SpringHibernateDataAdapterComposite extends ADataAdapterComposite {
 
-	private SpringHibernateDataAdapterDescriptor hbmDADesc = null;
 	private Text springConfig;
 	private Text beanIDtxt;
 
@@ -62,13 +65,13 @@ public class SpringHibernateDataAdapterComposite extends Composite {
 		composite.setLayout(gl_composite);
 
 		Label lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setText("Spring Configuration:");
+		lblNewLabel.setText(Messages.SpringHibernateDataAdapterComposite_0);
 
 		springConfig = new Text(composite, SWT.BORDER);
 		springConfig.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button btnBrowse = new Button(composite, SWT.NONE);
-		btnBrowse.setText("...");
+		btnBrowse.setText(Messages.SpringHibernateDataAdapterComposite_1);
 
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -76,7 +79,7 @@ public class SpringHibernateDataAdapterComposite extends Composite {
 				FileDialog fd = new FileDialog(Display.getDefault()
 						.getActiveShell());
 				fd.setFileName(springConfig.getText());
-				fd.setFilterExtensions(new String[] { "*.cfg.xml", "*.*" });
+				fd.setFilterExtensions(new String[] { "*.cfg.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
 				if (selection != null)
 					springConfig.setText(selection);
@@ -84,7 +87,7 @@ public class SpringHibernateDataAdapterComposite extends Composite {
 		});
 
 		lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setText("Session Factory Bean ID:");
+		lblNewLabel.setText(Messages.SpringHibernateDataAdapterComposite_4);
 
 		beanIDtxt = new Text(composite, SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -94,33 +97,26 @@ public class SpringHibernateDataAdapterComposite extends Composite {
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
-	public void setDataAdapter(SpringHibernateDataAdapterDescriptor dataAdapter) {
-		this.hbmDADesc = dataAdapter;
-
-		SpringHibernateDataAdapter xmlDataAdapter = hbmDADesc.getDataAdapter();
-
-		springConfig.setText(Misc.nvl(xmlDataAdapter.getSpringConfig(), ""));
-		beanIDtxt.setText(Misc.nvl(xmlDataAdapter.getBeanId(), ""));
-
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		bindingContext.bindValue(
+				SWTObservables.observeText(springConfig, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "springConfig")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(beanIDtxt, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "beanId")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
-		if (hbmDADesc == null)
-			hbmDADesc = new SpringHibernateDataAdapterDescriptor();
+		if (dataAdapterDesc == null)
+			dataAdapterDesc = new SpringHibernateDataAdapterDescriptor();
 
-		SpringHibernateDataAdapter dataAdapter = hbmDADesc.getDataAdapter();
+		SpringHibernateDataAdapter dataAdapter = (SpringHibernateDataAdapter) dataAdapterDesc
+				.getDataAdapter();
 
 		dataAdapter.setSpringConfig(springConfig.getText());
 		dataAdapter.setBeanId(beanIDtxt.getText());
 
-		return hbmDADesc;
+		return dataAdapterDesc;
 	}
 
-	public String getHelpContextId() {
-		return "";
-	}
 }

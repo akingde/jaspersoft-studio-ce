@@ -22,6 +22,7 @@ package com.jaspersoft.studio.data.mondrian;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterEditor;
 
@@ -38,7 +39,7 @@ public class MondrianDataAdapterEditor extends JDBCDataAdapterEditor {
 	 * com.jaspersoft.studio.data.DataAdapterEditor#getComposite(org.eclipse
 	 * .swt.widgets.Composite, int)
 	 */
-	public Composite getComposite(Composite parent, int style,
+	public ADataAdapterComposite getComposite(Composite parent, int style,
 			WizardPage wizardPage) {
 		if (composite == null || composite.getParent() != parent) {
 			if (composite != null)

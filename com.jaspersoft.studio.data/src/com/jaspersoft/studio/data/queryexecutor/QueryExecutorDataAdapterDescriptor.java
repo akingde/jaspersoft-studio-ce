@@ -31,10 +31,9 @@ import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class QueryExecutorDataAdapterDescriptor extends DataAdapterDescriptor 
-{
+public class QueryExecutorDataAdapterDescriptor extends DataAdapterDescriptor {
 	private QueryExecuterDataAdapter queryExecuterDataAdapter = new QueryExecuterDataAdapterImpl();
-	
+
 	@Override
 	public DataAdapter getDataAdapter() {
 		return queryExecuterDataAdapter;
@@ -42,25 +41,24 @@ public class QueryExecutorDataAdapterDescriptor extends DataAdapterDescriptor
 
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.queryExecuterDataAdapter = (QueryExecuterDataAdapter)dataAdapter;
+		this.queryExecuterDataAdapter = (QueryExecuterDataAdapter) dataAdapter;
 	}
 
 	@Override
 	public ImageDescriptor getIcon16() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/QueryExecutorDataAdapterIcon-16.gif");
+		return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
+				"icons/QueryExecutorDataAdapterIcon-16.gif");
 	}
-	
+
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new QueryExecutorDataAdapterEditor();
 	}
-	
+
 	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/receipt.png");
+		if (size == 16) {
+			return Activator.getImage("icons/receipt.png");
 		}
 		return null;
 	}

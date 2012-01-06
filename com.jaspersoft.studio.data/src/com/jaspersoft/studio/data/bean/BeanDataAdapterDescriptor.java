@@ -30,10 +30,16 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
 public class BeanDataAdapterDescriptor extends DataAdapterDescriptor {
-	private BeanDataAdapter beanDataAdapter = new BeanDataAdapterImpl();
+	private BeanDataAdapter beanDataAdapter;
 
 	@Override
-	public DataAdapter getDataAdapter() {
+	public BeanDataAdapter getDataAdapter() {
+		if (beanDataAdapter == null) {
+			beanDataAdapter = new BeanDataAdapterImpl();
+			beanDataAdapter
+					.setFactoryClass("com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory");
+			beanDataAdapter.setMethodName("createBeanCollection");
+		}
 		return beanDataAdapter;
 	}
 
@@ -42,20 +48,20 @@ public class BeanDataAdapterDescriptor extends DataAdapterDescriptor {
 		this.beanDataAdapter = (BeanDataAdapter) dataAdapter;
 	}
 
-	
 	@Override
 	public DataAdapterEditor getEditor() {
 		return new BeanDataAdapterEditor();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
 	@Override
 	public Image getIcon(int size) {
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/beans.png");
+		if (size == 16) {
+			return Activator.getImage("icons/beans.png");
 		}
 		return null;
 	}

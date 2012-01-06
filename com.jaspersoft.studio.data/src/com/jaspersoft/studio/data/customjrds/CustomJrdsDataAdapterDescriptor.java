@@ -29,19 +29,23 @@ import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
-public class CustomJrdsDataAdapterDescriptor extends DataAdapterDescriptor 
-{
-	
+public class CustomJrdsDataAdapterDescriptor extends DataAdapterDescriptor {
+
 	private DataSourceDataAdapter dsDataAdapter = new DataSourceDataAdapterImpl();
-	
+
 	@Override
 	public DataAdapter getDataAdapter() {
+		if (dsDataAdapter == null) {
+			dsDataAdapter = new DataSourceDataAdapterImpl();
+			dsDataAdapter
+					.setFactoryClass("com.jaspersoft.studio.data.sample.SampleJRDataSourceFactory");
+		}
 		return dsDataAdapter;
 	}
 
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
-		dsDataAdapter = (DataSourceDataAdapter)dataAdapter;
+		dsDataAdapter = (DataSourceDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -49,15 +53,15 @@ public class CustomJrdsDataAdapterDescriptor extends DataAdapterDescriptor
 		return new CustomJrdsDataAdapterEditor();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
 	@Override
 	public Image getIcon(int size) {
-		// TODO Auto-generated method stub
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/bean-green.png");
+		if (size == 16) {
+			return Activator.getImage("icons/bean-green.png");
 		}
 		return null;
 	}

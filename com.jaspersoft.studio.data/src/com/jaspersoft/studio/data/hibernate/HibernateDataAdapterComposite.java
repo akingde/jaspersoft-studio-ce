@@ -19,8 +19,11 @@
  */
 package com.jaspersoft.studio.data.hibernate;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.hibernate.HibernateDataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,12 +36,12 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.data.messages.Messages;
 
-public class HibernateDataAdapterComposite extends Composite {
+public class HibernateDataAdapterComposite extends ADataAdapterComposite {
 
-	private HibernateDataAdapterDescriptor hbmDataAdapterDesc = null;
 	private Text xmlFileName;
 	private Text propFileName;
 	private Button btnUseAnnotation;
@@ -63,13 +66,13 @@ public class HibernateDataAdapterComposite extends Composite {
 		composite.setLayout(gl_composite);
 
 		Label lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setText("Hibernate (.cfg.xml) File:");
+		lblNewLabel.setText(Messages.HibernateDataAdapterComposite_0);
 
 		xmlFileName = new Text(composite, SWT.BORDER);
 		xmlFileName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button btnBrowse = new Button(composite, SWT.NONE);
-		btnBrowse.setText("...");
+		btnBrowse.setText(Messages.HibernateDataAdapterComposite_1);
 
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -77,7 +80,7 @@ public class HibernateDataAdapterComposite extends Composite {
 				FileDialog fd = new FileDialog(Display.getDefault()
 						.getActiveShell());
 				fd.setFileName(xmlFileName.getText());
-				fd.setFilterExtensions(new String[] { "*.cfg.xml", "*.*" });
+				fd.setFilterExtensions(new String[] { "*.cfg.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
 				if (selection != null)
 					xmlFileName.setText(selection);
@@ -85,13 +88,13 @@ public class HibernateDataAdapterComposite extends Composite {
 		});
 
 		lblNewLabel = new Label(composite, SWT.NONE);
-		lblNewLabel.setText("hibernate.properties File:");
+		lblNewLabel.setText(Messages.HibernateDataAdapterComposite_4);
 
 		propFileName = new Text(composite, SWT.BORDER);
 		propFileName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		btnBrowse = new Button(composite, SWT.PUSH);
-		btnBrowse.setText("...");
+		btnBrowse.setText(Messages.HibernateDataAdapterComposite_5);
 
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -99,7 +102,7 @@ public class HibernateDataAdapterComposite extends Composite {
 				FileDialog fd = new FileDialog(Display.getDefault()
 						.getActiveShell());
 				fd.setFileName(xmlFileName.getText());
-				fd.setFilterExtensions(new String[] { "*.properties", "*.*" });
+				fd.setFilterExtensions(new String[] { "*.properties", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
 				if (selection != null)
 					propFileName.setText(selection);
@@ -107,42 +110,37 @@ public class HibernateDataAdapterComposite extends Composite {
 		});
 
 		btnUseAnnotation = new Button(composite, SWT.CHECK);
-		btnUseAnnotation.setText("Use Annotation");
+		btnUseAnnotation.setText(Messages.HibernateDataAdapterComposite_8);
 
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
-	public void setDataAdapter(HibernateDataAdapterDescriptor dataAdapter) {
-		this.hbmDataAdapterDesc = dataAdapter;
-
-		HibernateDataAdapter xmlDataAdapter = hbmDataAdapterDesc
-				.getDataAdapter();
-
-		xmlFileName.setText(Misc.nvl(xmlDataAdapter.getXMLFileName(), ""));
-		propFileName.setText(Misc.nvl(xmlDataAdapter.getPropertiesFileName(),
-				""));
-		btnUseAnnotation.setSelection(xmlDataAdapter.isUseAnnotation());
-
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		bindingContext.bindValue(
+				SWTObservables.observeText(xmlFileName, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "XMLFileName")); //$NON-NLS-1$
+		bindingContext
+				.bindValue(
+						SWTObservables.observeText(propFileName, SWT.Modify),
+						PojoObservables.observeValue(dataAdapter,
+								"propertiesFileName")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeSelection(btnUseAnnotation),
+				PojoObservables.observeValue(dataAdapter, "useAnnotation")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
-		if (hbmDataAdapterDesc == null)
-			hbmDataAdapterDesc = new HibernateDataAdapterDescriptor();
+		if (dataAdapterDesc == null)
+			dataAdapterDesc = new HibernateDataAdapterDescriptor();
 
-		HibernateDataAdapter dataAdapter = hbmDataAdapterDesc.getDataAdapter();
+		HibernateDataAdapter dataAdapter = (HibernateDataAdapter) dataAdapterDesc
+				.getDataAdapter();
 
 		dataAdapter.setXMLFileName(xmlFileName.getText());
 		dataAdapter.setPropertiesFileName(propFileName.getText());
 		dataAdapter.setUseAnnotation(btnUseAnnotation.getSelection());
 
-		return hbmDataAdapterDesc;
+		return dataAdapterDesc;
 	}
 
-	public String getHelpContextId() {
-		return "";
-	}
 }

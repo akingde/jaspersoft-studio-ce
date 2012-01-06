@@ -19,8 +19,11 @@
  */
 package com.jaspersoft.studio.data.mondrian;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.mondrian.MondrianDataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -34,8 +37,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterComposite;
-import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterDescriptor;
-import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.data.messages.Messages;
 
 public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 	private Text textCatalogURI;
@@ -46,13 +48,13 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 
 	@Override
 	protected void createPreWidgets(Composite parent) {
-		new Label(parent, SWT.NONE).setText("Catalog URI");
+		new Label(parent, SWT.NONE).setText(Messages.MondrianDataAdapterComposite_0);
 
 		textCatalogURI = new Text(parent, SWT.BORDER);
 		textCatalogURI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button btnBrowse = new Button(parent, SWT.NONE);
-		btnBrowse.setText("Browse");
+		btnBrowse.setText(Messages.MondrianDataAdapterComposite_1);
 
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 
@@ -61,7 +63,7 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 				FileDialog fd = new FileDialog(Display.getDefault()
 						.getActiveShell());
 				fd.setFileName(textCatalogURI.getText());
-				fd.setFilterExtensions(new String[] { "*.xml", "*.*" });
+				fd.setFilterExtensions(new String[] { "*.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
 				if (selection != null)
 					textCatalogURI.setText(selection);
@@ -70,14 +72,10 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 	}
 
 	@Override
-	public void setDataAdapter(JDBCDataAdapterDescriptor editingDataAdapter) {
-		super.setDataAdapter(editingDataAdapter);
-		dataAdapterDesc = editingDataAdapter;
-
-		MondrianDataAdapter jdbcDataAdapter = (MondrianDataAdapter) dataAdapterDesc
-				.getDataAdapter();
-
-		textCatalogURI.setText(Misc.nvl(jdbcDataAdapter.getCatalogURI(), "")); //$NON-NLS-1$
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		bindingContext.bindValue(
+				SWTObservables.observeText(textCatalogURI, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "catalogURI")); //$NON-NLS-1$
 	}
 
 	@Override

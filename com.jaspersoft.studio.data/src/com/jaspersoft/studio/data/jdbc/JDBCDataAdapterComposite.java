@@ -19,8 +19,11 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -38,14 +41,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.swt.widgets.PropertiesComponent;
 import com.jaspersoft.studio.utils.Misc;
 
-public class JDBCDataAdapterComposite extends Composite {
-	protected JDBCDataAdapterDescriptor dataAdapterDesc = null;
+public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	private Text textJDBCUrl;
 	private Text textServerAddress;
 	private Text textDatabase;
@@ -302,36 +305,47 @@ public class JDBCDataAdapterComposite extends Composite {
 	 * @param dataAdapter
 	 */
 	public void setDataAdapter(JDBCDataAdapterDescriptor editingDataAdapter) {
-		dataAdapterDesc = editingDataAdapter;
+		super.setDataAdapter(editingDataAdapter);
 
 		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc
 				.getDataAdapter();
+		if (jdbcDataAdapter.getDriver() == null)
+			btnWizardActionPerformed();
+	}
+
+	@Override
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapter;
 
 		String driverName = Misc.nvl(jdbcDataAdapter.getDriver(),
 				"org.hsqldb.jdbcDriver"); //$NON-NLS-1$
 		comboJDBCDriver.getCombo().setText(driverName);
 
 		for (JDBCDriverDefinition d : definitions) {
-			if (d.getDriverName().equals(driverName)){
+			if (d.getDriverName().equals(driverName)) {
 				currentdriver = d;
 				break;
 			}
 		}
 
-		textUsername.setText(Misc.nvl(jdbcDataAdapter.getUsername(), "")); //$NON-NLS-1$
-		textPassword.setText(Misc.nvl(jdbcDataAdapter.getPassword(), "")); //$NON-NLS-1$
-		textServerAddress.setText(Misc.nvl(jdbcDataAdapter.getServerAddress(),
-				"")); //$NON-NLS-1$
-		textDatabase.setText(Misc.nvl(jdbcDataAdapter.getDatabase(), "")); //$NON-NLS-1$
-		// btnSavePassword.setSelection(jdbcDataAdapter.isSavePassword());
-
-		textJDBCUrl.setText(Misc.nvl(jdbcDataAdapter.getUrl(), "")); //$NON-NLS-1$
+		bindingContext.bindValue(
+				SWTObservables.observeText(textUsername, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "username"));
+		bindingContext.bindValue(
+				SWTObservables.observeText(textPassword, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "password"));
+		bindingContext.bindValue(
+				SWTObservables.observeText(textServerAddress, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "serverAddress"));
+		bindingContext.bindValue(
+				SWTObservables.observeText(textDatabase, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "database"));
+		bindingContext.bindValue(
+				SWTObservables.observeText(textJDBCUrl, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "url"));
 
 		cpath.setClasspaths(jdbcDataAdapter.getClasspath());
 		cproperties.setProperties(jdbcDataAdapter.getProperties());
-
-		if (jdbcDataAdapter.getDriver() == null)
-			btnWizardActionPerformed();
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
@@ -356,7 +370,4 @@ public class JDBCDataAdapterComposite extends Composite {
 		return dataAdapterDesc;
 	}
 
-	public String getHelpContextId() {
-		return ""; //$NON-NLS-1$
-	}
 }

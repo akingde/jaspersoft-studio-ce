@@ -19,25 +19,26 @@
  */
 package com.jaspersoft.studio.data.jrdsprovider;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.provider.DataSourceProviderDataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.swt.widgets.ClassType;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
-import com.jaspersoft.studio.utils.Misc;
 
-public class JrdsProviderDataAdapterComposite extends Composite {
+public class JrdsProviderDataAdapterComposite extends ADataAdapterComposite {
 
-	private JrdsProviderDataAdapterDescriptor jrdsDADesc = null;
-	private Text textJRDSProviderClassName;
+	private ClassType factoryText;
 	private ClasspathComponent cpath;
 
 	/**
@@ -47,37 +48,19 @@ public class JrdsProviderDataAdapterComposite extends Composite {
 	 * @param style
 	 */
 	public JrdsProviderDataAdapterComposite(Composite parent, int style) {
-
-		/*
-		 * UI ELEMENTS
-		 */
 		super(parent, style);
 		setLayout(new GridLayout(2, false));
 
 		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1));
-		lblNewLabel.setText("JasperReports DataSource Provider Class Name:");
+		lblNewLabel.setText(Messages.JrdsProviderDataAdapterComposite_0);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		lblNewLabel.setLayoutData(gd);
 
-		textJRDSProviderClassName = new Text(this, SWT.BORDER);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		textJRDSProviderClassName.setLayoutData(gd);
-
-		/*
-		 * UI ELEMENTS LISTENERS
-		 */
-		textJRDSProviderClassName.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				((DataSourceProviderDataAdapter) jrdsDADesc.getDataAdapter())
-						.setProviderClass(textJRDSProviderClassName.getText()
-								.trim());
-			}
-		});
+		factoryText = new ClassType(this,
+				Messages.JrdsProviderDataAdapterComposite_1);
+		factoryText
+				.setClassType("com.jaspersoft.ireport.examples.SampleJRDataSourceFactory"); //$NON-NLS-1$
 
 		cpath = new ClasspathComponent(this);
 		gd = new GridData(GridData.FILL_BOTH);
@@ -86,35 +69,26 @@ public class JrdsProviderDataAdapterComposite extends Composite {
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		DataSourceProviderDataAdapter da = (DataSourceProviderDataAdapter) dataAdapter;
 
-	public void setDataAdapter(JrdsProviderDataAdapterDescriptor dataAdapter) {
-		jrdsDADesc = dataAdapter;
-		DataSourceProviderDataAdapter da = (DataSourceProviderDataAdapter) jrdsDADesc
-				.getDataAdapter();
-		textJRDSProviderClassName.setText(Misc.nvl(da.getProviderClass(),
-				"com.jaspersoft.studio.data.sample.PersonBeansDataSource"));
+		bindingContext.bindValue(SWTObservables.observeText(
+				factoryText.getControl(), SWT.Modify), PojoObservables
+				.observeValue(dataAdapter, "providerClass")); //$NON-NLS-1$
 
 		cpath.setClasspaths(da.getClasspath());
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
+		if (dataAdapterDesc == null)
+			dataAdapterDesc = new JrdsProviderDataAdapterDescriptor();
 
-		if (jrdsDADesc == null)
-			jrdsDADesc = new JrdsProviderDataAdapterDescriptor();
-
-		DataSourceProviderDataAdapter da = (DataSourceProviderDataAdapter) jrdsDADesc
+		DataSourceProviderDataAdapter da = (DataSourceProviderDataAdapter) dataAdapterDesc
 				.getDataAdapter();
-		da.setProviderClass(textJRDSProviderClassName.getText().trim());
+		da.setProviderClass(factoryText.getClassType().trim());
 		da.setClasspath(cpath.getClasspaths());
 
-		return jrdsDADesc;
+		return dataAdapterDesc;
 	}
 
-	public String getHelpContextId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -19,14 +19,18 @@
  */
 package com.jaspersoft.studio.data.queryexecutor;
 
+import net.sf.jasperreports.data.DataAdapter;
+
 import org.eclipse.swt.widgets.Composite;
 
-public class QueryExecutorDataAdapterComposite extends Composite {
-	
-	private QueryExecutorDataAdapterDescriptor queryExecutorDataAdapter = null;
+import com.jaspersoft.studio.data.ADataAdapterComposite;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+
+public class QueryExecutorDataAdapterComposite extends ADataAdapterComposite {
 
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
@@ -35,24 +39,14 @@ public class QueryExecutorDataAdapterComposite extends Composite {
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
+	protected void bindWidgets(DataAdapter dataAdapter) {
+
 	}
 
-	/**
-	 * Set the MyDataAdapter to edit.
-	 * The UI will be updated with the content of this adapter
-	 * @param dataAdapter
-	 */
-	public void setDataAdapter(QueryExecutorDataAdapterDescriptor queryExecutorDataAdapter) {
-		this.queryExecutorDataAdapter = queryExecutorDataAdapter;
+	public DataAdapterDescriptor getDataAdapter() {
+		if (dataAdapterDesc == null)
+			dataAdapterDesc = new QueryExecutorDataAdapterDescriptor();
+		return dataAdapterDesc;
 	}
 
-	public QueryExecutorDataAdapterDescriptor getDataAdapter() {
-		return queryExecutorDataAdapter;
-	}
-
-	public String getHelpContextId() {
-		return "";
-	}
 }

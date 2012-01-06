@@ -22,6 +22,7 @@ package com.jaspersoft.studio.data.hibernate;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 
@@ -39,7 +40,7 @@ public class HibernateDataAdapterEditor implements DataAdapterEditor {
 		return composite.getDataAdapter();
 	}
 
-	public Composite getComposite(Composite parent, int style,
+	public ADataAdapterComposite getComposite(Composite parent, int style,
 			WizardPage wizardPage) {
 		if (composite == null) {
 			composite = new HibernateDataAdapterComposite(parent, style);

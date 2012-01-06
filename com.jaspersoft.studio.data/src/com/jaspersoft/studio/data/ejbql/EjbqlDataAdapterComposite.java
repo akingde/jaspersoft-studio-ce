@@ -19,8 +19,11 @@
  */
 package com.jaspersoft.studio.data.ejbql;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.ejbql.EjbqlDataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -28,12 +31,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.data.messages.Messages;
 
-public class EjbqlDataAdapterComposite extends Composite {
+public class EjbqlDataAdapterComposite extends ADataAdapterComposite {
 
-	private EjbqlDataAdapterDescriptor ejbqlDataAdapterDesc = null;
 	private Text punitName;
 
 	/**
@@ -43,43 +46,33 @@ public class EjbqlDataAdapterComposite extends Composite {
 	 * @param style
 	 */
 	public EjbqlDataAdapterComposite(Composite parent, int style) {
-
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 
 		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setText("Persistance Unit Name");
+		lblNewLabel.setText(Messages.EjbqlDataAdapterComposite_0);
 
 		punitName = new Text(this, SWT.BORDER);
 		punitName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
-	public void setDataAdapter(EjbqlDataAdapterDescriptor dataAdapter) {
-		this.ejbqlDataAdapterDesc = dataAdapter;
-
-		EjbqlDataAdapter xmlDataAdapter = ejbqlDataAdapterDesc.getDataAdapter();
-
-		punitName
-				.setText(Misc.nvl(xmlDataAdapter.getPersistanceUnitName(), ""));
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		bindingContext.bindValue(SWTObservables.observeText(punitName,
+				SWT.Modify), PojoObservables.observeValue(dataAdapter,
+				"persistanceUnitName")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
-		if (ejbqlDataAdapterDesc == null)
-			ejbqlDataAdapterDesc = new EjbqlDataAdapterDescriptor();
+		if (dataAdapterDesc == null)
+			dataAdapterDesc = new EjbqlDataAdapterDescriptor();
 
-		EjbqlDataAdapter dataAdapter = ejbqlDataAdapterDesc.getDataAdapter();
+		EjbqlDataAdapter dataAdapter = (EjbqlDataAdapter) dataAdapterDesc
+				.getDataAdapter();
 
 		dataAdapter.setPersistanceUnitName(punitName.getText());
 
-		return ejbqlDataAdapterDesc;
+		return dataAdapterDesc;
 	}
 
-	public String getHelpContextId() {
-		return "";
-	}
 }

@@ -22,8 +22,11 @@ package com.jaspersoft.studio.data.hive;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -41,13 +44,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinition;
 import com.jaspersoft.studio.data.messages.Messages;
-import com.jaspersoft.studio.utils.Misc;
 
-public class HiveDataAdapterComposite extends Composite {
-	protected HiveDataAdapterDescriptor dataAdapterDesc = null;
+public class HiveDataAdapterComposite extends ADataAdapterComposite {
 	private Text textJDBCUrl;
 	private Text textServerAddress;
 	private Text textDatabase;
@@ -174,11 +176,13 @@ public class HiveDataAdapterComposite extends Composite {
 	 * @param dataAdapter
 	 */
 	public void setDataAdapter(HiveDataAdapterDescriptor editingDataAdapter) {
-		dataAdapterDesc = editingDataAdapter;
+		super.setDataAdapter(editingDataAdapter);
 
-		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc
-				.getDataAdapter();
+		btnWizardActionPerformed();
+	}
 
+	@Override
+	protected void bindWidgets(DataAdapter dataAdapter) {
 		String driverName = "org.apache.hadoop.hive.jdbc.HiveDriver"; //$NON-NLS-1$
 		comboJDBCDriver.getCombo().setText(driverName);
 
@@ -189,13 +193,15 @@ public class HiveDataAdapterComposite extends Composite {
 			}
 		}
 
-		textServerAddress.setText(Misc.nvl(jdbcDataAdapter.getServerAddress(),
-				"")); //$NON-NLS-1$
-		textDatabase.setText(Misc.nvl(jdbcDataAdapter.getDatabase(), "")); //$NON-NLS-1$ 
-
-		textJDBCUrl.setText(Misc.nvl(jdbcDataAdapter.getUrl(), "")); //$NON-NLS-1$
-
-		btnWizardActionPerformed();
+		bindingContext.bindValue(
+				SWTObservables.observeText(textServerAddress, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "serverAddress"));
+		bindingContext.bindValue(
+				SWTObservables.observeText(textDatabase, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "database"));
+		bindingContext.bindValue(
+				SWTObservables.observeText(textJDBCUrl, SWT.Modify),
+				PojoObservables.observeValue(dataAdapter, "url"));
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
@@ -220,7 +226,4 @@ public class HiveDataAdapterComposite extends Composite {
 		return dataAdapterDesc;
 	}
 
-	public String getHelpContextId() {
-		return ""; //$NON-NLS-1$
-	}
 }
