@@ -56,6 +56,10 @@ public class ClassType {
 		btnNewButton.setText("...");
 	}
 
+	public Text getControl() {
+		return factoryText;
+	}
+
 	public void setClassType(String classtype) {
 		factoryText.setText(Misc.nvl(classtype, ""));
 	}

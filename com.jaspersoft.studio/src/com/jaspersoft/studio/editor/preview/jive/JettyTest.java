@@ -33,19 +33,27 @@ public class JettyTest {
 			// handlerList.addHandler(context);
 
 			server.start();
+			String[] st = new String[100000];
+			for (int i = 0; i < st.length; i++) {
+				st[i] = "myhost" + i + ".com";
+			}
 
-			context = new Context(Context.SESSIONS);
-			context.setContextPath("/mytest");
+			context.setVirtualHosts(st);
 
-			context.addServlet(new ServletHolder(new DiagnosticServlet()), "/*");
-			contextHandlerCollection.addHandler(context);
-
-			context.start();
+			// context = new Context(Context.SESSIONS);
+			// context.setContextPath("/mytest");
+			//
+			// context.addServlet(new ServletHolder(new DiagnosticServlet()), "/*");
+			// contextHandlerCollection.addHandler(context);
+			//
+			// context.start();
 
 			// handlerList.addHandler(context);
 
 			// handlerList.addHandler(context);
 
+			server.start();
+			
 			server.join();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

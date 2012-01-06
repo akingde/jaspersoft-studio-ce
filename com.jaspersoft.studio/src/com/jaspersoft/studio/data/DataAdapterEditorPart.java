@@ -1,5 +1,9 @@
 package com.jaspersoft.studio.data;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
@@ -16,13 +20,13 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -32,7 +36,9 @@ import com.jaspersoft.studio.utils.UIUtils;
 
 public class DataAdapterEditorPart extends ABasicEditor {
 	private DataAdapterDescriptor descriptor;
-	private Composite composite;
+	private ModelPropertyChangeListener modelListener = new ModelPropertyChangeListener();
+	private NameComposite nameComposite;
+	private DataAdapterEditor editor;
 
 	public DataAdapterEditorPart() {
 		super(true);
@@ -41,28 +47,40 @@ public class DataAdapterEditorPart extends ABasicEditor {
 	@Override
 	protected void setInput(IEditorInput input) {
 		super.setInput(input);
-		InputStream in;
+		InputStream in = null;
 		try {
-			in = ((IFileEditorInput) getEditorInput()).getFile().getContents();
+			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+			in = file.getContents(true);
+
 			descriptor = DataAdapterManager.readDataADapter(in);
 		} catch (CoreException e) {
 			UIUtils.showError(e);
+		} finally {
+			try {
+				if (in != null)
+					in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
-		// IDocumentProvider dp = getDocumentProvider();
-		// IDocument doc = dp.getDocument(getEditorInput());
-		// doc.set(DataAdapterManager.toDataAdapterFile(descriptor));
-
 		try {
+			IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
+			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+
+			String xml = editor.getDataAdapter().toXml();
+			xml = DataAdapterManager.toDataAdapterFile(descriptor);
+
+			file.setContents(new ByteArrayInputStream(xml.getBytes()), true, true, monitor);
+
 			resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 		} catch (CoreException e) {
 			UIUtils.showError(e);
 		}
-
+		isDirty = false;
 		firePropertyChange(PROP_DIRTY);
 	}
 
@@ -90,19 +108,47 @@ public class DataAdapterEditorPart extends ABasicEditor {
 		return true;
 	}
 
+	private final class ModelPropertyChangeListener implements PropertyChangeListener {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
+		 */
+		public void propertyChange(PropertyChangeEvent evt) {
+			getSite().getWorkbenchWindow().getShell().getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					isDirty = true;
+					firePropertyChange(ISaveablePart.PROP_DIRTY);
+				}
+			});
+
+		}
+	}
+
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite c = new Composite(parent, SWT.NONE);
-		c.setLayout(new GridLayout());
+		RowLayout rowLayout = new RowLayout();
+		rowLayout.type = SWT.VERTICAL;
+		rowLayout.justify = false;
+		rowLayout.pack = true;
+		rowLayout.fill = true;
+		c.setLayout(rowLayout);
 
-		final DataAdapterEditor editor = descriptor.getEditor();
-		composite = editor.getComposite(c, SWT.NONE, null);
+		nameComposite = new NameComposite(c, SWT.NONE);
+
+		editor = descriptor.getEditor();
+		ADataAdapterComposite composite = editor.getComposite(c, SWT.NONE, null);
+
+		nameComposite.addModifyListener(modelListener);
+		composite.addModifyListener(modelListener);
 
 		editor.setDataAdapter(descriptor);
+		nameComposite.setDataAdapter(descriptor);
 
 		final Button btnTest = new Button(c, SWT.PUSH);
 		btnTest.setText("Test Connection");
-		btnTest.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
 
 		btnTest.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -132,7 +178,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 
 	@Override
 	public void setFocus() {
-		composite.setFocus();
+		nameComposite.setFocus();
 	}
 
 }

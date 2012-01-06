@@ -64,7 +64,7 @@ public interface DataAdapterEditor {
 	 * @param wizardPage can be null
 	 * @return composite
 	 */
-	public Composite getComposite(Composite parent, int style, WizardPage wizardPage);
+	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage);
 	
 	/**
 	 * This method returns the help context ID for the composite returned by getComposite()

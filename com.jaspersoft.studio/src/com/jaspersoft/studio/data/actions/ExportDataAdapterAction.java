@@ -112,7 +112,10 @@ public class ExportDataAdapterAction extends Action {
 						try {
 							DataAdapterDescriptor m = ((MDataAdapter) obj).getDataAdapter();
 							String xml = DataAdapterManager.toDataAdapterFile(m);
-							file.create(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, monitor);
+							if (file.exists())
+								file.setContents(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, true, monitor);
+							else
+								file.create(new ByteArrayInputStream(xml.getBytes("UTF-8")), true, monitor);
 						} catch (Throwable e) {
 							throw new InvocationTargetException(e);
 						} finally {
@@ -122,7 +125,7 @@ public class ExportDataAdapterAction extends Action {
 
 				});
 			} catch (InvocationTargetException e) {
-				UIUtils.showError(e);
+				UIUtils.showError(e.getCause());
 			} catch (InterruptedException e) {
 				UIUtils.showError(e);
 			}

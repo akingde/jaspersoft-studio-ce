@@ -19,8 +19,10 @@
  */
 package com.jaspersoft.studio.data.empty;
 
-import net.sf.jasperreports.data.empty.EmptyDataAdapter;
+import net.sf.jasperreports.data.DataAdapter;
 
+import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -28,13 +30,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.utils.UIUtils;
 
-public class EmptyDataAdapterComposite extends Composite {
+public class EmptyDataAdapterComposite extends ADataAdapterComposite {
 
 	private Spinner spinnerRecords;
-	private EmptyDataAdapterDescriptor emptyDataAdapterDesc = null;
 
 	/**
 	 * Create the composite.
@@ -53,37 +54,20 @@ public class EmptyDataAdapterComposite extends Composite {
 		spinnerRecords = new Spinner(this, SWT.BORDER);
 		spinnerRecords.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
 		spinnerRecords.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 	}
 
 	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
-
-	/**
-	 * Set the DataAdapter to edit. The UI will be updated with the content of this adapter
-	 * 
-	 * @param dataAdapter
-	 */
-	public void setDataAdapter(EmptyDataAdapterDescriptor dataAdapterDesc) {
-		emptyDataAdapterDesc = dataAdapterDesc;
-		EmptyDataAdapter dataAdapter = (EmptyDataAdapter) emptyDataAdapterDesc.getDataAdapter();
-		Integer records = dataAdapter.getRecordCount();
-		if (records != null) {
-			UIUtils.setSpinnerSelection(spinnerRecords, records);
-		}
+	protected void bindWidgets(DataAdapter dataAdapter) {
+		bindingContext.bindValue(SWTObservables.observeSelection(spinnerRecords),
+				PojoObservables.observeValue(dataAdapter, "recordCount"));
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
-		if (emptyDataAdapterDesc == null) {
-			emptyDataAdapterDesc = new EmptyDataAdapterDescriptor();
-		}
-		((EmptyDataAdapter) emptyDataAdapterDesc.getDataAdapter()).setRecordCount(spinnerRecords.getSelection());
-		return emptyDataAdapterDesc;
+		if (dataAdapterDesc == null)
+			dataAdapterDesc = new EmptyDataAdapterDescriptor();
+
+		((EmptyDataAdapterDescriptor) dataAdapterDesc).getDataAdapter().setRecordCount(spinnerRecords.getSelection());
+		return dataAdapterDesc;
 	}
 
-	public String getHelpContextId() {
-		return "";
-	}
 }
