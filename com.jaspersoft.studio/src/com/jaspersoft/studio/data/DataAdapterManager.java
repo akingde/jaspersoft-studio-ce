@@ -29,7 +29,6 @@ import java.util.List;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.XmlUtil;
 import net.sf.jasperreports.data.empty.EmptyDataAdapterImpl;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
 
 import org.eclipse.core.runtime.Status;
