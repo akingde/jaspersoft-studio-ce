@@ -102,7 +102,7 @@ public class DataAdapterManager {
 	 * @return
 	 */
 	public static DataAdapterFactory findFactoryByDataAdapterClass(String adapterClassName) {
-		if (adapterClassName == null)
+		if (adapterClassName == null || adapterClassName.isEmpty())
 			return null;
 
 		for (DataAdapterFactory factory : dataAdapterFactories) {
@@ -243,7 +243,7 @@ public class DataAdapterManager {
 						dataAdapters.add(dataAdapterDescriptor);
 					}
 				}
-			} catch (JRException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -308,6 +308,8 @@ public class DataAdapterManager {
 		try {
 			Document document = JRXmlUtils.parse(in);
 			String adapterClassName = document.getDocumentElement().getAttribute("class");
+			if (adapterClassName == null || adapterClassName.isEmpty())
+				return null;
 			DataAdapterFactory factory = findFactoryByDataAdapterClass(adapterClassName);
 			if (factory == null) {
 				// we should at least log a warning here....

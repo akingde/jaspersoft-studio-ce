@@ -35,6 +35,7 @@ import com.jaspersoft.studio.data.actions.DeleteDataAdapterAction;
 import com.jaspersoft.studio.data.actions.DuplicateDataAdapterAction;
 import com.jaspersoft.studio.data.actions.EditDataAdapterAction;
 import com.jaspersoft.studio.data.actions.ExportDataAdapterAction;
+import com.jaspersoft.studio.data.actions.ImportDataAdapterAction;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.repository.actions.Separator;
@@ -45,6 +46,7 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 	private DeleteDataAdapterAction deleteDataAdapterItemAction;
 	private DuplicateDataAdapterAction duplicateDataAdapterItemAction;
 	private ExportDataAdapterAction exportDataAdapterItemAction;
+	private ImportDataAdapterAction importDataAdapterItemAction;
 
 	public Action[] getActions(TreeViewer treeViewer) {
 		createActions(treeViewer);
@@ -63,6 +65,8 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 
 		if (exportDataAdapterItemAction == null)
 			exportDataAdapterItemAction = new ExportDataAdapterAction(treeViewer);
+		if (importDataAdapterItemAction == null)
+			importDataAdapterItemAction = new ImportDataAdapterAction(treeViewer);
 	}
 
 	public List<IAction> fillContextMenu(TreeViewer treeViewer, ANode node) {
@@ -82,10 +86,12 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 				lst.add(deleteDataAdapterItemAction);
 
 			lst.add(new Separator());
-			
+
 			if (exportDataAdapterItemAction.isEnabled())
 				lst.add(exportDataAdapterItemAction);
 		}
+		if (importDataAdapterItemAction.isEnabled())
+			lst.add(importDataAdapterItemAction);
 		return lst;
 	}
 

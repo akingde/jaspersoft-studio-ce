@@ -91,6 +91,7 @@ public class Messages extends NLS {
 	public static String JDBCDataAdapterComposite_serveraddress;
 	public static String JDBCDataAdapterComposite_urllabel;
 	public static String JDBCDataAdapterComposite_username;
+	public static String JndiDataAdapterComposite_0;
 	public static String JrdsProviderDataAdapterComposite_0;
 	public static String JrdsProviderDataAdapterComposite_1;
 	public static String JsonDataAdapterComposite_0;

@@ -6,6 +6,9 @@
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.empty.EmptyDataAdapterFactory"/>
          <dataAdapter ClassFactory="com.jaspersoft.studio.data.jdbc.JDBCDataAdapterFactory"/>
          <dataAdapter
+               ClassFactory="com.jaspersoft.studio.data.jndi.JndiDataAdapterFactory">
+         </dataAdapter>
+         <dataAdapter
                ClassFactory="com.jaspersoft.studio.data.mondrian.MondrianDataAdapterFactory">
          </dataAdapter>
          <dataAdapter
