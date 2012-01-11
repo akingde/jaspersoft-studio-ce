@@ -43,8 +43,8 @@ public class SReportServlet extends ReportServlet {
 			if (jasperPrint == null || Boolean.valueOf(run)) {
 				String reportUri = request.getParameter(REQUEST_PARAMETER_REPORT_URI);
 
-				webReportContext.setParameterValue(JRParameter.REPORT_FILE_RESOLVER, getFileResolver());
-				JRResourcesUtil.setThreadFileResolver(getFileResolver());
+				// webReportContext.setParameterValue(JRParameter.REPORT_FILE_RESOLVER, getFileResolver());
+				// JRResourcesUtil.setThreadFileResolver(getFileResolver());
 
 				Boolean isIgnorePagination = Boolean.valueOf(request.getParameter(REQUEST_PARAMETER_IGNORE_PAGINATION));
 				if (isIgnorePagination != null) {
@@ -53,19 +53,19 @@ public class SReportServlet extends ReportServlet {
 
 				JasperReport jasperReport = (JasperReport) cprm.get(PRM_JASPERREPORT);
 				if (jasperReport == null) {
-					String jrxml = request.getParameter(REQUEST_PARAMETER_REPORT_JRXML);
-					if (jrxml != null && jrxml.trim().length() > 0) {
-						jrxml = jrxml.trim();
-						jasperReport = JasperCompileManager.compileReport(JRXmlLoader.load(RepositoryUtil.getInputStream(jrxml)));
-					} else if (reportUri != null && reportUri.trim().length() > 0) {
-						reportUri = reportUri.trim();
-
-						jasperReport = RepositoryUtil.getReport(reportUri);
-					}
-
-					if (jasperReport == null) {
-						throw new JRException("Report not found at : " + reportUri);
-					}
+					// String jrxml = request.getParameter(REQUEST_PARAMETER_REPORT_JRXML);
+					// if (jrxml != null && jrxml.trim().length() > 0) {
+					// jrxml = jrxml.trim();
+					// jasperReport = JasperCompileManager.compileReport(JRXmlLoader.load(RepositoryUtil.getInputStream(jrxml)));
+					// } else if (reportUri != null && reportUri.trim().length() > 0) {
+					// reportUri = reportUri.trim();
+					//
+					// jasperReport = RepositoryUtil.getReport(reportUri);
+					// }
+					//
+					// if (jasperReport == null) {
+					// throw new JRException("Report not found at : " + reportUri);
+					// }
 				}
 				jasperPrint = JasperFillManager.fillReport(jasperReport, webReportContext.getParameterValues());
 

@@ -81,7 +81,7 @@ public final class JettyUtil {
 		String ctxName = file.getProject().getName();
 
 		return String.format("http://localhost:%d/%s/servlets/report?%s=%s&%s=%s", port, ctxName,
-				ReportServlet.REQUEST_PARAMETER_REPORT_JRXML, file.getProjectRelativePath().toString(),
+				ReportServlet.REQUEST_PARAMETER_REPORT_URI, file.getProjectRelativePath().toString(),
 				SReportServlet.PRM_JSSContext, uuid);
 	}
 
