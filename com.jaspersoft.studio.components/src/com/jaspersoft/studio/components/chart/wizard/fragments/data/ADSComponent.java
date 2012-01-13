@@ -176,6 +176,8 @@ public abstract class ADSComponent {
 		canvasChart = new Canvas(composite, SWT.NO_REDRAW_RESIZE
 				| SWT.NO_BACKGROUND);
 		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.heightHint = 200;
+		gd.widthHint = 250;
 		canvasChart.setLayoutData(gd);
 
 		lws = new J2DLightweightSystem();

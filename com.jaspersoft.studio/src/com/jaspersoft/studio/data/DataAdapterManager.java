@@ -101,9 +101,10 @@ public class DataAdapterManager {
 	private static Map<Object, ADataAdapterStorage> storages = new HashMap<Object, ADataAdapterStorage>();
 
 	public static ADataAdapterStorage[] getDataAdapter(IFile file) {
-		ADataAdapterStorage[] st = new ADataAdapterStorage[2];
+		ADataAdapterStorage[] st = new ADataAdapterStorage[file == null ? 1 : 2];
 		st[0] = getPreferencesStorage();
-		st[1] = getProjectStorage(file.getProject());
+		if (file != null)
+			st[1] = getProjectStorage(file.getProject());
 		return st;
 	}
 

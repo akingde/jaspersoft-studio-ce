@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.components.chart.wizard;
 
+import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -65,8 +66,11 @@ public class ChartDataPage extends WizardPage {
 
 	@Override
 	public void setVisible(boolean visible) {
-		if (visible)
+		if (visible) {
+			edataset = (JRDesignElementDataset) ((JRDesignChart) jrChart)
+					.getDataset();
 			updateData();
+		}
 		super.setVisible(visible);
 	}
 

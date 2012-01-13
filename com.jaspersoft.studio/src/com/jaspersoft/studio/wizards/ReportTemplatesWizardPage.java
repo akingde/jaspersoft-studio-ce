@@ -97,8 +97,7 @@ public class ReportTemplatesWizardPage extends WizardPage {
 		gal = new Gallery(container, SWT.VIRTUAL | SWT.V_SCROLL | SWT.BORDER);
 		final NoGroupRenderer gr = new NoGroupRenderer();
 		gr.setMinMargin(2);
-		gr.setItemHeight(GALLERY_HEIGHT);
-		gr.setItemWidth(GALLERY_WIDTH);
+		gr.setItemSize(GALLERY_WIDTH, GALLERY_HEIGHT);
 		gr.setAutoMargin(true);
 		gal.setGroupRenderer(gr);
 		DefaultGalleryItemRenderer ir = new DefaultGalleryItemRenderer();
@@ -136,8 +135,7 @@ public class ReportTemplatesWizardPage extends WizardPage {
 
 					public void run() {
 						double c = 1 + 0.1 * scale.getSelection();
-						gr.setItemHeight((int) (GALLERY_HEIGHT * c));
-						gr.setItemWidth((int) (GALLERY_WIDTH * c));
+						gr.setItemSize((int) (GALLERY_WIDTH * c), (int) (GALLERY_HEIGHT * c));
 					}
 				});
 
