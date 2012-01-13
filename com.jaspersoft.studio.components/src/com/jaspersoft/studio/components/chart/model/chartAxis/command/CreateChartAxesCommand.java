@@ -45,8 +45,8 @@ public class CreateChartAxesCommand extends Command {
 
 	private JRDesignChartAxis jrElement;
 
-	private JRDesignMultiAxisPlot jrChart;
-
+	private JRDesignMultiAxisPlot jrPlot;
+	private JRDesignChart chart;
 	private int index;
 	private JasperDesign jDesign;
 
@@ -64,8 +64,8 @@ public class CreateChartAxesCommand extends Command {
 			int newIndex) {
 		super();
 		this.jrElement = (JRDesignChartAxis) srcNode.getValue();
-		this.jrChart = (JRDesignMultiAxisPlot) ((JRDesignChart) destNode
-				.getValue()).getPlot();
+		this.chart = (JRDesignChart) destNode.getValue();
+		this.jrPlot = (JRDesignMultiAxisPlot) chart.getPlot();
 		this.index = newIndex;
 		this.jDesign = destNode.getJasperDesign();
 	}
@@ -76,7 +76,7 @@ public class CreateChartAxesCommand extends Command {
 	protected void createObject() {
 		if (jrElement == null) {
 			// here put a wizard
-			List<JRChartAxis> axes = jrChart.getAxes();
+			List<JRChartAxis> axes = jrPlot.getAxes();
 			Class<? extends JRChartPlot> chartplotclass = null;
 			if (!axes.isEmpty())
 				chartplotclass = axes.get(0).getChart().getPlot().getClass();
@@ -86,9 +86,10 @@ public class CreateChartAxesCommand extends Command {
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				byte type = wizard.getChartAxis();
-				JRDesignChart chart = (JRDesignChart) jrChart.getChart();
-				jrElement = new JRDesignChartAxis(chart);
-				jrElement.setChart(MChart.createJRElement(jDesign, type));
+				// JRDesignChart chart = (JRDesignChart) jrPlot.getChart();
+				jrElement = new JRDesignChartAxis(this.chart);
+				JRDesignChart c = MChart.createJRElement(jDesign, type);
+				jrElement.setChart(c);
 			}
 		}
 	}
@@ -102,10 +103,10 @@ public class CreateChartAxesCommand extends Command {
 	public void execute() {
 		createObject();
 		if (jrElement != null) {
-			if (index >= 0 && index < jrChart.getAxes().size())
-				jrChart.addAxis(index, jrElement);
+			if (index >= 0 && index < jrPlot.getAxes().size())
+				jrPlot.addAxis(index, jrElement);
 			else
-				jrChart.addAxis(jrElement);
+				jrPlot.addAxis(jrElement);
 		}
 	}
 
@@ -116,7 +117,7 @@ public class CreateChartAxesCommand extends Command {
 	 */
 	@Override
 	public boolean canUndo() {
-		if (jrChart == null || jrElement == null)
+		if (jrPlot == null || jrElement == null)
 			return false;
 		return true;
 	}
@@ -128,7 +129,7 @@ public class CreateChartAxesCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		jrChart.removeAxis(jrElement);
+		jrPlot.removeAxis(jrElement);
 	}
 
 }

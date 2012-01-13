@@ -83,7 +83,7 @@ public class ElementDatasetWidget {
 		final String[] ds = ModelUtils.getDataSets(jrDesign, true);
 		dsCombo.setItems(ds);
 		dsCombo.select(0);
-		if (eDataset.getDatasetRun() != null) {
+		if (eDataset != null && eDataset.getDatasetRun() != null) {
 			for (int i = 0; i < ds.length; i++) {
 				if (ds[i].equals(eDataset.getDatasetRun().getDatasetName())) {
 					dsCombo.select(i);
@@ -334,7 +334,7 @@ public class ElementDatasetWidget {
 
 	private JRDataset getJRdataset(final JRDesignElementDataset jrDataset) {
 		JRDataset jrds = jrDesign.getMainDataset();
-		if (jrDataset.getDatasetRun() != null) {
+		if (jrDataset != null && jrDataset.getDatasetRun() != null) {
 			String dsname = jrDataset.getDatasetRun().getDatasetName();
 			jrDesign.getDatasetMap().get(dsname);
 		}
@@ -431,8 +431,8 @@ public class ElementDatasetWidget {
 		dsCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY | SWT.SINGLE);
 		dsCombo.setItems(new String[] { "main dataset" });
 
-//		Button newDataset = new Button(composite, SWT.PUSH);
-//		newDataset.setText("new");
+		// Button newDataset = new Button(composite, SWT.PUSH);
+		// newDataset.setText("new");
 
 		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.HORIZONTAL
 				| SWT.WRAP | SWT.RIGHT);

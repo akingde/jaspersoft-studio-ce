@@ -98,6 +98,8 @@ public class ChartTypeWizardPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				if (e.item instanceof GalleryItem) {
 					chartType = (Byte) ((GalleryItem) e.item).getData();
+
+					getContainer().updateButtons();
 				}
 			}
 
@@ -145,6 +147,8 @@ public class ChartTypeWizardPage extends WizardPage {
 		if (chartType != old.getChartType()) {
 			old.setChartType(chartType);
 		}
+		if (chartType == JRDesignChart.CHART_TYPE_MULTI_AXIS)
+			return false;
 		return super.canFlipToNextPage();
 	}
 

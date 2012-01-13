@@ -86,8 +86,9 @@ public class ChartWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		if (page0 != null)
-			return (page0.canFlipToNextPage() && step1.isPageComplete());
+		if (page0 != null) {
+			return (page0.isPageComplete() && step1.isPageComplete());
+		}
 		return step1.isPageComplete();
 	}
 

@@ -35,20 +35,29 @@ import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.nebula.widgets.gallery.DefaultGalleryItemRenderer;
+import org.eclipse.nebula.widgets.gallery.Gallery;
+import org.eclipse.nebula.widgets.gallery.GalleryItem;
+import org.eclipse.nebula.widgets.gallery.NoGroupRenderer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Scale;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.wizard.ChartTypeWizardPage;
 
 public class ChartAxesWizardPage extends WizardPage {
+	private static final int GALLERY_HEIGHT = 100;
+	private static final int GALLERY_WIDTH = 100;
 	private byte chartAxes;
-	private Table chartTable;
+	private Scale zoomFactor;
+	private Gallery chartsGallery;
+	private GalleryItem itemGroup;
 	private Class<? extends JRChartPlot> chartPlot;
 
 	public byte getChartAxis() {
@@ -64,9 +73,9 @@ public class ChartAxesWizardPage extends WizardPage {
 
 	@Override
 	public void dispose() {
-		TableItem[] tis = chartTable.getSelection();
+		GalleryItem[] tis = chartsGallery.getSelection();
 		if (tis.length > 0) {
-			TableItem ti = tis[0];
+			GalleryItem ti = tis[0];
 			chartAxes = (Byte) ti.getData();
 		}
 		super.dispose();
@@ -79,23 +88,59 @@ public class ChartAxesWizardPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		chartTable = new Table(composite, SWT.NONE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.heightHint = 500;
-		gd.widthHint = 300;
-		chartTable.setLayoutData(gd);
-		chartTable.setHeaderVisible(false);
-		chartTable.setLinesVisible(true);
+		zoomFactor = new Scale(composite, SWT.NONE);
+		zoomFactor.setMinimum(1);
+		zoomFactor.setMaximum(50);
+		zoomFactor.setIncrement(1);
+		zoomFactor.setPageIncrement(5);
+		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		gd.widthHint = 150;
+		zoomFactor.setLayoutData(gd);
 
-		TableColumn[] column2 = new TableColumn[1];
-		column2[0] = new TableColumn(chartTable, SWT.NONE);
-		column2[0].setText(Messages.common_name);
+		chartsGallery = new Gallery(composite, SWT.VIRTUAL | SWT.V_SCROLL
+				| SWT.BORDER);
+		final NoGroupRenderer gr = new NoGroupRenderer();
+		gr.setMinMargin(2);
+		gr.setItemSize(GALLERY_WIDTH, GALLERY_HEIGHT);
+		gr.setAutoMargin(true);
+		gd = new GridData(GridData.FILL_BOTH);
+		gd.widthHint = 500;
+		chartsGallery.setLayoutData(gd);
+		chartsGallery.setGroupRenderer(gr);
+		DefaultGalleryItemRenderer ir = new DefaultGalleryItemRenderer();
+		ir.setShowLabels(true);
+		ir.setShowRoundedSelectionCorners(false);
+		ir.setSelectionForegroundColor(getShell().getDisplay().getSystemColor(
+				SWT.COLOR_BLUE));
+		chartsGallery.setItemRenderer(ir);
 
-		fillTableb4j(chartTable);
-		column2[0].pack();
+		itemGroup = new GalleryItem(chartsGallery, SWT.NONE);
+
+		fillTableb4j(chartsGallery, itemGroup);
+
+		chartsGallery.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				if (e.item instanceof GalleryItem)
+					chartAxes = (Byte) ((GalleryItem) e.item).getData();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+
+		zoomFactor.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				double c = 1 + 0.1 * zoomFactor.getSelection();
+				gr.setItemSize((int) (GALLERY_WIDTH * c),
+						(int) (GALLERY_HEIGHT * c));
+			}
+		});
 	}
 
-	private void fillTableb4j(Table table) {
+	private void fillTableb4j(Gallery table, GalleryItem rootItem) {
 		table.setRedraw(false);
 
 		for (byte ctype : plotmap.keySet()) {
@@ -103,7 +148,7 @@ public class ChartAxesWizardPage extends WizardPage {
 			// && !plotmap.get(ctype).isAssignableFrom(chartPlot))
 			// continue;
 			// hmm here we should use the same from jfreechart
-			ChartTypeWizardPage.getTableItem(ctype, table);
+			ChartTypeWizardPage.getTableItem(ctype, rootItem);
 		}
 
 		table.setRedraw(true);

@@ -115,7 +115,9 @@ public class DatasetSeriesWidget {
 	}
 
 	private void fillData() {
-		ADSComponent c = map.get(eDataset.getClass());
+		ADSComponent c = null;
+		if (eDataset != null)
+			c = map.get(eDataset.getClass());
 		if (c != null) {
 			c.setData(dv, jrChart, eDataset, sfResolver);
 			stacklayout.topControl = c.getControl();
