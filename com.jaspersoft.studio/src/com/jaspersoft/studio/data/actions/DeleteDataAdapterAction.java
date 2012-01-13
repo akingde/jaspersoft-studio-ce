@@ -47,8 +47,9 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
+import com.jaspersoft.studio.data.MDataAdapters;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class DeleteDataAdapterAction extends Action {
@@ -79,11 +80,16 @@ public class DeleteDataAdapterAction extends Action {
 
 		if (!UIUtils.showDeleteConfirmation())
 			return;
+		ADataAdapterStorage storage = null;
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MDataAdapter) {
-				DataAdapterDescriptor m = ((MDataAdapter) obj).getDataAdapter();
-				DataAdapterManager.removeDataAdapter(m);
+				MDataAdapter mDataAdapter = (MDataAdapter) obj;
+				DataAdapterDescriptor m = mDataAdapter.getDataAdapter();
+				if (storage == null)
+					storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
+				if (storage != null)
+					storage.removeDataAdapter(m);
 				treeViewer.refresh(true);
 			}
 		}

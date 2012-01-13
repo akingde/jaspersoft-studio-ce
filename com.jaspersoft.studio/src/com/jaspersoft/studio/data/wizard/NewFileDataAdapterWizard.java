@@ -116,15 +116,7 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 			java.text.MessageFormat fm = new java.text.MessageFormat(Messages.DataAdapterWizard_newdataadaptername);
 			// 1. instance a new dataAdapter using the factory
 			DataAdapterDescriptor newDataAdapter = factory.createDataAdapter();
-			for (int i = 1; i < 1000; i++) {
-				String name = fm.format(new Object[] { (i > 1) ? "(" + i + ")" : "" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-				if (DataAdapterManager.isDataAdapterNameValid(name)) {
-
-					newDataAdapter.getDataAdapter().setName(name);
-					break;
-				}
-			}
+			newDataAdapter.getDataAdapter().setName(fm.format(new Object[] { 1 }));
 
 			// 2. set in the wizard page the data adapter to edit
 			if (selectedFactory != factory) {
@@ -157,11 +149,7 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 			// ... let's update with the adapter just modified ...
 			String oldName = this.dataAdapter.getName();
 			dataAdapter.setDataAdapter(editedDataAdapter.getDataAdapter());
-			if (!oldName.equals(editedDataAdapter.getName())) {
-				if (!DataAdapterManager.isDataAdapterNameValid(editedDataAdapter.getName())) {
-					dataAdapter.getDataAdapter().setName(oldName);
-				}
-			}
+			dataAdapter.getDataAdapter().setName(oldName);
 		}
 		final String containerName = step1.getContainerFullPath().toPortableString();
 		final String fileName = step1.getFileName();

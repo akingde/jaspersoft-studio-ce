@@ -30,6 +30,7 @@ import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.preview.ABasicEditor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -52,7 +53,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 			in = file.getContents(true);
 
-			descriptor = DataAdapterManager.readDataADapter(in);
+			descriptor = FileDataAdapterStorage.readDataADapter(in);
 		} catch (CoreException e) {
 			UIUtils.showError(e);
 		} finally {
@@ -71,8 +72,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 
-			String xml = editor.getDataAdapter().toXml();
-			xml = DataAdapterManager.toDataAdapterFile(descriptor);
+			String xml = DataAdapterManager.toDataAdapterFile(descriptor);
 
 			file.setContents(new ByteArrayInputStream(xml.getBytes()), true, true, monitor);
 

@@ -67,7 +67,7 @@ public class ExtensionManager {
 			}
 		}
 
-		DataAdapterManager.loadDataAdapters();
+		DataAdapterManager.getPreferencesStorage();
 	}
 
 	public List<IRepositoryViewProvider> getRepositoryProviders() {

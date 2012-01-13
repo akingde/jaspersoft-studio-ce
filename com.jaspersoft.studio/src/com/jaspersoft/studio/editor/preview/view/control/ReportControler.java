@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
+import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 import com.jaspersoft.studio.editor.preview.input.BigNumericInput;
@@ -310,11 +311,14 @@ public class ReportControler {
 	private DataAdapterService setupDataAdapter(final PreviewContainer pcontainer) throws JRException {
 		c.addMessage("Setting connection");
 		DataAdapter dataAdapter = pcontainer.getDataAdapterDesc().getDataAdapter();
-		jasperParameters.remove(JRParameter.REPORT_CONNECTION);
-		jasperParameters.remove(JRParameter.REPORT_DATA_SOURCE);
+//		jasperParameters.remove(JRParameter.REPORT_CONNECTION);
+//		jasperParameters.remove(JRParameter.REPORT_DATA_SOURCE);
 		// We let the data adapter to contribute its parameters.
+		
+		jasperParameters.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapter);
+		
 		DataAdapterService dataAdapterService = DataAdapterServiceUtil.getDataAdapterService(dataAdapter);
-		dataAdapterService.contributeParameters(jasperParameters);
+//		dataAdapterService.contributeParameters(jasperParameters);
 		return dataAdapterService;
 	}
 

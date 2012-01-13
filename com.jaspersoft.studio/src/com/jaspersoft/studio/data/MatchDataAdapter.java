@@ -13,6 +13,8 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
+import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
+
 public class MatchDataAdapter implements IEditorMatchingStrategy {
 
 	public boolean matches(IEditorReference editorRef, IEditorInput input) {
@@ -24,7 +26,7 @@ public class MatchDataAdapter implements IEditorMatchingStrategy {
 				FileStoreEditorInput fsei = (FileStoreEditorInput) input;
 				path = new Path(fsei.getURI().getPath());
 			} else if (input instanceof IFileEditorInput) {
-				IFile file = ((IFileEditorInput) input).getFile();			
+				IFile file = ((IFileEditorInput) input).getFile();
 				path = file.getRawLocation();
 			}
 			if (!path.getFileExtension().equals("xml"))
@@ -42,7 +44,7 @@ public class MatchDataAdapter implements IEditorMatchingStrategy {
 			if (!path.toOSString().equals(refpath.toOSString()))
 				return false;
 
-			return DataAdapterManager.readDataADapter(new FileInputStream(path.toOSString())) != null;
+			return FileDataAdapterStorage.readDataADapter(new FileInputStream(path.toOSString())) != null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

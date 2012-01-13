@@ -22,16 +22,20 @@ package com.jaspersoft.studio.editor.preview.toolbar;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.widget.DatasourceComboItem;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 
 public class PreviewTopToolBarManager extends ATopToolBarManager {
+	private ADataAdapterStorage[] adapters;
 
-	public PreviewTopToolBarManager(PreviewContainer container, Composite parent) {
+	public PreviewTopToolBarManager(PreviewContainer container, Composite parent, ADataAdapterStorage[] adapters) {
 		super(container, parent);
+		dataSourceWidget.setDataAdapterStorages(adapters);
+		this.adapters = adapters;
 	}
 
 	private DatasourceComboItem dataSourceWidget;
@@ -41,7 +45,7 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 		PreviewContainer pvcont = (PreviewContainer) container;
 
 		if (dataSourceWidget == null)
-			dataSourceWidget = new DatasourceComboItem((IDataAdapterRunnable) container);
+			dataSourceWidget = new DatasourceComboItem((IDataAdapterRunnable) container, adapters);
 		tbManager.add(dataSourceWidget);
 
 		if (vexecAction == null)
@@ -54,7 +58,13 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 		return dataSourceWidget;
 	}
 
-	public void setDataAdapters(String strda) {
-		dataSourceWidget.setSelected(DataAdapterManager.findDataAdapter(strda));
+	public void setDataAdapters(String daName) {
+		for (ADataAdapterStorage da : adapters) {
+			DataAdapterDescriptor descriptor = da.findDataAdapter(daName);
+			if (descriptor != null) {
+				dataSourceWidget.setSelected(descriptor);
+				break;
+			}
+		}
 	}
 }

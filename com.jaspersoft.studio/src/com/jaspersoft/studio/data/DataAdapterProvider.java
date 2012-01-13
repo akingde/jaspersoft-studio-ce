@@ -36,6 +36,7 @@ import com.jaspersoft.studio.data.actions.DuplicateDataAdapterAction;
 import com.jaspersoft.studio.data.actions.EditDataAdapterAction;
 import com.jaspersoft.studio.data.actions.ExportDataAdapterAction;
 import com.jaspersoft.studio.data.actions.ImportDataAdapterAction;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
 import com.jaspersoft.studio.repository.actions.Separator;
@@ -106,16 +107,22 @@ public class DataAdapterProvider implements IRepositoryViewProvider {
 		editDataAdapterItemAction.run();
 	}
 
+	private List<ADataAdapterStorage> storages = new ArrayList<ADataAdapterStorage>();
+
 	public ANode getNode(ANode root) {
-		return new MDataAdapters(root);
+		ADataAdapterStorage s = DataAdapterManager.getPreferencesStorage();
+		storages.add(s);
+		return new MDataAdapters(root, s);
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {
-		DataAdapterManager.getPropertyChangeSupport().addPropertyChangeListener(pcl);
+		for (ADataAdapterStorage ds : storages)
+			ds.addPropertyChangeListener(pcl);
 	}
 
 	public void removePropertyChangeListener(PropertyChangeListener pcl) {
-		DataAdapterManager.getPropertyChangeSupport().removePropertyChangeListener(pcl);
+		for (ADataAdapterStorage ds : storages)
+			ds.removePropertyChangeListener(pcl);
 	}
 
 	public void handleTreeEvent(TreeExpansionEvent event) {

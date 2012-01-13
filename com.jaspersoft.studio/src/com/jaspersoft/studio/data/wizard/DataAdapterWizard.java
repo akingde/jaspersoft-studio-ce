@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.messages.Messages;
@@ -52,13 +53,15 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	private DataAdapterFactory selectedFactory = null;
 	private DataAdaptersListPage dataAdapterListPage = null;
 	private DataAdapterEditorPage dataAdapterEditorPage = null;
+	private ADataAdapterStorage storage;
 
 	/**
 	 * This constructor will set the data adapter wizard. The data adapters list is displayed as first page, then the edit
 	 * page is shown.
 	 */
-	public DataAdapterWizard() {
+	public DataAdapterWizard(ADataAdapterStorage storage) {
 		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
+		this.storage = storage;
 	}
 
 	/**
@@ -66,8 +69,8 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	 * 
 	 * @param dataAdapter
 	 */
-	public DataAdapterWizard(DataAdapterDescriptor dataAdapter) {
-		this();
+	public DataAdapterWizard(DataAdapterDescriptor dataAdapter, ADataAdapterStorage storage) {
+		this(storage);
 		this.dataAdapter = dataAdapter;
 	}
 
@@ -93,7 +96,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 						for (int i = 1; i < 1000; i++) {
 							String name = fm.format(new Object[] { (i > 1) ? "(" + i + ")" : "" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-							if (DataAdapterManager.isDataAdapterNameValid(name)) {
+							if (storage.isDataAdapterNameValid(name)) {
 
 								newDataAdapter.getDataAdapter().setName(name);
 								break;
@@ -132,6 +135,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 		}
 
 		dataAdapterEditorPage = new DataAdapterEditorPage();
+		dataAdapterEditorPage.setStorage(storage);
 		if (dataAdapter != null) {
 			dataAdapterEditorPage.setEditMode(true);
 		}
@@ -161,7 +165,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 			String oldName = this.dataAdapter.getName();
 			dataAdapter.setDataAdapter(editedDataAdapter.getDataAdapter());
 			if (!oldName.equals(editedDataAdapter.getName())) {
-				if (!DataAdapterManager.isDataAdapterNameValid(editedDataAdapter.getName())) {
+				if (!storage.isDataAdapterNameValid(editedDataAdapter.getName())) {
 					dataAdapter.getDataAdapter().setName(oldName);
 				}
 			}

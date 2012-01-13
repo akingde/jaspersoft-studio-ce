@@ -39,6 +39,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
@@ -139,8 +140,10 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	@Override
 	protected PreviewTopToolBarManager getTopToolBarManager1(Composite container) {
-		if (topToolBarManager1 == null)
-			topToolBarManager1 = new PreviewTopToolBarManager(this, container);
+		if (topToolBarManager1 == null) {
+			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+			topToolBarManager1 = new PreviewTopToolBarManager(this, container, DataAdapterManager.getDataAdapter(file));
+		}
 		return (PreviewTopToolBarManager) topToolBarManager1;
 	}
 

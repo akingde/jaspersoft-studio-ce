@@ -48,6 +48,8 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
+import com.jaspersoft.studio.data.MDataAdapters;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 
 public class DuplicateDataAdapterAction extends Action {
 	public static final String ID = "duplicatedataAdapteraction"; //$NON-NLS-1$
@@ -77,15 +79,17 @@ public class DuplicateDataAdapterAction extends Action {
 		for (int i = 0; i < p.length; i++) {
 			Object obj = p[i].getLastSegment();
 			if (obj instanceof MDataAdapter) {
-				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(((MDataAdapter) obj).getDataAdapter());
+				MDataAdapter mDataAdapter = (MDataAdapter) obj;
+				ADataAdapterStorage storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
+				DataAdapterDescriptor copyDataAdapter = DataAdapterManager.cloneDataAdapter(mDataAdapter.getDataAdapter());
 				String name = "copy_of_" + copyDataAdapter.getName();
 				for (int j = 1; j < 1000; j++) {
-					if (DataAdapterManager.isDataAdapterNameValid(name))
+					if (storage.isDataAdapterNameValid(name))
 						break;
 					name = "copy_of_" + copyDataAdapter.getName() + j;
 				}
 				copyDataAdapter.getDataAdapter().setName(name);
-				DataAdapterManager.addDataAdapter(copyDataAdapter);
+				storage.addDataAdapter("", copyDataAdapter);
 				treeViewer.refresh(true);
 			}
 		}

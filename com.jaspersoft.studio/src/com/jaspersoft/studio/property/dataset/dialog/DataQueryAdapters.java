@@ -55,6 +55,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.data.IQueryDesigner;
 import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
@@ -220,7 +221,7 @@ public abstract class DataQueryAdapters {
 				return true;
 			}
 		};
-		dscombo = new DatasourceComboItem(adapterRunReport);
+		dscombo = new DatasourceComboItem(adapterRunReport, DataAdapterManager.getDataAdapter(file));
 
 		Action newDA = new Action(Messages.DataQueryAdapters_newaction) {
 			@Override

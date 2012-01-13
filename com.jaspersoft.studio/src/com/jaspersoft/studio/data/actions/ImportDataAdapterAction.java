@@ -57,9 +57,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.MDataAdapter;
 import com.jaspersoft.studio.data.MDataAdapters;
+import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 
 public class ImportDataAdapterAction extends Action {
 	public static final String ID = "importDataAdapteraction"; //$NON-NLS-1$
@@ -87,44 +88,50 @@ public class ImportDataAdapterAction extends Action {
 
 	@Override
 	public void run() {
-		Job job = new WorkspaceJob("Searching DataAdapters") {
-			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();
-				IProject[] projects = workspace.getRoot().getProjects();
-				for (IProject prj : projects)
-					scanFolder(prj.members());
+		Object obj = ((TreeSelection) treeViewer.getSelection()).getFirstElement();
+		if (obj instanceof MDataAdapter) {
+			MDataAdapter mDataAdapter = (MDataAdapter) obj;
+			final ADataAdapterStorage storage = ((MDataAdapters) mDataAdapter.getParent()).getValue();
 
-				return Status.OK_STATUS;
-			}
+			Job job = new WorkspaceJob("Searching DataAdapters") {
+				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+					IWorkspace workspace = ResourcesPlugin.getWorkspace();
+					IProject[] projects = workspace.getRoot().getProjects();
+					for (IProject prj : projects)
+						scanFolder(prj.members());
 
-			protected void scanFolder(IResource[] fileResources) throws CoreException {
-				for (IResource r : fileResources) {
-					if (r instanceof IFolder)
-						scanFolder(((IFolder) r).members());
-					else if (r instanceof IFile)
-						checkFile((IFile) r);
+					return Status.OK_STATUS;
 				}
-			}
 
-			protected void checkFile(IFile file) throws CoreException {
-				if (file.getName().endsWith(".xml")) {
-					final DataAdapterDescriptor das = DataAdapterManager.readDataADapter(file.getContents());
-					if (das != null) {
-						Display.getDefault().asyncExec(new Runnable() {
-
-							public void run() {
-								DataAdapterDescriptor oldDas = DataAdapterManager.findDataAdapter(das.getName());
-								if (oldDas != null)
-									; // DataAdapterManager.removeDataAdapter(oldDas); replace?
-								else
-									DataAdapterManager.addDataAdapter(das);
-							}
-						});
-
+				protected void scanFolder(IResource[] fileResources) throws CoreException {
+					for (IResource r : fileResources) {
+						if (r instanceof IFolder)
+							scanFolder(((IFolder) r).members());
+						else if (r instanceof IFile)
+							checkFile((IFile) r);
 					}
 				}
-			}
-		};
-		job.schedule();
+
+				protected void checkFile(IFile file) throws CoreException {
+					if (file.getName().endsWith(".xml")) {
+						final DataAdapterDescriptor das = FileDataAdapterStorage.readDataADapter(file.getContents());
+						if (das != null) {
+							Display.getDefault().asyncExec(new Runnable() {
+
+								public void run() {
+									DataAdapterDescriptor oldDas = storage.findDataAdapter(das.getName());
+									if (oldDas != null)
+										; // DataAdapterManager.removeDataAdapter(oldDas); replace?
+									else
+										storage.addDataAdapter("", das);
+								}
+							});
+
+						}
+					}
+				}
+			};
+			job.schedule();
+		}
 	}
 }
