@@ -57,14 +57,14 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
 		HiveDataAdapter hiveDA = getHibernateDataAdapter();
 		if (hiveDA != null) {
 			try {
-//				Class.forName(hiveDA.getDriver());
+				// Class.forName(hiveDA.getDriver());
 
-//				String pass = hiveDA.getPassword();
-//				if (pass == null)
-//					pass = "";
-//				String user = hiveDA.getUsername();
-//				if (user == null)
-//					user = "";
+				// String pass = hiveDA.getPassword();
+				// if (pass == null)
+				// pass = "";
+				// String user = hiveDA.getUsername();
+				// if (user == null)
+				// user = "";
 				String url = hiveDA.getUrl();
 				con = new com.jaspersoft.hadoop.hive.HiveConnection(url);
 
@@ -78,7 +78,8 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
 	@Override
 	public void dispose() {
 		try {
-			con.close();
+			if (con != null)
+				con.close();
 		} catch (SQLException e) {
 			if (log.isErrorEnabled())
 				log.error("Error while closing the connection.", e);

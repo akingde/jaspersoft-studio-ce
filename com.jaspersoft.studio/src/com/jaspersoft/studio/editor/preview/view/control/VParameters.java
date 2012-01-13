@@ -88,7 +88,7 @@ public class VParameters extends APreview {
 	public boolean checkFieldsFilled() {
 		int count = 0;
 		for (JRParameter p : prompts)
-			if (p.isForPrompting() && !p.isSystemDefined()) {
+			if (p.isForPrompting() && !p.isSystemDefined() && haveWidget4Type(p)) {
 				count++;
 				if (params.containsKey(p.getName())) {
 					return true;
@@ -97,6 +97,15 @@ public class VParameters extends APreview {
 		if (count > 0)
 			return false;
 		return true;
+	}
+
+	protected boolean haveWidget4Type(JRParameter p) {
+		for (IDataInput in : ReportControler.inputs) {
+			if (in.isForType(p.getValueClass())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected void createInput(Composite sectionClient, JRDesignParameter p, Map<String, Object> params) {

@@ -323,27 +323,27 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	private DataAdapterDescriptor selectedDA;
 
 	public DataAdapterDescriptor getSelected() {
-//		if (selectedDA == null) {
-			int index = combo.getSelectionIndex() - 1;
-			if (index <= 0)
-				return null;
-			if (dastorages != null) {
-				int j = 1;
-				for (int i = 0; i < dastorages.length; i++) {
-					ADataAdapterStorage s = dastorages[i];
-					for (DataAdapterDescriptor d : s.getDataAdapterDescriptors()) {
-						if (j == index) {
-							selectedDA = d;
-							selectCombo(index);
-							return d;
-						}
-						j++;
+		// if (selectedDA == null) {
+		int index = combo.getSelectionIndex();
+		if (index <= 0)
+			return null;
+		if (dastorages != null) {
+			int j = 1;
+			for (int i = 0; i < dastorages.length; i++) {
+				ADataAdapterStorage s = dastorages[i];
+				for (DataAdapterDescriptor d : s.getDataAdapterDescriptors()) {
+					if (j == index) {
+						selectedDA = d;
+						selectCombo(index);
+						return d;
 					}
-					if (!s.getDataAdapterDescriptors().isEmpty() && i < dastorages.length - 1)
-						j++;
+					j++;
 				}
+				if (!s.getDataAdapterDescriptors().isEmpty() && i < dastorages.length - 1)
+					j++;
 			}
-//		}
+		}
+		// }
 		return selectedDA;
 	}
 
