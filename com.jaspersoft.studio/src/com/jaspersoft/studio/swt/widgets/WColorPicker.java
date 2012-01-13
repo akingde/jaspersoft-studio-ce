@@ -63,10 +63,12 @@ import com.jaspersoft.studio.utils.Colors;
 public class WColorPicker extends Composite{
 	
 	private static final String BUTTON_ICON_LOCATION="icons/resources/colorwheel-16.png"; //$NON-NLS-1$
+	private static final String BUTTON_DISABLED_ICON_LOCATION="icons/resources/colorwheel-16-disabled.png"; //$NON-NLS-1$
 	private RGB selectedRGB;
 	private CLabel imgColorPreview;
 	private Text textColorValue;
 	private List<ColorSelectionListener> colorSelectionListeners;
+	private ToolItem buttonColorChoser;
 	
 	public WColorPicker(RGB preselectedRGB, Composite parent){
 		this(preselectedRGB,parent,SWT.NONE);
@@ -107,8 +109,9 @@ public class WColorPicker extends Composite{
 			
 		ToolBar toolBar=new ToolBar(this, SWT.NONE);
 		toolBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		ToolItem buttonColorChoser=new ToolItem(toolBar, SWT.FLAT);
+		buttonColorChoser = new ToolItem(toolBar, SWT.FLAT);
 		buttonColorChoser.setImage(JaspersoftStudioPlugin.getImage(BUTTON_ICON_LOCATION));
+		buttonColorChoser.setDisabledImage(JaspersoftStudioPlugin.getImage(BUTTON_DISABLED_ICON_LOCATION));
 		buttonColorChoser.addSelectionListener(new SelectionListener() {
 		
 			public void widgetSelected(SelectionEvent e) {
@@ -201,6 +204,14 @@ public class WColorPicker extends Composite{
 	 */
 	public RGB getSelectedColorAsRGB(){
 		return selectedRGB;
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		this.imgColorPreview.setEnabled(enabled);
+		this.textColorValue.setEnabled(enabled);
+		this.buttonColorChoser.setEnabled(enabled);		
 	}
 	
 }

@@ -126,6 +126,7 @@ public class WHyperlink extends Composite {
 		super(parent, style);
 		init=true;
 		setLayout(new GridLayout(2, false));
+		setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		
 		CLabel lblHyperlinkTarget = new CLabel(this, SWT.NONE);
 		lblHyperlinkTarget.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -175,7 +176,11 @@ public class WHyperlink extends Composite {
 				
 				if(!init){
 					hyperlink.setLinkType(comboHyperlinkType.getText());
-					hyperlink.setHyperlinkType(selectedType);
+					if(selectedType!=HyperlinkTypeEnum.CUSTOM){
+						// No setting operation, otherwise it will produce an Exception
+						// with the following message: "Custom hyperlink types cannot be specified using the byte constant".
+						hyperlink.setHyperlinkType(selectedType);
+					}
 				}
 			}
 

@@ -115,7 +115,6 @@ public class TableComponentFactory implements IComponentFactory {
 		if (jrObject instanceof JRDesignComponentElement) {
 			JRDesignComponentElement tbl = (JRDesignComponentElement) jrObject;
 			if (tbl.getComponent() instanceof StandardTable) {
-
 				JasperDesign jasperDesign = parent.getJasperDesign();
 				TableManager tblManager = new TableManager(tbl, jasperDesign);
 				MTable mt = new MTable(parent, tbl, newIndex, tblManager);
@@ -147,8 +146,8 @@ public class TableComponentFactory implements IComponentFactory {
 							JasperDesign.PROPERTY_DATASETS, dlistener);
 
 					listenDatasets(jd, listener);
-					return mt;
 				}
+				return mt;
 			}
 		}
 		return null;

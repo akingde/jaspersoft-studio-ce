@@ -224,5 +224,39 @@ public class Colors {
 		return image;
 	}
 
+	/**
+	 * Gets the AWT color for the specified color string.
+	 * The input string should be an integer number representing the
+	 * rgb int value in 16 bit.
+	 * 
+	 * @param colorString the rgb int value as string
+	 * @return the AWT color instance converted, <code>null</code> if operation fails
+	 */
+	public static java.awt.Color decodeColor(String colorString) {
+		java.awt.Color color = null;
+		if (colorString.length() > 0) {
+			try {
+				color = new java.awt.Color(Integer.parseInt(colorString, 16));
+			} catch (Exception ex) {
+			}
+		}
+		return color;
+	}
 	
+	/**
+	 * Encodes the AWT color specified as HEX value (16 bit) representation.
+	 * It does not include in the final output the # character commonly used
+	 * in UI elements (i.e: text-boxes).
+	 * 
+	 * @param awtColor the color instance to encode
+	 * @return the encode string
+	 */
+	public static String getEncodedColor(java.awt.Color awtColor){
+		String s = getHexEncodedAWTColor(awtColor);
+		if(s!=null && !s.isEmpty())
+			// remove the # char
+			return s.substring(1);
+		else 
+			return s;
+	}
 }
