@@ -309,7 +309,7 @@ public abstract class DataQueryAdapters {
 			if (langindex >= 0)
 				langCombo.select(langindex);
 			else
-				langCombo.setItem(0, query.getLanguage());
+				langCombo.setItem(0, Misc.nvl(query.getLanguage()));
 			changeLanguage();
 			currentDesigner.setQuery(query.getText());
 		}

@@ -248,7 +248,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 			mquery = new MQuery(jrQuery);
 			command.add(setValueCommand(JRDesignDataset.PROPERTY_QUERY, mquery, mdataset));
 		} else {
-			if (!ds.getQuery().getLanguage().equals(lang))
+			if (ds.getQuery().getLanguage() == null || !ds.getQuery().getLanguage().equals(lang))
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_LANGUAGE, lang, mquery));
 			if (!ds.getQuery().getText().equals(qtext))
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, qtext, mquery));
