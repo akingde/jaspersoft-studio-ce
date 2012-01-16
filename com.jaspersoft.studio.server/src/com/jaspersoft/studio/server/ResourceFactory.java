@@ -27,6 +27,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MDataType;
+import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MJar;
@@ -123,9 +124,11 @@ public class ResourceFactory {
 
 	public static MResource getResource(ANode parent,
 			ResourceDescriptor resource, int index) {
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_FOLDER))
-			return new MFolder(parent, resource, index);
-
+		if (resource.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
+			MFolder folder = new MFolder(parent, resource, index);
+			new MDummy(folder);
+			return folder;
+		}
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_INPUT_CONTROL))
 			return new MInputControl(parent, resource, index);
 
@@ -138,8 +141,11 @@ public class ResourceFactory {
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_REFERENCE))
 			return new MReference(parent, resource, index);
 
-		if (resource.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT))
-			return new MReportUnit(parent, resource, index);
+		if (resource.getWsType().equals(ResourceDescriptor.TYPE_REPORTUNIT)) {
+			MReportUnit runit = new MReportUnit(parent, resource, index);
+			new MDummy(runit);
+			return runit;
+		}
 
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_LOV))
 			return new MListOfValues(parent, resource, index);

@@ -112,8 +112,10 @@ public class WSClientHelper {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
 		rd.setUriString(folderUri);
-		if (depth < 2)
+		if (depth < 1){
+			parent.removeChildren();
 			return listFolder(parent, -1, client, monitor, rd, depth);
+		}
 		return null;
 	}
 
