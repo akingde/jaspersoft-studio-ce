@@ -8,16 +8,20 @@ public class JRSDataAdapterStorage extends ADataAdapterStorage {
 	@Override
 	public void findAll() {
 		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void save(String url, DataAdapterDescriptor adapter) {
 		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void delete(String url) {
 		// TODO Auto-generated method stub
+		
 	}
+ 
 
 }
