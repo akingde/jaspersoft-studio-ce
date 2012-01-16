@@ -45,8 +45,9 @@ public class JRExpressionPage extends WizardPage {
 	}
 
 	public void setValue(JRDesignExpression value) {
-		this.value = value;
-		if (this.value == null)
+		if (value != null)
+			this.value = (JRDesignExpression) value.clone();
+		else
 			this.value = new JRDesignExpression();
 	}
 
@@ -85,15 +86,15 @@ public class JRExpressionPage extends WizardPage {
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		queryText.setLayoutData(gd);
+
+		setWidgets();
+		queryText.setFocus();
 		queryText.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
 				value.setText(queryText.getText());
 			}
 		});
-
-		setWidgets();
-		queryText.setFocus();
 	}
 
 	private void setWidgets() {
