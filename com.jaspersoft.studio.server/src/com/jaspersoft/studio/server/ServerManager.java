@@ -128,7 +128,6 @@ public class ServerManager {
 
 		if (xml != null) {
 			try {
-
 				Document document = JRXmlUtils.parse(new InputSource(
 						new StringReader(xml)));
 

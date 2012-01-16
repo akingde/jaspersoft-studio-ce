@@ -233,6 +233,13 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 					return Status.OK_STATUS;
 				} catch (Exception e) {
+					Display.getDefault().asyncExec(new Runnable() {
+
+						public void run() {
+							event.getTreeViewer().collapseToLevel(
+									(MServerProfile) event.getElement(), 1);
+						}
+					});
 					UIUtils.showError(e);
 				}
 				return Status.CANCEL_STATUS;
