@@ -102,7 +102,7 @@ public class DateInput extends ADataInput {
 				Timestamp d = java.sql.Timestamp
 						.valueOf(String
 								.format(
-										"%04d-%02d-%02d %02d:%02d:%02d", date.getYear(), date.getMonth(), date.getDay(), time.getHours(), time.getMinutes(), time.getSeconds())); //$NON-NLS-1$ 
+										"%04d-%02d-%02d %02d:%02d:%02d", date.getYear(), date.getMonth() + 1, date.getDay(), time.getHours(), time.getMinutes(), time.getSeconds())); //$NON-NLS-1$ 
 				updateModel(isNumeric ? d.getTime() : d);
 			}
 		};
@@ -143,7 +143,8 @@ public class DateInput extends ADataInput {
 		updateInput();
 		SelectionAdapter listener = new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Date d = java.sql.Date.valueOf(String.format("%04d-%02d-%02d", date.getYear(), date.getMonth(), date.getDay())); //$NON-NLS-1$ 
+				Date d = java.sql.Date.valueOf(String.format(
+						"%04d-%02d-%02d", date.getYear(), date.getMonth() + 1, date.getDay())); //$NON-NLS-1$ 
 				updateModel(isNumeric ? d.getTime() : d);
 			}
 		};
