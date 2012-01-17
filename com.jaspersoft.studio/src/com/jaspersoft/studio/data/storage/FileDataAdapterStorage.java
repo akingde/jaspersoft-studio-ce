@@ -44,9 +44,20 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 				IWorkspace workspace = ResourcesPlugin.getWorkspace();
 				IProject[] projects = workspace.getRoot().getProjects();
-				for (IProject prj : projects)
-					scanFolder(prj.members());
+				monitor.beginTask("Search DataAdapters in workspace", projects.length);
+				for (IProject prj : projects) {
+					monitor.subTask("Searching project " + prj.getName());
+					if (!scanFolder(prj.members(), monitor) || monitor.isCanceled()) {
+						listenWorkspace();
+						return Status.CANCEL_STATUS;
+					}
+					monitor.internalWorked(1);
+				}
+				listenWorkspace();
+				return Status.OK_STATUS;
+			}
 
+			protected void listenWorkspace() {
 				IWorkspace wspace = ResourcesPlugin.getWorkspace();
 				IResourceChangeListener rcl = new IResourceChangeListener() {
 					public void resourceChanged(IResourceChangeEvent event) {
@@ -80,19 +91,19 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 					}
 				};
 				wspace.addResourceChangeListener(rcl);
-
-				return Status.OK_STATUS;
 			}
 
-			protected void scanFolder(IResource[] fileResources) throws CoreException {
+			protected boolean scanFolder(IResource[] fileResources, IProgressMonitor monitor) throws CoreException {
 				for (IResource r : fileResources) {
 					if (r instanceof IFolder)
-						scanFolder(((IFolder) r).members());
+						scanFolder(((IFolder) r).members(), monitor);
 					else if (r instanceof IFile)
 						checkFile((IFile) r);
+					if (monitor.isCanceled())
+						return false;
 				}
+				return true;
 			}
-
 		};
 		job.schedule();
 	}
