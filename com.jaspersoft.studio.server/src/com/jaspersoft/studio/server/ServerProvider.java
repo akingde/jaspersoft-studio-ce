@@ -137,7 +137,6 @@ public class ServerProvider implements IRepositoryViewProvider {
 			lst.add(new Separator());
 			if (deleteServerAction.isEnabled())
 				lst.add(deleteServerAction);
-
 		} else if (node instanceof MResource) {
 			if (addAction.isEnabled()
 					&& (node instanceof MFolder || node instanceof MReportUnit))
@@ -151,6 +150,8 @@ public class ServerProvider implements IRepositoryViewProvider {
 
 			if (openInEditorAction.isEnabled())
 				lst.add(openInEditorAction);
+
+			lst.add(new Separator());
 
 			if (cutAction.isEnabled())
 				lst.add(cutAction);
