@@ -91,7 +91,7 @@ public class CreateServerAction extends Action implements ICheatSheetAction {
 		for (INode n : lst) {
 			if (n instanceof MServers) {
 				ServerProfile srv = new ServerProfile();
-				srv.setName("JS SERVER");
+				srv.setName("JasperReports Server");
 				srv.setUrl("http://localhost:8080/jasperserver/services/repository");
 				srv.setUser("username");
 				ServerProfileWizard wizard = new ServerProfileWizard(
