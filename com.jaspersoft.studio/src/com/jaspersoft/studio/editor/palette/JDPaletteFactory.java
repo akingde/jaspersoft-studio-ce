@@ -166,13 +166,13 @@ public class JDPaletteFactory {
 			Map<String, List<PaletteEntry>> map) {
 		PaletteDrawer drawer = createGroup(paletteRoot, ignore, p.getName(), p.getImage());
 
-		drawer.add(createJDEntry(MEllipse.getIconDescriptor(), MEllipse.class));
-		drawer.add(createJDEntry(MRectangle.getIconDescriptor(), MRectangle.class));
-		drawer.add(createJDEntry(MLine.getIconDescriptor(), MLine.class));
-		drawer.add(createJDEntry(MImage.getIconDescriptor(), MImage.class));
 		drawer.add(createJDEntry(MTextField.getIconDescriptor(), MTextField.class));
 		drawer.add(createJDEntry(MStaticText.getIconDescriptor(), MStaticText.class));
+		drawer.add(createJDEntry(MImage.getIconDescriptor(), MImage.class));
 		drawer.add(createJDEntry(MBreak.getIconDescriptor(), MBreak.class));
+		drawer.add(createJDEntry(MRectangle.getIconDescriptor(), MRectangle.class));
+		drawer.add(createJDEntry(MEllipse.getIconDescriptor(), MEllipse.class));
+		drawer.add(createJDEntry(MLine.getIconDescriptor(), MLine.class));
 		drawer.add(createJDEntry(MGenericElement.getIconDescriptor(), MGenericElement.class));
 
 		getEntries4Key(drawer, ignore, p.getId(), map);
