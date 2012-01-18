@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.IWorkspace;
@@ -50,6 +51,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class FileDataAdapterStorage extends ADataAdapterStorage {
 	private final class ResourceVisitor implements IResourceProxyVisitor {
@@ -71,19 +73,17 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 		Job job = new WorkspaceJob("Searching DataAdapters") {
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 				IWorkspace workspace = ResourcesPlugin.getWorkspace();
+				listenWorkspace();
 				IProject[] projects = workspace.getRoot().getProjects();
 				monitor.beginTask("Search DataAdapters in workspace", projects.length);
 				for (IProject prj : projects) {
 					monitor.subTask("Searching project " + prj.getName());
 					prj.accept(new ResourceVisitor(), IResource.NONE);
 
-					if (/* !scanFolder(prj.members(), monitor) || */monitor.isCanceled()) {
-						listenWorkspace();
+					if (monitor.isCanceled())
 						return Status.CANCEL_STATUS;
-					}
 					monitor.internalWorked(1);
 				}
-				listenWorkspace();
 				return Status.OK_STATUS;
 			}
 
@@ -92,48 +92,37 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 				IResourceChangeListener rcl = new IResourceChangeListener() {
 					public void resourceChanged(IResourceChangeEvent event) {
 						IResourceDelta delta = event.getDelta();
-						IResourceDelta[] projectDeltas = delta.getAffectedChildren(IResourceDelta.ADDED | IResourceDelta.CHANGED
-								| IResourceDelta.REMOVED);
-						for (int i = 0; i < projectDeltas.length; i++) {
-							IResourceDelta projectDelta = projectDeltas[i];
-							IResource resource = projectDelta.getResource();
-							if (resource.getType() == IResource.FILE) {
-								IFile f = (IFile) resource;
-								if (f.getFileExtension().equals(".xml")) {
-									try {
-										switch (projectDelta.getKind()) {
-										case IResourceDelta.ADDED:
-											checkFile(f);
-											break;
-										case IResourceDelta.CHANGED:
-											// ??
-											break;
-										case IResourceDelta.REMOVED:
-											// remove dataadapter if exists
-											break;
+						try {
+							delta.accept(new IResourceDeltaVisitor() {
+
+								public boolean visit(IResourceDelta delta) throws CoreException {
+									IResource res = delta.getResource();
+									if (res.getType() == IResource.FILE) {
+										IFile f = (IFile) res;
+										if (f.getName().endsWith(".xml")) {
+											switch (delta.getKind()) {
+											case IResourceDelta.ADDED:
+												checkFile(f);
+												break;
+											case IResourceDelta.REMOVED:
+												delete(f.getProjectRelativePath().toPortableString());
+												break;
+											case IResourceDelta.CHANGED:
+												checkFile(f);
+												break;
+											}
 										}
-									} catch (CoreException e) {
-										e.printStackTrace();
 									}
+									return true;
 								}
-							}
+							});
+						} catch (CoreException e) {
+							UIUtils.showError(e);
 						}
 					}
 				};
 				wspace.addResourceChangeListener(rcl);
 			}
-
-			// protected boolean scanFolder(IResource[] fileResources, IProgressMonitor monitor) throws CoreException {
-			// for (IResource r : fileResources) {
-			// if (r instanceof IFolder)
-			// scanFolder(((IFolder) r).members(), monitor);
-			// else if (r instanceof IFile)
-			// checkFile((IFile) r);
-			// if (monitor.isCanceled())
-			// return false;
-			// }
-			// return true;
-			// }
 		};
 		job.schedule();
 	}
@@ -158,7 +147,9 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 	public void delete(final String url) {
 		Job job = new WorkspaceJob("Deleting DataAdapter") {
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				project.getFile(url).delete(true, monitor);
+				IFile file = project.getFile(url);
+				if (file.exists())
+					file.delete(true, monitor);
 				return Status.OK_STATUS;
 			}
 		};
@@ -172,11 +163,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 				Display.getDefault().asyncExec(new Runnable() {
 
 					public void run() {
-						DataAdapterDescriptor oldDas = findDataAdapter(das.getName());
-						if (oldDas != null)
-							; // DataAdapterManager.removeDataAdapter(oldDas); replace?
-						else
-							addDataAdapter(file.getProjectRelativePath().toPortableString(), das);
+						addDataAdapter(file.getProjectRelativePath().toPortableString(), das);
 					}
 				});
 
