@@ -112,7 +112,6 @@ public class DatasetRunBaseComposite extends Composite {
 		
 		tabFolderDataSetRun = new TabFolder(this, SWT.NONE);
 		GridData gd_tabFolderDataSetRun = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2);
-		gd_tabFolderDataSetRun.heightHint = 205;
 		tabFolderDataSetRun.setLayoutData(gd_tabFolderDataSetRun);
 		tabFolderDataSetRun.setEnabled(false);
 		tabFolderDataSetRun.setVisible(false);
