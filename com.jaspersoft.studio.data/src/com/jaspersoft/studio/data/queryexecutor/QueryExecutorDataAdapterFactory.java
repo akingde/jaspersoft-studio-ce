@@ -43,24 +43,23 @@ public class QueryExecutorDataAdapterFactory implements DataAdapterFactory {
 		return "Query Executor adapter";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
 		return "Don't provide any connection or data source.";
 	}
 
-
 	public Image getIcon(int size) {
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/receipt.png");
+		if (size == 16) {
+			return Activator.getImage("icons/receipt.png");
 		}
 		return null;
 	}
 
-	@Override
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}
 }

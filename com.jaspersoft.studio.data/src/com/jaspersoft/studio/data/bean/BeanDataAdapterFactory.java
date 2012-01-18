@@ -43,25 +43,27 @@ public class BeanDataAdapterFactory implements DataAdapterFactory {
 		return "Collection of JavaBeans";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	public String getDescription() { 
+	public String getDescription() {
 		return "Collection or Array of JavaBeans";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	public Image getIcon(int size) { 
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/beans.png");
+	public Image getIcon(int size) {
+		if (size == 16) {
+			return Activator.getImage("icons/beans.png");
 		}
 		return null;
 	}
 
-	@Override
 	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}

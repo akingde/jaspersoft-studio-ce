@@ -104,7 +104,8 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 				ADataAdapterStorage s = dastorages[i];
 				for (DataAdapterDescriptor d : s.getDataAdapterDescriptors())
 					combo.add(d.getName(), s.getUrl(d));
-				if (!s.getDataAdapterDescriptors().isEmpty() && i < dastorages.length - 1)
+				if (!s.getDataAdapterDescriptors().isEmpty() && i < dastorages.length - 1
+						&& !dastorages[i + 1].getDataAdapterDescriptors().isEmpty())
 					combo.add("----------------------");
 			}
 
@@ -323,27 +324,27 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	private DataAdapterDescriptor selectedDA;
 
 	public DataAdapterDescriptor getSelected() {
-		// if (selectedDA == null) {
-		int index = combo.getSelectionIndex();
-		if (index <= 0)
-			return null;
-		if (dastorages != null) {
-			int j = 1;
-			for (int i = 0; i < dastorages.length; i++) {
-				ADataAdapterStorage s = dastorages[i];
-				for (DataAdapterDescriptor d : s.getDataAdapterDescriptors()) {
-					if (j == index) {
-						selectedDA = d;
-						selectCombo(index);
-						return d;
+		if (!combo.isDisposed()) {
+			int index = combo.getSelectionIndex();
+			if (index <= 0)
+				return null;
+			if (dastorages != null) {
+				int j = 1;
+				for (int i = 0; i < dastorages.length; i++) {
+					ADataAdapterStorage s = dastorages[i];
+					for (DataAdapterDescriptor d : s.getDataAdapterDescriptors()) {
+						if (j == index) {
+							selectedDA = d;
+							selectCombo(index);
+							return d;
+						}
+						j++;
 					}
-					j++;
+					if (!s.getDataAdapterDescriptors().isEmpty() && i < dastorages.length - 1)
+						j++;
 				}
-				if (!s.getDataAdapterDescriptors().isEmpty() && i < dastorages.length - 1)
-					j++;
 			}
 		}
-		// }
 		return selectedDA;
 	}
 

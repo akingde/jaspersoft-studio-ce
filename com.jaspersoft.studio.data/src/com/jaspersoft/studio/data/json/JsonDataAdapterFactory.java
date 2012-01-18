@@ -64,8 +64,7 @@ public class JsonDataAdapterFactory implements DataAdapterFactory {
 		return null;
 	}
 
-	@Override
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}
 }

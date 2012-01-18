@@ -43,7 +43,9 @@ public class XMLDataAdapterFactory implements DataAdapterFactory {
 		return "XML document";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
@@ -51,20 +53,19 @@ public class XMLDataAdapterFactory implements DataAdapterFactory {
 		return "Use an XML document as data";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
 	public Image getIcon(int size) {
-
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/blue-document-code.png");
+		if (size == 16) {
+			return Activator.getImage("icons/blue-document-code.png");
 		}
 		return null;
 	}
 
-	@Override
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}
 }

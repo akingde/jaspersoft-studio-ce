@@ -43,7 +43,9 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 		return "XML document (remote)";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
@@ -51,23 +53,21 @@ public class RemoteXMLDataAdapterFactory implements DataAdapterFactory {
 		return "Use an XML document loaded using an URL";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
 	public Image getIcon(int size) {
 
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/blue-document-code.png");
+		if (size == 16) {
+			return Activator.getImage("icons/blue-document-code.png");
 		}
 		return null;
 	}
 
-	@Override
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}
-
-	
 
 }

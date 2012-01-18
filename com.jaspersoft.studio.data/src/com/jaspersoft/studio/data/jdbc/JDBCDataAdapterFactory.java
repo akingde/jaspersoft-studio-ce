@@ -84,7 +84,6 @@ public class JDBCDataAdapterFactory implements DataAdapterFactory {
 		return null;
 	}
 
-	@Override
 	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}

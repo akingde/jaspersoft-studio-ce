@@ -43,26 +43,28 @@ public class CSVDataAdapterFactory implements DataAdapterFactory {
 		return "CSV File";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	public String getDescription() { 
+	public String getDescription() {
 		return "Use the content of a CSV file as data";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	public Image getIcon(int size) { 
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/document-excel-csv.png");
+	public Image getIcon(int size) {
+		if (size == 16) {
+			return Activator.getImage("icons/document-excel-csv.png");
 		}
 		return null;
 	}
 
-	@Override
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}
 

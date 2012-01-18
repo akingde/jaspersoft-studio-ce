@@ -43,7 +43,9 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 		return "JasperReports DataSource Provider class";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
@@ -53,15 +55,13 @@ public class JrdsProviderDataAdapterFactory implements DataAdapterFactory {
 	/**
 	 */
 	public Image getIcon(int size) {
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/bean-green.png");
+		if (size == 16) {
+			return Activator.getImage("icons/bean-green.png");
 		}
 		return null;
 	}
 
-	@Override
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}
 

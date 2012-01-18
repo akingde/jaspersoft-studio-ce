@@ -43,26 +43,28 @@ public class CustomJrdsDataAdapterFactory implements DataAdapterFactory {
 		return "Custom implementaion of JRDataSource";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
-	public String getDescription() { 
+	public String getDescription() {
 		return "Use your own java class to instance a JRDataSource";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
-	public Image getIcon(int size) { 
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/bean-green.png");
+	public Image getIcon(int size) {
+		if (size == 16) {
+			return Activator.getImage("icons/bean-green.png");
 		}
 		return null;
 	}
 
-	@Override
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) { 
+	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		return null;
 	}
 

@@ -85,7 +85,6 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 		return null;
 	}
 
-	@Override
 	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
 		if (dataAdapter instanceof HiveDataAdapter)
 			return new HiveDataAdapterService((HiveDataAdapter) dataAdapter);
