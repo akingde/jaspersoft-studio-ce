@@ -23,11 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.sf.jasperreports.engine.JRRenderable;
-import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -40,11 +35,14 @@ import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.ServerManager;
-import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.export.ImageExporter;
+import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.server.export.ResourceBundleExporter;
+import com.jaspersoft.studio.server.export.StyleTemplateExporter;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MRImage;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.utils.FileUtils;
+import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 
@@ -77,7 +75,7 @@ public class OpenInEditorAction extends Action {
 	}
 
 	private boolean isFileResource(Object obj) {
-		return (obj != null && (obj instanceof MRImage || obj instanceof MJrxml));
+		return (obj != null && (obj instanceof MRImage || obj instanceof MJrxml || obj instanceof MResourceBundle));
 	}
 
 	@Override
@@ -118,55 +116,33 @@ public class OpenInEditorAction extends Action {
 			FileNotFoundException, IOException {
 		if (isFileResource(obj)) {
 			MResource res = (MResource) obj;
-
 			ResourceDescriptor rd = res.getValue();
 
 			String fkeyname = ServerManager.getKey(res);
-			if(fkeyname == null)
+			if (fkeyname == null)
 				return;
-			String filename = fileurimap.get(fkeyname);
-
+			String type = rd.getWsType();
 			File f = null;
-			if (filename != null)
-				f = new File(filename);
-			else {
-				f = File.createTempFile("jrsres", ".jrxml");
-				f.deleteOnExit();
-				filename = f.getAbsolutePath();
-			}
+			if (type.equals(ResourceDescriptor.TYPE_JRXML))
+				f = new JrxmlExporter().exportFile(res, rd, fkeyname);
+			else if (type.equals(ResourceDescriptor.TYPE_IMAGE))
+				f = new ImageExporter().exportFile(res, rd, fkeyname);
+			else if (type.equals(ResourceDescriptor.TYPE_RESOURCE_BUNDLE))
+				f = new ResourceBundleExporter().exportFile(res, rd, fkeyname);
+			else if (type.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
+				f = new StyleTemplateExporter().exportFile(res, rd, fkeyname);
 
-			WSClientHelper.getResource(res, rd, f);
-
-			if (rd.getWsType().equals(ResourceDescriptor.TYPE_IMAGE)) {
-				filename = f.getAbsolutePath();
-				int dotPos = filename.lastIndexOf(".");
-				String strFilename = filename.substring(0, dotPos);
-				switch (JRTypeSniffer.getImageType(FileUtils.getBytes(f))) {
-				case JRRenderable.IMAGE_TYPE_GIF:
-					f = FileUtils.fileRenamed(f, strFilename, ".gif", false);
-					break;
-				case JRRenderable.IMAGE_TYPE_JPEG:
-					f = FileUtils.fileRenamed(f, strFilename, ".jpeg", false);
-					break;
-				case JRRenderable.IMAGE_TYPE_PNG:
-					f = FileUtils.fileRenamed(f, strFilename, ".png", false);
-					break;
-				case JRRenderable.IMAGE_TYPE_TIFF:
-					f = FileUtils.fileRenamed(f, strFilename, ".tiff", false);
-					break;
-				}
-				filename = f.getAbsolutePath();
-			}
-			final String fname = filename;
-			fileurimap.put(fkeyname, fname);
-			Display.getDefault().asyncExec(new Runnable() {
-
-				public void run() {
-					SelectionHelper.openEditor(new File(fname));
-				}
-			});
+			openEditor(f);
 		}
 	}
 
-	private static Map<String, String> fileurimap = new HashMap<String, String>();
+	private void openEditor(final File f) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				SelectionHelper.openEditor(f);
+			}
+		});
+	}
+
 }
