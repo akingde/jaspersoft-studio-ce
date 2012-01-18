@@ -1,0 +1,82 @@
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of Jaspersoft Open Studio.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
+ */
+/*
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of iReport.
+ * 
+ * iReport is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * iReport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+package com.jaspersoft.studio.property.dataset.wizard;
+
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.widgets.Composite;
+
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
+
+public class WizardConnectionPage extends WizardPage {
+	private MDatasetRun datasetrun;
+	private DatasetRunWidget dsRun;
+	private JRDesignDatasetRun jrDsRun;
+
+	public void setDataSetRun(MDatasetRun datasetrun) {
+		this.datasetrun = datasetrun;
+		jrDsRun = (JRDesignDatasetRun) datasetrun.getValue();
+		if (jrDsRun == null) {
+			jrDsRun = new JRDesignDatasetRun();
+			datasetrun.setValue(jrDsRun);
+		}
+		if (dsRun != null)
+			dsRun.setData(jrDsRun);
+	}
+
+	public MDatasetRun getDataSetRun() {
+		return datasetrun;
+	}
+
+	public WizardConnectionPage() {
+		super("connectionpage"); //$NON-NLS-1$
+		setTitle(Messages.common_connection);
+		setDescription(Messages.WizardConnectionPage_description);
+	}
+
+	public void createControl(Composite parent) {
+		dsRun = new DatasetRunWidget(parent);
+
+		setControl(dsRun.getControl());
+		dsRun.setData(jrDsRun);
+	}
+}
