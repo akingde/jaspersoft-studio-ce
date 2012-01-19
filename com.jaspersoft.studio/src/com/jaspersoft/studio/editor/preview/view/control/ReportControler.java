@@ -28,9 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.DataAdapterService;
-import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -202,7 +199,6 @@ public class ReportControler {
 		Job job = new Job(Messages.PreviewEditor_preview_a + ": " + jDesign.getName() + Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				DataAdapterService dataAdapterService = null;
 				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 				try {
 					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
@@ -228,7 +224,7 @@ public class ReportControler {
 						} else {
 							setupVirtualizer(jd, ph);
 
-							dataAdapterService = setupDataAdapter(pcontainer);
+							setupDataAdapter(pcontainer);
 
 							c.addMessage("Start report execution");
 							// We create the fillHandle to run the report based on the type of data adapter....
@@ -243,9 +239,6 @@ public class ReportControler {
 				} finally {
 					monitor.done();
 
-					// Allow the data adapter to cleanup its state
-					if (dataAdapterService != null)
-						dataAdapterService.dispose();
 					finishReport(pcontainer);
 					Thread.currentThread().setContextClassLoader(oldLoader);
 				}
@@ -307,18 +300,11 @@ public class ReportControler {
 		VirtualizerHelper.setVirtualizer(jd, ps, jasperParameters);
 	}
 
-	private DataAdapterService setupDataAdapter(final PreviewContainer pcontainer) throws JRException {
+	private void setupDataAdapter(final PreviewContainer pcontainer) throws JRException {
 		c.addMessage("Setting connection");
 		DataAdapterDescriptor daDesc = pcontainer.getDataAdapterDesc();
-		if (daDesc != null) {
-			DataAdapter dataAdapter = daDesc.getDataAdapter();
-
-			jasperParameters.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, dataAdapter);
-
-			DataAdapterService dataAdapterService = DataAdapterServiceUtil.getDataAdapterService(dataAdapter);
-			return dataAdapterService;
-		}
-		return null;
+		if (daDesc != null)
+			jasperParameters.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, daDesc.getDataAdapter());
 	}
 
 	private IStatus fillReport(AsynchronousFillHandle fh, IProgressMonitor monitor, final PreviewContainer pcontainer)
