@@ -48,6 +48,8 @@ Import-Package: org.eclipse.ui,
 Eclipse-RegisterBuddy: net.sf.jasperreports
 Eclipse-BuddyPolicy: registered
 Export-Package: com.jaspersoft.studio,
+ com.jaspersoft.studio.compatibility,
+ com.jaspersoft.studio.compatibility.dialog,
  com.jaspersoft.studio.data,
  com.jaspersoft.studio.data.empty,
  com.jaspersoft.studio.data.fields,

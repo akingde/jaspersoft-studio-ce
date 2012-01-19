@@ -85,11 +85,15 @@ public class JRXmlWriterHelper {
 
 	public static String writeReport(JRReport report, IFile file, boolean showDialog) throws Exception {
 
-		return writeReport(report, file, file.getCharset(true),
+		return writeReport(report, file.getCharset(true),
 				getVersion(file, new PropertiesHelper(file.getProject()), showDialog));
 	}
 
-	public static String writeReport(JRReport report, IFile file, String encoding, String version) throws Exception {
+	public static String writeReport(JRReport report, String version) throws Exception {
+		return writeReport(report, fixencoding("UTF-8"), version);
+	}
+
+	public static String writeReport(JRReport report, String encoding, String version) throws Exception {
 		encoding = fixencoding(encoding);
 		if (!writers.containsKey(version)) {
 			version = LAST_VERSION;
@@ -100,7 +104,10 @@ public class JRXmlWriterHelper {
 				return (String) clazz.getMethod("writeReport", new Class[] { JRReport.class, String.class }).invoke(null,
 						new Object[] { report, encoding });
 		}
-		return JRXmlWriter.writeReport(report, encoding);
+		String xml = JRXmlWriter.writeReport(report, encoding);
+		xml = xml.replaceFirst(
+				"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
+		return xml;
 	}
 
 	public static String fixencoding(String encoding) {

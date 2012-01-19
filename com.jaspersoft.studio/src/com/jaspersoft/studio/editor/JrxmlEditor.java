@@ -344,7 +344,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public void doSaveAs() {
 		SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
-		saveAsDialog.setOriginalFile(((FileEditorInput)getEditorInput()).getFile());
+		saveAsDialog.setOriginalFile(((FileEditorInput) getEditorInput()).getFile());
 		saveAsDialog.open();
 		IPath path = saveAsDialog.getResult();
 		if (path != null) {
@@ -464,7 +464,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			// ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			String str;
 			try {
-				str = JRXmlWriterHelper.writeReport(report, null, JRXmlWriterHelper.fixencoding(encoding), version);
+				str = JRXmlWriterHelper.writeReport(report, JRXmlWriterHelper.fixencoding(encoding), version);
 				return new ByteArrayInputStream(str.getBytes());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -629,13 +629,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			}
 
 			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-			String xml = JRXmlWriterHelper.writeReport(report, file, JRXmlWriterHelper.fixencoding(file.getCharset(true)),
-					version);
-
-			// String xml = JRXmlWriter.writeReport(report, file.getCharset(true));//
-			// JasperCompileManager.writeReportToXml(report);
-			xml = xml.replaceFirst(
-					"<jasperReport ", "<!-- Created with Jaspersoft Studio version " + version + "-->\n<jasperReport "); //$NON-NLS-1$ //$NON-NLS-2$
+			String xml = JRXmlWriterHelper.writeReport(report, JRXmlWriterHelper.fixencoding(file.getCharset(true)), version);
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 			doc.set(xml);

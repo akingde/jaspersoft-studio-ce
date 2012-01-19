@@ -31,6 +31,11 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jasperreports.crosstabs.JRCrosstabCell;
+import net.sf.jasperreports.crosstabs.JRCrosstabColumnGroup;
+import net.sf.jasperreports.crosstabs.JRCrosstabRowGroup;
+import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
@@ -536,16 +541,82 @@ public class ModelUtils {
 		return res;
 	}
 
+	public static List<JRDesignElement> getAllElements(JasperDesign jd) {
+		List<JRDesignElement> list = getAllGElements(jd);
+
+		List<JRDesignElement> list2 = new ArrayList<JRDesignElement>();
+		for (int i = 0; i < list.size(); ++i) {
+			JRDesignElement ele = list.get(i);
+			if (ele instanceof JRDesignCrosstab) {
+				list2.addAll(getCrosstabElements((JRDesignCrosstab) ele));
+			}
+		}
+		list.addAll(list2);
+		return list;
+	}
+
 	public static List<JRDesignElement> getGElements(JRElementGroup gr) {
 		List<JRDesignElement> res = new ArrayList<JRDesignElement>();
 		for (Object el : gr.getChildren()) {
 			if (el instanceof JRDesignElement) {
 				res.add((JRDesignElement) el);
+				if (el instanceof JRDesignCrosstab)
+					res.addAll(getCrosstabElements((JRDesignCrosstab) el));
 			} else if (el instanceof JRElementGroup) {
 				res.addAll(getGElements((JRElementGroup) el));
 			}
 		}
 		return res;
+	}
+
+	public static List<JRDesignElement> getCrosstabElements(JRDesignCrosstab crosstab) {
+		List<JRDesignElement> list = new ArrayList<JRDesignElement>();
+		List<JRDesignCellContents> cells = getAllCells(crosstab);
+		for (JRDesignCellContents content : cells)
+			list.addAll(getGElements(content));
+		return list;
+	}
+
+	public static List<JRDesignCellContents> getAllCells(JRDesignCrosstab designCrosstab) {
+		List<JRDesignCellContents> list = new ArrayList<JRDesignCellContents>();
+
+		list.add((JRDesignCellContents) designCrosstab.getHeaderCell());
+
+		// Row cells
+		List<JRCrosstabCell> cells = designCrosstab.getCellsList();
+		for (JRCrosstabCell cell : cells) {
+			if (cell != null && (JRDesignCellContents) cell.getContents() != null) {
+				list.add((JRDesignCellContents) cell.getContents());
+			}
+		}
+
+		JRCrosstabRowGroup[] row_groups = designCrosstab.getRowGroups();
+		for (int i = 0; i < row_groups.length; ++i) {
+			switch (row_groups[i].getTotalPositionValue()) {
+			case START:
+			case END:
+				list.add((JRDesignCellContents) row_groups[i].getTotalHeader());
+				break;
+			default:
+				break;
+			}
+			list.add((JRDesignCellContents) row_groups[i].getHeader());
+		}
+
+		JRCrosstabColumnGroup[] col_groups = designCrosstab.getColumnGroups();
+		for (int i = 0; i < col_groups.length; ++i) {
+			switch (col_groups[i].getTotalPositionValue()) {
+			case START:
+			case END:
+				list.add((JRDesignCellContents) col_groups[i].getTotalHeader());
+				break;
+			default:
+				break;
+			}
+			list.add((JRDesignCellContents) col_groups[i].getHeader());
+		}
+
+		return list;
 	}
 
 	/**
