@@ -26,7 +26,9 @@ package com.jaspersoft.studio.server;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
@@ -68,9 +70,14 @@ public class JSFileResolver extends SimpleFileResolver {
 		runitUri = jDesign.getProperty(JrxmlExporter.PROP_REPORTUNIT);
 	}
 
+	private Map<String, File> map = new HashMap<String, File>();
+
 	@Override
 	public File resolveFile(String fileName) {
 		if (c != null && fileName.startsWith("repo:")) {
+			File f = map.get(fileName);
+			if (f != null)
+				return f;
 			String objectUri = fileName.substring(5);
 			try {
 				if (objectUri.contains("/")) {
@@ -79,9 +86,8 @@ public class JSFileResolver extends SimpleFileResolver {
 					r.setUriString(objectUri);
 					r = c.get(r, null);
 
-					File f = File.createTempFile("jrsfr", r.getName());
+					f = File.createTempFile("jrsfr", r.getName());
 					c.get(r, f);
-					return f;
 				} else if (runitUri != null) {
 					// Locate the resource inside the report unit, if any...
 					if (reportUnitResources == null) {
@@ -98,19 +104,17 @@ public class JSFileResolver extends SimpleFileResolver {
 					// find the resource...
 					for (ResourceDescriptor r : reportUnitResources) {
 						if (r.getName().equals(objectUri) && isFileResource(r)) {
-							File f = File.createTempFile("jrsfr", r.getName());
+							f = File.createTempFile("jrsfr", r.getName());
 							c.get(r, f);
-							return f;
+							break;
 						}
 					}
-					// System.out.println("Resource " + objectUri
-					// + " not found in the JasperServer Report at "
-					// + runitUri);
 				}
 			} catch (Exception ex) {
-				// System.out.println("Unable to resolve " + objectUri + " on "
-				// + server.getName() + "server ( " + ex.getMessage()
-				// + ")");
+			}
+			if (f != null) {
+				map.put(fileName, f);
+				return f;
 			}
 		}
 		return super.resolveFile(fileName);
