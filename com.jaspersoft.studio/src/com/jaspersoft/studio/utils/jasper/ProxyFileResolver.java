@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License along with iReport. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.utils;
+package com.jaspersoft.studio.utils.jasper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class ProxyFileResolver implements FileResolver {
 	 */
 	public void addResolver(FileResolver resolver) {
 		if (!resolvers.contains(resolver))
-			resolvers.add(0, resolver);
+			resolvers.add(resolver);
 	}
 
 	public void removeResolver(FileResolver resolver) {

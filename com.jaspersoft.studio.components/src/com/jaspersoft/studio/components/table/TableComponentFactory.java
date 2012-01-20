@@ -39,7 +39,6 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -109,6 +108,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class TableComponentFactory implements IComponentFactory {
 
@@ -609,12 +609,12 @@ public class TableComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public AbstractVisualEditor getEditor(Object node, FileResolver fileResolver) {
+	public AbstractVisualEditor getEditor(Object node, JasperReportsConfiguration jrContext) {
 		if (node != null && node instanceof JRDesignComponentElement) {
 			Component component = ((JRDesignComponentElement) node)
 					.getComponent();
 			if (component != null && component instanceof StandardTable)
-				return new TableEditor(fileResolver);
+				return new TableEditor(jrContext);
 		}
 		return null;
 	}

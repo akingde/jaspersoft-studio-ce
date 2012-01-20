@@ -21,8 +21,6 @@ package com.jaspersoft.studio.editor.report;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.FileResolver;
-
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
@@ -98,6 +96,7 @@ import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class AbstractVisualEditor.
@@ -107,7 +106,7 @@ import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable,
 		IGraphicalEditor {
 	private Image partImage = JaspersoftStudioPlugin.getImage(MReport.getIconDescriptor().getIcon16());
-	private FileResolver fileResolver;
+	private JasperReportsConfiguration jrContext;
 
 	public Image getPartImage() {
 		return partImage;
@@ -116,9 +115,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	/**
 	 * Instantiates a new abstract visual editor.
 	 */
-	public AbstractVisualEditor(FileResolver fileResolver) {
+	public AbstractVisualEditor(JasperReportsConfiguration jrContext) {
 		setEditDomain(new DefaultEditDomain(this));
-		this.fileResolver = fileResolver;
+		this.jrContext = jrContext;
 	}
 
 	@Override
@@ -297,7 +296,7 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 		// set context menu
 		graphicalViewer.setContextMenu(new AppContextMenuProvider(graphicalViewer, getActionRegistry()));
 
-		graphicalViewer.setProperty("FILERESOLVER", fileResolver);
+		graphicalViewer.setProperty("JRCONTEXT", jrContext);
 	}
 
 	/*

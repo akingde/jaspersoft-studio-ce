@@ -185,6 +185,12 @@
             name="ReportUnit Editor">
       </editor>
    </extension>
+   <extension
+         point="com.jaspersoft.studio.editorLifecycle">
+      <editorLifecycle
+            ClassFactory="com.jaspersoft.studio.server.editor.JRSEditorContributor">
+      </editorLifecycle>
+   </extension>
 
 
 </plugin>

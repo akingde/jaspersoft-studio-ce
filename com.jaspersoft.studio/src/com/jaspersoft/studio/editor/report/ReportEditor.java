@@ -21,8 +21,6 @@ package com.jaspersoft.studio.editor.report;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.FileResolver;
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
@@ -56,6 +54,7 @@ import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
 import com.jaspersoft.studio.property.dataset.dialog.DatasetAction;
 import com.jaspersoft.studio.property.section.report.PageFormatAction;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class ReportEditor.
@@ -70,8 +69,8 @@ public class ReportEditor extends AbstractVisualEditor {
 	/**
 	 * Instantiates a new report editor.
 	 */
-	public ReportEditor(FileResolver fileResolver) {
-		super(fileResolver);
+	public ReportEditor(JasperReportsConfiguration jrContext) {
+		super(jrContext);
 		setPartName(Messages.common_main_report);
 	}
 

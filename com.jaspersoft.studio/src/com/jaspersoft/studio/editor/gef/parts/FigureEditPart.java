@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.parts;
 
@@ -28,7 +24,6 @@ import java.beans.PropertyChangeListener;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
@@ -51,13 +46,15 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 /*
  * The Class FigureEditPart.
  */
 public class FigureEditPart extends AJDEditPart implements PropertyChangeListener {
 
 	protected DrawVisitor drawVisitor;
-	protected SimpleFileResolver fileResolver;
+	protected JasperReportsConfiguration jrContext;
 
 	public DrawVisitor getDrawVisitor() {
 		return drawVisitor;
@@ -86,9 +83,9 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		super.deactivate();
 	}
 
-	public void setDrawVisitor(DrawVisitor drawVisitor, SimpleFileResolver fileResolver) {
+	public void setDrawVisitor(DrawVisitor drawVisitor, JasperReportsConfiguration fileResolver) {
 		this.drawVisitor = drawVisitor;
-		this.fileResolver = fileResolver;
+		this.jrContext = fileResolver;
 	}
 
 	/*
@@ -156,7 +153,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 				if (rect instanceof ComponentFigure && drawVisitor != null) {
 					ComponentFigure f = (ComponentFigure) rect;
 					f.setLocation(new Point(x, y));
-					f.setJRElement(jrElement, drawVisitor, fileResolver);
+					f.setJRElement(jrElement, drawVisitor, jrContext);
 				} else
 					rect.setBounds(new Rectangle(x, y, jrElement.getWidth(), jrElement.getHeight()));
 			} else {

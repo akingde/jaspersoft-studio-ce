@@ -119,7 +119,7 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 			f.setLocation(new Point(x, y));
 			f.setJRElement(model.getCell(),
 					(StandardBaseColumn) model.getValue(), getDrawVisitor(),
-					fileResolver);
+					jrContext);
 		}
 	}
 

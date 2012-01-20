@@ -22,8 +22,6 @@ package com.jaspersoft.studio.components.crosstab.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.FileResolver;
-
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -44,6 +42,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class CrosstabEditor.
@@ -51,8 +50,8 @@ import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
  * @author Chicu Veaceslav
  */
 public class CrosstabEditor extends AbstractVisualEditor {
-	public CrosstabEditor(FileResolver fileResolver) {
-		super(fileResolver);
+	public CrosstabEditor(JasperReportsConfiguration jrContext) {
+		super(jrContext);
 		setPartName(Messages.CrosstabEditor_crosstab);
 		setPartImage(JaspersoftStudioPlugin.getImage(MCrosstab
 				.getIconDescriptor().getIcon16()));

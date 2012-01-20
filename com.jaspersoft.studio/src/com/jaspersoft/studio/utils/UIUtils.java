@@ -60,7 +60,6 @@ public class UIUtils {
 	public static void showWarning(final String message) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-
 				MessageDialog.openWarning(Display.getDefault().getActiveShell(), Messages.common_warning, message);
 			}
 		});

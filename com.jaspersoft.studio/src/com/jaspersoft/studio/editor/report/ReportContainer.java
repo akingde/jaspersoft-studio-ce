@@ -36,7 +36,6 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -72,6 +71,7 @@ import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class ReportContainer.
@@ -90,7 +90,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	/** The parent. */
 	private EditorPart parent;
 	private PropertyChangeSupport propertyChangeSupport;
-	private FileResolver fileResolver;
+	private JasperReportsConfiguration jrContext;
 
 	public PropertyChangeSupport getPropertyChangeSupport() {
 		if (propertyChangeSupport == null)
@@ -104,9 +104,9 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 * @param parent
 	 *          the parent
 	 */
-	public ReportContainer(EditorPart parent, FileResolver fileResolver) {
+	public ReportContainer(EditorPart parent, JasperReportsConfiguration jrContext) {
 		this.parent = parent;
-		this.fileResolver = fileResolver;
+		this.jrContext = jrContext;
 	}
 
 	/*
@@ -140,7 +140,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		// ctfolder.setTopRight(combo);
 
 		try {
-			ReportEditor reportEditor = new ReportEditor(fileResolver);
+			ReportEditor reportEditor = new ReportEditor(jrContext);
 			int index = addPage(reportEditor, getEditorInput());
 			setPageText(index, Messages.common_main_report);
 			setPageImage(index, reportEditor.getPartImage());
@@ -229,7 +229,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				MPage rep = new MPage(root, jd);
 				ANode node = m.createNode(rep, obj, -1);
 
-				ave = m.getEditor(obj, fileResolver);
+				ave = m.getEditor(obj, jrContext);
 				if (ave != null) {
 					int index = addPage(ave, getEditorInput());
 

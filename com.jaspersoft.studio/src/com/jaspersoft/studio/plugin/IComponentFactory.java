@@ -21,8 +21,6 @@ package com.jaspersoft.studio.plugin;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.FileResolver;
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -32,6 +30,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public interface IComponentFactory {
 	public ANode createNode(ANode parent, Object jrObject, int newIndex);
@@ -56,6 +55,6 @@ public interface IComponentFactory {
 
 	public List<String> getActionsID();
 
-	public AbstractVisualEditor getEditor(Object node, FileResolver fileResolver);
+	public AbstractVisualEditor getEditor(Object node, JasperReportsConfiguration jrContext);
 
 }

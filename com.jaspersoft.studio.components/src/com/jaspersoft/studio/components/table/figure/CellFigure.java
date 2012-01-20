@@ -24,11 +24,11 @@ import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.draw2d.LineBorder;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CellFigure extends FrameFigure {
 	private DesignCell cell;
@@ -39,11 +39,11 @@ public class CellFigure extends FrameFigure {
 		setBorder(new LineBorder(1));
 	}
 
-	public void setJRElement(DesignCell cell, StandardBaseColumn column, DrawVisitor drawVisitor,
-			FileResolver fileResolver) {
+	public void setJRElement(DesignCell cell, StandardBaseColumn column,
+			DrawVisitor drawVisitor, JasperReportsConfiguration jrContext) {
 		this.cell = cell;
 		this.column = column;
-		super.setJRElement(null, drawVisitor, fileResolver);
+		super.setJRElement(null, drawVisitor, jrContext);
 		setSize(getElementWidth() + 3, getElementHeight() + 3);
 	}
 

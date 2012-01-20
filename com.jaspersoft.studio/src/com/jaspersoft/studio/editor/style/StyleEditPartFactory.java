@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.style;
 
@@ -28,7 +24,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -42,6 +37,8 @@ import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyleTemplateReference;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.util.ModelVisitor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 /*
  * A factory for creating JasperDesignEditPart objects.
  * 
@@ -50,7 +47,7 @@ import com.jaspersoft.studio.model.util.ModelVisitor;
 public class StyleEditPartFactory implements EditPartFactory {
 	private DrawVisitor drawVisitor;
 	private JasperDesign jDesign;
-	private SimpleFileResolver fileResolver;
+	private JasperReportsConfiguration jrContext;
 
 	public DrawVisitor getDrawVisitor(ANode model) {
 		if (model == null)
@@ -75,8 +72,8 @@ public class StyleEditPartFactory implements EditPartFactory {
 		if (context != null) {
 			EditPartViewer gv = context.getViewer();
 			Object prop = gv.getProperty("FILERESOLVER");
-			if (prop != null && prop instanceof SimpleFileResolver) {
-				fileResolver = (SimpleFileResolver) prop;
+			if (prop != null && prop instanceof JasperReportsConfiguration) {
+				jrContext = (JasperReportsConfiguration) prop;
 			}
 		}
 		EditPart editPart = null;
@@ -105,7 +102,7 @@ public class StyleEditPartFactory implements EditPartFactory {
 		if (editPart != null) {
 			editPart.setModel(model);
 			if (editPart instanceof FigureEditPart)
-				((FigureEditPart) editPart).setDrawVisitor(getDrawVisitor((ANode) model), fileResolver);
+				((FigureEditPart) editPart).setDrawVisitor(getDrawVisitor((ANode) model), jrContext);
 		}
 		return editPart;
 	}

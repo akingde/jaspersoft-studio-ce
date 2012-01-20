@@ -32,7 +32,7 @@
 <extension-point id="palette" name="Palette" schema="schema/palette.exsd"/>
 <extension-point id="repositoryview" name="repositoryview" schema="schema/repositoryview.exsd"/>
 <extension-point id="hyperlinkTypes" name="Hyperlink Types" schema="schema/hyperlinkTypes.exsd"/>
-
+<extension-point id="editorLifecycle" name="Editor Lifecycle" schema="schema/editor.exsd"/>
 
 
    <extension

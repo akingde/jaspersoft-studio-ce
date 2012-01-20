@@ -38,8 +38,6 @@
  */
 package com.jaspersoft.studio.editor.style;
 
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
@@ -81,7 +79,8 @@ import com.jaspersoft.studio.editor.outline.actions.CreateStyleAction;
 import com.jaspersoft.studio.editor.outline.actions.CreateStyleTemplateReferenceAction;
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 /*
  * The Class CrosstabEditor.
  * 
@@ -89,9 +88,13 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  */
 public class StyleTemplateEditor extends J2DGraphicalEditor implements ITabbedPropertySheetPageContributor,
 		IGraphicalEditor {
-	public StyleTemplateEditor() {
+
+	private JasperReportsConfiguration jrContext;
+
+	public StyleTemplateEditor(JasperReportsConfiguration jrContext) {
 		super();
 		setEditDomain(new DefaultEditDomain(this));
+		this.jrContext = jrContext;
 	}
 
 	public FigureCanvas getEditor() {
@@ -217,9 +220,7 @@ public class StyleTemplateEditor extends J2DGraphicalEditor implements ITabbedPr
 
 		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 
-		SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
-
-		graphicalViewer.setProperty("FILERESOLVER", fileResolver);
+		graphicalViewer.setProperty("JRCONTEXT", jrContext);
 	}
 
 	/*

@@ -26,7 +26,6 @@ package com.jaspersoft.studio.server;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -50,8 +49,8 @@ public class JSFileResolver extends SimpleFileResolver {
 
 	private List<ResourceDescriptor> reportUnitResources = null;
 
-	public JSFileResolver(File parentFolder, JasperDesign jasperDesign) {
-		this(Arrays.asList(parentFolder), jasperDesign);
+	public JSFileResolver(JasperDesign jasperDesign) {
+		this(new ArrayList<File>(), jasperDesign);
 	}
 
 	public JSFileResolver(List<File> parentFolders, JasperDesign jDesign) {

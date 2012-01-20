@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.window.Window;
@@ -49,6 +48,7 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.Datas
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DSTimeSeries extends ADSComponent {
 
@@ -70,9 +70,10 @@ public class DSTimeSeries extends ADSComponent {
 
 	@Override
 	public void setData(DrawVisitor drawVisitor, JRDesignElement jrChart,
-			JRDesignElementDataset eDataset, SimpleFileResolver fResolver) {
+			JRDesignElementDataset eDataset,
+			JasperReportsConfiguration jrContext) {
 		Assert.isTrue(eDataset instanceof JRDesignTimeSeriesDataset);
-		super.setData(drawVisitor, jrChart, eDataset, fResolver);
+		super.setData(drawVisitor, jrChart, eDataset, jrContext);
 		dataset = (JRDesignTimeSeriesDataset) eDataset;
 		setSeries(0);
 

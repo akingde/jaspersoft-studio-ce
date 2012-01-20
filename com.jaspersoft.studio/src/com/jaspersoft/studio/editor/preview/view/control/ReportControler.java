@@ -36,7 +36,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
-import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRSaver;
 
@@ -73,6 +72,7 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
 import com.jaspersoft.studio.utils.Console;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ReportControler {
 
@@ -99,11 +99,11 @@ public class ReportControler {
 	private PropertiesHelper ph;
 	private LinkedHashMap<String, APreview> viewmap;
 	private PreviewContainer pcontainer;
-	private FileResolver fileResolver;
+	private JasperReportsConfiguration jrContext;
 
-	public ReportControler(PreviewContainer pcontainer, FileResolver fileResolver) {
+	public ReportControler(PreviewContainer pcontainer, JasperReportsConfiguration jrContext) {
 		this.pcontainer = pcontainer;
-		this.fileResolver = fileResolver;
+		this.jrContext = jrContext;
 	}
 
 	public void setJasperDesign(JasperDesign jDesign) {
@@ -292,7 +292,7 @@ public class ReportControler {
 	}
 
 	private void setupFileRezolver(IProgressMonitor monitor, IFile file) {
-		jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, fileResolver);
+		jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, jrContext.getFileResolver());
 	}
 
 	private void setupVirtualizer(JasperDesign jd, PropertiesHelper ps) {

@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.util.FileResolver;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -35,6 +35,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.jface.action.Action;
+import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.WorkbenchPart;
 
 import com.jaspersoft.studio.data.DataAdapterFactory;
@@ -42,6 +43,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExtensionManager {
 	public void init() {
@@ -64,6 +66,17 @@ public class ExtensionManager {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
 				if (o instanceof DataAdapterFactory)
 					DataAdapterManager.addDataAdapterFactory((DataAdapterFactory) o);
+			} catch (CoreException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio", "editorLifecycle"); //$NON-NLS-1$ //$NON-NLS-2$
+		for (IConfigurationElement e : config) {
+			try {
+				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+				if (o instanceof IEditorContributor)
+					eContributor.add((IEditorContributor) o);
 			} catch (CoreException ex) {
 				System.out.println(ex.getMessage());
 			}
@@ -217,12 +230,30 @@ public class ExtensionManager {
 		return lst;
 	}
 
-	public AbstractVisualEditor getEditor(Object parent, FileResolver fileResolver) {
+	public AbstractVisualEditor getEditor(Object parent, JasperReportsConfiguration jrContext) {
 		for (IComponentFactory f : nodeFactory) {
-			AbstractVisualEditor n = f.getEditor(parent, fileResolver);
+			AbstractVisualEditor n = f.getEditor(parent, jrContext);
 			if (n != null)
 				return n;
 		}
 		return null;
 	}
+
+	private List<IEditorContributor> eContributor = new ArrayList<IEditorContributor>();
+
+	public void onLoad(JasperDesign jd, EditorPart editor) {
+		for (IEditorContributor f : eContributor)
+			f.onLoad(jd, editor);
+	}
+
+	public void onSave(JasperDesign jd) {
+		for (IEditorContributor f : eContributor)
+			f.onSave(jd);
+	}
+
+	public void onRun() {
+		for (IEditorContributor f : eContributor)
+			f.onRun();
+	}
+
 }

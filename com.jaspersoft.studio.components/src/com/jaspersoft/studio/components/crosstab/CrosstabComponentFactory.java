@@ -32,7 +32,6 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabCell;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
-import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -107,6 +106,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CrosstabComponentFactory implements IComponentFactory {
 
@@ -500,9 +500,10 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public AbstractVisualEditor getEditor(Object node, FileResolver fileResolver) {
+	public AbstractVisualEditor getEditor(Object node,
+			JasperReportsConfiguration jrContext) {
 		if (node instanceof JRDesignCrosstab)
-			return new CrosstabEditor(fileResolver);
+			return new CrosstabEditor(jrContext);
 		return null;
 	}
 

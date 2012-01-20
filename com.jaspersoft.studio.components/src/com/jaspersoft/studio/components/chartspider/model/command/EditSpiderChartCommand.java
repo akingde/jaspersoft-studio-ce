@@ -39,6 +39,8 @@ import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class EditSpiderChartCommand extends Command {
 	private JRElementGroup jrGroup;
@@ -74,9 +76,13 @@ public class EditSpiderChartCommand extends Command {
 					.clone();
 			SpiderChartComponent scc = (SpiderChartComponent) clone
 					.getComponent();
+			// TODO SHOULD TAKE THIS ONE FROM EDITOR
+			JasperReportsConfiguration jrContext = new JasperReportsConfiguration();
+			jrContext.setFileResolver(SelectionHelper.getFileResolver());
 
 			ChartWizard wizard = new ChartWizard(new MSpiderChart(null, clone,
-					-1), (JRDesignElementDataset) scc.getDataset(), jrDesign);
+					-1), (JRDesignElementDataset) scc.getDataset(), jrDesign,
+					jrContext);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

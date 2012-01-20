@@ -31,7 +31,6 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.jface.window.Window;
@@ -55,6 +54,7 @@ import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class ADSComponent {
 	private Control control;
@@ -75,13 +75,14 @@ public abstract class ADSComponent {
 	public abstract String getName();
 
 	public void setData(DrawVisitor drawVisitor, JRDesignElement jrChart,
-			JRDesignElementDataset eDataset, SimpleFileResolver fResolver) {
+			JRDesignElementDataset eDataset,
+			JasperReportsConfiguration jrContext) {
 		this.jrElement = jrChart;
 		this.eDataset = eDataset;
 		jrElement.setWidth(canvasChart.getSize().x);
 		jrElement.setHeight(canvasChart.getSize().y);
 		setChartFigure();
-		chartFigure.setJRElement(jrElement, drawVisitor, fResolver);
+		chartFigure.setJRElement(jrElement, drawVisitor, jrContext);
 		canvasChart.redraw();
 		btDatasetType.setEnabled(false);
 		if (jrElement instanceof JRDesignChart) {

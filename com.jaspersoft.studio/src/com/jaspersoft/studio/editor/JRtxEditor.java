@@ -28,9 +28,11 @@ import java.io.InputStream;
 import java.util.HashSet;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
+import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
@@ -46,6 +48,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -76,8 +79,13 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
+import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
 public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeListener {
+	private JasperReportsConfiguration jrContext;
+
 	public JRtxEditor() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
@@ -242,6 +250,9 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 			MStylesTemplate ms = new MStylesTemplate(m, file);
 			ms.setValue(jd);
 			StyleTemplateFactory.createTemplate(ms, new HashSet<String>(), true, file, file.getLocation().toFile(), jd);
+
+			getJrContext(file);
+
 			setModel(m);
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -254,6 +265,20 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 					setModel(null);
 					throw new PartInitException("error closing input stream", e); //$NON-NLS-1$
 				}
+		}
+	}
+
+	public void addFileResolver(FileResolver resolver) {
+		((ProxyFileResolver) jrContext.getFileResolver()).addResolver(resolver);
+	}
+
+	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
+		if (jrContext == null) {
+			jrContext = new JasperReportsConfiguration();
+			ProxyFileResolver resolver = new ProxyFileResolver();
+			resolver.addResolver(SelectionHelper.getFileResolver(file));
+			jrContext.setFileResolver(resolver);
+			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
 		}
 	}
 
@@ -335,7 +360,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 	 */
 	void createPage0() {
 		try {
-			styleEditor = new StyleTemplateEditor();
+			styleEditor = new StyleTemplateEditor(jrContext);
 
 			int index = addPage(styleEditor, getEditorInput());
 			setPageText(index, "Preview");

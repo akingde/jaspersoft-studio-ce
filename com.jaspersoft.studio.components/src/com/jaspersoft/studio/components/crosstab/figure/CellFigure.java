@@ -23,9 +23,9 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-import net.sf.jasperreports.engine.util.FileResolver;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CellFigure extends FrameFigure {
 	private JRDesignCellContents cell;
@@ -34,9 +34,10 @@ public class CellFigure extends FrameFigure {
 		super();
 	}
 
-	public void setJRElement(JRDesignCellContents jrElement, DrawVisitor drawVisitor, FileResolver fileResolver) {
+	public void setJRElement(JRDesignCellContents jrElement,
+			DrawVisitor drawVisitor, JasperReportsConfiguration jrContext) {
 		this.cell = jrElement;
-		super.setJRElement(null, drawVisitor, fileResolver);
+		super.setJRElement(null, drawVisitor, jrContext);
 		setSize(getElementWidth(), getElementHeight());
 	}
 

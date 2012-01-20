@@ -38,6 +38,8 @@ import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class EditChartCommand extends Command {
 	private JRElementGroup jrGroup;
@@ -71,8 +73,11 @@ public class EditChartCommand extends Command {
 		if (newChart == null) {
 			JRDesignChart clone = (JRDesignChart) oldChart.clone();
 
+			JasperReportsConfiguration jrContext = new JasperReportsConfiguration();
+			jrContext.setFileResolver(SelectionHelper.getFileResolver());
+			
 			ChartWizard wizard = new ChartWizard(new MChart(null, clone, -1),
-					(JRDesignElementDataset) clone.getDataset(), jrDesign, true);
+					(JRDesignElementDataset) clone.getDataset(), jrDesign, true, jrContext);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

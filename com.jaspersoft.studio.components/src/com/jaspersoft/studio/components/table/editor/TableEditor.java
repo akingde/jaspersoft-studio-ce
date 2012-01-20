@@ -22,8 +22,6 @@ package com.jaspersoft.studio.components.table.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.FileResolver;
-
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -42,6 +40,7 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class TableEditor.
@@ -49,8 +48,8 @@ import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
  * @author Chicu Veaceslav
  */
 public class TableEditor extends AbstractVisualEditor {
-	public TableEditor(FileResolver fileResolver) {
-		super(fileResolver);
+	public TableEditor(JasperReportsConfiguration jrContext) {
+		super(jrContext);
 		setPartName(Messages.TableEditor_table);
 		setPartImage(JaspersoftStudioPlugin.getImage(MTable.getIconDescriptor()
 				.getIcon16()));

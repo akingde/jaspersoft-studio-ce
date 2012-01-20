@@ -33,7 +33,7 @@ import net.sf.jasperreports.engine.JRTemplateReference;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
+import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 
 import org.eclipse.core.resources.IFile;
@@ -85,7 +85,7 @@ public class StyleTemplateFactory {
 			boolean editable, IFile file) {
 		if (file == null)
 			return;
-		SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
+		FileResolver fileResolver = SelectionHelper.getFileResolver(file);
 
 		File fileToBeOpened = fileResolver.resolveFile(location);
 		if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
@@ -171,7 +171,7 @@ public class StyleTemplateFactory {
 					str = ((JRTemplateReference) obj).getLocation();
 				}
 
-				SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(refFile);
+				FileResolver fileResolver = SelectionHelper.getFileResolver(refFile);
 				File fileToBeOpened = fileResolver.resolveFile(str);
 				if (fileToBeOpened != null && fileToBeOpened.exists() && fileToBeOpened.isFile()) {
 					IFile[] fs = root.findFilesForLocationURI(fileToBeOpened.toURI());

@@ -29,6 +29,7 @@ import org.eclipse.jface.wizard.Wizard;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.model.MGraphicElement;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ChartWizard extends Wizard {
 	private ChartTypeWizardPage page0;
@@ -36,18 +37,20 @@ public class ChartWizard extends Wizard {
 	private MGraphicElement chart;
 	private JRDesignElementDataset edataset;
 
+	private JasperReportsConfiguration jrContext;
 	private int width;
 	private int height;
 	private boolean skipFirstPage = false;
 
 	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset,
-			JasperDesign jasperDesign, boolean skipFirstPage) {
-		this(chart, edataset, jasperDesign);
+			JasperDesign jasperDesign, boolean skipFirstPage,
+			JasperReportsConfiguration jrContext) {
+		this(chart, edataset, jasperDesign, jrContext);
 		this.skipFirstPage = skipFirstPage;
 	}
 
 	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset,
-			JasperDesign jasperDesign) {
+			JasperDesign jasperDesign, JasperReportsConfiguration jrContext) {
 		super();
 		setWindowTitle(Messages.common_chart_wizard);
 		this.chart = chart;
@@ -56,6 +59,7 @@ public class ChartWizard extends Wizard {
 		JRDesignElement jrChart = (JRDesignElement) chart.getValue();
 		width = jrChart.getWidth();
 		height = jrChart.getHeight();
+		this.jrContext = jrContext;
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public class ChartWizard extends Wizard {
 		}
 
 		step1 = new ChartDataPage((JRDesignElement) chart.getValue(), edataset,
-				jasperDesign);
+				jasperDesign, jrContext);
 		addPage(step1);
 	}
 

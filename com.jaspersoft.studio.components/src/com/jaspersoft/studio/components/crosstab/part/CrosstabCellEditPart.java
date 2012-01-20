@@ -105,7 +105,7 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 			CellFigure f = (CellFigure) rect;
 			f.setLocation(new Point(x, y));
 			f.setJRElement((JRDesignCellContents) model.getValue(),
-					getDrawVisitor(), fileResolver);
+					getDrawVisitor(), jrContext);
 		}
 	}
 

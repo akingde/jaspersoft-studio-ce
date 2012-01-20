@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
@@ -28,7 +24,6 @@ import java.awt.Graphics2D;
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.JRResourcesUtil;
 
 import org.eclipse.draw2d.Graphics;
@@ -37,6 +32,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 /*
  * The Class GenericFigure.
  */
@@ -47,7 +44,7 @@ public class ComponentFigure extends RectangleFigure {
 
 	/** The draw visitor. */
 	protected DrawVisitor drawVisitor;
-	protected FileResolver fileRezolver;
+	protected JasperReportsConfiguration jrContext;
 
 	/**
 	 * Instantiates a new generic figure.
@@ -64,9 +61,9 @@ public class ComponentFigure extends RectangleFigure {
 	 * @param drawVisitor
 	 *          the draw visitor
 	 */
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor, FileResolver fileRezolver) {
+	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor, JasperReportsConfiguration jrContext) {
 		this.drawVisitor = drawVisitor;
-		this.fileRezolver = fileRezolver;
+		this.jrContext = jrContext;
 		this.jrElement = jrElement;
 		if (jrElement != null)
 			setSize(jrElement.getWidth(), jrElement.getHeight());
@@ -88,14 +85,15 @@ public class ComponentFigure extends RectangleFigure {
 
 			if (drawVisitor != null) {
 				drawVisitor.setGraphics2D(graphics2d);
-				if (fileRezolver != null) {
-
-					JRResourcesUtil.setGlobalFileResolver(fileRezolver);
+				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
+				if (jrContext != null) {
+					JRResourcesUtil.setGlobalFileResolver(jrContext.getFileResolver());
+					if (jrContext.getClassLoader() != null)
+						Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 				}
 				draw(drawVisitor, jrElement);
-				if (fileRezolver != null) {
-					// JRResourcesUtil.rese
-				}
+				if (jrContext != null)
+					Thread.currentThread().setContextClassLoader(oldLoader);
 			} else
 				graphics2d.drawRect(b.x, b.y, b.width, b.height);
 		} catch (Exception e) {

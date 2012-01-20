@@ -27,7 +27,6 @@ import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.window.Window;
@@ -46,6 +45,7 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.Serie
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XyzSerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DSXyz extends ADSComponent {
 	private JRDesignXyzDataset dataset;
@@ -66,9 +66,10 @@ public class DSXyz extends ADSComponent {
 
 	@Override
 	public void setData(DrawVisitor drawVisitor, JRDesignElement jrChart,
-			JRDesignElementDataset eDataset, SimpleFileResolver fResolver) {
+			JRDesignElementDataset eDataset,
+			JasperReportsConfiguration jrContext) {
 		Assert.isTrue(eDataset instanceof JRDesignXyzDataset);
-		super.setData(drawVisitor, jrChart, eDataset, fResolver);
+		super.setData(drawVisitor, jrChart, eDataset, jrContext);
 		dataset = (JRDesignXyzDataset) eDataset;
 		setSeries(0);
 	}

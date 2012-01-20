@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.ElementDatasetWidget;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ChartDataPage extends WizardPage {
 	private JRDesignElement jrChart;
@@ -38,15 +39,18 @@ public class ChartDataPage extends WizardPage {
 	private ElementDatasetWidget ewDataset;
 	private JRDesignElementDataset edataset;
 	private DatasetSeriesWidget eDatasetSeries;
+	private JasperReportsConfiguration jrContext;
 
 	protected ChartDataPage(JRDesignElement jrChart,
-			JRDesignElementDataset edataset, JasperDesign jrDesign) {
+			JRDesignElementDataset edataset, JasperDesign jrDesign,
+			JasperReportsConfiguration jrContext) {
 		super("chartdataconfiguration");
 		setTitle("Chart Data Configuration");
 		setDescription("Configure how data are used by your chart");
 		this.jrChart = jrChart;
 		this.jrDesign = jrDesign;
 		this.edataset = edataset;
+		this.jrContext = jrContext;
 	}
 
 	public void createControl(Composite parent) {
@@ -54,7 +58,7 @@ public class ChartDataPage extends WizardPage {
 		composite.setLayout(new GridLayout());
 		setControl(composite);
 
-		eDatasetSeries = new DatasetSeriesWidget(composite);
+		eDatasetSeries = new DatasetSeriesWidget(composite, jrContext);
 
 		ewDataset = new ElementDatasetWidget(composite);
 	}

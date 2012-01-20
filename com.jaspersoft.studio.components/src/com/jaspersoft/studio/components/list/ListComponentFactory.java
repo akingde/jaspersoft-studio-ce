@@ -24,7 +24,6 @@ import java.util.List;
 import net.sf.jasperreports.components.list.StandardListComponent;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
-import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -51,6 +50,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ListComponentFactory implements IComponentFactory {
 
@@ -151,12 +151,13 @@ public class ListComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public AbstractVisualEditor getEditor(Object node, FileResolver fileResolver) {
+	public AbstractVisualEditor getEditor(Object node,
+			JasperReportsConfiguration jrContext) {
 		if (node != null && node instanceof JRDesignComponentElement) {
 			Component component = ((JRDesignComponentElement) node)
 					.getComponent();
 			if (component != null && component instanceof StandardListComponent)
-				return new ListEditor(fileResolver);
+				return new ListEditor(jrContext);
 		}
 		return null;
 	}

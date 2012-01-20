@@ -36,7 +36,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -54,7 +53,7 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSValue;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSXy;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSXyz;
 import com.jaspersoft.studio.components.chartspider.wizard.action.DSSpider;
-import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DatasetSeriesWidget {
 	private JRDesignElementDataset eDataset;
@@ -64,11 +63,12 @@ public class DatasetSeriesWidget {
 	private StackLayout stacklayout;
 	private Composite sComposite;
 	private DrawVisitor dv;
-	private SimpleFileResolver sfResolver;
+	private JasperReportsConfiguration jrContext;
 
-	public DatasetSeriesWidget(Composite parent) {
+	public DatasetSeriesWidget(Composite parent,
+			JasperReportsConfiguration jrContext) {
 		createDataset(parent);
-		sfResolver = SelectionHelper.getFileResolver();
+		this.jrContext = jrContext;
 	}
 
 	public void createDataset(Composite composite) {
@@ -119,7 +119,7 @@ public class DatasetSeriesWidget {
 		if (eDataset != null)
 			c = map.get(eDataset.getClass());
 		if (c != null) {
-			c.setData(dv, jrChart, eDataset, sfResolver);
+			c.setData(dv, jrChart, eDataset, jrContext);
 			stacklayout.topControl = c.getControl();
 		} else {
 			// a label, with not implemented ...

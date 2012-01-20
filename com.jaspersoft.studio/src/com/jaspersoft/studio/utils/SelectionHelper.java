@@ -26,6 +26,7 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.SimpleFileResolver;
 
 import org.eclipse.core.filesystem.EFS;
@@ -157,7 +158,7 @@ public class SelectionHelper {
 		try {
 			if (file != null && path != null) {
 				// String pathname = FileUtils.findRelativePath(rpath, path);
-				SimpleFileResolver fileResolver = getFileResolver(file);
+				FileResolver fileResolver = getFileResolver(file);
 
 				File fileToBeOpened = fileResolver.resolveFile(path);
 
@@ -174,7 +175,7 @@ public class SelectionHelper {
 		}
 	}
 
-	public static SimpleFileResolver getFileResolver() {
+	public static FileResolver getFileResolver() {
 		IEditorPart ep = getActiveJRXMLEditor();
 		if (ep != null && ep.getEditorInput() instanceof IFileEditorInput) {
 			IFileEditorInput fe = ((IFileEditorInput) ep.getEditorInput());
@@ -185,7 +186,7 @@ public class SelectionHelper {
 		return fileResolver;
 	}
 
-	public static SimpleFileResolver getFileResolver(IFile file) {
+	public static FileResolver getFileResolver(IFile file) {
 		SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
 				new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
 				new File(file.getProject().getLocationURI()) }));
