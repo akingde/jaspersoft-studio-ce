@@ -22,6 +22,8 @@ package com.jaspersoft.studio.components.crosstab.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.util.FileResolver;
+
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -42,14 +44,15 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+
 /*
  * The Class CrosstabEditor.
  * 
  * @author Chicu Veaceslav
  */
 public class CrosstabEditor extends AbstractVisualEditor {
-	public CrosstabEditor() {
-		super();
+	public CrosstabEditor(FileResolver fileResolver) {
+		super(fileResolver);
 		setPartName(Messages.CrosstabEditor_crosstab);
 		setPartImage(JaspersoftStudioPlugin.getImage(MCrosstab
 				.getIconDescriptor().getIcon16()));
@@ -82,7 +85,8 @@ public class CrosstabEditor extends AbstractVisualEditor {
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
 				provider);
 
-		Boolean isRulerVisible = JaspersoftStudioPlugin.getInstance()
+		Boolean isRulerVisible = JaspersoftStudioPlugin
+				.getInstance()
 				.getPreferenceStore()
 				.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 

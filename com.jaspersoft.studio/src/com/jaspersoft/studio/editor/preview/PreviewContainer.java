@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
@@ -59,8 +60,11 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		super(true);
 	}
 
-	public PreviewContainer(boolean listenResource) {
+	private FileResolver fileResolver;
+
+	public PreviewContainer(boolean listenResource, FileResolver fileResolver) {
 		super(listenResource);
+		this.fileResolver = fileResolver;
 	}
 
 	@Override
@@ -233,7 +237,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	private ReportControler getReportControler() {
 		if (reportControler == null) {
-			reportControler = new ReportControler(this);
+			reportControler = new ReportControler(this, fileResolver);
 		}
 		return reportControler;
 	}

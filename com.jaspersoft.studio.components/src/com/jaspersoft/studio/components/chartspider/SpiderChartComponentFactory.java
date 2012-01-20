@@ -26,6 +26,7 @@ import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
 import net.sf.jasperreports.components.spiderchart.SpiderChartComponent;
 import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -163,7 +164,7 @@ public class SpiderChartComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public AbstractVisualEditor getEditor(Object node) {
+	public AbstractVisualEditor getEditor(Object node, FileResolver fileResolver) {
 		return null;
 	}
 

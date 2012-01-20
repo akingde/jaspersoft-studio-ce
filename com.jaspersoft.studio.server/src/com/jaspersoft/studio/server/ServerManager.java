@@ -35,6 +35,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -161,6 +162,14 @@ public class ServerManager {
 				if (sp.getValue().getName().equals(name))
 					return sp;
 			}
+		}
+		return null;
+	}
+
+	public static WSClient getServer(String url) {
+		for (MServerProfile sp : serverProfiles) {
+			if (sp.getValue().getUrl().equals(url))
+				return sp.getWsClient();
 		}
 		return null;
 	}

@@ -193,7 +193,7 @@ public class SelectionHelper {
 		return fileResolver;
 	}
 
-	public static SimpleFileResolver setClassLoader(IFile file, IProgressMonitor monitor) {
+	public static void setClassLoader(IFile file, IProgressMonitor monitor) {
 		try {
 			Thread.currentThread().setContextClassLoader(ClassLoaderUtil.getClassLoader4Project(monitor, file.getProject()));
 		} catch (JavaModelException e) {
@@ -201,9 +201,8 @@ public class SelectionHelper {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		return SelectionHelper.getFileResolver(file);
 	}
-	
+
 	/**
 	 * Gets the currently selected {@link IJavaProject} instance, based upon the current opened JRXMLEditor window.
 	 * 
@@ -211,7 +210,7 @@ public class SelectionHelper {
 	 */
 	public static IJavaProject getJavaProjectFromCurrentJRXMLEditor() {
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
-		if (activeJRXMLEditor!=null && activeJRXMLEditor.getEditorInput() instanceof IFileEditorInput){
+		if (activeJRXMLEditor != null && activeJRXMLEditor.getEditorInput() instanceof IFileEditorInput) {
 			IProject prj = ((IFileEditorInput) activeJRXMLEditor.getEditorInput()).getFile().getProject();
 			IJavaProject javaProj = JavaCore.create(prj);
 			return javaProj;

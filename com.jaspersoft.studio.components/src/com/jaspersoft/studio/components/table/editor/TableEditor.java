@@ -22,6 +22,8 @@ package com.jaspersoft.studio.components.table.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.util.FileResolver;
+
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -40,14 +42,15 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+
 /*
  * The Class TableEditor.
  * 
  * @author Chicu Veaceslav
  */
 public class TableEditor extends AbstractVisualEditor {
-	public TableEditor() {
-		super();
+	public TableEditor(FileResolver fileResolver) {
+		super(fileResolver);
 		setPartName(Messages.TableEditor_table);
 		setPartImage(JaspersoftStudioPlugin.getImage(MTable.getIconDescriptor()
 				.getIcon16()));
@@ -80,7 +83,8 @@ public class TableEditor extends AbstractVisualEditor {
 		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
 				provider);
 
-		Boolean isRulerVisible = JaspersoftStudioPlugin.getInstance()
+		Boolean isRulerVisible = JaspersoftStudioPlugin
+				.getInstance()
 				.getPreferenceStore()
 				.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 

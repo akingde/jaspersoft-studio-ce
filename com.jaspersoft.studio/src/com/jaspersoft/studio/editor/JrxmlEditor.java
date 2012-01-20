@@ -30,6 +30,7 @@ import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
@@ -44,7 +45,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.DocumentEvent;
@@ -83,6 +83,7 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 
 /*
@@ -140,6 +141,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	/** The model property change listener. */
 	private ModelPropertyChangeListener modelPropChangeListener = new ModelPropertyChangeListener();
+	private FileResolver fileResolver;
 
 	/**
 	 * Creates a multi-page editor example.
@@ -154,7 +156,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	void createPage0() {
 		try {
-			reportContainer = new ReportContainer(this);
+			reportContainer = new ReportContainer(this, fileResolver);
 
 			reportContainer.addPageChangedListener(new IPageChangedListener() {
 
@@ -167,8 +169,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			int index = addPage(reportContainer, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_design);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
-					null, e.getStatus());
+			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
 		}
 	}
 
@@ -192,8 +193,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 						}
 					});
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_text_editor,
-					null, e.getStatus());
+			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
 		}
 	}
 
@@ -201,7 +201,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Creates page 2 of the multi-page editor, which shows the sorted text.
 	 */
 	void createPage2() {
-		previewEditor = new PreviewContainer(false) {
+		previewEditor = new PreviewContainer(false, fileResolver) {
 			@Override
 			public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
 				if (myDataAdapterDesc != null) {
@@ -221,10 +221,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			int index = addPage(previewEditor, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_preview);
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
-					null, e.getStatus());
+			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
 		}
-
 	}
 
 	/**
@@ -379,9 +377,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (editorInput instanceof FileStoreEditorInput) {
 			try {
 				FileStoreEditorInput fsei = (FileStoreEditorInput) editorInput;
-
 				IPath location = new Path(fsei.getURI().getPath());
-
 				// Create a new temporary project object and open it.
 				IProject project = null;
 				for (IProject prj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
@@ -390,7 +386,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 							project = prj;
 						else if (prj.getNature(JasperReportsNature.NATURE_ID) != null)
 							project = prj;
-
 					}
 				}
 				if (project == null)
@@ -404,12 +399,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				IFile file = project.getFile(location.lastSegment());
 				file.createLink(location, IResource.REPLACE, null);
 
-				// FileEditorInput newFileEditorInput = new FileEditorInput(file);
 				editorInput = new FileEditorInput(file);
 			} catch (CoreException e) {
 				throw new PartInitException(e.getMessage(), e);
 			}
-			// in = new FileInputStream(((FileStoreEditorInput) editorInput).getURI().getPath());
 		}
 		super.init(site, editorInput);
 		setPartName(editorInput.getName());
@@ -419,13 +412,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			if (editorInput instanceof IFileEditorInput) {
 				file = ((IFileEditorInput) editorInput).getFile();
 				in = file.getContents();
-			} else {
+			} else
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
-			}
-			JasperDesign jd = null;
+			p = new PropertiesHelper(file.getProject());
+			fileResolver = SelectionHelper.getFileResolver(file);
 
 			in = getXML(editorInput, file.getCharset(true), in, version);
-			jd = JRXmlLoader.load(in);
+			JasperDesign jd = JRXmlLoader.load(in);
 			setModel(ReportFactory.createReport(jd, file));
 		} catch (JRException e) {
 			setModel(null);
@@ -442,7 +435,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					throw new PartInitException("error closing input stream", e); //$NON-NLS-1$
 				}
 		}
-		p = new PropertiesHelper(file.getProject());
 	}
 
 	public static String getFileExtension(IEditorInput editorInput) {

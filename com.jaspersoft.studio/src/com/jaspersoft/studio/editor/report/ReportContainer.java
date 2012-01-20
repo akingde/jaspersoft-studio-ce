@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignScriptlet;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -89,6 +90,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	/** The parent. */
 	private EditorPart parent;
 	private PropertyChangeSupport propertyChangeSupport;
+	private FileResolver fileResolver;
 
 	public PropertyChangeSupport getPropertyChangeSupport() {
 		if (propertyChangeSupport == null)
@@ -102,8 +104,9 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 * @param parent
 	 *          the parent
 	 */
-	public ReportContainer(EditorPart parent) {
+	public ReportContainer(EditorPart parent, FileResolver fileResolver) {
 		this.parent = parent;
+		this.fileResolver = fileResolver;
 	}
 
 	/*
@@ -137,7 +140,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		// ctfolder.setTopRight(combo);
 
 		try {
-			ReportEditor reportEditor = new ReportEditor();
+			ReportEditor reportEditor = new ReportEditor(fileResolver);
 			int index = addPage(reportEditor, getEditorInput());
 			setPageText(index, Messages.common_main_report);
 			setPageImage(index, reportEditor.getPartImage());
@@ -226,7 +229,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				MPage rep = new MPage(root, jd);
 				ANode node = m.createNode(rep, obj, -1);
 
-				ave = m.getEditor(obj);
+				ave = m.getEditor(obj, fileResolver);
 				if (ave != null) {
 					int index = addPage(ave, getEditorInput());
 

@@ -37,6 +37,7 @@ import net.sf.jasperreports.components.barcode4j.UPCAComponent;
 import net.sf.jasperreports.components.barcode4j.UPCEComponent;
 import net.sf.jasperreports.components.barcode4j.USPSIntelligentMailComponent;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -194,7 +195,7 @@ public class BarcodeComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public AbstractVisualEditor getEditor(Object node) {
+	public AbstractVisualEditor getEditor(Object node, FileResolver fileResolver) {
 		return null;
 	}
 

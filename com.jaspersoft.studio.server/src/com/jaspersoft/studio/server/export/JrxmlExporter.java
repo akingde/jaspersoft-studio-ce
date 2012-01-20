@@ -22,8 +22,8 @@ import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class JrxmlExporter extends AExporter {
-	private static final String PROP_SERVERURL = "ireport.jasperserver.url";
-	private static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit";
+	public static final String PROP_SERVERURL = "ireport.jasperserver.url";
+	public static final String PROP_REPORTUNIT = "ireport.jasperserver.reportUnit";
 
 	@Override
 	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)

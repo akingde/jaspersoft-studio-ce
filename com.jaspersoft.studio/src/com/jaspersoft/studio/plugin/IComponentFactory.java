@@ -21,6 +21,8 @@ package com.jaspersoft.studio.plugin;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.util.FileResolver;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -54,6 +56,6 @@ public interface IComponentFactory {
 
 	public List<String> getActionsID();
 
-	public AbstractVisualEditor getEditor(Object node);
+	public AbstractVisualEditor getEditor(Object node, FileResolver fileResolver);
 
 }

@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.util.FileResolver;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
@@ -215,9 +217,9 @@ public class ExtensionManager {
 		return lst;
 	}
 
-	public AbstractVisualEditor getEditor(Object parent) {
+	public AbstractVisualEditor getEditor(Object parent, FileResolver fileResolver) {
 		for (IComponentFactory f : nodeFactory) {
-			AbstractVisualEditor n = f.getEditor(parent);
+			AbstractVisualEditor n = f.getEditor(parent, fileResolver);
 			if (n != null)
 				return n;
 		}

@@ -21,9 +21,8 @@ package com.jaspersoft.studio.editor.report;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.SimpleFileResolver;
+import net.sf.jasperreports.engine.util.FileResolver;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
@@ -68,7 +67,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPageSite;
@@ -100,7 +98,6 @@ import com.jaspersoft.studio.editor.palette.JDPaletteFactory;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
-import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
  * The Class AbstractVisualEditor.
@@ -110,6 +107,7 @@ import com.jaspersoft.studio.utils.SelectionHelper;
 public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutPalette implements IAdaptable,
 		IGraphicalEditor {
 	private Image partImage = JaspersoftStudioPlugin.getImage(MReport.getIconDescriptor().getIcon16());
+	private FileResolver fileResolver;
 
 	public Image getPartImage() {
 		return partImage;
@@ -118,8 +116,9 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 	/**
 	 * Instantiates a new abstract visual editor.
 	 */
-	public AbstractVisualEditor() {
+	public AbstractVisualEditor(FileResolver fileResolver) {
 		setEditDomain(new DefaultEditDomain(this));
+		this.fileResolver = fileResolver;
 	}
 
 	@Override
@@ -297,10 +296,6 @@ public abstract class AbstractVisualEditor extends J2DGraphicalEditorWithFlyoutP
 
 		// set context menu
 		graphicalViewer.setContextMenu(new AppContextMenuProvider(graphicalViewer, getActionRegistry()));
-
-		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-
-		SimpleFileResolver fileResolver = SelectionHelper.getFileResolver(file);
 
 		graphicalViewer.setProperty("FILERESOLVER", fileResolver);
 	}

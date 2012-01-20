@@ -23,6 +23,7 @@ import java.util.List;
 
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.util.FileResolver;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -121,7 +122,7 @@ public class MapComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public AbstractVisualEditor getEditor(Object node) {
+	public AbstractVisualEditor getEditor(Object node, FileResolver fileResolver) {
 		return null;
 	}
 

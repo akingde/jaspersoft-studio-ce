@@ -22,6 +22,8 @@ package com.jaspersoft.studio.components.list.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.util.FileResolver;
+
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
@@ -35,16 +37,18 @@ import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerProvider;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.preferences.RulersGridPreferencePage;
+
 /*
  * The Class TableEditor.
  * 
  * @author Chicu Veaceslav
  */
 public class ListEditor extends AbstractVisualEditor {
-	public ListEditor() {
-		super();
+	public ListEditor(FileResolver fileResolver) {
+		super(fileResolver);
 		setPartName(Messages.common_list);
-		setPartImage(JaspersoftStudioPlugin.getImage(MList.getIconDescriptor().getIcon16()));
+		setPartImage(JaspersoftStudioPlugin.getImage(MList.getIconDescriptor()
+				.getIcon16()));
 	}
 
 	/*
@@ -64,19 +68,27 @@ public class ListEditor extends AbstractVisualEditor {
 		graphicalViewer.setEditPartFactory(new JasperDesignEditPartFactory());
 
 		// set rulers providers
-		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true, RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER, provider);
+		RulerProvider provider = new ReportRulerProvider(new ReportRuler(true,
+				RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER,
+				provider);
 
-		provider = new ReportRulerProvider(new ReportRuler(false, RulerProvider.UNIT_PIXELS));
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER, provider);
+		provider = new ReportRulerProvider(new ReportRuler(false,
+				RulerProvider.UNIT_PIXELS));
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_VERTICAL_RULER,
+				provider);
 
-		Boolean isRulerVisible = JaspersoftStudioPlugin.getInstance().getPreferenceStore()
+		Boolean isRulerVisible = JaspersoftStudioPlugin
+				.getInstance()
+				.getPreferenceStore()
 				.getBoolean(RulersGridPreferencePage.P_PAGE_RULERGRID_SHOWRULER);
 
-		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, isRulerVisible);
+		graphicalViewer.setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
+				isRulerVisible);
 
 		createAdditionalActions();
-		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(graphicalViewer));
+		graphicalViewer.setKeyHandler(new GraphicalViewerKeyHandler(
+				graphicalViewer));
 	}
 
 	@Override
