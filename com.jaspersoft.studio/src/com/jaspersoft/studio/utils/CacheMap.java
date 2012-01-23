@@ -24,12 +24,14 @@ public class CacheMap<K, V> extends HashMap<K, V> {
 	@Override
 	public V get(Object key) {
 		V val = super.get(key);
-		Date time = expmap.get(key);
+		if (val != null) {
+			Date time = expmap.get(key);
 
-		long newtime = new Date().getTime();
-		if (newtime - time.getTime() > timeout) {
-			remove(key);
-			return null;
+			long newtime = new Date().getTime();
+			if (newtime - time.getTime() > timeout) {
+				remove(key);
+				return null;
+			}
 		}
 		return val;
 	}
