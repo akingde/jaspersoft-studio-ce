@@ -16,7 +16,7 @@ public class CacheMap<K, V> extends HashMap<K, V> {
 
 	@Override
 	public V put(K key, V value) {
-		V oldval = put(key, value);
+		V oldval = super.put(key, value);
 		expmap.put(key, new Date());
 		return oldval;
 	};
