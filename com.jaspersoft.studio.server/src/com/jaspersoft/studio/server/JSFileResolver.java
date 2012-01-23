@@ -26,7 +26,6 @@ package com.jaspersoft.studio.server;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +35,7 @@ import net.sf.jasperreports.engine.util.SimpleFileResolver;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
+import com.jaspersoft.studio.utils.CacheMap;
 
 /**
  * 
@@ -70,7 +70,7 @@ public class JSFileResolver extends SimpleFileResolver {
 		runitUri = jDesign.getProperty(JrxmlExporter.PROP_REPORTUNIT);
 	}
 
-	private Map<String, File> map = new HashMap<String, File>();
+	private Map<String, File> map = new CacheMap<String, File>(3000);
 
 	@Override
 	public File resolveFile(String fileName) {
