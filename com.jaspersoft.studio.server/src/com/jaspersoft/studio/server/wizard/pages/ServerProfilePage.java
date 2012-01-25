@@ -36,6 +36,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.compatibility.dialog.VersionCombo;
 import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
@@ -70,6 +72,7 @@ public class ServerProfilePage extends WizardPage {
 		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(gd);
 
 		new Label(composite, SWT.NONE).setText(Messages.ServerProfilePage_4);
+
 		Text turl = new Text(composite, SWT.BORDER);
 		turl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -94,6 +97,17 @@ public class ServerProfilePage extends WizardPage {
 		new Label(gr, SWT.NONE).setText(Messages.ServerProfilePage_11);
 		Text tpass = new Text(gr, SWT.BORDER | SWT.PASSWORD);
 		tpass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		Composite cmp = new Composite(composite, SWT.NONE);
+		cmp.setLayout(new GridLayout(2, false));
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		cmp.setLayoutData(gd);
+
+		new Label(cmp, SWT.NONE).setText("JasperReports Library Version");
+
+		VersionCombo cversion = new VersionCombo(cmp);
+		cversion.setVersion(JRXmlWriterHelper.LAST_VERSION);
 
 		ServerProfile value = sprofile.getValue();
 		dbc.bindValue(SWTObservables.observeText(tname, SWT.Modify),
@@ -126,5 +140,24 @@ public class ServerProfilePage extends WizardPage {
 				null);
 		dbc.bindValue(SWTObservables.observeText(tpass, SWT.Modify),
 				PojoObservables.observeValue(value, "pass")); //$NON-NLS-1$
+
+		dbc.bindValue(SWTObservables.observeText(cversion.getControl()),
+				PojoObservables.observeValue(new Proxy(value), "jrVersion")); //$NON-NLS-1$
+	}
+
+	public class Proxy {
+		private ServerProfile sp;
+
+		public Proxy(ServerProfile sp) {
+			this.sp = sp;
+		}
+
+		public void setJrVersion(String v) {
+			sp.setJrVersion(VersionCombo.getJrVersion(v));
+		}
+
+		public String getJrVersion() {
+			return VersionCombo.getLabelVersion(sp.getJrVersion());
+		}
 	}
 }

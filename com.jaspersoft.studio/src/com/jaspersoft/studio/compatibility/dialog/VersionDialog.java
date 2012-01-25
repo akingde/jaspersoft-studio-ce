@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.compatibility.dialog;
 
@@ -32,7 +28,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -40,7 +35,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 
@@ -60,26 +54,11 @@ public class VersionDialog extends Dialog {
 		newShell.setText(Messages.VersionDialog_title);
 	}
 
-	private String[][] versions = JRXmlWriterHelper.getVersions();
-
-	private String[] getItems() {
-		String[] r = new String[versions.length];
-		for (int i = 0; i < versions.length; i++)
-			r[i] = versions[i][0];
-		return r;
-	}
-
-	private int getVersionIndex() {
-		for (int i = 0; i < versions.length; i++)
-			if (versions[i][1].equals(version))
-				return i;
-		return 0;
-	}
-
 	private String version;
+	private VersionCombo cversion;
 
 	public String getVersion() {
-		return version;
+		return cversion.getVersion();
 	}
 
 	@Override
@@ -96,21 +75,8 @@ public class VersionDialog extends Dialog {
 		label = new Label(container, SWT.NONE);
 		label.setText(Messages.VersionDialog_label2);
 
-		final Combo c = new Combo(container, SWT.SINGLE | SWT.READ_ONLY);
-		c.setItems(getItems());
-		c.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				int ind = c.getSelectionIndex();
-				if (ind >= 0 && ind < versions.length)
-					version = versions[ind][1];
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
-		});
-		c.select(getVersionIndex());
+		cversion = new VersionCombo(container);
+		cversion.setVersion(version);
 
 		final Button b = new Button(container, SWT.CHECK);
 		b.setText(Messages.VersionDialog_checkbox);

@@ -82,7 +82,6 @@ public class RDReportUnitPage extends AResourcePage {
 				PojoObservables.observeValue(v, "jspView"));
 
 		res.getChildren();
-
 	}
 
 	protected void createReportUnitControls(TabFolder tabFolder) {
@@ -121,7 +120,6 @@ public class RDReportUnitPage extends AResourcePage {
 				PojoObservables.observeValue(v, "allowPrompt"));
 
 		res.getChildren();
-
 	}
 
 	private ReportProxy getProxy(ResourceDescriptor rd) {

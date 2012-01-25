@@ -112,7 +112,7 @@ public class WSClientHelper {
 		ResourceDescriptor rd = new ResourceDescriptor();
 		rd.setWsType(ResourceDescriptor.TYPE_FOLDER);
 		rd.setUriString(folderUri);
-		if (depth < 1){
+		if (depth < 1) {
 			parent.removeChildren();
 			return listFolder(parent, -1, client, monitor, rd, depth);
 		}
@@ -178,6 +178,11 @@ public class WSClientHelper {
 		return sp.getWsClient().get(rd, f);
 	}
 
+	public static ResourceDescriptor getResource(WSClient cl,
+			ResourceDescriptor rd, File f) throws Exception {
+		return cl.get(rd, f);
+	}
+
 	public static ResourceDescriptor getReference(ANode root,
 			ResourceDescriptor rd) throws Exception {
 		MServerProfile sp = (MServerProfile) root.getRoot();
@@ -201,12 +206,13 @@ public class WSClientHelper {
 		saveResource(res, monitor, true);
 	}
 
-	public static void saveResource(MResource res, IProgressMonitor monitor,
-			boolean refresh) throws Exception {
+	public static ResourceDescriptor saveResource(MResource res,
+			IProgressMonitor monitor, boolean refresh) throws Exception {
 		INode n = res.getRoot();
+		ResourceDescriptor rd = null;
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile sp = (MServerProfile) n;
-			ResourceDescriptor rd = res.getValue();
+			rd = res.getValue();
 			if (rd.getIsNew()) {
 				rd.setUriString(rd.getParentFolder() + "/" + rd.getName());
 			}
@@ -216,20 +222,22 @@ public class WSClientHelper {
 			rd.setHasData(file != null);
 
 			MReportUnit mru = res.getReportUnit();
+			WSClient cli = sp.getWsClient();
 			if (mru != null && res != mru) {
 				String ruuri = mru.getValue().getUriString();
 
 				if (rd.getWsType()
 						.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
-					sp.getWsClient().addOrModifyResource(rd, file);
+					rd = cli.addOrModifyResource(rd, file);
 				} else {
-					sp.getWsClient().modifyReportUnitResource(ruuri, rd, file);
+					rd = cli.modifyReportUnitResource(ruuri, rd, file);
 				}
 			} else
-				sp.getWsClient().addOrModifyResource(rd, file);
+				rd = cli.addOrModifyResource(rd, file);
 			if (refresh)
 				refreshResource((MResource) res.getParent(), monitor);
 		}
+		return rd;
 
 	}
 
@@ -320,6 +328,34 @@ public class WSClientHelper {
 	public static WSClient getClient(String uri) {
 		MServerProfile sp = ServerManager.getServerProfile(uri);
 		return sp.getWsClient();
+	}
+
+	public static MResource findSelected(List<INode> list,
+			IProgressMonitor monitor, String prunit, WSClient cli)
+			throws Exception {
+		int maxl = 0;
+		int pos = -1;
+		for (int i = 0; i < list.size(); i++) {
+			if (!(list.get(i) instanceof MResource))
+				continue;
+			MResource mr = (MResource) list.get(i);
+			String uri = mr.getValue().getUriString();
+			if (prunit.equals(uri))
+				return mr;
+			if (prunit.startsWith(uri) && prunit.length() >= uri.length()) {
+				if (maxl < uri.length()) {
+					maxl = uri.length();
+					pos = i;
+				}
+			}
+		}
+		if (pos >= 0) {
+			MResource mr = (MResource) list.get(pos);
+			String uri = mr.getValue().getUriString();
+			listFolder(mr, cli, uri, monitor, 0);
+			return findSelected(mr.getChildren(), monitor, prunit, cli);
+		}
+		return null;
 	}
 
 }

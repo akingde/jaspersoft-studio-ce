@@ -253,7 +253,8 @@ public class WSClient {
      */
     public ResourceDescriptor get(ResourceDescriptor descriptor, File outputFile, java.util.List<Argument> args) throws Exception
     {
-
+    	java.io.InputStream is =null;
+    	OutputStream os=null;
         try {
             Request req = new Request();
 
@@ -284,17 +285,15 @@ public class WSClient {
             Object[] resAtts = ((org.apache.axis.client.Stub)getManagementService()).getAttachments();
             if (resAtts != null && resAtts.length > 0 && outputFile != null)
             {
-                java.io.InputStream is = ((org.apache.axis.attachments.AttachmentPart)resAtts[0]).getDataHandler().getInputStream();
+                 is = ((org.apache.axis.attachments.AttachmentPart)resAtts[0]).getDataHandler().getInputStream();
                 
                 byte[] buffer = new byte[1024];
-                OutputStream os = new FileOutputStream(outputFile);
+                os = new FileOutputStream(outputFile);
                 int bCount = 0;
                 while ( (bCount = is.read(buffer)) > 0)
                 {
                     os.write( buffer, 0, bCount);
-                }
-                is.close();
-                os.close();
+                } 
             }
             else if (outputFile != null)
             {
@@ -307,7 +306,10 @@ public class WSClient {
             ex.printStackTrace();
             throw ex;
         } finally {
-        
+        	if(is != null)
+        		is.close();
+        	if(os != null)
+        		os.close();
         }
         
     }

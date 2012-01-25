@@ -7,6 +7,7 @@ import java.util.Map;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.utils.FileUtils;
 
 public abstract class AExporter {
 	protected static Map<String, String> fileurimap = new HashMap<String, String>();
@@ -28,10 +29,9 @@ public abstract class AExporter {
 		File f = null;
 		if (filename != null)
 			f = new File(filename);
-		else {
-			f = File.createTempFile("jrsres", dextention);
-			f.deleteOnExit();
-		}
+		else
+			f = FileUtils.createTempFile("jrsres", dextention);
+
 		WSClientHelper.getResource(res, rd, f);
 		return f;
 	}

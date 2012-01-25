@@ -8,6 +8,9 @@
 		<field name="name" type="string">
 			<bind-xml name="name" node="element" />
 		</field>
+		<field name="jrVersion" type="string">
+			<bind-xml name="jrVersion" node="element" />
+		</field>
 		<field name="url" type="string">
 			<bind-xml name="url" node="element" />
 		</field>

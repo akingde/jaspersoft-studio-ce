@@ -71,6 +71,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.preferences.virtualizer.VirtualizerHelper;
 import com.jaspersoft.studio.utils.Console;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -208,7 +209,7 @@ public class ReportControler {
 
 					setupFileRezolver(monitor, file);
 
-					JasperDesign jd = copyJasperDesign();
+					JasperDesign jd = ModelUtils.copyJasperDesign(jDesign);
 
 					setupProperties(jd);
 
@@ -284,12 +285,7 @@ public class ReportControler {
 		ph.setProperties(jd);
 	}
 
-	private JasperDesign copyJasperDesign() throws JRException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		JRSaver.saveObject(jDesign, out);
-		JasperDesign jd = (JasperDesign) JRLoader.loadObject(new ByteArrayInputStream(out.toByteArray()));
-		return jd;
-	}
+	
 
 	private void setupFileRezolver(IProgressMonitor monitor, IFile file) {
 		jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, jrContext.getFileResolver());

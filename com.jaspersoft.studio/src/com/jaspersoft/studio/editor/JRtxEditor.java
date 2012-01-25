@@ -36,7 +36,6 @@ import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
-import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -46,7 +45,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -68,7 +66,6 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.editor.outline.page.MultiOutlineView;
 import com.jaspersoft.studio.editor.style.StyleTemplateEditor;
@@ -80,6 +77,7 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.style.StyleTemplateFactory;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
@@ -137,14 +135,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 				doc.set(xml);
 			}
 		} catch (final Exception e) {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(), 1,
-							"Error transforming model to xml.", e.getCause()); //$NON-NLS-1$
-					ErrorDialog.openError(Display.getDefault().getActiveShell(),
-							Messages.JrxmlEditor_error_loading_jrxml_to_model, null, status);
-				}
-			});
+			UIUtils.showError(e);
 		}
 
 	}

@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.server.model.server;
 
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+
 import net.sf.jasperreports.repo.Resource;
 
 public class ServerProfile implements Resource, Cloneable {
@@ -26,6 +28,15 @@ public class ServerProfile implements Resource, Cloneable {
 	private String url;
 	private String user;
 	private String organisation;
+	private String jrVersion = JRXmlWriterHelper.LAST_VERSION;
+
+	public String getJrVersion() {
+		return jrVersion;
+	}
+
+	public void setJrVersion(String jrVersion) {
+		this.jrVersion = jrVersion;
+	}
 
 	public String getOrganisation() {
 		return organisation;

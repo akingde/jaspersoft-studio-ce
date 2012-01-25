@@ -38,7 +38,6 @@
  */
 package com.jaspersoft.studio.editor.style;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.gef.ContextMenuProvider;
@@ -59,7 +58,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -217,8 +215,6 @@ public class StyleTemplateEditor extends J2DGraphicalEditor implements ITabbedPr
 		getActionRegistry().registerAction(new ZoomInAction(zoomManager));
 		getActionRegistry().registerAction(new ZoomOutAction(zoomManager));
 		graphicalViewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
-
-		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 
 		graphicalViewer.setProperty("JRCONTEXT", jrContext);
 	}

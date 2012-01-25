@@ -96,15 +96,22 @@ public class AddResourcePage extends WizardPage {
 		this.dsonly = dsonly;
 	}
 
+	private boolean ruOnly = false;
+
+	public void setOnlyReportUnit(boolean ruOnly) {
+		this.ruOnly = ruOnly;
+	}
+
 	private MRoot getInput() {
 		MRoot root = new MRoot(null, null);
 		if (dsonly) {
 			createDatasources(root);
+		} else if (ruOnly) {
+			createReportUnit(root);
 		} else {
-
 			if (parent instanceof MFolder) {
 				new MFolder(root, MFolder.createDescriptor(parent), -1);
-				new MReportUnit(root, MReportUnit.createDescriptor(parent), -1);
+				createReportUnit(root);
 
 				createDatasources(root);
 
@@ -133,6 +140,11 @@ public class AddResourcePage extends WizardPage {
 		}
 
 		return root;
+	}
+
+	protected void createReportUnit(MRoot root) {
+		resource = new MReportUnit(root, MReportUnit.createDescriptor(parent),
+				-1);
 	}
 
 	protected void createDatasources(MRoot root) {

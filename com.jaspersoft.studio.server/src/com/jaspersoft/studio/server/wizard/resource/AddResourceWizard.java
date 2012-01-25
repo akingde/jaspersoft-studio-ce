@@ -37,16 +37,36 @@ public class AddResourceWizard extends Wizard {
 		this.parent = parent;
 	}
 
+	private boolean skipFirstPage = false;
+
+	public void setSkipFirstPage(boolean skipFirstPage) {
+		this.skipFirstPage = skipFirstPage;
+	}
+
+	@Override
+	public IWizardPage getStartingPage() {
+		if (skipFirstPage && page0 != null)
+			return getNextPage(page0);
+		return super.getStartingPage();
+	}
+
 	private boolean dsonly = false;
 
 	public void setOnlyDatasource(boolean dsonly) {
 		this.dsonly = dsonly;
 	}
 
+	private boolean ruOnly = false;
+
+	public void setOnlyReportUnit(boolean ruOnly) {
+		this.ruOnly = ruOnly;
+	}
+
 	@Override
 	public void addPages() {
 		page0 = new AddResourcePage(parent);
 		page0.setOnlyDatasource(dsonly);
+		page0.setOnlyReportUnit(ruOnly);
 		addPage(page0);
 
 		addPage(new ResourceDescriptorPage());

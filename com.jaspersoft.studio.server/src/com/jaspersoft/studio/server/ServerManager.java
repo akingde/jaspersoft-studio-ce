@@ -54,6 +54,15 @@ public class ServerManager {
 	private static PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
 			JaspersoftStudioPlugin.getInstance());
 
+	public static List<ServerProfile> getServerList() {
+		if (serverProfiles.isEmpty())
+			loadServerProfiles(new MServers(null));
+		List<ServerProfile> servers = new ArrayList<ServerProfile>();
+		for (MServerProfile ms : serverProfiles)
+			servers.add(ms.getValue());
+		return servers;
+	}
+
 	public static PropertyChangeSupport getPropertyChangeSupport() {
 		return propertyChangeSupport;
 	}
@@ -139,12 +148,16 @@ public class ServerManager {
 					Node adapterNode = adapterNodes.item(i);
 
 					if (adapterNode.getNodeType() == Node.ELEMENT_NODE) {
-						ServerProfile sprof = (ServerProfile) XmlUtil.read(
-								adapterNode, MServerProfile.MAPPINGFILE);
+						try {
+							ServerProfile sprof = (ServerProfile) XmlUtil.read(
+									adapterNode, MServerProfile.MAPPINGFILE);
 
-						MServerProfile sp = new MServerProfile(root, sprof);
-						new MDummy(sp);
-						serverProfiles.add(sp);
+							MServerProfile sp = new MServerProfile(root, sprof);
+							new MDummy(sp);
+							serverProfiles.add(sp);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
 					}
 				}
 
@@ -170,6 +183,14 @@ public class ServerManager {
 		for (MServerProfile sp : serverProfiles) {
 			if (sp.getValue().getUrl().equals(url))
 				return sp.getWsClient();
+		}
+		return null;
+	}
+
+	public static MServerProfile getServerByUrl(String url) {
+		for (MServerProfile sp : serverProfiles) {
+			if (sp.getValue().getUrl().equals(url))
+				return sp;
 		}
 		return null;
 	}

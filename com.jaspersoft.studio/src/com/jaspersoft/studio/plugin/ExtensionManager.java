@@ -246,14 +246,24 @@ public class ExtensionManager {
 			f.onLoad(jd, editor);
 	}
 
-	public void onSave(JasperDesign jd) {
+	public void onSave(JasperReportsConfiguration jrConfig) {
 		for (IEditorContributor f : eContributor)
-			f.onSave(jd);
+			f.onSave(jrConfig);
 	}
 
 	public void onRun() {
 		for (IEditorContributor f : eContributor)
 			f.onRun();
+	}
+
+	public List<AContributorAction> getActions() {
+		List<AContributorAction> list = new ArrayList<AContributorAction>();
+		for (IEditorContributor f : eContributor) {
+			AContributorAction[] actions = f.getActions();
+			for (AContributorAction a : actions)
+				list.add(a);
+		}
+		return list;
 	}
 
 }

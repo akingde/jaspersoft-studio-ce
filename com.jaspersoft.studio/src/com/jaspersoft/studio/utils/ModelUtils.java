@@ -20,6 +20,8 @@
 package com.jaspersoft.studio.utils;
 
 import java.awt.GraphicsEnvironment;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,6 +42,7 @@ import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRGroup;
@@ -61,8 +64,10 @@ import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.util.JRFontUtil;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
+import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 import net.sf.jasperreports.olap.JRMdxQueryExecuterFactory;
@@ -84,6 +89,14 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
  * The Class ModelUtils.
  */
 public class ModelUtils {
+
+	public static JasperDesign copyJasperDesign(JasperDesign jrd) throws JRException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		JRSaver.saveObject(jrd, out);
+		JasperDesign jd = (JasperDesign) JRLoader.loadObject(new ByteArrayInputStream(out.toByteArray()));
+		return jd;
+	}
+
 	public static JRBand getGroupFooter(JRGroup group) {
 		if (group.getGroupFooterSection() != null) {
 			JRBand[] footers = group.getGroupFooterSection().getBands();

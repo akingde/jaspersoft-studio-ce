@@ -43,6 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.FileChannel;
@@ -100,6 +101,12 @@ public class FileUtils {
 				destination.close();
 			}
 		}
+	}
+
+	public static File createTempFile(String prefix, String sufix) throws IOException {
+		File f = File.createTempFile(prefix, sufix);
+		f.deleteOnExit();
+		return f;
 	}
 
 	public static File createTempDir() throws IOException {
@@ -226,6 +233,17 @@ public class FileUtils {
 			result = bis.read();
 		}
 		return buf.toString();
+	}
+
+	public static void writeFile(File f, String content) throws IOException {
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(f);
+			fw.write(content);
+		} finally {
+			if (fw != null)
+				fw.close();
+		}
 	}
 
 }

@@ -70,7 +70,7 @@ public class JSFileResolver extends SimpleFileResolver {
 		runitUri = jDesign.getProperty(JrxmlExporter.PROP_REPORTUNIT);
 	}
 
-	private Map<String, File> map = new CacheMap<String, File>(3000);
+	private Map<String, File> map = new CacheMap<String, File>(30000);
 
 	@Override
 	public File resolveFile(String fileName) {

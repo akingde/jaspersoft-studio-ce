@@ -169,7 +169,8 @@ public class SelectorJrxml {
 		}
 	}
 
-	protected void replaceMainReport(final MResource res, ResourceDescriptor rd) {
+	public static void replaceMainReport(final MResource res,
+			ResourceDescriptor rd) {
 		ResourceDescriptor rdel = getMainReport(res.getValue());
 		if (rdel != null) {
 			int index = res.getValue().getChildren().indexOf(rdel);

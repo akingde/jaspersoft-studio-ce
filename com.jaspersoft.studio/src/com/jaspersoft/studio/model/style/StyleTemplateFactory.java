@@ -148,16 +148,21 @@ public class StyleTemplateFactory {
 	private static IFile getFile(ANode node, IFile refFile) {
 		List<Object> plist = new ArrayList<Object>();
 		ANode p = (ANode) node;
+		JasperDesign jd = node.getJasperDesign();
 		plist.add(p.getValue());
 		while (!(p.getParent() instanceof MStyles)) {
 			p = (ANode) p.getParent();
 			plist.add(p.getValue());
 		}
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		MStyleTemplate mst = (MStyleTemplate) p;
 		JRDesignReportTemplate drt = (JRDesignReportTemplate) mst.getValue();
-		JasperDesign jd = node.getJasperDesign();
+
+		return resolveTemplates(refFile, plist, jd, drt);
+	}
+
+	protected static IFile resolveTemplates(IFile refFile, List<Object> plist, JasperDesign jd, JRDesignReportTemplate drt) {
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		String str = ExpressionUtil.eval(drt.getSourceExpression(), jd);
 		if (str != null) {
 			if (refFile == null)

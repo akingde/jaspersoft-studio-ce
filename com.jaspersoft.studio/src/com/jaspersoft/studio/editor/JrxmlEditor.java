@@ -24,6 +24,7 @@ import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
@@ -47,6 +48,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.DocumentEvent;
@@ -54,6 +56,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -85,6 +88,8 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.plugin.AContributorAction;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -312,7 +317,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		IResource resource = ((IFileEditorInput) getEditorInput()).getFile();
+		IFile resource = ((IFileEditorInput) getEditorInput()).getFile();
 		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor || !modelFresh) {
 			version = JRXmlWriterHelper.getVersion(resource, p, true);
 			model2xml(version);
@@ -339,7 +344,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		previewEditor.doSave(monitor);
 		firePropertyChange(PROP_DIRTY);
 
-		JaspersoftStudioPlugin.getExtensionManager().onSave(getJasperDesign());
+		JaspersoftStudioPlugin.getExtensionManager().onSave(jrContext);
 	}
 
 	/**
@@ -428,6 +433,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			in = getXML(editorInput, file.getCharset(true), in, version);
 			JasperDesign jd = JRXmlLoader.load(in);
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
+			editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
+			IActionBars b = getEditorSite().getActionBars();
+			IToolBarManager tb = b.getToolBarManager();
+			for (AContributorAction a : editorActions) {
+				a.setJrConfig(jrContext);
+				tb.add(a);
+			}
 
 			setModel(ReportFactory.createReport(jd, file));
 		} catch (JRException e) {
@@ -459,6 +471,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			jrContext.setFileResolver(resolver);
 			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
 		}
+		jrContext.put(IEditorContributor.KEY_FILE, file);
 	}
 
 	public static String getFileExtension(IEditorInput editorInput) {
@@ -609,6 +622,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	private String version = "last";
 
+	private List<AContributorAction> editorActions;
+
 	/**
 	 * Xml2model.
 	 * 
@@ -661,7 +676,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 
 	protected JasperDesign getJasperDesign() {
-		return (JasperDesign) ((MRoot) getModel()).getValue();
+		if (getModel() != null)
+			return (JasperDesign) ((MRoot) getModel()).getValue();
+		return null;
 	}
 
 	/**
@@ -709,6 +726,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropChangeListener);
 		this.model = model;
 		updateVisualView();
+		JasperDesign jd = getJasperDesign();
+		jrContext.setJasperDesign(jd);
 	}
 
 	private MReport getMReport() {

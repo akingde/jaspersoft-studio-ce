@@ -5,11 +5,13 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.server.JSFileResolver;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.publish.JrxmlImport;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JRSEditorContributor implements IEditorContributor {
 
@@ -34,14 +36,16 @@ public class JRSEditorContributor implements IEditorContributor {
 
 	}
 
-	public void onSave(JasperDesign jd) {
+	public void onSave(JasperReportsConfiguration jrConfig) {
+		JasperDesign jd = jrConfig.getJasperDesign();
+
 		String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
 		if (prop == null)
 			return;
 		if (UIUtils.showConfirmation("Export Report to JasperServer",
 				"Do you want to publish this report to JasperServer?")) {
 			JrxmlImport action = new JrxmlImport();
-			action.setJasperDesign(jd);
+			action.setJrConfig(jrConfig);
 			action.run();
 		}
 	}
@@ -49,6 +53,10 @@ public class JRSEditorContributor implements IEditorContributor {
 	public void onRun() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public AContributorAction[] getActions() {
+		return new AContributorAction[] { new JrxmlImport() };
 	}
 
 }
