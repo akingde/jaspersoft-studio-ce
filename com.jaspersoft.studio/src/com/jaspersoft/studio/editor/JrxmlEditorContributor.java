@@ -219,6 +219,8 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		IActionBars bars = getActionBars();
 		removeZoom(bars.getToolBarManager());
 		bars.clearGlobalActionHandlers();
+
+		addGlobal(bars);
 		if (activeEditor instanceof ITextEditor) {
 			if (textEditorContributor == null) {
 				textEditorContributor = new TextEditorActionContributor();
@@ -238,7 +240,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 				for (String id : globalActionKeys) {
 					bars.setGlobalActionHandler(id, registry.getAction(id));
 				}
-
 		}
 		bars.updateActionBars();
 	}
@@ -285,11 +286,6 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	}
 
 	private void addZoom(IToolBarManager tbm) {
-		for (String s : glRetargetAction) {
-			tbm.remove(s);
-			tbm.add(getAction(s));
-		}
-
 		tbm.add(getAction(GEFActionConstants.ZOOM_IN));
 		tbm.add(getAction(GEFActionConstants.ZOOM_OUT));
 		if (zoomCombo == null)
@@ -300,13 +296,26 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	}
 
 	private void removeZoom(IToolBarManager tbm) {
-		for (String s : glRetargetAction)
-			tbm.remove(s);
-
 		tbm.remove(GEFActionConstants.ZOOM_IN);
 		tbm.remove(GEFActionConstants.ZOOM_OUT);
 		tbm.remove(zoomCombo.getId());
 		zoomCombo.setEnabled(false);
+		tbm.update(true);
+	}
+
+	private void addGlobal(IActionBars bars) {
+		IToolBarManager tbm = bars.getToolBarManager();
+		for (String s : glRetargetAction) {
+			tbm.remove(s);
+			IAction action = getAction(s);
+			bars.setGlobalActionHandler(s, action);
+			tbm.add(action);
+		}
+	}
+
+	private void removeGlobal(IToolBarManager tbm) {
+		for (String s : glRetargetAction)
+			tbm.remove(s);
 		tbm.update(true);
 	}
 
