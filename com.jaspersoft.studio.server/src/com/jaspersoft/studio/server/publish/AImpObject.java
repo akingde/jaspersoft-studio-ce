@@ -73,18 +73,20 @@ public abstract class AImpObject {
 				rd.setName(rname);
 				rd.setLabel(rname);
 
-				rd.setParentFolder(runit.getUriString());
-				rd.setUriString(runit.getUriString() + "/_files/"
-						+ rd.getName());
+				rd.setParentFolder(runit.getUriString() + "_files");
+				rd.setUriString(runit.getUriString() + "_files/" + rd.getName());
 
 			}
 
 			AFileResource mres = (AFileResource) ResourceFactory.getResource(
 					mrunit, rd, -1);
 			mres.setFile(f);
-
-			WSClientHelper.saveResource(mres, monitor, false);
-
+			try {
+				WSClientHelper.saveResource(mres, monitor, false);
+			} catch (Exception e) {
+				mres.getValue().setIsNew(false);
+				WSClientHelper.saveResource(mres, monitor, false);
+			}
 			return mres;
 		}
 		return null;

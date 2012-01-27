@@ -223,6 +223,7 @@ public class WSClientHelper {
 
 			MReportUnit mru = res.getReportUnit();
 			WSClient cli = sp.getWsClient();
+			System.out.println("saving: " + rd.getUriString());
 			if (mru != null && res != mru) {
 				String ruuri = mru.getValue().getUriString();
 
