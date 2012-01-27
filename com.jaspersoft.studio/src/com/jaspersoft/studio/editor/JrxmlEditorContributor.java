@@ -31,6 +31,7 @@ import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomInRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomOutRetargetAction;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -144,6 +145,14 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 		addAction(action);
 		retargetActions.add(action);
 		getPage().addPartListener(action);
+		addGlobalActionKey(action.getId());
+	}
+
+	private List<String> glRetargetAction = new ArrayList<String>();
+
+	protected void addGlobaRetargetAction(Action action) {
+		addAction(action);
+		glRetargetAction.add(action.getId());
 		addGlobalActionKey(action.getId());
 	}
 
@@ -276,6 +285,11 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	}
 
 	private void addZoom(IToolBarManager tbm) {
+		for (String s : glRetargetAction) {
+			tbm.remove(s);
+			tbm.add(getAction(s));
+		}
+
 		tbm.add(getAction(GEFActionConstants.ZOOM_IN));
 		tbm.add(getAction(GEFActionConstants.ZOOM_OUT));
 		if (zoomCombo == null)
@@ -286,6 +300,9 @@ public class JrxmlEditorContributor extends MultiPageEditorActionBarContributor 
 	}
 
 	private void removeZoom(IToolBarManager tbm) {
+		for (String s : glRetargetAction)
+			tbm.remove(s);
+
 		tbm.remove(GEFActionConstants.ZOOM_IN);
 		tbm.remove(GEFActionConstants.ZOOM_OUT);
 		tbm.remove(zoomCombo.getId());

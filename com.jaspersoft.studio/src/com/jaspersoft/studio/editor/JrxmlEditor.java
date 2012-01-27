@@ -438,7 +438,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			IToolBarManager tb = b.getToolBarManager();
 			for (AContributorAction a : editorActions) {
 				a.setJrConfig(jrContext);
-				tb.add(a);
+				((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
 			}
 
 			setModel(ReportFactory.createReport(jd, file));

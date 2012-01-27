@@ -46,9 +46,7 @@ public class JrxmlImport extends AContributorAction {
 	private static final String ID = "PUBLISHJRXML";
 
 	public JrxmlImport() {
-		super();
-		setId(ID);
-		setText("Publish Report to JasperServer");
+		super(ID, "Publish Report to JasperServer");
 		setToolTipText("Publish Report to JasperServer");
 		ImageDescriptor icon16 = Activator
 				.getImageDescriptor("icons/server--upload.png");
@@ -58,7 +56,6 @@ public class JrxmlImport extends AContributorAction {
 
 	@Override
 	public void run() {
-
 		try {
 			Shell shell = Display.getDefault().getActiveShell();
 			final JasperDesign jd = getJasperDesign();
