@@ -54,9 +54,11 @@ import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
+import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.model.server.ServerProfile;
 import com.jaspersoft.studio.server.wizard.resource.page.SelectorJrxml;
 import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -131,16 +133,24 @@ public class JrxmlImport extends AContributorAction {
 		String version = JRXmlWriterHelper.LAST_VERSION;
 		mrunit.setValue(WSClientHelper.saveResource(mrunit, monitor, false));
 		INode n = mrunit.getRoot();
-		if (n != null && n instanceof MServerProfile)
-			version = ((MServerProfile) n).getValue().getJrVersion();
+		if (n != null && n instanceof MServerProfile) {
+			MServerProfile server = (MServerProfile) n;
+			ServerProfile srvrd = server.getValue();
+			version = srvrd.getJrVersion();
 
-		Set<String> fileset = new HashSet<String>();
-		publishJrxml(mrunit, monitor, jd, fileset, file, version);
+			Set<String> fileset = new HashSet<String>();
+			publishJrxml(mrunit, monitor, jd, fileset, file, version);
 
-		saveJRXML(monitor, mrunit, jd, version);
+			saveJRXML(monitor, mrunit, jd, version);
 
-		for (JRParameter p : jd.getParametersList()) {
-			ImpInputControls.publish(mrunit, monitor, p);
+			for (JRParameter p : jd.getParametersList()) {
+				ImpInputControls.publish(mrunit, monitor, p);
+			}
+
+			ResourceDescriptor runit = mrunit.getValue();
+
+			jd.setProperty(JrxmlExporter.PROP_SERVERURL, srvrd.getUrl());
+			jd.setProperty(JrxmlExporter.PROP_REPORTUNIT, runit.getUriString());
 		}
 	}
 
