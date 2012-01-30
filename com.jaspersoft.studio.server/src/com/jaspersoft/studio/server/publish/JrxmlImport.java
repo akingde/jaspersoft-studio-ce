@@ -149,8 +149,9 @@ public class JrxmlImport extends AContributorAction {
 
 			ResourceDescriptor runit = mrunit.getValue();
 
-			jd.setProperty(JrxmlExporter.PROP_SERVERURL, srvrd.getUrl());
-			jd.setProperty(JrxmlExporter.PROP_REPORTUNIT, runit.getUriString());
+			JasperDesign rpt = jrConfig.getJasperDesign();
+			rpt.setProperty(JrxmlExporter.PROP_SERVERURL, srvrd.getUrl());
+			rpt.setProperty(JrxmlExporter.PROP_REPORTUNIT, runit.getUriString());
 		}
 	}
 

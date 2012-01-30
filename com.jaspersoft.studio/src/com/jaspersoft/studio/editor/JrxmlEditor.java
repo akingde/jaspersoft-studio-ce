@@ -339,12 +339,12 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				e.printStackTrace();
 			}
 		}
+		JaspersoftStudioPlugin.getExtensionManager().onSave(jrContext);
+
 		xmlEditor.doSave(monitor);
 		reportContainer.doSave(monitor);
 		previewEditor.doSave(monitor);
 		firePropertyChange(PROP_DIRTY);
-
-		JaspersoftStudioPlugin.getExtensionManager().onSave(jrContext);
 	}
 
 	/**
