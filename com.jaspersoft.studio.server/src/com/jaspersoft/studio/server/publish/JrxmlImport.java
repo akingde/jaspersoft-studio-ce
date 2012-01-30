@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
@@ -137,6 +138,10 @@ public class JrxmlImport extends AContributorAction {
 		publishJrxml(mrunit, monitor, jd, fileset, file, version);
 
 		saveJRXML(monitor, mrunit, jd, version);
+
+		for (JRParameter p : jd.getParametersList()) {
+			ImpInputControls.publish(mrunit, monitor, p);
+		}
 	}
 
 	public void publishJrxml(MReportUnit mrunit, IProgressMonitor monitor,

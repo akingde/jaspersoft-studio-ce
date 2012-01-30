@@ -228,7 +228,8 @@ public class WSClientHelper {
 				String ruuri = mru.getValue().getUriString();
 
 				if (rd.getWsType()
-						.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)) {
+						.equals(ResourceDescriptor.TYPE_INPUT_CONTROL)
+						&& !rd.getIsNew()) {
 					rd = cli.addOrModifyResource(rd, file);
 				} else {
 					rd = cli.modifyReportUnitResource(ruuri, rd, file);
