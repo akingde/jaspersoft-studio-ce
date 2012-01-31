@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.components.chart.util.ChartHelper;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPClassType;
@@ -87,8 +88,8 @@ public class ChartSection extends AbstractSection {
 
 		rendererType = new SPRWCombo(composite, this,
 				JRBaseChart.PROPERTY_RENDER_TYPE,
-				Messages.MChart_renderer_type_description, new String[] { "",
-						"draw", "image", "svg" });
+				Messages.MChart_renderer_type_description,
+				ChartHelper.getChartThemesNull());
 		// ------------
 
 		composite = createNewRow(parent);
@@ -99,9 +100,8 @@ public class ChartSection extends AbstractSection {
 		lbl.setLayoutData(rd);
 
 		theme = new SPRWCombo(composite, this, JRBaseChart.PROPERTY_THEME,
-				Messages.MChart_theme_description, new String[] { "", "aegian",
-						"default", "default.spring", "generic",
-						"eye.candy.sixties" });
+				Messages.MChart_theme_description,
+				ChartHelper.getChartThemesNull());
 
 		// --------------------
 		composite = createNewRow(parent);

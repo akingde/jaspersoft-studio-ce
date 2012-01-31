@@ -68,6 +68,7 @@ import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
 import com.jaspersoft.studio.components.chart.model.plot.PlotFactory;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
+import com.jaspersoft.studio.components.chart.util.ChartHelper;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
@@ -253,10 +254,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		desc.add(rendererTypeD);
 
 		RWComboBoxPropertyDescriptor themeD = new RWComboBoxPropertyDescriptor(
-				JRBaseChart.PROPERTY_THEME,
-				Messages.MChart_theme,
-				new String[] {
-						"", "aegian", "default", "default.spring", "generic", "eye.candy.sixties" }, NullEnum.NULL); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+				JRBaseChart.PROPERTY_THEME, Messages.MChart_theme,
+				ChartHelper.getChartThemesNull(), NullEnum.NULL);
 		themeD.setDescription(Messages.MChart_theme_description);
 		desc.add(themeD);
 
@@ -283,8 +282,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		legendFontD.setDescription(Messages.MChart_legend_font_description);
 		desc.add(legendFontD);
 
-		PlotPropertyDescriptor plotD = new PlotPropertyDescriptor(
-				PLOTPROPERTY, Messages.MChart_plot); //$NON-NLS-1$
+		PlotPropertyDescriptor plotD = new PlotPropertyDescriptor(PLOTPROPERTY,
+				Messages.MChart_plot); //$NON-NLS-1$
 		plotD.setDescription(Messages.MChart_plot_description);
 		desc.add(plotD);
 

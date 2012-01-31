@@ -8,5 +8,9 @@ Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.jaspersoft.studio;bundle-version="1.0.1"
+Eclipse-RegisterBuddy: com.jaspersoft.studio
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: lib/spring-beans-2.5.5.jar,
+ lib/spring-core-2.5.5.jar,
+ .
