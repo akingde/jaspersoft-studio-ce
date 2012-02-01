@@ -111,6 +111,8 @@ public class DataAdapterEditorPage extends WizardPage {
 				if (b) {
 					setDescription(getSubTitle());
 					setMessage(getSubTitle());
+					
+					dataAdapterEditor.getDataAdapter().getDataAdapter().setName(name);
 				} else {
 
 					if (name.length() > 0) {

@@ -166,7 +166,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 			dataAdapter.setDataAdapter(editedDataAdapter.getDataAdapter());
 			if (!oldName.equals(editedDataAdapter.getName())) {
 				if (!storage.isDataAdapterNameValid(editedDataAdapter.getName())) {
-					dataAdapter.getDataAdapter().setName(oldName);
+					dataAdapter.getDataAdapter().setName(editedDataAdapter.getName());
 				}
 			}
 		}
