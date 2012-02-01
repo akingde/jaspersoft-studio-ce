@@ -20,34 +20,54 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.Misc;
 
 public class SPRWCombo {
-	private CCombo theme;
+	private Combo theme;
 
-	public SPRWCombo(Composite parent, AbstractSection section,
-			String property, String tooltip, String[] items) {
+	public SPRWCombo(Composite parent, AbstractSection section, String property, String tooltip, String[] items) {
 		createComponent(parent, section, property, tooltip, items);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property,
-			String tooltip, String[] items) {
-		theme = new CCombo(parent, SWT.BORDER | SWT.FLAT);
+	public void createComponent(Composite parent, final AbstractSection section, final String property, String tooltip,
+			String[] items) {
+		theme = new Combo(parent, SWT.BORDER | SWT.FLAT);
 		theme.setItems(items);
+		if (parent.getLayout() instanceof RowLayout) {
+			RowData rd = new RowData();
+			rd.width = 100;
+			theme.setLayoutData(rd);
+		} else if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.widthHint = 200;
+			theme.setLayoutData(gd);
+		}
 		theme.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				section.changeProperty(property,
-						theme.getItem(theme.getSelectionIndex()));
+				section.changeProperty(property, theme.getItem(theme.getSelectionIndex()));
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		theme.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				section.changeProperty(property, theme.getText());
 			}
 		});
 		theme.setToolTipText(tooltip);
@@ -62,8 +82,14 @@ public class SPRWCombo {
 				break;
 			}
 		}
-		theme.select(selection);
-		if (selection == 0 && b != null)
+		if (selection == 0) {
+			b = Misc.nvl(b);
+			int oldpos = b.length();
 			theme.setItem(0, b);
+			theme.setSelection(new Point(oldpos, oldpos));
+		} else {
+			theme.select(selection);
+
+		}
 	}
 }

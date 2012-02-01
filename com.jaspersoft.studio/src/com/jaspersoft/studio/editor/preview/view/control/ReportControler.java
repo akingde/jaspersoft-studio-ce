@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.editor.preview.view.control;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -36,8 +34,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.util.JRSaver;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
@@ -203,6 +199,7 @@ public class ReportControler {
 			protected IStatus run(IProgressMonitor monitor) {
 				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 				try {
+					Thread.currentThread().setContextClassLoader(jrContext.getClassLoader());
 					final IFile file = ((IFileEditorInput) pcontainer.getEditorInput()).getFile();
 
 					monitor.beginTask(Messages.PreviewEditor_starting, IProgressMonitor.UNKNOWN);
@@ -284,8 +281,6 @@ public class ReportControler {
 	private void setupProperties(JasperDesign jd) {
 		ph.setProperties(jd);
 	}
-
-	
 
 	private void setupFileRezolver(IProgressMonitor monitor, IFile file) {
 		jasperParameters.put(JRParameter.REPORT_FILE_RESOLVER, jrContext.getFileResolver());

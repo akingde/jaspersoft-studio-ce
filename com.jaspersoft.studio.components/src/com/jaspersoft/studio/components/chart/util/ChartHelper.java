@@ -31,19 +31,6 @@ public class ChartHelper {
 
 			SelectionHelper.setClassLoader(file, null);
 
-			try {
-				System.out.println(ChartThemeBundle.class.hashCode());
-				System.out.println(Thread
-						.currentThread()
-						.getContextClassLoader()
-						.loadClass(
-								"net.sf.jasperreports.charts.ChartThemeBundle")
-						.hashCode());
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 			List<ChartThemeBundle> tbundles = ExtensionsEnvironment
 					.getExtensionsRegistry().getExtensions(
 							ChartThemeBundle.class);
@@ -57,6 +44,9 @@ public class ChartHelper {
 			String[] themes = tset.toArray(new String[tset.size()]);
 			Arrays.sort(themes);
 			return themes;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new String[0];
 		} finally {
 			Thread.currentThread().setContextClassLoader(oldCL);
 		}

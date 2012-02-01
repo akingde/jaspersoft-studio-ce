@@ -434,8 +434,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			JasperDesign jd = JRXmlLoader.load(in);
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
 			editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
-			IActionBars b = getEditorSite().getActionBars();
-			IToolBarManager tb = b.getToolBarManager();
+			IActionBars b = getEditorSite().getActionBars(); 
 			for (AContributorAction a : editorActions) {
 				a.setJrConfig(jrContext);
 				((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
