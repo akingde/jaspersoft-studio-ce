@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+     Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
+     Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
+     http://www.jaspersoft.com
+     
+     Unless you have purchased a commercial license agreement from Jaspersoft,
+     the following license terms apply:
+     
+     This program is part of Jaspersoft Open Studio
+     
+     Jaspersoft Open Studio is free software: you can redistribute it and/or modify
+     it under the terms of the GNU Affero General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     
+     Jaspersoft Open Studio is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU Affero General Public License for more details.
+     
+     You should have received a copy of the GNU Affero General Public License
+     along with Jaspersoft Open Studio If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<plugin>
+   <extension-point id="components" name="Components" schema="schema/components.exsd"/>
+   <extension-point id="dataAdapters" name="Data Adapters" schema="schema/dataAdapters.exsd"/>
+   <extension-point id="queryDesigner" name="Query Designer" schema="schema/queryDesigner.exsd"/> 
+   <extension-point id="mappingTool" name="Mapping Tool" schema="schema/mappingTool.exsd"/>
+<extension-point id="palette" name="Palette" schema="schema/palette.exsd"/>
+<extension-point id="repositoryview" name="repositoryview" schema="schema/repositoryview.exsd"/>
+<extension-point id="hyperlinkTypes" name="Hyperlink Types" schema="schema/hyperlinkTypes.exsd"/>
+<extension-point id="editorLifecycle" name="Editor Lifecycle" schema="schema/editor.exsd"/>
+
+
+   <extension
+  
+         id="xmlProblem"
+         name="XML Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.jaspersoft.studio.editor.JrxmlEditor"
+            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            default="true"
+            extensions="jrxml"
+            icon="icons/jrxml_icon.png"
+            id="com.jaspersoft.studio.editor.JrxmlEditor"
+            name="JasperReports Designer">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.JrxmlEditor"
+            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            default="true"
+            extensions="jasper"
+            icon="icons/resources/jasperreports_jasper.png"
+            id="com.jaspersoft.studio.editor.JrxmlEditor.jasper"
+            name="JasperReports Designer">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.preview.PreviewJRPrint"
+            default="false"
+            extensions="jrprint"
+            icon="icons/report.png"
+            id="com.jaspersoft.studio.editor.JRPrintEditor"
+            name="JasperPrint Viewer">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.preview.PreviewJRPrint"
+            default="false"
+            extensions="jrpxml"
+            icon="icons/report.png"
+            id="com.jaspersoft.studio.JRPxmlEditor"
+            name="JasperJRPxml Viewer">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.JRtxEditor"
+            contributorClass="com.jaspersoft.studio.editor.style.JrtxEditorContributor"
+            default="false"
+            extensions="jrtx"
+            icon="icons/resources/jasperreports_jrtx.png"
+            id="com.jaspersoft.studio.JRtxEditor"
+            name="Jasper Style Template Editor">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.preview.PreviewContainer"
+            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            extensions="jasper"
+            icon="icons/resources/jasperreports_jasper.png"
+            id="com.jaspersoft.studio.editor.preview.PreviewContainer.jasper"
+            name="JasperReports Preview">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.editor.preview.PreviewContainer"
+            contributorClass="com.jaspersoft.studio.editor.JrxmlEditorContributor"
+            extensions="jrxml"
+            icon="icons/jrxml_icon.png"
+            id="com.jaspersoft.studio.editor.preview.PreviewContainer.jrxml"
+            name="JasperReports Preview">
+      </editor>
+      <editor
+            class="com.jaspersoft.studio.data.DataAdapterEditorPart"
+            default="false"
+            extensions="xml"
+            icon="icons/data_source.png"
+            id="com.jaspersoft.studio.data.DataAdapterEditorPart"
+            name="DataAdapter Editor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.jaspersoft.studio.ReportDesignPerspective"
+            icon="icons/jr_icon.png"
+            id="com.jaspersoft.studio.ReportDesignPerspective"
+            name="Report Design">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="com.jaspersoft.studio.ReportDesignPerspective">
+         <view
+               id="com.jaspersoft.studio.Repository"
+               minimized="false"
+               ratio="0.25"
+               relationship="left"
+               relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               id="org.eclipse.ui.navigator.ProjectExplorer"
+               minimized="false"
+               ratio="0.25"
+               relationship="stack"
+               relative="com.jaspersoft.studio.Repository">
+         </view>
+         <view
+               id="org.eclipse.ui.views.ContentOutline"
+               minimized="false"
+               ratio="0.5"
+               relationship="bottom"
+               relative="com.jaspersoft.studio.Repository">
+         </view>
+         <view
+               id="org.eclipse.ui.views.PropertySheet"
+               minimized="false"
+               ratio="0.66"
+               relationship="bottom"
+               relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               id="org.eclipse.ui.views.ProblemView"
+               minimized="false"
+               relationship="stack"
+               relative="org.eclipse.ui.views.PropertySheet">
+         </view>
+         <hiddenToolBarItem
+               id="org.eclipse.ui.workbench.navigate">
+         </hiddenToolBarItem>
+         <hiddenMenuItem
+               id="org.eclipse.ui.run">
+         </hiddenMenuItem>
+         <hiddenMenuItem
+               id="org.eclipse.search.menu">
+         </hiddenMenuItem>
+         <newWizardShortcut
+               id="com.jaspersoft.studio.wizards.ReportNewWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.jaspersoft.studio.wizards.StyleTemplateNewWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         id="com.jaspersoft.studio.preferences"
+         name="Jaspersoft Studio Preferences"
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            id="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            name="Jaspersoft Studio">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.DesignerPreferencePage"
+            id="com.jaspersoft.studio.preferences.DesignerPreferencePage"
+            name="Report Designer">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.RulersGridPreferencePage"
+            id="com.jaspersoft.studio.preferences.GridRulerPreferencePage"
+            name="Rulers And Grid">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
+            id="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
+            name="Properties">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            name="Exporters">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage"
+            name="PDF Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage"
+            name="HTML Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
+            name="CSV Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
+            name="CSV Metadata Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
+            name="Text Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage"
+            name="Excel Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
+            name="XMLExporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage"
+            name="DOCX Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            class="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
+            name="G2D Exporter">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
+            id="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
+            name="Virtualizer">
+      </page>
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
+            id="com.jaspersoft.studio.preferences.fonts.FontsPreferencePage"
+            name="Fonts">
+      </page>
+   </extension>
+   <extension
+         id="com.jaspersoft.studio.properties"
+         name="Jaspersoft Studio Properties"
+         point="org.eclipse.ui.propertyPages">
+      <page
+            adaptable="true"
+            class="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            id="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            name="Jaspersoft Studio"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            name="Exporters"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.PDFExporterPreferencePage.property"
+            name="PDF Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.HTMLExporterPreferencePage.property"
+            name="HTML Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.CSVExporterPreferencePage.property"
+            name="CSV Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.CSVMetadataExporterPreferencePage.property"
+            name="CSV Metadata Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.TextExporterPreferencePage.property"
+            name="Text Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.ExcelExporterPreferencePage.property"
+            name="Excel Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.XMLExporterPreferencePage.property"
+            name="XML Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.DOCXExporterPreferencePage.property"
+            name="DOCX Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.exporter.JRExporterPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage"
+            id="com.jaspersoft.studio.preferences.exporter.G2DExporterPreferencePage.property"
+            name="G2D Exporter"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.PropertiesPreferencePage"
+            id="com.jaspersoft.studio.preferences.PropertiesPreferencePage.property"
+            name="Properties"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+      <page
+            adaptable="true"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"
+            id="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage.property"
+            name="Virtualizer"
+            objectClass="org.eclipse.core.resources.IProject">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.jaspersoft.studio.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         id="com.jaspersoft.designer.property"
+         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+      <propertyContributor
+            contributorId="com.jaspersoft.studio.editor.report.ReportContainer"
+            labelProvider="com.jaspersoft.studio.property.ElementLabelProvider"
+            typeMapper="com.jaspersoft.studio.property.ElementTypeMapper">
+         <propertyCategory
+               category="element">
+         </propertyCategory>
+         <propertyCategory
+               category="advanced">
+         </propertyCategory>
+         <propertyCategory
+               category="parameter">
+         </propertyCategory>
+         <propertyCategory
+               category="field">
+         </propertyCategory>
+
+      </propertyContributor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs
+            contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
+         <propertyTab
+               category="advanced"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab"
+               image="icons/resources/eclipse/properties_view.gif"
+               label="%advanced">
+         </propertyTab>
+         <propertyTab
+               category="element"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               image="icons/resources/eclipse/left_align.gif"
+               label="%appearance">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               category="element"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               image="icons/resources/eclipse/border_frame.gif"
+               label="%borders">
+         </propertyTab>
+         <propertyTab
+               category="element"
+               id="com.jaspersoft.studio.propertyTab.pageFormat"
+               image="icons/resources/eclipse/border_frame.gif"
+               label="Page Format">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.propertyTab.pageFormat"
+               category="element"
+               id="com.jaspersoft.studio.propertyTab.report"
+               image="icons/report.png"
+               label="Report">
+         </propertyTab>
+      </propertyTabs>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections
+            contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
+         <propertySection
+               class="com.jaspersoft.studio.property.section.graphic.LocationSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LocationSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElement">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LocationSection"
+               class="com.jaspersoft.studio.property.section.graphic.SizeSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.SizeSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElement">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.SizeSection"
+               class="com.jaspersoft.studio.property.section.graphic.ColorsSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.ColorSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElement">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.ColorSection"
+               class="com.jaspersoft.studio.property.section.graphic.LinePenSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Borders">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.MGraphicElementLinePen">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
+               class="com.jaspersoft.studio.property.section.text.FontSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.text.FontSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.text.MTextElement">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.JDAdvancedSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab">
+            <input
+                  type="com.jaspersoft.studio.model.APropertyNode">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.band.BandSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.band.BandSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.band.MBand">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.report.PageSizeSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.report.PageSizeSection"
+               tab="com.jaspersoft.studio.propertyTab.pageFormat">
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.report.PageSizeSection"
+               class="com.jaspersoft.studio.property.section.report.PageMarginSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.report.PageMarginSection"
+               tab="com.jaspersoft.studio.propertyTab.pageFormat">
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
+               class="com.jaspersoft.studio.property.section.graphic.PaddingSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.PaddingSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
+               class="com.jaspersoft.studio.property.section.graphic.BordersSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.graphic.BordersSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Borders">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.ILineBox">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.SizeSection"
+               class="com.jaspersoft.studio.property.section.graphic.AlignSection"
+               id="com.jaspersoft.studio.property.section.graphic.AlignSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.text.MTextElement">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.image.MImage">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.graphic.AlignSection"
+               class="com.jaspersoft.studio.property.section.text.RotateSection"
+               id="com.jaspersoft.studio.property.section.text.RotateSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.IRotatable">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.report.ReportSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.report.ReportSection"
+               tab="com.jaspersoft.studio.propertyTab.report">
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+         </propertySection>
+      </propertySections>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="net.sf.jasperreports"
+            name="Jaspersoft Studio">
+      </category>
+      <view
+            category="net.sf.jasperreports"
+            class="com.jaspersoft.studio.repository.RepositoryView"
+            icon="icons/jr_icon.png"
+            id="com.jaspersoft.studio.Repository"
+            name="Repository Explorer"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.jaspersoft.studio"
+            name="Jaspersoft Studio">
+      </category>
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.wizards.ReportNewWizard"
+            icon="icons/jrxml_icon.png"
+            id="com.jaspersoft.studio.wizards.ReportNewWizard"
+            name="JasperReport">
+      </wizard>
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.editor.style.wizard.StyleTemplateNewWizard"
+            icon="icons/resources/jasperreports_jrtx.png"
+            id="com.jaspersoft.studio.wizards.StyleTemplateNewWizard"
+            name="Style Template File">
+      </wizard>
+      <wizard
+            category="com.jaspersoft.studio"
+            class="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard"
+            icon="icons/data_source.png"
+            id="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard"
+            name="DataAdapter">
+      </wizard>
+   </extension>
+    <extension
+          point="com.jaspersoft.studio.repositoryview">
+       <repositoryview
+             ClassFactory="com.jaspersoft.studio.data.DataAdapterProvider">
+       </repositoryview>
+    </extension>
+    <extension
+          id="com.jaspersoft.designer.property.repository"
+          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+       <propertyContributor
+             contributorId="com.jaspersoft.studio.Repository"
+             labelProvider="com.jaspersoft.studio.property.ElementLabelProvider"
+             typeMapper="com.jaspersoft.studio.property.ElementTypeMapper">
+          <propertyCategory
+                category="element">
+          </propertyCategory>
+       </propertyContributor>
+    </extension>
+     
+ 
+  
+   
+
+</plugin>
