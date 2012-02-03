@@ -32,19 +32,20 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
+import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.table.model.column.MCell;
 import com.jaspersoft.studio.components.table.model.column.MColumn;
 import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle;
 import com.jaspersoft.studio.property.SetValueCommand;
+
 /*
  * The Class BandMoveEditPolicy.
  * 
  * @author Chicu Veaceslav
  */
-public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
+public class TableCellMoveEditPolicy extends SelectionEditPolicy {
 
 	/** The feedback. */
 	private IFigure feedback;
@@ -61,7 +62,8 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	public void activate() {
 		super.activate();
 		// setHandle(new CellResizeHandle((GraphicalEditPart) getHost()));
-		setHandle(new CellResizeHandle((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
+		setHandle(new CellResizeHandle((GraphicalEditPart) getHost(),
+				PositionConstants.SOUTH));
 		getLayer(LayerConstants.HANDLE_LAYER).add(getHandle());
 	}
 
@@ -101,7 +103,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * Erase change bounds feedback.
 	 * 
 	 * @param request
-	 *          the request
+	 *            the request
 	 */
 	protected void eraseChangeBoundsFeedback(ChangeBoundsRequest request) {
 		if (feedback != null) {
@@ -137,7 +139,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * Gets the resize command.
 	 * 
 	 * @param request
-	 *          the request
+	 *            the request
 	 * @return the resize command
 	 */
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
@@ -147,7 +149,8 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 			MColumn model = (MColumn) getHost().getModel();
 			StandardBaseColumn jrdesign = (StandardBaseColumn) model.getValue();
 			Dimension sizeDelta = request.getSizeDelta();
-			PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0, 0, sizeDelta.width, sizeDelta.height));
+			PrecisionRectangle deltaRect = new PrecisionRectangle(
+					new Rectangle(0, 0, sizeDelta.width, sizeDelta.height));
 			getHostFigure().translateToRelative(deltaRect);
 			CompoundCommand c = new CompoundCommand("Change Cell Size"); //$NON-NLS-1$
 
@@ -164,7 +167,9 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 			}
 			if (request.getSizeDelta().height != 0 && model instanceof MCell) {
 				MCell mc = (MCell) model;
-				int height = (Integer) mc.getPropertyValue(DesignCell.PROPERTY_HEIGHT) + deltaRect.height;
+				int height = (Integer) mc
+						.getPropertyValue(DesignCell.PROPERTY_HEIGHT)
+						+ deltaRect.height;
 				if (height < 0)
 					height = 0;
 
@@ -183,7 +188,7 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * Sets the handle.
 	 * 
 	 * @param handle
-	 *          the new handle
+	 *            the new handle
 	 */
 	private void setHandle(IFigure handle) {
 		this.handle = handle;
@@ -196,6 +201,16 @@ public class TableCellMoveEditPolicy extends GraphicalEditPolicy {
 	 */
 	private IFigure getHandle() {
 		return handle;
+	}
+
+	@Override
+	protected void hideSelection() {
+
+	}
+
+	@Override
+	protected void showSelection() {
+
 	}
 
 }

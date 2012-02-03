@@ -784,37 +784,6 @@ public class ModelUtils {
 		return langs.toArray(new String[langs.size()]);
 	}
 
-	public static String[][] getQueryExecuters() {
-		// TODO this is a static array , we should do like in getQueryLanguages
-		// add some methods to QueryExecuteFactoryBundle
-		if (qexecutors == null)
-			qexecutors = new String[][] {
-					{ "sql", JRJdbcQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider" },
-					{ "SQL", JRJdbcQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider" },
-					{ "xPath", JRXPathQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider" },
-					{ "XPATH", JRXPathQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider" },
-					{ "hql", JRHibernateQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.HQLFieldsProvider" },
-					{ "mdx", JRMdxQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider" },
-					{ "MDX", JRMdxQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.MDXFieldsProvider" },
-					{ "ejbql", JRJpaQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider" },
-					{ "EJBQL", JRJpaQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.EJBQLFieldsProvider" },
-					{ "xmla-mdx", JRXmlaQueryExecuterFactory.class.getName(),
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.CincomMDXFieldsProvider" },
-					{ "xpath2", "com.jaspersoft.jrx.query.JRXPathQueryExecuterFactory",
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.XMLFieldsProvider" },
-					{ "plsql", "com.jaspersoft.jrx.query.PlSqlQueryExecuterFactory",
-							"com.jaspersoft.ireport.designer.data.fieldsproviders.SQLFieldsProvider" } };
-		return qexecutors;
-	}
 
 	public static String[] getMarkups() {
 		List<String> lst = new ArrayList<String>();

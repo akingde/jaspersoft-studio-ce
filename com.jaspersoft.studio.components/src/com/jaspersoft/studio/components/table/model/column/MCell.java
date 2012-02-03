@@ -54,13 +54,15 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MLineBox;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 
-public class MCell extends MColumn implements IGraphicElement, IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable {
+public class MCell extends MColumn implements IGraphicElement,
+		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable {
 
 	/**
 	 * Instantiates a new m field.
@@ -73,13 +75,14 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
-	public MCell(ANode parent, StandardBaseColumn column, Cell cell, String name, int index) {
+	public MCell(ANode parent, StandardBaseColumn column, Cell cell,
+			String name, int index) {
 		super(parent, column, name, index);
 		this.cell = (DesignCell) cell;
 		this.cell.getEventSupport().addPropertyChangeListener(this);
@@ -105,7 +108,8 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -117,7 +121,8 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 			if (styleD != null && cell != null) {
 				JRStyle[] styles = jasperDesign.getStyles();
 				String[] items = new String[styles.length + 1];
-				items[0] = cell.getStyleNameReference() != null ? cell.getStyleNameReference() : ""; //$NON-NLS-1$
+				items[0] = cell.getStyleNameReference() != null ? cell
+						.getStyleNameReference() : ""; //$NON-NLS-1$
 				for (int j = 0; j < styles.length; j++) {
 					items[j + 1] = styles[j].getName();
 				}
@@ -132,22 +137,25 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		styleD = new RWComboBoxPropertyDescriptor(DesignCell.PROPERTY_STYLE, Messages.MCell_parent_style,
-				new String[] { "" }, //$NON-NLS-1$
+		styleD = new RWComboBoxPropertyDescriptor(DesignCell.PROPERTY_STYLE,
+				Messages.MCell_parent_style, new String[] { "" }, //$NON-NLS-1$
 				NullEnum.NULL);
 		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
 
-		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(DesignCell.PROPERTY_HEIGHT, Messages.MCell_height);
+		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(
+				DesignCell.PROPERTY_HEIGHT, Messages.MCell_height);
 		desc.add(hD);
 
-		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MCell_line_box);
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX,
+				Messages.MCell_line_box);
 		lineBoxD.setDescription(Messages.MCell_line_box_description);
 		desc.add(lineBoxD);
 
@@ -164,7 +172,9 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -194,14 +204,17 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		if (cell != null) {
 			if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
 				if (!value.equals("")) { //$NON-NLS-1$
-					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
+					JRStyle style = (JRStyle) getJasperDesign().getStylesMap()
+							.get(value);
 					if (style != null) {
 						cell.setStyle(style);
 						cell.setStyleNameReference(null);
@@ -217,21 +230,26 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 				if (section != null && height.intValue() >= 0) {
 
 					@SuppressWarnings("unchecked")
-					Class<AMCollection> classType = (Class<AMCollection>) section.getClass();
+					Class<AMCollection> classType = (Class<AMCollection>) section
+							.getClass();
 					String grName = null;
 					if (section instanceof MTableGroupHeader)
-						grName = ((MTableGroupHeader) section).getJrDesignGroup().getName();
+						grName = ((MTableGroupHeader) section)
+								.getJrDesignGroup().getName();
 					if (section instanceof MTableGroupFooter)
-						grName = ((MTableGroupFooter) section).getJrDesignGroup().getName();
+						grName = ((MTableGroupFooter) section)
+								.getJrDesignGroup().getName();
 
-					mtable.getTableManager().setHeight(cell, height, (StandardBaseColumn) getValue(),
+					mtable.getTableManager().setHeight(cell, height,
+							(StandardBaseColumn) getValue(),
 							TableColumnSize.getType(classType), grName);
 
 					// cell.setHeight(height);
 					mtable.getTableManager().refresh();
 
 					// getPropertyChangeSupport().firePropertyChange(
-					// new PropertyChangeEvent(this, DesignCell.PROPERTY_HEIGHT, null, value));
+					// new PropertyChangeEvent(this, DesignCell.PROPERTY_HEIGHT,
+					// null, value));
 				}
 			}
 		}
@@ -303,20 +321,26 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
+		if (evt.getPropertyName()
+				.equals(JRDesignElementGroup.PROPERTY_CHILDREN)) {
 			if (evt.getSource() == cell) {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;
 					if (evt instanceof CollectionElementAddedEvent) {
-						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+						newIndex = ((CollectionElementAddedEvent) evt)
+								.getAddedIndex();
 					}
 					// add the node to this parent
-					ANode n = ReportFactory.createNode(this, evt.getNewValue(), newIndex);
+					ANode n = ReportFactory.createNode(this, evt.getNewValue(),
+							newIndex);
 					if (evt.getNewValue() instanceof JRElementGroup) {
-						JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
-						ReportFactory.createElementsForBand(n, jrFrame.getChildren());
+						JRElementGroup jrFrame = (JRElementGroup) evt
+								.getNewValue();
+						ReportFactory.createElementsForBand(n,
+								jrFrame.getChildren());
 					}
-				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+				} else if (evt.getOldValue() != null
+						&& evt.getNewValue() == null) {
 					// delete
 					for (INode n : getChildren()) {
 						if (n.getValue() == evt.getOldValue()) {
@@ -346,5 +370,16 @@ public class MCell extends MColumn implements IGraphicElement, IPastableGraphic,
 
 	public int getLeftPadding() {
 		return cell.getLineBox().getLeftPadding();
+	}
+
+	public MTable getTable() {
+		INode node = this;
+		while (node != null && node.getParent() != null
+				&& !(node instanceof MTable) && !(node instanceof MRoot)) {
+			node = node.getParent();
+		}
+		if (node instanceof MTable)
+			return (MTable) node;
+		return null;
 	}
 }

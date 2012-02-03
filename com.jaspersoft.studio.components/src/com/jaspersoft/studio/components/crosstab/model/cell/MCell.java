@@ -54,6 +54,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MLineBox;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
@@ -63,8 +64,9 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 
-public class MCell extends APropertyNode implements IGraphicElement, IPastable, IPastableGraphic, IContainer,
-		IContainerEditPart, ILineBox, IGraphicElementContainer {
+public class MCell extends APropertyNode implements IGraphicElement, IPastable,
+		IPastableGraphic, IContainer, IContainerEditPart, ILineBox,
+		IGraphicElementContainer {
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -97,11 +99,11 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MCell(ANode parent, JRCellContents jfRield, String name, int index) {
 		super(parent, index);
@@ -161,7 +163,8 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -175,7 +178,8 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 				JRDesignCellContents jrElement = (JRDesignCellContents) getValue();
 				JRStyle[] styles = jasperDesign.getStyles();
 				String[] items = new String[styles.length + 1];
-				items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
+				items[0] = jrElement.getStyleNameReference() != null ? jrElement
+						.getStyleNameReference() : ""; //$NON-NLS-1$
 				for (int j = 0; j < styles.length; j++) {
 					items[j + 1] = styles[j].getName();
 				}
@@ -190,39 +194,45 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
-				Messages.MCell_opaque, EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.NOTNULL));
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
+		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(
+				JRBaseStyle.PROPERTY_MODE, Messages.MCell_opaque,
+				EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.NOTNULL));
 		opaqueD.setDescription(Messages.MCell_opaque_description);
 		desc.add(opaqueD);
 
-		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(JRBaseStyle.PROPERTY_BACKCOLOR,
-				Messages.MCell_backcolor, NullEnum.INHERITED);
+		ColorPropertyDescriptor backcolorD = new ColorPropertyDescriptor(
+				JRBaseStyle.PROPERTY_BACKCOLOR, Messages.MCell_backcolor,
+				NullEnum.INHERITED);
 		backcolorD.setDescription(Messages.MCell_backcolor_description);
 		desc.add(backcolorD);
 
-		styleD = new RWComboBoxPropertyDescriptor(JRDesignCellContents.PROPERTY_STYLE, Messages.MCell_parent_style,
-				new String[] { "" }, //$NON-NLS-1$
+		styleD = new RWComboBoxPropertyDescriptor(
+				JRDesignCellContents.PROPERTY_STYLE,
+				Messages.MCell_parent_style, new String[] { "" }, //$NON-NLS-1$
 				NullEnum.NULL);
 		styleD.setDescription(Messages.MCell_parent_style_description);
 		desc.add(styleD);
 
-		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_WIDTH,
-				Messages.common_width);
+		IntegerPropertyDescriptor wD = new IntegerPropertyDescriptor(
+				JRDesignCrosstabCell.PROPERTY_WIDTH, Messages.common_width);
 		desc.add(wD);
 
-		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(JRDesignCrosstabCell.PROPERTY_HEIGHT,
-				Messages.common_height);
+		IntegerPropertyDescriptor hD = new IntegerPropertyDescriptor(
+				JRDesignCrosstabCell.PROPERTY_HEIGHT, Messages.common_height);
 		desc.add(hD);
 
-		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX, Messages.MCell_line_box);
+		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX,
+				Messages.MCell_line_box);
 		lineBoxD.setDescription(Messages.MCell_line_box_description);
 		desc.add(lineBoxD);
 
-		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, EnumHelper.getValue(ModeEnum.OPAQUE, 1, false));
+		defaultsMap.put(JRBaseStyle.PROPERTY_MODE,
+				EnumHelper.getValue(ModeEnum.OPAQUE, 1, false));
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
 		defaultsMap.put(JRDesignCellContents.PROPERTY_STYLE, null);
 	}
@@ -233,7 +243,9 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	public Object getPropertyValue(Object id) {
 		JRDesignCellContents jrElement = (JRDesignCellContents) getValue();
@@ -257,7 +269,8 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 				JRBoxContainer jrGraphicElement = (JRBoxContainer) getValue();
 				if (lineBox == null) {
 					lineBox = new MLineBox(jrGraphicElement.getLineBox());
-					lineBox.getPropertyChangeSupport().addPropertyChangeListener(this);
+					lineBox.getPropertyChangeSupport()
+							.addPropertyChangeListener(this);
 				}
 				return lineBox;
 			}
@@ -268,18 +281,22 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCellContents jrElement = (JRDesignCellContents) getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseStyle.PROPERTY_MODE))
-				jrElement.setMode((ModeEnum) EnumHelper.getSetValue(ModeEnum.values(), value, 1, false));
+				jrElement.setMode((ModeEnum) EnumHelper.getSetValue(
+						ModeEnum.values(), value, 1, false));
 			else if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR)) {
 				jrElement.setBackcolor(Colors.getAWT4SWTRGBColor((RGB) value));
 			} else if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
 				if (!value.equals("")) { //$NON-NLS-1$
-					JRStyle style = (JRStyle) getJasperDesign().getStylesMap().get(value);
+					JRStyle style = (JRStyle) getJasperDesign().getStylesMap()
+							.get(value);
 					if (style != null) {
 						jrElement.setStyle(style);
 						jrElement.setStyleNameReference(null);
@@ -295,16 +312,21 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 
 				cross.getCrosstabManager().refresh();
 				getPropertyChangeSupport().firePropertyChange(
-						new PropertyChangeEvent(this, JRDesignCrosstabCell.PROPERTY_WIDTH, null, value));
+						new PropertyChangeEvent(this,
+								JRDesignCrosstabCell.PROPERTY_WIDTH, null,
+								value));
 
 			} else if (id.equals(JRDesignCrosstabCell.PROPERTY_HEIGHT)) {
 				MCrosstab cross = getMCrosstab();
 
-				cross.getCrosstabManager().setHeight(jrElement, (Integer) value);
+				cross.getCrosstabManager()
+						.setHeight(jrElement, (Integer) value);
 
 				cross.getCrosstabManager().refresh();
 				getPropertyChangeSupport().firePropertyChange(
-						new PropertyChangeEvent(this, JRDesignCrosstabCell.PROPERTY_HEIGHT, null, value));
+						new PropertyChangeEvent(this,
+								JRDesignCrosstabCell.PROPERTY_HEIGHT, null,
+								value));
 
 			}
 
@@ -377,5 +399,16 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable, 
 			return c.getLineBox().getLeftPadding();
 		}
 		return 0;
+	}
+
+	public MCrosstab getCrosstab() {
+		INode node = this;
+		while (node != null && node.getParent() != null
+				&& !(node instanceof MCrosstab) && !(node instanceof MRoot)) {
+			node = node.getParent();
+		}
+		if (node instanceof MCrosstab)
+			return (MCrosstab) node;
+		return null;
 	}
 }

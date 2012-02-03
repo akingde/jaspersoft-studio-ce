@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.commands;
 
@@ -40,6 +36,7 @@ import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
+
 /*
  * The Class SetConstraintCommand.
  */
@@ -107,6 +104,20 @@ public class SetConstraintCommand extends Command {
 			jrElement.setY(y);
 			jrElement.setWidth(newBounds.width);
 			jrElement.setHeight(newBounds.height);
+
+			adjustBand();
+		}
+	}
+
+	private int oldBandHeight = -1;
+
+	private void adjustBand() {
+		if (cBand != null) {
+			oldBandHeight = cBand.getHeight();
+			int elHeight = jrElement.getY() + jrElement.getHeight();
+			if (elHeight > cBand.getHeight()) {
+				cBand.setHeight(elHeight);
+			}
 		}
 	}
 
@@ -121,6 +132,7 @@ public class SetConstraintCommand extends Command {
 		List<JRBand> bands = ModelUtils.getAllBands(jrDesign);
 		int pos = ModelUtils.getBand4Element(bands, jrElement);
 		if (pos >= 0 && pos < bands.size()) {
+			cBand = (JRDesignBand) bands.get(pos);
 			if (y < 0 - newBounds.height) {
 				// coordinates relative to the top-left corner of the page
 				int aC = parentBounds.y - jrElement.getY() + y;
@@ -244,6 +256,9 @@ public class SetConstraintCommand extends Command {
 			jrElement.setHeight(oldBounds.height);
 			jrElement.setX(oldBounds.x);
 			jrElement.setY(oldBounds.y);
+
+			if (oldBandHeight >= 0)
+				cBand.setHeight(oldBandHeight);
 		}
 	}
 

@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.parts;
 
@@ -59,6 +55,7 @@ import com.jaspersoft.studio.editor.gef.figures.borders.SimpleShadowBorder;
 import com.jaspersoft.studio.editor.gef.figures.layers.GridLayer;
 import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
@@ -67,6 +64,7 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.utils.ModelUtils;
+
 /*
  * The Class PageEditPart.
  * 
@@ -229,7 +227,27 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 		figure.setBackgroundColor(ColorConstants.white);
 		figure.setLayoutManager(new XYLayout());
 
+		updateRullers(jd);
+
 		return figure;
+	}
+
+	public void updateRullers(JasperDesign jd) {
+		if (jd == null)
+			jd = getJasperDesign();
+
+		List<JRBand> bands = ModelUtils.getAllBands(jd);
+		int dh = ModelUtils.getDesignHeight(bands);
+		int tx = jd.getLeftMargin() + ReportPageFigure.PAGE_BORDER.left;
+		int ty = jd.getTopMargin() + ReportPageFigure.PAGE_BORDER.top;
+
+		getViewer().setProperty(ReportRuler.PROPERTY_HOFFSET, tx);
+		getViewer().setProperty(ReportRuler.PROPERTY_VOFFSET, ty);
+		getViewer().setProperty(ReportRuler.PROPERTY_HEND, jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin());
+		getViewer().setProperty(ReportRuler.PROPERTY_VEND, dh);
+
+		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
+				new Point(tx, ReportPageFigure.PAGE_BORDER.top + jd.getTopMargin()));
 	}
 
 	/*
@@ -358,16 +376,6 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 		figure2.setBandNumber(bands.size());
 		figure2.setBandsHeight(designHeight);
 		figure2.setSize(w, h);
-
-		getViewer().setProperty("RULER_HOFFSET", jd.getLeftMargin() + ReportPageFigure.PAGE_BORDER.left); //$NON-NLS-1$
-		getViewer().setProperty("RULER_VOFFSET", jd.getTopMargin() + ReportPageFigure.PAGE_BORDER.top); //$NON-NLS-1$
-		getViewer().setProperty("RULER_HEND", jd.getPageWidth() - jd.getLeftMargin() - jd.getRightMargin()); //$NON-NLS-1$
-		getViewer().setProperty("RULER_VEND", dh);//$NON-NLS-1$
-
-		getViewer().setProperty(
-				SnapToGrid.PROPERTY_GRID_ORIGIN,
-				new Point(ReportPageFigure.PAGE_BORDER.left + jd.getLeftMargin(), ReportPageFigure.PAGE_BORDER.top
-						+ jd.getTopMargin()));
 	}
 
 	/*

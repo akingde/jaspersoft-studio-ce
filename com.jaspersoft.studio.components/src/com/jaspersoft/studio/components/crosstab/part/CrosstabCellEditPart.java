@@ -24,15 +24,18 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.SnapToGrid;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.crosstab.figure.CellFigure;
+import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.components.crosstab.part.editpolicy.CrosstabCellMoveEditPolicy;
 import com.jaspersoft.studio.components.crosstab.part.editpolicy.CrosstabCellResizableEditPolicy;
@@ -42,6 +45,7 @@ import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.editor.gef.parts.IContainerPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.PageLayoutEditPolicy;
+import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.MGraphicElement;
@@ -91,7 +95,12 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 
 		});
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
-				new CrosstabCellMoveEditPolicy());
+				new CrosstabCellMoveEditPolicy() {
+					@Override
+					protected void showSelection() {
+						updateRulers();
+					}
+				});
 	}
 
 	@Override
@@ -106,6 +115,7 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 			f.setLocation(new Point(x, y));
 			f.setJRElement((JRDesignCellContents) model.getValue(),
 					getDrawVisitor(), jrContext);
+			updateRulers();
 		}
 	}
 
@@ -128,6 +138,32 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 					.println(" Constraint request:  " + request.getSizeDelta() + "  " + request.getResizeDirection()); //$NON-NLS-1$ //$NON-NLS-2$
 		return new Rectangle(0, 0, request.getSizeDelta().width,
 				request.getSizeDelta().height);
+	}
+
+	protected void updateRulers() {
+		MCell mcell = (MCell) getModel();
+
+		// get mtable
+		// get max size (table and tablemanager.size)
+		MCrosstab table = mcell.getCrosstab();
+		if (table != null) {
+			Dimension d = table.getCrosstabManager().getSize();
+			int tx = 10;
+			int ty = 10;
+
+			int dh = Math.max(d.height, (Integer) table
+					.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT));
+			int dw = Math.max(d.width, (Integer) table
+					.getPropertyValue(JRDesignElement.PROPERTY_WIDTH));
+
+			getViewer().setProperty(ReportRuler.PROPERTY_HOFFSET, tx);
+			getViewer().setProperty(ReportRuler.PROPERTY_VOFFSET, ty);
+			getViewer().setProperty(ReportRuler.PROPERTY_HEND, dw);
+			getViewer().setProperty(ReportRuler.PROPERTY_VEND, dh);
+
+			getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN,
+					new Point(tx, ty));
+		}
 	}
 
 }

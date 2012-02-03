@@ -18,27 +18,23 @@
  * see <http://www.gnu.org/licenses/>.
  */
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.editor.gef.rulers.component;
 
@@ -190,7 +186,7 @@ public class JDRulerFigure extends Figure {
 		 * for horizontal and vertical rulers that are of the same height, the number of units per major mark is the same.
 		 */
 		int unitsPerMajorMark = (int) (minPixelsBetweenMajorMarks / dotsPerUnit);
-		if (Float.compare((float) ((float)minPixelsBetweenMajorMarks % dotsPerUnit), 0.0f) != 0) {
+		if (Float.compare((float) ((float) minPixelsBetweenMajorMarks % dotsPerUnit), 0.0f) != 0) {
 			unitsPerMajorMark++;
 		}
 		if (interval > 0) {
@@ -357,11 +353,13 @@ public class JDRulerFigure extends Figure {
 			graphics.setAlpha(128);
 			graphics.setBackgroundColor(ColorConstants.gray);
 			if (isHorizontal()) {
-				graphics.fillRectangle(0, 0, (int) (hoffset * zoomManager.getZoom()), t.height);
-				graphics.fillRectangle((int) ((hoffset + hend) * zoomManager.getZoom()), 0, getSize().width, t.height);
+				int swidth = getSize().width;
+				graphics.fillRectangle(0 - swidth, 0, (int) (hoffset * zoomManager.getZoom()) + swidth, t.height);
+				graphics.fillRectangle((int) ((hoffset + hend) * zoomManager.getZoom()), 0, swidth, t.height);
 			} else {
-				graphics.fillRectangle(0, 0, t.width, (int) (zoomManager.getZoom() * voffset));
-				graphics.fillRectangle(0, (int) ((vend + voffset) * zoomManager.getZoom()), t.width, getSize().height);
+				int sheight = getSize().height;
+				graphics.fillRectangle(0, 0 - sheight, t.width, (int) (zoomManager.getZoom() * voffset) + sheight);
+				graphics.fillRectangle(0, (int) ((vend + voffset) * zoomManager.getZoom()), t.width, sheight);
 			}
 			graphics.setAlpha(0);
 			graphics.setBackgroundColor(ColorConstants.white);

@@ -32,18 +32,19 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.GraphicalEditPolicy;
+import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.editor.gef.parts.handles.CellResizeHandle;
 import com.jaspersoft.studio.property.SetValueCommand;
+
 /*
  * The Class BandMoveEditPolicy.
  * 
  * @author Chicu Veaceslav
  */
-public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
+public class CrosstabCellMoveEditPolicy extends SelectionEditPolicy {
 
 	/** The feedback. */
 	private IFigure feedback;
@@ -60,7 +61,8 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	public void activate() {
 		super.activate();
 		// setHandle(new CellResizeHandle((GraphicalEditPart) getHost()));
-		setHandle(new CellResizeHandle((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
+		setHandle(new CellResizeHandle((GraphicalEditPart) getHost(),
+				PositionConstants.SOUTH));
 		getLayer(LayerConstants.HANDLE_LAYER).add(getHandle());
 	}
 
@@ -98,7 +100,7 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * Erase change bounds feedback.
 	 * 
 	 * @param request
-	 *          the request
+	 *            the request
 	 */
 	protected void eraseChangeBoundsFeedback(ChangeBoundsRequest request) {
 		if (feedback != null) {
@@ -134,7 +136,7 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * Gets the resize command.
 	 * 
 	 * @param request
-	 *          the request
+	 *            the request
 	 * @return the resize command
 	 */
 	protected Command getResizeCommand(ChangeBoundsRequest request) {
@@ -144,11 +146,12 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 			MCell mBand = (MCell) getHost().getModel();
 
 			Dimension sizeDelta = request.getSizeDelta();
-			PrecisionRectangle deltaRect = new PrecisionRectangle(new Rectangle(0, 0, sizeDelta.width,
-					sizeDelta.height));
+			PrecisionRectangle deltaRect = new PrecisionRectangle(
+					new Rectangle(0, 0, sizeDelta.width, sizeDelta.height));
 			getHostFigure().translateToRelative(deltaRect);
 
-			JRDesignCellContents jrdesign = (JRDesignCellContents) mBand.getValue();
+			JRDesignCellContents jrdesign = (JRDesignCellContents) mBand
+					.getValue();
 			int height = jrdesign.getHeight() + deltaRect.height;
 			if (height < 0)
 				height = 0;
@@ -182,7 +185,7 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 * Sets the handle.
 	 * 
 	 * @param handle
-	 *          the new handle
+	 *            the new handle
 	 */
 	private void setHandle(IFigure handle) {
 		this.handle = handle;
@@ -195,6 +198,14 @@ public class CrosstabCellMoveEditPolicy extends GraphicalEditPolicy {
 	 */
 	private IFigure getHandle() {
 		return handle;
+	}
+
+	@Override
+	protected void hideSelection() {
+	}
+
+	@Override
+	protected void showSelection() {
 	}
 
 }

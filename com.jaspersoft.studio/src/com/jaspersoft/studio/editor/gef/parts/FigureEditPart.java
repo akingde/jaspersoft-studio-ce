@@ -33,6 +33,8 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.SnapToGrid;
+import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -42,6 +44,7 @@ import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.figures.borders.CornerBorder;
 import com.jaspersoft.studio.editor.gef.figures.borders.ElementLineBorder;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
+import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
@@ -111,6 +114,28 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ElementEditPolicy());
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SelectionEditPolicy() {
+			@Override
+			protected void showSelection() {
+				ANode model = (ANode) ((ANode) getModel()).getParent();
+				if (model instanceof IGraphicElement && model.getValue() != null) {
+					Rectangle bounds = ((IGraphicElement) model).getBounds();
+					int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
+					int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
+
+					getViewer().setProperty(ReportRuler.PROPERTY_HOFFSET, x);
+					getViewer().setProperty(ReportRuler.PROPERTY_VOFFSET, y);
+					getViewer().setProperty(ReportRuler.PROPERTY_HEND, bounds.width); //$NON-NLS-1$
+					getViewer().setProperty(ReportRuler.PROPERTY_VEND, bounds.height);//$NON-NLS-1$
+
+					getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(x, y));
+				}
+			}
+
+			@Override
+			protected void hideSelection() {
+			}
+		});
 	}
 
 	/*

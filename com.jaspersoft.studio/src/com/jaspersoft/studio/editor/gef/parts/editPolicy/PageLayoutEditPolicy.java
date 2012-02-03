@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.design.JRDesignGraphicElement;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -158,7 +159,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
 		if (request.getType() == REQ_CREATE && getHost() instanceof AJDEditPart) {
-			Rectangle constraint = (Rectangle) getConstraintFor(request);
+			Rectangle constraint = adaptConstraint(getConstraintFor(request));
 
 			ANode parent = (ANode) getHost().getModel();
 			Rectangle copyconstraint = constraint.getCopy();
@@ -226,11 +227,19 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
 		// if (child instanceof IContainerPart) {
 		// return ((IContainerPart) child).createChangeConstraintCommand(child, constraint);
-		// }
+		// } 
+
 		SetConstraintCommand cmd = new SetConstraintCommand();
-		cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), (Rectangle) constraint);
+		cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), adaptConstraint(constraint));
 
 		return cmd;
+	}
+
+	protected Rectangle adaptConstraint(Object constraint) {
+		Rectangle r = (Rectangle) constraint;
+		Insets insets = getHostFigure().getInsets();
+		r.translate(getLayoutOrigin().translate(-insets.left, -insets.top));
+		return r;
 	}
 
 	@Override
