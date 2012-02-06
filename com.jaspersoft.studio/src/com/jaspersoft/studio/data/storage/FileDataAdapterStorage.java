@@ -72,18 +72,15 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 	public void findAll() {
 		Job job = new WorkspaceJob("Searching DataAdapters") {
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();
 				listenWorkspace();
-				IProject[] projects = workspace.getRoot().getProjects();
-				monitor.beginTask("Search DataAdapters in workspace", projects.length);
-				for (IProject prj : projects) {
-					monitor.subTask("Searching project " + prj.getName());
-					prj.accept(new ResourceVisitor(), IResource.NONE);
+				monitor.beginTask("Search DataAdapters in project " + project.getName(), 10);
+				monitor.subTask("Searching project " + project.getName());
+				project.accept(new ResourceVisitor(), IResource.NONE);
 
-					if (monitor.isCanceled())
-						return Status.CANCEL_STATUS;
-					monitor.internalWorked(1);
-				}
+				if (monitor.isCanceled())
+					return Status.CANCEL_STATUS;
+				monitor.internalWorked(10);
+
 				return Status.OK_STATUS;
 			}
 
@@ -97,6 +94,8 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 
 								public boolean visit(IResourceDelta delta) throws CoreException {
 									IResource res = delta.getResource();
+									if (res.getProject() != project)
+										return true;
 									if (res.getType() == IResource.FILE) {
 										IFile f = (IFile) res;
 										if (f.getName().endsWith(".xml")) {

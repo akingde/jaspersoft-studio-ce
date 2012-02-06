@@ -109,6 +109,7 @@ public abstract class DataQueryAdapters {
 
 	public void setFile(IFile file) {
 		this.file = file;
+		dscombo.setDataAdapterStorages(DataAdapterManager.getDataAdapter(file));
 	}
 
 	public CTabFolder createTop(Composite parent, IFieldSetter fsetter) {

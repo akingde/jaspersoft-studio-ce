@@ -74,12 +74,17 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	}
 
 	public void setDataAdapterStorages(ADataAdapterStorage[] dastorages) {
+		if (this.dastorages != null) {
+			for (ADataAdapterStorage das : dastorages)
+				das.removePropertyChangeListener(this); 
+		}
+
 		this.dastorages = dastorages;
 		if (dastorages != null) {
 			for (ADataAdapterStorage das : dastorages)
 				das.addPropertyChangeListener(this);
-			refresh(true);
 		}
+		refresh(true);
 	}
 
 	/**

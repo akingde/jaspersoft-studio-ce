@@ -146,4 +146,9 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 				e.printStackTrace();
 			}
 	}
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		return super.canFlipToNextPage();
+	}
 }
