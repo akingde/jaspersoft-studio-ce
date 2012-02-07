@@ -76,7 +76,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 	public void setDataAdapterStorages(ADataAdapterStorage[] dastorages) {
 		if (this.dastorages != null) {
 			for (ADataAdapterStorage das : dastorages)
-				das.removePropertyChangeListener(this); 
+				das.removePropertyChangeListener(this);
 		}
 
 		this.dastorages = dastorages;
@@ -149,7 +149,7 @@ public class DatasourceComboItem extends ContributionItem implements PropertyCha
 					if (!s.getDataAdapterDescriptors().isEmpty() && i < dastorages.length - 1)
 						j++;
 				}
-			combo.select(newSelectionIndex + 1);
+			combo.select(newSelectionIndex);
 		}
 
 		// Set a default selection
