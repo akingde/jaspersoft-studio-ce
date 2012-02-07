@@ -46,6 +46,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -146,9 +147,5 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 				e.printStackTrace();
 			}
 	}
-	
-	@Override
-	public boolean canFlipToNextPage() {
-		return super.canFlipToNextPage();
-	}
+
 }

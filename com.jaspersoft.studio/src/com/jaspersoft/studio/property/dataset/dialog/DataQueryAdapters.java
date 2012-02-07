@@ -258,10 +258,9 @@ public abstract class DataQueryAdapters {
 									final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, newdataset);
 									if (fields != null) {
 										monitor.setTaskName("Setting Fields");
-										Display.getDefault().asyncExec(new Runnable() {
+										Display.getDefault().syncExec(new Runnable() {
 
 											public void run() {
-
 												setFields(fields);
 											}
 										});

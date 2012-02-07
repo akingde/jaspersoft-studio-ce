@@ -123,7 +123,8 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 			step1.validatePage();
 		if (page == step2) {
 			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
-			step2.setFile(r.getProject().getFile(step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName()));
+			step2.setFile(r.getProject().getFile(
+					step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName()));
 		}
 		if (page == step3) {
 			try {
@@ -300,7 +301,8 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 						JRImage im = (JRImage) el;
 						String str = ExpressionUtil.eval(im.getExpression(), jd);
 						if (str != null) {// resolv image
-							Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle().findEntries(Messages.ReportNewWizard_7, str, true);
+							Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle()
+									.findEntries(Messages.ReportNewWizard_7, str, true);
 							while (en.hasMoreElements()) {
 								URL uimage = (URL) en.nextElement();
 								IFile f = repFile.getParent().getFile(new Path(str));
