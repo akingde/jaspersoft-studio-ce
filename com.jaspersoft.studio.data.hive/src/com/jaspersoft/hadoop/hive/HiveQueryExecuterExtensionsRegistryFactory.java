@@ -19,29 +19,20 @@
  */
 package com.jaspersoft.hadoop.hive;
 
-import java.util.Collections;
-import java.util.List;
-
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.extensions.ExtensionsRegistry;
 import net.sf.jasperreports.extensions.ExtensionsRegistryFactory;
+import net.sf.jasperreports.extensions.SingletonExtensionRegistry;
 
 /*
  * @author veaceslav chicu (schicu@jaspersoft.com) 
  */
 public class HiveQueryExecuterExtensionsRegistryFactory implements
 		ExtensionsRegistryFactory {
-	private static final ExtensionsRegistry defaultExtensionsRegistry = new ExtensionsRegistry() {
-		public <T> List<T> getExtensions(Class<T> extensionType) {
-			if (QueryExecuterFactoryBundle.class.equals(extensionType)) {
-				return (List<T>) Collections
-						.singletonList(HiveQueryExecuterFactoryBundle
-								.getInstance());
-			}
-			return null;
-		}
-	};
+	private static final ExtensionsRegistry defaultExtensionsRegistry = new SingletonExtensionRegistry<QueryExecuterFactoryBundle>(
+			QueryExecuterFactoryBundle.class,
+			HiveQueryExecuterFactoryBundle.getInstance());
 
 	public ExtensionsRegistry createRegistry(String registryId,
 			JRPropertiesMap properties) {

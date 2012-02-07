@@ -5,11 +5,10 @@ Bundle-SymbolicName: com.jaspersoft.studio.data.hive;singleton:=true
 Bundle-Version: 1.0.8
 Bundle-Activator: com.jaspersoft.studio.data.hive.Activator
 Bundle-Vendor: Jaspersoft Corporation
-Require-Bundle: com.jaspersoft.studio;bundle-version="1.0.6",
- com.jaspersoft.studio.data;bundle-version="1.0.6"
+Require-Bundle: com.jaspersoft.studio.data;bundle-version="1.0.8";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Eclipse-RegisterBuddy: com.jaspersoft.studio, net.sf.jasperreports
+Eclipse-RegisterBuddy: com.jaspersoft.studio.data
 Bundle-ClassPath: lib/hadoop-core-0.20.2.jar,
  lib/hive-common-0.7.0.jar,
  lib/hive-exec-0.7.0.jar,
