@@ -95,6 +95,7 @@ public class RDQueryPage extends AResourcePage {
 		}
 
 		public void setLanguage(String lang) {
+			lang = ModelUtils.getLanguage(lang);
 			rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE, lang);
 		}
 

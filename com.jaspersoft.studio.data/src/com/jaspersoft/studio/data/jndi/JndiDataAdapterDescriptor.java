@@ -19,16 +19,25 @@
  */
 package com.jaspersoft.studio.data.jndi;
 
+import java.util.List;
+
 import net.sf.jasperreports.data.DataAdapter;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.jndi.JndiDataAdapter;
 import net.sf.jasperreports.data.jndi.JndiDataAdapterImpl;
+import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.data.jdbc.JDBCFieldsProvider;
 
-public class JndiDataAdapterDescriptor extends DataAdapterDescriptor {
+public class JndiDataAdapterDescriptor extends DataAdapterDescriptor implements
+		IFieldsProvider {
 	private JndiDataAdapterImpl beanDataAdapter = new JndiDataAdapterImpl();
 
 	@Override
@@ -57,5 +66,24 @@ public class JndiDataAdapterDescriptor extends DataAdapterDescriptor {
 			return Activator.getImage("icons/datasource_jndi.png");
 		}
 		return null;
+	}
+
+	private IFieldsProvider fprovider;
+
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JRDataset reportDataset) throws JRException,
+			UnsupportedOperationException {
+		getFieldProvider();
+		return fprovider.getFields(con, reportDataset);
+	}
+
+	private void getFieldProvider() {
+		if (fprovider == null)
+			fprovider = new JDBCFieldsProvider();
+	}
+
+	public boolean supportsGetFieldsOperation() {
+		getFieldProvider();
+		return fprovider.supportsGetFieldsOperation();
 	}
 }

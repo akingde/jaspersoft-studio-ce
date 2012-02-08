@@ -85,6 +85,7 @@ public class QuerySection extends ASection {
 		}
 
 		public void setLanguage(String lang) {
+			lang = ModelUtils.getLanguage(lang);
 			rd.setResourceProperty(ResourceDescriptor.PROP_QUERY_LANGUAGE, lang);
 		}
 

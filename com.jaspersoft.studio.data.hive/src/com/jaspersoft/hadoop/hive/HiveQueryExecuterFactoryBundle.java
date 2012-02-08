@@ -28,8 +28,12 @@ public class HiveQueryExecuterFactoryBundle implements
 
 	public JRQueryExecuterFactory getQueryExecuterFactory(String language)
 			throws JRException {
-		return (JRQueryExecuterFactory) cache
-				.getCachedInstance(HiveQueryExecuterFactory.class.getName());
+		for (String lang : getLanguages()) {
+			if (lang.equalsIgnoreCase(language))
+				return cache.getCachedInstance(HiveQueryExecuterFactory.class
+						.getName());
+		}
+		return null;
 	}
 
 }

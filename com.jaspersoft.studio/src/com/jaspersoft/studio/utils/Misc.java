@@ -125,9 +125,9 @@ public class Misc {
 		return newStr;
 	}
 
-	public static int indexOf(Object[] array, Object key) {
+	public static int indexOf(String[] array, String key) {
 		for (int i = 0; i < array.length; i++)
-			if (array[i].equals(key))
+			if (array[i].equalsIgnoreCase(key))
 				return i;
 		return -1;
 	}

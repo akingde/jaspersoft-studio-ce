@@ -48,10 +48,6 @@
       </queryDesigner>
       <queryDesigner
             QueryDesignerClass="com.jaspersoft.studio.data.QueryDesigner"
-            language="SQL">
-      </queryDesigner>
-      <queryDesigner
-            QueryDesignerClass="com.jaspersoft.studio.data.QueryDesigner"
             language="hql">
       </queryDesigner>
      

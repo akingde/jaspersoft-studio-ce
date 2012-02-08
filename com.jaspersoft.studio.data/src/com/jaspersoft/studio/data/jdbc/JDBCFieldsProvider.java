@@ -61,11 +61,15 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 		try {
 			Connection c = (Connection) parameters
 					.get(JRParameter.REPORT_CONNECTION);
-			
-			// JasperReports query executer instances require REPORT_PARAMETERS_MAP parameter to be defined and not null
-			Map<String,JRValueParameter> tmpMap=ParameterUtil.convertMap(parameters);
-			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP, new SimpleValueParameter(new HashMap<String,JRValueParameter>() ));
-			
+
+			// JasperReports query executer instances require
+			// REPORT_PARAMETERS_MAP parameter to be defined and not null
+			Map<String, JRValueParameter> tmpMap = ParameterUtil
+					.convertMap(parameters);
+			tmpMap.put(JRParameter.REPORT_PARAMETERS_MAP,
+					new SimpleValueParameter(
+							new HashMap<String, JRValueParameter>()));
+
 			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(reportDataset,
 					tmpMap);
 			qe.createDatasource();

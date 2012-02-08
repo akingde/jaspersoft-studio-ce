@@ -22,6 +22,7 @@ package com.jaspersoft.studio.utils;
 import java.awt.GraphicsEnvironment;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -56,10 +57,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.query.JRHibernateQueryExecuterFactory;
-import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
-import net.sf.jasperreports.engine.query.JRJpaQueryExecuterFactory;
-import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
@@ -70,8 +67,6 @@ import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
-import net.sf.jasperreports.olap.JRMdxQueryExecuterFactory;
-import net.sf.jasperreports.olap.xmla.JRXmlaQueryExecuterFactory;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -414,6 +409,31 @@ public class ModelUtils {
 			}
 		}
 		return (MBand) res;
+	}
+
+	public static MGraphicElement getElement4Point(ANode parent, Point point) {
+		return null;
+		// MGraphicElement res = null;
+		// ANode rNode = parent; // root node from drag&drop operation
+		// int xband = parent.getJasperDesign().getTopMargin();
+		//
+		// // iterate IGraphicElements, and look at their position
+		// // find the top level container for this element
+		// for (INode n : rNode.getChildren()) {
+		// if (n instanceof IGraphicElement) {
+		// Object de = n.getValue();
+		// if (de instanceof JRDesignBand) {
+		// JRDesignBand deband = (JRDesignBand) de;
+		// res = (ANode) n;
+		// if (point.y >= xband && point.y < xband + deband.getHeight()) {
+		// // go to children, we have the band allready
+		// break;
+		// }
+		// xband += deband.getHeight();
+		// }
+		// }
+		// }
+		// return res;
 	}
 
 	/**
@@ -772,18 +792,36 @@ public class ModelUtils {
 		return res;
 	}
 
+	public static String getLanguage(String lang) {
+		if (lang != null && lang.contains(","))
+			return lang.substring(0, lang.indexOf(","));
+		return lang;
+	}
+
 	public static String[] getQueryLanguagesOnly() {
 		Set<String> langs = new HashSet<String>();
 		List<?> bundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(QueryExecuterFactoryBundle.class);
 		for (Iterator<?> it = bundles.iterator(); it.hasNext();) {
 			QueryExecuterFactoryBundle bundle = (QueryExecuterFactoryBundle) it.next();
-			String[] l = bundle.getLanguages();
-			for (int i = 0; i < l.length; i++)
-				langs.add(l[i]);
+			String[] languages = bundle.getLanguages();
+			for (String l : languages) {
+				if (!langs.contains(l)) {
+					boolean exists = false;
+					for (String item : langs) {
+						if (item.equalsIgnoreCase(l.trim())) {
+							exists = true;
+							break;
+						}
+					}
+					if (!exists)
+						langs.add(l);
+				}
+			}
 		}
-		return langs.toArray(new String[langs.size()]);
+		String[] languages = langs.toArray(new String[langs.size()]);
+		Arrays.sort(languages, Collator.getInstance());
+		return languages;
 	}
-
 
 	public static String[] getMarkups() {
 		List<String> lst = new ArrayList<String>();

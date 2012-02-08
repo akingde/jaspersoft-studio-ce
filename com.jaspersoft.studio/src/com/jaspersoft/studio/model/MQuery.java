@@ -33,6 +33,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MQuery extends APropertyNode implements IPropertySource {
@@ -104,10 +105,8 @@ public class MQuery extends APropertyNode implements IPropertySource {
 			if (id.equals(JRDesignQuery.PROPERTY_TEXT))
 				jrQuery.setText((String) value);
 			else if (id.equals(JRDesignQuery.PROPERTY_LANGUAGE)) {
-				String lang = null;
-				if (value != null && value instanceof String && !((String) value).isEmpty())
-					lang = (String) value;
-				jrQuery.setLanguage(lang);
+				String lang = Misc.nullValue((String) value);
+				jrQuery.setLanguage(ModelUtils.getLanguage(lang));
 			}
 		}
 	}

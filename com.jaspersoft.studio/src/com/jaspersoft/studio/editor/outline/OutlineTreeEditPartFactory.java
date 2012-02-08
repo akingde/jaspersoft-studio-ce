@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -135,6 +136,7 @@ import com.jaspersoft.studio.model.variable.command.DeleteVariableCommand;
 import com.jaspersoft.studio.model.variable.command.ReorderVariableCommand;
 import com.jaspersoft.studio.plugin.ExtensionManager;
 import com.jaspersoft.studio.property.SetValueCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * A factory for creating OutlineTreeEditPart objects.
@@ -400,13 +402,24 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 			if (child instanceof MStyle) {
 				if (parent instanceof MStyles)
 					return new CreateStyleCommand((MStyles) parent, (MStyle) child, newIndex);
-				if (child.getValue() != null && !(parent instanceof IContainer) && parent instanceof MGraphicElement) {
+				if (parent instanceof MGraphicElement && child.getValue() != null && !(parent instanceof IContainer)) {
 					SetValueCommand cmd = new SetValueCommand();
 					cmd.setTarget((IPropertySource) parent);
 					cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
 					JRStyle style = (JRStyle) child.getValue();
 					cmd.setPropertyValue(style.getName());
 					return cmd;
+				}
+				if (parent instanceof MReport) {
+					MGraphicElement element = ModelUtils.getElement4Point(parent, new Point(location.x, location.y));
+					if (element != null) {
+						SetValueCommand cmd = new SetValueCommand();
+						cmd.setTarget(element);
+						cmd.setPropertyId(JRDesignElement.PROPERTY_PARENT_STYLE);
+						JRStyle style = (JRStyle) child.getValue();
+						cmd.setPropertyValue(style.getName());
+						return cmd;
+					}
 				}
 			}
 		}
