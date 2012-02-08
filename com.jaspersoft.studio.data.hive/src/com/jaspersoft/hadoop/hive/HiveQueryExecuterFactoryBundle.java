@@ -5,8 +5,6 @@ import net.sf.jasperreports.engine.query.JRQueryExecuterFactory;
 import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.util.JRSingletonCache;
 
-import com.jaspersoft.hadoop.hive.HiveQueryExecuterFactory;
-
 public class HiveQueryExecuterFactoryBundle implements
 		QueryExecuterFactoryBundle {
 	private static final JRSingletonCache<JRQueryExecuterFactory> cache = new JRSingletonCache<JRQueryExecuterFactory>(
@@ -25,7 +23,7 @@ public class HiveQueryExecuterFactoryBundle implements
 	}
 
 	public String[] getLanguages() {
-		return new String[] { "hive" };
+		return new String[] { HiveDataSource.QUERY_LANGUAGE };
 	}
 
 	public JRQueryExecuterFactory getQueryExecuterFactory(String language)
