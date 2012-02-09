@@ -234,7 +234,7 @@ public class SelectorDatasource {
 
 	}
 
-	protected void replaceDatasource(final MResource res, ResourceDescriptor rd) {
+	public static void replaceDatasource(final MResource res, ResourceDescriptor rd) {
 		ResourceDescriptor rdel = getDatasource(res.getValue());
 		if (rdel != null) {
 			int index = res.getValue().getChildren().indexOf(rdel);
@@ -250,7 +250,7 @@ public class SelectorDatasource {
 			res.getValue().getChildren().remove(rdel);
 	}
 
-	private static ResourceDescriptor getDatasource(ResourceDescriptor ru) {
+	public static ResourceDescriptor getDatasource(ResourceDescriptor ru) {
 		for (Object obj : ru.getChildren()) {
 			ResourceDescriptor r = (ResourceDescriptor) obj;
 			if (isDatasource(r)) {

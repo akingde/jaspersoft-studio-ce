@@ -182,6 +182,8 @@ public class JrxmlImport extends AContributorAction {
 		for (JRReportTemplate rt : jasper.getTemplatesList()) {
 			style.publish(jasper, rt, mrunit, monitor, fileset, file);
 		}
+		// here extend and give possibility to contribute to plugins
+		Activator.getExtManager().publishJrxml(mrunit, monitor, jasper, fileset, file);
 	}
 
 	protected void saveJRXML(IProgressMonitor monitor, AFileResource fres,

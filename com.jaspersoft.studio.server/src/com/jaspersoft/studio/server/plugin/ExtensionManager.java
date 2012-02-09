@@ -21,18 +21,26 @@ package com.jaspersoft.studio.server.plugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import net.sf.jasperreports.engine.design.JasperDesign;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 
 public class ExtensionManager {
 	private List<IResourceFactory> resources = new ArrayList<IResourceFactory>();
+
+	private List<IPublishContributor> publisher = new ArrayList<IPublishContributor>();
 
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry()
@@ -47,6 +55,25 @@ public class ExtensionManager {
 				System.out.println(ex.getMessage());
 			}
 		}
+
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				"com.jaspersoft.studio.server", "publisher"); //$NON-NLS-1$ //$NON-NLS-2$
+		for (IConfigurationElement e : config) {
+			try {
+				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
+				if (o instanceof IPublishContributor)
+					publisher.add((IPublishContributor) o);
+			} catch (CoreException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+	}
+
+	public void publishJrxml(MReportUnit mrunit, IProgressMonitor monitor,
+			JasperDesign jasper, Set<String> fileset, IFile file)
+			throws Exception {
+		for (IPublishContributor r : publisher)
+			r.publishJrxml(mrunit, monitor, jasper, fileset, file);
 	}
 
 	public MResource getResource(ANode parent, ResourceDescriptor resource,
