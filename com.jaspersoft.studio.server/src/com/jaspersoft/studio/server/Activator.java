@@ -25,6 +25,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.jaspersoft.studio.server.plugin.ExtensionManager;
+
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -100,5 +102,15 @@ public class Activator extends AbstractUIPlugin {
 				image = imageRegistry.get("icons/unknown.png"); //$NON-NLS-1$
 		}
 		return image;
+	}
+
+	private static ExtensionManager extensionManager;
+
+	public static ExtensionManager getExtManager() {
+		if (extensionManager == null) {
+			extensionManager = new ExtensionManager();
+			extensionManager.init();
+		}
+		return extensionManager;
 	}
 }

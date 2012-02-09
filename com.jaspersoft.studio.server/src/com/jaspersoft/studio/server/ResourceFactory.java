@@ -48,6 +48,7 @@ import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
+import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDataTypePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceBeanPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceJDBCPage;
@@ -65,6 +66,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.RDReferencePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitOptionsPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDResourceBundlePage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDUnknownPage;
 
 public class ResourceFactory {
 
@@ -73,49 +75,54 @@ public class ResourceFactory {
 	public IWizardPage getResourcePage(ANode parent, MResource resource) {
 		IWizardPage page = pagemap.get(resource.getClass());
 		if (page == null) {
-			if (resource instanceof MFolder)
-				page = new RDFolderPage(parent, (MFolder) resource);
-			else if (resource instanceof MRImage)
-				page = new RDImagePage(parent, (MRImage) resource);
-			else if (resource instanceof MRFont)
-				page = new RDFontPage(parent, (MRFont) resource);
-			else if (resource instanceof MJar)
-				page = new RDJarPage(parent, (MJar) resource);
-			else if (resource instanceof MResourceBundle)
-				page = new RDResourceBundlePage(parent,
-						(MResourceBundle) resource);
-			else if (resource instanceof MJrxml)
-				page = new RDJrxmlPage(parent, (MJrxml) resource);
-			else if (resource instanceof MReference)
-				page = new RDReferencePage(parent, (MReference) resource);
-			else if (resource instanceof MRDatasourceJNDI)
-				page = new RDDatasourceJNDIPage(parent,
-						(MRDatasourceJNDI) resource);
-			else if (resource instanceof MRDatasourceJDBC)
-				page = new RDDatasourceJDBCPage(parent,
-						(MRDatasourceJDBC) resource);
-			else if (resource instanceof MRDatasourceBean)
-				page = new RDDatasourceBeanPage(parent,
-						(MRDatasourceBean) resource);
-			else if (resource instanceof MRDatasourceCustom)
-				page = new RDDatasourcePage(parent,
-						(MRDatasourceCustom) resource);
-			else if (resource instanceof MRDatasource)
-				page = new RDDatasourcePage(parent, (MRDatasource) resource);
-			else if (resource instanceof MReportUnit)
-				page = new RDReportUnitPage(parent, (MReportUnit) resource);
-			else if (resource instanceof MInputControl)
-				page = new RDInputControlPage(parent, (MInputControl) resource);
-			else if (resource instanceof MDataType)
-				page = new RDDataTypePage(parent, (MDataType) resource);
-			else if (resource instanceof MRQuery)
-				page = new RDQueryPage(parent, (MRQuery) resource);
-			else if (resource instanceof MListOfValues)
-				page = new RDLovPage(parent, (MListOfValues) resource);
-			else if (resource instanceof MReportUnitOptions)
-				page = new RDReportUnitOptionsPage(parent,
-						(MReportUnitOptions) resource);
-
+			page = Activator.getExtManager().getResourcePage(parent, resource);
+			if (page == null) {
+				if (resource instanceof MFolder)
+					page = new RDFolderPage(parent, (MFolder) resource);
+				else if (resource instanceof MRImage)
+					page = new RDImagePage(parent, (MRImage) resource);
+				else if (resource instanceof MRFont)
+					page = new RDFontPage(parent, (MRFont) resource);
+				else if (resource instanceof MJar)
+					page = new RDJarPage(parent, (MJar) resource);
+				else if (resource instanceof MResourceBundle)
+					page = new RDResourceBundlePage(parent,
+							(MResourceBundle) resource);
+				else if (resource instanceof MJrxml)
+					page = new RDJrxmlPage(parent, (MJrxml) resource);
+				else if (resource instanceof MReference)
+					page = new RDReferencePage(parent, (MReference) resource);
+				else if (resource instanceof MRDatasourceJNDI)
+					page = new RDDatasourceJNDIPage(parent,
+							(MRDatasourceJNDI) resource);
+				else if (resource instanceof MRDatasourceJDBC)
+					page = new RDDatasourceJDBCPage(parent,
+							(MRDatasourceJDBC) resource);
+				else if (resource instanceof MRDatasourceBean)
+					page = new RDDatasourceBeanPage(parent,
+							(MRDatasourceBean) resource);
+				else if (resource instanceof MRDatasourceCustom)
+					page = new RDDatasourcePage(parent,
+							(MRDatasourceCustom) resource);
+				else if (resource instanceof MRDatasource)
+					page = new RDDatasourcePage(parent, (MRDatasource) resource);
+				else if (resource instanceof MReportUnit)
+					page = new RDReportUnitPage(parent, (MReportUnit) resource);
+				else if (resource instanceof MInputControl)
+					page = new RDInputControlPage(parent,
+							(MInputControl) resource);
+				else if (resource instanceof MDataType)
+					page = new RDDataTypePage(parent, (MDataType) resource);
+				else if (resource instanceof MRQuery)
+					page = new RDQueryPage(parent, (MRQuery) resource);
+				else if (resource instanceof MListOfValues)
+					page = new RDLovPage(parent, (MListOfValues) resource);
+				else if (resource instanceof MReportUnitOptions)
+					page = new RDReportUnitOptionsPage(parent,
+							(MReportUnitOptions) resource);
+				else if (resource instanceof MUnknown)
+					page = new RDUnknownPage(parent, (MUnknown) resource);
+			}
 			if (page != null)
 				pagemap.put(resource.getClass(), page);
 		}
@@ -124,6 +131,10 @@ public class ResourceFactory {
 
 	public static MResource getResource(ANode parent,
 			ResourceDescriptor resource, int index) {
+		ExtensionManager extManager = Activator.getExtManager();
+		MResource m = extManager.getResource(parent, resource, index);
+		if (m != null)
+			return m;
 		if (resource.getWsType().equals(ResourceDescriptor.TYPE_FOLDER)) {
 			MFolder folder = new MFolder(parent, resource, index);
 			new MDummy(folder);
