@@ -23,6 +23,8 @@
  */
 package com.jaspersoft.studio.rcp.intro;
 
+import org.eclipse.core.runtime.IProduct;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPartListener;
@@ -62,8 +64,16 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowMenuBar(true);
 		configurer.setShowProgressIndicator(true);
 		configurer.setShowPerspectiveBar(true);
-		configurer
-				.setTitle(Messages.ApplicationWorkbenchWindowAdvisor_jasper_open_studio);
+		// Try to get the title from the Product name
+		IProduct product = Platform.getProduct();
+		if(product!=null && product.getName()!=null){
+			configurer.setTitle(product.getName());
+		}
+		else{
+			// Fallback solution
+			configurer.setTitle(
+					Messages.ApplicationWorkbenchWindowAdvisor_jasper_open_studio);
+		}
 		
 		IPartService service = (IPartService) configurer.getWindow().getService(IPartService.class);
     	service.addPartListener(new IPartListener() {
