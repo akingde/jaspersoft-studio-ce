@@ -949,7 +949,7 @@ public class JRXmlWriter_4_0_2 extends JRXmlWriter
 	/**
 	 *
 	 */
-	private void writeFont(JRFont font) throws IOException
+	public void writeFont(JRFont font) throws IOException
 	{
 		if (font != null)
 		{
