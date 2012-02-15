@@ -24,11 +24,11 @@ import net.sf.jasperreports.data.DataAdapterService;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
+import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImpl;
+import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
-import com.jaspersoft.studio.data.hive.adapter.HiveDataAdapter;
-import com.jaspersoft.studio.data.hive.adapter.HiveDataAdapterImpl;
-import com.jaspersoft.studio.data.hive.adapter.HiveDataAdapterService;
 
 /*
  * @author gtoffoli

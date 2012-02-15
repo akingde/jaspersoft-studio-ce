@@ -29,10 +29,10 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.swt.graphics.Image;
 
+import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
+import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImpl;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
-import com.jaspersoft.studio.data.hive.adapter.HiveDataAdapter;
-import com.jaspersoft.studio.data.hive.adapter.HiveDataAdapterImpl;
 import com.jaspersoft.studio.data.jdbc.JDBCFieldsProvider;
 
 /*
