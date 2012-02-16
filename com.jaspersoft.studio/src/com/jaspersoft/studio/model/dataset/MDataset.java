@@ -59,7 +59,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  */
 public class MDataset extends APropertyNode implements ICopyable {
 
-	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
+	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -99,6 +99,11 @@ public class MDataset extends APropertyNode implements ICopyable {
 	public MDataset(ANode parent, JRDesignDataset jrDataset, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrDataset);
+	}
+
+	@Override
+	public JRDesignDataset getValue() {
+		return (JRDesignDataset) super.getValue();
 	}
 
 	/*

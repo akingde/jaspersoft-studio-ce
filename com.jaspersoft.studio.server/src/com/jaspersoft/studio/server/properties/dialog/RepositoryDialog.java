@@ -21,6 +21,7 @@ package com.jaspersoft.studio.server.properties.dialog;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -80,6 +81,7 @@ public abstract class RepositoryDialog extends Dialog {
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		treeViewer.setInput(root);
+		ColumnViewerToolTipSupport.enableFor(treeViewer);
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			public void selectionChanged(SelectionChangedEvent event) {

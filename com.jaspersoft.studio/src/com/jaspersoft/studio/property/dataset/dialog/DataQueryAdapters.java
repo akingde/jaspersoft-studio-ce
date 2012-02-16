@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -71,13 +72,15 @@ import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class DataQueryAdapters {
 	private JRDesignDataset newdataset;
+	private JasperDesign jDesign;
 	private Color background;
 	private IFile file;
 
-	public DataQueryAdapters(Composite parent, JRDesignDataset newdataset, Color background, IFile file) {
+	public DataQueryAdapters(Composite parent,JasperDesign jDesign, JRDesignDataset newdataset, Color background, IFile file) {
 		this.file = file;
 		// createToolbar(parent);
 		this.newdataset = newdataset;
+		this.jDesign = jDesign;
 		if (background != null)
 			this.background = background;
 		// else
@@ -107,9 +110,11 @@ public abstract class DataQueryAdapters {
 		return tabFolder;
 	}
 
-	public void setFile(IFile file) {
+	public void setFile(IFile file, JasperDesign jDesign) {
 		this.file = file;
+		this.jDesign = jDesign;
 		dscombo.setDataAdapterStorages(DataAdapterManager.getDataAdapter(file));
+		setDataset(jDesign, newdataset);
 	}
 
 	public CTabFolder createTop(Composite parent, IFieldSetter fsetter) {
@@ -192,7 +197,7 @@ public abstract class DataQueryAdapters {
 		langLayout.topControl = designer.getControl();
 		langComposite.layout();
 		if (currentDesigner != null)
-			designer.setQuery(currentDesigner.getQuery());
+			designer.setQuery(currentDesigner.getQuery(), jDesign, newdataset);
 		currentDesigner = designer;
 	}
 
@@ -302,7 +307,7 @@ public abstract class DataQueryAdapters {
 		gFields.run();
 	}
 
-	public void setDataset(JRDesignDataset ds) {
+	public void setDataset(JasperDesign jDesign, JRDesignDataset ds) {
 		JRQuery query = ds.getQuery();
 		if (query != null) {
 			int langindex = Misc.indexOf(languages, query.getLanguage());
@@ -311,7 +316,7 @@ public abstract class DataQueryAdapters {
 			else
 				langCombo.setItem(0, Misc.nvl(query.getLanguage()));
 			changeLanguage();
-			currentDesigner.setQuery(query.getText());
+			currentDesigner.setQuery(query.getText(), jDesign, newdataset);
 		}
 	}
 

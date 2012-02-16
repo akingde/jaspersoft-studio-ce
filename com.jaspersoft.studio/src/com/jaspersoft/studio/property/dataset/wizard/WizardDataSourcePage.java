@@ -44,9 +44,9 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -62,6 +62,7 @@ import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 
 public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 	private JRDesignDataset dataset;
+	private JasperDesign jDesign;
 
 	public JRDesignDataset getDataset() {
 		if (dataset == null) {
@@ -77,12 +78,13 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 	private IFile file;
 	private DataQueryAdapters dataquery;
 
-	public WizardDataSourcePage(IFile file) {
+	public WizardDataSourcePage(IFile file, JasperDesign jDesign) {
 		super("datasourcepage"); //$NON-NLS-1$
 		setTitle(Messages.WizardDataSourcePage_datasource);
 		setImageDescriptor(MDatasources.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDataSourcePage_description);
 		this.file = file;
+		this.jDesign = jDesign;
 	}
 
 	@Override
@@ -107,7 +109,7 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		composite.setLayout(new GridLayout(1, true));
 		setControl(composite);
 
-		dataquery = new DataQueryAdapters(composite, getDataset(), composite.getBackground(), file) {
+		dataquery = new DataQueryAdapters(composite, jDesign, getDataset(), composite.getBackground(), file) {
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {
@@ -125,14 +127,15 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 
 		ctf.setTopRight(c);
 
-		dataquery.setDataset(getDataset());
+		dataquery.setDataset(jDesign, getDataset());
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
-	public void setFile(IFile file) {
+	public void setFile(IFile file, JasperDesign jDesign) {
 		this.file = file;
-		dataquery.setFile(file);
+		this.jDesign = jDesign;
+		dataquery.setFile(file, jDesign);
 
 	}
 

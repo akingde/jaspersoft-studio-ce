@@ -107,7 +107,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		step1.setFileName("NEW_REPORT.jrxml");//$NON-NLS-1$
 		addPage(step1);
 
-		step2 = new WizardDataSourcePage(null);
+		step2 = new WizardDataSourcePage(null, null);
 		addPage(step2);
 
 		step3 = new WizardFieldsPage();
@@ -123,8 +123,9 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 			step1.validatePage();
 		if (page == step2) {
 			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
-			step2.setFile(r.getProject().getFile(
-					step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName()));
+			step2.setFile(
+					r.getProject().getFile(step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName()),
+					getJasperDesign());
 		}
 		if (page == step3) {
 			try {
@@ -215,6 +216,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 	}
 
 	private IFile reportFile;
+	private JasperDesign jDesign;
 
 	public IFile getReportFile() {
 		return reportFile;
@@ -225,13 +227,13 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 	 */
 
 	private InputStream openContentStream(IProgressMonitor monitor) {
-		JasperDesign jd = null;
+		jDesign = null;
 		if (step0.getTemplate() != null) {
 			URL obj = step0.getTemplate();
 			try {
-				jd = JRXmlLoader.load(obj.openStream());
+				jDesign = JRXmlLoader.load(obj.openStream());
 
-				copyTemplateResources(monitor, jd, reportFile);
+				copyTemplateResources(monitor, jDesign, reportFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (JRException e) {
@@ -240,53 +242,57 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 				e.printStackTrace();
 			}
 		}
-		if (jd == null) {
-			jd = new JasperDesign();
-			jd.setPageWidth(800);
-			jd.setPageHeight(1200);
-			jd.setTopMargin(30);
-			jd.setBottomMargin(30);
-			jd.setLeftMargin(25);
-			jd.setRightMargin(25);
-			jd.setName(Messages.ReportNewWizard_new_report);
-
-			JRDesignQuery jrDesignQuery = new JRDesignQuery();
-			jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$
-			jrDesignQuery.setText(""); //$NON-NLS-1$
-			jd.setQuery(jrDesignQuery);
-
-			JRDesignBand jb = new JRDesignBand();
-			jb.setHeight(100);
-			jd.setPageHeader(jb);
-
-			jb = new JRDesignBand();
-			jb.setHeight(200);
-			((JRDesignSection) jd.getDetailSection()).addBand(jb);
-
-			jb = new JRDesignBand();
-			jb.setHeight(100);
-			jd.setPageFooter(jb);
-		}
-		final JasperDesign jasper = jd;
+		getJasperDesign();
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
 				DataAdapterDescriptor dataAdapter = step2.getDataAdapter();
 				if (dataAdapter != null)
-					jasper.setProperty(MReport.DEFAULT_DATAADAPTER, dataAdapter.getName());
+					jDesign.setProperty(MReport.DEFAULT_DATAADAPTER, dataAdapter.getName());
 
-				DatasetWizard.setUpDataset(jasper.getMainDesignDataset(), step2, step3, step4);
-				new ReportGenerator().processTemplate(jasper, step3.getFields(), step4.getFields());
+				DatasetWizard.setUpDataset(jDesign.getMainDesignDataset(), step2, step3, step4);
+				new ReportGenerator().processTemplate(jDesign, step3.getFields(), step4.getFields());
 
 			}
 		});
 		try {
-			String contents = JRXmlWriterHelper.writeReport(jd, reportFile, false);
+			String contents = JRXmlWriterHelper.writeReport(jDesign, reportFile, false);
 			return new ByteArrayInputStream(contents.getBytes());
 		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
 		return null;
+	}
+
+	protected JasperDesign getJasperDesign() {
+		if (jDesign == null) {
+			jDesign = new JasperDesign();
+			jDesign.setPageWidth(800);
+			jDesign.setPageHeight(1200);
+			jDesign.setTopMargin(30);
+			jDesign.setBottomMargin(30);
+			jDesign.setLeftMargin(25);
+			jDesign.setRightMargin(25);
+			jDesign.setName(Messages.ReportNewWizard_new_report);
+
+			JRDesignQuery jrDesignQuery = new JRDesignQuery();
+			jrDesignQuery.setLanguage("sql"); //$NON-NLS-1$
+			jrDesignQuery.setText(""); //$NON-NLS-1$
+			jDesign.setQuery(jrDesignQuery);
+
+			JRDesignBand jb = new JRDesignBand();
+			jb.setHeight(100);
+			jDesign.setPageHeader(jb);
+
+			jb = new JRDesignBand();
+			jb.setHeight(200);
+			((JRDesignSection) jDesign.getDetailSection()).addBand(jb);
+
+			jb = new JRDesignBand();
+			jb.setHeight(100);
+			jDesign.setPageFooter(jb);
+		}
+		return jDesign;
 	}
 
 	private void copyTemplateResources(final IProgressMonitor monitor, final JasperDesign jd, final IFile repFile)

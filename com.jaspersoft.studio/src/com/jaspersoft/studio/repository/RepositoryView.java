@@ -30,6 +30,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -113,7 +114,8 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		treeViewer.setInput(getResources()); // pass a non-null that will be ignored
 		treeViewer.expandToLevel(2);
-//		getViewSite().setSelectionProvider(treeViewer);
+		ColumnViewerToolTipSupport.enableFor(treeViewer);
+		// getViewSite().setSelectionProvider(treeViewer);
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			public void doubleClick(DoubleClickEvent event) {

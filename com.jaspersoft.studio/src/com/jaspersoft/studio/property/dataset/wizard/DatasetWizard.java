@@ -64,7 +64,7 @@ public class DatasetWizard extends Wizard {
 
 		IFile file = getCurrentFile();
 
-		step2 = new WizardDataSourcePage(file);
+		step2 = new WizardDataSourcePage(file, jasperDesign);
 		addPage(step2);
 
 		step3 = new WizardFieldsPage();

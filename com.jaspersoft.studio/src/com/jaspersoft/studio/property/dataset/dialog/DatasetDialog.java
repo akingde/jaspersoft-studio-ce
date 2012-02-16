@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.commands.Command;
@@ -102,7 +103,8 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		background = body.getBackground();
 
-		dataquery = new DataQueryAdapters(mform.getForm().getBody(), newdataset, background, file) {
+		dataquery = new DataQueryAdapters(mform.getForm().getBody(), mreport.getJasperDesign(), newdataset, background,
+				file) {
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {
@@ -132,7 +134,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		createBottom(sf, toolkit);
 		sf.setWeights(new int[] { 450, 150 });
 
-		setDataset((JRDesignDataset) mdataset.getValue());
+		setDataset(mreport.getJasperDesign(), (JRDesignDataset) mdataset.getValue());
 	}
 
 	public void setFields(List<JRDesignField> fields) {
@@ -230,8 +232,8 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 	private DataQueryAdapters dataquery;
 	private Text filterExpression;
 
-	public void setDataset(JRDesignDataset ds) {
-		dataquery.setDataset(ds);
+	public void setDataset(JasperDesign jDesign, JRDesignDataset ds) {
+		dataquery.setDataset(jDesign, ds);
 	}
 
 	public void createCommand() {
@@ -257,6 +259,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		if (fexprtext.trim().equals(""))
 			fexprtext = null;
 		command.add(setValueCommand(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, fexprtext, mdataset));
+		command.add(setValueCommand(MDataset.PROPERTY_MAP, newdataset.getPropertiesMap(), mdataset));
 
 		List<JRField> dsfields = ds.getFieldsList();
 		List<JRDesignField> fields = ftable.getFields();

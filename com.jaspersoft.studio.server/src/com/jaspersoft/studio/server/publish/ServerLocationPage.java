@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -100,7 +101,7 @@ public class ServerLocationPage extends WizardPage {
 		treeViewer.getTree().setLayoutData(gd);
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
-
+		ColumnViewerToolTipSupport.enableFor(treeViewer);
 		bnRunit = new Button(composite, SWT.CHECK);
 		bnRunit.setText("Create Report Unit");
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);

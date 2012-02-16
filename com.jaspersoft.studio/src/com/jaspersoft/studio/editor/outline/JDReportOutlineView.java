@@ -256,6 +256,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 		configureOutlineViewer();
 		hookOutlineViewer();
 		setContents(editor.getModel());
+
 		if (outline instanceof Tree) {
 			Tree tree = (Tree) outline;
 			tree.addMouseListener(new MouseListener() {

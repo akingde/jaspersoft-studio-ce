@@ -138,4 +138,26 @@ public class Misc {
 
 		return value;
 	}
+
+	public static String strReplace(String s1, String s2, String s3) {
+		String string = "";
+		string = "";
+
+		if (s2 == null || s3 == null || s2.length() == 0)
+			return s3;
+
+		int pos_i = 0; // posizione corrente.
+		int pos_f = 0; // posizione corrente finale
+
+		int len = s2.length();
+		while ((pos_f = s3.indexOf(s2, pos_i)) >= 0) {
+			string += s3.substring(pos_i, pos_f) + s1;
+			// +string.substring(pos+ s2.length());
+			pos_f = pos_i = pos_f + len;
+
+		}
+
+		string += s3.substring(pos_i);
+		return string;
+	}
 }

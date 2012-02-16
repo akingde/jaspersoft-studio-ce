@@ -40,6 +40,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.utils.Misc;
 
 /* 
  * 
@@ -84,8 +85,12 @@ public class MResource extends APropertyNode implements ICopyable {
 
 	@Override
 	public String getToolTip() {
-		if (getValue().getDescription() != null)
-			return getValue().getDescription();
+		if (getValue() != null) {
+			String tip = "name: " + getValue().getName();
+			tip += "\nuri:" + getValue().getUriString();
+			tip += "\ndescription:" + Misc.nvl(getValue().getDescription());
+			return tip;
+		}
 		return getThisIconDescriptor().getToolTip();
 	}
 

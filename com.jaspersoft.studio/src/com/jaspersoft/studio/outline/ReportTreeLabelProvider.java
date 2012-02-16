@@ -62,7 +62,25 @@ public class ReportTreeLabelProvider extends CellLabelProvider {
 	 */
 	@Override
 	public String getToolTipText(Object element) {
-		return "tooltip"; //$NON-NLS-1$
+		return ((INode) element).getToolTip();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.ViewerLabelProvider#getTooltipDisplayDelayTime(java.lang.Object)
+	 */
+	public int getToolTipDisplayDelayTime(Object object) {
+		return 200;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.ViewerLabelProvider#getTooltipTimeDisplayed(java.lang.Object)
+	 */
+	public int getToolTipTimeDisplayed(Object object) {
+		return 5000;
 	}
 
 	/*

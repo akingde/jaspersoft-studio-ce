@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.server.wizard.resource.page;
 
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -78,6 +79,7 @@ public class AddResourcePage extends WizardPage {
 		treeViewer.setContentProvider(new ReportTreeContetProvider());
 		treeViewer.setLabelProvider(new ReportTreeLabelProvider());
 		treeViewer.setInput(getInput());
+		ColumnViewerToolTipSupport.enableFor(treeViewer);
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			public void selectionChanged(SelectionChangedEvent event) {
