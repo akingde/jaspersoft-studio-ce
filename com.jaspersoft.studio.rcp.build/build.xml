@@ -7,40 +7,46 @@
 	<property name="builder" value="${basedir}" />
 	<property name="pluginPath" value="${basedir}/..${path.separator}${deltapack}" />
 	<property name="buildTempFolder" value="${buildDirectory}" />
-
-	<!-- - - - - - - - - - - - - - - - - - 
+		
+	<!-- ================================= 
           target: buildAndPackageConsole
-         - - - - - - - - - - - - - - - - - -->
-    <target name="buildAndPackageConsole" description="Invoke the main building task and then all packaging-tasks. Should be used when launching outside IDE">
+         ================================= -->
+    <target name="buildAndPackageConsole" description="Invoke the main building task and then all packaging-tasks. Should be used when launching outside IDE"  depends="readProductManifest">
     	<echo message="Executing 'buildAndPackageConsole' task"/>
-    	
-    	<antcall target="main"/>
-    	<antcall target="linux-x86-installer"/>
-    	<antcall target="linux-x86_64-installer"/>
-    	<antcall target="mac-x86_64-installer"/>
-    	<antcall target="windows-x86-installer"/>
-    	<antcall target="windows-x86_64-installer"/>
+		<property file="jss.properties"/>
+    	<antcall>
+    		<target name="main"/>
+    		<target name="linux-x86-installer"/>
+    		<target name="linux-x86_64-installer"/>
+    		<target name="mac-x86_64-installer"/>
+    		<target name="windows-x86-installer"/>
+    		<target name="windows-x86_64-installer"/>
+    		<target name="cleanJSSFiles" />
+    	</antcall>
     </target>
 	
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- ================================= 
           target: buildAndPackageIDE
-         - - - - - - - - - - - - - - - - - -->
-    <target name="buildAndPackageIDE" description="Invoke the main building task and then all packaging-tasks. Should be used when launching inside IDE">
+         ================================= -->
+    <target name="buildAndPackageIDE" description="Invoke the main building task and then all packaging-tasks. Should be used when launching inside IDE" depends="readProductManifest">
     	<echo message="Executing 'buildAndPackageIDE' task"/>
-    	
     	<property name="idelaunch" value="true" />
-    	<antcall target="main"/>
-    	<antcall target="linux-x86-installer"/>
-    	<antcall target="linux-x86_64-installer"/>
-    	<antcall target="mac-x86_64-installer"/>
-    	<antcall target="windows-x86-installer"/>
-    	<antcall target="windows-x86_64-installer"/>
-		<antcall target="refreshWorkspace"/>
+		<property file="jss.properties"/>
+    	<antcall>
+    		<target name="main"/>
+    		<target name="linux-x86-installer"/>
+    		<target name="linux-x86_64-installer"/>
+    		<target name="mac-x86_64-installer"/>
+    		<target name="windows-x86-installer"/>
+    		<target name="windows-x86_64-installer"/>
+    		<target name="cleanJSSFiles" />
+    		<target name="refreshWorkspace" />
+    	</antcall>
     </target>	
 	
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- ================================= 
           target: main
-         - - - - - - - - - - - - - - - - - -->
+         ================================= -->
 	<target name="main" description="Product creation (packaging as zip files)">
 		<echo message="Executing 'main' task"/>
 		<echo message="Delta pack location: ${deltapack}" />
@@ -58,19 +64,19 @@
 		</move>
 	</target>	
 	
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- ================================= 
           target: refreshWorkspace
-         - - - - - - - - - - - - - - - - - -->
+         ================================= -->
     <target name="refreshWorkspace" if="${idelaunch}" description="Need to refresh the workspace only when run from IDE">
     	<echo message="Executing 'refreshWorkspace' task"/>
 		<eclipse.convertPath fileSystemPath="${basedir}" property="resourcePath" />
 		<eclipse.refreshLocal resource="${resourcePath}" depth="infinite" />            
     </target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- ================================= 
           target: windows-x86-installer
-         - - - - - - - - - - - - - - - - - -->
-	<target name="windows-x86-installer" description="Create the win32 x86 installer using NSIS script (NSIS required)">
+         ================================= -->
+	<target name="windows-x86-installer" description="Create the win32 x86 installer using NSIS script (NSIS required)" if="jss.version">
 		<echo message="Executing 'windows-x86-installer' task"/>
 		<property name="dist" value="${basedir}/dist" />
 		<property name="zipfile.win32.x86" value="${buildId}-win32.win32.x86" />
@@ -106,10 +112,10 @@
 
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- ================================= 
           target: windows-x86_64-installer
-         - - - - - - - - - - - - - - - - - -->
-	<target name="windows-x86_64-installer" description="Create the win64 installer using NSIS script (NSIS required)">
+         ================================= -->
+	<target name="windows-x86_64-installer" description="Create the win64 installer using NSIS script (NSIS required)" if="jss.version">
 		<echo message="Executing 'windows-x86_64-installer' task"/>
 		<property name="dist" value="${basedir}/dist" />
 		<property name="zipfile.win32.x86_64" value="${buildId}-win32.win32.x86_64" />
@@ -145,10 +151,10 @@
 
 	</target>
 	
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- ================================= 
           target: linux-x86-installer
-         - - - - - - - - - - - - - - - - - -->
-	<target name="linux-x86-installer" description="Create the Linux (x86) tgz package (Unix system required)">
+         ================================= -->
+	<target name="linux-x86-installer" description="Create the Linux (x86) tgz package (Unix system required)" if="jss.version">
 		<echo message="Executing 'linux-x86-installer' task"/>
 		<property name="dist" value="${basedir}/dist" />
 		<property name="zipfile.linux.x86" value="${buildId}-linux.gtk.x86" />
@@ -173,10 +179,10 @@
 		<delete dir="${zipdir.linux.x86}" />
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- ================================= 
           target: linux-x86_64-installer
-         - - - - - - - - - - - - - - - - - -->
-	<target name="linux-x86_64-installer" description="Create the Linux (x86_64) tgz package (Unix system required)">
+         ================================= -->
+	<target name="linux-x86_64-installer" description="Create the Linux (x86_64) tgz package (Unix system required)" if="jss.version">
 		<echo message="Executing 'linux-x86_64-installer' task"/>
 		<property name="dist" value="${basedir}/dist" />
 		<property name="zipfile.linux.x86_64" value="${buildId}-linux.gtk.x86_64" />
@@ -210,10 +216,10 @@
 		<delete dir="${zipdir.linux.x86_64}" />
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- ================================= 
           target: mac-x86_64-installer
-         - - - - - - - - - - - - - - - - - -->
-	<target name="mac-x86_64-installer" description="Create DMG installer for Mac x86_64 using a remote Mac server (uses ssh.properties)">
+         ================================= -->
+	<target name="mac-x86_64-installer" description="Create DMG installer for Mac x86_64 using a remote Mac server (uses ssh.properties)" if="jss.version">
 		<echo message="Executing 'mac-x86_x64-installer' task"/>
 		<property file="ssh.properties" />
 		<property name="dist" value="${basedir}/dist" />
@@ -228,5 +234,44 @@
 		<sshexec host="${sshhost}" username="${sshuser}" password="${sshpass}" command="cd '${sshroot}/tmp-jssbuild'; chmod +x mac_distro.sh; ./mac_distro.sh ${jss.version}" />
 		<scp file="${sshuser}@${sshhost}:${sshroot}/tmp-jssbuild/jaspersoftstudio.dmg" localTofile="${dist}/${jss.mac.x86_64}" password="${sshpass}" />
 	</target>
+	
+	<!-- ================================= 
+          target: readProductManifest                      
+         ================================= -->
+    <target name="readProductManifest" description="Read the version for the product to be packed directly from the product plugin manifest.">
+    	<property name="manifestFilePosition" value="${basedir}/../${productPluginName}/META-INF/MANIFEST.MF"/>
+    	<readBundleVersion fileposition="${manifestFilePosition}"/>
+    	<property name="jss.version" value="${Bundle-Version}"/>
+    </target>
+
+	<!-- = = = = = = = = = = = = = = = = =
+          macrodef: readBundleVersion          
+         = = = = = = = = = = = = = = = = = -->
+    <macrodef name="readBundleVersion">
+        <attribute name="fileposition"/>
+        <sequential>
+            <loadproperties srcfile="@{fileposition}">
+        		<filterchain>
+        			<linecontains>
+        			<contains value="Bundle-Version:"/>
+        			</linecontains>
+        		</filterchain>
+			</loadproperties>
+        </sequential>
+    </macrodef>
+	
+	<!-- ================================= 
+          target: cleanJSSFiles              
+         ================================= -->
+    <target name="cleanJSSFiles" description="Clean projects from no more used files created during the building phase">
+    	<!-- remove all zip file produced by the product build -->
+    	<delete>
+			<fileset dir="${basedir}">
+			    <include name="${buildId}-*.zip"/>
+			</fileset>
+		</delete>
+    	<!-- remove build directory -->
+    	<delete dir="${buildDirectory}" />
+    </target>
 	
 </project>
