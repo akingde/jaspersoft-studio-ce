@@ -30,6 +30,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
 
+import org.eclipse.core.runtime.IProduct;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -37,10 +39,23 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class Heartbeat {
-	private static final String UUID_PROPERTY = "UUID";
-	public static final String VERSION = "1.0.1";
+	private static final String UUID_PROPERTY;
+	public static final String VERSION;
 	private static String version;
 	private static String optmsg;
+	
+	static {
+		UUID_PROPERTY="UUID";
+		// Get the JSS version directly from the running product (Bundle-Version attribute)
+		IProduct product = Platform.getProduct();
+		if(product!=null && product.getDefiningBundle()!=null
+				&& product.getDefiningBundle().getVersion()!=null){
+			VERSION=product.getDefiningBundle().getVersion().toString();	
+		}
+		else{
+			VERSION="x.x.x";
+		}
+	}
 
 	public static void run() {
 		final PropertiesHelper ph = new PropertiesHelper(null);
