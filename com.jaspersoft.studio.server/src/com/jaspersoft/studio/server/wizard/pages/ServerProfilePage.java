@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.compatibility.dialog.VersionCombo;
@@ -159,5 +160,11 @@ public class ServerProfilePage extends WizardPage {
 		public String getJrVersion() {
 			return VersionCombo.getLabelVersion(sp.getJrVersion());
 		}
+	}
+
+	@Override
+	public void performHelp() {
+		PlatformUI.getWorkbench().getHelpSystem()
+				.displayHelp("com.jaspersoft.studio.doc.jaspersoftserver");
 	}
 }

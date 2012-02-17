@@ -31,7 +31,8 @@ public class BeanDataAdapterEditor implements DataAdapterEditor {
 	BeanDataAdapterComposite composite = null;
 
 	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
-		if (composite != null && dataAdapter instanceof BeanDataAdapterDescriptor) {
+		if (composite != null
+				&& dataAdapter instanceof BeanDataAdapterDescriptor) {
 			composite.setDataAdapter((BeanDataAdapterDescriptor) dataAdapter);
 		}
 	}

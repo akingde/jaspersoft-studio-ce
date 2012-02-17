@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
+
 /*
  * @author gtoffoli
  *
@@ -32,48 +33,60 @@ import com.jaspersoft.studio.data.DataAdapterEditor;
 public class JDBCDataAdapterEditor implements DataAdapterEditor {
 
 	protected JDBCDataAdapterComposite composite = null;
-	
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getComposite(org.eclipse.swt.widgets.Composite, int)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.data.DataAdapterEditor#getComposite(org.eclipse
+	 * .swt.widgets.Composite, int)
 	 */
-	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage) {
-		
-		if (composite == null || composite.getParent() != parent)
-		{
-			if (composite != null) composite.dispose();
+	public ADataAdapterComposite getComposite(Composite parent, int style,
+			WizardPage wizardPage) {
+
+		if (composite == null || composite.getParent() != parent) {
+			if (composite != null)
+				composite.dispose();
 			composite = new JDBCDataAdapterComposite(parent, style);
 		}
 		return composite;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getDataAdapter()
 	 */
 	public DataAdapterDescriptor getDataAdapter() {
 
-		if (composite != null)
-		{
+		if (composite != null) {
 			return composite.getDataAdapter();
 		}
-		
+
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getHelpContextId()
 	 */
 	public String getHelpContextId() {
-		return null;
+		return composite.getHelpContextId();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterEditor#setDataAdapter(com.jaspersoft.studio.data.DataAdapter)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.jaspersoft.studio.data.DataAdapterEditor#setDataAdapter(com.jaspersoft
+	 * .studio.data.DataAdapter)
 	 */
 	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
-		
-		if (composite != null && dataAdapter instanceof JDBCDataAdapterDescriptor)
-		{
-			composite.setDataAdapter((JDBCDataAdapterDescriptor)dataAdapter);
+
+		if (composite != null
+				&& dataAdapter instanceof JDBCDataAdapterDescriptor) {
+			composite.setDataAdapter((JDBCDataAdapterDescriptor) dataAdapter);
 		}
 	}
 }

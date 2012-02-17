@@ -57,17 +57,13 @@ public class BeanDataAdapterComposite extends ADataAdapterComposite {
 		Label lblFactory = new Label(this, SWT.NONE);
 		lblFactory.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 2, 1));
-		lblFactory
-				.setText(Messages.BeanDataAdapterComposite_0);
+		lblFactory.setText(Messages.BeanDataAdapterComposite_0);
 
-		factoryText = new ClassType(this,
-				Messages.BeanDataAdapterComposite_1);
-		factoryText
-				.setClassType(Messages.BeanDataAdapterComposite_2);
+		factoryText = new ClassType(this, Messages.BeanDataAdapterComposite_1);
+		factoryText.setClassType(Messages.BeanDataAdapterComposite_2);
 
 		Label lblMethodName = new Label(this, SWT.NONE);
-		lblMethodName
-				.setText(Messages.BeanDataAdapterComposite_3);
+		lblMethodName.setText(Messages.BeanDataAdapterComposite_3);
 		new Label(this, SWT.NONE);
 
 		methodText = new Text(this, SWT.BORDER);

@@ -87,8 +87,8 @@ public class MResource extends APropertyNode implements ICopyable {
 	public String getToolTip() {
 		if (getValue() != null) {
 			String tip = "name: " + getValue().getName();
-			tip += "\nuri:" + getValue().getUriString();
-			tip += "\ndescription:" + Misc.nvl(getValue().getDescription());
+			tip += "\nuri: " + getValue().getUriString();
+			tip += "\ndescription: " + Misc.nvl(getValue().getDescription());
 			return tip;
 		}
 		return getThisIconDescriptor().getToolTip();

@@ -133,6 +133,5 @@ public class DataAdaptersListPage extends WizardPage {
 	@Override
 	public void performHelp() {
 		PlatformUI.getWorkbench().getHelpSystem().displayHelp("com.jaspersoft.studio.doc.dataAdapters_wizard_list");
-
 	}
 }

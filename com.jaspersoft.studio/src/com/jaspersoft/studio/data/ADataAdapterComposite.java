@@ -45,7 +45,7 @@ public abstract class ADataAdapterComposite extends Composite {
 	}
 
 	public String getHelpContextId() {
-		return "";
+		return "com.jaspersoft.studio.doc.dataAdapters_wizard_list";
 	}
 
 	public void removeBindings() {
