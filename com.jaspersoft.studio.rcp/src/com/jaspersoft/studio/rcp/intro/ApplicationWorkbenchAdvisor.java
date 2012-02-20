@@ -29,6 +29,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
@@ -82,6 +83,10 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				IDE.SharedImages.IMG_OBJ_PROJECT_CLOSED, PATH_OBJECT
 						+ "cprj_obj.gif", true);
 
+		// Force the default setting for the help (tray) button in dialogs.
+		// It seems that in Windows and Linux platforms as default this value is set to true.
+		// However in Mac OS X the button does not shown as default behavior.
+		TrayDialog.setDialogHelpAvailable(true);
 	}
 
 	private void declareWorkbenchImage(IWorkbenchConfigurer configurer_p,
