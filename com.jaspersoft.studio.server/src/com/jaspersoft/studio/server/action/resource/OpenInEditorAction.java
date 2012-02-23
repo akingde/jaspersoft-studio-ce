@@ -131,8 +131,8 @@ public class OpenInEditorAction extends Action {
 				f = new ResourceBundleExporter().exportFile(res, rd, fkeyname);
 			else if (type.equals(ResourceDescriptor.TYPE_STYLE_TEMPLATE))
 				f = new StyleTemplateExporter().exportFile(res, rd, fkeyname);
-
-			openEditor(f);
+			if (f != null)
+				openEditor(f);
 		}
 	}
 

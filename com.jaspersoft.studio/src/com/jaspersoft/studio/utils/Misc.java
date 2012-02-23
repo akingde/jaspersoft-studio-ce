@@ -20,6 +20,8 @@
 
 package com.jaspersoft.studio.utils;
 
+import net.sf.jasperreports.engine.JRExpression;
+
 public class Misc {
 
 	/**
@@ -159,5 +161,13 @@ public class Misc {
 
 		string += s3.substring(pos_i);
 		return string;
+	}
+
+	public static String getExpressionText(JRExpression exp) {
+		if (exp == null)
+			return "";
+		if (exp.getText() == null)
+			return "";
+		return exp.getText();
 	}
 }

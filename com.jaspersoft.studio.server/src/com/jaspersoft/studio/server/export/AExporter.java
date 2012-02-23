@@ -27,6 +27,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.utils.FileUtils;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class AExporter {
 	protected static Map<String, String> fileurimap = new HashMap<String, String>();
@@ -34,8 +35,8 @@ public abstract class AExporter {
 	public File exportFile(MResource res, ResourceDescriptor rd, String fkeyname)
 			throws Exception {
 		File f = getTempFile(res, rd, fkeyname, getExtension());
-		WSClientHelper.getResource(res, rd, f);
-		fileurimap.put(fkeyname, f.getAbsolutePath());
+		if (f != null)
+			fileurimap.put(fkeyname, f.getAbsolutePath());
 		return f;
 	}
 
@@ -50,8 +51,12 @@ public abstract class AExporter {
 			f = new File(filename);
 		else
 			f = FileUtils.createTempFile("jrsres", dextention);
-
-		WSClientHelper.getResource(res, rd, f);
+		try {
+			WSClientHelper.getResource(res, rd, f);
+		} catch (Exception e) {
+			UIUtils.showError(e);
+			return null;
+		}
 		return f;
 	}
 }

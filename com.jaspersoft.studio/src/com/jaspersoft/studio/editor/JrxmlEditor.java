@@ -48,7 +48,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.DocumentEvent;
@@ -56,7 +55,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -434,7 +432,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			JasperDesign jd = JRXmlLoader.load(in);
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
 			editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
-			IActionBars b = getEditorSite().getActionBars(); 
 			for (AContributorAction a : editorActions) {
 				a.setJrConfig(jrContext);
 				((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
@@ -725,8 +722,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropChangeListener);
 		this.model = model;
 		updateVisualView();
-		JasperDesign jd = getJasperDesign();
-		jrContext.setJasperDesign(jd);
+		if (jrContext != null)
+			jrContext.setJasperDesign(getJasperDesign());
 	}
 
 	private MReport getMReport() {

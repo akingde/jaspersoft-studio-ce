@@ -35,21 +35,11 @@ public class MServers extends ANode {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ("SERVERS".equals(evt.getPropertyName())) //$NON-NLS-1$
-		{
 			updateChildren();
-		}
-
 		super.propertyChange(evt);
 	}
 
 	private void updateChildren() {
-		// this.removeChildren();
-		// List<ServerDescriptor> dataAdapters =
-		// ServerManager.getDataAdapters();
-		// for (ServerDescriptor dataAdapter : dataAdapters) {
-		// MServerProfile mDataAdapter = new MServerProfile(dataAdapter);
-		// this.addChild(mDataAdapter);
-		// }
 	}
 
 	/** The icon descriptor. */
@@ -68,8 +58,6 @@ public class MServers extends ANode {
 
 	public MServers(ANode parent) {
 		super(parent, -1);
-		// ServerManager.getPropertyChangeSupport()
-		// .addPropertyChangeListener(this);
 		updateChildren();
 	}
 

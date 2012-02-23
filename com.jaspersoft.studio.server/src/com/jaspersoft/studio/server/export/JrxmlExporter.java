@@ -28,10 +28,8 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignImage;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRExpressionUtil;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
-import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.INode;
@@ -49,17 +47,18 @@ public class JrxmlExporter extends AExporter {
 			throws Exception {
 
 		File f = super.exportFile(res, rd, fkeyname);
+		if (f != null) {
+			JasperDesign jd = JRXmlLoader.load(f);
+			setPropServerURL(res, jd);
+			setPropReportUnit(res, jd);
+			getResources(res, jd);
 
-		JasperDesign jd = JRXmlLoader.load(f);
-		setPropServerURL(res, jd);
-		setPropReportUnit(res, jd);
-		getResources(res, jd);
-
-		FileWriter fw = new FileWriter(f);
-		try {
-			fw.write(JRXmlWriterHelper.writeReport(jd, "4_0_2"));
-		} finally {
-			fw.close();
+			FileWriter fw = new FileWriter(f);
+			try {
+				fw.write(JRXmlWriterHelper.writeReport(jd, "4_0_2"));
+			} finally {
+				fw.close();
+			}
 		}
 		return f;
 	}
@@ -101,30 +100,30 @@ public class JrxmlExporter extends AExporter {
 
 	protected void cacheResource(MResource res, JRExpression imgexp)
 			throws Exception {
-		if (imgexp != null && imgexp.getText() != null) {
-			String s = JRExpressionUtil.getSimpleExpressionText(imgexp);
-			if (s.startsWith("repo:")) {
-				String uri = s.substring(5);
+		// if (imgexp != null && imgexp.getText() != null) {
+		// String s = JRExpressionUtil.getSimpleExpressionText(imgexp);
+		// if (s.startsWith("repo:")) {
+		// String uri = s.substring(5);
 
-				ResourceDescriptor rd = new ResourceDescriptor();
-				MReportUnit repunit = res.getReportUnit();
-				if (!uri.startsWith("/") && repunit != null)
-					uri = repunit.getValue().getUriString() + "_files/" + uri;
-				rd.setUriString(uri);
+		// ResourceDescriptor rd = new ResourceDescriptor();
+		// MReportUnit repunit = res.getReportUnit();
+		// if (!uri.startsWith("/") && repunit != null)
+		// uri = repunit.getValue().getUriString() + "_files/" + uri;
+		// rd.setUriString(uri);
 
-				INode n = res.getRoot();
-				if (n != null && n instanceof MServerProfile) {
-					WSClient c = ((MServerProfile) n).getWsClient();
-					rd = c.get(rd, null);
-					// String fname = JasperServerManager
-					// .createTmpFileName("img", "");
-					// rd = c.get(rd, new File(fname));
-					// RepoImageCache.getInstance()
-					// .put(s, new File(fname));
+		// INode n = res.getRoot();
+		// if (n != null && n instanceof MServerProfile) {
+		// WSClient c = ((MServerProfile) n).getWsClient();
+		// rd = c.get(rd, null);
+		// // String fname = JasperServerManager
+		// // .createTmpFileName("img", "");
+		// // rd = c.get(rd, new File(fname));
+		// // RepoImageCache.getInstance()
+		// // .put(s, new File(fname));
+		//
+		// }
 
-				}
-
-			}
-		}
+		// }
+		// }
 	}
 }

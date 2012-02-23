@@ -410,7 +410,7 @@ public class OutlineTreeEditPartFactory implements EditPartFactory {
 					cmd.setPropertyValue(style.getName());
 					return cmd;
 				}
-				if (parent instanceof MReport) {
+				if (parent instanceof MReport && location != null) {
 					MGraphicElement element = ModelUtils.getElement4Point(parent, new Point(location.x, location.y));
 					if (element != null) {
 						SetValueCommand cmd = new SetValueCommand();

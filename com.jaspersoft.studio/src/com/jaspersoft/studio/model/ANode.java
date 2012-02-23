@@ -49,7 +49,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 public abstract class ANode implements INode {
 
 	/** The parent. */
-	private INode parent;
+	private ANode parent;
 
 	/** The children. */
 	private List<INode> children = new ArrayList<INode>();
@@ -310,7 +310,7 @@ public abstract class ANode implements INode {
 	 * 
 	 * @see com.jaspersoft.studio.model.INode#getParent()
 	 */
-	public INode getParent() {
+	public ANode getParent() {
 		return parent;
 	}
 

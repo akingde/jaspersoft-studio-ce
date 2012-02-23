@@ -47,7 +47,8 @@ Import-Package: org.eclipse.ui,
  org.eclipse.ui.part
 Eclipse-RegisterBuddy: net.sf.jasperreports
 Eclipse-BuddyPolicy: registered
-Export-Package: com.jaspersoft.studio,
+Export-Package: bsh,
+ com.jaspersoft.studio,
  com.jaspersoft.studio.compatibility,
  com.jaspersoft.studio.compatibility.dialog,
  com.jaspersoft.studio.data,
