@@ -31,8 +31,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -40,10 +38,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.events.ExpansionAdapter;
-import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -51,7 +45,6 @@ import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.swt.widgets.PropertiesComponent;
 import com.jaspersoft.studio.utils.Misc;
-import com.jaspersoft.studio.utils.SWTResourceManager;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class JDBCDataAdapterComposite extends ADataAdapterComposite {
@@ -273,68 +266,70 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	}
 
 	protected void createURLAssistant(final Composite composite) {
-		new Label(composite, SWT.NONE);
-
-		Section expcmp = new Section(composite, ExpandableComposite.TREE_NODE);
-		expcmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		expcmp.setTitleBarForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
-		UIUtils.setBold(expcmp);
-		expcmp.setText(Messages.JDBCDataAdapterComposite_jdbcurlassistant);
-
-		final Composite cmp = new Composite(expcmp, SWT.NONE);
-		cmp.setLayout(new GridLayout(2, false));
-
-		expcmp.setClient(cmp);
-		expcmp.addExpansionListener(new ExpansionAdapter() {
-			public void expansionStateChanged(ExpansionEvent e) {
-				JDBCDataAdapterComposite.this.getParent().layout(true);
-			}
-		});
-
-		Label lbl = new Label(cmp, SWT.NONE);
-		lbl.setText(Messages.JDBCDataAdapterComposite_notedbname);
-		GridData gd = new GridData();
-		gd.horizontalSpan = 2;
-		lbl.setLayoutData(gd);
-
-		Label lblServerAddress = new Label(cmp, SWT.NONE);
-		lblServerAddress.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
-				false, false, 1, 1));
-		lblServerAddress
-				.setText(Messages.JDBCDataAdapterComposite_serveraddress);
-
-		textServerAddress = new Text(cmp, SWT.BORDER);
-		textServerAddress.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
-
-		Label lblDatabase = new Label(cmp, SWT.NONE);
-		lblDatabase.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
-		lblDatabase.setText(Messages.JDBCDataAdapterComposite_database);
-
-		textDatabase = new Text(cmp, SWT.BORDER);
-		textDatabase.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-
-		textServerAddress.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				btnWizardActionPerformed();
-			}
-		});
-		textDatabase.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				btnWizardActionPerformed();
-			}
-		});
+		// new Label(composite, SWT.NONE);
+		//
+		// Section expcmp = new Section(composite,
+		// ExpandableComposite.TREE_NODE);
+		// expcmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		// expcmp.setTitleBarForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		// UIUtils.setBold(expcmp);
+		// expcmp.setText(Messages.JDBCDataAdapterComposite_jdbcurlassistant);
+		//
+		// final Composite cmp = new Composite(expcmp, SWT.NONE);
+		// cmp.setLayout(new GridLayout(2, false));
+		//
+		// expcmp.setClient(cmp);
+		// expcmp.addExpansionListener(new ExpansionAdapter() {
+		// public void expansionStateChanged(ExpansionEvent e) {
+		// JDBCDataAdapterComposite.this.getParent().layout(true);
+		// }
+		// });
+		//
+		// Label lbl = new Label(cmp, SWT.NONE);
+		// lbl.setText(Messages.JDBCDataAdapterComposite_notedbname);
+		// GridData gd = new GridData();
+		// gd.horizontalSpan = 2;
+		// lbl.setLayoutData(gd);
+		//
+		// Label lblServerAddress = new Label(cmp, SWT.NONE);
+		// lblServerAddress.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+		// false, false, 1, 1));
+		// lblServerAddress
+		// .setText(Messages.JDBCDataAdapterComposite_serveraddress);
+		//
+		// textServerAddress = new Text(cmp, SWT.BORDER);
+		// textServerAddress.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+		// true, false, 1, 1));
+		//
+		// Label lblDatabase = new Label(cmp, SWT.NONE);
+		// lblDatabase.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+		// false, 1, 1));
+		// lblDatabase.setText(Messages.JDBCDataAdapterComposite_database);
+		//
+		// textDatabase = new Text(cmp, SWT.BORDER);
+		// textDatabase.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+		// false, 1, 1));
+		//
+		// textServerAddress.addModifyListener(new ModifyListener() {
+		//
+		// public void modifyText(ModifyEvent e) {
+		// btnWizardActionPerformed();
+		// }
+		// });
+		// textDatabase.addModifyListener(new ModifyListener() {
+		//
+		// public void modifyText(ModifyEvent e) {
+		// btnWizardActionPerformed();
+		// }
+		// });
 	}
 
 	/**
 	 * @param e
 	 */
 	protected void btnWizardActionPerformed() {
-		if (currentdriver != null) {
+		if (currentdriver != null && textServerAddress != null
+				&& textDatabase != null) {
 			textJDBCUrl.setText(currentdriver.getUrl(
 					textServerAddress.getText(), textDatabase.getText()));
 		}
@@ -376,18 +371,24 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		bindingContext.bindValue(
 				SWTObservables.observeText(textPassword, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textServerAddress, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "serverAddress")); //$NON-NLS-1$
-		bindingContext.bindValue(
-				SWTObservables.observeText(textDatabase, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "database")); //$NON-NLS-1$
+		bindURLAssistant(dataAdapter);
 		bindingContext.bindValue(
 				SWTObservables.observeText(textJDBCUrl, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
 
 		cpath.setClasspaths(jdbcDataAdapter.getClasspath());
 		cproperties.setProperties(jdbcDataAdapter.getProperties());
+	}
+
+	protected void bindURLAssistant(DataAdapter dataAdapter) {
+		if (textServerAddress != null)
+			bindingContext.bindValue(
+					SWTObservables.observeText(textServerAddress, SWT.Modify),
+					PojoObservables.observeValue(dataAdapter, "serverAddress")); //$NON-NLS-1$
+		if (textDatabase != null)
+			bindingContext.bindValue(
+					SWTObservables.observeText(textDatabase, SWT.Modify),
+					PojoObservables.observeValue(dataAdapter, "database")); //$NON-NLS-1$
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
@@ -402,14 +403,24 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		jdbcDataAdapter.setUsername(textUsername.getText());
 		jdbcDataAdapter.setPassword(textPassword.getText());
 		jdbcDataAdapter.setUrl(textJDBCUrl.getText());
-		jdbcDataAdapter.setDatabase(textDatabase.getText());
-		jdbcDataAdapter.setServerAddress(textServerAddress.getText());
+		getDataAdapterURLAssistant(jdbcDataAdapter);
 		jdbcDataAdapter.setSavePassword(true);// btnSavePassword.getSelection());
 
 		jdbcDataAdapter.setClasspath(cpath.getClasspaths());
 		jdbcDataAdapter.setProperties(cproperties.getProperties());
 
 		return dataAdapterDesc;
+	}
+
+	protected void getDataAdapterURLAssistant(JdbcDataAdapter jdbcDataAdapter) {
+		if (textDatabase != null)
+			jdbcDataAdapter.setDatabase(textDatabase.getText());
+		else
+			jdbcDataAdapter.setDatabase("");
+		if (textServerAddress != null)
+			jdbcDataAdapter.setServerAddress(textServerAddress.getText());
+		else
+			jdbcDataAdapter.setServerAddress("");
 	}
 
 }

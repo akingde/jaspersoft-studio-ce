@@ -74,13 +74,6 @@ public class HiveDataAdapterComposite extends JDBCDataAdapterComposite {
 		lbl.setLayoutData(gd);
 	}
 
-	protected void btnWizardActionPerformed() {
-		if (currentdriver != null) {
-			textJDBCUrl.setText(currentdriver.getUrl(
-					textServerAddress.getText(), textDatabase.getText()));
-		}
-	}
-
 	/**
 	 * Set the DataAdapter to edit. The UI will be updated with the content of
 	 * this adapter
@@ -104,13 +97,8 @@ public class HiveDataAdapterComposite extends JDBCDataAdapterComposite {
 				break;
 			}
 		}
+		bindURLAssistant(dataAdapter);
 
-		bindingContext.bindValue(
-				SWTObservables.observeText(textServerAddress, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "serverAddress"));
-		bindingContext.bindValue(
-				SWTObservables.observeText(textDatabase, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "database"));
 		bindingContext.bindValue(
 				SWTObservables.observeText(textJDBCUrl, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "url"));
@@ -128,8 +116,9 @@ public class HiveDataAdapterComposite extends JDBCDataAdapterComposite {
 		jdbcDataAdapter.setUsername("");
 		jdbcDataAdapter.setPassword("");
 		jdbcDataAdapter.setUrl(textJDBCUrl.getText());
-		jdbcDataAdapter.setDatabase(textDatabase.getText());
-		jdbcDataAdapter.setServerAddress(textServerAddress.getText());
+
+		getDataAdapterURLAssistant(jdbcDataAdapter);
+
 		jdbcDataAdapter.setSavePassword(true);// btnSavePassword.getSelection());
 
 		jdbcDataAdapter.setClasspath(new ArrayList<String>());

@@ -117,7 +117,7 @@ public class PropertiesComponent {
 		wtable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.widthHint = 100;
-		gd.heightHint = 300;
+		gd.heightHint = 250;
 		wtable.setLayoutData(gd);
 		wtable.setHeaderVisible(true);
 
