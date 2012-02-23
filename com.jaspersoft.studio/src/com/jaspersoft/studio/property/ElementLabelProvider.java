@@ -37,6 +37,7 @@ import org.eclipse.ui.views.properties.tabbed.ITypeMapper;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 /*
@@ -113,6 +114,11 @@ public class ElementLabelProvider extends LabelProvider {
 			String name = typeMapper.mapType(object).getName();
 			if (object instanceof EditPart) {
 				ANode element = (ANode) ((EditPart) object).getModel();
+				// Look for a custom title for the property sheet page (if possible)
+				if(element instanceof APropertyNode && 
+						((APropertyNode)element).getCustomPropertyTitle()!=null){
+					return ((APropertyNode)element).getCustomPropertyTitle();
+				}
 				String str = Messages.getString(name.substring(name.lastIndexOf('.') + 2));
 				String displayText = element.getDisplayText().replaceAll("(\\r|\\n)+", " ");//$NON-NLS-1$ //$NON-NLS-2$
 				if(displayText.length() > 30)

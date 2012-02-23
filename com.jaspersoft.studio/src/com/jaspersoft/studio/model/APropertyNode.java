@@ -32,6 +32,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
 
+import com.jaspersoft.studio.property.ElementLabelProvider;
+
 public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
 	/** The descriptors. */
 
@@ -155,6 +157,25 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	 */
 	public Object getEditableValue() {
 		return this;
+	}
+	
+	/**
+	 * Returns a custom title that should be shown in the property sheets page
+	 * when the node is selected.<br>
+	 * Actually this method returns <code>null</code>, so the standard behavior
+	 * provided by the contributed label provider {@link ElementLabelProvider}
+	 * is used.
+	 * <p>
+	 * 
+	 * Nodes (sub-classes) that want to provide a different behavior should 
+	 * override this method and provide a meaningful human-readable text. 
+	 * 
+	 * @return a custom title
+	 * 
+	 * @see ElementLabelProvider#getText(Object)
+	 */
+	public String getCustomPropertyTitle(){
+		return null;
 	}
 
 }
