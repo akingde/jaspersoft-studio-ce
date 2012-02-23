@@ -60,7 +60,7 @@ public class JDBCDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getLabel() {
-		return "Database JDBC Connection";
+		return "Configure Database JDBC Connection";
 	}
 
 	/*

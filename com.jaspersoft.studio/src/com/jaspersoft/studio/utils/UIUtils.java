@@ -29,11 +29,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
@@ -157,6 +159,17 @@ public class UIUtils {
 			lbl.setLayoutData(gd);
 		}
 		return lbl;
+	}
+
+	public static void setBold(Control control) {
+		int fontHeight = 12;
+		String name = "";
+		FontData[] fontData = control.getFont().getFontData();
+		for (int i = 0; i < fontData.length; ++i) {
+			fontHeight = fontData[i].getHeight();
+			name = fontData[i].getName();
+		}
+		control.setFont(SWTResourceManager.getFont(name, fontHeight, SWT.BOLD));
 	}
 
 }

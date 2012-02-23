@@ -82,11 +82,15 @@ public class Messages extends NLS {
 	public static String HibernateDataAdapterComposite_5;
 	public static String HibernateDataAdapterComposite_8;
 	public static String JDBCDataAdapterComposite_attention;
+	public static String JDBCDataAdapterComposite_attentionlable;
 	public static String JDBCDataAdapterComposite_classpath;
 	public static String JDBCDataAdapterComposite_connectionproperties;
 	public static String JDBCDataAdapterComposite_database;
-	public static String JDBCDataAdapterComposite_databaselocation;
+	public static String JDBCDataAdapterComposite_tablocation;
 	public static String JDBCDataAdapterComposite_driverlabel;
+	public static String JDBCDataAdapterComposite_jdbcurlassistant;
+	public static String JDBCDataAdapterComposite_note;
+	public static String JDBCDataAdapterComposite_notedbname;
 	public static String JDBCDataAdapterComposite_password;
 	public static String JDBCDataAdapterComposite_serveraddress;
 	public static String JDBCDataAdapterComposite_urllabel;

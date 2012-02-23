@@ -40,6 +40,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
@@ -47,20 +51,11 @@ import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClasspathComponent;
 import com.jaspersoft.studio.swt.widgets.PropertiesComponent;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.SWTResourceManager;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class JDBCDataAdapterComposite extends ADataAdapterComposite {
-	private Text textJDBCUrl;
-	private Text textServerAddress;
-	private Text textDatabase;
-	private Text textUsername;
-	private Text textPassword;
-
-	// private Button btnSavePassword;
-	private ComboViewer comboJDBCDriver;
-
-	private JDBCDriverDefinition currentdriver = null;
-
-	public final static JDBCDriverDefinition[] definitions = new JDBCDriverDefinition[] {
+	private final static JDBCDriverDefinition[] jdbcDefinitions = new JDBCDriverDefinition[] {
 			new JDBCDriverDefinition("HSQLDB (server)", //$NON-NLS-1$
 					"org.hsqldb.jdbcDriver", "jdbc:hsqldb:hsql://{0}"), //$NON-NLS-1$ //$NON-NLS-2$
 			new JDBCDriverDefinition("HSQLDB (file)", "org.hsqldb.jdbcDriver", //$NON-NLS-1$ //$NON-NLS-2$
@@ -108,12 +103,29 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 					"com.sybase.jdbc2.jdbc.SybDriver", //$NON-NLS-1$
 					"jdbc:sybase:Tds:{0}:2638/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition("Vertica", "com.vertica.Driver", //$NON-NLS-1$ //$NON-NLS-2$
-					"jdbc:vertica://{0}:5433/{1}"),
+					"jdbc:vertica://{0}:5433/{1}"), //$NON-NLS-1$
 			new JDBCDriverDefinition(
 					"Hadoop Hive", "org.apache.hadoop.hive.jdbc.HiveDriver", //$NON-NLS-1$ //$NON-NLS-2$
 					"jdbc:hive://{0}:10000/default", "default", "localhost") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+	public JDBCDriverDefinition[] getDefinitions() {
+		return jdbcDefinitions;
+	}
+
+	protected Text textJDBCUrl;
+	protected Text textServerAddress;
+	protected Text textDatabase;
+	protected Text textUsername;
+	protected Text textPassword;
+
+	// private Button btnSavePassword;
+	protected ComboViewer comboJDBCDriver;
+
+	protected JDBCDriverDefinition currentdriver = null;
+
 	private ClasspathComponent cpath;
 	private PropertiesComponent cproperties;
+	protected JDBCDriverDefinition[] definitions;
 
 	/**
 	 * Create the composite.
@@ -123,34 +135,19 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	 */
 	public JDBCDataAdapterComposite(Composite parent, int style) {
 		super(parent, style);
-		setLayout(new GridLayout(3, false));
+		GridLayout layout = new GridLayout();
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		setLayout(layout);
 
 		createPreWidgets(this);
 
-		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
-		lblNewLabel.setText(Messages.JDBCDataAdapterComposite_driverlabel);
-
-		comboJDBCDriver = new ComboViewer(this, SWT.NONE);
-		Combo combo = comboJDBCDriver.getCombo();
-		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2,
-				1));
-
-		Label lblNewLabel_1 = new Label(this, SWT.NONE);
-		lblNewLabel_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
-		lblNewLabel_1.setText(Messages.JDBCDataAdapterComposite_urllabel);
-
-		textJDBCUrl = new Text(this, SWT.BORDER);
-		textJDBCUrl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 2, 1));
-
-		CTabFolder tabFolder = new CTabFolder(this, SWT.NONE);
+		CTabFolder tabFolder = new CTabFolder(this, SWT.BOTTOM);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 3, 1));
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(
 				SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
+		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createLocationTab(tabFolder);
 
@@ -158,10 +155,70 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 		createClasspathTab(tabFolder);
 		tabFolder.setSelection(0);
+	}
 
-		for (int i = 0; i < definitions.length; ++i) {
+	protected void createPreWidgets(Composite parent) {
+
+	}
+
+	protected void createClasspathTab(CTabFolder tabFolder) {
+		CTabItem tbtmNewItem_1 = new CTabItem(tabFolder, SWT.NONE);
+		tbtmNewItem_1.setText(Messages.JDBCDataAdapterComposite_classpath);
+
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout());
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tbtmNewItem_1.setControl(composite);
+
+		cpath = new ClasspathComponent(composite);
+		cpath.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+
+	protected void createPropertiesTab(CTabFolder tabFolder) {
+		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.NONE);
+		tbtmNewItem
+				.setText(Messages.JDBCDataAdapterComposite_connectionproperties);
+
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout());
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tbtmNewItem.setControl(composite);
+
+		cproperties = new PropertiesComponent(composite);
+		cproperties.getControl()
+				.setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+
+	protected void createLocationTab(CTabFolder tabFolder) {
+		CTabItem tbtmNewItem_2 = new CTabItem(tabFolder, SWT.NONE);
+		tbtmNewItem_2.setText(Messages.JDBCDataAdapterComposite_tablocation);
+
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+		tbtmNewItem_2.setControl(composite);
+
+		Label lbl = new Label(composite, SWT.NONE);
+		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+		lbl.setText(Messages.JDBCDataAdapterComposite_driverlabel);
+
+		comboJDBCDriver = new ComboViewer(composite, SWT.NONE);
+		Combo combo = comboJDBCDriver.getCombo();
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		lbl = new Label(composite, SWT.NONE);
+		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+		lbl.setText(Messages.JDBCDataAdapterComposite_urllabel);
+
+		textJDBCUrl = new Text(composite, SWT.BORDER);
+		textJDBCUrl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		createURLAssistant(composite);
+
+		createUserPass(composite);
+
+		definitions = getDefinitions();
+		for (int i = 0; i < definitions.length; ++i)
 			comboJDBCDriver.add(definitions[i]);
-		}
 
 		ISelectionChangedListener listener = new ISelectionChangedListener() {
 
@@ -184,64 +241,78 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		listener.selectionChanged(null);
 	}
 
-	protected void createPreWidgets(Composite parent) {
+	protected void createUserPass(final Composite composite) {
+		Label lbl = new Label(composite, SWT.NONE);
+		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+		lbl.setText(Messages.JDBCDataAdapterComposite_username);
 
+		textUsername = new Text(composite, SWT.BORDER);
+		textUsername.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		lbl = new Label(composite, SWT.NONE);
+		lbl.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+		lbl.setText(Messages.JDBCDataAdapterComposite_password);
+
+		textPassword = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+		textPassword.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		// btnSavePassword = new Button(this, SWT.CHECK);
+		// btnSavePassword.setText("Save Password");
+		// new Label(this, SWT.NONE);
+
+		new Label(composite, SWT.NONE);
+		Composite c = new Composite(composite, SWT.NONE);
+		c.setLayout(new GridLayout(2, false));
+
+		lbl = new Label(c, SWT.NONE | SWT.BOLD);
+		lbl.setText(Messages.JDBCDataAdapterComposite_attentionlable);
+		UIUtils.setBold(lbl);
+
+		lbl = new Label(c, SWT.NONE);
+		lbl.setText(Messages.JDBCDataAdapterComposite_attention);
 	}
 
-	private void createClasspathTab(CTabFolder tabFolder) {
-		CTabItem tbtmNewItem_1 = new CTabItem(tabFolder, SWT.NONE);
-		tbtmNewItem_1.setText(Messages.JDBCDataAdapterComposite_classpath);
+	protected void createURLAssistant(final Composite composite) {
+		new Label(composite, SWT.NONE);
 
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout());
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		tbtmNewItem_1.setControl(composite);
+		Section expcmp = new Section(composite, ExpandableComposite.TREE_NODE);
+		expcmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		expcmp.setTitleBarForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		UIUtils.setBold(expcmp);
+		expcmp.setText(Messages.JDBCDataAdapterComposite_jdbcurlassistant);
 
-		cpath = new ClasspathComponent(composite);
-		cpath.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-	}
+		final Composite cmp = new Composite(expcmp, SWT.NONE);
+		cmp.setLayout(new GridLayout(2, false));
 
-	private void createPropertiesTab(CTabFolder tabFolder) {
-		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.NONE);
-		tbtmNewItem
-				.setText(Messages.JDBCDataAdapterComposite_connectionproperties);
+		expcmp.setClient(cmp);
+		expcmp.addExpansionListener(new ExpansionAdapter() {
+			public void expansionStateChanged(ExpansionEvent e) {
+				JDBCDataAdapterComposite.this.getParent().layout(true);
+			}
+		});
 
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout());
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		tbtmNewItem.setControl(composite);
+		Label lbl = new Label(cmp, SWT.NONE);
+		lbl.setText(Messages.JDBCDataAdapterComposite_notedbname);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		lbl.setLayoutData(gd);
 
-		cproperties = new PropertiesComponent(composite);
-		cproperties.getControl()
-				.setLayoutData(new GridData(GridData.FILL_BOTH));
-	}
-
-	private void createLocationTab(CTabFolder tabFolder) {
-		CTabItem tbtmNewItem_2 = new CTabItem(tabFolder, SWT.NONE);
-		tbtmNewItem_2
-				.setText(Messages.JDBCDataAdapterComposite_databaselocation);
-
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		tbtmNewItem_2.setControl(composite);
-
-		Label lblServerAddress = new Label(composite, SWT.NONE);
+		Label lblServerAddress = new Label(cmp, SWT.NONE);
 		lblServerAddress.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
 				false, false, 1, 1));
 		lblServerAddress
 				.setText(Messages.JDBCDataAdapterComposite_serveraddress);
 
-		textServerAddress = new Text(composite, SWT.BORDER);
+		textServerAddress = new Text(cmp, SWT.BORDER);
 		textServerAddress.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
 
-		Label lblDatabase = new Label(composite, SWT.NONE);
+		Label lblDatabase = new Label(cmp, SWT.NONE);
 		lblDatabase.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 				false, 1, 1));
 		lblDatabase.setText(Messages.JDBCDataAdapterComposite_database);
 
-		textDatabase = new Text(composite, SWT.BORDER);
+		textDatabase = new Text(cmp, SWT.BORDER);
 		textDatabase.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
 
@@ -257,35 +328,6 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 				btnWizardActionPerformed();
 			}
 		});
-
-		Label lblUsername = new Label(composite, SWT.NONE);
-		lblUsername.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
-		lblUsername.setText(Messages.JDBCDataAdapterComposite_username);
-
-		textUsername = new Text(composite, SWT.BORDER);
-		textUsername.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-
-		Label lblPassword = new Label(composite, SWT.NONE);
-		lblPassword.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
-				false, 1, 1));
-		lblPassword.setText(Messages.JDBCDataAdapterComposite_password);
-
-		textPassword = new Text(composite, SWT.BORDER | SWT.PASSWORD);
-		textPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-
-		// btnSavePassword = new Button(this, SWT.CHECK);
-		// btnSavePassword.setText("Save Password");
-		// new Label(this, SWT.NONE);
-
-		Label lblAttentionPasswordsAre = new Label(composite, SWT.NONE);
-		lblAttentionPasswordsAre.setLayoutData(new GridData(SWT.LEFT,
-				SWT.CENTER, false, false, 2, 1));
-		lblAttentionPasswordsAre
-				.setText(Messages.JDBCDataAdapterComposite_attention);
-
 	}
 
 	/**
@@ -330,19 +372,19 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 
 		bindingContext.bindValue(
 				SWTObservables.observeText(textUsername, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "username"));
+				PojoObservables.observeValue(dataAdapter, "username")); //$NON-NLS-1$
 		bindingContext.bindValue(
 				SWTObservables.observeText(textPassword, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "password"));
+				PojoObservables.observeValue(dataAdapter, "password")); //$NON-NLS-1$
 		bindingContext.bindValue(
 				SWTObservables.observeText(textServerAddress, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "serverAddress"));
+				PojoObservables.observeValue(dataAdapter, "serverAddress")); //$NON-NLS-1$
 		bindingContext.bindValue(
 				SWTObservables.observeText(textDatabase, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "database"));
+				PojoObservables.observeValue(dataAdapter, "database")); //$NON-NLS-1$
 		bindingContext.bindValue(
 				SWTObservables.observeText(textJDBCUrl, SWT.Modify),
-				PojoObservables.observeValue(dataAdapter, "url"));
+				PojoObservables.observeValue(dataAdapter, "url")); //$NON-NLS-1$
 
 		cpath.setClasspaths(jdbcDataAdapter.getClasspath());
 		cproperties.setProperties(jdbcDataAdapter.getProperties());
