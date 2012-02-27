@@ -48,6 +48,7 @@ import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
 import com.jaspersoft.studio.server.model.MUnknown;
+import com.jaspersoft.studio.server.model.MXmlFile;
 import com.jaspersoft.studio.server.plugin.ExtensionManager;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDataTypePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDDatasourceBeanPage;
@@ -67,6 +68,7 @@ import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitOptionsPage
 import com.jaspersoft.studio.server.wizard.resource.page.RDReportUnitPage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDResourceBundlePage;
 import com.jaspersoft.studio.server.wizard.resource.page.RDUnknownPage;
+import com.jaspersoft.studio.server.wizard.resource.page.RDXmlFile;
 
 public class ResourceFactory {
 
@@ -120,6 +122,8 @@ public class ResourceFactory {
 				else if (resource instanceof MReportUnitOptions)
 					page = new RDReportUnitOptionsPage(parent,
 							(MReportUnitOptions) resource);
+				else if (resource instanceof MXmlFile)
+					page = new RDXmlFile(parent, (MXmlFile) resource);
 				else if (resource instanceof MUnknown)
 					page = new RDUnknownPage(parent, (MUnknown) resource);
 			}
@@ -201,14 +205,11 @@ public class ResourceFactory {
 				.equals(ResourceDescriptor.TYPE_DATASOURCE_JNDI))
 			return new MRDatasourceJNDI(parent, resource, index);
 
-		if (resource.getWsType().equals("Domain"))
-			return new MUnknown(parent, resource, index);
-
-		if (resource.getWsType().equals("dashboardUnit"))
-			return new MUnknown(parent, resource, index);
-
 		if (resource.getWsType().equals("ReportOptionsResource"))
 			return new MReportUnitOptions(parent, resource, index);
+
+		if (resource.getWsType().equals(ResourceDescriptor.TYPE_XML_FILE))
+			return new MXmlFile(parent, resource, index);
 
 		return new MUnknown(parent, resource, index);
 	}

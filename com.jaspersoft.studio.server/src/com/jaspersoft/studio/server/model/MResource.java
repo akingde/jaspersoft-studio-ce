@@ -88,6 +88,7 @@ public class MResource extends APropertyNode implements ICopyable {
 		if (getValue() != null) {
 			String tip = "name: " + getValue().getName();
 			tip += "\nuri: " + getValue().getUriString();
+			tip += "\ntype: " + getValue().getWsType();
 			tip += "\ndescription: " + Misc.nvl(getValue().getDescription());
 			return tip;
 		}
