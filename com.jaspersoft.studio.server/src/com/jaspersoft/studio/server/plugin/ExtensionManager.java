@@ -34,6 +34,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 
@@ -89,6 +90,15 @@ public class ExtensionManager {
 	public IWizardPage getResourcePage(ANode parent, MResource resource) {
 		for (IResourceFactory r : resources) {
 			IWizardPage mr = r.getResourcePage(parent, resource);
+			if (mr != null)
+				return mr;
+		}
+		return null;
+	}
+
+	public ANode createNewResource(MRoot root, ANode parent) {
+		for (IResourceFactory r : resources) {
+			ANode mr = r.createNewResource(root, parent);
 			if (mr != null)
 				return mr;
 		}

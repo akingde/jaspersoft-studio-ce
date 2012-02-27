@@ -34,6 +34,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
+import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MInputControl;
@@ -53,6 +54,8 @@ import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MReportUnitOptions;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.MResourceBundle;
+import com.jaspersoft.studio.server.model.MXmlFile;
+import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class AddResourcePage extends WizardPage {
 	private MResource resource;
@@ -111,7 +114,7 @@ public class AddResourcePage extends WizardPage {
 		} else if (ruOnly) {
 			createReportUnit(root);
 		} else {
-			if (parent instanceof MFolder) {
+			if (parent instanceof MFolder || parent instanceof MServerProfile) {
 				new MFolder(root, MFolder.createDescriptor(parent), -1);
 				createReportUnit(root);
 
@@ -121,7 +124,9 @@ public class AddResourcePage extends WizardPage {
 				new MRQuery(root, MRQuery.createDescriptor(parent), -1);
 				new MReportUnitOptions(root,
 						MReportUnitOptions.createDescriptor(parent), -1);
+				new MDataType(root, MDataType.createDescriptor(parent), -1);
 			}
+
 			new MJrxml(root, MJrxml.createDescriptor(parent), -1);
 			new MInputControl(root, MInputControl.createDescriptor(parent), -1);
 			new MListOfValues(root, MListOfValues.createDescriptor(parent), -1);
@@ -134,6 +139,9 @@ public class AddResourcePage extends WizardPage {
 			new MRImage(root, MRImage.createDescriptor(parent), -1);
 			new MRStyleTemplate(root, MRStyleTemplate.createDescriptor(parent),
 					-1);
+			new MXmlFile(root, MXmlFile.createDescriptor(parent), -1);
+
+			Activator.getExtManager().createNewResource(root, parent);
 
 			// new MUnknown(root, MUnknown.createDescriptor(parent), -1);
 		}
