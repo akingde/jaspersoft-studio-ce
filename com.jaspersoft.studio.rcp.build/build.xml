@@ -93,6 +93,7 @@
 		<!-- Replacing the exe launcher (it is a modified version of the original laucher (Eclipse 3.6.2)
 		     improved with Jaspersoft Studio icons -->
 		<copy file="${basedir}/resources/Jaspersoft Studio.exe" tofile="${zipdir.win32.x86}/jaspersoftstudio/Jaspersoft Studio.exe" overwrite="true" />
+		<copy file="${basedir}/jaspersoftstudio/jaspersoftstudio.ico" tofile="${zipdir.win32.x86}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
 
 		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
 		<copy file="${basedir}/resources/notice.txt" todir="${zipdir.win32.x86}/jaspersoftstudio" />
@@ -132,6 +133,7 @@
 		<!-- Replacing the exe launcher (it is a modified version of the original laucher (Eclipse 3.6.2)
 			     improved with Jaspersoft Studio icons -->
 		<copy file="${basedir}/resources/Jaspersoft Studio64.exe" tofile="${zipdir.win32.x86_64}/jaspersoftstudio/Jaspersoft Studio.exe" overwrite="true" />
+		<copy file="${basedir}/resources/jaspersoftstudio.ico" tofile="${zipdir.win32.x86_64}/jaspersoftstudio/jaspersoftstudio.ico" overwrite="true" />
 
 		<!-- copy notice.txt and LICENSE.txt in the eclipse folder -->
 		<copy file="${basedir}/resources/notice.txt" todir="${zipdir.win32.x86_64}/jaspersoftstudio" />

@@ -117,7 +117,7 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-  !insertmacro APP_ASSOCIATE "jrxml" "JaspersoftStudio.Jrxml" "Jrxml source file" "$INSTDIR\document.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
+  !insertmacro APP_ASSOCIATE "jrxml" "JaspersoftStudio.Jrxml" "Jrxml source file" "$INSTDIR\jaspersoftstudio.ico,0" "Open with ${PRODUCT_NAME}" "$INSTDIR\${PRODUCT_NAME}.exe --launcher.openFile $\"%1$\""
 SectionEnd
 
 ; Section descriptions
