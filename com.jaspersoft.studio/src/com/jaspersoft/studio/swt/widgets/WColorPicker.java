@@ -149,12 +149,7 @@ public class WColorPicker extends Composite{
 		// Updates color information
 		selectedRGB=newColor;
 		textColorValue.setText(Colors.getHexEncodedRGBColor(selectedRGB));
-		// Remember to dispose the old image no longer needed in order to release system resources
-		Image oldImage = imgColorPreview.getImage();
-		if (oldImage!=null){
-			oldImage.dispose();
-		}
-		imgColorPreview.setImage(Colors.getSWTColorPreview(Colors.getAWT4SWTRGBColor(selectedRGB), 16, 16));
+		updatePreviewImage(isEnabled());
 		notifyColorSelection();
 	}	
 
@@ -209,9 +204,29 @@ public class WColorPicker extends Composite{
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
+		updatePreviewImage(enabled);
 		this.imgColorPreview.setEnabled(enabled);
 		this.textColorValue.setEnabled(enabled);
 		this.buttonColorChoser.setEnabled(enabled);		
 	}
-	
+
+	/*
+	 * Internally updates the color preview image.
+	 */
+	private void updatePreviewImage(boolean enabled){
+		// Remember to dispose the old image no longer needed in order to release system resources
+		Image oldImage = imgColorPreview.getImage();
+		if (oldImage!=null){
+			oldImage.dispose();
+		}
+		Image newImage = Colors.getSWTColorPreview(Colors.getAWT4SWTRGBColor(selectedRGB), 16, 16);
+		if(enabled){
+			imgColorPreview.setImage(newImage);
+		}
+		else{
+			Image disabledImg=new Image(getDisplay(),newImage,SWT.IMAGE_DISABLE);
+			imgColorPreview.setImage(disabledImg);
+			newImage.dispose();
+		}
+	}
 }
