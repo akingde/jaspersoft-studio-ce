@@ -26,7 +26,6 @@ import java.util.Map;
 import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
-import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.engine.JRBoxContainer;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRStyle;
@@ -154,6 +153,10 @@ public class MCell extends MColumn implements IGraphicElement,
 				DesignCell.PROPERTY_HEIGHT, Messages.MCell_height);
 		desc.add(hD);
 
+		IntegerPropertyDescriptor hrowspan = new IntegerPropertyDescriptor(
+				DesignCell.PROPERTY_ROW_SPAN, Messages.MCell_rowspan);
+		desc.add(hrowspan);
+
 		BoxPropertyDescriptor lineBoxD = new BoxPropertyDescriptor(LINE_BOX,
 				Messages.MCell_line_box);
 		lineBoxD.setDescription(Messages.MCell_line_box_description);
@@ -179,7 +182,7 @@ public class MCell extends MColumn implements IGraphicElement,
 	@Override
 	public Object getPropertyValue(Object id) {
 		if (cell != null) {
-			if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
+			if (id.equals(DesignCell.PROPERTY_STYLE)) {
 				if (cell.getStyleNameReference() != null)
 					return cell.getStyleNameReference();
 				if (cell.getStyle() != null)
@@ -189,6 +192,8 @@ public class MCell extends MColumn implements IGraphicElement,
 
 			if (id.equals(DesignCell.PROPERTY_HEIGHT))
 				return cell.getHeight();
+			if (id.equals(DesignCell.PROPERTY_ROW_SPAN))
+				return cell.getRowSpan();
 			if (id.equals(LINE_BOX)) {
 				JRBoxContainer jrGraphicElement = (JRBoxContainer) cell;
 				if (lineBox == null) {
@@ -211,7 +216,7 @@ public class MCell extends MColumn implements IGraphicElement,
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		if (cell != null) {
-			if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
+			if (id.equals(DesignCell.PROPERTY_STYLE)) {
 				if (!value.equals("")) { //$NON-NLS-1$
 					JRStyle style = (JRStyle) getJasperDesign().getStylesMap()
 							.get(value);
@@ -223,6 +228,8 @@ public class MCell extends MColumn implements IGraphicElement,
 						cell.setStyle(null);
 					}
 				}
+			} else if (id.equals(DesignCell.PROPERTY_ROW_SPAN)) {
+				cell.setRowSpan((Integer) value);
 			} else if (id.equals(DesignCell.PROPERTY_HEIGHT)) {
 				MTable mtable = getMTable();
 				Integer height = (Integer) value;

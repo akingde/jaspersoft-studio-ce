@@ -41,6 +41,7 @@ public class Messages extends NLS {
 	public static String MCell_line_box_description;
 	public static String MCell_parent_style;
 	public static String MCell_parent_style_description;
+	public static String MCell_rowspan;
 	public static String MColumn_column_properties_category;
 	public static String MColumn_column_width;
 	public static String MColumn_print_when_expression;
