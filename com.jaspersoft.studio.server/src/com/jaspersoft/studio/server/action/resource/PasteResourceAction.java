@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.server.action.resource;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -46,6 +47,7 @@ import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class PasteResourceAction extends Action {
@@ -163,7 +165,6 @@ public class PasteResourceAction extends Action {
 					} else if (parent instanceof MReportUnit) {
 						ResourceDescriptor prd = (ResourceDescriptor) parent
 								.getValue();
-						prd.getChildren().add(origin);
 
 						String ruuri = prd.getUriString();
 						origin.setParentFolder(ruuri + "_files/"
@@ -175,8 +176,16 @@ public class PasteResourceAction extends Action {
 						origin.setName(getRName(oldName, prd.getChildren()));
 						origin.setLabel(origin.getName());
 
+						prd.getChildren().add(origin);
+						File file = FileUtils.createTempFile("tmp", "file");
+						try {
+							ws.get(origin, file);
+						} catch (Exception e) {
+							e.printStackTrace();
+							file = null;
+						}
 						ws.modifyReportUnitResource(prd.getUriString(), origin,
-								null);
+								file);
 
 						origin.setName(oldName);
 						origin.setLabel(oldLabel);
