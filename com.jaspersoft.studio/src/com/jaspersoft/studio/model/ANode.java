@@ -21,12 +21,15 @@ package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
@@ -46,7 +49,9 @@ import com.jaspersoft.studio.model.util.ReportFactory;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class ANode implements INode {
+public abstract class ANode implements INode, Serializable {
+
+	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/** The parent. */
 	private ANode parent;
@@ -114,6 +119,12 @@ public abstract class ANode implements INode {
 	public ANode(ANode parent, int newIndex) {
 		if (parent != null)
 			setParent(parent, newIndex);
+	}
+
+	public ANode(ANode parent, Object value, int newIndex) {
+		if (parent != null)
+			setParent(parent, newIndex);
+		setValue(value);
 	}
 
 	/** The icon descriptor. */
@@ -207,6 +218,31 @@ public abstract class ANode implements INode {
 	 */
 	public void addChild(ANode child) {
 		child.setParent(this, -1);
+	}
+
+	public void addChild(ANode child, int index) {
+		child.setParent(this, index);
+	}
+
+	public boolean hasParent(ANode node) {
+		if (parent == null)
+			return false;
+		return parent.equals(node) || parent.hasParent(node);
+	}
+
+	public ANode[] flatten() {
+		ArrayList<ANode> result = new ArrayList<ANode>();
+		doFlatten(this, result);
+		return (ANode[]) result.toArray(new ANode[result.size()]);
+	}
+
+	private void doFlatten(ANode node, ArrayList<ANode> all) {
+		// add the gadget and its children to the list
+		all.add(node);
+		List<INode> children = node.getChildren();
+		for (INode n : children) {
+			doFlatten((ANode) n, all);
+		}
 	}
 
 	/**
@@ -401,4 +437,18 @@ public abstract class ANode implements INode {
 		this.cut = cut;
 	}
 
+	public ANode clone() {
+		try {
+			ANode clone = (ANode) super.clone();
+			if (getChildren() != null) {
+				clone.removeChildren();
+				for (INode n : getChildren()) {
+					clone.addChild(((ANode) n).clone());
+				}
+			}
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new JRRuntimeException(e);
+		}
+	}
 }
