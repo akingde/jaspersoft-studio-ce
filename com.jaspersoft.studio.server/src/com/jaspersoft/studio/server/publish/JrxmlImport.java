@@ -119,7 +119,7 @@ public class JrxmlImport extends AContributorAction {
 	private ResourceDescriptor getMainReport(JasperDesign jd) {
 		ResourceDescriptor mainr = new ResourceDescriptor();
 		mainr.setName(jd.getName());
-		mainr.setLabel(jd.getName());
+		mainr.setLabel("Main jrxml");
 		mainr.setWsType(ResourceDescriptor.TYPE_JRXML);
 		mainr.setIsNew(true);
 		mainr.setMainReport(true);
@@ -183,7 +183,8 @@ public class JrxmlImport extends AContributorAction {
 			style.publish(jasper, rt, mrunit, monitor, fileset, file);
 		}
 		// here extend and give possibility to contribute to plugins
-		Activator.getExtManager().publishJrxml(mrunit, monitor, jasper, fileset, file);
+		Activator.getExtManager().publishJrxml(mrunit, monitor, jasper,
+				fileset, file);
 	}
 
 	protected void saveJRXML(IProgressMonitor monitor, AFileResource fres,

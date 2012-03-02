@@ -19,11 +19,17 @@
  */
 package com.jaspersoft.studio.data;
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 
 public interface IQueryDesigner {
 
@@ -36,5 +42,11 @@ public interface IQueryDesigner {
 	public Control createControl(Composite parent);
 
 	public void dispose();
+
+	public void setParentContainer(DataQueryAdapters dataQueryAdapters);
+
+	public void setFields(List<JRDesignField> fields);
+
+	public void setParameters(List<JRDesignParameter> fields);
 
 }

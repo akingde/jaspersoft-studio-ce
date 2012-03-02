@@ -22,10 +22,12 @@ package com.jaspersoft.studio.property.dataset.dialog;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRField;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSortField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -61,6 +63,8 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.field.command.CreateFieldCommand;
 import com.jaspersoft.studio.model.field.command.DeleteFieldCommand;
+import com.jaspersoft.studio.model.parameter.command.CreateParameterCommand;
+import com.jaspersoft.studio.model.parameter.command.DeleteParameterCommand;
 import com.jaspersoft.studio.model.sortfield.command.CreateSortFieldCommand;
 import com.jaspersoft.studio.model.sortfield.command.DeleteSortFieldCommand;
 import com.jaspersoft.studio.property.SetValueCommand;
@@ -109,6 +113,11 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 			@Override
 			public void setFields(List<JRDesignField> fields) {
 				DatasetDialog.this.setFields(fields);
+			}
+
+			@Override
+			public void setParameters(List<JRDesignParameter> params) {
+
 			}
 		};
 
@@ -274,6 +283,13 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 			command.add(new DeleteSortFieldCommand(ds, f));
 		for (JRDesignSortField newf : sfields)
 			command.add(new CreateSortFieldCommand(ds, newf, -1));
+
+		List<JRParameter> dssparameters = ds.getParametersList();
+		List<JRParameter> sparams = newdataset.getParametersList();
+		for (JRParameter f : dssparameters)
+			command.add(new DeleteParameterCommand(ds, f));
+		for (JRParameter newf : sparams)
+			command.add(new CreateParameterCommand(ds, newf, -1));
 	}
 
 	private Command setValueCommand(String property, Object value, IPropertySource target) {

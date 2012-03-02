@@ -43,6 +43,7 @@ import java.util.List;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -114,6 +115,10 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 			@Override
 			public void setFields(List<JRDesignField> fields) {
 				WizardDataSourcePage.this.setFields(fields);
+			}
+
+			@Override
+			public void setParameters(List<JRDesignParameter> params) {
 			}
 		};
 

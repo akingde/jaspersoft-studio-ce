@@ -31,13 +31,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.QueryDesigner;
 
 public class SQLQueryDesigner extends QueryDesigner {
+	public SQLQueryDesigner() {
+		super();
+	}
+
 	private Composite composite;
 
 	@Override

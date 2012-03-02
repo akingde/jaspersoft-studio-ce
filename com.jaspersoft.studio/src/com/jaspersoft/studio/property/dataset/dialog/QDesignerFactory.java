@@ -35,15 +35,18 @@ public class QDesignerFactory {
 	private Composite parent;
 	private Map<String, IQueryDesigner> languageMap = new HashMap<String, IQueryDesigner>();
 	private Map<Class<? extends IQueryDesigner>, IQueryDesigner> classmap = new HashMap<Class<? extends IQueryDesigner>, IQueryDesigner>();
+	private DataQueryAdapters dqa;
 
-	public QDesignerFactory(Composite parent) {
+	public QDesignerFactory(Composite parent, DataQueryAdapters dqa) {
 		this.parent = parent;
+		this.dqa = dqa;
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				"com.jaspersoft.studio", "queryDesigner"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				String lang = e.getAttribute("language");//$NON-NLS-1$
 				IQueryDesigner qd = (IQueryDesigner) e.createExecutableExtension("QueryDesignerClass"); //$NON-NLS-1$
+				qd.setParentContainer(dqa);
 				addDesigner(lang, qd);
 			} catch (CoreException ex) {
 				UIUtils.showError(ex);
@@ -59,9 +62,15 @@ public class QDesignerFactory {
 	public IQueryDesigner getDesigner(String lang) {
 		IQueryDesigner qd = languageMap.get(lang.toLowerCase());
 		if (qd == null) {
-			qd = addDesigner(lang, new QueryDesigner());
+			qd = addDesigner(lang, getDefaultDesigner());
 		}
 		return qd;
+	}
+
+	protected QueryDesigner getDefaultDesigner() {
+		QueryDesigner defaultDesigner = new QueryDesigner();
+		defaultDesigner.setParentContainer(dqa);
+		return defaultDesigner;
 	}
 
 	private IQueryDesigner addDesigner(String lang, IQueryDesigner qd) {
@@ -72,7 +81,7 @@ public class QDesignerFactory {
 				iqd.createControl(parent);
 			} catch (Exception e) {
 				e.printStackTrace();
-				addDesigner(lang, new QueryDesigner());
+				addDesigner(lang, getDefaultDesigner());
 			}
 			classmap.put(qd.getClass(), iqd);
 		}

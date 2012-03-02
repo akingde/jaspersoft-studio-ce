@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -76,7 +77,8 @@ public abstract class DataQueryAdapters {
 	private Color background;
 	private IFile file;
 
-	public DataQueryAdapters(Composite parent,JasperDesign jDesign, JRDesignDataset newdataset, Color background, IFile file) {
+	public DataQueryAdapters(Composite parent, JasperDesign jDesign, JRDesignDataset newdataset, Color background,
+			IFile file) {
 		this.file = file;
 		// createToolbar(parent);
 		this.newdataset = newdataset;
@@ -182,7 +184,7 @@ public abstract class DataQueryAdapters {
 		langComposite.setLayout(langLayout);
 		langComposite.setBackground(background);
 
-		qdfactory = new QDesignerFactory(langComposite);
+		qdfactory = new QDesignerFactory(langComposite, this);
 		for (String lang : languages)
 			qdfactory.getDesigner(lang);
 
@@ -333,6 +335,8 @@ public abstract class DataQueryAdapters {
 	}
 
 	public abstract void setFields(List<JRDesignField> fields);
+
+	public abstract void setParameters(List<JRDesignParameter> params);
 
 	public void setDefaultDataAdapter(MReport mreport) {
 		if (mreport != null) {
