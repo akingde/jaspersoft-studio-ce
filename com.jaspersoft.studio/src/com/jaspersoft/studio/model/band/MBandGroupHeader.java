@@ -111,6 +111,13 @@ public class MBandGroupHeader extends MBand {
 		return jrGroup.getName() + " " + Messages.MBandGroupHeader_group_header; //$NON-NLS-1$
 	}
 
+	@Override
+	public String getSimpleDisplayName() {
+		if (getJrGroup() == null)
+			return super.getSimpleDisplayName();
+		return jrGroup.getName() + " " + Messages.MBandGroupHeader_group_header; //$NON-NLS-1$
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

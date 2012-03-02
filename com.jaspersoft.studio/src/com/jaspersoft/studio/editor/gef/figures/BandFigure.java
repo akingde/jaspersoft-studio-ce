@@ -23,6 +23,7 @@
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
@@ -33,8 +34,12 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.Misc;
 /*
  * The Class BandFigure.
  */
@@ -48,6 +53,7 @@ public class BandFigure extends RectangleFigure {
 	private int marginRight = 0;
 
 	private boolean drawColumn = false;
+	private String bandText;
 
 	public static Color getMarginsColor() {
 		return marginsColor;
@@ -129,6 +135,13 @@ public class BandFigure extends RectangleFigure {
 
 			g.drawLine(b.x, b.y, b.x + b.width, b.y);
 			g.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
+			
+			if(!Misc.nvl(bandText).isEmpty() && showBandNames()){
+				FontMetrics fontMetrics = g.getFontMetrics();
+				int stringWidth = fontMetrics.stringWidth(bandText);
+				int stringHeight = fontMetrics.getHeight();
+				g.drawString(bandText, b.x + (b.width-stringWidth)/2, b.y + (b.height+stringHeight)/2);
+			}
 
 			if (drawColumn) {
 				int x = marginLeft + ReportPageFigure.PAGE_BORDER.left;
@@ -146,6 +159,37 @@ public class BandFigure extends RectangleFigure {
 		} else
 			graphics.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
 
+	}
+	
+	/*
+	 * Checks if the showing of the band name is required.
+	 */
+	private boolean showBandNames() {
+//		// For the moment there is no need to get this information 
+//		// at "project level". This is the code-snippet that could be used
+//		// when the page will be customizable for single project. 
+//		IJavaProject currJavaProj = SelectionHelper.getJavaProjectFromCurrentJRXMLEditor();
+//		if(currJavaProj!=null){
+//			return new PropertiesHelper(currJavaProj.getProject()).getBoolean(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES,false);
+//		}
+//		return false;
+		
+		// Get the preference information at "workspace" level
+		return PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier()).getBoolean(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES,false);
+	}
+
+	/**
+	 * Sets a human-readable text that will be painted
+	 * in the band background. Usually it is the band name.
+	 * <p>
+	 * 
+	 * <b>NOTE</b>: the text will be drawn only if the related property <i>"Show Band names"</i>
+	 * from the preference page <i>Jaspersoft Studio-&gt;Report Designer</i> is enabled.
+	 *  
+	 * @param bandText the band text
+	 */
+	public void setBandText(String bandText){
+		this.bandText=bandText;
 	}
 
 }

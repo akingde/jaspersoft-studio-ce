@@ -112,6 +112,14 @@ public class MBandGroupFooter extends MBand {
 		return jrGroup.getName() + " " + Messages.MBandGroupFooter_group_footer; //$NON-NLS-1$
 	}
 
+	
+	@Override
+	public String getSimpleDisplayName() {
+		if (getJrGroup() == null)
+			return super.getSimpleDisplayName();
+		return jrGroup.getName() + " " + Messages.MBandGroupFooter_group_footer; //$NON-NLS-1$
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

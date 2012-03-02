@@ -109,7 +109,6 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 
 		BandFigure rect = new BandFigure(drawColumns);
 		rect.setForegroundColor(ColorConstants.blue);
-		rect.setToolTip(new Label(((MBand) getModel()).getToolTip()));
 		setupBandFigure(rect);
 		return rect;
 	}
@@ -172,14 +171,14 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	 */
 	public void refreshVisuals() {
 		IFigure rect = getFigure();
-
 		setupBandFigure(rect);
 		rect.repaint();
 	}
 
 	private void setupBandFigure(IFigure rect) {
 		JRDesignBand jrBand = getBand();
-		Rectangle bounds = ((MBand) getModel()).getBounds();
+		MBand bandNode=(MBand) getModel();
+		Rectangle bounds = (bandNode).getBounds();
 		JasperDesign jasperDesign = getJasperDesign();
 		BandFigure bfig = (BandFigure) rect;
 		bfig.setMarginLeft(jasperDesign.getLeftMargin());
@@ -195,6 +194,10 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 				height));
 		// rect.setBounds(new Rectangle(0, bounds.y + PageFigure.PAGE_BORDER.top, width, height));
 
+		// update tooltip and band text (shown in background)
+		bfig.setToolTip(new Label(bandNode.getToolTip()));
+		bfig.setBandText(bandNode.getSimpleDisplayName());
+		
 		updateRullers();
 	}
 

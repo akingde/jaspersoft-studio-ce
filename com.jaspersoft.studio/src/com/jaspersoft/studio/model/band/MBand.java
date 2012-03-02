@@ -131,6 +131,21 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		return Messages.getString(value.getOrigin().getBandTypeValue().getName());
 	}
 
+	/**
+	 * Return a human-readable text that represent the band name.
+	 * Only the band name and no specific information on the size
+	 * is displayed (i.e. {@link #getDisplayText()}).
+	 * 
+	 * @return the band name
+	 */
+	public String getSimpleDisplayName(){
+		JRDesignBand value = (JRDesignBand) getValue();
+		if (bandType.equals(BandTypeEnum.DETAIL) || value==null) {
+			return Messages.getString(bandType.getName());
+		}
+		return Messages.getString(value.getOrigin().getBandTypeValue().getName());
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

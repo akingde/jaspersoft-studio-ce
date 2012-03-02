@@ -319,6 +319,7 @@ public class Messages extends NLS {
 	public static String DesignerPreferencePage_element_design_border_style;
 	public static String DesignerPreferencePage_fancy_shadow;
 	public static String DesignerPreferencePage_page_border_style;
+	public static String DesignerPreferencePage_show_band_names;
 	public static String DesignerPreferencePage_simple_shadow;
 	public static String DesignerPreferencePage_unit;
 	public static String DOCXExporterPreferencePage_3;
