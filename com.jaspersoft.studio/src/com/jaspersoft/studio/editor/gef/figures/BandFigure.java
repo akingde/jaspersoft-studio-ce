@@ -34,11 +34,8 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.editor.java2d.J2DUtils;
-import com.jaspersoft.studio.preferences.DesignerPreferencePage;
-import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.Misc;
 /*
  * The Class BandFigure.
@@ -54,6 +51,7 @@ public class BandFigure extends RectangleFigure {
 
 	private boolean drawColumn = false;
 	private String bandText;
+	private boolean showBandName;
 
 	public static Color getMarginsColor() {
 		return marginsColor;
@@ -136,7 +134,7 @@ public class BandFigure extends RectangleFigure {
 			g.drawLine(b.x, b.y, b.x + b.width, b.y);
 			g.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
 			
-			if(!Misc.nvl(bandText).isEmpty() && showBandNames()){
+			if(!Misc.nvl(bandText).isEmpty() && showBandName){
 				FontMetrics fontMetrics = g.getFontMetrics();
 				int stringWidth = fontMetrics.stringWidth(bandText);
 				int stringHeight = fontMetrics.getHeight();
@@ -160,24 +158,16 @@ public class BandFigure extends RectangleFigure {
 			graphics.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
 
 	}
-	
-	/*
-	 * Checks if the showing of the band name is required.
-	 */
-	private boolean showBandNames() {
-//		// For the moment there is no need to get this information 
-//		// at "project level". This is the code-snippet that could be used
-//		// when the page will be customizable for single project. 
-//		IJavaProject currJavaProj = SelectionHelper.getJavaProjectFromCurrentJRXMLEditor();
-//		if(currJavaProj!=null){
-//			return new PropertiesHelper(currJavaProj.getProject()).getBoolean(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES,false);
-//		}
-//		return false;
-		
-		// Get the preference information at "workspace" level
-		return PropertiesHelper.INSTANCE_SCOPE.getNode(JaspersoftStudioPlugin.getUniqueIdentifier()).getBoolean(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES,false);
-	}
 
+	/**
+	 * Enables/disables the showing of the band name in background.
+	 * 
+	 * @param showBandName flag for band name showing.
+	 */
+	public void setShowBandName(boolean showBandName){
+		this.showBandName=showBandName;
+	}
+	
 	/**
 	 * Sets a human-readable text that will be painted
 	 * in the band background. Usually it is the band name.

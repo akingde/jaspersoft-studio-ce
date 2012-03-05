@@ -37,8 +37,10 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.gef.figures.BandFigure;
 import com.jaspersoft.studio.editor.gef.figures.ReportPageFigure;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
@@ -48,6 +50,8 @@ import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandMoveEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.BandResizableEditPolicy;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.preferences.DesignerPreferencePage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -60,6 +64,32 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav, Giulio Toffoli
  */
 public class BandEditPart extends FigureEditPart implements PropertyChangeListener, IContainerPart {
+	
+	private BandPreferenceListener prefChangelistener;
+	
+	/*
+	 * Preferences listener for band preferences/properties.
+	 */
+	private final class BandPreferenceListener implements IPropertyChangeListener {
+		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
+			if (event.getProperty().equals(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)){
+				setBandNameShowing((BandFigure)getFigure());
+			}
+		}
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		prefChangelistener = new BandPreferenceListener();
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().addPropertyChangeListener(prefChangelistener);
+	}
+
+	@Override
+	public void deactivate() {
+		JaspersoftStudioPlugin.getInstance().getPreferenceStore().removePropertyChangeListener(prefChangelistener);
+		super.deactivate();
+	}
 
 	/**
 	 * Gets the band.
@@ -110,6 +140,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		BandFigure rect = new BandFigure(drawColumns);
 		rect.setForegroundColor(ColorConstants.blue);
 		setupBandFigure(rect);
+		setBandNameShowing(rect);
 		return rect;
 	}
 
@@ -224,4 +255,11 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		return new Rectangle(0, 0, 0, request.getSizeDelta().height);
 	}
 
+	/*
+	 * Update flag for band name showing.
+	 */
+	private void setBandNameShowing(BandFigure figure){
+		boolean showBandName = PropertiesHelper.getInstance(jrContext).getBoolean(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES,false);
+		figure.setShowBandName(showBandName);
+	}
 }

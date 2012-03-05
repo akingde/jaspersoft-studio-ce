@@ -384,6 +384,15 @@
             objectClass="org.eclipse.core.resources.IProject">
       </page>
       <page
+      		adaptable="true"
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
+            class="com.jaspersoft.studio.preferences.DesignerPreferencePage"
+            id="com.jaspersoft.studio.preferences.DesignerPreferencePage.property"
+            name="Report Designer"
+            objectClass="org.eclipse.core.resources.IProject"
+            >
+      </page>       
+      <page
             adaptable="true"
             category="com.jaspersoft.studio.preferences.StudioPreferencePage.property"
             class="com.jaspersoft.studio.preferences.virtualizer.VirtualizerPreferencePage"

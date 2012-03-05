@@ -21,20 +21,21 @@ package com.jaspersoft.studio.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
 import com.jaspersoft.studio.property.section.report.util.Unit;
 
 /*
  * 
  */
-public class DesignerPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class DesignerPreferencePage extends FieldEditorOverlayPage {
 
+	public static final String PAGE_ID = "com.jaspersoft.studio.preferences.DesignerPreferencePage.property";
+	
 	public static final String P_ELEMENT_DESIGN_BORDER_STYLE = "elementDesignBorderStyle"; //$NON-NLS-1$
 	public static final String P_PAGE_DESIGN_BORDER_STYLE = "pageDesignBorderStyle"; //$NON-NLS-1$
 	public static final String P_PAGE_DEFAULT_UNITS = "pageDEFAULTUNITS"; //$NON-NLS-1$
@@ -79,5 +80,10 @@ public class DesignerPreferencePage extends FieldEditorPreferencePage implements
 		store.setDefault(P_ELEMENT_DESIGN_BORDER_STYLE, "rectangle"); //$NON-NLS-1$
 		store.setDefault(P_PAGE_DEFAULT_UNITS, "px"); //$NON-NLS-1$
 		store.setDefault(P_SHOW_REPORT_BAND_NAMES, false); //$NON-NLS-1$
+	}
+
+	@Override
+	protected String getPageId() {
+		return PAGE_ID;
 	}
 }
