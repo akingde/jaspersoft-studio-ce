@@ -1,25 +1,21 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model;
 
@@ -28,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
@@ -35,6 +33,8 @@ import org.eclipse.ui.views.properties.IPropertySource2;
 import com.jaspersoft.studio.property.ElementLabelProvider;
 
 public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	/** The descriptors. */
 
 	public APropertyNode() {
@@ -158,23 +158,21 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	public Object getEditableValue() {
 		return this;
 	}
-	
+
 	/**
-	 * Returns a custom title that should be shown in the property sheets page
-	 * when the node is selected.<br>
-	 * Actually this method returns <code>null</code>, so the standard behavior
-	 * provided by the contributed label provider {@link ElementLabelProvider}
-	 * is used.
+	 * Returns a custom title that should be shown in the property sheets page when the node is selected.<br>
+	 * Actually this method returns <code>null</code>, so the standard behavior provided by the contributed label provider
+	 * {@link ElementLabelProvider} is used.
 	 * <p>
 	 * 
-	 * Nodes (sub-classes) that want to provide a different behavior should 
-	 * override this method and provide a meaningful human-readable text. 
+	 * Nodes (sub-classes) that want to provide a different behavior should override this method and provide a meaningful
+	 * human-readable text.
 	 * 
 	 * @return a custom title
 	 * 
 	 * @see ElementLabelProvider#getText(Object)
 	 */
-	public String getCustomPropertyTitle(){
+	public String getCustomPropertyTitle() {
 		return null;
 	}
 

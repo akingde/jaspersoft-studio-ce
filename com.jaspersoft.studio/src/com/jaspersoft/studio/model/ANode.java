@@ -51,7 +51,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
  */
 public abstract class ANode implements INode, Serializable {
 
-	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/** The parent. */
 	private ANode parent;
