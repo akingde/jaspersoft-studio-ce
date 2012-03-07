@@ -25,6 +25,8 @@ import net.sf.jasperreports.engine.JasperPrint;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.program.Program;
@@ -51,7 +53,14 @@ public abstract class ASystemViewer extends SWTViewer {
 
 		Button lbl = new Button(composite, SWT.PUSH);
 		lbl.setText("The report is opened in an external editor.\n Press here to open it again.");
-		lbl.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+		GridData layoutData = new GridData(SWT.CENTER,SWT.CENTER,true,true,1,1);
+
+		GC gc =new GC(lbl);
+		FontMetrics fontMetrics = gc.getFontMetrics();
+		int h = fontMetrics.getHeight();
+		gc.dispose();
+		layoutData.heightHint=h*2 + 50;
+		lbl.setLayoutData(layoutData);
 
 		rptviewer = new ReportViewer();
 
