@@ -135,7 +135,6 @@ public class UIUtils {
 	public static CLabel createLabel(Composite parent, String txt, int span) {
 		CLabel lbl = new CLabel(parent, SWT.RIGHT);
 		lbl.setText(txt);
-		lbl.setBackground(parent.getBackground());
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
 			lbl.setLayoutData(rd);

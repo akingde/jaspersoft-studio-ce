@@ -70,6 +70,7 @@ public class VParameters extends APreview {
 	public void createInputControls(List<JRParameter> prompts, Map<String, Object> params) {
 		this.params = params;
 		this.prompts = prompts;
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 		for (Control c : composite.getChildren()) {
 			c.dispose();
 		}
