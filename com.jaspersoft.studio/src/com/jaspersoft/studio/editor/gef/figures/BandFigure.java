@@ -23,9 +23,13 @@
  */
 package com.jaspersoft.studio.editor.gef.figures;
 
-import java.awt.FontMetrics;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Stroke;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FreeformLayout;
@@ -52,6 +56,8 @@ public class BandFigure extends RectangleFigure {
 	private boolean drawColumn = false;
 	private String bandText;
 	private boolean showBandName;
+	private Point bandNamePosition;
+	private Dimension bandNameSize;
 
 	public static Color getMarginsColor() {
 		return marginsColor;
@@ -135,10 +141,18 @@ public class BandFigure extends RectangleFigure {
 			g.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
 			
 			if(!Misc.nvl(bandText).isEmpty() && showBandName){
-				FontMetrics fontMetrics = g.getFontMetrics();
-				int stringWidth = fontMetrics.stringWidth(bandText);
-				int stringHeight = fontMetrics.getHeight();
-				g.drawString(bandText, b.x + (b.width-stringWidth)/2, b.y + (b.height+stringHeight)/2);
+				Font currfont = g.getFont();
+				g.setFont(currfont.deriveFont(16f));
+				if(bandNamePosition==null){
+					computeBandNamePositionAndSize(g);
+				}
+				if(bandNameSize.height<b.height){
+					java.awt.Color currColor = g.getColor();
+					g.setColor(java.awt.Color.GRAY);
+					g.drawString(bandText, bandNamePosition.x, bandNamePosition.y);
+					g.setColor(currColor);
+				}
+				g.setFont(currfont);
 			}
 
 			if (drawColumn) {
@@ -157,6 +171,22 @@ public class BandFigure extends RectangleFigure {
 		} else
 			graphics.drawLine(b.x, b.y + b.height - 1, b.x + b.width, b.y + b.height - 1);
 
+	}
+
+	/*
+	 * Computes the position for the band name text and position.
+	 */
+	private void computeBandNamePositionAndSize(Graphics2D g) {
+		FontRenderContext frc = g.getFontRenderContext();
+		Font currfont = g.getFont();
+		float sw = (float) currfont.getStringBounds(bandText, frc).getWidth();
+		LineMetrics lm = currfont.getLineMetrics(bandText, frc);
+		float sh = lm.getHeight();
+		Rectangle tmpRect=getClientArea();
+		float sx = tmpRect.x + (tmpRect.width - sw)/2;
+		float sy = tmpRect.y + (tmpRect.height+sh)/2 - lm.getDescent();
+		bandNamePosition=new Point((int)sx,(int)sy);
+		bandNameSize=new Dimension((int)sw,(int)sh);
 	}
 
 	/**
@@ -180,6 +210,9 @@ public class BandFigure extends RectangleFigure {
 	 */
 	public void setBandText(String bandText){
 		this.bandText=bandText;
+		// reset the band name position and size
+		this.bandNamePosition=null;
+		this.bandNameSize=null;
 	}
 
 }
