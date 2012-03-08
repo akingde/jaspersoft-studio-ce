@@ -23,13 +23,31 @@
  */
 package com.jaspersoft.hadoop.hive.adapter;
 
-import net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl;
-
 /**
- * @author Teodor Danciu (teodord@users.sourceforge.net)
- * @version $Id: JdbcDataAdapterImpl.java 4595 2011-09-08 15:55:10Z teodord $
+ * @author Eric Diaz
  */
-public class HiveDataAdapterImpl extends JdbcDataAdapterImpl implements
-		HiveDataAdapter {
+public class HiveDataAdapterImplementation implements HiveDataAdapter {
+	public String url;
 
+	public String name;
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String getUrl() {
+		return url;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }

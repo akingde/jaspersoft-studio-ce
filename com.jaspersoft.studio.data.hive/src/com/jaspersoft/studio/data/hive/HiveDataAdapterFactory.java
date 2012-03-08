@@ -25,12 +25,12 @@ import net.sf.jasperreports.data.DataAdapterService;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
-import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImpl;
+import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImplementation;
 import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterService;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 
-/*
+/**
  * @author gtoffoli
  *
  */
@@ -52,7 +52,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 * com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
 	 */
 	public String getDataAdapterClassName() {
-		return HiveDataAdapterImpl.class.getName();
+		return HiveDataAdapterImplementation.class.getName();
 	}
 
 	/*
@@ -70,7 +70,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
 	 */
 	public String getDescription() {
-		return "Use queries to get data from a hive database";
+		return "Use HiveQL queries to get data from a hive instance";
 	}
 
 	/*
@@ -90,5 +90,4 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 			return new HiveDataAdapterService((HiveDataAdapter) dataAdapter);
 		return null;
 	}
-
 }

@@ -23,12 +23,13 @@
  */
 package com.jaspersoft.hadoop.hive.adapter;
 
-import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
+import net.sf.jasperreports.data.DataAdapter;
 
 /**
- * @author Teodor Danciu (teodord@users.sourceforge.net)
- * @version $Id: JdbcDataAdapter.java 4595 2011-09-08 15:55:10Z teodord $
+ * @author Eric Diaz
  */
-public interface HiveDataAdapter extends JdbcDataAdapter {
+public interface HiveDataAdapter extends DataAdapter {
+	public void setUrl(String url);
 
+	public String getUrl();
 }

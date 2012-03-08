@@ -19,112 +19,68 @@
  */
 package com.jaspersoft.studio.data.hive;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
+import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
-import com.jaspersoft.studio.data.jdbc.JDBCDataAdapterComposite;
-import com.jaspersoft.studio.data.jdbc.JDBCDriverDefinition;
 
-public class HiveDataAdapterComposite extends JDBCDataAdapterComposite {
-	private static final JDBCDriverDefinition[] jdbcDefinitions = new JDBCDriverDefinition[] { new JDBCDriverDefinition(
-			"Hadoop Hive", "org.apache.hadoop.hive.jdbc.HiveDriver", //$NON-NLS-1$ //$NON-NLS-2$
-			"jdbc:hive://{0}:10000/default", "default", "localhost") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+/**
+ * 
+ * @author Eric Diaz
+ * 
+ */
+public class HiveDataAdapterComposite extends ADataAdapterComposite {
+	private Text urlField;
 
-	@Override
-	public JDBCDriverDefinition[] getDefinitions() {
-		return jdbcDefinitions;
-	}
+	private DataAdapterDescriptor dataAdapterDescriptor;
 
-	/**
-	 * Create the composite.
-	 * 
-	 * @param parent
-	 * @param style
-	 */
 	public HiveDataAdapterComposite(Composite parent, int style) {
 		super(parent, style);
-		comboJDBCDriver.getCombo().setEnabled(false);
+		initComponents();
+	}
+
+	private void initComponents() {
+		setLayout(new GridLayout(2, false));
+
+		Label urlLabel = new Label(this, SWT.NONE);
+		urlLabel.setText("JDBC URL");
+		urlLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+
+		urlField = new Text(this, SWT.NONE);
+		urlField.setText("jdbc:hive://bdsandbox6:10000/default");
+		urlField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+	}
+
+	public DataAdapterDescriptor getDataAdapter() {
+		if (dataAdapterDescriptor == null) {
+			dataAdapterDescriptor = new HiveDataAdapterDescriptor();
+		}
+		HiveDataAdapter hbaseDataAdapter = (HiveDataAdapter) dataAdapterDescriptor.getDataAdapter();
+		hbaseDataAdapter.setUrl(urlField.getText());
+		return dataAdapterDescriptor;
 	}
 
 	@Override
-	protected void createPropertiesTab(CTabFolder tabFolder) {
-	}
-
-	@Override
-	protected void createClasspathTab(CTabFolder tabFolder) {
-	}
-
-	@Override
-	protected void createUserPass(Composite composite) {
-		Label lbl = new Label(composite, SWT.NONE);
-		GridData gd = new GridData();
-		gd.heightHint = 150;
-		lbl.setLayoutData(gd);
-	}
-
-	/**
-	 * Set the DataAdapter to edit. The UI will be updated with the content of
-	 * this adapter
-	 * 
-	 * @param dataAdapter
-	 */
-	public void setDataAdapter(HiveDataAdapterDescriptor editingDataAdapter) {
-		super.setDataAdapter(editingDataAdapter);
-
-		btnWizardActionPerformed();
+	public void setDataAdapter(DataAdapterDescriptor dataAdapterDescriptor) {
+		this.dataAdapterDescriptor = dataAdapterDescriptor;
+		HiveDataAdapter dataAdapter = (HiveDataAdapter) dataAdapterDescriptor.getDataAdapter();
+		String url = dataAdapter.getUrl();
+		urlField.setText(url != null ? url : "");
 	}
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
-		String driverName = "org.apache.hadoop.hive.jdbc.HiveDriver"; //$NON-NLS-1$
-		comboJDBCDriver.getCombo().setText(driverName);
-
-		for (JDBCDriverDefinition d : definitions) {
-			if (d.getDriverName().equals(driverName)) {
-				currentdriver = d;
-				break;
-			}
-		}
-		bindURLAssistant(dataAdapter);
-
-		bindingContext.bindValue(
-				SWTObservables.observeText(textJDBCUrl, SWT.Modify),
+		bindingContext.bindValue(SWTObservables.observeText(urlField, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "url"));
 	}
-
-	public DataAdapterDescriptor getDataAdapter() {
-		if (dataAdapterDesc == null) {
-			dataAdapterDesc = new HiveDataAdapterDescriptor();
-		}
-
-		JdbcDataAdapter jdbcDataAdapter = (JdbcDataAdapter) dataAdapterDesc
-				.getDataAdapter();
-
-		jdbcDataAdapter.setDriver(comboJDBCDriver.getCombo().getText());
-		jdbcDataAdapter.setUsername("");
-		jdbcDataAdapter.setPassword("");
-		jdbcDataAdapter.setUrl(textJDBCUrl.getText());
-
-		getDataAdapterURLAssistant(jdbcDataAdapter);
-
-		jdbcDataAdapter.setSavePassword(true);// btnSavePassword.getSelection());
-
-		jdbcDataAdapter.setClasspath(new ArrayList<String>());
-		jdbcDataAdapter.setProperties(new HashMap<String, String>());
-
-		return dataAdapterDesc;
-	}
-
 }

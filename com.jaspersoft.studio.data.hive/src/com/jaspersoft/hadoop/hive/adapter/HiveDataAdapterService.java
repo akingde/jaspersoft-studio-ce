@@ -23,52 +23,41 @@
  */
 package com.jaspersoft.hadoop.hive.adapter;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Map;
 
-import net.sf.jasperreports.data.AbstractDataAdapterService;
+import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.jaspersoft.hadoop.hive.connection.HiveConnection;
+import com.jaspersoft.studio.data.hive.Activator;
+
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  * @version $Id: JdbcDataAdapterService.java 4595 2011-09-08 15:55:10Z teodord $
+ * @author Eric Diaz
  */
-public class HiveDataAdapterService extends AbstractDataAdapterService {
-	private static final Log log = LogFactory
-			.getLog(HiveDataAdapterService.class);
-	private Connection con;
+public class HiveDataAdapterService implements DataAdapterService {
+	private static final Log log = LogFactory.getLog(HiveDataAdapterService.class);
 
-	public HiveDataAdapterService(HiveDataAdapter jdbcDataAdapter) {
-		super(jdbcDataAdapter);
-	}
+	private HiveConnection connection;
 
-	public HiveDataAdapter getHibernateDataAdapter() {
-		return (HiveDataAdapter) getDataAdapter();
+	private HiveDataAdapter dataAdapter;
+
+	public HiveDataAdapterService(HiveDataAdapter dataAdapter) {
+		this.dataAdapter = dataAdapter;
 	}
 
 	@Override
-	public void contributeParameters(Map<String, Object> parameters)
-			throws JRException {
-		HiveDataAdapter hiveDA = getHibernateDataAdapter();
-		if (hiveDA != null) {
+	public void contributeParameters(Map<String, Object> parameters) throws JRException {
+		if (dataAdapter != null) {
 			try {
-				// Class.forName(hiveDA.getDriver());
-
-				// String pass = hiveDA.getPassword();
-				// if (pass == null)
-				// pass = "";
-				// String user = hiveDA.getUsername();
-				// if (user == null)
-				// user = "";
-				String url = hiveDA.getUrl();
-				con = new com.jaspersoft.hadoop.hive.HiveConnection(url);
-
-				parameters.put(JRParameter.REPORT_CONNECTION, con);
+				Activator.connectionManager.setJdbcURL(dataAdapter.getUrl());
+				connection = Activator.connectionManager.borrowConnection();
+				parameters.put(JRParameter.REPORT_CONNECTION, connection);
 			} catch (Exception e) {
 				throw new JRException(e);
 			}
@@ -78,11 +67,19 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
 	@Override
 	public void dispose() {
 		try {
-			if (con != null)
-				con.close();
-		} catch (SQLException e) {
+			if (connection != null)
+				Activator.connectionManager.returnConnection(connection);
+		} catch (Exception e) {
+			e.printStackTrace();
 			if (log.isErrorEnabled())
 				log.error("Error while closing the connection.", e);
+		}
+	}
+
+	@Override
+	public void test() throws JRException {
+		if (connection != null) {
+			connection.test();
 		}
 	}
 }

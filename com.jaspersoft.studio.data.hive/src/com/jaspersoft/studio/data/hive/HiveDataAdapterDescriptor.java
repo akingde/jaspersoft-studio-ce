@@ -30,28 +30,29 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapter;
-import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImpl;
+import com.jaspersoft.hadoop.hive.adapter.HiveDataAdapterImplementation;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
-import com.jaspersoft.studio.data.jdbc.JDBCFieldsProvider;
 
-/*
+/**
+ * 
  * @author gtoffoli
+ * @author Eric Diaz
  *
  */
-public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
-		IFieldsProvider {
-	private HiveDataAdapter jdbcDataAdapter = new HiveDataAdapterImpl();
+public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider {
+	private HiveDataAdapter dataAdapter = new HiveDataAdapterImplementation();
 
-	
+	private IFieldsProvider fieldsProvider;
+
 	@Override
 	public DataAdapter getDataAdapter() {
-		return jdbcDataAdapter;
+		return dataAdapter;
 	}
 
 	@Override
 	public void setDataAdapter(DataAdapter dataAdapter) {
-		this.jdbcDataAdapter = (HiveDataAdapter) dataAdapter;
+		this.dataAdapter = (HiveDataAdapter) dataAdapter;
 	}
 
 	@Override
@@ -59,34 +60,27 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return new HiveDataAdapterEditor();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
-	 */
 	@Override
 	public Image getIcon(int size) {
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/hive.png");
+		if (size == 16) {
+			return Activator.getImage("icons/hive.png");
 		}
 		return null;
 	}
 
-	private IFieldsProvider fprovider;
-
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JRDataset reportDataset) throws JRException,
+	public List<JRDesignField> getFields(DataAdapterService con, JRDataset reportDataset) throws JRException,
 			UnsupportedOperationException {
 		getFieldProvider();
-		return fprovider.getFields(con, reportDataset);
+		return fieldsProvider.getFields(con, reportDataset);
 	}
 
 	private void getFieldProvider() {
-		if (fprovider == null)
-			fprovider = new JDBCFieldsProvider();
+		if (fieldsProvider == null)
+			fieldsProvider = new HiveFieldsProvider();
 	}
 
 	public boolean supportsGetFieldsOperation() {
 		getFieldProvider();
-		return fprovider.supportsGetFieldsOperation();
+		return fieldsProvider.supportsGetFieldsOperation();
 	}
 }

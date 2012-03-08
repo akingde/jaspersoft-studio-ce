@@ -25,6 +25,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.jaspersoft.hadoop.hive.connection.HiveConnectionManager;
+
 /*
  * The activator class controls the plug-in life cycle
  */
@@ -35,6 +37,8 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+
+	public static HiveConnectionManager connectionManager;
 
 	/**
 	 * The constructor
@@ -53,6 +57,10 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		if (connectionManager == null) {
+			System.out.println("Starting Hive Connection Manager");
+			connectionManager = new HiveConnectionManager();
+		}
 	}
 
 	/*
@@ -65,6 +73,11 @@ public class Activator extends AbstractUIPlugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		if (connectionManager != null) {
+			System.out.println("Stopping Hive Connection Manager");
+			connectionManager.shutdown();
+			connectionManager = null;
+		}
 		super.stop(context);
 	}
 
@@ -81,8 +94,7 @@ public class Activator extends AbstractUIPlugin {
 		ImageRegistry imageRegistry = getDefault().getImageRegistry();
 		Image image = imageRegistry.get(path);
 		if (image == null) {
-			ImageDescriptor descriptor = AbstractUIPlugin
-					.imageDescriptorFromPlugin(PLUGIN_ID, path);
+			ImageDescriptor descriptor = AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, path);
 			if (descriptor != null) {
 				image = descriptor.createImage();
 				if (image != null)
@@ -91,5 +103,4 @@ public class Activator extends AbstractUIPlugin {
 		}
 		return image;
 	}
-
 }
