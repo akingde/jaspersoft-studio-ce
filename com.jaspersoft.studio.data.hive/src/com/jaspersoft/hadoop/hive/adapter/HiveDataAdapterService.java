@@ -88,6 +88,15 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
 	}
 
 	@Override
+	protected void finalize() throws Throwable {
+		if (connectionManager != null) {
+			connectionManager.shutdown();
+			System.out.println("Hive connection manager is shutdown");
+		}
+		super.finalize();
+	}
+
+	@Override
 	public void test() throws JRException {
 		super.test();
 		if (connection != null) {
