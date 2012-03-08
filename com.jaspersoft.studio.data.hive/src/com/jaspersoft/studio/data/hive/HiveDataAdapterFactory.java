@@ -32,7 +32,7 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
 
 /**
  * @author gtoffoli
- *
+ * 
  */
 public class HiveDataAdapterFactory implements DataAdapterFactory {
 
@@ -42,7 +42,10 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#createDataAdapter()
 	 */
 	public DataAdapterDescriptor createDataAdapter() {
-		return new HiveDataAdapterDescriptor();
+		HiveDataAdapterDescriptor descriptor = new HiveDataAdapterDescriptor();
+		descriptor.getDataAdapter().setUrl(
+				"jdbc:hive://bdsandbox6:10000/default");
+		return descriptor;
 	}
 
 	/*

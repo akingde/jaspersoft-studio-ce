@@ -46,7 +46,7 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements 
 	private IFieldsProvider fieldsProvider;
 
 	@Override
-	public DataAdapter getDataAdapter() {
+	public HiveDataAdapter getDataAdapter() {
 		return dataAdapter;
 	}
 

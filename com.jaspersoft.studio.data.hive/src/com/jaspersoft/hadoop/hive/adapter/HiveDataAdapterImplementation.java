@@ -23,27 +23,18 @@
  */
 package com.jaspersoft.hadoop.hive.adapter;
 
+import net.sf.jasperreports.data.AbstractDataAdapter;
+
 /**
  * @author Eric Diaz
  */
-public class HiveDataAdapterImplementation implements HiveDataAdapter {
+public class HiveDataAdapterImplementation extends AbstractDataAdapter
+		implements HiveDataAdapter {
 	public String url;
-
-	public String name;
-
-	@Override
-	public String getName() {
-		return name;
-	}
 
 	@Override
 	public String getUrl() {
 		return url;
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	@Override

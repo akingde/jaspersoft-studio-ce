@@ -42,7 +42,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 public class HiveDataAdapterComposite extends ADataAdapterComposite {
 	private Text urlField;
 
-	private DataAdapterDescriptor dataAdapterDescriptor;
+	private HiveDataAdapterDescriptor dataAdapterDescriptor;
 
 	public HiveDataAdapterComposite(Composite parent, int style) {
 		super(parent, style);
@@ -54,33 +54,33 @@ public class HiveDataAdapterComposite extends ADataAdapterComposite {
 
 		Label urlLabel = new Label(this, SWT.NONE);
 		urlLabel.setText("JDBC URL");
-		urlLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		urlLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false,
+				1, 1));
 
-		urlField = new Text(this, SWT.NONE);
-		urlField.setText("jdbc:hive://bdsandbox6:10000/default");
-		urlField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		urlField = new Text(this, SWT.BORDER);
+		urlField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
+				1, 1));
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
 		if (dataAdapterDescriptor == null) {
 			dataAdapterDescriptor = new HiveDataAdapterDescriptor();
 		}
-		HiveDataAdapter hbaseDataAdapter = (HiveDataAdapter) dataAdapterDescriptor.getDataAdapter();
-		hbaseDataAdapter.setUrl(urlField.getText());
 		return dataAdapterDescriptor;
 	}
 
 	@Override
 	public void setDataAdapter(DataAdapterDescriptor dataAdapterDescriptor) {
-		this.dataAdapterDescriptor = dataAdapterDescriptor;
-		HiveDataAdapter dataAdapter = (HiveDataAdapter) dataAdapterDescriptor.getDataAdapter();
-		String url = dataAdapter.getUrl();
-		urlField.setText(url != null ? url : "");
+		this.dataAdapterDescriptor = (HiveDataAdapterDescriptor) dataAdapterDescriptor;
+		HiveDataAdapter dataAdapter = (HiveDataAdapter) dataAdapterDescriptor
+				.getDataAdapter();
+		bindWidgets(dataAdapter);
 	}
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
-		bindingContext.bindValue(SWTObservables.observeText(urlField, SWT.Modify),
+		bindingContext.bindValue(
+				SWTObservables.observeText(urlField, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "url"));
 	}
 }

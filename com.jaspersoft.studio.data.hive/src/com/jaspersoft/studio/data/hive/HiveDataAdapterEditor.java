@@ -35,12 +35,10 @@ public class HiveDataAdapterEditor implements DataAdapterEditor {
 
 	protected HiveDataAdapterComposite composite = null;
 
-	public ADataAdapterComposite getComposite(Composite parent, int style, WizardPage wizardPage) {
-		if (composite == null || composite.getParent() != parent) {
-			if (composite != null)
-				composite.dispose();
+	public ADataAdapterComposite getComposite(Composite parent, int style,
+			WizardPage wizardPage) {
+		if (composite == null)
 			composite = new HiveDataAdapterComposite(parent, style);
-		}
 		return composite;
 	}
 
@@ -50,11 +48,7 @@ public class HiveDataAdapterEditor implements DataAdapterEditor {
 	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getDataAdapter()
 	 */
 	public DataAdapterDescriptor getDataAdapter() {
-		if (composite != null) {
-			return composite.getDataAdapter();
-		}
-
-		return null;
+		return composite.getDataAdapter();
 	}
 
 	/*
@@ -63,7 +57,7 @@ public class HiveDataAdapterEditor implements DataAdapterEditor {
 	 * @see com.jaspersoft.studio.data.DataAdapterEditor#getHelpContextId()
 	 */
 	public String getHelpContextId() {
-		return null;
+		return composite.getHelpContextId();
 	}
 
 	/*
@@ -74,8 +68,7 @@ public class HiveDataAdapterEditor implements DataAdapterEditor {
 	 * .studio.data.DataAdapter)
 	 */
 	public void setDataAdapter(DataAdapterDescriptor dataAdapter) {
-		if (composite != null && dataAdapter instanceof HiveDataAdapterDescriptor) {
+		if (dataAdapter instanceof HiveDataAdapterDescriptor)
 			composite.setDataAdapter((HiveDataAdapterDescriptor) dataAdapter);
-		}
 	}
 }

@@ -25,7 +25,7 @@ package com.jaspersoft.hadoop.hive.adapter;
 
 import java.util.Map;
 
-import net.sf.jasperreports.data.DataAdapterService;
+import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 
@@ -33,15 +33,25 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.jaspersoft.hadoop.hive.connection.HiveConnection;
-import com.jaspersoft.studio.data.hive.Activator;
+import com.jaspersoft.hadoop.hive.connection.HiveConnectionManager;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  * @version $Id: JdbcDataAdapterService.java 4595 2011-09-08 15:55:10Z teodord $
  * @author Eric Diaz
  */
-public class HiveDataAdapterService implements DataAdapterService {
-	private static final Log log = LogFactory.getLog(HiveDataAdapterService.class);
+public class HiveDataAdapterService extends AbstractDataAdapterService {
+	private static final Log log = LogFactory
+			.getLog(HiveDataAdapterService.class);
+	private static HiveConnectionManager connectionManager;
+
+	public static HiveConnectionManager getConnectionManager() {
+		if (connectionManager == null) {
+			System.out.println("Starting Hive Connection Manager");
+			connectionManager = new HiveConnectionManager();
+		}
+		return connectionManager;
+	}
 
 	private HiveConnection connection;
 
@@ -52,11 +62,12 @@ public class HiveDataAdapterService implements DataAdapterService {
 	}
 
 	@Override
-	public void contributeParameters(Map<String, Object> parameters) throws JRException {
+	public void contributeParameters(Map<String, Object> parameters)
+			throws JRException {
 		if (dataAdapter != null) {
 			try {
-				Activator.connectionManager.setJdbcURL(dataAdapter.getUrl());
-				connection = Activator.connectionManager.borrowConnection();
+				getConnectionManager().setJdbcURL(dataAdapter.getUrl());
+				connection = connectionManager.borrowConnection();
 				parameters.put(JRParameter.REPORT_CONNECTION, connection);
 			} catch (Exception e) {
 				throw new JRException(e);
@@ -68,7 +79,7 @@ public class HiveDataAdapterService implements DataAdapterService {
 	public void dispose() {
 		try {
 			if (connection != null)
-				Activator.connectionManager.returnConnection(connection);
+				connectionManager.returnConnection(connection);
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (log.isErrorEnabled())
@@ -78,8 +89,10 @@ public class HiveDataAdapterService implements DataAdapterService {
 
 	@Override
 	public void test() throws JRException {
+		super.test();
 		if (connection != null) {
 			connection.test();
+			connectionManager.returnConnection(connection);
 		}
 	}
 }
