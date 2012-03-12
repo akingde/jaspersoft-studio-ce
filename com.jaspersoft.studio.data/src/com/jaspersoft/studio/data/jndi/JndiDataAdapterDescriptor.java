@@ -28,6 +28,7 @@ import net.sf.jasperreports.data.jndi.JndiDataAdapterImpl;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -35,6 +36,7 @@ import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.jdbc.JDBCFieldsProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JndiDataAdapterDescriptor extends DataAdapterDescriptor implements
 		IFieldsProvider {
@@ -71,10 +73,10 @@ public class JndiDataAdapterDescriptor extends DataAdapterDescriptor implements
 	private IFieldsProvider fprovider;
 
 	public List<JRDesignField> getFields(DataAdapterService con,
-			JRDataset reportDataset) throws JRException,
-			UnsupportedOperationException {
+			JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		getFieldProvider();
-		return fprovider.getFields(con, reportDataset);
+		return fprovider.getFields(con, jConfig, jDataset);
 	}
 
 	private void getFieldProvider() {

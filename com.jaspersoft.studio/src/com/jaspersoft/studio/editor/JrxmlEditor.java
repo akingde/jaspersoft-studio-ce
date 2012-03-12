@@ -436,8 +436,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				a.setJrConfig(jrContext);
 				((JrxmlEditorContributor) getEditorSite().getActionBarContributor()).addGlobaRetargetAction(a);
 			}
-
-			setModel(ReportFactory.createReport(jd, file));
+			jrContext.setJasperDesign(jd);
+			setModel(ReportFactory.createReport(jrContext));
 		} catch (JRException e) {
 			setModel(null);
 			handleJRException(editorInput, e, false);
@@ -631,7 +631,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		IDocumentProvider dp = xmlEditor.getDocumentProvider();
 		IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 		JasperDesign jd = JRXmlLoader.load(new ByteArrayInputStream(doc.get().getBytes()));
-		setModel(ReportFactory.createReport(jd, ((IFileEditorInput) getEditorInput()).getFile()));
+		setModel(ReportFactory.createReport(jrContext));
 		modelFresh = true;
 	}
 

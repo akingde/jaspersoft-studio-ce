@@ -39,8 +39,13 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MRStyleTemplate;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpStyleTemplate extends AImpObject {
+	public ImpStyleTemplate(JasperReportsConfiguration jrConfig) {
+		super(jrConfig);
+	}
+
 	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 	public File publish(JasperDesign jd, JRReportTemplate img,

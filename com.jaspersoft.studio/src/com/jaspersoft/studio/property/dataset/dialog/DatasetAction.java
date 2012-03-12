@@ -82,7 +82,8 @@ public class DatasetAction extends SelectionAction {
 
 			part.getAdapter(String.class);
 
-			final DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mreport, file);
+			final DatasetDialog dlg = new DatasetDialog(Display.getDefault().getActiveShell(), mdataset, mreport,
+					mreport.getJasperConfiguration());
 			if (dlg.open() == Window.OK) {
 				Display.getCurrent().asyncExec(new Runnable() {
 

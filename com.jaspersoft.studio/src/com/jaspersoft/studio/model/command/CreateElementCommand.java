@@ -37,6 +37,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * link nodes & together.
@@ -45,6 +46,8 @@ import com.jaspersoft.studio.utils.SelectionHelper;
  */
 public class CreateElementCommand extends Command {
 	protected JasperDesign jasperDesign;
+	protected JasperReportsConfiguration jConfig;
+
 	/** The src node. */
 	protected MGraphicElement srcNode;
 
@@ -141,8 +144,9 @@ public class CreateElementCommand extends Command {
 	 *          the index
 	 */
 	protected void setContext(ANode destNode, MGraphicElement srcNode, int index) {
+		this.jConfig = destNode.getJasperConfiguration();
 		this.srcNode = srcNode;
-		this.jasperDesign = destNode.getJasperDesign();
+		this.jasperDesign = jConfig.getJasperDesign();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		if (destNode instanceof IGroupElement)
 			this.jrGroup = ((IGroupElement) destNode).getJRElementGroup();
@@ -163,7 +167,7 @@ public class CreateElementCommand extends Command {
 	 * @return the a node
 	 */
 	protected ANode fixPosition(ANode destNode, ANode srcNode, Rectangle position) {
-		if(position == null)
+		if (position == null)
 			position = new Rectangle(0, 0, 70, 30);
 		// calculate position, fix position relative to parent
 		MBand band = ModelUtils.getBand4Point(destNode, new Point(position.x, position.y));

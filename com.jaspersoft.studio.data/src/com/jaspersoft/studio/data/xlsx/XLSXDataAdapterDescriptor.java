@@ -35,6 +35,7 @@ import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements
 		IFieldsProvider {
@@ -55,15 +56,16 @@ public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return new XLSXDataAdapterEditor();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
 	@Override
 	public Image getIcon(int size) {
 		// TODO Auto-generated method stub
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/document-excel.png");
+		if (size == 16) {
+			return Activator.getImage("icons/document-excel.png");
 		}
 		return null;
 	}
@@ -71,10 +73,10 @@ public class XLSXDataAdapterDescriptor extends DataAdapterDescriptor implements
 	private IFieldsProvider fprovider;
 
 	public List<JRDesignField> getFields(DataAdapterService con,
-			JRDataset reportDataset) throws JRException,
-			UnsupportedOperationException {
+			JasperReportsConfiguration jConfig, JRDataset reportDataset)
+			throws JRException, UnsupportedOperationException {
 		getFieldProvider();
-		return fprovider.getFields(con, reportDataset);
+		return fprovider.getFields(con, jConfig, reportDataset);
 	}
 
 	public boolean supportsGetFieldsOperation() {

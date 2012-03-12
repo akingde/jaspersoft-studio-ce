@@ -21,6 +21,9 @@ package com.jaspersoft.studio.server.editor;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.part.EditorPart;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
@@ -28,7 +31,8 @@ import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.server.JSFileResolver;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
-import com.jaspersoft.studio.server.publish.JrxmlImport;
+import com.jaspersoft.studio.server.publish.JrxmlPublishAction;
+import com.jaspersoft.studio.server.publish.wizard.SaveConfirmationDialog;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -55,18 +59,33 @@ public class JRSEditorContributor implements IEditorContributor {
 
 	}
 
+	public static final String KEY_PUBLISH2JSS = "PUBLISH2JSS";
+	public static final String KEY_PUBLISH2JSS_SILENT = "PUBLISH2JSS.SILENT";
+
 	public void onSave(JasperReportsConfiguration jrConfig) {
 		JasperDesign jd = jrConfig.getJasperDesign();
 
 		String prop = jd.getProperty(JrxmlExporter.PROP_SERVERURL);
 		if (prop == null)
 			return;
-		if (UIUtils.showConfirmation("Export Report to JasperServer",
-				"Do you want to publish this report to JasperServer?")) {
-			JrxmlImport action = new JrxmlImport();
-			action.setJrConfig(jrConfig);
-			action.run();
+
+		boolean run = jrConfig.get(KEY_PUBLISH2JSS, true);
+		boolean allways = jrConfig.get(KEY_PUBLISH2JSS_SILENT, false);
+		if (run && !allways) {
+			Shell shell = Display.getDefault().getActiveShell();
+			SaveConfirmationDialog dialog = new SaveConfirmationDialog(shell);
+			run = (dialog.open() == Dialog.OK);
+			jrConfig.put(KEY_PUBLISH2JSS_SILENT, dialog.getAllways());
 		}
+		if (run)
+			getAction(jrConfig).run();
+	}
+
+	protected static JrxmlPublishAction getAction(
+			JasperReportsConfiguration jrConfig) {
+		JrxmlPublishAction publishAction = new JrxmlPublishAction();
+		publishAction.setJrConfig(jrConfig);
+		return publishAction;
 	}
 
 	public void onRun() {
@@ -75,7 +94,7 @@ public class JRSEditorContributor implements IEditorContributor {
 	}
 
 	public AContributorAction[] getActions() {
-		return new AContributorAction[] { new JrxmlImport() };
+		return new AContributorAction[] { new JrxmlPublishAction() };
 	}
 
 }

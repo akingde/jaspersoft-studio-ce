@@ -66,23 +66,27 @@ import com.jaspersoft.studio.data.widget.DatasourceComboItem;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class DataQueryAdapters {
 	private JRDesignDataset newdataset;
 	private JasperDesign jDesign;
+	private JasperReportsConfiguration jConfig;
 	private Color background;
 	private IFile file;
 
-	public DataQueryAdapters(Composite parent, JasperDesign jDesign, JRDesignDataset newdataset, Color background,
-			IFile file) {
-		this.file = file;
+	public DataQueryAdapters(Composite parent, JasperReportsConfiguration jConfig, JRDesignDataset newdataset,
+			Color background) {
+		this.file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
 		// createToolbar(parent);
 		this.newdataset = newdataset;
-		this.jDesign = jDesign;
+		this.jConfig = jConfig;
+		this.jDesign = jConfig.getJasperDesign();
 		if (background != null)
 			this.background = background;
 		// else
@@ -112,9 +116,9 @@ public abstract class DataQueryAdapters {
 		return tabFolder;
 	}
 
-	public void setFile(IFile file, JasperDesign jDesign) {
-		this.file = file;
-		this.jDesign = jDesign;
+	public void setFile(JasperReportsConfiguration jConfig) {
+		this.file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+		this.jDesign = jConfig.getJasperDesign();
 		dscombo.setDataAdapterStorages(DataAdapterManager.getDataAdapter(file));
 		setDataset(jDesign, newdataset);
 	}
@@ -262,7 +266,7 @@ public abstract class DataQueryAdapters {
 
 								DataAdapterService das = DataAdapterServiceUtil.getDataAdapterService(da.getDataAdapter());
 								try {
-									final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, newdataset);
+									final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, newdataset);
 									if (fields != null) {
 										monitor.setTaskName("Setting Fields");
 										Display.getDefault().syncExec(new Runnable() {

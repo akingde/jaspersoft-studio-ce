@@ -45,7 +45,6 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.WizardPage;
@@ -60,10 +59,11 @@ import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 	private JRDesignDataset dataset;
-	private JasperDesign jDesign;
+	private JasperReportsConfiguration jConfig;
 
 	public JRDesignDataset getDataset() {
 		if (dataset == null) {
@@ -76,16 +76,14 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		return dataset;
 	}
 
-	private IFile file;
 	private DataQueryAdapters dataquery;
 
-	public WizardDataSourcePage(IFile file, JasperDesign jDesign) {
+	public WizardDataSourcePage(IFile file, JasperReportsConfiguration jConfig) {
 		super("datasourcepage"); //$NON-NLS-1$
 		setTitle(Messages.WizardDataSourcePage_datasource);
 		setImageDescriptor(MDatasources.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDataSourcePage_description);
-		this.file = file;
-		this.jDesign = jDesign;
+		this.jConfig = jConfig;
 	}
 
 	@Override
@@ -110,7 +108,7 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		composite.setLayout(new GridLayout(1, true));
 		setControl(composite);
 
-		dataquery = new DataQueryAdapters(composite, jDesign, getDataset(), composite.getBackground(), file) {
+		dataquery = new DataQueryAdapters(composite, jConfig, getDataset(), composite.getBackground()) {
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {
@@ -132,15 +130,14 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 
 		ctf.setTopRight(c);
 
-		dataquery.setDataset(jDesign, getDataset());
+		dataquery.setDataset(jConfig.getJasperDesign(), getDataset());
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}
 
-	public void setFile(IFile file, JasperDesign jDesign) {
-		this.file = file;
-		this.jDesign = jDesign;
-		dataquery.setFile(file, jDesign);
+	public void setFile(JasperReportsConfiguration jConfig) {
+		this.jConfig = jConfig;
+		dataquery.setFile(jConfig);
 
 	}
 

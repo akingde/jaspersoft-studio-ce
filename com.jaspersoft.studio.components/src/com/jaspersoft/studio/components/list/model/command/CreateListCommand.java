@@ -108,7 +108,7 @@ public class CreateListCommand extends CreateElementCommand {
 			ListWizard wizard = new ListWizard();
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
-			wizard.init(jasperDesign);
+			wizard.init(jConfig);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getList();

@@ -36,17 +36,18 @@ import net.sf.jasperreports.engine.query.JRCsvQueryExecuter;
 import net.sf.jasperreports.engine.query.JRCsvQueryExecuterFactory;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
 public class CSVFieldsProvider implements IFieldsProvider {
 
 	public List<JRDesignField> getFields(DataAdapterService con,
-			JRDataset reportDataset) throws JRException,
-			UnsupportedOperationException {
+			JasperReportsConfiguration jConfig, JRDataset reportDataset)
+			throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
-		ParameterUtil.setParameters(reportDataset, parameters);
+		ParameterUtil.setParameters(jConfig, reportDataset, parameters);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 2);
 
 		JRCsvDataSource ds = null;

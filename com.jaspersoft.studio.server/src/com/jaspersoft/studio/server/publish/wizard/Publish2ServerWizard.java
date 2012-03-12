@@ -17,28 +17,63 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.publish;
+package com.jaspersoft.studio.server.publish.wizard;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class Publish2ServerWizard extends Wizard {
 	private JasperDesign jDesign;
-	private ServerLocationPage page0;
+	private RUnitLocationPage page0;
+	private ResourcesPage page1;
+	private int page;
+	private ANode n;
+	JasperReportsConfiguration jrConfig;
 
-	public Publish2ServerWizard(JasperDesign jDesign) {
+	public Publish2ServerWizard(ANode n, JasperDesign jDesign,
+			JasperReportsConfiguration jrConfig, int page) {
 		super();
-		setWindowTitle("Server profile wizard");
+		setWindowTitle("Report Publishing Wizard");
 		this.jDesign = jDesign;
+		this.page = page;
+		this.n = n;
+		this.jrConfig = jrConfig;
 	}
 
 	@Override
 	public void addPages() {
-		page0 = new ServerLocationPage(jDesign);
+		page0 = new RUnitLocationPage(jDesign, n);
 		addPage(page0);
+
+		page1 = new ResourcesPage(jDesign, n);
+		addPage(page1);
+	}
+
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+		if (page == page1) {
+			MReportUnit mrunit = page0.getReportUnit();
+			new FindResources().find(mrunit, jrConfig, jDesign);
+		}
+		return super.getNextPage(page);
+	}
+
+	@Override
+	public IWizardPage getStartingPage() {
+		switch (page) {
+		case 1:
+			return page0;
+		case 2:
+			return page1;
+		}
+		return super.getStartingPage();
 	}
 
 	public MReportUnit getReportUnit() {

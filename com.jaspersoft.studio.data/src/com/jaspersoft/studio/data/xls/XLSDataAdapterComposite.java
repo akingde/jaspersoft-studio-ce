@@ -31,6 +31,7 @@ import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.data.xls.XlsDataAdapter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -71,6 +72,7 @@ import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class XLSDataAdapterComposite extends ADataAdapterComposite {
 
@@ -693,8 +695,10 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 			DataAdapterDescriptor da = getDataAdapter();
 			DataAdapterService das = DataAdapterServiceUtil
 					.getDataAdapterService(da.getDataAdapter());
+			JasperReportsConfiguration jConfig = new JasperReportsConfiguration();
+			jConfig.setJasperDesign(new JasperDesign());
 			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das,
-					new JRDesignDataset(false));
+					jConfig, new JRDesignDataset(false));
 			rows.clear();
 			int columnIndex = 0;
 			for (JRDesignField f : fields) {

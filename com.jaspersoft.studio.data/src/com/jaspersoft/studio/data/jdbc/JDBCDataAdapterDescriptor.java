@@ -35,6 +35,7 @@ import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * @author gtoffoli
@@ -44,7 +45,6 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 		IFieldsProvider {
 	private JdbcDataAdapter jdbcDataAdapter = new JdbcDataAdapterImpl();
 
-	
 	@Override
 	public DataAdapter getDataAdapter() {
 		return jdbcDataAdapter;
@@ -61,14 +61,15 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 		return new JDBCDataAdapterEditor();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
 	 */
 	@Override
 	public Image getIcon(int size) {
-		if (size == 16)
-		{
-			return  Activator.getImage("icons/database.png");
+		if (size == 16) {
+			return Activator.getImage("icons/database.png");
 		}
 		return null;
 	}
@@ -76,10 +77,10 @@ public class JDBCDataAdapterDescriptor extends DataAdapterDescriptor implements
 	private IFieldsProvider fprovider;
 
 	public List<JRDesignField> getFields(DataAdapterService con,
-			JRDataset reportDataset) throws JRException,
-			UnsupportedOperationException {
+			JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		getFieldProvider();
-		return fprovider.getFields(con, reportDataset);
+		return fprovider.getFields(con, jConfig, jDataset);
 	}
 
 	private void getFieldProvider() {

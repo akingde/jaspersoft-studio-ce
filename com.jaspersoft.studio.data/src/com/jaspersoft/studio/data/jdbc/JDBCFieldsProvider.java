@@ -39,6 +39,7 @@ import net.sf.jasperreports.engine.query.JRJdbcQueryExecuter;
 import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 import com.jaspersoft.studio.utils.parameter.SimpleValueParameter;
 
@@ -49,12 +50,12 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 	}
 
 	public List<JRDesignField> getFields(DataAdapterService con,
-			JRDataset reportDataset) throws JRException,
-			UnsupportedOperationException {
+			JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		con.contributeParameters(parameters);
 
-		ParameterUtil.setParameters(reportDataset, parameters);
+		ParameterUtil.setParameters(jConfig, jDataset, parameters);
 		parameters.put(JRJdbcQueryExecuterFactory.PROPERTY_JDBC_FETCH_SIZE, 0);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
 
@@ -70,8 +71,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 					new SimpleValueParameter(
 							new HashMap<String, JRValueParameter>()));
 
-			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(reportDataset,
-					tmpMap);
+			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(jDataset, tmpMap);
 			qe.createDatasource();
 			ResultSet rs = qe.getResultSet();
 			if (rs != null) {

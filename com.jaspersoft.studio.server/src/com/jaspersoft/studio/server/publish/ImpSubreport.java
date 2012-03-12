@@ -30,8 +30,13 @@ import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpSubreport extends AImpObject {
+
+	public ImpSubreport(JasperReportsConfiguration jrConfig) {
+		super(jrConfig);
+	}
 
 	@Override
 	protected File findFile(IFile file, String str) {

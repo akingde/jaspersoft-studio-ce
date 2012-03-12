@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.server.publish;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -34,16 +35,21 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.ResourceFactory;
-import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.utils.ExpressionUtil;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class AImpObject {
+	private JasperReportsConfiguration jrConfig;
+
+	public AImpObject(JasperReportsConfiguration jrConfig) {
+		this.jrConfig = jrConfig;
+	}
 
 	protected File findFile(JasperDesign jd, Set<String> fileset,
 			JRDesignExpression exp, IFile file) {
-		String str = ExpressionUtil.eval(exp, jd);
+		String str = ExpressionUtil.eval(exp, jrConfig, jd);
 		if (str == null || fileset.contains(str))
 			return null;
 
@@ -100,12 +106,17 @@ public abstract class AImpObject {
 			AFileResource mres = (AFileResource) ResourceFactory.getResource(
 					mrunit, rd, -1);
 			mres.setFile(f);
-			try {
-				WSClientHelper.saveResource(mres, monitor, false);
-			} catch (Exception e) {
-				mres.getValue().setIsNew(false);
-				WSClientHelper.saveResource(mres, monitor, false);
-			}
+
+			List<AFileResource> resources = jrConfig.get(
+					JrxmlPublishAction.KEY_PUBLISH2JSS_DATA,
+					new ArrayList<AFileResource>());
+			resources.add(mres);
+			// try {
+			// WSClientHelper.saveResource(mres, monitor, false);
+			// } catch (Exception e) {
+			// mres.getValue().setIsNew(false);
+			// WSClientHelper.saveResource(mres, monitor, false);
+			// }
 			return mres;
 		}
 		return null;

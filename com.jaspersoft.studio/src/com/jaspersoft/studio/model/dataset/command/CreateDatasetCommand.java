@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * /* link nodes & together.
@@ -44,14 +45,16 @@ public class CreateDatasetCommand extends Command {
 
 	/** The jr design. */
 	private JasperDesign jrDesign;
+	private JasperReportsConfiguration jConfig;
 
 	/** The index. */
 	private int index;
 
-	public CreateDatasetCommand(JasperDesign jrDesign, JRDesignDataset jrDataset) {
+	public CreateDatasetCommand(JasperReportsConfiguration jConfig, JRDesignDataset jrDataset) {
 		super();
 		this.jrDataset = jrDataset;
-		this.jrDesign = jrDesign;
+		this.jrDesign = jConfig.getJasperDesign();
+		this.jConfig = jConfig;
 		index = -1;
 	}
 
@@ -68,6 +71,7 @@ public class CreateDatasetCommand extends Command {
 	public CreateDatasetCommand(MReport destNode, MDataset srcNode, int index) {
 		super();
 		this.jrDesign = destNode.getJasperDesign();
+		this.jConfig = destNode.getJasperConfiguration();
 		this.index = index;
 		if (srcNode != null && srcNode.getValue() != null)
 			this.jrDataset = (JRDesignDataset) srcNode.getValue();
@@ -97,7 +101,7 @@ public class CreateDatasetCommand extends Command {
 		if (jrDataset == null) {
 			DatasetWizard wizard = new DatasetWizard();
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-			wizard.init(jrDesign);
+			wizard.init(jConfig);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				MDataset srcNode = wizard.getDataset();

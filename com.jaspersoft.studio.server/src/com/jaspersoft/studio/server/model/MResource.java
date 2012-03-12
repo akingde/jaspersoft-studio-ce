@@ -26,6 +26,8 @@ package com.jaspersoft.studio.server.model;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -48,6 +50,7 @@ import com.jaspersoft.studio.utils.Misc;
  *
  */
 public class MResource extends APropertyNode implements ICopyable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MResource(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, index);

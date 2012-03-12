@@ -375,7 +375,8 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				if (getEditorInput() instanceof FileEditorInput) {
 					JRDesignSubreport s = (JRDesignSubreport) obj;
 					if (s.getExpression() != null)
-						SelectionHelper.openEditor((FileEditorInput) getEditorInput(), ExpressionUtil.eval(s.getExpression(), jd));
+						SelectionHelper.openEditor((FileEditorInput) getEditorInput(),
+								ExpressionUtil.eval(s.getExpression(), jrContext));
 				}
 				return;
 			}
@@ -383,7 +384,8 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				if (getEditorInput() instanceof FileEditorInput) {
 					JRDesignImage s = (JRDesignImage) obj;
 					if (s.getExpression() != null)
-						SelectionHelper.openEditor((FileEditorInput) getEditorInput(), ExpressionUtil.eval(s.getExpression(), jd));
+						SelectionHelper.openEditor((FileEditorInput) getEditorInput(),
+								ExpressionUtil.eval(s.getExpression(), jrContext));
 				}
 				return;
 			}

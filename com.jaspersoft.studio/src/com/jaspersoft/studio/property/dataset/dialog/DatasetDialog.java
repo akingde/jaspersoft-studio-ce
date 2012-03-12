@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSortField;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.Dialog;
@@ -72,17 +71,18 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 final class DatasetDialog extends FormDialog implements IFieldSetter {
 	private MDataset mdataset;
 	private MReport mreport;
-	private IFile file;
+	private JasperReportsConfiguration jConfig;
 
-	public DatasetDialog(Shell shell, MDataset mdataset, MReport mreport, IFile file) {
+	public DatasetDialog(Shell shell, MDataset mdataset, MReport mreport, JasperReportsConfiguration jConfig) {
 		super(shell);
 		this.mdataset = mdataset;
 		this.mreport = mreport;
-		this.file = file;
+		this.jConfig = jConfig;
 		newdataset = (JRDesignDataset) ((JRDesignDataset) mdataset.getValue()).clone();
 	}
 
@@ -107,8 +107,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		background = body.getBackground();
 
-		dataquery = new DataQueryAdapters(mform.getForm().getBody(), mreport.getJasperDesign(), newdataset, background,
-				file) {
+		dataquery = new DataQueryAdapters(mform.getForm().getBody(), jConfig, newdataset, background) {
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {

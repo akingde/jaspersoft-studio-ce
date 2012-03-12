@@ -20,36 +20,37 @@
 
 package com.jaspersoft.studio.utils;
 
-import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRExpression;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.JRExpressionUtil;
 
-import org.eclipse.jdt.core.IJavaProject;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExpressionUtil {
-	public static final String eval(JRExpression expr, JasperDesign jd) {
+	public static final String eval(JRExpression expr, JasperReportsConfiguration jConfig, JasperDesign jd) {
 		if (expr == null)
 			return null;
 		if (jd == null)
 			return JRExpressionUtil.getSimpleExpressionText(expr);
 
-		Object eval = eval(expr, jd, jd.getMainDesignDataset(), null);
+		Object eval = eval(expr, jd.getMainDesignDataset(), jConfig, jd);
 		if (eval != null)
 			return eval.toString();
 		return null;
 	}
 
-	public static final Object eval(JRExpression expr, JasperDesign jd, JRDataset jrd, IJavaProject javaProject) {
-		ClassLoader classLoader = null;
-		if (javaProject != null)
-			classLoader = new JavaProjectClassLoader(javaProject);
-		else if (jd != null)
-			classLoader = jd.getClass().getClassLoader();
-		else
-			classLoader = Thread.currentThread().getContextClassLoader();
-		ExpressionInterpreter ei = new ExpressionInterpreter(jd.getMainDesignDataset(), classLoader, jd, javaProject);
+	public static final String eval(JRExpression expr, JasperReportsConfiguration jConfig) {
+		return eval(expr, jConfig, jConfig.getJasperDesign());
+	}
+
+	public static final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig) {
+		return eval(expr, jrd, jConfig, jConfig.getJasperDesign());
+	}
+
+	public static final Object eval(JRExpression expr, JRDataset jrd, JasperReportsConfiguration jConfig, JasperDesign jd) {
+		ExpressionInterpreter ei = new ExpressionInterpreter((JRDesignDataset) jrd, jd, jConfig);
 		return ei.interpretExpression(expr.getText());
 	}
 }

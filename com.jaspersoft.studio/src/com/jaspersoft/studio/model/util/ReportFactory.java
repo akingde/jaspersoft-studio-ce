@@ -104,6 +104,8 @@ import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.model.variable.MVariableSystem;
 import com.jaspersoft.studio.model.variable.MVariables;
 import com.jaspersoft.studio.plugin.ExtensionManager;
+import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * A factory for creating Report objects.
@@ -119,16 +121,16 @@ public class ReportFactory {
 	 *          the jd
 	 * @return the i node
 	 */
-	public static INode createReport(JasperDesign jd, IFile file) {
-
+	public static INode createReport(JasperReportsConfiguration jConfig) {
+		JasperDesign jd = jConfig.getJasperDesign();
 		ANode node = new MRoot(null, jd);
-		ANode report = new MReport(node, jd);
+		ANode report = new MReport(node, jConfig);
 		// create first level
 		// create Styles
 		ANode nStyle = new MStyles(report);
 		if (jd.getTemplates() != null) {
 			for (Iterator<JRReportTemplate> it = jd.getTemplatesList().iterator(); it.hasNext();) {
-				createNode(nStyle, it.next(), -1, file);
+				createNode(nStyle, it.next(), -1, (IFile) jConfig.get(IEditorContributor.KEY_FILE));
 			}
 		}
 		if (jd.getStyles() != null) {

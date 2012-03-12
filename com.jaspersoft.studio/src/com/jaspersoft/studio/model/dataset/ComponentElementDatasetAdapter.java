@@ -29,6 +29,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.IncrementTypeEnum;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 
 /**
  * Adapter for a dataset instance used in a generic component element.
@@ -46,11 +48,11 @@ public class ComponentElementDatasetAdapter implements IEditableDataset{
 	private JRDesignElementDataset componentElementDataset;
 	
 	/* The JasperDesign object for the component element*/
-	private JasperDesign jasperDesign;
+	private JasperReportsConfiguration jConfig;
 	
-	public ComponentElementDatasetAdapter(JRDesignElementDataset widgetDataset, JasperDesign jasperDesign){
+	public ComponentElementDatasetAdapter(JRDesignElementDataset widgetDataset, JasperReportsConfiguration jasperDesign){
 		this.componentElementDataset=widgetDataset;
-		this.jasperDesign=jasperDesign;
+		this.jConfig=jasperDesign;
 	}
 
 	public void setDatasetRun(JRDatasetRun newDatasetRun) {
@@ -82,6 +84,6 @@ public class ComponentElementDatasetAdapter implements IEditableDataset{
 	}
 
 	public JasperDesign getJasperDesign() {
-		return jasperDesign;
+		return jConfig.getJasperDesign();
 	}
 }

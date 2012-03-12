@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -66,6 +67,7 @@ import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationProp
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class MReport.
@@ -73,7 +75,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * @author Chicu Veaceslav
  */
 public class MReport extends APropertyNode implements IGraphicElement, IContainerEditPart {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private Map<Object, ANode> obj2Node = new HashMap<Object, ANode>();
 
 	public void register(ANode n) {
@@ -112,9 +114,10 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	 * @param jd
 	 *          the jd
 	 */
-	public MReport(ANode parent, JasperDesign jd) {
+	public MReport(ANode parent, JasperReportsConfiguration jConfig) {
 		super(parent, -1);
-		setValue(jd);
+		setJasperConfiguration(jConfig);
+		setValue(jConfig.getJasperDesign());
 	}
 
 	/*

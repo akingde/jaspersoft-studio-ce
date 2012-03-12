@@ -17,16 +17,10 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.publish;
-
-import java.util.List;
+package com.jaspersoft.studio.server.publish.wizard;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeViewerListener;
@@ -51,41 +45,43 @@ import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.model.INode;
-import com.jaspersoft.studio.model.MRoot;
-import com.jaspersoft.studio.model.util.ModelVisitor;
 import com.jaspersoft.studio.outline.ReportTreeContetProvider;
 import com.jaspersoft.studio.outline.ReportTreeLabelProvider;
-import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.ServerProvider;
-import com.jaspersoft.studio.server.WSClientHelper;
-import com.jaspersoft.studio.server.export.JrxmlExporter;
-import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.server.model.server.ServerProfile;
 
-public class ServerLocationPage extends WizardPage {
+public class RUnitLocationPage extends WizardPage {
 	private JasperDesign jDesign;
 	private TreeViewer treeViewer;
 	private Button bnRunit;
 	private Text ruName;
 	private MReportUnit reportUnit;
+	private ANode n;
 
-	public ServerLocationPage(JasperDesign jDesign) {
+	public RUnitLocationPage(JasperDesign jDesign, ANode n) {
 		super("serverpublish"); //$NON-NLS-1$
 		setTitle("Publish To JasperServer");
 		setDescription("Select Jasper Reports Server and location where report will be published");
 		this.jDesign = jDesign;
+		this.n = n;
 	}
 
 	public MReportUnit getReportUnit() {
-		if (reportUnit.getValue().getName().isEmpty()) {
-			reportUnit.getValue().setName(jDesign.getName());
-			reportUnit.getValue().setLabel(jDesign.getName());
+		if (reportUnit != null) {
+			ResourceDescriptor runitvalue = reportUnit.getValue();
+			if (runitvalue.getName() == null || runitvalue.getName().isEmpty()) {
+				runitvalue.setName(jDesign.getName());
+				runitvalue.setLabel(jDesign.getName());
+			}
 		}
 		return reportUnit;
+	}
+
+	@Override
+	public boolean canFlipToNextPage() {
+		return super.canFlipToNextPage()
+				&& (getReportUnit() instanceof MReportUnit);
 	}
 
 	public void createControl(Composite parent) {
@@ -164,60 +160,8 @@ public class ServerLocationPage extends WizardPage {
 	}
 
 	private void fillInput() {
-		Job job = new Job("Find Report Unit") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					final MRoot root = new MRoot(null, null);
-					ANode sp = null;
-					List<ServerProfile> servers = ServerManager.getServerList();
-					for (ServerProfile s : servers) {
-						sp = new MServerProfile(root, s);
-						new MDummy(sp);
-						try {
-							WSClientHelper
-									.connect((MServerProfile) sp, monitor);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-					Display.getDefault().syncExec(new Runnable() {
-
-						public void run() {
-							treeViewer.setInput(root);
-						}
-					});
-
-					final String prop = jDesign
-							.getProperty(JrxmlExporter.PROP_SERVERURL);
-					if (prop != null) {
-						final MServerProfile mserv = (MServerProfile) new ModelVisitor(
-								root) {
-
-							@Override
-							public boolean visit(INode n) {
-								if (n instanceof MServerProfile
-										&& ((MServerProfile) n).getValue()
-												.getUrl().equals(prop)) {
-									setObject(n);
-									return false;
-								}
-								return false;
-							}
-						}.getObject();
-
-						sp = findReportUnit(mserv, monitor);
-					}
-					setSelection(sp);
-					return Status.OK_STATUS;
-				} finally {
-					monitor.done();
-				}
-			}
-
-		};
-		job.setPriority(Job.LONG);
-		job.schedule();
+		treeViewer.setInput(n.getRoot());
+		setSelection(n);
 	}
 
 	private MReportUnit newrunit;
@@ -239,6 +183,7 @@ public class ServerLocationPage extends WizardPage {
 		ruName.setEnabled(bnRunit.getSelection() && isFolder);
 
 		reportUnit = getNewRunit();
+		setPageComplete(true);
 		if (obj instanceof MReportUnit)
 			reportUnit = (MReportUnit) obj;
 		else if (obj instanceof MFolder) {
@@ -250,6 +195,8 @@ public class ServerLocationPage extends WizardPage {
 			String uri = ((MFolder) obj).getValue().getUriString();
 			nrd.setParentFolder(uri);
 			nrd.setUriString(uri + "/" + id);
+		} else {
+			setPageComplete(false);
 		}
 	}
 
@@ -270,23 +217,4 @@ public class ServerLocationPage extends WizardPage {
 		});
 	}
 
-	protected ANode findReportUnit(ANode sp, IProgressMonitor monitor) {
-		try {
-			MServerProfile mserv = (MServerProfile) sp;
-			WSClientHelper.connect(mserv, monitor);
-			if (sp != null && sp instanceof MServerProfile) {
-				String prunit = jDesign
-						.getProperty(JrxmlExporter.PROP_REPORTUNIT);
-				if (prunit != null) {
-					WSClientHelper.connectGetData(mserv, monitor);
-					sp = WSClientHelper.findSelected(mserv.getChildren(),
-							monitor, prunit, mserv.getWsClient());
-				}
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return sp;
-	}
 }

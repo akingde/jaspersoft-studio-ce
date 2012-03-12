@@ -36,17 +36,18 @@ import net.sf.jasperreports.engine.query.JRXlsQueryExecuter;
 import net.sf.jasperreports.engine.query.JRXlsQueryExecuterFactory;
 
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.utils.parameter.ParameterUtil;
 
 public class XLSFieldsProvider implements IFieldsProvider {
 
 	public List<JRDesignField> getFields(DataAdapterService con,
-			JRDataset reportDataset) throws JRException,
-			UnsupportedOperationException {
+			JasperReportsConfiguration jConfig, JRDataset reportDataset)
+			throws JRException, UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("REPORT_PARAMETERS_MAP", new HashMap<String, Object>());
 		con.contributeParameters(parameters);
-		ParameterUtil.setParameters(reportDataset, parameters);
+		ParameterUtil.setParameters(jConfig, reportDataset, parameters);
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 2);
 
 		JRXlsDataSource ds = null;

@@ -19,24 +19,16 @@
  */
 package com.jaspersoft.studio.server.publish;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JRReportTemplate;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignImage;
-import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -49,25 +41,28 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.plugin.AContributorAction;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.server.Activator;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.model.AFileResource;
+import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
-import com.jaspersoft.studio.server.wizard.resource.page.SelectorJrxml;
-import com.jaspersoft.studio.utils.FileUtils;
+import com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
 
-public class JrxmlImport extends AContributorAction {
+public class JrxmlPublishAction extends AContributorAction {
 	private static final String ID = "PUBLISHJRXML";
+	public static final String KEY_PUBLISH2JSSWIZARD_SILENT = "PUBLISH2JSSWIZARD_SILENT";
+	public static final String KEY_PUBLISH2JSS_DATA = "PUBLISH2JSS_DATA";
+	private MReportUnit mrunit;
 
-	public JrxmlImport() {
+	public JrxmlPublishAction() {
 		super(ID, "Publish Report to JasperServer");
 		setToolTipText("Publish Report to JasperServer");
 		ImageDescriptor icon16 = Activator
@@ -79,37 +74,58 @@ public class JrxmlImport extends AContributorAction {
 	@Override
 	public void run() {
 		try {
-			Shell shell = Display.getDefault().getActiveShell();
-			final JasperDesign jd = getJasperDesign();
-			Publish2ServerWizard wizard = new Publish2ServerWizard(jd);
-			WizardDialog dialog = new WizardDialog(shell, wizard);
-			dialog.create();
-			if (dialog.open() == Dialog.OK) {
-				final MReportUnit mrunit = wizard.getReportUnit();
-				SelectorJrxml.replaceMainReport(mrunit, getMainReport(jd));
-				final IFile file = (IFile) jrConfig
-						.get(IEditorContributor.KEY_FILE);
-				mrunit.setFile(file.getRawLocation().toFile());
-				Job job = new Job("Publish Report Unit") {
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							publish(mrunit, monitor, file, jd);
-						} catch (Exception e) {
-							UIUtils.showError(e);
-						} finally {
-							monitor.done();
-						}
-						return Status.OK_STATUS;
-					}
-
-				};
-				job.setPriority(Job.LONG);
-				job.schedule();
-			}
-		} catch (JRException e) {
+			new FindReportUnit().find(this, getJasperDesign());
+		} catch (Exception e) {
 			UIUtils.showError(e);
 		}
+	}
+
+	public void publishReportUnit(final ANode node, final JasperDesign jd) {
+		boolean silent = jrConfig.get(KEY_PUBLISH2JSSWIZARD_SILENT, false);
+		if (node == null || !(node instanceof MReportUnit)) {
+			if (!createDialog(node, jd, 1))
+				return;
+		} else {
+			mrunit = (MReportUnit) node;
+			if (silent) {
+				new FindResources().find(mrunit, jrConfig, jd);
+			} else if (!createDialog(node, jd, 2))
+				return;
+		}
+		Job job = new Job("Publish Report Unit") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					publishResources(monitor, jd, node);
+					if (monitor.isCanceled())
+						return Status.CANCEL_STATUS;
+					postProcessLocal();
+					// clean
+					jrConfig.remove(KEY_PUBLISH2JSS_DATA);
+					// end;
+				} catch (Exception e) {
+					UIUtils.showError(e);
+				} finally {
+					monitor.done();
+				}
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.setPriority(Job.LONG);
+		job.schedule();
+	}
+
+	private boolean createDialog(ANode n, JasperDesign jd, int page) {
+		Shell shell = Display.getDefault().getActiveShell();
+		Publish2ServerWizard wizard = new Publish2ServerWizard(n, jd, jrConfig,
+				page);
+		WizardDialog dialog = new WizardDialog(shell, wizard);
+		dialog.create();
+		if (dialog.open() != Dialog.OK)
+			return false;
+		mrunit = wizard.getReportUnit();
+		return true;
 	}
 
 	protected JasperDesign getJasperDesign() throws JRException {
@@ -130,73 +146,70 @@ public class JrxmlImport extends AContributorAction {
 
 	protected void publish(final MReportUnit mrunit, IProgressMonitor monitor,
 			IFile file, JasperDesign jd) throws Exception {
-		String version = JRXmlWriterHelper.LAST_VERSION;
+
 		mrunit.setValue(WSClientHelper.saveResource(mrunit, monitor, false));
 		INode n = mrunit.getRoot();
 		if (n != null && n instanceof MServerProfile) {
 			MServerProfile server = (MServerProfile) n;
 			ServerProfile srvrd = server.getValue();
+			String version = JRXmlWriterHelper.LAST_VERSION;
 			version = srvrd.getJrVersion();
 
 			Set<String> fileset = new HashSet<String>();
-			publishJrxml(mrunit, monitor, jd, fileset, file, version);
 
-			saveJRXML(monitor, mrunit, jd, version);
+			JrxmlPublishContributor jpc = new JrxmlPublishContributor();
+			jpc.publishJrxml(mrunit, monitor, jd, fileset, file, version,
+					jrConfig);
+			// jpc.saveJRXML(monitor, mrunit, jd, version);
 
 			for (JRParameter p : jd.getParametersList()) {
 				ImpInputControls.publish(mrunit, monitor, p);
 			}
-
-			ResourceDescriptor runit = mrunit.getValue();
-
-			JasperDesign rpt = jrConfig.getJasperDesign();
-			rpt.setProperty(JrxmlExporter.PROP_SERVERURL, srvrd.getUrl());
-			rpt.setProperty(JrxmlExporter.PROP_REPORTUNIT, runit.getUriString());
 		}
 	}
 
-	public void publishJrxml(MReportUnit mrunit, IProgressMonitor monitor,
-			JasperDesign jasper, Set<String> fileset, IFile file, String version)
-			throws Exception {
-		List<JRDesignElement> elements = ModelUtils.getAllElements(jasper);
-		for (JRDesignElement ele : elements) {
-			if (ele instanceof JRDesignImage)
-				img.publish(jasper, ele, mrunit, monitor, fileset, file);
-			else if (ele instanceof JRDesignSubreport) {
-				AFileResource fres = srp.publish(jasper, ele, mrunit, monitor,
-						fileset, file);
-				if (fres == null)
-					continue;
-				JasperDesign jrd = JRXmlLoader.load(fres.getFile());
-				if (jrd != null) {
-					IFile[] fs = root.findFilesForLocationURI(fres.getFile()
-							.toURI());
-					if (fs != null && fs.length > 0) {
-						publishJrxml(mrunit, monitor, jrd, fileset, fs[0],
-								version);
-						saveJRXML(monitor, fres, jrd, version);
-					}
-				}
+	protected IStatus publishResources(IProgressMonitor monitor,
+			JasperDesign jd, ANode parent) throws Exception {
+
+		if (mrunit == null || !(mrunit instanceof MReportUnit)) {
+			mrunit = new MReportUnit(parent,
+					MReportUnit.createDescriptor(parent), -1);
+			mrunit.setValue(WSClientHelper.saveResource(mrunit, monitor, false));
+
+			MJrxml jrxml = new MJrxml(mrunit, getMainReport(jd), -1);
+			WSClientHelper.saveResource(jrxml, monitor, false);
+		}
+
+		List<AFileResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA,
+				new ArrayList<AFileResource>());
+		for (AFileResource f : files) {
+			try {
+				WSClientHelper.saveResource(f, monitor, false);
+			} catch (Exception e) {
+				f.getValue().setIsNew(false);
+				WSClientHelper.saveResource(f, monitor, false);
+			}
+			if (monitor.isCanceled())
+				return Status.CANCEL_STATUS;
+		}
+		return Status.OK_STATUS;
+	}
+
+	protected void postProcessLocal() {
+		JasperDesign rpt = jrConfig.getJasperDesign();
+		if (mrunit != null) {
+			ResourceDescriptor runit = mrunit.getValue();
+			rpt.setProperty(JrxmlExporter.PROP_REPORTUNIT, runit.getUriString());
+
+			INode n = mrunit.getRoot();
+			if (n != null && n instanceof MServerProfile) {
+				MServerProfile server = (MServerProfile) n;
+				ServerProfile srvrd = server.getValue();
+				rpt.setProperty(JrxmlExporter.PROP_SERVERURL, srvrd.getUrl());
+
 			}
 		}
-		for (JRReportTemplate rt : jasper.getTemplatesList()) {
-			style.publish(jasper, rt, mrunit, monitor, fileset, file);
-		}
-		// here extend and give possibility to contribute to plugins
-		Activator.getExtManager().publishJrxml(mrunit, monitor, jasper,
-				fileset, file);
+
 	}
 
-	protected void saveJRXML(IProgressMonitor monitor, AFileResource fres,
-			JasperDesign jrd, String version) throws IOException, Exception {
-		File f = FileUtils.createTempFile("jrsres", ".jrxml");
-		FileUtils.writeFile(f, JRXmlWriterHelper.writeReport(jrd, version));
-		fres.setFile(f);
-		WSClientHelper.saveResource(fres, monitor, false);
-	}
-
-	private IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-	private ImpStyleTemplate style = new ImpStyleTemplate();
-	private ImpImage img = new ImpImage();
-	private ImpSubreport srp = new ImpSubreport();
 }

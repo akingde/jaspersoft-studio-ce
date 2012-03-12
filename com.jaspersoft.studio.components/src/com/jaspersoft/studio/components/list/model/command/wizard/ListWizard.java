@@ -20,7 +20,6 @@
 package com.jaspersoft.studio.components.list.model.command.wizard;
 
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -30,6 +29,7 @@ import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ListWizard extends Wizard {
 	private WizardDatasetPage step1;
@@ -45,15 +45,15 @@ public class ListWizard extends Wizard {
 	public void addPages() {
 
 		this.list = new MList();
-		list.setValue(list.createJRElement(jasperDesign));
+		list.setValue(list.createJRElement(jConfig.getJasperDesign()));
 
 		MDatasetRun mdatasetrun = (MDatasetRun) list
 				.getPropertyValue(MList.PREFIX + "DATASET_RUN");//$NON-NLS-1$
 		if (mdatasetrun == null)
 			mdatasetrun = new MDatasetRun(new JRDesignDatasetRun(),
-					jasperDesign);
+					jConfig.getJasperDesign());
 
-		step1 = new WizardDatasetPage(jasperDesign, false);
+		step1 = new WizardDatasetPage(jConfig, false);
 		addPage(step1);
 		step1.setDataSetRun(mdatasetrun);
 
@@ -80,10 +80,10 @@ public class ListWizard extends Wizard {
 		return true;
 	}
 
-	private JasperDesign jasperDesign;
+	private JasperReportsConfiguration jConfig;
 
-	public void init(JasperDesign jd) {
-		this.jasperDesign = jd;
+	public void init(JasperReportsConfiguration jConfig) {
+		this.jConfig = jConfig;
 	}
 
 }

@@ -31,6 +31,7 @@ import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -70,6 +71,7 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class XLSXDataAdapterComposite extends ADataAdapterComposite {
 
@@ -133,8 +135,7 @@ public class XLSXDataAdapterComposite extends ADataAdapterComposite {
 		btnCheckQEMode = new Button(this, SWT.CHECK);
 		btnCheckQEMode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		btnCheckQEMode
-				.setText(Messages.XLSXDataAdapterComposite_2);
+		btnCheckQEMode.setText(Messages.XLSXDataAdapterComposite_2);
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayout(new FillLayout(SWT.VERTICAL));
@@ -149,8 +150,7 @@ public class XLSXDataAdapterComposite extends ADataAdapterComposite {
 		Button btnGetExcelColumnsName = new Button(grpColumnNames, SWT.NONE);
 		btnGetExcelColumnsName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
-		btnGetExcelColumnsName
-				.setText(Messages.XLSXDataAdapterComposite_4);
+		btnGetExcelColumnsName.setText(Messages.XLSXDataAdapterComposite_4);
 
 		Composite composite_3 = new Composite(grpColumnNames, SWT.NONE);
 		GridLayout gl_composite_3 = new GridLayout(2, false);
@@ -263,8 +263,7 @@ public class XLSXDataAdapterComposite extends ADataAdapterComposite {
 		btnCheckSkipFirstLine = new Button(grpOther, SWT.CHECK);
 		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
 				false, false, 3, 1));
-		btnCheckSkipFirstLine
-				.setText(Messages.XLSXDataAdapterComposite_14);
+		btnCheckSkipFirstLine.setText(Messages.XLSXDataAdapterComposite_14);
 
 		/*
 		 * UI ELEMENTS LISTENERS
@@ -688,8 +687,10 @@ public class XLSXDataAdapterComposite extends ADataAdapterComposite {
 			DataAdapterDescriptor da = getDataAdapter();
 			DataAdapterService das = DataAdapterServiceUtil
 					.getDataAdapterService(da.getDataAdapter());
+			JasperReportsConfiguration jConfig = new JasperReportsConfiguration();
+			jConfig.setJasperDesign(new JasperDesign());
 			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das,
-					new JRDesignDataset(false));
+					jConfig, new JRDesignDataset(false));
 			rows.clear();
 			int columnIndex = 0;
 			for (JRDesignField f : fields) {

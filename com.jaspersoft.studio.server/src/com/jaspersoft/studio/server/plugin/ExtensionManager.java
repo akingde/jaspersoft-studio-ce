@@ -37,6 +37,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.model.MResource;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ExtensionManager {
 	private List<IResourceFactory> resources = new ArrayList<IResourceFactory>();
@@ -71,10 +72,12 @@ public class ExtensionManager {
 	}
 
 	public void publishJrxml(MReportUnit mrunit, IProgressMonitor monitor,
-			JasperDesign jasper, Set<String> fileset, IFile file)
+			JasperDesign jasper, Set<String> fileset, IFile file,
+			String version, JasperReportsConfiguration jrConfig)
 			throws Exception {
 		for (IPublishContributor r : publisher)
-			r.publishJrxml(mrunit, monitor, jasper, fileset, file);
+			r.publishJrxml(mrunit, monitor, jasper, fileset, file, version,
+					jrConfig);
 	}
 
 	public MResource getResource(ANode parent, ResourceDescriptor resource,

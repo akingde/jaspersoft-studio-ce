@@ -45,10 +45,18 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.JavaRuntime;
 
 import bsh.EvalError;
 import bsh.Interpreter;
+
+import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * 
@@ -62,20 +70,32 @@ public class ExpressionInterpreter {
 
 	private boolean convertNullParams = false;
 
-	public ExpressionInterpreter(JRDesignDataset dataset, ClassLoader classLoader) {
-		this(dataset, classLoader, null, null);
+	public ExpressionInterpreter(JRDesignDataset dataset, JasperReportsConfiguration jConfig) {
+		this(dataset, null, jConfig);
 	}
 
-	public ExpressionInterpreter(JRDesignDataset dataset, ClassLoader classLoader, JasperDesign jasperDesign,
-			IJavaProject javaProject) {
+	public ExpressionInterpreter(JRDesignDataset dataset, JasperDesign jasperDesign, JasperReportsConfiguration jConfig) {
 		try {
 			this.dataset = dataset;
 			this.jasperDesign = jasperDesign;
-			this.javaProject = javaProject;
-			// if (jasperDesign == null && IReportManager.getInstance().getActiveReport() != null)
-			// {
-			// jasperDesign = IReportManager.getInstance().getActiveReport();
-			// }
+			try {
+				IFile file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+				if (file != null) {
+					IProject project = file.getProject();
+					if (project.getNature(JavaCore.NATURE_ID) != null)
+						this.javaProject = JavaCore.create(project);
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+
+			ClassLoader classLoader = jConfig.getClassLoader();
+			if (classLoader == null) {
+				if (jasperDesign != null)
+					classLoader = jasperDesign.getClass().getClassLoader();
+				else
+					classLoader = Thread.currentThread().getContextClassLoader();
+			}
 			prepareExpressionEvaluator(classLoader);
 		} catch (EvalError ex) {
 			ex.printStackTrace();
@@ -183,6 +203,16 @@ public class ExpressionInterpreter {
 		// Staring patch from rp4
 
 		interpreter.eval("String tmp;");
+		try {
+			String[] cpaths = JavaRuntime.computeDefaultRuntimeClassPath(javaProject);
+			for (String p : cpaths) {
+				interpreter.set("tmp", p);
+				interpreter.eval("addClassPath(tmp);");
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+
 		// if (javaProject != null) {
 		// IClasspathEntry[] cpaths = javaProject.getJavaProject().getRawClasspath();
 		// for (IClasspathEntry c : cpaths) {

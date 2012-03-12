@@ -32,7 +32,6 @@ import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRTemplateReference;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
-import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.xml.JRXmlTemplateLoader;
 
@@ -49,6 +48,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class StyleTemplateFactory {
 
@@ -66,7 +66,7 @@ public class StyleTemplateFactory {
 
 	public static ANode createTemplate(ANode parent, JRDesignReportTemplate jrObject, int newIndex, IFile file) {
 		MStyleTemplate mStyleTemplate = new MStyleTemplate(parent, (JRDesignReportTemplate) jrObject, newIndex);
-		String str = ExpressionUtil.eval(jrObject.getSourceExpression(), parent.getJasperDesign());
+		String str = ExpressionUtil.eval(jrObject.getSourceExpression(), parent.getJasperConfiguration());
 		if (str != null) {
 			Set<String> set = new HashSet<String>();
 			if (file == null) {
@@ -139,7 +139,7 @@ public class StyleTemplateFactory {
 				JRDesignReportTemplate s = (JRDesignReportTemplate) obj;
 				if (s.getSourceExpression() != null)
 					SelectionHelper.openEditor((FileEditorInput) editorInput,
-							ExpressionUtil.eval(s.getSourceExpression(), node.getJasperDesign()));
+							ExpressionUtil.eval(s.getSourceExpression(), node.getJasperConfiguration()));
 			}
 			return;
 		}
@@ -148,7 +148,7 @@ public class StyleTemplateFactory {
 	private static IFile getFile(ANode node, IFile refFile) {
 		List<Object> plist = new ArrayList<Object>();
 		ANode p = (ANode) node;
-		JasperDesign jd = node.getJasperDesign();
+		JasperReportsConfiguration jConfig = node.getJasperConfiguration();
 		plist.add(p.getValue());
 		while (!(p.getParent() instanceof MStyles)) {
 			p = (ANode) p.getParent();
@@ -158,12 +158,13 @@ public class StyleTemplateFactory {
 		MStyleTemplate mst = (MStyleTemplate) p;
 		JRDesignReportTemplate drt = (JRDesignReportTemplate) mst.getValue();
 
-		return resolveTemplates(refFile, plist, jd, drt);
+		return resolveTemplates(refFile, plist, jConfig, drt);
 	}
 
-	protected static IFile resolveTemplates(IFile refFile, List<Object> plist, JasperDesign jd, JRDesignReportTemplate drt) {
+	protected static IFile resolveTemplates(IFile refFile, List<Object> plist, JasperReportsConfiguration jConfig,
+			JRDesignReportTemplate drt) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		String str = ExpressionUtil.eval(drt.getSourceExpression(), jd);
+		String str = ExpressionUtil.eval(drt.getSourceExpression(), jConfig);
 		if (str != null) {
 			if (refFile == null)
 				refFile = ((IFileEditorInput) SelectionHelper.getActiveJRXMLEditor().getEditorInput()).getFile();
@@ -171,7 +172,7 @@ public class StyleTemplateFactory {
 			for (int i = plist.size() - 1; i >= 0; i--) {
 				Object obj = plist.get(i);
 				if (obj instanceof JRDesignReportTemplate) {
-					str = ExpressionUtil.eval(((JRDesignReportTemplate) obj).getSourceExpression(), jd);
+					str = ExpressionUtil.eval(((JRDesignReportTemplate) obj).getSourceExpression(), jConfig);
 				} else if (obj instanceof JRTemplateReference) {
 					str = ((JRTemplateReference) obj).getLocation();
 				}

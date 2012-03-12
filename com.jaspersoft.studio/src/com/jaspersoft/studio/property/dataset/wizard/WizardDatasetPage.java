@@ -41,7 +41,6 @@ package com.jaspersoft.studio.property.dataset.wizard;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -63,6 +62,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class WizardDatasetPage extends WizardPage {
 	private final class DatasetListListener implements Listener {
@@ -75,7 +75,7 @@ public class WizardDatasetPage extends WizardPage {
 		}
 	}
 
-	private JasperDesign jasperDesign;
+	private JasperReportsConfiguration jConfig;
 	private boolean all = true;
 	private MDatasetRun datasetrun;
 	private List datasets;
@@ -92,16 +92,16 @@ public class WizardDatasetPage extends WizardPage {
 		return datasetrun;
 	}
 
-	public WizardDatasetPage(JasperDesign jasperDesign) {
-		this(jasperDesign, true);
+	public WizardDatasetPage(JasperReportsConfiguration jConfig) {
+		this(jConfig, true);
 	}
 
-	public WizardDatasetPage(JasperDesign jasperDesign, boolean all) {
+	public WizardDatasetPage(JasperReportsConfiguration jConfig, boolean all) {
 		super("datasetpage"); //$NON-NLS-1$
 		setTitle(Messages.common_dataset);
 		setImageDescriptor(MDataset.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDatasetPage_description);
-		this.jasperDesign = jasperDesign;
+		this.jConfig = jConfig;
 		this.all = all;
 	}
 
@@ -112,7 +112,7 @@ public class WizardDatasetPage extends WizardPage {
 		composite.setLayout(layout);
 		setControl(composite);
 
-		String[] dsNames = ModelUtils.getDataSets(jasperDesign, all);
+		String[] dsNames = ModelUtils.getDataSets(jConfig.getJasperDesign(), all);
 
 		datasets = new List(composite, SWT.BORDER | SWT.READ_ONLY);
 		datasets.setItems(dsNames);
@@ -143,7 +143,7 @@ public class WizardDatasetPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				DatasetWizard wizard = new DatasetWizard();
 				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-				wizard.init(jasperDesign);
+				wizard.init(jConfig);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
 					String ds = (String) wizard.getDataset().getPropertyValue(JRDesignDataset.PROPERTY_NAME);
@@ -151,7 +151,7 @@ public class WizardDatasetPage extends WizardPage {
 					datasets.select(datasets.getItemCount() - 1);
 
 					try {
-						jasperDesign.addDataset((JRDesignDataset) wizard.getDataset().getValue());
+						jConfig.getJasperDesign().addDataset((JRDesignDataset) wizard.getDataset().getValue());
 						datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME, ds);
 					} catch (JRException e1) {
 						e1.printStackTrace();

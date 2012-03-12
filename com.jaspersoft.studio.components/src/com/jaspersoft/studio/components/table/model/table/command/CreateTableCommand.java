@@ -117,7 +117,7 @@ public class CreateTableCommand extends CreateElementCommand {
 			TableWizard wizard = new TableWizard();
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
-			wizard.init(jasperDesign);
+			wizard.init(jConfig);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getTable();
@@ -144,8 +144,7 @@ public class CreateTableCommand extends CreateElementCommand {
 				JRDesignDataset jrDataset = new JRDesignDataset(false);
 				jrDataset.setName(ModelUtils.getDefaultName(
 						jasperDesign.getDatasetMap(), "Empty Dataset"));
-				datasetCommand = new CreateDatasetCommand(jasperDesign,
-						jrDataset);
+				datasetCommand = new CreateDatasetCommand(jConfig, jrDataset);
 				datasetCommand.execute();
 				((JRDesignDatasetRun) jrTable.getDatasetRun())
 						.setDatasetName(jrDataset.getName());

@@ -66,6 +66,7 @@ import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
@@ -73,6 +74,7 @@ import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.report.ReportGenerator;
 
 public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWizard {
@@ -117,15 +119,21 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		addPage(step4);
 	}
 
+	private JasperReportsConfiguration jConfig;
+
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == step0)
 			step1.validatePage();
 		if (page == step2) {
 			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
-			step2.setFile(
-					r.getProject().getFile(step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName()),
-					getJasperDesign());
+
+			IFile file = r.getProject().getFile(
+					step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName());
+			jConfig.put(IEditorContributor.KEY_FILE, file);
+			jConfig.setJasperDesign(getJasperDesign());
+
+			step2.setFile(jConfig);
 		}
 		if (page == step3) {
 			try {
@@ -305,7 +313,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 				for (JRDesignElement el : list) {
 					if (el instanceof JRImage) {
 						JRImage im = (JRImage) el;
-						String str = ExpressionUtil.eval(im.getExpression(), jd);
+						String str = ExpressionUtil.eval(im.getExpression(), jConfig);
 						if (str != null) {// resolv image
 							Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle()
 									.findEntries(Messages.ReportNewWizard_7, str, true);

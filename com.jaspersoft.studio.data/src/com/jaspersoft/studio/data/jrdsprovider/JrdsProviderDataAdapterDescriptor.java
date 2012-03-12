@@ -35,6 +35,7 @@ import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 		implements IFieldsProvider {
@@ -63,10 +64,10 @@ public class JrdsProviderDataAdapterDescriptor extends DataAdapterDescriptor
 	private IFieldsProvider fprovider;
 
 	public List<JRDesignField> getFields(DataAdapterService con,
-			JRDataset reportDataset) throws JRException,
-			UnsupportedOperationException {
+			JasperReportsConfiguration jConfig, JRDataset jDataset)
+			throws JRException, UnsupportedOperationException {
 		getFieldProvider();
-		return fprovider.getFields(con, reportDataset);
+		return fprovider.getFields(con, jConfig, jDataset);
 	}
 
 	public boolean supportsGetFieldsOperation() {

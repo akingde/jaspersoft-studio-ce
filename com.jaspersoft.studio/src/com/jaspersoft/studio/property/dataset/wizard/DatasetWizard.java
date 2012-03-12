@@ -30,7 +30,6 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -40,6 +39,7 @@ import org.eclipse.ui.IFileEditorInput;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DatasetWizard extends Wizard {
 	private MDataset dataset;
@@ -56,15 +56,15 @@ public class DatasetWizard extends Wizard {
 	@Override
 	public void addPages() {
 		this.dataset = new MDataset();
-		dataset.setValue(MDataset.createJRDataset(jasperDesign));
+		dataset.setValue(MDataset.createJRDataset(jConfig.getJasperDesign()));
 
-		step1 = new WizardDatasetNewPage(jasperDesign);
+		step1 = new WizardDatasetNewPage(jConfig.getJasperDesign());
 		addPage(step1);
 		step1.setDataSet(dataset);
 
 		IFile file = getCurrentFile();
 
-		step2 = new WizardDataSourcePage(file, jasperDesign);
+		step2 = new WizardDataSourcePage(file, jConfig);
 		addPage(step2);
 
 		step3 = new WizardFieldsPage();
@@ -84,7 +84,7 @@ public class DatasetWizard extends Wizard {
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == step3) {
 			try {
-				if(step3.getFields() == null || step3.getFields().isEmpty())
+				if (step3.getFields() == null || step3.getFields().isEmpty())
 					step2.getFields();
 				JRDesignDataset dataset = step2.getDataset();
 				if (dataset != null && dataset.getFieldsList() != null) {
@@ -151,9 +151,9 @@ public class DatasetWizard extends Wizard {
 		return true;
 	}
 
-	private JasperDesign jasperDesign;
+	private JasperReportsConfiguration jConfig;
 
-	public void init(JasperDesign jd) {
-		this.jasperDesign = jd;
+	public void init(JasperReportsConfiguration jConfig) {
+		this.jConfig = jConfig;
 	}
 }

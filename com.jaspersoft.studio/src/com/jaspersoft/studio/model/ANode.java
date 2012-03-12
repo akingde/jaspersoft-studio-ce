@@ -43,6 +43,7 @@ import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class ANode.
@@ -414,6 +415,18 @@ public abstract class ANode implements INode, Serializable {
 		if (getRoot().getValue() instanceof JasperDesign)
 			return (JasperDesign) getRoot().getValue();
 		return null;
+	}
+
+	private JasperReportsConfiguration jConfig;
+
+	public void setJasperConfiguration(JasperReportsConfiguration jConfig) {
+		this.jConfig = jConfig;
+	}
+
+	public JasperReportsConfiguration getJasperConfiguration() {
+		if (jConfig != null)
+			return jConfig;
+		return parent.getJasperConfiguration();
 	}
 
 	public int findElement(Object obj) {
