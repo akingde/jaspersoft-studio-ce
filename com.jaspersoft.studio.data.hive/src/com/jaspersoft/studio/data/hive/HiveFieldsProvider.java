@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import com.jaspersoft.hadoop.hive.connection.HiveConnection;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
@@ -26,13 +27,18 @@ public class HiveFieldsProvider implements IFieldsProvider {
 	}
 
 	@Override
-	public List<JRDesignField> getFields(DataAdapterService dataAdapterService, JRDataset reportDataset)
-			throws JRException, UnsupportedOperationException {
+	public List<JRDesignField> getFields(DataAdapterService dataAdapterService,
+			JasperDesign jDesign, JRDataset reportDataset) throws JRException,
+			UnsupportedOperationException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
 		dataAdapterService.contributeParameters(parameters);
-		JRField[] fields = com.jaspersoft.hadoop.hive.HiveFieldsProvider.getInstance().getFields(
-				(HiveConnection) parameters.get(JRParameter.REPORT_CONNECTION), reportDataset, parameters);
+		JRField[] fields = com.jaspersoft.hadoop.hive.HiveFieldsProvider
+				.getInstance()
+				.getFields(
+						(HiveConnection) parameters
+								.get(JRParameter.REPORT_CONNECTION),
+						reportDataset, parameters);
 		List<JRDesignField> designFields = new ArrayList<JRDesignField>();
 		for (int index = 0; index < fields.length; index++) {
 			designFields.add((JRDesignField) fields[index]);

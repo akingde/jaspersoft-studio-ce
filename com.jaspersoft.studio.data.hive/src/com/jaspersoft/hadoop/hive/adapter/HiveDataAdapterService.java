@@ -49,6 +49,15 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
 		if (connectionManager == null) {
 			System.out.println("Starting Hive Connection Manager");
 			connectionManager = new HiveConnectionManager();
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				@Override
+				public void run() {
+					System.out.println("Stopping Hive Connection Manager");
+					if (connectionManager != null)
+						connectionManager.shutdown();
+					super.run();
+				}
+			});
 		}
 		return connectionManager;
 	}

@@ -26,6 +26,7 @@ import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -38,9 +39,10 @@ import com.jaspersoft.studio.data.fields.IFieldsProvider;
  * 
  * @author gtoffoli
  * @author Eric Diaz
- *
+ * 
  */
-public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements IFieldsProvider {
+public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements
+		IFieldsProvider {
 	private HiveDataAdapter dataAdapter = new HiveDataAdapterImplementation();
 
 	private IFieldsProvider fieldsProvider;
@@ -68,10 +70,11 @@ public class HiveDataAdapterDescriptor extends DataAdapterDescriptor implements 
 		return null;
 	}
 
-	public List<JRDesignField> getFields(DataAdapterService con, JRDataset reportDataset) throws JRException,
+	public List<JRDesignField> getFields(DataAdapterService con,
+			JasperDesign jDesign, JRDataset reportDataset) throws JRException,
 			UnsupportedOperationException {
 		getFieldProvider();
-		return fieldsProvider.getFields(con, reportDataset);
+		return fieldsProvider.getFields(con, jDesign, reportDataset);
 	}
 
 	private void getFieldProvider() {
