@@ -16,4 +16,7 @@ public interface IPublishContributor {
 			String version, JasperReportsConfiguration jrConfig)
 			throws Exception;
 
+	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor,
+			JasperDesign jasper, JasperReportsConfiguration jrConfig)
+			throws Exception;
 }

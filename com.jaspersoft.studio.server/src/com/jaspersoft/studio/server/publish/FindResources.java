@@ -2,8 +2,6 @@ package com.jaspersoft.studio.server.publish;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -13,13 +11,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
-import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
-import com.jaspersoft.studio.server.model.server.MServerProfile;
-import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -44,24 +40,21 @@ public class FindResources {
 		job.schedule();
 	}
 
-	private void find(IProgressMonitor monitor, MReportUnit mrunit,
+	public void find(IProgressMonitor monitor, MReportUnit mrunit,
 			JasperReportsConfiguration jrConfig, JasperDesign jd)
 			throws Exception {
-		List<AFileResource> fres = new ArrayList<AFileResource>();
-		INode n = mrunit.getRoot();
-		if (n != null && n instanceof MServerProfile) {
-			MServerProfile server = (MServerProfile) n;
-			ServerProfile srvrd = server.getValue();
-			String version = JRXmlWriterHelper.LAST_VERSION;
-			version = srvrd.getJrVersion();
+		jrConfig.put(JrxmlPublishAction.KEY_PUBLISH2JSS_DATA,
+				new ArrayList<AFileResource>());
 
-			Set<String> fileset = new HashSet<String>();
+		String version = ServerManager.getVersion(mrunit);
+		HashSet<String> fileset = new HashSet<String>();
+		IFile file = (IFile) jrConfig.get(IEditorContributor.KEY_FILE);
 
-			JrxmlPublishContributor jpc = new JrxmlPublishContributor();
-			jpc.publishJrxml(mrunit, monitor, jd, fileset,
-					(IFile) jrConfig.get(IEditorContributor.KEY_FILE), version,
-					jrConfig);
-		}
-//		jrConfig.put(JrxmlPublishAction.KEY_PUBLISH2JSS_DATA, fres);
+		mrunit.removeChildren();
+
+		new JrxmlPublishContributor().publishJrxml(mrunit, monitor, jd,
+				fileset, file, version, jrConfig);
+
 	}
+
 }

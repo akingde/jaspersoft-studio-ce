@@ -19,13 +19,15 @@
  */
 package com.jaspersoft.studio.server.model;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 public class MInputControl extends MResource {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public MInputControl(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
 	}
@@ -39,7 +41,7 @@ public class MInputControl extends MResource {
 	}
 
 	@Override
-	protected IIconDescriptor getThisIconDescriptor() {
+	public IIconDescriptor getThisIconDescriptor() {
 		return getIconDescriptor();
 	}
 

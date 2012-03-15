@@ -19,12 +19,15 @@
  */
 package com.jaspersoft.studio.server.model;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 
 public class MJrxml extends AFileResource {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MJrxml(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
@@ -39,7 +42,7 @@ public class MJrxml extends AFileResource {
 	}
 
 	@Override
-	protected IIconDescriptor getThisIconDescriptor() {
+	public IIconDescriptor getThisIconDescriptor() {
 		return getIconDescriptor();
 	}
 

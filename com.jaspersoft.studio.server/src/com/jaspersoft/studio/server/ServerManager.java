@@ -37,6 +37,7 @@ import org.xml.sax.InputSource;
 
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
@@ -203,5 +204,15 @@ public class ServerManager {
 					+ res.getValue().getUriString();
 		}
 		return null;
+	}
+
+	public static String getVersion(ANode node) {
+		INode n = node.getRoot();
+		if (n != null && n instanceof MServerProfile) {
+			MServerProfile server = (MServerProfile) n;
+			ServerProfile srvrd = server.getValue();
+			return srvrd.getJrVersion();
+		}
+		return JRXmlWriterHelper.LAST_VERSION;
 	}
 }

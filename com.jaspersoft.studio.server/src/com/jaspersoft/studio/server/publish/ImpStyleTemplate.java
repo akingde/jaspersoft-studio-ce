@@ -51,21 +51,22 @@ public class ImpStyleTemplate extends AImpObject {
 	public File publish(JasperDesign jd, JRReportTemplate img,
 			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
 			IFile file) throws Exception {
-		File f = findFile(jd, fileset, getExpression(img), file);
-		uploadFile(mrunit, monitor, f);
+		AFileResource fres = findFile(mrunit, monitor, jd, fileset,
+				getExpression(img), file);
 
-		JRSimpleTemplate jrt = (JRSimpleTemplate) JRXmlTemplateLoader.load(f);
+		JRSimpleTemplate jrt = (JRSimpleTemplate) JRXmlTemplateLoader.load(fres
+				.getFile());
 		for (JRTemplateReference r : jrt.getIncludedTemplatesList()) {
-			IFile[] fs = root.findFilesForLocationURI(f.toURI());
+			IFile[] fs = root.findFilesForLocationURI(fres.getFile().toURI());
 			if (fs != null && fs.length > 0) {
 				File ftr = findFile(file, r.getLocation());
 				if (ftr != null && ftr.exists()) {
 					fileset.add(ftr.getAbsolutePath());
-					uploadFile(mrunit, monitor, ftr);
+					addResource(mrunit, fileset, ftr, new PublishOptions());
 				}
 			}
 		}
-		return f;
+		return fres.getFile();
 	}
 
 	@Override

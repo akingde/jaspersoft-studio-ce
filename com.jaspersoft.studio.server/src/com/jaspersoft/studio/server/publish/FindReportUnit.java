@@ -20,6 +20,7 @@ import com.jaspersoft.studio.server.export.JrxmlExporter;
 import com.jaspersoft.studio.server.model.MDummy;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class FindReportUnit {

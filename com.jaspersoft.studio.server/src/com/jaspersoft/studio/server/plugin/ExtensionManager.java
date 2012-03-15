@@ -80,6 +80,13 @@ public class ExtensionManager {
 					jrConfig);
 	}
 
+	public void publishParameters(MReportUnit mrunit, IProgressMonitor monitor,
+			JasperDesign jasper, JasperReportsConfiguration jrConfig)
+			throws Exception {
+		for (IPublishContributor r : publisher)
+			r.publishParameters(mrunit, monitor, jasper, jrConfig);
+	}
+
 	public MResource getResource(ANode parent, ResourceDescriptor resource,
 			int index) {
 		for (IResourceFactory r : resources) {

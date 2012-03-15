@@ -17,18 +17,15 @@
  * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.server.publish;
+package com.jaspersoft.studio.server.publish.action;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -45,16 +42,22 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.server.Activator;
+import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
-import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MJrxml;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
+import com.jaspersoft.studio.server.publish.FindReportUnit;
+import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.server.publish.wizard.Publish2ServerWizard;
+import com.jaspersoft.studio.utils.FileUtils;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class JrxmlPublishAction extends AContributorAction {
 	private static final String ID = "PUBLISHJRXML";
@@ -99,10 +102,14 @@ public class JrxmlPublishAction extends AContributorAction {
 					publishResources(monitor, jd, node);
 					if (monitor.isCanceled())
 						return Status.CANCEL_STATUS;
-					postProcessLocal();
 					// clean
 					jrConfig.remove(KEY_PUBLISH2JSS_DATA);
-					// end;
+					Display.getDefault().syncExec(new Runnable() {
+
+						public void run() {
+							postProcessLocal();
+						}
+					});
 				} catch (Exception e) {
 					UIUtils.showError(e);
 				} finally {
@@ -132,6 +139,47 @@ public class JrxmlPublishAction extends AContributorAction {
 		return ModelUtils.copyJasperDesign(jrConfig.getJasperDesign());
 	}
 
+	protected IStatus publishResources(IProgressMonitor monitor,
+			JasperDesign jd, ANode parent) throws Exception {
+		if (mrunit == null || !(mrunit instanceof MReportUnit)) {
+			ResourceDescriptor rd = MReportUnit.createDescriptor(parent);
+			mrunit = new MReportUnit(parent, rd);
+		}
+		MJrxml jrxml = new MJrxml(mrunit, getMainReport(jd), 0);
+		File file = FileUtils.createTempFile("jrsres", ".jrxml");
+		String version = ServerManager.getVersion(mrunit);
+		FileUtils.writeFile(file, JRXmlWriterHelper.writeReport(jd, version));
+		jrxml.setFile(file);
+
+		mrunit.getValue().getChildren().add(jrxml.getValue());
+
+		mrunit.setValue(save(monitor, mrunit));
+
+		List<MResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA,
+				new ArrayList<MResource>());
+		for (MResource f : files) {
+			PublishOptions popt = f.getPublishOptions();
+			if (popt.isOverwrite()) {
+				if (popt.getjExpression() != null)
+					popt.getjExpression().setText(popt.getExpression());
+				save(monitor, f);
+			}
+			if (monitor.isCanceled())
+				return Status.CANCEL_STATUS;
+		}
+		return Status.OK_STATUS;
+	}
+
+	protected ResourceDescriptor save(IProgressMonitor monitor, MResource f)
+			throws Exception {
+		try {
+			return WSClientHelper.saveResource(f, monitor, false);
+		} catch (Exception e) {
+			f.getValue().setIsNew(false);
+			return WSClientHelper.saveResource(f, monitor, false);
+		}
+	}
+
 	private ResourceDescriptor getMainReport(JasperDesign jd) {
 		ResourceDescriptor mainr = new ResourceDescriptor();
 		mainr.setName(jd.getName());
@@ -142,57 +190,6 @@ public class JrxmlPublishAction extends AContributorAction {
 		mainr.setIsReference(false);
 		mainr.setHasData(true);
 		return mainr;
-	}
-
-	protected void publish(final MReportUnit mrunit, IProgressMonitor monitor,
-			IFile file, JasperDesign jd) throws Exception {
-
-		mrunit.setValue(WSClientHelper.saveResource(mrunit, monitor, false));
-		INode n = mrunit.getRoot();
-		if (n != null && n instanceof MServerProfile) {
-			MServerProfile server = (MServerProfile) n;
-			ServerProfile srvrd = server.getValue();
-			String version = JRXmlWriterHelper.LAST_VERSION;
-			version = srvrd.getJrVersion();
-
-			Set<String> fileset = new HashSet<String>();
-
-			JrxmlPublishContributor jpc = new JrxmlPublishContributor();
-			jpc.publishJrxml(mrunit, monitor, jd, fileset, file, version,
-					jrConfig);
-			// jpc.saveJRXML(monitor, mrunit, jd, version);
-
-			for (JRParameter p : jd.getParametersList()) {
-				ImpInputControls.publish(mrunit, monitor, p);
-			}
-		}
-	}
-
-	protected IStatus publishResources(IProgressMonitor monitor,
-			JasperDesign jd, ANode parent) throws Exception {
-
-		if (mrunit == null || !(mrunit instanceof MReportUnit)) {
-			mrunit = new MReportUnit(parent,
-					MReportUnit.createDescriptor(parent), -1);
-			mrunit.setValue(WSClientHelper.saveResource(mrunit, monitor, false));
-
-			MJrxml jrxml = new MJrxml(mrunit, getMainReport(jd), -1);
-			WSClientHelper.saveResource(jrxml, monitor, false);
-		}
-
-		List<AFileResource> files = jrConfig.get(KEY_PUBLISH2JSS_DATA,
-				new ArrayList<AFileResource>());
-		for (AFileResource f : files) {
-			try {
-				WSClientHelper.saveResource(f, monitor, false);
-			} catch (Exception e) {
-				f.getValue().setIsNew(false);
-				WSClientHelper.saveResource(f, monitor, false);
-			}
-			if (monitor.isCanceled())
-				return Status.CANCEL_STATUS;
-		}
-		return Status.OK_STATUS;
 	}
 
 	protected void postProcessLocal() {
@@ -209,7 +206,16 @@ public class JrxmlPublishAction extends AContributorAction {
 
 			}
 		}
+	}
 
+	public static List<MResource> getResources(
+			JasperReportsConfiguration jrConfig) {
+		List<MResource> resources = jrConfig.get(
+				JrxmlPublishAction.KEY_PUBLISH2JSS_DATA,
+				new ArrayList<MResource>());
+		jrConfig.put(JrxmlPublishAction.KEY_PUBLISH2JSS_DATA, resources);
+
+		return resources;
 	}
 
 }

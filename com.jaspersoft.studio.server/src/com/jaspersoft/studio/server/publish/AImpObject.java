@@ -20,7 +20,6 @@
 package com.jaspersoft.studio.server.publish;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +36,7 @@ import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescript
 import com.jaspersoft.studio.server.ResourceFactory;
 import com.jaspersoft.studio.server.model.AFileResource;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -47,7 +47,8 @@ public abstract class AImpObject {
 		this.jrConfig = jrConfig;
 	}
 
-	protected File findFile(JasperDesign jd, Set<String> fileset,
+	protected AFileResource findFile(MReportUnit mrunit,
+			IProgressMonitor monitor, JasperDesign jd, Set<String> fileset,
 			JRDesignExpression exp, IFile file) {
 		String str = ExpressionUtil.eval(exp, jrConfig, jd);
 		if (str == null || fileset.contains(str))
@@ -55,11 +56,44 @@ public abstract class AImpObject {
 
 		File f = findFile(file, str);
 		if (f != null && f.exists()) {
+			PublishOptions popt = new PublishOptions();
+			popt.setjExpression(exp);
+			popt.setExpression("repo:" + f.getName());
 			fileset.add(str);
-			exp.setText("repo:" + f.getName());
-			return f;
-		} else
-			return null;
+
+			return addResource(mrunit, fileset, f, popt);
+		}
+		return null;
+	}
+
+	protected AFileResource addResource(MReportUnit mrunit,
+			Set<String> fileset, File f, PublishOptions popt) {
+		ResourceDescriptor runit = mrunit.getValue();
+		String rname = f.getName();
+		ResourceDescriptor rd = null;
+		List<ResourceDescriptor> list = runit.getChildren();
+		for (ResourceDescriptor r : list) {
+			if (r.getName().equals(rname)) {
+				rd = r;
+				break;
+			}
+		}
+		if (rd == null) {
+			rd = createResource(mrunit);
+			rd.setName(rname);
+			rd.setLabel(rname);
+
+			rd.setParentFolder(runit.getUriString() + "_files");
+			rd.setUriString(runit.getUriString() + "_files/" + rd.getName());
+		}
+
+		AFileResource mres = (AFileResource) ResourceFactory.getResource(
+				mrunit, rd, -1);
+		mres.setFile(f);
+		mres.setPublishOptions(popt);
+
+		JrxmlPublishAction.getResources(jrConfig).add(mres);
+		return mres;
 	}
 
 	protected File findFile(IFile file, String str) {
@@ -69,57 +103,13 @@ public abstract class AImpObject {
 						new File("."),
 						new File(file.getProject().getLocationURI()) }));
 		fr.setResolveAbsolutePath(true);
-		File f = fr.resolveFile(str);
-		return f;
+		return fr.resolveFile(str);
 	}
 
 	public AFileResource publish(JasperDesign jd, JRDesignElement img,
 			MReportUnit mrunit, IProgressMonitor monitor, Set<String> fileset,
 			IFile file) throws Exception {
-		File f = findFile(jd, fileset, getExpression(img), file);
-		return uploadFile(mrunit, monitor, f);
-	}
-
-	protected AFileResource uploadFile(MReportUnit mrunit,
-			IProgressMonitor monitor, File f) throws Exception {
-		if (f != null) {
-			ResourceDescriptor runit = mrunit.getValue();
-			String rname = f.getName();
-			ResourceDescriptor rd = null;
-			List<ResourceDescriptor> list = runit.getChildren();
-			for (ResourceDescriptor r : list) {
-				if (r.getName().equals(rname)) {
-					rd = r;
-					break;
-				}
-			}
-			if (rd == null) {
-				rd = createResource(mrunit);
-				rd.setName(rname);
-				rd.setLabel(rname);
-
-				rd.setParentFolder(runit.getUriString() + "_files");
-				rd.setUriString(runit.getUriString() + "_files/" + rd.getName());
-
-			}
-
-			AFileResource mres = (AFileResource) ResourceFactory.getResource(
-					mrunit, rd, -1);
-			mres.setFile(f);
-
-			List<AFileResource> resources = jrConfig.get(
-					JrxmlPublishAction.KEY_PUBLISH2JSS_DATA,
-					new ArrayList<AFileResource>());
-			resources.add(mres);
-			// try {
-			// WSClientHelper.saveResource(mres, monitor, false);
-			// } catch (Exception e) {
-			// mres.getValue().setIsNew(false);
-			// WSClientHelper.saveResource(mres, monitor, false);
-			// }
-			return mres;
-		}
-		return null;
+		return findFile(mrunit, monitor, jd, fileset, getExpression(img), file);
 	}
 
 	protected abstract ResourceDescriptor createResource(MReportUnit mrunit);

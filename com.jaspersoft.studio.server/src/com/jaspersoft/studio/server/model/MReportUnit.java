@@ -34,6 +34,10 @@ public class MReportUnit extends AFileResource {
 		super(parent, rd, index);
 	}
 
+	public MReportUnit(ANode parent, ResourceDescriptor rd) {
+		super(parent, rd, -1);
+	}
+
 	private static IIconDescriptor iconDescriptor;
 
 	public static IIconDescriptor getIconDescriptor() {
@@ -43,7 +47,7 @@ public class MReportUnit extends AFileResource {
 	}
 
 	@Override
-	protected IIconDescriptor getThisIconDescriptor() {
+	public IIconDescriptor getThisIconDescriptor() {
 		return getIconDescriptor();
 	}
 

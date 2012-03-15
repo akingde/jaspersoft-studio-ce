@@ -31,7 +31,7 @@ import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.server.JSFileResolver;
 import com.jaspersoft.studio.server.export.JrxmlExporter;
-import com.jaspersoft.studio.server.publish.JrxmlPublishAction;
+import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
 import com.jaspersoft.studio.server.publish.wizard.SaveConfirmationDialog;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;

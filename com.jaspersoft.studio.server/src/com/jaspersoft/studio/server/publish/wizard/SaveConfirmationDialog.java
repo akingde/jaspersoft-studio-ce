@@ -77,7 +77,6 @@ public class SaveConfirmationDialog extends Dialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		// create OK and Cancel buttons by default
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
 		createButton(parent, IDialogConstants.NO_ID, IDialogConstants.NO_LABEL,

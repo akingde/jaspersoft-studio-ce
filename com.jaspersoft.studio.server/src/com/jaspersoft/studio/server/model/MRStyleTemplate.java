@@ -19,12 +19,15 @@
  */
 package com.jaspersoft.studio.server.model;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.style.MStyleTemplate;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MRStyleTemplate extends AFileResource {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MRStyleTemplate(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
@@ -35,7 +38,7 @@ public class MRStyleTemplate extends AFileResource {
 	}
 
 	@Override
-	protected IIconDescriptor getThisIconDescriptor() {
+	public IIconDescriptor getThisIconDescriptor() {
 		return getIconDescriptor();
 	}
 

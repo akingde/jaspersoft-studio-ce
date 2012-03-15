@@ -42,6 +42,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
+import com.jaspersoft.studio.server.publish.PublishOptions;
 import com.jaspersoft.studio.utils.Misc;
 
 /* 
@@ -71,7 +72,7 @@ public class MResource extends APropertyNode implements ICopyable {
 		return iconDescriptor;
 	}
 
-	protected IIconDescriptor getThisIconDescriptor() {
+	public IIconDescriptor getThisIconDescriptor() {
 		return getIconDescriptor();
 	}
 
@@ -201,4 +202,15 @@ public class MResource extends APropertyNode implements ICopyable {
 		return false;
 	}
 
+	private PublishOptions publishOptions;
+
+	public PublishOptions getPublishOptions() {
+		if (publishOptions == null)
+			publishOptions = new PublishOptions();
+		return publishOptions;
+	}
+
+	public void setPublishOptions(PublishOptions publishOptions) {
+		this.publishOptions = publishOptions;
+	}
 }

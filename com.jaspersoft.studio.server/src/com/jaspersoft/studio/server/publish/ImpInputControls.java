@@ -23,55 +23,64 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.server.ResourceFactory;
-import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.model.MDataType;
 import com.jaspersoft.studio.server.model.MInputControl;
 import com.jaspersoft.studio.server.model.MReportUnit;
+import com.jaspersoft.studio.server.publish.action.JrxmlPublishAction;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ImpInputControls {
-	public static void publish(MReportUnit mrunit, IProgressMonitor monitor,
-			JRParameter param) throws Exception {
-		if (param.isSystemDefined() || !param.isForPrompting())
-			return;
-		ResourceDescriptor runit = mrunit.getValue();
+	private JasperReportsConfiguration jrConfig;
 
-		ResourceDescriptor rd = MInputControl.createDescriptor(mrunit);
-		rd.setName(param.getName());
-		rd.setLabel(param.getName());
-		rd.setDescription(param.getDescription());
-		rd.setVisible(true);
-		rd.setReadOnly(false);
-		rd.setMandatory(false);
-		rd.setResourceProperty(ResourceDescriptor.PROP_INPUTCONTROL_TYPE,
-				ResourceDescriptor.IC_TYPE_SINGLE_VALUE);
-		rd.setParentFolder(runit.getUriString() + "_files");
-		rd.setUriString(runit.getUriString() + "_files/" + rd.getName());
+	public ImpInputControls(JasperReportsConfiguration jrConfig) {
+		this.jrConfig = jrConfig;
+	}
 
-		MInputControl mres = (MInputControl) ResourceFactory.getResource(
-				mrunit, rd, -1);
+	public void publish(MReportUnit mrunit, IProgressMonitor monitor,
+			JasperDesign jasper, JasperReportsConfiguration jrConfig)
+			throws Exception {
+		for (JRParameter p : jasper.getParametersList()) {
+			if (p.isSystemDefined() || !p.isForPrompting())
+				continue;
+			ResourceDescriptor runit = mrunit.getValue();
 
-		if (Boolean.class.isAssignableFrom(param.getValueClass())) {
-			rd.setControlType(ResourceDescriptor.IC_TYPE_BOOLEAN);
-		} else if (String.class.isAssignableFrom(param.getValueClass())) {
-			addType(rd, mres, ResourceDescriptor.DT_TYPE_TEXT);
-		} else if (Timestamp.class.isAssignableFrom(param.getValueClass())) {
-			addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE_TIME);
-		} else if (Date.class.isAssignableFrom(param.getValueClass())) {
-			addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE);
-		} else if (Number.class.isAssignableFrom(param.getValueClass())) {
-			addType(rd, mres, ResourceDescriptor.DT_TYPE_NUMBER);
-		} else
-			return;
-		try {
-			WSClientHelper.saveResource(mres, monitor, false);
-		} catch (Exception e) {
-			mres.getValue().setIsNew(false);
-			WSClientHelper.saveResource(mres, monitor, false);
+			ResourceDescriptor rd = MInputControl.createDescriptor(mrunit);
+			rd.setName(p.getName());
+			rd.setLabel(p.getName());
+			rd.setDescription(p.getDescription());
+			rd.setVisible(true);
+			rd.setReadOnly(false);
+			rd.setMandatory(false);
+			rd.setResourceProperty(ResourceDescriptor.PROP_INPUTCONTROL_TYPE,
+					ResourceDescriptor.IC_TYPE_SINGLE_VALUE);
+			rd.setParentFolder(runit.getUriString() + "_files");
+			rd.setUriString(runit.getUriString() + "_files/" + rd.getName());
+
+			MInputControl mres = (MInputControl) ResourceFactory.getResource(
+					mrunit, rd, -1);
+
+			if (Boolean.class.isAssignableFrom(p.getValueClass())) {
+				rd.setControlType(ResourceDescriptor.IC_TYPE_BOOLEAN);
+			} else if (String.class.isAssignableFrom(p.getValueClass())) {
+				addType(rd, mres, ResourceDescriptor.DT_TYPE_TEXT);
+			} else if (Timestamp.class.isAssignableFrom(p.getValueClass())) {
+				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE_TIME);
+			} else if (Date.class.isAssignableFrom(p.getValueClass())) {
+				addType(rd, mres, ResourceDescriptor.DT_TYPE_DATE);
+			} else if (Number.class.isAssignableFrom(p.getValueClass())) {
+				addType(rd, mres, ResourceDescriptor.DT_TYPE_NUMBER);
+			} else
+				return;
+
+			mres.setPublishOptions(new PublishOptions());
+
+			JrxmlPublishAction.getResources(jrConfig).add(mres);
 		}
 	}
 

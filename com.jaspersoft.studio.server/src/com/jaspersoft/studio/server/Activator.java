@@ -92,6 +92,10 @@ public class Activator extends AbstractUIPlugin {
 	public static Image getImage(String path) {
 		ImageDescriptor descriptor = getImageDescriptor(path);
 
+		return getImage(descriptor);
+	}
+
+	public static Image getImage(ImageDescriptor descriptor) {
 		ImageRegistry imageRegistry = getDefault().getImageRegistry();
 		Image image = imageRegistry.get(descriptor.toString());
 		if (image == null) {

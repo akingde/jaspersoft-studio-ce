@@ -19,14 +19,20 @@
  */
 package com.jaspersoft.studio.server.publish.wizard;
 
+import java.lang.reflect.InvocationTargetException;
+
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MReportUnit;
 import com.jaspersoft.studio.server.publish.FindResources;
+import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class Publish2ServerWizard extends Wizard {
@@ -45,6 +51,7 @@ public class Publish2ServerWizard extends Wizard {
 		this.page = page;
 		this.n = n;
 		this.jrConfig = jrConfig;
+		setNeedsProgressMonitor(true);
 	}
 
 	@Override
@@ -52,15 +59,43 @@ public class Publish2ServerWizard extends Wizard {
 		page0 = new RUnitLocationPage(jDesign, n);
 		addPage(page0);
 
-		page1 = new ResourcesPage(jDesign, n);
+		page1 = new ResourcesPage(jrConfig);
 		addPage(page1);
 	}
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == page1) {
-			MReportUnit mrunit = page0.getReportUnit();
-			new FindResources().find(mrunit, jrConfig, jDesign);
+			try {
+				getContainer().run(true, true, new IRunnableWithProgress() {
+					public void run(IProgressMonitor monitor)
+							throws InvocationTargetException,
+							InterruptedException {
+						monitor.beginTask("Looking For Resources To Publish",
+								IProgressMonitor.UNKNOWN);
+						try {
+							MReportUnit mrunit = page0.getReportUnit();
+							n = mrunit;
+							new FindResources().find(monitor, mrunit, jrConfig,
+									jDesign);
+							Display.getDefault().syncExec(new Runnable() {
+								public void run() {
+									page1.fillData();
+
+								}
+							});
+						} catch (Exception e) {
+							UIUtils.showError(e);
+						} finally {
+							monitor.done();
+						}
+					}
+				});
+			} catch (InvocationTargetException e) {
+				UIUtils.showError(e.getCause());
+			} catch (InterruptedException e) {
+				UIUtils.showError(e.getCause());
+			}
 		}
 		return super.getNextPage(page);
 	}

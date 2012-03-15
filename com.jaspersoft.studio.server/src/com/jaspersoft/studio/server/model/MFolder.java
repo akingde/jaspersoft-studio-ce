@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.server.model;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -26,6 +28,7 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 
 public class MFolder extends MResource {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MFolder(ANode parent, ResourceDescriptor rd, int index) {
 		super(parent, rd, index);
@@ -40,7 +43,7 @@ public class MFolder extends MResource {
 	}
 
 	@Override
-	protected IIconDescriptor getThisIconDescriptor() {
+	public IIconDescriptor getThisIconDescriptor() {
 		return getIconDescriptor();
 	}
 
