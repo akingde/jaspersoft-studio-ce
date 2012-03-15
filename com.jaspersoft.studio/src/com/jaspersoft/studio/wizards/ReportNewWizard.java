@@ -109,7 +109,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		step1.setFileName("NEW_REPORT.jrxml");//$NON-NLS-1$
 		addPage(step1);
 
-		step2 = new WizardDataSourcePage(null, null);
+		step2 = new WizardDataSourcePage(null, jConfig);
 		addPage(step2);
 
 		step3 = new WizardFieldsPage();
@@ -119,7 +119,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		addPage(step4);
 	}
 
-	private JasperReportsConfiguration jConfig;
+	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration();
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {

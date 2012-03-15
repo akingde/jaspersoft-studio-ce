@@ -129,8 +129,8 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		ctf.setTabHeight(tabHeight);
 
 		ctf.setTopRight(c);
-
-		dataquery.setDataset(jConfig.getJasperDesign(), getDataset());
+		if (jConfig != null)
+			dataquery.setDataset(jConfig.getJasperDesign(), getDataset());
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}

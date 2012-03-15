@@ -82,11 +82,13 @@ public abstract class DataQueryAdapters {
 
 	public DataQueryAdapters(Composite parent, JasperReportsConfiguration jConfig, JRDesignDataset newdataset,
 			Color background) {
-		this.file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+		if (jConfig != null) {
+			this.file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
+			this.jDesign = jConfig.getJasperDesign();
+		}
 		// createToolbar(parent);
 		this.newdataset = newdataset;
 		this.jConfig = jConfig;
-		this.jDesign = jConfig.getJasperDesign();
 		if (background != null)
 			this.background = background;
 		// else

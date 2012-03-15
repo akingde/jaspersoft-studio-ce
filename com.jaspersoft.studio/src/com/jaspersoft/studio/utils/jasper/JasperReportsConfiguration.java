@@ -72,8 +72,9 @@ public class JasperReportsConfiguration {
 	@SuppressWarnings("unchecked")
 	public <T> T get(String key, T def) {
 		Object value = get(key);
-		if (value != null && value.getClass().isAssignableFrom(def.getClass()))
+		if (value != null && def != null && value.getClass().isAssignableFrom(def.getClass()))
 			return (T) value;
 		return def;
 	}
+
 }
