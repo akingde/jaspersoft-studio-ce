@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.property.section.report;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.window.Window;
@@ -26,6 +28,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
+import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.model.ANode;
 
@@ -69,6 +73,13 @@ public class PageFormatAction extends SelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		return true;
+		List<Object> selection = getSelectedObjects();
+		if (!selection.isEmpty() && selection.size() == 1) {
+			Object obj = selection.get(0);
+			if (obj instanceof ReportPageEditPart || obj instanceof BandEditPart)
+				return true;
+		}
+
+		return false;
 	}
 }

@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.property.dataset.dialog;
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
@@ -30,6 +32,8 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
+import com.jaspersoft.studio.editor.gef.parts.band.BandEditPart;
 import com.jaspersoft.studio.editor.outline.part.TreeEditPart;
 import com.jaspersoft.studio.editor.report.ReportEditor;
 import com.jaspersoft.studio.model.MReport;
@@ -100,6 +104,13 @@ public class DatasetAction extends SelectionAction {
 
 	@Override
 	protected boolean calculateEnabled() {
-		return true;
+		List<Object> selection = getSelectedObjects();
+		if (!selection.isEmpty() && selection.size() == 1) {
+			Object obj = selection.get(0);
+			if (obj instanceof ReportPageEditPart || obj instanceof BandEditPart)
+				return true;
+		}
+
+		return false;
 	}
 }
