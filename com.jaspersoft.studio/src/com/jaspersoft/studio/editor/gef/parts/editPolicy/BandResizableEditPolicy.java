@@ -97,9 +97,9 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 
 		list.add(hand);
 		
-		BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
-		buttonPadHandle.setBorder(null); 
-		list.add(buttonPadHandle);
+//		BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
+//		buttonPadHandle.setBorder(null); 
+//		list.add(buttonPadHandle);
 		// NonResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), list);
 		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
 		// // if (hasNorth)
