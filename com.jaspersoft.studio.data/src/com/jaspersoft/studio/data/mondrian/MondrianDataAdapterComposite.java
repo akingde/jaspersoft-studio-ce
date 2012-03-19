@@ -28,6 +28,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -48,12 +49,17 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 
 	@Override
 	protected void createPreWidgets(Composite parent) {
-		new Label(parent, SWT.NONE).setText(Messages.MondrianDataAdapterComposite_0);
+		Composite cmp = new Composite(parent, SWT.NONE);
+		cmp.setLayout(new GridLayout(3, false));
+		cmp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		textCatalogURI = new Text(parent, SWT.BORDER);
+		new Label(cmp, SWT.NONE)
+				.setText(Messages.MondrianDataAdapterComposite_0);
+
+		textCatalogURI = new Text(cmp, SWT.BORDER);
 		textCatalogURI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Button btnBrowse = new Button(parent, SWT.NONE);
+		Button btnBrowse = new Button(cmp, SWT.NONE);
 		btnBrowse.setText(Messages.MondrianDataAdapterComposite_1);
 
 		btnBrowse.addSelectionListener(new SelectionAdapter() {

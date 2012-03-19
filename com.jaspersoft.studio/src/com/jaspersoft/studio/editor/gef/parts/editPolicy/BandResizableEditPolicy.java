@@ -41,6 +41,7 @@ import org.eclipse.gef.handles.MoveHandle;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 import com.jaspersoft.studio.editor.gef.figures.borders.Line1Border;
+import com.jaspersoft.studio.editor.gef.parts.band.BandButtonPadHandle;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -71,6 +72,7 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 			setFeedbackText(oldBounds.height + (bWidth != null ? "," + oldBounds.width : "") + " px");
 		}
 		super.showChangeBoundsFeedback(request);
+		
 	}
 
 	/**
@@ -94,6 +96,10 @@ public class BandResizableEditPolicy extends ResizableEditPolicy {
 		hand.setBorder(new Line1Border(ColorConstants.darkBlue, 4));
 
 		list.add(hand);
+		
+		BandButtonPadHandle buttonPadHandle=new BandButtonPadHandle((GraphicalEditPart)getHost());
+		buttonPadHandle.setBorder(null); 
+		list.add(buttonPadHandle);
 		// NonResizableHandleKit.addMoveHandle((GraphicalEditPart) getHost(), list);
 		// list.add(new CellResizeHandle2((GraphicalEditPart) getHost(), PositionConstants.SOUTH));
 		// // if (hasNorth)

@@ -70,60 +70,69 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 
 	@Override
 	public void findAll() {
-		Job job = new WorkspaceJob("Searching DataAdapters") {
-			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				listenWorkspace();
-				monitor.beginTask("Search DataAdapters in project " + project.getName(), 10);
-				monitor.subTask("Searching project " + project.getName());
-				project.accept(new ResourceVisitor(), IResource.NONE);
+		try {
+			if (project.isOpen()) {
+				IResource[] members = project.members();
+				if (members != null && members.length > 0) {
+					Job job = new WorkspaceJob("Searching DataAdapters") {
+						public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+							listenWorkspace();
+							monitor.beginTask("Search DataAdapters in project " + project.getName(), 10);
+							monitor.subTask("Searching project " + project.getName());
+							project.accept(new ResourceVisitor(), IResource.NONE);
 
-				if (monitor.isCanceled())
-					return Status.CANCEL_STATUS;
-				monitor.internalWorked(10);
+							if (monitor.isCanceled())
+								return Status.CANCEL_STATUS;
+							monitor.internalWorked(10);
 
-				return Status.OK_STATUS;
-			}
-
-			protected void listenWorkspace() {
-				IWorkspace wspace = ResourcesPlugin.getWorkspace();
-				IResourceChangeListener rcl = new IResourceChangeListener() {
-					public void resourceChanged(IResourceChangeEvent event) {
-						IResourceDelta delta = event.getDelta();
-						try {
-							delta.accept(new IResourceDeltaVisitor() {
-
-								public boolean visit(IResourceDelta delta) throws CoreException {
-									IResource res = delta.getResource();
-									if (res.getProject() != project)
-										return true;
-									if (res.getType() == IResource.FILE) {
-										IFile f = (IFile) res;
-										if (f.getName().endsWith(".xml")) {
-											switch (delta.getKind()) {
-											case IResourceDelta.ADDED:
-												checkFile(f);
-												break;
-											case IResourceDelta.REMOVED:
-												delete(f.getProjectRelativePath().toPortableString());
-												break;
-											case IResourceDelta.CHANGED:
-												checkFile(f);
-												break;
-											}
-										}
-									}
-									return true;
-								}
-							});
-						} catch (CoreException e) {
-							UIUtils.showError(e);
+							return Status.OK_STATUS;
 						}
-					}
-				};
-				wspace.addResourceChangeListener(rcl);
+
+						protected void listenWorkspace() {
+							IWorkspace wspace = ResourcesPlugin.getWorkspace();
+							IResourceChangeListener rcl = new IResourceChangeListener() {
+								public void resourceChanged(IResourceChangeEvent event) {
+									IResourceDelta delta = event.getDelta();
+									try {
+										delta.accept(new IResourceDeltaVisitor() {
+
+											public boolean visit(IResourceDelta delta) throws CoreException {
+												IResource res = delta.getResource();
+												if (res.getProject() != project)
+													return true;
+												if (res.getType() == IResource.FILE) {
+													IFile f = (IFile) res;
+													if (f.getName().endsWith(".xml")) {
+														switch (delta.getKind()) {
+														case IResourceDelta.ADDED:
+															checkFile(f);
+															break;
+														case IResourceDelta.REMOVED:
+															delete(f.getProjectRelativePath().toPortableString());
+															break;
+														case IResourceDelta.CHANGED:
+															checkFile(f);
+															break;
+														}
+													}
+												}
+												return true;
+											}
+										});
+									} catch (CoreException e) {
+										UIUtils.showError(e);
+									}
+								}
+							};
+							wspace.addResourceChangeListener(rcl);
+						}
+					};
+					job.schedule();
+				}
 			}
-		};
-		job.schedule();
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

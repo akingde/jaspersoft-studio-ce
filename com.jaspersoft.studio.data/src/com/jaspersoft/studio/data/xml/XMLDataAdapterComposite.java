@@ -348,7 +348,7 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 						new UpdateValueStrategy()
 								.setConverter(new TimeZone2StringConverter()));
 
-		if (xmlDataAdapter.isUseConnection()) {
+		if (!xmlDataAdapter.isUseConnection()) {
 			useConnection = true;
 			btnRadioButtonCreateDataAdapter.setSelection(true);
 			textSelectExpression.setEnabled(true);
@@ -389,7 +389,7 @@ public class XMLDataAdapterComposite extends ADataAdapterComposite {
 				.getDataAdapter();
 
 		xmlDataAdapter.setFileName(textFileName.getText());
-		xmlDataAdapter.setUseConnection(useConnection);
+		xmlDataAdapter.setUseConnection(!useConnection);
 		xmlDataAdapter.setSelectExpression(textSelectExpression.getText());
 
 		xmlDataAdapter.setDatePattern(textDatePattern.getText());

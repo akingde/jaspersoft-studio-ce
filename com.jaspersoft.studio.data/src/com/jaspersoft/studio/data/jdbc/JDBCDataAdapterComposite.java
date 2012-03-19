@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
+import java.util.ArrayList;
+
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 
@@ -163,7 +165,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tbtmNewItem_1.setControl(composite);
 
-		cpath = new ClasspathComponent(composite);
+		cpath = new ClasspathComponent(composite); 
 		cpath.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 

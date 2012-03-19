@@ -82,6 +82,8 @@ public class PropertiesComponent {
 
 	public Map<String, String> getProperties() {
 		List<Property> list = (List<Property>) tviewer.getInput();
+		if (list == null)
+			list = new ArrayList<Property>();
 		for (Property prop : list)
 			properties.put(prop.key, prop.value);
 		return properties;

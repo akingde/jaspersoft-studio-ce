@@ -62,12 +62,13 @@ public class ClasspathComponent {
 
 	}
 
-	private List<File> classpaths;
+	private List<File> classpaths = new ArrayList<File>();
 
 	public List<String> getClasspaths() {
 		List<String> paths = new ArrayList<String>();
-		for (File f : classpaths)
-			paths.add(f.getAbsolutePath());
+		if (classpaths != null)
+			for (File f : classpaths)
+				paths.add(f.getAbsolutePath());
 		return paths;
 	}
 

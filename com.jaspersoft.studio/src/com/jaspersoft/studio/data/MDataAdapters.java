@@ -22,6 +22,8 @@ package com.jaspersoft.studio.data;
 import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
@@ -30,6 +32,8 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
 public class MDataAdapters extends ANode {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ("DATAADAPTERS".equals(evt.getPropertyName())) //$NON-NLS-1$
