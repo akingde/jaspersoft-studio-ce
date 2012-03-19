@@ -253,7 +253,7 @@ public class BandMoveEditPolicy extends SelectionEditPolicy {
 				System.out.println(moveDelta.y + " set to" + (-b.getHeight())); //$NON-NLS-1$
 
 				moveDelta.y = -b.getHeight();
-				feedbackFigure.setForegroundColor(ColorConstants.blue);
+				feedbackFigure.setForegroundColor(ColorConstants.darkGray);
 			} else if (moveDelta.y > maxDelta) {
 				// moveDelta.x = 0;
 				moveDelta.y = maxDelta;
