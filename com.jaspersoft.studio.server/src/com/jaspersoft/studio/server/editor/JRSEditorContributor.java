@@ -75,6 +75,7 @@ public class JRSEditorContributor implements IEditorContributor {
 			Shell shell = Display.getDefault().getActiveShell();
 			SaveConfirmationDialog dialog = new SaveConfirmationDialog(shell);
 			run = (dialog.open() == Dialog.OK);
+			jrConfig.put(KEY_PUBLISH2JSS, run);
 			jrConfig.put(KEY_PUBLISH2JSS_SILENT, dialog.getAllways());
 		}
 		if (run)
