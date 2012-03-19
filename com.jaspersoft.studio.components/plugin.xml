@@ -285,11 +285,6 @@
    <extension
          point="com.jaspersoft.studio.palette">
       <group
-            Name="Charts"
-            afterGroup="com.jaspersoft.studio.COMMON_ELEMENTS"
-            id="com.jaspersoft.studio.components.CHARTCOMPONENTS">
-      </group>
-      <group
             Name="Web Components"
             afterGroup="com.jaspersoft.studio.COMMON_CONTAINER"
             id="com.jaspersoft.studio.components.WEBCOMPONENTS">

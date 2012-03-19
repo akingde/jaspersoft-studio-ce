@@ -383,7 +383,8 @@ public class TableComponentFactory implements IComponentFactory {
 
 	public IPaletteContributor getPaletteEntries() {
 		PaletteContributor pc = new PaletteContributor();
-		pc.add(IPaletteContributor.KEY_COMMON_CONTAINER, MTable.class);
+		// pc.add(IPaletteContributor.KEY_COMMON_CONTAINER, MTable.class);
+		pc.add(MTable.class);
 		return pc;
 	}
 
@@ -609,7 +610,8 @@ public class TableComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public AbstractVisualEditor getEditor(Object node, JasperReportsConfiguration jrContext) {
+	public AbstractVisualEditor getEditor(Object node,
+			JasperReportsConfiguration jrContext) {
 		if (node != null && node instanceof JRDesignComponentElement) {
 			Component component = ((JRDesignComponentElement) node)
 					.getComponent();

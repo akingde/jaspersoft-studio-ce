@@ -309,7 +309,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 
 	public IPaletteContributor getPaletteEntries() {
 		PaletteContributor pc = new PaletteContributor();
-		pc.add(IPaletteContributor.KEY_COMMON_CONTAINER, MCrosstab.class);
+		// pc.add(IPaletteContributor.KEY_COMMON_CONTAINER, MCrosstab.class);
+		pc.add(MCrosstab.class);
 		return pc;
 	}
 

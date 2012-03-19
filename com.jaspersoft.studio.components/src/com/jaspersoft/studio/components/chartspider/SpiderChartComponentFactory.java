@@ -94,8 +94,9 @@ public class SpiderChartComponentFactory implements IComponentFactory {
 
 	public IPaletteContributor getPaletteEntries() {
 		PaletteContributor pc = new PaletteContributor();
-		pc.add("com.jaspersoft.studio.components.CHARTCOMPONENTS",
-				MSpiderChart.class);
+		// pc.add("com.jaspersoft.studio.components.CHARTCOMPONENTS",
+		// MSpiderChart.class);
+		pc.add(MSpiderChart.class);
 		return pc;
 	}
 

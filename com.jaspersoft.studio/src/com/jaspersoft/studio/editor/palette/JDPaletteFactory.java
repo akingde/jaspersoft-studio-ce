@@ -81,12 +81,12 @@ public class JDPaletteFactory {
 		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
 		map.put(pgc.getId(), pgc);
 
-		pgc = new PaletteGroup();
-		pgc.setId(IPaletteContributor.KEY_COMMON_CONTAINER);
-		pgc.setName(Messages.JDPaletteFactory_complex_components);
-		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
-		pgc.setAfterGroup(IPaletteContributor.KEY_COMMON_ELEMENTS);
-		map.put(pgc.getId(), pgc);
+//		pgc = new PaletteGroup();
+//		pgc.setId(IPaletteContributor.KEY_COMMON_CONTAINER);
+//		pgc.setName(Messages.JDPaletteFactory_complex_components);
+//		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
+//		pgc.setAfterGroup(IPaletteContributor.KEY_COMMON_ELEMENTS);
+//		map.put(pgc.getId(), pgc);
 
 		pgc = new PaletteGroup();
 		pgc.setId(IPaletteContributor.KEY_COMMON_TOOLS);

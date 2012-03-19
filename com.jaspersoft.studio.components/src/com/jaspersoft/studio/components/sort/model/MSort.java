@@ -203,6 +203,8 @@ public class MSort extends MGraphicElement {
 		defaultsMap.put(SortComponent.PROPERTY_EVALUATION_TIME,
 				EvaluationTimeEnum.NOW);
 		defaultsMap.put(SortComponent.PROPERTY_HANDLER_COLOR, null);
+		defaultsMap.put(SortComponent.PROPERTY_COLUMN_TYPE,
+				SortFieldTypeEnum.FIELD);
 
 	}
 
@@ -216,7 +218,7 @@ public class MSort extends MGraphicElement {
 		if (id.equals(SortComponent.PROPERTY_COLUMN_NAME))
 			return component.getSortFieldName();
 		if (id.equals(SortComponent.PROPERTY_COLUMN_TYPE))
-			return EnumHelper.getValue(component.getSortFieldType(), 1, false);
+			return EnumHelper.getValue(component.getSortFieldType(), 0, false);
 
 		if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(component.getEvaluationTime(), 1, false);
@@ -242,7 +244,7 @@ public class MSort extends MGraphicElement {
 			component.setSortFieldName((String) value);
 		else if (id.equals(SortComponent.PROPERTY_COLUMN_TYPE))
 			component.setSortFieldType((SortFieldTypeEnum) EnumHelper
-					.getSetValue(SortFieldTypeEnum.values(), value, 1, false));
+					.getSetValue(SortFieldTypeEnum.values(), value, 0, false));
 
 		else if (id.equals(SortComponent.PROPERTY_EVALUATION_TIME))
 			component.setEvaluationTime((EvaluationTimeEnum) EnumHelper
@@ -303,7 +305,7 @@ public class MSort extends MGraphicElement {
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement jrcomponent = new JRDesignComponentElement();
 		SortComponent component = new SortComponent();
-
+		component.setSortFieldType(SortFieldTypeEnum.FIELD);
 		jrcomponent.setComponent(component);
 		jrcomponent
 				.setComponentKey(new ComponentKey(

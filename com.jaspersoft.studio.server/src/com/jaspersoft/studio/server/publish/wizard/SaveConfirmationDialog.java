@@ -83,4 +83,12 @@ public class SaveConfirmationDialog extends Dialog {
 				false);
 	}
 
+	@Override
+	protected void buttonPressed(int buttonId) {
+		super.buttonPressed(buttonId);
+		if (IDialogConstants.NO_ID == buttonId) {
+			cancelPressed();
+		}
+	}
+
 }

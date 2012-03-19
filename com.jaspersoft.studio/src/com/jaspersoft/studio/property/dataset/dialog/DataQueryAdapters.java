@@ -56,13 +56,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.data.IQueryDesigner;
-import com.jaspersoft.studio.data.actions.CreateDataAdapterAction;
+import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
-import com.jaspersoft.studio.data.widget.DatasourceComboItem;
+import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
@@ -101,7 +102,7 @@ public abstract class DataQueryAdapters {
 	}
 
 	private Composite composite;
-	private DatasourceComboItem dscombo;
+	private DataAdapterAction dscombo;
 	private Action gFields;
 	private Combo langCombo;
 	private String[] languages;
@@ -210,41 +211,35 @@ public abstract class DataQueryAdapters {
 	}
 
 	public Composite createToolbar(Composite parent) {
-		Composite comp = new Composite(parent, SWT.NONE);
+		final Composite comp = new Composite(parent, SWT.NONE);
 		comp.setLayout(new GridLayout(2, false));
+		comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Label lbl = new Label(comp, SWT.NONE);
-		lbl.setText(Messages.DataQueryAdapters_actionname);
+		// lbl.setText(Messages.DataQueryAdapters_actionname);
+		lbl.setImage(JaspersoftStudioPlugin.getImage(MDataAdapters.getIconDescriptor().getIcon16()));
 
-		ToolBar tb = new ToolBar(comp, SWT.FLAT | SWT.RIGHT);
+		final ToolBar tb = new ToolBar(comp, SWT.FLAT | SWT.RIGHT);
+		tb.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		tb.setBackground(parent.getBackground());
 		// tb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ToolBarManager manager = new ToolBarManager(tb);
+		final ToolBarManager manager = new ToolBarManager(tb);
 		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
 				gFields.setEnabled(false);
 				if (da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
 					gFields.setEnabled(true);
-					// TODO if auto gfields.run;
+				} else {
+					gFields.setEnabled(false);
 				}
 			}
 
 			public boolean isNotRunning() {
-				// TODO Auto-generated method stub
 				return true;
 			}
 		};
-		dscombo = new DatasourceComboItem(adapterRunReport, DataAdapterManager.getDataAdapter(file));
-
-		Action newDA = new Action(Messages.DataQueryAdapters_newaction) {
-			@Override
-			public void run() {
-				CreateDataAdapterAction createDAAction = new CreateDataAdapterAction(null);
-				createDAAction.run();
-				dscombo.setSelected(createDAAction.getNewDataAdapter());
-			}
-		};
+		dscombo = new DataAdapterAction(adapterRunReport, DataAdapterManager.getDataAdapter(file));
 
 		gFields = new Action(Messages.DataQueryAdapters_getfields) {
 			@Override
@@ -301,7 +296,6 @@ public abstract class DataQueryAdapters {
 		gFields.setEnabled(false);
 
 		manager.add(dscombo);
-		manager.add(newDA);
 		manager.add(new Separator());
 		manager.add(gFields);
 

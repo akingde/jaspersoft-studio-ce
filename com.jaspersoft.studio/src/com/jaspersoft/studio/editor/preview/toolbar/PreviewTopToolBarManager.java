@@ -19,12 +19,14 @@
  */
 package com.jaspersoft.studio.editor.preview.toolbar;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.MDataAdapters;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
-import com.jaspersoft.studio.data.widget.DatasourceComboItem;
+import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
@@ -38,14 +40,20 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 		this.adapters = adapters;
 	}
 
-	private DatasourceComboItem dataSourceWidget;
+	private DataAdapterAction dataSourceWidget;
 	private RunStopAction vexecAction;
+	private Action iconAction;
 
 	protected void fillToolbar(IToolBarManager tbManager) {
 		PreviewContainer pvcont = (PreviewContainer) container;
 
-		if (dataSourceWidget == null)
-			dataSourceWidget = new DatasourceComboItem((IDataAdapterRunnable) container, adapters);
+		if (iconAction == null) {
+			iconAction = new IconAction();
+		}
+		tbManager.add(iconAction);
+		if (dataSourceWidget == null) {
+			dataSourceWidget = new DataAdapterAction((IDataAdapterRunnable) container, adapters);
+		}
 		tbManager.add(dataSourceWidget);
 
 		if (vexecAction == null)
@@ -54,7 +62,21 @@ public class PreviewTopToolBarManager extends ATopToolBarManager {
 
 	}
 
-	public DatasourceComboItem getDataSourceWidget() {
+	class IconAction extends Action {
+		public IconAction() {
+			super();
+			setEnabled(false);
+			setImageDescriptor(MDataAdapters.getIconDescriptor().getIcon16());
+			setDisabledImageDescriptor(MDataAdapters.getIconDescriptor().getIcon16());
+		}
+
+		@Override
+		public boolean isEnabled() {
+			return false;
+		}
+	}
+
+	public DataAdapterAction getDataSourceWidget() {
 		return dataSourceWidget;
 	}
 

@@ -47,6 +47,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 
+import com.jaspersoft.studio.utils.Misc;
+
 public class NumericInput extends ADataInput {
 	private Spinner num;
 	private int min;
@@ -90,11 +92,11 @@ public class NumericInput extends ADataInput {
 					num.removeModifyListener(this);
 					Number n = null;
 					if (param.getValueClass().equals(Integer.class)) {
-						n = new Integer(num.getText());
+						n = new Integer(Misc.nvl(num.getText()));
 					} else if (param.getValueClass().equals(Byte.class)) {
-						n = new Byte(num.getText());
+						n = new Byte(Misc.nvl(num.getText()));
 					} else if (param.getValueClass().equals(Short.class)) {
-						n = new Short(num.getText());
+						n = new Short(Misc.nvl(num.getText()));
 					}
 					updateModel(n);
 					updateInput();

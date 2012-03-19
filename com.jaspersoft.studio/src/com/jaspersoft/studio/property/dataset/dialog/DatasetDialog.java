@@ -120,6 +120,8 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 			}
 		};
 
+		Composite c = dataquery.createToolbar(body);
+		
 		SashForm sf = new CSashForm(body, SWT.VERTICAL);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -128,14 +130,15 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		sf.setLayoutData(gd);
 		sf.setLayout(new GridLayout());
 
+		
 		CTabFolder ctf = dataquery.createTop(sf, this);
-		Composite c = dataquery.createToolbar(ctf);
+		
 
-		int tabHeight = c.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-		tabHeight = Math.max(tabHeight, ctf.getTabHeight());
-		ctf.setTabHeight(tabHeight);
-
-		ctf.setTopRight(c);
+//		int tabHeight = c.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+//		tabHeight = Math.max(tabHeight, ctf.getTabHeight());
+//		ctf.setTabHeight(tabHeight);
+//
+//		ctf.setTopRight(c);
 
 		dataquery.setDefaultDataAdapter(mreport);
 
@@ -159,9 +162,20 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		createFields(toolkit, tabFolder);
 		createSortFields(toolkit, tabFolder);
 		createFilterExpression(toolkit, tabFolder);
+
+		createParameters(toolkit, tabFolder);
 		// createDataPreview(toolkit, tabFolder);
 
 		tabFolder.setSelection(0);
+	}
+
+	private void createParameters(FormToolkit toolkit, CTabFolder tabFolder) {
+		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+		bptab.setText("Parameters");
+
+		ptable = new ParametersTable(tabFolder, newdataset);
+
+		bptab.setControl(ptable.getControl());
 	}
 
 	private void createFields(FormToolkit toolkit, CTabFolder tabFolder) {
@@ -236,6 +250,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 
 	private JRDesignDataset newdataset;
 	private FieldsTable ftable;
+	private ParametersTable ptable;
 	private SortFieldsTable sftable;
 	private DataQueryAdapters dataquery;
 	private Text filterExpression;

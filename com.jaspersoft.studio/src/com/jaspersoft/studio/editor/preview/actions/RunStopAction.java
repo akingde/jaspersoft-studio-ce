@@ -101,7 +101,7 @@ public class RunStopAction extends Action implements IMenuCreator {
 			}
 		};
 
-		MenuItem m1 = new MenuItem(listMenu, SWT.RADIO);
+		MenuItem m1 = new MenuItem(listMenu, SWT.PUSH);
 		m1.setText("Run Report");
 		m1.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/start_task.gif"));
 		m1.addSelectionListener(listener);

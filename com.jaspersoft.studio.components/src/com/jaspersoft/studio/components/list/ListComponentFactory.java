@@ -91,7 +91,8 @@ public class ListComponentFactory implements IComponentFactory {
 
 	public IPaletteContributor getPaletteEntries() {
 		PaletteContributor pc = new PaletteContributor();
-		pc.add(IPaletteContributor.KEY_COMMON_CONTAINER, MList.class);
+		// pc.add(IPaletteContributor.KEY_COMMON_CONTAINER, MList.class);
+		pc.add(MList.class);
 		return pc;
 	}
 
