@@ -125,7 +125,7 @@ public class RUnitLocationPage extends WizardPage {
 			public void modifyText(ModifyEvent e) {
 				String rtext = ruName.getText();
 				ResourceDescriptor ru = getNewRunit().getValue();
-				ru.setName(rtext);
+				ru.setName(rtext.replace(" ", ""));
 				ru.setLabel(rtext);
 			}
 		});
@@ -160,8 +160,10 @@ public class RUnitLocationPage extends WizardPage {
 	}
 
 	private void fillInput() {
-		treeViewer.setInput(n.getRoot());
-		setSelection(n);
+		if (n != null) {
+			treeViewer.setInput(n.getRoot());
+			setSelection(n);
+		}
 	}
 
 	private MReportUnit newrunit;
@@ -179,6 +181,7 @@ public class RUnitLocationPage extends WizardPage {
 
 	protected void handleSelectionChanged(Object obj) {
 		boolean isFolder = obj instanceof MFolder;
+		bnRunit.setSelection(isFolder);
 		bnRunit.setEnabled(isFolder);
 		ruName.setEnabled(bnRunit.getSelection() && isFolder);
 
@@ -189,7 +192,7 @@ public class RUnitLocationPage extends WizardPage {
 		else if (obj instanceof MFolder) {
 			reportUnit.setParent((ANode) obj, -1);
 			ResourceDescriptor nrd = reportUnit.getValue();
-			String id = ruName.getText();
+			String id = ruName.getText().replace(" ", "");
 			nrd.setName(id);
 			nrd.setLabel(id);
 			String uri = ((MFolder) obj).getValue().getUriString();
