@@ -36,15 +36,14 @@ import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -63,12 +62,14 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.ADataAdapterComposite;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
+import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -151,8 +152,7 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 		btnCheckQEMode = new Button(this, SWT.CHECK);
 		btnCheckQEMode.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
-		btnCheckQEMode
-				.setText(Messages.CSVDataAdapterComposite_2);
+		btnCheckQEMode.setText(Messages.CSVDataAdapterComposite_2);
 
 		Composite composite_1 = new Composite(this, SWT.NONE);
 		GridLayout gl_composite_1 = new GridLayout(1, false);
@@ -185,37 +185,59 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 		Button btnGetCSVColumnsName = new Button(grpColumnNames, SWT.NONE);
 		btnGetCSVColumnsName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false, 1, 1));
-		btnGetCSVColumnsName
-				.setText(Messages.CSVDataAdapterComposite_5);
+		btnGetCSVColumnsName.setText(Messages.CSVDataAdapterComposite_5);
 
 		Composite composite_3 = new Composite(grpColumnNames, SWT.NONE);
 		GridLayout gl_composite_3 = new GridLayout(2, false);
 		gl_composite_3.marginWidth = 0;
 		gl_composite_3.marginHeight = 0;
 		composite_3.setLayout(gl_composite_3);
-		composite_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
-				1, 1));
+		composite_3.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite_3.setBounds(0, 0, 64, 64);
 
-		tableViewer = new TableViewer(composite_3, SWT.BORDER
-				| SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		tableViewer.setContentProvider(new CSVContentProvider());
-		tableViewer.setInput(rows);
-
-		table = tableViewer.getTable();
-		table.setLinesVisible(true);
+		table = new Table(composite_3, SWT.V_SCROLL | SWT.MULTI
+				| SWT.FULL_SELECTION | SWT.BORDER);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.widthHint = 100;
+		table.setLayoutData(gd);
 		table.setHeaderVisible(true);
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		TableViewerColumn tableViewerColumnName = new TableViewerColumn(
-				tableViewer, SWT.NONE);
-		TableColumn tblclmnColumnName = tableViewerColumnName.getColumn();
-		tblclmnColumnName.setMoveable(true);
-		tblclmnColumnName.setWidth(100);
-		tblclmnColumnName.setText(Messages.CSVDataAdapterComposite_6);
-		tableViewerColumnName.setLabelProvider(new ColumnLabelProvider());
-		tableViewerColumnName.setEditingSupport(new NameEditingSupport(
-				tableViewer));
+		TableColumn[] col = new TableColumn[1];
+		col[0] = new TableColumn(table, SWT.NONE);
+		col[0].setText(Messages.CSVDataAdapterComposite_6);
+		col[0].pack();
+
+		TableLayout tlayout = new TableLayout();
+		tlayout.addColumnData(new ColumnWeightData(100, false));
+		table.setLayout(tlayout);
+
+		tableViewer = new TableViewer(table);
+		tableViewer.setContentProvider(new ListContentProvider());
+		tableViewer.setLabelProvider(new LabelProvider());
+		tableViewer.setCellModifier(new ICellModifier() {
+			public boolean canModify(Object element, String property) {
+				return true;
+			}
+
+			public Object getValue(Object element, String property) {
+				String prop = (String) element;
+				if ("NAME".equals(property)) //$NON-NLS-1$
+					return prop;
+				return ""; //$NON-NLS-1$
+			}
+
+			public void modify(Object element, String property, Object value) {
+				TableItem tableItem = (TableItem) element;
+				tableViewer.update(element, new String[] { property });
+				tableViewer.refresh();
+			}
+		});
+
+		tableViewer
+				.setCellEditors(new CellEditor[] { new TextCellEditor(table) });
+		tableViewer.setColumnProperties(new String[] { "NAME" }); //$NON-NLS-1$ //$NON-NLS-2$
+
+		tableViewer.setInput(rows);
 
 		Composite composite_4 = new Composite(composite_3, SWT.NONE);
 		GridLayout gl_composite_4 = new GridLayout(1, false);
@@ -277,7 +299,7 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 		textNumberPattern.setEnabled(false);
 
 		btnCreateNumberPattern = new Button(grpOther, SWT.NONE);
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd.widthHint = 100;
 		btnCreateNumberPattern.setLayoutData(gd);
 		btnCreateNumberPattern.setText(Messages.CSVDataAdapterComposite_13);
@@ -286,8 +308,7 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 		btnCheckSkipFirstLine = new Button(grpOther, SWT.CHECK);
 		btnCheckSkipFirstLine.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				false, false, 3, 1));
-		btnCheckSkipFirstLine
-				.setText(Messages.CSVDataAdapterComposite_14);
+		btnCheckSkipFirstLine.setText(Messages.CSVDataAdapterComposite_14);
 
 		CTabItem tbtmSeparators = new CTabItem(tabFolder, SWT.NONE);
 		tbtmSeparators.setText(Messages.CSVDataAdapterComposite_15);
@@ -341,8 +362,7 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 		btnRadioFieldOther.setText(Messages.CSVDataAdapterComposite_22);
 
 		textFieldOther = new Text(fieldComposite, SWT.BORDER);
-		textFieldOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1));
+		textFieldOther.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		textFieldOther.setEnabled(false);
 		textFieldOther.setTextLimit(1);
 
@@ -395,47 +415,56 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 		btnRadioRowOther.setText(Messages.CSVDataAdapterComposite_30);
 
 		textRowOther = new Text(rowComposite, SWT.BORDER);
-		textRowOther.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 1, 1));
+		gd = new GridData();
+		gd.widthHint = 100;
+		textRowOther.setLayoutData(gd);
 		textRowOther.setEnabled(false);
 		new Label(grpRowSeparator, SWT.NONE);
 		new Label(grpRowSeparator, SWT.NONE);
 
 		Group grpSpecialCharacters = new Group(composite_5, SWT.NONE);
 		grpSpecialCharacters.setText(Messages.CSVDataAdapterComposite_31);
-		grpSpecialCharacters.setLayout(new GridLayout(2, true));
-		grpSpecialCharacters.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				true, false, 1, 1));
+		grpSpecialCharacters.setLayout(new GridLayout(4, false));
+		grpSpecialCharacters.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Text text_a = new Text(grpSpecialCharacters, SWT.NONE);
-		text_a.setEditable(false);
-		text_a.setText(Messages.CSVDataAdapterComposite_32);
-		text_a.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
-				1));
+		Label lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
+		lbl.setText("\\n");
+		UIUtils.setBold(lbl);
 
-		Text text_b = new Text(grpSpecialCharacters, SWT.NONE);
+		new Label(grpSpecialCharacters, SWT.NONE)
+				.setText(Messages.CSVDataAdapterComposite_32);
+
+		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
+		lbl.setText("\\r");
+		UIUtils.setBold(lbl);
+
+		Label text_b = new Label(grpSpecialCharacters, SWT.NONE);
 		text_b.setText(Messages.CSVDataAdapterComposite_33);
-		text_b.setEditable(false);
-		text_b.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
-				1));
 
-		Text text_c = new Text(grpSpecialCharacters, SWT.NONE);
+		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
+		lbl.setText("\\r\\n");
+		UIUtils.setBold(lbl);
+
+		Label text_c = new Label(grpSpecialCharacters, SWT.NONE);
 		text_c.setText(Messages.CSVDataAdapterComposite_34);
-		text_c.setEditable(false);
-		text_c.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
-				1));
+		gd = new GridData();
+		gd.widthHint = 250;
+		text_c.setLayoutData(gd);
 
-		Text text_d = new Text(grpSpecialCharacters, SWT.NONE);
+		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
+		lbl.setText("\\t");
+		UIUtils.setBold(lbl);
+
+		Label text_d = new Label(grpSpecialCharacters, SWT.NONE);
 		text_d.setText(Messages.CSVDataAdapterComposite_35);
-		text_d.setEditable(false);
-		text_d.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
-				1));
 
-		Text text_e = new Text(grpSpecialCharacters, SWT.NONE);
+		lbl = new Label(grpSpecialCharacters, SWT.NONE | SWT.BOLD);
+		lbl.setText("\\\\");
+		UIUtils.setBold(lbl);
+
+		Label text_e = new Label(grpSpecialCharacters, SWT.NONE);
 		text_e.setText(Messages.CSVDataAdapterComposite_36);
-		text_e.setEditable(false);
-		text_e.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1,
-				1));
+
 		new Label(grpSpecialCharacters, SWT.NONE);
 
 		/*
@@ -538,7 +567,8 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 
 				boolean bool = ((Button) e.widget).getSelection();
 				if (!bool) {
-					textDatePattern.setText(Messages.CSVDataAdapterComposite_39);
+					textDatePattern
+							.setText(Messages.CSVDataAdapterComposite_39);
 				}
 				textDatePattern.setEnabled(bool);
 				btnCreateDatePattern.setEnabled(bool);
@@ -570,7 +600,8 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 
 				boolean bool = ((Button) e.widget).getSelection();
 				if (!bool) {
-					textNumberPattern.setText(Messages.CSVDataAdapterComposite_39);
+					textNumberPattern
+							.setText(Messages.CSVDataAdapterComposite_39);
 				}
 				textNumberPattern.setEnabled(bool);
 				btnCreateNumberPattern.setEnabled(bool);
@@ -718,7 +749,7 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 				PojoObservables.observeValue(proxy, "rowNewLineUnix")); //$NON-NLS-1$
 		bindingContext.bindValue(
 				SWTObservables.observeSelection(btnRadioRowNewLineWin),
-				PojoObservables.observeValue(proxy, "rowNewLineUnix")); //$NON-NLS-1$
+				PojoObservables.observeValue(proxy, "rowNewLineWin")); //$NON-NLS-1$
 
 		bindingContext.bindValue(
 				SWTObservables.observeText(textRowOther, SWT.Modify),
@@ -918,67 +949,68 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 		return dataAdapterDesc;
 	}
 
-	/**
-	 * Content provider for CSVDataAdapterComposite TableViewer
-	 * 
-	 * @author czhu
-	 * 
-	 */
-	private class CSVContentProvider implements IStructuredContentProvider {
+	// /**
+	// * Content provider for CSVDataAdapterComposite TableViewer
+	// *
+	// * @author czhu
+	// *
+	// */
+	// private class CSVContentProvider implements IStructuredContentProvider {
+	//
+	// public void dispose() {
+	// // nothing
+	// }
+	//
+	// public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
+	// {
+	// // nothing
+	// }
+	//
+	// public Object[] getElements(Object inputElement) {
+	// if (inputElement != null && inputElement instanceof List)
+	// return ((List<?>) inputElement).toArray();
+	// return new Object[0];
+	// }
+	// }
 
-		public void dispose() {
-			// nothing
-		}
-
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			// nothing
-		}
-
-		public Object[] getElements(Object inputElement) {
-			if (inputElement != null && inputElement instanceof List)
-				return ((List<?>) inputElement).toArray();
-			return new Object[0];
-		}
-	}
-
-	/**
-	 * Extended EditingSupport for the specific column Name
-	 * 
-	 * @author czhu
-	 * 
-	 */
-	private class NameEditingSupport extends EditingSupport {
-
-		private final TableViewer viewer;
-
-		public NameEditingSupport(TableViewer viewer) {
-			super(viewer);
-			this.viewer = viewer;
-		}
-
-		@Override
-		protected CellEditor getCellEditor(Object element) {
-			return new TextCellEditor(viewer.getTable());
-		}
-
-		@Override
-		protected boolean canEdit(Object element) {
-			return true;
-		}
-
-		@Override
-		protected Object getValue(Object element) {
-			return ((StringBuffer) element).toString();
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-
-			((StringBuffer) element).setLength(0);
-			((StringBuffer) element).append((String.valueOf(value)));
-			viewer.refresh();
-		}
-	}
+	//
+	// /**
+	// * Extended EditingSupport for the specific column Name
+	// *
+	// * @author czhu
+	// *
+	// */
+	// private class NameEditingSupport extends EditingSupport {
+	//
+	// private final TableViewer viewer;
+	//
+	// public NameEditingSupport(TableViewer viewer) {
+	// super(viewer);
+	// this.viewer = viewer;
+	// }
+	//
+	// @Override
+	// protected CellEditor getCellEditor(Object element) {
+	// return new TextCellEditor(viewer.getTable());
+	// }
+	//
+	// @Override
+	// protected boolean canEdit(Object element) {
+	// return true;
+	// }
+	//
+	// @Override
+	// protected Object getValue(Object element) {
+	// return new StringBuffer((String) element);
+	// }
+	//
+	// @Override
+	// protected void setValue(Object element, Object value) {
+	// ((StringBuffer) element).setLength(0);
+	// ((StringBuffer) element).append((String.valueOf(value)));
+	// viewer.refresh();
+	// }
+	// }
 
 	/**
 	 * This creates and returns a new entry for the data model
@@ -1099,36 +1131,36 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 
 		if (btnRadioFieldComma.getSelection())
 			ds.setFieldDelimiter(',');
-		if (btnRadioFieldTab.getSelection())
+		else if (btnRadioFieldTab.getSelection())
 			ds.setFieldDelimiter('\t');
-		if (btnRadioFieldSpace.getSelection())
+		else if (btnRadioFieldSpace.getSelection())
 			ds.setFieldDelimiter(' ');
-		if (btnRadioFieldSemicolon.getSelection())
+		else if (btnRadioFieldSemicolon.getSelection())
 			ds.setFieldDelimiter(';');
-		if (btnRadioFieldNewLineUnix.getSelection())
+		else if (btnRadioFieldNewLineUnix.getSelection())
 			ds.setFieldDelimiter('\n');
-		if (btnRadioFieldOther.getSelection())
+		else if (btnRadioFieldOther.getSelection())
 			ds.setFieldDelimiter(Misc.removeSlashesString(
 					textFieldOther.getText() + " ").charAt(0)); //$NON-NLS-1$
-		if (ds.getFieldDelimiter() == ' ')
+		else if (ds.getFieldDelimiter() == ' ')
 			ds.setFieldDelimiter(';');
 
 		if (btnRadioRowComma.getSelection())
 			ds.setRecordDelimiter(","); //$NON-NLS-1$
-		if (btnRadioRowTab.getSelection())
+		else if (btnRadioRowTab.getSelection())
 			ds.setRecordDelimiter("\t"); //$NON-NLS-1$
-		if (btnRadioRowSpace.getSelection())
+		else if (btnRadioRowSpace.getSelection())
 			ds.setRecordDelimiter(" "); //$NON-NLS-1$
-		if (btnRadioRowSemicolon.getSelection())
+		else if (btnRadioRowSemicolon.getSelection())
 			ds.setRecordDelimiter(";"); //$NON-NLS-1$
-		if (btnRadioRowNewLineUnix.getSelection())
+		else if (btnRadioRowNewLineUnix.getSelection())
 			ds.setRecordDelimiter("\n"); //$NON-NLS-1$
-		if (btnRadioRowNewLineWin.getSelection())
+		else if (btnRadioRowNewLineWin.getSelection())
 			ds.setRecordDelimiter("\r\n"); //$NON-NLS-1$
-		if (btnRadioRowOther.getSelection())
+		else if (btnRadioRowOther.getSelection())
 			ds.setRecordDelimiter(Misc.removeSlashesString(textRowOther
 					.getText()));
-		if (ds.getRecordDelimiter().equals("")) //$NON-NLS-1$
+		else if (ds.getRecordDelimiter().equals("")) //$NON-NLS-1$
 			ds.setRecordDelimiter("\n"); //$NON-NLS-1$
 
 		// empty data model

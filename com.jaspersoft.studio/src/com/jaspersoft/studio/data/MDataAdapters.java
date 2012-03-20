@@ -44,7 +44,7 @@ public class MDataAdapters extends ANode {
 		super.propertyChange(evt);
 	}
 
-	private void updateChildren() {
+	private synchronized void updateChildren() {
 		this.removeChildren();
 		Collection<DataAdapterDescriptor> dataAdapters = getValue().getDataAdapterDescriptors();
 		for (DataAdapterDescriptor dataAdapter : dataAdapters) {
