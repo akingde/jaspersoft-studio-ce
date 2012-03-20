@@ -20,7 +20,6 @@
 package com.jaspersoft.studio.data;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Collection;
 
 import net.sf.jasperreports.engine.JRConstants;
 
@@ -28,6 +27,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 
@@ -38,19 +38,30 @@ public class MDataAdapters extends ANode {
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ("DATAADAPTERS".equals(evt.getPropertyName())) //$NON-NLS-1$
 		{
-			updateChildren();
+			if (evt.getOldValue() == null && evt.getNewValue() != null) {
+				boolean exists = false;
+				for (INode n : getChildren()) {
+					if (n.getValue() == evt.getNewValue()) {
+						exists = true;
+						break;
+					}
+				}
+				if (!exists)
+					new MDataAdapter(this, (DataAdapterDescriptor) evt.getNewValue());
+			}
+			if (evt.getOldValue() != null)
+				for (INode n : getChildren()) {
+					MDataAdapter m = (MDataAdapter) n;
+					if (m.getValue() == evt.getOldValue()) {
+						removeChild(m);
+						break;
+
+					}
+				}
+
 		}
 
 		super.propertyChange(evt);
-	}
-
-	private synchronized void updateChildren() {
-		this.removeChildren();
-		Collection<DataAdapterDescriptor> dataAdapters = getValue().getDataAdapterDescriptors();
-		for (DataAdapterDescriptor dataAdapter : dataAdapters) {
-			MDataAdapter mDataAdapter = new MDataAdapter(dataAdapter);
-			this.addChild(mDataAdapter);
-		}
 	}
 
 	/** The icon descriptor. */
@@ -71,7 +82,7 @@ public class MDataAdapters extends ANode {
 		super(parent, -1);
 		setValue(storage);
 		storage.addPropertyChangeListener(this);
-		updateChildren();
+		storage.getDataAdapterDescriptors();
 	}
 
 	@Override

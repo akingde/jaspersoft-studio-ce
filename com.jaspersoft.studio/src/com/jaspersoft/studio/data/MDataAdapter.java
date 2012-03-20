@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.data;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.model.ANode;
@@ -30,6 +32,7 @@ import com.jaspersoft.studio.model.ANode;
  * @author czhu, gtoffoli
  */
 public class MDataAdapter extends ANode {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/** The icon descriptor. */
 	private DataAdapterDescriptor dataAdapter = null;
@@ -38,7 +41,13 @@ public class MDataAdapter extends ANode {
 		return dataAdapter;
 	}
 
-	public MDataAdapter(DataAdapterDescriptor dataAdapter) {
+	@Override
+	public DataAdapterDescriptor getValue() {
+		return (DataAdapterDescriptor) super.getValue();
+	}
+
+	public MDataAdapter(MDataAdapters parent, DataAdapterDescriptor dataAdapter) {
+		super(parent, dataAdapter, -1);
 		this.dataAdapter = dataAdapter;
 	}
 
