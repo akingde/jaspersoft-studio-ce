@@ -81,12 +81,12 @@ public class JDPaletteFactory {
 		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
 		map.put(pgc.getId(), pgc);
 
-//		pgc = new PaletteGroup();
-//		pgc.setId(IPaletteContributor.KEY_COMMON_CONTAINER);
-//		pgc.setName(Messages.JDPaletteFactory_complex_components);
-//		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
-//		pgc.setAfterGroup(IPaletteContributor.KEY_COMMON_ELEMENTS);
-//		map.put(pgc.getId(), pgc);
+		// pgc = new PaletteGroup();
+		// pgc.setId(IPaletteContributor.KEY_COMMON_CONTAINER);
+		// pgc.setName(Messages.JDPaletteFactory_complex_components);
+		//		pgc.setImage("icons/resources/elementgroup-16.png"); //$NON-NLS-1$
+		// pgc.setAfterGroup(IPaletteContributor.KEY_COMMON_ELEMENTS);
+		// map.put(pgc.getId(), pgc);
 
 		pgc = new PaletteGroup();
 		pgc.setId(IPaletteContributor.KEY_COMMON_TOOLS);
@@ -133,7 +133,7 @@ public class JDPaletteFactory {
 		for (PaletteGroup p : ordpgrps) {
 			if (p.getId().equals(IPaletteContributor.KEY_COMMON_ELEMENTS)) {
 				PaletteDrawer drawer = createElements(paletteRoot, ignore, p, mapEntry);
-				getEntries4Key(drawer, ignore, "", mapEntry); //$NON-NLS-1$
+				getEntries4Key(drawer, ignore, "", mapEntry); //$NON-NLS-1$ 
 				continue;
 			} else if (p.getId().equals(IPaletteContributor.KEY_COMMON_CONTAINER)) {
 				createContainers(paletteRoot, ignore, p, mapEntry);
@@ -174,6 +174,9 @@ public class JDPaletteFactory {
 		drawer.add(createJDEntry(MEllipse.getIconDescriptor(), MEllipse.class));
 		drawer.add(createJDEntry(MLine.getIconDescriptor(), MLine.class));
 		drawer.add(createJDEntry(MGenericElement.getIconDescriptor(), MGenericElement.class));
+
+		drawer.add(createJDEntry(MFrame.getIconDescriptor(), MFrame.class));
+		drawer.add(createJDEntry(MSubreport.getIconDescriptor(), MSubreport.class));
 
 		getEntries4Key(drawer, ignore, p.getId(), map);
 		return drawer;
