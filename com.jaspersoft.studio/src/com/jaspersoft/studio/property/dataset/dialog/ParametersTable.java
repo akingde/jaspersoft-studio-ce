@@ -46,6 +46,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
+import com.jaspersoft.studio.property.descriptor.checkbox.CheckboxCellEditor;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -80,23 +83,27 @@ public class ParametersTable {
 		wtable.setLayoutData(gd);
 		wtable.setHeaderVisible(true);
 
-		TableColumn[] col = new TableColumn[3];
+		TableColumn[] col = new TableColumn[4];
 		col[0] = new TableColumn(wtable, SWT.NONE);
 		col[0].setText("Parameter Name");
-		col[0].pack();
 
 		col[1] = new TableColumn(wtable, SWT.NONE);
-		col[1].setText("Class Type");
-		col[1].pack();
+		col[1].setText("Is For Prompt");
 
 		col[2] = new TableColumn(wtable, SWT.NONE);
-		col[2].setText("Description");
-		col[2].pack();
+		col[2].setText("Class Type");
+
+		col[3] = new TableColumn(wtable, SWT.NONE);
+		col[3].setText("Description");
+
+		for (TableColumn tc : col)
+			tc.pack();
 
 		TableLayout tlayout = new TableLayout();
-		tlayout.addColumnData(new ColumnWeightData(100, false));
-		tlayout.addColumnData(new ColumnWeightData(100, false));
-		tlayout.addColumnData(new ColumnWeightData(100, false));
+		tlayout.addColumnData(new ColumnWeightData(25, false));
+		tlayout.addColumnData(new ColumnWeightData(25, false));
+		tlayout.addColumnData(new ColumnWeightData(25, false));
+		tlayout.addColumnData(new ColumnWeightData(25, false));
 		wtable.setLayout(tlayout);
 
 		tviewer = new TableViewer(wtable);
@@ -169,6 +176,8 @@ public class ParametersTable {
 			public boolean canModify(Object element, String property) {
 				if (property.equals("NAME")) //$NON-NLS-1$
 					return true;
+				if (property.equals("ISFORPROMPT")) //$NON-NLS-1$
+					return true;
 				if (property.equals("TYPE")) //$NON-NLS-1$
 					return true;
 				if (property.equals("DESCRIPTION")) //$NON-NLS-1$
@@ -180,6 +189,8 @@ public class ParametersTable {
 				JRDesignParameter prop = (JRDesignParameter) element;
 				if ("NAME".equals(property)) //$NON-NLS-1$
 					return prop.getName();
+				if ("ISFORPROMPT".equals(property)) //$NON-NLS-1$
+					return prop.isForPrompting();
 				if ("TYPE".equals(property)) //$NON-NLS-1$
 					return prop.getValueClassName();
 				if ("DESCRIPTION".equals(property)) //$NON-NLS-1$
@@ -193,6 +204,8 @@ public class ParametersTable {
 				JRDesignParameter field = (JRDesignParameter) tableItem.getData();
 				if ("NAME".equals(property)) { //$NON-NLS-1$
 					field.setName((String) value);
+				} else if ("ISFORPROMPT".equals(property)) { //$NON-NLS-1$
+					field.setForPrompting((Boolean) value);
 				} else if ("TYPE".equals(property)) { //$NON-NLS-1$
 					field.setValueClassName((String) value);
 				} else if ("DESCRIPTION".equals(property)) { //$NON-NLS-1$
@@ -203,12 +216,23 @@ public class ParametersTable {
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new ClassTypeCellEditor(parent),
-				new TextCellEditor(parent) });
-		viewer.setColumnProperties(new String[] { "NAME", "TYPE", "DESCRIPTION" }); //$NON-NLS-1$ //$NON-NLS-2$
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new CheckboxCellEditor(parent),
+				new ClassTypeCellEditor(parent), new TextCellEditor(parent) });
+		viewer.setColumnProperties(new String[] { "NAME", "ISFORPROMPT", "TYPE", "DESCRIPTION" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
+		private CheckBoxLabelProvider cblp = new CheckBoxLabelProvider(NullEnum.NOTNULL);
+
+		public Image getColumnImage(Object element, int columnIndex) {
+			JRDesignParameter field = (JRDesignParameter) element;
+			switch (columnIndex) {
+			case 1:
+				if (!field.isSystemDefined())
+					return cblp.getCellEditorImage(field.isForPrompting());
+			}
+			return null;
+		}
 
 		public String getColumnText(Object element, int columnIndex) {
 			JRDesignParameter field = (JRDesignParameter) element;
@@ -216,15 +240,17 @@ public class ParametersTable {
 			case 0:
 				return field.getName();
 			case 1:
-				return Misc.nvl(field.getValueClassName(), "");
+				if (field.isSystemDefined())
+					return "";
+				else
+					return Boolean.toString(field.isForPrompting());
 			case 2:
+				return Misc.nvl(field.getValueClassName(), "");
+			case 3:
 				return Misc.nvl(field.getDescription(), "");
 			}
 			return ""; //$NON-NLS-1$
 		}
 
-		public Image getColumnImage(Object element, int columnIndex) {
-			return null;
-		}
 	}
 }
