@@ -24,7 +24,6 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -113,21 +112,21 @@ public class ParametersTable {
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
 			public Object newElement(List<?> input, int pos) {
-				JRDesignField f = new JRDesignField();
+				JRDesignParameter f = new JRDesignParameter();
 				f.setName(getName());
 				f.setValueClass(String.class);
 				return f;
 			}
 
 			private String getName() {
-				List<JRDesignField> list = (List<JRDesignField>) tviewer.getInput();
-				String name = "Field";
+				List<JRDesignParameter> list = (List<JRDesignParameter>) tviewer.getInput();
+				String name = "Parameter";
 				boolean match = false;
 				String tmp = name;
 				for (int i = 1; i < 100000; i++) {
 					tmp = ModelUtils.getNameFormat(name, i);
 
-					for (JRDesignField f : list) {
+					for (JRDesignParameter f : list) {
 						match = f.getName().equals(tmp);
 						if (match)
 							break;

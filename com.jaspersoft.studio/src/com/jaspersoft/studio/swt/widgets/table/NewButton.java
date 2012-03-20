@@ -90,6 +90,7 @@ public class NewButton {
 					addElement(index, inlist, selement);
 				tableViewer.refresh();
 				tableViewer.setSelection(new StructuredSelection(selement));
+				tableViewer.reveal(selement);
 			}
 		}
 
