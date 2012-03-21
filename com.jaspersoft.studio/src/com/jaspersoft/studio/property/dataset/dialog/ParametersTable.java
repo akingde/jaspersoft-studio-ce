@@ -175,9 +175,11 @@ public class ParametersTable {
 		viewer.setCellModifier(new ICellModifier() {
 			public boolean canModify(Object element, String property) {
 				JRDesignParameter field = (JRDesignParameter) element;
+				if (field.isSystemDefined())
+					return false;
 				if (property.equals("NAME")) //$NON-NLS-1$
 					return true;
-				if (property.equals("ISFORPROMPT") && !field.isSystemDefined()) //$NON-NLS-1$
+				if (property.equals("ISFORPROMPT")) //$NON-NLS-1$
 					return true;
 				if (property.equals("TYPE")) //$NON-NLS-1$
 					return true;
