@@ -21,7 +21,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.hadoop.hive.adapter;
+package com.jaspersoft.mongodb.adapter;
 
 import java.util.Map;
 
@@ -32,21 +32,21 @@ import net.sf.jasperreports.engine.JRParameter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.jaspersoft.hadoop.hive.connection.HiveConnection;
+import com.jaspersoft.mongodb.connection.MongoDbConnection;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
- * @version $Id: JdbcDataAdapterService.java 4595 2011-09-08 15:55:10Z teodord $
+ * @version $Id$
  * @author Eric Diaz
  */
-public class HiveDataAdapterService extends AbstractDataAdapterService {
-    private static final Log log = LogFactory.getLog(HiveDataAdapterService.class);
+public class MongoDbDataAdapterService extends AbstractDataAdapterService {
+    private static final Log log = LogFactory.getLog(MongoDbDataAdapterService.class);
 
-    private HiveConnection connection;
+    private MongoDbConnection connection;
 
-    private HiveDataAdapter dataAdapter;
+    private MongoDbDataAdapter dataAdapter;
 
-    public HiveDataAdapterService(HiveDataAdapter dataAdapter) {
+    public MongoDbDataAdapterService(MongoDbDataAdapter dataAdapter) {
         this.dataAdapter = dataAdapter;
     }
 
@@ -65,8 +65,9 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
         }
     }
 
-    private void createConnection() throws Exception {
-        connection = new HiveConnection(dataAdapter.getUrl());
+    private void createConnection() throws JRException {
+        connection = new MongoDbConnection(dataAdapter.getMongoURI(), dataAdapter.getUsername(),
+                dataAdapter.getPassword());
     }
 
     @Override
@@ -86,12 +87,7 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
         try {
             if (connection != null) {
             } else {
-                try {
-                    createConnection();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new JRException(e);
-                }
+                createConnection();
             }
             connection.test();
         } finally {

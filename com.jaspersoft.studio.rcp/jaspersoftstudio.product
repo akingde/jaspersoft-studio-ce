@@ -724,6 +724,7 @@ Public License instead of this License.  But first, please read
       <plugin id="com.jaspersoft.studio.components"/>
       <plugin id="com.jaspersoft.studio.data"/>
       <plugin id="com.jaspersoft.studio.data.hive"/>
+      <plugin id="com.jaspersoft.studio.data.mongodb"/>
       <plugin id="com.jaspersoft.studio.doc"/>
       <plugin id="com.jaspersoft.studio.html"/>
       <plugin id="com.jaspersoft.studio.rcp"/>
