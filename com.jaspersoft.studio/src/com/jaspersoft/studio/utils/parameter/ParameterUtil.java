@@ -33,7 +33,7 @@ public class ParameterUtil {
 
 	public static void setParameters(JasperReportsConfiguration jConfig, JRDataset dataset, Map<String, Object> inmap) {
 		for (JRParameter p : dataset.getParameters()) {
-			if (!p.isSystemDefined() && p.isForPrompting() && p.getDefaultValueExpression() == null) {
+			if (!p.isSystemDefined() && p.isForPrompting() && p.getDefaultValueExpression() != null) {
 				Object val;
 				try {
 					val = p.getValueClass().newInstance();
