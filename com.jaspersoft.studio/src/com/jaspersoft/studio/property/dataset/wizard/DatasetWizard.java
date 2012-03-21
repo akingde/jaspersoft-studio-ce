@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.property.dataset.wizard;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,8 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IFileEditorInput;
@@ -39,6 +42,7 @@ import org.eclipse.ui.IFileEditorInput;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
+import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class DatasetWizard extends Wizard {
@@ -84,14 +88,31 @@ public class DatasetWizard extends Wizard {
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == step3) {
 			try {
-				if (step3.getFields() == null || step3.getFields().isEmpty())
-					step2.getFields();
-				JRDesignDataset dataset = step2.getDataset();
-				if (dataset != null && dataset.getFieldsList() != null) {
-					step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
-				}
-			} catch (UnsupportedOperationException e) {
-				e.printStackTrace();
+				getContainer().run(true, true, new IRunnableWithProgress() {
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						monitor.beginTask("Looking For Resources To Publish", IProgressMonitor.UNKNOWN);
+						try {
+							try {
+								if (step3.getFields() == null || step3.getFields().isEmpty())
+									step2.getFields(monitor);
+								JRDesignDataset dataset = step2.getDataset();
+								if (dataset != null && dataset.getFieldsList() != null) {
+									step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
+								}
+							} catch (UnsupportedOperationException e) {
+								e.printStackTrace();
+							}
+						} catch (Exception e) {
+							UIUtils.showError(e);
+						} finally {
+							monitor.done();
+						}
+					}
+				});
+			} catch (InvocationTargetException e) {
+				UIUtils.showError(e.getCause());
+			} catch (InterruptedException e) {
+				UIUtils.showError(e.getCause());
 			}
 		}
 		if (page == step4 && step3.getFields() != null)

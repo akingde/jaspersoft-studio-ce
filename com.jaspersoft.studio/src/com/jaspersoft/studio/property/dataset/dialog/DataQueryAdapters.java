@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -70,7 +71,6 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -202,12 +202,16 @@ public abstract class DataQueryAdapters {
 	private DataMappingFactory dmfactory;
 
 	private void changeLanguage() {
-		IQueryDesigner designer = qdfactory.getDesigner(langCombo.getText());
-		langLayout.topControl = designer.getControl();
-		langComposite.layout();
-		if (currentDesigner != null)
-			designer.setQuery(currentDesigner.getQuery(), jDesign, newdataset);
-		currentDesigner = designer;
+		if (!isRefresh) {
+			String lang = langCombo.getText();
+			((JRDesignQuery) newdataset.getQuery()).setLanguage(lang);
+			IQueryDesigner designer = qdfactory.getDesigner(lang);
+			langLayout.topControl = designer.getControl();
+			langComposite.layout();
+			// if (currentDesigner != null)
+			designer.setQuery(jDesign, newdataset);
+			currentDesigner = designer;
+		}
 	}
 
 	public Composite createToolbar(Composite parent) {
@@ -244,54 +248,20 @@ public abstract class DataQueryAdapters {
 		gFields = new Action(Messages.DataQueryAdapters_getfields) {
 			@Override
 			public void run() {
-
-				final String lang = langCombo.getText();
-				final DataAdapterDescriptor da = dscombo.getSelected();
-				if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
-					final String query = qdfactory.getDesigner(lang).getQuery();
-					ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-					try {
-						dialog.run(true, true, new IRunnableWithProgress() {
-							public void run(IProgressMonitor monitor) {
-								monitor.beginTask(Messages.DataQueryAdapters_jobname, -1);
-								SelectionHelper.setClassLoader(file, monitor);
-
-								JRDesignQuery jdq = new JRDesignQuery();
-								jdq.setLanguage(lang);
-								jdq.setText(query);
-								newdataset.setQuery(jdq);
-
-								DataAdapterService das = DataAdapterServiceUtil.getDataAdapterService(da.getDataAdapter());
-								try {
-									final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, newdataset);
-									if (fields != null) {
-										monitor.setTaskName("Setting Fields");
-										Display.getDefault().syncExec(new Runnable() {
-
-											public void run() {
-												setFields(fields);
-											}
-										});
-										monitor.setTaskName("Fields set");
-									}
-								} catch (UnsupportedOperationException e) {
-									UIUtils.showError(e);
-								} catch (JRException e) {
-									UIUtils.showError(e);
-								} finally {
-									das.dispose();
-								}
-								monitor.done();
-							}
-						});
-
-					} catch (InvocationTargetException e) {
-						UIUtils.showError(e.getTargetException());
-					} catch (InterruptedException e) {
-						UIUtils.showError(e);
-					}
+				ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+				try {
+					dialog.run(true, true, new IRunnableWithProgress() {
+						public void run(IProgressMonitor monitor) {
+							doGetFields(monitor);
+						}
+					});
+				} catch (InvocationTargetException e) {
+					UIUtils.showError(e.getTargetException());
+				} catch (InterruptedException e) {
+					UIUtils.showError(e);
 				}
 			}
+
 		};
 		gFields.setEnabled(false);
 
@@ -305,21 +275,32 @@ public abstract class DataQueryAdapters {
 		return comp;
 	}
 
-	public void getFields() {
-		gFields.run();
+	public void getFields(IProgressMonitor monitor) {
+		doGetFields(monitor);
 	}
 
+	private boolean isRefresh = false;
+
 	public void setDataset(JasperDesign jDesign, JRDesignDataset ds) {
-		JRQuery query = ds.getQuery();
-		if (query != null) {
-			int langindex = Misc.indexOf(languages, query.getLanguage());
-			if (langindex >= 0)
-				langCombo.select(langindex);
-			else
-				langCombo.setItem(0, Misc.nvl(query.getLanguage()));
-			changeLanguage();
-			currentDesigner.setQuery(query.getText(), jDesign, newdataset);
+		newdataset = ds;
+		JRQuery query = newdataset.getQuery();
+		if (query == null) {
+			query = new JRDesignQuery();
+			((JRDesignQuery) query).setLanguage(JRJdbcQueryExecuterFactory.QUERY_LANGUAGE_SQL);
+			((JRDesignQuery) query).setText("");
+			newdataset.setQuery((JRDesignQuery) query);
 		}
+		isRefresh = true;
+		int langindex = Misc.indexOf(languages, query.getLanguage());
+		if (langindex >= 0)
+			langCombo.select(langindex);
+		else
+			langCombo.setItem(0, Misc.nvl(query.getLanguage()));
+		isRefresh = false;
+		changeLanguage();
+
+		if (jDesign != null)
+			dscombo.setSelected(jDesign.getProperty(MReport.DEFAULT_DATAADAPTER));
 	}
 
 	public String getLanguage() {
@@ -331,7 +312,9 @@ public abstract class DataQueryAdapters {
 	}
 
 	public String getQuery() {
-		return qdfactory.getDesigner(langCombo.getText()).getQuery();
+		// if (currentDesigner != null)
+		// return currentDesigner.getQuery();
+		return qdfactory.getDesigner(newdataset.getQuery().getLanguage()).getQuery();
 	}
 
 	public abstract void setFields(List<JRDesignField> fields);
@@ -351,5 +334,46 @@ public abstract class DataQueryAdapters {
 
 	public DataAdapterDescriptor getDataAdapter() {
 		return dscombo.getSelected();
+	}
+
+	protected void doGetFields(IProgressMonitor monitor) {
+		final String lang = newdataset.getQuery().getLanguage();
+		final DataAdapterDescriptor da = dscombo.getSelected();
+		if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
+			final String query = newdataset.getQuery().getText();
+
+			monitor.beginTask(Messages.DataQueryAdapters_jobname, -1);
+
+			ClassLoader oldClassloader = Thread.currentThread().getContextClassLoader();
+			Thread.currentThread().setContextClassLoader(jConfig.getClassLoader());
+
+			JRDesignQuery jdq = new JRDesignQuery();
+			jdq.setLanguage(lang);
+			jdq.setText(query);
+			newdataset.setQuery(jdq);
+
+			DataAdapterService das = DataAdapterServiceUtil.getDataAdapterService(da.getDataAdapter());
+			try {
+				final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, newdataset);
+				if (fields != null) {
+					monitor.setTaskName("Setting Fields");
+					Display.getDefault().syncExec(new Runnable() {
+
+						public void run() {
+							setFields(fields);
+						}
+					});
+					monitor.setTaskName("Fields set");
+				}
+			} catch (UnsupportedOperationException e) {
+				UIUtils.showError(e);
+			} catch (JRException e) {
+				UIUtils.showError(e);
+			} finally {
+				Thread.currentThread().setContextClassLoader(oldClassloader);
+				das.dispose();
+			}
+			monitor.done();
+		}
 	}
 }

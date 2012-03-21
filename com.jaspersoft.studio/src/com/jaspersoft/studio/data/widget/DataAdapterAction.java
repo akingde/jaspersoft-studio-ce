@@ -121,6 +121,18 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 
 	private DataAdapterDescriptor selectedDA;
 
+	public void setSelected(String d) {
+		if (d != null && dastorages != null) {
+			for (ADataAdapterStorage das : dastorages)
+				for (DataAdapterDescriptor dad : das.getDataAdapterDescriptors()) {
+					if (dad.getName().equals(d)) {
+						setSelected(dad);
+						return;
+					}
+				}
+		}
+	}
+
 	public void setSelected(DataAdapterDescriptor d) {
 		selectedDA = d;
 		// set current

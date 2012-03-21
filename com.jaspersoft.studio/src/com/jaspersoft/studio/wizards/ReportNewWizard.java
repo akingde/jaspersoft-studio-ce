@@ -22,11 +22,13 @@ package com.jaspersoft.studio.wizards;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -39,6 +41,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -47,7 +50,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -132,22 +136,53 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 					step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName());
 			jConfig.put(IEditorContributor.KEY_FILE, file);
 			jConfig.setJasperDesign(getJasperDesign());
+			IProject project = file.getProject();
+			try {
+				if (project.getNature(JavaCore.NATURE_ID) != null)
+					jConfig.setClassLoader(new JavaProjectClassLoader(JavaCore.create(project)));
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
 
 			step2.setFile(jConfig);
 		}
 		if (page == step3) {
 			try {
-				// if we don't have fields, call getFields from the QueryDesigner automatically
-				if (step3.getFields() == null || step3.getFields().isEmpty())
-					step2.getFields();
+				getContainer().run(true, true, new IRunnableWithProgress() {
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						monitor.beginTask("Looking For Resources To Publish", IProgressMonitor.UNKNOWN);
+						try {
+							try {
+								// if we don't have fields, call getFields from the QueryDesigner automatically
+								if (step3.getFields() == null || step3.getFields().isEmpty())
+									step2.getFields(monitor);
 
-				JRDesignDataset dataset = step2.getDataset();
-				if (dataset != null && dataset.getFieldsList() != null) {
-					step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
-				}
-			} catch (UnsupportedOperationException e) {
-				e.printStackTrace();
+								final JRDesignDataset dataset = step2.getDataset();
+								if (dataset != null && dataset.getFieldsList() != null) {
+									Display.getDefault().syncExec(new Runnable() {
+
+										public void run() {
+											step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
+										}
+									});
+
+								}
+							} catch (UnsupportedOperationException e) {
+								e.printStackTrace();
+							}
+						} catch (Exception e) {
+							UIUtils.showError(e);
+						} finally {
+							monitor.done();
+						}
+					}
+				});
+			} catch (InvocationTargetException e) {
+				UIUtils.showError(e.getCause());
+			} catch (InterruptedException e) {
+				UIUtils.showError(e.getCause());
 			}
+
 		}
 		if (page == step4 && step3.getFields() != null)
 			step4.setFields(new ArrayList<Object>(step3.getFields()));
@@ -163,21 +198,24 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		final String containerName = step1.getContainerFullPath().toPortableString();
 		final String fileName = step1.getFileName();
 
-		Job job = new Job(Messages.ReportNewWizard_2) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					doFinish(containerName, fileName, monitor);
-				} catch (CoreException e) {
-					UIUtils.showError(e);
-					return Status.CANCEL_STATUS;
+		try {
+			getContainer().run(true, true, new IRunnableWithProgress() {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.ReportNewWizard_2, IProgressMonitor.UNKNOWN);
+					try {
+						doFinish(containerName, fileName, monitor);
+					} catch (Exception e) {
+						UIUtils.showError(e);
+					} finally {
+						monitor.done();
+					}
 				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setUser(true);
-		job.schedule();
-
+			});
+		} catch (InvocationTargetException e) {
+			UIUtils.showError(e.getCause());
+		} catch (InterruptedException e) {
+			UIUtils.showError(e.getCause());
+		}
 		return true;
 	}
 
@@ -305,38 +343,36 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 
 	private void copyTemplateResources(final IProgressMonitor monitor, final JasperDesign jd, final IFile repFile)
 			throws CoreException, IOException {
-		Job job = new Job(Messages.ReportNewWizard_6) {
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				List<JRDesignElement> list = ModelUtils.getAllGElements(jd);
-				for (JRDesignElement el : list) {
-					if (el instanceof JRImage) {
-						JRImage im = (JRImage) el;
-						String str = ExpressionUtil.eval(im.getExpression(), jConfig);
-						if (str != null) {// resolv image
-							Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle()
-									.findEntries(Messages.ReportNewWizard_7, str, true);
-							while (en.hasMoreElements()) {
-								URL uimage = (URL) en.nextElement();
-								IFile f = repFile.getParent().getFile(new Path(str));
-								try {
-									if (!f.exists())
-										f.create(uimage.openStream(), true, monitor);
-								} catch (CoreException e) {
-									e.printStackTrace();
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
+		monitor.subTask(Messages.ReportNewWizard_6);
+		try {
+			List<JRDesignElement> list = ModelUtils.getAllGElements(jd);
+			for (JRDesignElement el : list) {
+				if (el instanceof JRImage) {
+					JRImage im = (JRImage) el;
+					String str = ExpressionUtil.eval(im.getExpression(), jConfig);
+					if (str != null) {// resolv image
+						Enumeration<?> en = JaspersoftStudioPlugin.getInstance().getBundle()
+								.findEntries(Messages.ReportNewWizard_7, str, true);
+						while (en.hasMoreElements()) {
+							URL uimage = (URL) en.nextElement();
+							IFile f = repFile.getParent().getFile(new Path(str));
+							try {
+								if (!f.exists())
+									f.create(uimage.openStream(), true, monitor);
+							} catch (CoreException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
 							}
 						}
 					}
 				}
-				return Status.OK_STATUS;
 			}
-		};
-		job.setPriority(Job.SHORT);
-		job.schedule();
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		} finally {
+			monitor.done();
+		}
 	}
 
 	private void throwCoreException(String message) throws CoreException {

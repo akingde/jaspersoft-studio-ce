@@ -35,7 +35,7 @@ public interface IQueryDesigner {
 
 	public Control getControl();
 
-	public void setQuery(String query, JasperDesign jDesign, JRDataset jDataset);
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset);
 
 	public String getQuery();
 

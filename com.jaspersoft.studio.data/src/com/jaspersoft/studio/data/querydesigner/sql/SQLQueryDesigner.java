@@ -143,12 +143,12 @@ public class SQLQueryDesigner extends QueryDesigner {
 	// private SQLEditor sqleditor;
 
 	@Override
-	public void setQuery(String query, JasperDesign jDesign, JRDataset jDataset) {
+	public void setQuery(JasperDesign jDesign, JRDataset jDataset) {
 		// if (sqleditor != null) {
 		// sqleditor.setInput(createSQLEditorInput(query));
 		// this.query = query;
 		// } else
-		super.setQuery(query, jDesign, jDataset);
+		super.setQuery(jDesign, jDataset);
 	}
 
 	// private QDSQLEditorInput createSQLEditorInput(String query) {

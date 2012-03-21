@@ -47,6 +47,7 @@ import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -72,7 +73,6 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 			query.setLanguage("SQL");
 			dataset.setQuery(query);
 		}
-
 		return dataset;
 	}
 
@@ -92,9 +92,9 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		super.dispose();
 	}
 
-	public void getFields() {
+	public void getFields(IProgressMonitor monitor) {
 		if (dataquery != null)
-			dataquery.getFields();
+			dataquery.getFields(monitor);
 	}
 
 	public DataAdapterDescriptor getDataAdapter() {
@@ -108,7 +108,8 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		composite.setLayout(new GridLayout(1, true));
 		setControl(composite);
 
-		dataquery = new DataQueryAdapters(composite, jConfig, getDataset(), composite.getBackground()) {
+		JRDesignDataset ds = getDataset();
+		dataquery = new DataQueryAdapters(composite, jConfig, ds, composite.getBackground()) {
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {
@@ -130,7 +131,7 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 
 		ctf.setTopRight(c);
 		if (jConfig != null)
-			dataquery.setDataset(jConfig.getJasperDesign(), getDataset());
+			dataquery.setDataset(jConfig.getJasperDesign(), ds);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");
 	}

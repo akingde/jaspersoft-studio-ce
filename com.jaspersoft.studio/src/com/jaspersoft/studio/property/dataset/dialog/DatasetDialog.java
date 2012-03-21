@@ -121,7 +121,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		};
 
 		Composite c = dataquery.createToolbar(body);
-		
+
 		SashForm sf = new CSashForm(body, SWT.VERTICAL);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -130,22 +130,20 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		sf.setLayoutData(gd);
 		sf.setLayout(new GridLayout());
 
-		
 		CTabFolder ctf = dataquery.createTop(sf, this);
-		
 
-//		int tabHeight = c.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-//		tabHeight = Math.max(tabHeight, ctf.getTabHeight());
-//		ctf.setTabHeight(tabHeight);
-//
-//		ctf.setTopRight(c);
+		// int tabHeight = c.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+		// tabHeight = Math.max(tabHeight, ctf.getTabHeight());
+		// ctf.setTabHeight(tabHeight);
+		//
+		// ctf.setTopRight(c);
 
 		dataquery.setDefaultDataAdapter(mreport);
 
 		createBottom(sf, toolkit);
 		sf.setWeights(new int[] { 450, 150 });
 
-		setDataset(mreport.getJasperDesign(), (JRDesignDataset) mdataset.getValue());
+		setDataset(mreport.getJasperDesign(), newdataset);
 	}
 
 	public void setFields(List<JRDesignField> fields) {
@@ -263,16 +261,16 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		JRDesignDataset ds = (JRDesignDataset) (mdataset.getParent() == null ? mreport.getJasperDesign()
 				.getMainDesignDataset() : mdataset.getValue());
 		command = new CompoundCommand();
-		IPropertySource mquery = (IPropertySource) mdataset.getPropertyValue(JRDesignDataset.PROPERTY_QUERY);
-		String lang = dataquery.getLanguage();
-		String qtext = dataquery.getQuery();
+
+		String lang = newdataset.getQuery().getLanguage();
+		String qtext = newdataset.getQuery().getText();
 		if (ds.getQuery() == null) {
 			JRDesignQuery jrQuery = new JRDesignQuery();
 			jrQuery.setLanguage(lang);
 			jrQuery.setText(qtext);
-			mquery = new MQuery(jrQuery);
-			command.add(setValueCommand(JRDesignDataset.PROPERTY_QUERY, mquery, mdataset));
+			command.add(setValueCommand(JRDesignDataset.PROPERTY_QUERY, new MQuery(jrQuery), mdataset));
 		} else {
+			IPropertySource mquery = (IPropertySource) mdataset.getPropertyValue(JRDesignDataset.PROPERTY_QUERY);
 			if (ds.getQuery().getLanguage() == null || !ds.getQuery().getLanguage().equals(lang))
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_LANGUAGE, lang, mquery));
 			if (!ds.getQuery().getText().equals(qtext))
