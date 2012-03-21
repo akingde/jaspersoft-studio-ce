@@ -27,7 +27,6 @@ public class HiveFieldsProvider implements IFieldsProvider {
 		return true;
 	}
 
-	@Override
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JasperReportsConfiguration jConfig, JRDataset jDataset)
 			throws JRException, UnsupportedOperationException {
