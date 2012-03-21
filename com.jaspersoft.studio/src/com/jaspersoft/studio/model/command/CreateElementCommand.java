@@ -146,7 +146,7 @@ public class CreateElementCommand extends Command {
 	protected void setContext(ANode destNode, MGraphicElement srcNode, int index) {
 		this.jConfig = destNode.getJasperConfiguration();
 		this.srcNode = srcNode;
-		this.jasperDesign = jConfig.getJasperDesign();
+		this.jasperDesign = destNode.getJasperDesign();
 		this.jrElement = (JRDesignElement) srcNode.getValue();
 		if (destNode instanceof IGroupElement)
 			this.jrGroup = ((IGroupElement) destNode).getJRElementGroup();

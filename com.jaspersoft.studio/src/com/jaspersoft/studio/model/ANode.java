@@ -426,7 +426,9 @@ public abstract class ANode implements INode, Serializable {
 	public JasperReportsConfiguration getJasperConfiguration() {
 		if (jConfig != null)
 			return jConfig;
-		return parent.getJasperConfiguration();
+		if (parent != null)
+			return parent.getJasperConfiguration();
+		return null;
 	}
 
 	public int findElement(Object obj) {
