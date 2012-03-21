@@ -23,28 +23,24 @@ import com.jaspersoft.studio.utils.parameter.ParameterUtil;
  * 
  */
 public class HiveFieldsProvider implements IFieldsProvider {
-	public boolean supportsGetFieldsOperation() {
-		return true;
-	}
+    public boolean supportsGetFieldsOperation() {
+        return true;
+    }
 
-	public List<JRDesignField> getFields(DataAdapterService con,
-			JasperReportsConfiguration jConfig, JRDataset jDataset)
-			throws JRException, UnsupportedOperationException {
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
-		con.contributeParameters(parameters);
-		ParameterUtil.setParameters(jConfig, jDataset, parameters);
+    public List<JRDesignField> getFields(DataAdapterService dataAdapterService,
+            JasperReportsConfiguration jasperReportsConfiguration, JRDataset dataset) throws JRException,
+            UnsupportedOperationException {
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put(JRParameter.REPORT_MAX_COUNT, 0);
+        dataAdapterService.contributeParameters(parameters);
+        ParameterUtil.setParameters(jasperReportsConfiguration, dataset, parameters);
 
-		JRField[] fields = com.jaspersoft.hadoop.hive.HiveFieldsProvider
-				.getInstance()
-				.getFields(
-						(HiveConnection) parameters
-								.get(JRParameter.REPORT_CONNECTION),
-						jDataset, parameters);
-		List<JRDesignField> designFields = new ArrayList<JRDesignField>();
-		for (int index = 0; index < fields.length; index++) {
-			designFields.add((JRDesignField) fields[index]);
-		}
-		return designFields;
-	}
+        JRField[] fields = com.jaspersoft.hadoop.hive.HiveFieldsProvider.getInstance().getFields(
+                (HiveConnection) parameters.get(JRParameter.REPORT_CONNECTION), dataset, parameters);
+        List<JRDesignField> designFields = new ArrayList<JRDesignField>();
+        for (int index = 0; index < fields.length; index++) {
+            designFields.add((JRDesignField) fields[index]);
+        }
+        return designFields;
+    }
 }

@@ -44,7 +44,7 @@ public class HiveDataAdapterFactory implements DataAdapterFactory {
 	public DataAdapterDescriptor createDataAdapter() {
 		HiveDataAdapterDescriptor descriptor = new HiveDataAdapterDescriptor();
 		descriptor.getDataAdapter().setUrl(
-				"jdbc:hive://bdsandbox6:10000/default");
+				"jdbc:hive://lovalhost:10000/default");
 		return descriptor;
 	}
 

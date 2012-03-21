@@ -33,7 +33,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.jaspersoft.hadoop.hive.connection.HiveConnection;
-import com.jaspersoft.hadoop.hive.connection.HiveConnectionManager;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
@@ -41,26 +40,7 @@ import com.jaspersoft.hadoop.hive.connection.HiveConnectionManager;
  * @author Eric Diaz
  */
 public class HiveDataAdapterService extends AbstractDataAdapterService {
-	private static final Log log = LogFactory
-			.getLog(HiveDataAdapterService.class);
-	private static HiveConnectionManager connectionManager;
-
-	public static HiveConnectionManager getConnectionManager() {
-		if (connectionManager == null) {
-			System.out.println("Starting Hive Connection Manager");
-			connectionManager = new HiveConnectionManager();
-			Runtime.getRuntime().addShutdownHook(new Thread() {
-				@Override
-				public void run() {
-					System.out.println("Stopping Hive Connection Manager");
-					if (connectionManager != null)
-						connectionManager.shutdown();
-					super.run();
-				}
-			});
-		}
-		return connectionManager;
-	}
+	private static final Log log = LogFactory.getLog(HiveDataAdapterService.class);
 
 	private HiveConnection connection;
 
@@ -71,12 +51,13 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
 	}
 
 	@Override
-	public void contributeParameters(Map<String, Object> parameters)
-			throws JRException {
+	public void contributeParameters(Map<String, Object> parameters) throws JRException {
+		if (connection != null) {
+			dispose();
+		}
 		if (dataAdapter != null) {
 			try {
-				getConnectionManager().setJdbcURL(dataAdapter.getUrl());
-				connection = connectionManager.borrowConnection();
+				connection = new HiveConnection(dataAdapter.getUrl());
 				parameters.put(JRParameter.REPORT_CONNECTION, connection);
 			} catch (Exception e) {
 				throw new JRException(e);
@@ -88,7 +69,7 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
 	public void dispose() {
 		try {
 			if (connection != null)
-				connectionManager.returnConnection(connection);
+				connection.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (log.isErrorEnabled())
@@ -97,20 +78,11 @@ public class HiveDataAdapterService extends AbstractDataAdapterService {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
-		if (connectionManager != null) {
-			connectionManager.shutdown();
-			System.out.println("Hive connection manager is shutdown");
-		}
-		super.finalize();
-	}
-
-	@Override
 	public void test() throws JRException {
 		super.test();
 		if (connection != null) {
 			connection.test();
-			connectionManager.returnConnection(connection);
+			dispose();
 		}
 	}
 }
