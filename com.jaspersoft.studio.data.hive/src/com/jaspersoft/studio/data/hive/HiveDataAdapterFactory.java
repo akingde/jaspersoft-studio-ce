@@ -36,61 +36,60 @@ import com.jaspersoft.studio.data.DataAdapterFactory;
  */
 public class HiveDataAdapterFactory implements DataAdapterFactory {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#createDataAdapter()
-	 */
-	public DataAdapterDescriptor createDataAdapter() {
-		HiveDataAdapterDescriptor descriptor = new HiveDataAdapterDescriptor();
-		descriptor.getDataAdapter().setUrl(
-				"jdbc:hive://lovalhost:10000/default");
-		return descriptor;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.jaspersoft.studio.data.DataAdapterFactory#createDataAdapter()
+     */
+    public DataAdapterDescriptor createDataAdapter() {
+        HiveDataAdapterDescriptor descriptor = new HiveDataAdapterDescriptor();
+        descriptor.getDataAdapter().setUrl("jdbc:hive://localhost:10000/default");
+        return descriptor;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
-	 */
-	public String getDataAdapterClassName() {
-		return HiveDataAdapterImplementation.class.getName();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.jaspersoft.studio.data.DataAdapterFactory#getDataAdapterClassName()
+     */
+    public String getDataAdapterClassName() {
+        return HiveDataAdapterImplementation.class.getName();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
-	 */
-	public String getLabel() {
-		return "Hive Connection";
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+     */
+    public String getLabel() {
+        return "Hive Connection";
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
-	 */
-	public String getDescription() {
-		return "Use HiveQL queries to get data from a hive instance";
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.jaspersoft.studio.data.DataAdapterFactory#getDescription()
+     */
+    public String getDescription() {
+        return "Use HiveQL queries to get data from a hive instance";
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
-	 */
-	public Image getIcon(int size) {
-		if (size == 16) {
-			return Activator.getImage("icons/hive.png");
-		}
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.jaspersoft.studio.data.DataAdapterFactory#getIcon(int)
+     */
+    public Image getIcon(int size) {
+        if (size == 16) {
+            return Activator.getImage("icons/hive.png");
+        }
+        return null;
+    }
 
-	public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
-		if (dataAdapter instanceof HiveDataAdapter)
-			return new HiveDataAdapterService((HiveDataAdapter) dataAdapter);
-		return null;
-	}
+    public DataAdapterService createDataAdapterService(DataAdapter dataAdapter) {
+        if (dataAdapter instanceof HiveDataAdapter)
+            return new HiveDataAdapterService((HiveDataAdapter) dataAdapter);
+        return null;
+    }
 }
