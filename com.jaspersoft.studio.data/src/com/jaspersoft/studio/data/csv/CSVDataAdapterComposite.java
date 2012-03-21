@@ -62,7 +62,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.ADataAdapterComposite;
@@ -227,7 +226,7 @@ public class CSVDataAdapterComposite extends ADataAdapterComposite {
 			}
 
 			public void modify(Object element, String property, Object value) {
-				TableItem tableItem = (TableItem) element;
+				// TableItem tableItem = (TableItem) element;
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
 			}
