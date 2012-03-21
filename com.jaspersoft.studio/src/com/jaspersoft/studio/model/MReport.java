@@ -526,7 +526,8 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			handleDetailBandChanged(evt);
 		} else if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_GROUPS)) {
 			handleGroupChanged(evt);
-		}
+		} else if (evt.getPropertyName().equals(JRDesignDataset.PROPERTY_QUERY))
+			return;
 		super.propertyChange(evt);
 	}
 
