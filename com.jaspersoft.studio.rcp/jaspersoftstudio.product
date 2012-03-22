@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="1.0.8" useFeatures="false" includeLaunchers="true">
+<product name="Jaspersoft Studio" uid="com.jaspersoft.studio.rcp.product" id="com.jaspersoft.studio.rcp.product" application="com.jaspersoft.studio.rcp.application" version="1.0.9" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/com.jaspersoft.studio.rcp/icons/studio_logo_about.png"/>
@@ -724,7 +724,7 @@ Public License instead of this License.  But first, please read
       <plugin id="com.jaspersoft.studio.components"/>
       <plugin id="com.jaspersoft.studio.data"/>
       <plugin id="com.jaspersoft.studio.data.hive"/>
-      <plugin id="com.jaspersoft.studio.data.mongodb"/>
+      <plugin id="com.jaspersoft.studio.data.mongodb" fragment=""/>
       <plugin id="com.jaspersoft.studio.doc"/>
       <plugin id="com.jaspersoft.studio.html"/>
       <plugin id="com.jaspersoft.studio.rcp"/>
