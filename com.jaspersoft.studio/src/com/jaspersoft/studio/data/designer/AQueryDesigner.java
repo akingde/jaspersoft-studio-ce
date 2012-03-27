@@ -1,5 +1,6 @@
-package com.jaspersoft.studio.data;
+package com.jaspersoft.studio.data.designer;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRDataset;
@@ -8,14 +9,35 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public abstract class AQueryDesigner implements IQueryDesigner {
-	private DataQueryAdapters parent;
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.IQueryDesigner;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
+import com.jaspersoft.studio.utils.jobs.IRunWithProgress;
+
+public abstract class AQueryDesigner implements IQueryDesigner, IRunWithProgress {
+	protected DataQueryAdapters container;
 	protected JasperDesign jDesign;
 	protected JRDesignDataset jDataset;
 
 	public AQueryDesigner() {
+	}
+
+	public void showError(Throwable t) {
+		container.getQueryStatus().showError(t);
+	}
+
+	public void showWarning(String msg) {
+		container.getQueryStatus().showWarning(msg);
+	}
+
+	public void showInfo(String msg) {
+		container.getQueryStatus().showInfo(msg);
+	}
+
+	public void runJob(IRunnableWithProgress runnable) throws InvocationTargetException, InterruptedException {
+		container.run(runnable);
 	}
 
 	/*
@@ -36,14 +58,14 @@ public abstract class AQueryDesigner implements IQueryDesigner {
 	}
 
 	public void setParentContainer(DataQueryAdapters parent) {
-		this.parent = parent;
+		this.container = parent;
 	}
 
 	public void setFields(List<JRDesignField> fields) {
-		parent.setFields(fields);
+		container.setFields(fields);
 	}
 
 	public void setParameters(List<JRDesignParameter> params) {
-		parent.setParameters(params);
+		container.setParameters(params);
 	}
 }

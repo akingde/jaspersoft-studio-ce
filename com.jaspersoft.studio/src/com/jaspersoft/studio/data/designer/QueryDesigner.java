@@ -17,18 +17,29 @@
  * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
  * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.data;
+package com.jaspersoft.studio.data.designer;
+
+import java.lang.reflect.InvocationTargetException;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.fields.IFieldsProvider;
 
 public class QueryDesigner extends AQueryDesigner {
 	private boolean refresh = false;
@@ -45,9 +56,11 @@ public class QueryDesigner extends AQueryDesigner {
 	}
 
 	protected Text control;
+	private Composite tbCompo;
+	private Button btnAuto;
+	private Button btn;
 
 	public QueryDesigner() {
-		super();
 	}
 
 	/*
@@ -57,6 +70,10 @@ public class QueryDesigner extends AQueryDesigner {
 	 */
 	public Control getControl() {
 		return control;
+	}
+
+	public Control getToolbarControl() {
+		return tbCompo;
 	}
 
 	public Control createControl(Composite parent) {
@@ -79,5 +96,53 @@ public class QueryDesigner extends AQueryDesigner {
 
 	public void dispose() {
 
+	}
+
+	public Control createToolbar(Composite parent) {
+		tbCompo = new Composite(parent, SWT.NONE);
+		tbCompo.setBackgroundMode(SWT.INHERIT_FORCE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		tbCompo.setLayout(layout);
+
+		btnAuto = new Button(tbCompo, SWT.CHECK);
+		btnAuto.setText("Automatically Retrive Fields");
+
+		btn = new Button(tbCompo, SWT.PUSH);
+		btn.setText("Read Fields");
+		btn.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					container.run(new IRunnableWithProgress() {
+
+						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+							container.doGetFields(monitor);
+						}
+					});
+				} catch (InvocationTargetException ex) {
+					container.getQueryStatus().showError(ex.getTargetException());
+				} catch (InterruptedException ex) {
+					container.getQueryStatus().showError(ex);
+				}
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+		setFieldProviderEnabled(false);
+		return tbCompo;
+	}
+
+	public void setDataAdapter(DataAdapterDescriptor da) {
+		boolean enable = (da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation());
+		setFieldProviderEnabled(enable);
+	}
+
+	protected void setFieldProviderEnabled(boolean enable) {
+		btnAuto.setEnabled(enable);
+		btn.setEnabled(enable);
 	}
 }

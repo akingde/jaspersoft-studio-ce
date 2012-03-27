@@ -33,7 +33,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.data.QueryDesigner;
+import com.jaspersoft.studio.data.designer.QueryDesigner;
+import com.jaspersoft.studio.data.designer.QueryStatus;
 
 public class SQLQueryDesigner extends QueryDesigner {
 	public SQLQueryDesigner() {

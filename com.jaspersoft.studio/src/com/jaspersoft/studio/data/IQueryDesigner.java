@@ -35,13 +35,19 @@ public interface IQueryDesigner {
 
 	public Control getControl();
 
+	public Control createControl(Composite parent);
+
+	public Control getToolbarControl();
+
+	public Control createToolbar(Composite parent);
+
+	public void dispose();
+
 	public void setQuery(JasperDesign jDesign, JRDataset jDataset);
 
 	public String getQuery();
 
-	public Control createControl(Composite parent);
-
-	public void dispose();
+	public void setDataAdapter(DataAdapterDescriptor da);
 
 	public void setParentContainer(DataQueryAdapters dataQueryAdapters);
 

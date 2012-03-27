@@ -35,10 +35,7 @@ import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -63,6 +60,7 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.data.IQueryDesigner;
 import com.jaspersoft.studio.data.MDataAdapters;
+import com.jaspersoft.studio.data.designer.QueryStatus;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
 import com.jaspersoft.studio.data.widget.DataAdapterAction;
 import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
@@ -71,7 +69,6 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public abstract class DataQueryAdapters {
@@ -103,7 +100,7 @@ public abstract class DataQueryAdapters {
 
 	private Composite composite;
 	private DataAdapterAction dscombo;
-	private Action gFields;
+	// private Action gFields;
 	private Combo langCombo;
 	private String[] languages;
 	private Composite langComposite;
@@ -149,12 +146,12 @@ public abstract class DataQueryAdapters {
 		bptab.setText(Messages.DataQueryAdapters_querytab);
 
 		Composite sectionClient = new Composite(tabFolder, SWT.NONE);
-		sectionClient.setLayout(new GridLayout(2, false));
+		sectionClient.setLayout(new GridLayout(3, false));
 		sectionClient.setBackground(background);
+		sectionClient.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		Label label = new Label(sectionClient, SWT.NONE);
 		label.setText(Messages.DataQueryAdapters_languagetitle);
-		label.setBackground(background);
 
 		langCombo = new Combo(sectionClient, SWT.SINGLE | SWT.BORDER);
 		languages = ModelUtils.getQueryLanguages();
@@ -183,60 +180,66 @@ public abstract class DataQueryAdapters {
 			}
 		});
 
+		tbCompo = new Composite(sectionClient, SWT.NONE);
+		tbCompo.setBackgroundMode(SWT.INHERIT_FORCE);
+		tbLayout = new StackLayout();
+		tbCompo.setLayout(tbLayout);
+		tbCompo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+
 		langComposite = new Composite(sectionClient, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
+		gd.horizontalSpan = 3;
 		langComposite.setLayoutData(gd);
 		langLayout = new StackLayout();
+		langLayout.marginWidth = 0;
+		langLayout.marginWidth = 0;
 		langComposite.setLayout(langLayout);
 		langComposite.setBackground(background);
 
-		qdfactory = new QDesignerFactory(langComposite, this);
+		qdfactory = new QDesignerFactory(langComposite, tbCompo, this);
 		for (String lang : languages)
 			qdfactory.getDesigner(lang);
 
 		bptab.setControl(sectionClient);
 	}
 
-	IQueryDesigner currentDesigner = null;
+	private IQueryDesigner currentDesigner = null;
 	private DataMappingFactory dmfactory;
 
 	private void changeLanguage() {
 		if (!isRefresh) {
+			qStatus.showInfo("");
 			String lang = langCombo.getText();
 			((JRDesignQuery) newdataset.getQuery()).setLanguage(lang);
 			IQueryDesigner designer = qdfactory.getDesigner(lang);
 			langLayout.topControl = designer.getControl();
+			tbLayout.topControl = designer.getToolbarControl();
+			tbCompo.layout();
 			langComposite.layout();
 			// if (currentDesigner != null)
 			designer.setQuery(jDesign, newdataset);
+
 			currentDesigner = designer;
 		}
 	}
 
 	public Composite createToolbar(Composite parent) {
 		final Composite comp = new Composite(parent, SWT.NONE);
-		comp.setLayout(new GridLayout(2, false));
+		comp.setLayout(new GridLayout(5, false));
 		comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comp.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		Label lbl = new Label(comp, SWT.NONE);
-		// lbl.setText(Messages.DataQueryAdapters_actionname);
 		lbl.setImage(JaspersoftStudioPlugin.getImage(MDataAdapters.getIconDescriptor().getIcon16()));
 
 		final ToolBar tb = new ToolBar(comp, SWT.FLAT | SWT.RIGHT);
 		tb.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		tb.setBackground(parent.getBackground());
 		// tb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		final ToolBarManager manager = new ToolBarManager(tb);
 		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
-				gFields.setEnabled(false);
-				if (da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
-					gFields.setEnabled(true);
-				} else {
-					gFields.setEnabled(false);
-				}
+				currentDesigner.setDataAdapter(da);
 			}
 
 			public boolean isNotRunning() {
@@ -245,34 +248,36 @@ public abstract class DataQueryAdapters {
 		};
 		dscombo = new DataAdapterAction(adapterRunReport, DataAdapterManager.getDataAdapter(file));
 
-		gFields = new Action(Messages.DataQueryAdapters_getfields) {
-			@Override
-			public void run() {
-				ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-				try {
-					dialog.run(true, true, new IRunnableWithProgress() {
-						public void run(IProgressMonitor monitor) {
-							doGetFields(monitor);
-						}
-					});
-				} catch (InvocationTargetException e) {
-					UIUtils.showError(e.getTargetException());
-				} catch (InterruptedException e) {
-					UIUtils.showError(e);
-				}
-			}
-
-		};
-		gFields.setEnabled(false);
-
 		manager.add(dscombo);
-		manager.add(new Separator());
-		manager.add(gFields);
 
 		manager.update(true);
 		tb.pack();
 
+		createStatusBar(comp);
+
+		createProgressBar(comp);
+
 		return comp;
+	}
+
+	private RunWithProgressBar runner;
+
+	protected void createProgressBar(final Composite comp) {
+		runner = new RunWithProgressBar(comp);
+	}
+
+	public void run(IRunnableWithProgress runnable) throws InvocationTargetException, InterruptedException {
+		runner.runJob(runnable);
+	}
+
+	private QueryStatus qStatus;
+
+	protected void createStatusBar(final Composite comp) {
+		qStatus = new QueryStatus(comp);
+	}
+
+	public QueryStatus getQueryStatus() {
+		return qStatus;
 	}
 
 	public void getFields(IProgressMonitor monitor) {
@@ -280,6 +285,8 @@ public abstract class DataQueryAdapters {
 	}
 
 	private boolean isRefresh = false;
+	private StackLayout tbLayout;
+	private Composite tbCompo;
 
 	public void setDataset(JasperDesign jDesign, JRDesignDataset ds) {
 		newdataset = ds;
@@ -326,8 +333,7 @@ public abstract class DataQueryAdapters {
 			Object obj = mreport.getParameter(MReport.DEFAULT_DATAADAPTER);
 			if (obj != null && obj instanceof DataAdapterDescriptor) {
 				dscombo.setSelected((DataAdapterDescriptor) obj);
-				if (obj instanceof IFieldsProvider)
-					gFields.setEnabled(true);
+				currentDesigner.setDataAdapter((DataAdapterDescriptor) obj);
 			}
 		}
 	}
@@ -336,7 +342,7 @@ public abstract class DataQueryAdapters {
 		return dscombo.getSelected();
 	}
 
-	protected void doGetFields(IProgressMonitor monitor) {
+	public void doGetFields(IProgressMonitor monitor) {
 		final String lang = newdataset.getQuery().getLanguage();
 		final DataAdapterDescriptor da = dscombo.getSelected();
 		if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
@@ -366,9 +372,9 @@ public abstract class DataQueryAdapters {
 					monitor.setTaskName("Fields set");
 				}
 			} catch (UnsupportedOperationException e) {
-				UIUtils.showError(e);
+				qStatus.showError(e);
 			} catch (JRException e) {
-				UIUtils.showError(e);
+				qStatus.showError(e);
 			} finally {
 				Thread.currentThread().setContextClassLoader(oldClassloader);
 				das.dispose();

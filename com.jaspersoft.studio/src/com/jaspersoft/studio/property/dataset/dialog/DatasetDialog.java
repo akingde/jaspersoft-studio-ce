@@ -90,6 +90,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(Messages.DatasetDialog_title);
+		setShellStyle(getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE);
 	}
 
 	@Override
@@ -120,7 +121,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 			}
 		};
 
-		Composite c = dataquery.createToolbar(body);
+		dataquery.createToolbar(body);
 
 		SashForm sf = new CSashForm(body, SWT.VERTICAL);
 
@@ -130,7 +131,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		sf.setLayoutData(gd);
 		sf.setLayout(new GridLayout());
 
-		CTabFolder ctf = dataquery.createTop(sf, this);
+		dataquery.createTop(sf, this);
 
 		// int tabHeight = c.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 		// tabHeight = Math.max(tabHeight, ctf.getTabHeight());
@@ -158,10 +159,10 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		tabFolder.setBackground(background);
 
 		createFields(toolkit, tabFolder);
+		createParameters(toolkit, tabFolder);
 		createSortFields(toolkit, tabFolder);
 		createFilterExpression(toolkit, tabFolder);
 
-		createParameters(toolkit, tabFolder);
 		// createDataPreview(toolkit, tabFolder);
 
 		tabFolder.setSelection(0);

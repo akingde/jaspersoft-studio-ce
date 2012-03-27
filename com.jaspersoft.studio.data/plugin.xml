@@ -43,11 +43,11 @@
    <extension
          point="com.jaspersoft.studio.queryDesigner">
       <queryDesigner
-            QueryDesignerClass="com.jaspersoft.studio.data.QueryDesigner"
+            QueryDesignerClass="com.jaspersoft.studio.data.designer.QueryDesigner"
             language="sql">
       </queryDesigner>
       <queryDesigner
-            QueryDesignerClass="com.jaspersoft.studio.data.QueryDesigner"
+            QueryDesignerClass="com.jaspersoft.studio.data.designer.QueryDesigner"
             language="hql">
       </queryDesigner>
      

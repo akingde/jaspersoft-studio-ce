@@ -24,6 +24,8 @@ import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
@@ -34,6 +36,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlDigesterFactory;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IFile;
@@ -70,6 +73,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -429,7 +433,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			getJrContext(file);
 
 			in = getXML(editorInput, file.getCharset(true), in, version);
-			JasperDesign jd = JRXmlLoader.load(in);
+			Reader reader = new InputStreamReader(in, "UTF-8");
+
+			InputSource is = new InputSource(reader);
+
+			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
 			editorActions = JaspersoftStudioPlugin.getExtensionManager().getActions();
 			for (AContributorAction a : editorActions) {
@@ -441,7 +449,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		} catch (JRException e) {
 			setModel(null);
 			handleJRException(editorInput, e, false);
-		} catch (CoreException e) {
+		} catch (Exception e) {
 			setModel(null);
 			throw new PartInitException(e.getMessage(), e);
 		} finally {

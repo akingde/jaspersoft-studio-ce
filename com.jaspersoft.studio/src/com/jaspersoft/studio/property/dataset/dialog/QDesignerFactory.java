@@ -28,17 +28,19 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.data.IQueryDesigner;
-import com.jaspersoft.studio.data.QueryDesigner;
+import com.jaspersoft.studio.data.designer.QueryDesigner;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class QDesignerFactory {
 	private Composite parent;
+	private Composite toolbar;
 	private Map<String, IQueryDesigner> languageMap = new HashMap<String, IQueryDesigner>();
 	private Map<Class<? extends IQueryDesigner>, IQueryDesigner> classmap = new HashMap<Class<? extends IQueryDesigner>, IQueryDesigner>();
 	private DataQueryAdapters dqa;
 
-	public QDesignerFactory(Composite parent, DataQueryAdapters dqa) {
+	public QDesignerFactory(Composite parent, Composite toolbar, DataQueryAdapters dqa) {
 		this.parent = parent;
+		this.toolbar = toolbar;
 		this.dqa = dqa;
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				"com.jaspersoft.studio", "queryDesigner"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -78,6 +80,7 @@ public class QDesignerFactory {
 		if (iqd == null) {
 			iqd = qd;
 			try {
+				iqd.createToolbar(toolbar);
 				iqd.createControl(parent);
 			} catch (Exception e) {
 				e.printStackTrace();
