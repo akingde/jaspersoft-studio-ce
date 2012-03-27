@@ -79,6 +79,7 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 
 	@Override
 	protected void bindWidgets(DataAdapter dataAdapter) {
+		super.bindWidgets(dataAdapter);
 		bindingContext.bindValue(
 				SWTObservables.observeText(textCatalogURI, SWT.Modify),
 				PojoObservables.observeValue(dataAdapter, "catalogURI")); //$NON-NLS-1$
