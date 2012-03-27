@@ -58,7 +58,8 @@ public class WSClientHelper {
 		server.setName(sp.getName());
 		server.setUrl(sp.getUrl());
 		String username = sp.getUser();
-		if (sp.getOrganisation() != null)
+		if (sp.getOrganisation() != null
+				&& !sp.getOrganisation().trim().isEmpty())
 			username += "|" + sp.getOrganisation();
 		server.setUsername(username);
 		server.setPassword(sp.getPass());
@@ -78,7 +79,8 @@ public class WSClientHelper {
 		server.setName(sp.getName());
 		server.setUrl(sp.getUrl());
 		String username = sp.getUser();
-		if (sp.getOrganisation() != null)
+		if (sp.getOrganisation() != null
+				&& !sp.getOrganisation().trim().isEmpty())
 			username += "|" + sp.getOrganisation();
 		server.setUsername(username);
 		server.setPassword(sp.getPass());
