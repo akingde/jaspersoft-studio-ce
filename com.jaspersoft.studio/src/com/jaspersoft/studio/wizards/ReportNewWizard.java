@@ -145,10 +145,8 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 			}
 
 			step2.setFile(jConfig);
-		}
-		if (page == step3) {
 			try {
-				getContainer().run(true, true, new IRunnableWithProgress() {
+				getContainer().run(false, true, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						monitor.beginTask("Looking For Resources To Publish", IProgressMonitor.UNKNOWN);
 						try {
@@ -163,6 +161,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 
 										public void run() {
 											step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
+											getContainer().showPage(step3);
 										}
 									});
 
@@ -177,13 +176,14 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 						}
 					}
 				});
+				// return null;
 			} catch (InvocationTargetException e) {
 				UIUtils.showError(e.getCause());
 			} catch (InterruptedException e) {
 				UIUtils.showError(e.getCause());
 			}
-
 		}
+
 		if (page == step4 && step3.getFields() != null)
 			step4.setFields(new ArrayList<Object>(step3.getFields()));
 		return super.getNextPage(page);

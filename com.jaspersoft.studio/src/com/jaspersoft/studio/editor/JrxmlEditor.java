@@ -25,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
@@ -320,6 +319,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		IFile resource = ((IFileEditorInput) getEditorInput()).getFile();
+		try {
+			resource.setCharset("UTF-8", monitor);
+		} catch (CoreException e1) {
+			UIUtils.showError(e1);
+		}
 		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor || !modelFresh) {
 			version = JRXmlWriterHelper.getVersion(resource, p, true);
 			model2xml(version);
@@ -433,9 +437,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			getJrContext(file);
 
 			in = getXML(editorInput, file.getCharset(true), in, version);
-			Reader reader = new InputStreamReader(in, "UTF-8");
 
-			InputSource is = new InputSource(reader);
+			InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
 
 			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
 			JaspersoftStudioPlugin.getExtensionManager().onLoad(jd, this);
@@ -636,11 +639,25 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *           the jR exception
 	 */
 	private void xml2model() throws JRException {
-		IDocumentProvider dp = xmlEditor.getDocumentProvider();
-		IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
-		JasperDesign jd = JRXmlLoader.load(new ByteArrayInputStream(doc.get().getBytes()));
-		setModel(ReportFactory.createReport(jrContext));
-		modelFresh = true;
+		InputStream in = null;
+		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+		try {
+			in = getXML(getEditorInput(), file.getCharset(true), file.getContents(), version);
+			InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
+
+			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
+			jrContext.setJasperDesign(jd);
+			setModel(ReportFactory.createReport(jrContext));
+			modelFresh = true;
+		} catch (Exception e) {
+			UIUtils.showError(e);
+		} finally {
+			try {
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void model2xml() {
@@ -664,8 +681,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				}
 			}
 
-			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-			String xml = JRXmlWriterHelper.writeReport(report, JRXmlWriterHelper.fixencoding(file.getCharset(true)), version);
+			String xml = JRXmlWriterHelper.writeReport(report, "UTF-8", version);
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
 			doc.set(xml);

@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.encoding.EncodingMap;
 
 /*
  * 
@@ -111,17 +112,17 @@ public class JRXmlWriterHelper {
 	}
 
 	public static String fixencoding(String encoding) {
-		return "UTF-8";
-		// String tmp = EncodingMap.getJava2IANAMapping(encoding);
-		// if (tmp != null)
-		// return tmp;
-		// tmp = EncodingMap.getJava2IANAMapping(encoding.toUpperCase());
-		// if (tmp != null)
-		// return tmp;
-		// tmp = EncodingMap.getJava2IANAMapping(encoding.toLowerCase());
-		// if (tmp != null)
-		// return tmp;
-		// return encoding;
+		 return "UTF-8";
+//		String tmp = EncodingMap.getJava2IANAMapping(encoding);
+//		if (tmp != null)
+//			return tmp;
+//		tmp = EncodingMap.getJava2IANAMapping(encoding.toUpperCase());
+//		if (tmp != null)
+//			return tmp;
+//		tmp = EncodingMap.getJava2IANAMapping(encoding.toLowerCase());
+//		if (tmp != null)
+//			return tmp;
+//		return encoding;
 	}
 
 	public static String getVersion(IResource resource, PropertiesHelper ph, boolean showDialog) {
