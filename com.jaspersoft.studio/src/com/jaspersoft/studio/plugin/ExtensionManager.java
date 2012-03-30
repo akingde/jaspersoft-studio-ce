@@ -28,7 +28,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -38,8 +40,10 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.repository.IRepositoryViewProvider;
@@ -48,7 +52,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ExtensionManager {
 	public void init() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"com.jaspersoft.studio", "components"); //$NON-NLS-1$ //$NON-NLS-2$
+				JaspersoftStudioPlugin.PLUGIN_ID, "components"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -60,7 +64,7 @@ public class ExtensionManager {
 		}
 
 		// List all the extensions that provide a DataAdapterFactory
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio", "dataAdapters"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "dataAdapters"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -71,7 +75,7 @@ public class ExtensionManager {
 			}
 		}
 
-		config = Platform.getExtensionRegistry().getConfigurationElementsFor("com.jaspersoft.studio", "editorLifecycle"); //$NON-NLS-1$ //$NON-NLS-2$
+		config = Platform.getExtensionRegistry().getConfigurationElementsFor(JaspersoftStudioPlugin.PLUGIN_ID, "editorLifecycle"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -88,7 +92,7 @@ public class ExtensionManager {
 	public List<IRepositoryViewProvider> getRepositoryProviders() {
 		List<IRepositoryViewProvider> paletteGroup = new ArrayList<IRepositoryViewProvider>();
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"com.jaspersoft.studio", "repositoryview"); //$NON-NLS-1$ //$NON-NLS-2$
+				JaspersoftStudioPlugin.PLUGIN_ID, "repositoryview"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			try {
 				Object o = e.createExecutableExtension("ClassFactory"); //$NON-NLS-1$
@@ -100,11 +104,58 @@ public class ExtensionManager {
 		}
 		return paletteGroup;
 	}
+	
+	/**
+	 * Returns the support factory for the expression editor.
+	 * 
+	 * <p>
+	 * The method seeks for a custom support factory or a default one (fallback).
+	 * 
+	 * @return the contributed support factory, null <code>otherwise</code>
+	 */
+	public IExpressionEditorSupportFactory getExpressionEditorSupportFactory(){
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				JaspersoftStudioPlugin.PLUGIN_ID, "expressionEditorSupport"); //$NON-NLS-1$ //$NON-NLS-2$
+		IExpressionEditorSupportFactory defaultFactory=null;
+		boolean defaultFound=false;
+		boolean overrideFound=true;
+		for(IConfigurationElement el : config){
+			if(!defaultFound && "false".equals(el.getAttribute("override"))){
+				Object defaultSupportClazz;
+				try {
+					defaultSupportClazz = el.createExecutableExtension("class");
+					if(defaultSupportClazz instanceof IExpressionEditorSupportFactory){
+						defaultFactory=(IExpressionEditorSupportFactory) defaultSupportClazz;
+					}
+				} catch (CoreException e) {
+					JaspersoftStudioPlugin.getInstance().getLog().log(
+							new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID, "An error occurred while trying to create the new class.", e));
+				}
+			}
+			else {
+				if(!overrideFound && "true".equals(el.getAttribute("override"))){
+					overrideFound=true;
+					Object overrideClazz;
+					try {
+						overrideClazz = el.createExecutableExtension("class");
+						if(overrideClazz instanceof IExpressionEditorSupportFactory){
+							return (IExpressionEditorSupportFactory) overrideClazz;
+						}
+					} catch (CoreException e) {
+						JaspersoftStudioPlugin.getInstance().getLog().log(
+								new Status(IStatus.ERROR, JaspersoftStudioPlugin.PLUGIN_ID, "An error occurred while trying to create the new class.", e));
+					}
+				}
+			}
+		}
+
+		return defaultFactory;
+	}
 
 	public List<PaletteGroup> getPaletteGroups() {
 		List<PaletteGroup> paletteGroup = new ArrayList<PaletteGroup>();
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"com.jaspersoft.studio", "palette"); //$NON-NLS-1$ //$NON-NLS-2$
+				JaspersoftStudioPlugin.PLUGIN_ID, "palette"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IConfigurationElement e : config) {
 			PaletteGroup p = new PaletteGroup();
 			p.setId(e.getAttribute("id")); //$NON-NLS-1$

@@ -37,6 +37,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  */
 public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 
+	public static final String PLUGIN_ID="com.jaspersoft.studio"; //$NON-NLS-1$
 	public static final String COMPONENTS_ID = "com.jaspersoft.studio.components"; //$NON-NLS-1$
 
 	// The shared instance.

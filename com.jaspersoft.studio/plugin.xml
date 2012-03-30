@@ -33,6 +33,7 @@
 <extension-point id="repositoryview" name="repositoryview" schema="schema/repositoryview.exsd"/>
 <extension-point id="hyperlinkTypes" name="Hyperlink Types" schema="schema/hyperlinkTypes.exsd"/>
 <extension-point id="editorLifecycle" name="Editor Lifecycle" schema="schema/editor.exsd"/>
+<extension-point id="expressionEditorSupport" name="JRExpression Editor Support" schema="schema/expressionEditorSupport.exsd"/>
 
 
    <extension
@@ -673,9 +674,4 @@
           </propertyCategory>
        </propertyContributor>
     </extension>
-     
- 
-  
-   
-
 </plugin>

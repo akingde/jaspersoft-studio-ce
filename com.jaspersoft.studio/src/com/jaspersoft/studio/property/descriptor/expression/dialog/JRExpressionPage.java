@@ -31,6 +31,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorComposite;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupport;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClassType;
 import com.jaspersoft.studio.utils.Misc;
@@ -39,9 +43,16 @@ public class JRExpressionPage extends WizardPage {
 	private JRDesignExpression value;
 	private StyledText queryText;
 	private ClassType valueType;
+	private ExpressionEditorComposite contributedComposite;
+	private ExpressionContext exprContext;
 
 	public JRDesignExpression getValue() {
-		return value;
+		if(contributedComposite!=null){
+			return (JRDesignExpression) contributedComposite.getExpression();
+		}
+		else{
+			return value;			
+		}
 	}
 
 	public void setValue(JRDesignExpression value) {
@@ -58,43 +69,62 @@ public class JRExpressionPage extends WizardPage {
 	}
 
 	public void createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
-		setControl(composite);
+		// Seeks for a possible contributed composite
+		ExpressionEditorSupport editorSupportForReportLanguage = ExpressionEditorSupportUtil.getEditorSupportForReportLanguage();
+		if(editorSupportForReportLanguage!=null){
+			contributedComposite = editorSupportForReportLanguage.createExpressionEditorComposite(parent);
+			contributedComposite.setExpression(this.value);
+			contributedComposite.setExpressionContext(getExpressionContext());
+			setControl(contributedComposite);
+		}
+		// Otherwise fallback to a generic composite
+		else{
+			Composite composite = new Composite(parent, SWT.NONE);
+			composite.setLayout(new GridLayout(2, false));
+			setControl(composite);
+	
+			Label lbl1 = new Label(composite, SWT.NONE);
+			lbl1.setText("Value Class Name"); //$NON-NLS-1$
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			lbl1.setLayoutData(gd);
+	
+			valueType = new ClassType(composite, "Expression Class type (deprecated)");
+			valueType.addListener(new ModifyListener() {
+	
+				public void modifyText(ModifyEvent e) {
+					value.setValueClassName(valueType.getClassType());
+				}
+			});
+	
+			Label lbl2 = new Label(composite, SWT.NONE);
+			lbl2.setText(Messages.common_expression + ":"); //$NON-NLS-1$
+			gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			lbl2.setLayoutData(gd);
+	
+			queryText = new StyledText(composite, SWT.BORDER);
+			gd = new GridData(GridData.FILL_BOTH);
+			gd.horizontalSpan = 2;
+			queryText.setLayoutData(gd);
+	
+			setWidgets();
+			queryText.setFocus();
+			queryText.addModifyListener(new ModifyListener() {
+	
+				public void modifyText(ModifyEvent e) {
+					value.setText(queryText.getText());
+				}
+			});
+		}
+	}
 
-		Label lbl1 = new Label(composite, SWT.NONE);
-		lbl1.setText("Value Class Name"); //$NON-NLS-1$
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		lbl1.setLayoutData(gd);
-
-		valueType = new ClassType(composite, "Expression Class type (deprecated)");
-		valueType.addListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				value.setValueClassName(valueType.getClassType());
-			}
-		});
-
-		Label lbl2 = new Label(composite, SWT.NONE);
-		lbl2.setText(Messages.common_expression + ":"); //$NON-NLS-1$
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		lbl2.setLayoutData(gd);
-
-		queryText = new StyledText(composite, SWT.BORDER);
-		gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = 2;
-		queryText.setLayoutData(gd);
-
-		setWidgets();
-		queryText.setFocus();
-		queryText.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				value.setText(queryText.getText());
-			}
-		});
+	private ExpressionContext getExpressionContext() {
+		if(exprContext==null){
+			// Try to get the global expression context that use the main dataset
+			exprContext=ExpressionEditorSupportUtil.getReportExpressionContext();
+		}
+		return exprContext;
 	}
 
 	private void setWidgets() {
@@ -102,4 +132,6 @@ public class JRExpressionPage extends WizardPage {
 		valueType.setClassType(value.getValueClassName());
 	}
 
+	
+	
 }
