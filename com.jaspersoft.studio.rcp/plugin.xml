@@ -223,6 +223,11 @@
 		             name="newWizardId"
 		             value="com.jaspersoft.studio.wizards.ReportNewWizard">
 		       </parameter>
+	 	        <visibleWhen checkEnabled="false">
+	                <with variable="activeWorkbenchWindow.activePerspective">
+	                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+	            	</with>
+			    </visibleWhen>
 		    </command>
 		    <command
 		          commandId="org.eclipse.ui.newWizard"
@@ -231,6 +236,11 @@
 		             name="newWizardId"
 		             value="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard">
 		       </parameter>
+	 	        <visibleWhen checkEnabled="false">
+	                <with variable="activeWorkbenchWindow.activePerspective">
+	                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+	            	</with>
+			    </visibleWhen>		       
 		    </command>
 		   	<command
 		          commandId="org.eclipse.ui.newWizard"
@@ -239,6 +249,11 @@
 		             name="newWizardId"
 		             value="com.jaspersoft.studio.wizards.StyleTemplateNewWizard">
 		       </parameter>
+	 	        <visibleWhen checkEnabled="false">
+	                <with variable="activeWorkbenchWindow.activePerspective">
+	                  <equals value="com.jaspersoft.studio.ReportDesignPerspective"/>
+	            	</with>
+			    </visibleWhen>	
 		    </command>
          </toolbar>
 	</menuContribution>
