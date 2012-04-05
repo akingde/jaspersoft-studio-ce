@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -60,7 +61,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  */
 public class MBand extends APropertyNode implements IGraphicElement, IPastable, IPastableGraphic, IContainer,
 		IContainerEditPart {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private static final Integer CONST_HEIGHT = new Integer(50);
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
@@ -132,20 +133,19 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	/**
-	 * Return a human-readable text that represent the band name.
-	 * Only the band name and no specific information on the size
-	 * is displayed (i.e. {@link #getDisplayText()}).
+	 * Return a human-readable text that represent the band name. Only the band name and no specific information on the
+	 * size is displayed (i.e. {@link #getDisplayText()}).
 	 * 
 	 * @return the band name
 	 */
-	public String getSimpleDisplayName(){
+	public String getSimpleDisplayName() {
 		JRDesignBand value = (JRDesignBand) getValue();
-		if (bandType.equals(BandTypeEnum.DETAIL) || value==null) {
+		if (bandType.equals(BandTypeEnum.DETAIL) || value == null) {
 			return Messages.getString(bandType.getName());
 		}
 		return Messages.getString(value.getOrigin().getBandTypeValue().getName());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 

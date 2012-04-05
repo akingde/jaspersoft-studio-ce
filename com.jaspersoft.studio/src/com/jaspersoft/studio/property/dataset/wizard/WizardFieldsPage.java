@@ -67,9 +67,9 @@ public class WizardFieldsPage extends WizardPage {
 	protected TableViewer rightTView;
 	private TableViewer leftTView;
 
-	public void setFields(List<Object> inFields) {
+	public void setFields(List<?> inFields) {
 		if (inFields == null || this.outFields == null)
-			fillTables(inFields, new ArrayList<Object>());
+			fillTables((List<Object>) inFields, new ArrayList<Object>());
 		else {
 			// add fields if not exists inside
 			for (Object f : inFields) {

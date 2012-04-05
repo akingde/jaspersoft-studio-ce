@@ -19,7 +19,10 @@
  */
 package com.jaspersoft.studio.model.command;
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.JRElementGroup;
+import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
@@ -28,6 +31,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -35,6 +40,7 @@ import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -50,6 +56,7 @@ public class CreateElementCommand extends Command {
 
 	/** The src node. */
 	protected MGraphicElement srcNode;
+	protected ANode destNode;
 
 	/** The jr element. */
 	protected JRDesignElement jrElement;
@@ -152,6 +159,7 @@ public class CreateElementCommand extends Command {
 			this.jrGroup = ((IGroupElement) destNode).getJRElementGroup();
 		else
 			this.jrGroup = (JRElementGroup) destNode.getValue();
+		this.destNode = destNode;
 		this.index = index;
 	}
 
@@ -202,10 +210,41 @@ public class CreateElementCommand extends Command {
 		jrElement.setY(location.y);
 		jrElement.setWidth(location.width);
 		jrElement.setHeight(location.height);
+
+		if (jrGroup instanceof JRDesignBand) {
+			JRDesignBand band = (JRDesignBand) jrGroup;
+			int height = jrElement.getY() + jrElement.getHeight();
+			if (band.getHeight() < height) {
+				SetValueCommand cmd = new SetValueCommand();
+				cmd.setTarget((IPropertySource) destNode);
+				cmd.setPropertyId(JRDesignBand.PROPERTY_HEIGHT);
+				cmd.setPropertyValue(height);
+				addCommand(cmd);
+			}
+		}
 	}
 
 	public void setJrGroup(JRElementGroup jrGroup) {
 		this.jrGroup = jrGroup;
+	}
+
+	private CompoundCommand commands;
+
+	protected void addCommand(Command command) {
+		if (commands == null)
+			commands = new CompoundCommand();
+		commands.add(command);
+	}
+
+	protected void addCommands(List<Command> cmds) {
+		if (cmds != null)
+			for (Command c : cmds)
+				addCommand(c);
+	}
+
+	protected void executeCommands() {
+		if (commands != null)
+			commands.execute();
 	}
 
 	/*
@@ -216,6 +255,7 @@ public class CreateElementCommand extends Command {
 	@Override
 	public void execute() {
 		createObject();
+		executeCommands();
 		if (jrElement != null) {
 			if (jrGroup instanceof JRDesignElementGroup) {
 				if (index < 0 || index > jrGroup.getChildren().size())
@@ -256,6 +296,8 @@ public class CreateElementCommand extends Command {
 	 */
 	@Override
 	public void undo() {
+		if (commands != null)
+			commands.undo();
 		if (jrGroup instanceof JRDesignElementGroup)
 			((JRDesignElementGroup) jrGroup).removeElement(jrElement);
 		else if (jrGroup instanceof JRDesignFrame)

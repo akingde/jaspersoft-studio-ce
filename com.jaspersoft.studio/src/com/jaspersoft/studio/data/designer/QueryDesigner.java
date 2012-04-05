@@ -19,14 +19,10 @@
  */
 package com.jaspersoft.studio.data.designer;
 
-import java.lang.reflect.InvocationTargetException;
-
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -114,18 +110,7 @@ public class QueryDesigner extends AQueryDesigner {
 		btn.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					container.run(new IRunnableWithProgress() {
-
-						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-							container.doGetFields(monitor);
-						}
-					});
-				} catch (InvocationTargetException ex) {
-					container.getQueryStatus().showError(ex.getTargetException());
-				} catch (InterruptedException ex) {
-					container.getQueryStatus().showError(ex);
-				}
+				container.doGetFields();
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {

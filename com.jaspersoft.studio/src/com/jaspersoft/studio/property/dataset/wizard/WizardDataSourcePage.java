@@ -48,7 +48,6 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridLayout;
@@ -61,8 +60,9 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.datasource.MDatasources;
 import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.JSSWizardPage;
 
-public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
+public class WizardDataSourcePage extends JSSWizardPage implements IFieldSetter {
 	private JRDesignDataset dataset;
 	private JasperReportsConfiguration jConfig;
 
@@ -71,7 +71,7 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 			dataset = new JRDesignDataset(true);
 			JRDesignQuery query = new JRDesignQuery();
 			query.setLanguage("SQL");
-			dataset.setQuery(query);
+			dataset.setQuery(query); 
 		}
 		return dataset;
 	}
@@ -109,7 +109,7 @@ public class WizardDataSourcePage extends WizardPage implements IFieldSetter {
 		setControl(composite);
 
 		JRDesignDataset ds = getDataset();
-		dataquery = new DataQueryAdapters(composite, jConfig, ds, composite.getBackground()) {
+		dataquery = new DataQueryAdapters(composite, jConfig, ds, composite.getBackground(), getWizard().getContainer()) {
 
 			@Override
 			public void setFields(List<JRDesignField> fields) {

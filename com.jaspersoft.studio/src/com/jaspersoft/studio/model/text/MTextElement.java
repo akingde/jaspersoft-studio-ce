@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.text;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -46,6 +47,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public abstract class MTextElement extends MGraphicElementLineBox implements IRotatable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MTextElement() {
 		super();

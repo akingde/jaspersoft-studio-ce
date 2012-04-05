@@ -124,6 +124,14 @@ public class ModelUtils {
 		return inFields;
 	}
 
+	public static List<Object> getReportObjects4Datasource(JRDataset ds) {
+		ArrayList<Object> inFields = new ArrayList<Object>();
+		inFields.addAll(Arrays.asList(ds.getFields()));
+		inFields.addAll(Arrays.asList(ds.getVariables()));
+		inFields.addAll(Arrays.asList(ds.getParameters()));
+		return inFields;
+	}
+
 	public static List<JRParameter> getParameters4Datasource(JasperDesign jd, String ds) {
 		if (ds == null || ds.equals("")) {
 			List<JRParameter> res = new ArrayList<JRParameter>(jd.getParametersList());

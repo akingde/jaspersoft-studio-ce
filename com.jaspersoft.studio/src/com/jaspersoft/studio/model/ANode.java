@@ -302,6 +302,7 @@ public abstract class ANode implements INode, Serializable {
 						JRElementGroup jrFrame = (JRElementGroup) evt.getNewValue();
 						ReportFactory.createElementsForBand(n, jrFrame.getChildren());
 					}
+					
 				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
 					// delete
 					for (INode n : getChildren()) {

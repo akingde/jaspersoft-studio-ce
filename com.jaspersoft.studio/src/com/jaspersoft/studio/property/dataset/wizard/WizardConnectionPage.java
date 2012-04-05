@@ -45,11 +45,11 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
-import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
+import com.jaspersoft.studio.property.dataset.DatasetRunWidgetRadio;
 
 public class WizardConnectionPage extends WizardPage {
 	private MDatasetRun datasetrun;
-	private DatasetRunWidget dsRun;
+	private DatasetRunWidgetRadio dsRun;
 	private JRDesignDatasetRun jrDsRun;
 
 	public void setDataSetRun(MDatasetRun datasetrun) {
@@ -74,7 +74,7 @@ public class WizardConnectionPage extends WizardPage {
 	}
 
 	public void createControl(Composite parent) {
-		dsRun = new DatasetRunWidget(parent);
+		dsRun = new DatasetRunWidgetRadio(parent);
 
 		setControl(dsRun.getControl());
 		dsRun.setData(jrDsRun);

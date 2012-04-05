@@ -25,6 +25,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.list.DesignListContents;
 import net.sf.jasperreports.components.list.StandardListComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.component.ComponentKey;
@@ -65,7 +66,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 public class MList extends MGraphicElement implements IPastable,
 		IPastableGraphic, IContainer, IContainerEditPart, IGroupElement,
 		ICopyable {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -100,6 +101,11 @@ public class MList extends MGraphicElement implements IPastable,
 	public MList(ANode parent, JRDesignComponentElement jrList, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrList);
+	}
+
+	@Override
+	public JRDesignComponentElement getValue() {
+		return (JRDesignComponentElement) super.getValue();
 	}
 
 	private static IPropertyDescriptor[] descriptors;
@@ -252,6 +258,8 @@ public class MList extends MGraphicElement implements IPastable,
 	@Override
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement component = new JRDesignComponentElement();
+		component.setHeight(getDefaultHeight());
+		component.setWidth(getDefaultWidth());
 		StandardListComponent componentImpl = new StandardListComponent();
 		DesignListContents contents = new DesignListContents();
 		contents.setHeight(100);
@@ -263,6 +271,9 @@ public class MList extends MGraphicElement implements IPastable,
 				"http://jasperreports.sourceforge.net/jasperreports/components",
 				"jr", "list");
 		component.setComponentKey(componentKey);
+
+		JRDesignDatasetRun datasetRun = new JRDesignDatasetRun();
+		componentImpl.setDatasetRun(datasetRun);
 		return component;
 	}
 
@@ -382,10 +393,10 @@ public class MList extends MGraphicElement implements IPastable,
 				}
 			}
 		}
-		PropertyChangeEvent newEvent = evt;
-		if (!(evt.getSource() instanceof ANode))
-			newEvent = new PropertyChangeEvent(this, evt.getPropertyName(),
-					evt.getOldValue(), evt.getNewValue());
-		getPropertyChangeSupport().firePropertyChange(newEvent);
+		// PropertyChangeEvent newEvent = evt;
+		// if (!(evt.getSource() instanceof ANode))
+		// newEvent = new PropertyChangeEvent(this, evt.getPropertyName(),
+		// evt.getOldValue(), evt.getNewValue());
+		getPropertyChangeSupport().firePropertyChange(evt);
 	}
 }

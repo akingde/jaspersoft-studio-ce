@@ -121,7 +121,7 @@ public class CreateSubreportCommand extends CreateElementCommand {
 		if (jrElement == null) {
 			SubreportWizard wizard = new SubreportWizard();
 			WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
-			wizard.init(jasperDesign);
+			wizard.init(jConfig);
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getSubreport();
@@ -135,5 +135,4 @@ public class CreateSubreportCommand extends CreateElementCommand {
 			}
 		}
 	}
-
 }

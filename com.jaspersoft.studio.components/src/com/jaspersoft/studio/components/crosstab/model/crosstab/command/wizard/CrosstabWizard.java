@@ -33,20 +33,22 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabPercentageEnum;
+import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVariable;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabManager;
 import com.jaspersoft.studio.components.crosstab.messages.Messages;
@@ -54,16 +56,19 @@ import com.jaspersoft.studio.components.crosstab.model.MCrosstab;
 import com.jaspersoft.studio.components.crosstab.model.columngroup.command.CreateColumnGroupCommand;
 import com.jaspersoft.studio.components.crosstab.model.measure.command.CreateMeasureCommand;
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.CreateRowGroupCommand;
+import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.dataset.MElementDataset;
 import com.jaspersoft.studio.model.text.MTextField;
+import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.JSSWizard;
 
-public class CrosstabWizard extends Wizard {
+public class CrosstabWizard extends JSSWizard {
 	private WizardDatasetPage step1;
 	private WizardFieldsPage step3;
 	private WizardFieldsPage step4;
@@ -80,16 +85,20 @@ public class CrosstabWizard extends Wizard {
 	@Override
 	public void addPages() {
 		JRDesignCrosstab jrCrosstab = (JRDesignCrosstab) new MCrosstab()
-				.createJRElement(jConfig.getJasperDesign());
-		this.crosstab = new MCrosstab(null, jrCrosstab, 1, new CrosstabManager(
+				.createJRElement(getConfig().getJasperDesign());
+		crosstab = new MCrosstab(null, jrCrosstab, 1, new CrosstabManager(
 				jrCrosstab));
+		crosstab.setJasperConfiguration(getConfig());
 
-		step1 = new WizardDatasetPage(jConfig);
+		step1 = new WizardDatasetPage(getConfig());
 		addPage(step1);
 		MElementDataset dataset = (MElementDataset) crosstab
 				.getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET);
 		MDatasetRun mdataset = (MDatasetRun) dataset
 				.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
+		mdataset.setPropertyValue(
+				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION,
+				"$P{REPORT_CONNECTION}");
 		step1.setDataSetRun(mdataset);
 
 		step2 = new WizardConnectionPage();
@@ -110,20 +119,45 @@ public class CrosstabWizard extends Wizard {
 		step6.setCrosstab(crosstab);
 	}
 
+	private JRDesignDataset getDataset() {
+		JasperDesign jd = getConfig().getJasperDesign();
+		List<JRDataset> datasetsList = jd.getDatasetsList();
+		MDatasetRun dataSetRun = step1.getDataSetRun();
+		JRDesignDataset ds = null;
+		if (dataSetRun == null) {
+			MDataset mds = (MDataset) getConfig().get(DatasetWizard.DATASET);
+			if (mds != null)
+				ds = mds.getValue();
+		} else {
+			String dsname = (String) dataSetRun
+					.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+			for (JRDataset d : datasetsList)
+				if (d.getName().equals(dsname)) {
+					ds = (JRDesignDataset) d;
+					break;
+				}
+		}
+		return ds;
+	}
+
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		String dsname = (String) step1.getDataSetRun().getPropertyValue(
-				JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+		JasperDesign jd = getConfig().getJasperDesign();
+		List<JRDataset> datasetsList = jd.getDatasetsList();
+		JRDesignDataset ds = getDataset();
+		if (page == step1) {
+			if (datasetsList.size() == 0)
+				return step2;
+		}
 		JRDesignCrosstab jdc = (JRDesignCrosstab) crosstab.getValue();
-		if (page == step1 && (dsname == null || dsname.equals(""))) //$NON-NLS-1$
-			page = step2;
 		if (page == step2) {
-			if (dsname != null && !dsname.equals("")) { //$NON-NLS-1$
+			if (ds != null) {
 				List<Object> m = new ArrayList<Object>();
-				if (colGroups == null || !colGroups.getDsname().equals(dsname)) {
+				if (colGroups == null
+						|| !colGroups.getDsname().equals(ds.getName())) {
 					colGroups = new ReportObjects(
-							ModelUtils.getReportObjects4Datasource(
-									jConfig.getJasperDesign(), dsname), dsname);
+							ModelUtils.getReportObjects4Datasource(ds),
+							ds.getName());
 					for (Object f : colGroups.getReportObects())
 						m.add(createColumnGroups(jdc, f));
 					step3.setFields(m);
@@ -134,12 +168,13 @@ public class CrosstabWizard extends Wizard {
 				page = step3;
 		}
 		if (page == step3) {
-			if (dsname != null && !dsname.equals("")) { //$NON-NLS-1$
+			if (ds != null) {
 				List<Object> m = new ArrayList<Object>();
-				if (rowGroups == null || !rowGroups.getDsname().equals(dsname)) {
+				if (rowGroups == null
+						|| !rowGroups.getDsname().equals(ds.getName())) {
 					rowGroups = new ReportObjects(
-							ModelUtils.getReportObjects4Datasource(
-									jConfig.getJasperDesign(), dsname), dsname);
+							ModelUtils.getReportObjects4Datasource(ds),
+							ds.getName());
 					for (Object f : colGroups.getReportObects())
 						m.add(createRowGroups(jdc, f));
 					step4.setFields(m);
@@ -150,13 +185,14 @@ public class CrosstabWizard extends Wizard {
 				page = step4;
 		}
 		if (page == step4) {
-			if (dsname != null && !dsname.equals("")) {
+			if (ds != null) {
 
-				if (mesures == null || !mesures.getDsname().equals(dsname)) {
+				if (mesures == null
+						|| !mesures.getDsname().equals(ds.getName())) {
 					List<Object> m = new ArrayList<Object>();
 					mesures = new ReportObjects(
-							ModelUtils.getReportObjects4Datasource(
-									jConfig.getJasperDesign(), dsname), dsname);
+							ModelUtils.getReportObjects4Datasource(ds),
+							ds.getName());
 					for (Object f : mesures.getReportObects())
 						m.add(createMesures(jdc, f));
 					step5.setFields(m);
@@ -264,7 +300,7 @@ public class CrosstabWizard extends Wizard {
 						exp.setText("$V{" + measures[i].getName() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 
 						JRDesignTextField tf = (JRDesignTextField) new MTextField()
-								.createJRElement(jConfig.getJasperDesign());
+								.createJRElement(getConfig().getJasperDesign());
 						tf.setX(0);
 						tf.setY(y);
 						tf.setWidth(c.getWidth());
@@ -331,7 +367,7 @@ public class CrosstabWizard extends Wizard {
 		}
 
 		JRDesignCrosstabRowGroup rowGroup = CreateRowGroupCommand
-				.createRowGroup(jConfig.getJasperDesign(), jdc, name);
+				.createRowGroup(getConfig().getJasperDesign(), jdc, name);
 
 		((JRDesignExpression) rowGroup.getBucket().getExpression())
 				.setText(txt);
@@ -356,7 +392,7 @@ public class CrosstabWizard extends Wizard {
 			txt = "$V{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		JRDesignCrosstabColumnGroup colGroup = CreateColumnGroupCommand
-				.createColumnGroup(jConfig.getJasperDesign(), jdc, name);
+				.createColumnGroup(getConfig().getJasperDesign(), jdc, name);
 		((JRDesignExpression) colGroup.getBucket().getExpression())
 				.setText(txt);
 
@@ -401,12 +437,6 @@ public class CrosstabWizard extends Wizard {
 		return m;
 	}
 
-	@Override
-	public boolean performFinish() {
-		return true;
-	}
-
-	private JasperReportsConfiguration jConfig;
 	private ReportObjects colGroups;
 	private ReportObjects rowGroups;
 	private ReportObjects mesures;
@@ -431,8 +461,11 @@ public class CrosstabWizard extends Wizard {
 
 	}
 
+	@Override
 	public void init(JasperReportsConfiguration jConfig) {
-		this.jConfig = jConfig;
+		super.init(jConfig);
+		if (crosstab != null)
+			crosstab.setJasperConfiguration(jConfig);
 	}
 
 }

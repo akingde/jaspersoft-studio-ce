@@ -47,6 +47,7 @@ public class ChartWizard extends Wizard {
 			JasperReportsConfiguration jrContext) {
 		this(chart, edataset, jasperDesign, jrContext);
 		this.skipFirstPage = skipFirstPage;
+		setNeedsProgressMonitor(false);
 	}
 
 	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset,

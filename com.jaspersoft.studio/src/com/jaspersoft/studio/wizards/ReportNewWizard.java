@@ -50,13 +50,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -64,6 +69,7 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
@@ -77,11 +83,12 @@ import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
 import com.jaspersoft.studio.utils.ExpressionUtil;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.report.ReportGenerator;
 
-public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWizard {
+public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INewWizard {
 	private ReportTemplatesWizardPage step0;
 	private NewFileCreationWizard step1;
 	private WizardDataSourcePage step2;
@@ -94,6 +101,11 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 	 */
 	public ReportNewWizard() {
 		super();
+		setNeedsProgressMonitor(true);
+	}
+
+	public ReportNewWizard(IWizard parentWizard, IWizardPage fallbackPage) {
+		super(parentWizard, fallbackPage);
 		setNeedsProgressMonitor(true);
 	}
 
@@ -124,6 +136,8 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 	}
 
 	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration();
+	public static final String REPORT_FILE = "REPORTFILEWIZARD";
+	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD";
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
@@ -139,49 +153,40 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 			IProject project = file.getProject();
 			try {
 				if (project.getNature(JavaCore.NATURE_ID) != null)
-					jConfig.setClassLoader(new JavaProjectClassLoader(JavaCore.create(project)));
+					jConfig.setClassLoader(JavaProjectClassLoader.instance(JavaCore.create(project)));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
-
-			step2.setFile(jConfig);
-			try {
-				getContainer().run(false, true, new IRunnableWithProgress() {
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-						monitor.beginTask("Looking For Resources To Publish", IProgressMonitor.UNKNOWN);
-						try {
-							try {
-								// if we don't have fields, call getFields from the QueryDesigner automatically
-								if (step3.getFields() == null || step3.getFields().isEmpty())
-									step2.getFields(monitor);
-
-								final JRDesignDataset dataset = step2.getDataset();
-								if (dataset != null && dataset.getFieldsList() != null) {
-									Display.getDefault().syncExec(new Runnable() {
-
-										public void run() {
-											step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
-											getContainer().showPage(step3);
-										}
-									});
-
-								}
-							} catch (UnsupportedOperationException e) {
-								e.printStackTrace();
-							}
-						} catch (Exception e) {
-							UIUtils.showError(e);
-						} finally {
-							monitor.done();
-						}
-					}
-				});
-				// return null;
-			} catch (InvocationTargetException e) {
-				UIUtils.showError(e.getCause());
-			} catch (InterruptedException e) {
-				UIUtils.showError(e.getCause());
+			if (getConfig() != null) {
+				getConfig().put(REPORT_FILE, file);
+				getConfig().put(REPORT_DESIGN, getJasperDesign());
 			}
+			step2.setFile(jConfig);
+			run(true, true, new IRunnableWithProgress() {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask("Getting fields from datasource", IProgressMonitor.UNKNOWN);
+					try {
+						// if we don't have fields, call getFields from the QueryDesigner automatically
+						if (step3.getFields() == null || step3.getFields().isEmpty())
+							step2.getFields(monitor);
+
+						final JRDesignDataset dataset = step2.getDataset();
+						if (dataset != null && dataset.getFieldsList() != null) {
+							Display.getDefault().syncExec(new Runnable() {
+
+								public void run() {
+									step3.setFields(new ArrayList<Object>(dataset.getFieldsList()));
+								}
+							});
+
+						}
+					} catch (Exception e) {
+						UIUtils.showError(e);
+					} finally {
+						monitor.done();
+					}
+				}
+			});
 		}
 
 		if (page == step4 && step3.getFields() != null)
@@ -216,7 +221,7 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 		} catch (InterruptedException e) {
 			UIUtils.showError(e.getCause());
 		}
-		return true;
+		return super.performFinish();
 	}
 
 	/**
@@ -386,6 +391,17 @@ public class ReportNewWizard extends Wizard implements IWorkbenchWizard, INewWiz
 	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		if (selection instanceof StructuredSelection) {
+			for (Object obj : selection.toList()) {
+				if (obj instanceof EditPart) {
+					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor().getEditorInput();
+					if (ein instanceof FileEditorInput) {
+						this.selection = new TreeSelection(new TreePath(new Object[] { ((FileEditorInput) ein).getFile() }));
+						return;
+					}
+				}
+			}
+		}
 		this.selection = selection;
 	}
 }

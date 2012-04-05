@@ -121,6 +121,7 @@ public class CreateTableCommand extends CreateElementCommand {
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getTable();
+				addCommands(wizard.getCommands());
 				if (srcNode.getValue() == null)
 					jrElement = srcNode.createJRElement(srcNode
 							.getJasperDesign());
@@ -144,8 +145,7 @@ public class CreateTableCommand extends CreateElementCommand {
 				JRDesignDataset jrDataset = new JRDesignDataset(false);
 				jrDataset.setName(ModelUtils.getDefaultName(
 						jasperDesign.getDatasetMap(), "Empty Dataset"));
-				datasetCommand = new CreateDatasetCommand(jConfig, jrDataset);
-				datasetCommand.execute();
+				addCommand(new CreateDatasetCommand(jConfig, jrDataset));
 				((JRDesignDatasetRun) jrTable.getDatasetRun())
 						.setDatasetName(jrDataset.getName());
 			}
@@ -153,12 +153,8 @@ public class CreateTableCommand extends CreateElementCommand {
 		}
 	}
 
-	private CreateDatasetCommand datasetCommand;
-
 	@Override
 	public void undo() {
-		if (datasetCommand != null)
-			datasetCommand.undo();
 		super.undo();
 	}
 }

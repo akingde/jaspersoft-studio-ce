@@ -43,46 +43,44 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyPage;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.JSSWizard;
+import com.jaspersoft.studio.wizards.ReportNewWizard;
 
-public class SubreportWizard extends Wizard {
-
-	private WizardNewSubreportPage step1;
+public class SubreportWizard extends JSSWizard {
+	private NewSubreportPage step0;
 	private WizardConnectionPage step2;
 	private SubreportPropertyPage step3;
 	private MSubreport subreport;
+	private MDatasetRun mdataset;
 
 	public SubreportWizard() {
 		super();
 		setWindowTitle(Messages.common_subreport);
-		IWorkbench bench = PlatformUI.getWorkbench();
-		IWorkbenchPage page = bench.getActiveWorkbenchWindow().getActivePage();
-
-		init(bench, (IStructuredSelection) page.getSelection());
 	}
 
 	@Override
 	public void addPages() {
 		this.subreport = new MSubreport();
-		subreport.setValue(subreport.createJRElement(jasperDesign));
+		subreport.setValue(subreport.createJRElement(getConfig().getJasperDesign()));
+		subreport.setPropertyValue(JRDesignSubreport.PROPERTY_CONNECTION_EXPRESSION, "$P{REPORT_CONNECTION}");
 
-		MDatasetRun mdataset = new MDatasetRun(new JRDesignDatasetRun(), jasperDesign);
+		step0 = new NewSubreportPage();
+		step0.setSubreport(subreport);
+		addPage(step0);
 
-		step1 = new WizardNewSubreportPage();
-		step1.init(workbench, selection);
-		addPage(step1);
-		step1.setSubreport(subreport);
+		mdataset = new MDatasetRun(new JRDesignDatasetRun(), getConfig().getJasperDesign());
+		mdataset.setPropertyValue(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION, "$P{REPORT_CONNECTION}");
+		subreport.setJasperConfiguration(getConfig());
+		mdataset.setJasperConfiguration(getConfig());
 
 		step2 = new WizardConnectionPage();
 		addPage(step2);
@@ -90,19 +88,16 @@ public class SubreportWizard extends Wizard {
 
 		step3 = new SubreportPropertyPage();
 		addPage(step3);
-	}
 
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		this.selection = selection;
-		this.workbench = workbench;
 	}
-
-	private IWorkbench workbench;
-	private IStructuredSelection selection;
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-
+		if (page == step2) {
+			IFile file = (IFile) getConfig().get(ReportNewWizard.REPORT_FILE);
+			JasperDesign newjd = (JasperDesign) getConfig().get(ReportNewWizard.REPORT_DESIGN);
+			step0.setUpSubreport(file, newjd);
+		}
 		if (page == step3) {
 			JRSubreportParameter[] map = (JRSubreportParameter[]) subreport
 					.getPropertyValue(JRDesignSubreport.PROPERTY_PARAMETERS);
@@ -129,13 +124,11 @@ public class SubreportWizard extends Wizard {
 	}
 
 	@Override
-	public boolean performFinish() {
-		return true;
-	}
-
-	private JasperDesign jasperDesign;
-
-	public void init(JasperDesign jd) {
-		this.jasperDesign = jd;
+	public void init(JasperReportsConfiguration jd) {
+		super.init(jd);
+		if (subreport != null)
+			subreport.setJasperConfiguration(jd);
+		if (mdataset != null)
+			mdataset.setJasperConfiguration(jd);
 	}
 }

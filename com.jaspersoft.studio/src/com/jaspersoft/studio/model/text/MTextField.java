@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.text;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.JRTextField;
@@ -54,7 +55,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * The Class MTextField.
  */
 public class MTextField extends MTextElement {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -317,7 +318,12 @@ public class MTextField extends MTextElement {
 	 */
 	@Override
 	public JRDesignTextField createJRElement(JasperDesign jasperDesign) {
-		return new JRDesignTextField();
+		JRDesignTextField jrDesignTextField = new JRDesignTextField();
+		jrDesignTextField.setX(0);
+		jrDesignTextField.setY(0);
+		jrDesignTextField.setWidth(getDefaultWidth());
+		jrDesignTextField.setHeight(getDefaultHeight());
+		return jrDesignTextField;
 	}
 
 	/*

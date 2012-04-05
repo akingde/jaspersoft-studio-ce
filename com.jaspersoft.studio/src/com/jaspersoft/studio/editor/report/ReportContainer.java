@@ -374,9 +374,12 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 			if (obj instanceof JRDesignSubreport) {
 				if (getEditorInput() instanceof FileEditorInput) {
 					JRDesignSubreport s = (JRDesignSubreport) obj;
-					if (s.getExpression() != null)
-						SelectionHelper.openEditor((FileEditorInput) getEditorInput(),
-								ExpressionUtil.eval(s.getExpression(), jrContext));
+					if (s.getExpression() != null) {
+						String path = ExpressionUtil.eval(s.getExpression(), jrContext);
+						if (!SelectionHelper.openEditor((FileEditorInput) getEditorInput(), path)) {
+							SelectionHelper.openEditor((FileEditorInput) getEditorInput(), path.replaceAll(".jasper", ".jrxml"));
+						}
+					}
 				}
 				return;
 			}

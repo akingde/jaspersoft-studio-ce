@@ -117,6 +117,7 @@ public class CreateCrosstabCommand extends CreateElementCommand {
 			dialog.create();
 			if (dialog.open() == Dialog.OK) {
 				srcNode = wizard.getCrosstab();
+				addCommands(wizard.getCommands());
 				if (srcNode.getValue() == null)
 					jrElement = srcNode.createJRElement(srcNode
 							.getJasperDesign());

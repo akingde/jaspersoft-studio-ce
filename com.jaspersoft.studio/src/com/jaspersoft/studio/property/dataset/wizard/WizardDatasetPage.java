@@ -38,21 +38,16 @@
  */
 package com.jaspersoft.studio.property.dataset.wizard;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
@@ -63,8 +58,11 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.AWizardNode;
+import com.jaspersoft.studio.wizards.JSSWizard;
+import com.jaspersoft.studio.wizards.JSSWizardSelectionPage;
 
-public class WizardDatasetPage extends WizardPage {
+public class WizardDatasetPage extends JSSWizardSelectionPage {
 	private final class DatasetListListener implements Listener {
 		public void handleEvent(Event event) {
 			if (datasets.getSelectionIndex() == 0 && all)
@@ -80,6 +78,9 @@ public class WizardDatasetPage extends WizardPage {
 	private MDatasetRun datasetrun;
 	private List datasets;
 	private DatasetListListener dsListener;
+	private Button addDataset;
+	private Button selDataset;
+	private Button noDataset;
 
 	public void setDataSetRun(MDatasetRun datasetrun) {
 		this.datasetrun = datasetrun;
@@ -89,6 +90,10 @@ public class WizardDatasetPage extends WizardPage {
 	}
 
 	public MDatasetRun getDataSetRun() {
+		if (noDataset.getSelection())
+			return null;
+		if (addDataset.getSelection())
+			return null;
 		return datasetrun;
 	}
 
@@ -107,10 +112,30 @@ public class WizardDatasetPage extends WizardPage {
 
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		composite.setLayout(layout);
+		composite.setLayout(new GridLayout());
 		setControl(composite);
+
+		addDataset = new Button(composite, SWT.RADIO);
+		addDataset.setText("Create from a new Dataset");
+		addDataset.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleNewSelected();
+			}
+
+		});
+
+		selDataset = new Button(composite, SWT.RADIO);
+		selDataset.setText("Select an existing Dataset");
+		selDataset.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setSelectedNode(null);
+				datasets.setEnabled(selDataset.getSelection());
+				setPageComplete(datasets.getSelectionIndex() >= 0);
+			}
+
+		});
 
 		String[] dsNames = ModelUtils.getDataSets(jConfig.getJasperDesign(), all);
 
@@ -134,36 +159,41 @@ public class WizardDatasetPage extends WizardPage {
 		gd.widthHint = 300;
 		datasets.setLayoutData(gd);
 
-		Button newDataset = new Button(composite, SWT.PUSH);
-		newDataset.setText(Messages.common_new);
-		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		newDataset.setLayoutData(gd);
-		newDataset.addSelectionListener(new SelectionListener() {
-
+		noDataset = new Button(composite, SWT.RADIO);
+		noDataset.setText("Just create an empty element");
+		noDataset.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				DatasetWizard wizard = new DatasetWizard();
-				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-				wizard.init(jConfig);
-				dialog.create();
-				if (dialog.open() == Dialog.OK) {
-					String ds = (String) wizard.getDataset().getPropertyValue(JRDesignDataset.PROPERTY_NAME);
-					datasets.add(ds);
-					datasets.select(datasets.getItemCount() - 1);
-
-					try {
-						jConfig.getJasperDesign().addDataset((JRDesignDataset) wizard.getDataset().getValue());
-						datasetrun.setPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME, ds);
-					} catch (JRException e1) {
-						e1.printStackTrace();
-					}
-				}
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
+				setSelectedNode(null);
+				datasets.setEnabled(selDataset.getSelection());
+				setPageComplete(true);
 			}
 		});
 
+		if (dsNames.length > 0) {
+			selDataset.setSelection(true);
+			datasets.setEnabled(true);
+		} else {
+			addDataset.setSelection(true);
+			handleNewSelected();
+		}
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
+	}
+
+	protected void handleNewSelected() {
+		datasets.setEnabled(selDataset.getSelection());
+		if (addDataset.getSelection()) {
+			setSelectedNode(new AWizardNode() {
+				public IWizard createWizard() {
+					IWizard pwizard = WizardDatasetPage.this.getWizard();
+					DatasetWizard w = new DatasetWizard(pwizard, pwizard.getNextPage(WizardDatasetPage.this));
+					if (pwizard instanceof JSSWizard)
+						w.init(((JSSWizard) pwizard).getConfig());
+					return w;
+				}
+			});
+			setPageComplete(true);
+		}
 	}
 
 }

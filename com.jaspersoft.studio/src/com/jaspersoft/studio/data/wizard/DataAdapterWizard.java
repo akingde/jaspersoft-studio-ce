@@ -185,9 +185,9 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 				for (IProject p : prjs) {
 					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
 						if (cl == null)
-							cl = new JavaProjectClassLoader(JavaCore.create(p));
+							cl = JavaProjectClassLoader.instance(JavaCore.create(p));
 						else
-							cl = new CompositeClassloader(cl, new JavaProjectClassLoader(JavaCore.create(p)));
+							cl = new CompositeClassloader(cl, JavaProjectClassLoader.instance(JavaCore.create(p)));
 					}
 				}
 				if (cl != null)

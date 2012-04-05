@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -64,6 +65,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * The Class MGeneric.
  */
 public class MGraphicElement extends APropertyNode implements IGraphicElement, ICopyable, IGuidebleElement, IDragable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private ReportRulerGuide verticalGuide, horizontalGuide;
 
 	/*
@@ -468,6 +470,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
+//			jrElement.getPropertyExpressions();
+//			jrElement.getPropertiesMap()
 			// FIXME: jrElement.getPropertyExpression(); same field
 			return jrElement.getPropertiesMap();
 		}

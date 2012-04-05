@@ -150,11 +150,11 @@ public class SelectionHelper {
 		}
 	}
 
-	public static final void openEditor(FileEditorInput editorInput, String path) {
-		openEditor(editorInput.getFile(), path);
+	public static final boolean openEditor(FileEditorInput editorInput, String path) {
+		return openEditor(editorInput.getFile(), path);
 	}
 
-	public static final void openEditor(IFile file, String path) {
+	public static final boolean openEditor(IFile file, String path) {
 		try {
 			if (file != null && path != null) {
 				// String pathname = FileUtils.findRelativePath(rpath, path);
@@ -168,11 +168,13 @@ public class SelectionHelper {
 					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
 					IDE.openEditorOnFileStore(page, fileStore);
+					return true;
 				}
 			}
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 	public static FileResolver getFileResolver() {

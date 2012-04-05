@@ -41,12 +41,11 @@ package com.jaspersoft.studio.property.dataset.wizard;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -58,8 +57,9 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.wizards.JSSWizardPage;
 
-public class WizardDatasetNewPage extends WizardPage {
+public class WizardDatasetNewPage extends JSSWizardPage {
 	private JasperDesign jasperDesign;
 	private MDataset dataset;
 	private boolean emptyDataset = false;
@@ -128,16 +128,12 @@ public class WizardDatasetNewPage extends WizardPage {
 		final Button fromConn = new Button(composite, SWT.RADIO);
 		fromConn.setText(Messages.WizardDatasetNewPage_create_new_dataset);
 		fromConn.setSelection(true);
-		fromConn.addSelectionListener(new SelectionListener() {
-
+		fromConn.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				emptyDataset = !fromConn.getSelection();
 			}
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
 		});
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
@@ -145,17 +141,12 @@ public class WizardDatasetNewPage extends WizardPage {
 
 		final Button empty = new Button(composite, SWT.RADIO);
 		empty.setText(Messages.WizardDatasetNewPage_create_an_empty_dataset);
-		empty.addSelectionListener(new SelectionListener() {
-
+		empty.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				emptyDataset = empty.getSelection();
-				getWizard().getContainer().updateButtons();
 			}
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
 		});
 		gd = new GridData();
 		gd.horizontalSpan = 2;
@@ -163,9 +154,9 @@ public class WizardDatasetNewPage extends WizardPage {
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard"); //$NON-NLS-1$
 	}
-
-	@Override
-	public boolean canFlipToNextPage() {
-		return isPageComplete() && !emptyDataset;
-	}
+	//
+	// @Override
+	// public boolean canFlipToNextPage() {
+	// return isPageComplete() && !emptyDataset;
+	// }
 }

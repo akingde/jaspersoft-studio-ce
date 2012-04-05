@@ -3,6 +3,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.operation.ModalContext;
 import org.eclipse.swt.SWT;
@@ -11,9 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 
-import com.jaspersoft.studio.utils.jobs.IRunWithProgress;
-
-public class RunWithProgressBar implements IRunWithProgress {
+public class RunWithProgressBar implements IRunnableContext {
 
 	private ProgressBar pb;
 
@@ -30,7 +29,8 @@ public class RunWithProgressBar implements IRunWithProgress {
 		pb.setVisible(false);
 	}
 
-	public void runJob(IRunnableWithProgress runnable) throws InvocationTargetException, InterruptedException {
+	public void run(boolean fork, boolean cancelable, IRunnableWithProgress runnable) throws InvocationTargetException,
+			InterruptedException {
 		IProgressMonitor monitor = getProgressMonitor();
 
 		ModalContext.run(runnable, true, monitor, Display.getDefault());

@@ -25,6 +25,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.components.table.WhenNoDataTypeTableEnum;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.component.ComponentKey;
@@ -53,6 +54,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MTable extends MGraphicElement implements IContainer,
 		IContainerEditPart, IGroupElement {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

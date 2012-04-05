@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.JRSubreportReturnValue;
@@ -52,6 +53,7 @@ import com.jaspersoft.studio.property.descriptor.subreport.returnvalue.RVPropert
  * The Class MSubreport.
  */
 public class MSubreport extends MGraphicElement {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.query.JRJdbcQueryExecuterFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -79,7 +80,8 @@ public abstract class DataQueryAdapters {
 	private IFile file;
 
 	public DataQueryAdapters(Composite parent, JasperReportsConfiguration jConfig, JRDesignDataset newdataset,
-			Color background) {
+			Color background, IRunnableContext runner) {
+		setRunnableContext(runner);
 		if (jConfig != null) {
 			this.file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
 			this.jDesign = jConfig.getJasperDesign();
@@ -91,6 +93,11 @@ public abstract class DataQueryAdapters {
 			this.background = background;
 		// else
 		this.background = parent.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
+	}
+
+	public DataQueryAdapters(Composite parent, JasperReportsConfiguration jConfig, JRDesignDataset newdataset,
+			Color background) {
+		this(parent, jConfig, newdataset, background, null);
 	}
 
 	public void dispose() {
@@ -260,14 +267,20 @@ public abstract class DataQueryAdapters {
 		return comp;
 	}
 
-	private RunWithProgressBar runner;
+	private IRunnableContext runner;
 
-	protected void createProgressBar(final Composite comp) {
-		runner = new RunWithProgressBar(comp);
+	public void setRunnableContext(IRunnableContext runner) {
+		this.runner = runner;
 	}
 
-	public void run(IRunnableWithProgress runnable) throws InvocationTargetException, InterruptedException {
-		runner.runJob(runnable);
+	protected void createProgressBar(final Composite comp) {
+		if (runner == null)
+			runner = new RunWithProgressBar(comp);
+	}
+
+	public void run(boolean fork, boolean cancelable, IRunnableWithProgress runnable) throws InvocationTargetException,
+			InterruptedException {
+		runner.run(fork, cancelable, runnable);
 	}
 
 	private QueryStatus qStatus;
@@ -342,7 +355,22 @@ public abstract class DataQueryAdapters {
 		return dscombo.getSelected();
 	}
 
-	public void doGetFields(IProgressMonitor monitor) {
+	public void doGetFields() {
+		try {
+			run(true, true, new IRunnableWithProgress() {
+
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					doGetFields(monitor);
+				}
+			});
+		} catch (InvocationTargetException ex) {
+			getQueryStatus().showError(ex.getTargetException());
+		} catch (InterruptedException ex) {
+			getQueryStatus().showError(ex);
+		}
+	}
+
+	protected void doGetFields(IProgressMonitor monitor) {
 		final String lang = newdataset.getQuery().getLanguage();
 		final DataAdapterDescriptor da = dscombo.getSelected();
 		if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
