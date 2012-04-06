@@ -97,17 +97,20 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		return datasetrun;
 	}
 
-	public WizardDatasetPage(JasperReportsConfiguration jConfig) {
-		this(jConfig, true);
+	private String componentName = "component";
+
+	public WizardDatasetPage(JasperReportsConfiguration jConfig, String componentName) {
+		this(jConfig, true, componentName);
 	}
 
-	public WizardDatasetPage(JasperReportsConfiguration jConfig, boolean all) {
+	public WizardDatasetPage(JasperReportsConfiguration jConfig, boolean all, String componentName) {
 		super("datasetpage"); //$NON-NLS-1$
 		setTitle(Messages.common_dataset);
 		setImageDescriptor(MDataset.getIconDescriptor().getIcon32());
 		setDescription(Messages.WizardDatasetPage_description);
 		this.jConfig = jConfig;
 		this.all = all;
+		this.componentName = componentName;
 	}
 
 	public void createControl(Composite parent) {
@@ -116,7 +119,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		setControl(composite);
 
 		addDataset = new Button(composite, SWT.RADIO);
-		addDataset.setText("Create from a new Dataset");
+		addDataset.setText("Create a " + componentName + " using a new dataset");
 		addDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -126,7 +129,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		});
 
 		selDataset = new Button(composite, SWT.RADIO);
-		selDataset.setText("Select an existing Dataset");
+		selDataset.setText("Create a " + componentName + " using an existing dataset");
 		selDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -160,7 +163,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 		datasets.setLayoutData(gd);
 
 		noDataset = new Button(composite, SWT.RADIO);
-		noDataset.setText("Just create an empty element");
+		noDataset.setText("Just create the " + componentName + " (further manual configuration may be required)");
 		noDataset.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

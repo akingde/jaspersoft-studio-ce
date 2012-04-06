@@ -53,6 +53,7 @@ public class ListWizard extends JSSWizard {
 	private WizardConnectionPage step2;
 	private WizardFieldsPage step3;
 	private MList list;
+	private JRDesignDataset jrdataset;
 
 	public ListWizard() {
 		super();
@@ -75,7 +76,7 @@ public class ListWizard extends JSSWizard {
 				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION,
 				"$P{REPORT_CONNECTION}");
 
-		step1 = new WizardDatasetPage(getConfig(), false);
+		step1 = new WizardDatasetPage(getConfig(), false, "List");
 		addPage(step1);
 		step1.setDataSetRun(mdatasetrun);
 
@@ -96,29 +97,35 @@ public class ListWizard extends JSSWizard {
 				return step2;
 		}
 		if (page == step2) {
-			MDatasetRun dataSetRun = step1.getDataSetRun();
-			JRDesignDataset ds = null;
-			if (dataSetRun == null) {
-				MDataset mds = (MDataset) getConfig()
-						.get(DatasetWizard.DATASET);
-				if (mds != null)
-					ds = mds.getValue();
-			} else {
-				String dsname = (String) dataSetRun
-						.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
-				for (JRDataset d : datasetsList)
-					if (d.getName().equals(dsname)) {
-						ds = (JRDesignDataset) d;
-						break;
-					}
-			}
-			if (ds != null)
-				step3.setFields(new ArrayList<JRField>(Arrays.asList(ds
+			jrdataset = getDataset();
+			if (jrdataset != null)
+				step3.setFields(new ArrayList<JRField>(Arrays.asList(jrdataset
 						.getFields())));
 			else
 				page = step3;
 		}
 		return super.getNextPage(page);
+	}
+
+	private JRDesignDataset getDataset() {
+		JasperDesign jd = getConfig().getJasperDesign();
+		List<JRDataset> datasetsList = jd.getDatasetsList();
+		MDatasetRun dataSetRun = step1.getDataSetRun();
+		JRDesignDataset ds = null;
+		if (dataSetRun == null) {
+			MDataset mds = (MDataset) getConfig().get(DatasetWizard.DATASET);
+			if (mds != null)
+				ds = mds.getValue();
+		} else {
+			String dsname = (String) dataSetRun
+					.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
+			for (JRDataset d : datasetsList)
+				if (d.getName().equals(dsname)) {
+					ds = (JRDesignDataset) d;
+					break;
+				}
+		}
+		return ds;
 	}
 
 	public MList getList() {
@@ -137,7 +144,15 @@ public class ListWizard extends JSSWizard {
 			element.setExpression(new JRDesignExpression("$F{" + field + "}"));
 			((DesignListContents) jrList.getContents()).addElement(element);
 			x += element.getWidth();
+			jrElement.setHeight(Math.max(jrElement.getHeight(),
+					element.getHeight()));
+			jrElement.setWidth(Math.max(x, jrElement.getWidth()));
 		}
+		if (jrdataset == null)
+			jrList.setDatasetRun(null);
+		else
+			((JRDesignDatasetRun) jrList.getDatasetRun())
+					.setDatasetName(jrdataset.getName());
 
 		return list;
 	}

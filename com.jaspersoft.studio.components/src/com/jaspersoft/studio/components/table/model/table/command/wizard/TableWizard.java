@@ -77,7 +77,7 @@ public class TableWizard extends JSSWizard {
 				JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION,
 				"$P{REPORT_CONNECTION}");
 
-		step1 = new WizardDatasetPage(getConfig(), false);
+		step1 = new WizardDatasetPage(getConfig(), false, "Table");
 		addPage(step1);
 		step1.setDataSetRun(mdataset);
 

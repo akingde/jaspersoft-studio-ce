@@ -118,6 +118,12 @@ public class CreateListCommand extends CreateElementCommand {
 							.getJasperDesign());
 				else {
 					jrElement = (JRDesignElement) srcNode.getValue();
+					if (location != null) {
+						location.width = Math.max(location.width,
+								jrElement.getWidth());
+						location.height = Math.max(location.height,
+								jrElement.getHeight());
+					}
 				}
 				if (jrElement != null) {
 					setElementBounds();

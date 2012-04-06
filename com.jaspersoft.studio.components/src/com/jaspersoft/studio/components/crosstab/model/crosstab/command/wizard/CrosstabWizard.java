@@ -90,7 +90,7 @@ public class CrosstabWizard extends JSSWizard {
 				jrCrosstab));
 		crosstab.setJasperConfiguration(getConfig());
 
-		step1 = new WizardDatasetPage(getConfig());
+		step1 = new WizardDatasetPage(getConfig(), "Crosstab");
 		addPage(step1);
 		MElementDataset dataset = (MElementDataset) crosstab
 				.getPropertyValue(JRDesignCrosstab.PROPERTY_DATASET);
