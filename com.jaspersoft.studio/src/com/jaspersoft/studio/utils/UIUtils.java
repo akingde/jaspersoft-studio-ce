@@ -24,6 +24,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import net.sf.jasperreports.eclipse.ui.util.ExceptionDetailsErrorDialog;
+
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -52,8 +54,11 @@ public class UIUtils {
 				IStatus status = new OperationStatus(IStatus.ERROR, JaspersoftStudioPlugin.getUniqueIdentifier(),
 						OperationStatus.NOTHING_TO_REDO, t.getMessage(), t);
 				new ExceptionDetailsErrorDialog(Display.getDefault().getActiveShell(), Messages.common_exception,
-						Messages.common_exception_detail, status, IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR)
-						.open();
+						Messages.common_exception_detail, status, IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR) {
+					protected void setShellStyle(int newShellStyle) {
+						super.setShellStyle(newShellStyle | SWT.SHEET);
+					};
+				}.open();
 			}
 		});
 		t.printStackTrace();
@@ -62,7 +67,8 @@ public class UIUtils {
 	public static void showWarning(final String message) {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				MessageDialog.openWarning(Display.getDefault().getActiveShell(), Messages.common_warning, message);
+				MessageDialog.open(MessageDialog.WARNING, Display.getDefault().getActiveShell(), Messages.common_warning,
+						message, SWT.SHEET);
 			}
 		});
 	}
@@ -72,7 +78,13 @@ public class UIUtils {
 	 */
 	public static boolean showConfirmation(String title, String message) {
 		MessageDialog dialog = new MessageDialog(null, title, null, message, MessageDialog.QUESTION, new String[] {
-				Messages.common_yes, Messages.common_no }, 0);
+				Messages.common_yes, Messages.common_no }, 0) {
+
+			@Override
+			protected void setShellStyle(int newShellStyle) {
+				super.setShellStyle(newShellStyle | SWT.SHEET);
+			}
+		};
 		return dialog.open() == 0;
 	}
 

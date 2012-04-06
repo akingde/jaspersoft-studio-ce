@@ -22,6 +22,8 @@ package com.jaspersoft.studio.server.wizard.validator;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
+
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

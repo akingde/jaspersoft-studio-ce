@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.server.wizard.resource.page;
 
+import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
+
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -44,7 +46,6 @@ import com.jaspersoft.studio.server.model.MFolder;
 import com.jaspersoft.studio.server.model.MReference;
 import com.jaspersoft.studio.server.model.MResource;
 import com.jaspersoft.studio.server.properties.dialog.RepositoryDialog;
-import com.jaspersoft.studio.server.wizard.validator.EmptyStringValidator;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class RDReferencePage extends AResourcePage {

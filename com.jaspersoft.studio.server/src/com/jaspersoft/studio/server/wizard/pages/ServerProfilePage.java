@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.server.wizard.pages;
 
+import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -43,7 +45,6 @@ import com.jaspersoft.studio.server.ServerManager;
 import com.jaspersoft.studio.server.messages.Messages;
 import com.jaspersoft.studio.server.model.server.MServerProfile;
 import com.jaspersoft.studio.server.model.server.ServerProfile;
-import com.jaspersoft.studio.server.wizard.validator.EmptyStringValidator;
 import com.jaspersoft.studio.server.wizard.validator.URLValidator;
 
 public class ServerProfilePage extends WizardPage {

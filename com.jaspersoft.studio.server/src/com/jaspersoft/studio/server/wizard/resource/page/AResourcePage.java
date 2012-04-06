@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.server.wizard.resource.page;
 
+import net.sf.jasperreports.eclipse.ui.validator.EmptyStringValidator;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -36,7 +38,6 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.server.model.MResource;
-import com.jaspersoft.studio.server.wizard.validator.EmptyStringValidator;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public abstract class AResourcePage extends WizardPage {

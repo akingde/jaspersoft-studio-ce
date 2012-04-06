@@ -217,8 +217,11 @@
         	id="com.jaspersoft.studio.rcp.jssToolbar"
             label="Jaspersoft Studio Toolbar">
 		    <command
-		          commandId="org.eclipse.ui.newWizard"
-		          style="push">
+            commandId="org.eclipse.ui.newWizard"
+            id="com.jaspersoft.studio.rcp.newreport"
+            label="New JasperReport"
+            style="push"
+            tooltip="New JasperReport">
 		       <parameter
 		             name="newWizardId"
 		             value="com.jaspersoft.studio.wizards.ReportNewWizard">
@@ -230,8 +233,11 @@
 			    </visibleWhen>
 		    </command>
 		    <command
-		          commandId="org.eclipse.ui.newWizard"
-		          style="push">
+            commandId="org.eclipse.ui.newWizard"
+            id="com.jaspersoft.studio.rcp.newdataadapter"
+            label="New DataAdapter"
+            style="push"
+            tooltip="New DataAdapter">
 		       <parameter
 		             name="newWizardId"
 		             value="com.jaspersoft.studio.data.wizard.NewFileDataAdapterWizard">
@@ -243,8 +249,11 @@
 			    </visibleWhen>		       
 		    </command>
 		   	<command
-		          commandId="org.eclipse.ui.newWizard"
-		          style="push">
+            commandId="org.eclipse.ui.newWizard"
+            id="com.jaspersoft.studio.rcp.newstyletemplate"
+            label="New Style Template"
+            style="push"
+            tooltip="New Style Template">
 		       <parameter
 		             name="newWizardId"
 		             value="com.jaspersoft.studio.wizards.StyleTemplateNewWizard">
@@ -258,4 +267,106 @@
          </toolbar>
 	</menuContribution>
 	</extension>
+	<extension
+ point="org.eclipse.ui.preferencePages">
+<page
+      category="org.eclipse.ui.preferencePages.Workbench"
+      class="org.eclipse.ui.activities.ActivitiesPreferencePage"
+      id="org.eclipse.sdk.capabilities"
+      name="Capabilities">
+   <keywordReference
+         id="com.jaspersoft.studio.rcp.javadevelopment">
+   </keywordReference>
+</page>
+</extension>
+   <extension
+         point="org.eclipse.ui.activities">
+      <category
+            description="Programming Languages Developement"
+            id="com.jaspersoft.studio.rcp.development"
+            name="Development">
+      </category>
+      <activity
+            description="Java programming language environement"
+            id="com.jaspersoft.studio.rcp.javadevelopment"
+            name="Java Development">
+      </activity>
+      <categoryActivityBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            categoryId="com.jaspersoft.studio.rcp.development">
+      </categoryActivityBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaPerspective">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaHierarchyPerspective">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaBrowsingPerspective">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.debug.ui/org.eclipse.debug.ui.DebugPerspective">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org.eclipse.debug.ui/org.eclipse.debug.ui.*View">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org.eclipse.jdt.debug.ui/*DisplayView">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.*View">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.callhierarchy.view*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.TypeHierarchy">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.debug.ui/org.eclipse.jdt.debug.ui.DisplayView">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org\.eclipse\.jdt\.debug\.ui/.*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org\.eclipse\.debug\..*/.*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            pattern="org\.eclipse\.jdt\.ui/.*Wizard*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.ui.ide/org.eclipse.ui.wizards.new.project">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaSearchResultPage">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.jaspersoft.studio.rcp.javadevelopment"
+            isEqualityPattern="true"
+            pattern="org.eclipse.jdt.ui/org.eclipse.jdt.ui.JavaSearchPage">
+      </activityPatternBinding>
+   </extension>
 </plugin>
