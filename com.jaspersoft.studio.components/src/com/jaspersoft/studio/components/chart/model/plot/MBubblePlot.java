@@ -25,6 +25,7 @@ import java.util.Map;
 import net.sf.jasperreports.charts.JRBubblePlot;
 import net.sf.jasperreports.charts.design.JRDesignBubblePlot;
 import net.sf.jasperreports.charts.type.ScaleTypeEnum;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -44,6 +45,8 @@ import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MBubblePlot extends MChartPlot {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MBubblePlot(JRBubblePlot value) {
 		super(value);
 	}

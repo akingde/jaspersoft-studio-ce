@@ -25,7 +25,6 @@ import org.eclipse.gef.EditPolicy;
 
 import com.jaspersoft.studio.components.table.model.MTable;
 import com.jaspersoft.studio.editor.gef.parts.EditableFigureEditPart;
-import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
 import com.jaspersoft.studio.editor.gef.parts.editPolicy.ElementEditPolicy;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MPage;
@@ -49,13 +48,9 @@ public class TableEditPart extends EditableFigureEditPart {
 			MTable m = (MTable) getModel();
 			Dimension d = m.getTableManager().getSize();
 			Dimension dr = rect.getSize();
-			rect.setSize(Math.max(dr.width, d.width) + 4, Math.max(dr.height, d.height) + 4);
+			rect.setSize(Math.max(dr.width, d.width) + 4,
+					Math.max(dr.height, d.height) + 4);
 		}
-	}
-
-	@Override
-	public boolean isSelectable() {
-		return getParent() instanceof ReportPageEditPart;
 	}
 
 }

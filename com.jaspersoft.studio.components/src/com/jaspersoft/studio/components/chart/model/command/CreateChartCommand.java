@@ -37,7 +37,6 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
 import com.jaspersoft.studio.utils.SelectionHelper;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * link nodes & together.
@@ -116,13 +115,12 @@ public class CreateChartCommand extends CreateElementCommand {
 			JRDesignChart newchart = MChart.createJRElement(jasperDesign,
 					JRDesignChart.CHART_TYPE_AREA);
 
-			JasperReportsConfiguration jrContext = new JasperReportsConfiguration();
-			jrContext.setFileResolver(SelectionHelper.getFileResolver());
+			jConfig.setFileResolver(SelectionHelper.getFileResolver());
 
 			ChartWizard wizard = new ChartWizard(
 					new MChart(null, newchart, -1),
-					(JRDesignElementDataset) newchart.getDataset(),
-					jasperDesign, jrContext);
+					(JRDesignElementDataset) newchart.getDataset());
+			wizard.init(jConfig);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

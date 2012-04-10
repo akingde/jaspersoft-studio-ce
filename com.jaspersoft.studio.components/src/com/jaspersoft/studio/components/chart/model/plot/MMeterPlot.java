@@ -30,6 +30,7 @@ import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.charts.type.MeterShapeEnum;
 import net.sf.jasperreports.charts.util.JRMeterInterval;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRException;
 
 import org.eclipse.swt.graphics.RGB;
@@ -51,6 +52,8 @@ import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MMeterPlot extends MChartPlot {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MMeterPlot(JRMeterPlot value) {
 		super(value);
 	}

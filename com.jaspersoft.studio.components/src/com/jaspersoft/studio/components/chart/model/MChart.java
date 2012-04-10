@@ -42,6 +42,7 @@ import net.sf.jasperreports.charts.type.EdgeEnum;
 import net.sf.jasperreports.charts.type.ValueLocationEnum;
 import net.sf.jasperreports.engine.JRChart;
 import net.sf.jasperreports.engine.JRChartPlot;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRGroup;
@@ -98,7 +99,7 @@ import com.jaspersoft.studio.utils.Misc;
  */
 public class MChart extends MGraphicElementLineBox implements IContainer,
 		IContainerEditPart {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public static final String PLOTPROPERTY = "PLOTPROPERTY";
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

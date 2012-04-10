@@ -47,9 +47,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.PlatformUI;
 
@@ -76,7 +76,7 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 	private JasperReportsConfiguration jConfig;
 	private boolean all = true;
 	private MDatasetRun datasetrun;
-	private List datasets;
+	private Combo datasets;
 	private DatasetListListener dsListener;
 	private Button addDataset;
 	private Button selDataset;
@@ -142,24 +142,24 @@ public class WizardDatasetPage extends JSSWizardSelectionPage {
 
 		String[] dsNames = ModelUtils.getDataSets(jConfig.getJasperDesign(), all);
 
-		datasets = new List(composite, SWT.BORDER | SWT.READ_ONLY);
+		datasets = new Combo(composite, SWT.BORDER | SWT.SINGLE);
 		datasets.setItems(dsNames);
 		dsListener = new DatasetListListener();
 		datasets.addListener(SWT.Selection, dsListener);
-		datasets.setSelection(0);
+		datasets.select(0);
 		String dsname = (String) datasetrun.getPropertyValue(JRDesignDatasetRun.PROPERTY_DATASET_NAME);
 		if (dsname != null) {
 			String[] items = datasets.getItems();
 			for (int i = 0; i < items.length; i++) {
 				if (items[i].equals(dsname)) {
-					datasets.setSelection(i);
+					datasets.select(i);
 					break;
 				}
 			}
 		}
 		dsListener.handleEvent(new Event());
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.widthHint = 300;
+		GridData gd = new GridData();
+		gd.horizontalIndent = 30;
 		datasets.setLayoutData(gd);
 
 		noDataset = new Button(composite, SWT.RADIO);

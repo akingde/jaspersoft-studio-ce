@@ -22,7 +22,6 @@ package com.jaspersoft.studio.components.chart.wizard;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.nebula.widgets.gallery.DefaultGalleryItemRenderer;
 import org.eclipse.nebula.widgets.gallery.Gallery;
 import org.eclipse.nebula.widgets.gallery.GalleryItem;
@@ -40,8 +39,9 @@ import org.eclipse.ui.PlatformUI;
 import com.jaspersoft.studio.components.Activator;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
+import com.jaspersoft.studio.wizards.JSSWizardPage;
 
-public class ChartTypeWizardPage extends WizardPage {
+public class ChartTypeWizardPage extends JSSWizardPage {
 	private static final int GALLERY_HEIGHT = 100;
 	private static final int GALLERY_WIDTH = 100;
 	private MChart chart;
@@ -143,12 +143,13 @@ public class ChartTypeWizardPage extends WizardPage {
 
 	@Override
 	public boolean canFlipToNextPage() {
-		JRDesignChart old = (JRDesignChart) chart.getValue();
-		if (chartType != old.getChartType()) {
-			old.setChartType(chartType);
-		}
-		if (chartType == JRDesignChart.CHART_TYPE_MULTI_AXIS)
+		if (chartType == JRDesignChart.CHART_TYPE_MULTI_AXIS) {
+			JRDesignChart old = (JRDesignChart) chart.getValue();
+			if (chartType != old.getChartType()) {
+				old.setChartType(chartType);
+			}
 			return false;
+		}
 		return super.canFlipToNextPage();
 	}
 

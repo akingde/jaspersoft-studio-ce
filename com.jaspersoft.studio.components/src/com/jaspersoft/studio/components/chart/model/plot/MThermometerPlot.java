@@ -27,6 +27,7 @@ import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.charts.type.ValueLocationEnum;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -45,6 +46,8 @@ import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MThermometerPlot extends MChartPlot {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MThermometerPlot(JRThermometerPlot value) {
 		super(value);
 	}

@@ -25,6 +25,7 @@ import java.util.Map;
 import net.sf.jasperreports.charts.JRBar3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignBar3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -45,6 +46,8 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MBar3DPlot extends MChartPlot {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MBar3DPlot(JRBar3DPlot value) {
 		super(value);
 	}

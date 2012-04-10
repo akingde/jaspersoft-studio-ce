@@ -21,46 +21,40 @@ package com.jaspersoft.studio.components.chart.wizard;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.JSSWizard;
 
-public class ChartWizard extends Wizard {
+public class ChartWizard extends JSSWizard {
 	private ChartTypeWizardPage page0;
 	private ChartDataPage step1;
 	private MGraphicElement chart;
 	private JRDesignElementDataset edataset;
 
-	private JasperReportsConfiguration jrContext;
 	private int width;
 	private int height;
 	private boolean skipFirstPage = false;
 
 	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset,
-			JasperDesign jasperDesign, boolean skipFirstPage,
-			JasperReportsConfiguration jrContext) {
-		this(chart, edataset, jasperDesign, jrContext);
+			boolean skipFirstPage) {
+		this(chart, edataset);
 		this.skipFirstPage = skipFirstPage;
 		setNeedsProgressMonitor(false);
 	}
 
-	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset,
-			JasperDesign jasperDesign, JasperReportsConfiguration jrContext) {
+	public ChartWizard(MGraphicElement chart, JRDesignElementDataset edataset) {
 		super();
 		setWindowTitle(Messages.common_chart_wizard);
 		this.chart = chart;
-		this.jasperDesign = jasperDesign;
 		this.edataset = edataset;
 		JRDesignElement jrChart = (JRDesignElement) chart.getValue();
 		width = jrChart.getWidth();
 		height = jrChart.getHeight();
-		this.jrContext = jrContext;
 	}
 
 	@Override
@@ -71,7 +65,7 @@ public class ChartWizard extends Wizard {
 		}
 
 		step1 = new ChartDataPage((JRDesignElement) chart.getValue(), edataset,
-				jasperDesign, jrContext);
+				getConfig());
 		addPage(step1);
 	}
 
@@ -97,6 +91,10 @@ public class ChartWizard extends Wizard {
 		return step1.isPageComplete();
 	}
 
-	private JasperDesign jasperDesign;
-
+	@Override
+	public void init(JasperReportsConfiguration jConfig) {
+		super.init(jConfig);
+		if (chart != null)
+			chart.setJasperConfiguration(jConfig);
+	}
 }

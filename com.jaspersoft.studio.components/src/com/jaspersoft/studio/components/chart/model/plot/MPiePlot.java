@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.JRPiePlot;
 import net.sf.jasperreports.charts.design.JRDesignPiePlot;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -35,13 +36,17 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
 public class MPiePlot extends MChartPlot {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MPiePlot(JRPiePlot value) {
 		super(value);
 	}
+
 	@Override
 	public String getDisplayText() {
 		return Messages.MPiePlot_pie_plot;
 	}
+
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
@@ -56,35 +61,43 @@ public class MPiePlot extends MChartPlot {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignPiePlot.PROPERTY_ITEM_LABEL, Messages.common_item_label);
+		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(
+				JRDesignPiePlot.PROPERTY_ITEM_LABEL, Messages.common_item_label);
 		itemLabelD.setDescription(Messages.MPiePlot_item_label_description);
 		desc.add(itemLabelD);
 
-		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(JRDesignPiePlot.PROPERTY_SHOW_LABELS,
+		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(
+				JRDesignPiePlot.PROPERTY_SHOW_LABELS,
 				Messages.common_show_labels, NullEnum.NULL);
 		showLabelsD.setDescription(Messages.MPiePlot_show_labels_description);
 		desc.add(showLabelsD);
 
-		CheckBoxPropertyDescriptor circularD = new CheckBoxPropertyDescriptor(JRDesignPiePlot.PROPERTY_CIRCULAR,
-				Messages.common_circular, NullEnum.NULL);
+		CheckBoxPropertyDescriptor circularD = new CheckBoxPropertyDescriptor(
+				JRDesignPiePlot.PROPERTY_CIRCULAR, Messages.common_circular,
+				NullEnum.NULL);
 		circularD.setDescription(Messages.MPiePlot_circular_description);
 		desc.add(circularD);
 
 		NTextPropertyDescriptor legendLabelFormatD = new NTextPropertyDescriptor(
-				JRDesignPiePlot.PROPERTY_LEGEND_LABEL_FORMAT, Messages.common_legend_label_format);
-		legendLabelFormatD.setDescription(Messages.MPiePlot_legend_label_format_description);
+				JRDesignPiePlot.PROPERTY_LEGEND_LABEL_FORMAT,
+				Messages.common_legend_label_format);
+		legendLabelFormatD
+				.setDescription(Messages.MPiePlot_legend_label_format_description);
 		desc.add(legendLabelFormatD);
 
-		NTextPropertyDescriptor labelFormatD = new NTextPropertyDescriptor(JRDesignPiePlot.PROPERTY_LABEL_FORMAT,
+		NTextPropertyDescriptor labelFormatD = new NTextPropertyDescriptor(
+				JRDesignPiePlot.PROPERTY_LABEL_FORMAT,
 				Messages.common_label_format);
 		labelFormatD.setDescription(Messages.MPiePlot_label_format_description);
 		desc.add(labelFormatD);
@@ -94,7 +107,9 @@ public class MPiePlot extends MChartPlot {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -108,7 +123,7 @@ public class MPiePlot extends MChartPlot {
 		if (id.equals(JRDesignPiePlot.PROPERTY_LABEL_FORMAT))
 			return jrElement.getLabelFormat();
 		if (id.equals(JRDesignPiePlot.PROPERTY_ITEM_LABEL)) {
-			if (ilFont == null){
+			if (ilFont == null) {
 				ilFont = new MChartItemLabel(jrElement.getItemLabel());
 				setChildListener(ilFont);
 			}
@@ -123,7 +138,9 @@ public class MPiePlot extends MChartPlot {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {

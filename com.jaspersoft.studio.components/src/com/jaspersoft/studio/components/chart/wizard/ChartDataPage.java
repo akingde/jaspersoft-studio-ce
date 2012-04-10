@@ -22,9 +22,7 @@ package com.jaspersoft.studio.components.chart.wizard;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -32,23 +30,22 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.ElementDatasetWidget;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.JSSWizardPage;
 
-public class ChartDataPage extends WizardPage {
+public class ChartDataPage extends JSSWizardPage {
 	private JRDesignElement jrChart;
-	private JasperDesign jrDesign;
 	private ElementDatasetWidget ewDataset;
 	private JRDesignElementDataset edataset;
 	private DatasetSeriesWidget eDatasetSeries;
 	private JasperReportsConfiguration jrContext;
 
 	protected ChartDataPage(JRDesignElement jrChart,
-			JRDesignElementDataset edataset, JasperDesign jrDesign,
+			JRDesignElementDataset edataset,
 			JasperReportsConfiguration jrContext) {
 		super("chartdataconfiguration");
 		setTitle("Chart Data Configuration");
 		setDescription("Configure how data are used by your chart");
 		this.jrChart = jrChart;
-		this.jrDesign = jrDesign;
 		this.edataset = edataset;
 		this.jrContext = jrContext;
 	}
@@ -64,8 +61,9 @@ public class ChartDataPage extends WizardPage {
 	}
 
 	public void updateData() {
-		eDatasetSeries.setDataset(jrDesign, jrChart, edataset);
-		ewDataset.setDataset(edataset, jrDesign);
+		eDatasetSeries.setDataset(jrContext.getJasperDesign(), jrChart,
+				edataset);
+		ewDataset.setDataset(edataset, jrContext.getJasperDesign());
 	}
 
 	@Override

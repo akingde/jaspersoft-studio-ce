@@ -24,7 +24,6 @@ import net.sf.jasperreports.engine.design.JRDesignChart;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
@@ -38,14 +37,13 @@ import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class EditChartCommand extends Command {
 	private JRElementGroup jrGroup;
-	private JasperDesign jrDesign;
 	private JRDesignChart oldChart;
 	private JRDesignChart newChart;
+	protected JasperReportsConfiguration jConfig;
 
 	public EditChartCommand(MFrame parent, MChart mchart) {
 		this(parent, mchart, -1);
@@ -60,7 +58,7 @@ public class EditChartCommand extends Command {
 	}
 
 	private EditChartCommand(ANode parent, MChart mchart, int index) {
-		this.jrDesign = mchart.getJasperDesign();
+		this.jConfig = parent.getJasperConfiguration();
 		this.oldChart = (JRDesignChart) mchart.getValue();
 		if (parent instanceof IGroupElement)
 			this.jrGroup = ((IGroupElement) parent).getJRElementGroup();
@@ -73,11 +71,9 @@ public class EditChartCommand extends Command {
 		if (newChart == null) {
 			JRDesignChart clone = (JRDesignChart) oldChart.clone();
 
-			JasperReportsConfiguration jrContext = new JasperReportsConfiguration();
-			jrContext.setFileResolver(SelectionHelper.getFileResolver());
-			
 			ChartWizard wizard = new ChartWizard(new MChart(null, clone, -1),
-					(JRDesignElementDataset) clone.getDataset(), jrDesign, true, jrContext);
+					(JRDesignElementDataset) clone.getDataset(), true);
+			wizard.init(jConfig);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

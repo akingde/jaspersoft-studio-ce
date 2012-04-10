@@ -25,7 +25,6 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignElementGroup;
 import net.sf.jasperreports.engine.design.JRDesignFrame;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.dialogs.Dialog;
@@ -39,14 +38,13 @@ import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
-import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class EditSpiderChartCommand extends Command {
 	private JRElementGroup jrGroup;
-	private JasperDesign jrDesign;
 	private JRDesignComponentElement oldChart;
 	private JRDesignComponentElement newChart;
+	protected JasperReportsConfiguration jConfig;
 
 	public EditSpiderChartCommand(MFrame parent, MSpiderChart mchart) {
 		this(parent, mchart, -1);
@@ -61,7 +59,7 @@ public class EditSpiderChartCommand extends Command {
 	}
 
 	private EditSpiderChartCommand(ANode parent, MSpiderChart mchart, int index) {
-		this.jrDesign = mchart.getJasperDesign();
+		this.jConfig = parent.getJasperConfiguration();
 		this.oldChart = (JRDesignComponentElement) mchart.getValue();
 		if (parent instanceof IGroupElement)
 			this.jrGroup = ((IGroupElement) parent).getJRElementGroup();
@@ -77,12 +75,10 @@ public class EditSpiderChartCommand extends Command {
 			SpiderChartComponent scc = (SpiderChartComponent) clone
 					.getComponent();
 			// TODO SHOULD TAKE THIS ONE FROM EDITOR
-			JasperReportsConfiguration jrContext = new JasperReportsConfiguration();
-			jrContext.setFileResolver(SelectionHelper.getFileResolver());
 
 			ChartWizard wizard = new ChartWizard(new MSpiderChart(null, clone,
-					-1), (JRDesignElementDataset) scc.getDataset(), jrDesign,
-					jrContext);
+					-1), (JRDesignElementDataset) scc.getDataset());
+			wizard.init(jConfig);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

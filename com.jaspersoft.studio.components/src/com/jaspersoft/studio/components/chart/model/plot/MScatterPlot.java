@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.JRScatterPlot;
 import net.sf.jasperreports.charts.design.JRDesignScatterPlot;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -41,6 +42,8 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MScatterPlot extends MChartPlot {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MScatterPlot(JRScatterPlot value) {
 		super(value);
 	}

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.JRPie3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -36,13 +37,17 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
 public class MPie3DPlot extends MChartPlot {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MPie3DPlot(JRPie3DPlot value) {
 		super(value);
 	}
+
 	@Override
 	public String getDisplayText() {
 		return Messages.MPie3DPlot_pie3d_plot;
 	}
+
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
@@ -57,49 +62,63 @@ public class MPie3DPlot extends MChartPlot {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(JRDesignPie3DPlot.PROPERTY_ITEM_LABEL, Messages.common_item_label);
+		PlotPropertyDescriptor itemLabelD = new PlotPropertyDescriptor(
+				JRDesignPie3DPlot.PROPERTY_ITEM_LABEL,
+				Messages.common_item_label);
 		itemLabelD.setDescription(Messages.MPie3DPlot_item_label_description);
 		desc.add(itemLabelD);
 
-		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(JRDesignPie3DPlot.PROPERTY_SHOW_LABELS,
+		CheckBoxPropertyDescriptor showLabelsD = new CheckBoxPropertyDescriptor(
+				JRDesignPie3DPlot.PROPERTY_SHOW_LABELS,
 				Messages.common_show_labels, NullEnum.NULL);
 		showLabelsD.setDescription(Messages.MPie3DPlot_show_labels_description);
 		desc.add(showLabelsD);
 
-		CheckBoxPropertyDescriptor circularD = new CheckBoxPropertyDescriptor(JRDesignPie3DPlot.PROPERTY_CIRCULAR,
-				Messages.common_circular, NullEnum.NULL);
+		CheckBoxPropertyDescriptor circularD = new CheckBoxPropertyDescriptor(
+				JRDesignPie3DPlot.PROPERTY_CIRCULAR, Messages.common_circular,
+				NullEnum.NULL);
 		circularD.setDescription(Messages.MPie3DPlot_circular_description);
 		desc.add(circularD);
 
 		NTextPropertyDescriptor legendLabelFormatD = new NTextPropertyDescriptor(
-				JRDesignPie3DPlot.PROPERTY_LEGEND_LABEL_FORMAT, Messages.common_legend_label_format);
-		legendLabelFormatD.setDescription(Messages.MPie3DPlot_legend_label_format_description);
+				JRDesignPie3DPlot.PROPERTY_LEGEND_LABEL_FORMAT,
+				Messages.common_legend_label_format);
+		legendLabelFormatD
+				.setDescription(Messages.MPie3DPlot_legend_label_format_description);
 		desc.add(legendLabelFormatD);
 
-		NTextPropertyDescriptor labelFormatD = new NTextPropertyDescriptor(JRDesignPie3DPlot.PROPERTY_LABEL_FORMAT,
+		NTextPropertyDescriptor labelFormatD = new NTextPropertyDescriptor(
+				JRDesignPie3DPlot.PROPERTY_LABEL_FORMAT,
 				Messages.common_label_format);
-		labelFormatD.setDescription(Messages.MPie3DPlot_label_format_description);
+		labelFormatD
+				.setDescription(Messages.MPie3DPlot_label_format_description);
 		desc.add(labelFormatD);
 
-		DoublePropertyDescriptor depthFactorD = new DoublePropertyDescriptor(JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR,
+		DoublePropertyDescriptor depthFactorD = new DoublePropertyDescriptor(
+				JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR,
 				Messages.MPie3DPlot_depth_factor);
-		depthFactorD.setDescription(Messages.MPie3DPlot_depth_factor_description);
+		depthFactorD
+				.setDescription(Messages.MPie3DPlot_depth_factor_description);
 		desc.add(depthFactorD);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -115,7 +134,7 @@ public class MPie3DPlot extends MChartPlot {
 		if (id.equals(JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR))
 			return jrElement.getDepthFactorDouble();
 		if (id.equals(JRDesignPie3DPlot.PROPERTY_ITEM_LABEL)) {
-			if (ilFont == null){
+			if (ilFont == null) {
 				ilFont = new MChartItemLabel(jrElement.getItemLabel());
 				setChildListener(ilFont);
 			}
@@ -130,7 +149,9 @@ public class MPie3DPlot extends MChartPlot {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {

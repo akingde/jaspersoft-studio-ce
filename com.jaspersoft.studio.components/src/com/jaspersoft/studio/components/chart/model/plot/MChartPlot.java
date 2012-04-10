@@ -22,10 +22,10 @@ package com.jaspersoft.studio.components.chart.model.plot;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 
 import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.JRChartPlot.JRSeriesColor;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -43,6 +43,7 @@ import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MChartPlot extends APropertyNode {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MChartPlot(JRChartPlot value) {
 		super();
