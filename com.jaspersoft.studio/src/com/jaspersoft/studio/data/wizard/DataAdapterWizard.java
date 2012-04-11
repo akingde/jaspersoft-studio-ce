@@ -21,6 +21,7 @@ package com.jaspersoft.studio.data.wizard;
 
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.util.CompositeClassloader;
 
 import org.eclipse.core.resources.IProject;
@@ -30,7 +31,6 @@ import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -45,8 +45,10 @@ import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.wizards.JSSWizard;
 
-public class DataAdapterWizard extends Wizard implements SelectionListener {
+public class DataAdapterWizard extends JSSWizard implements SelectionListener {
 
 	private DataAdapterDescriptor dataAdapter = null;
 	private DataAdapterWizardDialog wizardDialog = null;
@@ -62,6 +64,7 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 	public DataAdapterWizard(ADataAdapterStorage storage) {
 		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
 		this.storage = storage;
+		init(new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance()));
 	}
 
 	/**
@@ -193,8 +196,10 @@ public class DataAdapterWizard extends Wizard implements SelectionListener {
 				if (cl != null)
 					Thread.currentThread().setContextClassLoader(cl);
 
-				DataAdapterServiceUtil.getDataAdapterService(
-						dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter()).test();
+				getConfig().setClassLoader(cl);
+
+				DataAdapterServiceUtil.getInstance(getConfig())
+						.getService(dataAdapterEditorPage.getDataAdapterEditor().getDataAdapter().getDataAdapter()).test();
 
 				MessageBox mb = new MessageBox(getContainer().getShell(), SWT.ICON_INFORMATION | SWT.OK);
 				mb.setText(Messages.DataAdapterWizard_testbutton);

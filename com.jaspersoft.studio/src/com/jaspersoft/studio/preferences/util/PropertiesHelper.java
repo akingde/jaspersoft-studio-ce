@@ -23,11 +23,14 @@ package com.jaspersoft.studio.preferences.util;
 import java.util.List;
 import java.util.Properties;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRProperties;
-import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Assert;
@@ -37,17 +40,24 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class PropertiesHelper {
-	public static final String JRCONTEXT_PREFERENCE_HELPER_KEY="preferenceHelper";
-	public static final InstanceScope INSTANCE_SCOPE = new InstanceScope();
+	public static final String JRCONTEXT_PREFERENCE_HELPER_KEY = "preferenceHelper";
+	public static final IScopeContext INSTANCE_SCOPE = InstanceScope.INSTANCE;
 	private IPreferencesService service;
 	private String qualifier;
 	private String[] lookupOrders;
 	private IScopeContext[] contexts;
+	public static JRPropertiesUtil DPROP = JRPropertiesUtil.getInstance(DefaultJasperReportsContext.getInstance());
 
-	public PropertiesHelper(IProject project) {
+	private PropertiesHelper(JasperReportsContext jrContext) {
+		IProject project = null;
+		this.jrContext = jrContext;
+		IFile file = (IFile) jrContext.getValue(IEditorContributor.KEY_FILE);
+		if (file != null)
+			project = file.getProject();
 		service = Platform.getPreferencesService();
 		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
 		if (project != null) {
@@ -70,7 +80,7 @@ public class PropertiesHelper {
 
 	public void setProperties(JasperDesign jd) {
 		JRPropertiesMap map = jd.getPropertiesMap();
-		List<PropertySuffix> lst = JRProperties.getProperties("");
+		List<PropertySuffix> lst = JRPropertiesUtil.getInstance(jrContext).getProperties("");
 		for (PropertySuffix ps : lst) {
 			String key = ps.getKey();
 			if (map.getProperty(key) == null) {
@@ -83,13 +93,13 @@ public class PropertiesHelper {
 
 	public Properties getProperties() {
 		Properties p = new Properties();
-		List<PropertySuffix> lst = JRProperties.getProperties("");
+		List<PropertySuffix> lst = JRPropertiesUtil.getInstance(jrContext).getProperties("");
 		for (PropertySuffix ps : lst) {
 
 			String key = ps.getKey();
 			String val = getString(key);
 			if (key != null && val != null)
-				JRProperties.setProperty(key, val);
+				p.setProperty(key, val);
 		}
 		return p;
 	}
@@ -153,22 +163,24 @@ public class PropertiesHelper {
 			return null;
 		return new Character(val.charAt(0));
 	}
-	
+
+	private JasperReportsContext jrContext;
+
 	/**
-	 * Get a {@link PropertiesHelper} instance from the specified {@link JasperReportsConfiguration}.
-	 * If a valid JasperReports context is not found then a default {@link PropertiesHelper} is returned.
+	 * Get a {@link PropertiesHelper} instance from the specified {@link JasperReportsConfiguration}. If a valid
+	 * JasperReports context is not found then a default {@link PropertiesHelper} is returned.
 	 * 
-	 * @param jrContext the context from which to extract a {@link PropertiesHelper} instance
+	 * @param jrContext
+	 *          the context from which to extract a {@link PropertiesHelper} instance
 	 * @return the properties helper found, a default one otherwise
 	 */
-	public static PropertiesHelper getInstance(JasperReportsConfiguration jrContext){
+	public static PropertiesHelper getInstance(JasperReportsContext jrContext) {
 		Assert.isNotNull(jrContext);
-		PropertiesHelper propHelper = (PropertiesHelper)jrContext.get(JRCONTEXT_PREFERENCE_HELPER_KEY);
-		if(propHelper!=null){
+		PropertiesHelper propHelper = (PropertiesHelper) jrContext.getValue(JRCONTEXT_PREFERENCE_HELPER_KEY);
+		if (propHelper != null) {
 			return propHelper;
-		}
-		else{
-			return new PropertiesHelper(null);
+		} else {
+			return new PropertiesHelper(jrContext);
 		}
 	}
 }

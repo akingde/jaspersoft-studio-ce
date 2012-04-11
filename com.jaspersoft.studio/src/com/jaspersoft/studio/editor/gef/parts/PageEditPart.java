@@ -78,6 +78,7 @@ public class PageEditPart extends AJDEditPart implements PropertyChangeListener 
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class key) {
 		if (key == SnapToHelper.class) {

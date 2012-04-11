@@ -84,10 +84,10 @@ public class StyleEditPart extends FigureEditPart {
 		rf.setSize(textE.getX() * 3 + textE.getWidth() + imageE.getWidth(), textE.getY() * 2 + textE.getHeight());
 
 		textF = new StaticTextFigure();
-		textF.setJRElement(textE, drawVisitor, jrContext);
+		textF.setJRElement(textE, drawVisitor);
 
 		imageF = new ImageFigure();
-		imageF.setJRElement(imageE, drawVisitor, jrContext);
+		imageF.setJRElement(imageE, drawVisitor);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = textE.getHeight() + 20;

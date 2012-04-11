@@ -94,6 +94,7 @@ public class JDRulerRootEditPart extends SimpleRootEditPart {
 	/**
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class adapter) {
 		if (adapter == AutoexposeHelper.class) {
 			if (((JDRulerEditPart) getContents()).isHorizontal())

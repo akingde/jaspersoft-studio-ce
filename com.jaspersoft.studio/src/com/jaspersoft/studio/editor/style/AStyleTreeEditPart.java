@@ -123,7 +123,7 @@ public class AStyleTreeEditPart extends AbstractTreeEditPart implements Property
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
 	 */
 	@Override
-	protected List getModelChildren() {
+	protected List<Object> getModelChildren() {
 		List<Object> list = new ArrayList<Object>();
 		if (getModel() != null)
 			for (INode node : ((ANode) getModel()).getChildren()) {

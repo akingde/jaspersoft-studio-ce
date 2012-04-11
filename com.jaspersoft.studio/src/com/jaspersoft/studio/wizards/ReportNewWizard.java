@@ -29,6 +29,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRImage;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -135,7 +136,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		addPage(step4);
 	}
 
-	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration();
+	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance());
 	public static final String REPORT_FILE = "REPORTFILEWIZARD";
 	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD";
 
@@ -307,7 +308,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 			}
 		});
 		try {
-			String contents = JRXmlWriterHelper.writeReport(jDesign, reportFile, false);
+			String contents = JRXmlWriterHelper.writeReport(jConfig, jDesign, reportFile, false);
 			return new ByteArrayInputStream(contents.getBytes());
 		} catch (Exception e) {
 			UIUtils.showError(e);

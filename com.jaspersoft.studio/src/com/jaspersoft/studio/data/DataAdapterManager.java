@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.XmlUtil;
+import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -158,7 +158,7 @@ public class DataAdapterManager {
 		DataAdapter srcDataAdapter = src.getDataAdapter();
 		DataAdapterFactory factory = findFactoryByDataAdapterClass(srcDataAdapter.getClass().getName());
 		DataAdapterDescriptor copy = factory.createDataAdapter();
-		srcDataAdapter = (DataAdapter) XmlUtil.read(new ByteArrayInputStream(src.toXml().getBytes()),
+		srcDataAdapter = (DataAdapter) CastorUtil.read(new ByteArrayInputStream(src.toXml().getBytes()),
 				srcDataAdapter.getClass());
 		copy.setDataAdapter(srcDataAdapter);
 		return copy;

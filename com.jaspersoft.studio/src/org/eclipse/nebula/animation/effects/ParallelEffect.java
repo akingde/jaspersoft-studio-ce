@@ -81,7 +81,7 @@ public class ParallelEffect implements IEffect {
 	 * 
 	 * @param effects
 	 */
-	public ParallelEffect(List effects) {
+	public ParallelEffect(List<?> effects) {
 		this(effects, null, null);
 	}
 
@@ -92,7 +92,7 @@ public class ParallelEffect implements IEffect {
 	 * @param onStop
 	 * @param onCancel
 	 */
-	public ParallelEffect(List effects, Runnable onStop, Runnable onCancel) {
+	public ParallelEffect(List<?> effects, Runnable onStop, Runnable onCancel) {
 		this((IEffect[]) effects.toArray(), onStop, onCancel);
 	}
 

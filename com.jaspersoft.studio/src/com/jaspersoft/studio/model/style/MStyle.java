@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
@@ -75,7 +76,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav
  */
 public class MStyle extends APropertyNode implements ICopyable, IPastable, IContainerEditPart {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -290,7 +291,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		desc.add(defaultD);
 
 		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP,
-				Messages.MStyle_markup, ModelUtils.getMarkups(), NullEnum.INHERITED);
+				Messages.MStyle_markup, ModelUtils.getMarkups(getJasperConfiguration()), NullEnum.INHERITED);
 		markupD.setDescription(Messages.MStyle_markup_description);
 		desc.add(markupD);
 

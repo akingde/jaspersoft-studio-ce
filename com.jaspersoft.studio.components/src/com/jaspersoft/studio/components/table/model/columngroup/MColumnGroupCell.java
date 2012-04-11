@@ -24,6 +24,7 @@ import java.beans.PropertyChangeEvent;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -39,7 +40,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MColumnGroupCell extends MCell {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -57,7 +58,8 @@ public class MColumnGroupCell extends MCell {
 	/** The descriptors. */
 	protected static IPropertyDescriptor[] descriptors;
 
-	public MColumnGroupCell(ANode parent, StandardColumnGroup jrDataset, DesignCell cell, String name, int index) {
+	public MColumnGroupCell(ANode parent, StandardColumnGroup jrDataset,
+			DesignCell cell, String name, int index) {
 		super(parent, jrDataset, cell, name, index);
 	}
 
@@ -75,18 +77,23 @@ public class MColumnGroupCell extends MCell {
 	public void propertyChange(PropertyChangeEvent evt) {
 		AMCollection section = getSection();
 		if (section != null) {
-			if (evt.getPropertyName().equals(StandardColumnGroup.PROPERTY_COLUMNS)) {
-				if (evt.getSource() instanceof StandardColumnGroup && evt.getSource() == getValue()) {
+			if (evt.getPropertyName().equals(
+					StandardColumnGroup.PROPERTY_COLUMNS)) {
+				if (evt.getSource() instanceof StandardColumnGroup
+						&& evt.getSource() == getValue()) {
 					if (evt.getOldValue() == null && evt.getNewValue() != null) {
 						int newIndex = -1;
 						if (evt instanceof CollectionElementAddedEvent) {
-							newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+							newIndex = ((CollectionElementAddedEvent) evt)
+									.getAddedIndex();
 						}
-						StandardBaseColumn bc = (StandardBaseColumn) evt.getNewValue();
+						StandardBaseColumn bc = (StandardBaseColumn) evt
+								.getNewValue();
 						if (section != null) {
 							section.createColumn(this, bc, 122, newIndex);
 						}
-					} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+					} else if (evt.getOldValue() != null
+							&& evt.getNewValue() == null) {
 						// delete
 						for (INode n : getChildren()) {
 							if (n.getValue() == evt.getOldValue()) {

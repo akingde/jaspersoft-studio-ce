@@ -24,7 +24,6 @@
 package com.jaspersoft.studio.preferences.exporter;
 
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -33,6 +32,7 @@ import org.eclipse.ui.IWorkbench;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 /*
  * 
  */
@@ -56,9 +56,9 @@ public class DOCXExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(JRDocxExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES,
-				JRProperties.getProperty(JRDocxExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
+				PropertiesHelper.DPROP.getProperty(JRDocxExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
 		store.setDefault(JRDocxExporterParameter.PROPERTY_FLEXIBLE_ROW_HEIGHT,
-				JRProperties.getProperty(JRDocxExporterParameter.PROPERTY_FLEXIBLE_ROW_HEIGHT));
+				PropertiesHelper.DPROP.getProperty(JRDocxExporterParameter.PROPERTY_FLEXIBLE_ROW_HEIGHT));
 	}
 
 	/*

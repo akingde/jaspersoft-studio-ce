@@ -56,7 +56,7 @@ public class XLSXFieldsProvider implements IFieldsProvider {
 				.getDataAdapter();
 		if (da.isQueryExecuterMode()) {
 			JRXlsxQueryExecuter qe = (JRXlsxQueryExecuter) new JRXlsxQueryExecuterFactory()
-					.createQueryExecuter(reportDataset,
+					.createQueryExecuter(jConfig, reportDataset,
 							ParameterUtil.convertMap(parameters));
 			ds = (JRXlsxDataSource) qe.createDatasource();
 		} else {

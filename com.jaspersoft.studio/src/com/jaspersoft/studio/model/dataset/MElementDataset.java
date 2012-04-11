@@ -41,6 +41,7 @@ package com.jaspersoft.studio.model.dataset;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElementDataset;
 import net.sf.jasperreports.engine.JRGroup;
@@ -70,6 +71,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MElementDataset extends APropertyNode implements IContainer, IContainerEditPart {
 	private static IIconDescriptor iconDescriptor;
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/**
 	 * Gets the icon descriptor.

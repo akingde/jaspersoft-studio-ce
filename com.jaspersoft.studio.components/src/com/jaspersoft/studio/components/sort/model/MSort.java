@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.sort.SortComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -55,6 +56,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * 
  */
 public class MSort extends MGraphicElement {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MSort() {
 		super();

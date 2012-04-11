@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignValueDataset;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -33,6 +34,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MChartValueDataset extends MChartDataset {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MChartValueDataset(ANode parent, JRDesignValueDataset value,
 			JasperDesign jasperDesign) {

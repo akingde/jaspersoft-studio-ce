@@ -22,6 +22,8 @@ package com.jaspersoft.studio.editor.style;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
@@ -37,7 +39,6 @@ import com.jaspersoft.studio.model.style.MStyle;
 import com.jaspersoft.studio.model.style.MStyleTemplateReference;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 import com.jaspersoft.studio.model.util.ModelVisitor;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * A factory for creating JasperDesignEditPart objects.
@@ -47,7 +48,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class StyleEditPartFactory implements EditPartFactory {
 	private DrawVisitor drawVisitor;
 	private JasperDesign jDesign;
-	private JasperReportsConfiguration jrContext;
+	private JasperReportsContext jrContext;
 
 	public DrawVisitor getDrawVisitor(ANode model) {
 		if (model == null)
@@ -55,10 +56,10 @@ public class StyleEditPartFactory implements EditPartFactory {
 		JasperDesign tjd = model.getJasperDesign();
 		if (tjd != jDesign) {
 			jDesign = tjd;
-			drawVisitor = new DrawVisitor(jDesign, null);
+			drawVisitor = new DrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
 		}
 		if (drawVisitor == null) {
-			drawVisitor = new DrawVisitor(jDesign, null);
+			drawVisitor = new DrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
 		}
 		return drawVisitor;
 	}
@@ -72,8 +73,8 @@ public class StyleEditPartFactory implements EditPartFactory {
 		if (context != null) {
 			EditPartViewer gv = context.getViewer();
 			Object prop = gv.getProperty("FILERESOLVER");
-			if (prop != null && prop instanceof JasperReportsConfiguration) {
-				jrContext = (JasperReportsConfiguration) prop;
+			if (prop != null && prop instanceof JasperReportsContext) {
+				jrContext = (JasperReportsContext) prop;
 			}
 		}
 		EditPart editPart = null;
@@ -102,7 +103,7 @@ public class StyleEditPartFactory implements EditPartFactory {
 		if (editPart != null) {
 			editPart.setModel(model);
 			if (editPart instanceof FigureEditPart)
-				((FigureEditPart) editPart).setDrawVisitor(getDrawVisitor((ANode) model), jrContext);
+				((FigureEditPart) editPart).setDrawVisitor(getDrawVisitor((ANode) model));
 		}
 		return editPart;
 	}

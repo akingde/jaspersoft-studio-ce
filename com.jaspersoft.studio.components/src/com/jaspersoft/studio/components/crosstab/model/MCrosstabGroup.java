@@ -26,6 +26,7 @@ import java.util.Map;
 import net.sf.jasperreports.crosstabs.JRCrosstabGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabTotalPositionEnum;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -42,7 +43,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 
 public abstract class MCrosstabGroup extends APropertyNode implements
 		IPropertySource {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/**
 	 * Instantiates a new m field.
 	 */

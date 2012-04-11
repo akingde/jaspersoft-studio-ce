@@ -374,13 +374,13 @@ public class WSClient {
             req.setLocale( getServer().getLocale() );
             ResourceDescriptor newRUDescriptor = new ResourceDescriptor();
             newRUDescriptor.setUriString(descriptor.getUriString() );
-            for (Iterator i= parameters.keySet().iterator(); i.hasNext() ;)
+            for (Iterator<String> i= parameters.keySet().iterator(); i.hasNext() ;)
             {
                 String key = ""+i.next();
                 Object value = parameters.get( key );
                 if (value instanceof java.util.Collection)
                 {
-                    Iterator cIter = ((Collection)value).iterator();
+                    Iterator<?> cIter = ((Collection<?>)value).iterator();
                     while (cIter.hasNext())
                     {
                         String item = ""+cIter.next();

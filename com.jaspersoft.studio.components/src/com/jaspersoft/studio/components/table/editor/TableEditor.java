@@ -106,15 +106,17 @@ public class TableEditor extends AbstractVisualEditor {
 	protected void createEditorActions(ActionRegistry registry) {
 		IAction action = new CreateColumnAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateColumnAction.ID);
+		@SuppressWarnings("unchecked")
+		List<String> selectionActions = getSelectionActions();
+		selectionActions.add(CreateColumnAction.ID);
 
 		action = new CreateColumnGroupAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateColumnGroupAction.ID);
+		selectionActions.add(CreateColumnGroupAction.ID);
 
 		action = new CreateColumnCellAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateColumnCellAction.ID);
+		selectionActions.add(CreateColumnCellAction.ID);
 	}
 
 }

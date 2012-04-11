@@ -21,7 +21,7 @@ package com.jaspersoft.studio.server.properties;
 
 import java.io.File;
 
-import net.sf.jasperreports.engine.JRRenderable;
+import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -76,20 +76,17 @@ public abstract class AResourceSection extends ASection {
 						File file = new File(filename);
 						int dotPos = filename.lastIndexOf(".");
 						String strFilename = filename.substring(0, dotPos);
-						switch (JRTypeSniffer.getImageType(FileUtils
-								.getBytes(file))) {
-						case JRRenderable.IMAGE_TYPE_GIF:
+
+						ImageTypeEnum itype = JRTypeSniffer
+								.getImageTypeValue(FileUtils.getBytes(file));
+						if (itype == ImageTypeEnum.GIF) {
 							fileRenamed(file, strFilename, ".gif");
-							break;
-						case JRRenderable.IMAGE_TYPE_JPEG:
+						} else if (itype == ImageTypeEnum.JPEG) {
 							fileRenamed(file, strFilename, ".jpeg");
-							break;
-						case JRRenderable.IMAGE_TYPE_PNG:
+						} else if (itype == ImageTypeEnum.PNG) {
 							fileRenamed(file, strFilename, ".png");
-							break;
-						case JRRenderable.IMAGE_TYPE_TIFF:
+						} else if (itype == ImageTypeEnum.TIFF) {
 							fileRenamed(file, strFilename, ".tiff");
-							break;
 						}
 					} catch (Exception e1) {
 						UIUtils.showError(e1);

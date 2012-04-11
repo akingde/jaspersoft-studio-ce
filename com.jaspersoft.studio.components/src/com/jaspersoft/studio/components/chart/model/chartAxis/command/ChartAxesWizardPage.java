@@ -58,7 +58,6 @@ public class ChartAxesWizardPage extends WizardPage {
 	private Scale zoomFactor;
 	private Gallery chartsGallery;
 	private GalleryItem itemGroup;
-	private Class<? extends JRChartPlot> chartPlot;
 
 	public byte getChartAxis() {
 		return chartAxes;
@@ -68,7 +67,6 @@ public class ChartAxesWizardPage extends WizardPage {
 		super("chartaxiswizard"); //$NON-NLS-1$
 		setTitle(Messages.common_chartaxis_wizard);
 		setDescription(Messages.ChartAxesWizardPage_chartaxis_wizard_description);
-		this.chartPlot = chartPlot;
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.charts.JRItemLabel;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
@@ -39,6 +40,7 @@ import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MChartItemLabel extends APropertyNode {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MChartItemLabel(JRItemLabel value) {
 		super();

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.map.MapComponent;
 import net.sf.jasperreports.components.map.StandardMapComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -52,6 +53,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * 
  */
 public class MMap extends MGraphicElement {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MMap() {
 		super();

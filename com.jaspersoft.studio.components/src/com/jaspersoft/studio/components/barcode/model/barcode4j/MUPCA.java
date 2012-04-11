@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.barcode4j.UPCAComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -34,6 +35,8 @@ import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 
 public class MUPCA extends MBarcode4j {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MUPCA() {
 		super();
 	}
@@ -46,7 +49,8 @@ public class MUPCA extends MBarcode4j {
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		el.setComponent(new UPCAComponent());
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", "UPCA")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		el.setComponentKey(new ComponentKey(
+				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", "UPCA")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return el;
 	}
 
@@ -64,7 +68,8 @@ public class MUPCA extends MBarcode4j {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -73,13 +78,15 @@ public class MUPCA extends MBarcode4j {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(UPCAComponent.PROPERTY_CHECKSUM_MODE,
+		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(
+				UPCAComponent.PROPERTY_CHECKSUM_MODE,
 				Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MUPCA_checksum_mode_description);
 		desc.add(checksumModeD);
@@ -103,7 +110,8 @@ public class MUPCA extends MBarcode4j {
 		UPCAComponent jrList = (UPCAComponent) jrElement.getComponent();
 
 		if (id.equals(UPCAComponent.PROPERTY_CHECKSUM_MODE))
-			jrList.setChecksumMode(ChecksumMode.getChecksumMode4Pos((Integer) value));
+			jrList.setChecksumMode(ChecksumMode
+					.getChecksumMode4Pos((Integer) value));
 		else
 			super.setPropertyValue(id, value);
 	}

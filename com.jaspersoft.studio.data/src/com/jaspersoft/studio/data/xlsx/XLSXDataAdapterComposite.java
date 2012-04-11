@@ -29,6 +29,7 @@ import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.data.xlsx.XlsxDataAdapter;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -685,9 +686,10 @@ public class XLSXDataAdapterComposite extends ADataAdapterComposite {
 	private void getExcelColumns() throws Exception {
 		if (textExcelFileName.getText().length() > 0) {
 			DataAdapterDescriptor da = getDataAdapter();
+			JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
+					DefaultJasperReportsContext.getInstance());
 			DataAdapterService das = DataAdapterServiceUtil
-					.getDataAdapterService(da.getDataAdapter());
-			JasperReportsConfiguration jConfig = new JasperReportsConfiguration();
+					.getInstance(jConfig).getService(da.getDataAdapter());
 			jConfig.setJasperDesign(new JasperDesign());
 			List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das,
 					jConfig, new JRDesignDataset(false));

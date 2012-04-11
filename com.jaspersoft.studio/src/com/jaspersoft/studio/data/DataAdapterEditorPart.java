@@ -27,6 +27,7 @@ import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -180,7 +181,8 @@ public class DataAdapterEditorPart extends ABasicEditor {
 					if (cl != null)
 						Thread.currentThread().setContextClassLoader(cl);
 
-					DataAdapterServiceUtil.getDataAdapterService(editor.getDataAdapter().getDataAdapter()).test();
+					DataAdapterServiceUtil.getInstance(DefaultJasperReportsContext.getInstance())
+							.getService(editor.getDataAdapter().getDataAdapter()).test();
 
 					MessageBox mb = new MessageBox(btnTest.getShell(), SWT.ICON_INFORMATION | SWT.OK);
 					mb.setText(Messages.DataAdapterWizard_testbutton);

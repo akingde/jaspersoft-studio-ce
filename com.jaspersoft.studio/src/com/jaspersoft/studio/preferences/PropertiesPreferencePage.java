@@ -22,8 +22,7 @@ package com.jaspersoft.studio.preferences;
 import java.util.Collections;
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.JRProperties;
-import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
+import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
@@ -32,6 +31,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyComparator;
 import com.jaspersoft.studio.preferences.editor.properties.PropertyListFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.Misc;
 
 /*
@@ -58,7 +58,7 @@ public class PropertiesPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		List<PropertySuffix> lst = JRProperties.getProperties("");
+		List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties("");
 		Collections.sort(lst, new PropertyComparator());
 		for (PropertySuffix ps : lst)
 			store.setDefault(ps.getKey(), Misc.nvl(ps.getValue(), ""));

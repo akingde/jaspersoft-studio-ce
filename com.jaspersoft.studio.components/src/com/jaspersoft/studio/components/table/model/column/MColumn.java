@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.table.StandardBaseColumn;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
@@ -51,7 +52,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 
 public class MColumn extends APropertyNode implements IPastable, IContainer,
 		IContainerEditPart {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

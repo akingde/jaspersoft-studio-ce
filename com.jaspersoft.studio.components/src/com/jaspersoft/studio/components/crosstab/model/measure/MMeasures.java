@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.components.crosstab.model.measure;
 
 import net.sf.jasperreports.crosstabs.JRCrosstab;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -30,7 +31,7 @@ import com.jaspersoft.studio.model.MCollection;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MMeasures extends MCollection {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

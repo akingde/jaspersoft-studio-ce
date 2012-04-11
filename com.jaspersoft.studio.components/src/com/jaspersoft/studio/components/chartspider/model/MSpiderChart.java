@@ -29,6 +29,7 @@ import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
 import net.sf.jasperreports.components.spiderchart.StandardSpiderPlot;
 import net.sf.jasperreports.components.spiderchart.type.SpiderRotationEnum;
 import net.sf.jasperreports.components.spiderchart.type.TableOrderEnum;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
@@ -72,6 +73,7 @@ import com.jaspersoft.studio.utils.Misc;
  * 
  */
 public class MSpiderChart extends MGraphicElement {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MSpiderChart() {
 		super();

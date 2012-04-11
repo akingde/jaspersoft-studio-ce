@@ -24,6 +24,8 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -51,7 +53,7 @@ import com.jaspersoft.studio.property.section.widgets.SPExpression;
  * Abstract class for a section in a tab in the properties view.
  */
 public abstract class AbstractSection extends AbstractPropertySection implements PropertyChangeListener {
-
+	protected JasperReportsContext jasperReportsContext;
 	private List<APropertyNode> elements;
 	private APropertyNode element;
 	private EditDomain editDomain;
@@ -73,6 +75,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 			for (Object item : selected) {
 				if (item instanceof EditPart) {
 					APropertyNode model = getModelFromEditPart(item);
+					jasperReportsContext = model.getJasperConfiguration();
 					if (model != null) {
 						if (element == null) {
 							EditorContributor provider = (EditorContributor) part.getAdapter(EditorContributor.class);

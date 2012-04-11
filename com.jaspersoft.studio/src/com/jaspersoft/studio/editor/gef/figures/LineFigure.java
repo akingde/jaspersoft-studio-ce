@@ -27,8 +27,6 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
 /*
  * The Class LineFigure.
  */
@@ -59,8 +57,8 @@ public class LineFigure extends AHandleBoundsFigure {
 	 * net.sf.jasperreports.engine.export.draw.DrawVisitor)
 	 */
 	@Override
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor, JasperReportsConfiguration jrContext) {
-		super.setJRElement(jrElement, drawVisitor, jrContext);
+	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
+		super.setJRElement(jrElement, drawVisitor);
 		// set bounds + 1/2 border
 		int offset = calcBorder(getLinePen());
 		Rectangle b = getBounds();

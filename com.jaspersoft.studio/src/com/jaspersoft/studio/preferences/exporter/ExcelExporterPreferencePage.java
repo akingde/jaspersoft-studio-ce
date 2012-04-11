@@ -21,7 +21,6 @@ package com.jaspersoft.studio.preferences.exporter;
 
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.type.RunDirectionEnum;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -44,6 +43,7 @@ import com.jaspersoft.studio.preferences.editor.number.FloatFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.Misc;
 
 /*
@@ -253,70 +253,64 @@ public class ExcelExporterPreferencePage extends FieldEditorOverlayPage {
 	public static void getDefaults(IPreferenceStore store) {
 		// JEXCELAPI
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_CREATE_CUSTOM_PALETTE));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD,
-				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD))); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_USE_TMP_FILE, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_USE_TMP_FILE), "")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_USE_TIMEZONE, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_USE_TIMEZONE), "")); //$NON-NLS-1$
-		
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_PASSWORD))); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_USE_TMP_FILE, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_USE_TMP_FILE), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_USE_TIMEZONE, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_USE_TIMEZONE), "")); //$NON-NLS-1$
+
 		store.setDefault(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT))); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_CELL_COMPLEX_FORMAT))); //$NON-NLS-1$
 		// COMMON
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_COLLAPSE_ROW_SPAN));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_GRAPHICS));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED,
-				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED), "false")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IMAGE_BORDER_FIX_ENABLED), "false")); //$NON-NLS-1$
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS));
 		// page
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
 		// sheet
 		store.setDefault(NSF_EXPORT_XLS_SHEET_DIRECTION,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_DIRECTION), RunDirectionEnum.LTR.getName()));
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_SHEET_DIRECTION), RunDirectionEnum.LTR.getName()));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_MAXIMUM_ROWS_PER_SHEET));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_ONE_PAGE_PER_SHEET));
 
 		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER))); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_LEFT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_LEFT))); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_RIGHT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_RIGHT))); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_CENTER))); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_LEFT, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_LEFT))); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_SHEET_FOOTER_RIGHT, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_SHEET_FOOTER_RIGHT))); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_XLS_SHEET_HEADER_CENTER,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_CENTER))); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_SHEET_HEADER_LEFT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_LEFT))); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_SHEET_HEADER_RIGHT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_RIGHT))); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_CENTER))); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_SHEET_HEADER_LEFT, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_LEFT))); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_SHEET_HEADER_RIGHT, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_SHEET_HEADER_RIGHT))); //$NON-NLS-1$
 
-		store.setDefault(NSF_EXPORT_XLS_FIT_HEIGHT, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FIT_HEIGHT))); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_FIT_WIDTH, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FIT_WIDTH))); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_FIT_HEIGHT, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_FIT_HEIGHT))); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_FIT_WIDTH, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_FIT_WIDTH))); //$NON-NLS-1$
 		// CELL
-		store.setDefault(NSF_EXPORT_XLS_CELL_HIDDEN,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_HIDDEN), "false")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_XLS_CELL_LOCKED,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_CELL_LOCKED), "false")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_CELL_HIDDEN, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_CELL_HIDDEN), "false")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_XLS_CELL_LOCKED, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_CELL_LOCKED), "false")); //$NON-NLS-1$
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_DETECT_CELL_TYPE));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BACKGROUND));
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER,
-				JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER));
-		store.setDefault(NSF_EXPORT_XLS_CELL_WRAP_TEXT, JRProperties.getProperty(NSF_EXPORT_XLS_CELL_WRAP_TEXT));
+				PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_IGNORE_CELL_BORDER));
+		store.setDefault(NSF_EXPORT_XLS_CELL_WRAP_TEXT, PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_CELL_WRAP_TEXT));
 
-		store.setDefault(NSF_EXPORT_XLS_AUTO_FILTER, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_AUTO_FILTER)));
-		store.setDefault(NSF_EXPORT_XLS_FREEZ_ROW, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FREEZ_ROW)));
-		store.setDefault(NSF_EXPORT_XLS_FREEZ_COLUMN, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_XLS_FREEZ_COLUMN)));
+		store.setDefault(NSF_EXPORT_XLS_AUTO_FILTER, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_AUTO_FILTER)));
+		store.setDefault(NSF_EXPORT_XLS_FREEZ_ROW, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_FREEZ_ROW)));
+		store.setDefault(NSF_EXPORT_XLS_FREEZ_COLUMN, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_XLS_FREEZ_COLUMN)));
 
 		store.setDefault(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED,
-				Misc.nvl(JRProperties.getProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED), "false")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRXlsAbstractExporterParameter.PROPERTY_FONT_SIZE_FIX_ENABLED), "false")); //$NON-NLS-1$
 	}
 
 	/*

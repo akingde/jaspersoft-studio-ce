@@ -63,7 +63,7 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 public class JDDragGuidePolicy extends GraphicalEditPolicy {
 
-	private List attachedEditParts = null;
+	private List<?> attachedEditParts = null;
 	private IFigure dummyGuideFigure, dummyLineFigure;
 	private boolean dragInProgress = false;
 
@@ -91,7 +91,7 @@ public class JDDragGuidePolicy extends GraphicalEditPolicy {
 			ChangeBoundsRequest req = new ChangeBoundsRequest(request.getType());
 			req.setEditParts(attachedEditParts);
 
-			Iterator i = attachedEditParts.iterator();
+			Iterator<?> i = attachedEditParts.iterator();
 
 			while (i.hasNext())
 				((EditPart) i.next()).eraseSourceFeedback(req);
@@ -110,7 +110,7 @@ public class JDDragGuidePolicy extends GraphicalEditPolicy {
 		eraseAttachedPartsFeedback(request);
 	}
 
-	private List getAttachedEditParts() {
+	private List<?> getAttachedEditParts() {
 		if (attachedEditParts == null)
 			attachedEditParts = getGuideEditPart().getRulerProvider().getAttachedEditParts(getHost().getModel(),
 					((JDRulerEditPart) getHost().getParent()).getDiagramViewer());
@@ -183,7 +183,7 @@ public class JDDragGuidePolicy extends GraphicalEditPolicy {
 		if (zoomManager != null) {
 			position = (int) Math.round(position / zoomManager.getZoom());
 		}
-		Iterator guides = getGuideEditPart().getRulerProvider().getGuides().iterator();
+		Iterator<?> guides = getGuideEditPart().getRulerProvider().getGuides().iterator();
 		while (guides.hasNext()) {
 			Object guide = guides.next();
 			if (guide != getGuideEditPart().getModel()) {
@@ -216,7 +216,7 @@ public class JDDragGuidePolicy extends GraphicalEditPolicy {
 		else
 			req.setMoveDelta(new Point(request.getMoveDelta().x, 0));
 
-		Iterator i = getAttachedEditParts().iterator();
+		Iterator<?> i = getAttachedEditParts().iterator();
 
 		while (i.hasNext())
 			((EditPart) i.next()).showSourceFeedback(req);
@@ -238,7 +238,7 @@ public class JDDragGuidePolicy extends GraphicalEditPolicy {
 			// move the guide being dragged to the last index so that it's drawn
 			// on
 			// top of other guides
-			List children = getHostFigure().getParent().getChildren();
+			List<IFigure> children = getHostFigure().getParent().getChildren();
 			children.remove(getHostFigure());
 			children.add(getHostFigure());
 		}

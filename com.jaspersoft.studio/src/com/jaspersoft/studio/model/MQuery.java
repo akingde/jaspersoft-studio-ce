@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
@@ -37,6 +38,7 @@ import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MQuery extends APropertyNode implements IPropertySource {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MQuery(JRQuery jrQuery) {
 		super();

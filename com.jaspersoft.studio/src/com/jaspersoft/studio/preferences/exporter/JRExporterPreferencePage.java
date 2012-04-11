@@ -1,30 +1,25 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.preferences.exporter;
 
 import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -37,7 +32,9 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.CEncodingFieldEditor;
 import com.jaspersoft.studio.preferences.editor.pages.PagesFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.Misc;
+
 /*
  * 
  */
@@ -74,13 +71,13 @@ public class JRExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(JRExporterParameter.PROPERTY_CHARACTER_ENCODING,
-				Misc.nvl(JRProperties.getProperty(JRExporterParameter.PROPERTY_CHARACTER_ENCODING), "UTF-8")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRExporterParameter.PROPERTY_CHARACTER_ENCODING), "UTF-8")); //$NON-NLS-1$
 		store.setDefault(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS,
-				JRProperties.getBooleanProperty(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS));
+				PropertiesHelper.DPROP.getBooleanProperty(JRExporterParameter.PROPERTY_IGNORE_PAGE_MARGINS));
 		store.setDefault(JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS,
-				JRProperties.getBooleanProperty(JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS));
+				PropertiesHelper.DPROP.getBooleanProperty(JRExporterParameter.PROPERTY_EXPORT_PARAMETERS_OVERRIDE_REPORT_HINTS));
 		store.setDefault(NSF_EXPORT_LEGACY_BORDER_OFFSET,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_LEGACY_BORDER_OFFSET), "DEFAULT")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_LEGACY_BORDER_OFFSET), "DEFAULT")); //$NON-NLS-1$
 
 		store.setDefault(EXPPARAM_OFFSET_X, 0);
 		store.setDefault(EXPPARAM_OFFSET_Y, 0);

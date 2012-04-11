@@ -31,7 +31,6 @@
 package org.eclipse.nebula.widgets.gallery;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -73,7 +72,7 @@ public class DefaultGalleryItemRenderer extends AbstractGalleryItemRenderer {
 	/**
 	 * Stores colors used in drop shadows
 	 */
-	protected ArrayList dropShadowsColors = new ArrayList();
+	protected ArrayList<Color> dropShadowsColors = new ArrayList<Color>();
 
 	// Renderer parameters
 	boolean dropShadows = false;
@@ -184,7 +183,7 @@ public class DefaultGalleryItemRenderer extends AbstractGalleryItemRenderer {
 			if (dropShadows) {
 				Color c = null;
 				for (int i = this.dropShadowsSize - 1; i >= 0; i--) {
-					c = (Color) dropShadowsColors.get(i);
+					c =  dropShadowsColors.get(i);
 					gc.setForeground(c);
 
 					gc.drawLine(x + width + i - xShift - 1, y + dropShadowsSize
@@ -310,9 +309,7 @@ public class DefaultGalleryItemRenderer extends AbstractGalleryItemRenderer {
 	private void freeDropShadowsColors() {
 		// Free colors :
 		{
-			Iterator i = this.dropShadowsColors.iterator();
-			while (i.hasNext()) {
-				Color c = (Color) i.next();
+			for (Color c: dropShadowsColors) {
 				if (c != null && !c.isDisposed())
 					c.dispose();
 			}

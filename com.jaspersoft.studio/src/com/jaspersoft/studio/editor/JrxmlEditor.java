@@ -30,6 +30,7 @@ import java.util.List;
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -432,7 +433,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				in = file.getContents();
 			} else
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
-			p = new PropertiesHelper(file.getProject());
 
 			getJrContext(file);
 
@@ -472,14 +472,15 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null) {
-			jrContext = new JasperReportsConfiguration();
+			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance());
 			ProxyFileResolver resolver = new ProxyFileResolver();
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);
 			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
 		}
 		jrContext.put(IEditorContributor.KEY_FILE, file);
-		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, p);
+		p =  PropertiesHelper.getInstance(jrContext);		
+		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, p); 
 	}
 
 	public static String getFileExtension(IEditorInput editorInput) {

@@ -22,6 +22,7 @@ package com.jaspersoft.studio.components.chart.model.dataset;
 import java.beans.PropertyChangeEvent;
 
 import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
@@ -30,7 +31,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ReportFactory;
 
 public class MChartCategoryDataset extends MChartDataset {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public MChartCategoryDataset(ANode parent, JRDesignCategoryDataset value, JasperDesign jasperDesign) {
 		super(parent, value, jasperDesign);
 	}

@@ -1,31 +1,28 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.model.band;
 
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.FooterPositionEnum;
@@ -42,7 +39,7 @@ import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescri
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MGroupBand extends MGroup implements IPropertySource {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private static final Integer CONST_MIN_HEIGHT = new Integer(0);
 
 	public MGroupBand(JRDesignGroup jrDesignGroup) {
@@ -66,32 +63,27 @@ public class MGroupBand extends MGroup implements IPropertySource {
 
 		CheckBoxPropertyDescriptor reprintHeaderD = new CheckBoxPropertyDescriptor(
 				JRDesignGroup.PROPERTY_REPRINT_HEADER_ON_EACH_PAGE, Messages.MGroupBand_reprint_header_on_each_page);
-		reprintHeaderD
-				.setDescription(Messages.MGroupBand_reprint_header_on_each_page_description);
+		reprintHeaderD.setDescription(Messages.MGroupBand_reprint_header_on_each_page_description);
 		desc.add(reprintHeaderD);
 
 		CheckBoxPropertyDescriptor resetPageNumberD = new CheckBoxPropertyDescriptor(
 				JRDesignGroup.PROPERTY_RESET_PAGE_NUMBER, Messages.MGroupBand_reset_page_number);
-		resetPageNumberD
-				.setDescription(Messages.MGroupBand_reset_page_number_description);
+		resetPageNumberD.setDescription(Messages.MGroupBand_reset_page_number_description);
 		desc.add(resetPageNumberD);
 
 		CheckBoxPropertyDescriptor keepTogetherD = new CheckBoxPropertyDescriptor(JRDesignGroup.PROPERTY_KEEP_TOGETHER,
 				Messages.MGroupBand_keep_together);
-		keepTogetherD
-				.setDescription(Messages.MGroupBand_keep_together_description);
+		keepTogetherD.setDescription(Messages.MGroupBand_keep_together_description);
 		desc.add(keepTogetherD);
 
 		ComboBoxPropertyDescriptor footerPositionD = new ComboBoxPropertyDescriptor(JRDesignGroup.PROPERTY_FOOTER_POSITION,
 				Messages.MGroupBand_footer_position, EnumHelper.getEnumNames(FooterPositionEnum.values(), NullEnum.NULL));
-		footerPositionD
-				.setDescription(Messages.MGroupBand_footer_position_description);
+		footerPositionD.setDescription(Messages.MGroupBand_footer_position_description);
 		desc.add(footerPositionD);
 
 		IntegerPropertyDescriptor minHeightD = new IntegerPropertyDescriptor(
 				JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, Messages.MGroupBand_min_height_to_start_new_page);
-		minHeightD
-				.setDescription(Messages.MGroupBand_min_height_to_start_new_page_description);
+		minHeightD.setDescription(Messages.MGroupBand_min_height_to_start_new_page_description);
 		desc.add(minHeightD);
 
 		defaultsMap.put(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE, CONST_MIN_HEIGHT);
@@ -170,8 +162,8 @@ public class MGroupBand extends MGroup implements IPropertySource {
 			jrGroup.setKeepTogether(((Boolean) value).booleanValue());
 
 		else if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
-			jrGroup.setFooterPosition((FooterPositionEnum) EnumHelper
-					.getSetValue(FooterPositionEnum.values(), value, 1, true));
+			jrGroup
+					.setFooterPosition((FooterPositionEnum) EnumHelper.getSetValue(FooterPositionEnum.values(), value, 1, true));
 
 		else if (id.equals(JRDesignGroup.PROPERTY_MIN_HEIGHT_TO_START_NEW_PAGE))
 			jrGroup.setMinHeightToStartNewPage(((Integer) value).intValue());

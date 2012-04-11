@@ -19,25 +19,26 @@
  */
 package com.jaspersoft.studio.utils.jasper;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
+import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
 
-public class JasperReportsConfiguration {
-	private Map<String, Object> params = new HashMap<String, Object>();
+public class JasperReportsConfiguration extends LocalJasperReportsContext {
+	public JasperReportsConfiguration(JasperReportsContext parent) {
+		super(parent);
+	}
 
 	public void put(String key, Object value) {
-		params.put(key, value);
+		setValue(key, value);
 	}
 
 	public Object get(String key) {
-		return params.get(key);
+		return getValue(key);
 	}
 
 	public void remove(String key) {
-		params.remove(key);
+		removeValue(key);
 	}
 
 	private ClassLoader classLoader;
@@ -47,16 +48,20 @@ public class JasperReportsConfiguration {
 		return classLoader;
 	}
 
+	@Override
 	public void setClassLoader(ClassLoader classLoader) {
 		this.classLoader = classLoader;
+		super.setClassLoader(classLoader);
 	}
 
 	public FileResolver getFileResolver() {
 		return fileResolver;
 	}
 
+	@Override
 	public void setFileResolver(FileResolver fileResolver) {
 		this.fileResolver = fileResolver;
+		super.setFileResolver(fileResolver);
 	}
 
 	public static final String KEY_JASPERDESIGN = "JasperDesign";

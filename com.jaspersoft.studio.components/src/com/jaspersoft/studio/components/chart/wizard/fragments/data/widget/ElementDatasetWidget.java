@@ -391,30 +391,30 @@ public class ElementDatasetWidget {
 		bptab.setControl(composite);
 	}
 
-	private void createFields(CTabFolder tabFolder) {
-		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Fields");
+//	private void createFields(CTabFolder tabFolder) {
+//		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+//		bptab.setText("Fields");
+//
+//		Composite composite = new Composite(tabFolder, SWT.NONE);
+//		composite.setLayout(new GridLayout());
+//
+//		Label lbl = new Label(composite, SWT.NONE);
+//		lbl.setText("[dataset fields table here]");
+//		lbl.setLayoutData(new GridData(GridData.FILL_BOTH
+//				| GridData.HORIZONTAL_ALIGN_CENTER
+//				| GridData.VERTICAL_ALIGN_CENTER));
+//
+//		bptab.setControl(composite);
+//	}
 
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout());
-
-		Label lbl = new Label(composite, SWT.NONE);
-		lbl.setText("[dataset fields table here]");
-		lbl.setLayoutData(new GridData(GridData.FILL_BOTH
-				| GridData.HORIZONTAL_ALIGN_CENTER
-				| GridData.VERTICAL_ALIGN_CENTER));
-
-		bptab.setControl(composite);
-	}
-
-	private void createData(CTabFolder tabFolder) {
-		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Data");
-
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-
-		bptab.setControl(composite);
-	}
+	// private void createData(CTabFolder tabFolder) {
+	// CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
+	// bptab.setText("Data");
+	//
+	// Composite composite = new Composite(tabFolder, SWT.NONE);
+	//
+	// bptab.setControl(composite);
+	// }
 
 	private void createParametersMap(CTabFolder ctfolder) {
 		Composite composite = new Composite(ctfolder, SWT.NONE);

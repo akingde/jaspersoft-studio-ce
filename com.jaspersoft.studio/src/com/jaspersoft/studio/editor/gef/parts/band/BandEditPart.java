@@ -64,20 +64,20 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav, Giulio Toffoli
  */
 public class BandEditPart extends FigureEditPart implements PropertyChangeListener, IContainerPart {
-	
+
 	private BandPreferenceListener prefChangelistener;
-	
+
 	/*
 	 * Preferences listener for band preferences/properties.
 	 */
 	private final class BandPreferenceListener implements IPropertyChangeListener {
 		public void propertyChange(org.eclipse.jface.util.PropertyChangeEvent event) {
-			if (event.getProperty().equals(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)){
-				setBandNameShowing((BandFigure)getFigure());
+			if (event.getProperty().equals(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES)) {
+				setBandNameShowing((BandFigure) getFigure());
 			}
 		}
 	}
-	
+
 	@Override
 	public void activate() {
 		super.activate();
@@ -97,7 +97,12 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	 * @return the band
 	 */
 	public JRDesignBand getBand() {
-		return (JRDesignBand) ((MBand) getModel()).getValue();
+		return getModel().getValue();
+	}
+
+	@Override
+	public MBand getModel() {
+		return (MBand) super.getModel();
 	}
 
 	public void performRequest(Request req) {
@@ -208,7 +213,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 
 	private void setupBandFigure(IFigure rect) {
 		JRDesignBand jrBand = getBand();
-		MBand bandNode=(MBand) getModel();
+		MBand bandNode = (MBand) getModel();
 		Rectangle bounds = (bandNode).getBounds();
 		JasperDesign jasperDesign = getJasperDesign();
 		BandFigure bfig = (BandFigure) rect;
@@ -228,7 +233,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		// update tooltip and band text (shown in background)
 		bfig.setToolTip(new Label(bandNode.getToolTip()));
 		bfig.setBandText(bandNode.getSimpleDisplayName());
-		
+
 		updateRullers();
 	}
 
@@ -258,8 +263,9 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	/*
 	 * Update flag for band name showing.
 	 */
-	private void setBandNameShowing(BandFigure figure){
-		boolean showBandName = PropertiesHelper.getInstance(jrContext).getBoolean(DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES,false);
+	private void setBandNameShowing(BandFigure figure) {
+		boolean showBandName = PropertiesHelper.getInstance(getModel().getJasperConfiguration()).getBoolean(
+				DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES, false);
 		figure.setShowBandName(showBandName);
 	}
 }

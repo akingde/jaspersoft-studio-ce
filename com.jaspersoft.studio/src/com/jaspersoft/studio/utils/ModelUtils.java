@@ -49,6 +49,8 @@ import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignBand;
@@ -57,13 +59,11 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
+import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.util.JRFontUtil;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.util.JRProperties;
-import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
 import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
@@ -79,6 +79,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The Class ModelUtils.
@@ -186,7 +187,6 @@ public class ModelUtils {
 	}
 
 	private static Map<String, String> mp = new HashMap<String, String>();
-	private static String[][] qexecutors;
 	private static java.util.List<String> pdfencodings;
 
 	/**
@@ -808,9 +808,9 @@ public class ModelUtils {
 
 	public static String[] getQueryLanguagesOnly() {
 		Set<String> langs = new HashSet<String>();
-		List<?> bundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(QueryExecuterFactoryBundle.class);
+		List<?> bundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(JRQueryExecuterFactoryBundle.class);
 		for (Iterator<?> it = bundles.iterator(); it.hasNext();) {
-			QueryExecuterFactoryBundle bundle = (QueryExecuterFactoryBundle) it.next();
+			JRQueryExecuterFactoryBundle bundle = (JRQueryExecuterFactoryBundle) it.next();
 			String[] languages = bundle.getLanguages();
 			for (String l : languages) {
 				if (!langs.contains(l)) {
@@ -831,13 +831,13 @@ public class ModelUtils {
 		return languages;
 	}
 
-	public static String[] getMarkups() {
+	public static String[] getMarkups(JasperReportsConfiguration jrContext) {
 		List<String> lst = new ArrayList<String>();
 		lst.add(""); //$NON-NLS-1$
 		lst.add("none"); //$NON-NLS-1$
 		lst.add("styled"); //$NON-NLS-1$
-		List<PropertySuffix> props = JRProperties
-				.getProperties(MarkupProcessorFactory.PROPERTY_MARKUP_PROCESSOR_FACTORY_PREFIX);
+		List<PropertySuffix> props = JRPropertiesUtil.getInstance(jrContext).getProperties(
+				MarkupProcessorFactory.PROPERTY_MARKUP_PROCESSOR_FACTORY_PREFIX);
 		for (PropertySuffix p : props) {
 			lst.add(p.getSuffix());
 		}

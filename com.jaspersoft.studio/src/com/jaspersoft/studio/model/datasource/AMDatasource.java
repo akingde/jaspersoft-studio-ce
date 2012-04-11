@@ -33,6 +33,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,6 +46,8 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
 public abstract class AMDatasource extends APropertyNode {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public AMDatasource(ANode parent, int index) {
 		super(parent, index);
 		setValue(this);

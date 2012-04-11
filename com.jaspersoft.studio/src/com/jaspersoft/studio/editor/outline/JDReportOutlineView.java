@@ -332,7 +332,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 	 * 
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
-	public Object getAdapter(Class type) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class type) {
 		if (type == ZoomManager.class)
 			return editor.getGraphicalViewer().getProperty(ZoomManager.class.toString());
 		if (type == EditorContributor.class) {

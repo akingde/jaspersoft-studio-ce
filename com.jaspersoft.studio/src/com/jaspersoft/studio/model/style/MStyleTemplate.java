@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.style;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRReportTemplate;
 import net.sf.jasperreports.engine.design.JRDesignReportTemplate;
 
@@ -44,7 +45,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
  * @author Chicu Veaceslav
  */
 public class MStyleTemplate extends APropertyNode implements IPropertySource, ICopyable {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

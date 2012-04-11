@@ -34,7 +34,6 @@ import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.designer.QueryDesigner;
-import com.jaspersoft.studio.data.designer.QueryStatus;
 
 public class SQLQueryDesigner extends QueryDesigner {
 	public SQLQueryDesigner() {
@@ -138,8 +137,6 @@ public class SQLQueryDesigner extends QueryDesigner {
 		// sqleditor.dispose();
 		super.dispose();
 	}
-
-	private String query;
 
 	// private SQLEditor sqleditor;
 

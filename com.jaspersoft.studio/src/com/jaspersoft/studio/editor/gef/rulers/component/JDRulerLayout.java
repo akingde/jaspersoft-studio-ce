@@ -69,7 +69,7 @@ public class JDRulerLayout extends XYLayout {
 	 * @see org.eclipse.draw2d.LayoutManager#layout(org.eclipse.draw2d.IFigure)
 	 */
 	public void layout(IFigure container) {
-		List children = container.getChildren();
+		List<?> children = container.getChildren();
 		Rectangle rulerSize = container.getClientArea();
 		for (int i = 0; i < children.size(); i++) {
 			IFigure child = (IFigure) children.get(i);

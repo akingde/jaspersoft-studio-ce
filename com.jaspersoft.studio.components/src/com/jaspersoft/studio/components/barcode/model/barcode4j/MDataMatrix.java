@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.barcode4j.DataMatrixComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -34,11 +35,14 @@ import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 
 public class MDataMatrix extends MBarcode4j {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MDataMatrix() {
 		super();
 	}
 
-	public MDataMatrix(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
+	public MDataMatrix(ANode parent, JRDesignComponentElement jrBarcode,
+			int newIndex) {
 		super(parent, jrBarcode, newIndex);
 	}
 
@@ -46,7 +50,8 @@ public class MDataMatrix extends MBarcode4j {
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		el.setComponent(new DataMatrixComponent());
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
+		el.setComponentKey(new ComponentKey(
+				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
 				"DataMatrix")); //$NON-NLS-1$
 		return el;
 	}
@@ -65,7 +70,8 @@ public class MDataMatrix extends MBarcode4j {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -74,13 +80,15 @@ public class MDataMatrix extends MBarcode4j {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor shapeD = new ComboBoxPropertyDescriptor(DataMatrixComponent.PROPERTY_SHAPE, Messages.MDataMatrix_shape,
+		ComboBoxPropertyDescriptor shapeD = new ComboBoxPropertyDescriptor(
+				DataMatrixComponent.PROPERTY_SHAPE, Messages.MDataMatrix_shape,
 				Orientation.getItems());
 		shapeD.setDescription(Messages.MDataMatrix_shape_description);
 		desc.add(shapeD);
@@ -91,7 +99,8 @@ public class MDataMatrix extends MBarcode4j {
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		DataMatrixComponent jrList = (DataMatrixComponent) jrElement.getComponent();
+		DataMatrixComponent jrList = (DataMatrixComponent) jrElement
+				.getComponent();
 
 		if (id.equals(DataMatrixComponent.PROPERTY_SHAPE))
 			return DataMatrixShape.getPos4Shape(jrList.getShape());
@@ -102,7 +111,8 @@ public class MDataMatrix extends MBarcode4j {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignComponentElement jrElement = (JRDesignComponentElement) getValue();
-		DataMatrixComponent jrList = (DataMatrixComponent) jrElement.getComponent();
+		DataMatrixComponent jrList = (DataMatrixComponent) jrElement
+				.getComponent();
 
 		if (id.equals(DataMatrixComponent.PROPERTY_SHAPE))
 			jrList.setShape(DataMatrixShape.getShape4Pos((Integer) value));

@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.html.HtmlComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -69,7 +70,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MHtml extends MGraphicElement {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 	private static IIconDescriptor iconDescriptor;

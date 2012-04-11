@@ -21,6 +21,7 @@ package com.jaspersoft.studio.model;
 
 import java.beans.PropertyChangeEvent;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
@@ -32,7 +33,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
  * @author Chicu Veaceslav
  */
 public abstract class MCollection extends ANode implements IPastable, IContainerEditPart {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private String PROPERTY_PARAMETERS = JRDesignDataset.PROPERTY_PARAMETERS;
 
 	public MCollection(ANode parent, Object value, String property) {

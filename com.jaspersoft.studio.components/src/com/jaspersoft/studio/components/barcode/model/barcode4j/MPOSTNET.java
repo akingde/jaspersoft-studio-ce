@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.barcode4j.POSTNETComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -37,11 +38,14 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 
 public class MPOSTNET extends MBarcode4j {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MPOSTNET() {
 		super();
 	}
 
-	public MPOSTNET(ANode parent, JRDesignComponentElement jrBarcode, int newIndex) {
+	public MPOSTNET(ANode parent, JRDesignComponentElement jrBarcode,
+			int newIndex) {
 		super(parent, jrBarcode, newIndex);
 	}
 
@@ -49,7 +53,8 @@ public class MPOSTNET extends MBarcode4j {
 	public JRDesignComponentElement createJRElement(JasperDesign jasperDesign) {
 		JRDesignComponentElement el = new JRDesignComponentElement();
 		el.setComponent(new POSTNETComponent());
-		el.setComponentKey(new ComponentKey("http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
+		el.setComponentKey(new ComponentKey(
+				"http://jasperreports.sourceforge.net/jasperreports/components", "jr", //$NON-NLS-1$ //$NON-NLS-2$
 				"POSTNET")); //$NON-NLS-1$
 		return el;
 	}
@@ -68,7 +73,8 @@ public class MPOSTNET extends MBarcode4j {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -77,35 +83,47 @@ public class MPOSTNET extends MBarcode4j {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		DoublePropertyDescriptor shortBarHeightD = new DoublePropertyDescriptor(POSTNETComponent.PROPERTY_SHORT_BAR_HEIGHT,
+		DoublePropertyDescriptor shortBarHeightD = new DoublePropertyDescriptor(
+				POSTNETComponent.PROPERTY_SHORT_BAR_HEIGHT,
 				Messages.MPOSTNET_short_bar_height);
-		shortBarHeightD.setDescription(Messages.MPOSTNET_short_bar_height_description);
+		shortBarHeightD
+				.setDescription(Messages.MPOSTNET_short_bar_height_description);
 		desc.add(shortBarHeightD);
 
-		DoublePropertyDescriptor intercharD = new DoublePropertyDescriptor(POSTNETComponent.PROPERTY_INTERCHAR_GAP_WIDTH,
+		DoublePropertyDescriptor intercharD = new DoublePropertyDescriptor(
+				POSTNETComponent.PROPERTY_INTERCHAR_GAP_WIDTH,
 				Messages.common_interchar_gap_width);
-		intercharD.setDescription(Messages.MPOSTNET_interchar_gap_width_description);
+		intercharD
+				.setDescription(Messages.MPOSTNET_interchar_gap_width_description);
 		desc.add(intercharD);
 
 		CheckBoxPropertyDescriptor displayChecksumD = new CheckBoxPropertyDescriptor(
-				POSTNETComponent.PROPERTY_DISPLAY_CHECKSUM, Messages.common_display_checksum, NullEnum.NULL);
-		displayChecksumD.setDescription(Messages.MPOSTNET_display_checksum_description);
+				POSTNETComponent.PROPERTY_DISPLAY_CHECKSUM,
+				Messages.common_display_checksum, NullEnum.NULL);
+		displayChecksumD
+				.setDescription(Messages.MPOSTNET_display_checksum_description);
 		desc.add(displayChecksumD);
 
-		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(POSTNETComponent.PROPERTY_CHECKSUM_MODE,
+		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(
+				POSTNETComponent.PROPERTY_CHECKSUM_MODE,
 				Messages.common_checksum_mode, ChecksumMode.getItems());
-		checksumModeD.setDescription(Messages.MPOSTNET_checksum_mode_description);
+		checksumModeD
+				.setDescription(Messages.MPOSTNET_checksum_mode_description);
 		desc.add(checksumModeD);
 
 		ComboBoxPropertyDescriptor baselinePositionD = new ComboBoxPropertyDescriptor(
-				POSTNETComponent.PROPERTY_BASELINE_POSITION, Messages.MPOSTNET_baseline_position, BaselinePosition.getItems());
-		baselinePositionD.setDescription(Messages.MPOSTNET_baseline_position_description);
+				POSTNETComponent.PROPERTY_BASELINE_POSITION,
+				Messages.MPOSTNET_baseline_position,
+				BaselinePosition.getItems());
+		baselinePositionD
+				.setDescription(Messages.MPOSTNET_baseline_position_description);
 		desc.add(baselinePositionD);
 
 		shortBarHeightD.setCategory(Messages.MPOSTNET_properties_category);
@@ -129,7 +147,8 @@ public class MPOSTNET extends MBarcode4j {
 		if (id.equals(POSTNETComponent.PROPERTY_CHECKSUM_MODE))
 			return ChecksumMode.getPos4ChecksumMode(jrList.getChecksumMode());
 		if (id.equals(POSTNETComponent.PROPERTY_BASELINE_POSITION))
-			return BaselinePosition.getPos4BaselinePosition(jrList.getBaselinePosition());
+			return BaselinePosition.getPos4BaselinePosition(jrList
+					.getBaselinePosition());
 
 		return super.getPropertyValue(id);
 	}
@@ -144,9 +163,11 @@ public class MPOSTNET extends MBarcode4j {
 		else if (id.equals(POSTNETComponent.PROPERTY_INTERCHAR_GAP_WIDTH))
 			jrList.setIntercharGapWidth((Double) value);
 		else if (id.equals(POSTNETComponent.PROPERTY_CHECKSUM_MODE))
-			jrList.setChecksumMode(ChecksumMode.getChecksumMode4Pos((Integer) value));
+			jrList.setChecksumMode(ChecksumMode
+					.getChecksumMode4Pos((Integer) value));
 		else if (id.equals(POSTNETComponent.PROPERTY_BASELINE_POSITION))
-			jrList.setChecksumMode(BaselinePosition.getBaselinePosition4Pos((Integer) value));
+			jrList.setChecksumMode(BaselinePosition
+					.getBaselinePosition4Pos((Integer) value));
 
 		else if (id.equals(POSTNETComponent.PROPERTY_DISPLAY_CHECKSUM))
 			jrList.setDisplayChecksum((Boolean) value);

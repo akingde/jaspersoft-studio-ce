@@ -20,6 +20,8 @@
 package com.jaspersoft.studio.editor.preview;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
+import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -33,6 +35,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -46,7 +49,11 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
+import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.SelectionHelper;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
 public abstract class ABasicEditor extends EditorPart {
 	protected PropertiesHelper ph;
@@ -216,10 +223,30 @@ public abstract class ABasicEditor extends EditorPart {
 		} else if (input instanceof IFileEditorInput) {
 			file = ((IFileEditorInput) input).getFile();
 		}
-		ph = new PropertiesHelper(file != null ? file.getProject() : null);
-		setSite(site);
-		setPartName(input.getName());
-		setInput(input);
+
+		try {
+			getJrContext(file);
+			setSite(site);
+			setPartName(input.getName());
+			setInput(input);
+		} catch (Exception e) {
+			throw new PartInitException(e.getMessage(), e);
+		}
+	}
+
+	private JasperReportsConfiguration jrContext;
+
+	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
+		if (jrContext == null) {
+			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance());
+			ProxyFileResolver resolver = new ProxyFileResolver();
+			resolver.addResolver(SelectionHelper.getFileResolver(file));
+			jrContext.setFileResolver(resolver);
+			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
+		}
+		jrContext.put(IEditorContributor.KEY_FILE, file);
+		ph = PropertiesHelper.getInstance(jrContext);
+		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, ph);
 	}
 
 	protected boolean isDirty = false;

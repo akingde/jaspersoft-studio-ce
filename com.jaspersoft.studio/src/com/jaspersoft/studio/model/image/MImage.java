@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.image;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.base.JRBaseImage;
@@ -59,7 +60,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * The Class MImage.
  */
 public class MImage extends MGraphicElementLineBox {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

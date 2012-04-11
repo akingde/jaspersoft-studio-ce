@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.sortfield;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -52,7 +53,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * @author Chicu Veaceslav
  */
 public class MSortField extends APropertyNode implements ICopyable {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardColumnGroup;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -38,7 +39,7 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MColumnGroup extends MColumn {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

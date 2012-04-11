@@ -45,7 +45,7 @@ public class MultiPageToolbarEditorSite  implements IEditorSite, INestable {
 	/**
 	 * The list of popup menu extenders; <code>null</code> if none registered.
 	 */
-	private ArrayList menuExtenders;
+	private ArrayList<PopupMenuExtender> menuExtenders;
 
 	/**
 	 * The multi-page editor.
@@ -208,7 +208,7 @@ public class MultiPageToolbarEditorSite  implements IEditorSite, INestable {
 	 * 
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		return null;
 	}
 
@@ -365,7 +365,7 @@ public class MultiPageToolbarEditorSite  implements IEditorSite, INestable {
 		return selectionProvider;
 	}
 
-	public final Object getService(final Class key) {
+	public final Object getService(@SuppressWarnings("rawtypes") final Class key) {
 		return serviceLocator.getService(key);
 	}
 
@@ -435,7 +435,7 @@ public class MultiPageToolbarEditorSite  implements IEditorSite, INestable {
 		}
 	}
 
-	public final boolean hasService(final Class key) {
+	public final boolean hasService(@SuppressWarnings("rawtypes") final Class key) {
 		return serviceLocator.hasService(key);
 	}
 
@@ -477,7 +477,7 @@ public class MultiPageToolbarEditorSite  implements IEditorSite, INestable {
 	public void registerContextMenu(String menuID, MenuManager menuMgr,
 			ISelectionProvider selProvider) {
 		if (menuExtenders == null) {
-			menuExtenders = new ArrayList(1);
+			menuExtenders = new ArrayList<PopupMenuExtender>(1);
 		}
 		PartSite.registerContextMenu(menuID, menuMgr, selProvider, true,
 				editor, menuExtenders);
@@ -488,7 +488,7 @@ public class MultiPageToolbarEditorSite  implements IEditorSite, INestable {
 			final ISelectionProvider selectionProvider,
 			final boolean includeEditorInput) {
 		if (menuExtenders == null) {
-			menuExtenders = new ArrayList(1);
+			menuExtenders = new ArrayList<PopupMenuExtender>(1);
 		}
 		PartSite.registerContextMenu(menuId, menuManager, selectionProvider,
 				includeEditorInput, editor, menuExtenders);

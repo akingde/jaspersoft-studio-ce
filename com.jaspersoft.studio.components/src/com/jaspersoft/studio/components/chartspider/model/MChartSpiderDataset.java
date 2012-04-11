@@ -22,6 +22,7 @@ package com.jaspersoft.studio.components.chartspider.model;
 import java.beans.PropertyChangeEvent;
 
 import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
@@ -31,6 +32,7 @@ import com.jaspersoft.studio.model.dataset.MElementDataset;
 import com.jaspersoft.studio.model.util.ReportFactory;
 
 public class MChartSpiderDataset extends MElementDataset {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MChartSpiderDataset(ANode parent, StandardSpiderDataset value,
 			JasperDesign jasperDesign) {

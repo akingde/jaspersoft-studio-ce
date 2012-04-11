@@ -25,6 +25,7 @@ import java.util.Map;
 import net.sf.jasperreports.crosstabs.JRCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabMeasure;
 import net.sf.jasperreports.crosstabs.type.CrosstabPercentageEnum;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -45,7 +46,7 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MMeasure extends APropertyNode implements ICopyable {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

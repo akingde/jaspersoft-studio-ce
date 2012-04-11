@@ -78,7 +78,7 @@ public class Pie3dPlot extends APlot {
 				JRDesignPie3DPlot.PROPERTY_CIRCULAR,
 				com.jaspersoft.studio.components.chart.messages.Messages.MPie3DPlot_circular_description);
 
-		composite = section.createNewRow(parent);
+		composite = AbstractSection.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite,
 				Messages.common_label_format, SWT.RIGHT);
@@ -101,7 +101,7 @@ public class Pie3dPlot extends APlot {
 				JRDesignPie3DPlot.PROPERTY_LEGEND_LABEL_FORMAT,
 				com.jaspersoft.studio.components.chart.messages.Messages.MPie3DPlot_legend_label_format_description);
 
-		composite = section.createNewRow(parent);
+		composite = AbstractSection.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite,
 				Messages.MPie3DPlot_depth_factor, SWT.RIGHT);

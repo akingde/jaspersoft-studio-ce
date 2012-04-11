@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.components.crosstab.model.nodata;
 
+import net.sf.jasperreports.engine.JRConstants;
+
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
@@ -29,7 +31,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MCrosstabWhenNoData extends ANode {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -55,11 +57,11 @@ public class MCrosstabWhenNoData extends ANode {
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MCrosstabWhenNoData(ANode parent, int index) {
 		super(parent, index);

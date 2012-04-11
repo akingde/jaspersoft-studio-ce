@@ -23,7 +23,9 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRPropertiesMap;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.fonts.FontFamily;
 import net.sf.jasperreports.engine.fonts.SimpleFontExtensionHelper;
 import net.sf.jasperreports.extensions.ExtensionsRegistry;
@@ -42,6 +44,7 @@ public class JSSFontExtensionRegistry implements ExtensionsRegistry {
 	}
 
 	public <T> List<T> getExtensions(Class<T> extensionType) {
+		JasperReportsContext jrContext = DefaultJasperReportsContext.getInstance();
 		// FIXME: this method is called many times during report executions
 		// we should cache, the list, but, if user ads some font, they will not be visible
 		// maybe JR should cache font list, not us
@@ -49,11 +52,11 @@ public class JSSFontExtensionRegistry implements ExtensionsRegistry {
 		if (lst == null)
 			lst = new ArrayList<FontFamily>();
 		if (ph == null)
-			ph = new PropertiesHelper(null);
+			ph = PropertiesHelper.getInstance(jrContext);
 		String strprop = ph.getString(FontsPreferencePage.FPP_FONT_LIST);
 		if (strprop != null && (strproperties == null || !strproperties.equals(strprop))) {
 			lst.clear();
-			List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(
+			List<FontFamily> fonts = SimpleFontExtensionHelper.getInstance().loadFontFamilies(jrContext,
 					new ByteArrayInputStream(strprop.getBytes()));
 			if (fonts != null && !fonts.isEmpty())
 				lst.addAll(fonts);

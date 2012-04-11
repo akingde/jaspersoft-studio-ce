@@ -24,6 +24,7 @@ import java.beans.PropertyChangeEvent;
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.components.table.StandardTable;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
@@ -33,8 +34,10 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MCollection;
 
 public abstract class AMCollection extends MCollection {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public AMCollection(ANode parent, JRDesignComponentElement jrDataset, String property) {
+	public AMCollection(ANode parent, JRDesignComponentElement jrDataset,
+			String property) {
 		super(parent, jrDataset, property);
 	}
 
@@ -63,13 +66,16 @@ public abstract class AMCollection extends MCollection {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;
 					if (evt instanceof CollectionElementAddedEvent) {
-						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+						newIndex = ((CollectionElementAddedEvent) evt)
+								.getAddedIndex();
 					}
-					StandardBaseColumn bc = (StandardBaseColumn) evt.getNewValue();
+					StandardBaseColumn bc = (StandardBaseColumn) evt
+							.getNewValue();
 
 					createColumn(this, bc, 122, newIndex);
 
-				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+				} else if (evt.getOldValue() != null
+						&& evt.getNewValue() == null) {
 					// delete
 					for (INode n : getChildren()) {
 						if (n.getValue() == evt.getOldValue()) {
@@ -95,6 +101,5 @@ public abstract class AMCollection extends MCollection {
 	public abstract String getCellEvent();
 
 	public abstract void createColumn(ANode mth, BaseColumn bc, int i, int index);
- 
 
 }

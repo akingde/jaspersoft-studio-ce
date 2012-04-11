@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.components.chart.wizard.fragments.data;
 
+import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +33,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
-import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
@@ -64,7 +64,7 @@ public abstract class ADSComponent {
 	private JRDesignElement jrElement;
 	private JRDesignElementDataset eDataset;
 	private DatasetSeriesWidget dsWidget;
-	private LightweightSystem lws;
+	private J2DLightweightSystem lws;
 	private Button btDatasetType;
 
 	public ADSComponent(Composite composite, DatasetSeriesWidget dsWidget) {
@@ -82,7 +82,7 @@ public abstract class ADSComponent {
 		jrElement.setWidth(canvasChart.getSize().x);
 		jrElement.setHeight(canvasChart.getSize().y);
 		setChartFigure();
-		chartFigure.setJRElement(jrElement, drawVisitor, jrContext);
+		chartFigure.setJRElement(jrElement, drawVisitor);
 		canvasChart.redraw();
 		btDatasetType.setEnabled(false);
 		if (jrElement instanceof JRDesignChart) {
@@ -199,6 +199,10 @@ public abstract class ADSComponent {
 		setChartFigure();
 
 		return canvasChart;
+	}
+
+	public Graphics2D getGraphics2D() {
+		return lws.getGraphics2D();
 	}
 
 	private void setChartFigure() {

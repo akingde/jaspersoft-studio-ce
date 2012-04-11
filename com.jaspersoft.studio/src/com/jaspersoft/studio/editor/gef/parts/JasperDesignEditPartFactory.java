@@ -21,6 +21,8 @@ package com.jaspersoft.studio.editor.gef.parts;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
@@ -44,7 +46,6 @@ import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.model.text.MStaticText;
 import com.jaspersoft.studio.model.text.MTextField;
 import com.jaspersoft.studio.plugin.ExtensionManager;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * A factory for creating JasperDesignEditPart objects.
@@ -54,7 +55,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class JasperDesignEditPartFactory implements EditPartFactory {
 	private DrawVisitor drawVisitor;
 	private JasperDesign jDesign;
-	private JasperReportsConfiguration jrContext;
+	private JasperReportsContext jrContext;
 
 	public DrawVisitor getDrawVisitor(ANode model) {
 		if (model == null)
@@ -62,10 +63,10 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 		JasperDesign tjd = model.getJasperDesign();
 		if (tjd != jDesign) {
 			jDesign = tjd;
-			drawVisitor = new DrawVisitor(jDesign, null);
+			drawVisitor = new DrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
 		}
 		if (drawVisitor == null) {
-			drawVisitor = new DrawVisitor(jDesign, null);
+			drawVisitor = new DrawVisitor(new ReportConverter(jrContext, jDesign, true), null);
 		}
 		return drawVisitor;
 	}
@@ -79,8 +80,8 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 		if (context != null) {
 			EditPartViewer gv = context.getViewer();
 			Object prop = gv.getProperty("JRCONTEXT");
-			if (prop != null && prop instanceof JasperReportsConfiguration) {
-				jrContext = (JasperReportsConfiguration) prop;
+			if (prop != null && prop instanceof JasperReportsContext) {
+				jrContext = (JasperReportsContext) prop;
 			}
 		}
 		ExtensionManager m = JaspersoftStudioPlugin.getExtensionManager();
@@ -114,7 +115,7 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 		if (editPart != null) {
 			editPart.setModel(model);
 			if (editPart instanceof FigureEditPart)
-				((FigureEditPart) editPart).setDrawVisitor(getDrawVisitor((ANode) model), jrContext);
+				((FigureEditPart) editPart).setDrawVisitor(getDrawVisitor((ANode) model));
 		}
 		return editPart;
 	}

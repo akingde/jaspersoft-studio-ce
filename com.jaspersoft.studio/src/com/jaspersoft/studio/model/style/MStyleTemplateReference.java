@@ -26,6 +26,7 @@ package com.jaspersoft.studio.model.style;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRTemplateReference;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -45,7 +46,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
  * @author Chicu Veaceslav
  */
 public class MStyleTemplateReference extends APropertyNode implements IPropertySource, ICopyable {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

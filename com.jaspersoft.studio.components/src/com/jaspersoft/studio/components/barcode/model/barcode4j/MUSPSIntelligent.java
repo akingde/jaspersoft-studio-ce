@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.components.barcode.model.barcode4j;
 
 import net.sf.jasperreports.components.barcode4j.USPSIntelligentMailComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -27,6 +28,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import com.jaspersoft.studio.model.ANode;
 
 public class MUSPSIntelligent extends MFourStateBarcode {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MUSPSIntelligent() {
 		super();
 	}

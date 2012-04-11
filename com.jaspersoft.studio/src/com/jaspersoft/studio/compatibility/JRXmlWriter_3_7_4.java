@@ -30,11 +30,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -203,7 +201,7 @@ public class JRXmlWriter_3_7_4 extends JRXmlWriter
 	/**
 	 *
 	 */
-	private Map fontsMap = new HashMap();
+//	private Map fontsMap = new HashMap();
 
 	private XmlWriterVisitor xmlWriterVisitor = new XmlWriterVisitor(this);
 
@@ -462,7 +460,7 @@ public class JRXmlWriter_3_7_4 extends JRXmlWriter
 	}
 
 
-	private void writeProperties(JRPropertiesHolder propertiesHolder) throws IOException
+	public void writeProperties(JRPropertiesHolder propertiesHolder) throws IOException
 	{
 		if (propertiesHolder.hasProperties())
 		{
@@ -715,7 +713,7 @@ public class JRXmlWriter_3_7_4 extends JRXmlWriter
 	 */
 	public void writeChildElements(JRElementGroup elementContainer)
 	{
-		List children = elementContainer.getChildren();
+		List<?> children = elementContainer.getChildren();
 		if (children != null && children.size() > 0)
 		{
 			for(int i = 0; i < children.size(); i++)
@@ -804,7 +802,7 @@ public class JRXmlWriter_3_7_4 extends JRXmlWriter
 	}
 
 
-	protected void writePropertyExpressions(
+	public void writePropertyExpressions(
 			JRPropertyExpression[] propertyExpressions) throws IOException
 	{
 		if (propertyExpressions != null)
@@ -1611,7 +1609,7 @@ public class JRXmlWriter_3_7_4 extends JRXmlWriter
 	 *
 	 * @param seriesColors the colors to write
 	 */
-	private void writeSeriesColors(SortedSet seriesColors) throws IOException
+	private void writeSeriesColors(SortedSet<?> seriesColors) throws IOException
 	{
 		if (seriesColors == null || seriesColors.size() == 0)
 		{

@@ -20,7 +20,7 @@
 package com.jaspersoft.jrx.query;
 
 import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
+import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
 import net.sf.jasperreports.extensions.ExtensionsRegistry;
 import net.sf.jasperreports.extensions.ExtensionsRegistryFactory;
 import net.sf.jasperreports.extensions.SingletonExtensionRegistry;
@@ -30,8 +30,8 @@ import net.sf.jasperreports.extensions.SingletonExtensionRegistry;
  */
 public class JrxExecuterExtensionsRegistryFactory implements
 		ExtensionsRegistryFactory {
-	private static final ExtensionsRegistry defaultExtensionsRegistry = new SingletonExtensionRegistry<QueryExecuterFactoryBundle>(
-			QueryExecuterFactoryBundle.class,
+	private static final ExtensionsRegistry defaultExtensionsRegistry = new SingletonExtensionRegistry<JRQueryExecuterFactoryBundle>(
+			JRQueryExecuterFactoryBundle.class,
 			JrxQueryExecuterFactoryBundle.getInstance());
 
 	public ExtensionsRegistry createRegistry(String registryId,

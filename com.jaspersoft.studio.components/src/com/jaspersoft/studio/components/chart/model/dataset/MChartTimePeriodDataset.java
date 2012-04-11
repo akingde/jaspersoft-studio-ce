@@ -22,6 +22,7 @@ package com.jaspersoft.studio.components.chart.model.dataset;
 import java.beans.PropertyChangeEvent;
 
 import net.sf.jasperreports.charts.design.JRDesignTimePeriodDataset;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
@@ -30,8 +31,10 @@ import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.util.ReportFactory;
 
 public class MChartTimePeriodDataset extends MChartDataset {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MChartTimePeriodDataset(ANode parent, JRDesignTimePeriodDataset value, JasperDesign jasperDesign) {
+	public MChartTimePeriodDataset(ANode parent,
+			JRDesignTimePeriodDataset value, JasperDesign jasperDesign) {
 		super(parent, value, jasperDesign);
 	}
 
@@ -42,10 +45,12 @@ public class MChartTimePeriodDataset extends MChartDataset {
 				if (evt.getOldValue() == null && evt.getNewValue() != null) {
 					int newIndex = -1;
 					if (evt instanceof CollectionElementAddedEvent) {
-						newIndex = ((CollectionElementAddedEvent) evt).getAddedIndex();
+						newIndex = ((CollectionElementAddedEvent) evt)
+								.getAddedIndex();
 					}
 					ReportFactory.createNode(this, evt.getNewValue(), newIndex);
-				} else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+				} else if (evt.getOldValue() != null
+						&& evt.getNewValue() == null) {
 					// delete
 					for (INode n : getChildren()) {
 						if (n.getValue() == evt.getOldValue()) {

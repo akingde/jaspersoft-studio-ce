@@ -164,7 +164,7 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 	 * 
 	 * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
 	 */
-	protected List getModelChildren() {
+	protected List<?> getModelChildren() {
 		return getRulerProvider().getGuides();
 	}
 

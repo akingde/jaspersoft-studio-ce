@@ -386,7 +386,7 @@ public abstract class DataQueryAdapters {
 			jdq.setText(query);
 			newdataset.setQuery(jdq);
 
-			DataAdapterService das = DataAdapterServiceUtil.getDataAdapterService(da.getDataAdapter());
+			DataAdapterService das = DataAdapterServiceUtil.getInstance(jConfig).getService(da.getDataAdapter());
 			try {
 				final List<JRDesignField> fields = ((IFieldsProvider) da).getFields(das, jConfig, newdataset);
 				if (fields != null) {

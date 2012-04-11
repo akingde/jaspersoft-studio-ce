@@ -20,7 +20,6 @@
 package com.jaspersoft.studio.preferences.exporter;
 
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -42,6 +41,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.PDFPermissionFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -73,61 +73,63 @@ public class PDFExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(JRPdfExporterParameter.PROPERTY_PDF_VERSION, Misc.nvl(
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDF_VERSION), Messages.PDFExporterPreferencePage_25));
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_PDF_VERSION),
+				Messages.PDFExporterPreferencePage_25));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_COMPRESSED,
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_COMPRESSED));
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_COMPRESSED));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS,
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS));
-		store.setDefault(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT,
-				Misc.nvl(JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT),
-						Messages.PDFExporterPreferencePage_26));
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_CREATE_BATCH_MODE_BOOKMARKS));
+		store.setDefault(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_PDF_JAVASCRIPT),
+				Messages.PDFExporterPreferencePage_26));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES,
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES));
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_FORCE_SVG_SHAPES));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_PRINT_SCALING,
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PRINT_SCALING));
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_PRINT_SCALING));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE, Misc.nvl(
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE), Messages.PDFExporterPreferencePage_27));
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_TAG_LANGUAGE),
+				Messages.PDFExporterPreferencePage_27));
 		store.setDefault(NSF_EXPORT_PDF_COLLAPSE_MISSING_BOOKMARK_LEVELS,
-				JRProperties.getProperty(NSF_EXPORT_PDF_COLLAPSE_MISSING_BOOKMARK_LEVELS));
+				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_COLLAPSE_MISSING_BOOKMARK_LEVELS));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_TAGGED, Misc.nvl(
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_TAGGED), Messages.PDFExporterPreferencePage_28));
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_TAGGED),
+				Messages.PDFExporterPreferencePage_28));
 		// FONTS
-		store.setDefault(NSF_EXPORT_PDF_EMBEDDED, JRProperties.getProperty(NSF_EXPORT_PDF_EMBEDDED));
-		store.setDefault(NSF_EXPORT_PDF_ENCODING, JRProperties.getProperty(NSF_EXPORT_PDF_ENCODING));
-		store.setDefault(NSF_EXPORT_PDF_FONT_NAME, JRProperties.getProperty(NSF_EXPORT_PDF_FONT_NAME));
+		store.setDefault(NSF_EXPORT_PDF_EMBEDDED, PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_EMBEDDED));
+		store.setDefault(NSF_EXPORT_PDF_ENCODING, PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_ENCODING));
+		store.setDefault(NSF_EXPORT_PDF_FONT_NAME, PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_FONT_NAME));
 		store.setDefault(NSF_EXPORT_PDF_FONTDIR,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_FONTDIR), Messages.PDFExporterPreferencePage_29));
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_FONTDIR), Messages.PDFExporterPreferencePage_29));
 		// SECURITY
 		store.setDefault(JRPdfExporterParameter.PROPERTY_ENCRYPTED,
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_ENCRYPTED));
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_ENCRYPTED));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_128_BIT_KEY,
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_128_BIT_KEY));
-		store
-				.setDefault(JRPdfExporterParameter.PROPERTY_USER_PASSWORD, Misc.nvl(
-						JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_USER_PASSWORD),
-						Messages.PDFExporterPreferencePage_30));
-		store.setDefault(JRPdfExporterParameter.PROPERTY_OWNER_PASSWORD,
-				Misc.nvl(JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_OWNER_PASSWORD),
-						Messages.PDFExporterPreferencePage_31));
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_128_BIT_KEY));
+		store.setDefault(JRPdfExporterParameter.PROPERTY_USER_PASSWORD, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_USER_PASSWORD),
+				Messages.PDFExporterPreferencePage_30));
+		store.setDefault(JRPdfExporterParameter.PROPERTY_OWNER_PASSWORD, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_OWNER_PASSWORD),
+				Messages.PDFExporterPreferencePage_31));
 		store.setDefault(NSF_EXPORT_PDF_PERMISSION,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_PERMISSION), Messages.PDFExporterPreferencePage_32));
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_PERMISSION), Messages.PDFExporterPreferencePage_32));
 		// metadata
-		store.setDefault(NSF_EXPORT_PDF_METADATA_TITLE,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_METADATA_TITLE), Messages.PDFExporterPreferencePage_33));
-		store.setDefault(NSF_EXPORT_PDF_METADATA_AUTHOR,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_METADATA_AUTHOR), Messages.PDFExporterPreferencePage_34));
-		store.setDefault(NSF_EXPORT_PDF_METADATA_SUBJECT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_METADATA_SUBJECT), Messages.PDFExporterPreferencePage_35));
-		store.setDefault(NSF_EXPORT_PDF_METADATA_KEYWORDS,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_METADATA_KEYWORDS), Messages.PDFExporterPreferencePage_36));
-		store.setDefault(NSF_EXPORT_PDF_METADATA_CREATOR,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_PDF_METADATA_CREATOR), Messages.PDFExporterPreferencePage_37));
+		store.setDefault(NSF_EXPORT_PDF_METADATA_TITLE, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_TITLE), Messages.PDFExporterPreferencePage_33));
+		store.setDefault(NSF_EXPORT_PDF_METADATA_AUTHOR, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_AUTHOR), Messages.PDFExporterPreferencePage_34));
+		store.setDefault(NSF_EXPORT_PDF_METADATA_SUBJECT, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_SUBJECT), Messages.PDFExporterPreferencePage_35));
+		store.setDefault(NSF_EXPORT_PDF_METADATA_KEYWORDS, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_KEYWORDS), Messages.PDFExporterPreferencePage_36));
+		store.setDefault(NSF_EXPORT_PDF_METADATA_CREATOR, Misc.nvl(
+				PropertiesHelper.DPROP.getProperty(NSF_EXPORT_PDF_METADATA_CREATOR), Messages.PDFExporterPreferencePage_37));
 		// PDF/A
 		store.setDefault(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE, Misc.nvl(
-				JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE),
+				PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_CONFORMANCE),
 				JRPdfExporterParameter.PDFA_CONFORMANCE_NONE));
 		store.setDefault(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH,
-				Misc.nvl(JRProperties.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH), ""));
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRPdfExporterParameter.PROPERTY_PDFA_ICC_PROFILE_PATH), ""));
 	}
 
 	/**

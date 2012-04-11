@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model.dataset;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -58,7 +59,7 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav
  */
 public class MDataset extends APropertyNode implements ICopyable {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

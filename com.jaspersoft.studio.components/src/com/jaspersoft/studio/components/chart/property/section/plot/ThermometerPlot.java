@@ -70,7 +70,7 @@ public class ThermometerPlot extends APlot {
 		section.getWidgetFactory().createCLabel(composite,
 				Messages.MMeterPlot_shape);
 
-		composite = section.createNewRow(parent);
+		composite = AbstractSection.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Value",
 				SWT.RIGHT);
@@ -120,7 +120,7 @@ public class ThermometerPlot extends APlot {
 		Composite composite;
 		CLabel lbl;
 		RowData rd;
-		composite = section.createNewRow(parent);
+		composite = AbstractSection.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Data Range",
 				SWT.RIGHT);
@@ -161,7 +161,7 @@ public class ThermometerPlot extends APlot {
 		Composite composite;
 		CLabel lbl;
 		RowData rd;
-		composite = section.createNewRow(parent);
+		composite = AbstractSection.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "Low Range",
 				SWT.RIGHT);
@@ -202,7 +202,7 @@ public class ThermometerPlot extends APlot {
 		Composite composite;
 		CLabel lbl;
 		RowData rd;
-		composite = section.createNewRow(parent);
+		composite = AbstractSection.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite,
 				"Medium Range", SWT.RIGHT);
@@ -243,7 +243,7 @@ public class ThermometerPlot extends APlot {
 		Composite composite;
 		CLabel lbl;
 		RowData rd;
-		composite = section.createNewRow(parent);
+		composite = AbstractSection.createNewRow(parent);
 
 		lbl = section.getWidgetFactory().createCLabel(composite, "High Range",
 				SWT.RIGHT);

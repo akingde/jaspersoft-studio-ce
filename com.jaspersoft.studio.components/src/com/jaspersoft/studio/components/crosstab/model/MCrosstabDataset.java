@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabDataset;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabDataset;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -35,6 +36,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 
 public class MCrosstabDataset extends MElementDataset {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MCrosstabDataset(JRCrosstabDataset value, JasperDesign jasperDesign) {
 		super(value, jasperDesign);
@@ -54,18 +56,22 @@ public class MCrosstabDataset extends MElementDataset {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
 
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		CheckBoxPropertyDescriptor repeatColumnHeadersD = new CheckBoxPropertyDescriptor(
-				JRDesignCrosstabDataset.PROPERTY_DATA_PRE_SORTED, Messages.MCrosstabDataset_data_presorted, NullEnum.NOTNULL);
-		repeatColumnHeadersD.setDescription(Messages.MCrosstabDataset_data_presorted_description);
+				JRDesignCrosstabDataset.PROPERTY_DATA_PRE_SORTED,
+				Messages.MCrosstabDataset_data_presorted, NullEnum.NOTNULL);
+		repeatColumnHeadersD
+				.setDescription(Messages.MCrosstabDataset_data_presorted_description);
 		desc.add(repeatColumnHeadersD);
 
 	}
@@ -73,7 +79,9 @@ public class MCrosstabDataset extends MElementDataset {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -87,7 +95,9 @@ public class MCrosstabDataset extends MElementDataset {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {

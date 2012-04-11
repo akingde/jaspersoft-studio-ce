@@ -26,10 +26,11 @@ import java.util.List;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.ParameterContributor;
 import net.sf.jasperreports.engine.ParameterContributorContext;
 import net.sf.jasperreports.engine.ParameterContributorFactory;
-import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
 /**
@@ -39,17 +40,19 @@ import net.sf.jasperreports.repo.RepositoryUtil;
 public final class DataAdapterParameterContributorFactory implements ParameterContributorFactory {
 
 	public static final String PARAMETER_DATA_ADAPTER = "PARAMETER_DATA_ADAPTER";
-	private static final DataAdapterParameterContributorFactory INSTANCE = new DataAdapterParameterContributorFactory();
 
-	private DataAdapterParameterContributorFactory() {
+	private DataAdapterParameterContributorFactory(JasperReportsContext jasperReportsContext) {
+		this.jasperReportsContext = jasperReportsContext;
 	}
 
 	/**
 	 * 
 	 */
-	public static DataAdapterParameterContributorFactory getInstance() {
-		return INSTANCE;
+	public static DataAdapterParameterContributorFactory getInstance(JasperReportsContext jasperReportsContext) {
+		return new DataAdapterParameterContributorFactory(jasperReportsContext);
 	}
+
+	private JasperReportsContext jasperReportsContext;
 
 	/**
 	 *
@@ -62,12 +65,14 @@ public final class DataAdapterParameterContributorFactory implements ParameterCo
 		if (param != null && param instanceof DataAdapter)
 			dataAdapter = (DataAdapter) param;
 		if (dataAdapter == null) {
-			String dataAdapterUri = JRProperties.getProperty(context.getDataset(), "net.sf.jasperreports.data.adapter");
+			String dataAdapterUri = JRPropertiesUtil.getInstance(jasperReportsContext).getProperty(context.getDataset(),
+					"net.sf.jasperreports.data.adapter");
 			if (dataAdapterUri != null)
-				dataAdapter = RepositoryUtil.getResource(dataAdapterUri, DataAdapter.class);
+				dataAdapter = RepositoryUtil.getInstance(jasperReportsContext).getResource2(dataAdapterUri, DataAdapter.class);
 		}
 		if (dataAdapter != null) {
-			ParameterContributor dataAdapterService = DataAdapterServiceUtil.getDataAdapterService(dataAdapter);
+			ParameterContributor dataAdapterService = DataAdapterServiceUtil.getInstance(jasperReportsContext).getService(
+					dataAdapter);
 			return Collections.singletonList(dataAdapterService);
 		}
 		return contributors;

@@ -66,7 +66,7 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		RWComboBoxPropertyDescriptor markupD = new RWComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MARKUP,
-				Messages.MTextElement_markup, ModelUtils.getMarkups(), NullEnum.INHERITED);
+				Messages.MTextElement_markup, ModelUtils.getMarkups(getJasperConfiguration()), NullEnum.INHERITED);
 		markupD.setDescription(Messages.MTextElement_markup_description);
 		desc.add(markupD);
 

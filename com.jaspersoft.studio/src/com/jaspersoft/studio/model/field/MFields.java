@@ -21,6 +21,7 @@ package com.jaspersoft.studio.model.field;
 
 import java.beans.PropertyChangeEvent;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
@@ -41,7 +42,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
  * @author Chicu Veaceslav
  */
 public class MFields extends ANode implements IPastable, IContainerEditPart {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

@@ -27,6 +27,7 @@ import net.sf.jasperreports.components.table.Cell;
 import net.sf.jasperreports.components.table.DesignCell;
 import net.sf.jasperreports.components.table.StandardBaseColumn;
 import net.sf.jasperreports.engine.JRBoxContainer;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.design.JRDesignElement;
@@ -62,6 +63,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 
 public class MCell extends MColumn implements IGraphicElement,
 		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/**
 	 * Instantiates a new m field.

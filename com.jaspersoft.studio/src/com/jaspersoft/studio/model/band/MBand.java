@@ -114,6 +114,11 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		this.bandType = bandtype;
 	}
 
+	@Override
+	public JRDesignBand getValue() {
+		return (JRDesignBand) super.getValue();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

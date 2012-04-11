@@ -71,7 +71,8 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 					new SimpleValueParameter(
 							new HashMap<String, JRValueParameter>()));
 
-			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(jDataset, tmpMap);
+			JRJdbcQueryExecuter qe = new JRJdbcQueryExecuter(jConfig, jDataset,
+					tmpMap);
 			qe.createDatasource();
 			ResultSet rs = qe.getResultSet();
 			if (rs != null) {

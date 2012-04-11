@@ -22,21 +22,20 @@ package com.jaspersoft.studio.data.jdbc;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapterService;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  * @version $Id: JRBaseBand.java 4319 2011-05-17 09:22:14Z teodord $
  */
-public class JDBCDataAdapterService extends JdbcDataAdapterService 
-{
-	public JDBCDataAdapterService(JdbcDataAdapter jdbcDataAdapter)
-	{
-		super(jdbcDataAdapter);
+public class JDBCDataAdapterService extends JdbcDataAdapterService {
+	public JDBCDataAdapterService(JasperReportsContext jContext,
+			JdbcDataAdapter jdbcDataAdapter) {
+		super(jContext, jdbcDataAdapter);
 	}
-	
+
 	@Override
-	public String getPassword() throws JRException 
-	{
+	public String getPassword() throws JRException {
 		throw new JRException("FIXME: Password dialog not implemented!");
 	}
 }

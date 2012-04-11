@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Display;
 import com.jaspersoft.studio.compatibility.dialog.VersionDialog;
 import com.jaspersoft.studio.preferences.StudioPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
-import com.jaspersoft.studio.utils.encoding.EncodingMap;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * 
@@ -47,6 +47,7 @@ public class JRXmlWriterHelper {
 	private static final Map<String, Class<? extends JRXmlWriter>> writers = new HashMap<String, Class<? extends JRXmlWriter>>();
 
 	static {
+		writers.put("4_5_1", JRXmlWriter_4_5_1.class);
 		writers.put("4_0_2", JRXmlWriter_4_0_2.class);
 		writers.put("4_0_1", JRXmlWriter_4_0_1.class);
 		writers.put("3_7_4", JRXmlWriter_3_7_4.class);
@@ -84,10 +85,11 @@ public class JRXmlWriterHelper {
 		return r;
 	}
 
-	public static String writeReport(JRReport report, IFile file, boolean showDialog) throws Exception {
+	public static String writeReport(JasperReportsConfiguration jrContext, JRReport report, IFile file, boolean showDialog)
+			throws Exception {
 
 		return writeReport(report, file.getCharset(true),
-				getVersion(file, new PropertiesHelper(file.getProject()), showDialog));
+				getVersion(file, PropertiesHelper.getInstance(jrContext), showDialog));
 	}
 
 	public static String writeReport(JRReport report, String version) throws Exception {
@@ -112,17 +114,17 @@ public class JRXmlWriterHelper {
 	}
 
 	public static String fixencoding(String encoding) {
-		 return "UTF-8";
-//		String tmp = EncodingMap.getJava2IANAMapping(encoding);
-//		if (tmp != null)
-//			return tmp;
-//		tmp = EncodingMap.getJava2IANAMapping(encoding.toUpperCase());
-//		if (tmp != null)
-//			return tmp;
-//		tmp = EncodingMap.getJava2IANAMapping(encoding.toLowerCase());
-//		if (tmp != null)
-//			return tmp;
-//		return encoding;
+		return "UTF-8";
+		// String tmp = EncodingMap.getJava2IANAMapping(encoding);
+		// if (tmp != null)
+		// return tmp;
+		// tmp = EncodingMap.getJava2IANAMapping(encoding.toUpperCase());
+		// if (tmp != null)
+		// return tmp;
+		// tmp = EncodingMap.getJava2IANAMapping(encoding.toLowerCase());
+		// if (tmp != null)
+		// return tmp;
+		// return encoding;
 	}
 
 	public static String getVersion(IResource resource, PropertiesHelper ph, boolean showDialog) {

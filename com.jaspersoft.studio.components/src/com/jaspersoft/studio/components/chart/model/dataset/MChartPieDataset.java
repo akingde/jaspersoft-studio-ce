@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -43,6 +44,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 
 public class MChartPieDataset extends MChartDataset {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MChartPieDataset(ANode parent, JRDesignPieDataset value,
 			JasperDesign jasperDesign) {

@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import org.eclipse.draw2d.LineBorder;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CellFigure extends FrameFigure {
 	private DesignCell cell;
@@ -40,10 +39,10 @@ public class CellFigure extends FrameFigure {
 	}
 
 	public void setJRElement(DesignCell cell, StandardBaseColumn column,
-			DrawVisitor drawVisitor, JasperReportsConfiguration jrContext) {
+			DrawVisitor drawVisitor) {
 		this.cell = cell;
 		this.column = column;
-		super.setJRElement(null, drawVisitor, jrContext);
+		super.setJRElement(null, drawVisitor);
 		setSize(getElementWidth() + 3, getElementHeight() + 3);
 	}
 

@@ -23,6 +23,7 @@ package com.jaspersoft.studio.preferences.util;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
@@ -57,7 +58,6 @@ import com.jaspersoft.studio.preferences.PreferenceInitializer;
 
 public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage implements IWorkbenchPropertyPage,
 		IWorkbenchPreferencePage {
-
 	public static final String USEPROJECTSETTINGS = "useProjectSettings"; //$NON-NLS-1$
 
 	private static final String FALSE = "false"; //$NON-NLS-1$

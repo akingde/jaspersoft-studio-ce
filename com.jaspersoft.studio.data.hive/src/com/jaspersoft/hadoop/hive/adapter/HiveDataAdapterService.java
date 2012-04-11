@@ -28,6 +28,7 @@ import java.util.Map;
 import net.sf.jasperreports.data.AbstractDataAdapterService;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,62 +41,66 @@ import com.jaspersoft.hadoop.hive.connection.HiveConnection;
  * @author Eric Diaz
  */
 public class HiveDataAdapterService extends AbstractDataAdapterService {
-    private static final Log log = LogFactory.getLog(HiveDataAdapterService.class);
+	private static final Log log = LogFactory
+			.getLog(HiveDataAdapterService.class);
 
-    private HiveConnection connection;
+	private HiveConnection connection;
 
-    private HiveDataAdapter dataAdapter;
+	private HiveDataAdapter dataAdapter;
 
-    public HiveDataAdapterService(HiveDataAdapter dataAdapter) {
-        this.dataAdapter = dataAdapter;
-    }
+	public HiveDataAdapterService(JasperReportsContext jContext,
+			HiveDataAdapter dataAdapter) {
+		super(jContext, dataAdapter);
+		this.dataAdapter = dataAdapter;
+	}
 
-    @Override
-    public void contributeParameters(Map<String, Object> parameters) throws JRException {
-        if (connection != null) {
-            dispose();
-        }
-        if (dataAdapter != null) {
-            try {
-                createConnection();
-                parameters.put(JRParameter.REPORT_CONNECTION, connection);
-            } catch (Exception e) {
-                throw new JRException(e);
-            }
-        }
-    }
+	@Override
+	public void contributeParameters(Map<String, Object> parameters)
+			throws JRException {
+		if (connection != null) {
+			dispose();
+		}
+		if (dataAdapter != null) {
+			try {
+				createConnection();
+				parameters.put(JRParameter.REPORT_CONNECTION, connection);
+			} catch (Exception e) {
+				throw new JRException(e);
+			}
+		}
+	}
 
-    private void createConnection() throws Exception {
-        connection = new HiveConnection(dataAdapter.getUrl());
-    }
+	private void createConnection() throws Exception {
+		connection = new HiveConnection(dataAdapter.getUrl());
+	}
 
-    @Override
-    public void dispose() {
-        try {
-            if (connection != null)
-                connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (log.isErrorEnabled())
-                log.error("Error while closing the connection.", e);
-        }
-    }
+	@Override
+	public void dispose() {
+		try {
+			if (connection != null)
+				connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (log.isErrorEnabled())
+				log.error("Error while closing the connection.", e);
+		}
+	}
 
-    @Override
-    public void test() throws JRException {
-        try {
-            if (connection != null) {
-            } else {
-                try {
-                    createConnection();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new JRException(e);
-                }
-            }
-            connection.test();
-        } finally {
-            dispose();
-        }
-    }
+	@Override
+	public void test() throws JRException {
+		try {
+			if (connection != null) {
+			} else {
+				try {
+					createConnection();
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new JRException(e);
+				}
+			}
+			connection.test();
+		} finally {
+			dispose();
+		}
+	}
 }

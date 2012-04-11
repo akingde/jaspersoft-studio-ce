@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.data.jdbc;
 
-import java.util.ArrayList;
-
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 

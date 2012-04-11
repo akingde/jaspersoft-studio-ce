@@ -55,6 +55,7 @@ public class StringInput implements IStorageEditorInput {
 		return storage.getName();
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class adapter) {
 		return null;
 	}

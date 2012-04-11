@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 
@@ -36,6 +37,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
 
 public class MChartTimeSeriesDataset extends MChartDataset {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MChartTimeSeriesDataset(ANode parent,
 			JRDesignTimeSeriesDataset value, JasperDesign jasperDesign) {

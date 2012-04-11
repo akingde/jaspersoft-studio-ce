@@ -19,6 +19,7 @@
  */
 package com.jaspersoft.studio.model.textfield;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRTextField;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -31,6 +32,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
  * /* The Class MPageXofY.
  */
 public class MPageXofY extends MTextField {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

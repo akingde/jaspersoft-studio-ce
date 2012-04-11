@@ -139,7 +139,7 @@ public class JDRulerDragTracker extends SimpleDragTracker {
 		if (getState() == STATE_INVALID)
 			return false;
 		int position = getCurrentPosition();
-		Iterator guides = source.getRulerProvider().getGuides().iterator();
+		Iterator<?> guides = source.getRulerProvider().getGuides().iterator();
 		while (guides.hasNext()) {
 			int guidePos = source.getRulerProvider().getGuidePosition(guides.next());
 			if (Math.abs(guidePos - position) < GuideEditPart.MIN_DISTANCE_BW_GUIDES) {

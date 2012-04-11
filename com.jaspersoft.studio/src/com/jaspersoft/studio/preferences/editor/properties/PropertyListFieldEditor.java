@@ -23,8 +23,7 @@ package com.jaspersoft.studio.preferences.editor.properties;
 import java.util.Collections;
 import java.util.List;
 
-import net.sf.jasperreports.engine.util.JRProperties;
-import net.sf.jasperreports.engine.util.JRProperties.PropertySuffix;
+import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -34,6 +33,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 
 public class PropertyListFieldEditor extends TableFieldEditor {
 
@@ -72,10 +72,9 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	/*
 	 * (non-Javadoc) Method declared on FieldEditor.
 	 */
-	@SuppressWarnings("unchecked")
 	protected void doLoad() {
 		if (getTable() != null) {
-			List<PropertySuffix> lst = JRProperties.getProperties("");
+			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties("");
 			Collections.sort(lst, new PropertyComparator());
 			for (PropertySuffix ps : lst) {
 				String s = getPreferenceStore().getString(ps.getKey());
@@ -89,12 +88,11 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 	/*
 	 * (non-Javadoc) Method declared on FieldEditor.
 	 */
-	@SuppressWarnings("unchecked")
 	protected void doLoadDefault() {
 		if (getTable() != null) {
 			getTable().removeAll();
 
-			List<PropertySuffix> lst = JRProperties.getProperties("");
+			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties("");
 			Collections.sort(lst, new PropertyComparator());
 			for (PropertySuffix ps : lst) {
 				String s = getPreferenceStore().getDefaultString(ps.getKey());

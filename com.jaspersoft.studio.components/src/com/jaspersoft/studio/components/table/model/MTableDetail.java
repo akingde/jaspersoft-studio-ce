@@ -21,6 +21,7 @@ package com.jaspersoft.studio.components.table.model;
 
 import net.sf.jasperreports.components.table.BaseColumn;
 import net.sf.jasperreports.components.table.StandardColumn;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -32,7 +33,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 
 public class MTableDetail extends AMCollection {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -50,7 +51,8 @@ public class MTableDetail extends AMCollection {
 	/** The descriptors. */
 	protected static IPropertyDescriptor[] descriptors;
 
-	public MTableDetail(ANode parent, JRDesignComponentElement jrDataset, String property) {
+	public MTableDetail(ANode parent, JRDesignComponentElement jrDataset,
+			String property) {
 		super(parent, jrDataset, property);
 	}
 

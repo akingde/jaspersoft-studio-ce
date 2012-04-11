@@ -1,7 +1,5 @@
 package com.jaspersoft.studio.dnd;
 
-import java.io.ByteArrayInputStream;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.ui.part.IDropActionDelegate;
 
@@ -42,20 +40,13 @@ public class NodePluginDropAdapter implements IDropActionDelegate {
 		// }
 	}
 
-	private ByteArrayInputStream createFileContents(ANode gadget) {
-		// write the hierarchy of gadgets to string
-		StringBuffer buf = new StringBuffer();
-		writeGadgetString(gadget, buf, 0);
-		return new ByteArrayInputStream(buf.toString().getBytes());
-	}
-
-	private void writeGadgetString(ANode gadget, StringBuffer buf, int depth) {
-		// for (int i = 0; i < depth; i++)
-		// buf.append('\t');
-		// buf.append(gadget.getName());
-		// buf.append('\n');
-		// List<INode> children = gadget.getChildren();
-		// for (INode n : children)
-		// writeGadgetString((ANode) n, buf, depth + 1);
-	}
+//	private void writeGadgetString(ANode gadget, StringBuffer buf, int depth) {
+//		// for (int i = 0; i < depth; i++)
+//		// buf.append('\t');
+//		// buf.append(gadget.getName());
+//		// buf.append('\n');
+//		// List<INode> children = gadget.getChildren();
+//		// for (INode n : children)
+//		// writeGadgetString((ANode) n, buf, depth + 1);
+//	}
 }

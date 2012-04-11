@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 import net.sf.jasperreports.components.barcode4j.BarcodeComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
@@ -46,7 +47,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * The Class MBarcode.
  */
 public class MBarcode4j extends MBarcode {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 

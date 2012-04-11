@@ -65,7 +65,11 @@ public final class J2DGraphicsSource implements GraphicsSource
   	/** The graphics2d. */
   	private Graphics2D graphics2d;
 	  
-  	/** The c. */
+  	public Graphics2D getGraphics2d() {
+			return graphics2d;
+		}
+
+		/** The c. */
   	private Control c;
 	  
   	/** The graphics context. */

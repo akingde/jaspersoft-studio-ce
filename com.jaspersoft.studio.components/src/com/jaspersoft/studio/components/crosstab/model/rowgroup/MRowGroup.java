@@ -28,6 +28,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabGroup;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabRowGroup;
 import net.sf.jasperreports.crosstabs.type.CrosstabRowPositionEnum;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -46,7 +47,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MRowGroup extends MCrosstabGroup implements ICopyable {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -72,11 +73,11 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	 * Instantiates a new m field.
 	 * 
 	 * @param parent
-	 *          the parent
+	 *            the parent
 	 * @param jfRield
-	 *          the jf rield
+	 *            the jf rield
 	 * @param newIndex
-	 *          the new index
+	 *            the new index
 	 */
 	public MRowGroup(ANode parent, JRCrosstabRowGroup jfRield, int newIndex) {
 		super(parent, jfRield, newIndex);
@@ -115,7 +116,8 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	}
 
 	@Override
-	public void setDescriptors(IPropertyDescriptor[] descriptors1, Map<String, Object> defaultsMap1) {
+	public void setDescriptors(IPropertyDescriptor[] descriptors1,
+			Map<String, Object> defaultsMap1) {
 		descriptors = descriptors1;
 		defaultsMap = defaultsMap1;
 	}
@@ -124,20 +126,23 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	 * Creates the property descriptors.
 	 * 
 	 * @param desc
-	 *          the desc
+	 *            the desc
 	 */
 	@Override
-	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
+	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
+			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
 		ComboBoxPropertyDescriptor columnPositionD = new ComboBoxPropertyDescriptor(
-				JRDesignCrosstabRowGroup.PROPERTY_POSITION, Messages.MRowGroup_row_position, EnumHelper.getEnumNames(
+				JRDesignCrosstabRowGroup.PROPERTY_POSITION,
+				Messages.MRowGroup_row_position, EnumHelper.getEnumNames(
 						CrosstabRowPositionEnum.values(), NullEnum.NOTNULL));
-		columnPositionD.setDescription(Messages.MRowGroup_row_position_description);
+		columnPositionD
+				.setDescription(Messages.MRowGroup_row_position_description);
 		desc.add(columnPositionD);
 
-		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(JRDesignCrosstabRowGroup.PROPERTY_WIDTH,
-				Messages.common_width);
+		IntegerPropertyDescriptor widthD = new IntegerPropertyDescriptor(
+				JRDesignCrosstabRowGroup.PROPERTY_WIDTH, Messages.common_width);
 		widthD.setDescription(Messages.MRowGroup_width_description);
 		desc.add(widthD);
 
@@ -146,7 +151,9 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java
+	 * .lang.Object)
 	 */
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -161,32 +168,40 @@ public class MRowGroup extends MCrosstabGroup implements ICopyable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
+	 * @see
+	 * org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java
+	 * .lang.Object, java.lang.Object)
 	 */
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignCrosstabRowGroup jrField = (JRDesignCrosstabRowGroup) getValue();
 		if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_POSITION))
-			jrField.setPosition((CrosstabRowPositionEnum) EnumHelper.getSetValue(CrosstabRowPositionEnum.values(), value, 0,
-					false));
+			jrField.setPosition((CrosstabRowPositionEnum) EnumHelper
+					.getSetValue(CrosstabRowPositionEnum.values(), value, 0,
+							false));
 		else if (id.equals(JRDesignCrosstabRowGroup.PROPERTY_WIDTH)) {
 			jrField.setWidth((Integer) value);
 			MCrosstab cross = getMCrosstab();
 			cross.getCrosstabManager().refresh();
 			getPropertyChangeSupport().firePropertyChange(
-					new PropertyChangeEvent(this, JRDesignCrosstabRowGroup.PROPERTY_WIDTH, null, value));
+					new PropertyChangeEvent(this,
+							JRDesignCrosstabRowGroup.PROPERTY_WIDTH, null,
+							value));
 		} else
 			super.setPropertyValue(id, value);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
+		if (evt.getPropertyName().equals(
+				JRDesignCrosstabGroup.PROPERTY_TOTAL_POSITION)) {
 			this.removeChildren();
-			CrosstabComponentFactory.createRowGroupCells(this, (JRCrosstabRowGroup) getValue());
+			CrosstabComponentFactory.createRowGroupCells(this,
+					(JRCrosstabRowGroup) getValue());
 			MCrosstab mCrosstab = getMCrosstab();
 			CrosstabComponentFactory.deleteCellNodes(mCrosstab);
-			CrosstabComponentFactory.createCellNodes((JRDesignCrosstab) mCrosstab.getValue(), mCrosstab);
+			CrosstabComponentFactory.createCellNodes(
+					(JRDesignCrosstab) mCrosstab.getValue(), mCrosstab);
 		}
 		super.propertyChange(evt);
 	}

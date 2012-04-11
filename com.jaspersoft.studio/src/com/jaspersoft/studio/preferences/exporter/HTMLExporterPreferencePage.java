@@ -1,30 +1,25 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.preferences.exporter;
 
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -43,7 +38,9 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.Misc;
+
 /*
  * 
  */
@@ -154,33 +151,30 @@ public class HTMLExporterPreferencePage extends FieldEditorOverlayPage {
 	}
 
 	public static void getDefaults(IPreferenceStore store) {
-		store.setDefault(NSF_EXPORT_HTML_ACCESSIBLE,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_ACCESSIBLE), "false")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_ACCESSIBLE, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_HTML_ACCESSIBLE), "false")); //$NON-NLS-1$
 		store.setDefault(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT,
-				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT));
+				PropertiesHelper.DPROP.getProperty(JRHtmlExporterParameter.PROPERTY_FLUSH_OUTPUT));
 		store.setDefault(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES,
-				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
+				PropertiesHelper.DPROP.getProperty(JRHtmlExporterParameter.PROPERTY_FRAMES_AS_NESTED_TABLES));
 		store.setDefault(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
-				Misc.nvl(JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS), "false")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRHtmlExporterParameter.PROPERTY_REMOVE_EMPTY_SPACE_BETWEEN_ROWS), "false")); //$NON-NLS-1$
 		store.setDefault(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT,
-				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT));
+				PropertiesHelper.DPROP.getProperty(JRHtmlExporterParameter.PROPERTY_SIZE_UNIT));
 		store.setDefault(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN,
-				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN));
+				PropertiesHelper.DPROP.getProperty(JRHtmlExporterParameter.PROPERTY_USING_IMAGES_TO_ALIGN));
 		store.setDefault(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND,
-				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
+				PropertiesHelper.DPROP.getProperty(JRHtmlExporterParameter.PROPERTY_WHITE_PAGE_BACKGROUND));
 		store.setDefault(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD,
-				JRProperties.getProperty(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD));
+				PropertiesHelper.DPROP.getProperty(JRHtmlExporterParameter.PROPERTY_WRAP_BREAK_WORD));
 
-		store.setDefault(NSF_EXPORT_HTML_HEADER, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_HEADER), "")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_HTML_FOOTER, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_FOOTER), "")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_HTML_BETWEEN_PAGES,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_BETWEEN_PAGES), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_HEADER, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_HTML_HEADER), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_FOOTER, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_HTML_FOOTER), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_BETWEEN_PAGES, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_HTML_BETWEEN_PAGES), "")); //$NON-NLS-1$
 
 		store.setDefault(NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR), "")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_HTML_IMAGES_DIR_NAME,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_IMAGES_DIR_NAME), "")); //$NON-NLS-1$
-		store.setDefault(NSF_EXPORT_HTML_IMAGES_URI, Misc.nvl(JRProperties.getProperty(NSF_EXPORT_HTML_IMAGES_URI), "")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_HTML_IS_OUTPUT_IMAGES_TO_DIR), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_IMAGES_DIR_NAME, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_HTML_IMAGES_DIR_NAME), "")); //$NON-NLS-1$
+		store.setDefault(NSF_EXPORT_HTML_IMAGES_URI, Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_HTML_IMAGES_URI), "")); //$NON-NLS-1$
 	}
 
 	/*

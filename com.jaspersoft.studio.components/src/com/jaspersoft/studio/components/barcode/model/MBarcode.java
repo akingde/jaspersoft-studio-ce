@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public abstract class MBarcode extends MGraphicElement implements IRotatable {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MBarcode() {
 		super();

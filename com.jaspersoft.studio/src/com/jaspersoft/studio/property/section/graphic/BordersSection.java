@@ -26,6 +26,7 @@ import java.util.Set;
 
 import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.JRPrintElement;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.base.JRBasePen;
 import net.sf.jasperreports.engine.base.JRBasePrintText;
@@ -78,6 +79,9 @@ import com.jaspersoft.studio.utils.UIUtils;
 public class BordersSection extends AbstractSection {
 
 	private final class LineBoxDrawer extends BoxDrawer {
+		public LineBoxDrawer(JasperReportsContext jasperReportsContext) {
+			super(jasperReportsContext);
+		}
 
 		public void drawBox(Graphics2D graphics2d, JRLineBox box, JRPrintElement element) {
 			drawBox(graphics2d, box, element, 0, 0);
@@ -153,7 +157,7 @@ public class BordersSection extends AbstractSection {
 		lws.setControl(square);
 
 		borderPreview = new RectangleFigure() {
-			private LineBoxDrawer bd = new LineBoxDrawer();
+			private LineBoxDrawer bd = new LineBoxDrawer(jasperReportsContext);
 
 			@Override
 			public void paint(Graphics graphics) {

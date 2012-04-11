@@ -41,6 +41,7 @@ package com.jaspersoft.studio.model.dataset;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
 import net.sf.jasperreports.engine.JRDatasetRun;
@@ -61,7 +62,7 @@ import com.jaspersoft.studio.property.descriptor.parameter.ParameterPropertyDesc
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
 
 public class MDatasetRun extends APropertyNode {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public MDatasetRun(JRDatasetRun value, JasperDesign jasperDesign) {
 		super();
 		setValue(value);

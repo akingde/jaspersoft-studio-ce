@@ -28,8 +28,6 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
-
 /*
  * The Class FrameFigure.
  * 
@@ -64,8 +62,8 @@ public class FrameFigure extends AHandleBoundsFigure {
 	 * net.sf.jasperreports.engine.export.draw.DrawVisitor)
 	 */
 	@Override
-	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor, JasperReportsConfiguration fileResolver) {
-		super.setJRElement(jrElement, drawVisitor, fileResolver);
+	public void setJRElement(JRElement jrElement, DrawVisitor drawVisitor) {
+		super.setJRElement(jrElement, drawVisitor);
 		// set bounds + 1/2 border
 		Rectangle o = calcBorder(getLineBox());
 		Rectangle b = getBounds();

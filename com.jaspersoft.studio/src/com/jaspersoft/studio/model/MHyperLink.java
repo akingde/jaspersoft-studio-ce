@@ -22,6 +22,7 @@ package com.jaspersoft.studio.model;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MHyperLink extends APropertyNode {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	public MHyperLink(JRHyperlink hyperLink) {
 		super();

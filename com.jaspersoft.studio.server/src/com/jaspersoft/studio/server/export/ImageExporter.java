@@ -21,7 +21,7 @@ package com.jaspersoft.studio.server.export;
 
 import java.io.File;
 
-import net.sf.jasperreports.engine.JRRenderable;
+import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
@@ -38,19 +38,16 @@ public class ImageExporter extends AExporter {
 			String filename = f.getAbsolutePath();
 			int dotPos = filename.lastIndexOf(".");
 			String strFilename = filename.substring(0, dotPos);
-			switch (JRTypeSniffer.getImageType(FileUtils.getBytes(f))) {
-			case JRRenderable.IMAGE_TYPE_GIF:
+			ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils
+					.getBytes(f));
+			if (itype == ImageTypeEnum.GIF) {
 				f = FileUtils.fileRenamed(f, strFilename, ".gif", false);
-				break;
-			case JRRenderable.IMAGE_TYPE_JPEG:
+			} else if (itype == ImageTypeEnum.JPEG) {
 				f = FileUtils.fileRenamed(f, strFilename, ".jpeg", false);
-				break;
-			case JRRenderable.IMAGE_TYPE_PNG:
+			} else if (itype == ImageTypeEnum.PNG) {
 				f = FileUtils.fileRenamed(f, strFilename, ".png", false);
-				break;
-			case JRRenderable.IMAGE_TYPE_TIFF:
+			} else if (itype == ImageTypeEnum.TIFF) {
 				f = FileUtils.fileRenamed(f, strFilename, ".tiff", false);
-				break;
 			}
 			fileurimap.put(fkeyname, f.getAbsolutePath());
 		}

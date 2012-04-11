@@ -32,6 +32,7 @@ import net.sf.jasperreports.charts.design.JRDesignValueDataset;
 import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.charts.design.JRDesignXyzDataset;
 import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
+import net.sf.jasperreports.engine.convert.ReportConverter;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -108,7 +109,6 @@ public class DatasetSeriesWidget {
 		this.eDataset = eDataset;
 		if (jrDesign != null && this.jrDesign != jrDesign) {
 			this.jrDesign = jrDesign;
-			dv = new DrawVisitor(jrDesign, null);
 		}
 		this.jrChart = jrChart;
 		fillData();
@@ -119,6 +119,9 @@ public class DatasetSeriesWidget {
 		if (eDataset != null)
 			c = map.get(eDataset.getClass());
 		if (c != null) {
+			dv = new DrawVisitor(
+					new ReportConverter(jrContext, jrDesign, true),
+					c.getGraphics2D());
 			c.setData(dv, jrChart, eDataset, jrContext);
 			stacklayout.topControl = c.getControl();
 		} else {

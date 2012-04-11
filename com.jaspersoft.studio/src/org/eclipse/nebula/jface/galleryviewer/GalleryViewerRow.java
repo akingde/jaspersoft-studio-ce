@@ -240,7 +240,7 @@ public class GalleryViewerRow extends ViewerRow {
 	 * @see org.eclipse.jface.viewers.ViewerRow#getTreePath()
 	 */
 	public TreePath getTreePath() {
-		LinkedList path = new LinkedList();
+		LinkedList<Object> path = new LinkedList<Object>();
 		path.add(item.getData());
 
 		GalleryItem curItem = item;

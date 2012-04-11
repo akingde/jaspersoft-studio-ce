@@ -25,7 +25,6 @@ import net.sf.jasperreports.engine.JRLineBox;
 import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class CellFigure extends FrameFigure {
 	private JRDesignCellContents cell;
@@ -35,9 +34,9 @@ public class CellFigure extends FrameFigure {
 	}
 
 	public void setJRElement(JRDesignCellContents jrElement,
-			DrawVisitor drawVisitor, JasperReportsConfiguration jrContext) {
+			DrawVisitor drawVisitor) {
 		this.cell = jrElement;
-		super.setJRElement(null, drawVisitor, jrContext);
+		super.setJRElement(null, drawVisitor);
 		setSize(getElementWidth(), getElementHeight());
 	}
 

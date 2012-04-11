@@ -22,6 +22,7 @@ package com.jaspersoft.studio.data;
 import net.sf.jasperreports.data.DataAdapter;
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DefaultDataAdapterServiceFactory;
+import net.sf.jasperreports.engine.JasperReportsContext;
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
@@ -44,14 +45,14 @@ public class DataAdapterServiceFactoryImpl extends DefaultDataAdapterServiceFact
 	/**
 	 *
 	 */
-	public DataAdapterService getDataAdapterService(DataAdapter dataAdapter) {
+	public DataAdapterService getDataAdapterService(JasperReportsContext jasperReportsContext, DataAdapter dataAdapter) {
 		DataAdapterService dataAdapterService = null;
 
 		DataAdapterFactory daf = DataAdapterManager.findFactoryByDataAdapterClass(dataAdapter.getClass().getName());
 		if (daf != null)
 			dataAdapterService = daf.createDataAdapterService(dataAdapter);
 		if (daf == null)
-			return super.getDataAdapterService(dataAdapter);
+			return super.getDataAdapterService(jasperReportsContext, dataAdapter);
 		return dataAdapterService;
 	}
 

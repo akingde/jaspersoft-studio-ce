@@ -39,7 +39,7 @@
 package com.jaspersoft.studio.data;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.XmlUtil;
+import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -107,7 +107,7 @@ public abstract class DataAdapterDescriptor implements IIconDescriptor {
 	 */
 	public final String toXml() {
 
-		return XmlUtil.write(getDataAdapter());
+		return CastorUtil.write(getDataAdapter());
 	}
 
 	@Override

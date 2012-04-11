@@ -314,7 +314,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 * @see org.eclipse.ui.part.MultiPageEditorPart#getAdapter(java.lang.Class)
 	 */
 	@Override
-	public Object getAdapter(Class type) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class type) {
 		if (type == IPropertySource.class)
 			return getPropertySheetPage();
 		if (type == IPropertySource2.class)

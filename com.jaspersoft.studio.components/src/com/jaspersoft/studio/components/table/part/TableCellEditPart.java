@@ -62,7 +62,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
  */
 public class TableCellEditPart extends FigureEditPart implements IContainerPart {
 	@Override
-	public Object getAdapter(Class key) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
 		return getParent().getAdapter(key);
 	}
 
@@ -127,8 +127,7 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 			CellFigure f = (CellFigure) rect;
 			f.setLocation(new Point(x, y));
 			f.setJRElement(model.getCell(),
-					(StandardBaseColumn) model.getValue(), getDrawVisitor(),
-					jrContext);
+					(StandardBaseColumn) model.getValue(), getDrawVisitor());
 			updateRulers();
 		}
 	}

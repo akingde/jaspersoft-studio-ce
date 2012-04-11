@@ -24,7 +24,6 @@
 package com.jaspersoft.studio.preferences.exporter;
 
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
-import net.sf.jasperreports.engine.util.JRProperties;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -40,6 +39,7 @@ import com.jaspersoft.studio.preferences.editor.number.FloatFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.NStringFieldEditor;
 import com.jaspersoft.studio.preferences.editor.text.TextFieldEditor;
 import com.jaspersoft.studio.preferences.util.FieldEditorOverlayPage;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.Misc;
 /*
  * 
@@ -87,17 +87,17 @@ public class TextExporterPreferencePage extends FieldEditorOverlayPage {
 
 	public static void getDefaults(IPreferenceStore store) {
 		store.setDefault(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT,
-				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT), "0")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRTextExporterParameter.PROPERTY_CHARACTER_HEIGHT), "0")); //$NON-NLS-1$
 		store.setDefault(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH,
-				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH), "0")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRTextExporterParameter.PROPERTY_CHARACTER_WIDTH), "0")); //$NON-NLS-1$
 		store.setDefault(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT,
-				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT), "0")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRTextExporterParameter.PROPERTY_PAGE_HEIGHT), "0")); //$NON-NLS-1$
 		store.setDefault(JRTextExporterParameter.PROPERTY_PAGE_WIDTH,
-				Misc.nvl(JRProperties.getProperty(JRTextExporterParameter.PROPERTY_PAGE_WIDTH), "0")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(JRTextExporterParameter.PROPERTY_PAGE_WIDTH), "0")); //$NON-NLS-1$
 
 		store.setDefault(NSF_EXPORT_TEXT_LINE_SEPARATOR, "\n"); //$NON-NLS-1$
 		store.setDefault(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT,
-				Misc.nvl(JRProperties.getProperty(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT), "")); //$NON-NLS-1$
+				Misc.nvl(PropertiesHelper.DPROP.getProperty(NSF_EXPORT_TEXT_BETWEEN_PAGE_TEXT), "")); //$NON-NLS-1$
 	}
 
 	/*

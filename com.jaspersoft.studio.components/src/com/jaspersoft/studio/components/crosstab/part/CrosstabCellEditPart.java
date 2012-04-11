@@ -62,7 +62,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 public class CrosstabCellEditPart extends FigureEditPart implements
 		IContainerPart {
 	@Override
-	public Object getAdapter(Class key) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
 		return getParent().getAdapter(key);
 	}
 
@@ -114,7 +114,7 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 			CellFigure f = (CellFigure) rect;
 			f.setLocation(new Point(x, y));
 			f.setJRElement((JRDesignCellContents) model.getValue(),
-					getDrawVisitor(), jrContext);
+					getDrawVisitor());
 			updateRulers();
 		}
 	}

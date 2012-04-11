@@ -30,7 +30,6 @@
 package org.eclipse.nebula.widgets.gallery;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -40,39 +39,10 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
-/*
- * <p>
- * Alternate item renderer for the Gallery widget using a list style. Supports
- * multi-line text, image, drop shadows and decorators.
- * </p>
- * <p>
- * Best with bigger width than height.
- * </p>
- * <p>
- * Decorator images can be set with {@link GalleryItem#setData(String, Object)}
- * by using the following keys :
- * </p>
- * <ul>
- * <li>org.eclipse.nebula.widget.gallery.bottomLeftOverlay</li>
- * <li>org.eclipse.nebula.widget.gallery.bottomRightOverlay</li>
- * <li>org.eclipse.nebula.widget.gallery.topLeftOverlay</li>
- * <li>org.eclipse.nebula.widget.gallery.topRightOverlay</li>
- *</ul>
- *<p>
- * Supported types are org.eclipse.swt.Image for one single decorator and
- * org.eclipse.swt.Image[] for multiple decorators.
- * </p>
- * <p>
- * NOTE: THIS WIDGET AND ITS API ARE STILL UNDER DEVELOPMENT.
- * </p>
- * 
- * @author Nicolas Richeton (nicolas.richeton@gmail.com)
- * 
- */
 
 public class ListItemRenderer extends AbstractGalleryItemRenderer {
 
-	protected ArrayList dropShadowsColors = new ArrayList();
+	protected ArrayList<Color> dropShadowsColors = new ArrayList<Color>();
 
 	boolean dropShadows = false;
 
@@ -171,7 +141,7 @@ public class ListItemRenderer extends AbstractGalleryItemRenderer {
 			if (dropShadows) {
 				Color c = null;
 				for (int i = this.dropShadowsSize - 1; i >= 0; i--) {
-					c = (Color) dropShadowsColors.get(i);
+					c =  dropShadowsColors.get(i);
 					gc.setForeground(c);
 
 					gc.drawLine(x + useableHeight + i - xShift - 1, y
@@ -298,10 +268,8 @@ public class ListItemRenderer extends AbstractGalleryItemRenderer {
 
 	private void freeDropShadowsColors() {
 		// Free colors :
-		{
-			Iterator i = this.dropShadowsColors.iterator();
-			while (i.hasNext()) {
-				Color c = (Color) i.next();
+		{ 
+			for (Color c :dropShadowsColors) { 
 				if (c != null && !c.isDisposed())
 					c.dispose();
 			}

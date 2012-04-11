@@ -152,6 +152,7 @@ public class StyleTemplateEditor extends J2DGraphicalEditor implements ITabbedPr
 
 	private EditorContributor editorContributor;
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class type) {
 		if (type == IPropertySource.class)

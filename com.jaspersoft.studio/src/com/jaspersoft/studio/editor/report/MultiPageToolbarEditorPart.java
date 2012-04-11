@@ -1035,7 +1035,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 * 
 	 * @see org.eclipse.ui.part.WorkbenchPart#getAdapter(java.lang.Class)
 	 */
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		Object result = super.getAdapter(adapter);
 		// restrict delegating to the UI thread for bug 144851
 		if (result == null && Display.getCurrent() != null) {
@@ -1058,7 +1058,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 * @since 3.3
 	 */
 	public final IEditorPart[] findEditors(IEditorInput input) {
-		List result = new ArrayList();
+		List<IEditorPart> result = new ArrayList<IEditorPart>();
 		int count = getPageCount();
 		for (int i = 0; i < count; i++) {
 			IEditorPart editor = getEditor(i);

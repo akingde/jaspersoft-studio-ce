@@ -25,7 +25,6 @@ import java.util.List;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.OrientationEnum;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -68,14 +67,12 @@ import com.jaspersoft.studio.property.section.report.util.ValueUnitsWidget;
 final class PageFormatDialog extends FormDialog {
 	private JasperDesign jd;
 	private MReport jnode;
-	private IFile file;
 
-	public PageFormatDialog(Shell shell, ANode node, IFile file) {
+	public PageFormatDialog(Shell shell, ANode node) {
 		super(shell);
 
 		jnode = (MReport) node.getRoot();
 		this.jd = node.getJasperDesign();
-		this.file = file;
 	}
 
 	@Override
@@ -104,7 +101,8 @@ final class PageFormatDialog extends FormDialog {
 
 		setJasperDesign(jd);
 
-		uw.setUnit(new PropertiesHelper(file.getProject()).getString(DesignerPreferencePage.P_PAGE_DEFAULT_UNITS));
+		uw.setUnit(PropertiesHelper.getInstance(jnode.getJasperConfiguration()).getString(
+				DesignerPreferencePage.P_PAGE_DEFAULT_UNITS));
 		setAllUnits();
 	}
 

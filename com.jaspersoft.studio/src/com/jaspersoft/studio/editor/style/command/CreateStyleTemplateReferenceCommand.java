@@ -35,7 +35,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 
 import com.jaspersoft.studio.model.style.MStyleTemplateReference;
-import com.jaspersoft.studio.model.style.MStyles;
 import com.jaspersoft.studio.model.style.MStylesTemplate;
 /*
  * link nodes & together.

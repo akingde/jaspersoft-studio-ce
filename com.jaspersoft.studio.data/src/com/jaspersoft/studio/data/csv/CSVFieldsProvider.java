@@ -56,7 +56,7 @@ public class CSVFieldsProvider implements IFieldsProvider {
 				.getDataAdapter();
 		if (da.isQueryExecuterMode()) {
 			JRCsvQueryExecuter qe = (JRCsvQueryExecuter) new JRCsvQueryExecuterFactory()
-					.createQueryExecuter(reportDataset,
+					.createQueryExecuter(jConfig, reportDataset,
 							ParameterUtil.convertMap(parameters));
 			ds = (JRCsvDataSource) qe.createDatasource();
 		} else {

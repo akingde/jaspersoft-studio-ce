@@ -21,7 +21,7 @@ package com.jaspersoft.studio.server.wizard.resource.page;
 
 import java.io.File;
 
-import net.sf.jasperreports.engine.JRRenderable;
+import net.sf.jasperreports.engine.type.ImageTypeEnum;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 
 import org.eclipse.core.databinding.beans.PojoObservables;
@@ -78,38 +78,7 @@ public abstract class AFileResourcePage extends AResourcePage {
 				fd.setFilterExtensions(getFilter());
 				fd.setText("Save Resource To File ...");
 				String filename = fd.open();
-				if (filename != null) {
-					try {
-						WSClientHelper.getResource(AFileResourcePage.this.res,
-								res.getValue(), filename);
-						File file = new File(filename);
-						int dotPos = filename.lastIndexOf(".");
-						String strFilename = filename.substring(0, dotPos);
-						switch (JRTypeSniffer.getImageType(FileUtils
-								.getBytes(file))) {
-						case JRRenderable.IMAGE_TYPE_GIF:
-							file = FileUtils.fileRenamed(file, strFilename,
-									".gif");
-							break;
-						case JRRenderable.IMAGE_TYPE_JPEG:
-							file = FileUtils.fileRenamed(file, strFilename,
-									".jpeg");
-							break;
-						case JRRenderable.IMAGE_TYPE_PNG:
-							file = FileUtils.fileRenamed(file, strFilename,
-									".png");
-							break;
-						case JRRenderable.IMAGE_TYPE_TIFF:
-							file = FileUtils.fileRenamed(file, strFilename,
-									".tiff");
-							break;
-						}
-						((AFileResource) res).setFile(file);
-					} catch (Exception e1) {
-						UIUtils.showError(e1);
-					}
-					handleFileChange();
-				}
+				doSaveFile(filename);
 			}
 
 		});
@@ -154,5 +123,32 @@ public abstract class AFileResourcePage extends AResourcePage {
 	}
 
 	protected abstract String[] getFilter();
+
+	protected void doSaveFile(String filename) {
+		if (filename != null) {
+			try {
+				WSClientHelper.getResource(AFileResourcePage.this.res,
+						res.getValue(), filename);
+				File file = new File(filename);
+				int dotPos = filename.lastIndexOf(".");
+				String strFilename = filename.substring(0, dotPos);
+				ImageTypeEnum itype = JRTypeSniffer.getImageTypeValue(FileUtils
+						.getBytes(file));
+				if (itype == ImageTypeEnum.GIF) {
+					file = FileUtils.fileRenamed(file, strFilename, ".gif");
+				} else if (itype == ImageTypeEnum.JPEG) {
+					file = FileUtils.fileRenamed(file, strFilename, ".jpeg");
+				} else if (itype == ImageTypeEnum.PNG) {
+					file = FileUtils.fileRenamed(file, strFilename, ".png");
+				} else if (itype == ImageTypeEnum.TIFF) {
+					file = FileUtils.fileRenamed(file, strFilename, ".tiff");
+				}
+				((AFileResource) res).setFile(file);
+			} catch (Exception e1) {
+				UIUtils.showError(e1);
+			}
+			handleFileChange();
+		}
+	}
 
 }

@@ -21,11 +21,9 @@ package com.jaspersoft.studio.property.section.report;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.jaspersoft.studio.editor.gef.parts.ReportPageEditPart;
@@ -64,8 +62,7 @@ public class PageFormatAction extends SelectionAction {
 	public void run() {
 		ReportEditor part = (ReportEditor) getWorkbenchPart();
 		ANode n = (ANode) part.getModel().getChildren().get(0);
-		IFile file = ((IFileEditorInput) part.getEditorInput()).getFile();
-		PageFormatDialog dlg = new PageFormatDialog(Display.getCurrent().getActiveShell(), n, file);
+		PageFormatDialog dlg = new PageFormatDialog(Display.getCurrent().getActiveShell(), n);
 		if (dlg.open() == Window.OK) {
 			part.getEditDomain().getCommandStack().execute(dlg.getCommand());
 		}

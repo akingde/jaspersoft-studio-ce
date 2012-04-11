@@ -109,23 +109,25 @@ public class CrosstabEditor extends AbstractVisualEditor {
 	protected void createEditorActions(ActionRegistry registry) {
 		IAction action = new CreateMeasureAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateMeasureAction.ID);
+		@SuppressWarnings("unchecked")
+		List<String> selectionActions = getSelectionActions();
+		selectionActions.add(CreateMeasureAction.ID);
 
 		action = new CreateColumnGroupAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateColumnGroupAction.ID);
+		selectionActions.add(CreateColumnGroupAction.ID);
 
 		action = new CreateRowGroupAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateRowGroupAction.ID);
+		selectionActions.add(CreateRowGroupAction.ID);
 
 		action = new CreateCrosstabHeaderAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateCrosstabHeaderAction.ID);
+		selectionActions.add(CreateCrosstabHeaderAction.ID);
 
 		action = new CreateCrosstabWhenNoDataAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateCrosstabWhenNoDataAction.ID);
+		selectionActions.add(CreateCrosstabWhenNoDataAction.ID);
 
 	}
 

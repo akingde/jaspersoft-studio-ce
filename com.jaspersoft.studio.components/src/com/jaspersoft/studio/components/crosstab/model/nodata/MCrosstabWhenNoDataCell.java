@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.components.crosstab.model.nodata;
 
 import net.sf.jasperreports.crosstabs.JRCellContents;
+import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.Color;
@@ -29,12 +30,16 @@ import com.jaspersoft.studio.components.crosstab.model.cell.MCell;
 import com.jaspersoft.studio.model.ANode;
 
 public class MCrosstabWhenNoDataCell extends MCell {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MCrosstabWhenNoDataCell() {
 		super();
 	}
 
-	public MCrosstabWhenNoDataCell(ANode parent, JRCellContents jfRield, int index) {
-		super(parent, jfRield, Messages.MCrosstabWhenNoDataCell_when_no_data_cell, index);
+	public MCrosstabWhenNoDataCell(ANode parent, JRCellContents jfRield,
+			int index) {
+		super(parent, jfRield,
+				Messages.MCrosstabWhenNoDataCell_when_no_data_cell, index);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.crosstabs.JRCrosstabBucket;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstabBucket;
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.property.descriptor.expression.JRExpressionProperty
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MBucket extends APropertyNode {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/**
 	 * Instantiates a new m field.

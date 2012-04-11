@@ -23,8 +23,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapter;
-import net.sf.jasperreports.data.XmlUtil;
 import net.sf.jasperreports.engine.util.JRXmlUtils;
+import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -197,7 +197,7 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 			} else {
 				DataAdapterDescriptor dataAdapterDescriptor = factory.createDataAdapter();
 				DataAdapter dataAdapter = dataAdapterDescriptor.getDataAdapter();
-				dataAdapter = (DataAdapter) XmlUtil.read(document.getDocumentElement(), dataAdapter.getClass());
+				dataAdapter = (DataAdapter) CastorUtil.read(document.getDocumentElement(), dataAdapter.getClass());
 				dataAdapterDescriptor.setDataAdapter(dataAdapter);
 				return dataAdapterDescriptor;
 			}

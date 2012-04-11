@@ -29,17 +29,17 @@ import java.util.EventObject;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.engine.ImageMapRenderable;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JRImageMapRenderer;
 import net.sf.jasperreports.engine.JRPrintAnchorIndex;
 import net.sf.jasperreports.engine.JRPrintElement;
 import net.sf.jasperreports.engine.JRPrintHyperlink;
 import net.sf.jasperreports.engine.JRPrintImage;
 import net.sf.jasperreports.engine.JRPrintImageAreaHyperlink;
 import net.sf.jasperreports.engine.JRPrintPage;
-import net.sf.jasperreports.engine.JRRenderable;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.Renderable;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
@@ -809,9 +809,10 @@ class ViewerCanvas extends Canvas {
 			throws JRException {
 		if (elements != null) {
 			for (JRPrintElement element : elements) {
-				if (getImageMapRenderer(element) != null) {
-					List<JRPrintImageAreaHyperlink> hyperlinks = getImageMapRenderer(element).renderWithHyperlinks(grx,
-							new java.awt.Rectangle(0, 0, element.getWidth(), element.getHeight()));
+				ImageMapRenderable ir = getImageMapRenderer(element);
+				if (ir != null) {
+					List<JRPrintImageAreaHyperlink> hyperlinks = ir.renderWithHyperlinks(grx, new java.awt.Rectangle(0, 0,
+							element.getWidth(), element.getHeight()));
 					if (hyperlinks != null)
 						hyperlinkElements
 								.add(new ImageAreaHyperlink(originX + element.getX(), originY + element.getY(), hyperlinks));
@@ -823,11 +824,11 @@ class ViewerCanvas extends Canvas {
 		}
 	}
 
-	private static JRImageMapRenderer getImageMapRenderer(JRPrintElement element) {
+	private static ImageMapRenderable getImageMapRenderer(JRPrintElement element) {
 		if (element instanceof JRPrintImage) {
-			JRRenderable renderer = ((JRPrintImage) element).getRenderer();
-			if (renderer instanceof JRImageMapRenderer)
-				return (JRImageMapRenderer) renderer;
+			Renderable renderer = ((JRPrintImage) element).getRenderable();
+			if (renderer instanceof ImageMapRenderable)
+				return (ImageMapRenderable) renderer;
 		}
 
 		return null;

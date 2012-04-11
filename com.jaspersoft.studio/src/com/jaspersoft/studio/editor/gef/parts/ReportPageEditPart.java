@@ -81,6 +81,7 @@ public class ReportPageEditPart extends AJDEditPart implements PropertyChangeLis
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class key) {
 		if (key == SnapToHelper.class) {

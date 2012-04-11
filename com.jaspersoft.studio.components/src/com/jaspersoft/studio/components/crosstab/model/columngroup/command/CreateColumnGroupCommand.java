@@ -101,7 +101,9 @@ public class CreateColumnGroupCommand extends Command {
 
 			} catch (JRException e) {
 				e.printStackTrace();
-				if (e.getMessage().startsWith("A group or measure having the same name already exists in the crosstab.")) { //$NON-NLS-1$
+				if (e.getMessage()
+						.startsWith(
+								"A group or measure having the same name already exists in the crosstab.")) { //$NON-NLS-1$
 					String defaultName = ModelUtils.getDefaultName(
 							jrCrosstab.getColumnGroupIndicesMap(),
 							"CopyOFColumnGroup_"); //$NON-NLS-1$
@@ -176,7 +178,8 @@ public class CreateColumnGroupCommand extends Command {
 
 		// I need to add the extra cells...
 
-		if (!jrCross.getCellsMap().containsKey(new Pair(null, null))) {
+		if (!jrCross.getCellsMap().containsKey(
+				new Pair<String, String>(null, null))) {
 			JRDesignCrosstabCell dT = new JRDesignCrosstabCell();
 			dT.setColumnTotalGroup(null);
 			dT.setRowTotalGroup(null);

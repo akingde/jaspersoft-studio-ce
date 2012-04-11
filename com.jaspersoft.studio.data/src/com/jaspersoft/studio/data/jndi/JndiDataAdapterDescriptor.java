@@ -28,7 +28,6 @@ import net.sf.jasperreports.data.jndi.JndiDataAdapterImpl;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.graphics.Image;
 

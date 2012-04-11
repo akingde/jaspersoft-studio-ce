@@ -38,6 +38,7 @@
  */
 package com.jaspersoft.studio.model.textfield;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRTextField;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -53,6 +54,7 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
  * /* The Class MPercentage.
  */
 public class MPercentage extends MTextField {
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

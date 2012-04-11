@@ -79,6 +79,7 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 		}
 	};
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class type) {
 		if (type == IPropertySource.class)

@@ -29,6 +29,7 @@ import java.util.HashSet;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
 import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRSimpleTemplate;
 import net.sf.jasperreports.engine.JRTemplate;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -265,7 +266,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null) {
-			jrContext = new JasperReportsConfiguration();
+			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance());
 			ProxyFileResolver resolver = new ProxyFileResolver();
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);

@@ -50,10 +50,11 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 	private IContentOutlinePage currentPage;
 	private IContentOutlinePage emptyPage;
 	private IActionBars actionBars;
-//	private EditorPart editor;
+
+	// private EditorPart editor;
 
 	public MultiOutlineView(EditorPart editor) {
-//		this.editor = editor;
+		// this.editor = editor;
 		listeners = new ArrayList<ISelectionChangedListener>();
 
 	}
@@ -191,7 +192,7 @@ public class MultiOutlineView extends Page implements IContentOutlinePage, ISele
 		}
 	}
 
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (currentPage instanceof IAdaptable)
 			return ((IAdaptable) currentPage).getAdapter(adapter);
 		return null;
