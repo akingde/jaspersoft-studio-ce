@@ -30,6 +30,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+
 import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -43,22 +45,23 @@ public class Heartbeat {
 	public static final String VERSION;
 	private static String version;
 	private static String optmsg;
-	
+
 	static {
-		UUID_PROPERTY="UUID";
-		// Get the JSS version directly from the running product (Bundle-Version attribute)
+		UUID_PROPERTY = "UUID";
+		// Get the JSS version directly from the running product (Bundle-Version
+		// attribute)
 		IProduct product = Platform.getProduct();
-		if(product!=null && product.getDefiningBundle()!=null
-				&& product.getDefiningBundle().getVersion()!=null){
-			VERSION=product.getDefiningBundle().getVersion().toString();	
-		}
-		else{
-			VERSION="x.x.x";
+		if (product != null && product.getDefiningBundle() != null
+				&& product.getDefiningBundle().getVersion() != null) {
+			VERSION = product.getDefiningBundle().getVersion().toString();
+		} else {
+			VERSION = "x.x.x";
 		}
 	}
 
 	public static void run() {
-		final PropertiesHelper ph = new PropertiesHelper(null);
+		final PropertiesHelper ph = PropertiesHelper
+				.getInstance(DefaultJasperReportsContext.getInstance());
 		String uuid = ph.getString(UUID_PROPERTY, null);
 		int newInstallation = 0;
 		if (uuid == null || uuid.length() == 0) {

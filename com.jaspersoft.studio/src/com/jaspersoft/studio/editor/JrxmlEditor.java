@@ -479,8 +479,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
 		}
 		jrContext.put(IEditorContributor.KEY_FILE, file);
-		p =  PropertiesHelper.getInstance(jrContext);		
-		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, p); 
+		p = PropertiesHelper.getInstance(jrContext);
+		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, p);
 	}
 
 	public static String getFileExtension(IEditorInput editorInput) {

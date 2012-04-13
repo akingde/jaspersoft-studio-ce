@@ -42,8 +42,10 @@ import com.jaspersoft.studio.editor.preview.toolbar.ATopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.ViewsFactory;
+import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
+import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.Console;
 
 public class PreviewJRPrint extends ABasicEditor {
@@ -74,12 +76,13 @@ public class PreviewJRPrint extends ABasicEditor {
 			} else {
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 			}
+			Statistics stats = new Statistics();
 			if (file.getFileExtension().equals(".jrpxml")) {
-				setJasperPrint(JRPrintXmlLoader.load(in));
+				setJasperPrint(stats, JRPrintXmlLoader.load(in));
 			} else {
 				Object obj = JRLoader.loadObject(in);
 				if (obj instanceof JasperPrint)
-					setJasperPrint((JasperPrint) obj);
+					setJasperPrint(stats, (JasperPrint) obj);
 			}
 		} catch (Exception e) {
 			throw new PartInitException("Invalid Input", e);
@@ -90,17 +93,17 @@ public class PreviewJRPrint extends ABasicEditor {
 		return jasperPrint;
 	}
 
-	public void setJasperPrint(JasperPrint jasperPrint) {
+	public void setJasperPrint(final Statistics stats, JasperPrint jasperPrint) {
 		this.jasperPrint = jasperPrint;
-		Display.getDefault().asyncExec(new Runnable() {
+		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				if (getDefaultViewer() instanceof IJRPrintable) {
 					JasperPrint jrprint = getJasperPrint();
 					if (jrprint != null) {
-						getRightContainer().switchView(getDefaultViewerKey());
+						getRightContainer().switchView(stats, getDefaultViewerKey());
 					} else {
-						errorPreview.setMessage("Document is empty");
-						getRightContainer().switchView(errorPreview);
+						// errorPreview.setclear("Document is empty");
+						getRightContainer().switchView(stats, errorPreview);
 					}
 				}
 			}
@@ -124,25 +127,26 @@ public class PreviewJRPrint extends ABasicEditor {
 	public MultiPageContainer getRightContainer() {
 		if (rightContainer == null) {
 			rightContainer = new MultiPageContainer() {
-				public void switchView(String key) {
+				public void switchView(Statistics stats, String key) {
 					APreview aPreview = pmap.get(key);
 					if (aPreview instanceof IJRPrintable) {
 						try {
-							((IJRPrintable) aPreview).setJRPRint(jasperPrint);
+							((IJRPrintable) aPreview).setJRPRint(stats, jasperPrint);
+							errorPreview.setStats(stats);
 						} catch (Exception e) {
-							switchView(errorPreview);
+							switchView(stats, errorPreview);
 
 							errorPreview.addError(e);
 							return;
 						}
 					}
 					currentViewer = key;
-					super.switchView(key);
+					super.switchView(stats, key);
 				}
 
 				@Override
-				public void switchView(APreview view) {
-					super.switchView(view);
+				public void switchView(Statistics stats, APreview view) {
+					super.switchView(stats, view);
 					topToolBarManager.contributeItems(view);
 				}
 
@@ -201,14 +205,17 @@ public class PreviewJRPrint extends ABasicEditor {
 	}
 
 	protected Composite createRight(Composite parent) {
-		rightComposite = new Composite(parent, SWT.BORDER);
+		CSashForm rightSash = new CSashForm(parent, SWT.VERTICAL);
+
+		rightComposite = new Composite(rightSash, SWT.BORDER);
 
 		StackLayout stacklayoutView = new StackLayout();
 		rightComposite.setLayout(stacklayoutView);
 
 		getRightContainer().populate(rightComposite, ViewsFactory.createPreviews(rightComposite, ph));
 
-		errorPreview = new VErrorPreview(rightComposite, ph);
+		errorPreview = new VErrorPreview(rightSash, ph);
+
 		return rightComposite;
 	}
 
@@ -244,8 +251,10 @@ public class PreviewJRPrint extends ABasicEditor {
 	protected Composite rightComposite;
 
 	public Console getConsole() {
-		if (console == null)
+		if (console == null) {
 			console = Console.showConsole(getEditorInput().getName());
+			console.setErrorPreview(errorPreview);
+		}
 		return console;
 	}
 

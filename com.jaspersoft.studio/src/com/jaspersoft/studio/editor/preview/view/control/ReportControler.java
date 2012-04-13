@@ -34,6 +34,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.fill.AsynchronousFillHandle;
 import net.sf.jasperreports.engine.fill.AsynchronousFilllListener;
+import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
@@ -72,6 +73,16 @@ import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ReportControler {
+
+	public static final String ST_RECORDCOUNTER = "RECORDCOUNTER";
+
+	public static final String ST_PAGECOUNT = "PAGECOUNT";
+
+	public static final String ST_FILLINGTIME = "FILLINGTIME";
+
+	public static final String ST_COMPILATIONTIME = "COMPILATIONTIME";
+
+	public static final String ST_REPORTEXECUTIONTIME = "REPORTEXECUTIONTIME";
 
 	public static final String FORM_SORTING = "Sorting Options";
 
@@ -142,8 +153,6 @@ public class ReportControler {
 		return viewmap;
 	}
 
-	private long stime;
-
 	private void fillForms() {
 		prmInput = (VParameters) viewmap.get(FORM_PARAMETERS);
 		prmInput.createInputControls(prompts, jasperParameters);
@@ -161,11 +170,11 @@ public class ReportControler {
 		c = pcontainer.getConsole();
 		c.clearConsole();
 		if (pcontainer.getMode().equals(RunStopAction.MODERUN_LOCAL))
-			pcontainer.setJasperPrint(null);
+			pcontainer.setJasperPrint(null, null);
 		fillError = null;
-
-		stime = System.currentTimeMillis();
-		c.addMessage("Start");
+		stats = new Statistics();
+		stats.startCount(ST_REPORTEXECUTIONTIME);
+		c.addMessage("Start Report Execution");
 
 		pcontainer.setNotRunning(false);
 		runJob(pcontainer);
@@ -175,10 +184,7 @@ public class ReportControler {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
-				long etime = System.currentTimeMillis();
-				c.addMessage("end report");
-				long ttime = etime - stime;
-				c.addMessage(String.format("Total time: %1$.3f s", (double) (ttime / 1000)));
+				c.addMessage("Report Execution Finished.");
 				pcontainer.setNotRunning(true);
 				boolean notprmfiled = !prmInput.checkFieldsFilled();
 				if (notprmfiled) {
@@ -186,15 +192,16 @@ public class ReportControler {
 					UIUtils.showWarning("You have some input parameters, that you have to fill first");
 				}
 				pcontainer.showParameters(notprmfiled);
-				if (pcontainer.getJasperPrint() != null)
-					c.addMessage(String.format("Number of Pages: %d", pcontainer.getJasperPrint().getPages().size()));
 			}
 		});
 	}
 
+	private RecordCountScriptletFactory scfactory;
+
 	private void runJob(final PreviewContainer pcontainer) {
 		fillError = null;
 		Job job = new Job(Messages.PreviewEditor_preview_a + ": " + jDesign.getName() + Messages.PreviewEditor_preview_b) { //$NON-NLS-1$ 
+
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
@@ -211,9 +218,8 @@ public class ReportControler {
 					setupProperties(jd);
 
 					JasperReport jasperReport = compileJasperDesign(jd);
-					if (jasperReport != null) {
-						c.addMessage("Compilation successful");
 
+					if (jasperReport != null) {
 						if (!prmInput.checkFieldsFilled())
 							return Status.CANCEL_STATUS;
 
@@ -225,9 +231,12 @@ public class ReportControler {
 
 							setupDataAdapter(pcontainer);
 
-							c.addMessage("Start report execution");
+							c.addMessage("Filling Report");
+
+							setupRecordCounters();
 							// We create the fillHandle to run the report based on the type of data adapter....
-							AsynchronousFillHandle fh = AsynchronousFillHandle.createHandle(jasperReport, jasperParameters);
+							AsynchronousFillHandle fh = AsynchronousFillHandle
+									.createHandle(jrContext, jasperReport, jasperParameters);
 
 							if (fillReport(fh, monitor, pcontainer) == Status.CANCEL_STATUS)
 								return Status.CANCEL_STATUS;
@@ -251,7 +260,7 @@ public class ReportControler {
 
 	protected void runJive(final PreviewContainer pcontainer, final IFile file, final JasperReport jasperReport) {
 		JettyUtil.startJetty(file.getProject());
-		Display.getDefault().asyncExec(new Runnable() {
+		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
 				try {
@@ -273,8 +282,10 @@ public class ReportControler {
 	}
 
 	private JasperReport compileJasperDesign(JasperDesign jd) throws JRException {
-		c.addMessage("Start compiling");
+		stats.startCount(ST_COMPILATIONTIME);
+		c.addMessage("Compiling");
 		JasperReport jasperReport = JasperCompileManager.compileReport(jd);
+		stats.endCount(ST_COMPILATIONTIME);
 		return jasperReport;
 	}
 
@@ -287,12 +298,12 @@ public class ReportControler {
 	}
 
 	private void setupVirtualizer(JasperDesign jd, PropertiesHelper ps) {
-		c.addMessage("Setting virtualizer");
+		c.addMessage("Setting Virtualizer");
 		VirtualizerHelper.setVirtualizer(jd, ps, jasperParameters);
 	}
 
 	private void setupDataAdapter(final PreviewContainer pcontainer) throws JRException {
-		c.addMessage("Setting connection");
+		c.addMessage("Setting DataAdapter Connection");
 		DataAdapterDescriptor daDesc = pcontainer.getDataAdapterDesc();
 		if (daDesc != null)
 			jasperParameters.put(DataAdapterParameterContributorFactory.PARAMETER_DATA_ADAPTER, daDesc.getDataAdapter());
@@ -309,7 +320,12 @@ public class ReportControler {
 			fh.addListener(new AsynchronousFilllListener() {
 
 				public void reportFinished(JasperPrint jPrint) {
-					pcontainer.setJasperPrint(jPrint);
+					stats.endCount(ST_FILLINGTIME);
+					stats.setValue(ST_PAGECOUNT, jPrint.getPages().size());
+					if (scfactory != null)
+						stats.setValue(ST_RECORDCOUNTER, scfactory.getRecordCount());
+					stats.endCount(ST_REPORTEXECUTIONTIME);
+					pcontainer.setJasperPrint(stats, jPrint);
 				}
 
 				public void reportFillError(Throwable t) {
@@ -320,6 +336,7 @@ public class ReportControler {
 					c.addMessage(Messages.PreviewEditor_report_fill_canceled);
 				}
 			});
+			stats.startCount(ST_FILLINGTIME);
 			fh.startFill();
 			while (true && pcontainer.getJasperPrint() == null && fillError == null) {
 				if (sm.isCanceled()) {
@@ -342,7 +359,20 @@ public class ReportControler {
 
 	private VParameters prmInput;
 
+	private Statistics stats;
+
+	public static final String ST_REPORTSIZE = "REPORTSIZE";
+
+	public static final String ST_EXPORTTIME = "ST_EXPORTTIME";
+
 	private void handleFillException(Throwable t) {
 		fillError = t;
+	}
+
+	protected void setupRecordCounters() {
+		List<ScriptletFactory> extensions = new ArrayList<ScriptletFactory>();
+		scfactory = new RecordCountScriptletFactory();
+		extensions.add(scfactory);
+		jrContext.setExtensions(ScriptletFactory.class, extensions);
 	}
 }

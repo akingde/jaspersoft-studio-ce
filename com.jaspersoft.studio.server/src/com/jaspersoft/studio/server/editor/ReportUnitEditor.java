@@ -32,6 +32,7 @@ import org.eclipse.ui.PartInitException;
 import com.jaspersoft.studio.editor.preview.MultiPageContainer;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.FileUtils;
@@ -69,7 +70,8 @@ public class ReportUnitEditor extends PreviewJRPrint {
 			topToolBarManager1.setEnabled(false);
 			leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
-			getLeftContainer().switchView(ReportRunControler.FORM_PARAMETERS);
+			getLeftContainer().switchView(null,
+					ReportRunControler.FORM_PARAMETERS);
 
 			reportControler.setReportUnit(reportUnitURI);
 		}
@@ -122,7 +124,7 @@ public class ReportUnitEditor extends PreviewJRPrint {
 
 		getLeftContainer().populate(cleftcompo,
 				getReportControler().createControls(cleftcompo, ph));
-		getLeftContainer().switchView(ReportRunControler.FORM_PARAMETERS);
+		getLeftContainer().switchView(null, ReportRunControler.FORM_PARAMETERS);
 	}
 
 	private MultiPageContainer leftContainer;
@@ -131,8 +133,8 @@ public class ReportUnitEditor extends PreviewJRPrint {
 		if (leftContainer == null)
 			leftContainer = new MultiPageContainer() {
 				@Override
-				public void switchView(APreview view) {
-					super.switchView(view);
+				public void switchView(Statistics stats, APreview view) {
+					super.switchView(stats, view);
 					for (String key : pmap.keySet()) {
 						if (pmap.get(key) == view) {
 							leftToolbar.setLabelText(key);

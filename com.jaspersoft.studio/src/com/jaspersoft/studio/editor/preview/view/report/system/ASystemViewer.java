@@ -35,6 +35,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
@@ -53,13 +55,13 @@ public abstract class ASystemViewer extends SWTViewer {
 
 		Button lbl = new Button(composite, SWT.PUSH);
 		lbl.setText("The report is opened in an external editor.\n Press here to open it again.");
-		GridData layoutData = new GridData(SWT.CENTER,SWT.CENTER,true,true,1,1);
+		GridData layoutData = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
 
-		GC gc =new GC(lbl);
+		GC gc = new GC(lbl);
 		FontMetrics fontMetrics = gc.getFontMetrics();
 		int h = fontMetrics.getHeight();
 		gc.dispose();
-		layoutData.heightHint=h*2 + 50;
+		layoutData.heightHint = h * 2 + 50;
 		lbl.setLayoutData(layoutData);
 
 		rptviewer = new ReportViewer();
@@ -76,13 +78,16 @@ public abstract class ASystemViewer extends SWTViewer {
 	protected abstract String getExtension();
 
 	@Override
-	public void setJRPRint(JasperPrint jrprint) {
-		super.setJRPRint(jrprint);
+	public void setJRPRint(Statistics stats, JasperPrint jrprint) {
+		super.setJRPRint(stats, jrprint);
 		if (this.jrprint != null) {
 			try {
 				File tmpFile = File.createTempFile("report", getExtension());
 				AbstractExportAction exp = createExporter(rptviewer);
+				stats.startCount(ReportControler.ST_EXPORTTIME);
 				exp.export(tmpFile);
+				stats.endCount(ReportControler.ST_EXPORTTIME);
+				stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
 
 				Program p = Program.findProgram(getExtension());
 				if (p != null)

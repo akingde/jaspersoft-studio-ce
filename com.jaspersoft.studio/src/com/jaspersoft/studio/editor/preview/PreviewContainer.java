@@ -49,6 +49,7 @@ import com.jaspersoft.studio.editor.preview.toolbar.PreviewTopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.report.html.JiveViewer;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -74,7 +75,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 
 	@Override
 	protected void loadJRPrint(IEditorInput input) throws PartInitException {
-		setJasperPrint(null);
+		setJasperPrint(null, null);
 		if (listenResource) {
 			InputStream in = null;
 			IFile file = null;
@@ -106,8 +107,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		if (leftContainer == null)
 			leftContainer = new MultiPageContainer() {
 				@Override
-				public void switchView(APreview view) {
-					super.switchView(view);
+				public void switchView(Statistics stats, APreview view) {
+					super.switchView(stats, view);
 					for (String key : pmap.keySet()) {
 						if (pmap.get(key) == view) {
 							leftToolbar.setLabelText(key);
@@ -182,18 +183,18 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		cleftcompo.setLayout(new StackLayout());
 
 		getLeftContainer().populate(cleftcompo, getReportControler().createControls(cleftcompo, ph));
-		getLeftContainer().switchView(ReportControler.FORM_PARAMETERS);
+		getLeftContainer().switchView(null, ReportControler.FORM_PARAMETERS);
 	}
 
 	private JiveViewer jiveViewer;
 
 	@Override
 	protected Composite createRight(Composite parent) {
-		Composite composite = super.createRight(parent);
+		super.createRight(parent);
 
 		jiveViewer = new JiveViewer(rightComposite, ph);
 
-		return composite;
+		return rightComposite;
 	}
 
 	public void runReport(DataAdapterDescriptor myDataAdapter) {
@@ -203,7 +204,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 			topToolBarManager1.setEnabled(false);
 			leftToolbar.setEnabled(false);
 			getLeftContainer().setEnabled(false);
-			getLeftContainer().switchView(ReportControler.FORM_PARAMETERS);
+			getLeftContainer().switchView(null, ReportControler.FORM_PARAMETERS);
 
 			// Cache the DataAdapter used for this report only if it is not null.
 			if (myDataAdapter != null) {
@@ -266,9 +267,9 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void setMode(String mode) {
 		this.runMode = mode;
 		if (mode.equals(RunStopAction.MODERUN_JIVE))
-			getRightContainer().switchView(jiveViewer);
+			getRightContainer().switchView(null, jiveViewer);
 		else if (mode.equals(RunStopAction.MODERUN_LOCAL))
-			getRightContainer().switchView(getDefaultViewerKey());
+			getRightContainer().switchView(null, getDefaultViewerKey());
 	}
 
 	public String getMode() {

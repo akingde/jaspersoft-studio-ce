@@ -183,4 +183,13 @@ public class UIUtils {
 		control.setFont(SWTResourceManager.getFont(name, fontHeight, SWT.BOLD));
 	}
 
+	public static void setFontHeight(Control control, int height) {
+		String name = "";
+		FontData[] fontData = control.getFont().getFontData();
+		for (int i = 0; i < fontData.length; ++i) {
+			name = fontData[i].getName();
+		}
+		control.setFont(SWTResourceManager.getFont(name, height, SWT.BOLD));
+	}
+
 }

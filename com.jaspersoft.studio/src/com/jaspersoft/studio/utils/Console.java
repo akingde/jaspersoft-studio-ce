@@ -19,6 +19,8 @@
  */
 package com.jaspersoft.studio.utils;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -30,6 +32,8 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
+
+import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
 
 public class Console {
 	public static MessageConsole findConsole(String name) {
@@ -60,17 +64,29 @@ public class Console {
 	}
 
 	private MessageConsole console;
+	private VErrorPreview errorPreview;
 
 	private Console(MessageConsole console) {
 		this.console = console;
 	}
+
+	public void setErrorPreview(VErrorPreview errorPreview) {
+		this.errorPreview = errorPreview;
+	}
+
+	public static Color REDCOLOR = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 
 	public void addError(final Throwable e) {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
 				MessageConsoleStream out = console.newMessageStream();
+				Color color = out.getColor();
+				out.setColor(color);
 				out.println(ErrorUtil.getStackTrace(e) + "\n\r");
+				out.setColor(REDCOLOR);
+				if (errorPreview != null)
+					errorPreview.addError(e);
 			}
 		});
 	}
@@ -81,6 +97,8 @@ public class Console {
 			public void run() {
 				MessageConsoleStream out = console.newMessageStream();
 				out.println(message);
+				if (errorPreview != null)
+					errorPreview.addMessage(message);
 			}
 		});
 	}
@@ -99,5 +117,7 @@ public class Console {
 
 	public void clearConsole() {
 		console.clearConsole();
+		if (errorPreview != null)
+			errorPreview.clear();
 	}
 }

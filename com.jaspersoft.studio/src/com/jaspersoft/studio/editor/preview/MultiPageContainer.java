@@ -27,21 +27,28 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 
 public class MultiPageContainer {
 	protected LinkedHashMap<String, APreview> pmap = new LinkedHashMap<String, APreview>();
 	private List<String> keys;
 	private Composite composite;
+	private Statistics stats;
 
 	public APreview getViewer(String key) {
 		return pmap.get(key);
 	}
 
 	public void switchView(String key) {
-		switchView(pmap.get(key));
+		switchView(stats, pmap.get(key));
 	}
 
-	public void switchView(APreview view) {
+	public void switchView(Statistics stats, String key) {
+		switchView(stats, pmap.get(key));
+	}
+
+	public void switchView(Statistics stats, APreview view) {
+		this.stats = stats;
 		((StackLayout) composite.getLayout()).topControl = view.getControl();
 		composite.layout();
 	}

@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.FirstPageAction;
@@ -76,7 +77,7 @@ public class SWTViewer extends APreview implements IJRPrintable {
 
 	protected JasperPrint jrprint;
 
-	public void setJRPRint(JasperPrint jrprint) {
+	public void setJRPRint(Statistics stats, JasperPrint jrprint) {
 		if (this.jrprint == null || this.jrprint != jrprint) {
 			rptviewer.setDocument(jrprint);
 			rptviewer.gotoFirstPage();

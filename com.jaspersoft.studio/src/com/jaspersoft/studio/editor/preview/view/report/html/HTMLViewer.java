@@ -35,6 +35,8 @@ import org.eclipse.swt.widgets.Control;
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.actions.export.ExportAsHtmlAction;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.IURLViewable;
@@ -76,14 +78,17 @@ public class HTMLViewer extends APreview implements IJRPrintable, IURLViewable {
 	private JasperPrint jrprint;
 	private ReportViewer rptviewer;
 
-	public void setJRPRint(JasperPrint jrprint) throws Exception {
+	public void setJRPRint(Statistics stats, JasperPrint jrprint) throws Exception {
 		if (this.jrprint != jrprint) {
 			rptviewer.setDocument(jrprint);
 
 			tmpFile = File.createTempFile("report", getExtension(), getTmpPath());
 
 			AbstractExportAction exp = createExporter(rptviewer);
+			stats.startCount(ReportControler.ST_EXPORTTIME);
 			exp.export(tmpFile);
+			stats.endCount(ReportControler.ST_EXPORTTIME);
+			stats.setValue(ReportControler.ST_REPORTSIZE, tmpFile.length());
 
 			browser.setUrl(tmpFile.toURI().toASCIIString());
 		}

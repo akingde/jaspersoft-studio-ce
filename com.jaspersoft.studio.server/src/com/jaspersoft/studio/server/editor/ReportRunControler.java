@@ -39,6 +39,8 @@ import com.jaspersoft.ireport.jasperserver.ws.FileContent;
 import com.jaspersoft.ireport.jasperserver.ws.WSClient;
 import com.jaspersoft.jasperserver.api.metadata.xml.domain.impl.ResourceDescriptor;
 import com.jaspersoft.studio.editor.preview.view.APreview;
+import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
+import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.server.WSClientHelper;
 import com.jaspersoft.studio.server.editor.input.InputControlsManager;
@@ -77,7 +79,7 @@ public class ReportRunControler {
 									.getReportUnit(reportUnit);
 							List<ResourceDescriptor> list = cli.list(rdrepunit);
 							icm.getInputControls(list, cli);
-							
+
 							// TODO search all the repository
 							icm.getDefaults(rdrepunit);
 							Display.getDefault().asyncExec(new Runnable() {
@@ -119,17 +121,19 @@ public class ReportRunControler {
 		prmInput.createInputControls(icm);
 	}
 
-	private long stime;
 	private Console c;
 
 	private WSClient cli;
 
+	private Statistics stats;
+
 	public void runReport() {
 		c = pcontainer.getConsole();
 		c.clearConsole();
-		pcontainer.setJasperPrint(null);
+		pcontainer.setJasperPrint(null, null);
 
-		stime = System.currentTimeMillis();
+		stats = new Statistics();
+		stats.startCount(ReportControler.ST_REPORTEXECUTIONTIME);
 		c.addMessage("Start");
 
 		pcontainer.setNotRunning(false);
@@ -159,8 +163,8 @@ public class ReportRunControler {
 
 									Object obj = JRLoader.loadObject(f);
 									if (obj instanceof JasperPrint)
-										pcontainer
-												.setJasperPrint((JasperPrint) obj);
+										pcontainer.setJasperPrint(stats,
+												(JasperPrint) obj);
 
 									break;
 								}
@@ -186,11 +190,12 @@ public class ReportRunControler {
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
-				long etime = System.currentTimeMillis();
 				c.addMessage("end report");
-				long ttime = etime - stime;
-				c.addMessage(String.format("Total time: %1$.3f s",
-						(double) (ttime / 1000)));
+				stats.endCount(ReportControler.ST_REPORTEXECUTIONTIME);
+				c.addMessage(String.format(
+						"Total time: %1$.3f s",
+						(double) (stats
+								.getDuration(ReportControler.ST_REPORTEXECUTIONTIME) / 1000)));
 				pcontainer.setNotRunning(true);
 
 				boolean notprmfiled = !prmInput.checkFieldsFilled();
