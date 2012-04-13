@@ -19,6 +19,8 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+
 /**
  * This class provides a way to define what objects are available in the context of a particular expression.
  * 
@@ -28,6 +30,8 @@ public class ExpressionContext {
 	public static final String ATTRIBUTE_EXPRESSION_CONTEXT = "EXPRESSION_CONTEXT";
 
 	private static ExpressionContext globalContext = null;
+	
+	private JasperReportsConfiguration config=null;
 
 	public static ExpressionContext getGlobalContext() {
 		return globalContext;
@@ -58,7 +62,8 @@ public class ExpressionContext {
 		return crosstabs;
 	}
 
-	public ExpressionContext() {
+	public ExpressionContext(JasperReportsConfiguration config) {
+		this.config=config;
 	}
 
 	/**
@@ -67,7 +72,8 @@ public class ExpressionContext {
 	 * 
 	 * @param dataset
 	 */
-	public ExpressionContext(JRDesignDataset dataset) {
+	public ExpressionContext(JRDesignDataset dataset,JasperReportsConfiguration config) {
+		this(config);
 		datasets.add(dataset);
 	}
 
@@ -77,7 +83,8 @@ public class ExpressionContext {
 	 * 
 	 * @param crosstab
 	 */
-	public ExpressionContext(JRDesignCrosstab crosstab) {
+	public ExpressionContext(JRDesignCrosstab crosstab,JasperReportsConfiguration config) {
+		this(config);
 		crosstabs.add(crosstab);
 	}
 
@@ -172,4 +179,7 @@ public class ExpressionContext {
 		return null;
 	}
 
+	public JasperReportsConfiguration getJasperReportsConfiguration(){
+		return config;
+	}
 }

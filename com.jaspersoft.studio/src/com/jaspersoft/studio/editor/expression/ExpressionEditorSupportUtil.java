@@ -106,20 +106,13 @@ public class ExpressionEditorSupportUtil {
 	public static ExpressionContext getReportExpressionContext(){
 		IEditorPart activeJRXMLEditor = SelectionHelper.getActiveJRXMLEditor();
 		if(activeJRXMLEditor!=null && activeJRXMLEditor instanceof JrxmlEditor){
-				JRDataset mainDS = ((ANode)((JrxmlEditor)activeJRXMLEditor).getModel()).getJasperDesign().getMainDataset();
-				ExpressionContext exprContext=new ExpressionContext((JRDesignDataset)mainDS);
+				final ANode mroot = (ANode)((JrxmlEditor)activeJRXMLEditor).getModel();
+				final ANode mreport = (ANode) mroot.getChildren().get(0);
+				JRDataset mainDS = mreport.getJasperDesign().getMainDataset();
+				ExpressionContext exprContext=new ExpressionContext((JRDesignDataset)mainDS,mreport.getJasperConfiguration());
 				return exprContext;
 		}
 		return null;
 	}
 	
-//	/**
-//	 * Returns the list of categories (string are the key) given by the "standard"
-//	 * function library provided by JasperReports.
-//	 * 
-//	 * @return a list of categories (as keys)
-//	 */
-//	public static List<String> getBuiltInFunctionsCategories(){
-//		return FunctionsLibraryUtil.getBuiltinCategories();
-//	}
 }

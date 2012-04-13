@@ -73,8 +73,8 @@ public class JRExpressionPage extends WizardPage {
 		ExpressionEditorSupport editorSupportForReportLanguage = ExpressionEditorSupportUtil.getEditorSupportForReportLanguage();
 		if(editorSupportForReportLanguage!=null){
 			contributedComposite = editorSupportForReportLanguage.createExpressionEditorComposite(parent);
-			contributedComposite.setExpression(this.value);
 			contributedComposite.setExpressionContext(getExpressionContext());
+			contributedComposite.setExpression(this.value);
 			setControl(contributedComposite);
 		}
 		// Otherwise fallback to a generic composite
@@ -126,7 +126,7 @@ public class JRExpressionPage extends WizardPage {
 		}
 		return exprContext;
 	}
-
+	
 	private void setWidgets() {
 		queryText.setText(Misc.nvl(value.getText(), ""));
 		valueType.setClassType(value.getValueClassName());

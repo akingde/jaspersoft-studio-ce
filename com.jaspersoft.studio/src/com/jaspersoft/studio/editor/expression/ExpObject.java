@@ -8,7 +8,7 @@ import net.sf.jasperreports.engine.JRVariable;
 	*
 	* @author gtoffoli
 	*/
-public class ExpObject {
+public class ExpObject implements Comparable<ExpObject>{
 
 	public static final int TYPE_FIELD = 0;
 	public static final int TYPE_VARIABLE = 1;
@@ -78,6 +78,10 @@ public class ExpObject {
 		if (getType() == TYPE_PARAM)
 			return "$P{" + getName() + "}";
 		return getName();
+	}
+
+	public int compareTo(ExpObject arg0) {
+		return getExpression().compareTo(arg0.getExpression());
 	}
 
 }
