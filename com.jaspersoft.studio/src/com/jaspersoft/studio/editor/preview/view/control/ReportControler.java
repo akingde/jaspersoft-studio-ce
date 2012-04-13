@@ -47,6 +47,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
+import bsh.util.JConsole;
+
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
 import com.jaspersoft.studio.editor.preview.PreviewContainer;
@@ -284,7 +286,7 @@ public class ReportControler {
 	private JasperReport compileJasperDesign(JasperDesign jd) throws JRException {
 		stats.startCount(ST_COMPILATIONTIME);
 		c.addMessage("Compiling");
-		JasperReport jasperReport = JasperCompileManager.compileReport(jd);
+		JasperReport jasperReport = JasperCompileManager.getInstance(jrContext).compile(jd);
 		stats.endCount(ST_COMPILATIONTIME);
 		return jasperReport;
 	}
