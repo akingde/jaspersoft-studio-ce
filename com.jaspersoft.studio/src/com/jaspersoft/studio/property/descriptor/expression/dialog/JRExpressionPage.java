@@ -35,6 +35,8 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorComposite;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupport;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
+import com.jaspersoft.studio.editor.expression.ExpressionStatus;
+import com.jaspersoft.studio.editor.expression.IExpressionStatusChangeListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClassType;
 import com.jaspersoft.studio.utils.Misc;
@@ -74,6 +76,16 @@ public class JRExpressionPage extends WizardPage {
 		if(editorSupportForReportLanguage!=null){
 			contributedComposite = editorSupportForReportLanguage.createExpressionEditorComposite(parent);
 			contributedComposite.setExpressionContext(getExpressionContext());
+			contributedComposite.addExpressionStatusChangeListener(new IExpressionStatusChangeListener() {
+				public void statusChanged(ExpressionStatus status) {
+					if(status.equals(ExpressionStatus.ERROR)){
+						setErrorMessage(status.getShortDescription());
+					}
+					else{
+						setErrorMessage(null);
+					}
+				}
+			});
 			contributedComposite.setExpression(this.value);
 			setControl(contributedComposite);
 		}

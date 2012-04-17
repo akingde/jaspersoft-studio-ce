@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public abstract class ExpressionEditorComposite extends Composite{
+public abstract class ExpressionEditorComposite extends Composite implements IExpressionStatusNotifier{
 
 	/**
 	 * Creates the composite.
