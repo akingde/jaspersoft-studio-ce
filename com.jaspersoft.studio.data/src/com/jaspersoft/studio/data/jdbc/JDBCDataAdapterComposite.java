@@ -163,7 +163,7 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tbtmNewItem_1.setControl(composite);
 
-		cpath = new ClasspathComponent(composite); 
+		cpath = new ClasspathComponent(composite);
 		cpath.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
@@ -328,10 +328,10 @@ public class JDBCDataAdapterComposite extends ADataAdapterComposite {
 	 * @param e
 	 */
 	protected void btnWizardActionPerformed() {
-		if (currentdriver != null && textServerAddress != null
-				&& textDatabase != null) {
-			textJDBCUrl.setText(currentdriver.getUrl(
-					textServerAddress.getText(), textDatabase.getText()));
+		if (currentdriver != null) {
+			// && textServerAddress != null && textDatabase != null) {
+			textJDBCUrl.setText(currentdriver.getUrl("localhost", "database"));
+			// textServerAddress.getText(), textDatabase.getText()));
 		}
 	}
 
