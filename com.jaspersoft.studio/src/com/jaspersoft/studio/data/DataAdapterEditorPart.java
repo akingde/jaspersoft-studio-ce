@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
+import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
@@ -37,6 +38,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -53,7 +55,12 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.preview.ABasicEditor;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.plugin.IEditorContributor;
+import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
+import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 
 public class DataAdapterEditorPart extends ABasicEditor {
 	public static final String ID = "com.jaspersoft.studio.data.DataAdapterEditorPart";
@@ -182,8 +189,7 @@ public class DataAdapterEditorPart extends ABasicEditor {
 					if (cl != null)
 						Thread.currentThread().setContextClassLoader(cl);
 
-					DataAdapterServiceUtil.getInstance(DefaultJasperReportsContext.getInstance())
-							.getService(editor.getDataAdapter().getDataAdapter()).test();
+					DataAdapterServiceUtil.getInstance(jrContext).getService(editor.getDataAdapter().getDataAdapter()).test();
 
 					MessageBox mb = new MessageBox(btnTest.getShell(), SWT.ICON_INFORMATION | SWT.OK);
 					mb.setText(Messages.DataAdapterWizard_testbutton);
@@ -196,6 +202,22 @@ public class DataAdapterEditorPart extends ABasicEditor {
 				}
 			}
 		});
+	}
+
+	private PropertiesHelper p;
+	private JasperReportsConfiguration jrContext;
+
+	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
+		if (jrContext == null) {
+			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance());
+			ProxyFileResolver resolver = new ProxyFileResolver();
+			resolver.addResolver(SelectionHelper.getFileResolver(file));
+			jrContext.setFileResolver(resolver);
+			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
+		}
+		jrContext.put(IEditorContributor.KEY_FILE, file);
+		p = PropertiesHelper.getInstance(jrContext);
+		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, p);
 	}
 
 	@Override
