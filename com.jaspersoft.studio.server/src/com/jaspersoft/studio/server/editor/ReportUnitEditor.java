@@ -31,8 +31,8 @@ import org.eclipse.ui.PartInitException;
 
 import com.jaspersoft.studio.editor.preview.MultiPageContainer;
 import com.jaspersoft.studio.editor.preview.PreviewJRPrint;
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.util.StringInput;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.FileUtils;

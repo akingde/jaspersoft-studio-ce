@@ -44,12 +44,12 @@ import com.jaspersoft.studio.data.widget.IDataAdapterRunnable;
 import com.jaspersoft.studio.editor.JrxmlEditor;
 import com.jaspersoft.studio.editor.preview.actions.RunStopAction;
 import com.jaspersoft.studio.editor.preview.actions.SwitchViewsAction;
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.toolbar.LeftToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.PreviewTopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
-import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.report.html.JiveViewer;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -87,7 +87,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 				}
 				in = JrxmlEditor.getXML(input, file.getCharset(true), in, null);
-				setJasperDesign(JRXmlLoader.load(in));
+				setJasperDesign(jrContext, JRXmlLoader.load(in));
 			} catch (Exception e) {
 				throw new PartInitException(e.getMessage(), e);
 			} finally {
@@ -243,8 +243,8 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		return reportControler;
 	}
 
-	public void setJasperDesign(JasperDesign jasperDesign) {
-		getReportControler().setJasperDesign(jasperDesign);
+	public void setJasperDesign(JasperReportsConfiguration jConfig, JasperDesign jasperDesign) {
+		getReportControler().setJasperDesign(jConfig, jasperDesign);
 		setupDataAdapter();
 	}
 

@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -38,6 +38,7 @@ import net.sf.jasperreports.engine.scriptlets.ScriptletFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -46,8 +47,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
-
-import bsh.util.JConsole;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.adapter.DataAdapterParameterContributorFactory;
@@ -65,6 +64,8 @@ import com.jaspersoft.studio.editor.preview.input.TimeZoneInput;
 import com.jaspersoft.studio.editor.preview.jive.Context;
 import com.jaspersoft.studio.editor.preview.jive.JettyUtil;
 import com.jaspersoft.studio.editor.preview.jive.servlet.SReportServlet;
+import com.jaspersoft.studio.editor.preview.stats.RecordCountScriptletFactory;
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
@@ -116,7 +117,8 @@ public class ReportControler {
 		this.jrContext = jrContext;
 	}
 
-	public void setJasperDesign(JasperDesign jDesign) {
+	public void setJasperDesign(JasperReportsConfiguration jrContext, JasperDesign jDesign) {
+		this.jrContext = jrContext;
 		this.jDesign = jDesign;
 		this.prompts = jDesign.getParametersList();
 		setParameters(jDesign);
@@ -170,6 +172,7 @@ public class ReportControler {
 
 	public void runReport() {
 		c = pcontainer.getConsole();
+		c.showConsole();
 		c.clearConsole();
 		if (pcontainer.getMode().equals(RunStopAction.MODERUN_LOCAL))
 			pcontainer.setJasperPrint(null, null);
@@ -219,7 +222,7 @@ public class ReportControler {
 
 					setupProperties(jd);
 
-					JasperReport jasperReport = compileJasperDesign(jd);
+					JasperReport jasperReport = compileJasperDesign(file, jd);
 
 					if (jasperReport != null) {
 						if (!prmInput.checkFieldsFilled())
@@ -244,7 +247,7 @@ public class ReportControler {
 								return Status.CANCEL_STATUS;
 						}
 					}
-				} catch (final Throwable e) {
+				} catch (Throwable e) {
 					c.addError(e);
 				} finally {
 					monitor.done();
@@ -283,10 +286,15 @@ public class ReportControler {
 		});
 	}
 
-	private JasperReport compileJasperDesign(JasperDesign jd) throws JRException {
+	private JasperReport compileJasperDesign(IFile file, JasperDesign jd) throws CoreException {
 		stats.startCount(ST_COMPILATIONTIME);
 		c.addMessage("Compiling");
-		JasperReport jasperReport = JasperCompileManager.getInstance(jrContext).compile(jd);
+		if (compiler == null) {
+			compiler = new JasperReportCompiler();
+			compiler.setErrorHandler(new JRErrorHandler(c));
+			compiler.setProject(file.getProject());
+		}
+		JasperReport jasperReport = compiler.compileReport(jrContext, jd);// JasperCompileManager.getInstance(jrContext).compile(jd);
 		stats.endCount(ST_COMPILATIONTIME);
 		return jasperReport;
 	}
@@ -366,6 +374,8 @@ public class ReportControler {
 	public static final String ST_REPORTSIZE = "REPORTSIZE";
 
 	public static final String ST_EXPORTTIME = "ST_EXPORTTIME";
+
+	private JasperReportCompiler compiler;
 
 	private void handleFillException(Throwable t) {
 		fillError = t;

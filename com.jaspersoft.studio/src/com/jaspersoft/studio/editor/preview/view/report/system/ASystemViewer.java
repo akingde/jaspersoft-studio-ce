@@ -35,8 +35,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
-import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;
 import com.jaspersoft.studio.editor.preview.view.report.swt.SWTViewer;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;

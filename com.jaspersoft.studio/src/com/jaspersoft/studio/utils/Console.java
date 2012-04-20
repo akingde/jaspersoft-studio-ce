@@ -19,17 +19,15 @@
  */
 package com.jaspersoft.studio.utils;
 
+import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
+
+import org.eclipse.jdt.core.compiler.CategorizedProblem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
@@ -51,15 +49,7 @@ public class Console {
 
 	public static Console showConsole(String name) {
 		MessageConsole myConsole = findConsole(name);
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();// obtain the active page
-		String id = IConsoleConstants.ID_CONSOLE_VIEW;
-		IConsoleView view;
-		try {
-			view = (IConsoleView) page.showView(id);
-			view.display(myConsole);
-		} catch (PartInitException e) {
-			e.printStackTrace();
-		}
+		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(myConsole);
 		return new Console(myConsole);
 	}
 
@@ -103,16 +93,26 @@ public class Console {
 		});
 	}
 
+	public void addProblem(final CategorizedProblem problem, final SourceLocation location) {
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				errorPreview.addProblem(problem, location);
+			}
+		});
+	}
+
+	public void addProblem(final String message, final SourceLocation location) {
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				errorPreview.addProblem(message, location);
+			}
+		});
+	}
+
 	public void showConsole() {
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();// obtain the active page
-		String id = IConsoleConstants.ID_CONSOLE_VIEW;
-		IConsoleView view;
-		try {
-			view = (IConsoleView) page.showView(id);
-			view.display(console);
-		} catch (PartInitException e) {
-			e.printStackTrace();
-		}
+		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(console);
 	}
 
 	public void clearConsole() {

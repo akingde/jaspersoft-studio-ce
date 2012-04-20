@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.editor.preview.view.control;
+package com.jaspersoft.studio.editor.preview.stats;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -107,6 +107,27 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	public static final String DEFAULT_PROJECT = "MyReports";
 
+	private final class PreviewEditor extends PreviewContainer {
+		public PreviewEditor(boolean listenResource, JasperReportsConfiguration jrContext) {
+			super(listenResource, jrContext);
+		}
+
+		@Override
+		public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
+			if (myDataAdapterDesc != null) {
+				JasperDesign jasperDesign = getMReport().getJasperDesign();
+				String oldp = jasperDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
+				if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
+					getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
+					jasperDesign.setProperty(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
+					modelPropChangeListener.propertyChange(new PropertyChangeEvent(jasperDesign, "xzzdataset", null, oldp));
+					isDirty = true;
+				}
+			}
+			super.runReport(myDataAdapterDesc);
+		}
+	}
+
 	/**
 	 * The listener interface for receiving modelPropertyChange events. The class that is interested in processing a
 	 * modelPropertyChange event implements this interface, and the object created with that class is registered with a
@@ -213,22 +234,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Creates page 2 of the multi-page editor, which shows the sorted text.
 	 */
 	void createPage2() {
-		previewEditor = new PreviewContainer(false, jrContext) {
-			@Override
-			public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
-				if (myDataAdapterDesc != null) {
-					JasperDesign jasperDesign = getMReport().getJasperDesign();
-					String oldp = jasperDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
-					if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
-						getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
-						jasperDesign.setProperty(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
-						modelPropChangeListener.propertyChange(new PropertyChangeEvent(jasperDesign, "xzzdataset", null, oldp));
-						isDirty = true;
-					}
-				}
-				super.runReport(myDataAdapterDesc);
-			};
-		};
+		previewEditor = new PreviewEditor(false, jrContext);
 		try {
 			int index = addPage(previewEditor, getEditorInput());
 			setPageText(index, Messages.JrxmlEditor_preview);
@@ -262,6 +268,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		createPage0();
 		createPage1();
 		createPage2();
+	}
+
+	@Override
+	public IEditorPart getActiveEditor() {
+		return super.getActiveEditor();
 	}
 
 	private MultiOutlineView outlinePage;
@@ -707,7 +718,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Model2xml.
 	 */
 	private void model2preview() {
-		previewEditor.setJasperDesign(getJasperDesign());
+		previewEditor.setJasperDesign(jrContext, getJasperDesign());
 	}
 
 	/**

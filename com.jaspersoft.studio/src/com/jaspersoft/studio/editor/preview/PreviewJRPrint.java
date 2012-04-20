@@ -38,11 +38,11 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.toolbar.ATopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.ViewsFactory;
-import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.swt.widgets.CSashForm;
@@ -64,6 +64,56 @@ public class PreviewJRPrint extends ABasicEditor {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		loadJRPrint(getEditorInput());
+		// getSite().getPage().addPartListener(new IPartListener2() {
+		//
+		// public void partVisible(IWorkbenchPartReference partRef) {
+		// if (console != null) {
+		// IEditorPart ceditor = getSite().getPage().getActiveEditor();
+		// if (partRef.getPart(false).getClass().equals(ceditor.getClass())) {
+		// if (ceditor instanceof JrxmlEditor && ((JrxmlEditor) ceditor).getActivePage() == JrxmlEditor.PAGE_PREVIEW) {
+		// console.showConsole();
+		// }
+		// if (ceditor instanceof PreviewJRPrint)
+		// console.showConsole();
+		// }
+		// }
+		// }
+		//
+		// public void partOpened(IWorkbenchPartReference partRef) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// public void partInputChanged(IWorkbenchPartReference partRef) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// public void partHidden(IWorkbenchPartReference partRef) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// public void partDeactivated(IWorkbenchPartReference partRef) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// public void partClosed(IWorkbenchPartReference partRef) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		//
+		// public void partBroughtToTop(IWorkbenchPartReference partRef) {
+		// // if (console != null)
+		// // console.showConsole();
+		// }
+		//
+		// public void partActivated(IWorkbenchPartReference partRef) {
+		// // if (console != null)
+		// // console.showConsole();
+		// }
+		// });
 	}
 
 	protected void loadJRPrint(IEditorInput input) throws PartInitException {
@@ -146,6 +196,17 @@ public class PreviewJRPrint extends ABasicEditor {
 
 				@Override
 				public void switchView(Statistics stats, APreview view) {
+					if (view instanceof IJRPrintable) {
+						try {
+							((IJRPrintable) view).setJRPRint(stats, jasperPrint);
+							errorPreview.setStats(stats);
+						} catch (Exception e) {
+							switchView(stats, errorPreview);
+
+							errorPreview.addError(e);
+							return;
+						}
+					}
 					super.switchView(stats, view);
 					topToolBarManager.contributeItems(view);
 				}

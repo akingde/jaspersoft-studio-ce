@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.editor.preview.view.control;
+package com.jaspersoft.studio.editor.preview.stats;
 
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
 import net.sf.jasperreports.engine.JRScriptletException;

@@ -26,8 +26,8 @@ import java.util.List;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 
 public class MultiPageContainer {
 	protected LinkedHashMap<String, APreview> pmap = new LinkedHashMap<String, APreview>();

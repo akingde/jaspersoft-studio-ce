@@ -29,8 +29,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
-import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.swt.action.FirstPageAction;

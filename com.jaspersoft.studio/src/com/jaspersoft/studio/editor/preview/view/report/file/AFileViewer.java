@@ -32,9 +32,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.control.ReportControler;
-import com.jaspersoft.studio.editor.preview.view.control.Statistics;
 import com.jaspersoft.studio.editor.preview.view.report.ExportMenu;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
 import com.jaspersoft.studio.editor.preview.view.report.swt.ReportViewer;

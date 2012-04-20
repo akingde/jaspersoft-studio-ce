@@ -21,7 +21,7 @@ package com.jaspersoft.studio.editor.preview.view.report;
 
 import net.sf.jasperreports.engine.JasperPrint;
 
-import com.jaspersoft.studio.editor.preview.view.control.Statistics;
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 
 public interface IJRPrintable {
 	public void setJRPRint(Statistics stats, JasperPrint jrprint) throws Exception;
