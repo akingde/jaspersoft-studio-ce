@@ -50,6 +50,7 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.DataAdapterEditorPart;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
@@ -210,7 +211,7 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 			public void run() {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
-					IDE.openEditor(page, file, true);
+					IDE.openEditor(page, file, DataAdapterEditorPart.ID);
 				} catch (PartInitException e) {
 					e.printStackTrace();
 				}

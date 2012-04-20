@@ -56,6 +56,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.utils.UIUtils;
 
 public class DataAdapterEditorPart extends ABasicEditor {
+	public static final String ID = "com.jaspersoft.studio.data.DataAdapterEditorPart";
 	private DataAdapterDescriptor descriptor;
 	private ModelPropertyChangeListener modelListener = new ModelPropertyChangeListener();
 	private NameComposite nameComposite;
