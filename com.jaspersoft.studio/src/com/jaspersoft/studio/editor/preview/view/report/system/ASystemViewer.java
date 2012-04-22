@@ -23,16 +23,8 @@ import java.io.File;
 
 import net.sf.jasperreports.engine.JasperPrint;
 
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.program.Program;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
 import com.jaspersoft.studio.editor.preview.actions.export.AbstractExportAction;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
@@ -48,30 +40,30 @@ public abstract class ASystemViewer extends SWTViewer {
 		super(parent, ph);
 	}
 
-	@Override
-	protected Control createControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.BORDER);
-		composite.setLayout(new GridLayout());
+	// @Override
+	// protected Control createControl(Composite parent) {
+	// Composite composite = new Composite(parent, SWT.BORDER);
+	// composite.setLayout(new GridLayout());
+	//
+	// Button lbl = new Button(composite, SWT.PUSH);
+	// lbl.setText("The report is opened in an external editor.\n Press here to open it again.");
+	// GridData layoutData = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
+	//
+	// GC gc = new GC(lbl);
+	// FontMetrics fontMetrics = gc.getFontMetrics();
+	// int h = fontMetrics.getHeight();
+	// gc.dispose();
+	// layoutData.heightHint = h * 2 + 50;
+	// lbl.setLayoutData(layoutData);
+	//
+	// rptviewer = new ReportViewer();
+	//
+	// return composite;
+	// }
 
-		Button lbl = new Button(composite, SWT.PUSH);
-		lbl.setText("The report is opened in an external editor.\n Press here to open it again.");
-		GridData layoutData = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
-
-		GC gc = new GC(lbl);
-		FontMetrics fontMetrics = gc.getFontMetrics();
-		int h = fontMetrics.getHeight();
-		gc.dispose();
-		layoutData.heightHint = h * 2 + 50;
-		lbl.setLayoutData(layoutData);
-
-		rptviewer = new ReportViewer();
-
-		return composite;
-	}
-
-	@Override
-	public void contribute2ToolBar(IToolBarManager tmanager) {
-	}
+	// @Override
+	// public void contribute2ToolBar(IToolBarManager tmanager) {
+	// }
 
 	protected abstract AbstractExportAction createExporter(ReportViewer rptv);
 
