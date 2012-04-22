@@ -105,8 +105,8 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		FormToolkit toolkit = mform.getToolkit();
 		Composite body = mform.getForm().getBody();
 		body.setLayout(new GridLayout(1, true));
-		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		background = body.getBackground();
+		body.setBackground(body.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
 		dataquery = new DataQueryAdapters(mform.getForm().getBody(), jConfig, newdataset, background) {
 
@@ -126,7 +126,8 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		SashForm sf = new CSashForm(body, SWT.VERTICAL);
 
 		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.heightHint = 700;
+		gd.heightHint = 600;
+		gd.minimumHeight = 400;
 		gd.widthHint = 800;
 		sf.setLayoutData(gd);
 		sf.setLayout(new GridLayout());
@@ -142,7 +143,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		dataquery.setDefaultDataAdapter(mreport);
 
 		createBottom(sf, toolkit);
-		sf.setWeights(new int[] { 450, 150 });
+		sf.setWeights(new int[] { 450, 250 });
 
 		setDataset(mreport.getJasperDesign(), newdataset);
 	}
@@ -154,9 +155,8 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 	private void createBottom(Composite parent, FormToolkit toolkit) {
 		CTabFolder tabFolder = new CTabFolder(parent, SWT.BOTTOM);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.heightHint = 150;
+		gd.heightHint = 250;
 		tabFolder.setLayoutData(gd);
-		tabFolder.setBackground(background);
 
 		createFields(toolkit, tabFolder);
 		createParameters(toolkit, tabFolder);
@@ -172,7 +172,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText("Parameters");
 
-		ptable = new ParametersTable(tabFolder, newdataset);
+		ptable = new ParametersTable(tabFolder, newdataset, background);
 
 		bptab.setControl(ptable.getControl());
 	}
@@ -181,7 +181,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText(Messages.DatasetDialog_fieldstab);
 
-		ftable = new FieldsTable(tabFolder, newdataset);
+		ftable = new FieldsTable(tabFolder, newdataset, background);
 
 		bptab.setControl(ftable.getControl());
 	}
@@ -190,10 +190,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
 		bptab.setText(Messages.DatasetDialog_sortingtab);
 
-		Composite sectionClient = toolkit.createComposite(tabFolder);
-		sectionClient.setLayout(new GridLayout(2, false));
-
-		sftable = new SortFieldsTable(tabFolder, newdataset);
+		sftable = new SortFieldsTable(tabFolder, newdataset, background);
 
 		bptab.setControl(sftable.getControl());
 	}

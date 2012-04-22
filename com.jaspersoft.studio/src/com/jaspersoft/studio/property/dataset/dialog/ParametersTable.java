@@ -38,6 +38,7 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -62,8 +63,10 @@ public class ParametersTable {
 	private Table wtable;
 	private Composite composite;
 	private JRDesignDataset dataset;
+	private Color background;
 
-	public ParametersTable(Composite parent, JRDesignDataset dataset) {
+	public ParametersTable(Composite parent, JRDesignDataset dataset, Color background) {
+		this.background = background;
 		this.dataset = dataset;
 		createControl(parent);
 	}
@@ -75,7 +78,8 @@ public class ParametersTable {
 	private void createControl(Composite parent) {
 		composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
-		composite.setBackground(parent.getBackground());
+		composite.setBackground(background);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		wtable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);

@@ -1,25 +1,21 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
 package com.jaspersoft.studio.property.dataset.dialog;
 
@@ -39,6 +35,7 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -61,9 +58,11 @@ public class FieldsTable {
 	private Table wtable;
 	private Composite composite;
 	private JRDesignDataset dataset;
+	private Color background;
 
-	public FieldsTable(Composite parent, JRDesignDataset dataset) {
+	public FieldsTable(Composite parent, JRDesignDataset dataset, Color background) {
 		this.dataset = dataset;
+		this.background = background;
 		createControl(parent);
 	}
 
@@ -74,7 +73,8 @@ public class FieldsTable {
 	private void createControl(Composite parent) {
 		composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
-		composite.setBackground(parent.getBackground());
+		composite.setBackground(background);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 
 		wtable = new Table(composite, SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.BORDER);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -109,7 +109,6 @@ public class FieldsTable {
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-		bGroup.setBackground(parent.getBackground());
 
 		new NewButton().createNewButtons(bGroup, tviewer, new INewElement() {
 
