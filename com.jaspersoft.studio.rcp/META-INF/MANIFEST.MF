@@ -25,12 +25,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core.manipulation;bundle-version="1.4.0",
  org.eclipse.jdt.debug;bundle-version="3.7.0",
  org.eclipse.jdt.debug.ui;bundle-version="3.6.0",
- org.eclipse.jdt.doc.isv;bundle-version="3.7.0",
  org.eclipse.jdt.doc.user;bundle-version="3.7.0",
  org.eclipse.jdt.ui;bundle-version="3.7.0",
  org.eclipse.jdt;bundle-version="3.7.0",
  org.mortbay.jetty.server;bundle-version="6.1.23",
- org.eclipse.debug.ui;bundle-version="3.7.102"
+ org.eclipse.debug.ui
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: com.jaspersoft.studio.rcp,
