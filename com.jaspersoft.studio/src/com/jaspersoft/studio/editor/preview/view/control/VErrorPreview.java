@@ -152,6 +152,10 @@ public class VErrorPreview extends APreview {
 		return container;
 	}
 
+	public void setFocus() {
+		body.setFocus();
+	}
+
 	protected void createMessages(Composite composite) {
 		tmessage = new Text(composite, SWT.READ_ONLY | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 	}

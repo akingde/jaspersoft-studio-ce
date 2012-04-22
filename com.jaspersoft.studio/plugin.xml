@@ -627,6 +627,14 @@
             name="Repository Explorer"
             restorable="true">
       </view>
+      <view
+            category="net.sf.jasperreports"
+            class="com.jaspersoft.studio.editor.preview.ReportStateView"
+            icon="icons/jrxml_icon.png"
+            id="com.jaspersoft.studio.editor.preview.reportstate"
+            name="Report State"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
