@@ -56,8 +56,13 @@ public class Console {
 
 	public static Console showConsole(String name) {
 		MessageConsole myConsole = findConsole(name);
-		Console c = new Console(myConsole);
-		c.showConsole();
+		final Console c = new Console(myConsole);
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				c.showConsole();
+			}
+		});
 		// ConsolePlugin.getDefault().getConsoleManager().showConsoleView(myConsole);
 		return c;
 	}

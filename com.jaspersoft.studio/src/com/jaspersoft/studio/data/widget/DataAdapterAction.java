@@ -18,6 +18,7 @@ import com.jasperassistant.designer.viewer.ReportViewerEvent;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.storage.ADataAdapterStorage;
+import com.jaspersoft.studio.messages.Messages;
 
 public class DataAdapterAction extends Action implements IMenuCreator, PropertyChangeListener, IReportViewerListener {
 	public static final String ID = "DATAADAPTERACTION"; //$NON-NLS-1$
@@ -34,6 +35,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		setToolTipText("Select a Data Adapter");
 		this.editor = editor;
 		this.dastorages = dastorages;
+		setSelected(Messages.DataAdapterManager_oneemptyrecord);
 	}
 
 	@Override
@@ -72,7 +74,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 				run();
 			}
 		};
-		if (dastorages != null)
+		if (dastorages != null) {
 			for (int i = 0; i < dastorages.length; i++) {
 				ADataAdapterStorage s = dastorages[i];
 				for (DataAdapterDescriptor d : s.getDataAdapterDescriptors()) {
@@ -86,7 +88,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 						&& !dastorages[i + 1].getDataAdapterDescriptors().isEmpty())
 					new MenuItem(listMenu, SWT.SEPARATOR);
 			}
-
+		}
 		return listMenu;
 	}
 
