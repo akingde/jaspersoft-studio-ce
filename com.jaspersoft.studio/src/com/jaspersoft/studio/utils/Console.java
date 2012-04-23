@@ -19,6 +19,9 @@
  */
 package com.jaspersoft.studio.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.eclipse.util.xml.SourceLocation;
 
 import org.eclipse.jdt.core.compiler.CategorizedProblem;
@@ -31,6 +34,7 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
+import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
 
 public class Console {
@@ -49,19 +53,40 @@ public class Console {
 
 	public static Console showConsole(String name) {
 		MessageConsole myConsole = findConsole(name);
-		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(myConsole);
-		return new Console(myConsole);
+		Console c = new Console(myConsole);
+		c.showConsole();
+		// ConsolePlugin.getDefault().getConsoleManager().showConsoleView(myConsole);
+		return c;
+	}
+
+	public void showConsole() {
+		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(console);
+		// IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		// if (window != null) {
+		// IWorkbenchPage page = window.getActivePage();
+		// if (page != null) {
+		// IViewPart view = page.findView(ReportStateView.ID);
+		// if (view != null)
+		// page.bringToTop(view);
+		// }
+		// }
+
 	}
 
 	private MessageConsole console;
-	private VErrorPreview errorPreview;
+	private List<VErrorPreview> ePreviews = new ArrayList<VErrorPreview>();
 
 	private Console(MessageConsole console) {
 		this.console = console;
 	}
 
-	public void setErrorPreview(VErrorPreview errorPreview) {
-		this.errorPreview = errorPreview;
+	public void addErrorPreview(VErrorPreview ep) {
+		if (ep != null)
+			ePreviews.add(ep);
+	}
+
+	public void removeErrorPreview(VErrorPreview ep) {
+		ePreviews.remove(ep);
 	}
 
 	public static Color REDCOLOR = Display.getDefault().getSystemColor(SWT.COLOR_RED);
@@ -75,8 +100,8 @@ public class Console {
 				out.setColor(color);
 				out.println(ErrorUtil.getStackTrace(e) + "\n\r");
 				out.setColor(REDCOLOR);
-				if (errorPreview != null)
-					errorPreview.addError(e);
+				for (VErrorPreview vep : ePreviews)
+					vep.addError(e);
 			}
 		});
 	}
@@ -87,8 +112,8 @@ public class Console {
 			public void run() {
 				MessageConsoleStream out = console.newMessageStream();
 				out.println(message);
-				if (errorPreview != null)
-					errorPreview.addMessage(message);
+				for (VErrorPreview vep : ePreviews)
+					vep.addMessage(message);
 			}
 		});
 	}
@@ -97,7 +122,8 @@ public class Console {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
-				errorPreview.addProblem(problem, location);
+				for (VErrorPreview vep : ePreviews)
+					vep.addProblem(problem, location);
 			}
 		});
 	}
@@ -106,18 +132,27 @@ public class Console {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
-				errorPreview.addProblem(message, location);
+				for (VErrorPreview vep : ePreviews)
+					vep.addProblem(message, location);
 			}
 		});
 	}
 
-	public void showConsole() {
-		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(console);
+	public void setStatistics(final Statistics stats) {
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				for (VErrorPreview vep : ePreviews)
+					vep.setStats(stats);
+			}
+		});
 	}
 
 	public void clearConsole() {
+		for (VErrorPreview vep : ePreviews)
+			vep.setStats(null);
 		console.clearConsole();
-		if (errorPreview != null)
-			errorPreview.clear();
+		for (VErrorPreview vep : ePreviews)
+			vep.clear();
 	}
 }

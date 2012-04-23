@@ -5,13 +5,15 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.Page;
 
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
+import com.jaspersoft.studio.utils.Console;
 
 public class ReportStatePage extends Page {
 
 	private VErrorPreview errorPreview;
+	private Console console;
 
-	public ReportStatePage() {
-		// do nothing
+	public ReportStatePage(Console console) {
+		this.console = console;
 	}
 
 	/*
@@ -19,6 +21,15 @@ public class ReportStatePage extends Page {
 	 */
 	public void createControl(Composite parent) {
 		errorPreview = new VErrorPreview(parent, null);
+		if (console != null)
+			console.addErrorPreview(errorPreview);
+	}
+
+	@Override
+	public void dispose() {
+		if (console != null)
+			console.removeErrorPreview(errorPreview);
+		super.dispose();
 	}
 
 	/*

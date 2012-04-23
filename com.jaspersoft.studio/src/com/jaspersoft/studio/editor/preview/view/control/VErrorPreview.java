@@ -334,6 +334,8 @@ public class VErrorPreview extends APreview {
 
 	private void addError2List(Object err, String message) {
 		errors.add(err);
+		if(message == null)
+			message = "< No message >";
 		String lines[] = message.split("\\r?\\n");
 		if (lines.length > 0)
 			message = lines[0];

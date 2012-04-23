@@ -61,8 +61,6 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 		super(true);
 	}
 
-	private JasperReportsConfiguration jrContext;
-
 	public PreviewContainer(boolean listenResource, JasperReportsConfiguration jrContext) {
 		super(listenResource);
 		this.jrContext = jrContext;
@@ -87,6 +85,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 					throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
 				}
 				in = JrxmlEditor.getXML(input, file.getCharset(true), in, null);
+				getJrContext(file);
 				setJasperDesign(jrContext, JRXmlLoader.load(in));
 			} catch (Exception e) {
 				throw new PartInitException(e.getMessage(), e);

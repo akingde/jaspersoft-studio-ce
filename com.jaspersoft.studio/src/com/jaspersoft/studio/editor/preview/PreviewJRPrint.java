@@ -43,9 +43,8 @@ import com.jaspersoft.studio.editor.preview.toolbar.ATopToolBarManager;
 import com.jaspersoft.studio.editor.preview.toolbar.TopToolBarManagerJRPrint;
 import com.jaspersoft.studio.editor.preview.view.APreview;
 import com.jaspersoft.studio.editor.preview.view.ViewsFactory;
-import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
+import com.jaspersoft.studio.editor.preview.view.control.VSimpleErrorPreview;
 import com.jaspersoft.studio.editor.preview.view.report.IJRPrintable;
-import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.Console;
 
 public class PreviewJRPrint extends ABasicEditor {
@@ -182,11 +181,11 @@ public class PreviewJRPrint extends ABasicEditor {
 					if (aPreview instanceof IJRPrintable) {
 						try {
 							((IJRPrintable) aPreview).setJRPRint(stats, jasperPrint);
-							errorPreview.setStats(stats);
+							console.setStatistics(stats);
 						} catch (Exception e) {
 							switchView(stats, errorPreview);
 
-							errorPreview.addError(e);
+							console.addError(e);
 							return;
 						}
 					}
@@ -199,11 +198,11 @@ public class PreviewJRPrint extends ABasicEditor {
 					if (view instanceof IJRPrintable) {
 						try {
 							((IJRPrintable) view).setJRPRint(stats, jasperPrint);
-							errorPreview.setStats(stats);
+							console.setStatistics(stats);
 						} catch (Exception e) {
 							switchView(stats, errorPreview);
 
-							errorPreview.addError(e);
+							console.addError(e);
 							return;
 						}
 					}
@@ -249,7 +248,7 @@ public class PreviewJRPrint extends ABasicEditor {
 		return topToolBarManager1;
 	}
 
-	private VErrorPreview errorPreview;
+	private VSimpleErrorPreview errorPreview;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -266,16 +265,16 @@ public class PreviewJRPrint extends ABasicEditor {
 	}
 
 	protected Composite createRight(Composite parent) {
-		CSashForm rightSash = new CSashForm(parent, SWT.VERTICAL);
+		// CSashForm rightSash = new CSashForm(parent, SWT.VERTICAL);
 
-		rightComposite = new Composite(rightSash, SWT.BORDER);
+		rightComposite = new Composite(parent, SWT.BORDER);
 
 		StackLayout stacklayoutView = new StackLayout();
 		rightComposite.setLayout(stacklayoutView);
 
 		getRightContainer().populate(rightComposite, ViewsFactory.createPreviews(rightComposite, ph));
 
-		errorPreview = new VErrorPreview(rightSash, ph);
+		errorPreview = new VSimpleErrorPreview(rightComposite, ph);
 
 		return rightComposite;
 	}
@@ -314,7 +313,7 @@ public class PreviewJRPrint extends ABasicEditor {
 	public Console getConsole() {
 		if (console == null) {
 			console = Console.showConsole(getEditorInput().getName());
-			console.setErrorPreview(errorPreview);
+			// console.addErrorPreview(errorPreview);
 		}
 		return console;
 	}

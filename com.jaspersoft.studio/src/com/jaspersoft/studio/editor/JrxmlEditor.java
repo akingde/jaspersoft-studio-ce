@@ -275,6 +275,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		return super.getActiveEditor();
 	}
 
+	@Override
+	public IEditorPart getEditor(int pageIndex) {
+		return super.getEditor(pageIndex);
+	}
+
 	private MultiOutlineView outlinePage;
 
 	/*

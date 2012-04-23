@@ -234,7 +234,7 @@ public abstract class ABasicEditor extends EditorPart {
 		}
 	}
 
-	private JasperReportsConfiguration jrContext;
+	protected JasperReportsConfiguration jrContext;
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null) {
