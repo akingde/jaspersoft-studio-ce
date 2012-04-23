@@ -35,7 +35,6 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 		setToolTipText("Select a Data Adapter");
 		this.editor = editor;
 		this.dastorages = dastorages;
-		setSelected(Messages.DataAdapterManager_oneemptyrecord);
 	}
 
 	@Override
@@ -107,6 +106,7 @@ public class DataAdapterAction extends Action implements IMenuCreator, PropertyC
 			for (ADataAdapterStorage das : dastorages)
 				das.addPropertyChangeListener(this);
 		}
+		setSelected(Messages.DataAdapterManager_oneemptyrecord);
 	}
 
 	public Menu getMenu(Menu parent) {
