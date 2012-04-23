@@ -319,8 +319,11 @@ public abstract class DataQueryAdapters {
 		isRefresh = false;
 		changeLanguage();
 
-		if (jDesign != null)
-			dscombo.setSelected(jDesign.getProperty(MReport.DEFAULT_DATAADAPTER));
+		if (jDesign != null) {
+			String defadapter = jDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
+			dscombo.setSelected(defadapter);
+			currentDesigner.setDataAdapter(dscombo.getSelected());
+		}
 	}
 
 	public String getLanguage() {
