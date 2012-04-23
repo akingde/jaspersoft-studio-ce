@@ -245,6 +245,7 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void setJasperDesign(JasperReportsConfiguration jConfig, JasperDesign jasperDesign) {
 		getReportControler().setJasperDesign(jConfig, jasperDesign);
 		setupDataAdapter();
+		runReport(dataAdapterDesc);
 	}
 
 	private void setupDataAdapter() {
