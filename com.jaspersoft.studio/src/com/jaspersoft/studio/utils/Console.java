@@ -28,12 +28,15 @@ import org.eclipse.jdt.core.compiler.CategorizedProblem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
+import com.jaspersoft.studio.editor.preview.ReportStateView;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
 import com.jaspersoft.studio.editor.preview.view.control.VErrorPreview;
 
@@ -60,17 +63,12 @@ public class Console {
 	}
 
 	public void showConsole() {
-		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(console);
-		// IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		// if (window != null) {
-		// IWorkbenchPage page = window.getActivePage();
-		// if (page != null) {
-		// IViewPart view = page.findView(ReportStateView.ID);
-		// if (view != null)
-		// page.bringToTop(view);
-		// }
-		// }
-
+		// ConsolePlugin.getDefault().getConsoleManager().showConsoleView(myConsole);
+		try {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(ReportStateView.ID);
+		} catch (PartInitException e) {
+			UIUtils.showError(e);
+		}
 	}
 
 	private MessageConsole console;
