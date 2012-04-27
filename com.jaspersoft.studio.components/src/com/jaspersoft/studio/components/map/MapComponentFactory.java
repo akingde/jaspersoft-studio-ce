@@ -34,6 +34,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.components.map.figure.MapFigure;
 import com.jaspersoft.studio.components.map.model.MMap;
 import com.jaspersoft.studio.components.map.model.command.CreateMapCommand;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -127,4 +128,8 @@ public class MapComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	public ExpressionContext getElementExpressionContext(Object jrObject) {
+		// FIXME - Implement this method.
+		return null;
+	}
 }

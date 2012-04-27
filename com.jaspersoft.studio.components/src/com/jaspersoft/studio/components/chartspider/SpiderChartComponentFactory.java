@@ -44,6 +44,7 @@ import com.jaspersoft.studio.components.chartspider.model.command.DeleteCategory
 import com.jaspersoft.studio.components.chartspider.model.command.ReorderCategorySeriesCommand;
 import com.jaspersoft.studio.components.chartspider.part.SpiderChartEditPart;
 import com.jaspersoft.studio.components.chartspider.wizard.action.ChartSpiderWizardAction;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -170,4 +171,8 @@ public class SpiderChartComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	public ExpressionContext getElementExpressionContext(Object jrObject) {
+		// FIXME - Implement this method.
+		return null;
+	}
 }

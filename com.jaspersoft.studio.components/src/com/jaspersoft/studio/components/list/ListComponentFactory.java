@@ -22,8 +22,10 @@ package com.jaspersoft.studio.components.list;
 import java.util.List;
 
 import net.sf.jasperreports.components.list.StandardListComponent;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -37,6 +39,7 @@ import com.jaspersoft.studio.components.list.figure.ListFigure;
 import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.components.list.model.command.CreateListCommand;
 import com.jaspersoft.studio.components.list.part.ListEditPart;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -50,6 +53,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class ListComponentFactory implements IComponentFactory {
@@ -163,4 +167,19 @@ public class ListComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	public ExpressionContext getElementExpressionContext(Object jrObject) {
+		if(jrObject instanceof MList &&
+				((MList)jrObject).getValue() instanceof JRDesignComponentElement){
+			 StandardListComponent listComponent = 
+					 (StandardListComponent) ((MList)jrObject).getValue().getComponent();
+			JRDatasetRun datasetRun = listComponent.getDatasetRun();
+			if(datasetRun!=null){
+				JRDesignDataset designDatasetByName = 
+						ModelUtils.getDesignDatasetByName(((MList)jrObject).getJasperDesign(),datasetRun.getDatasetName());
+				return new ExpressionContext(designDatasetByName,((MList)jrObject).getJasperConfiguration());
+			}
+		}
+
+		return null;
+	}
 }

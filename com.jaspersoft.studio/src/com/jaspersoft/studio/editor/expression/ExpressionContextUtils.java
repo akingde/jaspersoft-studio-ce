@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.editor.expression;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRField;
@@ -28,7 +29,7 @@ public final class ExpressionContextUtils {
 	 */
 	public static List<JRParameter> getAllParameters(ExpressionContext exprContext){
 		JRDesignDataset ds = exprContext.getDatasets().get(0);
-		return ds.getParametersList();
+		return (ds!=null) ? ds.getParametersList() : new ArrayList<JRParameter>();
 	}
 	
 	/**
@@ -40,7 +41,7 @@ public final class ExpressionContextUtils {
 	 */
 	public static List<JRVariable> getAllVariables(ExpressionContext exprContext){
 		JRDesignDataset ds = exprContext.getDatasets().get(0);
-    return ds.getVariablesList();
+		return (ds!=null) ? ds.getVariablesList() : new ArrayList<JRVariable>();
 	}
 	
 	/**
@@ -52,6 +53,6 @@ public final class ExpressionContextUtils {
 	 */
 	public static List<JRField> getAllFields(ExpressionContext exprContext){
 		JRDesignDataset ds = exprContext.getDatasets().get(0);
-		return ds.getFieldsList();
+		return (ds!=null) ? ds.getFieldsList() : new ArrayList<JRField>();
 	}
 }

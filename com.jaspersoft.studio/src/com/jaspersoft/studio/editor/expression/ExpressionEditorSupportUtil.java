@@ -1,11 +1,15 @@
 package com.jaspersoft.studio.editor.expression;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.expressions.functions.util.FunctionsLibraryUtil;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.ui.IEditorPart;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
@@ -110,9 +114,24 @@ public class ExpressionEditorSupportUtil {
 				final ANode mreport = (ANode) mroot.getChildren().get(0);
 				JRDataset mainDS = mreport.getJasperDesign().getMainDataset();
 				ExpressionContext exprContext=new ExpressionContext((JRDesignDataset)mainDS,mreport.getJasperConfiguration());
+				addFunctionsLibraryImports(exprContext.getJasperReportsConfiguration().getJasperDesign());				
 				return exprContext;
 		}
 		return null;
+	}
+	
+	/**
+	 * Add a list of static imports to the specified {@link JasperDesign} instance in order
+	 * to correctly use the functions library inside the expressions.
+	 * 
+	 * @param jd the jasper design object to be enriched
+	 */
+	public static void addFunctionsLibraryImports(JasperDesign jd){
+		Assert.isNotNull(jd);
+		List<String> libraryClasses = FunctionsLibraryUtil.getLibraryClasses();
+		for(String clazzName : libraryClasses){
+			jd.addImport("static " + clazzName + ".*");
+		}
 	}
 	
 }

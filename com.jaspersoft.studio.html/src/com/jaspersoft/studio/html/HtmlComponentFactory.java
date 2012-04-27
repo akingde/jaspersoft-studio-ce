@@ -32,6 +32,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.html.command.CreateHtmlCommand;
 import com.jaspersoft.studio.html.figure.HtmlFigure;
@@ -131,4 +132,13 @@ public class HtmlComponentFactory implements IComponentFactory {
 			JasperReportsConfiguration jrContext) {
 		return null;
 	}
+
+	public ExpressionContext getElementExpressionContext(Object jrObject) {
+		// The HTML design component element has no direct
+		// dataset information associated. 
+		// Therefore this situation must be handled somehow by
+		// the caller method(s).
+		return null;
+	}
+
 }

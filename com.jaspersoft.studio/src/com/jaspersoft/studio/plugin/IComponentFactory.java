@@ -21,6 +21,9 @@ package com.jaspersoft.studio.plugin;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.design.JRDesignDataset;
+import net.sf.jasperreports.engine.design.JRDesignElement;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
@@ -28,8 +31,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.part.WorkbenchPart;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public interface IComponentFactory {
@@ -56,5 +61,28 @@ public interface IComponentFactory {
 	public List<String> getActionsID();
 
 	public AbstractVisualEditor getEditor(Object node, JasperReportsConfiguration jrContext);
-
+	
+	/**
+	 * Returns a valid {@link ExpressionContext} that can be used inside an expression editor.
+	 * 
+	 * <p>
+	 * The generic <code>jrObject</code> parameter will usually be an {@link ANode} instance,
+	 * indicating what is the current report element node being edited.
+	 * It's up to the implementors to know how to build a valid expression context from this 
+	 * information. Most of the times the custom component will have a dataset/datasetrun 
+	 * reference so it will be possible to build a new expression context directly from a
+	 * valid {@link JRDesignDataset}.<br>
+	 * <b>NOTE:</b> when an expression context can not be created using the node information
+	 * (for example no dataset reference), <code>null</code> value is returned. 
+	 * In this situation it is up to the implementors try to find a solution (i.e: inspect the
+	 * parent node or return a default expression context).
+	 * 
+	 * @param jrObject the object to be inspected, in order to build the expression context
+	 * @return a valid expression context if possible, <code>null</code> otherwise
+	 * 
+	 * @see ExpressionContext#ExpressionContext(JRDesignDataset, JasperReportsConfiguration)
+	 * @see ModelUtils#getElementExpressionContext(JRDesignElement, ANode)
+	 */
+	public ExpressionContext getElementExpressionContext(Object jrObject);
+	
 }

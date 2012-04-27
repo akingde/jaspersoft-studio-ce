@@ -205,6 +205,8 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				j = new JRDesignDatasetRun();
 			}
 			mDatasetRun = new MDatasetRun(j, getJasperDesign());
+			mDatasetRun.setParent(this, -1);	// Fixed: Sets the parent in order to get correctly
+												// the jasperconfiguration from the report node tree.
 			setChildListener(mDatasetRun);
 			return mDatasetRun;
 		}

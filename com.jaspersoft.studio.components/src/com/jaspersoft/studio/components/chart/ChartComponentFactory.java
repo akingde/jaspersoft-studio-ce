@@ -106,6 +106,7 @@ import com.jaspersoft.studio.components.chart.model.series.xyzseries.command.Del
 import com.jaspersoft.studio.components.chart.model.series.xyzseries.command.ReorderXYZSeriesCommand;
 import com.jaspersoft.studio.components.chart.part.ChartEditPart;
 import com.jaspersoft.studio.components.chart.wizard.action.ChartWizardAction;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -364,4 +365,8 @@ public class ChartComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	public ExpressionContext getElementExpressionContext(Object jrObject) {
+		// FIXME - Implement this method.
+		return null;
+	}
 }

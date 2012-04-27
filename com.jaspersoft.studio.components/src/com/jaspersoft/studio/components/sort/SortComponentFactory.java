@@ -34,6 +34,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.components.sort.figure.SortFigure;
 import com.jaspersoft.studio.components.sort.model.MSort;
 import com.jaspersoft.studio.components.sort.model.command.CreateSortCommand;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -127,4 +128,8 @@ public class SortComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	public ExpressionContext getElementExpressionContext(Object jrObject) {
+		// FIXME - Implement this method.
+		return null;
+	}
 }

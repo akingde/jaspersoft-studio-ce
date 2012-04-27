@@ -43,6 +43,7 @@ import org.eclipse.ui.part.WorkbenchPart;
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.data.DataAdapterFactory;
 import com.jaspersoft.studio.data.DataAdapterManager;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
@@ -317,4 +318,12 @@ public class ExtensionManager {
 		return list;
 	}
 
+	public ExpressionContext getExpressionContext4Element(Object jrObject){
+		for(IComponentFactory f:nodeFactory){
+			ExpressionContext exprContext = f.getElementExpressionContext(jrObject);
+			if(exprContext!=null) return exprContext;
+		}
+		return null;
+	}
+	
 }

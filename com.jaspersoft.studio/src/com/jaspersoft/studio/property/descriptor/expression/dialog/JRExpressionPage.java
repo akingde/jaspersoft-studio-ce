@@ -63,6 +63,10 @@ public class JRExpressionPage extends WizardPage {
 		else
 			this.value = new JRDesignExpression();
 	}
+	
+	public void setExpressionContext(ExpressionContext exprContext){
+		this.exprContext=exprContext;
+	}
 
 	protected JRExpressionPage(String pageName) {
 		super(pageName);

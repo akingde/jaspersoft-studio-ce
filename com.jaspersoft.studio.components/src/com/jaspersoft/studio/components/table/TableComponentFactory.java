@@ -92,6 +92,7 @@ import com.jaspersoft.studio.components.table.model.columngroup.command.ReorderC
 import com.jaspersoft.studio.components.table.model.table.command.CreateTableCommand;
 import com.jaspersoft.studio.components.table.part.TableCellEditPart;
 import com.jaspersoft.studio.components.table.part.TableEditPart;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -621,4 +622,8 @@ public class TableComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	public ExpressionContext getElementExpressionContext(Object jrObject) {
+		// FIXME - Implement this method.
+		return null;
+	}
 }

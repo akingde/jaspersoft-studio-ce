@@ -54,6 +54,7 @@ import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.JRSection;
 import net.sf.jasperreports.engine.JRVariable;
 import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
@@ -68,16 +69,19 @@ import net.sf.jasperreports.engine.util.JRSaver;
 import net.sf.jasperreports.engine.util.MarkupProcessorFactory;
 import net.sf.jasperreports.extensions.ExtensionsEnvironment;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -986,5 +990,113 @@ public class ModelUtils {
 		list.addAll(Arrays.asList(EnumHelper.getEnumNames(HyperlinkTypeEnum.values(), NullEnum.NOTNULL)));
 
 		return list.toArray(new String[list.size()]);
+	}
+	
+	/**
+	 * Returns the {@link JRDesignDataset} instance corresponding to the dataset name specified.
+	 * 
+	 * <p>
+	 * If the corresponding name is not found, then the main design dataset is returned as fallback solution. 
+	 * 
+	 * @param jd the jasper design
+	 * @param datasetName the name of design dataset we are looking for
+	 * @return the corresponding design dataset, or the main (report) one
+	 */
+	public static JRDesignDataset getDesignDatasetByName(JasperDesign jd, String datasetName){
+		Assert.isNotNull(jd);
+		Assert.isNotNull(datasetName);
+		
+		JRDataset jrDataset = jd.getDatasetMap().get(datasetName);
+		if(jrDataset instanceof JRDesignDataset){
+			return (JRDesignDataset) jrDataset;
+		}
+		else{
+			return jd.getMainDesignDataset();
+		}
+	}
+
+	/**
+	 * Finds the top element group for a specified {@link JRDesignElement}.
+	 * 
+	 * @param element the design element
+	 * @return the top element group if any exists, <code>null</code> otherwise
+	 */
+	public static JRElementGroup getTopElementGroup(JRDesignElement element) {
+		JRElementGroup g1 = element.getElementGroup();
+		while (g1 != null) {
+			// if (!g1.getChildren().contains(element)) return null; // The element points to its parent, but its parent has
+			// not it as child
+			if (g1 instanceof JRDesignBand || g1 instanceof JRDesignCellContents)
+				return g1;
+			g1 = g1.getElementGroup();
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns a valid {@link ExpressionContext} that can be used in the 
+	 * expression editor when editing a specific node expression.
+	 * 
+	 * <p>
+	 * Usually a {@link JRDesignElement} instance is given so we can use this to look for a 
+	 * valid expression context. When not available, the original model object node is used.
+	 * During the search, if for some reasons an expression context can not be returned, a 
+	 * generic expression context that uses the report main dataset is used.
+	 *  
+	 * @param element the design element to be investigated 
+	 * @param node the model object node for which we are currently asking an expression context
+	 * @return the expression context found, or a default one
+	 * 
+	 * @see IComponentFactory#getElementExpressionContext(Object)
+	 */
+	public static ExpressionContext getElementExpressionContext(JRDesignElement element,ANode node){
+		if(element!=null){
+			JRElementGroup group = getTopElementGroup(element);
+			if (group instanceof JRDesignCellContents) {	
+				// Inside the cell of a cross=tab
+				JRDesignCellContents contents = (JRDesignCellContents) ModelUtils.getTopElementGroup(element);
+				return new ExpressionContext(contents.getOrigin().getCrosstab(), node.getJasperConfiguration());
+			}
+			else if(!(group instanceof JRBand)){
+				// Custom component, then try to get information from a possible related IComponentFactory
+				// If necessary walk the tree (up direction).
+				ExpressionContext ec = getExpressionContext4Component(node);
+				if(ec!=null) {
+					return ec;
+				}
+			}
+		}
+		else{
+			// No direct design element available, rely on the node information
+			// Try to find a possible related IComponentFactory
+			ExpressionContext ec = getExpressionContext4Component(node);
+			if(ec!=null) {
+				return ec;
+			}
+		}
+		
+		// Default
+		return new ExpressionContext(node.getJasperDesign().getMainDesignDataset(),node.getJasperConfiguration());
+	}
+	
+	/*
+	 * Given an ANode instance, tries to obtain a valid expression context.
+	 * When this method is invoked, it usually means that a custom component is being 
+	 * introspected, therefore we will rely on the its component factory to obtain
+	 * a possible valid expression context (see IComponentFactory#getElementExpressionContext(Object)).
+	 */
+	private static ExpressionContext getExpressionContext4Component(ANode node){
+		ANode cursorNode=node;
+		while (cursorNode!=null){
+			if(cursorNode.getValue() instanceof JRDesignComponentElement){
+				ExpressionContext ec = JaspersoftStudioPlugin.getExtensionManager().getExpressionContext4Element(cursorNode);
+				if(ec!=null) {
+					return ec;
+				}
+			}
+			cursorNode=cursorNode.getParent();
+		}
+		
+		return null;
 	}
 }

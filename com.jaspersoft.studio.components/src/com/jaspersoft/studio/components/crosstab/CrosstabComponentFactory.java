@@ -90,6 +90,7 @@ import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.DeleteRo
 import com.jaspersoft.studio.components.crosstab.model.rowgroup.command.ReorderRowGroupCommand;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabCellEditPart;
 import com.jaspersoft.studio.components.crosstab.part.CrosstabEditPart;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.report.AbstractVisualEditor;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGroupElement;
@@ -508,4 +509,8 @@ public class CrosstabComponentFactory implements IComponentFactory {
 		return null;
 	}
 
+	public ExpressionContext getElementExpressionContext(Object jrObject) {
+		// FIXME - Implement this method.
+		return null;
+	}
 }

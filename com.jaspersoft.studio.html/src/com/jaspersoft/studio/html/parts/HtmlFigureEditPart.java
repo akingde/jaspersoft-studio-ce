@@ -24,6 +24,7 @@
 package com.jaspersoft.studio.html.parts;
 
 import net.sf.jasperreports.components.html.HtmlComponent;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.gef.Request;
@@ -33,10 +34,12 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.gef.parts.FigureEditPart;
 import com.jaspersoft.studio.html.model.MHtml;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class HtmlFigureEditPart extends FigureEditPart {
 
@@ -47,6 +50,8 @@ public class HtmlFigureEditPart extends FigureEditPart {
 			MHtml m = (MHtml) getModel();
 			wizard.setValue((JRDesignExpression) m
 					.getPropertyValue(HtmlComponent.PROPERTY_HTMLCONTENT_EXPRESSION));
+			ExpressionContext ec=ModelUtils.getElementExpressionContext((JRDesignElement)m.getValue(), m);
+			wizard.setExpressionContext(ec);
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();
