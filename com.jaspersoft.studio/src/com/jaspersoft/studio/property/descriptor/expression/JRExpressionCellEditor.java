@@ -27,9 +27,12 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
 public class JRExpressionCellEditor extends DialogCellEditor {
+	
+	private ExpressionContext expContext;
 
 	public JRExpressionCellEditor(Composite parent) {
 		super(parent);
@@ -43,6 +46,7 @@ public class JRExpressionCellEditor extends DialogCellEditor {
 	protected Object openDialogBox(Control cellEditorWindow) {
 		JRExpressionEditor wizard = new JRExpressionEditor();
 		wizard.setValue((JRDesignExpression) getValue());
+		wizard.setExpressionContext(expContext);
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
@@ -64,5 +68,9 @@ public class JRExpressionCellEditor extends DialogCellEditor {
 			labelProvider = new JRExpressionLabelProvider();
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
+	}
+	
+	public void setExpressionContext(ExpressionContext expContext){
+		this.expContext=expContext;
 	}
 }

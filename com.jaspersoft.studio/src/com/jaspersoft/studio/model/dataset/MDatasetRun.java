@@ -213,7 +213,7 @@ public class MDatasetRun extends APropertyNode {
 	}
 
 	public String getDisplayText() {
-		return null;
+		return "DatasetRun";
 	}
 
 }

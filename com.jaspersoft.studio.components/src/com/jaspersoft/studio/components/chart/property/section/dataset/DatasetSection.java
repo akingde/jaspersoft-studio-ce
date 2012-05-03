@@ -24,6 +24,7 @@ import java.sql.Connection;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -46,6 +47,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
@@ -165,18 +167,19 @@ public class DatasetSection extends AbstractSection {
 					String property) {
 				int dsind = rcombo.getSelectionIndex();
 				if (dsind == 0) {
+					// Main dataset
 					section.changeProperty(
 							JRDesignElementDataset.PROPERTY_DATASET_RUN, null);
 				} else {
-					MDatasetRun mdr = (MDatasetRun) getElement()
-							.getPropertyValue(
-									JRDesignElementDataset.PROPERTY_DATASET_RUN);
 					JRDesignDatasetRun dr = getDatasetRun();
+					if (dr==null){
+						// No previously design dataset run set
+						dr=new JRDesignDatasetRun();
+					}
 					dr.setDatasetName(rcombo.getItem(dsind));
-
 					section.changeProperty(
 							JRDesignElementDataset.PROPERTY_DATASET_RUN,
-							new MDatasetRun(dr, mdr.getJasperDesign()));
+							new MDatasetRun(dr, getElement().getJasperDesign()));
 
 				}
 				setDatasetEnabled(dsind != 0);
@@ -210,6 +213,7 @@ public class DatasetSection extends AbstractSection {
 
 				ParameterEditor wizard = new ParameterEditor();
 				wizard.setValue(prmDTO);
+				wizard.setExpressionContext(ModelUtils.getElementExpressionContext(null,getElement()));
 				WizardDialog dialog = new WizardDialog(params.getShell(),
 						wizard);
 				dialog.create();
@@ -239,6 +243,8 @@ public class DatasetSection extends AbstractSection {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue((JRDesignExpression) datasetRun
 						.getParametersMapExpression());
+				ExpressionContext ec = ModelUtils.getElementExpressionContext(null,getElement());
+				wizard.setExpressionContext(ec);
 				WizardDialog dialog = new WizardDialog(paramMap.getShell(),
 						wizard);
 				dialog.create();
@@ -348,6 +354,9 @@ public class DatasetSection extends AbstractSection {
 			if (dataset == null)
 				dataset = jasperDesign.getMainDataset();
 
+			// "Increment When" expression refers to the dataset run of current element
+			expr.setExpressionContext(new ExpressionContext((JRDesignDataset)dataset, element.getJasperConfiguration()));
+			
 			incrementType
 					.setData(
 							(Integer) element
@@ -394,6 +403,10 @@ public class DatasetSection extends AbstractSection {
 				else if (datasetRun.getDataSourceExpression() != null)
 					connection.setData((JRDesignExpression) datasetRun
 							.getDataSourceExpression());
+				
+				if(connection.isEnabled()){
+					connection.setExpressionContext(ModelUtils.getElementExpressionContext(null, element));					
+				}
 			}
 		}
 		isRefreshing = false;
@@ -447,8 +460,12 @@ public class DatasetSection extends AbstractSection {
 	private JRDesignDatasetRun getDatasetRun() {
 		MDatasetRun mdr = (MDatasetRun) getElement().getPropertyValue(
 				JRDesignElementDataset.PROPERTY_DATASET_RUN);
-		JRDesignDatasetRun dsrun = (JRDesignDatasetRun) mdr.getValue();
-		return (JRDesignDatasetRun) dsrun.clone();
+		if(mdr!=null){
+			JRDesignDatasetRun dsrun = (JRDesignDatasetRun) mdr.getValue();
+			return (JRDesignDatasetRun) dsrun.clone();
+		}
+		
+		return null;
 	}
 
 	@Override

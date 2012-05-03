@@ -38,10 +38,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 
 public class ExpressionWidget {
 	private String label;
+	private ExpressionContext exprContext;
 
 	public ExpressionWidget(Composite parent, String label) {
 		this.label = label;
@@ -77,10 +79,17 @@ public class ExpressionWidget {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue(expression);
+				wizard.setExpressionContext(exprContext);
 				WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
-					setExpressionText(wizard.getValue().getText(), wizard.getValue().getValueClassName());
+					JRDesignExpression exprTmp = wizard.getValue();
+					if(exprTmp!=null){
+						setExpressionText(exprTmp.getText(), exprTmp.getValueClassName());
+					}
+					else{
+						setExpression(exprTmp);
+					}
 				}
 			}
 
@@ -175,5 +184,13 @@ public class ExpressionWidget {
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void setExpressionContext(ExpressionContext exprContext) {
+		this.exprContext=exprContext;
+	}
+
+	public boolean isEnabled() {
+		return expButton.isEnabled() && expText.isEnabled();
 	}
 }

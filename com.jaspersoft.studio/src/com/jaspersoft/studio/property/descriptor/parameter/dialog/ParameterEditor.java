@@ -44,11 +44,13 @@ package com.jaspersoft.studio.property.descriptor.parameter.dialog;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 
 public class ParameterEditor extends Wizard {
 	private ParameterDTO value;
 	private ParameterPage page0;
+	private ExpressionContext exprContext;
 
 	public ParameterDTO getValue() {
 		if (page0 != null)
@@ -72,12 +74,22 @@ public class ParameterEditor extends Wizard {
 	public void addPages() {
 		page0 = new ParameterPage("Datasetparameters"); //$NON-NLS-1$
 		page0.setValue(value);
+		if(exprContext!=null){
+			page0.setExpressionContext(exprContext);
+		}
 		addPage(page0);
 	}
 
 	@Override
 	public boolean performFinish() {
 		return true;
+	}
+	
+	public void setExpressionContext(ExpressionContext exprContext){
+		this.exprContext=exprContext;
+		if(page0!=null){
+			page0.setExpressionContext(this.exprContext);
+		}
 	}
 
 }

@@ -109,8 +109,8 @@ public class TreeEditPart extends AbstractTreeEditPart implements PropertyChange
 					item.setForeground(node.getForeground());
 			}
 			String displayText = node.getDisplayText();
-			displayText = displayText.replaceAll("(\\r|\\n)+", " ");
 			if (displayText != null) {
+				displayText = displayText.replaceAll("(\\r|\\n)+", " ");
 				if (displayText.length() > 30)
 					displayText = displayText.substring(0, 30) + " ..."; //$NON-NLS-1$
 				setWidgetText(displayText);

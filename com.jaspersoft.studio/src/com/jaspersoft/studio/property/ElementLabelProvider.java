@@ -120,10 +120,13 @@ public class ElementLabelProvider extends LabelProvider {
 					return ((APropertyNode)element).getCustomPropertyTitle();
 				}
 				String str = Messages.getString(name.substring(name.lastIndexOf('.') + 2));
-				String displayText = element.getDisplayText().replaceAll("(\\r|\\n)+", " ");//$NON-NLS-1$ //$NON-NLS-2$
-				if(displayText.length() > 30)
-					displayText = displayText.substring(0, 30)+"...";//$NON-NLS-1$
-				return str + ": " + displayText; //$NON-NLS-1$
+				String displayText = element.getDisplayText();
+				if(displayText!=null){
+					displayText=displayText.replaceAll("(\\r|\\n)+", " ");//$NON-NLS-1$ //$NON-NLS-2$
+					if(displayText.length() > 30)
+						displayText = displayText.substring(0, 30)+"...";//$NON-NLS-1$
+					return str + ": " + displayText; //$NON-NLS-1$
+				}
 			}
 			return Messages.getString(name.substring(name.lastIndexOf('.') + 1));
 		}

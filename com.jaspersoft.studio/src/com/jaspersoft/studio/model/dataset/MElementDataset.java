@@ -202,12 +202,17 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			JRDatasetRun j = jrElement.getDatasetRun();
 			if (j == null) {
-				j = new JRDesignDatasetRun();
+				// Main dataset
+				j=new JRDesignDatasetRun();				
 			}
-			mDatasetRun = new MDatasetRun(j, getJasperDesign());
-			mDatasetRun.setParent(this, -1);	// Fixed: Sets the parent in order to get correctly
-												// the jasperconfiguration from the report node tree.
-			setChildListener(mDatasetRun);
+			if (mDatasetRun==null){
+				// Initialize the dataset run node reference
+				// Could be the first getPropertyValue() invocation or an invocation
+				// after a reset (due to a setPropertyValue())
+				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+				mDatasetRun.setParent(this, -1);
+				setChildListener(mDatasetRun);
+			}
 			return mDatasetRun;
 		}
 		return null;
@@ -249,17 +254,31 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 				jrElement.setResetGroup(group);
 			}
 		} else if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
+			clearOldMDatasetRun();
 			if (value == null) {
+				// Reset to main dataset
 				jrElement.setDatasetRun(null);
 			} else {
 				MDatasetRun mdr = (MDatasetRun) value;
 				JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
 				if (dr.getDatasetName() != null)
 					jrElement.setDatasetRun(dr);
-				else
+				else{
 					jrElement.setDatasetRun(null);
+				}
 			}
 		}
 	}
-
+	
+	/*
+	 * Clear the local dataset run information.
+	 */
+	private void clearOldMDatasetRun(){
+		if(mDatasetRun!=null){
+			unsetChildListener(mDatasetRun);
+			mDatasetRun.setParent(null, -1);
+			mDatasetRun=null;
+		}
+	}
+	
 }

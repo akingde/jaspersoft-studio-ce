@@ -81,6 +81,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 
@@ -107,7 +108,8 @@ public class ParameterPage extends WizardPage {
 	private ParameterDTO value;
 	private Table table;
 	private TableViewer tableViewer;
-
+	private ExpressionContext expContext;
+	
 	// private TableCursor cursor;
 
 	public ParameterDTO getValue() {
@@ -349,7 +351,9 @@ public class ParameterPage extends WizardPage {
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new JRExpressionCellEditor(parent) });
+		JRExpressionCellEditor exprCellEditor = new JRExpressionCellEditor(parent);
+		exprCellEditor.setExpressionContext(expContext);
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), exprCellEditor });
 		viewer.setColumnProperties(new String[] { "NAME", "VALUE" }); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -437,5 +441,9 @@ public class ParameterPage extends WizardPage {
 		// return p.getDescription();
 		// }
 		return ""; //$NON-NLS-1$
+	}
+	
+	public void setExpressionContext(ExpressionContext expContext){
+		this.expContext=expContext;
 	}
 }

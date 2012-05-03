@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
@@ -48,5 +49,13 @@ public class SPExpression {
 
 	public void setEnabled(boolean enabled) {
 		expr.setEnabled(enabled);
+	}
+	
+	public boolean isEnabled(){
+		return expr.isEnabled();
+	}
+	
+	public void setExpressionContext(ExpressionContext exprContext){
+		expr.setExpressionContext(exprContext);
 	}
 }
