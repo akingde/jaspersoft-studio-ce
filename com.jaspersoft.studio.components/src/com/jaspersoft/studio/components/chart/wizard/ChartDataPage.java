@@ -19,7 +19,12 @@
  */
 package com.jaspersoft.studio.components.chart.wizard;
 
+import net.sf.jasperreports.components.spiderchart.SpiderChartComponent;
+import net.sf.jasperreports.components.spiderchart.StandardSpiderDataset;
+import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignComponentElement;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 
@@ -29,15 +34,21 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.ElementDatasetWidget;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
+import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizardPage;
 
-public class ChartDataPage extends JSSWizardPage {
+public class ChartDataPage extends JSSWizardPage implements IExpressionContextSetter{
 	private JRDesignElement jrChart;
 	private ElementDatasetWidget ewDataset;
 	private JRDesignElementDataset edataset;
 	private DatasetSeriesWidget eDatasetSeries;
 	private JasperReportsConfiguration jrContext;
+	private ExpressionContext expContext;
 
 	protected ChartDataPage(JRDesignElement jrChart,
 			JRDesignElementDataset edataset,
@@ -56,8 +67,14 @@ public class ChartDataPage extends JSSWizardPage {
 		setControl(composite);
 
 		eDatasetSeries = new DatasetSeriesWidget(composite, jrContext);
-
+		eDatasetSeries.setExpressionContext(getExpressionContextFromDSRun());		
 		ewDataset = new ElementDatasetWidget(composite);
+		ewDataset.setExpressionContext(expContext);
+		ewDataset.addDatasetRunSelectionListener(new DatasetRunSelectionListener() {
+			public void selectionChanged() {
+				eDatasetSeries.setExpressionContext(getExpressionContextFromDSRun());
+			}
+		});
 	}
 
 	public void updateData() {
@@ -69,11 +86,38 @@ public class ChartDataPage extends JSSWizardPage {
 	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
-			edataset = (JRDesignElementDataset) ((JRDesignChart) jrChart)
+			if(jrChart instanceof JRDesignChart){
+				edataset = (JRDesignElementDataset) ((JRDesignChart) jrChart)
 					.getDataset();
-			updateData();
+				updateData();
+			}
+			else if (jrChart instanceof JRDesignComponentElement){ 
+				Component component = ((JRDesignComponentElement)jrChart).getComponent();
+				if(component instanceof SpiderChartComponent){
+					edataset=(StandardSpiderDataset) ((SpiderChartComponent)component).getDataset();
+					updateData();
+				}
+			}
 		}
 		super.setVisible(visible);
 	}
 
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		if(ewDataset!=null){
+			ewDataset.setExpressionContext(expContext);
+		}
+	}
+
+	/*
+	 * Gets the expression context from the current dataset run
+	 * set for the design element dataset.
+	 */
+	private ExpressionContext getExpressionContextFromDSRun() {
+		JRDesignDataset designDs=jrContext.getJasperDesign().getMainDesignDataset(); 
+		if(edataset.getDatasetRun()!=null){
+			designDs=ModelUtils.getDesignDatasetByName(jrContext.getJasperDesign(), Misc.nvl(edataset.getDatasetRun().getDatasetName()));
+		}
+		return new ExpressionContext(designDs,jrContext);
+	}
 }

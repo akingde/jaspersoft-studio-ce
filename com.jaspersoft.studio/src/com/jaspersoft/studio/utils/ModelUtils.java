@@ -41,6 +41,7 @@ import net.sf.jasperreports.crosstabs.design.JRDesignCellContents;
 import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRDataset;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JRElementGroup;
 import net.sf.jasperreports.engine.JRException;
@@ -75,6 +76,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.IGraphicElement;
@@ -1016,6 +1018,28 @@ public class ModelUtils {
 	}
 
 	/**
+	 * Returns the {@link JRDesignDatase} instance that correspond to the dataset information 
+	 * contained in the datasetrun.
+	 * 
+	 * <p>
+	 * If the dataset run is <code>null</code> or no design dataset can be found, the main one 
+	 * is returned as fallback solution.
+	 * 
+	 * @param jd the jasper design
+	 * @param datasetRun the dataset run
+	 * @return the corresponding design dataset, or the main (report) one
+	 */
+	public static JRDesignDataset getDesignDatasetForDatasetRun(JasperDesign jd,JRDatasetRun datasetRun){
+		Assert.isNotNull(jd);
+		if(datasetRun!=null && datasetRun.getDatasetName() != null){
+			return getDesignDatasetByName(jd, datasetRun.getDatasetName());
+		}
+		else {
+			return jd.getMainDesignDataset();
+		}
+	}
+
+	/**
 	 * Finds the top element group for a specified {@link JRDesignElement}.
 	 * 
 	 * @param element the design element
@@ -1076,7 +1100,7 @@ public class ModelUtils {
 		}
 		
 		// Default
-		return new ExpressionContext(node.getJasperDesign().getMainDesignDataset(),node.getJasperConfiguration());
+		return ExpressionEditorSupportUtil.getReportExpressionContext();
 	}
 	
 	/*

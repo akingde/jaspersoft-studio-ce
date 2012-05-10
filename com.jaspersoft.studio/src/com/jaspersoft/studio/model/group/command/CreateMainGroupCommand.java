@@ -50,6 +50,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
@@ -77,6 +78,8 @@ public class CreateMainGroupCommand extends CompoundCommand {
 				if (jrGroup == null) {
 					BandGroupWizard wizard = new BandGroupWizard();
 					wizard.init(jrDesign);
+					// Main group(s) are directly contained in the report -> main report exprcontext
+					wizard.setExpressionContext(ExpressionEditorSupportUtil.getReportExpressionContext());
 					WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 					dialog.create();
 					if (dialog.open() == Dialog.OK) {

@@ -25,12 +25,16 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.ElementLabelProvider;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public abstract class APropertyNode extends ANode implements IPropertySource, IPropertySource2 {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -73,8 +77,33 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 	 */
 	public abstract void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap);
 
+	/**
+	 * @param descriptors
+	 */
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
-
+		// Property descriptors that involve the use of an expression
+		// should have an expression context. 
+		// Most of the times the right context can be get using directly the node information.
+		// Sometimes the context must be customized (i.e: dataset run related expressions).
+		// In this case the clients should override this method, but also be sure to call
+		// the superclass one first in order not to break the expression context setting of
+		// other property descriptors.
+		try{
+			JRDesignElement designEl=null;
+			if(this.getValue() instanceof JRDesignElement){
+				designEl=(JRDesignElement)this.getValue();
+			}
+			ExpressionContext elementExpressionContext=ModelUtils.getElementExpressionContext(designEl, this);
+			for (IPropertyDescriptor desc : descriptors){
+				if(desc instanceof IExpressionContextSetter){
+					((IExpressionContextSetter)desc).setExpressionContext(elementExpressionContext);
+				}
+			}
+		}
+		catch(Exception ex){
+			// Unable to get a valid context expression, a default one will be used.
+			// Maybe we should log for debug purpose.
+		}
 	}
 
 	/*

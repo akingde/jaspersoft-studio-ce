@@ -45,6 +45,7 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.ADSComponent
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.SeriesDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.CategorySerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -71,7 +72,7 @@ public class DSSpider extends ADSComponent {
 		Assert.isTrue(eDataset instanceof StandardSpiderDataset);
 		super.setData(drawVisitor, jrChart, eDataset, jrContext);
 		this.dataset = (StandardSpiderDataset) eDataset;
-		setSeries(0);
+		setSeries(0);		
 	}
 
 	private void setSeries(int selection) {
@@ -134,6 +135,7 @@ public class DSSpider extends ADSComponent {
 			public void widgetSelected(SelectionEvent e) {
 				CategorySerie serie = new CategorySerie();
 				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				dlg.setExpressionContext(expContext);
 				List<JRCategorySeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();
 				JRCategorySeries selected = null;
@@ -189,6 +191,14 @@ public class DSSpider extends ADSComponent {
 
 		categWidget = new ExpressionWidget(xCompo, "Category");
 		return xCompo;
+	}
+
+	@Override
+	public void setExpressionContext(ExpressionContext expContext) {
+		super.setExpressionContext(expContext);
+		valueWidget.setExpressionContext(expContext);
+		categWidget.setExpressionContext(expContext);
+		labelWidget.setExpressionContext(expContext);
 	}
 
 }

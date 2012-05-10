@@ -421,6 +421,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		if (id.equals(PLOTPROPERTY)) { //$NON-NLS-1$
 			if (mChartPlot == null) {
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
+				mChartPlot.setParent(this, -1);
 				setChildListener(mChartPlot);
 			}
 			return mChartPlot;
@@ -863,4 +864,5 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 					evt.getOldValue(), evt.getNewValue());
 		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
+
 }

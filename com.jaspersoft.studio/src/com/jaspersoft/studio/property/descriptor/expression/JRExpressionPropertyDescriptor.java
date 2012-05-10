@@ -27,9 +27,12 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 
-public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor {
+public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor implements IExpressionContextSetter{
+	private ExpressionContext expContext;
 
 	public JRExpressionPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
@@ -37,7 +40,8 @@ public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor {
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
-		CellEditor editor = new JRExpressionCellEditor(parent);
+		JRExpressionCellEditor editor = new JRExpressionCellEditor(parent);
+		editor.setExpressionContext(expContext);
 		return editor;
 	}
 
@@ -47,5 +51,9 @@ public class JRExpressionPropertyDescriptor extends NTextPropertyDescriptor {
 			return super.getLabelProvider();
 		}
 		return new JRExpressionLabelProvider();
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
 	}
 }

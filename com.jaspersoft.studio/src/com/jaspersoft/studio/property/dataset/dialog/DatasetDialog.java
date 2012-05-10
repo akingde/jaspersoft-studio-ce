@@ -56,6 +56,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.data.IFieldSetter;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.MReport;
@@ -212,6 +214,13 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue(ExprUtil.setValues(new JRDesignExpression(), filterExpression.getText(), null));
+				JRDesignDataset designDataset = mdataset.getValue();
+				if(designDataset!=null){
+					wizard.setExpressionContext(new ExpressionContext(designDataset,mreport.getJasperConfiguration()));
+				}
+				else{
+					wizard.setExpressionContext(ExpressionEditorSupportUtil.getReportExpressionContext());
+				}
 				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {

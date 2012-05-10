@@ -147,6 +147,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
 		if (nameD != null) {
 			JRDesignDataset jrDataset = getDataSet();
 			if (getValue() != null) {

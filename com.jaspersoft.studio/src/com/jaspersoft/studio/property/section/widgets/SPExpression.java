@@ -24,10 +24,11 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPExpression {
+public class SPExpression implements IExpressionContextSetter{
 	private ExpressionWidget expr;
 
 	public SPExpression(Composite parent, AbstractSection section, String property) {

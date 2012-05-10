@@ -63,11 +63,13 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.utils.Misc;
 
-public class ParameterPage extends WizardPage {
+public class ParameterPage extends WizardPage implements IExpressionContextSetter{
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -94,6 +96,7 @@ public class ParameterPage extends WizardPage {
 	private ParameterDTO value;
 	private Table table;
 	private TableViewer tableViewer;
+	private ExpressionContext expContext;
 
 	// private TableCursor cursor;
 
@@ -347,7 +350,9 @@ public class ParameterPage extends WizardPage {
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), new JRExpressionCellEditor(parent),
+		JRExpressionCellEditor jrExpressionCellEditor = new JRExpressionCellEditor(parent);
+		jrExpressionCellEditor.setExpressionContext(expContext);
+		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent), jrExpressionCellEditor,
 				new ComboBoxCellEditor(parent, new String[] { "false", "true" }) }); //$NON-NLS-1$ //$NON-NLS-2$
 		viewer.setColumnProperties(new String[] { "NAME", "VALUE", "SKIPONEMPTY" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
@@ -439,4 +444,9 @@ public class ParameterPage extends WizardPage {
 		// }
 		return ""; //$NON-NLS-1$
 	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+	}
+	
 }

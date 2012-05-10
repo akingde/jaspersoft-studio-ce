@@ -48,6 +48,8 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorCellEditor;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
@@ -61,7 +63,7 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.Misc;
 
-public class SPMeterInterval {
+public class SPMeterInterval implements IExpressionContextSetter{
 	private final class TLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
 		private ColorLabelProvider colorLabel = new ColorLabelProvider(
@@ -112,6 +114,7 @@ public class SPMeterInterval {
 	private TableViewer tableViewer;
 	private AbstractSection section;
 	private String property;
+	private ExpressionContext expContext;
 
 	public SPMeterInterval(Composite parent, AbstractSection section,
 			String property, String tooltip) {
@@ -283,10 +286,12 @@ public class SPMeterInterval {
 			}
 		});
 
+		JRExpressionCellEditor exprCellEditor = new JRExpressionCellEditor(parent);
+		exprCellEditor.setExpressionContext(expContext);
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
 				new ColorCellEditor(parent), new TextCellEditor(parent),
-				new JRExpressionCellEditor(parent),
-				new JRExpressionCellEditor(parent) });
+				exprCellEditor,
+				exprCellEditor });
 		viewer.setColumnProperties(new String[] {
 				"LABEL", "COLOR", "ALPHA", "LOW", "HIGH" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
@@ -309,5 +314,9 @@ public class SPMeterInterval {
 		}
 
 		tableViewer.setInput(ilist);
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
 	}
 }

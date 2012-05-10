@@ -40,6 +40,8 @@ import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.ISeriesFactory;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -47,7 +49,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 
-public class SeriesDialog extends FormDialog {
+public class SeriesDialog extends FormDialog implements IExpressionContextSetter{
 	private final class TLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
 
@@ -63,6 +65,7 @@ public class SeriesDialog extends FormDialog {
 	private Table table;
 	private TableViewer tableViewer;
 	private ISeriesFactory<?> serie;
+	private ExpressionContext expContext;
 
 	public SeriesDialog(Shell parentShellProvider, ISeriesFactory<?> serie) {
 		super(parentShellProvider);
@@ -159,12 +162,18 @@ public class SeriesDialog extends FormDialog {
 			}
 		});
 
-		viewer.setCellEditors(new CellEditor[] { new JRExpressionCellEditor(
-				parent) });
+		JRExpressionCellEditor jrExpressionCellEditor = new JRExpressionCellEditor(
+				parent);
+		jrExpressionCellEditor.setExpressionContext(expContext);
+		viewer.setCellEditors(new CellEditor[] { jrExpressionCellEditor });
 		viewer.setColumnProperties(new String[] { "NAME" }); //$NON-NLS-1$  
 	}
 
 	private void fillTable(Table table) {
 		tableViewer.setInput(serie.getList());
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
 	}
 }

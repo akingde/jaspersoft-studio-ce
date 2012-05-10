@@ -40,17 +40,20 @@ package com.jaspersoft.studio.model.subreport.command.wizard;
 
 import net.sf.jasperreports.engine.JRSubreportParameter;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignSubreport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.IWizardPage;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.descriptor.subreport.parameter.dialog.SubreportPropertyPage;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
@@ -89,6 +92,9 @@ public class SubreportWizard extends JSSWizard {
 		step3 = new SubreportPropertyPage();
 		addPage(step3);
 
+		ExpressionContext ec = ModelUtils.getElementExpressionContext((JRDesignElement)subreport.getValue(), subreport);
+		step2.setExpressionContext(ec);
+		step0.setExpressionContext(ec);
 	}
 
 	@Override

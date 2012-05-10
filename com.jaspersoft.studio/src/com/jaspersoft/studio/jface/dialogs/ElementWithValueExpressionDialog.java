@@ -38,6 +38,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
@@ -50,7 +52,7 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
  * @author mrabbi
  *
  */
-public class ElementWithValueExpressionDialog extends FormDialog {
+public class ElementWithValueExpressionDialog extends FormDialog implements IExpressionContextSetter{
 	
 	// Dialog UI information
 	private String dialogTitle=Messages.ElementWithValueExpressionDialog_Title;
@@ -60,6 +62,7 @@ public class ElementWithValueExpressionDialog extends FormDialog {
 	// Information
 	private String elementName;
 	private JRDesignExpression elementValueExpr;
+	private ExpressionContext expContext;
 	
 	// Widgets
 	private Text name;
@@ -140,6 +143,7 @@ public class ElementWithValueExpressionDialog extends FormDialog {
 			name.setText(""); //$NON-NLS-1$
 		}
 		valueExpression.setExpression(elementValueExpr);
+		valueExpression.setExpressionContext(expContext);
 	}
 
 	@Override
@@ -185,6 +189,13 @@ public class ElementWithValueExpressionDialog extends FormDialog {
 	 */
 	public JRDesignExpression getElementValueExpression(){
 		return elementValueExpr;
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		if(valueExpression!=null){
+			valueExpression.setExpressionContext(this.expContext);
+		}			
 	}
 
 }

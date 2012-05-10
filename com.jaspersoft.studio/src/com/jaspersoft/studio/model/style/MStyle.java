@@ -169,6 +169,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
 		if (styleD != null && getValue() instanceof JRDesignStyle) {
 			JRDesignStyle jrElement = (JRDesignStyle) getValue();
 			JasperDesign jasperDesign = getJasperDesign();

@@ -114,7 +114,6 @@ public class ExpressionEditorSupportUtil {
 				final ANode mreport = (ANode) mroot.getChildren().get(0);
 				JRDataset mainDS = mreport.getJasperDesign().getMainDataset();
 				ExpressionContext exprContext=new ExpressionContext((JRDesignDataset)mainDS,mreport.getJasperConfiguration());
-				addFunctionsLibraryImports(exprContext.getJasperReportsConfiguration().getJasperDesign());				
 				return exprContext;
 		}
 		return null;

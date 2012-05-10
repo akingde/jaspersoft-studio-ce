@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -44,6 +45,7 @@ import com.jaspersoft.studio.property.section.widgets.SPFont;
 import com.jaspersoft.studio.property.section.widgets.SPRCombo;
 import com.jaspersoft.studio.property.section.widgets.SPText;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class ThermometerPlot extends APlot {
 
@@ -350,7 +352,17 @@ public class ThermometerPlot extends APlot {
 		hRangeHigh.setData((JRDesignExpression) mplot
 				.getPropertyValue(JRDesignThermometerPlot.PROPERTY_HIGH_RANGE
 						+ "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)); //$NON-NLS-1$
-
+		
+		// update expression context info
+		ExpressionContext ec=ModelUtils.getElementExpressionContext(null, mplot);
+		dRangeHigh.setExpressionContext(ec);
+		dRangeLow.setExpressionContext(ec);
+		hRangeHigh.setExpressionContext(ec);
+		hRangeLow.setExpressionContext(ec);
+		lRangeHigh.setExpressionContext(ec);
+		lRangeLow.setExpressionContext(ec);
+		mRangeHigh.setExpressionContext(ec);
+		mRangeLow.setExpressionContext(ec);
 	}
 
 }

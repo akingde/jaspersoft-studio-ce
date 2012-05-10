@@ -22,7 +22,6 @@ package com.jaspersoft.studio.components.list;
 import java.util.List;
 
 import net.sf.jasperreports.components.list.StandardListComponent;
-import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
@@ -170,14 +169,12 @@ public class ListComponentFactory implements IComponentFactory {
 	public ExpressionContext getElementExpressionContext(Object jrObject) {
 		if(jrObject instanceof MList &&
 				((MList)jrObject).getValue() instanceof JRDesignComponentElement){
+			MList mlist = (MList)jrObject;
 			 StandardListComponent listComponent = 
-					 (StandardListComponent) ((MList)jrObject).getValue().getComponent();
-			JRDatasetRun datasetRun = listComponent.getDatasetRun();
-			if(datasetRun!=null){
-				JRDesignDataset designDatasetByName = 
-						ModelUtils.getDesignDatasetByName(((MList)jrObject).getJasperDesign(),datasetRun.getDatasetName());
-				return new ExpressionContext(designDatasetByName,((MList)jrObject).getJasperConfiguration());
-			}
+					 (StandardListComponent) mlist.getValue().getComponent();
+			JRDesignDataset designDS = ModelUtils.getDesignDatasetForDatasetRun(
+					mlist.getJasperConfiguration().getJasperDesign(), listComponent.getDatasetRun());
+			return new ExpressionContext(designDS,mlist.getJasperConfiguration());
 		}
 
 		return null;

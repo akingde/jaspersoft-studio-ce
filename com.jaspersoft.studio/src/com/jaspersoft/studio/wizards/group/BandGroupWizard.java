@@ -47,11 +47,14 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.group.MGroup;
 
-public class BandGroupWizard extends Wizard {
+public class BandGroupWizard extends Wizard implements IExpressionContextSetter {
 	private MGroup group;
+	private ExpressionContext expContext;
 
 	public boolean isAddHeader() {
 		return step2.isAddHeader();
@@ -77,6 +80,9 @@ public class BandGroupWizard extends Wizard {
 		step1 = new WizardBandGroupPage(jasperDesign);
 		addPage(step1);
 		step1.setGroup(group);
+		if(expContext!=null){
+			step1.setExpressionContext(expContext);
+		}
 
 		step2 = new WizardBandGroupLayoutPage();
 		addPage(step2);
@@ -99,4 +105,12 @@ public class BandGroupWizard extends Wizard {
 	public void init(JasperDesign jd) {
 		this.jasperDesign = jd;
 	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		if(step1!=null){
+			step1.setExpressionContext(expContext);
+		}
+	}
+	
 }

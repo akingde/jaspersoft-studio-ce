@@ -44,11 +44,14 @@ package com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 
-public class ParameterEditor extends Wizard {
+public class ParameterEditor extends Wizard implements IExpressionContextSetter{
 	private ParameterDTO value;
 	private ParameterPage page0;
+	private ExpressionContext expContext;
 
 	public ParameterDTO getValue() {
 		if (page0 != null)
@@ -72,12 +75,22 @@ public class ParameterEditor extends Wizard {
 	public void addPages() {
 		page0 = new ParameterPage("Hyperlinkparameters"); //$NON-NLS-1$
 		page0.setValue(value);
+		if(expContext!=null){
+			page0.setExpressionContext(expContext);
+		}
 		addPage(page0);
 	}
 
 	@Override
 	public boolean performFinish() {
 		return true;
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		if(page0!=null){
+			page0.setExpressionContext(this.expContext);
+		}
 	}
 
 }

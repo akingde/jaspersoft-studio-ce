@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
 import com.jaspersoft.studio.components.chart.property.widget.SPMeterInterval;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -49,6 +50,7 @@ import com.jaspersoft.studio.property.section.widgets.SPNumber;
 import com.jaspersoft.studio.property.section.widgets.SPRCombo;
 import com.jaspersoft.studio.property.section.widgets.SPText;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MeterPlot extends APlot {
 
@@ -245,9 +247,10 @@ public class MeterPlot extends APlot {
 
 	@Override
 	public void setData(MChartPlot mplot) {
+		ExpressionContext expContext = ModelUtils.getElementExpressionContext(null, mplot);
 		mInterval.setData((List<JRMeterInterval>) mplot
 				.getPropertyValue(JRDesignMeterPlot.PROPERTY_INTERVALS));
-
+		mInterval.setExpressionContext(expContext);
 		units.setData((String) mplot
 				.getPropertyValue(JRDesignMeterPlot.PROPERTY_UNITS));
 
@@ -284,11 +287,12 @@ public class MeterPlot extends APlot {
 		dRangeLow.setData((JRDesignExpression) mplot
 				.getPropertyValue(JRDesignMeterPlot.PROPERTY_DATA_RANGE
 						+ "." + JRDesignDataRange.PROPERTY_LOW_EXPRESSION)); //$NON-NLS-1$
+		dRangeLow.setExpressionContext(expContext);
 
 		dRangeHigh.setData((JRDesignExpression) mplot
 				.getPropertyValue(JRDesignMeterPlot.PROPERTY_DATA_RANGE
 						+ "." + JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)); //$NON-NLS-1$
-
+		dRangeHigh.setExpressionContext(expContext);
 	}
 
 }

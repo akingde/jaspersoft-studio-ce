@@ -39,9 +39,11 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 
-public class DatasetRunWidget {
+public class DatasetRunWidget implements IExpressionContextSetter{
 	public static final String[] ITEMS = new String[] { Messages.WizardConnectionPage_noconnection_text,
 			Messages.WizardConnectionPage_connection_text, Messages.WizardConnectionPage_datasource_text,
 			Messages.WizardConnectionPage_mainreport_text, Messages.WizardConnectionPage_empty_connection_text };
@@ -88,6 +90,7 @@ public class DatasetRunWidget {
 
 	private ExpressionWidget cnExpr;
 	private Combo cmb;
+	private ExpressionContext expContext;
 
 	public void createControl(Composite parent) {
 		Composite cmp = new Composite(parent, SWT.NONE);
@@ -174,4 +177,12 @@ public class DatasetRunWidget {
 			setData(datasetrun);
 		}
 	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		if(cnExpr!=null){
+			cnExpr.setExpressionContext(this.expContext);
+		}
+	}
+	
 }

@@ -36,6 +36,7 @@ import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.command.CreateElementCommand;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
@@ -121,6 +122,7 @@ public class CreateChartCommand extends CreateElementCommand {
 					new MChart(null, newchart, -1),
 					(JRDesignElementDataset) newchart.getDataset());
 			wizard.init(jConfig);
+			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(null, destNode));	// Use the "future" parent inherited information
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

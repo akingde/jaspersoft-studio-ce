@@ -72,6 +72,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.field.MField;
 import com.jaspersoft.studio.model.group.MGroup;
@@ -80,13 +82,14 @@ import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionE
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public class WizardBandGroupPage extends WizardPage {
+public class WizardBandGroupPage extends WizardPage implements IExpressionContextSetter{
 	private MGroup group;
 	private JasperDesign jrDesign;
 	private Text grName;
 	private java.util.List<Object> fList;
 	private Table leftTable;
 	private TableViewer leftTView;
+	private ExpressionContext expContext;
 
 	private final class TLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -226,10 +229,9 @@ public class WizardBandGroupPage extends WizardPage {
 
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
-
 				JRDesignExpression mexp = (JRDesignExpression) group.getPropertyValue(JRDesignGroup.PROPERTY_EXPRESSION);
-
 				wizard.setValue(mexp);
+				wizard.setExpressionContext(expContext);
 				WizardDialog dialog = new WizardDialog(dsExprDialog.getShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
@@ -279,5 +281,9 @@ public class WizardBandGroupPage extends WizardPage {
 		leftTView.setInput(fList);
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), "Jaspersoft.wizard");//$NON-NLS-1$
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
 	}
 }

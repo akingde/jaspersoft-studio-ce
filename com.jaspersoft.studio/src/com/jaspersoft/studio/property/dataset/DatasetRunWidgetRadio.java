@@ -34,10 +34,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
-public class DatasetRunWidgetRadio {
+public class DatasetRunWidgetRadio implements IExpressionContextSetter{
 	private JRDesignDatasetRun datasetrun;
 
 	public DatasetRunWidgetRadio(Composite parent) {
@@ -184,5 +186,10 @@ public class DatasetRunWidgetRadio {
 			datasetrun.setDataSourceExpression(null);
 			setData(datasetrun);
 		}
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.dsRunExpr.setExpressionContext(expContext);
+		this.otherExpr.setExpressionContext(expContext);
 	}
 }

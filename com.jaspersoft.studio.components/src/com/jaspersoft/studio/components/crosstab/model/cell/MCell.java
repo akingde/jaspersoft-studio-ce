@@ -172,6 +172,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
 		// initialize style
 		JasperDesign jasperDesign = getJasperDesign();
 		if (jasperDesign != null) {

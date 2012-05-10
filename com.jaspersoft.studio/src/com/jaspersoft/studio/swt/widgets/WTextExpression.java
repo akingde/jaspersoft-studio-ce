@@ -42,6 +42,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.utils.Misc;
 
@@ -57,7 +59,7 @@ import com.jaspersoft.studio.utils.Misc;
  * @author mrabbi
  * 
  */
-public class WTextExpression extends Composite {
+public class WTextExpression extends Composite implements IExpressionContextSetter{
 
 	/** No label specified */
 	public static final int LABEL_NONE = 0x0000;
@@ -70,6 +72,7 @@ public class WTextExpression extends Composite {
 
 	private static final String BUTTON_ICON_PATH = "icons/resources/expressionedit-16.png"; //$NON-NLS-1$
 	private int customTextLinesNumber = -1;
+	private ExpressionContext expContext;
 
 	// Widgets
 	private JRDesignExpression expression;
@@ -199,6 +202,7 @@ public class WTextExpression extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue(expression);
+				wizard.setExpressionContext(expContext);
 				WizardDialog dialog = new WizardDialog(Display.getDefault().getActiveShell(), wizard);
 				dialog.create();
 				if (dialog.open() == Dialog.OK) {
@@ -275,6 +279,10 @@ public class WTextExpression extends Composite {
 		return this.expression == null ? "" : Misc.nvl(this.getExpression().getText());
 	}
 
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+	}
+	
 	public void fireModifyEvent(ModifyEvent event) {
 		for (ModifyListener ml : listeners)
 			ml.modifyText(event);

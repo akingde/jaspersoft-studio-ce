@@ -109,6 +109,7 @@ import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.IComponentFactory;
 import com.jaspersoft.studio.plugin.IPaletteContributor;
 import com.jaspersoft.studio.plugin.PaletteContributor;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class TableComponentFactory implements IComponentFactory {
@@ -623,7 +624,14 @@ public class TableComponentFactory implements IComponentFactory {
 	}
 
 	public ExpressionContext getElementExpressionContext(Object jrObject) {
-		// FIXME - Implement this method.
+		if(jrObject instanceof MTable && 
+				((MTable)jrObject).getValue() instanceof JRDesignComponentElement){
+			MTable mtable=(MTable)jrObject;
+			StandardTable table=(StandardTable) ((JRDesignComponentElement)mtable.getValue()).getComponent();
+			JRDesignDataset designDS = ModelUtils.getDesignDatasetForDatasetRun(
+					mtable.getJasperConfiguration().getJasperDesign(), table.getDatasetRun());
+			return new ExpressionContext(designDS,mtable.getJasperConfiguration());
+		}
 		return null;
 	}
 }

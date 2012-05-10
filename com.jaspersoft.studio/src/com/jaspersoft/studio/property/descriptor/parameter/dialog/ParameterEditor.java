@@ -45,9 +45,10 @@ package com.jaspersoft.studio.property.descriptor.parameter.dialog;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 
-public class ParameterEditor extends Wizard {
+public class ParameterEditor extends Wizard implements IExpressionContextSetter{
 	private ParameterDTO value;
 	private ParameterPage page0;
 	private ExpressionContext exprContext;

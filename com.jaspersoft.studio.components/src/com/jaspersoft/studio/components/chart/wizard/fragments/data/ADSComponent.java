@@ -50,22 +50,25 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.components.chart.figure.ChartFigure;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.ChartDatasetDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.editor.gef.figures.FrameFigure;
 import com.jaspersoft.studio.editor.gef.figures.JRComponentFigure;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
 import com.jaspersoft.studio.utils.UIUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public abstract class ADSComponent {
+public abstract class ADSComponent implements IExpressionContextSetter{
 	private Control control;
 	protected Label imgLabel;
 	private FrameFigure chartFigure;
 	private Canvas canvasChart;
 	private JRDesignElement jrElement;
 	private JRDesignElementDataset eDataset;
-	private DatasetSeriesWidget dsWidget;
+	protected DatasetSeriesWidget dsWidget;
 	private J2DLightweightSystem lws;
 	private Button btDatasetType;
+	protected ExpressionContext expContext;
 
 	public ADSComponent(Composite composite, DatasetSeriesWidget dsWidget) {
 		createControl(composite);
@@ -212,5 +215,9 @@ public abstract class ADSComponent {
 			// if (jrElement instanceof JRCommonElement)
 			chartFigure = new JRComponentFigure();
 		lws.setContents(chartFigure);
+	}
+	
+	public void setExpressionContext(ExpressionContext expContext){
+		this.expContext=expContext;
 	}
 }

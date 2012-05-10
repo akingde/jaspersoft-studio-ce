@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Text;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.SeriesDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.PieSerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -150,6 +151,7 @@ public class DSPie extends ADSComponent {
 			public void widgetSelected(SelectionEvent e) {
 				PieSerie serie = new PieSerie();
 				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				dlg.setExpressionContext(expContext);
 				List<JRPieSeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();
 				JRPieSeries selected = null;
@@ -275,4 +277,12 @@ public class DSPie extends ADSComponent {
 		return yCompo;
 	}
 
+	@Override
+	public void setExpressionContext(ExpressionContext expContext) {
+		super.setExpressionContext(expContext);
+		this.key.setExpressionContext(expContext);
+		this.labelWidget.setExpressionContext(expContext);
+		this.valueWidget.setExpressionContext(expContext);
+	}
+	
 }

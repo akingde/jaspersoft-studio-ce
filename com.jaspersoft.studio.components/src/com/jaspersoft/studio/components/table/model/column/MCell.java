@@ -117,6 +117,7 @@ public class MCell extends MColumn implements IGraphicElement,
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
 		JasperDesign jasperDesign = getJasperDesign();
 		if (jasperDesign != null) {
 			if (styleD != null && cell != null) {

@@ -227,6 +227,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 				JasperDesign jd = getModel().getJasperDesign();
 				MRoot root = new MRoot(null, jd);
 				MPage rep = new MPage(root, jd);
+				rep.setJasperConfiguration(jrContext);
 				ANode node = m.createNode(rep, obj, -1);
 
 				ave = m.getEditor(obj, jrContext);

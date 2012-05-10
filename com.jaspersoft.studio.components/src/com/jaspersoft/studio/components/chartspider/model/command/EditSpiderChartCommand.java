@@ -38,6 +38,7 @@ import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MElementGroup;
 import com.jaspersoft.studio.model.MFrame;
 import com.jaspersoft.studio.model.band.MBand;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class EditSpiderChartCommand extends Command {
@@ -45,6 +46,7 @@ public class EditSpiderChartCommand extends Command {
 	private JRDesignComponentElement oldChart;
 	private JRDesignComponentElement newChart;
 	protected JasperReportsConfiguration jConfig;
+	private MSpiderChart originalNode;
 
 	public EditSpiderChartCommand(MFrame parent, MSpiderChart mchart) {
 		this(parent, mchart, -1);
@@ -59,6 +61,7 @@ public class EditSpiderChartCommand extends Command {
 	}
 
 	private EditSpiderChartCommand(ANode parent, MSpiderChart mchart, int index) {
+		this.originalNode=mchart;
 		this.jConfig = parent.getJasperConfiguration();
 		this.oldChart = (JRDesignComponentElement) mchart.getValue();
 		if (parent instanceof IGroupElement)
@@ -79,6 +82,7 @@ public class EditSpiderChartCommand extends Command {
 			ChartWizard wizard = new ChartWizard(new MSpiderChart(null, clone,
 					-1), (JRDesignElementDataset) scc.getDataset());
 			wizard.init(jConfig);
+			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(oldChart,originalNode));
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();

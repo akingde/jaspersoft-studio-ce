@@ -26,15 +26,18 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChart;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
-public class ChartWizard extends JSSWizard {
+public class ChartWizard extends JSSWizard implements IExpressionContextSetter{
 	private ChartTypeWizardPage page0;
 	private ChartDataPage step1;
 	private MGraphicElement chart;
 	private JRDesignElementDataset edataset;
+	private ExpressionContext expContext;
 
 	private int width;
 	private int height;
@@ -66,6 +69,7 @@ public class ChartWizard extends JSSWizard {
 
 		step1 = new ChartDataPage((JRDesignElement) chart.getValue(), edataset,
 				getConfig());
+		step1.setExpressionContext(expContext);
 		addPage(step1);
 	}
 
@@ -96,5 +100,12 @@ public class ChartWizard extends JSSWizard {
 		super.init(jConfig);
 		if (chart != null)
 			chart.setJasperConfiguration(jConfig);
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		if(step1!=null){
+			step1.setExpressionContext(expContext);
+		}
 	}
 }

@@ -43,14 +43,17 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidgetRadio;
 
-public class WizardConnectionPage extends WizardPage {
+public class WizardConnectionPage extends WizardPage implements IExpressionContextSetter{
 	private MDatasetRun datasetrun;
 	private DatasetRunWidgetRadio dsRun;
 	private JRDesignDatasetRun jrDsRun;
+	private ExpressionContext expContext;
 
 	public void setDataSetRun(MDatasetRun datasetrun) {
 		this.datasetrun = datasetrun;
@@ -75,8 +78,17 @@ public class WizardConnectionPage extends WizardPage {
 
 	public void createControl(Composite parent) {
 		dsRun = new DatasetRunWidgetRadio(parent);
-
 		setControl(dsRun.getControl());
 		dsRun.setData(jrDsRun);
+		if(expContext!=null){
+			dsRun.setExpressionContext(expContext);
+		}
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		if(dsRun!=null){
+			dsRun.setExpressionContext(expContext);
+		}
 	}
 }

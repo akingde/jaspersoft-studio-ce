@@ -64,6 +64,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.jface.dialogs.ElementWithValueExpressionDialog;
 import com.jaspersoft.studio.messages.Messages;
 
@@ -78,10 +80,10 @@ import com.jaspersoft.studio.messages.Messages;
  * @author mrabbi
  *
  */
-public class WHyperlink extends Composite {
+public class WHyperlink extends Composite implements IExpressionContextSetter {
 	
 	private JRDesignHyperlink hyperlink;
-	
+	private ExpressionContext expContext;
 	private boolean init=false;
 	
 	// Widgets
@@ -544,6 +546,7 @@ public class WHyperlink extends Composite {
 	 */
 	private void addNewParameter() {
 		ElementWithValueExpressionDialog dialog=new ElementWithValueExpressionDialog(Messages.WHyperlink_AddParameterDialogTitle, Messages.WHyperlink_AddParameterDialogLbl1, Messages.WHyperlink_AddParameterDialogLbl2, null, null, getShell());
+		dialog.setExpressionContext(expContext);
 		if(dialog.open()==Window.OK){
 			JRDesignHyperlinkParameter linkParam=new JRDesignHyperlinkParameter();
 			linkParam.setName(dialog.getElementName());
@@ -561,6 +564,7 @@ public class WHyperlink extends Composite {
 		if(selObject!=null && selObject instanceof JRDesignHyperlinkParameter){
 			JRDesignHyperlinkParameter selectedParam=(JRDesignHyperlinkParameter)selObject;
 			ElementWithValueExpressionDialog dialog=new ElementWithValueExpressionDialog(Messages.WHyperlink_ModifyParameterDialogTitle, Messages.WHyperlink_ModifyParameterDialogLbl1, Messages.WHyperlink_ModifyParameterDialogLbl2, selectedParam.getName(), (JRDesignExpression)selectedParam.getValueExpression(), getShell());
+			dialog.setExpressionContext(expContext);
 			if(dialog.open()==Window.OK){
 				selectedParam.setName(dialog.getElementName());
 				selectedParam.setValueExpression(dialog.getElementValueExpression());
@@ -643,6 +647,14 @@ public class WHyperlink extends Composite {
 		}
 		
 		return this.hyperlink;
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		referenceExpr.setExpressionContext(expContext);
+		anchorExpr.setExpressionContext(expContext);
+		pageExpr.setExpressionContext(expContext);
+		tooltipExpr.setExpressionContext(expContext);
 	}
 	
 }

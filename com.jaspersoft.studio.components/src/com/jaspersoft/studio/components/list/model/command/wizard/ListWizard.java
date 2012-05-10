@@ -30,6 +30,7 @@ import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -45,6 +46,7 @@ import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardConnectionPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDatasetPage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsPage;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.JSSWizard;
 
@@ -66,7 +68,7 @@ public class ListWizard extends JSSWizard {
 		list = new MList();
 		list.setValue(list.createJRElement(getConfig().getJasperDesign()));
 		list.setJasperConfiguration(getConfig());
-
+		
 		MDatasetRun mdatasetrun = (MDatasetRun) list
 				.getPropertyValue(MList.PREFIX + "DATASET_RUN");//$NON-NLS-1$
 		if (mdatasetrun == null)
@@ -83,6 +85,8 @@ public class ListWizard extends JSSWizard {
 		step2 = new WizardConnectionPage();
 		addPage(step2);
 		step2.setDataSetRun(mdatasetrun);
+		step2.setExpressionContext(
+				ModelUtils.getElementExpressionContext((JRDesignElement)list.getValue(), list));
 
 		step3 = new WizardFieldsPage();
 		addPage(step3);

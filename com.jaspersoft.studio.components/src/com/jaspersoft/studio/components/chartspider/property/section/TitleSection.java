@@ -20,6 +20,7 @@
 package com.jaspersoft.studio.components.chartspider.property.section;
 
 import net.sf.jasperreports.components.spiderchart.StandardChartSettings;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
@@ -31,6 +32,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
@@ -39,6 +41,7 @@ import com.jaspersoft.studio.property.section.widgets.SPColor;
 import com.jaspersoft.studio.property.section.widgets.SPEdgeEnum;
 import com.jaspersoft.studio.property.section.widgets.SPExpression;
 import com.jaspersoft.studio.property.section.widgets.SPFont;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The location section on the location tab.
@@ -125,6 +128,13 @@ public class TitleSection extends AbstractSection {
 
 			expr.setData((JRDesignExpression) element
 					.getPropertyValue(StandardChartSettings.PROPERTY_TITLE_EXPRESSION));
+			// update expression context info
+			JRDesignElement designEl=null;
+			if(element.getValue() instanceof JRDesignElement){
+				designEl=(JRDesignElement) element.getValue();
+			}
+			ExpressionContext ec=ModelUtils.getElementExpressionContext(designEl, element);
+			expr.setExpressionContext(ec);
 		}
 		isRefreshing = false;
 	}

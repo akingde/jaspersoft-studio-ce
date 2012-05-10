@@ -21,6 +21,7 @@ package com.jaspersoft.studio.components.chart.property.section;
 
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.property.section.widgets.SPColor;
 import com.jaspersoft.studio.property.section.widgets.SPEdgeEnum;
 import com.jaspersoft.studio.property.section.widgets.SPExpression;
 import com.jaspersoft.studio.property.section.widgets.SPFont;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The location section on the location tab.
@@ -122,6 +124,11 @@ public class TitleSection extends AbstractSection {
 
 			expr.setData((JRDesignExpression) element
 					.getPropertyValue(JRDesignChart.PROPERTY_TITLE_EXPRESSION));
+			JRDesignElement designEl=null;
+			if(element.getValue() instanceof JRDesignElement){
+				designEl=(JRDesignElement) element.getValue();
+			}
+			expr.setExpressionContext(ModelUtils.getElementExpressionContext(designEl, element));
 		}
 		isRefreshing = false;
 	}

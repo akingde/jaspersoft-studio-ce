@@ -42,6 +42,8 @@ import org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.subreport.MSubreport;
 import com.jaspersoft.studio.plugin.IEditorContributor;
@@ -51,12 +53,13 @@ import com.jaspersoft.studio.wizards.AWizardNode;
 import com.jaspersoft.studio.wizards.JSSWizardSelectionPage;
 import com.jaspersoft.studio.wizards.ReportNewWizard;
 
-public class NewSubreportPage extends JSSWizardSelectionPage {
+public class NewSubreportPage extends JSSWizardSelectionPage implements IExpressionContextSetter{
 
 	private Button useReport;
 	private WTextExpression useReportPath;
 	private Button useReportB;
 	private Button newReport;
+	private ExpressionContext expContext;
 
 	protected NewSubreportPage() {
 		super("newsubreportpage");
@@ -102,6 +105,9 @@ public class NewSubreportPage extends JSSWizardSelectionPage {
 				setPageComplete(!(useReportPath.getExpression() == null || useReportPath.getExpression().getText().isEmpty()));
 			}
 		});
+		if(expContext!=null){
+			useReportPath.setExpressionContext(expContext);
+		}
 
 		useReportB = new Button(useReportPath, SWT.PUSH);
 		useReportB.setText("Browse");
@@ -234,6 +240,13 @@ public class NewSubreportPage extends JSSWizardSelectionPage {
 			}
 
 			useReportPath.setExpression(jre);
+		}
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		if(useReportPath!=null){
+			useReportPath.setExpressionContext(this.expContext);
 		}
 	}
 }

@@ -130,6 +130,7 @@ public class MChartAxes extends APropertyNode {
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
 		// initialize style
 		JasperDesign jasperDesign = getJasperDesign();
 		if (jasperDesign != null) {

@@ -33,6 +33,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SP3Boolean;
@@ -40,6 +41,7 @@ import com.jaspersoft.studio.property.section.widgets.SPColor;
 import com.jaspersoft.studio.property.section.widgets.SPExpression;
 import com.jaspersoft.studio.property.section.widgets.SPFont;
 import com.jaspersoft.studio.property.section.widgets.SPText;
+import com.jaspersoft.studio.utils.ModelUtils;
 
 public class CandlestickPlot extends APlot {
 
@@ -459,5 +461,14 @@ public class CandlestickPlot extends APlot {
 		vaxRangeMax
 				.setData((JRDesignExpression) mplot
 						.getPropertyValue(JRDesignCandlestickPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION));
+
+		// update expression context info
+		ExpressionContext ec=ModelUtils.getElementExpressionContext(null, mplot);
+		caxLblExpr.setExpressionContext(ec);
+		caxRangeMin.setExpressionContext(ec);
+		caxRangeMax.setExpressionContext(ec);
+		vaxLblExpr.setExpressionContext(ec);
+		vaxRangeMin.setExpressionContext(ec);
+		vaxRangeMax.setExpressionContext(ec);
 	}
 }

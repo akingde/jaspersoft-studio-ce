@@ -285,6 +285,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 
 	@Override
 	protected void postDescriptors(IPropertyDescriptor[] descriptors) {
+		super.postDescriptors(descriptors);
 		// initialize style
 		JasperDesign jasperDesign = getJasperDesign();
 		if (jasperDesign != null) {

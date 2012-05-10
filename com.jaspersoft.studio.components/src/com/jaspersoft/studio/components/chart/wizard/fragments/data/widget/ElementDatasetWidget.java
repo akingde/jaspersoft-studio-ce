@@ -24,8 +24,10 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRDatasetParameter;
+import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
@@ -49,13 +51,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.property.dataset.DatasetRunWidget;
 import com.jaspersoft.studio.property.descriptor.expression.dialog.JRExpressionEditor;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterEditor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
-public class ElementDatasetWidget {
+public class ElementDatasetWidget implements IExpressionContextSetter {
 	private static final String GROUPPREFIX = "[Group] ";
 	private JRDesignElementDataset eDataset;
 	private JasperDesign jrDesign;
@@ -66,8 +71,11 @@ public class ElementDatasetWidget {
 	private ToolItem prmItem;
 	private ToolItem prmMapItem;
 	private DatasetRunWidget dsRun;
+	private ExpressionContext expContext;
+	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
 
 	public ElementDatasetWidget(Composite parent) {
+		this.dsRunSelectionListeners=new ArrayList<DatasetRunSelectionListener>();
 		createDataset(parent);
 		bindData();
 	}
@@ -91,6 +99,7 @@ public class ElementDatasetWidget {
 				}
 			}
 			dsRun.setData((JRDesignDatasetRun) eDataset.getDatasetRun());
+			dsRun.setExpressionContext(this.expContext);
 		}
 
 		enableMainDatasetRun();
@@ -184,6 +193,7 @@ public class ElementDatasetWidget {
 				}
 				dsRun.setData((JRDesignDatasetRun) eDataset.getDatasetRun());
 				enableMainDatasetRun();
+				notifyDatasetRunSelectionChanged();
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -207,6 +217,7 @@ public class ElementDatasetWidget {
 
 				ParameterEditor wizard = new ParameterEditor();
 				wizard.setValue(prmDTO);
+				wizard.setExpressionContext(expContext);
 				WizardDialog dialog = new WizardDialog(btnIncrement.getShell(),
 						wizard);
 				dialog.create();
@@ -236,6 +247,7 @@ public class ElementDatasetWidget {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue((JRDesignExpression) eDataset.getDatasetRun()
 						.getParametersMapExpression());
+				wizard.setExpressionContext(expContext);
 				WizardDialog dialog = new WizardDialog(btnIncrement.getShell(),
 						wizard);
 				dialog.create();
@@ -318,6 +330,14 @@ public class ElementDatasetWidget {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue((JRDesignExpression) eDataset
 						.getIncrementWhenExpression());
+				// Increment when expression should rely on the dataset run information.
+				JRDatasetRun datasetRun = eDataset.getDatasetRun();
+				JRDesignDataset dds=jrDesign.getMainDesignDataset();
+				if(datasetRun!=null && datasetRun.getDatasetName()!=null){
+					dds=ModelUtils.getDesignDatasetByName(jrDesign, datasetRun.getDatasetName());
+				}
+				ExpressionContext ec=new ExpressionContext(dds,expContext.getJasperReportsConfiguration());
+				wizard.setExpressionContext(ec);
 				WizardDialog dialog = new WizardDialog(btnIncrement.getShell(),
 						wizard);
 				dialog.create();
@@ -447,5 +467,23 @@ public class ElementDatasetWidget {
 		ctfolder.setTabHeight(tabHeight);
 
 		ctfolder.setTopRight(composite);
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+	}
+	
+	public void addDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+		dsRunSelectionListeners.add(listener);
+	}
+	
+	public void removeDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+		dsRunSelectionListeners.remove(listener);
+	}
+	
+	private void notifyDatasetRunSelectionChanged(){
+		for(DatasetRunSelectionListener l : dsRunSelectionListeners){
+			l.selectionChanged();
+		}
 	}
 }

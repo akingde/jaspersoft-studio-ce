@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.SeriesDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.GanttSeries;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -139,6 +140,7 @@ public class DSGantt extends ADSComponent {
 			public void widgetSelected(SelectionEvent e) {
 				GanttSeries serie = new GanttSeries();
 				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				dlg.setExpressionContext(expContext);
 				List<JRGanttSeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();
 				JRGanttSeries selected = null;
@@ -199,4 +201,15 @@ public class DSGantt extends ADSComponent {
 		return yCompo;
 	}
 
+	@Override
+	public void setExpressionContext(ExpressionContext expContext) {
+		super.setExpressionContext(expContext);
+		this.endDate.setExpressionContext(expContext);
+		this.labelWidget.setExpressionContext(expContext);
+		this.starDate.setExpressionContext(expContext);
+		this.subtask.setExpressionContext(expContext);
+		this.task.setExpressionContext(expContext);
+		this.percent.setExpressionContext(expContext);
+	}
+	
 }

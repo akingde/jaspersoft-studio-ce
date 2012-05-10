@@ -45,10 +45,13 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterEditor;
 
-public class ParameterCellEditor extends DialogCellEditor {
+public class ParameterCellEditor extends DialogCellEditor implements IExpressionContextSetter{
+	private ExpressionContext expContext;
 
 	public ParameterCellEditor(Composite parent) {
 		super(parent);
@@ -62,6 +65,7 @@ public class ParameterCellEditor extends DialogCellEditor {
 	protected Object openDialogBox(Control cellEditorWindow) {
 		ParameterEditor wizard = new ParameterEditor();
 		wizard.setValue((ParameterDTO) getValue());
+		wizard.setExpressionContext(expContext);
 		WizardDialog dialog = new WizardDialog(cellEditorWindow.getShell(), wizard);
 		dialog.create();
 		if (dialog.open() == Dialog.OK) {
@@ -81,5 +85,9 @@ public class ParameterCellEditor extends DialogCellEditor {
 			labelProvider = new ParameterLabelProvider();
 		String text = labelProvider.getText(value);
 		getDefaultLabel().setText(text);
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
 	}
 }

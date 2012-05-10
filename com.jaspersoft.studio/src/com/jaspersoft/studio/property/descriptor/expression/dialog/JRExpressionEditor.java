@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
 import com.jaspersoft.studio.messages.Messages;
 
 public class JRExpressionEditor extends Wizard {
@@ -67,6 +68,11 @@ public class JRExpressionEditor extends Wizard {
 
 	@Override
 	public boolean performFinish() {
+		if(exprContext!=null){
+			// Add the imports needed for the functions library
+			ExpressionEditorSupportUtil.addFunctionsLibraryImports(
+					exprContext.getJasperReportsConfiguration().getJasperDesign());
+		}
 		return true;
 	}
 

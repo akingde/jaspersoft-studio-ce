@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.dialog.SeriesDialog;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.series.XySerie;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.widget.DatasetSeriesWidget;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.property.dataset.ExpressionWidget;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -133,6 +134,7 @@ public class DSXy extends ADSComponent {
 			public void widgetSelected(SelectionEvent e) {
 				XySerie serie = new XySerie();
 				SeriesDialog dlg = new SeriesDialog(btn.getShell(), serie);
+				dlg.setExpressionContext(expContext);
 				List<JRXySeries> oldList = dataset.getSeriesList();
 				int oldsel = seriesCombo.getSelectionIndex();
 				JRXySeries selected = null;
@@ -190,4 +192,11 @@ public class DSXy extends ADSComponent {
 		return yCompo;
 	}
 
+	@Override
+	public void setExpressionContext(ExpressionContext expContext) {
+		super.setExpressionContext(expContext);
+		this.xvalueWidget.setExpressionContext(expContext);
+		this.yvalueWidget.setExpressionContext(expContext);
+		this.labelWidget.setExpressionContext(expContext);
+	}
 }

@@ -54,9 +54,11 @@ import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSValue;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSXy;
 import com.jaspersoft.studio.components.chart.wizard.fragments.data.DSXyz;
 import com.jaspersoft.studio.components.chartspider.wizard.action.DSSpider;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class DatasetSeriesWidget {
+public class DatasetSeriesWidget implements IExpressionContextSetter{
 	private JRDesignElementDataset eDataset;
 	private JasperDesign jrDesign;
 	private JRDesignElement jrChart;
@@ -65,6 +67,8 @@ public class DatasetSeriesWidget {
 	private Composite sComposite;
 	private DrawVisitor dv;
 	private JasperReportsConfiguration jrContext;
+	private ExpressionContext expContext;
+	
 
 	public DatasetSeriesWidget(Composite parent,
 			JasperReportsConfiguration jrContext) {
@@ -128,6 +132,13 @@ public class DatasetSeriesWidget {
 			// a label, with not implemented ...
 		}
 		sComposite.layout(true);
+	}
+
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		for(ADSComponent c : map.values()){
+			c.setExpressionContext(this.expContext);
+		}
 	}
 
 }

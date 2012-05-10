@@ -20,7 +20,10 @@
 package com.jaspersoft.studio.components.chart.property.section.dataset;
 
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
+import net.sf.jasperreports.engine.design.JRDesignChartDataset;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -30,9 +33,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.widgets.SPExpression;
 import com.jaspersoft.studio.property.section.widgets.SPNumber;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The location section on the location tab.
@@ -105,8 +112,24 @@ public class DatasetPieSection extends DatasetSection {
 			maxSlice.setData((Integer) element
 					.getPropertyValue(JRDesignPieDataset.PROPERTY_MAX_COUNT));
 
+			updateWidgetsExpressionContext(element);
 		}
 		isRefreshing = false;
+	}
+	
+	private void updateWidgetsExpressionContext(APropertyNode element) {
+		JasperDesign jd=element.getJasperDesign();
+		JasperReportsConfiguration config=element.getJasperConfiguration();
+		if(jd!=null && config!=null && 
+				element instanceof MChartDataset){
+			Object value = ((MChartDataset)element).getValue();
+			if(value instanceof JRDesignChartDataset){
+				JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(jd, ((JRDesignChartDataset) value).getDatasetRun());
+				ExpressionContext ec=new ExpressionContext(ds, config);
+				otherKeyExpr.setExpressionContext(ec);
+				otherLabelExpr.setExpressionContext(ec);
+			}
+		}
 	}
 
 }

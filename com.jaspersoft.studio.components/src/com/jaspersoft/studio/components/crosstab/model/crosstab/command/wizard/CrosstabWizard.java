@@ -104,6 +104,8 @@ public class CrosstabWizard extends JSSWizard {
 		step2 = new WizardConnectionPage();
 		addPage(step2);
 		step2.setDataSetRun(mdataset);
+		step2.setExpressionContext(
+				ModelUtils.getElementExpressionContext((JRDesignElement)crosstab.getValue(), crosstab));
 
 		step3 = new CrosstabWizardColumnPage();
 		addPage(step3);

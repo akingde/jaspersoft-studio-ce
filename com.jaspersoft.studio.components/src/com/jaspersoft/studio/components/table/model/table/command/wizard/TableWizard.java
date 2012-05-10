@@ -27,6 +27,7 @@ import net.sf.jasperreports.components.table.StandardColumn;
 import net.sf.jasperreports.components.table.StandardTable;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
@@ -84,6 +85,8 @@ public class TableWizard extends JSSWizard {
 		step2 = new WizardConnectionPage();
 		addPage(step2);
 		step2.setDataSetRun(mdataset);
+		step2.setExpressionContext(
+				ModelUtils.getElementExpressionContext((JRDesignElement)table.getValue(), table));
 
 		step3 = new WizardFieldsPage();
 		addPage(step3);

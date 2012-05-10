@@ -20,7 +20,10 @@
 package com.jaspersoft.studio.components.chart.property.section.series;
 
 import net.sf.jasperreports.charts.design.JRDesignGanttSeries;
+import net.sf.jasperreports.engine.design.JRDesignChartDataset;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
@@ -28,9 +31,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPExpression;
+import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The location section on the location tab.
@@ -113,7 +120,7 @@ public class SeriesGanttSection extends AbstractSection {
 			percentExpr
 					.setData((JRDesignExpression) element
 							.getPropertyValue(JRDesignGanttSeries.PROPERTY_PERCENT_EXPRESSION));
-
+			updateWidgetsExpressionContext(element);
 		}
 		isRefreshing = false;
 	}
@@ -123,4 +130,23 @@ public class SeriesGanttSection extends AbstractSection {
 		return composite.isDisposed();
 	}
 
+	private void updateWidgetsExpressionContext(APropertyNode element) {
+		JasperDesign jd=element.getJasperDesign();
+		JasperReportsConfiguration config=element.getJasperConfiguration();
+		if(jd!=null && config!=null && 
+				element.getParent() instanceof MChartDataset){
+			Object value = ((MChartDataset)element.getParent()).getValue();
+			if(value instanceof JRDesignChartDataset){
+				JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(jd, ((JRDesignChartDataset) value).getDatasetRun());
+				ExpressionContext ec=new ExpressionContext(ds, config);
+				endExpr.setExpressionContext(ec);
+				labelExpr.setExpressionContext(ec);
+				percentExpr.setExpressionContext(ec);
+				seriesExpr.setExpressionContext(ec);
+				startExpr.setExpressionContext(ec);
+				subtaskExpr.setExpressionContext(ec);
+				taskExpr.setExpressionContext(ec);
+			}
+		}
+	}
 }
