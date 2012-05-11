@@ -1,0 +1,71 @@
+/**
+ * <copyright>
+ * </copyright>
+ *
+ */
+package com.jaspersoft.studio.editor.jrexpressions.javaJRExpression;
+
+import org.eclipse.emf.common.util.EList;
+
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Methods Expression</b></em>'.
+ * <!-- end-user-doc -->
+ *
+ * <p>
+ * The following features are supported:
+ * <ul>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getMethodInvocations <em>Method Invocations</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getObjectExpression <em>Object Expression</em>}</li>
+ * </ul>
+ * </p>
+ *
+ * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage#getMethodsExpression()
+ * @model
+ * @generated
+ */
+public interface MethodsExpression extends JasperReportsExpression
+{
+  /**
+   * Returns the value of the '<em><b>Method Invocations</b></em>' containment reference list.
+   * The list contents are of type {@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Method Invocations</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Method Invocations</em>' containment reference list.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage#getMethodsExpression_MethodInvocations()
+   * @model containment="true"
+   * @generated
+   */
+  EList<MethodInvocation> getMethodInvocations();
+
+  /**
+   * Returns the value of the '<em><b>Object Expression</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Object Expression</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Object Expression</em>' containment reference.
+   * @see #setObjectExpression(JasperReportsExpression)
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage#getMethodsExpression_ObjectExpression()
+   * @model containment="true"
+   * @generated
+   */
+  JasperReportsExpression getObjectExpression();
+
+  /**
+   * Sets the value of the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getObjectExpression <em>Object Expression</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Object Expression</em>' containment reference.
+   * @see #getObjectExpression()
+   * @generated
+   */
+  void setObjectExpression(JasperReportsExpression value);
+
+} // MethodsExpression
