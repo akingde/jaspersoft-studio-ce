@@ -21,27 +21,14 @@ package com.jaspersoft.studio.components.chart.property.section;
 
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.swt.widgets.Group;
 
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.SPColor;
-import com.jaspersoft.studio.property.section.widgets.SPEdgeEnum;
-import com.jaspersoft.studio.property.section.widgets.SPExpression;
-import com.jaspersoft.studio.property.section.widgets.SPFont;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
  * The location section on the location tab.
@@ -49,11 +36,6 @@ import com.jaspersoft.studio.utils.ModelUtils;
  * @author Chicu Veaceslav
  */
 public class TitleSection extends AbstractSection {
-	private SPColor foreButton;
-	private SPExpression expr;
-	private SPEdgeEnum btnEdgeEnum;
-	private SPFont btnFont;
-	private Composite composite;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -63,78 +45,26 @@ public class TitleSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay()
-				.getSystemColor(SWT.COLOR_WHITE));
+		Group group = getWidgetFactory().createGroup(parent, "Title");
+		group.setLayout(new GridLayout(4, false));
+		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		composite = createNewRow(parent);
+		getWidgetFactory().createCLabel(group, "Expression");
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(group, JRDesignChart.PROPERTY_TITLE_EXPRESSION,
+				false).getControl().setLayoutData(gd);
 
-		CLabel lbl = getWidgetFactory().createCLabel(composite,
-				"Title:", SWT.RIGHT); //$NON-NLS-1$
-		RowData rd = new RowData();
-		rd.width = 100;
-		lbl.setLayoutData(rd);
+		getWidgetFactory().createCLabel(group, "Position");
+		createWidget4Property(group, JRBaseChart.PROPERTY_TITLE_POSITION, false);
 
-		Composite cmp = new Composite(composite, SWT.NONE);
-		GridLayout gl = new GridLayout(3, false);
-		gl.marginTop = 0;
-		gl.marginHeight = 0;
-		gl.marginWidth = 0;
-		gl.marginLeft = 0;
-		cmp.setLayout(gl);
-		cmp.setBackground(parent.getBackground());
+		getWidgetFactory().createCLabel(group, "Color");
+		createWidget4Property(group, JRBaseChart.PROPERTY_TITLE_COLOR, false);
 
-		expr = new SPExpression(cmp, this,
-				JRDesignChart.PROPERTY_TITLE_EXPRESSION);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 4;
+		createWidget4Property(group, JRDesignChart.PROPERTY_TITLE_FONT, false)
+				.getControl().setLayoutData(gd);
 
-		btnFont = new SPFont(parent, this, JRDesignChart.PROPERTY_TITLE_FONT);
-
-		composite = createNewRow(parent);
-
-		lbl = getWidgetFactory().createCLabel(composite,
-				Messages.common_forecolor + ":", SWT.RIGHT); //$NON-NLS-1$
-		rd = new RowData();
-		rd.width = 100;
-		lbl.setLayoutData(rd);
-
-		foreButton = new SPColor(composite, this,
-				JRBaseChart.PROPERTY_TITLE_COLOR,
-				Messages.ColorsSection_element_forecolor_tool_tip);
-
-		btnEdgeEnum = new SPEdgeEnum(parent, this,
-				JRBaseChart.PROPERTY_TITLE_POSITION);
-	}
-
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			foreButton.setData((RGB) element
-					.getPropertyValue(JRBaseChart.PROPERTY_TITLE_COLOR));
-
-			btnEdgeEnum.setData((Integer) element
-					.getPropertyValue(JRBaseChart.PROPERTY_TITLE_POSITION));
-
-			btnFont.setData(element, (MFont) element
-					.getPropertyValue(JRDesignChart.PROPERTY_TITLE_FONT));
-
-			expr.setData((JRDesignExpression) element
-					.getPropertyValue(JRDesignChart.PROPERTY_TITLE_EXPRESSION));
-			JRDesignElement designEl=null;
-			if(element.getValue() instanceof JRDesignElement){
-				designEl=(JRDesignElement) element.getValue();
-			}
-			expr.setExpressionContext(ModelUtils.getElementExpressionContext(designEl, element));
-		}
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return composite.isDisposed();
 	}
 }

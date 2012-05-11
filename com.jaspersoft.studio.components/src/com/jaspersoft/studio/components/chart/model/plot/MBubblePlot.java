@@ -196,7 +196,7 @@ public class MBubblePlot extends MChartPlot {
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		catAxisVertTickLabelD
 				.setDescription(Messages.MBubblePlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
@@ -204,7 +204,7 @@ public class MBubblePlot extends MChartPlot {
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBubblePlot.PROPERTY_Y_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MBubblePlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);

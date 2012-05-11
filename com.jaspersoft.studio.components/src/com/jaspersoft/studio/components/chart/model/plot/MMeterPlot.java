@@ -34,22 +34,22 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRException;
 
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
+import com.jaspersoft.studio.components.chart.property.descriptor.MeterIntervalPropertyDescriptor;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
-import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MMeterPlot extends MChartPlot {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -142,12 +142,11 @@ public class MMeterPlot extends MChartPlot {
 				.setDescription(Messages.MMeterPlot_tick_interval_description);
 		desc.add(tickIntervalD);
 
-		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(
+		shapeD = new JSSEnumPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_SHAPE, Messages.MMeterPlot_shape,
-				EnumHelper.getEnumNames(MeterShapeEnum.values(),
-						NullEnum.NOTNULL));
-		positionTypeD.setDescription(Messages.MMeterPlot_shape_description);
-		desc.add(positionTypeD);
+				MeterShapeEnum.class, NullEnum.NOTNULL);
+		shapeD.setDescription(Messages.MMeterPlot_shape_description);
+		desc.add(shapeD);
 
 		JRExpressionPropertyDescriptor dataRangeHighExprD = new JRExpressionPropertyDescriptor(
 				JRDesignMeterPlot.PROPERTY_DATA_RANGE
@@ -176,6 +175,11 @@ public class MMeterPlot extends MChartPlot {
 				Messages.common_value_mask);
 		maskD.setDescription(Messages.MMeterPlot_value_mask_description);
 		desc.add(maskD);
+
+		MeterIntervalPropertyDescriptor mipd = new MeterIntervalPropertyDescriptor(
+				JRDesignMeterPlot.PROPERTY_INTERVALS, "Intervals");
+		mipd.setDescription("Meter Intervals");
+		desc.add(mipd);
 
 	}
 
@@ -209,7 +213,7 @@ public class MMeterPlot extends MChartPlot {
 			return jrElement.getTickIntervalDouble();
 
 		if (id.equals(JRDesignMeterPlot.PROPERTY_SHAPE))
-			return EnumHelper.getValue(jrElement.getShapeValue(), 0, false);
+			return shapeD.getEnumValue(jrElement.getShapeValue());
 		if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
 			return jrElement.getUnits();
 		if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
@@ -240,11 +244,13 @@ public class MMeterPlot extends MChartPlot {
 			}
 			return lst;
 		}
+
 		return super.getPropertyValue(id);
 	}
 
 	private MFont tlFont;
 	private MFont vdFont;
+	private static JSSEnumPropertyDescriptor shapeD;
 
 	/*
 	 * (non-Javadoc)
@@ -264,11 +270,26 @@ public class MMeterPlot extends MChartPlot {
 			jrElement.setTickLabelFont(MFontUtil.setMFont(value));
 		} else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
 				+ "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
-			((JRDesignValueDisplay) jrElement.getValueDisplay())
-					.setFont(MFontUtil.setMFont(value));
-		} else
+			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(
+					jrElement.getValueDisplay(), jrElement.getChart());
+			jrDesignValueDisplay.setFont(MFontUtil.setMFont(value));
+			jrElement.setValueDisplay(jrDesignValueDisplay);
+		} else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
+				+ "." + JRDesignValueDisplay.PROPERTY_COLOR) //$NON-NLS-1$
+				&& value instanceof RGB) {
+			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(
+					jrElement.getValueDisplay(), jrElement.getChart());
+			jrDesignValueDisplay.setColor(Colors
+					.getAWT4SWTRGBColor((RGB) value));
+			jrElement.setValueDisplay(jrDesignValueDisplay);
+		} else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
+				+ "." + JRDesignValueDisplay.PROPERTY_MASK)) { //$NON-NLS-1$
+			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(
+					jrElement.getValueDisplay(), jrElement.getChart());
+			jrDesignValueDisplay.setMask((String) value);
+			jrElement.setValueDisplay(jrDesignValueDisplay);
 
-		if (id.equals(JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR)
+		} else if (id.equals(JRDesignMeterPlot.PROPERTY_METER_BACKGROUND_COLOR)
 				&& value instanceof RGB)
 			jrElement.setMeterBackgroundColor(Colors
 					.getAWT4SWTRGBColor((RGB) value));
@@ -278,35 +299,20 @@ public class MMeterPlot extends MChartPlot {
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_NEEDLE_COLOR)
 				&& value instanceof RGB)
 			jrElement.setNeedleColor(Colors.getAWT4SWTRGBColor((RGB) value));
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
-				+ "." + JRDesignValueDisplay.PROPERTY_COLOR) //$NON-NLS-1$
-				&& value instanceof RGB) {
-			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(
-					jrElement.getValueDisplay(), jrElement.getChart());
-			jrDesignValueDisplay.setColor(Colors
-					.getAWT4SWTRGBColor((RGB) value));
-			jrElement.setValueDisplay(jrDesignValueDisplay);
-		} else if (id.equals(JRDesignMeterPlot.PROPERTY_METER_ANGLE))
+		else if (id.equals(JRDesignMeterPlot.PROPERTY_METER_ANGLE))
 			jrElement.setMeterAngle((Integer) value);
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_TICK_INTERVAL))
 			jrElement.setTickInterval((Double) value);
 
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_SHAPE))
 			try {
-				jrElement.setShape((MeterShapeEnum) EnumHelper.getSetValue(
-						MeterShapeEnum.values(), value, 0, false));
+				jrElement.setShape((MeterShapeEnum) shapeD.getEnumValue(value));
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
 			jrElement.setUnits((String) value);
-		else if (id.equals(JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY
-				+ "." + JRDesignValueDisplay.PROPERTY_MASK)) { //$NON-NLS-1$
-			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(
-					jrElement.getValueDisplay(), jrElement.getChart());
-			jrDesignValueDisplay.setMask((String) value);
-			jrElement.setValueDisplay(jrDesignValueDisplay);
-		} else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
+		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
 			jrElement.setUnits((String) value);
 		else if (id.equals(JRDesignMeterPlot.PROPERTY_UNITS))
 			jrElement.setUnits((String) value);

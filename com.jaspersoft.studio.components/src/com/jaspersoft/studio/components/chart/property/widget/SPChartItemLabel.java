@@ -21,71 +21,69 @@ package com.jaspersoft.studio.components.chart.property.widget;
 
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
-import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPColor;
 import com.jaspersoft.studio.property.section.widgets.SPFont;
 
-public class SPChartItemLabel {
+public class SPChartItemLabel extends ASPropertyWidget {
 
 	public SPChartItemLabel(Composite parent, AbstractSection section,
-			String property) {
-		createComponent(parent, section, property);
+			IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+	@Override
+	public Control getControl() {
+		return null;
+	}
 
-		CLabel lbl = section.getWidgetFactory().createCLabel(composite,
-				" Color", SWT.RIGHT);
-		RowData rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
+	protected void createComponent(Composite parent) {
+		ml = new MChartItemLabel(new JRDesignItemLabel(null, null));
 
-		ilColor = new SPColor(composite, section,
-				JRDesignItemLabel.PROPERTY_COLOR,
-				Messages.MChartItemLabel_color_description);
+		IPropertyDescriptor pd = ml
+				.getPropertyDescriptor(JRDesignItemLabel.PROPERTY_COLOR);
 
-		section.getWidgetFactory().createCLabel(composite, "Background",
-				SWT.RIGHT);
+		section.getWidgetFactory().createCLabel(parent, pd.getDisplayName());
 
-		ilBGColor = new SPColor(composite, section,
-				JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR,
-				Messages.MChartItemLabel_background_color_description);
+		ilColor = new SPColor(parent, section, pd);
 
-		section.getWidgetFactory().createCLabel(composite, "Font", SWT.RIGHT);
+		pd = ml.getPropertyDescriptor(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR);
+		section.getWidgetFactory().createCLabel(parent, pd.getDisplayName());
 
-		ilFont = new SPFont(composite, section,
-				JRDesignItemLabel.PROPERTY_FONT, false);
+		ilBGColor = new SPColor(parent, section, pd);
+
+		pd = ml.getPropertyDescriptor(JRDesignItemLabel.PROPERTY_FONT);
+
+		GridData gd = new GridData();
+		gd.horizontalSpan = 4;
+		ilFont = new SPFont(parent, section, pd);
+		ilFont.getControl().setLayoutData(gd);
 	}
 
 	private SPColor ilColor;
 	private SPColor ilBGColor;
 	private SPFont ilFont;
+	private MChartItemLabel ml;
 
-	public void setData(MChartItemLabel element) {
-		if (element != null) {
-			ilColor.setData(element, (RGB) element
-					.getPropertyValue(JRDesignItemLabel.PROPERTY_COLOR));
+	public void setData(APropertyNode pnode, Object value) {
+		ml = (MChartItemLabel) value;
+		if (value != null) {
+			ilColor.setData(pnode,
+					ml.getPropertyValue(JRDesignItemLabel.PROPERTY_COLOR));
 			ilBGColor
 					.setData(
-							element,
-							(RGB) element
-									.getPropertyValue(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR));
-			ilFont.setData(element, (MFont) element
-					.getPropertyValue(JRDesignItemLabel.PROPERTY_FONT));
+							pnode,
+							ml.getPropertyValue(JRDesignItemLabel.PROPERTY_BACKGROUND_COLOR));
+			ilFont.setData(pnode,
+					ml.getPropertyValue(JRDesignItemLabel.PROPERTY_FONT));
 		}
 	}
 }

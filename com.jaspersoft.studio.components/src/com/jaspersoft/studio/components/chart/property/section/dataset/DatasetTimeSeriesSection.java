@@ -21,16 +21,10 @@ package com.jaspersoft.studio.components.chart.property.section.dataset;
 
 import net.sf.jasperreports.charts.design.JRDesignTimeSeriesDataset;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.components.chart.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.section.widgets.SPRComboTimePeriod;
+import com.jaspersoft.studio.model.dataset.descriptor.DatasetSection;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 
 /*
  * The location section on the location tab.
@@ -38,45 +32,14 @@ import com.jaspersoft.studio.property.section.widgets.SPRComboTimePeriod;
  * @author Chicu Veaceslav
  */
 public class DatasetTimeSeriesSection extends DatasetSection {
-	private SPRComboTimePeriod highExpr;
 
 	@Override
 	public void createControls(Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent = this.parent;
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay()
-				.getSystemColor(SWT.COLOR_WHITE));
-
-		composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
-
-		CLabel lbl = getWidgetFactory().createCLabel(composite,
-				Messages.MChartTimeSeriesDataset_time_period, SWT.RIGHT);
-		RowData rd = new RowData();
-		rd.width = 120;
-		lbl.setLayoutData(rd);
-
-		highExpr = new SPRComboTimePeriod(composite, this,
-				JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD,
-				Messages.MChartTimeSeriesDataset_time_period_description);
-	}
-
-	@Override
-	public void refresh() {
-		super.refresh();
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			JRDesignTimeSeriesDataset ds = (JRDesignTimeSeriesDataset) element.getValue();
-			
-			highExpr.setData(ds.getTimePeriod());
-		}
-		isRefreshing = false;
+		createWidget4Property(parent,
+				JRDesignTimeSeriesDataset.PROPERTY_TIME_PERIOD);
 	}
 
 }

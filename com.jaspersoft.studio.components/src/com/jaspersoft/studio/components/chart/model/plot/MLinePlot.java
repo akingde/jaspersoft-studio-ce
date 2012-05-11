@@ -32,7 +32,6 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.model.text.MFont;
 import com.jaspersoft.studio.model.text.MFontUtil;
-import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
@@ -40,6 +39,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MLinePlot extends MChartPlot {
@@ -194,7 +194,7 @@ public class MLinePlot extends MChartPlot {
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		catAxisVertTickLabelD
 				.setDescription(Messages.MLinePlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
@@ -208,13 +208,13 @@ public class MLinePlot extends MChartPlot {
 
 		CheckBoxPropertyDescriptor showLinesD = new CheckBoxPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_SHOW_LINES,
-				Messages.common_show_lines, NullEnum.NOTNULL);
+				Messages.common_show_lines, NullEnum.NULL);
 		showLinesD.setDescription(Messages.MLinePlot_show_lines_description);
 		desc.add(showLinesD);
 
 		CheckBoxPropertyDescriptor showShapesD = new CheckBoxPropertyDescriptor(
 				JRDesignLinePlot.PROPERTY_SHOW_SHAPES,
-				Messages.common_show_shapes, NullEnum.NOTNULL);
+				Messages.common_show_shapes, NullEnum.NULL);
 		showShapesD.setDescription(Messages.MLinePlot_show_shapes_description);
 		desc.add(showShapesD);
 

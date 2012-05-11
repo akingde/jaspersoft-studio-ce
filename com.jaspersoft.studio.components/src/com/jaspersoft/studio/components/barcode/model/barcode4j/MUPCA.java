@@ -28,11 +28,11 @@ import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
 public class MUPCA extends MBarcode4j {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -85,7 +85,7 @@ public class MUPCA extends MBarcode4j {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(
+		JSSComboPropertyDescriptor checksumModeD = new JSSComboPropertyDescriptor(
 				UPCAComponent.PROPERTY_CHECKSUM_MODE,
 				Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD.setDescription(Messages.MUPCA_checksum_mode_description);

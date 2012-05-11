@@ -20,514 +20,188 @@
 package com.jaspersoft.studio.components.chart.property.section.plot;
 
 import net.sf.jasperreports.charts.design.JRDesignBarPlot;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.jaspersoft.studio.components.chart.messages.Messages;
-import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
-import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
-import com.jaspersoft.studio.components.chart.property.widget.SPChartItemLabel;
-import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.SP3Boolean;
-import com.jaspersoft.studio.property.section.widgets.SPColor;
-import com.jaspersoft.studio.property.section.widgets.SPExpression;
-import com.jaspersoft.studio.property.section.widgets.SPFont;
-import com.jaspersoft.studio.property.section.widgets.SPNumber;
-import com.jaspersoft.studio.property.section.widgets.SPText;
-import com.jaspersoft.studio.utils.ModelUtils;
 
 public class BarPlot extends APlot {
 
-	public BarPlot(Composite parent, AbstractSection section) {
-		super(parent, section);
-	}
-
-	private SP3Boolean showLabels;
-	private SP3Boolean showTickLabels;
-	private SP3Boolean showTickMarks;
-
 	@Override
-	protected void createComponent(Composite parent, AbstractSection section) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
+	public void createControls(AbstractSection section, Composite parent,
+			TabbedPropertySheetPage tabbedPropertySheetPage) {
+		section.createWidget4Property(parent,
+				JRDesignBarPlot.PROPERTY_SHOW_LABELS);
 
-		CLabel lbl = section.getWidgetFactory().createCLabel(composite,
-				Messages.common_show_labels, SWT.RIGHT);
-		RowData rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
+		section.createWidget4Property(parent,
+				JRDesignBarPlot.PROPERTY_SHOW_TICK_LABELS);
 
-		showLabels = new SP3Boolean(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_SHOW_LABELS,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_show_labels_description);
+		section.createWidget4Property(parent,
+				JRDesignBarPlot.PROPERTY_SHOW_TICK_MARKS);
 
-		section.getWidgetFactory().createCLabel(composite, "Show Tick Labels",
-				SWT.RIGHT);
+		createCategory(section, parent, tabbedPropertySheetPage);
 
-		showTickLabels = new SP3Boolean(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_SHOW_TICK_LABELS,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_show_tick_labels_description);
+		createValue(section, parent, tabbedPropertySheetPage);
 
-		section.getWidgetFactory().createCLabel(composite, "Show Tick Marks",
-				SWT.RIGHT);
-
-		showTickMarks = new SP3Boolean(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_SHOW_TICK_MARKS,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_show_tick_marks_description);
-
-		createCategory(parent, section);
-
-		createValue(parent, section);
-
-		createItemLabel(parent, section);
+		createItemLabel(section, parent, tabbedPropertySheetPage);
 	}
 
-	private void createCategory(Composite parent, AbstractSection section) {
+	private void createCategory(AbstractSection section, Composite parent,
+			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		Section sectioncmp = section.getWidgetFactory().createSection(
 				parent,
 				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
 						| ExpandableComposite.EXPANDED);
-		sectioncmp.setText("Category axis");
+		sectioncmp.setText("Category Axis");
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		sectioncmp.setLayoutData(gd);
 
-		parent = new Composite(sectioncmp, SWT.NONE);
-		parent.setBackground(sectioncmp.getBackground());
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
+		parent = section.getWidgetFactory().createComposite(sectioncmp);
+		parent.setLayout(new GridLayout(2, false));
 
 		sectioncmp.setClient(parent);
 
-		Composite composite = AbstractSection.createNewRow(parent);
+		section.createWidget4Property(parent,
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR);
 
-		CLabel lbl = section.getWidgetFactory().createCLabel(composite,
-				"Axis Color", SWT.RIGHT);
-		RowData rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
+		Group group = section.getWidgetFactory().createGroup(parent, "Label");
+		group.setLayout(new GridLayout(2, false));
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		group.setLayoutData(gd);
 
-		caxLineColor = new SPColor(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_category_axis_line_color_description);
-
-		composite = AbstractSection.createNewRow(parent);
-
-		lbl = section.getWidgetFactory().createCLabel(composite, "Label",
-				SWT.RIGHT);
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
-
-		Composite cmp = new Composite(composite, SWT.NONE);
-		GridLayout gl = new GridLayout(3, false);
-		gl.marginTop = 0;
-		gl.marginHeight = 0;
-		gl.marginWidth = 0;
-		gl.marginLeft = 0;
-		cmp.setLayout(gl);
-		cmp.setBackground(parent.getBackground());
-		caxLblExpr = new SPExpression(cmp, section,
+		section.createWidget4Property(group,
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION);
 
-		section.getWidgetFactory().createCLabel(composite, "Font", SWT.RIGHT);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, false)
+				.getControl().setLayoutData(gd);
 
-		caxLblFont = new SPFont(composite, section,
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, false);
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR);
 
-		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
+		group = section.getWidgetFactory().createGroup(parent, "Tick");
+		group.setLayout(new GridLayout(2, false));
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		group.setLayoutData(gd);
 
-		caxLblColor = new SPColor(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_category_axis_label_color_description);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, false)
+				.getControl().setLayoutData(gd);
 
-		composite = AbstractSection.createNewRow(parent);
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR);
 
-		lbl = section.getWidgetFactory().createCLabel(composite, "Tick Label",
-				SWT.RIGHT);
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK);
 
-		caxTickLblFont = new SPFont(composite, section,
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT, false);
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION);
 
-		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS);
 
-		caxTickLblColor = new SPColor(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_category_axis_tick_label_color_description);
-
-		section.getWidgetFactory().createCLabel(composite, "Mask", SWT.RIGHT);
-
-		caxTickLblMask = new SPText(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_category_axis_tick_label_mask_description);
-
-		section.getWidgetFactory().createCLabel(composite, "Rotation",
-				SWT.RIGHT);
-
-		caxTickLblRotation = new SPNumber(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_category_axis_tick_label_rotation_description);
-
-		composite = AbstractSection.createNewRow(parent);
-
-		lbl = section.getWidgetFactory().createCLabel(composite, "", SWT.RIGHT);
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
-
-		section.getWidgetFactory().createCLabel(composite,
-				"Show Vertical Tick Label", SWT.RIGHT);
-
-		caxTickLblShow = new SP3Boolean(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_category_axis_vertical_tick_labels_description);
-
-		composite = AbstractSection.createNewRow(parent);
-
-		lbl = section.getWidgetFactory().createCLabel(composite, "Domain",
-				SWT.RIGHT);
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
-
-		section.getWidgetFactory().createCLabel(composite, "Min value",
-				SWT.RIGHT);
-
-		cmp = new Composite(composite, SWT.NONE);
-		gl = new GridLayout(3, false);
-		gl.marginTop = 0;
-		gl.marginHeight = 0;
-		gl.marginWidth = 0;
-		gl.marginLeft = 0;
-		cmp.setLayout(gl);
-		cmp.setBackground(parent.getBackground());
-		caxRangeMin = new SPExpression(cmp, section,
+		section.createWidget4Property(parent,
 				JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION);
 
-		section.getWidgetFactory().createCLabel(composite, "Max value",
-				SWT.RIGHT);
-
-		cmp = new Composite(composite, SWT.NONE);
-		gl = new GridLayout(3, false);
-		gl.marginTop = 0;
-		gl.marginHeight = 0;
-		gl.marginWidth = 0;
-		gl.marginLeft = 0;
-		cmp.setLayout(gl);
-		cmp.setBackground(parent.getBackground());
-		caxRangeMax = new SPExpression(cmp, section,
+		section.createWidget4Property(parent,
 				JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION);
-
 	}
 
-	private SPColor caxLineColor;
-	private SPColor caxLblColor;
-	private SPFont caxLblFont;
-	private SPColor caxTickLblColor;
-	private SPFont caxTickLblFont;
-	private SP3Boolean caxTickLblShow;
-	private SPText caxTickLblMask;
-	private SPNumber caxTickLblRotation;
-	private SPExpression caxLblExpr;
-	private SPExpression caxRangeMin;
-	private SPExpression caxRangeMax;
-
-	private SPColor vaxLineColor;
-	private SPColor vaxLblColor;
-	private SPFont vaxLblFont;
-	private SPColor vaxTickLblColor;
-	private SPFont vaxTickLblFont;
-	private SP3Boolean vaxTickLblShow;
-	private SPText vaxTickLblMask;
-	private SPExpression vaxLblExpr;
-	private SPExpression vaxRangeMin;
-	private SPExpression vaxRangeMax;
-
-	private void createValue(Composite parent, AbstractSection section) {
+	private void createValue(AbstractSection section, Composite parent,
+			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		Section sectioncmp = section.getWidgetFactory().createSection(
 				parent,
 				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
 						| ExpandableComposite.EXPANDED);
-		sectioncmp.setText("Value axis");
+		sectioncmp.setText("Value Axis");
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		sectioncmp.setLayoutData(gd);
 
-		parent = new Composite(sectioncmp, SWT.NONE);
-		parent.setBackground(sectioncmp.getBackground());
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
+		parent = section.getWidgetFactory().createComposite(sectioncmp);
+		parent.setLayout(new GridLayout(2, false));
 
 		sectioncmp.setClient(parent);
 
-		Composite composite = AbstractSection.createNewRow(parent);
+		section.createWidget4Property(parent,
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR);
 
-		CLabel lbl = section.getWidgetFactory().createCLabel(composite,
-				"Axis Color", SWT.RIGHT);
-		RowData rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
+		Group group = section.getWidgetFactory().createGroup(parent, "Label");
+		group.setLayout(new GridLayout(2, false));
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		group.setLayoutData(gd);
 
-		vaxLineColor = new SPColor(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_value_axis_line_color_description);
-
-		composite = AbstractSection.createNewRow(parent);
-
-		lbl = section.getWidgetFactory().createCLabel(composite, "Label",
-				SWT.RIGHT);
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
-
-		Composite cmp = new Composite(composite, SWT.NONE);
-		GridLayout gl = new GridLayout(3, false);
-		gl.marginTop = 0;
-		gl.marginHeight = 0;
-		gl.marginWidth = 0;
-		gl.marginLeft = 0;
-		cmp.setLayout(gl);
-		cmp.setBackground(parent.getBackground());
-		vaxLblExpr = new SPExpression(cmp, section,
+		section.createWidget4Property(group,
 				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION);
 
-		section.getWidgetFactory().createCLabel(composite, "Font", SWT.RIGHT);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, false)
+				.getControl().setLayoutData(gd);
 
-		vaxLblFont = new SPFont(composite, section,
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, false);
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR);
 
-		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
+		group = section.getWidgetFactory().createGroup(parent, "Tick");
+		group.setLayout(new GridLayout(2, false));
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		group.setLayoutData(gd);
 
-		vaxLblColor = new SPColor(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_value_axis_label_color_description);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, false)
+				.getControl().setLayoutData(gd);
 
-		composite = AbstractSection.createNewRow(parent);
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR);
 
-		lbl = section.getWidgetFactory().createCLabel(composite, "Tick Label",
-				SWT.RIGHT);
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK);
 
-		vaxTickLblFont = new SPFont(composite, section,
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT, false);
+		section.createWidget4Property(group,
+				JRDesignBarPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS);
 
-		section.getWidgetFactory().createCLabel(composite, "Color", SWT.RIGHT);
-
-		vaxTickLblColor = new SPColor(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_value_axis_tick_label_color_description);
-
-		section.getWidgetFactory().createCLabel(composite, "Mask", SWT.RIGHT);
-
-		vaxTickLblMask = new SPText(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_value_axis_tick_label_mask_description);
-
-		composite = AbstractSection.createNewRow(parent);
-
-		lbl = section.getWidgetFactory().createCLabel(composite, "", SWT.RIGHT);
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
-
-		section.getWidgetFactory().createCLabel(composite,
-				"Show Vertical Tick Label", SWT.RIGHT);
-
-		vaxTickLblShow = new SP3Boolean(
-				composite,
-				section,
-				JRDesignBarPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
-				com.jaspersoft.studio.components.chart.messages.Messages.MBarPlot_value_axis_vertical_tick_labels_description);
-
-		composite = AbstractSection.createNewRow(parent);
-
-		lbl = section.getWidgetFactory().createCLabel(composite, "Range",
-				SWT.RIGHT);
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
-
-		section.getWidgetFactory().createCLabel(composite, "Min value",
-				SWT.RIGHT);
-
-		cmp = new Composite(composite, SWT.NONE);
-		gl = new GridLayout(3, false);
-		gl.marginTop = 0;
-		gl.marginHeight = 0;
-		gl.marginWidth = 0;
-		gl.marginLeft = 0;
-		cmp.setLayout(gl);
-		cmp.setBackground(parent.getBackground());
-		vaxRangeMin = new SPExpression(cmp, section,
+		section.createWidget4Property(parent,
 				JRDesignBarPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION);
 
-		section.getWidgetFactory().createCLabel(composite, "Max value",
-				SWT.RIGHT);
-
-		cmp = new Composite(composite, SWT.NONE);
-		gl = new GridLayout(3, false);
-		gl.marginTop = 0;
-		gl.marginHeight = 0;
-		gl.marginWidth = 0;
-		gl.marginLeft = 0;
-		cmp.setLayout(gl);
-		cmp.setBackground(parent.getBackground());
-		vaxRangeMax = new SPExpression(cmp, section,
+		section.createWidget4Property(parent,
 				JRDesignBarPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION);
 	}
 
-	private void createItemLabel(Composite parent, AbstractSection section) {
+	private void createItemLabel(AbstractSection section, Composite parent,
+			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		Section sectioncmp = section.getWidgetFactory().createSection(
 				parent,
 				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
 						| ExpandableComposite.EXPANDED);
 		sectioncmp.setText("Item Label");
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		sectioncmp.setLayoutData(gd);
 
-		parent = new Composite(sectioncmp, SWT.NONE);
-		parent.setBackground(sectioncmp.getBackground());
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
+		parent = section.getWidgetFactory().createComposite(sectioncmp);
+		parent.setLayout(new GridLayout(4, false));
 
 		sectioncmp.setClient(parent);
 
-		chItemLabel = new SPChartItemLabel(parent, section,
-				JRDesignBarPlot.PROPERTY_ITEM_LABEL);
-
-	}
-
-	private SPChartItemLabel chItemLabel;
-
-	@Override
-	public void setData(MChartPlot mplot) {
-		MChartItemLabel cil = (MChartItemLabel) mplot
-				.getPropertyValue(JRDesignBarPlot.PROPERTY_ITEM_LABEL);
-		chItemLabel.setData(cil);
-
-		showLabels.setData((Boolean) mplot
-				.getPropertyValue(JRDesignBarPlot.PROPERTY_SHOW_LABELS));
-
-		showTickLabels.setData((Boolean) mplot
-				.getPropertyValue(JRDesignBarPlot.PROPERTY_SHOW_TICK_LABELS));
-
-		showTickMarks.setData((Boolean) mplot
-				.getPropertyValue(JRDesignBarPlot.PROPERTY_SHOW_TICK_MARKS));
-
-		caxLineColor
-				.setData((RGB) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR));
-		caxLblColor
-				.setData((RGB) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR));
-		caxLblFont
-				.setData(
-						mplot,
-						(MFont) mplot
-								.getPropertyValue(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT));
-		caxTickLblColor
-				.setData((RGB) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_COLOR));
-		caxTickLblFont
-				.setData(
-						mplot,
-						(MFont) mplot
-								.getPropertyValue(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_FONT));
-		caxTickLblShow
-				.setData((Boolean) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS));
-		caxTickLblMask
-				.setData((String) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_MASK));
-		caxTickLblRotation
-				.setData((Double) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION));
-		caxLblExpr
-				.setData((JRDesignExpression) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION));
-
-		caxRangeMin
-				.setData((JRDesignExpression) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MINVALUE_EXPRESSION));
-		caxRangeMax
-				.setData((JRDesignExpression) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_DOMAIN_AXIS_MAXVALUE_EXPRESSION));
-		// ---------------------------------
-		vaxLineColor
-				.setData((RGB) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LINE_COLOR));
-		vaxLblColor
-				.setData((RGB) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR));
-		vaxLblFont
-				.setData(
-						mplot,
-						(MFont) mplot
-								.getPropertyValue(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_FONT));
-		vaxTickLblColor
-				.setData((RGB) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_COLOR));
-		vaxTickLblFont
-				.setData(
-						mplot,
-						(MFont) mplot
-								.getPropertyValue(JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_FONT));
-		vaxTickLblShow
-				.setData((Boolean) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS));
-		vaxTickLblMask
-				.setData((String) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_VALUE_AXIS_TICK_LABEL_MASK));
-		vaxLblExpr
-				.setData((JRDesignExpression) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION));
-
-		vaxRangeMin
-				.setData((JRDesignExpression) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_RANGE_AXIS_MINVALUE_EXPRESSION));
-		vaxRangeMax
-				.setData((JRDesignExpression) mplot
-						.getPropertyValue(JRDesignBarPlot.PROPERTY_RANGE_AXIS_MAXVALUE_EXPRESSION));
-		
-		// update expression context info
-		ExpressionContext ec=ModelUtils.getElementExpressionContext(null, mplot);
-		caxLblExpr.setExpressionContext(ec);
-		caxRangeMin.setExpressionContext(ec);
-		caxRangeMax.setExpressionContext(ec);
-		vaxLblExpr.setExpressionContext(ec);
-		vaxRangeMin.setExpressionContext(ec);
-		vaxRangeMax.setExpressionContext(ec);
+		section.createWidget4Property(parent,
+				JRDesignBarPlot.PROPERTY_ITEM_LABEL, false);
 	}
 }

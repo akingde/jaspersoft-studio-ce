@@ -31,10 +31,10 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.model.MChartItemLabel;
 import com.jaspersoft.studio.components.chart.property.descriptor.PlotPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 
 public class MPie3DPlot extends MChartPlot {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

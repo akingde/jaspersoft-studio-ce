@@ -22,22 +22,13 @@ package com.jaspersoft.studio.components.chart.property.section;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.swt.widgets.Group;
 
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.SP3Boolean;
-import com.jaspersoft.studio.property.section.widgets.SPColor;
-import com.jaspersoft.studio.property.section.widgets.SPEdgeEnum;
-import com.jaspersoft.studio.property.section.widgets.SPFont;
 
 /*
  * The location section on the location tab.
@@ -45,12 +36,6 @@ import com.jaspersoft.studio.property.section.widgets.SPFont;
  * @author Chicu Veaceslav
  */
 public class LegendSection extends AbstractSection {
-	private SP3Boolean showLegend;
-	private SPColor backButton;
-	private SPColor foreButton;
-	private SPEdgeEnum btnEdgeEnum;
-	private SPFont btnFont;
-	private Composite composite;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -60,82 +45,31 @@ public class LegendSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay()
-				.getSystemColor(SWT.COLOR_WHITE));
+		Group group = getWidgetFactory().createGroup(parent, "Legend");
+		group.setLayout(new GridLayout(6, false));
+		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		composite = createNewRow(parent);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 5;
+		createWidget4Property(group, JRBaseChart.PROPERTY_SHOW_LEGEND)
+				.getControl().setLayoutData(gd);
 
-		CLabel lbl = getWidgetFactory()
-				.createCLabel(
-						composite,
-						com.jaspersoft.studio.components.chart.messages.Messages.MChart_show_legend,
-						SWT.RIGHT);
-		RowData rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
+		getWidgetFactory().createCLabel(group, "Position");
+		createWidget4Property(group, JRBaseChart.PROPERTY_LEGEND_POSITION,
+				false);
 
-		showLegend = new SP3Boolean(
-				composite,
-				this,
-				JRBaseChart.PROPERTY_SHOW_LEGEND,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_show_legend_description);
+		getWidgetFactory().createCLabel(group, "F");
+		createWidget4Property(group, JRBaseChart.PROPERTY_LEGEND_COLOR, false);
 
-		btnFont = new SPFont(parent, this, JRDesignChart.PROPERTY_LEGEND_FONT);
+		getWidgetFactory().createCLabel(group, "B");
+		createWidget4Property(group,
+				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR, false);
 
-		composite = createNewRow(parent);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 6;
+		createWidget4Property(group, JRDesignChart.PROPERTY_LEGEND_FONT, false)
+				.getControl().setLayoutData(gd);
 
-		lbl = getWidgetFactory().createCLabel(composite,
-				Messages.common_forecolor + ":", SWT.RIGHT); //$NON-NLS-1$
-		rd = new RowData();
-		rd.width = 101;
-		lbl.setLayoutData(rd);
-
-		foreButton = new SPColor(composite, this,
-				JRBaseChart.PROPERTY_LEGEND_COLOR,
-				Messages.ColorsSection_element_forecolor_tool_tip);
-
-		getWidgetFactory().createCLabel(composite, Messages.common_backcolor,
-				SWT.RIGHT);
-
-		backButton = new SPColor(composite, this,
-				JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR,
-				Messages.ColorsSection_element_backcolor_tool_tip);
-
-		composite = createNewRow(parent);
-
-		btnEdgeEnum = new SPEdgeEnum(composite, this,
-				JRBaseChart.PROPERTY_LEGEND_POSITION);
 	}
 
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			backButton
-					.setData((RGB) element
-							.getPropertyValue(JRBaseChart.PROPERTY_LEGEND_BACKGROUND_COLOR));
-			foreButton.setData((RGB) element
-					.getPropertyValue(JRBaseChart.PROPERTY_LEGEND_COLOR));
-
-			btnEdgeEnum.setData((Integer) element
-					.getPropertyValue(JRBaseChart.PROPERTY_LEGEND_POSITION));
-
-			showLegend.setData((Boolean) element
-					.getPropertyValue(JRBaseChart.PROPERTY_SHOW_LEGEND));
-
-			btnFont.setData(element, (MFont) element
-					.getPropertyValue(JRDesignChart.PROPERTY_LEGEND_FONT));
-		}
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return composite.isDisposed();
-	}
 }

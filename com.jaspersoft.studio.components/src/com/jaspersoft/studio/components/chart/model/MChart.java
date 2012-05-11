@@ -82,7 +82,7 @@ import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
@@ -90,6 +90,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
@@ -172,18 +173,18 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor titlePositionD = new ComboBoxPropertyDescriptor(
+		titlePositionD = new EdgePropertyDescriptor(
 				JRBaseChart.PROPERTY_TITLE_POSITION,
-				Messages.MChart_title_position, EnumHelper.getEnumNames(
-						EdgeEnum.values(), NullEnum.NULL));
+				Messages.MChart_title_position, EdgeEnum.class,
+				NullEnum.NOTNULL);
 		titlePositionD
 				.setDescription(Messages.MChart_title_position_description);
 		desc.add(titlePositionD);
 
-		ComboBoxPropertyDescriptor legendPositionD = new ComboBoxPropertyDescriptor(
+		legendPositionD = new EdgePropertyDescriptor(
 				JRBaseChart.PROPERTY_LEGEND_POSITION,
-				Messages.MChart_legend_position, EnumHelper.getEnumNames(
-						EdgeEnum.values(), NullEnum.NULL));
+				Messages.MChart_legend_position, EdgeEnum.class,
+				NullEnum.NOTNULL);
 		legendPositionD
 				.setDescription(Messages.MChart_legend_position_description);
 		desc.add(legendPositionD);
@@ -235,7 +236,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 				.setDescription(Messages.MChart_legend_background_color_description);
 		desc.add(legendBackColorD);
 
-		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(
 				JRDesignChart.PROPERTY_CUSTOMIZER_CLASS,
 				Messages.MChart_customizer_class);
 		classD.setDescription(Messages.MChart_customizer_class_description);
@@ -354,17 +355,19 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 	private MHyperLink mHyperLink;
 
 	private ParameterDTO propertyDTO;
+	private static EdgePropertyDescriptor titlePositionD;
+	private static EdgePropertyDescriptor legendPositionD;
 
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignChart jrElement = (JRDesignChart) getValue();
 
 		if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
-			return EnumHelper.getValue(jrElement.getTitlePositionValue(), 1,
-					true);
+			return titlePositionD.getEnumValue(jrElement
+					.getTitlePositionValue());
 		if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))
-			return EnumHelper.getValue(jrElement.getLegendPositionValue(), 1,
-					true);
+			return legendPositionD.getEnumValue(jrElement
+					.getLegendPositionValue());
 		if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
 			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1,
 					false);
@@ -421,7 +424,6 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		if (id.equals(PLOTPROPERTY)) { //$NON-NLS-1$
 			if (mChartPlot == null) {
 				mChartPlot = PlotFactory.getChartPlot(jrElement.getPlot());
-				mChartPlot.setParent(this, -1);
 				setChildListener(mChartPlot);
 			}
 			return mChartPlot;
@@ -461,11 +463,11 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		} else if (id.equals(JRDesignChart.PROPERTY_LEGEND_FONT)) {
 			jrElement.setLegendFont(MFontUtil.setMFont(value));
 		} else if (id.equals(JRBaseChart.PROPERTY_TITLE_POSITION))
-			jrElement.setTitlePosition((EdgeEnum) EnumHelper.getSetValue(
-					EdgeEnum.values(), value, 1, true));
+			jrElement.setTitlePosition((EdgeEnum) titlePositionD
+					.getEnumValue(value));
 		else if (id.equals(JRBaseChart.PROPERTY_LEGEND_POSITION))
-			jrElement.setLegendPosition((EdgeEnum) EnumHelper.getSetValue(
-					EdgeEnum.values(), value, 1, true));
+			jrElement.setLegendPosition((EdgeEnum) legendPositionD
+					.getEnumValue(value));
 		else if (id.equals(JRDesignChart.PROPERTY_EVALUATION_TIME))
 			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper
 					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
@@ -864,5 +866,4 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 					evt.getOldValue(), evt.getNewValue());
 		getPropertyChangeSupport().firePropertyChange(newEvent);
 	}
-
 }

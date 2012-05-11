@@ -194,15 +194,14 @@ public class MTimeSeriesPlot extends MChartPlot {
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignTimeSeriesPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS,
 				Messages.MTimeSeriesPlot_time_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		catAxisVertTickLabelD
 				.setDescription(Messages.MTimeSeriesPlot_time_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignTimeSeriesPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
-				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				Messages.common_value_axis_vertical_tick_labels, NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MTimeSeriesPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);

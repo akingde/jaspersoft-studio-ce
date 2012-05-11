@@ -44,6 +44,7 @@ import com.jaspersoft.studio.components.barcode.model.barcode4j.MCodabar;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MCode128;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MCode39;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MDataMatrix;
+import com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN128;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN13;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN8;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MInterleaved2Of5;
@@ -78,7 +79,7 @@ public class BarcodeWizardPage extends WizardPage {
 			else if (b4jCode.equals("Code39")) //$NON-NLS-1$
 				barcode = new MCode39();
 			else if (b4jCode.equals("EAN128")) //$NON-NLS-1$
-				barcode = new MCode128();
+				barcode = new MEAN128();
 			else if (b4jCode.equals("EAN13")) //$NON-NLS-1$
 				barcode = new MEAN13();
 			else if (b4jCode.equals("EAN8")) //$NON-NLS-1$

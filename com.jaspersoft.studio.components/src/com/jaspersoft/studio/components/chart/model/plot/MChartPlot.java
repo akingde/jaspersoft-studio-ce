@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jasperreports.charts.type.PlotOrientationEnum;
 import net.sf.jasperreports.engine.JRChartPlot;
 import net.sf.jasperreports.engine.JRChartPlot.JRSeriesColor;
 import net.sf.jasperreports.engine.JRConstants;
@@ -30,16 +31,15 @@ import net.sf.jasperreports.engine.base.JRBaseChartPlot;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.jfree.chart.plot.PlotOrientation;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
 import com.jaspersoft.studio.components.chart.property.descriptor.seriescolor.SeriesColorPropertyDescriptor;
 import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MChartPlot extends APropertyNode {
@@ -73,11 +73,11 @@ public class MChartPlot extends APropertyNode {
 				.setDescription(Messages.MChartPlot_foreground_alpha_percent_description);
 		desc.add(foreAlphaD);
 
-		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(
+		orientationD = new JSSEnumPropertyDescriptor(
 				JRBaseChartPlot.PROPERTY_ORIENTATION,
-				Messages.MChartPlot_orientation, new String[] {
-						Messages.MChartPlot_horizontal,
-						Messages.MChartPlot_vertical });
+				Messages.MChartPlot_orientation,
+				com.jaspersoft.studio.components.chart.model.PlotOrientationEnum.class,
+				NullEnum.NULL);
 		orientationD
 				.setDescription(Messages.MChartPlot_orientation_description);
 		desc.add(orientationD);
@@ -94,6 +94,7 @@ public class MChartPlot extends APropertyNode {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor orientationD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -128,10 +129,12 @@ public class MChartPlot extends APropertyNode {
 		if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA))
 			return jrElement.getForegroundAlphaFloat();
 		if (id.equals(JRBaseChartPlot.PROPERTY_ORIENTATION)) {
-			if (jrElement.getOrientation().equals(PlotOrientation.HORIZONTAL))
+			if (jrElement.getOrientationValue() == null)
 				return 0;
-			else
+			if (jrElement.getOrientationValue() == PlotOrientationEnum.HORIZONTAL)
 				return 1;
+			else
+				return 2;
 		}
 		if (id.equals(JRBaseChartPlot.PROPERTY_SERIES_COLORS))
 			return jrElement.getSeriesColors();
@@ -156,10 +159,19 @@ public class MChartPlot extends APropertyNode {
 		} else if (id.equals(JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA)) {
 			jrElement.setForegroundAlpha((Float) value);
 		} else if (id.equals(JRBaseChartPlot.PROPERTY_ORIENTATION)) {
-			if (value.equals(new Integer(0)))
-				jrElement.setOrientation(PlotOrientation.HORIZONTAL);
-			else
-				jrElement.setOrientation(PlotOrientation.VERTICAL);
+			switch ((Integer) value) {
+			case 0:
+				jrElement.setOrientation((PlotOrientationEnum) null);
+				break;
+			case 1:
+				jrElement.setOrientation(PlotOrientationEnum.HORIZONTAL);
+				break;
+			case 2:
+				jrElement.setOrientation(PlotOrientationEnum.VERTICAL);
+				break;
+			}
+			// jrElement.setOrientation((PlotOrientationEnum) orientationD
+			// .getEnumValue(value));
 		} else if (id.equals(JRBaseChartPlot.PROPERTY_SERIES_COLORS)) {
 			jrElement.setSeriesColors((Collection<JRSeriesColor>) value);
 			// jrElement.clearSeriesColors();

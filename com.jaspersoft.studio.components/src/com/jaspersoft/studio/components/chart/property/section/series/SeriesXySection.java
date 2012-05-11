@@ -20,24 +20,12 @@
 package com.jaspersoft.studio.components.chart.property.section.series;
 
 import net.sf.jasperreports.charts.design.JRDesignXySeries;
-import net.sf.jasperreports.engine.design.JRDesignChartDataset;
-import net.sf.jasperreports.engine.design.JRDesignDataset;
-import net.sf.jasperreports.engine.design.JRDesignExpression;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.components.chart.messages.Messages;
-import com.jaspersoft.studio.components.chart.model.dataset.MChartDataset;
-import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.SPExpression;
-import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
  * The location section on the location tab.
@@ -45,13 +33,6 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * @author Chicu Veaceslav
  */
 public class SeriesXySection extends AbstractSection {
-	private SPExpression xValueExpr;
-	private SPExpression yValueExpr;
-	private SPExpression labelExpr;
-	private SPExpression seriesExpr;
-
-	protected Composite composite;
-	protected Composite parent;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -61,73 +42,16 @@ public class SeriesXySection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay()
-				.getSystemColor(SWT.COLOR_WHITE));
-		this.parent = parent;
+		parent.setLayout(new GridLayout(2, false));
 
-		xValueExpr = createExpression(parent,
-				JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION,
-				Messages.common_x_value_expression, 150);
-		yValueExpr = createExpression(parent,
-				JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION,
-				Messages.common_y_value_expression, 150);
-
-		labelExpr = createExpression(parent,
-				JRDesignXySeries.PROPERTY_LABEL_EXPRESSION,
-				Messages.common_label_expression, 150);
-		seriesExpr = createExpression(parent,
-				JRDesignXySeries.PROPERTY_SERIES_EXPRESSION,
-				Messages.common_series_expression, 150);
-
+		createWidget4Property(parent,
+				JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION);
+		createWidget4Property(parent,
+				JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION);
+		createWidget4Property(parent,
+				JRDesignXySeries.PROPERTY_LABEL_EXPRESSION);
+		createWidget4Property(parent,
+				JRDesignXySeries.PROPERTY_SERIES_EXPRESSION);
 	}
 
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-
-			xValueExpr
-					.setData((JRDesignExpression) element
-							.getPropertyValue(JRDesignXySeries.PROPERTY_X_VALUE_EXPRESSION));
-			yValueExpr
-					.setData((JRDesignExpression) element
-							.getPropertyValue(JRDesignXySeries.PROPERTY_Y_VALUE_EXPRESSION));
-			labelExpr
-					.setData((JRDesignExpression) element
-							.getPropertyValue(JRDesignXySeries.PROPERTY_LABEL_EXPRESSION));
-			seriesExpr
-					.setData((JRDesignExpression) element
-							.getPropertyValue(JRDesignXySeries.PROPERTY_SERIES_EXPRESSION));
-			
-			updateWidgetsExpressionContext(element);
-		}
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return composite.isDisposed();
-	}
-
-	private void updateWidgetsExpressionContext(APropertyNode element) {
-		JasperDesign jd=element.getJasperDesign();
-		JasperReportsConfiguration config=element.getJasperConfiguration();
-		if(jd!=null && config!=null && 
-				element.getParent() instanceof MChartDataset){
-			Object value = ((MChartDataset)element.getParent()).getValue();
-			if(value instanceof JRDesignChartDataset){
-				JRDesignDataset ds = ModelUtils.getDesignDatasetForDatasetRun(jd, ((JRDesignChartDataset) value).getDatasetRun());
-				ExpressionContext ec=new ExpressionContext(ds, config);
-				labelExpr.setExpressionContext(ec);
-				seriesExpr.setExpressionContext(ec);
-				xValueExpr.setExpressionContext(ec);
-				yValueExpr.setExpressionContext(ec);
-			}
-		}
-	}
 }

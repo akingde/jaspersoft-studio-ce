@@ -23,7 +23,10 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
+import com.jaspersoft.studio.components.chart.property.widget.SPColorSeries;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 public class SeriesColorPropertyDescriptor extends NTextPropertyDescriptor {
 
@@ -43,5 +46,10 @@ public class SeriesColorPropertyDescriptor extends NTextPropertyDescriptor {
 			return super.getLabelProvider();
 		}
 		return new SeriesColorLabelProvider();
+	}
+
+	public ASPropertyWidget createWidget(Composite parent,
+			AbstractSection section) {
+		return new SPColorSeries(parent, section, this);
 	}
 }

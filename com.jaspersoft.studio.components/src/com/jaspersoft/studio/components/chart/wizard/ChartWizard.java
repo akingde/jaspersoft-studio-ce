@@ -90,7 +90,9 @@ public class ChartWizard extends JSSWizard implements IExpressionContextSetter{
 	@Override
 	public boolean performFinish() {
 		if (page0 != null) {
-			return (page0.isPageComplete() && step1.isPageComplete());
+			boolean finished = page0.isPageComplete() && step1.isPageComplete();
+			page0.finishPage();
+			return finished;
 		}
 		return step1.isPageComplete();
 	}

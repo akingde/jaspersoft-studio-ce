@@ -40,21 +40,22 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorCellEditor;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionCellEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
 import com.jaspersoft.studio.swt.widgets.table.ListContentProvider;
@@ -63,7 +64,7 @@ import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.Misc;
 
-public class SPMeterInterval implements IExpressionContextSetter{
+public class SPMeterInterval extends ASPropertyWidget {
 	private final class TLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
 		private ColorLabelProvider colorLabel = new ColorLabelProvider(
@@ -112,39 +113,34 @@ public class SPMeterInterval implements IExpressionContextSetter{
 
 	private Table table;
 	private TableViewer tableViewer;
-	private AbstractSection section;
-	private String property;
-	private ExpressionContext expContext;
+	private Section sectioncmp;
 
 	public SPMeterInterval(Composite parent, AbstractSection section,
-			String property, String tooltip) {
-		this.section = section;
-		this.property = property;
-		createComponent(parent, section, property, tooltip);
+			IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property, String tooltip) {
-		Section sectioncmp = section.getWidgetFactory().createSection(parent,
+	@Override
+	public Control getControl() {
+		return sectioncmp;
+	}
+
+	public void createComponent(Composite parent) {
+		sectioncmp = section.getWidgetFactory().createSection(parent,
 				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
 		sectioncmp.setText("Meter Intervals");
 
-		parent = new Composite(sectioncmp, SWT.NONE);
-		parent.setBackground(sectioncmp.getBackground());
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-
-		sectioncmp.setClient(parent);
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
+		Composite composite = new Composite(sectioncmp, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
+		composite.setBackground(parent.getBackground());
+
+		sectioncmp.setClient(composite);
 
 		buildTable(composite);
 
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-		bGroup.setBackground(composite.getBackground());
 
 		new NewButton().createNewButtons(bGroup, tableViewer,
 				new INewElement() {
@@ -162,7 +158,7 @@ public class SPMeterInterval implements IExpressionContextSetter{
 
 		new ListOrderButtons().createOrderButtons(bGroup, tableViewer);
 
-		table.setToolTipText(tooltip);
+		table.setToolTipText(pDescriptor.getDescription());
 	}
 
 	private void buildTable(Composite composite) {
@@ -180,7 +176,7 @@ public class SPMeterInterval implements IExpressionContextSetter{
 			protected void inputChanged(Object input, Object oldInput) {
 				if (!(input != null && oldInput != null && input
 						.equals(oldInput)))
-					propertyChange(section, property);
+					propertyChange(section, pDescriptor.getId());
 				super.inputChanged(input, oldInput);
 			}
 		};
@@ -282,26 +278,25 @@ public class SPMeterInterval implements IExpressionContextSetter{
 				}
 				tableViewer.update(element, new String[] { property });
 				tableViewer.refresh();
-				propertyChange(section, SPMeterInterval.this.property);
+				propertyChange(section, pDescriptor.getId());
 			}
 		});
 
-		JRExpressionCellEditor exprCellEditor = new JRExpressionCellEditor(parent);
-		exprCellEditor.setExpressionContext(expContext);
 		viewer.setCellEditors(new CellEditor[] { new TextCellEditor(parent),
 				new ColorCellEditor(parent), new TextCellEditor(parent),
-				exprCellEditor,
-				exprCellEditor });
+				new JRExpressionCellEditor(parent),
+				new JRExpressionCellEditor(parent) });
 		viewer.setColumnProperties(new String[] {
 				"LABEL", "COLOR", "ALPHA", "LOW", "HIGH" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
 	}
 
-	private void propertyChange(AbstractSection section, String property) {
+	private void propertyChange(AbstractSection section, Object property) {
 		section.changeProperty(property, tableViewer.getInput());
 	}
 
-	public void setData(List<JRMeterInterval> ilist) {
+	public void setData(APropertyNode pnode, Object value) {
+		List<JRMeterInterval> ilist = (List<JRMeterInterval>) value;
 		if (ilist == null) {
 			ilist = new ArrayList<JRMeterInterval>();
 		} else {
@@ -314,9 +309,5 @@ public class SPMeterInterval implements IExpressionContextSetter{
 		}
 
 		tableViewer.setInput(ilist);
-	}
-
-	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext=expContext;
 	}
 }

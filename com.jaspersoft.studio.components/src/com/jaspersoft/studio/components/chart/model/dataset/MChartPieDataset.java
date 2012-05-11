@@ -37,11 +37,11 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MHyperLink;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.property.descriptor.FloatPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 public class MChartPieDataset extends MChartDataset {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

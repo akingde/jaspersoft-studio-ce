@@ -21,17 +21,12 @@ package com.jaspersoft.studio.components.chart.property.section.plot;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.components.chart.model.plot.MChartPlot;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public abstract class APlot {
 
-	public APlot(Composite parent, AbstractSection section) {
-		createComponent(parent, section);
-	}
+	public abstract void createControls(AbstractSection section,
+			Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage);
 
-	protected abstract void createComponent(Composite parent,
-			AbstractSection section);
-
-	public abstract void setData(MChartPlot mplot);
 }

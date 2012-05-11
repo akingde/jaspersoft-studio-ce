@@ -32,7 +32,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 
 public class MCodabar extends MBarcode4j {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

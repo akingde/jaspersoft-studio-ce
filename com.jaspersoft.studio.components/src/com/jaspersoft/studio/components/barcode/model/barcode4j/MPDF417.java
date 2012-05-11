@@ -32,8 +32,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 public class MPDF417 extends MBarcode4j {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

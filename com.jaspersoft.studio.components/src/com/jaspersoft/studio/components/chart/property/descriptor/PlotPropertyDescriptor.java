@@ -21,9 +21,16 @@ package com.jaspersoft.studio.components.chart.property.descriptor;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-public class PlotPropertyDescriptor extends PropertyDescriptor {
+import com.jaspersoft.studio.components.chart.property.widget.SPChartItemLabel;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
+
+public class PlotPropertyDescriptor extends PropertyDescriptor implements
+		IPropertyDescriptorWidget {
 	public PlotPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
 	}
@@ -39,5 +46,10 @@ public class PlotPropertyDescriptor extends PropertyDescriptor {
 				return ""; //$NON-NLS-1$
 			}
 		};
+	}
+
+	public ASPropertyWidget createWidget(Composite parent,
+			AbstractSection section) {
+		return new SPChartItemLabel(parent, section, this);
 	}
 }

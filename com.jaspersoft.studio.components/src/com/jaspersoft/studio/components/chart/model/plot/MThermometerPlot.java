@@ -30,7 +30,6 @@ import net.sf.jasperreports.charts.type.ValueLocationEnum;
 import net.sf.jasperreports.engine.JRConstants;
 
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.messages.Messages;
@@ -42,8 +41,8 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MThermometerPlot extends MChartPlot {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -175,11 +174,10 @@ public class MThermometerPlot extends MChartPlot {
 				.setDescription(Messages.MThermometerPlot_medium_range_low_expression_description);
 		desc.add(medRangeLowExprD);
 
-		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(
+		positionTypeD = new JSSEnumPropertyDescriptor(
 				JRDesignThermometerPlot.PROPERTY_VALUE_LOCATION,
 				Messages.MThermometerPlot_value_location,
-				EnumHelper.getEnumNames(ValueLocationEnum.values(),
-						NullEnum.NOTNULL));
+				ValueLocationEnum.class, NullEnum.NOTNULL);
 		positionTypeD
 				.setDescription(Messages.MThermometerPlot_value_location_description);
 		desc.add(positionTypeD);
@@ -215,8 +213,8 @@ public class MThermometerPlot extends MChartPlot {
 				+ "." + JRDesignValueDisplay.PROPERTY_MASK)) //$NON-NLS-1$
 			return jrElement.getValueDisplay().getMask();
 		if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_LOCATION))
-			return EnumHelper.getValue(jrElement.getValueLocationValue(), 0,
-					false);
+			return positionTypeD
+					.getEnumValue(jrElement.getValueLocationValue());
 
 		if (id.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "."
 				+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION))
@@ -254,6 +252,7 @@ public class MThermometerPlot extends MChartPlot {
 	}
 
 	private MFont vtFont;
+	private static JSSEnumPropertyDescriptor positionTypeD;
 
 	/*
 	 * (non-Javadoc)
@@ -278,8 +277,10 @@ public class MThermometerPlot extends MChartPlot {
 			jrElement.setMercuryColor(Colors.getAWT4SWTRGBColor((RGB) value));
 		else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY
 				+ "." + JRDesignValueDisplay.PROPERTY_FONT)) { //$NON-NLS-1$
-			((JRDesignValueDisplay) jrElement.getValueDisplay())
-					.setFont(MFontUtil.setMFont(value));
+			JRDesignValueDisplay jrDesignValueDisplay = new JRDesignValueDisplay(
+					jrElement.getValueDisplay(), jrElement.getChart());
+			jrDesignValueDisplay.setFont(MFontUtil.setMFont(value));
+			jrElement.setValueDisplay(jrDesignValueDisplay);
 		} else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY
 				+ "." + JRDesignValueDisplay.PROPERTY_COLOR) //$NON-NLS-1$
 				&& value instanceof RGB) {
@@ -295,8 +296,8 @@ public class MThermometerPlot extends MChartPlot {
 			jrDesignValueDisplay.setMask((String) value);
 			jrElement.setValueDisplay(jrDesignValueDisplay);
 		} else if (id.equals(JRDesignThermometerPlot.PROPERTY_VALUE_LOCATION))
-			jrElement.setValueLocation((ValueLocationEnum) EnumHelper
-					.getSetValue(ValueLocationEnum.values(), value, 0, false));
+			jrElement.setValueLocation((ValueLocationEnum) positionTypeD
+					.getEnumValue(value));
 		else if (id.equals(id
 				.equals(JRDesignThermometerPlot.PROPERTY_DATA_RANGE + "." //$NON-NLS-1$
 						+ JRDesignDataRange.PROPERTY_HIGH_EXPRESSION)))

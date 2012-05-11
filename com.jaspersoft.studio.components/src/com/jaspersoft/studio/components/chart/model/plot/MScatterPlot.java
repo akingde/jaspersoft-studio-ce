@@ -193,15 +193,14 @@ public class MScatterPlot extends MChartPlot {
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_X_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		catAxisVertTickLabelD
 				.setDescription(Messages.MScatterPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_VERTICAL_TICK_LABELS,
-				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				Messages.common_value_axis_vertical_tick_labels, NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MScatterPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);

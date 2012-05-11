@@ -193,7 +193,7 @@ public class MHighLowPlot extends MChartPlot {
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		catAxisVertTickLabelD
 				.setDescription(Messages.MHighLowPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
@@ -201,7 +201,7 @@ public class MHighLowPlot extends MChartPlot {
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignHighLowPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MHighLowPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);

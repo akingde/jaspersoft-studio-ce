@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
@@ -38,6 +37,7 @@ import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public abstract class MBarcode extends MGraphicElement implements IRotatable {
@@ -88,10 +88,10 @@ public abstract class MBarcode extends MGraphicElement implements IRotatable {
 		codeExprD.setDescription(Messages.MBarcode_code_expression_description);
 		desc.add(codeExprD);
 
-		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
+		evaluationTimeD = new JSSEnumPropertyDescriptor(
 				StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
-				Messages.MBarcode_evaluation_time, EnumHelper.getEnumNames(
-						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
+				Messages.MBarcode_evaluation_time, EvaluationTimeEnum.class,
+				NullEnum.NOTNULL);
 		evaluationTimeD
 				.setDescription(Messages.MBarcode_evaluation_time_description);
 		desc.add(evaluationTimeD);
@@ -108,7 +108,7 @@ public abstract class MBarcode extends MGraphicElement implements IRotatable {
 		codeExprD.setCategory(Messages.common_properties_category);
 
 		defaultsMap.put(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME,
-				EvaluationTimeEnum.NOW);
+				evaluationTimeD.getEnumValue(EvaluationTimeEnum.NOW));
 	}
 
 	@Override
@@ -119,6 +119,7 @@ public abstract class MBarcode extends MGraphicElement implements IRotatable {
 	}
 
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
+	protected static JSSEnumPropertyDescriptor evaluationTimeD;
 
 	@Override
 	public void setValue(Object value) {

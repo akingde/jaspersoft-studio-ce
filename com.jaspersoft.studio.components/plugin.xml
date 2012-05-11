@@ -30,7 +30,7 @@
       </component>
    </extension>
    <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+         point="com.jaspersoft.studio.properties.propertySections">
       <propertySections
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
          <propertySection
@@ -42,25 +42,28 @@
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.Chart"
                class="com.jaspersoft.studio.components.chart.property.section.LegendSection"
                id="com.jaspersoft.studio.components.chart.property.section.LegendSection"
-               tab="com.jaspersoft.studio.components.chart.legend">
+               tab="com.jaspersoft.studio.components.chart">
             <input
                   type="com.jaspersoft.studio.components.chart.model.MChart">
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.Chart"
                class="com.jaspersoft.studio.components.chart.property.section.TitleSection"
                id="com.jaspersoft.studio.components.chart.property.section.TitleSection"
-               tab="com.jaspersoft.studio.components.chart.title">
+               tab="com.jaspersoft.studio.components.chart">
             <input
                   type="com.jaspersoft.studio.components.chart.model.MChart">
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.components.chart.property.section.TitleSection"
                class="com.jaspersoft.studio.components.chart.property.section.SubTitleSection"
                id="com.jaspersoft.studio.components.chart.property.section.SubtitleSection"
-               tab="com.jaspersoft.studio.components.chart.subtitle">
+               tab="com.jaspersoft.studio.components.chart">
             <input
                   type="com.jaspersoft.studio.components.chart.model.MChart">
             </input>
@@ -74,7 +77,7 @@
             </input>
          </propertySection>
          <propertySection
-               class="com.jaspersoft.studio.components.chart.property.section.dataset.DatasetSection"
+               class="com.jaspersoft.studio.model.dataset.descriptor.DatasetSection"
                id="com.jaspersoft.studio.components.chart.property.section.ChartDataset"
                tab="com.jaspersoft.studio.components.chart.dataset">
             <input
@@ -227,10 +230,152 @@
                   type="com.jaspersoft.studio.components.chart.model.series.xyzseries.MXYZSeries">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.barcode.property.BarcodeSection"
+               id="com.jaspersoft.studio.components.barcode.property.BarcodeSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.MBarcode">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.BarcodeSection"
+               class="com.jaspersoft.studio.components.barcode.property.BarcodeBarbecueSection"
+               id="com.jaspersoft.studio.components.barcode.property.BarcodeBarbecueSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.MBarcodeBarbecue">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.BarcodeSection"
+               class="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               id="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MBarcode4j">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.Code39Section"
+               id="com.jaspersoft.studio.components.barcode.property.Code39Section"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MCode39">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.PDF417Section"
+               id="com.jaspersoft.studio.components.barcode.property.PDF417Section"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MPDF417">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.POSTNETSection"
+               id="com.jaspersoft.studio.components.barcode.property.POSTNETSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MPOSTNET">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.UPCESection"
+               id="com.jaspersoft.studio.components.barcode.property.UPCESection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCE">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.UPCASection"
+               id="com.jaspersoft.studio.components.barcode.property.UPCASection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MUPCA">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.CodabarSection"
+               id="com.jaspersoft.studio.components.barcode.property.CodabarSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MCodabar">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.EAN128Section"
+               id="com.jaspersoft.studio.components.barcode.property.EAN128Section"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN128">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.EAN13Section"
+               id="com.jaspersoft.studio.components.barcode.property.EAN13Section"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN13">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.EAN8Section"
+               id="com.jaspersoft.studio.components.barcode.property.EAN8Section"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN8">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.DataMatrixSection"
+               id="com.jaspersoft.studio.components.barcode.property.DataMatrixSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MDataMatrix">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.Interleaved2Of5Section"
+               id="com.jaspersoft.studio.components.barcode.property.Interleaved2Of5Section"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MInterleaved2Of5">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.components.barcode.property.Barcode4jSection"
+               class="com.jaspersoft.studio.components.barcode.property.FourStateSection"
+               id="com.jaspersoft.studio.components.barcode.property.FourStateSection"
+               tab="com.jaspersoft.studio.components.barcode">
+            <input
+                  type="com.jaspersoft.studio.components.barcode.model.barcode4j.MFourStateBarcode">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.list.property.ListSection"
+               id="com.jaspersoft.studio.components.list.property.ListSection"
+               tab="com.jaspersoft.studio.components.list">
+            <input
+                  type="com.jaspersoft.studio.components.list.model.MList">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+         point="com.jaspersoft.studio.properties.propertyTabs">
       <propertyTabs
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
          <propertyTab
@@ -279,6 +424,20 @@
                id="com.jaspersoft.studio.components.chart.series"
                indented="true"
                label="Chart Series">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               category="element"
+               id="com.jaspersoft.studio.components.barcode"
+               image="icons/barcode-16.png"
+               label="Barcode">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               category="element"
+               id="com.jaspersoft.studio.components.list"
+               image="icons/list-16.png"
+               label="List">
          </propertyTab>
       </propertyTabs>
    </extension>

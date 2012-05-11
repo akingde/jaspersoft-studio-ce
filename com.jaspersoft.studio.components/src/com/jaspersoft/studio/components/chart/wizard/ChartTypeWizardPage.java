@@ -133,12 +133,16 @@ public class ChartTypeWizardPage extends JSSWizardPage {
 
 	@Override
 	public IWizardPage getNextPage() {
+		finishPage();
+		return super.getNextPage();
+	}
+
+	public void finishPage() {
 		JRDesignChart oldChart = (JRDesignChart) chart.getValue();
 		if (chartType != oldChart.getChartType()) {
 			oldChart.setChartType(chartType);
 			MChart.setupChart(oldChart);
 		}
-		return super.getNextPage();
 	}
 
 	@Override

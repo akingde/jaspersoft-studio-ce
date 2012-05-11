@@ -19,25 +19,17 @@
  */
 package com.jaspersoft.studio.components.chart.property.section;
 
-import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
-import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.components.chart.messages.Messages;
-import com.jaspersoft.studio.components.chart.util.ChartHelper;
-import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.SPClassType;
 import com.jaspersoft.studio.property.section.widgets.SPEvaluationTime;
-import com.jaspersoft.studio.property.section.widgets.SPRWCombo;
 
 /*
  * The location section on the location tab.
@@ -45,11 +37,6 @@ import com.jaspersoft.studio.property.section.widgets.SPRWCombo;
  * @author Chicu Veaceslav
  */
 public class ChartSection extends AbstractSection {
-	private SPEvaluationTime evaluationTime;
-	private SPRWCombo rendererType;
-	private Composite composite;
-	private SPRWCombo theme;
-	private SPClassType classtype;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -59,107 +46,24 @@ public class ChartSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay()
-				.getSystemColor(SWT.COLOR_WHITE));
+		parent.setLayout(new GridLayout(3, false));
 
-		composite = createNewRow(parent);
+		createWidget4Property(parent, JRDesignChart.PROPERTY_CUSTOMIZER_CLASS);
 
-		CLabel lbl = getWidgetFactory().createCLabel(composite,
-				Messages.MChart_customizer_class, SWT.RIGHT);
-		RowData rd = new RowData();
-		rd.width = 130;
-		lbl.setLayoutData(rd);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, JRBaseChart.PROPERTY_RENDER_TYPE)
+				.getControl().setLayoutData(gd);
 
-		classtype = new SPClassType(composite, this,
-				JRDesignChart.PROPERTY_CUSTOMIZER_CLASS,
-				Messages.MChart_customizer_class_description);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, JRBaseChart.PROPERTY_THEME).getControl()
+				.setLayoutData(gd);
 
-		// ------------------
-
-		composite = createNewRow(parent);
-
-		lbl = getWidgetFactory().createCLabel(composite,
-				Messages.MChart_renderer_type);
-		rd = new RowData();
-		rd.width = 130;
-		lbl.setLayoutData(rd);
-
-		rendererType = new SPRWCombo(composite, this,
-				JRBaseChart.PROPERTY_RENDER_TYPE,
-				Messages.MChart_renderer_type_description,
-				ChartHelper.getChartThemesNull());
-		// ------------
-
-		composite = createNewRow(parent);
-
-		lbl = getWidgetFactory().createCLabel(composite, Messages.MChart_theme); //$NON-NLS-1$
-		rd = new RowData();
-		rd.width = 130;
-		lbl.setLayoutData(rd);
-
-		theme = new SPRWCombo(composite, this, JRBaseChart.PROPERTY_THEME,
-				Messages.MChart_theme_description,
-				ChartHelper.getChartThemesNull());
-
-		// --------------------
-		composite = createNewRow(parent);
-
-		lbl = getWidgetFactory().createCLabel(composite,
-				Messages.MChart_evaluation_time);
-		rd = new RowData();
-		rd.width = 130;
-		lbl.setLayoutData(rd);
-
-		evaluationTime = new SPEvaluationTime(
-				composite,
-				this,
-				JRDesignChart.PROPERTY_EVALUATION_TIME,
-				JRDesignChart.PROPERTY_EVALUATION_GROUP,
-				com.jaspersoft.studio.components.chart.messages.Messages.MChart_evaluation_time_description);
+		IPropertyDescriptor pd = getPropertyDesriptor(JRDesignChart.PROPERTY_EVALUATION_TIME);
+		IPropertyDescriptor gpd = getPropertyDesriptor(JRDesignChart.PROPERTY_EVALUATION_GROUP);
+		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
+		widgets.put(pd.getId(), new SPEvaluationTime(parent, this, pd, gpd));
 	}
 
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			classtype.setData((String) element
-					.getPropertyValue(JRDesignChart.PROPERTY_CUSTOMIZER_CLASS));
-
-			rendererType.setData((String) element
-					.getPropertyValue(JRBaseChart.PROPERTY_RENDER_TYPE));
-
-			theme.setData((String) element
-					.getPropertyValue(JRBaseChart.PROPERTY_THEME));
-
-			JRDesignChart chart = (JRDesignChart) element.getValue();
-			JasperDesign jasperDesign = element.getJasperDesign();
-			JRDataset dataset = null;
-			if (chart.getDataset().getDatasetRun() != null) {
-				String dsname = chart.getDataset().getDatasetRun()
-						.getDatasetName();
-				dataset = jasperDesign.getDatasetMap().get(dsname);
-			}
-			if (dataset == null)
-				dataset = jasperDesign.getMainDataset();
-
-			evaluationTime
-					.setData(
-							(Integer) element
-									.getPropertyValue(JRDesignChart.PROPERTY_EVALUATION_TIME),
-							(String) element
-									.getPropertyValue(JRDesignChart.PROPERTY_EVALUATION_GROUP),
-							SPEvaluationTime.getItems(dataset));
-		}
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return composite.isDisposed();
-	}
 }

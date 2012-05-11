@@ -26,12 +26,12 @@ import net.sf.jasperreports.components.barcode4j.FourStateBarcodeComponent;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
 public class MFourStateBarcode extends MBarcode4j {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -76,7 +76,7 @@ public class MFourStateBarcode extends MBarcode4j {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(
+		JSSComboPropertyDescriptor checksumModeD = new JSSComboPropertyDescriptor(
 				FourStateBarcodeComponent.PROPERTY_CHECKSUM_MODE,
 				Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD

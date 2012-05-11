@@ -28,14 +28,14 @@ import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
-import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
 public class MPOSTNET extends MBarcode4j {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -111,14 +111,14 @@ public class MPOSTNET extends MBarcode4j {
 				.setDescription(Messages.MPOSTNET_display_checksum_description);
 		desc.add(displayChecksumD);
 
-		ComboBoxPropertyDescriptor checksumModeD = new ComboBoxPropertyDescriptor(
+		JSSComboPropertyDescriptor checksumModeD = new JSSComboPropertyDescriptor(
 				POSTNETComponent.PROPERTY_CHECKSUM_MODE,
 				Messages.common_checksum_mode, ChecksumMode.getItems());
 		checksumModeD
 				.setDescription(Messages.MPOSTNET_checksum_mode_description);
 		desc.add(checksumModeD);
 
-		ComboBoxPropertyDescriptor baselinePositionD = new ComboBoxPropertyDescriptor(
+		JSSComboPropertyDescriptor baselinePositionD = new JSSComboPropertyDescriptor(
 				POSTNETComponent.PROPERTY_BASELINE_POSITION,
 				Messages.MPOSTNET_baseline_position,
 				BaselinePosition.getItems());

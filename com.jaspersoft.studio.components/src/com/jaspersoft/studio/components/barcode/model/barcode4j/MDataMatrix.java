@@ -28,11 +28,11 @@ import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
 public class MDataMatrix extends MBarcode4j {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -87,7 +87,7 @@ public class MDataMatrix extends MBarcode4j {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor shapeD = new ComboBoxPropertyDescriptor(
+		JSSComboPropertyDescriptor shapeD = new JSSComboPropertyDescriptor(
 				DataMatrixComponent.PROPERTY_SHAPE, Messages.MDataMatrix_shape,
 				Orientation.getItems());
 		shapeD.setDescription(Messages.MDataMatrix_shape_description);

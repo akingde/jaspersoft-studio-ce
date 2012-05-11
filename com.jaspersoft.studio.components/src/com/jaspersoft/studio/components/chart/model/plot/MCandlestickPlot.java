@@ -194,15 +194,14 @@ public class MCandlestickPlot extends MChartPlot {
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_TIME_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		catAxisVertTickLabelD
 				.setDescription(Messages.MCandlestickPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
-				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				Messages.common_value_axis_vertical_tick_labels, NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MCandlestickPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
@@ -223,7 +222,7 @@ public class MCandlestickPlot extends MChartPlot {
 
 		CheckBoxPropertyDescriptor showVolumeD = new CheckBoxPropertyDescriptor(
 				JRDesignCandlestickPlot.PROPERTY_SHOW_VOLUME,
-				Messages.MCandlestickPlot_show_volume, NullEnum.NOTNULL);
+				Messages.MCandlestickPlot_show_volume, NullEnum.NULL);
 		showVolumeD
 				.setDescription(Messages.MCandlestickPlot_show_volume_description);
 		desc.add(showVolumeD);

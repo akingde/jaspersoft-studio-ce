@@ -30,7 +30,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.barcode.BarcodeNodeIconDescriptor;
@@ -38,10 +37,10 @@ import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.components.barcode.model.MBarcode;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.DoublePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 
 /*
  * The Class MBarcode.
@@ -153,7 +152,7 @@ public class MBarcode4j extends MBarcode {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(
+		JSSComboPropertyDescriptor orientationD = new JSSComboPropertyDescriptor(
 				BarcodeComponent.PROPERTY_ORIENTATION,
 				Messages.MBarcode4j_orientation, Orientation.getItems());
 		orientationD
@@ -167,7 +166,7 @@ public class MBarcode4j extends MBarcode {
 				.setDescription(Messages.MBarcode4j_pattern_expression_description);
 		desc.add(patternExprD);
 
-		ComboBoxPropertyDescriptor textPositionD = new ComboBoxPropertyDescriptor(
+		JSSComboPropertyDescriptor textPositionD = new JSSComboPropertyDescriptor(
 				BarcodeComponent.PROPERTY_TEXT_POSITION,
 				Messages.MBarcode4j_text_position, TextPosition.getItems());
 		textPositionD
@@ -209,8 +208,8 @@ public class MBarcode4j extends MBarcode {
 		BarcodeComponent jrList = (BarcodeComponent) jrElement.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrList.getEvaluationTimeValue(), 1,
-					false);
+			return evaluationTimeD
+					.getEnumValue(jrList.getEvaluationTimeValue());
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			return jrList.getEvaluationGroup();
 
@@ -238,8 +237,8 @@ public class MBarcode4j extends MBarcode {
 		BarcodeComponent jrList = (BarcodeComponent) jrElement.getComponent();
 
 		if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_TIME))
-			jrList.setEvaluationTimeValue((EvaluationTimeEnum) EnumHelper
-					.getSetValue(EvaluationTimeEnum.values(), value, 1, false));
+			jrList.setEvaluationTimeValue((EvaluationTimeEnum) evaluationTimeD
+					.getEnumValue(value));
 		else if (id.equals(StandardBarbecueComponent.PROPERTY_EVALUATION_GROUP))
 			jrList.setEvaluationGroup((String) value);
 
