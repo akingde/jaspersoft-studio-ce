@@ -40,7 +40,6 @@ import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.type.PrintOrderEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.list.ListNodeIconDescriptor;
@@ -55,13 +54,13 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MList extends MGraphicElement implements IPastable,
 		IPastableGraphic, IContainer, IContainerEditPart, IGroupElement,
@@ -139,17 +138,17 @@ public class MList extends MGraphicElement implements IPastable,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(
+		printOrderD = new JSSEnumPropertyDescriptor(
 				StandardListComponent.PROPERTY_PRINT_ORDER,
-				Messages.MList_print_order, EnumHelper.getEnumNames(
-						PrintOrderEnum.values(), NullEnum.NOTNULL));
-		stretchTypeD.setDescription(Messages.MList_print_order_description);
-		desc.add(stretchTypeD);
-		stretchTypeD.setCategory(Messages.MList_list_properties_category);
+				Messages.MList_print_order, PrintOrderEnum.class,
+				NullEnum.NOTNULL);
+		printOrderD.setDescription(Messages.MList_print_order_description);
+		desc.add(printOrderD);
+		printOrderD.setCategory(Messages.MList_list_properties_category);
 
 		CheckBoxPropertyDescriptor ignoreWidthD = new CheckBoxPropertyDescriptor(
 				StandardListComponent.PROPERTY_IGNORE_WIDTH,
-				Messages.MList_ignore_width);
+				Messages.MList_ignore_width, NullEnum.NULL);
 		ignoreWidthD.setDescription(Messages.MList_ignore_width_description);
 		desc.add(ignoreWidthD);
 		ignoreWidthD.setCategory(Messages.MList_list_properties_category);
@@ -167,8 +166,8 @@ public class MList extends MGraphicElement implements IPastable,
 		widthD.setDescription(Messages.MList_cell_width_description);
 		desc.add(widthD);
 
-		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(PREFIX
-				+ StandardListComponent.PROPERTY_DATASET_RUN,
+		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(
+				PREFIX + StandardListComponent.PROPERTY_DATASET_RUN,
 				Messages.MList_dataset_run); //$NON-NLS-1$
 		datasetRunD.setDescription(Messages.MList_dataset_run_description);
 		datasetRunD.setCategory(Messages.MList_list_properties_category);
@@ -183,6 +182,7 @@ public class MList extends MGraphicElement implements IPastable,
 	public static final String PREFIX = "CONTENTS."; //$NON-NLS-1$
 
 	private MDatasetRun mDatasetRun;
+	private static JSSEnumPropertyDescriptor printOrderD;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -193,22 +193,25 @@ public class MList extends MGraphicElement implements IPastable,
 		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
 			return jrList.getIgnoreWidth();
 		if (id.equals(StandardListComponent.PROPERTY_PRINT_ORDER))
-			return EnumHelper.getValue(jrList.getPrintOrderValue(), 1, false);
+			return printOrderD.getEnumValue(jrList.getPrintOrderValue());
 
 		if (id.equals(PREFIX + DesignListContents.PROPERTY_HEIGHT))
 			return jrList.getContents().getHeight();
 		if (id.equals(PREFIX + DesignListContents.PROPERTY_WIDTH))
 			return jrList.getContents().getWidth();
 
-		if (id.equals(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN)) { //$NON-NLS-1$
+		if (id.equals(PREFIX + StandardListComponent.PROPERTY_DATASET_RUN)) { //$NON-NLS-1$ 
 			JRDatasetRun j = jrList.getDatasetRun();
 			if (j == null) {
 				j = new JRDesignDatasetRun();
 			}
-			mDatasetRun = new MDatasetRun(j, getJasperDesign());
-			setChildListener(mDatasetRun);
+			if (mDatasetRun != null)
+				mDatasetRun.setValue(j);
+			else {
+				mDatasetRun = new MDatasetRun(j, getJasperDesign());
+				setChildListener(mDatasetRun);
+			}
 			return mDatasetRun;
-
 		}
 
 		return super.getPropertyValue(id);
@@ -225,8 +228,8 @@ public class MList extends MGraphicElement implements IPastable,
 		if (id.equals(StandardListComponent.PROPERTY_IGNORE_WIDTH))
 			jrList.setIgnoreWidth((Boolean) value);
 		else if (id.equals(StandardListComponent.PROPERTY_PRINT_ORDER))
-			jrList.setPrintOrderValue((PrintOrderEnum) EnumHelper.getSetValue(
-					PrintOrderEnum.values(), value, 1, false));
+			jrList.setPrintOrderValue((PrintOrderEnum) printOrderD
+					.getEnumValue(value));
 		else if (id.equals(PREFIX + DesignListContents.PROPERTY_HEIGHT))
 			((DesignListContents) jrList.getContents())
 					.setHeight((Integer) value);

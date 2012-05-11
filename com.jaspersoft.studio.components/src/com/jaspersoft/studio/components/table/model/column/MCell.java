@@ -56,10 +56,10 @@ import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 public class MCell extends MColumn implements IGraphicElement,
 		IPastableGraphic, ILineBox, IGraphicElementContainer, IPastable {
