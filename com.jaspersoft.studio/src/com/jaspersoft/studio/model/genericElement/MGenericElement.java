@@ -29,7 +29,6 @@ import net.sf.jasperreports.engine.design.JRDesignGenericElement;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -42,7 +41,7 @@ import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescript
 import com.jaspersoft.studio.property.descriptor.genericElement.ParameterPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.genericElement.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MGenericElement extends MGraphicElement {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -142,9 +141,8 @@ public class MGenericElement extends MGraphicElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
-				JRDesignGenericElement.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time, EnumHelper.getEnumNames(
-						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
+		evaluationTimeD = new JSSEnumPropertyDescriptor(JRDesignGenericElement.PROPERTY_EVALUATION_TIME,
+				Messages.common_evaluation_time, EvaluationTimeEnum.class, NullEnum.NOTNULL);
 		evaluationTimeD.setDescription(Messages.MGenericElement_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
@@ -180,6 +178,7 @@ public class MGenericElement extends MGraphicElement {
 	public static final String PROPERTY_NAME = "NAME"; //$NON-NLS-1$
 	public static final String PROPERTY_NAMESPACE = "NAMESPACE"; //$NON-NLS-1$
 	private ParameterDTO propertyDTO;
+	private static JSSEnumPropertyDescriptor evaluationTimeD;
 
 	@Override
 	protected void setGroupItems(String[] items) {
@@ -192,7 +191,7 @@ public class MGenericElement extends MGraphicElement {
 	public Object getPropertyValue(Object id) {
 		JRDesignGenericElement jrElement = (JRDesignGenericElement) getValue();
 		if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, false);
+			return evaluationTimeD.getEnumValue(jrElement.getEvaluationTimeValue());
 		if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME))
 			return jrElement.getEvaluationGroupName();
 		JRGenericElementType genericType = jrElement.getGenericType();
@@ -218,8 +217,7 @@ public class MGenericElement extends MGraphicElement {
 		JRDesignGenericElement jrElement = (JRDesignGenericElement) getValue();
 		JRGenericElementType genericType = jrElement.getGenericType();
 		if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1,
-					false));
+			jrElement.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD.getEnumValue(value));
 		else if (id.equals(JRDesignGenericElement.PROPERTY_EVALUATION_GROUP_NAME))
 			jrElement.setEvaluationGroupName((String) value);
 		else if (id.equals(JRDesignGenericElement.PROPERTY_PARAMETERS)) {

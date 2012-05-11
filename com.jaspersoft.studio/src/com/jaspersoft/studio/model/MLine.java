@@ -32,13 +32,13 @@ import net.sf.jasperreports.engine.type.FillEnum;
 import net.sf.jasperreports.engine.type.LineDirectionEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 /*
@@ -84,6 +84,8 @@ public class MLine extends MGraphicElementLinePen {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor directionD;
+	private static JSSEnumPropertyDescriptor fillD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -111,14 +113,14 @@ public class MLine extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor directionD = new ComboBoxPropertyDescriptor(JRBaseLine.PROPERTY_DIRECTION,
-				Messages.MLine_direction, EnumHelper.getEnumNames(LineDirectionEnum.values(), NullEnum.NULL));
+		directionD = new JSSEnumPropertyDescriptor(JRBaseLine.PROPERTY_DIRECTION, Messages.MLine_direction,
+				LineDirectionEnum.class, NullEnum.NULL);
 		directionD.setDescription(Messages.MLine_direction_description);
 		directionD.setCategory(Messages.MLine_line_category);
 		desc.add(directionD);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill,
-				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
+		fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
+				NullEnum.INHERITED);
 		fillD.setDescription(Messages.MLine_fill_description);
 		desc.add(fillD);
 
@@ -130,9 +132,9 @@ public class MLine extends MGraphicElementLinePen {
 	public Object getPropertyValue(Object id) {
 		JRDesignLine jrElement = (JRDesignLine) getValue();
 		if (id.equals(JRBaseLine.PROPERTY_DIRECTION))
-			return EnumHelper.getValue(jrElement.getDirectionValue(), 1, true);
+			return directionD.getEnumValue(jrElement.getDirectionValue());
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return EnumHelper.getValue(jrElement.getOwnFillValue(), 1, true);
+			return fillD.getEnumValue(jrElement.getOwnFillValue());
 		return super.getPropertyValue(id);
 	}
 
@@ -140,9 +142,9 @@ public class MLine extends MGraphicElementLinePen {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignLine jrElement = (JRDesignLine) getValue();
 		if (id.equals(JRBaseLine.PROPERTY_DIRECTION))
-			jrElement.setDirection((LineDirectionEnum) EnumHelper.getSetValue(LineDirectionEnum.values(), value, 1, true));
+			jrElement.setDirection((LineDirectionEnum) directionD.getEnumValue(value));
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			jrElement.setFill((FillEnum) EnumHelper.getSetValue(FillEnum.values(), value, 1, true));
+			jrElement.setFill((FillEnum) fillD.getEnumValue(value));
 		else
 			super.setPropertyValue(id, value);
 	}

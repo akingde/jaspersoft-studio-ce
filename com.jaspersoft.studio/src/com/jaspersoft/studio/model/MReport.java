@@ -47,11 +47,12 @@ import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.band.MBand;
 import com.jaspersoft.studio.model.band.MBandGroupFooter;
@@ -60,13 +61,17 @@ import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.ImportDeclarationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -159,7 +164,8 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JasperDesign.PROPERTY_NAME, Messages.MReport_report_name);
+		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JasperDesign.PROPERTY_NAME,
+				Messages.MReport_report_name);
 		nameD.setDescription(Messages.MReport_report_name_description);
 		nameD.setCategory(Messages.common_report);
 		desc.add(nameD);
@@ -241,20 +247,27 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
 
-		ComboBoxPropertyDescriptor orientationD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_ORIENTATION,
-				Messages.MReport_page_orientation, EnumHelper.getEnumNames(OrientationEnum.values(), NullEnum.NOTNULL));
+		orientationD = new JSSEnumPropertyDescriptor(JasperDesign.PROPERTY_ORIENTATION, Messages.MReport_page_orientation,
+				OrientationEnum.class, NullEnum.NOTNULL) {
+			@Override
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/portrait16.png"),
+						JaspersoftStudioPlugin.getImage("icons/resources/landscape16.png") };
+				return new SPToolBarEnum(parent, section, this, images);
+			}
+		};
 		orientationD.setDescription(Messages.MReport_page_orientation_description);
 		orientationD.setCategory(Messages.MReport_report_page_category);
 		desc.add(orientationD);
 
-		ComboBoxPropertyDescriptor printOrderD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_PRINT_ORDER,
-				Messages.MReport_print_order, EnumHelper.getEnumNames(PrintOrderEnum.values(), NullEnum.NULL));
+		printOrderD = new JSSEnumPropertyDescriptor(JasperDesign.PROPERTY_PRINT_ORDER, Messages.MReport_print_order,
+				PrintOrderEnum.class, NullEnum.NULL);
 		printOrderD.setDescription(Messages.MReport_print_order_description);
 		printOrderD.setCategory(Messages.MReport_columns_category);
 		desc.add(printOrderD);
 
-		ComboBoxPropertyDescriptor whenNoDataD = new ComboBoxPropertyDescriptor(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
-				Messages.MReport_when_no_data_type, EnumHelper.getEnumNames(WhenNoDataTypeEnum.values(), NullEnum.NULL));
+		whenNoDataD = new JSSEnumPropertyDescriptor(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE,
+				Messages.MReport_when_no_data_type, WhenNoDataTypeEnum.class, NullEnum.NULL);
 		whenNoDataD.setDescription(Messages.MReport_when_no_data_type_description);
 		whenNoDataD.setCategory(Messages.common_report);
 		desc.add(whenNoDataD);
@@ -303,9 +316,9 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_COUNT, new Integer(1));
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_WIDTH, new Integer(555));
 		defaultsMap.put(JasperDesign.PROPERTY_COLUMN_SPACING, new Integer(0));
-		defaultsMap.put(JasperDesign.PROPERTY_ORIENTATION, EnumHelper.getValue(OrientationEnum.PORTRAIT, 1, false));
-		defaultsMap.put(JasperDesign.PROPERTY_PRINT_ORDER, EnumHelper.getValue(PrintOrderEnum.VERTICAL, 1, true));
-		defaultsMap.put(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, EnumHelper.getValue(WhenNoDataTypeEnum.NO_PAGES, 1, true));
+		defaultsMap.put(JasperDesign.PROPERTY_ORIENTATION, orientationD.getEnumValue(OrientationEnum.PORTRAIT));
+		defaultsMap.put(JasperDesign.PROPERTY_PRINT_ORDER, printOrderD.getEnumValue(PrintOrderEnum.VERTICAL));
+		defaultsMap.put(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE, whenNoDataD.getEnumValue(WhenNoDataTypeEnum.NO_PAGES));
 		defaultsMap.put(JasperDesign.PROPERTY_TITLE_NEW_PAGE, Boolean.FALSE);
 		defaultsMap.put(JasperDesign.PROPERTY_SUMMARY_NEW_PAGE, Boolean.FALSE);
 		defaultsMap.put(JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, Boolean.FALSE);
@@ -367,11 +380,11 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			return jrDesign.getLanguage();
 
 		if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
-			return EnumHelper.getValue(jrDesign.getOrientationValue(), 1, false);
+			return orientationD.getEnumValue(jrDesign.getOrientationValue());
 		if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER))
-			return EnumHelper.getValue(jrDesign.getPrintOrderValue(), 1, true);
+			return printOrderD.getEnumValue(jrDesign.getPrintOrderValue());
 		if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE))
-			return EnumHelper.getValue(jrDesign.getWhenNoDataTypeValue(), 1, true);
+			return whenNoDataD.getEnumValue(jrDesign.getWhenNoDataTypeValue());
 
 		if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
 			return new Boolean(jrDesign.isTitleNewPage());
@@ -439,12 +452,11 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 			jrDesign.setColumnWidth(((Integer) value).intValue());
 		// -- enums
 		else if (id.equals(JasperDesign.PROPERTY_ORIENTATION))
-			jrDesign.setOrientation((OrientationEnum) EnumHelper.getSetValue(OrientationEnum.values(), value, 1, false));
+			jrDesign.setOrientation((OrientationEnum) orientationD.getEnumValue(value));
 		else if (id.equals(JasperDesign.PROPERTY_PRINT_ORDER))
-			jrDesign.setPrintOrder((PrintOrderEnum) EnumHelper.getSetValue(PrintOrderEnum.values(), value, 1, true));
+			jrDesign.setPrintOrder((PrintOrderEnum) printOrderD.getEnumValue(value));
 		else if (id.equals(JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE))
-			jrDesign.setWhenNoDataType((WhenNoDataTypeEnum) EnumHelper.getSetValue(WhenNoDataTypeEnum.values(), value, 1,
-					true));
+			jrDesign.setWhenNoDataType((WhenNoDataTypeEnum) whenNoDataD.getEnumValue(value));
 		// -- booleans
 		else if (id.equals(JasperDesign.PROPERTY_TITLE_NEW_PAGE))
 			jrDesign.setTitleNewPage(((Boolean) value).booleanValue());
@@ -875,6 +887,9 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 	}
 
 	public static final String DEFAULT_DATAADAPTER = "com.jaspersoft.studio.data.defaultdataadapter";
+	private static JSSEnumPropertyDescriptor orientationD;
+	private static JSSEnumPropertyDescriptor printOrderD;
+	private static JSSEnumPropertyDescriptor whenNoDataD;
 
 	public void putParameter(String key, Object value) {
 		if (parameters == null)

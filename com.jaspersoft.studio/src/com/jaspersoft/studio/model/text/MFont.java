@@ -46,14 +46,19 @@ import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseFont;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPBooleanToggle;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 public class MFont extends APropertyNode {
@@ -96,22 +101,44 @@ public class MFont extends APropertyNode {
 		desc.add(pdfEncodingD);
 
 		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_BOLD, Messages.common_bold,
-				NullEnum.INHERITED);
+				NullEnum.INHERITED) {
+			@Override
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/bold.png"));
+			}
+		};
 		boldD.setDescription(Messages.MFont_bold_description);
 		desc.add(boldD);
 
 		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_ITALIC,
-				Messages.common_italic, NullEnum.INHERITED);
+				Messages.common_italic, NullEnum.INHERITED) {
+			@Override
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/italic.png"));
+			}
+		};
 		italicD.setDescription(Messages.MFont_italic_description);
 		desc.add(italicD);
 
 		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_UNDERLINE,
-				Messages.common_underline, NullEnum.INHERITED);
+				Messages.common_underline, NullEnum.INHERITED) {
+			@Override
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getImage("icons/resources/underline.png"));
+			}
+		};
 		underlineD.setDescription(Messages.MFont_underline_description);
 		desc.add(underlineD);
 
 		CheckBoxPropertyDescriptor strikeTroughD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_STRIKE_THROUGH,
-				Messages.common_strike_trough, NullEnum.INHERITED);
+				Messages.common_strike_trough, NullEnum.INHERITED) {
+			@Override
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getImage("icons/resources/strikethrought.png"));
+			}
+		};
 		strikeTroughD.setDescription(Messages.MFont_strike_trough_description);
 		desc.add(strikeTroughD);
 

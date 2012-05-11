@@ -33,7 +33,6 @@ import net.sf.jasperreports.engine.type.HorizontalAlignEnum;
 import net.sf.jasperreports.engine.type.RotationEnum;
 import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -43,6 +42,10 @@ import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -70,18 +73,18 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		markupD.setDescription(Messages.MTextElement_markup_description);
 		desc.add(markupD);
 
-		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.common_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
+		hAlignD = new HAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
+				Messages.common_horizontal_alignment, HorizontalAlignEnum.class, NullEnum.INHERITED);
 		hAlignD.setDescription(Messages.MTextElement_horizontal_alignment_description);
 		desc.add(hAlignD);
 
-		ComboBoxPropertyDescriptor vAlignD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				Messages.common_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
+		vAlignD = new VAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, Messages.common_vertical_alignment,
+				VerticalAlignEnum.class, NullEnum.INHERITED);
 		vAlignD.setDescription(Messages.MTextElement_vertical_alignment_description);
 		desc.add(vAlignD);
 
-		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION,
-				Messages.common_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
+		rotationD = new RotationPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION, Messages.common_rotation,
+				RotationEnum.class, NullEnum.INHERITED);
 		rotationD.setDescription(Messages.MTextElement_rotation_description);
 		desc.add(rotationD);
 
@@ -104,6 +107,9 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 
 	private MFont tFont;
 	private MParagraph mParagraph;
+	private static JSSEnumPropertyDescriptor hAlignD;
+	private static JSSEnumPropertyDescriptor vAlignD;
+	private static JSSEnumPropertyDescriptor rotationD;
 
 	private MFont getMFont() {
 		if (tFont == null) {
@@ -129,11 +135,11 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 		}
 
 		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			return EnumHelper.getValue(jrElement.getOwnHorizontalAlignmentValue(), 1, true);
+			return hAlignD.getEnumValue(jrElement.getOwnHorizontalAlignmentValue());
 		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			return EnumHelper.getValue(jrElement.getOwnVerticalAlignmentValue(), 1, true);
+			return vAlignD.getEnumValue(jrElement.getOwnVerticalAlignmentValue());
 		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
-			return EnumHelper.getValue(jrElement.getOwnRotationValue(), 0, true);
+			return rotationD.getEnumValue(jrElement.getOwnRotationValue());
 
 		if (getMFont() != null) {
 			Object val = tFont.getPropertyValue(id);
@@ -151,15 +157,14 @@ public abstract class MTextElement extends MGraphicElementLineBox implements IRo
 			jrElement.setMarkup((String) value);
 
 		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			jrElement.setHorizontalAlignment((HorizontalAlignEnum) EnumHelper.getSetValue(HorizontalAlignEnum.values(),
-					value, 1, true));
+			jrElement.setHorizontalAlignment((HorizontalAlignEnum) hAlignD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT)) {
 			VerticalAlignEnum va = (VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), value, 1, true);
 			if (va != null && va.equals(VerticalAlignEnum.JUSTIFIED))
 				va = VerticalAlignEnum.MIDDLE;
 			jrElement.setVerticalAlignment(va);
 		} else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
-			jrElement.setRotation((RotationEnum) EnumHelper.getSetValue(RotationEnum.values(), value, 0, true));
+			jrElement.setRotation((RotationEnum) rotationD.getEnumValue(value));
 
 		getMFont().setPropertyValue(id, value);
 

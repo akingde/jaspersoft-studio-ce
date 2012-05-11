@@ -63,10 +63,16 @@ import com.jaspersoft.studio.property.descriptor.parameter.dialog.ParameterDTO;
 
 public class MDatasetRun extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
+
 	public MDatasetRun(JRDatasetRun value, JasperDesign jasperDesign) {
 		super();
 		setValue(value);
 		this.jasperDesign = jasperDesign;
+	}
+
+	@Override
+	public JRDesignDatasetRun getValue() {
+		return (JRDesignDatasetRun) super.getValue();
 	}
 
 	private IPropertyDescriptor[] descriptors;
@@ -172,13 +178,19 @@ public class MDatasetRun extends APropertyNode {
 	 */
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignDatasetRun jrElement = (JRDesignDatasetRun) getValue();
-		if (id.equals(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION))
+		if (id.equals(JRDesignDatasetRun.PROPERTY_CONNECTION_EXPRESSION)) {
+			jrElement.getEventSupport().removePropertyChangeListener(this);
+			jrElement.setDataSourceExpression(null);
+			jrElement.getEventSupport().addPropertyChangeListener(this);
 			jrElement.setConnectionExpression(ExprUtil.setValues(jrElement.getConnectionExpression(), value));
-		else if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION))
+		} else if (id.equals(JRDesignDatasetRun.PROPERTY_PARAMETERS_MAP_EXPRESSION))
 			jrElement.setParametersMapExpression(ExprUtil.setValues(jrElement.getParametersMapExpression(), value));
-		else if (id.equals(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION))
+		else if (id.equals(JRDesignDatasetRun.PROPERTY_DATA_SOURCE_EXPRESSION)) {
+			jrElement.getEventSupport().removePropertyChangeListener(this);
+			jrElement.setConnectionExpression(null);
+			jrElement.getEventSupport().addPropertyChangeListener(this);
 			jrElement.setDataSourceExpression(ExprUtil.setValues(jrElement.getDataSourceExpression(), value));
-		else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
+		} else if (id.equals(JRDesignSubreport.PROPERTY_PARAMETERS)) {
 			if (value instanceof ParameterDTO) {
 				ParameterDTO v = (ParameterDTO) value;
 

@@ -26,13 +26,13 @@ import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
@@ -40,7 +40,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 public class DatasetRunWidgetRadio implements IExpressionContextSetter{
-	private JRDesignDatasetRun datasetrun;
+	protected JRDesignDatasetRun datasetrun;
 
 	public DatasetRunWidgetRadio(Composite parent) {
 		createControl(parent);
@@ -48,9 +48,18 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter{
 
 	public void setData(JRDesignDatasetRun datasetrun) {
 		this.datasetrun = datasetrun;
+		removeListeners();
 		if (datasetrun != null) {
 			dsRunExpr.setEnabled(false);
 			otherExpr.setEnabled(false);
+
+			sameCon.setSelection(false);
+			otherCon.setSelection(false);
+			jrdCon.setSelection(false);
+			emptyCon.setSelection(false);
+			noCon.setSelection(false);
+			otherExpr.setExpression(null);
+			dsRunExpr.setExpression(null);
 
 			if (datasetrun.getConnectionExpression() == null && datasetrun.getDataSourceExpression() == null) {
 				noCon.setSelection(true);
@@ -73,10 +82,15 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter{
 				noCon.setSelection(true);
 			}
 		}
+		addListeners();
 	}
 
 	public Control getControl() {
 		return composite;
+	}
+
+	public void setEnabled(boolean en) {
+		composite.setEnabled(en);
 	}
 
 	private Composite composite;
@@ -87,6 +101,7 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter{
 	private Button jrdCon;
 	private Button emptyCon;
 	private Button noCon;
+	private Listener listener;
 
 	public void createControl(Composite parent) {
 		composite = new Composite(parent, SWT.NONE);
@@ -128,33 +143,46 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter{
 		gd.horizontalSpan = 3;
 		emptyCon.setLayoutData(gd);
 
-		SelectionListener listener = new SelectionListener() {
+		listener = new Listener() {
+			int time = -1;
 
-			public void widgetSelected(SelectionEvent e) {
+			public void handleEvent(Event event) {
+				if (time > 0 && event.time - time < 20)
+					return;
+				time = event.time;
 				if (noCon.getSelection())
 					setNoConnection();
 				else if (otherCon.getSelection())
-					setConnection(""); //$NON-NLS-1$
+					setConnection("new Connection()"); //$NON-NLS-1$
 				else if (jrdCon.getSelection())
-					setDatasource("");//$NON-NLS-1$
+					setDatasource("new JRDataSource()");//$NON-NLS-1$ 
 				else if (sameCon.getSelection())
 					setConnection("$P{REPORT_CONNECTION}"); //$NON-NLS-1$
 				else if (emptyCon.getSelection())
 					setDatasource("new net.sf.jasperreports.engine.JREmptyDataSource()");//$NON-NLS-1$
 			}
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		};
-		sameCon.addSelectionListener(listener);
-		otherCon.addSelectionListener(listener);
-		jrdCon.addSelectionListener(listener);
-		emptyCon.addSelectionListener(listener);
-		noCon.addSelectionListener(listener);
+		addListeners();
 	}
 
-	private void setNoConnection() {
+	protected void removeListeners() {
+		sameCon.removeListener(SWT.Selection, listener);
+		otherCon.removeListener(SWT.Selection, listener);
+		jrdCon.removeListener(SWT.Selection, listener);
+		emptyCon.removeListener(SWT.Selection, listener);
+		noCon.removeListener(SWT.Selection, listener);
+	}
+
+	protected void addListeners() {
+		sameCon.addListener(SWT.Selection, listener);
+		otherCon.addListener(SWT.Selection, listener);
+		jrdCon.addListener(SWT.Selection, listener);
+		emptyCon.addListener(SWT.Selection, listener);
+		noCon.addListener(SWT.Selection, listener);
+	}
+
+	protected void setNoConnection() {
 		if (datasetrun != null) {
 			datasetrun.setConnectionExpression(null);
 			datasetrun.setDataSourceExpression(null);
@@ -162,7 +190,7 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter{
 		}
 	}
 
-	private void setDatasource(String exTxt) {
+	protected void setDatasource(String exTxt) {
 		if (datasetrun != null) {
 			JRDesignExpression jde = (JRDesignExpression) datasetrun.getDataSourceExpression();
 			if (jde == null)
@@ -175,7 +203,7 @@ public class DatasetRunWidgetRadio implements IExpressionContextSetter{
 		}
 	}
 
-	private void setConnection(String exTxt) {
+	protected void setConnection(String exTxt) {
 		if (datasetrun != null) {
 			JRDesignExpression jde = (JRDesignExpression) datasetrun.getConnectionExpression();
 			if (jde == null)

@@ -41,14 +41,12 @@ import net.sf.jasperreports.engine.type.StretchTypeEnum;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRulerGuide;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
@@ -58,8 +56,10 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.TransparencePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.EnumHelper;
 
 /*
  * The Class MGeneric.
@@ -331,6 +331,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		groupChangesD = new RComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES,
 				Messages.MGraphicElement_print_when_group_changes, new String[] { "" }); //$NON-NLS-1$
 		groupChangesD.setDescription(Messages.MGraphicElement_print_when_group_changes_description);
+		groupChangesD.setCategory(Messages.MGraphicElement_print_when);
 		desc.add(groupChangesD);
 
 		NTextPropertyDescriptor keyD = new NTextPropertyDescriptor(JRDesignElement.PROPERTY_KEY, Messages.common_key);
@@ -369,20 +370,20 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 				Messages.common_forecolor, NullEnum.INHERITED);
 		forecolorD.setDescription(Messages.MGraphicElement_forecolor_description);
 		desc.add(forecolorD);
-		// opacity
-		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
-				Messages.common_opaque, EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
+
+		opaqueD = new TransparencePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque, ModeEnum.class,
+				NullEnum.INHERITED);
 		opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueD);
 
-		ComboBoxPropertyDescriptor positionTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
-				Messages.common_position_type, EnumHelper.getEnumNames(PositionTypeEnum.values(), NullEnum.NOTNULL));
+		positionTypeD = new JSSEnumPropertyDescriptor(JRDesignElement.PROPERTY_POSITION_TYPE,
+				Messages.common_position_type, PositionTypeEnum.class, NullEnum.NOTNULL);
 		positionTypeD.setDescription(Messages.MGraphicElement_position_type_description);
 		desc.add(positionTypeD);
 		positionTypeD.setCategory(Messages.MGraphicElement_location_category);
 
-		ComboBoxPropertyDescriptor stretchTypeD = new ComboBoxPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE,
-				Messages.common_stretch_type, EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
+		stretchTypeD = new JSSEnumPropertyDescriptor(JRDesignElement.PROPERTY_STRETCH_TYPE, Messages.common_stretch_type,
+				StretchTypeEnum.class, NullEnum.NOTNULL);
 		stretchTypeD.setCategory(Messages.common_size);
 		stretchTypeD.setDescription(Messages.MGraphicElement_stretch_type_description);
 		desc.add(stretchTypeD);
@@ -405,11 +406,13 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		CheckBoxPropertyDescriptor printWhenDetailOverflowsD = new CheckBoxPropertyDescriptor(
 				JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, Messages.MGraphicElement_print_when_detail_overflows);
 		printWhenDetailOverflowsD.setDescription(Messages.MGraphicElement_print_when_detail_overflows_desription);
+		printWhenDetailOverflowsD.setCategory(Messages.MGraphicElement_print_when);
 		desc.add(printWhenDetailOverflowsD);
 
 		JRExpressionPropertyDescriptor printWhenExprD = new JRExpressionPropertyDescriptor(
 				JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION, Messages.common_print_when_expression);
 		printWhenExprD.setDescription(Messages.MGraphicElement_print_when_expression_description);
+		printWhenExprD.setCategory(Messages.MGraphicElement_print_when);
 		desc.add(printWhenExprD);
 
 		JPropertiesPropertyDescriptor propertiesD = new JPropertiesPropertyDescriptor(
@@ -431,10 +434,10 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
 
-		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, EnumHelper.getValue(ModeEnum.OPAQUE, 1, true));
+		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, opaqueD.getEnumValue(ModeEnum.OPAQUE));
 		defaultsMap.put(JRDesignElement.PROPERTY_POSITION_TYPE,
-				EnumHelper.getValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP, 1, false));
-		defaultsMap.put(JRDesignElement.PROPERTY_STRETCH_TYPE, EnumHelper.getValue(StretchTypeEnum.NO_STRETCH, 0, false));
+				positionTypeD.getEnumValue(PositionTypeEnum.FIX_RELATIVE_TO_TOP));
+		defaultsMap.put(JRDesignElement.PROPERTY_STRETCH_TYPE, stretchTypeD.getEnumValue(StretchTypeEnum.NO_STRETCH));
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES, Boolean.TRUE);
 		defaultsMap.put(JRDesignElement.PROPERTY_REMOVE_LINE_WHEN_BLANK, Boolean.FALSE);
 		defaultsMap.put(JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, Boolean.FALSE);
@@ -445,6 +448,9 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 	private static final String PROPERTY_MAP = "PROPERTY_MAP"; //$NON-NLS-1$
 	private RWComboBoxPropertyDescriptor styleD;
 	private RComboBoxPropertyDescriptor groupChangesD;
+	private static JSSEnumPropertyDescriptor positionTypeD;
+	private static JSSEnumPropertyDescriptor opaqueD;
+	private static JSSEnumPropertyDescriptor stretchTypeD;
 
 	/*
 	 * (non-Javadoc)
@@ -471,8 +477,8 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignElement.PROPERTY_PROPERTY_EXPRESSIONS)) {
-//			jrElement.getPropertyExpressions();
-//			jrElement.getPropertiesMap()
+			// jrElement.getPropertyExpressions();
+			// jrElement.getPropertiesMap()
 			// FIXME: jrElement.getPropertyExpression(); same field
 			return jrElement.getPropertiesMap();
 		}
@@ -491,11 +497,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 			return Colors.getSWTRGB4AWTGBColor(jrElement.getOwnForecolor());
 		// opacity
 		if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			return EnumHelper.getValue(jrElement.getOwnModeValue(), 1, true);
+			return opaqueD.getEnumValue(jrElement.getOwnModeValue());
 		if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
-			return EnumHelper.getValue(jrElement.getPositionTypeValue(), 1, false);
+			return positionTypeD.getEnumValue(jrElement.getPositionTypeValue());
 		if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
-			return EnumHelper.getValue(jrElement.getStretchTypeValue(), 0, false);
+			return stretchTypeD.getEnumValue(jrElement.getStretchTypeValue());
 
 		if (id.equals(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES))
 			return new Boolean(jrElement.isPrintRepeatedValues());
@@ -578,11 +584,11 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		} else
 		// opacity
 		if (id.equals(JRBaseStyle.PROPERTY_MODE))
-			jrElement.setMode((ModeEnum) EnumHelper.getSetValue(ModeEnum.values(), value, 1, true));
+			jrElement.setMode((ModeEnum) opaqueD.getEnumValue(value));
 		else if (id.equals(JRDesignElement.PROPERTY_POSITION_TYPE))
-			jrElement.setPositionType((PositionTypeEnum) EnumHelper.getSetValue(PositionTypeEnum.values(), value, 1, false));
+			jrElement.setPositionType((PositionTypeEnum) positionTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignElement.PROPERTY_STRETCH_TYPE))
-			jrElement.setStretchType((StretchTypeEnum) EnumHelper.getSetValue(StretchTypeEnum.values(), value, 0, false));
+			jrElement.setStretchType((StretchTypeEnum) stretchTypeD.getEnumValue(value));
 
 		else if (id.equals(JRDesignElement.PROPERTY_PRINT_REPEATED_VALUES))
 			jrElement.setPrintRepeatedValues(((Boolean) value).booleanValue());

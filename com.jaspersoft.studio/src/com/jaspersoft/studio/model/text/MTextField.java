@@ -34,7 +34,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -49,7 +48,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 /*
  * The Class MTextField.
@@ -130,9 +129,8 @@ public class MTextField extends MTextElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
-				JRDesignTextField.PROPERTY_EVALUATION_TIME, Messages.common_evaluation_time, EnumHelper.getEnumNames(
-						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
+		evaluationTimeD = new JSSEnumPropertyDescriptor(JRDesignTextField.PROPERTY_EVALUATION_TIME,
+				Messages.common_evaluation_time, EvaluationTimeEnum.class, NullEnum.NOTNULL);
 		evaluationTimeD.setDescription(Messages.MTextField_evaluation_time_description);
 		desc.add(evaluationTimeD);
 
@@ -147,7 +145,7 @@ public class MTextField extends MTextElement {
 		desc.add(blankWhenNullD);
 
 		CheckBoxPropertyDescriptor stretchOverflowD = new CheckBoxPropertyDescriptor(
-				JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Messages.MTextField_stretch_with_overflow);
+				JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW, Messages.MTextField_stretch_with_overflow, NullEnum.NOTNULL);
 		stretchOverflowD.setDescription(Messages.MTextField_stretch_with_overflow_description);
 		desc.add(stretchOverflowD);
 
@@ -185,6 +183,7 @@ public class MTextField extends MTextElement {
 
 	private ParameterDTO propertyDTO;
 	private MHyperLink mHyperLink;
+	private static JSSEnumPropertyDescriptor evaluationTimeD;
 
 	@Override
 	public Object getPropertyValue(Object id) {
@@ -195,7 +194,7 @@ public class MTextField extends MTextElement {
 			return ExprUtil.getExpression(jrElement.getPatternExpression());
 
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(jrElement.getEvaluationTimeValue(), 1, false);
+			return evaluationTimeD.getEnumValue(jrElement.getEvaluationTimeValue());
 		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrElement.isOwnBlankWhenNull();
 		if (id.equals(JRBaseTextField.PROPERTY_STRETCH_WITH_OVERFLOW))
@@ -244,8 +243,7 @@ public class MTextField extends MTextElement {
 		JRDesignTextField jrElement = (JRDesignTextField) getValue();
 
 		if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_TIME))
-			jrElement.setEvaluationTime((EvaluationTimeEnum) EnumHelper.getSetValue(EvaluationTimeEnum.values(), value, 1,
-					false));
+			jrElement.setEvaluationTime((EvaluationTimeEnum) evaluationTimeD.getEnumValue(value));
 		else if (id.equals(JRDesignTextField.PROPERTY_EVALUATION_GROUP)) {
 			if (!value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);

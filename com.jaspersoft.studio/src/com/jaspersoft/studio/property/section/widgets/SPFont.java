@@ -21,29 +21,31 @@ package com.jaspersoft.studio.property.section.widgets;
 
 import net.sf.jasperreports.engine.JRFont;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
+import net.sf.jasperreports.engine.design.JRDesignFont;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.text.MFont;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.ModelUtils;
 
-public class SPFont {
+public class SPFont extends ASPropertyWidget {
 	private CCombo fontName;
 	private CCombo fontSize;
 	private ToolItem boldButton;
@@ -51,32 +53,25 @@ public class SPFont {
 	private ToolItem underlineButton;
 	private ToolItem strikeTroughtButton;
 
-	public SPFont(Composite parent, AbstractSection section, String property) {
-		this(parent, section, property, true);
+	public SPFont(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public SPFont(Composite parent, AbstractSection section, String property, boolean withLabel) {
-		createComponent(parent, section, property, withLabel);
+	@Override
+	public Control getControl() {
+		return group;
 	}
 
-	private void createComponent(Composite parent, final AbstractSection section, final String property, boolean withLabel) {
-		Composite composite = parent;
-		if (withLabel) {
-			composite = new Composite(parent, SWT.NONE);
-			composite.setBackground(parent.getBackground());
-			RowLayout rl = new RowLayout();
-			rl.fill = true;
-			composite.setLayout(rl);
+	protected void createComponent(Composite parent) {
+		mfont = new MFont(new JRDesignFont(null));
 
-			CLabel label = section.getWidgetFactory().createCLabel(composite, Messages.common_font + ":", SWT.RIGHT); //$NON-NLS-1$
+		group = section.getWidgetFactory().createGroup(parent, pDescriptor.getDisplayName());
+		group.setLayout(new GridLayout(2, false));
 
-			RowData rd = new RowData();
-			rd.width = 102;
-			label.setLayoutData(rd);
-		}
-
-		fontName = new CCombo(composite, SWT.BORDER | SWT.FLAT);
-		fontName.setItems(ModelUtils.getFontNames());
+		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) mfont
+				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
+		fontName = section.getWidgetFactory().createCCombo(group, SWT.FLAT);
+		fontName.setItems(pd.getItems());
 		fontName.addModifyListener(new ModifyListener() {
 			private int time = 0;
 
@@ -84,15 +79,18 @@ public class SPFont {
 				if (e.time - time > 100) {
 					String value = fontName.getText();
 					if (!value.equals("______________")) //$NON-NLS-1$
-						changeProperty(section, property, JRBaseStyle.PROPERTY_FONT_NAME, value);
+						changeProperty(section, pDescriptor.getId(), pd.getId(), value);
 				}
 				time = e.time;
 			}
 		});
-		fontName.setToolTipText(Messages.FontSection_font_name_tool_tip);
+		fontName.setToolTipText(pd.getDescription());
 
-		fontSize = new CCombo(composite, SWT.BORDER | SWT.FLAT);
-		fontSize.setItems(ModelUtils.getFontSizes());
+		final RWComboBoxPropertyDescriptor pd1 = (RWComboBoxPropertyDescriptor) mfont
+				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE);
+
+		fontSize = section.getWidgetFactory().createCCombo(group, SWT.FLAT);
+		fontSize.setItems(pd1.getItems());
 		fontSize.addModifyListener(new ModifyListener() {
 			private int time = 0;
 
@@ -100,71 +98,56 @@ public class SPFont {
 				if (e.time - time > 100) {
 					String value = fontSize.getText();
 					if (IntegerCellEditorValidator.instance().isValid(value) == null)
-						changeProperty(section, property, JRBaseStyle.PROPERTY_FONT_SIZE, value);
+						changeProperty(section, pDescriptor.getId(), pd1.getId(), value);
 				}
 				time = e.time;
 			}
 		});
+		fontSize.setToolTipText(pd1.getDescription());
 
-		fontSize.setToolTipText(Messages.FontSection_font_size_tool_tip);
+		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		toolBar.setLayoutData(gd);
 
-		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.WRAP | SWT.LEFT);
-		toolBar.setBackground(composite.getBackground());
+		boldButton = createItem(toolBar, JRBaseStyle.PROPERTY_BOLD, "icons/resources/bold.png");
 
-		boldButton = new ToolItem(toolBar, SWT.CHECK);
-		boldButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/bold.png"));
-		boldButton.setToolTipText(Messages.FontSection_bold_tool_tip);
+		italicButton = createItem(toolBar, JRBaseStyle.PROPERTY_ITALIC, "icons/resources/italic.png");
 
-		boldButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(section, property, JRBaseStyle.PROPERTY_BOLD, new Boolean(boldButton.getSelection()));
-			}
-		});
+		underlineButton = createItem(toolBar, JRBaseStyle.PROPERTY_UNDERLINE, "icons/resources/underline.png");
 
-		italicButton = new ToolItem(toolBar, SWT.CHECK);
-		italicButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(section, property, JRBaseStyle.PROPERTY_ITALIC, new Boolean(italicButton.getSelection()));
-			}
-		});
-		italicButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/italic.png")); //$NON-NLS-1$
-		italicButton.setToolTipText(Messages.FontSection_italic_tool_tip);
-
-		underlineButton = new ToolItem(toolBar, SWT.CHECK);
-		underlineButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(section, property, JRBaseStyle.PROPERTY_UNDERLINE, new Boolean(underlineButton.getSelection()));
-			}
-		});
-		underlineButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/underline.png")); //$NON-NLS-1$
-		underlineButton.setToolTipText(Messages.FontSection_underline_tool_tip);
-
-		strikeTroughtButton = new ToolItem(toolBar, SWT.CHECK);
-		strikeTroughtButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(section, property, JRBaseStyle.PROPERTY_STRIKE_THROUGH,
-						new Boolean(strikeTroughtButton.getSelection()));
-			}
-		});
-		strikeTroughtButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/strikethrought.png")); //$NON-NLS-1$
-		strikeTroughtButton.setToolTipText(Messages.FontSection_strike_through_tool_tip);
-
+		strikeTroughtButton = createItem(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, "icons/resources/strikethrought.png");
 	}
 
-	private void changeProperty(AbstractSection section, String property, String prop, Object value) {
+	private ToolItem createItem(ToolBar toolBar, Object id, String image) {
+		final IPropertyDescriptor ipd = mfont.getPropertyDescriptor(id);
+
+		final ToolItem item = new ToolItem(toolBar, SWT.CHECK);
+		item.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				changeProperty(section, pDescriptor.getId(), ipd.getId(), new Boolean(item.getSelection()));
+			}
+		});
+		item.setImage(JaspersoftStudioPlugin.getImage(image)); //$NON-NLS-1$
+		item.setToolTipText(ipd.getDescription());
+		return item;
+	}
+
+	private void changeProperty(AbstractSection section, Object property, Object prop, Object value) {
 		section.changePropertyOn(prop, value, mfont);
 		if (property != null && parentNode != null)
 			section.changePropertyOn(property, new MFont((JRFont) mfont.getValue()), parentNode);
 	}
 
-	private APropertyNode mfont;
+	private MFont mfont;
 	private APropertyNode parentNode;
+	private Group group;
 
-	public void setData(APropertyNode parentNode, APropertyNode element) {
-		this.parentNode = parentNode;
-		this.mfont = element;
-		if (element != null) {
-			String strfontname = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
+	public void setData(APropertyNode pnode, Object value) {
+		this.parentNode = pnode;
+		this.mfont = (MFont) value;
+		if (mfont != null) {
+			String strfontname = (String) mfont.getPropertyValue(JRBaseStyle.PROPERTY_FONT_NAME);
 			fontName.setText(strfontname != null ? strfontname : ""); //$NON-NLS-1$
 			String[] items = fontName.getItems();
 			for (int i = 0; i < items.length; i++) {
@@ -174,7 +157,7 @@ public class SPFont {
 				}
 			}
 
-			String strfontsize = (String) element.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
+			String strfontsize = (String) mfont.getPropertyValue(JRBaseStyle.PROPERTY_FONT_SIZE);
 			items = fontSize.getItems();
 			fontSize.setText(strfontsize != null ? strfontsize : ""); //$NON-NLS-1$
 			for (int i = 0; i < items.length; i++) {
@@ -184,13 +167,13 @@ public class SPFont {
 				}
 			}
 
-			Boolean b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_BOLD);
+			Boolean b = (Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_BOLD);
 			boldButton.setSelection(b != null ? b.booleanValue() : false);
-			b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_ITALIC);
+			b = (Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_ITALIC);
 			italicButton.setSelection(b != null ? b.booleanValue() : false);
-			b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_UNDERLINE);
+			b = (Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_UNDERLINE);
 			underlineButton.setSelection(b != null ? b.booleanValue() : false);
-			b = (Boolean) element.getPropertyValue(JRBaseStyle.PROPERTY_STRIKE_THROUGH);
+			b = (Boolean) mfont.getPropertyValue(JRBaseStyle.PROPERTY_STRIKE_THROUGH);
 			strikeTroughtButton.setSelection(b != null ? b.booleanValue() : false);
 		}
 	}

@@ -189,6 +189,7 @@ public abstract class ANode implements INode, Serializable {
 	Set<ANode> dependents;
 
 	public void setChildListener(ANode child) {
+		unsetChildListener(child);
 		if (child != null)
 			child.getPropertyChangeSupport().addPropertyChangeListener(this);
 		if (dependents == null)

@@ -45,11 +45,16 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.jaspersoft.studio.jface.BooleanCellEditorValidator;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
+import com.jaspersoft.studio.property.section.widgets.SP3Boolean;
+import com.jaspersoft.studio.property.section.widgets.SPBoolean;
 
 /*
  * @author Chicu Veaceslav
  */
-public class CheckBoxPropertyDescriptor extends PropertyDescriptor {
+public class CheckBoxPropertyDescriptor extends PropertyDescriptor implements IPropertyDescriptorWidget {
 	private NullEnum canBeNull;
 
 	public CheckBoxPropertyDescriptor(Object id, String displayName, NullEnum canBeNull) {
@@ -79,4 +84,10 @@ public class CheckBoxPropertyDescriptor extends PropertyDescriptor {
 		return new CheckBoxLabelProvider(canBeNull);
 	}
 
+	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+		if (canBeNull == NullEnum.NOTNULL)
+			return new SPBoolean(parent, section, this);
+		else
+			return new SP3Boolean(parent, section, this);
+	}
 }

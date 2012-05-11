@@ -30,15 +30,14 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.FillEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 /*
  * The Class MRectangle.
@@ -83,6 +82,7 @@ public class MRectangle extends MGraphicElementLinePen {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor fillD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -110,8 +110,8 @@ public class MRectangle extends MGraphicElementLinePen {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill,
-				EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
+		fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
+				NullEnum.INHERITED);
 		fillD.setDescription(Messages.MRectangle_fill_description);
 		desc.add(fillD);
 
@@ -129,7 +129,7 @@ public class MRectangle extends MGraphicElementLinePen {
 		if (id.equals(JRBaseStyle.PROPERTY_RADIUS))
 			return jrElement.getOwnRadius();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			return EnumHelper.getValue(jrElement.getFillValue(), 1, true);
+			return fillD.getEnumValue(jrElement.getFillValue());
 		return super.getPropertyValue(id);
 	}
 
@@ -137,9 +137,10 @@ public class MRectangle extends MGraphicElementLinePen {
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignRectangle jrElement = (JRDesignRectangle) getValue();
 		if (id.equals(JRBaseStyle.PROPERTY_FILL))
-			jrElement.setFill((FillEnum) EnumHelper.getSetValue(FillEnum.values(), value, 1, true));
+			jrElement.setFill((FillEnum) fillD.getEnumValue(value));
 		else if (id.equals(JRBaseStyle.PROPERTY_RADIUS)) {
-			jrElement.setRadius(((Integer) value).intValue());
+			jrElement.setRadius(value != null ? ((Integer) value).intValue() : 0);
+
 		} else
 			super.setPropertyValue(id, value);
 	}

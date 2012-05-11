@@ -32,7 +32,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.datasource.AMDatasource;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 public class MEmptyDataSource extends AMDatasource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;

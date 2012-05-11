@@ -52,7 +52,6 @@ import net.sf.jasperreports.engine.type.IncrementTypeEnum;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -60,14 +59,14 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IContainer;
 import com.jaspersoft.studio.model.IContainerEditPart;
+import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MElementDataset extends APropertyNode implements IContainer, IContainerEditPart {
 	private static IIconDescriptor iconDescriptor;
@@ -135,14 +134,13 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		ComboBoxPropertyDescriptor resetTypeD = new ComboBoxPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_TYPE,
-				Messages.common_reset_type, EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
+		resetTypeD = new JSSEnumPropertyDescriptor(JRDesignElementDataset.PROPERTY_RESET_TYPE, Messages.common_reset_type,
+				ResetTypeEnum.class, NullEnum.NOTNULL);
 		resetTypeD.setDescription(Messages.MElementDataset_reset_type_description);
 		desc.add(resetTypeD);
 
-		ComboBoxPropertyDescriptor inctypeD = new ComboBoxPropertyDescriptor(
-				JRDesignElementDataset.PROPERTY_INCREMENT_TYPE, Messages.common_increment_type, EnumHelper.getEnumNames(
-						IncrementTypeEnum.values(), NullEnum.NOTNULL));
+		inctypeD = new JSSEnumPropertyDescriptor(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE,
+				Messages.common_increment_type, IncrementTypeEnum.class, NullEnum.NOTNULL);
 		inctypeD.setDescription(Messages.MElementDataset_increment_type_description);
 		desc.add(inctypeD);
 
@@ -161,8 +159,8 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		incGroupD.setDescription(Messages.MElementDataset_increment_group_description);
 		desc.add(incGroupD);
 
-		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(JRDesignElementDataset.PROPERTY_DATASET_RUN,
-				Messages.MElementDataset_dataset_run);
+		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(
+				JRDesignElementDataset.PROPERTY_DATASET_RUN, Messages.MElementDataset_dataset_run);
 		datasetRunD.setDescription(Messages.MElementDataset_dataset_run_description);
 		desc.add(datasetRunD);
 
@@ -183,12 +181,11 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	public Object getPropertyValue(Object id) {
 		JRDesignElementDataset jrElement = (JRDesignElementDataset) getValue();
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_TYPE))
-			return EnumHelper.getValue(jrElement.getResetTypeValue(), 1, false);
+			return resetTypeD.getEnumValue(jrElement.getResetTypeValue());
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
-			return EnumHelper.getValue(jrElement.getIncrementTypeValue(), 1, false);
-		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION)) {
+			return inctypeD.getEnumValue(jrElement.getIncrementTypeValue());
+		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION))
 			return ExprUtil.getExpression(jrElement.getIncrementWhenExpression());
-		}
 		if (id.equals(JRDesignElementDataset.PROPERTY_RESET_GROUP)) {
 			if (jrElement.getResetGroup() != null)
 				return jrElement.getResetGroup().getName();
@@ -202,17 +199,13 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 		if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
 			JRDatasetRun j = jrElement.getDatasetRun();
 			if (j == null) {
-				// Main dataset
-				j=new JRDesignDatasetRun();				
+				j = new JRDesignDatasetRun();
 			}
-			if (mDatasetRun==null){
-				// Initialize the dataset run node reference
-				// Could be the first getPropertyValue() invocation or an invocation
-				// after a reset (due to a setPropertyValue())
+			if (mDatasetRun != null)
+				mDatasetRun.setValue(j);
+			else
 				mDatasetRun = new MDatasetRun(j, getJasperDesign());
-				mDatasetRun.setParent(this, -1);
-				setChildListener(mDatasetRun);
-			}
+			setChildListener(mDatasetRun);
 			return mDatasetRun;
 		}
 		return null;
@@ -223,6 +216,8 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	private RComboBoxPropertyDescriptor resetGroupD;
 
 	private JasperDesign jasperDesign;
+	private static JSSEnumPropertyDescriptor resetTypeD;
+	private static JSSEnumPropertyDescriptor inctypeD;
 
 	@Override
 	public JasperDesign getJasperDesign() {
@@ -237,48 +232,33 @@ public class MElementDataset extends APropertyNode implements IContainer, IConta
 	public void setPropertyValue(Object id, Object value) {
 		JRDesignElementDataset jrElement = (JRDesignElementDataset) getValue();
 		if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_TYPE))
-			jrElement
-					.setIncrementType((IncrementTypeEnum) EnumHelper.getSetValue(IncrementTypeEnum.values(), value, 1, false));
+			jrElement.setIncrementType((IncrementTypeEnum) inctypeD.getEnumValue(value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_RESET_TYPE))
-			jrElement.setResetType((ResetTypeEnum) EnumHelper.getSetValue(ResetTypeEnum.values(), value, 1, false));
+			jrElement.setResetType((ResetTypeEnum) resetTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_WHEN_EXPRESSION))
 			jrElement.setIncrementWhenExpression(ExprUtil.setValues(jrElement.getIncrementWhenExpression(), value));
 		else if (id.equals(JRDesignElementDataset.PROPERTY_INCREMENT_GROUP)) {
-			if (!value.equals("")) { //$NON-NLS-1$
+			if (value != null && !value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setIncrementGroup(group);
 			}
 		} else if (id.equals(JRDesignElementDataset.PROPERTY_RESET_GROUP)) {
-			if (!value.equals("")) { //$NON-NLS-1$
+			if (value != null && !value.equals("")) { //$NON-NLS-1$
 				JRGroup group = (JRGroup) getJasperDesign().getGroupsMap().get(value);
 				jrElement.setResetGroup(group);
 			}
 		} else if (id.equals(JRDesignElementDataset.PROPERTY_DATASET_RUN)) {
-			clearOldMDatasetRun();
 			if (value == null) {
-				// Reset to main dataset
 				jrElement.setDatasetRun(null);
 			} else {
 				MDatasetRun mdr = (MDatasetRun) value;
 				JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();
 				if (dr.getDatasetName() != null)
 					jrElement.setDatasetRun(dr);
-				else{
+				else
 					jrElement.setDatasetRun(null);
-				}
 			}
 		}
 	}
-	
-	/*
-	 * Clear the local dataset run information.
-	 */
-	private void clearOldMDatasetRun(){
-		if(mDatasetRun!=null){
-			unsetChildListener(mDatasetRun);
-			mDatasetRun.setParent(null, -1);
-			mDatasetRun=null;
-		}
-	}
-	
+
 }

@@ -21,25 +21,13 @@ package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.base.JRBasePen;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.MGraphicElementLinePen;
 import com.jaspersoft.studio.model.style.MStyle;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.SPColor;
-import com.jaspersoft.studio.property.section.widgets.SPLineStyleEnum;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /*
  * The location section on the location tab.
@@ -47,11 +35,6 @@ import com.jaspersoft.studio.utils.UIUtils;
  * @author Chicu Veaceslav
  */
 public class LinePenSection extends AbstractSection {
-
-	private Composite composite;
-	private SPColor lineColor;
-	private SPLineStyleEnum lineStyle;
-	private Spinner lineWidth;
 
 	@Override
 	protected APropertyNode getModelFromEditPart(Object item) {
@@ -68,61 +51,9 @@ public class LinePenSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-
-		composite = createNewRow(parent);
-
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_pen_color + ":", SWT.RIGHT); //$NON-NLS-1$
-		RowData rd = new RowData();
-		rd.width = 100;
-		label.setLayoutData(rd);
-
-		lineColor = new SPColor(composite, this, JRBasePen.PROPERTY_LINE_COLOR, Messages.common_pen_color);
-
-		getWidgetFactory().createCLabel(composite, Messages.common_pen_style + ":"); //$NON-NLS-1$
-
-		lineStyle = new SPLineStyleEnum(composite, this, JRBasePen.PROPERTY_LINE_STYLE);
-
-		label = getWidgetFactory().createCLabel(composite, Messages.common_pen_width + ":", SWT.RIGHT); //$NON-NLS-1$
-
-		lineWidth = new Spinner(composite, SWT.BORDER);
-		lineWidth.setValues(0, 0, 5000, 1, 1, 100);
-		lineWidth.setToolTipText(Messages.LinePenSection_pen_width_tool_tip);
-		lineWidth.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				int selection = lineWidth.getSelection();
-				int digits = lineWidth.getDigits();
-				Float newValue = new Float(selection / Math.pow(10, digits));
-				changeProperty(JRBasePen.PROPERTY_LINE_WIDTH, newValue);
-			}
-		});
+		createWidget4Property(parent, JRBasePen.PROPERTY_LINE_COLOR);
+		createWidget4Property(parent, JRBasePen.PROPERTY_LINE_STYLE);
+		createWidget4Property(parent, JRBasePen.PROPERTY_LINE_WIDTH);
 	}
 
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			RGB backcolor = (RGB) element.getPropertyValue(JRBasePen.PROPERTY_LINE_COLOR);
-			lineColor.setData(backcolor);
-
-			lineStyle.setData(((Integer) element.getPropertyValue(JRBasePen.PROPERTY_LINE_STYLE)).intValue());
-
-			Float propertyValue = (Float) element.getPropertyValue(JRBasePen.PROPERTY_LINE_WIDTH);
-
-			UIUtils.setSpinnerSelection(lineWidth, null, (int) ((propertyValue == null) ? 0 : propertyValue.doubleValue()
-					* Math.pow(10, 1)));
-
-		}
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return lineWidth.isDisposed();
-	}
 }

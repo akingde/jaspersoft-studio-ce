@@ -22,22 +22,34 @@ package com.jaspersoft.studio.property.section.widgets;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPNumber {
+public class SPNumber extends ASPropertyWidget {
 	private Text ftext;
 
-	public SPNumber(Composite parent, AbstractSection section, String property, String tooltip) {
-		createComponent(parent, section, property, tooltip);
+	public SPNumber(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public void createComponent(Composite parent, final AbstractSection section, final String property, String tooltip) {
-		ftext = new Text(parent, SWT.BORDER | SWT.FLAT);
+	@Override
+	public Control getControl() {
+		return ftext;
+	}
+
+	protected void createComponent(Composite parent) {
+		ftext = section.getWidgetFactory().createText(parent, "", SWT.RIGHT);
 		ftext.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -52,35 +64,39 @@ public class SPNumber {
 						else if (numType == Float.class)
 							newValue = new Float(tmp);
 					}
-					section.changeProperty(property, newValue);
+					section.changeProperty(pDescriptor.getId(), newValue);
 				} catch (NumberFormatException nfe) {
 
 				}
 			}
 		});
-		ftext.setToolTipText(tooltip);
+		ftext.setToolTipText(pDescriptor.getDescription());
+		setWidth(parent, 6);
+	}
+
+	protected void setWidth(Composite parent, int chars) {
+		GC gc = new GC(ftext);
+		FontMetrics fontMetrics = gc.getFontMetrics();
+		int w = fontMetrics.getAverageCharWidth() * chars;
+		gc.dispose();
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
-			rd.width = 100;
+			rd.width = w;
+			ftext.setLayoutData(rd);
+		} else if (parent.getLayout() instanceof GridLayout) {
+			GridData rd = new GridData();
+			rd.widthHint = w;
 			ftext.setLayoutData(rd);
 		}
 	}
 
 	private Class<? extends Number> numType;
 
-	public void setData(Integer f) {
-		setDataNumber(f);
-		numType = Integer.class;
-	}
-
-	public void setData(Float f) {
-		setDataNumber(f);
-		numType = Float.class;
-	}
-
-	public void setData(Double f) {
-		setDataNumber(f);
-		numType = Double.class;
+	public void setData(APropertyNode pnode, Object b) {
+		Number n = (Number) b;
+		setDataNumber(n);
+		if (n != null)
+			numType = n.getClass();
 	}
 
 	public void setDataNumber(Number f) {
@@ -92,4 +108,5 @@ public class SPNumber {
 		} else
 			ftext.setText("");
 	}
+
 }

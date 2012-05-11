@@ -20,22 +20,11 @@
 package com.jaspersoft.studio.property.section.text;
 
 import net.sf.jasperreports.engine.base.JRBaseStyle;
-import net.sf.jasperreports.engine.type.RotationEnum;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 /*
@@ -44,113 +33,15 @@ import com.jaspersoft.studio.property.section.AbstractSection;
  * @author Chicu Veaceslav
  */
 public class RotateSection extends AbstractSection {
-
-	private ToolItem noneButton;
-	private ToolItem leftButton;
-	private ToolItem rightButton;
-	private ToolItem upDownButton;
-	private Composite composite;
-
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
 	 *      org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage)
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
+		parent.setLayout(new GridLayout(2, false));
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-
-		composite = createNewRow(parent);
-
-		CLabel label = getWidgetFactory().createCLabel(composite, "Rotation" + ":", SWT.RIGHT);
-		RowData rd = new RowData();
-		rd.width = 100;
-		label.setLayoutData(rd);
-		label.setToolTipText(Messages.TextSection_rotation_tool_tip);
-
-		ToolBar toolBar = new ToolBar(composite, SWT.FLAT | SWT.WRAP | SWT.LEFT);
-		toolBar.setBackground(composite.getBackground());
-
-		noneButton = new ToolItem(toolBar, SWT.CHECK);
-		noneButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/text-direction-none.png"));
-		noneButton.setToolTipText("Do not rotate");
-
-		noneButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBaseStyle.PROPERTY_ROTATION, new Integer(noneButton.getSelection() ? new Integer(
-						RotationEnum.NONE.getValue() + 1) : 0));
-			}
-		});
-
-		leftButton = new ToolItem(toolBar, SWT.CHECK);
-		leftButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBaseStyle.PROPERTY_ROTATION, new Integer(leftButton.getSelection() ? new Integer(
-						RotationEnum.LEFT.getValue() + 1) : 0));
-			}
-		});
-		leftButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/text-direction-left.png")); //$NON-NLS-1$
-		leftButton.setToolTipText("Rotate left");
-
-		rightButton = new ToolItem(toolBar, SWT.CHECK);
-		rightButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBaseStyle.PROPERTY_ROTATION, new Integer(rightButton.getSelection() ? new Integer(
-						RotationEnum.RIGHT.getValue() + 1) : 0));
-			}
-		});
-		rightButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/text-direction-right.png")); //$NON-NLS-1$
-		rightButton.setToolTipText("Rotate right");
-
-		upDownButton = new ToolItem(toolBar, SWT.CHECK);
-		upDownButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRBaseStyle.PROPERTY_ROTATION, new Integer(upDownButton.getSelection() ? new Integer(
-						RotationEnum.UPSIDE_DOWN.getValue() + 1) : 0));
-			}
-		});
-		upDownButton.setImage(JaspersoftStudioPlugin.getImage("icons/resources/text-direction-updown.png")); //$NON-NLS-1$
-		upDownButton.setToolTipText("Rotate upside down");
-
+		createWidget4Property(parent, JRBaseStyle.PROPERTY_ROTATION);
 	}
 
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			noneButton.setSelection(false);
-			leftButton.setSelection(false);
-			rightButton.setSelection(false);
-			upDownButton.setSelection(false);
-
-			Integer introt =   (Integer) element.getPropertyValue(JRBaseStyle.PROPERTY_ROTATION);
-			if(introt != null){
-				switch (introt) {
-				case 1:
-					noneButton.setSelection(true);
-					break;
-				case 2:
-					leftButton.setSelection(true);
-					break;
-				case 3:
-					rightButton.setSelection(true);
-					break;
-				case 4:
-					upDownButton.setSelection(true);
-					break;
-				}
-			}
-		}
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return composite.isDisposed();
-	}
 }

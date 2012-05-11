@@ -24,6 +24,9 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
 import org.eclipse.swt.SWT;
@@ -31,21 +34,32 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.Misc;
 
-public class SPResetType {
+public class SPResetType extends ASPropertyWidget {
 	private CCombo evalTime;
+	private IPropertyDescriptor gDescriptor;
 
-	public SPResetType(Composite parent, AbstractSection section,
-			String propEvalTime, String propEvalGroup, String tooltip) {
-		createComponent(parent, section, propEvalTime, propEvalGroup, tooltip);
+	public SPResetType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
+			IPropertyDescriptor gDescriptor) {
+		super(parent, section, pDescriptor);
+		this.gDescriptor = gDescriptor;
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String propEvalTime, final String propEvalGroup, String tooltip) {
-		evalTime = new CCombo(parent, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
+	@Override
+	public Control getControl() {
+		return evalTime;
+	}
+
+	public void createComponent(Composite parent) {
+		evalTime = section.getWidgetFactory().createCCombo(parent, SWT.FLAT | SWT.READ_ONLY);
 		evalTime.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
@@ -55,39 +69,53 @@ public class SPResetType {
 				String str = evalTime.getItem(evalTime.getSelectionIndex());
 				if (str.startsWith(GROUPPREFIX)) {
 					group = str.substring(GROUPPREFIX.length());
-					et = EnumHelper
-							.getValue(ResetTypeEnum.GROUP, 1, false);
+					et = EnumHelper.getValue(ResetTypeEnum.GROUP, 1, false);
 				} else {
-					et = EnumHelper.getValue(ResetTypeEnum.getByName(str),
-							1, false);
+					et = EnumHelper.getValue(ResetTypeEnum.getByName(str), 1, false);
 				}
 
-				section.changeProperty(propEvalTime,
-						et);
-				section.changeProperty(propEvalGroup,
-						group);
+				section.changeProperty(pDescriptor.getId(), et);
+				section.changeProperty(gDescriptor.getId(), Misc.nvl(group));
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
 			}
 		});
-		evalTime.setToolTipText(tooltip);
+		evalTime.setToolTipText(pDescriptor.getDescription());
+	}
+
+	@Override
+	public void setData(APropertyNode pnode, Object value) {
+		JasperDesign jasperDesign = pnode.getJasperDesign();
+		JRDataset dataset = null;
+		MDatasetRun mdataset = (MDatasetRun) pnode.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
+		if (mdataset != null) {
+			JRDesignDatasetRun datasetRun = mdataset.getValue();
+			if (datasetRun != null) {
+				String dsname = datasetRun.getDatasetName();
+				dataset = jasperDesign.getDatasetMap().get(dsname);
+			}
+		}
+		if (dataset == null)
+			dataset = jasperDesign.getMainDataset();
+
+		setData((Integer) pnode.getPropertyValue(pDescriptor.getId()),
+				(String) pnode.getPropertyValue(gDescriptor.getId()), SPIncrementType.getItems(dataset));
+
 	}
 
 	public void setData(Integer et, String group, String[] items) {
 		evalTime.setItems(items);
 		int selection = 0;
-		ResetTypeEnum sel = (ResetTypeEnum) EnumHelper.getSetValue(
-				ResetTypeEnum.values(), et, 1, false);
+		ResetTypeEnum sel = (ResetTypeEnum) EnumHelper.getSetValue(ResetTypeEnum.values(), et, 1, false);
 
 		for (int i = 0; i < items.length; i++) {
 			if (items[i].equals(sel.getName())) {
 				selection = i;
 				break;
 			}
-			if (items[i].startsWith(GROUPPREFIX)
-					&& sel.equals(ResetTypeEnum.GROUP)) {
+			if (items[i].startsWith(GROUPPREFIX) && sel.equals(ResetTypeEnum.GROUP)) {
 				if (items[i].substring(GROUPPREFIX.length()).equals(group)) {
 					selection = i;
 					break;
@@ -101,8 +129,9 @@ public class SPResetType {
 		List<String> lsIncs = new ArrayList<String>();
 		for (ResetTypeEnum en : ResetTypeEnum.values()) {
 			if (en.equals(ResetTypeEnum.GROUP)) {
-				for (JRGroup gr : dataset.getGroups())
-					lsIncs.add(GROUPPREFIX + gr.getName());
+				if (dataset != null)
+					for (JRGroup gr : dataset.getGroups())
+						lsIncs.add(GROUPPREFIX + gr.getName());
 			} else {
 				lsIncs.add(en.getName());
 			}

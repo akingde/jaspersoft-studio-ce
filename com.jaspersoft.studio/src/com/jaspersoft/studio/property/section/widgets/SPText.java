@@ -22,59 +22,71 @@ package com.jaspersoft.studio.property.section.widgets;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPText {
-	private Text ftext;
+public class SPText extends ASPropertyWidget {
+	protected Text ftext;
 
-	public SPText(Composite parent, AbstractSection section, String property, String tooltip) {
-		createComponent(parent, section, property, tooltip);
+	public SPText(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public void createComponent(Composite parent, final AbstractSection section, final String property, String tooltip) {
-		ftext = new Text(parent, SWT.BORDER);
+	@Override
+	public Control getControl() {
+		return ftext;
+	}
 
+	protected void createComponent(Composite parent) {
+		ftext = section.getWidgetFactory().createText(parent, "", SWT.LEFT);
 		ftext.addModifyListener(new ModifyListener() {
-
 			public void modifyText(ModifyEvent e) {
-				handleTextChanged(section, property);
+				handleTextChanged(section, pDescriptor.getId());
 			}
-
 		});
-		ftext.setToolTipText(tooltip);
+		ftext.setToolTipText(pDescriptor.getDescription());
+		setWidth(parent, 20);
+	}
+
+	protected void setWidth(Composite parent, int chars) {
+		GC gc = new GC(ftext);
+		FontMetrics fontMetrics = gc.getFontMetrics();
+		int w = fontMetrics.getAverageCharWidth() * chars;
+		gc.dispose();
 		if (parent.getLayout() instanceof RowLayout) {
 			RowData rd = new RowData();
-			rd.width = 100;
+			rd.width = w;
 			ftext.setLayoutData(rd);
 		} else if (parent.getLayout() instanceof GridLayout) {
-			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.widthHint = 200;
-			ftext.setLayoutData(gd);
+			GridData rd = new GridData(GridData.FILL_HORIZONTAL);
+			rd.minimumWidth = w;
+			ftext.setLayoutData(rd);
 		}
 	}
 
-	protected void handleTextChanged(final AbstractSection section, final String property) {
+	protected void handleTextChanged(final AbstractSection section, final Object property) {
 		section.changeProperty(property, ftext.getText());
 	}
 
-	public void setData(String f) {
-		if (f != null) {
+	public void setData(APropertyNode pnode, Object b) {
+		if (b != null) {
 			int oldpos = ftext.getCaretPosition();
-			ftext.setText(f.toString());
-			if (f.toString().length() >= oldpos)
+			ftext.setText(b.toString());
+			if (b.toString().length() >= oldpos)
 				ftext.setSelection(oldpos, oldpos);
 		} else
 			ftext.setText("");
 	}
 
-	public String getText() {
-		return ftext.getText();
-	}
 }

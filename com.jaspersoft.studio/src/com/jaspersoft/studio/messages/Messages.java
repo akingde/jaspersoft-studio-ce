@@ -629,6 +629,7 @@ public class Messages extends NLS {
 	public static String MGraphicElement_print_when_detail_overflows;
 	public static String MGraphicElement_print_when_detail_overflows_desription;
 	public static String MGraphicElement_print_when_expression_description;
+	public static String MGraphicElement_print_when;
 	public static String MGraphicElement_print_when_group_changes;
 	public static String MGraphicElement_print_when_group_changes_description;
 	public static String MGraphicElement_property_expressions;

@@ -35,7 +35,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -141,7 +141,7 @@ public class MParameterSystem extends APropertyNode implements IDragable {
 		nameD.setDescription(Messages.MParameterSystem_name_description);
 		desc.add(nameD);
 
-		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME,
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignParameter.PROPERTY_VALUE_CLASS_NAME,
 				Messages.common_class);
 		classD.setDescription(Messages.MParameterSystem_class_description);
 		desc.add(classD);

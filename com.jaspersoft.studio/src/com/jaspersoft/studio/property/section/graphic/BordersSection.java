@@ -55,7 +55,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.java2d.J2DGraphics;
@@ -66,6 +65,7 @@ import com.jaspersoft.studio.model.ILineBox;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
 import com.jaspersoft.studio.model.MLineBox;
 import com.jaspersoft.studio.model.MLinePen;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.descriptor.color.ColorLabelProvider;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.SPLineStyleEnum;
@@ -113,7 +113,7 @@ public class BordersSection extends AbstractSection {
 		GridLayout layout = new GridLayout(3, false);
 		composite.setLayout(layout);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.BordersSection_box + ":", SWT.RIGHT); //$NON-NLS-1$
+		CLabel label = getWidgetFactory().createCLabel(composite, "", SWT.RIGHT); //$NON-NLS-1$
 		GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		gd.verticalSpan = 2;
 		label.setLayoutData(gd);

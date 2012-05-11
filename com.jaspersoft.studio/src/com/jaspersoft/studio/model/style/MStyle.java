@@ -39,7 +39,6 @@ import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
@@ -57,7 +56,6 @@ import com.jaspersoft.studio.model.text.MParagraph;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.util.ReportFactory;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
@@ -66,8 +64,13 @@ import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.TransparencePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -231,33 +234,33 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		radiusD.setDescription(Messages.MStyle_radius_description);
 		desc.add(radiusD);
 
-		ComboBoxPropertyDescriptor fillD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_FILL,
-				Messages.common_fill, EnumHelper.getEnumNames(FillEnum.values(), NullEnum.INHERITED));
+		fillD = new JSSEnumPropertyDescriptor(JRDesignStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
+				NullEnum.INHERITED);
 		fillD.setDescription(Messages.MStyle_fill_description);
 		desc.add(fillD);
 
-		ComboBoxPropertyDescriptor scaleD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_SCALE_IMAGE,
-				Messages.MStyle_scale, EnumHelper.getEnumNames(ScaleImageEnum.values(), NullEnum.INHERITED));
+		scaleD = new JSSEnumPropertyDescriptor(JRDesignStyle.PROPERTY_SCALE_IMAGE, Messages.MStyle_scale,
+				ScaleImageEnum.class, NullEnum.INHERITED);
 		scaleD.setDescription(Messages.MStyle_scale_description);
 		desc.add(scaleD);
 
-		ComboBoxPropertyDescriptor halignD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
-				Messages.common_horizontal_alignment, EnumHelper.getEnumNames(HorizontalAlignEnum.values(), NullEnum.INHERITED));
+		halignD = new HAlignPropertyDescriptor(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
+				Messages.common_horizontal_alignment, HorizontalAlignEnum.class, NullEnum.INHERITED);
 		halignD.setDescription(Messages.MStyle_horizontal_alignment_description);
 		desc.add(halignD);
 
-		ComboBoxPropertyDescriptor valignD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				Messages.common_vertical_alignment, EnumHelper.getEnumNames(VerticalAlignEnum.values(), NullEnum.INHERITED));
+		valignD = new VAlignPropertyDescriptor(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT,
+				Messages.common_vertical_alignment, VerticalAlignEnum.class, NullEnum.INHERITED);
 		valignD.setDescription(Messages.MStyle_vertical_alignment_description);
 		desc.add(valignD);
 
-		ComboBoxPropertyDescriptor rotationD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ROTATION,
-				Messages.common_rotation, EnumHelper.getEnumNames(RotationEnum.values(), NullEnum.INHERITED));
+		rotationD = new RotationPropertyDescriptor(JRDesignStyle.PROPERTY_ROTATION, Messages.common_rotation,
+				RotationEnum.class, NullEnum.INHERITED);
 		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
-		ComboBoxPropertyDescriptor modeD = new ComboBoxPropertyDescriptor(JRDesignStyle.PROPERTY_MODE,
-				Messages.MStyle_mode, EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.INHERITED));
+		modeD = new TransparencePropertyDescriptor(JRDesignStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
+				NullEnum.INHERITED);
 		modeD.setDescription(Messages.MStyle_mode_description);
 		desc.add(modeD);
 
@@ -352,7 +355,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		defaultsMap.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
 		defaultsMap.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
 		defaultsMap.put(JRDesignStyle.PROPERTY_ROTATION, null);
-		defaultsMap.put(JRDesignStyle.PROPERTY_MODE, EnumHelper.getValue(ModeEnum.OPAQUE, 1, true));
+		defaultsMap.put(JRDesignStyle.PROPERTY_MODE, modeD.getEnumValue(ModeEnum.OPAQUE));
 
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
 		defaultsMap.put(JRDesignStyle.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
@@ -367,6 +370,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 	private MLineBox lineBox;
 	private RWComboBoxPropertyDescriptor styleD;
 	private MParagraph mParagraph;
+	private static JSSEnumPropertyDescriptor fillD;
+	private static JSSEnumPropertyDescriptor scaleD;
+	private static JSSEnumPropertyDescriptor halignD;
+	private static JSSEnumPropertyDescriptor valignD;
+	private static JSSEnumPropertyDescriptor rotationD;
+	private static JSSEnumPropertyDescriptor modeD;
 
 	/*
 	 * (non-Javadoc)
@@ -423,19 +432,19 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			return Colors.getSWTRGB4AWTGBColor(jrstyle.getOwnForecolor());
 		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrstyle.getOwnBackcolor());
-		if (id.equals(JRDesignStyle.PROPERTY_FILL))
-			return EnumHelper.getValue(jrstyle.getOwnFillValue(), 1, true);
 
+		if (id.equals(JRDesignStyle.PROPERTY_FILL))
+			return fillD.getEnumValue(jrstyle.getOwnFillValue());
 		if (id.equals(JRDesignStyle.PROPERTY_SCALE_IMAGE))
-			return EnumHelper.getValue(jrstyle.getOwnScaleImageValue(), 1, true);
+			return scaleD.getEnumValue(jrstyle.getOwnScaleImageValue());
 		if (id.equals(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			return EnumHelper.getValue(jrstyle.getOwnHorizontalAlignmentValue(), 1, true);
+			return halignD.getEnumValue(jrstyle.getOwnHorizontalAlignmentValue());
 		if (id.equals(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			return EnumHelper.getValue(jrstyle.getOwnVerticalAlignmentValue(), 1, true);
+			return valignD.getEnumValue(jrstyle.getOwnVerticalAlignmentValue());
 		if (id.equals(JRDesignStyle.PROPERTY_ROTATION))
-			return EnumHelper.getValue(jrstyle.getOwnRotationValue(), 0, true);
+			return rotationD.getEnumValue(jrstyle.getOwnRotationValue());
 		if (id.equals(JRDesignStyle.PROPERTY_MODE))
-			return EnumHelper.getValue(jrstyle.getOwnModeValue(), 1, true);
+			return modeD.getEnumValue(jrstyle.getOwnModeValue());
 
 		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrstyle.isOwnBlankWhenNull();
@@ -494,21 +503,19 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			jrstyle.setForecolor(Colors.getAWT4SWTRGBColor((RGB) value));
 		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))
 			jrstyle.setBackcolor(Colors.getAWT4SWTRGBColor((RGB) value));
-		else if (id.equals(JRDesignStyle.PROPERTY_FILL))
-			jrstyle.setFill((FillEnum) EnumHelper.getSetValue(FillEnum.values(), value, 1, true));
 
+		else if (id.equals(JRDesignStyle.PROPERTY_FILL))
+			jrstyle.setFill((FillEnum) fillD.getEnumValue(value));
 		else if (id.equals(JRDesignStyle.PROPERTY_SCALE_IMAGE))
-			jrstyle.setScaleImage((ScaleImageEnum) EnumHelper.getSetValue(ScaleImageEnum.values(), value, 1, true));
+			jrstyle.setScaleImage((ScaleImageEnum) scaleD.getEnumValue(value));
 		else if (id.equals(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
-			jrstyle.setHorizontalAlignment((HorizontalAlignEnum) EnumHelper.getSetValue(HorizontalAlignEnum.values(), value,
-					1, true));
+			jrstyle.setHorizontalAlignment((HorizontalAlignEnum) halignD.getEnumValue(value));
 		else if (id.equals(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT))
-			jrstyle.setVerticalAlignment((VerticalAlignEnum) EnumHelper.getSetValue(VerticalAlignEnum.values(), value, 1,
-					true));
+			jrstyle.setVerticalAlignment((VerticalAlignEnum) valignD.getEnumValue(value));
 		else if (id.equals(JRDesignStyle.PROPERTY_ROTATION))
-			jrstyle.setRotation((RotationEnum) EnumHelper.getSetValue(RotationEnum.values(), value, 0, true));
+			jrstyle.setRotation((RotationEnum) rotationD.getEnumValue(value));
 		else if (id.equals(JRDesignStyle.PROPERTY_MODE))
-			jrstyle.setMode((ModeEnum) EnumHelper.getSetValue(ModeEnum.values(), value, 1, true));
+			jrstyle.setMode((ModeEnum) modeD.getEnumValue(value));
 
 		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrstyle.setBlankWhenNull((Boolean) value);

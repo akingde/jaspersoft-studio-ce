@@ -24,7 +24,8 @@
 package com.jaspersoft.studio.property;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.ui.views.properties.tabbed.ITypeMapper;
+
+import com.jaspersoft.studio.properties.view.ITypeMapper;
 /*
  * Type mapper for the logic example. We want to get the GEF model object from the selected element in the outline view
  * and the diagram. We can then filter on the model object type.

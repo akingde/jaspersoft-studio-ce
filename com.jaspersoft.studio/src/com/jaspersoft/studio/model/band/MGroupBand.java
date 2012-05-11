@@ -27,15 +27,15 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.FooterPositionEnum;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.group.MGroup;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MGroupBand extends MGroup implements IPropertySource {
@@ -76,8 +76,8 @@ public class MGroupBand extends MGroup implements IPropertySource {
 		keepTogetherD.setDescription(Messages.MGroupBand_keep_together_description);
 		desc.add(keepTogetherD);
 
-		ComboBoxPropertyDescriptor footerPositionD = new ComboBoxPropertyDescriptor(JRDesignGroup.PROPERTY_FOOTER_POSITION,
-				Messages.MGroupBand_footer_position, EnumHelper.getEnumNames(FooterPositionEnum.values(), NullEnum.NULL));
+		footerPositionD = new JSSEnumPropertyDescriptor(JRDesignGroup.PROPERTY_FOOTER_POSITION,
+				Messages.MGroupBand_footer_position, FooterPositionEnum.class, NullEnum.NULL);
 		footerPositionD.setDescription(Messages.MGroupBand_footer_position_description);
 		desc.add(footerPositionD);
 
@@ -97,6 +97,7 @@ public class MGroupBand extends MGroup implements IPropertySource {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor footerPositionD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {

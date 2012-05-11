@@ -19,44 +19,68 @@
  */
 package com.jaspersoft.studio.property.section.widgets;
 
+import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
-import com.jaspersoft.studio.property.dataset.ExpressionWidget;
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.swt.widgets.WTextExpression;
+import com.jaspersoft.studio.utils.ModelUtils;
 
-public class SPExpression implements IExpressionContextSetter{
-	private ExpressionWidget expr;
+public class SPExpression extends ASPropertyWidget implements IExpressionContextSetter {
+	private WTextExpression expr;
 
-	public SPExpression(Composite parent, AbstractSection section, String property) {
-		createComponent(parent, section, property);
+	public SPExpression(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public void createComponent(Composite parent, final AbstractSection section, final String property) {
-		expr = new ExpressionWidget(parent, null) {
-			@Override
-			protected void setOnParent(JRDesignExpression exp) {
-				section.changeProperty(property, exp != null ? exp.clone() : null);
+	@Override
+	public Control getControl() {
+		return expr;
+	}
+
+	protected void createComponent(Composite parent) {
+		expr = new WTextExpression(parent, SWT.NONE, 1);
+		expr.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				JRDesignExpression exp = expr.getExpression();
+				section.changeProperty(pDescriptor.getId(), exp != null ? exp.clone() : null);
 			}
-		};
+		});
+		if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.widthHint = 100;
+			expr.setLayoutData(gd);
+		}
 	}
 
-	public void setData(JRDesignExpression b) {
-		expr.setExpression(b);
+	public void setData(APropertyNode pnode, Object b) {
+		expr.setExpression((JRDesignExpression) b);
+		JRDesignElement designEl = null;
+		if (pnode.getValue() instanceof JRDesignElement) {
+			designEl = (JRDesignElement) pnode.getValue();
+		}
+		expr.setExpressionContext(ModelUtils.getElementExpressionContext(designEl, pnode));
 	}
 
 	public void setEnabled(boolean enabled) {
 		expr.setEnabled(enabled);
 	}
-	
-	public boolean isEnabled(){
-		return expr.isEnabled();
-	}
-	
-	public void setExpressionContext(ExpressionContext exprContext){
+
+	public void setExpressionContext(ExpressionContext exprContext) {
 		expr.setExpressionContext(exprContext);
 	}
+
 }

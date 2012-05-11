@@ -21,26 +21,32 @@ package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SP3Boolean {
+public class SP3Boolean extends ASPropertyWidget {
 	private CCombo cmb3Bool;
 
-	public SP3Boolean(Composite parent, AbstractSection section,
-			String property, String tooltip) {
-		createComponent(parent, section, property, tooltip);
+	public SP3Boolean(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property, String tooltip) {
-		cmb3Bool = new CCombo(parent, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		cmb3Bool.setItems(new String[] { "NULL", "TRUE", "FALSE" });
-		cmb3Bool.addSelectionListener(new SelectionListener() {
+	@Override
+	public Control getControl() {
+		return cmb3Bool;
+	}
 
+	public void createComponent(Composite parent) {
+		cmb3Bool = section.getWidgetFactory().createCCombo(parent, SWT.FLAT | SWT.READ_ONLY);
+		cmb3Bool.setItems(new String[] { "NULL", "TRUE", "FALSE" });
+		cmb3Bool.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Boolean bval = null;
 				switch (cmb3Bool.getSelectionIndex()) {
@@ -52,19 +58,16 @@ public class SP3Boolean {
 					break;
 				}
 
-				section.changeProperty(property, bval);
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
+				section.changeProperty(pDescriptor.getId(), bval);
 			}
 		});
-		cmb3Bool.setToolTipText(tooltip);
+		cmb3Bool.setToolTipText(pDescriptor.getDescription());
 	}
 
-	public void setData(Boolean b) {
+	public void setData(APropertyNode pnode, Object b) {
 		if (b == null)
 			cmb3Bool.select(0);
-		else if (b)
+		else if ((Boolean) b)
 			cmb3Bool.select(1);
 		else
 			cmb3Bool.select(2);

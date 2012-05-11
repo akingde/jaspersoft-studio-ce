@@ -31,8 +31,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 
 public class MLineBox extends APropertyNode implements IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -158,6 +158,7 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 				if (linePen == null) {
 					linePen = new MLinePen(lineBox.getPen());
 					setChildListener(linePen);
+					linePen.getPropertyDescriptors();
 				}
 				return linePen;
 			}
@@ -165,6 +166,7 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 				if (linePenTop == null) {
 					linePenTop = new MLinePen(lineBox.getTopPen());
 					setChildListener(linePenTop);
+					linePenTop.getPropertyDescriptors();
 				}
 				return linePenTop;
 			}
@@ -172,6 +174,7 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 				if (linePenBottom == null) {
 					linePenBottom = new MLinePen(lineBox.getBottomPen());
 					setChildListener(linePenBottom);
+					linePenBottom.getPropertyDescriptors();
 				}
 				return linePenBottom;
 			}
@@ -179,6 +182,7 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 				if (linePenLeft == null) {
 					linePenLeft = new MLinePen(lineBox.getLeftPen());
 					setChildListener(linePenLeft);
+					linePenLeft.getPropertyDescriptors();
 				}
 				return linePenLeft;
 			}
@@ -186,6 +190,7 @@ public class MLineBox extends APropertyNode implements IPropertySource {
 				if (linePenRight == null) {
 					linePenRight = new MLinePen(lineBox.getRightPen());
 					setChildListener(linePenRight);
+					linePenRight.getPropertyDescriptors();
 				}
 				return linePenRight;
 			}

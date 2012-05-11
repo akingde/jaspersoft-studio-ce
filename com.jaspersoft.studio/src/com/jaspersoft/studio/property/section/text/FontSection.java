@@ -19,14 +19,18 @@
  */
 package com.jaspersoft.studio.property.section.text;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import net.sf.jasperreports.engine.base.JRBaseStyle;
 
-import com.jaspersoft.studio.model.APropertyNode;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.ToolBar;
+
+import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.SPFont;
 
 /*
  * The location section on the location tab.
@@ -34,8 +38,6 @@ import com.jaspersoft.studio.property.section.widgets.SPFont;
  * @author Chicu Veaceslav
  */
 public class FontSection extends AbstractSection {
-	private Composite composite;
-	private SPFont font;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -44,29 +46,22 @@ public class FontSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		Group group = getWidgetFactory().createGroup(parent, Messages.common_font);
+		group.setLayout(new GridLayout(2, false));
+		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		composite = createNewRow(parent);
+		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_NAME, false);
 
-		font = new SPFont(parent, this, null, true);
+		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_SIZE, false);
+
+		ToolBar toolBar = new ToolBar(group, SWT.FLAT | SWT.WRAP | SWT.LEFT);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		toolBar.setLayoutData(gd);
+		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_BOLD);
+		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_ITALIC);
+		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_UNDERLINE);
+		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH);
 	}
 
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			font.setData(null, element);
-		}
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return composite.isDisposed();
-	}
 }

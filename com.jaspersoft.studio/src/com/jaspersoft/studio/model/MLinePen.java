@@ -29,16 +29,16 @@ import net.sf.jasperreports.engine.type.LineStyleEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.property.descriptor.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.LineStylePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MLinePen extends APropertyNode implements IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -61,8 +61,8 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 		penLineWidthD.setDescription(Messages.MLinePen_line_width_description);
 		desc.add(penLineWidthD);
 
-		ComboBoxPropertyDescriptor penLineStyleD = new ComboBoxPropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE,
-				Messages.common_line_style, EnumHelper.getEnumNames(LineStyleEnum.values(), NullEnum.INHERITED));
+		penLineStyleD = new LineStylePropertyDescriptor(JRBasePen.PROPERTY_LINE_STYLE, Messages.common_line_style,
+				LineStyleEnum.class, NullEnum.INHERITED);
 		penLineStyleD.setDescription(Messages.MLinePen_line_style_description);
 		desc.add(penLineStyleD);
 
@@ -73,6 +73,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor penLineStyleD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -104,7 +105,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 			if (id.equals(JRBasePen.PROPERTY_LINE_WIDTH))
 				return linePen.getOwnLineWidth();
 			if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
-				return EnumHelper.getValue(linePen.getOwnLineStyleValue(), 0, true);
+				return penLineStyleD.getEnumValue(linePen.getOwnLineStyleValue());
 		}
 		return null;
 	}
@@ -125,7 +126,7 @@ public class MLinePen extends APropertyNode implements IPropertySource {
 				else if (value instanceof RGB)
 					linePen.setLineColor(Colors.getAWT4SWTRGBColor((RGB) value));
 			} else if (id.equals(JRBasePen.PROPERTY_LINE_STYLE))
-				linePen.setLineStyle((LineStyleEnum) EnumHelper.getSetValue(LineStyleEnum.values(), value, 0, true));
+				linePen.setLineStyle((LineStyleEnum) penLineStyleD.getEnumValue(value));
 		}
 	}
 

@@ -30,14 +30,13 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.BreakTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 /*
  * The Class MBreak.
@@ -82,6 +81,7 @@ public class MBreak extends MGraphicElement {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor typeD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -109,20 +109,20 @@ public class MBreak extends MGraphicElement {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor hAlignD = new ComboBoxPropertyDescriptor(JRBaseBreak.PROPERTY_TYPE,
-				Messages.MBreak_type, EnumHelper.getEnumNames(BreakTypeEnum.values(), NullEnum.NULL));
-		hAlignD.setDescription(Messages.MBreak_type_description);
-		desc.add(hAlignD);
-		hAlignD.setCategory(Messages.MBreak_break_properties_category);
+		typeD = new JSSEnumPropertyDescriptor(JRBaseBreak.PROPERTY_TYPE, Messages.MBreak_type, BreakTypeEnum.class,
+				NullEnum.NULL);
+		typeD.setDescription(Messages.MBreak_type_description);
+		desc.add(typeD);
+		typeD.setCategory(Messages.MBreak_break_properties_category);
 
-		defaultsMap.put(JRBaseBreak.PROPERTY_TYPE, EnumHelper.getValue(BreakTypeEnum.PAGE, 1, true));
+		defaultsMap.put(JRBaseBreak.PROPERTY_TYPE, typeD.getEnumValue(BreakTypeEnum.PAGE));
 	}
 
 	@Override
 	public Object getPropertyValue(Object id) {
 		JRDesignBreak jrElement = (JRDesignBreak) getValue();
 		if (id.equals(JRBaseBreak.PROPERTY_TYPE))
-			return EnumHelper.getValue(jrElement.getTypeValue(), 1, true);
+			return typeD.getEnumValue(jrElement.getTypeValue());
 		return super.getPropertyValue(id);
 	}
 
@@ -131,7 +131,7 @@ public class MBreak extends MGraphicElement {
 		JRDesignBreak jrElement = (JRDesignBreak) getValue();
 
 		if (id.equals(JRBaseBreak.PROPERTY_TYPE))
-			jrElement.setType((BreakTypeEnum) EnumHelper.getSetValue(BreakTypeEnum.values(), value, 1, true));
+			jrElement.setType((BreakTypeEnum) typeD.getEnumValue(value));
 		else
 			super.setPropertyValue(id, value);
 	}

@@ -20,27 +20,12 @@
 package com.jaspersoft.studio.property.section.band;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
-import net.sf.jasperreports.engine.type.SplitTypeEnum;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.UIUtils;
 
 /*
  * The location section on the location tab.
@@ -48,8 +33,6 @@ import com.jaspersoft.studio.utils.UIUtils;
  * @author Chicu Veaceslav
  */
 public class BandSection extends AbstractSection {
-	private Spinner height;
-	private CCombo splitType;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -58,60 +41,12 @@ public class BandSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		GridLayout layout = new GridLayout(5, false);
-		composite.setLayout(layout);
+		parent.setLayout(new GridLayout(2, false));
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_height + ":", SWT.RIGHT); //$NON-NLS-1$
-		GridData gd = new GridData();
-		gd.widthHint = 100;
-		label.setLayoutData(gd);
+		createWidget4Property(parent, JRDesignBand.PROPERTY_HEIGHT);
 
-		height = new Spinner(composite, SWT.BORDER);
-		height.setValues(0, 0, Integer.MAX_VALUE, 0, 1, 10);
-		height.setToolTipText(Messages.BandSection_height_tool_tip);
+		createWidget4Property(parent, JRDesignBand.PROPERTY_SPLIT_TYPE);
 
-		height.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				changeProperty(JRDesignBand.PROPERTY_HEIGHT, new Integer(height.getSelection()));
-			}
-		});
-
-		getWidgetFactory().createCLabel(composite, Messages.common_split_type + ":", SWT.RIGHT); //$NON-NLS-1$
-
-		splitType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		splitType.setItems(EnumHelper.getEnumNames(SplitTypeEnum.values(), NullEnum.NULL));
-		splitType.setToolTipText(Messages.BandSection_split_type_tool_tip);
-		splitType.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRDesignBand.PROPERTY_SPLIT_TYPE, new Integer(splitType.getSelectionIndex()));
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-	}
-
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null && element.getValue() != null) {
-			UIUtils.setSpinnerSelection(height, element.getPropertyValue(JRDesignBand.PROPERTY_HEIGHT));
-			Integer splitTypeInt = (Integer) element.getPropertyValue(JRDesignBand.PROPERTY_SPLIT_TYPE);
-			if (splitTypeInt != null)
-				splitType.select(splitTypeInt.intValue());
-		}
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return splitType.isDisposed();
+		createWidget4Property(parent, JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION);
 	}
 }

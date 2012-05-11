@@ -20,41 +20,33 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.swt.widgets.ClassType;
 
-public class SPClassType {
-	private ClassType clWidget;
+public class SPClassType extends SPText {
 
-	public SPClassType(Composite parent, AbstractSection section,
-			String property, String tooltip) {
-		createComponent(parent, section, property, tooltip);
+	public SPClassType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public void createComponent(Composite parent,
-			final AbstractSection section, final String property, String tooltip) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		GridLayout layout = new GridLayout(3, false);
-		layout.marginHeight = 0;
-		layout.marginLeft = 0;
-		composite.setLayout(layout);
+	protected void createComponent(Composite parent) {
+		super.createComponent(parent);
 
-		clWidget = new ClassType(composite, tooltip);
-		clWidget.addListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				section.changeProperty(property, clWidget.getClassType());
+		Button btn = section.getWidgetFactory().createButton(parent, "...", SWT.PUSH);
+		btn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String classname = ClassTypeCellEditor.getJavaClassDialog(ftext.getShell(), null);
+				if (classname != null)
+					handleTextChanged(section, classname);
 			}
 		});
 	}
 
-	public void setData(String b) {
-		clWidget.setClassType(b);
-	}
 }

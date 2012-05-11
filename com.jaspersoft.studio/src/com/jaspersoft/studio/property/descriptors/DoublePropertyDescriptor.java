@@ -1,27 +1,23 @@
 /*
- * JasperReports - Free Java Reporting Library.
- * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
+ * JasperReports - Free Java Reporting Library. Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is part of JasperReports.
- *
- * JasperReports is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JasperReports is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
+ * This program is part of JasperReports.
+ * 
+ * JasperReports is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * JasperReports is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License along with JasperReports. If not, see
+ * <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.property.descriptor;
+package com.jaspersoft.studio.property.descriptors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.CellEditor;
@@ -30,12 +26,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.jface.DoubleCellEditorValidator;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.IPropertyDescriptorWidget;
+import com.jaspersoft.studio.property.section.widgets.SPNumber;
+
 /*
  * The Class FloatPropertyDescriptor.
  * 
  * @author Chicu Veaceslav
  */
-public class DoublePropertyDescriptor extends TextPropertyDescriptor {
+public class DoublePropertyDescriptor extends TextPropertyDescriptor implements IPropertyDescriptorWidget {
 
 	/**
 	 * Instantiates a new float property descriptor.
@@ -84,5 +85,9 @@ public class DoublePropertyDescriptor extends TextPropertyDescriptor {
 		setValidator(DoubleCellEditorValidator.instance());
 
 		return editor;
+	}
+
+	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+		return new SPNumber(parent, section, this);
 	}
 }

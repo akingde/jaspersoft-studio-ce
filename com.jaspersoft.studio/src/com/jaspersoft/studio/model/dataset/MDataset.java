@@ -31,9 +31,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.WhenResourceMissingTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -44,12 +42,14 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.jrQuery.JRQueryPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.resource.NResourcePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -162,7 +162,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME, Messages.common_name);
+		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignDataset.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MDataset_name_description);
 		desc.add(nameD);
 
@@ -171,7 +171,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 		propertiesD.setDescription(Messages.MDataset_properties_description);
 		desc.add(propertiesD);
 
-		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignDataset.PROPERTY_SCRIPTLET_CLASS,
 				Messages.common_class);
 		classD.setDescription(Messages.MDataset_class_description);
 		desc.add(classD);
@@ -186,9 +186,8 @@ public class MDataset extends APropertyNode implements ICopyable {
 		queryD.setDescription(Messages.MDataset_query_description);
 		desc.add(queryD);
 
-		ComboBoxPropertyDescriptor whenResMissTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE, Messages.MDataset_when_resource_missing_type,
-				EnumHelper.getEnumNames(WhenResourceMissingTypeEnum.values(), NullEnum.NOTNULL));
+		whenResMissTypeD = new JSSEnumPropertyDescriptor(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE,
+				Messages.MDataset_when_resource_missing_type, WhenResourceMissingTypeEnum.class, NullEnum.NOTNULL);
 		whenResMissTypeD.setDescription(Messages.MDataset_when_resource_missing_type_description);
 		desc.add(whenResMissTypeD);
 
@@ -203,6 +202,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 	}
 
 	private MQuery mQuery;
+	private static JSSEnumPropertyDescriptor whenResMissTypeD;
 
 	/*
 	 * (non-Javadoc)
@@ -233,7 +233,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 			return pmap;
 		}
 		if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
-			return EnumHelper.getValue(jrDataset.getWhenResourceMissingTypeValue(), 1, false);
+			return whenResMissTypeD.getEnumValue(jrDataset.getWhenResourceMissingTypeValue());
 		if (id.equals(JRDesignDataset.PROPERTY_RESOURCE_BUNDLE))
 			return jrDataset.getResourceBundle();
 
@@ -266,8 +266,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 				jrDataset.setProperty(names[i], v.getProperty(names[i]));
 			this.getPropertyChangeSupport().firePropertyChange(PROPERTY_MAP, false, true);
 		} else if (id.equals(JRDesignDataset.PROPERTY_WHEN_RESOURCE_MISSING_TYPE))
-			jrDataset.setWhenResourceMissingType((WhenResourceMissingTypeEnum) EnumHelper.getSetValue(
-					WhenResourceMissingTypeEnum.values(), value, 1, false));
+			jrDataset.setWhenResourceMissingType((WhenResourceMissingTypeEnum) whenResMissTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
 			if (value instanceof MQuery) {
 				mQuery = (MQuery) value;

@@ -34,7 +34,6 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -48,11 +47,11 @@ import com.jaspersoft.studio.model.IPastable;
 import com.jaspersoft.studio.model.IPastableGraphic;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 /*
  * The Class MBand.
@@ -217,8 +216,8 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 		heightD.setDescription(Messages.MBand_height_description);
 		desc.add(heightD);
 
-		ComboBoxPropertyDescriptor splitStyleD = new ComboBoxPropertyDescriptor(JRDesignBand.PROPERTY_SPLIT_TYPE,
-				Messages.common_split_type, EnumHelper.getEnumNames(SplitTypeEnum.values(), NullEnum.NULL));
+		splitStyleD = new JSSEnumPropertyDescriptor(JRDesignBand.PROPERTY_SPLIT_TYPE, Messages.common_split_type,
+				SplitTypeEnum.class, NullEnum.NULL);
 		splitStyleD.setDescription(Messages.MBand_split_type_dscription);
 		desc.add(splitStyleD);
 
@@ -243,7 +242,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
 				return new Integer(jrband.getHeight());
 			if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
-				return EnumHelper.getValue(jrband.getSplitTypeValue(), 1, true);
+				return splitStyleD.getEnumValue(jrband.getSplitTypeValue());
 			if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION)) {
 				return ExprUtil.getExpression(jrband.getPrintWhenExpression());
 			}
@@ -262,7 +261,7 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 			if (id.equals(JRDesignBand.PROPERTY_HEIGHT))
 				jrband.setHeight(((Integer) value).intValue());
 			else if (id.equals(JRDesignBand.PROPERTY_SPLIT_TYPE))
-				jrband.setSplitType((SplitTypeEnum) EnumHelper.getSetValue(SplitTypeEnum.values(), value, 1, true));
+				jrband.setSplitType((SplitTypeEnum) splitStyleD.getEnumValue(value));
 			else if (id.equals(JRDesignBand.PROPERTY_PRINT_WHEN_EXPRESSION))
 				jrband.setPrintWhenExpression(ExprUtil.setValues(jrband.getPrintWhenExpression(), value, null));
 		}
@@ -334,4 +333,5 @@ public class MBand extends APropertyNode implements IGraphicElement, IPastable, 
 	}
 
 	private static int BAND_GAP = 0;
+	private static JSSEnumPropertyDescriptor splitStyleD;
 }

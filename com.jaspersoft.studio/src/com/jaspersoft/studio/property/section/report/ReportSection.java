@@ -21,23 +21,12 @@ package com.jaspersoft.studio.property.section.report;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.classname.dialog.ImportDialog;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.property.section.widgets.SPText;
 
 /*
  * The location section on the location tab.
@@ -45,8 +34,6 @@ import com.jaspersoft.studio.property.section.widgets.SPText;
  * @author Chicu Veaceslav
  */
 public class ReportSection extends AbstractSection {
-	private SPText impTxt;
-	private Composite composite;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -55,45 +42,45 @@ public class ReportSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		parent.setLayout(new GridLayout(3, false));
 
-		composite = createNewRow(parent);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, JasperDesign.PROPERTY_NAME).getControl().setLayoutData(gd);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.MReport_imports, SWT.RIGHT); //$NON-NLS-1$
-		RowData rd = new RowData();
-		rd.width = 100;
-		label.setLayoutData(rd);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, JasperDesign.PROPERTY_LANGUAGE).getControl().setLayoutData(gd);
 
-		impTxt = new SPText(composite, this, JasperDesign.PROPERTY_IMPORTS, Messages.MReport_imports_description);
+		createWidget4Property(parent, JasperDesign.PROPERTY_IMPORTS);
 
-		Button btn = getWidgetFactory().createButton(composite, "...", SWT.PUSH);
-		btn.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ImportDialog dialog = new ImportDialog(Display.getDefault().getActiveShell(), impTxt.getText());
-				if (dialog.open() == Dialog.OK)
-					changeProperty(JasperDesign.PROPERTY_IMPORTS, dialog.getImports());
-			}
-		});
+		createWidget4Property(parent, JasperDesign.PROPERTY_FORMAT_FACTORY_CLASS);
+
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		createWidget4Property(parent, JasperDesign.PROPERTY_WHEN_NO_DATA_TYPE).getControl().setLayoutData(gd);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JasperDesign.PROPERTY_TITLE_NEW_PAGE, false).getControl().setLayoutData(gd);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JasperDesign.PROPERTY_SUMMARY_NEW_PAGE, false).getControl().setLayoutData(gd);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JasperDesign.PROPERTY_SUMMARY_WITH_PAGE_HEADER_AND_FOOTER, false).getControl()
+				.setLayoutData(gd);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JasperDesign.PROPERTY_FLOAT_COLUMN_FOOTER, false).getControl().setLayoutData(gd);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		createWidget4Property(parent, JasperDesign.PROPERTY_IGNORE_PAGINATION, false).getControl().setLayoutData(gd);
 
 	}
 
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null)
-			impTxt.setData((String) element.getPropertyValue(JasperDesign.PROPERTY_IMPORTS));
-
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return composite.isDisposed();
-	}
 }

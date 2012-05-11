@@ -42,7 +42,7 @@
  */
 package com.jaspersoft.studio.property;
 
-import org.eclipse.ui.views.properties.tabbed.ITypeMapper;
+import com.jaspersoft.studio.properties.view.ITypeMapper;
 /*
  * The Class PropertyTypeMaper.
  */

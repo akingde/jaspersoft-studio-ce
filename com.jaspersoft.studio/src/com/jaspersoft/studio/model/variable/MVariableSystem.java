@@ -28,7 +28,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -36,7 +35,8 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.IDragable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.model.util.NodeIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.classname.ClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.utils.ModelUtils;
 
 /*
@@ -137,11 +137,12 @@ public class MVariableSystem extends APropertyNode implements IDragable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME, Messages.common_name);
+		JSSTextPropertyDescriptor nameD = new JSSTextPropertyDescriptor(JRDesignVariable.PROPERTY_NAME,
+				Messages.common_name);
 		nameD.setDescription(Messages.MVariableSystem_name_description);
 		desc.add(nameD);
 
-		ClassTypePropertyDescriptor classD = new ClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,
+		NClassTypePropertyDescriptor classD = new NClassTypePropertyDescriptor(JRDesignVariable.PROPERTY_VALUE_CLASS_NAME,
 				Messages.common_value_class_name);
 		classD.setDescription(Messages.MVariableSystem_value_class_name_description);
 		desc.add(classD);

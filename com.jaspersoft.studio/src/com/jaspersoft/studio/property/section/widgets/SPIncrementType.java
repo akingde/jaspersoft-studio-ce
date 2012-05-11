@@ -24,30 +24,44 @@ import java.util.List;
 
 import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRGroup;
+import net.sf.jasperreports.engine.design.JRDesignDatasetRun;
+import net.sf.jasperreports.engine.design.JRDesignElementDataset;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.IncrementTypeEnum;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.model.dataset.MDatasetRun;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.utils.Misc;
 
-public class SPIncrementType {
+public class SPIncrementType extends ASPropertyWidget {
 	private CCombo evalTime;
+	private IPropertyDescriptor gDescriptor;
 
-	public SPIncrementType(Composite parent, AbstractSection section, String propEvalTime, String propEvalGroup,
-			String tooltip) {
-		createComponent(parent, section, propEvalTime, propEvalGroup, tooltip);
+	public SPIncrementType(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
+			IPropertyDescriptor gDescriptor) {
+		super(parent, section, pDescriptor);
+		this.gDescriptor = gDescriptor;
 	}
 
-	public void createComponent(Composite parent, final AbstractSection section, final String propEvalTime,
-			final String propEvalGroup, String tooltip) {
-		evalTime = new CCombo(parent, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		evalTime.addSelectionListener(new SelectionListener() {
+	@Override
+	public Control getControl() {
+		return evalTime;
+	}
 
+	public void createComponent(Composite parent) {
+		evalTime = section.getWidgetFactory().createCCombo(parent, SWT.FLAT | SWT.READ_ONLY);
+		evalTime.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String group = null;
 				Integer et = new Integer(1);
@@ -60,15 +74,31 @@ public class SPIncrementType {
 					et = EnumHelper.getValue(IncrementTypeEnum.getByName(str), 1, false);
 				}
 
-				section.changeProperty(propEvalTime, et);
-				section.changeProperty(propEvalGroup, group);
+				section.changeProperty(pDescriptor.getId(), et);
+				section.changeProperty(gDescriptor.getId(), Misc.nvl(group));
 			}
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		});
-		evalTime.setToolTipText(tooltip);
+		evalTime.setToolTipText(pDescriptor.getDescription());
+	}
+
+	@Override
+	public void setData(APropertyNode pnode, Object value) {
+		JasperDesign jasperDesign = pnode.getJasperDesign();
+		JRDataset dataset = null;
+		MDatasetRun mdataset = (MDatasetRun) pnode.getPropertyValue(JRDesignElementDataset.PROPERTY_DATASET_RUN);
+		if (mdataset != null) {
+			JRDesignDatasetRun datasetRun = mdataset.getValue();
+			if (datasetRun != null) {
+				String dsname = datasetRun.getDatasetName();
+				dataset = jasperDesign.getDatasetMap().get(dsname);
+			}
+		}
+		if (dataset == null)
+			dataset = jasperDesign.getMainDataset();
+
+		setData((Integer) pnode.getPropertyValue(pDescriptor.getId()),
+				(String) pnode.getPropertyValue(gDescriptor.getId()), SPIncrementType.getItems(dataset));
 	}
 
 	public void setData(Integer et, String group, String[] items) {
@@ -95,8 +125,9 @@ public class SPIncrementType {
 		List<String> lsIncs = new ArrayList<String>();
 		for (IncrementTypeEnum en : IncrementTypeEnum.values()) {
 			if (en.equals(IncrementTypeEnum.GROUP)) {
-				for (JRGroup gr : dataset.getGroups())
-					lsIncs.add(GROUPPREFIX + gr.getName());
+				if (dataset != null)
+					for (JRGroup gr : dataset.getGroups())
+						lsIncs.add(GROUPPREFIX + gr.getName());
 			} else {
 				lsIncs.add(en.getName());
 			}

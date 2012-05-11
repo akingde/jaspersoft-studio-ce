@@ -22,7 +22,9 @@ package com.jaspersoft.studio.property.section;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.JasperReportsContext;
 
@@ -41,22 +43,75 @@ import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.editor.report.EditorContributor;
 import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.properties.view.AbstractPropertySection;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 import com.jaspersoft.studio.property.SetValueCommand;
-import com.jaspersoft.studio.property.section.widgets.SPExpression;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPWidgetFactory;
 
 /*
  * Abstract class for a section in a tab in the properties view.
  */
 public abstract class AbstractSection extends AbstractPropertySection implements PropertyChangeListener {
+	protected Map<Object, ASPropertyWidget> widgets = new HashMap<Object, ASPropertyWidget>();
+
 	protected JasperReportsContext jasperReportsContext;
 	private List<APropertyNode> elements;
 	private APropertyNode element;
 	private EditDomain editDomain;
+
+	/**
+	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
+	 */
+	public void refresh() {
+		isRefreshing = true;
+		APropertyNode element = getElement();
+		element.getPropertyDescriptors();
+		if (element != null) {
+			for (Object key : widgets.keySet()) {
+				widgets.get(key).setData(element, element.getPropertyValue(key));
+			}
+		}
+		isRefreshing = false;
+	}
+
+	public ASPropertyWidget createWidget4Property(Composite composite, Object property) {
+		return createWidget4Property(composite, property, true);
+	}
+
+	public ASPropertyWidget createWidget4Property(Composite composite, Object property, boolean showLabel) {
+		IPropertyDescriptor[] pds = getElement().getPropertyDescriptors();
+		for (IPropertyDescriptor pd : pds) {
+			if (pd.getId().equals(property)) {
+				CLabel label = null;
+				if (showLabel)
+					label = getWidgetFactory().createCLabel(composite, pd.getDisplayName(), SWT.NONE);
+				ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
+				if (widget != null) {
+					widget.setLabel(label);
+					widgets.put(pd.getId(), widget);
+					return widget;
+				}
+				break;
+			}
+		}
+		return null;
+	}
+
+	public IPropertyDescriptor getPropertyDesriptor(Object property) {
+		IPropertyDescriptor[] pds = getElement().getPropertyDescriptors();
+		for (IPropertyDescriptor pd : pds) {
+			if (pd.getId().equals(property)) {
+				return pd;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#setInput(org.eclipse.ui.IWorkbenchPart,
@@ -85,6 +140,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 								if (getElement() != null)
 									getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
 								setElement((APropertyNode) model);
+								getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
 								getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
 							}
 						}
@@ -119,12 +175,30 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeShown()
 	 */
 	public void aboutToBeShown() {
+		if (getElement() != null) {
+			getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+			getElement().getPropertyChangeSupport().addPropertyChangeListener(this);
+		}
 	}
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#aboutToBeHidden()
 	 */
 	public void aboutToBeHidden() {
+		if (getElement() != null)
+			getElement().getPropertyChangeSupport().removePropertyChangeListener(this);
+	}
+
+	protected Composite parent;
+
+	@Override
+	public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
+		super.createControls(parent, aTabbedPropertySheetPage);
+		this.parent = parent;
+	}
+
+	public boolean isDisposed() {
+		return parent.isDisposed();
 	}
 
 	@Override
@@ -156,7 +230,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	protected boolean isRefreshing = false;
 
-	public void changeProperty(String property, Object newValue) {
+	public void changeProperty(Object property, Object newValue) {
 		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
 			CompoundCommand cc = new CompoundCommand("Set " + property);
@@ -170,7 +244,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 	}
 
-	public void changePropertyOn(String property, Object newValue, APropertyNode n) {
+	public void changePropertyOn(Object property, Object newValue, APropertyNode n) {
 		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
 			CompoundCommand cc = new CompoundCommand("Set " + property);
@@ -182,7 +256,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 	}
 
-	protected Command changeProperty(String property, Object newValue, APropertyNode n) {
+	protected Command changeProperty(Object property, Object newValue, APropertyNode n) {
 		Object oldValue = n.getPropertyValue(property);
 		if (((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || (newValue != null && !newValue
 				.equals(oldValue))) && getEditDomain() != null) {
@@ -199,35 +273,12 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return elements;
 	}
 
-	public abstract boolean isDisposed();
-
-	protected SPExpression createExpression(Composite parent, String property, String name, int width) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(parent.getBackground());
-		composite.setLayout(new RowLayout());
-
-		CLabel lbl = getWidgetFactory().createCLabel(composite, name, SWT.RIGHT);
-		RowData rd = new RowData();
-		rd.width = width;
-		lbl.setLayoutData(rd);
-
-		Composite cmp = new Composite(composite, SWT.NONE);
-		GridLayout gl = new GridLayout(3, false);
-		gl.marginTop = 0;
-		gl.marginHeight = 0;
-		gl.marginWidth = 0;
-		gl.marginLeft = 0;
-		cmp.setLayout(gl);
-		cmp.setBackground(parent.getBackground());
-
-		return new SPExpression(cmp, this, property);
-	}
-
 	public static Composite createNewRow(Composite parent) {
 		Composite cmp = new Composite(parent, SWT.NONE);
 		cmp.setBackground(parent.getBackground());
 		RowLayout rl = new RowLayout();
 		rl.fill = true;
+		rl.wrap = true;
 		cmp.setLayout(rl);
 		return cmp;
 	}

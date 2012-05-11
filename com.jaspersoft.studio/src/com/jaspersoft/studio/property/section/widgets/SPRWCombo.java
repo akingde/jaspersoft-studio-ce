@@ -20,75 +20,72 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 
-public class SPRWCombo {
-	private Combo theme;
+public class SPRWCombo extends ASPropertyWidget {
+	private CCombo combo;
 
-	public SPRWCombo(Composite parent, AbstractSection section, String property, String tooltip, String[] items) {
-		createComponent(parent, section, property, tooltip, items);
+	public SPRWCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public void createComponent(Composite parent, final AbstractSection section, final String property, String tooltip,
-			String[] items) {
-		theme = new Combo(parent, SWT.BORDER | SWT.FLAT);
-		theme.setItems(items);
-		if (parent.getLayout() instanceof RowLayout) {
-			RowData rd = new RowData();
-			rd.width = 100;
-			theme.setLayoutData(rd);
-		} else if (parent.getLayout() instanceof GridLayout) {
-			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.widthHint = 200;
-			theme.setLayoutData(gd);
-		}
-		theme.addSelectionListener(new SelectionListener() {
+	@Override
+	public Control getControl() {
+		return combo;
+	}
+
+	protected void createComponent(Composite parent) {
+		combo = section.getWidgetFactory().createCCombo(parent, SWT.FLAT);
+		combo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-				section.changeProperty(property, theme.getItem(theme.getSelectionIndex()));
+				section.changeProperty(pDescriptor.getId(), combo.getItem(combo.getSelectionIndex()));
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		theme.addModifyListener(new ModifyListener() {
+		combo.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				section.changeProperty(property, theme.getText());
+				section.changeProperty(pDescriptor.getId(), combo.getText());
 			}
 		});
-		theme.setToolTipText(tooltip);
+		combo.setToolTipText(pDescriptor.getDescription());
 	}
 
-	public void setData(String b) {
-		String[] items = theme.getItems();
+	public void setData(APropertyNode pnode, Object b) {
+		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) pDescriptor;
+		combo.setItems(pd.getItems());
+		String str = (String) b;
+		String[] items = combo.getItems();
 		int selection = 0;
 		for (int i = 0; i < items.length; i++) {
-			if (items[i].equals(b)) {
+			if (items[i].equals(str)) {
 				selection = i;
 				break;
 			}
 		}
 		if (selection == 0) {
-			b = Misc.nvl(b);
-			int oldpos = b.length();
-			theme.setItem(0, b);
-			theme.setSelection(new Point(oldpos, oldpos));
+			str = Misc.nvl(str);
+			int oldpos = str.length();
+			combo.setItem(0, str);
+			combo.setSelection(new Point(oldpos, oldpos));
 		} else {
-			theme.select(selection);
+			combo.select(selection);
 
 		}
 	}

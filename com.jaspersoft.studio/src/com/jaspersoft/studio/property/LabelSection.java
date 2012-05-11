@@ -29,8 +29,9 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+
+import com.jaspersoft.studio.properties.view.AbstractPropertySection;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 
 /*
  * The Class LabelSection.

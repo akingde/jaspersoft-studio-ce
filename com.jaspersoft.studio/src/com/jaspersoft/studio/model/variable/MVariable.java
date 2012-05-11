@@ -30,7 +30,6 @@ import net.sf.jasperreports.engine.type.CalculationEnum;
 import net.sf.jasperreports.engine.type.IncrementTypeEnum;
 import net.sf.jasperreports.engine.type.ResetTypeEnum;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -44,6 +43,7 @@ import com.jaspersoft.studio.property.descriptor.classname.NClassTypePropertyDes
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -128,19 +128,18 @@ public class MVariable extends MVariableSystem implements ICopyable {
 		incrementGroupD.setDescription(Messages.MVariable_increment_group_description);
 		desc.add(incrementGroupD);
 
-		ComboBoxPropertyDescriptor calculationD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_CALCULATION,
-				Messages.MVariable_calculation, EnumHelper.getEnumNames(CalculationEnum.values(), NullEnum.NOTNULL));
+		calculationD = new JSSEnumPropertyDescriptor(JRDesignVariable.PROPERTY_CALCULATION, Messages.MVariable_calculation,
+				CalculationEnum.class, NullEnum.NOTNULL);
 		calculationD.setDescription(Messages.MVariable_calculation_description);
 		desc.add(calculationD);
 
-		ComboBoxPropertyDescriptor resetTypeD = new ComboBoxPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_TYPE,
-				Messages.common_reset_type, EnumHelper.getEnumNames(ResetTypeEnum.values(), NullEnum.NOTNULL));
+		resetTypeD = new JSSEnumPropertyDescriptor(JRDesignVariable.PROPERTY_RESET_TYPE, Messages.common_reset_type,
+				ResetTypeEnum.class, NullEnum.NOTNULL);
 		resetTypeD.setDescription(Messages.MVariable_reset_type_description);
 		desc.add(resetTypeD);
 
-		ComboBoxPropertyDescriptor incrementTypeD = new ComboBoxPropertyDescriptor(
-				JRDesignVariable.PROPERTY_INCREMENT_TYPE, Messages.common_increment_type, EnumHelper.getEnumNames(
-						IncrementTypeEnum.values(), NullEnum.NOTNULL));
+		incrementTypeD = new JSSEnumPropertyDescriptor(JRDesignVariable.PROPERTY_INCREMENT_TYPE,
+				Messages.common_increment_type, IncrementTypeEnum.class, NullEnum.NOTNULL);
 		incrementTypeD.setDescription(Messages.MVariable_increment_type_description);
 		desc.add(incrementTypeD);
 
@@ -213,11 +212,11 @@ public class MVariable extends MVariableSystem implements ICopyable {
 			return ""; //$NON-NLS-1$
 		}
 		if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
-			return EnumHelper.getValue(jrVariable.getCalculationValue(), 0, false);
+			return calculationD.getEnumValue(jrVariable.getCalculationValue());
 		if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE))
-			return EnumHelper.getValue(jrVariable.getResetTypeValue(), 1, false);
+			return resetTypeD.getEnumValue(jrVariable.getResetTypeValue());
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE))
-			return EnumHelper.getValue(jrVariable.getIncrementTypeValue(), 1, false);
+			return incrementTypeD.getEnumValue(jrVariable.getIncrementTypeValue());
 		if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
 			return jrVariable.getIncrementerFactoryClassName();
 		if (id.equals(JRDesignVariable.PROPERTY_EXPRESSION)) {
@@ -255,14 +254,13 @@ public class MVariable extends MVariableSystem implements ICopyable {
 				jrVariable.setIncrementGroup(group);
 			}
 		} else if (id.equals(JRDesignVariable.PROPERTY_CALCULATION))
-			jrVariable.setCalculation((CalculationEnum) EnumHelper.getSetValue(CalculationEnum.values(), value, 0, false));
+			jrVariable.setCalculation((CalculationEnum) calculationD.getEnumValue(value));
 		else if (id.equals(JRDesignVariable.PROPERTY_RESET_TYPE)) {
-			jrVariable.setResetType((ResetTypeEnum) EnumHelper.getSetValue(ResetTypeEnum.values(), value, 1, false));
+			jrVariable.setResetType((ResetTypeEnum) resetTypeD.getEnumValue(value));
 			if (!jrVariable.getResetTypeValue().equals(ResetTypeEnum.GROUP))
 				jrVariable.setResetGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENT_TYPE)) {
-			jrVariable.setIncrementType((IncrementTypeEnum) EnumHelper.getSetValue(IncrementTypeEnum.values(), value, 1,
-					false));
+			jrVariable.setIncrementType((IncrementTypeEnum) incrementTypeD.getEnumValue(value));
 			if (!jrVariable.getIncrementTypeValue().equals(IncrementTypeEnum.GROUP))
 				jrVariable.setIncrementGroup(null);
 		} else if (id.equals(JRDesignVariable.PROPERTY_INCREMENTER_FACTORY_CLASS_NAME))
@@ -270,6 +268,9 @@ public class MVariable extends MVariableSystem implements ICopyable {
 	}
 
 	private JRDesignDataset dataset;
+	private static JSSEnumPropertyDescriptor calculationD;
+	private static JSSEnumPropertyDescriptor resetTypeD;
+	private static JSSEnumPropertyDescriptor incrementTypeD;
 
 	protected JRDesignDataset getDataSet() {
 		if (dataset != null)

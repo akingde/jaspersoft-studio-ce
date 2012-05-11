@@ -21,47 +21,75 @@ package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.model.APropertyNode;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.utils.Misc;
 
-public class SPRCombo {
-	protected CCombo rcombo;
+public class SPRCombo extends ASPropertyWidget {
+	private CCombo combo;
 
-	public SPRCombo(Composite parent, AbstractSection section, String property, String tooltip, String[] items) {
-		createComponent(parent, section, property, tooltip, items);
+	public SPRCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+		super(parent, section, pDescriptor);
 	}
 
-	public void createComponent(Composite parent, final AbstractSection section, final String property, String tooltip,
-			String[] items) {
-		rcombo = new CCombo(parent, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		rcombo.setItems(items);
-		rcombo.addSelectionListener(new SelectionListener() {
+	@Override
+	public Control getControl() {
+		return combo;
+	}
 
+	protected void createComponent(Composite parent) {
+		combo = section.getWidgetFactory().createCCombo(parent, SWT.FLAT | SWT.READ_ONLY);
+
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
 			public void widgetSelected(SelectionEvent e) {
-				changeProperty(section, property);
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
+				changeProperty(section, combo.getItem(combo.getSelectionIndex()));
 			}
 		});
-		rcombo.setToolTipText(tooltip);
+		combo.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				changeProperty(section, combo.getText());
+			}
+		});
+		combo.setToolTipText(pDescriptor.getDescription());
 	}
 
-	protected void changeProperty(AbstractSection section, final String property) {
-		section.changeProperty(property, rcombo.getSelectionIndex());
+	protected void changeProperty(AbstractSection section, Object value) {
+		section.changeProperty(pDescriptor.getId(), value);
 	}
 
-	public void setData(Integer b) {
-		rcombo.select(b);
+	public void setData(APropertyNode pnode, Object b) {
+		final RComboBoxPropertyDescriptor pd = (RComboBoxPropertyDescriptor) pDescriptor;
+		combo.setItems(pd.getItems());
+		String str = (String) b;
+		String[] items = combo.getItems();
+		int selection = 0;
+		for (int i = 0; i < items.length; i++) {
+			if (items[i].equals(str)) {
+				selection = i;
+				break;
+			}
+		}
+		if (selection == 0) {
+			str = Misc.nvl(str);
+			int oldpos = str.length();
+			combo.setItem(0, str);
+			combo.setSelection(new Point(oldpos, oldpos));
+		} else {
+			combo.select(selection);
 
-	}
-
-	public void setData(Integer b, String[] items) {
-		rcombo.setItems(items);
-		rcombo.select(b);
-
+		}
 	}
 }

@@ -20,7 +20,8 @@
 package com.jaspersoft.studio.server.properties;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 
 public class DatasourceCustomSection extends ASection {
 

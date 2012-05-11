@@ -20,26 +20,17 @@
 package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.design.JRDesignElement;
-import net.sf.jasperreports.engine.type.StretchTypeEnum;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.model.APropertyNode;
-import com.jaspersoft.studio.property.descriptor.NullEnum;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
-import com.jaspersoft.studio.utils.EnumHelper;
-import com.jaspersoft.studio.utils.UIUtils;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 
 /*
  * The location section on the location tab.
@@ -47,10 +38,6 @@ import com.jaspersoft.studio.utils.UIUtils;
  * @author Chicu Veaceslav
  */
 public class SizeSection extends AbstractSection {
-	private Composite composite;
-	private Spinner widthText;
-	private Spinner heightText;
-	private CCombo stretchType;
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -59,72 +46,20 @@ public class SizeSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent = new Composite(parent, SWT.NONE);
-		parent.setLayout(new RowLayout(SWT.VERTICAL));
-		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		Group group = getWidgetFactory().createGroup(parent, Messages.common_size);
+		group.setLayout(new GridLayout(4, false));
+		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		composite = createNewRow(parent);
+		getWidgetFactory().createCLabel(group, "w", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		createWidget4Property(group, JRDesignElement.PROPERTY_WIDTH, false);
 
-		CLabel label = getWidgetFactory().createCLabel(composite, Messages.common_size + ":", SWT.RIGHT); //$NON-NLS-1$
-		RowData rd = new RowData();
-		rd.width = 100;
-		label.setLayoutData(rd);
+		getWidgetFactory().createCLabel(group, "h", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		createWidget4Property(group, JRDesignElement.PROPERTY_HEIGHT, false);
 
-		widthText = new Spinner(composite, SWT.BORDER);
-		widthText.setValues(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
-		widthText.setToolTipText(Messages.SizeSection_width_tool_tip);
-
-		heightText = new Spinner(composite, SWT.BORDER);
-		heightText.setValues(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1, 10);
-		heightText.setToolTipText(Messages.SizeSection_height_tool_tip);
-
-		label = getWidgetFactory().createCLabel(composite, Messages.common_stretch_type + ":"); //$NON-NLS-1$
-		rd = new RowData();
-		rd.width = 100;
-		label.setLayoutData(rd);
-
-		stretchType = new CCombo(composite, SWT.BORDER | SWT.FLAT | SWT.READ_ONLY);
-		stretchType.setItems(EnumHelper.getEnumNames(StretchTypeEnum.values(), NullEnum.NOTNULL));
-		stretchType.setToolTipText(Messages.SizeSection_stretch_type_tool_tip);
-
-		widthText.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRDesignElement.PROPERTY_WIDTH, new Integer(widthText.getSelection()));
-			}
-		});
-		heightText.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRDesignElement.PROPERTY_HEIGHT, new Integer(heightText.getSelection()));
-			}
-		});
-		stretchType.addSelectionListener(new SelectionListener() {
-
-			public void widgetSelected(SelectionEvent e) {
-				changeProperty(JRDesignElement.PROPERTY_STRETCH_TYPE, new Integer(stretchType.getSelectionIndex()));
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-
+		ASPropertyWidget w = createWidget4Property(group, JRDesignElement.PROPERTY_STRETCH_TYPE);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 3;
+		w.getControl().setLayoutData(gd);
 	}
 
-	/**
-	 * @see org.eclipse.ui.views.properties.tabbed.view.ITabbedPropertySection#refresh()
-	 */
-	public void refresh() {
-		isRefreshing = true;
-		APropertyNode element = getElement();
-		if (element != null) {
-			UIUtils.setSpinnerSelection(widthText, element.getPropertyValue(JRDesignElement.PROPERTY_WIDTH));
-			UIUtils.setSpinnerSelection(heightText, element.getPropertyValue(JRDesignElement.PROPERTY_HEIGHT));
-			stretchType.select(((Integer) element.getPropertyValue(JRDesignElement.PROPERTY_STRETCH_TYPE)).intValue());
-		}
-		isRefreshing = false;
-	}
-
-	@Override
-	public boolean isDisposed() {
-		return composite.isDisposed();
-	}
 }

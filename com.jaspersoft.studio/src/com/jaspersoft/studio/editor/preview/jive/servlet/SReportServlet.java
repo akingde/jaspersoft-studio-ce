@@ -29,7 +29,7 @@ import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.web.JasperInteractiveException;
+import net.sf.jasperreports.web.JRInteractiveException;
 import net.sf.jasperreports.web.WebReportContext;
 import net.sf.jasperreports.web.servlets.ReportServlet;
 
@@ -43,7 +43,8 @@ public class SReportServlet extends ReportServlet {
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	@Override
-	public void runReport(HttpServletRequest request, WebReportContext webReportContext) throws JRException, JasperInteractiveException {
+	public void runReport(HttpServletRequest request, WebReportContext webReportContext) throws JRException,
+			JRInteractiveException {
 		Map<String, Object> prm = webReportContext.getParameterValues();
 
 		String jsskey = request.getParameter(PRM_JSSContext);

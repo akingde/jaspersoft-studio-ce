@@ -10,7 +10,7 @@
       </repositoryview>
    </extension>
    <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+         point="com.jaspersoft.studio.properties.propertyTabs">
       <propertyTabs
             contributorId="com.jaspersoft.studio.Repository">
          <propertyTab
@@ -27,7 +27,7 @@
       </propertyTabs>
    </extension>
    <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+         point="com.jaspersoft.studio.properties.propertySections">
       <propertySections
             contributorId="com.jaspersoft.studio.Repository">
          <propertySection

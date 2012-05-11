@@ -286,7 +286,7 @@
       </page>
    </extension>
    <extension
-         id="com.jaspersoft.studio.properties"
+         id=""
          name="Jaspersoft Studio Properties"
          point="org.eclipse.ui.propertyPages">
       <page
@@ -410,7 +410,7 @@
    </extension>
    <extension
          id="com.jaspersoft.designer.property"
-         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+         point="com.jaspersoft.studio.properties.propertyContributor">
       <propertyContributor
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer"
             labelProvider="com.jaspersoft.studio.property.ElementLabelProvider"
@@ -431,10 +431,16 @@
       </propertyContributor>
    </extension>
    <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+         point="com.jaspersoft.studio.properties.propertyTabs">
       <propertyTabs
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
          <propertyTab
+               category="element"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.Element"
+               label="Object">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Element"
                category="advanced"
                id="com.jaspersoft.studio.editor.JrxmlEditor.AdvancedTab"
                image="icons/resources/eclipse/properties_view.gif"
@@ -455,21 +461,28 @@
          </propertyTab>
          <propertyTab
                category="element"
-               id="com.jaspersoft.studio.propertyTab.pageFormat"
-               image="icons/resources/eclipse/border_frame.gif"
-               label="Page Format">
-         </propertyTab>
-         <propertyTab
-               afterTab="com.jaspersoft.studio.propertyTab.pageFormat"
-               category="element"
                id="com.jaspersoft.studio.propertyTab.report"
                image="icons/report.png"
                label="Report">
          </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.propertyTab.report"
+               category="element"
+               id="com.jaspersoft.studio.propertyTab.pageFormat"
+               image="icons/resources/eclipse/border_frame.gif"
+               label="%pageformat">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
+               category="element"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.Text"
+               image="icons/resources/eclipse/left_align.gif"
+               label="%element">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
-         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+         point="com.jaspersoft.studio.properties.propertySections">
       <propertySections
             contributorId="com.jaspersoft.studio.editor.report.ReportContainer">
          <propertySection
@@ -514,15 +527,12 @@
             </input>
          </propertySection>
          <propertySection
-               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.LinePenSection"
-               class="com.jaspersoft.studio.property.section.text.FontSection"
-               id="com.jaspersoft.studio.editor.JrxmlEditor.text.FontSection"
+               afterSection="com.jaspersoft.studio.property.section.text.FontSection"
+               class="com.jaspersoft.studio.property.section.graphic.GraphicSection"
+               id="com.jaspersoft.studio.property.section.graphic.GraphicSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
             <input
-                  type="com.jaspersoft.studio.model.style.MStyle">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.text.MTextElement">
+                  type="com.jaspersoft.studio.model.MGraphicElement">
             </input>
          </propertySection>
          <propertySection
@@ -535,24 +545,45 @@
          </propertySection>
          <propertySection
                class="com.jaspersoft.studio.property.section.band.BandSection"
-               id="com.jaspersoft.studio.editor.JrxmlEditor.band.BandSection"
+               id="com.jaspersoft.studio.property.section.band.BandSection"
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
             <input
                   type="com.jaspersoft.studio.model.band.MBand">
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.property.section.band.BandSection"
+               class="com.jaspersoft.studio.property.section.band.BandGroupSection"
+               id="com.jaspersoft.studio.property.section.band.BandGroupSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+            <input
+                  type="com.jaspersoft.studio.model.band.MBandGroupHeader">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.band.MBandGroupFooter">
+            </input>
+         </propertySection>
+         <propertySection
                class="com.jaspersoft.studio.property.section.report.PageSizeSection"
-               id="com.jaspersoft.studio.editor.JrxmlEditor.report.PageSizeSection"
+               id="com.jaspersoft.studio.property.section.report.PageSizeSection"
                tab="com.jaspersoft.studio.propertyTab.pageFormat">
             <input
                   type="com.jaspersoft.studio.model.MReport">
             </input>
          </propertySection>
          <propertySection
-               afterSection="com.jaspersoft.studio.editor.JrxmlEditor.report.PageSizeSection"
+               afterSection="com.jaspersoft.studio.property.section.report.PageSizeSection"
                class="com.jaspersoft.studio.property.section.report.PageMarginSection"
-               id="com.jaspersoft.studio.editor.JrxmlEditor.report.PageMarginSection"
+               id="com.jaspersoft.studio.property.section.report.PageMarginSection"
+               tab="com.jaspersoft.studio.propertyTab.pageFormat">
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.report.PageMarginSection"
+               class="com.jaspersoft.studio.property.section.report.PageColumnsSection"
+               id="com.jaspersoft.studio.property.section.report.PageColumnsSection"
                tab="com.jaspersoft.studio.propertyTab.pageFormat">
             <input
                   type="com.jaspersoft.studio.model.MReport">
@@ -577,10 +608,18 @@
             </input>
          </propertySection>
          <propertySection
+               class="com.jaspersoft.studio.property.section.report.ReportSection"
+               id="com.jaspersoft.studio.editor.JrxmlEditor.report.ReportSection"
+               tab="com.jaspersoft.studio.propertyTab.report">
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
+            </input>
+         </propertySection>
+         <propertySection
                afterSection="com.jaspersoft.studio.editor.JrxmlEditor.graphic.SizeSection"
-               class="com.jaspersoft.studio.property.section.graphic.AlignSection"
+               class="com.jaspersoft.studio.property.section.text.AlignSection"
                id="com.jaspersoft.studio.property.section.graphic.AlignSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
             <input
                   type="com.jaspersoft.studio.model.style.MStyle">
             </input>
@@ -595,7 +634,7 @@
                afterSection="com.jaspersoft.studio.property.section.graphic.AlignSection"
                class="com.jaspersoft.studio.property.section.text.RotateSection"
                id="com.jaspersoft.studio.property.section.text.RotateSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance">
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
             <input
                   type="com.jaspersoft.studio.model.style.MStyle">
             </input>
@@ -604,11 +643,150 @@
             </input>
          </propertySection>
          <propertySection
-               class="com.jaspersoft.studio.property.section.report.ReportSection"
-               id="com.jaspersoft.studio.editor.JrxmlEditor.report.ReportSection"
-               tab="com.jaspersoft.studio.propertyTab.report">
+               afterSection="com.jaspersoft.studio.property.section.text.RotateSection"
+               class="com.jaspersoft.studio.property.section.text.FontSection"
+               id="com.jaspersoft.studio.property.section.text.FontSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
             <input
-                  type="com.jaspersoft.studio.model.MReport">
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.text.MTextElement">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.text.FontSection"
+               class="com.jaspersoft.studio.property.section.text.TextSection"
+               id="com.jaspersoft.studio.property.section.text.TextSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.text.MTextElement">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.text.TextFieldSection"
+               id="com.jaspersoft.studio.property.section.text.TextFieldSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.text.MTextField">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.text.StaticTextSection"
+               id="com.jaspersoft.studio.property.section.text.StaticTextSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.text.MStaticText">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.graphic.ImageFieldSection"
+               id="com.jaspersoft.studio.property.section.graphic.ImageFieldSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.image.MImage">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.DatasetSection"
+               id="com.jaspersoft.studio.property.section.obj.DatasetSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Element">
+            <input
+                  type="com.jaspersoft.studio.model.dataset.MDataset">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.FieldSection"
+               id="com.jaspersoft.studio.property.section.obj.FieldSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Element">
+            <input
+                  type="com.jaspersoft.studio.model.field.MField">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.VariableSection"
+               id="com.jaspersoft.studio.property.section.obj.VariableSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Element">
+            <input
+                  type="com.jaspersoft.studio.model.variable.MVariable">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.VariableSystemSection"
+               id="com.jaspersoft.studio.property.section.obj.VariableSystemSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Element">
+            <input
+                  type="com.jaspersoft.studio.model.variable.MVariableSystem">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.ParameterSection"
+               id="com.jaspersoft.studio.property.section.obj.ParameterSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Element">
+            <input
+                  type="com.jaspersoft.studio.model.parameter.MParameter">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.ParameterSystemSection"
+               id="com.jaspersoft.studio.property.section.obj.ParameterSystemSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Element">
+            <input
+                  type="com.jaspersoft.studio.model.parameter.MParameterSystem">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.text.FontSection"
+               class="com.jaspersoft.studio.property.section.obj.BreakSection"
+               id="com.jaspersoft.studio.property.section.obj.BreakSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.MBreak">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.text.FontSection"
+               class="com.jaspersoft.studio.property.section.obj.RectangleSection"
+               id="com.jaspersoft.studio.property.section.obj.RectangleSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.MRectangle">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.text.FontSection"
+               class="com.jaspersoft.studio.property.section.obj.LineSection"
+               id="com.jaspersoft.studio.property.section.obj.LineSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.MLine">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.text.FontSection"
+               class="com.jaspersoft.studio.property.section.obj.GenericElementSection"
+               id="com.jaspersoft.studio.property.section.obj.GenericElementSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.genericElement.MGenericElement">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.text.FontSection"
+               class="com.jaspersoft.studio.property.section.obj.SubreportSection"
+               id="com.jaspersoft.studio.property.section.obj.SubreportSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.subreport.MSubreport">
             </input>
          </propertySection>
       </propertySections>

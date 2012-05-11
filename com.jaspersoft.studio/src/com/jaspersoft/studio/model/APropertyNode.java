@@ -106,6 +106,14 @@ public abstract class APropertyNode extends ANode implements IPropertySource, IP
 		}
 	}
 
+	public IPropertyDescriptor getPropertyDescriptor(Object id) {
+		IPropertyDescriptor[] descriptors = getPropertyDescriptors();
+		for (IPropertyDescriptor pd : descriptors)
+			if (pd.getId().equals(id))
+				return pd;
+		return null;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

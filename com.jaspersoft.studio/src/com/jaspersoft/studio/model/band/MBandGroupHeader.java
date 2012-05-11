@@ -30,7 +30,6 @@ import net.sf.jasperreports.engine.type.BandTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -44,7 +43,6 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
  */
 public class MBandGroupHeader extends MBand {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
-	private static final String MAIN_GROUP = "MAIN_GROUP"; //$NON-NLS-1$
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;
 
@@ -84,6 +82,7 @@ public class MBandGroupHeader extends MBand {
 	public MBandGroupHeader(ANode parent, JRDesignGroup jrGroup, JRBand jrband, int index) {
 		super(parent, jrband, BandTypeEnum.GROUP_HEADER, index);
 		this.jrGroup = jrGroup;
+		mGroupBand = new MGroupBand(jrGroup);
 	}
 
 	/**
@@ -156,22 +155,31 @@ public class MBandGroupHeader extends MBand {
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		PropertyDescriptor groupD = new PropertyDescriptor(MAIN_GROUP, Messages.common_group);
-		desc.add(groupD);
+		new MGroupBand(getJrGroup()).createPropertyDescriptors(desc, defaultsMap);
 	}
 
 	private MGroupBand mGroupBand;
 
 	@Override
 	public Object getPropertyValue(Object id) {
-		if (id.equals(MAIN_GROUP)) {
-			if (mGroupBand == null) {
-				mGroupBand = new MGroupBand(getJrGroup());
-				setChildListener(mGroupBand);
-			}
-			return mGroupBand;
-		}
+		Object obj = mGroupBand.getPropertyValue(id);
+		if (obj != null)
+			return obj;
 		return super.getPropertyValue(id);
+	}
+
+	@Override
+	public void setPropertyValue(Object id, Object value) {
+		mGroupBand.setPropertyValue(id, value);
+		super.setPropertyValue(id, value);
+	}
+
+	@Override
+	public Object getPropertyDefaultValue(String id) throws Exception {
+		Object obj = mGroupBand.getPropertyDefaultValue(id);
+		if (obj != null)
+			return obj;
+		return super.getPropertyDefaultValue(id);
 	}
 
 }

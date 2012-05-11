@@ -97,9 +97,9 @@ public class SPLineStyleEnum {
 	}
 
 	public void setData(Integer b) {
-		lsSolid.setSelection(b != null && b.intValue() == 1);
-		lsDashed.setSelection(b != null && b.intValue() == 2);
-		lsDotted.setSelection(b != null && b.intValue() == 3);
-		lsDouble.setSelection(b != null && b.intValue() == 4);
+		lsSolid.setSelection(b != null && b.intValue() == LineStyleEnum.SOLID.getValue() + 1);
+		lsDashed.setSelection(b != null && b.intValue() == LineStyleEnum.DASHED.getValue() + 1);
+		lsDotted.setSelection(b != null && b.intValue() == LineStyleEnum.DOTTED.getValue() + 1);
+		lsDouble.setSelection(b != null && b.intValue() == LineStyleEnum.DOUBLE.getValue() + 1);
 	}
 }
