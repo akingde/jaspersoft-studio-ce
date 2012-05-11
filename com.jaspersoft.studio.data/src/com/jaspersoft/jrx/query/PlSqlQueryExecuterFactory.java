@@ -117,7 +117,6 @@ public class PlSqlQueryExecuterFactory implements QueryExecuterFactory {
 		return Arrays.binarySearch(queryParameterClassNames, className) >= 0;
 	}
 
-	@Override
 	public JRQueryExecuter createQueryExecuter(
 			JasperReportsContext jasperReportsContext, JRDataset dataset,
 			Map<String, ? extends JRValueParameter> parameters)

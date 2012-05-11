@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio"
-      version="1.0.9"
+      version="1.0.10"
       provider-name="Jaspersoft Corporation">
 
    <description url="http://jasperforge.org/projects/jaspersoftstudio">
@@ -688,106 +688,121 @@ Public License instead of this License.  But first, please read
 
    <requires>
       <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.ui.ide" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.views" version="3.4.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.views.properties.tabbed" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.cheatsheets"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.core.filesystem"/>
-      <import plugin="org.eclipse.jdt.core"/>
-      <import plugin="org.eclipse.jdt.ui" version="3.5.2" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.help.ui" version="3.4.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.team.core" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.navigator"/>
       <import plugin="org.apache.xerces" version="2.9.0" match="greaterOrEqual"/>
       <import plugin="org.apache.xml.resolver" version="1.2.0" match="greaterOrEqual"/>
       <import plugin="org.apache.xml.serializer" version="2.7.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.team.core" version="3.4.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.navigator"/>
+      <import plugin="org.eclipse.core.databinding"/>
+      <import plugin="org.eclipse.jface.databinding"/>
+      <import plugin="org.eclipse.core.databinding.beans"/>
+      <import plugin="javax.servlet" version="2.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help.appserver" version="3.1.400" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help.base" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help.webapp" version="3.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.gef" version="3.5.1" match="greaterOrEqual"/>
-      <import plugin="com.jaspersoft.studio" version="1.0.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.runtime" version="3.4.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.databinding"/>
-      <import plugin="org.eclipse.jface.databinding"/>
-      <import plugin="org.eclipse.core.databinding.beans"/>
-      <import plugin="org.eclipse.ui.console"/>
-      <import plugin="org.mortbay.jetty.server" version="6.1.23" match="greaterOrEqual"/>
-      <import plugin="org.mortbay.jetty.util" version="6.1.23" match="greaterOrEqual"/>
-      <import plugin="javax.servlet" version="2.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.jdt.ui" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.equinox.http.jetty" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help.ui" version="3.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="com.jaspersoft.studio"
          download-size="0"
          install-size="0"
-         version="1.0.9"
+         version="1.0.10"
          unpack="false"/>
 
    <plugin
          id="net.sf.jasperreports"
          download-size="0"
          install-size="0"
-         version="4.5.1"
+         version="4.6.0"
          unpack="false"/>
 
    <plugin
          id="net.sf.jasperreports.doc"
          download-size="0"
          install-size="0"
-         version="4.5.1"
+         version="4.6.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.doc"
          download-size="0"
          install-size="0"
-         version="1.0.9"
+         version="1.0.10"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.html"
          download-size="0"
          install-size="0"
-         version="1.0.9"
+         version="1.0.10"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data"
          download-size="0"
          install-size="0"
-         version="1.0.9"
+         version="1.0.10"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.components"
          download-size="0"
          install-size="0"
-         version="1.0.9"
+         version="1.0.10"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.server"
          download-size="0"
          install-size="0"
-         version="1.0.9"
+         version="1.0.10"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data.hive"
          download-size="0"
          install-size="0"
-         version="1.0.9"
+         version="1.0.10"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data.mongodb"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="1.0.10"
+         unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.editor.jrexpressions"
+         download-size="0"
+         install-size="0"
+         version="1.0.10"
+         unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.editor.jrexpressions.ui"
+         download-size="0"
+         install-size="0"
+         version="1.0.10"
+         unpack="false"/>
+
+   <plugin
+         id="com.jaspersoft.studio.properties"
+         download-size="0"
+         install-size="0"
+         version="1.0.10"
          unpack="false"/>
 
 </feature>
