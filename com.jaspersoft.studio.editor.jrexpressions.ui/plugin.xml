@@ -2,7 +2,7 @@
 <?eclipse version="3.0"?>
 
 <plugin>
-
+	<!--
     <extension
             point="org.eclipse.ui.editors">
         <editor
@@ -133,7 +133,7 @@
             </activeWhen>
         </handler>
     </extension>   
-
+	-->
 <!-- adding resource factories -->
 
 	<extension
@@ -151,7 +151,7 @@
     </extension>
 
 
-
+<!--
    <extension
          point="org.eclipse.xtext.builder.participant">
       <participant
@@ -182,8 +182,10 @@
 	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
         </page>
     </extension>
+-->
 
 	<!-- Quick Outline -->
+<!--
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler 
@@ -216,14 +218,16 @@
 			</command>
 		</menuContribution>
 	</extension>
+-->
    <!-- quickfix marker resolution generator -->
+<!--
    <extension
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
             class="com.jaspersoft.studio.editor.jrexpressions.ui.JavaJRExpressionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator">
       </markerResolutionGenerator>
    </extension>
-   
+-->   
    <extension
          id="com.jaspersoft.studio.editor.jrexpressions.BasicSupport"
          name="Default Support for JRExpression Editor"
