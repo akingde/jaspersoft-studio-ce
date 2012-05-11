@@ -265,7 +265,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 	 */
 	private void setBandNameShowing(BandFigure figure) {
 		boolean showBandName = PropertiesHelper.getInstance(getModel().getJasperConfiguration()).getBoolean(
-				DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES, false);
+				DesignerPreferencePage.P_SHOW_REPORT_BAND_NAMES, true);
 		figure.setShowBandName(showBandName);
 	}
 }
