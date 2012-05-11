@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.jaspersoft.studio.properties.view;
 
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -17,10 +18,13 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
@@ -163,10 +167,18 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 	public Group createGroup(Composite parent, String text) {
 		Group group = new Group(parent, SWT.SHADOW_NONE);
 		group.setText(text);
-		group.setBackground(getColors().getBackground());
 		group.setForeground(getColors().getForeground());
 		paintBordersFor(group);
 		return group;
+	}
+
+	@Override
+	public Button createButton(Composite parent, String text, int style) {
+		Button button = new Button(parent, style | SWT.FLAT
+				| Window.getDefaultOrientation());
+		if (text != null)
+			button.setText(text);
+		return button;
 	}
 
 	/**
@@ -212,7 +224,6 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 	 */
 	public CLabel createCLabel(Composite parent, String text, int style) {
 		final CLabel label = new CLabel(parent, style);
-		label.setBackground(parent.getBackground());
 		label.setText(text);
 		return label;
 	}
