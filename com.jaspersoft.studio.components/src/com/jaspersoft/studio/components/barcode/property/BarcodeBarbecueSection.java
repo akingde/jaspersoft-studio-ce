@@ -3,9 +3,7 @@ package com.jaspersoft.studio.components.barcode.property;
 import net.sf.jasperreports.components.barbecue.StandardBarbecueComponent;
 
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -20,9 +18,8 @@ public class BarcodeBarbecueSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Group group = getWidgetFactory().createGroup(parent, "Barbecue");
-		group.setLayout(new GridLayout(2, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite group = getWidgetFactory().createSection(parent, "Barbecue",
+				false, 2);
 
 		createWidget4Property(group,
 				StandardBarbecueComponent.PROPERTY_BAR_WIDTH);

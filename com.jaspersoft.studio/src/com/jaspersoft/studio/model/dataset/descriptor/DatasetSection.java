@@ -21,10 +21,8 @@ package com.jaspersoft.studio.model.dataset.descriptor;
 
 import net.sf.jasperreports.engine.design.JRDesignElementDataset;
 
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -60,11 +58,7 @@ public class DatasetSection extends AbstractSection {
 		getWidgetFactory().createCLabel(parent, pd.getDisplayName());
 		widgets.put(pd.getId(), new SPResetType(parent, this, pd, gpd));
 
-		Group group = getWidgetFactory().createGroup(parent, "Dataset Run");
-		group.setLayout(new GridLayout(2, false));
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		Composite group = getWidgetFactory().createSection(parent, "Dataset Run", true, 2, 2);
 
 		createWidget4Property(group, JRDesignElementDataset.PROPERTY_DATASET_RUN);
 	}

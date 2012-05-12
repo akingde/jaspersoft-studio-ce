@@ -24,9 +24,7 @@ import net.sf.jasperreports.charts.design.JRDesignMeterPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -40,11 +38,8 @@ public class MeterPlot extends APlot {
 
 		section.createWidget4Property(parent, JRDesignMeterPlot.PROPERTY_SHAPE);
 
-		Group group = section.getWidgetFactory().createGroup(parent, "Tick");
-		group.setLayout(new GridLayout(2, false));
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		Composite group = section.getWidgetFactory().createSection(parent,
+				"Tick", false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignMeterPlot.PROPERTY_TICK_COLOR);
@@ -52,7 +47,7 @@ public class MeterPlot extends APlot {
 		section.createWidget4Property(group,
 				JRDesignMeterPlot.PROPERTY_TICK_INTERVAL);
 
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		section.createWidget4Property(group,
 				JRDesignMeterPlot.PROPERTY_TICK_LABEL_FONT, false).getControl()
@@ -67,11 +62,8 @@ public class MeterPlot extends APlot {
 		section.createWidget4Property(parent,
 				JRDesignMeterPlot.PROPERTY_METER_ANGLE);
 
-		group = section.getWidgetFactory().createGroup(parent, "Value");
-		group.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		group = section.getWidgetFactory().createSection(parent, "Value",
+				false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignMeterPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$
@@ -101,6 +93,5 @@ public class MeterPlot extends APlot {
 		section.createWidget4Property(parent,
 				JRDesignMeterPlot.PROPERTY_INTERVALS, false).getControl()
 				.setLayoutData(gd);
-
 	}
 }

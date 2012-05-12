@@ -21,7 +21,7 @@ package com.jaspersoft.studio.components.chartspider.property.section;
 
 import net.sf.jasperreports.components.spiderchart.StandardChartSettings;
 
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -42,14 +42,21 @@ public class SubTitleSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent.setLayout(new GridLayout(2, false));
+		Composite group = getWidgetFactory().createSectionTitle(parent,
+				"Subtitle", true, 2, 1);
 
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION);
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_SUBTITLE_FONT);
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_SUBTITLE_COLOR);
+		getWidgetFactory().createCLabel(group, "Expression");
+		createWidget4Property(group,
+				StandardChartSettings.PROPERTY_SUBTITLE_EXPRESSION, false);
+
+		getWidgetFactory().createCLabel(group, "Color");
+		createWidget4Property(group,
+				StandardChartSettings.PROPERTY_SUBTITLE_COLOR, false);
+
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		createWidget4Property(group,
+				StandardChartSettings.PROPERTY_SUBTITLE_FONT, false)
+				.getControl().setLayoutData(gd);
 	}
-
 }

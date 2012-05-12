@@ -176,14 +176,7 @@ public class UIUtils {
 	}
 
 	public static void setBold(Control control) {
-		int fontHeight = 12;
-		String name = "";
-		FontData[] fontData = control.getFont().getFontData();
-		for (int i = 0; i < fontData.length; ++i) {
-			fontHeight = fontData[i].getHeight();
-			name = fontData[i].getName();
-		}
-		control.setFont(SWTResourceManager.getFont(name, fontHeight, SWT.BOLD));
+		control.setFont(SWTResourceManager.getBoldFont(control.getFont()));
 	}
 
 	public static void setFontHeight(Control control, int height) {

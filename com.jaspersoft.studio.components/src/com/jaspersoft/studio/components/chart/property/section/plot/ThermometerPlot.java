@@ -24,9 +24,7 @@ import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -39,13 +37,10 @@ public class ThermometerPlot extends APlot {
 		section.createWidget4Property(parent,
 				JRDesignThermometerPlot.PROPERTY_MERCURY_COLOR);
 
-		Group group = section.getWidgetFactory().createGroup(parent, "Value");
-		group.setLayout(new GridLayout(2, false));
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		Composite group = section.getWidgetFactory().createSection(parent,
+				"Value", false, 2, 2);
 
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		section.createWidget4Property(group,
 				JRDesignThermometerPlot.PROPERTY_VALUE_DISPLAY + "." //$NON-NLS-1$

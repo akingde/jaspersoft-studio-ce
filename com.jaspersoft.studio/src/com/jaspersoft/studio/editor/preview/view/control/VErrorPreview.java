@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.forms.widgets.FormText;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.preview.stats.Statistics;
@@ -226,6 +227,7 @@ public class VErrorPreview extends APreview {
 		layout.marginLeft = 20;
 		layout.horizontalSpacing = 3;
 		statComposite.setLayout(layout);
+
 		new Label(statComposite, SWT.NONE).setText("Compilation Time");
 
 		compilationTime = new Label(statComposite, SWT.BOLD);
@@ -334,7 +336,7 @@ public class VErrorPreview extends APreview {
 
 	private void addError2List(Object err, String message) {
 		errors.add(err);
-		if(message == null)
+		if (message == null)
 			message = "< No message >";
 		String lines[] = message.split("\\r?\\n");
 		if (lines.length > 0)

@@ -40,7 +40,6 @@ import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.chart.ChartNodeIconDescriptor;
@@ -63,6 +62,8 @@ import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.Para
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.EdgePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
@@ -159,18 +160,18 @@ public class MSpiderChart extends MGraphicElement {
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor titlePositionD = new ComboBoxPropertyDescriptor(
+		titlePositionD = new EdgePropertyDescriptor(
 				StandardChartSettings.PROPERTY_TITLE_POSITION,
 				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position,
-				EnumHelper.getEnumNames(EdgeEnum.values(), NullEnum.NULL));
+				EdgeEnum.class, NullEnum.NULL);
 		titlePositionD
 				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position_description);
 		desc.add(titlePositionD);
 
-		ComboBoxPropertyDescriptor legendPositionD = new ComboBoxPropertyDescriptor(
+		legendPositionD = new EdgePropertyDescriptor(
 				StandardChartSettings.PROPERTY_LEGEND_POSITION,
 				com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_position,
-				EnumHelper.getEnumNames(EdgeEnum.values(), NullEnum.NULL));
+				EdgeEnum.class, NullEnum.NULL);
 		legendPositionD
 				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_position_description);
 		desc.add(legendPositionD);
@@ -264,10 +265,10 @@ public class MSpiderChart extends MGraphicElement {
 				.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_legend_font_description);
 		desc.add(legendFontD);
 
-		ComboBoxPropertyDescriptor evaluationTimeD = new ComboBoxPropertyDescriptor(
+		evaluationTimeD = new JSSEnumPropertyDescriptor(
 				SpiderChartComponent.PROPERTY_EVALUATION_TIME,
-				Messages.common_evaluation_time, EnumHelper.getEnumNames(
-						EvaluationTimeEnum.values(), NullEnum.NOTNULL));
+				Messages.common_evaluation_time, EvaluationTimeEnum.class,
+				NullEnum.NOTNULL);
 		evaluationTimeD
 				.setDescription(Messages.MGenericElement_evaluation_time_description);
 		desc.add(evaluationTimeD);
@@ -305,17 +306,16 @@ public class MSpiderChart extends MGraphicElement {
 		maxValExpr.setDescription("Max value expression");
 		desc.add(maxValExpr);
 
-		ComboBoxPropertyDescriptor rotation = new ComboBoxPropertyDescriptor(
+		rotation = new JSSEnumPropertyDescriptor(
 				StandardSpiderPlot.PROPERTY_ROTATION,
 				com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position,
-				EnumHelper.getEnumNames(SpiderRotationEnum.values(),
-						NullEnum.NULL));
+				SpiderRotationEnum.class, NullEnum.NULL);
 		rotation.setDescription(com.jaspersoft.studio.components.chart.messages.Messages.MChart_title_position_description);
 		desc.add(rotation);
 
-		ComboBoxPropertyDescriptor tableOrder = new ComboBoxPropertyDescriptor(
+		tableOrder = new JSSEnumPropertyDescriptor(
 				StandardSpiderPlot.PROPERTY_TABLE_ORDER, "Table Order",
-				EnumHelper.getEnumNames(TableOrderEnum.values(), NullEnum.NULL));
+				TableOrderEnum.class, NullEnum.NULL);
 		tableOrder.setDescription("Table order");
 		desc.add(tableOrder);
 
@@ -432,9 +432,9 @@ public class MSpiderChart extends MGraphicElement {
 				.getChartSettings();
 
 		if (id.equals(StandardChartSettings.PROPERTY_TITLE_POSITION))
-			return EnumHelper.getValue(cs.getTitlePosition(), 1, true);
+			return titlePositionD.getEnumValue(cs.getTitlePosition());
 		if (id.equals(StandardChartSettings.PROPERTY_LEGEND_POSITION))
-			return EnumHelper.getValue(cs.getLegendPosition(), 1, true);
+			return legendPositionD.getEnumValue(cs.getLegendPosition());
 
 		if (id.equals(StandardChartSettings.PROPERTY_RENDER_TYPE))
 			return cs.getRenderType();
@@ -497,7 +497,7 @@ public class MSpiderChart extends MGraphicElement {
 			return ExprUtil.getExpression(cs.getSubtitleExpression());
 
 		if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_TIME))
-			return EnumHelper.getValue(component.getEvaluationTime(), 1, false);
+			return evaluationTimeD.getEnumValue(component.getEvaluationTime());
 		if (id.equals(SpiderChartComponent.PROPERTY_EVALUATION_GROUP))
 			return component.getEvaluationGroup();
 
@@ -519,9 +519,9 @@ public class MSpiderChart extends MGraphicElement {
 		if (id.equals(StandardSpiderPlot.PROPERTY_MAX_VALUE_EXPRESSION))
 			return ExprUtil.getExpression(sp.getMaxValueExpression());
 		if (id.equals(StandardSpiderPlot.PROPERTY_ROTATION))
-			return EnumHelper.getValue(sp.getRotation(), 1, true);
+			return rotation.getEnumValue(sp.getRotation());
 		if (id.equals(StandardSpiderPlot.PROPERTY_TABLE_ORDER))
-			return EnumHelper.getValue(sp.getTableOrder(), 1, true);
+			return tableOrder.getEnumValue(sp.getTableOrder());
 		if (id.equals(StandardSpiderPlot.PROPERTY_WEB_FILLED))
 			return sp.getWebFilled();
 		if (id.equals(StandardSpiderPlot.PROPERTY_START_ANGLE))
@@ -590,11 +590,9 @@ public class MSpiderChart extends MGraphicElement {
 		} else if (id.equals(StandardChartSettings.PROPERTY_LEGEND_FONT)) {
 			cs.setLegendFont(MFontUtil.setMFont(value));
 		} else if (id.equals(StandardChartSettings.PROPERTY_TITLE_POSITION))
-			cs.setTitlePosition((EdgeEnum) EnumHelper.getSetValue(
-					EdgeEnum.values(), value, 1, true));
+			cs.setTitlePosition((EdgeEnum) titlePositionD.getEnumValue(value));
 		else if (id.equals(StandardChartSettings.PROPERTY_LEGEND_POSITION))
-			cs.setLegendPosition((EdgeEnum) EnumHelper.getSetValue(
-					EdgeEnum.values(), value, 1, true));
+			cs.setLegendPosition((EdgeEnum) legendPositionD.getEnumValue(value));
 
 		else if (id.equals(StandardChartSettings.PROPERTY_SHOW_LEGEND))
 			cs.setShowLegend((Boolean) value);
@@ -674,6 +672,11 @@ public class MSpiderChart extends MGraphicElement {
 	}
 
 	private RComboBoxPropertyDescriptor evaluationGroupNameD;
+	private static JSSEnumPropertyDescriptor titlePositionD;
+	private static JSSEnumPropertyDescriptor legendPositionD;
+	private static JSSEnumPropertyDescriptor evaluationTimeD;
+	private static JSSEnumPropertyDescriptor rotation;
+	private static JSSEnumPropertyDescriptor tableOrder;
 
 	@Override
 	public void setValue(Object value) {

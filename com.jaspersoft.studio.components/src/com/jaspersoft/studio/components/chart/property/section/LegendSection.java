@@ -23,9 +23,7 @@ import net.sf.jasperreports.engine.base.JRBaseChart;
 import net.sf.jasperreports.engine.design.JRDesignChart;
 
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -45,9 +43,8 @@ public class LegendSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Group group = getWidgetFactory().createGroup(parent, "Legend");
-		group.setLayout(new GridLayout(6, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite group = getWidgetFactory().createSection(parent, "Legend",
+				true, 6);
 
 		GridData gd = new GridData();
 		gd.horizontalSpan = 5;

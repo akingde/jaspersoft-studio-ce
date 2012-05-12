@@ -23,10 +23,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
@@ -46,9 +43,7 @@ public class PageMarginSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Group group = getWidgetFactory().createGroup(parent, Messages.PageMarginSection_margin);
-		group.setLayout(new GridLayout(8, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite group = getWidgetFactory().createSection(parent, Messages.PageMarginSection_margin, true, 2);
 
 		CLabel l = getWidgetFactory().createCLabel(group, "", SWT.RIGHT);
 		l.setImage(JaspersoftStudioPlugin.getImage("icons/resources/eclipse/border_top.gif")); //$NON-NLS-1$

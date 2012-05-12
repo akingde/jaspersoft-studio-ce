@@ -21,7 +21,7 @@ package com.jaspersoft.studio.components.chartspider.property.section;
 
 import net.sf.jasperreports.components.spiderchart.StandardChartSettings;
 
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -42,18 +42,32 @@ public class LegendSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		parent.setLayout(new GridLayout(2, false));
+		Composite group = getWidgetFactory().createSectionTitle(parent,
+				"Legend", true, 6, 1);
 
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_SHOW_LEGEND);
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_LEGEND_FONT);
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_LEGEND_COLOR);
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR);
-		createWidget4Property(parent,
-				StandardChartSettings.PROPERTY_LEGEND_POSITION);
+		GridData gd = new GridData();
+		gd.horizontalSpan = 5;
+
+		createWidget4Property(group, StandardChartSettings.PROPERTY_SHOW_LEGEND)
+				.getControl().setLayoutData(gd);
+
+		getWidgetFactory().createCLabel(group, "Position");
+		createWidget4Property(group,
+				StandardChartSettings.PROPERTY_LEGEND_POSITION, false);
+
+		getWidgetFactory().createCLabel(group, "F");
+		createWidget4Property(group,
+				StandardChartSettings.PROPERTY_LEGEND_COLOR, false);
+
+		getWidgetFactory().createCLabel(group, "B");
+		createWidget4Property(group,
+				StandardChartSettings.PROPERTY_LEGEND_BACKGROUND_COLOR, false);
+
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 6;
+		createWidget4Property(group,
+				StandardChartSettings.PROPERTY_LEGEND_FONT, false).getControl()
+				.setLayoutData(gd);
 	}
 
 }

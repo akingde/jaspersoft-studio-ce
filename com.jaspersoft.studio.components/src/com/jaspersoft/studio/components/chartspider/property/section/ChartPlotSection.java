@@ -21,6 +21,7 @@ package com.jaspersoft.studio.components.chartspider.property.section;
 
 import net.sf.jasperreports.components.spiderchart.StandardSpiderPlot;
 
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -40,6 +41,8 @@ public class ChartPlotSection extends AbstractSection {
 	public void createControls(Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
+
+		parent.setLayout(new GridLayout(2, false));
 
 		createWidget4Property(parent, StandardSpiderPlot.PROPERTY_BACKCOLOR);
 		createWidget4Property(parent,

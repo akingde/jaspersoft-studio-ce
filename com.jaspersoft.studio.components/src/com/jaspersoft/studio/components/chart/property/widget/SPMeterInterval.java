@@ -45,8 +45,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.model.APropertyNode;
@@ -113,7 +111,8 @@ public class SPMeterInterval extends ASPropertyWidget {
 
 	private Table table;
 	private TableViewer tableViewer;
-	private Section sectioncmp;
+	private Composite sectioncmp;
+	private Composite composite;
 
 	public SPMeterInterval(Composite parent, AbstractSection section,
 			IPropertyDescriptor pDescriptor) {
@@ -126,15 +125,9 @@ public class SPMeterInterval extends ASPropertyWidget {
 	}
 
 	public void createComponent(Composite parent) {
-		sectioncmp = section.getWidgetFactory().createSection(parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
-		sectioncmp.setText("Meter Intervals");
-
-		Composite composite = new Composite(sectioncmp, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setBackground(parent.getBackground());
-
-		sectioncmp.setClient(composite);
+		composite = section.getWidgetFactory().createSection(parent,
+				"Meter Intervals", true, 2);
+		sectioncmp = composite.getParent();
 
 		buildTable(composite);
 

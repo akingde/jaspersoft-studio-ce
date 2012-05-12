@@ -23,11 +23,8 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
-import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
@@ -46,17 +43,15 @@ public class SizeSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Group group = getWidgetFactory().createGroup(parent, Messages.common_size);
-		group.setLayout(new GridLayout(4, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		parent = getWidgetFactory().createSection(parent, "Size", false, 4);
 
-		getWidgetFactory().createCLabel(group, "w", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		createWidget4Property(group, JRDesignElement.PROPERTY_WIDTH, false);
+		getWidgetFactory().createCLabel(parent, "w", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		createWidget4Property(parent, JRDesignElement.PROPERTY_WIDTH, false);
 
-		getWidgetFactory().createCLabel(group, "h", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		createWidget4Property(group, JRDesignElement.PROPERTY_HEIGHT, false);
+		getWidgetFactory().createCLabel(parent, "h", SWT.RIGHT).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		createWidget4Property(parent, JRDesignElement.PROPERTY_HEIGHT, false);
 
-		ASPropertyWidget w = createWidget4Property(group, JRDesignElement.PROPERTY_STRETCH_TYPE);
+		ASPropertyWidget w = createWidget4Property(parent, JRDesignElement.PROPERTY_STRETCH_TYPE);
 		GridData gd = new GridData();
 		gd.horizontalSpan = 3;
 		w.getControl().setLayoutData(gd);

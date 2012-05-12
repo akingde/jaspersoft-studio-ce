@@ -23,9 +23,7 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.ToolBar;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -46,9 +44,7 @@ public class FontSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Group group = getWidgetFactory().createGroup(parent, Messages.common_font);
-		group.setLayout(new GridLayout(2, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite group = getWidgetFactory().createSection(parent, Messages.common_font, true, 2);
 
 		createWidget4Property(group, JRBaseStyle.PROPERTY_FONT_NAME, false);
 

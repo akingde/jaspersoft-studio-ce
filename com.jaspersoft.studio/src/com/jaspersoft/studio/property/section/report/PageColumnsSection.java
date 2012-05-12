@@ -21,10 +21,7 @@ package com.jaspersoft.studio.property.section.report;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -43,17 +40,15 @@ public class PageColumnsSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Group group = getWidgetFactory().createGroup(parent, Messages.MReport_columns_category);
-		group.setLayout(new GridLayout(2, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		parent = getWidgetFactory().createSection(parent, Messages.MReport_columns_category, true, 2);
 
-		createWidget4Property(group, JasperDesign.PROPERTY_COLUMN_COUNT);
+		createWidget4Property(parent, JasperDesign.PROPERTY_COLUMN_COUNT);
 
-		createWidget4Property(group, JasperDesign.PROPERTY_COLUMN_WIDTH);
+		createWidget4Property(parent, JasperDesign.PROPERTY_COLUMN_WIDTH);
 
-		createWidget4Property(group, JasperDesign.PROPERTY_COLUMN_SPACING);
+		createWidget4Property(parent, JasperDesign.PROPERTY_COLUMN_SPACING);
 
-		createWidget4Property(group, JasperDesign.PROPERTY_PRINT_ORDER);
+		createWidget4Property(parent, JasperDesign.PROPERTY_PRINT_ORDER);
 
 	}
 

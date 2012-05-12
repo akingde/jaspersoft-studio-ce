@@ -30,10 +30,8 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -59,14 +57,13 @@ public class SPFont extends ASPropertyWidget {
 
 	@Override
 	public Control getControl() {
-		return group;
+		return group.getParent();
 	}
 
 	protected void createComponent(Composite parent) {
 		mfont = new MFont(new JRDesignFont(null));
 
-		group = section.getWidgetFactory().createGroup(parent, pDescriptor.getDisplayName());
-		group.setLayout(new GridLayout(2, false));
+		group = section.getWidgetFactory().createSection(parent, pDescriptor.getDisplayName(), true, 2);
 
 		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
@@ -141,7 +138,7 @@ public class SPFont extends ASPropertyWidget {
 
 	private MFont mfont;
 	private APropertyNode parentNode;
-	private Group group;
+	private Composite group;
 
 	public void setData(APropertyNode pnode, Object value) {
 		this.parentNode = pnode;

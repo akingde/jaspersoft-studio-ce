@@ -143,25 +143,28 @@
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.components.chartspider.property.section.SubtitleSection"
                class="com.jaspersoft.studio.components.chartspider.property.section.LegendSection"
                id="com.jaspersoft.studio.components.chartspider.property.section.LegendSection"
-               tab="com.jaspersoft.studio.components.chart.legend">
+               tab="com.jaspersoft.studio.components.chart">
             <input
                   type="com.jaspersoft.studio.components.chartspider.model.MSpiderChart">
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.components.chartspider.property.section.Chart"
                class="com.jaspersoft.studio.components.chartspider.property.section.TitleSection"
                id="com.jaspersoft.studio.components.chartspider.property.section.TitleSection"
-               tab="com.jaspersoft.studio.components.chart.title">
+               tab="com.jaspersoft.studio.components.chart">
             <input
                   type="com.jaspersoft.studio.components.chartspider.model.MSpiderChart">
             </input>
          </propertySection>
          <propertySection
+               afterSection="com.jaspersoft.studio.components.chartspider.property.section.TitleSection"
                class="com.jaspersoft.studio.components.chartspider.property.section.SubTitleSection"
                id="com.jaspersoft.studio.components.chartspider.property.section.SubtitleSection"
-               tab="com.jaspersoft.studio.components.chart.subtitle">
+               tab="com.jaspersoft.studio.components.chart">
             <input
                   type="com.jaspersoft.studio.components.chartspider.model.MSpiderChart">
             </input>

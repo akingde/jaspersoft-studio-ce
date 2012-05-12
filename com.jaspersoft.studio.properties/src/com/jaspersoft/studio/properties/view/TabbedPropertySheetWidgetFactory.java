@@ -18,12 +18,18 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
+
+import com.jaspersoft.studio.properties.util.SWTResourceManager;
 
 /**
  * A FormToolkit customized for use by tabbed property sheet page.
@@ -224,6 +230,79 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 		final CLabel label = new CLabel(parent, style);
 		label.setText(text);
 		return label;
+	}
+
+	public Composite createSection(Composite parent, String text,
+			boolean expandable, int columns) {
+		return createSection(parent, text, expandable, columns, 1, SWT.NONE);
+	}
+
+	public Composite createSection(Composite parent, String text,
+			boolean expandable, int columns, int span) {
+		return createSection(parent, text, expandable, columns, span, SWT.NONE);
+	}
+
+	public Composite createSectionTitle(Composite parent, String text,
+			boolean expandable, int columns, int span) {
+		int style = Section.EXPANDED | Section.TITLE_BAR;
+		if (expandable)
+			style = style | Section.TWISTIE;
+		// Section section = createSection(parent, style);
+		Section section = new Section(parent, style);
+		section.titleBarTextMarginWidth = 0;
+		// section.marginWidth = 2;
+		section.setTitleBarBorderColor(SWTResourceManager
+				.getColor(SWT.COLOR_GRAY));
+		section.setTitleBarBackground(SWTResourceManager
+				.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
+
+		// section.setFont(SWTResourceManager.getBoldFont(section.getFont()));
+		if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = span;
+			section.setLayoutData(gd);
+		}
+		section.setText(text);
+		// section.setSeparatorControl(new Label(section, SWT.SEPARATOR
+		// | SWT.HORIZONTAL));
+
+		parent = createComposite(section, SWT.BORDER);
+		GridLayout layout = new GridLayout(columns, false);
+		layout.marginHeight = 4;
+		layout.marginWidth = 2;
+		parent.setLayout(layout);
+
+		section.setClient(parent);
+		return parent;
+	}
+
+	public Composite createSection(Composite parent, String text,
+			boolean expandable, int columns, int span, int style) {
+		style = style | Section.EXPANDED;
+		if (expandable)
+			style = style | Section.TREE_NODE;
+		Section section = new Section(parent, style);
+		section.titleBarTextMarginWidth = 0;
+
+		section.setFont(SWTResourceManager.getBoldFont(section.getFont()));
+
+		if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = span;
+			section.setLayoutData(gd);
+		}
+		section.setText(text);
+		section.setSeparatorControl(new Label(section, SWT.SEPARATOR
+				| SWT.HORIZONTAL));
+
+		parent = createComposite(section, SWT.NONE);
+		GridLayout layout = new GridLayout(columns, false);
+		layout.marginHeight = 4;
+		layout.marginWidth = 2;
+		parent.setLayout(layout);
+
+		section.setClient(parent);
+		return parent;
 	}
 
 	public void dispose() {

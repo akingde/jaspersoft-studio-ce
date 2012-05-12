@@ -203,7 +203,7 @@ public class MBar3DPlot extends MChartPlot {
 		CheckBoxPropertyDescriptor catAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_category_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		catAxisVertTickLabelD
 				.setDescription(Messages.MBar3DPlot_category_axis_vertical_tick_labels_description);
 		desc.add(catAxisVertTickLabelD);
@@ -211,7 +211,7 @@ public class MBar3DPlot extends MChartPlot {
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
 				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MBar3DPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);

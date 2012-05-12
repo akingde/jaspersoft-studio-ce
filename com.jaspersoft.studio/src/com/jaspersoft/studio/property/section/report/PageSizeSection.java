@@ -21,10 +21,7 @@ package com.jaspersoft.studio.property.section.report;
 
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -43,15 +40,12 @@ public class PageSizeSection extends AbstractSection {
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Group group = getWidgetFactory().createGroup(parent, "Page Size");
-		group.setLayout(new GridLayout(4, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite group = getWidgetFactory().createSection(parent, "Page Size", false, 2);
 
 		createWidget4Property(group, JasperDesign.PROPERTY_PAGE_WIDTH);
 		createWidget4Property(group, JasperDesign.PROPERTY_PAGE_HEIGHT);
 
-		group = getWidgetFactory().createGroup(parent, "Page Orientation");
-		group.setLayout(new GridLayout(3, false));
+		group = getWidgetFactory().createSection(parent, "Page Orientation", false, 2);
 
 		createWidget4Property(group, JasperDesign.PROPERTY_ORIENTATION, false);
 	}

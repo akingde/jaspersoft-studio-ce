@@ -24,9 +24,6 @@ import net.sf.jasperreports.charts.design.JRDesignBar3DPlot;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -36,14 +33,7 @@ public class Bar3dPlot extends APlot {
 	@Override
 	public void createControls(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
-		section.createWidget4Property(parent,
-				JRDesignBar3DPlot.PROPERTY_SHOW_LABELS);
-
-		section.createWidget4Property(parent,
-				JRDesignBar3DPlot.PROPERTY_X_OFFSET);
-
-		section.createWidget4Property(parent,
-				JRDesignBar3DPlot.PROPERTY_Y_OFFSET);
+		createCommon(section, parent);
 
 		createCategory(section, parent, tabbedPropertySheetPage);
 
@@ -52,35 +42,35 @@ public class Bar3dPlot extends APlot {
 		createItemLabel(section, parent, tabbedPropertySheetPage);
 	}
 
-	private void createCategory(AbstractSection section, Composite parent,
-			TabbedPropertySheetPage tabbedPropertySheetPage) {
-		Section sectioncmp = section.getWidgetFactory().createSection(
-				parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
-						| ExpandableComposite.EXPANDED);
-		sectioncmp.setText("Category Axis");
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		sectioncmp.setLayoutData(gd);
-
-		parent = section.getWidgetFactory().createComposite(sectioncmp);
+	public void createCommon(AbstractSection section, Composite parent) {
+		parent = section.getWidgetFactory().createComposite(parent);
 		parent.setLayout(new GridLayout(2, false));
 
-		sectioncmp.setClient(parent);
+		section.createWidget4Property(parent,
+				JRDesignBar3DPlot.PROPERTY_SHOW_LABELS);
+
+		section.createWidget4Property(parent,
+				JRDesignBar3DPlot.PROPERTY_X_OFFSET);
+
+		section.createWidget4Property(parent,
+				JRDesignBar3DPlot.PROPERTY_Y_OFFSET);
+	}
+
+	private void createCategory(AbstractSection section, Composite parent,
+			TabbedPropertySheetPage tabbedPropertySheetPage) {
+		parent = section.getWidgetFactory().createSectionTitle(parent,
+				"Category Axis", true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LINE_COLOR);
 
-		Group group = section.getWidgetFactory().createGroup(parent, "Label");
-		group.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		Composite group = section.getWidgetFactory().createSection(parent,
+				"Label", false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_EXPRESSION);
 
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		section.createWidget4Property(group,
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_FONT, false)
@@ -89,11 +79,8 @@ public class Bar3dPlot extends APlot {
 		section.createWidget4Property(group,
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_LABEL_COLOR);
 
-		group = section.getWidgetFactory().createGroup(parent, "Tick");
-		group.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		group = section.getWidgetFactory().createSection(parent, "Tick", false,
+				2, 2);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -122,33 +109,19 @@ public class Bar3dPlot extends APlot {
 
 	private void createValue(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
-		Section sectioncmp = section.getWidgetFactory().createSection(
-				parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
-						| ExpandableComposite.EXPANDED);
-		sectioncmp.setText("Value Axis");
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		sectioncmp.setLayoutData(gd);
-
-		parent = section.getWidgetFactory().createComposite(sectioncmp);
-		parent.setLayout(new GridLayout(2, false));
-
-		sectioncmp.setClient(parent);
+		parent = section.getWidgetFactory().createSectionTitle(parent,
+				"Value Axis", true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LINE_COLOR);
 
-		Group group = section.getWidgetFactory().createGroup(parent, "Label");
-		group.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		Composite group = section.getWidgetFactory().createSection(parent,
+				"Label", false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_EXPRESSION);
 
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		section.createWidget4Property(group,
 				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_FONT, false)
@@ -157,11 +130,8 @@ public class Bar3dPlot extends APlot {
 		section.createWidget4Property(group,
 				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_LABEL_COLOR);
 
-		group = section.getWidgetFactory().createGroup(parent, "Tick");
-		group.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		group = section.getWidgetFactory().createSection(parent, "Tick", false,
+				2, 2);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -187,19 +157,8 @@ public class Bar3dPlot extends APlot {
 
 	private void createItemLabel(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
-		Section sectioncmp = section.getWidgetFactory().createSection(
-				parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
-						| ExpandableComposite.EXPANDED);
-		sectioncmp.setText("Item Label");
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		sectioncmp.setLayoutData(gd);
-
-		parent = section.getWidgetFactory().createComposite(sectioncmp);
-		parent.setLayout(new GridLayout(4, false));
-
-		sectioncmp.setClient(parent);
+		parent = section.getWidgetFactory().createSectionTitle(parent,
+				"Item Label", true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignBar3DPlot.PROPERTY_ITEM_LABEL, false);

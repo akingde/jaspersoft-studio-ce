@@ -24,7 +24,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
@@ -64,22 +63,18 @@ public class GraphicSection extends AbstractSection {
 		createWidget4Property(parent, JRDesignElement.PROPERTY_PRINT_IN_FIRST_WHOLE_BAND, false).getControl()
 				.setLayoutData(gd);
 
-		Group group = getWidgetFactory().createGroup(parent, Messages.MGraphicElement_print_when);
-		group.setLayout(new GridLayout(3, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		parent = getWidgetFactory().createSection(parent, Messages.MGraphicElement_print_when, true, 3, 2);
 
 		gd = new GridData();
 		gd.horizontalSpan = 3;
-		createWidget4Property(group, JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, false).getControl()
+		createWidget4Property(parent, JRDesignElement.PROPERTY_PRINT_WHEN_DETAIL_OVERFLOWS, false).getControl()
 				.setLayoutData(gd);
 
 		gd = new GridData();
 		gd.horizontalSpan = 2;
-		createWidget4Property(group, JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES).getControl().setLayoutData(gd);
+		createWidget4Property(parent, JRDesignElement.PROPERTY_PRINT_WHEN_GROUP_CHANGES).getControl().setLayoutData(gd);
 
-		createWidget4Property(group, JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION);
+		createWidget4Property(parent, JRDesignElement.PROPERTY_PRINT_WHEN_EXPRESSION);
 	}
 
 }

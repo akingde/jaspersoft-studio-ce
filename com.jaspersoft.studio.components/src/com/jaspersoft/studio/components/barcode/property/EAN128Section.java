@@ -2,10 +2,7 @@ package com.jaspersoft.studio.components.barcode.property;
 
 import net.sf.jasperreports.components.barcode4j.EAN128Component;
 
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -20,9 +17,8 @@ public class EAN128Section extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Group group = getWidgetFactory().createGroup(parent, "EAN128");
-		group.setLayout(new GridLayout(2, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite group = getWidgetFactory().createSection(parent, "EAN128",
+				false, 2);
 
 		createWidget4Property(group, EAN128Component.PROPERTY_CHECKSUM_MODE);
 	}

@@ -21,11 +21,7 @@ package com.jaspersoft.studio.components.chart.property.section.plot;
 
 import net.sf.jasperreports.charts.design.JRDesignPie3DPlot;
 
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -50,19 +46,8 @@ public class Pie3dPlot extends APlot {
 		section.createWidget4Property(parent,
 				JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR);
 
-		Section sectioncmp = section.getWidgetFactory().createSection(
-				parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
-						| ExpandableComposite.EXPANDED);
-		sectioncmp.setText("Item Label");
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		sectioncmp.setLayoutData(gd);
-
-		parent = section.getWidgetFactory().createComposite(sectioncmp);
-		parent.setLayout(new GridLayout(4, false));
-
-		sectioncmp.setClient(parent);
+		parent = section.getWidgetFactory().createSectionTitle(parent,
+				"Item Label", true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignPie3DPlot.PROPERTY_ITEM_LABEL, false);

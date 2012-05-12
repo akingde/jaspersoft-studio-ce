@@ -20,9 +20,8 @@ public class Barcode4jSection extends AbstractSection {
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 
-		Group group = getWidgetFactory().createGroup(parent, "Barcode 4J");
-		group.setLayout(new GridLayout(2, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite group = getWidgetFactory().createSection(parent,
+				"Barcode 4J", false, 2);
 
 		createWidget4Property(group,
 				BarcodeComponent.PROPERTY_PATTERN_EXPRESSION);

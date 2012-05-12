@@ -48,7 +48,12 @@ public class ChartPlotSection extends AbstractSection {
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(2, false));
+		createCommon(parent);
 
+		PlotFactory.createPlot(this, parent, tabbedPropertySheetPage);
+	}
+
+	public void createCommon(Composite parent) {
 		Composite group = getWidgetFactory().createComposite(parent);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -74,8 +79,6 @@ public class ChartPlotSection extends AbstractSection {
 				.getControl().setLayoutData(gd);
 
 		createWidget4Property(group, JRBaseChartPlot.PROPERTY_ORIENTATION);
-
-		PlotFactory.createPlot(this, parent, tabbedPropertySheetPage);
 	}
 
 	@Override

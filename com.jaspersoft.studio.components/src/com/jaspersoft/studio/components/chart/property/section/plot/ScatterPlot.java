@@ -22,11 +22,7 @@ package com.jaspersoft.studio.components.chart.property.section.plot;
 import net.sf.jasperreports.charts.design.JRDesignScatterPlot;
 
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
@@ -48,33 +44,19 @@ public class ScatterPlot extends APlot {
 
 	private void createCategory(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
-		Section sectioncmp = section.getWidgetFactory().createSection(
-				parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
-						| ExpandableComposite.EXPANDED);
-		sectioncmp.setText("Category Axis");
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		sectioncmp.setLayoutData(gd);
-
-		parent = section.getWidgetFactory().createComposite(sectioncmp);
-		parent.setLayout(new GridLayout(2, false));
-
-		sectioncmp.setClient(parent);
+		parent = section.getWidgetFactory().createSectionTitle(parent,
+				"Category Axis", true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LINE_COLOR);
 
-		Group group = section.getWidgetFactory().createGroup(parent, "Label");
-		group.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		Composite group = section.getWidgetFactory().createSection(parent,
+				"Label", false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_EXPRESSION);
 
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		section.createWidget4Property(group,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_FONT, false)
@@ -83,11 +65,8 @@ public class ScatterPlot extends APlot {
 		section.createWidget4Property(group,
 				JRDesignScatterPlot.PROPERTY_X_AXIS_LABEL_COLOR);
 
-		group = section.getWidgetFactory().createGroup(parent, "Tick");
-		group.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		group = section.getWidgetFactory().createSection(parent, "Tick", false,
+				2, 2);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -113,33 +92,19 @@ public class ScatterPlot extends APlot {
 
 	private void createValue(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
-		Section sectioncmp = section.getWidgetFactory().createSection(
-				parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
-						| ExpandableComposite.EXPANDED);
-		sectioncmp.setText("Value Axis");
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		sectioncmp.setLayoutData(gd);
-
-		parent = section.getWidgetFactory().createComposite(sectioncmp);
-		parent.setLayout(new GridLayout(2, false));
-
-		sectioncmp.setClient(parent);
+		parent = section.getWidgetFactory().createSectionTitle(parent,
+				"Value Axis", true, 2, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LINE_COLOR);
 
-		Group group = section.getWidgetFactory().createGroup(parent, "Label");
-		group.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		Composite group = section.getWidgetFactory().createSection(parent,
+				"Label", false, 2, 2);
 
 		section.createWidget4Property(group,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_EXPRESSION);
 
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		section.createWidget4Property(group,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_FONT, false)
@@ -148,11 +113,8 @@ public class ScatterPlot extends APlot {
 		section.createWidget4Property(group,
 				JRDesignScatterPlot.PROPERTY_Y_AXIS_LABEL_COLOR);
 
-		group = section.getWidgetFactory().createGroup(parent, "Tick");
-		group.setLayout(new GridLayout(2, false));
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		group.setLayoutData(gd);
+		group = section.getWidgetFactory().createSection(parent, "Tick", false,
+				2, 2);
 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
