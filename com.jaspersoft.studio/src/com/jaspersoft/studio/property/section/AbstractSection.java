@@ -71,8 +71,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	public void refresh() {
 		isRefreshing = true;
 		APropertyNode element = getElement();
-		element.getPropertyDescriptors();
 		if (element != null) {
+		element.getPropertyDescriptors();
 			for (Object key : widgets.keySet()) {
 				widgets.get(key).setData(element, element.getPropertyValue(key));
 			}

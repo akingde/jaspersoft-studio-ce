@@ -155,9 +155,10 @@
          <view
                id="org.eclipse.ui.views.PropertySheet"
                minimized="false"
-               ratio="0.66"
-               relationship="bottom"
-               relative="org.eclipse.ui.editorss">
+               ratio="0.25"
+               relationship="right"
+               relative="org.eclipse.ui.editorss"
+               visible="true">
          </view>
          <view
                id="org.eclipse.ui.views.ProblemView"
