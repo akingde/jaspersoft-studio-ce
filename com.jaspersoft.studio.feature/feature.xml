@@ -4,7 +4,7 @@
       label="Jaspersoft Studio"
       version="1.0.10"
       provider-name="Jaspersoft Corporation"
-      plugin="com.jaspersoft.studio"
+      plugin="net.sf.jasperreports"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32">
 
