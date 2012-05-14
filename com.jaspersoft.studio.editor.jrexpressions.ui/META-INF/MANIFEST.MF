@@ -5,7 +5,7 @@ Bundle-Vendor: Jaspersoft Corporation
 Bundle-Version: 1.0.10
 Bundle-SymbolicName: com.jaspersoft.studio.editor.jrexpressions.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: com.jaspersoft.studio.editor.jrexpressions,
+Require-Bundle: com.jaspersoft.studio.editor.jrexpressions;bundle-version="1.0.10",
  org.eclipse.xtext.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.builder,
