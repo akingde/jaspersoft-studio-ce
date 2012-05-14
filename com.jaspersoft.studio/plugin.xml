@@ -155,16 +155,22 @@
          <view
                id="org.eclipse.ui.views.PropertySheet"
                minimized="false"
-               ratio="0.25"
+               ratio="0.75"
                relationship="right"
-               relative="org.eclipse.ui.editorss"
-               visible="true">
+               relative="org.eclipse.ui.editorss">
          </view>
          <view
                id="org.eclipse.ui.views.ProblemView"
                minimized="false"
                relationship="stack"
                relative="org.eclipse.ui.views.PropertySheet">
+         </view>
+         <view
+               id="com.jaspersoft.studio.editor.preview.reportstate"
+               minimized="false"
+               ratio="0.75"
+               relationship="bottom"
+               relative="org.eclipse.ui.editorss">
          </view>
          <hiddenToolBarItem
                id="org.eclipse.ui.workbench.navigate">

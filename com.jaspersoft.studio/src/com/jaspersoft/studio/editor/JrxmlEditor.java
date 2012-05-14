@@ -29,7 +29,6 @@ import java.util.List;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsBuilder;
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
-import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
@@ -91,7 +90,6 @@ import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.AContributorAction;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -488,13 +486,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null) {
-			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance());
+			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
 			ProxyFileResolver resolver = new ProxyFileResolver();
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);
-			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
 		}
-		jrContext.put(IEditorContributor.KEY_FILE, file);
 		p = PropertiesHelper.getInstance(jrContext);
 		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, p);
 	}

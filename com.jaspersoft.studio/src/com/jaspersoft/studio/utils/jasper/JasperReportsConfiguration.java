@@ -19,14 +19,63 @@
  */
 package com.jaspersoft.studio.utils.jasper;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.util.FileResolver;
 import net.sf.jasperreports.engine.util.LocalJasperReportsContext;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jdt.core.JavaCore;
+
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
+import com.jaspersoft.studio.plugin.IEditorContributor;
+
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
-	public JasperReportsConfiguration(JasperReportsContext parent) {
+	public static final IScopeContext INSTANCE_SCOPE = InstanceScope.INSTANCE;
+	private IPreferencesService service;
+	private String qualifier;
+	private String[] lookupOrders;
+	private IScopeContext[] contexts;
+
+	public JasperReportsConfiguration(JasperReportsContext parent, IFile file) {
 		super(parent);
+		init(file);
+	}
+
+	public void init(IFile file) {
+		IProject project = null;
+		if (file != null) {
+			put(IEditorContributor.KEY_FILE, file);
+			project = file.getProject();
+		}
+		service = Platform.getPreferencesService();
+		qualifier = JaspersoftStudioPlugin.getUniqueIdentifier();
+		if (project != null) {
+			lookupOrders = new String[] { ProjectScope.SCOPE, InstanceScope.SCOPE };
+			contexts = new IScopeContext[] { new ProjectScope(project), INSTANCE_SCOPE };
+			try {
+				if (project.getNature(JavaCore.NATURE_ID) != null)
+					setClassLoader(JavaProjectClassLoader.instance(JavaCore.create(project)));
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		} else {
+			lookupOrders = new String[] { InstanceScope.SCOPE };
+			contexts = new IScopeContext[] { INSTANCE_SCOPE };
+		}
+		service.setDefaultLookupOrder(qualifier, null, lookupOrders);
+
 	}
 
 	public void put(String key, Object value) {
@@ -80,6 +129,35 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 		if (value != null && def != null && value.getClass().isAssignableFrom(def.getClass()))
 			return (T) value;
 		return def;
+	}
+
+	@Override
+	public Map<String, String> getProperties() {
+		Map<String, String> map = super.getProperties();
+
+		if (map == null)
+			map = new HashMap<String, String>();
+
+		for (String key : map.keySet()) {
+			String val = service.getString(qualifier, key, null, contexts);
+			if (val != null)
+				map.put(key, val);
+		}
+
+		return map;
+	}
+
+	public static final String PROPERTY_JRPROPERTY_PREFIX = "ireport.jrproperty.";
+
+	@Override
+	public String getProperty(String key) {
+		String val = service.getString(qualifier, key, null, contexts);
+		if (val == null)
+			val = service.getString(qualifier, PROPERTY_JRPROPERTY_PREFIX + key, null, contexts);
+
+		if (val == null)
+			return super.getProperty(key);
+		return val;
 	}
 
 }

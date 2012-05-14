@@ -64,7 +64,7 @@ public class DataAdapterWizard extends JSSWizard implements SelectionListener {
 	public DataAdapterWizard(ADataAdapterStorage storage) {
 		setWindowTitle(Messages.DataAdapterWizard_windowtitle);
 		this.storage = storage;
-		init(new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance()));
+		init(new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), null));
 	}
 
 	/**

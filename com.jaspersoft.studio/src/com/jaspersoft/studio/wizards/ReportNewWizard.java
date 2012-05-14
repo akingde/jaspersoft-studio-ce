@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRImage;
@@ -42,7 +41,6 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -52,7 +50,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.gef.EditPart;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -77,7 +74,6 @@ import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.property.dataset.wizard.DatasetWizard;
 import com.jaspersoft.studio.property.dataset.wizard.WizardDataSourcePage;
 import com.jaspersoft.studio.property.dataset.wizard.WizardFieldsGroupByPage;
@@ -136,7 +132,8 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		addPage(step4);
 	}
 
-	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance());
+	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
+			DefaultJasperReportsContext.getInstance(), null);
 	public static final String REPORT_FILE = "REPORTFILEWIZARD";
 	public static final String REPORT_DESIGN = "REPORTDESIGNWIZARD";
 
@@ -149,15 +146,9 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 
 			IFile file = r.getProject().getFile(
 					step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName());
-			jConfig.put(IEditorContributor.KEY_FILE, file);
+			jConfig.init(file);
 			jConfig.setJasperDesign(getJasperDesign());
-			IProject project = file.getProject();
-			try {
-				if (project.getNature(JavaCore.NATURE_ID) != null)
-					jConfig.setClassLoader(JavaProjectClassLoader.instance(JavaCore.create(project)));
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
+
 			if (getConfig() != null) {
 				getConfig().put(REPORT_FILE, file);
 				getConfig().put(REPORT_DESIGN, getJasperDesign());

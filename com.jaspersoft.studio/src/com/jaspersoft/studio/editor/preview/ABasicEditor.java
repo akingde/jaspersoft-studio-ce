@@ -238,13 +238,12 @@ public abstract class ABasicEditor extends EditorPart {
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null) {
-			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance());
+			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
 			ProxyFileResolver resolver = new ProxyFileResolver();
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);
 			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
 		}
-		jrContext.put(IEditorContributor.KEY_FILE, file);
 		ph = PropertiesHelper.getInstance(jrContext);
 		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, ph);
 	}

@@ -266,7 +266,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 
 	protected void getJrContext(IFile file) throws CoreException, JavaModelException {
 		if (jrContext == null) {
-			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance());
+			jrContext = new JasperReportsConfiguration(DefaultJasperReportsContext.getInstance(), file);
 			ProxyFileResolver resolver = new ProxyFileResolver();
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);

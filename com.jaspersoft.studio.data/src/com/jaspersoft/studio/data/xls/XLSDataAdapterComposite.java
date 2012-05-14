@@ -696,7 +696,7 @@ public class XLSDataAdapterComposite extends ADataAdapterComposite {
 			DataAdapterDescriptor da = getDataAdapter();
 
 			JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
-					DefaultJasperReportsContext.getInstance());
+					DefaultJasperReportsContext.getInstance(),null);
 			DataAdapterService das = DataAdapterServiceUtil
 					.getInstance(jConfig).getService(da.getDataAdapter());
 			jConfig.setJasperDesign(new JasperDesign());
