@@ -35,32 +35,26 @@ public class MongoDbDataAdapterImplementation extends AbstractDataAdapter implem
 
     private String password;
 
-    @Override
     public void setMongoURI(String mongoURI) {
         this.mongoURI = mongoURI;
     }
 
-    @Override
     public String getMongoURI() {
         return mongoURI;
     }
 
-    @Override
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
 
-    @Override
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }

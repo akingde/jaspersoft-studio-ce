@@ -8,7 +8,7 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext.xbase;bundle-version="2.1.0";resolution:=optional;visibility:=reexport,
  org.eclipse.xtext.generator;resolution:=optional,
  org.eclipse.emf.mwe2.launch;resolution:=optional,
- com.jaspersoft.studio;bundle-version="1.0.9"
+ com.jaspersoft.studio;bundle-version="1.0.10";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: com.jaspersoft.studio.editor.jrexpressions,
  com.jaspersoft.studio.editor.jrexpressions.formatting,
