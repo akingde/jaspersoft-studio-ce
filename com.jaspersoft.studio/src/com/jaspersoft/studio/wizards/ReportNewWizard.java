@@ -89,6 +89,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 import com.jaspersoft.studio.wizards.report.ReportGenerator;
 
 public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INewWizard {
+	private static final String NEW_REPORT_JRXML = "NEW_REPORT.jrxml";
 	private ReportTemplatesWizardPage step0;
 	private NewFileCreationWizard step1;
 	private WizardDataSourcePage step2;
@@ -122,7 +123,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		step1.setTitle(Messages.ReportNewWizard_0);
 		step1.setDescription(Messages.ReportNewWizardPage_description);
 		step1.setFileExtension("jrxml");//$NON-NLS-1$
-		step1.setFileName("NEW_REPORT.jrxml");//$NON-NLS-1$
+		setupNewFileName();
 		addPage(step1);
 
 		step2 = new WizardDataSourcePage(null, jConfig);
@@ -133,6 +134,28 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 
 		step4 = new WizardFieldsGroupByPage();
 		addPage(step4);
+	}
+
+	public void setupNewFileName() {
+		String filename = NEW_REPORT_JRXML;
+		if (selection != null) {
+			if (selection instanceof TreeSelection) {
+				TreeSelection s = (TreeSelection) selection;
+				if (s.getFirstElement() instanceof IFile) {
+					IFile file = (IFile) s.getFirstElement();
+
+					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+
+					int i = 1;
+					while (file.getProject().getFile(f).exists()) {
+						filename = "NEW_REPORT_" + i + ".jrxml";
+						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+						i++;
+					}
+				}
+			}
+			step1.setFileName(filename);
+		}
 	}
 
 	private JasperReportsConfiguration jConfig = new JasperReportsConfiguration(
@@ -402,7 +425,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 				try {
 					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(p.getFullPath()) }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_REPORT_JRXML) }));
 						return;
 					}
 				} catch (CoreException e) {
@@ -413,7 +436,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 				try {
 					if (p.isAccessible()) {
 						p.open(progressMonitor);
-						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(p.getFullPath()) }));
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile("file") }));
 						return;
 					}
 				} catch (CoreException e) {
