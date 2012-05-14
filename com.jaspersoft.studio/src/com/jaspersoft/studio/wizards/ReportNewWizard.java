@@ -41,15 +41,18 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -391,6 +394,30 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 						this.selection = new TreeSelection(new TreePath(new Object[] { ((FileEditorInput) ein).getFile() }));
 						return;
 					}
+				}
+			}
+			IProgressMonitor progressMonitor = new NullProgressMonitor();
+			IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			for (IProject p : prjs) {
+				try {
+					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+						p.open(progressMonitor);
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(p.getFullPath()) }));
+						return;
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+			for (IProject p : prjs) {
+				try {
+					if (p.isAccessible()) {
+						p.open(progressMonitor);
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(p.getFullPath()) }));
+						return;
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
 				}
 			}
 		}
