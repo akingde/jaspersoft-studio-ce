@@ -101,14 +101,21 @@ public class FileDataAdapterStorage extends ADataAdapterStorage {
 												if (res.getProject() != project)
 													return true;
 												if (res.getType() == IResource.FILE) {
-													IFile f = (IFile) res;
+													final IFile f = (IFile) res;
 													if (f.getName().endsWith(".xml")) {
 														switch (delta.getKind()) {
 														case IResourceDelta.ADDED:
 															checkFile(f);
 															break;
 														case IResourceDelta.REMOVED:
-															delete(f.getProjectRelativePath().toPortableString());
+															if (f.getName().endsWith(".xml")) {
+																Display.getDefault().asyncExec(new Runnable() {
+
+																	public void run() {
+																		removeDataAdapter(f.getProjectRelativePath().toPortableString());
+																	}
+																});
+															}
 															break;
 														case IResourceDelta.CHANGED:
 															checkFile(f);

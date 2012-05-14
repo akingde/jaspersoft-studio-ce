@@ -112,6 +112,7 @@ public class DataAdapterManager {
 		ADataAdapterStorage s = storages.get(key);
 		if (s == null) {
 			s = new FileDataAdapterStorage(key);
+			s.getDataAdapterDescriptors();
 			storages.put(key, s);
 		}
 		return s;
