@@ -711,31 +711,20 @@ Public License instead of this License.  But first, please read
          search-location="both"/>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.ui.editors"/>
-      <import plugin="org.eclipse.ui.ide" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.views" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.cheatsheets"/>
-      <import plugin="org.eclipse.core.runtime" version="3.4.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.core.filesystem"/>
-      <import plugin="org.eclipse.jdt.core"/>
-      <import plugin="org.eclipse.jdt.ui" version="3.5.2" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.gef" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="net.sf.jasperreports"/>
       <import plugin="org.eclipse.help.ui" version="3.4.1" match="greaterOrEqual"/>
-      <import plugin="org.apache.xerces" version="2.9.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.xml.resolver" version="1.2.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.xml.serializer" version="2.7.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.databinding"/>
-      <import plugin="org.eclipse.jface.databinding"/>
-      <import plugin="org.eclipse.core.databinding.beans"/>
       <import plugin="org.eclipse.ui.console"/>
       <import plugin="org.mortbay.jetty.server" version="6.1.23" match="greaterOrEqual"/>
       <import plugin="org.mortbay.jetty.util" version="6.1.23" match="greaterOrEqual"/>
       <import plugin="javax.servlet" version="2.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.forms" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="com.jaspersoft.studio.editor.jrexpressions"/>
       <import plugin="org.eclipse.xtext.ui"/>
       <import plugin="org.eclipse.xtext.ui.shared"/>
       <import plugin="org.eclipse.xtext.builder"/>
@@ -743,7 +732,7 @@ Public License instead of this License.  But first, please read
       <import plugin="org.eclipse.xtext.ui.codetemplates.ui"/>
       <import plugin="de.itemis.xtext.utils.jface"/>
       <import plugin="org.apache.log4j"/>
-      <import plugin="com.jaspersoft.studio.editor.jrexpressions"/>
+      <import plugin="org.eclipse.ui.views" version="3.4.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
