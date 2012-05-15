@@ -72,7 +72,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		isRefreshing = true;
 		APropertyNode element = getElement();
 		if (element != null) {
-		element.getPropertyDescriptors();
+			element.getPropertyDescriptors();
 			for (Object key : widgets.keySet()) {
 				widgets.get(key).setData(element, element.getPropertyValue(key));
 			}
@@ -85,29 +85,33 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	public ASPropertyWidget createWidget4Property(Composite composite, Object property, boolean showLabel) {
-		IPropertyDescriptor[] pds = getElement().getPropertyDescriptors();
-		for (IPropertyDescriptor pd : pds) {
-			if (pd.getId().equals(property)) {
-				CLabel label = null;
-				if (showLabel)
-					label = getWidgetFactory().createCLabel(composite, pd.getDisplayName(), SWT.NONE);
-				ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
-				if (widget != null) {
-					widget.setLabel(label);
-					widgets.put(pd.getId(), widget);
-					return widget;
+		if (getElement() != null) {
+			IPropertyDescriptor[] pds = getElement().getPropertyDescriptors();
+			for (IPropertyDescriptor pd : pds) {
+				if (pd.getId().equals(property)) {
+					CLabel label = null;
+					if (showLabel)
+						label = getWidgetFactory().createCLabel(composite, pd.getDisplayName(), SWT.NONE);
+					ASPropertyWidget widget = SPWidgetFactory.createWidget(composite, this, pd);
+					if (widget != null) {
+						widget.setLabel(label);
+						widgets.put(pd.getId(), widget);
+						return widget;
+					}
+					break;
 				}
-				break;
 			}
 		}
 		return null;
 	}
 
 	public IPropertyDescriptor getPropertyDesriptor(Object property) {
-		IPropertyDescriptor[] pds = getElement().getPropertyDescriptors();
-		for (IPropertyDescriptor pd : pds) {
-			if (pd.getId().equals(property)) {
-				return pd;
+		if (getElement() != null) {
+			IPropertyDescriptor[] pds = getElement().getPropertyDescriptors();
+			for (IPropertyDescriptor pd : pds) {
+				if (pd.getId().equals(property)) {
+					return pd;
+				}
 			}
 		}
 		return null;

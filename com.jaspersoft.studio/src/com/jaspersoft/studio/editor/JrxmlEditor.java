@@ -346,10 +346,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			try { // just go thru the model, to look what happend with our markers
 				xml2model();
 				resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-			} catch (JRException e) {
-				handleJRException(getEditorInput(), e, true);
-			} catch (CoreException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				xmlEditor.doSave(monitor);
+				return;
 			}
 		}
 		if (getFileExtension(getEditorInput()).equals("")) { //$NON-NLS-1$
@@ -533,7 +532,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @param mute
 	 *          the mute
 	 */
-	public void handleJRException(IEditorInput editorInput, final JRException e, boolean mute) {
+	public void handleJRException(IEditorInput editorInput, final Exception e, boolean mute) {
 		if (!mute) {
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
@@ -601,7 +600,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				if (activePage == PAGE_XMLEDITOR && !xmlFresh) {
 					try {
 						xml2model();
-					} catch (JRException e) {
+					} catch (Exception e) {
 						handleJRException(getEditorInput(), e, false);
 					}
 				}
@@ -619,7 +618,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				if (activePage == PAGE_XMLEDITOR)
 					try {
 						xml2model();
-					} catch (JRException e) {
+					} catch (Exception e) {
 						handleJRException(getEditorInput(), e, false);
 					}
 				else {
@@ -651,19 +650,19 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * @throws JRException
 	 *           the jR exception
 	 */
-	private void xml2model() throws JRException {
+	private void xml2model() throws Exception {
 		InputStream in = null;
-		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 		try {
-			in = getXML(getEditorInput(), file.getCharset(true), file.getContents(), version);
+			IDocumentProvider dp = xmlEditor.getDocumentProvider();
+			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
+
+			in = new ByteArrayInputStream(doc.get().getBytes());
 			InputSource is = new InputSource(new InputStreamReader(in, "UTF-8"));
 
 			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
 			jrContext.setJasperDesign(jd);
 			setModel(ReportFactory.createReport(jrContext));
 			modelFresh = true;
-		} catch (Exception e) {
-			UIUtils.showError(e);
 		} finally {
 			try {
 				in.close();
