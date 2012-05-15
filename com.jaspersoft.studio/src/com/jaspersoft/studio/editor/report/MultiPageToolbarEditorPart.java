@@ -51,7 +51,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
@@ -265,7 +264,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 					e.doit = true;
 					e.detail = SWT.TRAVERSE_NONE;
 					Control control = newContainer.getParent();
-					control.traverse(detail, new Event());
+					control.traverse(detail);
 				}
 			}
 		});

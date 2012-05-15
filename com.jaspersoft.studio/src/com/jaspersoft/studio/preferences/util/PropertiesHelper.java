@@ -45,7 +45,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class PropertiesHelper {
 	public static final String JRCONTEXT_PREFERENCE_HELPER_KEY = "preferenceHelper";
-	public static final IScopeContext INSTANCE_SCOPE = InstanceScope.INSTANCE;
+	public static final IScopeContext INSTANCE_SCOPE =  new InstanceScope();
 	private IPreferencesService service;
 	private String qualifier;
 	private String[] lookupOrders;
