@@ -31,29 +31,38 @@ import net.sf.jasperreports.engine.xml.JRXmlTemplateWriter;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.gef.EditPart;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 /*
  * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container
@@ -63,6 +72,7 @@ import com.jaspersoft.studio.messages.Messages;
  */
 
 public class StyleTemplateNewWizard extends Wizard implements INewWizard {
+	private static final String NEW_STYLE_JRTX = "NEW_STYLE.jrtx";
 	private WizardNewFileCreationPage step1;
 	private ISelection selection;
 
@@ -83,9 +93,30 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		step1.setTitle(Messages.StyleTemplateNewWizard_title);
 		step1.setDescription(Messages.StyleTemplateNewWizard_description);
 		step1.setFileExtension("jrtx");//$NON-NLS-1$
-		step1.setFileName("NEW_STYLE.jrtx");//$NON-NLS-1$
+		setupNewFileName();
 		addPage(step1);
+	}
 
+	public void setupNewFileName() {
+		String filename = NEW_STYLE_JRTX;
+		if (selection != null) {
+			if (selection instanceof TreeSelection) {
+				TreeSelection s = (TreeSelection) selection;
+				if (s.getFirstElement() instanceof IFile) {
+					IFile file = (IFile) s.getFirstElement();
+
+					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+
+					int i = 1;
+					while (file.getProject().getFile(f).exists()) {
+						filename = "NEW_STYLE" + i + ".jrtx";
+						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+						i++;
+					}
+				}
+			}
+			step1.setFileName(filename);
+		}
 	}
 
 	/**
@@ -195,12 +226,42 @@ public class StyleTemplateNewWizard extends Wizard implements INewWizard {
 		throw new CoreException(status);
 	}
 
-	/**
-	 * We will accept the selection in the workbench to see if we can initialize from it.
-	 * 
-	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
-	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		if (selection instanceof StructuredSelection) {
+			for (Object obj : selection.toList()) {
+				if (obj instanceof EditPart) {
+					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor().getEditorInput();
+					if (ein instanceof FileEditorInput) {
+						this.selection = new TreeSelection(new TreePath(new Object[] { ((FileEditorInput) ein).getFile() }));
+						return;
+					}
+				}
+			}
+			IProgressMonitor progressMonitor = new NullProgressMonitor();
+			IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			for (IProject p : prjs) {
+				try {
+					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+						p.open(progressMonitor);
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_STYLE_JRTX) }));
+						return;
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+			for (IProject p : prjs) {
+				try {
+					if (p.isAccessible()) {
+						p.open(progressMonitor);
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile("file") }));
+						return;
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		this.selection = selection;
 	}
 }

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Data
+Bundle-Name: Data Adapters
 Bundle-SymbolicName: com.jaspersoft.studio.data;singleton:=true
 Bundle-Version: 1.1.0
 Bundle-Activator: com.jaspersoft.studio.data.Activator

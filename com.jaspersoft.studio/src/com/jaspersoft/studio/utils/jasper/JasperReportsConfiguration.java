@@ -42,7 +42,7 @@ import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.plugin.IEditorContributor;
 
 public class JasperReportsConfiguration extends LocalJasperReportsContext {
-	public static final IScopeContext INSTANCE_SCOPE = InstanceScope.INSTANCE;
+	public static final IScopeContext INSTANCE_SCOPE = new InstanceScope();
 	private IPreferencesService service;
 	private String qualifier;
 	private String[] lookupOrders;

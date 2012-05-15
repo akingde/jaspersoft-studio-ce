@@ -20,7 +20,6 @@
 package com.jaspersoft.studio.editor.preview;
 
 import net.sf.jasperreports.eclipse.builder.JasperReportsNature;
-import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
 import org.eclipse.core.resources.IFile;
@@ -49,7 +48,6 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.editor.JrxmlEditor;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -242,7 +240,6 @@ public abstract class ABasicEditor extends EditorPart {
 			ProxyFileResolver resolver = new ProxyFileResolver();
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);
-			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
 		}
 		ph = PropertiesHelper.getInstance(jrContext);
 		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, ph);

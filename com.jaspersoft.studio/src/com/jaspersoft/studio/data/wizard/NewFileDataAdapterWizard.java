@@ -26,21 +26,29 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.gef.EditPart;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -48,6 +56,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.FileEditorInput;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.DataAdapterEditorPart;
@@ -56,8 +65,11 @@ import com.jaspersoft.studio.data.DataAdapterManager;
 import com.jaspersoft.studio.data.wizard.pages.DataAdapterEditorPage;
 import com.jaspersoft.studio.data.wizard.pages.DataAdaptersListPage;
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.utils.SelectionHelper;
 
 public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
+	private static final String NEW_DATAADAPTER_XML = "NEW_DATAADAPTER.xml";
+
 	private ISelection selection;
 
 	private DataAdapterFactory selectedFactory = null;
@@ -92,7 +104,7 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 		step1.setTitle("DataAdapter File");
 		step1.setDescription("Create a DataAdapter in a file");
 		step1.setFileExtension("xml");//$NON-NLS-1$
-		step1.setFileName("NEW_DATAADAPTER.xml");//$NON-NLS-1$
+		setupNewFileName();
 		addPage(step1);
 
 		if (dataAdapter == null) {
@@ -105,6 +117,28 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 			dataAdapterEditorPage.setEditMode(true);
 		}
 		addPage(dataAdapterEditorPage);
+	}
+
+	public void setupNewFileName() {
+		String filename = NEW_DATAADAPTER_XML;
+		if (selection != null) {
+			if (selection instanceof TreeSelection) {
+				TreeSelection s = (TreeSelection) selection;
+				if (s.getFirstElement() instanceof IFile) {
+					IFile file = (IFile) s.getFirstElement();
+
+					String f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+
+					int i = 1;
+					while (file.getProject().getFile(f).exists()) {
+						filename = "NEW_DATAADAPTER" + i + ".xml";
+						f = file.getProjectRelativePath().removeLastSegments(1).toOSString() + "/" + filename;
+						i++;
+					}
+				}
+			}
+			step1.setFileName(filename);
+		}
 	}
 
 	@Override
@@ -232,6 +266,41 @@ public class NewFileDataAdapterWizard extends Wizard implements INewWizard {
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		if (selection instanceof StructuredSelection) {
+			for (Object obj : selection.toList()) {
+				if (obj instanceof EditPart) {
+					IEditorInput ein = SelectionHelper.getActiveJRXMLEditor().getEditorInput();
+					if (ein instanceof FileEditorInput) {
+						this.selection = new TreeSelection(new TreePath(new Object[] { ((FileEditorInput) ein).getFile() }));
+						return;
+					}
+				}
+			}
+			IProgressMonitor progressMonitor = new NullProgressMonitor();
+			IProject[] prjs = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			for (IProject p : prjs) {
+				try {
+					if (p.isAccessible() && p.getNature(JavaCore.NATURE_ID) != null) {
+						p.open(progressMonitor);
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile(NEW_DATAADAPTER_XML) }));
+						return;
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+			for (IProject p : prjs) {
+				try {
+					if (p.isAccessible()) {
+						p.open(progressMonitor);
+						this.selection = new TreeSelection(new TreePath(new Object[] { p.getFile("file") }));
+						return;
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		this.selection = selection;
 	}
 }

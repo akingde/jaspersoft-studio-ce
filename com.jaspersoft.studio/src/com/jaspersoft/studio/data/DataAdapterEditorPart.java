@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.eclipse.util.ClassLoaderUtil;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 
@@ -55,7 +54,6 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.jaspersoft.studio.data.storage.FileDataAdapterStorage;
 import com.jaspersoft.studio.editor.preview.ABasicEditor;
 import com.jaspersoft.studio.messages.Messages;
-import com.jaspersoft.studio.plugin.IEditorContributor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 import com.jaspersoft.studio.utils.SelectionHelper;
 import com.jaspersoft.studio.utils.UIUtils;
@@ -213,7 +211,6 @@ public class DataAdapterEditorPart extends ABasicEditor {
 			ProxyFileResolver resolver = new ProxyFileResolver();
 			resolver.addResolver(SelectionHelper.getFileResolver(file));
 			jrContext.setFileResolver(resolver);
-			jrContext.setClassLoader(ClassLoaderUtil.getClassLoader4Project(null, file.getProject()));
 		}
 		p = PropertiesHelper.getInstance(jrContext);
 		jrContext.put(PropertiesHelper.JRCONTEXT_PREFERENCE_HELPER_KEY, p);
