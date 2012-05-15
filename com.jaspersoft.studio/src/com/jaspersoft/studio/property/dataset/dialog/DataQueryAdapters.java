@@ -246,7 +246,7 @@ public abstract class DataQueryAdapters {
 		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
-				jDesign.setProperty(MReport.DEFAULT_DATAADAPTER, da.getName());
+				newdataset.setProperty(MReport.DEFAULT_DATAADAPTER, da.getName());
 				currentDesigner.setDataAdapter(da);
 			}
 
@@ -350,7 +350,8 @@ public abstract class DataQueryAdapters {
 			Object obj = mreport.getParameter(MReport.DEFAULT_DATAADAPTER);
 			if (obj != null && obj instanceof DataAdapterDescriptor) {
 				dscombo.setSelected((DataAdapterDescriptor) obj);
-				currentDesigner.setDataAdapter((DataAdapterDescriptor) obj);
+				if (currentDesigner != null)
+					currentDesigner.setDataAdapter((DataAdapterDescriptor) obj);
 			}
 		}
 	}
