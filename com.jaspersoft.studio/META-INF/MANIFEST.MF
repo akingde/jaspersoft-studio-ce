@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio
 Bundle-SymbolicName: com.jaspersoft.studio;singleton:=true
-Bundle-Version: 1.0.10
+Bundle-Version: 1.1.0
 Bundle-Activator: com.jaspersoft.studio.JaspersoftStudioPlugin
 Bundle-Vendor: Jaspersoft Corporation
 Bundle-Localization: plugin
@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui.cheatsheets;visibility:=reexport,
  org.eclipse.core.filesystem;visibility:=reexport,
  org.eclipse.gef;bundle-version="3.5.0";visibility:=reexport,
  net.sf.jasperreports;visibility:=reexport,
- com.jaspersoft.studio.properties;bundle-version="1.0.10";visibility:=reexport,
+ com.jaspersoft.studio.properties;bundle-version="1.1.0";visibility:=reexport,
  org.eclipse.help.ui;bundle-version="3.4.1";visibility:=reexport,
  org.eclipse.ui.console,
  org.mortbay.jetty.server;bundle-version="6.1.23",

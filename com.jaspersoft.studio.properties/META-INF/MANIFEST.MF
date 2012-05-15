@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.jaspersoft.studio.properties
 Bundle-SymbolicName: com.jaspersoft.studio.properties;singleton:=true
-Bundle-Version: 1.0.10
+Bundle-Version: 1.1.0
 Bundle-Activator: com.jaspersoft.studio.properties.Activator
 Bundle-Vendor: Jaspersoft Corporation
 Require-Bundle: org.eclipse.ui;visibility:=reexport,

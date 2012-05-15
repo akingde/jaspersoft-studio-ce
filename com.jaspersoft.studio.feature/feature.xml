@@ -2,7 +2,7 @@
 <feature
       id="com.jaspersoft.studio.feature"
       label="Jaspersoft Studio"
-      version="1.0.10"
+      version="1.1.0"
       provider-name="Jaspersoft Corporation"
       plugin="net.sf.jasperreports"
       os="linux,macosx,win32"
@@ -739,77 +739,77 @@ Public License instead of this License.  But first, please read
          id="com.jaspersoft.studio"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.doc"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.html"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.components"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.server"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data.hive"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.data.mongodb"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.editor.jrexpressions"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.editor.jrexpressions.ui"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
    <plugin
          id="com.jaspersoft.studio.properties"
          download-size="0"
          install-size="0"
-         version="1.0.10"
+         version="1.1.0"
          unpack="false"/>
 
 </feature>
