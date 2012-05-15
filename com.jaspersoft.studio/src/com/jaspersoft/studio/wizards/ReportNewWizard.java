@@ -167,7 +167,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (page == step0)
 			step1.validatePage();
-		if (page == step2) {
+		if (page == step1) {
 			IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
 
 			IFile file = r.getProject().getFile(
@@ -180,6 +180,20 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 				getConfig().put(REPORT_DESIGN, getJasperDesign());
 			}
 			step2.setFile(jConfig);
+		}
+		if (page == step2) {
+			// IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(step1.getContainerFullPath());
+			//
+			// IFile file = r.getProject().getFile(
+			// step1.getContainerFullPath() + Messages.ReportNewWizard_1 + step1.getFileName());
+			// jConfig.init(file);
+			// jConfig.setJasperDesign(getJasperDesign());
+			//
+			// if (getConfig() != null) {
+			// getConfig().put(REPORT_FILE, file);
+			// getConfig().put(REPORT_DESIGN, getJasperDesign());
+			// }
+			// step2.setFile(jConfig);
 			run(true, true, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					monitor.beginTask("Getting fields from datasource", IProgressMonitor.UNKNOWN);

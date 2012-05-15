@@ -246,6 +246,7 @@ public abstract class DataQueryAdapters {
 		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
 			public void runReport(DataAdapterDescriptor da) {
+				jDesign.setProperty(MReport.DEFAULT_DATAADAPTER, da.getName());
 				currentDesigner.setDataAdapter(da);
 			}
 
