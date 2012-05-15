@@ -81,7 +81,7 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 				List<JRDesignField> columns = new ArrayList<JRDesignField>(cc);
 				for (int i = 1; i <= cc; i++) {
 					JRDesignField field = new JRDesignField();
-					String name = metaData.getColumnName(i);
+					String name = metaData.getColumnLabel(i);
 					field.setName(name);
 
 					field.setValueClassName(getJdbcTypeClass(metaData, i));
