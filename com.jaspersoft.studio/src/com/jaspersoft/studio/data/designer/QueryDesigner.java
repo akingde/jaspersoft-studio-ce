@@ -53,7 +53,7 @@ public class QueryDesigner extends AQueryDesigner {
 
 	protected Text control;
 	private Composite tbCompo;
-	private Button btnAuto;
+	// private Button btnAuto;
 	private Button btn;
 
 	public QueryDesigner() {
@@ -95,15 +95,15 @@ public class QueryDesigner extends AQueryDesigner {
 	}
 
 	public Control createToolbar(Composite parent) {
-		tbCompo = new Composite(parent, SWT.NONE);
+		tbCompo = new Composite(parent, SWT.RIGHT_TO_LEFT);
 		tbCompo.setBackgroundMode(SWT.INHERIT_FORCE);
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		tbCompo.setLayout(layout);
 
-		btnAuto = new Button(tbCompo, SWT.CHECK);
-		btnAuto.setText("Automatically Retrive Fields");
+		// btnAuto = new Button(tbCompo, SWT.CHECK);
+		// btnAuto.setText("Automatically Retrive Fields");
 
 		btn = new Button(tbCompo, SWT.PUSH);
 		btn.setText("Read Fields");
@@ -127,7 +127,7 @@ public class QueryDesigner extends AQueryDesigner {
 	}
 
 	protected void setFieldProviderEnabled(boolean enable) {
-		btnAuto.setEnabled(enable);
+		// btnAuto.setEnabled(enable);
 		btn.setEnabled(enable);
 	}
 }
