@@ -121,6 +121,7 @@ public class TabbedPropertyComposite extends Composite {
 		scrolledComposite.setAlwaysShowScrollBars(false);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setMinSize(300, 1800);
 	}
 
 	/**
