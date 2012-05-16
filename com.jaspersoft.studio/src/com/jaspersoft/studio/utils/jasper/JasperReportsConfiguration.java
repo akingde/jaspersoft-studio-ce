@@ -22,6 +22,7 @@ package com.jaspersoft.studio.utils.jasper;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.jasperreports.eclipse.builder.JasperReportCompiler;
 import net.sf.jasperreports.eclipse.util.JavaProjectClassLoader;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -66,7 +67,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 			contexts = new IScopeContext[] { new ProjectScope(project), INSTANCE_SCOPE };
 			try {
 				if (project.getNature(JavaCore.NATURE_ID) != null)
-					setClassLoader(JavaProjectClassLoader.instance(JavaCore.create(project)));
+					setClassLoader(JavaProjectClassLoader.instance(JavaCore.create(project), this.getClass().getClassLoader()));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
@@ -101,6 +102,7 @@ public class JasperReportsConfiguration extends LocalJasperReportsContext {
 	public void setClassLoader(ClassLoader classLoader) {
 		this.classLoader = classLoader;
 		super.setClassLoader(classLoader);
+		put(JasperReportCompiler.CURRENTCLASSLOADER, classLoader);
 	}
 
 	public FileResolver getFileResolver() {

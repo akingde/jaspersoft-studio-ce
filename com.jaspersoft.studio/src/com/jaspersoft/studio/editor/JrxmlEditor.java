@@ -365,6 +365,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		reportContainer.doSave(monitor);
 		previewEditor.doSave(monitor);
 		firePropertyChange(PROP_DIRTY);
+		modelFresh = true;
+		xmlFresh = true;
 	}
 
 	/**
@@ -679,6 +681,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Model2xml.
 	 */
 	private void model2xml(String version) {
+		isRefreshing = true;
 		try {
 			JasperDesign report = getJasperDesign();
 			// save the last used dataadapter in the report
@@ -695,6 +698,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			String xml = JRXmlWriterHelper.writeReport(report, "UTF-8", version);
 			IDocumentProvider dp = xmlEditor.getDocumentProvider();
 			IDocument doc = dp.getDocument(xmlEditor.getEditorInput());
+
 			doc.set(xml);
 			xmlFresh = true;
 		} catch (final Exception e) {
@@ -703,8 +707,17 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					UIUtils.showError(e);
 				}
 			});
+		} finally {
+			isRefreshing = false;
 		}
+	}
 
+	private boolean isRefreshing = false;
+
+	@Override
+	protected void handlePropertyChange(int propertyId) {
+		if (!isRefreshing)
+			super.handlePropertyChange(propertyId);
 	}
 
 	protected JasperDesign getJasperDesign() {
