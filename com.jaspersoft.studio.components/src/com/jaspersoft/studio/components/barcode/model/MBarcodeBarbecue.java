@@ -37,6 +37,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import com.jaspersoft.studio.components.barcode.BarcodeNodeIconDescriptor;
 import com.jaspersoft.studio.components.barcode.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.IRotatable;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
@@ -49,7 +50,7 @@ import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 /*
  * The Class MBarcode.
  */
-public class MBarcodeBarbecue extends MBarcode {
+public class MBarcodeBarbecue extends MBarcode implements IRotatable {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	/** The icon descriptor. */
 	private static IIconDescriptor iconDescriptor;

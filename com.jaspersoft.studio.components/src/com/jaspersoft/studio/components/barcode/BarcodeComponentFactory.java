@@ -29,6 +29,7 @@ import net.sf.jasperreports.components.barcode4j.DataMatrixComponent;
 import net.sf.jasperreports.components.barcode4j.EAN128Component;
 import net.sf.jasperreports.components.barcode4j.EAN13Component;
 import net.sf.jasperreports.components.barcode4j.EAN8Component;
+import net.sf.jasperreports.components.barcode4j.FourStateBarcodeComponent;
 import net.sf.jasperreports.components.barcode4j.Interleaved2Of5Component;
 import net.sf.jasperreports.components.barcode4j.PDF417Component;
 import net.sf.jasperreports.components.barcode4j.POSTNETComponent;
@@ -57,6 +58,7 @@ import com.jaspersoft.studio.components.barcode.model.barcode4j.MDataMatrix;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN128;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN13;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MEAN8;
+import com.jaspersoft.studio.components.barcode.model.barcode4j.MFourStateBarcode;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MInterleaved2Of5;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MPDF417;
 import com.jaspersoft.studio.components.barcode.model.barcode4j.MPOSTNET;
@@ -88,18 +90,21 @@ public class BarcodeComponentFactory implements IComponentFactory {
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof CodabarComponent)
 				return new MCodabar(parent,
 						(JRDesignComponentElement) jrObject, newIndex);
+
+			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof EAN128Component)
+				return new MEAN128(parent, (JRDesignComponentElement) jrObject,
+						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof Code128Component)
 				return new MCode128(parent,
 						(JRDesignComponentElement) jrObject, newIndex);
+
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof Code39Component)
 				return new MCode39(parent, (JRDesignComponentElement) jrObject,
 						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof DataMatrixComponent)
 				return new MDataMatrix(parent,
 						(JRDesignComponentElement) jrObject, newIndex);
-			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof EAN128Component)
-				return new MEAN128(parent, (JRDesignComponentElement) jrObject,
-						newIndex);
+
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof EAN13Component)
 				return new MEAN13(parent, (JRDesignComponentElement) jrObject,
 						newIndex);
@@ -115,18 +120,24 @@ public class BarcodeComponentFactory implements IComponentFactory {
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof POSTNETComponent)
 				return new MPOSTNET(parent,
 						(JRDesignComponentElement) jrObject, newIndex);
+
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof RoyalMailCustomerComponent)
 				return new MRoyalMail(parent,
 						(JRDesignComponentElement) jrObject, newIndex);
+			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof USPSIntelligentMailComponent)
+				return new MUSPSIntelligent(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
+			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof FourStateBarcodeComponent)
+				return new MFourStateBarcode(parent,
+						(JRDesignComponentElement) jrObject, newIndex);
+
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof UPCAComponent)
 				return new MUPCA(parent, (JRDesignComponentElement) jrObject,
 						newIndex);
 			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof UPCEComponent)
 				return new MUPCE(parent, (JRDesignComponentElement) jrObject,
 						newIndex);
-			else if (((JRDesignComponentElement) jrObject).getComponent() instanceof USPSIntelligentMailComponent)
-				return new MUSPSIntelligent(parent,
-						(JRDesignComponentElement) jrObject, newIndex);
+
 		}
 		return null;
 	}
@@ -196,7 +207,8 @@ public class BarcodeComponentFactory implements IComponentFactory {
 		return null;
 	}
 
-	public AbstractVisualEditor getEditor(Object node, JasperReportsConfiguration jrContext) {
+	public AbstractVisualEditor getEditor(Object node,
+			JasperReportsConfiguration jrContext) {
 		return null;
 	}
 

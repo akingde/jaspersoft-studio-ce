@@ -199,7 +199,6 @@ public class MBarcode4j extends MBarcode {
 		orientationD.setCategory(Messages.common_properties_category);
 		patternExprD.setCategory(Messages.common_properties_category);
 		textPositionD.setCategory(Messages.common_properties_category);
-
 	}
 
 	@Override
