@@ -686,36 +686,9 @@ Public License instead of this License.  But first, please read
       <discovery label="Itemis JFace Xtext Integration Update Site" url="http://updates.yakindu.com/indigo/milestones/"/>
    </url>
 
-   <includes
-         id="de.itemis.xtext.utils.jface"
-         version="0.0.0"
-         search-location="both"/>
-
-   <includes
-         id="org.eclipse.xtext.runtime"
-         version="0.0.0"
-         search-location="both"/>
-
-   <includes
-         id="org.eclipse.xtext.ui"
-         version="0.0.0"
-         search-location="both"/>
-
-   <includes
-         id="org.eclipse.xtext.xtext.ui"
-         version="0.0.0"
-         search-location="both"/>
-
    <requires>
-      <import plugin="com.jaspersoft.studio" version="1.1.0" match="greaterOrEqual"/>
-      <import plugin="com.jaspersoft.studio.editor.jrexpressions"/>
-      <import plugin="org.eclipse.xtext.ui"/>
-      <import plugin="org.eclipse.xtext.ui.shared"/>
-      <import plugin="org.eclipse.xtext.builder"/>
-      <import plugin="org.eclipse.xtext.common.types.ui"/>
-      <import plugin="org.eclipse.xtext.ui.codetemplates.ui"/>
-      <import plugin="de.itemis.xtext.utils.jface"/>
-      <import plugin="org.apache.log4j"/>
+      <import feature="de.itemis.xtext.utils.jface" version="1.0.0.201205141449" match="perfect"/>
+      <import feature="org.eclipse.xtext.ui" version="2.2.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin
