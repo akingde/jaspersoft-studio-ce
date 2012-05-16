@@ -157,6 +157,7 @@ public class MTable extends MGraphicElement implements IContainer,
 
 	@Override
 	public void setGroupItems(String[] items) {
+		super.setGroupItems(items);
 		// if (mCrosstabDataset != null)
 		// mCrosstabDataset.setGroupItems(items);
 	}

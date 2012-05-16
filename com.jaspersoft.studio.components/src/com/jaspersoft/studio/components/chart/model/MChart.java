@@ -342,6 +342,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 
 	@Override
 	public void setGroupItems(String[] items) {
+		super.setGroupItems(items);
 		if (evaluationGroupD != null)
 			evaluationGroupD.setItems(items);
 	}
