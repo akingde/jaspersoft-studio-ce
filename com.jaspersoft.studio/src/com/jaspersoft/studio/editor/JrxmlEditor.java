@@ -629,7 +629,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 				break;
 			}
 		}
-		getSite().getSelectionProvider().setSelection(null);
 		super.pageChange(newPageIndex);
 		updateContentOutline(getActivePage());
 		activePage = newPageIndex;

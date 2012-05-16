@@ -33,7 +33,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -563,6 +562,8 @@ public class TabbedPropertySheetPage extends Page implements
 	 *      org.eclipse.jface.viewers.ISelection)
 	 */
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (!(selection instanceof IStructuredSelection))
+			selection = new StructuredSelection();
 		setInput(part, selection);
 	}
 
@@ -587,17 +588,17 @@ public class TabbedPropertySheetPage extends Page implements
 	 * @since 3.5
 	 */
 	public void resizeScrolledComposite() {
-//		Point currentTabSize = new Point(0, 0);
-//		if (currentTab != null) {
-//			Composite sizeReference = (Composite) tabToComposite
-//					.get(currentTab);
-//			if (sizeReference != null) {
-//				currentTabSize = sizeReference.computeSize(SWT.DEFAULT,
-//						SWT.DEFAULT);
-//			}
-//		}
-//		tabbedPropertyComposite.getScrolledComposite().setMinSize(
-//				currentTabSize);
+		// Point currentTabSize = new Point(0, 0);
+		// if (currentTab != null) {
+		// Composite sizeReference = (Composite) tabToComposite
+		// .get(currentTab);
+		// if (sizeReference != null) {
+		// currentTabSize = sizeReference.computeSize(SWT.DEFAULT,
+		// SWT.DEFAULT);
+		// }
+		// }
+		// tabbedPropertyComposite.getScrolledComposite().setMinSize(
+		// currentTabSize);
 
 		Rectangle ca = tabbedPropertyComposite.getScrolledComposite()
 				.getClientArea();
