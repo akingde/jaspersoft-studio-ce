@@ -24,7 +24,6 @@ import java.util.List;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.data.DataAdapterServiceUtil;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
@@ -86,7 +85,6 @@ public abstract class DataQueryAdapters {
 			this.file = (IFile) jConfig.get(IEditorContributor.KEY_FILE);
 			this.jDesign = jConfig.getJasperDesign();
 		}
-		// createToolbar(parent);
 		this.newdataset = newdataset;
 		this.jConfig = jConfig;
 		if (background != null)
@@ -107,7 +105,6 @@ public abstract class DataQueryAdapters {
 
 	private Composite composite;
 	private DataAdapterAction dscombo;
-	// private Action gFields;
 	private Combo langCombo;
 	private String[] languages;
 	private Composite langComposite;
@@ -135,7 +132,6 @@ public abstract class DataQueryAdapters {
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 150;
 		tabFolder.setLayoutData(gd);
-		// tabFolder.setBackground(background);
 
 		createQuery(tabFolder);
 		createMappingTools(tabFolder, fsetter);
@@ -223,7 +219,6 @@ public abstract class DataQueryAdapters {
 			tbLayout.topControl = designer.getToolbarControl();
 			tbCompo.layout();
 			langComposite.layout();
-			// if (currentDesigner != null)
 			designer.setQuery(jDesign, newdataset);
 
 			currentDesigner = designer;
@@ -241,7 +236,6 @@ public abstract class DataQueryAdapters {
 
 		final ToolBar tb = new ToolBar(comp, SWT.FLAT | SWT.RIGHT);
 		tb.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		// tb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		final ToolBarManager manager = new ToolBarManager(tb);
 		IDataAdapterRunnable adapterRunReport = new IDataAdapterRunnable() {
 
@@ -336,8 +330,6 @@ public abstract class DataQueryAdapters {
 	}
 
 	public String getQuery() {
-		// if (currentDesigner != null)
-		// return currentDesigner.getQuery();
 		return qdfactory.getDesigner(newdataset.getQuery().getLanguage()).getQuery();
 	}
 
@@ -379,6 +371,7 @@ public abstract class DataQueryAdapters {
 		final String lang = newdataset.getQuery().getLanguage();
 		final DataAdapterDescriptor da = dscombo.getSelected();
 		if (da != null && da instanceof IFieldsProvider && ((IFieldsProvider) da).supportsGetFieldsOperation()) {
+			qStatus.showInfo("");
 			final String query = newdataset.getQuery().getText();
 
 			monitor.beginTask(Messages.DataQueryAdapters_jobname, -1);
@@ -404,15 +397,16 @@ public abstract class DataQueryAdapters {
 					});
 					monitor.setTaskName("Fields set");
 				}
-			} catch (UnsupportedOperationException e) {
-				qStatus.showError(e);
-			} catch (JRException e) {
-				qStatus.showError(e);
+			} catch (Exception e) {
+				if (e.getCause() != null)
+					qStatus.showError(e.getCause().getMessage(), e);
+				else
+					qStatus.showError(e);
 			} finally {
 				Thread.currentThread().setContextClassLoader(oldClassloader);
 				das.dispose();
+				monitor.done();
 			}
-			monitor.done();
 		}
 	}
 }

@@ -53,6 +53,7 @@ public class VParameters extends APreview {
 		scompo.setExpandHorizontal(true);
 		scompo.setExpandVertical(true);
 		scompo.setMinWidth(100);
+		scompo.setAlwaysShowScrollBars(false);
 
 		composite = new Composite(scompo, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));

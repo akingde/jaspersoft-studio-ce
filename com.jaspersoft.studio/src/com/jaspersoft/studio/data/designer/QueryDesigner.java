@@ -26,8 +26,8 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -53,7 +53,6 @@ public class QueryDesigner extends AQueryDesigner {
 
 	protected Text control;
 	private Composite tbCompo;
-	// private Button btnAuto;
 	private Button btn;
 
 	public QueryDesigner() {
@@ -91,7 +90,6 @@ public class QueryDesigner extends AQueryDesigner {
 	}
 
 	public void dispose() {
-
 	}
 
 	public Control createToolbar(Composite parent) {
@@ -102,20 +100,14 @@ public class QueryDesigner extends AQueryDesigner {
 		layout.marginWidth = 0;
 		tbCompo.setLayout(layout);
 
-		// btnAuto = new Button(tbCompo, SWT.CHECK);
-		// btnAuto.setText("Automatically Retrive Fields");
-
 		btn = new Button(tbCompo, SWT.PUSH);
 		btn.setText("Read Fields");
-		btn.addSelectionListener(new SelectionListener() {
-
+		btn.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				container.doGetFields();
 			}
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		});
 		setFieldProviderEnabled(false);
 		return tbCompo;
@@ -127,7 +119,6 @@ public class QueryDesigner extends AQueryDesigner {
 	}
 
 	protected void setFieldProviderEnabled(boolean enable) {
-		// btnAuto.setEnabled(enable);
 		btn.setEnabled(enable);
 	}
 }

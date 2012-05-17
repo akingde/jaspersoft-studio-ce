@@ -32,16 +32,27 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 public class ParameterUtil {
 
 	public static void setParameters(JasperReportsConfiguration jConfig, JRDataset dataset, Map<String, Object> inmap) {
+		Map<String, Object> map = jConfig.getJRParameters();
 		for (JRParameter p : dataset.getParameters()) {
-			if (!p.isSystemDefined() && p.isForPrompting() && p.getDefaultValueExpression() != null) {
-				Object val;
-				try {
-					val = p.getValueClass().newInstance();
-					inmap.put(p.getName(), val);
-				} catch (InstantiationException e) {
-					inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
-				} catch (IllegalAccessException e) {
-					inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+			if (!p.isSystemDefined() && p.isForPrompting()) {
+				if (map != null) {
+					Object val = map.get(p.getName());
+					if (val != null) {
+						inmap.put(p.getName(), val);
+						continue;
+					}
+				}
+
+				if (p.getDefaultValueExpression() != null) {
+					Object val;
+					try {
+						val = p.getValueClass().newInstance();
+						inmap.put(p.getName(), val);
+					} catch (InstantiationException e) {
+						inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+					} catch (IllegalAccessException e) {
+						inmap.put(p.getName(), getDefaultInstance(p, jConfig, dataset));
+					}
 				}
 			}
 		}

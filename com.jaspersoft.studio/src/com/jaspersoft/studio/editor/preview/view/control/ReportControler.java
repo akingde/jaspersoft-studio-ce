@@ -139,6 +139,7 @@ public class ReportControler {
 			}
 			jasperParameters = map;
 		}
+		jrContext.setJRParameters(jasperParameters);
 	}
 
 	public JasperDesign getjDesign() {
