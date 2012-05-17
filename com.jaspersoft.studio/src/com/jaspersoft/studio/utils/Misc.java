@@ -170,4 +170,10 @@ public class Misc {
 			return "";
 		return exp.getText();
 	}
+
+	public static boolean compare(String a, String b, boolean caseSensitive) {
+		if (caseSensitive)
+			return a.equals(b);
+		return a.equalsIgnoreCase(b);
+	}
 }

@@ -74,7 +74,7 @@ public class SPRWCombo extends ASPropertyWidget {
 		String[] items = combo.getItems();
 		int selection = 0;
 		for (int i = 0; i < items.length; i++) {
-			if (items[i].equals(str)) {
+			if (Misc.compare(items[i], str, pd.isCaseSensitive())) {
 				selection = i;
 				break;
 			}

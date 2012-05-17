@@ -242,7 +242,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		desc.add(columnSpaceD);
 
 		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
-				Messages.common_language, new String[] { "", "Java", "Groovy", "JavaScript", "bsh" }, NullEnum.NOTNULL); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				Messages.common_language, new String[] { "", "Java", "Groovy", "JavaScript", "bsh" }, NullEnum.NOTNULL, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		languageD.setDescription(Messages.MReport_language_description);
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);

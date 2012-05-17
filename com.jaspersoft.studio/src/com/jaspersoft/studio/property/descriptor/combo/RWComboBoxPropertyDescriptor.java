@@ -34,11 +34,22 @@ public class RWComboBoxPropertyDescriptor extends ComboBoxPropertyDescriptor imp
 	private String[] labels;
 	private NullEnum canBeNull;
 	private RWComboBoxCellEditor cellEditor;
+	private boolean caseSensitive;
 
 	public RWComboBoxPropertyDescriptor(Object id, String displayName, String[] labelsArray, NullEnum canBeNull) {
+		this(id, displayName, labelsArray, canBeNull, true);
+	}
+
+	public RWComboBoxPropertyDescriptor(Object id, String displayName, String[] labelsArray, NullEnum canBeNull,
+			boolean caseSensitive) {
 		super(id, displayName, labelsArray);
 		labels = labelsArray;
 		this.canBeNull = canBeNull;
+		this.caseSensitive = caseSensitive;
+	}
+
+	public boolean isCaseSensitive() {
+		return caseSensitive;
 	}
 
 	@Override
