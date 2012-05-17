@@ -682,7 +682,7 @@ Public License instead of this License.  But first, please read
    </license>
 
    <url>
-      <discovery label="Itemis Xtext Update Site" url="http://download.itemis.com/updates/"/>
+      <discovery label="Xtext Releases Update Site" url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
       <discovery label="Itemis JFace Xtext Integration Update Site" url="http://updates.yakindu.com/indigo/milestones/"/>
    </url>
 

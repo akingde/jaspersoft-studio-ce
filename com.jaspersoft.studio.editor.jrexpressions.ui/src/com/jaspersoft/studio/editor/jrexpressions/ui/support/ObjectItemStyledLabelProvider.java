@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.TextStyle;
 
 import com.jaspersoft.studio.editor.expression.ExpObject;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
 import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
@@ -30,6 +31,8 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 	public static final Styler FIELD_STYLER;
 	/** Styler for the class types */
 	public static final Styler CLASSTYPE_STYLER;
+	
+	private Category currentCategory;
 	
 	static {
 		// Styling info
@@ -81,23 +84,39 @@ public class ObjectItemStyledLabelProvider extends StyledCellLabelProvider {
 			text.append(canonicalName, CLASSTYPE_STYLER);
 		}
 		else if (element instanceof String){
-			final Font boldFont = ResourceManager.getBoldFont(getViewer().getControl().getFont());
-			String methodFirm = element.toString();
-			int lParanIdx=methodFirm.indexOf('(');
-			int rParanIdx=methodFirm.indexOf(')');
-			text.append(methodFirm.substring(0,lParanIdx), new Styler() {
-				@Override
-				public void applyStyles(TextStyle textStyle) {
-					textStyle.font=boldFont;
+			if(Category.RECENT_EXPRESSIONS.equals(currentCategory) || 
+					Category.USER_DEFINED_EXPRESSIONS.equals(currentCategory)){
+				if(((String) element).length()>80){
+					text.append(element.toString().substring(0, Math.min(80, ((String) element).length())));
+					text.append("...");
 				}
-			});
-			text.append(methodFirm.substring(lParanIdx,rParanIdx+1));
-			text.append(methodFirm.substring(rParanIdx+1), CLASSTYPE_STYLER);
+				else{
+					text.append(element.toString());
+				}
+			}
+			else {
+				final Font boldFont = ResourceManager.getBoldFont(getViewer().getControl().getFont());
+				String methodFirm = element.toString();
+				int lParanIdx=methodFirm.indexOf('(');
+				int rParanIdx=methodFirm.indexOf(')');
+				text.append(methodFirm.substring(0,lParanIdx), new Styler() {
+					@Override
+					public void applyStyles(TextStyle textStyle) {
+						textStyle.font=boldFont;
+					}
+				});
+				text.append(methodFirm.substring(lParanIdx,rParanIdx+1));
+				text.append(methodFirm.substring(rParanIdx+1), CLASSTYPE_STYLER);
+			}
 		}
 		
 		cell.setText(text.toString());
 		cell.setStyleRanges(text.getStyleRanges());
 		super.update(cell);
+	}
+
+	public void setCategory(Category currentCategory) {
+		this.currentCategory=currentCategory;
 	}
 	
 }

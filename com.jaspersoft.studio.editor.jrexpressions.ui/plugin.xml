@@ -228,6 +228,7 @@
       </markerResolutionGenerator>
    </extension>
 -->   
+   <!-- Jaspersoft Studio standard (contributed) expression editor -->
    <extension
          id="com.jaspersoft.studio.editor.jrexpressions.BasicSupport"
          name="Default Support for JRExpression Editor"
@@ -238,4 +239,14 @@
       </editorSupportFactory>
    </extension>
 
+   <!-- Preference page for the expression editor stuff -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.jaspersoft.studio.preferences.StudioPreferencePage"
+            class="com.jaspersoft.studio.editor.jrexpressions.ui.preferences.ExpressionEditorPreferencePage"
+            id="com.jaspersoft.studio.editor.jrexpressions.ui.preferences.ExpressionEditorPreferencePage"
+            name="Expression Editor">
+      </page>
+   </extension>
 </plugin>

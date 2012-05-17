@@ -47,7 +47,9 @@ import com.jaspersoft.studio.editor.expression.CrosstabTotalVariable;
 import com.jaspersoft.studio.editor.expression.ExpObject;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.preferences.ExpressionEditorPreferencePage;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
+import com.jaspersoft.studio.utils.RecentExpressions;
 import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
@@ -65,6 +67,9 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	private StackLayout additionalDetailsStackLayout;
 	private ToolItem hideBuiltinParams;
 	private ToolItem hideBuiltinVariables;
+	private ObjectItemStyledLabelProvider categoryContentLblProvider;
+	private SashForm panelSashForm;
+	private ToolBar buttonsToolbar;
 	
 	// Support data structures
 	private ExpressionContext exprContext;
@@ -88,12 +93,12 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		layout.marginWidth=0;
 		layout.marginHeight=0;
 		this.setLayout(layout);
-		SashForm sashForm=new SashForm(this, SWT.HORIZONTAL);
+		panelSashForm = new SashForm(this, SWT.HORIZONTAL);
 		final GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		layoutData.widthHint=600;
-		sashForm.setLayoutData(layoutData);
+		panelSashForm.setLayoutData(layoutData);
 		
-		Composite categoryContentCmp=new Composite(sashForm, SWT.NONE);
+		Composite categoryContentCmp=new Composite(panelSashForm, SWT.NONE);
 		final GridLayout layout2 = new GridLayout(1,false);
 		layout2.marginWidth=5;
 		layout2.marginHeight=0;
@@ -102,17 +107,22 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		GridData catContentGD=new GridData(SWT.FILL, SWT.FILL, true, true);
 		catContentGD.heightHint=350;
 		categoryContent.getTree().setLayoutData(catContentGD);
-		categoryContent.setLabelProvider(new ObjectItemStyledLabelProvider());
+		categoryContentLblProvider = new ObjectItemStyledLabelProvider();
+		categoryContent.setLabelProvider(categoryContentLblProvider);
 		categoryContent.setContentProvider(new TreeArrayContentProvider());
 		categoryContent.addSelectionChangedListener(new ISelectionChangedListener() {
 			 
 			public void selectionChanged(SelectionChangedEvent event) {
-				Object selItem = ((IStructuredSelection)event.getSelection()).getFirstElement();
-				if(selItem!=null){
-					refreshAdditionalDetailsUI(selItem);
-					if(functionMode && !editingAreaInfo.isUpdate()){
-						showFunctionDetailsPanel();
-						functionMode=false;
+				Category currCategory = ObjectCategoryDetailsPanel.this.selItem.getCategory();
+				if(!ObjectCategoryItem.Category.RECENT_EXPRESSIONS.equals(currCategory) && 
+						!ObjectCategoryItem.Category.USER_DEFINED_EXPRESSIONS.equals(currCategory)){
+					Object selItem = ((IStructuredSelection)event.getSelection()).getFirstElement();
+					if(selItem!=null){
+						refreshAdditionalDetailsUI(selItem);
+						if(functionMode && !editingAreaInfo.isUpdate()){
+							showFunctionDetailsPanel();
+							functionMode=false;
+						}
 					}
 				}
 			}
@@ -144,7 +154,8 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			}
 		});
 		
-		ToolBar buttonsToolbar=new ToolBar(categoryContentCmp, SWT.FLAT);
+		buttonsToolbar = new ToolBar(categoryContentCmp, SWT.FLAT);
+		buttonsToolbar.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, false));
 		hideBuiltinParams = new ToolItem(buttonsToolbar, SWT.CHECK);
 		hideBuiltinParams.setImage(
 				ResourceManager.getPluginImage(JRExpressionsActivator.PLUGIN_ID, "/resources/icons/filter-parameters.png"));
@@ -172,12 +183,12 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		});
 		hideBuiltinVariables.setToolTipText("Hide built-in variables");
 		
-		additionalDetailsCmp=new Composite(sashForm, SWT.NONE);
+		additionalDetailsCmp=new Composite(panelSashForm, SWT.NONE);
 		additionalDetailsCmp.setLayoutData(layoutData);
 		additionalDetailsStackLayout=new StackLayout();
 		additionalDetailsCmp.setLayout(additionalDetailsStackLayout);
 		
-		sashForm.setWeights(new int[]{40,60});
+		panelSashForm.setWeights(new int[]{40,60});
 	}
 
 	/**
@@ -187,6 +198,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 	 */
 	public void refreshPanelUI(ObjectCategoryItem selItem) {
 		this.selItem=selItem;
+		categoryContentLblProvider.setCategory(this.selItem.getCategory());
 		// Update the list of category children
 		categoryContent.getTree().clearAll(true);
 		categoryDetails = new ArrayList<Object>();		
@@ -233,12 +245,18 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				List<JRExprFunctionBean> categoryFunctions = FunctionsLibraryUtil.getFunctionsByCategory((String)selItem.getData());
 				Collections.sort(categoryFunctions);
 				categoryDetails.addAll(categoryFunctions);
+				((GridData)buttonsToolbar.getLayoutData()).exclude=true;
+				buttonsToolbar.getParent().layout();
 				break;
 			case RECENT_EXPRESSIONS:
-				// TODO - Gets the recent expressions (simple string)
+				List<String> recentExpressions = RecentExpressions.getRecentExpressionsList();
+				Collections.reverse(recentExpressions);
+				categoryDetails.addAll(recentExpressions);
+				configureMinimalLayout();
 				break;
 			case USER_DEFINED_EXPRESSIONS:
-				// TODO - Gets the user defined expressions (simple string)
+				categoryDetails.addAll(ExpressionEditorPreferencePage.getUserDefinedExpressionList());
+				configureMinimalLayout();
 				break;
 			case CROSSTAB:
                 JRDesignCrosstab crosstab = (JRDesignCrosstab) selItem.getData();
@@ -285,6 +303,8 @@ public class ObjectCategoryDetailsPanel extends Composite {
 				List<JRExprFunctionBean> allFunctionsLst=FunctionsLibraryUtil.getAllFunctions();
 				Collections.sort(allFunctionsLst);
 				categoryDetails.addAll(allFunctionsLst);
+				((GridData)buttonsToolbar.getLayoutData()).exclude=true;
+				buttonsToolbar.getParent().layout();
 				break;
 		default:
 			break;
@@ -310,6 +330,17 @@ public class ObjectCategoryDetailsPanel extends Composite {
 			TreeItem item = categoryContent.getTree().getItem(0);
 			categoryContent.setSelection(new StructuredSelection(item.getData()),true);
 		}
+	}
+
+	/*
+	 * Configure a minimal layout for those categories that do not need
+	 */
+	private void configureMinimalLayout() {
+		panelSashForm.setWeights(new int[]{100,0});
+		panelSashForm.SASH_WIDTH=0;
+		buttonsToolbar.setVisible(false);
+		((GridData)buttonsToolbar.getLayoutData()).exclude=true;
+		buttonsToolbar.getParent().layout();
 	}
 	
 	/*

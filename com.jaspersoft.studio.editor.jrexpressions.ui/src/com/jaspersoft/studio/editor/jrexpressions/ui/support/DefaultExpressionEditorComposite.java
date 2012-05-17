@@ -127,7 +127,9 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 
 		editorArea = new StyledText(editorContainer, SWT.BORDER
 				| SWT.BORDER_SOLID | SWT.MULTI | SWT.WRAP);
-		editorArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridData editorAreaGD=new GridData(SWT.FILL, SWT.FILL, true, true);
+		editorAreaGD.widthHint=500;
+		editorArea.setLayoutData(editorAreaGD);
 		editorArea.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -139,6 +141,7 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 		editorArea.addCaretListener(new CaretListener() {
 
 			public void caretMoved(CaretEvent event) {
+				currentWidgetText = editorArea.getText();
 				synchCurrentFunctionDetails();
 			}
 		});

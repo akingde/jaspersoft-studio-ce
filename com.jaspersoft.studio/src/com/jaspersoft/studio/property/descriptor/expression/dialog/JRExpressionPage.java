@@ -40,6 +40,7 @@ import com.jaspersoft.studio.editor.expression.IExpressionStatusChangeListener;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.ClassType;
 import com.jaspersoft.studio.utils.Misc;
+import com.jaspersoft.studio.utils.RecentExpressions;
 
 public class JRExpressionPage extends WizardPage {
 	private JRDesignExpression value;
@@ -50,7 +51,11 @@ public class JRExpressionPage extends WizardPage {
 
 	public JRDesignExpression getValue() {
 		if(contributedComposite!=null){
-			return (JRDesignExpression) contributedComposite.getExpression();
+			JRDesignExpression expression = (JRDesignExpression) contributedComposite.getExpression();
+			if(expression!=null && !Misc.nvl(expression.getText()).equals("")){
+				RecentExpressions.addNewExpression(expression.getText());
+			}
+			return expression;
 		}
 		else{
 			return value;			
