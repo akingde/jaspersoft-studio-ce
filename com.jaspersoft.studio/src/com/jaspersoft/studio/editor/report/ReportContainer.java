@@ -47,8 +47,10 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
@@ -129,15 +131,6 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 		CTabFolder ctfolder = (CTabFolder) getContainer();
 		ctfolder.setTabPosition(SWT.TOP);
 		ctfolder.setBorderVisible(false);
-		// ctfolder.setUnselectedCloseVisible(true);
-		// Combo combo = new Combo(ctfolder, SWT.BORDER);
-		// combo.setItems(new String[] { "abcda", "bcda" });
-		//
-		// int tabHeight = combo.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
-		// tabHeight = Math.max(tabHeight, ctfolder.getTabHeight());
-		// ctfolder.setTabHeight(tabHeight);
-
-		// ctfolder.setTopRight(combo);
 
 		try {
 			ReportEditor reportEditor = new ReportEditor(jrContext);
@@ -197,6 +190,11 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 					removeEditorPage(evt, obj);
 			}
 			getPropertyChangeSupport().firePropertyChange(evt);
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					firePropertyChange(ISaveablePart.PROP_DIRTY);
+				}
+			});
 		}
 
 	};
@@ -363,9 +361,6 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	}
 
 	public void openEditor(Object obj, ANode node) {
-		JasperDesign jd = null;
-		if (node != null)
-			jd = node.getJasperDesign();
 		if (getEditorInput() instanceof FileEditorInput) {
 			if (obj instanceof JRDesignReportTemplate || obj instanceof JRSimpleTemplate || obj instanceof JRStyle
 					|| obj instanceof JRConditionalStyle || obj instanceof JRTemplateReference) {

@@ -19,8 +19,6 @@
  */
 package com.jaspersoft.studio.editor;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,7 +85,6 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MReport;
-import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.util.ReportFactory;
 import com.jaspersoft.studio.plugin.AContributorAction;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
@@ -113,44 +110,21 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		@Override
 		public void runReport(com.jaspersoft.studio.data.DataAdapterDescriptor myDataAdapterDesc) {
 			if (myDataAdapterDesc != null) {
-				JasperDesign jasperDesign = getMReport().getJasperDesign();
+				JasperDesign jasperDesign = getJasperDesign();
 				String oldp = jasperDesign.getProperty(MReport.DEFAULT_DATAADAPTER);
 				if (oldp == null || (oldp != null && !oldp.equals(myDataAdapterDesc.getName()))) {
 					getMReport().putParameter(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc);
 					jasperDesign.setProperty(MReport.DEFAULT_DATAADAPTER, myDataAdapterDesc.getName());
-					modelPropChangeListener.propertyChange(new PropertyChangeEvent(jasperDesign, "xzzdataset", null, oldp));
-					isDirty = true;
+					setDirty(true);
 				}
 			}
 			super.runReport(myDataAdapterDesc);
 		}
-	}
 
-	/**
-	 * The listener interface for receiving modelPropertyChange events. The class that is interested in processing a
-	 * modelPropertyChange event implements this interface, and the object created with that class is registered with a
-	 * component using the component's <code>addModelPropertyChangeListener<code> method. When
-	 * the modelPropertyChange event occurs, that object's appropriate
-	 * method is invoked.
-	 * 
-	 * @see ModelPropertyChangeEvent
-	 */
-	private final class ModelPropertyChangeListener implements PropertyChangeListener {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-		 */
-		public void propertyChange(PropertyChangeEvent evt) {
-			getSite().getWorkbenchWindow().getShell().getDisplay().asyncExec(new Runnable() {
-				public void run() {
-					firePropertyChange(ISaveablePart.PROP_DIRTY);
-					modelFresh = false;
-				}
-			});
-
+		public void setDirty(boolean dirty) {
+			this.isDirty = dirty;
 		}
+
 	}
 
 	/** The Constant PAGE_DESIGNER. */
@@ -170,8 +144,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	/** Xml editor used in page 1. */
 	private XMLEditor xmlEditor;
 
-	/** The model property change listener. */
-	private ModelPropertyChangeListener modelPropChangeListener = new ModelPropertyChangeListener();
 	private JasperReportsConfiguration jrContext;
 
 	/**
@@ -185,60 +157,48 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	/**
 	 * Creates page 1 of the multi-page editor, which allows you to change the font used in page 2.
 	 */
-	void createPage0() {
-		try {
-			reportContainer = new ReportContainer(this, jrContext);
+	void createPage0() throws PartInitException {
+		reportContainer = new ReportContainer(this, jrContext);
+		reportContainer.addPageChangedListener(new IPageChangedListener() {
 
-			reportContainer.addPageChangedListener(new IPageChangedListener() {
+			public void pageChanged(PageChangedEvent event) {
+				updateContentOutline(PAGE_DESIGNER);
+			}
+		});
 
-				public void pageChanged(PageChangedEvent event) {
-					updateContentOutline(PAGE_DESIGNER);
-				}
-			});
-			reportContainer.getPropertyChangeSupport().addPropertyChangeListener(modelPropChangeListener);
-
-			int index = addPage(reportContainer, getEditorInput());
-			setPageText(index, Messages.JrxmlEditor_design);
-		} catch (PartInitException e) {
-			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
-		}
+		int index = addPage(reportContainer, getEditorInput());
+		setPageText(index, Messages.JrxmlEditor_design);
 	}
 
 	/**
 	 * Creates page 0 of the multi-page editor, which contains a text editor.
 	 */
-	void createPage1() {
-		try {
-			xmlEditor = new XMLEditor();
-			int index = addPage(xmlEditor, getEditorInput());
-			setPageText(index, Messages.common_source);
-			xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput())
-					.addDocumentListener(new IDocumentListener() {
+	void createPage1() throws PartInitException {
+		xmlEditor = new XMLEditor();
+		int index = addPage(xmlEditor, getEditorInput());
+		setPageText(index, Messages.common_source);
+		xmlEditor.getDocumentProvider().getDocument(xmlEditor.getEditorInput())
+				.addDocumentListener(new IDocumentListener() {
 
-						public void documentChanged(DocumentEvent event) {
-							xmlFresh = false;
-						}
+					public void documentChanged(DocumentEvent event) {
+						xmlFresh = false;
+						previewEditor.setDirty(true);
+					}
 
-						public void documentAboutToBeChanged(DocumentEvent event) {
+					public void documentAboutToBeChanged(DocumentEvent event) {
 
-						}
-					});
-		} catch (PartInitException e) {
-			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
-		}
+					}
+				});
 	}
 
 	/**
 	 * Creates page 2 of the multi-page editor, which shows the sorted text.
 	 */
-	void createPage2() {
+	void createPage2() throws PartInitException {
 		previewEditor = new PreviewEditor(false, jrContext);
-		try {
-			int index = addPage(previewEditor, getEditorInput());
-			setPageText(index, Messages.JrxmlEditor_preview);
-		} catch (PartInitException e) {
-			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
-		}
+
+		int index = addPage(previewEditor, getEditorInput());
+		setPageText(index, Messages.JrxmlEditor_preview);
 	}
 
 	/**
@@ -262,10 +222,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		// ctfolder.setTabHeight(tabHeight);
 		//
 		// ctfolder.setTopRight(toolBar);
-
-		createPage0();
-		createPage1();
-		createPage2();
+		try {
+			createPage0();
+			createPage1();
+			createPage2();
+		} catch (PartInitException e) {
+			UIUtils.showError(new Exception(Messages.common_error_creating_nested_visual_editor));
+		}
 	}
 
 	@Override
@@ -339,7 +302,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		} catch (CoreException e1) {
 			UIUtils.showError(e1);
 		}
-		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor || !modelFresh) {
+		if ((!xmlEditor.isDirty() && reportContainer.isDirty()) || getActiveEditor() != xmlEditor) {
 			version = JRXmlWriterHelper.getVersion(resource, p, true);
 			model2xml(version);
 		} else {
@@ -365,7 +328,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		reportContainer.doSave(monitor);
 		previewEditor.doSave(monitor);
 		firePropertyChange(PROP_DIRTY);
-		modelFresh = true;
 		xmlFresh = true;
 	}
 
@@ -535,13 +497,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the mute
 	 */
 	public void handleJRException(IEditorInput editorInput, final Exception e, boolean mute) {
-		if (!mute) {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					UIUtils.showError(e);
-				}
-			});
-		}
+		if (!mute)
+			UIUtils.showError(e);
 		try {
 			int lineNumber = 0;
 			if (e.getCause() instanceof SAXParseException) {
@@ -569,6 +526,13 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 	}
 
+	@Override
+	protected void handlePropertyChange(int propertyId) {
+		if (propertyId == ISaveablePart.PROP_DIRTY)
+			previewEditor.setDirty(true);
+		super.handlePropertyChange(propertyId);
+	}
+
 	/*
 	 * (non-Javadoc) Method declared on IEditorPart.
 	 */
@@ -577,13 +541,10 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		return true;
 	}
 
-	/** The model fresh. */
-	private boolean modelFresh = true;
-
 	/** The xml fresh. */
 	private boolean xmlFresh = true;
 
-	private PreviewContainer previewEditor;
+	private PreviewEditor previewEditor;
 
 	/**
 	 * Calculates the contents of page 2 when the it is activated.
@@ -594,26 +555,22 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	@Override
 	protected void pageChange(int newPageIndex) {
 		if (newPageIndex == PAGE_DESIGNER || newPageIndex == PAGE_XMLEDITOR || newPageIndex == PAGE_PREVIEW) {
-			if (activePage == PAGE_DESIGNER) {
+			if (activePage == PAGE_DESIGNER)
 				tmpselection = reportContainer.getActiveEditor().getSite().getSelectionProvider().getSelection();
-			}
 			switch (newPageIndex) {
 			case PAGE_DESIGNER:
-				if (activePage == PAGE_XMLEDITOR && !xmlFresh) {
+				if (activePage == PAGE_XMLEDITOR && !xmlFresh)
 					try {
 						xml2model();
 					} catch (Exception e) {
 						handleJRException(getEditorInput(), e, false);
 					}
-				}
-				if (activePage != PAGE_PREVIEW) {
+				if (activePage != PAGE_PREVIEW)
 					updateVisualView();
-					modelFresh = true;
-				}
 				reportContainer.getActiveEditor().getSite().getSelectionProvider().setSelection(tmpselection);
 				break;
 			case PAGE_XMLEDITOR:
-				if (!modelFresh)
+				if (reportContainer.isDirty())
 					model2xml();
 				break;
 			case PAGE_PREVIEW:
@@ -623,10 +580,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 					} catch (Exception e) {
 						handleJRException(getEditorInput(), e, false);
 					}
-				else {
-					if (!modelFresh)
-						model2xml();
-				}
+				else if (reportContainer.isDirty())
+					model2xml();
 				model2preview();
 				break;
 			}
@@ -634,6 +589,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		super.pageChange(newPageIndex);
 		updateContentOutline(getActivePage());
 		activePage = newPageIndex;
+		previewEditor.setDirty(false);
 	}
 
 	private ISelection tmpselection;
@@ -663,7 +619,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			JasperDesign jd = new JRXmlLoader(JRXmlDigesterFactory.createDigester()).loadXML(is);
 			jrContext.setJasperDesign(jd);
 			setModel(ReportFactory.createReport(jrContext));
-			modelFresh = true;
 		} finally {
 			try {
 				in.close();
@@ -681,12 +636,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 * Model2xml.
 	 */
 	private void model2xml(String version) {
-		isRefreshing = true;
 		try {
-			JasperDesign report = getJasperDesign();
-			// save the last used dataadapter in the report
+			JasperDesign report = null;
 			MReport mReport = getMReport();
 			if (mReport != null) {
+				report = mReport.getJasperDesign();
 				Object obj = mReport.getParameter(MReport.DEFAULT_DATAADAPTER);
 				if (obj != null && obj instanceof DataAdapterDescriptor) {
 					String dataAdapterDesc = previewEditor.getDataAdapterDesc().getName();
@@ -702,27 +656,14 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 			doc.set(xml);
 			xmlFresh = true;
 		} catch (final Exception e) {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					UIUtils.showError(e);
-				}
-			});
-		} finally {
-			isRefreshing = false;
+			UIUtils.showError(e);
 		}
 	}
 
-	private boolean isRefreshing = false;
-
-	@Override
-	protected void handlePropertyChange(int propertyId) {
-		if (!isRefreshing)
-			super.handlePropertyChange(propertyId);
-	}
-
 	protected JasperDesign getJasperDesign() {
-		if (getModel() != null)
-			return (JasperDesign) ((MRoot) getModel()).getValue();
+		MReport mreport = getMReport();
+		if (mreport != null)
+			return mreport.getValue();
 		return null;
 	}
 
@@ -765,10 +706,6 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 *          the new model
 	 */
 	public void setModel(INode model) {
-		if (this.model != null && this.model.getChildren() != null && !this.model.getChildren().isEmpty())
-			getMReport().getPropertyChangeSupport().removePropertyChangeListener(modelPropChangeListener);
-		if (model != null && model.getChildren() != null && !model.getChildren().isEmpty())
-			model.getChildren().get(0).getPropertyChangeSupport().addPropertyChangeListener(modelPropChangeListener);
 		this.model = model;
 		updateVisualView();
 		if (jrContext != null)
@@ -776,15 +713,9 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 
 	private MReport getMReport() {
-		return (MReport) this.model.getChildren().get(0);
-	}
-
-	/**
-	 * Update visual view.
-	 */
-	public void updateVisualView() {
-		if (reportContainer != null)
-			reportContainer.setModel(getModel());
+		if (model != null)
+			return (MReport) model.getChildren().get(0);
+		return null;
 	}
 
 	/**
@@ -794,6 +725,14 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	public INode getModel() {
 		return model;
+	}
+
+	/**
+	 * Update visual view.
+	 */
+	public void updateVisualView() {
+		if (reportContainer != null)
+			reportContainer.setModel(getModel());
 	}
 
 	/*

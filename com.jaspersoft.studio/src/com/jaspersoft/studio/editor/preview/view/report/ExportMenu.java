@@ -19,7 +19,6 @@
  */
 package com.jaspersoft.studio.editor.preview.view.report;
 
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 
@@ -47,12 +46,12 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
 public class ExportMenu {
 	public static ExportMenuAction getExportMenu(IReportViewer rptviewer, PropertiesHelper ph) {
 		ExportMenuAction exportMenu = new ExportMenuAction(rptviewer);
-		IAction pdfAction = null;
+
 		MenuManager mm = exportMenu.getMenuManager();
 		mm.add(new ExportAsJasperReportsAction(rptviewer, ph));
 		mm.add(new Separator());
 
-		mm.add(pdfAction = new ExportAsPdfAction(rptviewer, ph));
+		mm.add(new ExportAsPdfAction(rptviewer, ph));
 		mm.add(new ExportAsHtmlAction(rptviewer, ph));
 		mm.add(new ExportAsXHtmlAction(rptviewer, ph));
 		mm.add(new Separator());

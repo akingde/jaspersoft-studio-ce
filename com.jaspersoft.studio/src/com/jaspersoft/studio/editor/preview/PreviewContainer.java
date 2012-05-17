@@ -245,14 +245,18 @@ public class PreviewContainer extends PreviewJRPrint implements IDataAdapterRunn
 	public void setJasperDesign(JasperReportsConfiguration jConfig, JasperDesign jasperDesign) {
 		getReportControler().setJasperDesign(jConfig, jasperDesign);
 		setupDataAdapter();
-		runReport(dataAdapterDesc);
+		if (isDirty())
+			runReport(dataAdapterDesc);
+		isDirty = false;
 	}
 
 	private void setupDataAdapter() {
-		if (((PreviewTopToolBarManager) topToolBarManager1) != null && getReportControler().getjDesign() != null) {
-			String strda = getReportControler().getjDesign().getProperty(MReport.DEFAULT_DATAADAPTER);
+		JasperDesign jd = getReportControler().getjDesign();
+		PreviewTopToolBarManager pt = (PreviewTopToolBarManager) topToolBarManager1;
+		if (pt != null && jd != null) {
+			String strda = jd.getProperty(MReport.DEFAULT_DATAADAPTER);
 			if (strda != null)
-				((PreviewTopToolBarManager) topToolBarManager1).setDataAdapters(strda);
+				pt.setDataAdapters(strda);
 		}
 	}
 

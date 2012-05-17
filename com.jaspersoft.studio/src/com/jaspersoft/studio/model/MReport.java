@@ -125,6 +125,11 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		setValue(jConfig.getJasperDesign());
 	}
 
+	@Override
+	public JasperDesign getValue() {
+		return (JasperDesign) super.getValue();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
