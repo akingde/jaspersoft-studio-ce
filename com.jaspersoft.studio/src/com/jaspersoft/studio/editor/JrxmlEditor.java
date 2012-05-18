@@ -327,7 +327,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		xmlEditor.doSave(monitor);
 		reportContainer.doSave(monitor);
 		previewEditor.doSave(monitor);
-		firePropertyChange(PROP_DIRTY);
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				firePropertyChange(ISaveablePart.PROP_DIRTY);
+			}
+		});
 		xmlFresh = true;
 	}
 
@@ -528,7 +532,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	@Override
 	protected void handlePropertyChange(int propertyId) {
-		if (propertyId == ISaveablePart.PROP_DIRTY)
+		if (propertyId == ISaveablePart.PROP_DIRTY && activePage == PAGE_PREVIEW)
 			previewEditor.setDirty(true);
 		super.handlePropertyChange(propertyId);
 	}
