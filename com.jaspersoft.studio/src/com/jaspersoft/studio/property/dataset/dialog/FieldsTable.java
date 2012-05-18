@@ -185,7 +185,15 @@ public class FieldsTable {
 				TableItem tableItem = (TableItem) element;
 				JRDesignField field = (JRDesignField) tableItem.getData();
 				if ("NAME".equals(property)) { //$NON-NLS-1$
-					field.setName((String) value);
+					List<JRDesignField> list = (List<JRDesignField>) tviewer.getInput();
+					boolean exists = false;
+					for (JRDesignField f : list) {
+						exists = f.getName().equals(value);
+						if (exists)
+							break;
+					}
+					if (!exists)
+						field.setName((String) value);
 				} else if ("TYPE".equals(property)) { //$NON-NLS-1$
 					field.setValueClassName((String) value);
 				} else if ("DESCRIPTION".equals(property)) { //$NON-NLS-1$
