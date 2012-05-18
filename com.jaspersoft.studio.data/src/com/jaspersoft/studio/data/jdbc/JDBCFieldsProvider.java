@@ -26,8 +26,10 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.jasperreports.data.DataAdapterService;
 import net.sf.jasperreports.engine.JRDataset;
@@ -78,10 +80,14 @@ public class JDBCFieldsProvider implements IFieldsProvider {
 			if (rs != null) {
 				ResultSetMetaData metaData = rs.getMetaData();
 				int cc = metaData.getColumnCount();
+				Set<String> colset = new HashSet<String>();
 				List<JRDesignField> columns = new ArrayList<JRDesignField>(cc);
 				for (int i = 1; i <= cc; i++) {
-					JRDesignField field = new JRDesignField();
 					String name = metaData.getColumnLabel(i);
+					if (colset.contains(name))
+						continue;
+					colset.add(name);
+					JRDesignField field = new JRDesignField();
 					field.setName(name);
 
 					field.setValueClassName(getJdbcTypeClass(metaData, i));
