@@ -603,8 +603,8 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 						new JRDesignExpression(), "new Date()"));
 		} else if (jrChart.getDataset() instanceof JRDesignPieDataset) {
 			JRDesignPieSeries pieSeries = new JRDesignPieSeries();
-			pieSeries.setKeyExpression(ExprUtil.setValues(
-					new JRDesignExpression(), ""));
+			pieSeries.setKeyExpression(new JRDesignExpression("\"CHANGE_ME\""));
+			pieSeries.setValueExpression(new JRDesignExpression("new Double(0)"));
 			((JRDesignPieDataset) jrChart.getDataset()).addPieSeries(pieSeries);
 		} else if (jrChart.getDataset() instanceof JRDesignCategoryDataset) {
 
