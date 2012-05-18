@@ -21,7 +21,6 @@ package com.jaspersoft.studio.components.chart.property.section.dataset;
 
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetSection;
@@ -38,7 +37,8 @@ public class DatasetHigLowSection extends DatasetSection {
 	public void createControls(Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(2, false));
+		parent = getWidgetFactory().createSection(parent, "High Low Dataset",
+				false, 2, 2);
 
 		createWidget4Property(parent,
 				JRDesignHighLowDataset.PROPERTY_HIGH_EXPRESSION);

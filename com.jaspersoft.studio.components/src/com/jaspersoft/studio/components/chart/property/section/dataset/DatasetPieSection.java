@@ -38,7 +38,9 @@ public class DatasetPieSection extends DatasetSection {
 	public void createControls(Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(2, false));
+
+		parent = getWidgetFactory().createSection(parent, "Pie Dataset", false,
+				2, 2);
 
 		createWidget4Property(parent,
 				JRDesignPieDataset.PROPERTY_OTHER_KEY_EXPRESSION);
@@ -48,6 +50,7 @@ public class DatasetPieSection extends DatasetSection {
 		createWidget4Property(parent,
 				JRDesignPieDataset.PROPERTY_MIN_PERCENTAGE);
 		createWidget4Property(parent, JRDesignPieDataset.PROPERTY_MAX_COUNT);
+
 	}
 
 }

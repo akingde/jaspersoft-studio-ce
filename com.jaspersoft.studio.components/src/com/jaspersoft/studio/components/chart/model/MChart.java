@@ -26,6 +26,7 @@ import java.util.Map;
 import net.sf.jasperreports.charts.design.JRDesignBar3DPlot;
 import net.sf.jasperreports.charts.design.JRDesignBarPlot;
 import net.sf.jasperreports.charts.design.JRDesignCategoryDataset;
+import net.sf.jasperreports.charts.design.JRDesignCategorySeries;
 import net.sf.jasperreports.charts.design.JRDesignDataRange;
 import net.sf.jasperreports.charts.design.JRDesignHighLowDataset;
 import net.sf.jasperreports.charts.design.JRDesignItemLabel;
@@ -601,13 +602,22 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 			if (jds.getDateExpression() == null)
 				jds.setDateExpression(ExprUtil.setValues(
 						new JRDesignExpression(), "new Date()"));
+			jds.setSeriesExpression(new JRDesignExpression("\"CHANGE_ME\""));
 		} else if (jrChart.getDataset() instanceof JRDesignPieDataset) {
 			JRDesignPieSeries pieSeries = new JRDesignPieSeries();
 			pieSeries.setKeyExpression(new JRDesignExpression("\"CHANGE_ME\""));
-			pieSeries.setValueExpression(new JRDesignExpression("new Double(0)"));
+			pieSeries
+					.setValueExpression(new JRDesignExpression("new Double(0)"));
 			((JRDesignPieDataset) jrChart.getDataset()).addPieSeries(pieSeries);
 		} else if (jrChart.getDataset() instanceof JRDesignCategoryDataset) {
-
+			JRDesignCategorySeries catSeries = new JRDesignCategorySeries();
+			catSeries.setSeriesExpression(new JRDesignExpression("\"SERIE1\""));
+			catSeries.setCategoryExpression(new JRDesignExpression(
+					"new Double(0)"));
+			catSeries
+					.setValueExpression(new JRDesignExpression("new Double(0)"));
+			((JRDesignCategoryDataset) jrChart.getDataset())
+					.addCategorySeries(catSeries);
 		}
 		// plot initialisation
 		JRChartPlot plot = jrChart.getPlot();
