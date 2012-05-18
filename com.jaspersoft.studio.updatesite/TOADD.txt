@@ -1,0 +1,6 @@
+<references size="4">
+<repository uri="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/" url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/" type="0" options="1"/>
+<repository uri="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/" url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/" type="1" options="1"/>
+<repository uri="http://updates.yakindu.com/indigo/milestones/" url="http://updates.yakindu.com/indigo/milestones/" type="0" options="1"/>
+<repository uri="http://updates.yakindu.com/indigo/milestones/" url="http://updates.yakindu.com/indigo/milestones/" type="1" options="1"/>
+</references>
