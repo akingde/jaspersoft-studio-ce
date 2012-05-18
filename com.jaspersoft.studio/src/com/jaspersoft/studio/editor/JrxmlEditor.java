@@ -122,7 +122,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		}
 
 		public void setDirty(boolean dirty) {
-			this.isDirty = dirty;
+			if (!isRefresh)
+				this.isDirty = dirty;
 		}
 
 	}
@@ -288,6 +289,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		super.dispose();
 	}
 
+	boolean isRefresh = false;
+
 	/**
 	 * Saves the multi-page editor's document.
 	 * 
@@ -296,6 +299,7 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		isRefresh = true;
 		IFile resource = ((IFileEditorInput) getEditorInput()).getFile();
 		try {
 			resource.setCharset("UTF-8", monitor);
@@ -327,11 +331,18 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		xmlEditor.doSave(monitor);
 		reportContainer.doSave(monitor);
 		previewEditor.doSave(monitor);
+
+		xmlEditor.isDirty();
+		reportContainer.isDirty();
+		previewEditor.isDirty();
+
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				isRefresh = false;
 				firePropertyChange(ISaveablePart.PROP_DIRTY);
 			}
 		});
+
 		xmlFresh = true;
 	}
 
@@ -532,9 +543,11 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	@Override
 	protected void handlePropertyChange(int propertyId) {
-		if (propertyId == ISaveablePart.PROP_DIRTY && activePage == PAGE_PREVIEW)
-			previewEditor.setDirty(true);
-		super.handlePropertyChange(propertyId);
+		if (!isRefresh) {
+			if (propertyId == ISaveablePart.PROP_DIRTY)
+				previewEditor.setDirty(true);
+			super.handlePropertyChange(propertyId);
+		}
 	}
 
 	/*
