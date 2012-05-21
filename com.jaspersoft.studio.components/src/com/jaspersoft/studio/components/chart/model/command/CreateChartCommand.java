@@ -29,6 +29,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.jaspersoft.studio.components.chart.model.MChart;
+import com.jaspersoft.studio.components.chart.model.chartAxis.command.CreateChartAxesCommand;
 import com.jaspersoft.studio.components.chart.wizard.ChartWizard;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MElementGroup;
@@ -122,7 +123,9 @@ public class CreateChartCommand extends CreateElementCommand {
 					new MChart(null, newchart, -1),
 					(JRDesignElementDataset) newchart.getDataset());
 			wizard.init(jConfig);
-			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(null, destNode));	// Use the "future" parent inherited information
+			wizard.setExpressionContext(ModelUtils.getElementExpressionContext(
+					null, destNode)); // Use the "future" parent inherited
+										// information
 			WizardDialog dialog = new WizardDialog(Display.getDefault()
 					.getActiveShell(), wizard);
 			dialog.create();
@@ -135,6 +138,12 @@ public class CreateChartCommand extends CreateElementCommand {
 			}
 			if (jrElement != null)
 				setElementBounds();
+
+			if (((JRDesignChart) jrElement).getChartType() == JRDesignChart.CHART_TYPE_MULTI_AXIS) {
+				CreateChartAxesCommand cmd = new CreateChartAxesCommand(
+						(JRDesignChart) jrElement, null, -1, jasperDesign);
+				addCommand(cmd);
+			}
 
 		}
 	}

@@ -62,12 +62,18 @@ public class CreateChartAxesCommand extends Command {
 	 */
 	public CreateChartAxesCommand(MChart destNode, MChartAxes srcNode,
 			int newIndex) {
+		this((JRDesignChart) destNode.getValue(), (JRDesignChartAxis) srcNode
+				.getValue(), newIndex, destNode.getJasperDesign());
+	}
+
+	public CreateChartAxesCommand(JRDesignChart chart,
+			JRDesignChartAxis chartAxis, int newIndex, JasperDesign jDesign) {
 		super();
-		this.jrElement = (JRDesignChartAxis) srcNode.getValue();
-		this.chart = (JRDesignChart) destNode.getValue();
+		this.jrElement = chartAxis;
+		this.chart = chart;
 		this.jrPlot = (JRDesignMultiAxisPlot) chart.getPlot();
 		this.index = newIndex;
-		this.jDesign = destNode.getJasperDesign();
+		this.jDesign = jDesign;
 	}
 
 	/**
