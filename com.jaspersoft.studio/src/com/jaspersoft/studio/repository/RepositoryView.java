@@ -68,6 +68,7 @@ import com.jaspersoft.studio.repository.actions.Separator;
 
 public class RepositoryView extends ViewPart implements ITabbedPropertySheetPageContributor {
 	public RepositoryView() {
+		super();
 	}
 
 	private TreeViewer treeViewer;

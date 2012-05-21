@@ -83,6 +83,8 @@ public class MDataAdapters extends ANode {
 		setValue(storage);
 		storage.addPropertyChangeListener(this);
 		storage.getDataAdapterDescriptors();
+		for (DataAdapterDescriptor dad : storage.getDataAdapterDescriptors())
+			new MDataAdapter(this, dad);
 	}
 
 	@Override

@@ -123,6 +123,7 @@ public class DataAdapterManager {
 		if (s == null) {
 			s = new PreferencesDataAdapterStorage();
 			storages.put("PREFERENCES", s);
+			s.getDataAdapterDescriptors();
 		}
 		return s;
 	}
