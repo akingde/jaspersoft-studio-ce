@@ -37,6 +37,7 @@ import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 import net.sf.jasperreports.charts.design.JRDesignPiePlot;
 import net.sf.jasperreports.charts.design.JRDesignPieSeries;
 import net.sf.jasperreports.charts.design.JRDesignThermometerPlot;
+import net.sf.jasperreports.charts.design.JRDesignValueDataset;
 import net.sf.jasperreports.charts.design.JRDesignValueDisplay;
 import net.sf.jasperreports.charts.design.JRDesignXyDataset;
 import net.sf.jasperreports.charts.type.EdgeEnum;
@@ -618,6 +619,9 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 					.setValueExpression(new JRDesignExpression("new Double(0)"));
 			((JRDesignCategoryDataset) jrChart.getDataset())
 					.addCategorySeries(catSeries);
+		} else if (jrChart.getDataset() instanceof JRDesignValueDataset){
+			JRDesignValueDataset valueDataset = (JRDesignValueDataset)jrChart.getDataset();
+			valueDataset.setValueExpression(new JRDesignExpression("\"CHANGE_ME\""));
 		}
 		// plot initialisation
 		JRChartPlot plot = jrChart.getPlot();
@@ -640,13 +644,14 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		} else if (plot instanceof JRDesignThermometerPlot) {
 			JRDesignThermometerPlot tplot = (JRDesignThermometerPlot) plot;
 			if (tplot.getHighRange() == null)
-				tplot.setHighRange(new JRDesignDataRange(null));
+				tplot.setHighRange(getDummyDataRange());
 			if (tplot.getLowRange() == null)
-				tplot.setLowRange(new JRDesignDataRange(null));
+				tplot.setLowRange(getDummyDataRange());
 			if (tplot.getMediumRange() == null)
-				tplot.setMediumRange(new JRDesignDataRange(null));
-			if (tplot.getDataRange() == null)
-				tplot.setDataRange(new JRDesignDataRange(null));
+				tplot.setMediumRange(getDummyDataRange());
+			if (tplot.getDataRange() == null){
+				tplot.setDataRange(getDummyDataRange());
+			}
 			if (tplot.getValueLocationValue() == null)
 				tplot.setValueLocation(ValueLocationEnum.LEFT);
 			if (tplot.getValueDisplay() == null)
@@ -658,13 +663,20 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 					tplot.setValueDisplay(new JRDesignValueDisplay(null,
 							jrChart));
 				if (tplot.getDataRange() == null)
-					tplot.setDataRange(new JRDesignDataRange(null));
+					tplot.setDataRange(getDummyDataRange());
 			} catch (JRException e) {
 				e.printStackTrace();
 			}
 		} else if (plot instanceof JRDesignMultiAxisPlot) {
 			((JRDesignMultiAxisPlot) plot).setChart(jrChart);
 		}
+	}
+
+	private static JRDesignDataRange getDummyDataRange() {
+		JRDesignDataRange dataRange = new JRDesignDataRange(null);
+		dataRange.setHighExpression(new JRDesignExpression("\"CHANGE_ME\""));
+		dataRange.setLowExpression(new JRDesignExpression("\"CHANGE_ME\""));
+		return dataRange;
 	}
 
 	/*
