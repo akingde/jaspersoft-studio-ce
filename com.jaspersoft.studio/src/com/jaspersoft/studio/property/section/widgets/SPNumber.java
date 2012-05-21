@@ -37,7 +37,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPNumber extends ASPropertyWidget {
-	private Text ftext;
+	protected Text ftext;
 
 	public SPNumber(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -56,6 +56,8 @@ public class SPNumber extends ASPropertyWidget {
 				try {
 					Number newValue = null;
 					String tmp = ftext.getText();
+					if (numType == null)
+						numType = Double.class;
 					if (tmp != null && !tmp.trim().isEmpty()) {
 						if (numType == Double.class)
 							newValue = new Double(tmp);

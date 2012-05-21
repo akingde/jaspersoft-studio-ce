@@ -41,6 +41,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DegreePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
@@ -247,7 +248,7 @@ public class MBarPlot extends MChartPlot {
 				.setDescription(Messages.MBarPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
-		DoublePropertyDescriptor catAxisTickLabelRotation = new DoublePropertyDescriptor(
+		DoublePropertyDescriptor catAxisTickLabelRotation = new DegreePropertyDescriptor(
 				JRDesignBarPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION,
 				Messages.common_category_axis_tick_label_rotation);
 		catAxisTickLabelRotation

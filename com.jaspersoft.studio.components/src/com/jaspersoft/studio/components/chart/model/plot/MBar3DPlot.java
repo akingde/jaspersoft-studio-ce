@@ -42,6 +42,7 @@ import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.FontPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.DegreePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.DoublePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
@@ -210,8 +211,7 @@ public class MBar3DPlot extends MChartPlot {
 
 		CheckBoxPropertyDescriptor valAxisVertTickLabelD = new CheckBoxPropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_VALUE_AXIS_VERTICAL_TICK_LABELS,
-				Messages.common_value_axis_vertical_tick_labels,
-				NullEnum.NULL);
+				Messages.common_value_axis_vertical_tick_labels, NullEnum.NULL);
 		valAxisVertTickLabelD
 				.setDescription(Messages.MBar3DPlot_value_axis_vertical_tick_labels_description);
 		desc.add(valAxisVertTickLabelD);
@@ -236,7 +236,7 @@ public class MBar3DPlot extends MChartPlot {
 				.setDescription(Messages.MBar3DPlot_value_axis_tick_label_mask_description);
 		desc.add(valAxisTickLabelMaskD);
 
-		DoublePropertyDescriptor catAxisTickLabelRotation = new DoublePropertyDescriptor(
+		DoublePropertyDescriptor catAxisTickLabelRotation = new DegreePropertyDescriptor(
 				JRDesignBar3DPlot.PROPERTY_CATEGORY_AXIS_TICK_LABEL_ROTATION,
 				Messages.common_category_axis_tick_label_rotation);
 		catAxisTickLabelRotation
