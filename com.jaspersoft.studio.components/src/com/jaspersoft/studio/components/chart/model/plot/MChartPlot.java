@@ -40,6 +40,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.TransparencyPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 public class MChartPlot extends APropertyNode {
@@ -59,14 +60,14 @@ public class MChartPlot extends APropertyNode {
 		backcolorD.setDescription(Messages.MChartPlot_backcolor_description);
 		desc.add(backcolorD);
 
-		FloatPropertyDescriptor backAlphaD = new FloatPropertyDescriptor(
+		FloatPropertyDescriptor backAlphaD = new TransparencyPropertyDescriptor(
 				JRBaseChartPlot.PROPERTY_BACKGROUND_ALPHA,
 				Messages.MChartPlot_background_alpha_percent);
 		backAlphaD
 				.setDescription(Messages.MChartPlot_background_alpha_percent_description);
 		desc.add(backAlphaD);
 
-		FloatPropertyDescriptor foreAlphaD = new FloatPropertyDescriptor(
+		FloatPropertyDescriptor foreAlphaD = new TransparencyPropertyDescriptor(
 				JRBaseChartPlot.PROPERTY_FOREGROUND_ALPHA,
 				Messages.MChartPlot_foreground_alpha_percent);
 		foreAlphaD

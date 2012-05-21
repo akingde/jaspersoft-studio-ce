@@ -30,8 +30,7 @@ import com.jaspersoft.studio.data.DataAdapterDescriptor;
 
 public abstract class ADataAdapterStorage {
 	private static final String PROP_DATAADAPTERS = "DATAADAPTERS";
-	private static PropertyChangeSupport propChangeSupport = new PropertyChangeSupport(
-			JaspersoftStudioPlugin.getInstance());
+	private PropertyChangeSupport propChangeSupport = new PropertyChangeSupport(JaspersoftStudioPlugin.getInstance());
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		propChangeSupport.addPropertyChangeListener(listener);

@@ -34,9 +34,9 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
 
-public class TransparencePropertyDescriptor extends JSSEnumPropertyDescriptor {
+public class OpaqueModePropertyDescriptor extends JSSEnumPropertyDescriptor {
 
-	public TransparencePropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type) {
+	public OpaqueModePropertyDescriptor(Object id, String displayName, Class<? extends JREnum> jrEnum, NullEnum type) {
 		super(id, displayName, jrEnum, type);
 	}
 

@@ -19,23 +19,21 @@
  */
 package com.jaspersoft.studio.property.section.widgets;
 
-import java.math.BigDecimal;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Scale;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.mihalis.opal.angles.AngleSlider;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPDegree extends SPNumber {
-	private AngleSlider angleSlider;
+public class SPTransparency extends SPNumber {
 
-	public SPDegree(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
+	public SPTransparency(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
 	}
 
@@ -53,14 +51,20 @@ public class SPDegree extends SPNumber {
 		layout.center = true;
 		composite.setLayout(layout);
 
-		angleSlider = new AngleSlider(composite, SWT.NONE);
-		angleSlider.setToolTipText(pDescriptor.getDescription());
-		angleSlider.addSelectionListener(new SelectionAdapter() {
-
+		scale = new Scale(composite, SWT.HORIZONTAL);
+		scale.setMinimum(0);
+		scale.setMaximum(100);
+		scale.setIncrement(1);
+		scale.setPageIncrement(5);
+		RowData rd = new RowData();
+		rd.width = 100;
+		scale.setLayoutData(rd);
+		scale.setToolTipText(pDescriptor.getDescription());
+		scale.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (!isRefresh)
-					ftext.setText("" + angleSlider.getSelection());
+					ftext.setText("" + (scale.getSelection() / 100f));
 			}
 		});
 
@@ -68,19 +72,19 @@ public class SPDegree extends SPNumber {
 	}
 
 	private Composite composite;
+	private Scale scale;
 
 	public void setDataNumber(Number f) {
 		if (numType == null)
-			numType = Double.class;
+			numType = Float.class;
+
 		super.setDataNumber(f);
 		if (f != null) {
-			int degree = Math.abs(f.intValue());
-			if (degree > 360)
-				degree = BigDecimal.valueOf(degree).remainder(BigDecimal.valueOf(360)).intValue();
+			int alfa = Math.round(100 * f.floatValue());
 
-			angleSlider.setSelection(degree);
+			scale.setSelection(alfa);
 		} else
-			angleSlider.setSelection(0);
+			scale.setSelection(0);
 	}
 
 }

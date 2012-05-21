@@ -48,28 +48,49 @@ public class SPNumber extends ASPropertyWidget {
 		return ftext;
 	}
 
+	private Number min;
+	private Number max;
+
+	public void setBorders(Number min, Number max) {
+		this.min = min;
+		this.max = max;
+	}
+
 	protected void createComponent(Composite parent) {
 		ftext = section.getWidgetFactory().createText(parent, "", SWT.RIGHT);
 		ftext.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
 				try {
-					Number newValue = null;
-					String tmp = ftext.getText();
-					if (numType == null)
-						numType = Double.class;
-					if (tmp != null && !tmp.trim().isEmpty()) {
-						if (numType == Double.class)
-							newValue = new Double(tmp);
-						else if (numType == Integer.class)
-							newValue = new Integer(tmp);
-						else if (numType == Float.class)
-							newValue = new Float(tmp);
-					}
-					section.changeProperty(pDescriptor.getId(), newValue);
-				} catch (NumberFormatException nfe) {
+					if (!isRefresh) {
+						Number newValue = null;
+						String tmp = ftext.getText();
+						if (tmp != null && !tmp.trim().isEmpty()) {
+							if (numType == Double.class)
+								newValue = new Double(tmp);
+							else if (numType == Integer.class)
+								newValue = new Integer(tmp);
+							else if (numType == Float.class)
+								newValue = new Float(tmp);
+						}
+						if (newValue != null) {
+							if (min != null) {
+								if (min.doubleValue() > newValue.doubleValue())
+									newValue = min;
+							}
+							if (max != null) {
+								if (max.doubleValue() < newValue.doubleValue())
+									newValue = max;
+							}
+						}
 
+						if (!section.changeProperty(pDescriptor.getId(), newValue)) {
+							setData(section.getElement(), newValue);
+						}
+					}
+				} catch (NumberFormatException nfe) {
 				}
+
 			}
 		});
 		ftext.setToolTipText(pDescriptor.getDescription());
@@ -92,11 +113,14 @@ public class SPNumber extends ASPropertyWidget {
 		}
 	}
 
-	private Class<? extends Number> numType;
+	boolean isRefresh = false;
+	protected Class<? extends Number> numType;
 
 	public void setData(APropertyNode pnode, Object b) {
 		Number n = (Number) b;
+		isRefresh = true;
 		setDataNumber(n);
+		isRefresh = false;
 		if (n != null)
 			numType = n.getClass();
 	}

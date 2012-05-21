@@ -23,14 +23,14 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
-import com.jaspersoft.studio.property.section.widgets.SPDegree;
+import com.jaspersoft.studio.property.section.widgets.SPTransparency;
 
 /*
  * The Class FloatPropertyDescriptor.
  * 
  * @author Chicu Veaceslav
  */
-public class DegreePropertyDescriptor extends DoublePropertyDescriptor {
+public class TransparencyPropertyDescriptor extends FloatPropertyDescriptor {
 
 	/**
 	 * Instantiates a new float property descriptor.
@@ -40,13 +40,13 @@ public class DegreePropertyDescriptor extends DoublePropertyDescriptor {
 	 * @param displayName
 	 *          the display name
 	 */
-	public DegreePropertyDescriptor(Object id, String displayName) {
+	public TransparencyPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		SPDegree spDegree = new SPDegree(parent, section, this);
-		spDegree.setBorders(new Double(-360), new Double(360));
-		return spDegree;
+		SPTransparency spTransparency = new SPTransparency(parent, section, this);
+		spTransparency.setBorders(new Float(0), new Float(1));
+		return spTransparency;
 	}
 }

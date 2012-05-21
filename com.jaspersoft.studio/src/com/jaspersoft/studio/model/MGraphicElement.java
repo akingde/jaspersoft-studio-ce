@@ -58,7 +58,7 @@ import com.jaspersoft.studio.property.descriptor.properties.JPropertiesPropertyD
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.TransparencePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 
 /*
@@ -371,7 +371,7 @@ public class MGraphicElement extends APropertyNode implements IGraphicElement, I
 		forecolorD.setDescription(Messages.MGraphicElement_forecolor_description);
 		desc.add(forecolorD);
 
-		opaqueD = new TransparencePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque, ModeEnum.class,
+		opaqueD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.common_opaque, ModeEnum.class,
 				NullEnum.INHERITED);
 		opaqueD.setDescription(Messages.MGraphicElement_opaque_description);
 		desc.add(opaqueD);

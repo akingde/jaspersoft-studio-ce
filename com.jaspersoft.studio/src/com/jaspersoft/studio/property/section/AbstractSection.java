@@ -234,7 +234,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	protected boolean isRefreshing = false;
 
-	public void changeProperty(Object property, Object newValue) {
+	public boolean changeProperty(Object property, Object newValue) {
 		if (!isRefreshing && elements != null && !elements.isEmpty() && getEditDomain() != null) {
 			CommandStack cs = getEditDomain().getCommandStack();
 			CompoundCommand cc = new CompoundCommand("Set " + property);
@@ -243,9 +243,12 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 				if (c != null)
 					cc.add(c);
 			}
-			if (!cc.getCommands().isEmpty())
+			if (!cc.getCommands().isEmpty()) {
 				cs.execute(cc);
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public void changePropertyOn(Object property, Object newValue, APropertyNode n) {

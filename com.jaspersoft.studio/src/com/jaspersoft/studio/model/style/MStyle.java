@@ -68,7 +68,7 @@ import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.TransparencePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.ModelUtils;
@@ -259,7 +259,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
-		modeD = new TransparencePropertyDescriptor(JRDesignStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
+		modeD = new OpaqueModePropertyDescriptor(JRDesignStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
 				NullEnum.INHERITED);
 		modeD.setDescription(Messages.MStyle_mode_description);
 		desc.add(modeD);
