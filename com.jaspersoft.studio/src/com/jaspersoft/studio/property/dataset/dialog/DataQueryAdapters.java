@@ -75,6 +75,7 @@ public abstract class DataQueryAdapters {
 	private JRDesignDataset newdataset;
 	private JasperDesign jDesign;
 	private JasperReportsConfiguration jConfig;
+
 	private Color background;
 	private IFile file;
 
@@ -141,7 +142,7 @@ public abstract class DataQueryAdapters {
 	}
 
 	private void createMappingTools(CTabFolder tabFolder, IFieldSetter fsetter) {
-		dmfactory = new DataMappingFactory(tabFolder, fsetter);
+		dmfactory = new DataMappingFactory(tabFolder, fsetter, this);
 	}
 
 	private void createQuery(CTabFolder tabFolder) {
@@ -408,5 +409,9 @@ public abstract class DataQueryAdapters {
 				monitor.done();
 			}
 		}
+	}
+
+	public JasperReportsConfiguration getjConfig() {
+		return jConfig;
 	}
 }

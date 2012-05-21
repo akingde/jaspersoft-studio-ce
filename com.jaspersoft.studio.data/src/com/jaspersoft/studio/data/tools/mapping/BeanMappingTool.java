@@ -42,7 +42,9 @@ import org.eclipse.swt.widgets.Label;
 import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.data.IMappingTool;
 import com.jaspersoft.studio.data.messages.Messages;
+import com.jaspersoft.studio.property.dataset.dialog.DataQueryAdapters;
 import com.jaspersoft.studio.swt.widgets.ClassType;
+import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 public class BeanMappingTool implements IMappingTool {
 	private JRDesignDataset dataset;
@@ -71,7 +73,11 @@ public class BeanMappingTool implements IMappingTool {
 			public void modifyText(ModifyEvent e) {
 				try {
 					errMsg.setText(""); //$NON-NLS-1$
-					Class<?> clazz = Class.forName(classType.getClassType());
+					JasperReportsConfiguration jConfig = dataQueryAdapters
+							.getjConfig();
+
+					Class<?> clazz = jConfig.getClassLoader().loadClass(
+							classType.getClassType());
 
 					methodsarray = PropertyUtils.getPropertyDescriptors(clazz);
 
@@ -157,6 +163,13 @@ public class BeanMappingTool implements IMappingTool {
 
 	public void dispose() {
 
+	}
+
+	private DataQueryAdapters dataQueryAdapters;
+
+	@Override
+	public void setParentContainer(DataQueryAdapters dataQueryAdapters) {
+		this.dataQueryAdapters = dataQueryAdapters;
 	}
 
 }
