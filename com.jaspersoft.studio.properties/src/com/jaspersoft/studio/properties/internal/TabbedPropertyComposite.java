@@ -109,7 +109,7 @@ public class TabbedPropertyComposite extends Composite {
 		mainComposite.addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				scrolledComposite.setMinSize(300, 1800);
+				setupScrolledComposite();
 			}
 		});
 		GridLayout layout2 = new GridLayout();
@@ -121,7 +121,12 @@ public class TabbedPropertyComposite extends Composite {
 		scrolledComposite.setAlwaysShowScrollBars(false);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setExpandHorizontal(true);
+		setupScrolledComposite();
+	}
+
+	public void setupScrolledComposite() {
 		scrolledComposite.setMinSize(300, 1800);
+		mainComposite.layout(true);
 	}
 
 	/**

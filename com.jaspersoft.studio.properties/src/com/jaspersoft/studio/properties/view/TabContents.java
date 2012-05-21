@@ -110,8 +110,8 @@ public final class TabContents {
 			final ISection section = sections[i];
 			final Composite sectionComposite = page.getWidgetFactory()
 					.createComposite(pageComposite, SWT.NO_FOCUS);
-//			sectionComposite.setLayoutData(new ColumnLayoutData(
-//					ColumnLayoutData.FILL));
+			// sectionComposite.setLayoutData(new ColumnLayoutData(
+			// ColumnLayoutData.FILL));
 			// RowLayout l = new RowLayout();
 			// l.wrap = true;
 			// GridLayout l = new GridLayout();

@@ -588,6 +588,7 @@ public class TabbedPropertySheetPage extends Page implements
 	 * @since 3.5
 	 */
 	public void resizeScrolledComposite() {
+		tabbedPropertyComposite.setupScrolledComposite();
 		// Point currentTabSize = new Point(0, 0);
 		// if (currentTab != null) {
 		// Composite sizeReference = (Composite) tabToComposite
