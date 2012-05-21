@@ -732,9 +732,11 @@ public class MSpiderChart extends MGraphicElement {
 		jrcomponent.setHeight(200);
 
 		SpiderChartComponent component = new SpiderChartComponent();
-		component.setPlot(new StandardSpiderPlot());
 		component.setChartSettings(new StandardChartSettings());
 		component.setDataset(new StandardSpiderDataset());
+		StandardSpiderPlot spiderPlot = new StandardSpiderPlot();
+		spiderPlot.setWebFilled(true);
+		component.setPlot(spiderPlot);
 
 		jrcomponent.setComponent(component);
 		jrcomponent
