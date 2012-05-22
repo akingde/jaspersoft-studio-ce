@@ -64,6 +64,7 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.texteditor.IElementStateListener;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.jaspersoft.studio.compatibility.JRXmlWriterHelper;
@@ -361,6 +362,34 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 		styleEditor.setModel(model);
 	}
 
+	private class StateListener implements IElementStateListener {
+
+		public void elementDirtyStateChanged(Object element, boolean isDirty) {
+
+		}
+
+		public void elementContentAboutToBeReplaced(Object element) {
+
+		}
+
+		public void elementContentReplaced(Object element) {
+
+		}
+
+		public void elementDeleted(Object element) {
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					getSite().getPage().closeEditor(JRtxEditor.this, false);
+				}
+			});
+		}
+
+		public void elementMoved(Object originalElement, Object movedElement) {
+
+		}
+
+	}
+
 	/**
 	 * Creates page 0 of the multi-page editor, which contains a text editor.
 	 */
@@ -379,6 +408,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 
 						}
 					});
+			xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
 		} catch (PartInitException e) {
 			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_text_editor,
 					null, e.getStatus());

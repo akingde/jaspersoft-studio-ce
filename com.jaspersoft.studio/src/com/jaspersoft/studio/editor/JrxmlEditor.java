@@ -69,6 +69,7 @@ import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.texteditor.IElementStateListener;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
@@ -101,6 +102,34 @@ import com.jaspersoft.studio.utils.jasper.ProxyFileResolver;
 public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeListener, IGotoMarker, IJROBjectEditor {
 
 	public static final String DEFAULT_PROJECT = "MyReports";
+
+	private class StateListener implements IElementStateListener {
+
+		public void elementDirtyStateChanged(Object element, boolean isDirty) {
+
+		}
+
+		public void elementContentAboutToBeReplaced(Object element) {
+
+		}
+
+		public void elementContentReplaced(Object element) {
+
+		}
+
+		public void elementDeleted(Object element) {
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					getSite().getPage().closeEditor(JrxmlEditor.this, false);
+				}
+			});
+		}
+
+		public void elementMoved(Object originalElement, Object movedElement) {
+
+		}
+
+	}
 
 	private final class PreviewEditor extends PreviewContainer {
 		public PreviewEditor(boolean listenResource, JasperReportsConfiguration jrContext) {
@@ -200,6 +229,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 
 		int index = addPage(previewEditor, getEditorInput());
 		setPageText(index, Messages.JrxmlEditor_preview);
+
+		xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
 	}
 
 	/**
