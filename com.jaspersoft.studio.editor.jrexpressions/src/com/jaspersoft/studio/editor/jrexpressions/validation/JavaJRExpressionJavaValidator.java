@@ -39,6 +39,12 @@ public class JavaJRExpressionJavaValidator extends AbstractJavaJRExpressionJavaV
 					error("The specified function was not found in the contributed library", name,
 							JavaJRExpressionPackage.Literals.FULL_METHOD_NAME__METHOD_NAME, JavaJRExpressionPackage.FULL_METHOD_NAME__METHOD_NAME);
 				}
+				else{
+					// TODO - Check for parameters
+					// We should add the verification for the number of parameters.
+					// Keep in mind that the JRExprFunctionBean contains a list of 
+					// parameters, and each of them can be multi/optional.
+				}
 			}
 		}
 	}
