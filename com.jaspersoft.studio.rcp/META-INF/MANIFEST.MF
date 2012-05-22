@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jaspersoft Studio
 Bundle-SymbolicName: com.jaspersoft.studio.rcp; singleton:=true
-Bundle-Version: 1.1.0
+Bundle-Version: 1.1.1
 Bundle-Localization: plugin
 Bundle-Activator: com.jaspersoft.studio.rcp.Activator
 Bundle-Vendor: Jaspersoft Corporation

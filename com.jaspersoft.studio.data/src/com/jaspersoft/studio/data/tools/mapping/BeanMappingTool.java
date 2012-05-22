@@ -167,7 +167,6 @@ public class BeanMappingTool implements IMappingTool {
 
 	private DataQueryAdapters dataQueryAdapters;
 
-	@Override
 	public void setParentContainer(DataQueryAdapters dataQueryAdapters) {
 		this.dataQueryAdapters = dataQueryAdapters;
 	}
