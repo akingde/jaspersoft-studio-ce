@@ -33,6 +33,7 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.LongLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.NullLiteral;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.StringLiteral;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.TestExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Type;
@@ -257,6 +258,13 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * @generated
    */
   private EClass arrayCreatorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass objectCreationEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1046,6 +1054,26 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getObjectCreation()
+  {
+    return objectCreationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getObjectCreation_ConstructorInvocation()
+  {
+    return (EReference)objectCreationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getJvmGenericArrayTypeReference()
   {
     return jvmGenericArrayTypeReferenceEClass;
@@ -1191,6 +1219,9 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     createEReference(arrayCreatorEClass, ARRAY_CREATOR__SIZE);
     createEReference(arrayCreatorEClass, ARRAY_CREATOR__INITIALIZATION);
 
+    objectCreationEClass = createEClass(OBJECT_CREATION);
+    createEReference(objectCreationEClass, OBJECT_CREATION__CONSTRUCTOR_INVOCATION);
+
     jvmGenericArrayTypeReferenceEClass = createEClass(JVM_GENERIC_ARRAY_TYPE_REFERENCE);
     createEReference(jvmGenericArrayTypeReferenceEClass, JVM_GENERIC_ARRAY_TYPE_REFERENCE__COMPONENT_TYPE);
   }
@@ -1246,6 +1277,7 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     nullLiteralEClass.getESuperTypes().add(this.getJasperReportsExpression());
     castedExpressionEClass.getESuperTypes().add(this.getJasperReportsExpression());
     arrayCreatorEClass.getESuperTypes().add(this.getJasperReportsExpression());
+    objectCreationEClass.getESuperTypes().add(this.getJasperReportsExpression());
     jvmGenericArrayTypeReferenceEClass.getESuperTypes().add(theTypesPackage.getJvmTypeReference());
 
     // Initialize classes and features; add operations and parameters
@@ -1348,6 +1380,9 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     initEReference(getArrayCreator_Type(), this.getType(), null, "type", null, 0, 1, ArrayCreator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getArrayCreator_Size(), this.getJasperReportsExpression(), null, "size", null, 0, -1, ArrayCreator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getArrayCreator_Initialization(), this.getArrayInitializer(), null, "initialization", null, 0, 1, ArrayCreator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(objectCreationEClass, ObjectCreation.class, "ObjectCreation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getObjectCreation_ConstructorInvocation(), this.getMethodInvocation(), null, "constructorInvocation", null, 0, 1, ObjectCreation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(jvmGenericArrayTypeReferenceEClass, JvmGenericArrayTypeReference.class, "JvmGenericArrayTypeReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getJvmGenericArrayTypeReference_ComponentType(), this.getJvmParameterizedTypeReference(), null, "componentType", null, 0, 1, JvmGenericArrayTypeReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

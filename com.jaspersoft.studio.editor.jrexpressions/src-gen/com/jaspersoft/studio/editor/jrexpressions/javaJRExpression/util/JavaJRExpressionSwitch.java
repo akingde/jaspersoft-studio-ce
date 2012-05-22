@@ -299,6 +299,14 @@ public class JavaJRExpressionSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case JavaJRExpressionPackage.OBJECT_CREATION:
+      {
+        ObjectCreation objectCreation = (ObjectCreation)theEObject;
+        T result = caseObjectCreation(objectCreation);
+        if (result == null) result = caseJasperReportsExpression(objectCreation);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case JavaJRExpressionPackage.JVM_GENERIC_ARRAY_TYPE_REFERENCE:
       {
         JvmGenericArrayTypeReference jvmGenericArrayTypeReference = (JvmGenericArrayTypeReference)theEObject;
@@ -771,6 +779,22 @@ public class JavaJRExpressionSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseArrayCreator(ArrayCreator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Object Creation</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Object Creation</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseObjectCreation(ObjectCreation object)
   {
     return null;
   }

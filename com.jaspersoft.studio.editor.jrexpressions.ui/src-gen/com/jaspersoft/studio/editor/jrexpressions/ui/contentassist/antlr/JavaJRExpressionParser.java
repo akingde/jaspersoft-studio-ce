@@ -43,7 +43,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getUnaryExpressionAccess().getAlternatives(), "rule__UnaryExpression__Alternatives");
 					put(grammarAccess.getUnaryExpressionNotPlusMinusAccess().getAlternatives(), "rule__UnaryExpressionNotPlusMinus__Alternatives");
 					put(grammarAccess.getPrimaryExpressionAccess().getAlternatives(), "rule__PrimaryExpression__Alternatives");
-					put(grammarAccess.getPrimaryExpressionAccess().getAlternatives_5_1(), "rule__PrimaryExpression__Alternatives_5_1");
+					put(grammarAccess.getPrimaryExpressionAccess().getAlternatives_6_1(), "rule__PrimaryExpression__Alternatives_6_1");
 					put(grammarAccess.getBaseJRExpressionAccess().getAlternatives(), "rule__BaseJRExpression__Alternatives");
 					put(grammarAccess.getMethodsExpressionAccess().getAlternatives_1(), "rule__MethodsExpression__Alternatives_1");
 					put(grammarAccess.getLiteralExpressionAccess().getAlternatives(), "rule__LiteralExpression__Alternatives");
@@ -90,7 +90,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getUnaryExpressionAccess().getGroup_1(), "rule__UnaryExpression__Group_1__0");
 					put(grammarAccess.getUnaryExpressionNotPlusMinusAccess().getGroup_0(), "rule__UnaryExpressionNotPlusMinus__Group_0__0");
 					put(grammarAccess.getUnaryExpressionNotPlusMinusAccess().getGroup_1(), "rule__UnaryExpressionNotPlusMinus__Group_1__0");
-					put(grammarAccess.getPrimaryExpressionAccess().getGroup_5(), "rule__PrimaryExpression__Group_5__0");
+					put(grammarAccess.getPrimaryExpressionAccess().getGroup_6(), "rule__PrimaryExpression__Group_6__0");
 					put(grammarAccess.getJRFieldObjAccess().getGroup(), "rule__JRFieldObj__Group__0");
 					put(grammarAccess.getJRParameterObjAccess().getGroup(), "rule__JRParameterObj__Group__0");
 					put(grammarAccess.getJRVariableObjAccess().getGroup(), "rule__JRVariableObj__Group__0");
@@ -115,6 +115,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getArrayCreatorAccess().getGroup_3_1(), "rule__ArrayCreator__Group_3_1__0");
 					put(grammarAccess.getArrayCreatorAccess().getGroup_3_1_0(), "rule__ArrayCreator__Group_3_1_0__0");
 					put(grammarAccess.getArrayInitializerAccess().getGroup(), "rule__ArrayInitializer__Group__0");
+					put(grammarAccess.getObjectCreationAccess().getGroup(), "rule__ObjectCreation__Group__0");
 					put(grammarAccess.getMethodInvocationAccess().getGroup(), "rule__MethodInvocation__Group__0");
 					put(grammarAccess.getFullMethodNameAccess().getGroup(), "rule__FullMethodName__Group__0");
 					put(grammarAccess.getFullMethodNameAccess().getGroup_0(), "rule__FullMethodName__Group_0__0");
@@ -149,8 +150,8 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAdditiveExpressionAccess().getRightAssignment_1_1(), "rule__AdditiveExpression__RightAssignment_1_1");
 					put(grammarAccess.getMultiplicativeExpressionAccess().getOpAssignment_1_0_0_1(), "rule__MultiplicativeExpression__OpAssignment_1_0_0_1");
 					put(grammarAccess.getMultiplicativeExpressionAccess().getRightAssignment_1_1(), "rule__MultiplicativeExpression__RightAssignment_1_1");
-					put(grammarAccess.getPrimaryExpressionAccess().getTypeAssignment_5_1_0(), "rule__PrimaryExpression__TypeAssignment_5_1_0");
-					put(grammarAccess.getPrimaryExpressionAccess().getVoidAssignment_5_1_1(), "rule__PrimaryExpression__VoidAssignment_5_1_1");
+					put(grammarAccess.getPrimaryExpressionAccess().getTypeAssignment_6_1_0(), "rule__PrimaryExpression__TypeAssignment_6_1_0");
+					put(grammarAccess.getPrimaryExpressionAccess().getVoidAssignment_6_1_1(), "rule__PrimaryExpression__VoidAssignment_6_1_1");
 					put(grammarAccess.getJRFieldObjAccess().getBracedIdentifierAssignment_2(), "rule__JRFieldObj__BracedIdentifierAssignment_2");
 					put(grammarAccess.getJRParameterObjAccess().getBracedIdentifierAssignment_2(), "rule__JRParameterObj__BracedIdentifierAssignment_2");
 					put(grammarAccess.getJRVariableObjAccess().getBracedIdentifierAssignment_2(), "rule__JRVariableObj__BracedIdentifierAssignment_2");
@@ -173,6 +174,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getArrayCreatorAccess().getSizeAssignment_3_0_1(), "rule__ArrayCreator__SizeAssignment_3_0_1");
 					put(grammarAccess.getArrayCreatorAccess().getInitializationAssignment_3_1_1(), "rule__ArrayCreator__InitializationAssignment_3_1_1");
 					put(grammarAccess.getArrayInitializerAccess().getInitializationAssignment_2(), "rule__ArrayInitializer__InitializationAssignment_2");
+					put(grammarAccess.getObjectCreationAccess().getConstructorInvocationAssignment_2(), "rule__ObjectCreation__ConstructorInvocationAssignment_2");
 					put(grammarAccess.getMethodInvocationAccess().getFullyQualifiedMethodNameAssignment_1(), "rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1");
 					put(grammarAccess.getMethodInvocationAccess().getArgsAssignment_2(), "rule__MethodInvocation__ArgsAssignment_2");
 					put(grammarAccess.getFullMethodNameAccess().getPrefixQMNAssignment_0_0(), "rule__FullMethodName__PrefixQMNAssignment_0_0");

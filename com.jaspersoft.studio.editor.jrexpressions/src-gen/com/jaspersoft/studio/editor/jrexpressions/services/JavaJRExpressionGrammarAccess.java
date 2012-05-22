@@ -522,12 +522,12 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		private final RuleCall cPrimaryExpressionParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
 		
 		//UnaryExpressionNotPlusMinus returns JasperReportsExpression:
-		//	"~" UnaryExpression // Look for cast, avoiding the "dangling else problem". 
+		//	"~" UnaryExpression // Look for cast, avoiding a sort of "dangling else problem". 
 		//	// PrimaryExpression in fact has a ParExpression resulting in potential ambiguity
 		//	| "!" UnaryExpression | => CastedExpression | PrimaryExpression;
 		public ParserRule getRule() { return rule; }
 
-		//"~" UnaryExpression // Look for cast, avoiding the "dangling else problem". 
+		//"~" UnaryExpression // Look for cast, avoiding a sort of "dangling else problem". 
 		//// PrimaryExpression in fact has a ParExpression resulting in potential ambiguity
 		//| "!" UnaryExpression | => CastedExpression | PrimaryExpression
 		public Alternatives getAlternatives() { return cAlternatives; }
@@ -563,24 +563,29 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		private final RuleCall cParExpressionParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final RuleCall cLiteralExpressionParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		private final RuleCall cArrayCreatorParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
-		private final RuleCall cBaseJRExpressionParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
-		private final RuleCall cMethodsExpressionParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
-		private final Group cGroup_5 = (Group)cAlternatives.eContents().get(5);
-		private final Action cTypeClassAction_5_0 = (Action)cGroup_5.eContents().get(0);
-		private final Alternatives cAlternatives_5_1 = (Alternatives)cGroup_5.eContents().get(1);
-		private final Assignment cTypeAssignment_5_1_0 = (Assignment)cAlternatives_5_1.eContents().get(0);
-		private final RuleCall cTypeTypeParserRuleCall_5_1_0_0 = (RuleCall)cTypeAssignment_5_1_0.eContents().get(0);
-		private final Assignment cVoidAssignment_5_1_1 = (Assignment)cAlternatives_5_1.eContents().get(1);
-		private final Keyword cVoidVoidKeyword_5_1_1_0 = (Keyword)cVoidAssignment_5_1_1.eContents().get(0);
-		private final Keyword cFullStopKeyword_5_2 = (Keyword)cGroup_5.eContents().get(2);
-		private final Keyword cClassKeyword_5_3 = (Keyword)cGroup_5.eContents().get(3);
+		private final RuleCall cObjectCreationParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
+		private final RuleCall cBaseJRExpressionParserRuleCall_4 = (RuleCall)cAlternatives.eContents().get(4);
+		private final RuleCall cMethodsExpressionParserRuleCall_5 = (RuleCall)cAlternatives.eContents().get(5);
+		private final Group cGroup_6 = (Group)cAlternatives.eContents().get(6);
+		private final Action cTypeClassAction_6_0 = (Action)cGroup_6.eContents().get(0);
+		private final Alternatives cAlternatives_6_1 = (Alternatives)cGroup_6.eContents().get(1);
+		private final Assignment cTypeAssignment_6_1_0 = (Assignment)cAlternatives_6_1.eContents().get(0);
+		private final RuleCall cTypeTypeParserRuleCall_6_1_0_0 = (RuleCall)cTypeAssignment_6_1_0.eContents().get(0);
+		private final Assignment cVoidAssignment_6_1_1 = (Assignment)cAlternatives_6_1.eContents().get(1);
+		private final Keyword cVoidVoidKeyword_6_1_1_0 = (Keyword)cVoidAssignment_6_1_1.eContents().get(0);
+		private final Keyword cFullStopKeyword_6_2 = (Keyword)cGroup_6.eContents().get(2);
+		private final Keyword cClassKeyword_6_3 = (Keyword)cGroup_6.eContents().get(3);
 		
 		//PrimaryExpression returns JasperReportsExpression:
-		//	ParExpression | LiteralExpression | ArrayCreator | => BaseJRExpression | MethodsExpression | {TypeClass} (type=Type |
-		//	void?="void") "." "class";
+		//	ParExpression // Look for a base jrexpression, avoiding a sort of "dangling else problem". 
+		//	// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
+		//	| LiteralExpression | ArrayCreator | ObjectCreation | => BaseJRExpression | MethodsExpression | {TypeClass} (type=Type
+		//	| void?="void") "." "class";
 		public ParserRule getRule() { return rule; }
 
-		//ParExpression | LiteralExpression | ArrayCreator | => BaseJRExpression | MethodsExpression | {TypeClass} (type=Type |
+		//ParExpression // Look for a base jrexpression, avoiding a sort of "dangling else problem". 
+		//// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
+		//| LiteralExpression | ArrayCreator | ObjectCreation | => BaseJRExpression | MethodsExpression | {TypeClass} (type=Type |
 		//void?="void") "." "class"
 		public Alternatives getAlternatives() { return cAlternatives; }
 
@@ -593,38 +598,41 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		//ArrayCreator
 		public RuleCall getArrayCreatorParserRuleCall_2() { return cArrayCreatorParserRuleCall_2; }
 
+		//ObjectCreation
+		public RuleCall getObjectCreationParserRuleCall_3() { return cObjectCreationParserRuleCall_3; }
+
 		//=> BaseJRExpression
-		public RuleCall getBaseJRExpressionParserRuleCall_3() { return cBaseJRExpressionParserRuleCall_3; }
+		public RuleCall getBaseJRExpressionParserRuleCall_4() { return cBaseJRExpressionParserRuleCall_4; }
 
 		//MethodsExpression
-		public RuleCall getMethodsExpressionParserRuleCall_4() { return cMethodsExpressionParserRuleCall_4; }
+		public RuleCall getMethodsExpressionParserRuleCall_5() { return cMethodsExpressionParserRuleCall_5; }
 
 		//{TypeClass} (type=Type | void?="void") "." "class"
-		public Group getGroup_5() { return cGroup_5; }
+		public Group getGroup_6() { return cGroup_6; }
 
 		//{TypeClass}
-		public Action getTypeClassAction_5_0() { return cTypeClassAction_5_0; }
+		public Action getTypeClassAction_6_0() { return cTypeClassAction_6_0; }
 
 		//type=Type | void?="void"
-		public Alternatives getAlternatives_5_1() { return cAlternatives_5_1; }
+		public Alternatives getAlternatives_6_1() { return cAlternatives_6_1; }
 
 		//type=Type
-		public Assignment getTypeAssignment_5_1_0() { return cTypeAssignment_5_1_0; }
+		public Assignment getTypeAssignment_6_1_0() { return cTypeAssignment_6_1_0; }
 
 		//Type
-		public RuleCall getTypeTypeParserRuleCall_5_1_0_0() { return cTypeTypeParserRuleCall_5_1_0_0; }
+		public RuleCall getTypeTypeParserRuleCall_6_1_0_0() { return cTypeTypeParserRuleCall_6_1_0_0; }
 
 		//void?="void"
-		public Assignment getVoidAssignment_5_1_1() { return cVoidAssignment_5_1_1; }
+		public Assignment getVoidAssignment_6_1_1() { return cVoidAssignment_6_1_1; }
 
 		//"void"
-		public Keyword getVoidVoidKeyword_5_1_1_0() { return cVoidVoidKeyword_5_1_1_0; }
+		public Keyword getVoidVoidKeyword_6_1_1_0() { return cVoidVoidKeyword_6_1_1_0; }
 
 		//"."
-		public Keyword getFullStopKeyword_5_2() { return cFullStopKeyword_5_2; }
+		public Keyword getFullStopKeyword_6_2() { return cFullStopKeyword_6_2; }
 
 		//"class"
-		public Keyword getClassKeyword_5_3() { return cClassKeyword_5_3; }
+		public Keyword getClassKeyword_6_3() { return cClassKeyword_6_3; }
 	}
 
 	public class BaseJRExpressionElements extends AbstractParserRuleElementFinder {
@@ -1262,6 +1270,34 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		public Keyword getRightCurlyBracketKeyword_3() { return cRightCurlyBracketKeyword_3; }
 	}
 
+	public class ObjectCreationElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "ObjectCreation");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cObjectCreationAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cNewKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cConstructorInvocationAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cConstructorInvocationMethodInvocationParserRuleCall_2_0 = (RuleCall)cConstructorInvocationAssignment_2.eContents().get(0);
+		
+		//ObjectCreation returns JasperReportsExpression:
+		//	{ObjectCreation} "new" constructorInvocation=MethodInvocation;
+		public ParserRule getRule() { return rule; }
+
+		//{ObjectCreation} "new" constructorInvocation=MethodInvocation
+		public Group getGroup() { return cGroup; }
+
+		//{ObjectCreation}
+		public Action getObjectCreationAction_0() { return cObjectCreationAction_0; }
+
+		//"new"
+		public Keyword getNewKeyword_1() { return cNewKeyword_1; }
+
+		//constructorInvocation=MethodInvocation
+		public Assignment getConstructorInvocationAssignment_2() { return cConstructorInvocationAssignment_2; }
+
+		//MethodInvocation
+		public RuleCall getConstructorInvocationMethodInvocationParserRuleCall_2_0() { return cConstructorInvocationMethodInvocationParserRuleCall_2_0; }
+	}
+
 	public class MethodInvocationElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "MethodInvocation");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -1759,6 +1795,7 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	private TypeElements pType;
 	private ArrayCreatorElements pArrayCreator;
 	private ArrayInitializerElements pArrayInitializer;
+	private ObjectCreationElements pObjectCreation;
 	private MethodInvocationElements pMethodInvocation;
 	private FullMethodNameElements pFullMethodName;
 	private ArgumentsElements pArguments;
@@ -1925,7 +1962,7 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//UnaryExpressionNotPlusMinus returns JasperReportsExpression:
-	//	"~" UnaryExpression // Look for cast, avoiding the "dangling else problem". 
+	//	"~" UnaryExpression // Look for cast, avoiding a sort of "dangling else problem". 
 	//	// PrimaryExpression in fact has a ParExpression resulting in potential ambiguity
 	//	| "!" UnaryExpression | => CastedExpression | PrimaryExpression;
 	public UnaryExpressionNotPlusMinusElements getUnaryExpressionNotPlusMinusAccess() {
@@ -1937,8 +1974,10 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//PrimaryExpression returns JasperReportsExpression:
-	//	ParExpression | LiteralExpression | ArrayCreator | => BaseJRExpression | MethodsExpression | {TypeClass} (type=Type |
-	//	void?="void") "." "class";
+	//	ParExpression // Look for a base jrexpression, avoiding a sort of "dangling else problem". 
+	//	// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
+	//	| LiteralExpression | ArrayCreator | ObjectCreation | => BaseJRExpression | MethodsExpression | {TypeClass} (type=Type
+	//	| void?="void") "." "class";
 	public PrimaryExpressionElements getPrimaryExpressionAccess() {
 		return (pPrimaryExpression != null) ? pPrimaryExpression : (pPrimaryExpression = new PrimaryExpressionElements());
 	}
@@ -2136,6 +2175,16 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 	
 	public ParserRule getArrayInitializerRule() {
 		return getArrayInitializerAccess().getRule();
+	}
+
+	//ObjectCreation returns JasperReportsExpression:
+	//	{ObjectCreation} "new" constructorInvocation=MethodInvocation;
+	public ObjectCreationElements getObjectCreationAccess() {
+		return (pObjectCreation != null) ? pObjectCreation : (pObjectCreation = new ObjectCreationElements());
+	}
+	
+	public ParserRule getObjectCreationRule() {
+		return getObjectCreationAccess().getRule();
 	}
 
 	//MethodInvocation:

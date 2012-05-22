@@ -287,6 +287,15 @@ public interface JavaJRExpressionFactory extends EFactory
   ArrayCreator createArrayCreator();
 
   /**
+   * Returns a new object of class '<em>Object Creation</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Object Creation</em>'.
+   * @generated
+   */
+  ObjectCreation createObjectCreation();
+
+  /**
    * Returns a new object of class '<em>Jvm Generic Array Type Reference</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

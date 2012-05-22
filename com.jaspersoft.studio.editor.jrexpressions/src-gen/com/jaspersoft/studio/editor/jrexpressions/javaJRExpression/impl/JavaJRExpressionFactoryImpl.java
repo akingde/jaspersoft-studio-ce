@@ -96,6 +96,7 @@ public class JavaJRExpressionFactoryImpl extends EFactoryImpl implements JavaJRE
       case JavaJRExpressionPackage.NULL_LITERAL: return createNullLiteral();
       case JavaJRExpressionPackage.CASTED_EXPRESSION: return createCastedExpression();
       case JavaJRExpressionPackage.ARRAY_CREATOR: return createArrayCreator();
+      case JavaJRExpressionPackage.OBJECT_CREATION: return createObjectCreation();
       case JavaJRExpressionPackage.JVM_GENERIC_ARRAY_TYPE_REFERENCE: return createJvmGenericArrayTypeReference();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -419,6 +420,17 @@ public class JavaJRExpressionFactoryImpl extends EFactoryImpl implements JavaJRE
   {
     ArrayCreatorImpl arrayCreator = new ArrayCreatorImpl();
     return arrayCreator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ObjectCreation createObjectCreation()
+  {
+    ObjectCreationImpl objectCreation = new ObjectCreationImpl();
+    return objectCreation;
   }
 
   /**

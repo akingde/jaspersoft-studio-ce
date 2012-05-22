@@ -62,6 +62,7 @@ PrimaryExpression returns JasperReportsExpression:
 	ParExpression
 	| LiteralExpression 
 	| ArrayCreator 
+	| ObjectCreation
 	| (=>BaseJRExpression)	// Look for a base jrexpression, avoiding a sort of "dangling else problem". 
 							// MethodsExpression in fact uses BaseJRExpression resulting in potential ambiguity
 	| MethodsExpression 
@@ -149,6 +150,10 @@ ArrayCreator returns JasperReportsExpression:
 
 ArrayInitializer:
 	{ArrayInitializer} '{' (initialization=ExpressionList)? '}'
+;
+
+ObjectCreation returns JasperReportsExpression:
+	{ObjectCreation} 'new' constructorInvocation=MethodInvocation
 ;
 
 MethodInvocation:

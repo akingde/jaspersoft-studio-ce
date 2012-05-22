@@ -991,6 +991,34 @@ public interface JavaJRExpressionPackage extends EPackage
   int ARRAY_CREATOR_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 3;
 
   /**
+   * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.ObjectCreationImpl <em>Object Creation</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.ObjectCreationImpl
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getObjectCreation()
+   * @generated
+   */
+  int OBJECT_CREATION = 29;
+
+  /**
+   * The feature id for the '<em><b>Constructor Invocation</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OBJECT_CREATION__CONSTRUCTOR_INVOCATION = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Object Creation</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OBJECT_CREATION_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
+
+  /**
    * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JvmGenericArrayTypeReferenceImpl <em>Jvm Generic Array Type Reference</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -998,7 +1026,7 @@ public interface JavaJRExpressionPackage extends EPackage
    * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getJvmGenericArrayTypeReference()
    * @generated
    */
-  int JVM_GENERIC_ARRAY_TYPE_REFERENCE = 29;
+  int JVM_GENERIC_ARRAY_TYPE_REFERENCE = 30;
 
   /**
    * The feature id for the '<em><b>Component Type</b></em>' containment reference.
@@ -1772,6 +1800,27 @@ public interface JavaJRExpressionPackage extends EPackage
   EReference getArrayCreator_Initialization();
 
   /**
+   * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation <em>Object Creation</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Object Creation</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation
+   * @generated
+   */
+  EClass getObjectCreation();
+
+  /**
+   * Returns the meta object for the containment reference '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation#getConstructorInvocation <em>Constructor Invocation</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Constructor Invocation</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ObjectCreation#getConstructorInvocation()
+   * @see #getObjectCreation()
+   * @generated
+   */
+  EReference getObjectCreation_ConstructorInvocation();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JvmGenericArrayTypeReference <em>Jvm Generic Array Type Reference</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2440,6 +2489,24 @@ public interface JavaJRExpressionPackage extends EPackage
      * @generated
      */
     EReference ARRAY_CREATOR__INITIALIZATION = eINSTANCE.getArrayCreator_Initialization();
+
+    /**
+     * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.ObjectCreationImpl <em>Object Creation</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.ObjectCreationImpl
+     * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JavaJRExpressionPackageImpl#getObjectCreation()
+     * @generated
+     */
+    EClass OBJECT_CREATION = eINSTANCE.getObjectCreation();
+
+    /**
+     * The meta object literal for the '<em><b>Constructor Invocation</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OBJECT_CREATION__CONSTRUCTOR_INVOCATION = eINSTANCE.getObjectCreation_ConstructorInvocation();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.JvmGenericArrayTypeReferenceImpl <em>Jvm Generic Array Type Reference</em>}' class.

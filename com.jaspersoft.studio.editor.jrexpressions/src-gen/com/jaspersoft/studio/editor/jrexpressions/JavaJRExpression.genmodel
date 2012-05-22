@@ -107,6 +107,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//ArrayCreator/size"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//ArrayCreator/initialization"/>
     </genClasses>
+    <genClasses ecoreClass="JavaJRExpression.ecore#//ObjectCreation">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//ObjectCreation/constructorInvocation"/>
+    </genClasses>
     <genClasses ecoreClass="JavaJRExpression.ecore#//JvmGenericArrayTypeReference">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//JvmGenericArrayTypeReference/componentType"/>
     </genClasses>
