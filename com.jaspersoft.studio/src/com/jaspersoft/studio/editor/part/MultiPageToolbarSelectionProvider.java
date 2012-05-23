@@ -21,7 +21,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.report;
+package com.jaspersoft.studio.editor.part;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.ListenerList;

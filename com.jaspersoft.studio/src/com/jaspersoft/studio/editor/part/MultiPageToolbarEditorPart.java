@@ -1,27 +1,23 @@
 /*
- * Jaspersoft Open Studio - Eclipse-based JasperReports Designer.
- * Copyright (C) 2005 - 2010 Jaspersoft Corporation. All rights reserved.
- * http://www.jaspersoft.com
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
+ * Jaspersoft Open Studio - Eclipse-based JasperReports Designer. Copyright (C) 2005 - 2010 Jaspersoft Corporation. All
+ * rights reserved. http://www.jaspersoft.com
+ * 
+ * Unless you have purchased a commercial license agreement from Jaspersoft, the following license terms apply:
+ * 
  * This program is part of Jaspersoft Open Studio.
- *
- * Jaspersoft Open Studio is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jaspersoft Open Studio is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with Jaspersoft Open Studio. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Jaspersoft Open Studio is free software: you can redistribute it and/or modify it under the terms of the GNU Affero
+ * General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ * 
+ * Jaspersoft Open Studio is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with Jaspersoft Open Studio. If not,
+ * see <http://www.gnu.org/licenses/>.
  */
-package com.jaspersoft.studio.editor.report;
+package com.jaspersoft.studio.editor.part;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +43,13 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -74,8 +72,6 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.IWorkbenchPartOrientation;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import org.eclipse.ui.part.MultiPageEditorSite;
-import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.ui.part.PageSwitcher;
 import org.eclipse.ui.services.IDisposable;
 import org.eclipse.ui.services.IServiceLocator;
@@ -138,8 +134,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 * @param control
 	 *          the control, or <code>null</code>
 	 * @return the index of the new page
-	 * 
-	 * @see MultiPageEditorPart#setControl(int, Control)
+	 *  
 	 */
 	public int addPage(Control control) {
 		int index = getPageCount();
@@ -155,8 +150,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 *          the index at which to add the page (0-based)
 	 * @param control
 	 *          the control, or <code>null</code>
-	 * 
-	 * @see MultiPageEditorPart#setControl(int, Control)
+	 *  
 	 */
 	public void addPage(int index, Control control) {
 		createItem(index, control);
@@ -173,8 +167,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 * @return the index of the new page
 	 * @exception PartInitException
 	 *              if a new page could not be created
-	 * 
-	 * @see MultiPageEditorPart#handlePropertyChange(int) the handler for property change events from the nested editor
+	 *  
 	 */
 	public int addPage(IEditorPart editor, IEditorInput input) throws PartInitException {
 		int index = getPageCount();
@@ -194,8 +187,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 *          the input for the nested editor
 	 * @exception PartInitException
 	 *              if a new page could not be created
-	 * 
-	 * @see MultiPageEditorPart#handlePropertyChange(int) the handler for property change events from the nested editor
+	 *  
 	 */
 	public void addPage(int index, IEditorPart editor, IEditorInput input) throws PartInitException {
 		IEditorSite site = createSite(editor);
@@ -242,15 +234,21 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 *          The composite in which the container tab folder should be created; must not be <code>null</code>.
 	 * @return a new container
 	 */
-	private TFContainer createContainer(Composite parent) {
+	private TFContainer createContainer(final Composite parent) {
 		// use SWT.FLAT style so that an extra 1 pixel border is not reserved
 		// inside the folder
 		parent.setLayout(new FillLayout());
 		final TFContainer newContainer = new TFContainer(parent, SWT.NONE);
 		newContainer.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				int newPageIndex = newContainer.indexOf((TFItem) e.item);
+				ToolItem ti = (ToolItem) e.getSource();
+				int newPageIndex = newContainer.indexOf((TFItem) ti.getData());
+				container.setSelection(newPageIndex);
 				pageChange(newPageIndex);
+				// TODO, workaround here, after selection, container is not refreshed
+				Point size = parent.getParent().getSize();
+				parent.getParent().setSize(size.x - 1, size.y - 1);
+				parent.getParent().setSize(size.x, size.y);
 			}
 		});
 		newContainer.addTraverseListener(new TraverseListener() {
@@ -323,13 +321,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		initializePageSwitching();
 		initializeSubTabSwitching();
 	}
-
-	/**
-	 * Initialize the MultiPageEditorPart to use the page switching command. Clients can override this method with an
-	 * empty body if they wish to opt-out.
-	 * 
-	 * @since 3.4
-	 */
+ 
 	protected void initializePageSwitching() {
 		new PageSwitcher(this) {
 			public Object[] getPages() {
@@ -362,12 +354,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 			}
 		};
 	}
-
-	/**
-	 * Initialize the MultiPageEditorPart to use the sub-tab switching commands.
-	 * 
-	 * @since 3.5
-	 */
+ 
 	private void initializeSubTabSwitching() {
 		IHandlerService service = (IHandlerService) getSite().getService(IHandlerService.class);
 		service.activateHandler(COMMAND_NEXT_SUB_TAB, new AbstractHandler() {
@@ -428,23 +415,11 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		return parent;
 	}
 
-	/**
-	 * Creates the site for the given nested editor. The <code>MultiPageEditorPart</code> implementation of this method
-	 * creates an instance of <code>MultiPageEditorSite</code>. Subclasses may reimplement to create more specialized
-	 * sites.
-	 * 
-	 * @param editor
-	 *          the nested editor
-	 * @return the editor site
-	 */
+	 
 	protected IEditorSite createSite(IEditorPart editor) {
 		return new MultiPageToolbarEditorSite(this, editor);
 	}
-
-	/**
-	 * The <code>MultiPageEditorPart</code> implementation of this <code>IWorkbenchPart</code> method disposes all nested
-	 * editors. Subclasses may extend.
-	 */
+ 
 	public void dispose() {
 		pageChangeListeners.clear();
 		for (IEditorPart editor : nestedEditors) {
@@ -516,7 +491,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 * @return the composite, or <code>null</code> if <code>createPartControl</code> has not been called yet
 	 */
 	protected Composite getContainer() {
-		return container;
+		return container.getContent();
 	}
 
 	/**
@@ -692,35 +667,13 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	protected void handlePropertyChange(int propertyId) {
 		firePropertyChange(propertyId);
 	}
-
-	/**
-	 * The <code>MultiPageEditorPart</code> implementation of this <code>IEditorPart</code> method sets its site to the
-	 * given site, its input to the given input, and the site's selection provider to a
-	 * <code>MultiPageSelectionProvider</code>. Subclasses may extend this method.
-	 * 
-	 * @param site
-	 *          The site for which this part is being created; must not be <code>null</code>.
-	 * @param input
-	 *          The input on which this editor should be created; must not be <code>null</code>.
-	 * @throws PartInitException
-	 *           If the initialization of the part fails -- currently never.
-	 */
+ 
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
 		site.setSelectionProvider(new MultiPageToolbarSelectionProvider(this));
 	}
-
-	/**
-	 * The <code>MultiPageEditorPart</code> implementation of this <code>IEditorPart</code> method returns whether the
-	 * contents of any of this multi-page editor's nested editors have changed since the last save. Pages created with
-	 * <code>addPage(Control)</code> are ignored.
-	 * <p>
-	 * Subclasses may extend or reimplement this method.
-	 * </p>
-	 * 
-	 * @return <code>true</code> if any of the nested editors are dirty; <code>false</code> otherwise.
-	 */
+ 
 	public boolean isDirty() {
 		// use nestedEditors to avoid SWT requests; see bug 12996
 		for (IEditorPart editor : nestedEditors) {
@@ -730,24 +683,8 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		}
 		return false;
 	}
-
-	/**
-	 * Notifies this multi-page editor that the page with the given id has been activated. This method is called when the
-	 * user selects a different tab.
-	 * <p>
-	 * The <code>MultiPageEditorPart</code> implementation of this method sets focus to the new page, and notifies the
-	 * action bar contributor (if there is one). This checks whether the action bar contributor is an instance of
-	 * <code>MultiPageEditorActionBarContributor</code>, and, if so, calls <code>setActivePage</code> with the active
-	 * nested editor. This also fires a selection change event if required.
-	 * </p>
-	 * <p>
-	 * Subclasses may extend this method.
-	 * </p>
-	 * 
-	 * @param newPageIndex
-	 *          the index of the activated page
-	 */
-	protected void pageChange(int newPageIndex) {
+ 
+	protected void pageChange(final int newPageIndex) {
 		deactivateSite(false, false);
 
 		IPartService partService = (IPartService) getSite().getService(IPartService.class);
@@ -766,10 +703,10 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 			ISelectionProvider selectionProvider = activeEditor.getSite().getSelectionProvider();
 			if (selectionProvider != null) {
 				ISelectionProvider outerProvider = getSite().getSelectionProvider();
-				if (outerProvider instanceof MultiPageSelectionProvider) {
+				if (outerProvider instanceof MultiPageToolbarSelectionProvider) {
 					SelectionChangedEvent event = new SelectionChangedEvent(selectionProvider, selectionProvider.getSelection());
 
-					MultiPageSelectionProvider provider = (MultiPageSelectionProvider) outerProvider;
+					MultiPageToolbarSelectionProvider provider = (MultiPageToolbarSelectionProvider) outerProvider;
 					provider.fireSelectionChanged(event);
 					provider.firePostSelectionChanged(event);
 				} else {
@@ -783,11 +720,16 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		}
 
 		activateSite();
+
+		postPageChange(newPageIndex);
+
 		Object selectedPage = getSelectedPage();
 		if (selectedPage != null) {
 			firePageChanged(new PageChangedEvent(this, selectedPage));
 		}
 	}
+
+	protected abstract void postPageChange(int newPageIndex);
 
 	/**
 	 * This method can be used by implementors of {@link MultiPageEditorPart#createPageContainer(Composite)} to deactivate
@@ -911,8 +853,8 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 			public void run() {
 				IWorkbenchPartSite partSite = part.getSite();
 				part.dispose();
-				if (partSite instanceof MultiPageEditorSite) {
-					((MultiPageEditorSite) partSite).dispose();
+				if (partSite instanceof MultiPageToolbarEditorSite) {
+					((MultiPageToolbarEditorSite) partSite).dispose();
 				}
 			}
 
@@ -927,9 +869,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 * the page has an editor, it is disposed of too. The page index must be valid.
 	 * 
 	 * @param pageIndex
-	 *          the index of the page
-	 * @see MultiPageEditorPart#addPage(Control)
-	 * @see MultiPageEditorPart#addPage(IEditorPart, IEditorInput)
+	 *          the index of the page 
 	 */
 	public void removePage(int pageIndex) {
 		Assert.isTrue(pageIndex >= 0 && pageIndex < getPageCount());
@@ -1050,13 +990,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	protected void setPageText(int pageIndex, String text) {
 		getItem(pageIndex).setText(text);
 	}
-
-	/**
-	 * If there is an adapter registered against the subclass of MultiPageEditorPart return that. Otherwise, delegate to
-	 * the internal editor.
-	 * 
-	 * @see org.eclipse.ui.part.WorkbenchPart#getAdapter(java.lang.Class)
-	 */
+ 
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		Object result = super.getAdapter(adapter);
 		// restrict delegating to the UI thread for bug 144851

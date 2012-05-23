@@ -71,6 +71,7 @@ public class SPText extends ASPropertyWidget {
 		} else if (parent.getLayout() instanceof GridLayout) {
 			GridData rd = new GridData(GridData.FILL_HORIZONTAL);
 			rd.minimumWidth = w;
+			rd.widthHint = w;
 			ftext.setLayoutData(rd);
 		}
 	}

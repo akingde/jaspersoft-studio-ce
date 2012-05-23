@@ -45,8 +45,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
@@ -55,13 +53,13 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
 
 import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.editor.IJROBjectEditor;
+import com.jaspersoft.studio.editor.part.MultiPageToolbarEditorPart;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.INode;
@@ -80,7 +78,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public class ReportContainer extends MultiPageEditorPart implements ITabbedPropertySheetPageContributor,
+public class ReportContainer extends MultiPageToolbarEditorPart implements ITabbedPropertySheetPageContributor,
 		IJROBjectEditor {
 
 	/** The model. */
@@ -128,10 +126,6 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	 */
 	@Override
 	protected void createPages() {
-		CTabFolder ctfolder = (CTabFolder) getContainer();
-		ctfolder.setTabPosition(SWT.TOP);
-		ctfolder.setBorderVisible(false);
-
 		try {
 			ReportEditor reportEditor = new ReportEditor(jrContext);
 			int index = addPage(reportEditor, getEditorInput());
@@ -348,8 +342,7 @@ public class ReportContainer extends MultiPageEditorPart implements ITabbedPrope
 	}
 
 	@Override
-	protected void pageChange(int newPageIndex) {
-		super.pageChange(newPageIndex);
+	protected void postPageChange(int newPageIndex) {
 		AbstractVisualEditor activeEditor = editors.get(newPageIndex);
 		activeEditor.setModel(activeEditor.getModel());
 
