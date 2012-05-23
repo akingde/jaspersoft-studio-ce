@@ -1,7 +1,14 @@
 package com.jaspersoft.studio.editor.jrexpressions.ui.support;
 
+import java.lang.reflect.Method;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.text.TextViewer;
+
 import com.google.inject.Injector;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
 
 import de.itemis.xtext.utils.jface.viewers.StyledTextXtextAdapter;
 
@@ -37,5 +44,28 @@ public class StyledTextXtextAdapter2 extends StyledTextXtextAdapter {
 	 */
 	public void configureExpressionContext(ExpressionContext exprContext){
 		getXtextSourceviewer().setData(ExpressionContext.ATTRIBUTE_EXPRESSION_CONTEXT, exprContext);
+	}
+	
+	/**
+	 * Tries to tell to the Xtext viewer whether the registered
+	 * auto edit strategies should be ignored.
+	 * 
+	 * @param ignore <code>true</code> if the strategies should be ignored.
+	 */
+	public void ignoreAutoEditStrategies(boolean ignore){
+		try {
+			// org.eclipse.jface.text.TextViewer#ignoreAutoEditStrategies(boolean) is protected by definition.
+			// XtextSourceViewer does not extend its visibility so we have to bypass it
+			// invoking the method via Reflection API.
+			// N.B: This way of using reflection is a "violation" of OOP basis but
+			// it is also a trick that works fine.
+			Method declaredMethod = TextViewer.class.getDeclaredMethod("ignoreAutoEditStrategies",boolean.class);
+			declaredMethod.setAccessible(true);
+			declaredMethod.invoke(getXtextSourceviewer(), ignore);
+		} catch (Exception e) {
+			JRExpressionsActivator.getInstance().getLog().log(
+					new Status(IStatus.ERROR, JRExpressionsActivator.PLUGIN_ID, 
+							"Unable to enable/disable auto edit strategies for Xtext source viewer.", e));
+		}
 	}
 }

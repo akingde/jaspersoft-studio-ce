@@ -18,8 +18,6 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ExpressionLis
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 
-import de.itemis.xtext.utils.jface.viewers.StyledTextXtextAdapter;
-
 /**
  * Utility object that exposes some methods to work with the current editing area.
  * 
@@ -31,7 +29,7 @@ public class EditingAreaHelper {
 	// flag to indicate if an update operation (text modification) is occurring.
 	private boolean update;	
 	// reference to the adapter for the styled text widget containing the xtext expression
-	private StyledTextXtextAdapter xtextAdapter;
+	private StyledTextXtextAdapter2 xtextAdapter;
 	// reference to the text widget with the expression
 	private StyledText textArea;	
 	// list of listeners
@@ -43,7 +41,7 @@ public class EditingAreaHelper {
 	 * @param xtextAdapter the adapter for the styled text widget
 	 * @param textArea the text widget where the expression is currently being edited
 	 */
-	public EditingAreaHelper(StyledTextXtextAdapter xtextAdapter, StyledText textArea) {
+	public EditingAreaHelper(StyledTextXtextAdapter2 xtextAdapter, StyledText textArea) {
 		super();
 		this.xtextAdapter = xtextAdapter;
 		this.textArea = textArea;
@@ -459,5 +457,15 @@ public class EditingAreaHelper {
 		for (ObjectCategorySelectionListener l : categorySelectionListeners){
 			l.select(selectionEvent);
 		}
+	}
+	
+	/**
+	 * Enables/disables the support for the auto edit strategies of the
+	 * Xtext viewer associated to the editing area.
+	 * 
+	 * @param ignore flag to determine if the auto edit strategies must be ignored
+	 */
+	public void ignoreAutoEditStrategies(boolean ignore){
+		xtextAdapter.ignoreAutoEditStrategies(ignore);
 	}
 }
