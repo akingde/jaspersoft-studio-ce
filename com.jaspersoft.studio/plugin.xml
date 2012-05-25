@@ -854,7 +854,7 @@
                id="com.jaspersoft.studio.property.section.obj.HyperlinkSection"
                tab="com.jaspersoft.studio.editor.section.HYPERLINK">
             <input
-                  type="com.jaspersoft.studio.model.text.MTextElement">
+                  type="com.jaspersoft.studio.model.text.MTextField">
             </input>
             <input
                   type="com.jaspersoft.studio.model.image.MImage">
