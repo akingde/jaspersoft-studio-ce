@@ -21,7 +21,6 @@ package com.jaspersoft.studio.components.chart.property.section.dataset;
 
 import net.sf.jasperreports.charts.design.JRDesignPieDataset;
 
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.model.dataset.descriptor.DatasetSection;

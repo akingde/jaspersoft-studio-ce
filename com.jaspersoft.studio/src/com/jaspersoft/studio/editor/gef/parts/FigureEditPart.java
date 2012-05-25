@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.export.draw.DrawVisitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -166,6 +167,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 */
 	protected void setupFigure(IFigure rect) {
 		ANode model = (ANode) getModel();
+		rect.setToolTip(new Label(model.getToolTip()));
 		if (model instanceof IGraphicElement && model.getValue() != null) {
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
 			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;

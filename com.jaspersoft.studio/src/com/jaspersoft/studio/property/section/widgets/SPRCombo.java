@@ -82,14 +82,15 @@ public class SPRCombo extends ASPropertyWidget {
 				break;
 			}
 		}
-		if (selection == 0 && pd.getItems().length > 0) {
-			str = Misc.nvl(str);
-			int oldpos = str.length();
-			combo.setItem(0, str);
-			combo.setSelection(new Point(oldpos, oldpos));
-		} else {
-			combo.select(selection);
-
+		if (b != null) {
+			if (selection == 0 && pd.getItems().length > 0) {
+				str = Misc.nvl(str);
+				int oldpos = str.length();
+				combo.setItem(0, str);
+				combo.setSelection(new Point(oldpos, oldpos));
+			} else {
+				combo.select(selection);
+			}
 		}
 	}
 }

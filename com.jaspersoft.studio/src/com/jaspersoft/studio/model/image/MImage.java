@@ -98,6 +98,11 @@ public class MImage extends MGraphicElementLineBox {
 		setValue(jrImage);
 	}
 
+	@Override
+	public JRDesignImage getValue() {
+		return (JRDesignImage) super.getValue();
+	}
+
 	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
 
@@ -389,6 +394,13 @@ public class MImage extends MGraphicElementLineBox {
 	 */
 	@Override
 	public String getToolTip() {
+		JRDesignImage value = getValue();
+		if (value != null) {
+			String tip = "";
+			if (value.getExpression() != null)
+				tip += value.getExpression().getText();
+			return tip;
+		}
 		return getIconDescriptor().getToolTip();
 	}
 

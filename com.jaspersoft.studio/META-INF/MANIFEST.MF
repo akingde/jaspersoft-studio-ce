@@ -700,6 +700,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    com.jaspersoft.studio.model,
    com.jaspersoft.studio.properties.view,
    org.eclipse.swt.widgets",
+ com.jaspersoft.studio.property.section.obj,
  com.jaspersoft.studio.property.section.report;
   uses:="org.eclipse.gef.ui.actions,
    org.eclipse.gef.commands,

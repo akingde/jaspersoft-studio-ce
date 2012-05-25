@@ -26,19 +26,20 @@ import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.JRHyperlinkParameter;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
+import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.ParameterPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.hyperlink.parameter.dialog.ParameterDTO;
-import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
-import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MHyperLink extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -70,13 +71,13 @@ public class MHyperLink extends APropertyNode {
 		toolTipExpressionD.setDescription(Messages.MHyperLink_hyperlink_tooltip_expression_description);
 		desc.add(toolTipExpressionD);
 
-		NTextPropertyDescriptor linkTargetD = new NTextPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TARGET,
-				Messages.MHyperLink_link_target);
+		RComboBoxPropertyDescriptor linkTargetD = new RComboBoxPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TARGET,
+				Messages.MHyperLink_link_target, EnumHelper.getEnumNames(HyperlinkTargetEnum.values(), NullEnum.NULL));
 		linkTargetD.setDescription(Messages.MHyperLink_link_target_description);
 		desc.add(linkTargetD);
 
-		RWComboBoxPropertyDescriptor linkTypeD = new RWComboBoxPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TYPE,
-				Messages.MHyperLink_link_type, ModelUtils.getHyperLinkType(), NullEnum.NULL);
+		RComboBoxPropertyDescriptor linkTypeD = new RComboBoxPropertyDescriptor(JRDesignHyperlink.PROPERTY_LINK_TYPE,
+				Messages.MHyperLink_link_type, EnumHelper.getEnumNames(HyperlinkTypeEnum.values(), NullEnum.NULL));
 		linkTypeD.setDescription(Messages.MHyperLink_link_type_description);
 		desc.add(linkTypeD);
 

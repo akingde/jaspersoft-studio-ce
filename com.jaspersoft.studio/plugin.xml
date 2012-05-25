@@ -494,6 +494,13 @@
                image="icons/resources/dataset-16.png"
                label="Dataset">
          </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Text"
+               category="element"
+               id="com.jaspersoft.studio.editor.section.HYPERLINK"
+               image="icons/resources/dataset-16.png"
+               label="Hyperlink">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension
@@ -840,6 +847,17 @@
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
             <input
                   type="com.jaspersoft.studio.model.text.MTextElement">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.HyperlinkSection"
+               id="com.jaspersoft.studio.property.section.obj.HyperlinkSection"
+               tab="com.jaspersoft.studio.editor.section.HYPERLINK">
+            <input
+                  type="com.jaspersoft.studio.model.text.MTextElement">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.image.MImage">
             </input>
          </propertySection>
       </propertySections>

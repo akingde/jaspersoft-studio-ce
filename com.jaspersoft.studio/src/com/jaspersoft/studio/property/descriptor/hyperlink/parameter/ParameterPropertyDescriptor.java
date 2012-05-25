@@ -45,13 +45,20 @@ import org.eclipse.swt.widgets.Composite;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPParameter;
 
-public class ParameterPropertyDescriptor extends NTextPropertyDescriptor implements IExpressionContextSetter{
-	
+public class ParameterPropertyDescriptor extends NTextPropertyDescriptor implements IExpressionContextSetter {
+
 	private ExpressionContext expContext;
 
 	public ParameterPropertyDescriptor(Object id, String displayName) {
 		super(id, displayName);
+	}
+
+	public ExpressionContext getExpContext() {
+		return expContext;
 	}
 
 	public CellEditor createPropertyEditor(Composite parent) {
@@ -69,6 +76,10 @@ public class ParameterPropertyDescriptor extends NTextPropertyDescriptor impleme
 	}
 
 	public void setExpressionContext(ExpressionContext expContext) {
-		this.expContext=expContext;
+		this.expContext = expContext;
+	}
+
+	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+		return new SPParameter(parent, section, this);
 	}
 }
