@@ -76,6 +76,7 @@ public abstract class AFileResourcePage extends AResourcePage {
 				FileDialog fd = new FileDialog(Display.getDefault()
 						.getActiveShell(), SWT.SAVE);
 				fd.setFilterExtensions(getFilter());
+				fd.setFileName(res.getValue().getName());
 				fd.setText("Save Resource To File ...");
 				String filename = fd.open();
 				doSaveFile(filename);

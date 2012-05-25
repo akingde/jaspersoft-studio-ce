@@ -23,7 +23,8 @@
  */
 package com.jaspersoft.studio.server.model.server;
 
-import net.sf.jasperreports.data.XmlUtil;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.util.CastorUtil;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -38,7 +39,7 @@ import com.jaspersoft.studio.server.ServerIconDescriptor;
  *
  */
 public class MServerProfile extends ANode {
-
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	public static final String MAPPINGFILE = "com/jaspersoft/studio/server/model/server/ServerProfileImpl.xml";
 
 	public MServerProfile(ANode parent, ServerProfile server) {
@@ -100,7 +101,7 @@ public class MServerProfile extends ANode {
 	}
 
 	public String toXML() {
-		return XmlUtil.write(getValue(), MAPPINGFILE);
+		return CastorUtil.write(getValue(), MAPPINGFILE);
 	}
 
 	private WSClient wsClient;

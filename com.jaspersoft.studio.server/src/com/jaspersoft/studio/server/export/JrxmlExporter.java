@@ -48,16 +48,24 @@ public class JrxmlExporter extends AExporter {
 
 		File f = super.exportFile(res, rd, fkeyname);
 		if (f != null) {
-			JasperDesign jd = JRXmlLoader.load(f);
-			setPropServerURL(res, jd);
-			setPropReportUnit(res, jd);
-			getResources(res, jd);
-
-			FileWriter fw = new FileWriter(f);
 			try {
-				fw.write(JRXmlWriterHelper.writeReport(jd, "4_0_2"));
-			} finally {
-				fw.close();
+				JasperDesign jd = JRXmlLoader.load(f);
+				setPropServerURL(res, jd);
+				setPropReportUnit(res, jd);
+				getResources(res, jd);
+
+				FileWriter fw = new FileWriter(f);
+				try {
+					MServerProfile sp = (MServerProfile) res.getRoot();
+					if (sp != null) {
+						fw.write(JRXmlWriterHelper.writeReport(jd, sp
+								.getValue().getJrVersion()));
+					}
+				} finally {
+					fw.close();
+				}
+			} catch (Exception e) {
+
 			}
 		}
 		return f;

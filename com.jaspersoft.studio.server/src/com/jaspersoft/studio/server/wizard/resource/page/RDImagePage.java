@@ -92,27 +92,29 @@ public class RDImagePage extends AFileResourcePage {
 		});
 		resizeListener = new Listener() {
 			public void handleEvent(Event e) {
-				Rectangle rect = img.getBounds();
-				Rectangle client = canvas.getClientArea();
-				hBar.setMaximum(rect.width);
-				vBar.setMaximum(rect.height);
-				hBar.setThumb(Math.min(rect.width, client.width));
-				vBar.setThumb(Math.min(rect.height, client.height));
-				int hPage = rect.width - client.width;
-				int vPage = rect.height - client.height;
-				int hSelection = hBar.getSelection();
-				int vSelection = vBar.getSelection();
-				if (hSelection >= hPage) {
-					if (hPage <= 0)
-						hSelection = 0;
-					origin.x = -hSelection;
+				if (img != null) {
+					Rectangle rect = img.getBounds();
+					Rectangle client = canvas.getClientArea();
+					hBar.setMaximum(rect.width);
+					vBar.setMaximum(rect.height);
+					hBar.setThumb(Math.min(rect.width, client.width));
+					vBar.setThumb(Math.min(rect.height, client.height));
+					int hPage = rect.width - client.width;
+					int vPage = rect.height - client.height;
+					int hSelection = hBar.getSelection();
+					int vSelection = vBar.getSelection();
+					if (hSelection >= hPage) {
+						if (hPage <= 0)
+							hSelection = 0;
+						origin.x = -hSelection;
+					}
+					if (vSelection >= vPage) {
+						if (vPage <= 0)
+							vSelection = 0;
+						origin.y = -vSelection;
+					}
+					canvas.redraw();
 				}
-				if (vSelection >= vPage) {
-					if (vPage <= 0)
-						vSelection = 0;
-					origin.y = -vSelection;
-				}
-				canvas.redraw();
 			}
 		};
 		canvas.addListener(SWT.Resize, resizeListener);

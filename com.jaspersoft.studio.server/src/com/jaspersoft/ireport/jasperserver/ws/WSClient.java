@@ -253,6 +253,7 @@ public class WSClient {
      */
     public ResourceDescriptor get(ResourceDescriptor descriptor, File outputFile, java.util.List<Argument> args) throws Exception
     {
+    	ResourceDescriptor rd = null;
     	java.io.InputStream is =null;
     	OutputStream os=null;
         try {
@@ -300,7 +301,7 @@ public class WSClient {
             	throw new Exception("Attachment not present!");
             }
             
-            return (ResourceDescriptor)or.getResourceDescriptors().get(0);
+            rd = (ResourceDescriptor)or.getResourceDescriptors().get(0);
             
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -311,7 +312,7 @@ public class WSClient {
         	if(os != null)
         		os.close();
         }
-        
+        return rd;
     }
     /*
     public JasperPrint runReport(ResourceDescriptor descriptor, java.util.Map parameters) throws Exception {

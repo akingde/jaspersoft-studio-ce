@@ -137,7 +137,6 @@ public class MResource extends APropertyNode implements ICopyable {
 	}
 
 	public Object getPropertyValue(Object id) {
-
 		return null;
 	}
 
