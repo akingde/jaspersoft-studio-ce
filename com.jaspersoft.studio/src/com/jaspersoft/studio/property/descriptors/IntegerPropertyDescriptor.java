@@ -89,6 +89,8 @@ public class IntegerPropertyDescriptor extends TextPropertyDescriptor implements
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPNumber(parent, section, this);
+		SPNumber spNumber = new SPNumber(parent, section, this);
+		spNumber.setNumType(Integer.class);
+		return spNumber;
 	}
 }

@@ -116,6 +116,10 @@ public class SPNumber extends ASPropertyWidget {
 	boolean isRefresh = false;
 	protected Class<? extends Number> numType;
 
+	public void setNumType(Class<? extends Number> numType) {
+		this.numType = numType;
+	}
+
 	public void setData(APropertyNode pnode, Object b) {
 		Number n = (Number) b;
 		isRefresh = true;

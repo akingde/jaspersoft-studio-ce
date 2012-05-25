@@ -75,7 +75,7 @@ import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-final class DatasetDialog extends FormDialog implements IFieldSetter {
+public class DatasetDialog extends FormDialog implements IFieldSetter {
 	private MDataset mdataset;
 	private MReport mreport;
 	private JasperReportsConfiguration jConfig;
@@ -215,10 +215,9 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 				JRExpressionEditor wizard = new JRExpressionEditor();
 				wizard.setValue(ExprUtil.setValues(new JRDesignExpression(), filterExpression.getText(), null));
 				JRDesignDataset designDataset = mdataset.getValue();
-				if(designDataset!=null){
-					wizard.setExpressionContext(new ExpressionContext(designDataset,mreport.getJasperConfiguration()));
-				}
-				else{
+				if (designDataset != null) {
+					wizard.setExpressionContext(new ExpressionContext(designDataset, mreport.getJasperConfiguration()));
+				} else {
 					wizard.setExpressionContext(ExpressionEditorSupportUtil.getReportExpressionContext());
 				}
 				WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
@@ -275,7 +274,7 @@ final class DatasetDialog extends FormDialog implements IFieldSetter {
 			JRDesignQuery jrQuery = new JRDesignQuery();
 			jrQuery.setLanguage(lang);
 			jrQuery.setText(qtext);
-			command.add(setValueCommand(JRDesignDataset.PROPERTY_QUERY, new MQuery(jrQuery), mdataset));
+			command.add(setValueCommand(JRDesignDataset.PROPERTY_QUERY, new MQuery(jrQuery, mdataset), mdataset));
 		} else {
 			IPropertySource mquery = (IPropertySource) mdataset.getPropertyValue(JRDesignDataset.PROPERTY_QUERY);
 			if (ds.getQuery().getLanguage() == null || !ds.getQuery().getLanguage().equals(lang))

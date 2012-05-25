@@ -25,6 +25,7 @@ import java.util.Map;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRStyle;
+import net.sf.jasperreports.engine.base.JRBaseFont;
 import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignStyle;
@@ -39,9 +40,10 @@ import net.sf.jasperreports.engine.type.VerticalAlignEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.jface.IntegerCellEditorValidator;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
@@ -64,12 +66,16 @@ import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pattern.PatternPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.pen.PenPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.HAlignPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
-import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.RotationPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.VAlignPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPBooleanToggle;
 import com.jaspersoft.studio.utils.Colors;
 import com.jaspersoft.studio.utils.ModelUtils;
 
@@ -181,9 +187,12 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 				String[] items = new String[styles.length];
 				if (items.length > 0) {
 					items[0] = jrElement.getStyleNameReference() != null ? jrElement.getStyleNameReference() : ""; //$NON-NLS-1$
+					int offset = 1;
 					for (int j = 0; j < styles.length; j++) {
 						if (jrElement != styles[j])
-							items[j] = styles[j].getName();
+							items[j + offset] = styles[j].getName();
+						else
+							offset = 0;
 					}
 				}
 				styleD.setItems(items);
@@ -206,7 +215,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		styleD.setDescription(Messages.MStyle_parent_style_description);
 		desc.add(styleD);
 
-		TextPropertyDescriptor nameD = new TextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, Messages.common_name);
+		NTextPropertyDescriptor nameD = new NTextPropertyDescriptor(JRDesignStyle.PROPERTY_NAME, Messages.common_name);
 		nameD.setDescription(Messages.MStyle_name_description);
 		desc.add(nameD);
 
@@ -229,68 +238,90 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		backcolorD.setDescription(Messages.MStyle_backcolor_description);
 		desc.add(backcolorD);
 
-		IntegerPropertyDescriptor radiusD = new IntegerPropertyDescriptor(JRDesignStyle.PROPERTY_RADIUS,
+		IntegerPropertyDescriptor radiusD = new IntegerPropertyDescriptor(JRBaseStyle.PROPERTY_RADIUS,
 				Messages.common_radius);
 		radiusD.setDescription(Messages.MStyle_radius_description);
 		desc.add(radiusD);
 
-		fillD = new JSSEnumPropertyDescriptor(JRDesignStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
+		fillD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_FILL, Messages.common_fill, FillEnum.class,
 				NullEnum.INHERITED);
 		fillD.setDescription(Messages.MStyle_fill_description);
 		desc.add(fillD);
 
-		scaleD = new JSSEnumPropertyDescriptor(JRDesignStyle.PROPERTY_SCALE_IMAGE, Messages.MStyle_scale,
+		scaleD = new JSSEnumPropertyDescriptor(JRBaseStyle.PROPERTY_SCALE_IMAGE, Messages.MStyle_scale,
 				ScaleImageEnum.class, NullEnum.INHERITED);
 		scaleD.setDescription(Messages.MStyle_scale_description);
 		desc.add(scaleD);
 
-		halignD = new HAlignPropertyDescriptor(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
+		halignD = new HAlignPropertyDescriptor(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT,
 				Messages.common_horizontal_alignment, HorizontalAlignEnum.class, NullEnum.INHERITED);
 		halignD.setDescription(Messages.MStyle_horizontal_alignment_description);
 		desc.add(halignD);
 
-		valignD = new VAlignPropertyDescriptor(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT,
-				Messages.common_vertical_alignment, VerticalAlignEnum.class, NullEnum.INHERITED);
+		valignD = new VAlignPropertyDescriptor(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, Messages.common_vertical_alignment,
+				VerticalAlignEnum.class, NullEnum.INHERITED);
 		valignD.setDescription(Messages.MStyle_vertical_alignment_description);
 		desc.add(valignD);
 
-		rotationD = new RotationPropertyDescriptor(JRDesignStyle.PROPERTY_ROTATION, Messages.common_rotation,
+		rotationD = new RotationPropertyDescriptor(JRBaseStyle.PROPERTY_ROTATION, Messages.common_rotation,
 				RotationEnum.class, NullEnum.INHERITED);
 		rotationD.setDescription(Messages.MStyle_rotation_description);
 		desc.add(rotationD);
 
-		modeD = new OpaqueModePropertyDescriptor(JRDesignStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
+		modeD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE, Messages.MStyle_mode, ModeEnum.class,
 				NullEnum.INHERITED);
 		modeD.setDescription(Messages.MStyle_mode_description);
 		desc.add(modeD);
 
-		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL,
+		CheckBoxPropertyDescriptor blankWhenNullD = new CheckBoxPropertyDescriptor(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL,
 				Messages.common_blank_when_null, NullEnum.INHERITED);
 		blankWhenNullD.setDescription(Messages.MStyle_blank_when_null_description);
 		desc.add(blankWhenNullD);
 
-		CheckBoxPropertyDescriptor strikeThroughD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_STRIKE_THROUGH,
-				Messages.common_strike_trough, NullEnum.INHERITED);
-		strikeThroughD.setDescription(Messages.MStyle_strike_trough_description);
-		desc.add(strikeThroughD);
-
-		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_UNDERLINE,
-				Messages.common_underline, NullEnum.INHERITED);
-		underlineD.setDescription(Messages.MStyle_underline_description);
-		desc.add(underlineD);
-
-		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_ITALIC,
-				Messages.common_italic, NullEnum.INHERITED);
-		italicD.setDescription(Messages.MStyle_italic_description);
-		desc.add(italicD);
-
-		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_BOLD,
-				Messages.common_bold, NullEnum.INHERITED);
-		boldD.setDescription(Messages.MStyle_bold_description);
+		CheckBoxPropertyDescriptor boldD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_BOLD, Messages.common_bold,
+				NullEnum.INHERITED) {
+			@Override
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/bold.png"));
+			}
+		};
+		boldD.setDescription(Messages.MFont_bold_description);
 		desc.add(boldD);
 
+		CheckBoxPropertyDescriptor italicD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_ITALIC,
+				Messages.common_italic, NullEnum.INHERITED) {
+			@Override
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this, JaspersoftStudioPlugin.getImage("icons/resources/italic.png"));
+			}
+		};
+		italicD.setDescription(Messages.MFont_italic_description);
+		desc.add(italicD);
+
+		CheckBoxPropertyDescriptor underlineD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_UNDERLINE,
+				Messages.common_underline, NullEnum.INHERITED) {
+			@Override
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getImage("icons/resources/underline.png"));
+			}
+		};
+		underlineD.setDescription(Messages.MFont_underline_description);
+		desc.add(underlineD);
+
+		CheckBoxPropertyDescriptor strikeThroughD = new CheckBoxPropertyDescriptor(JRBaseFont.PROPERTY_STRIKE_THROUGH,
+				Messages.common_strike_trough, NullEnum.INHERITED) {
+			@Override
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				return new SPBooleanToggle(parent, section, this,
+						JaspersoftStudioPlugin.getImage("icons/resources/strikethrought.png"));
+			}
+		};
+		strikeThroughD.setDescription(Messages.MFont_strike_trough_description);
+		desc.add(strikeThroughD);
+
 		CheckBoxPropertyDescriptor defaultD = new CheckBoxPropertyDescriptor(JRDesignStyle.PROPERTY_DEFAULT,
-				Messages.MStyle_default_style);
+				Messages.MStyle_default_style, NullEnum.INHERITED);
 		defaultD.setDescription(Messages.MStyle_default_style_description);
 		desc.add(defaultD);
 
@@ -310,7 +341,7 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		fontSizeD.setValidator(new IntegerCellEditorValidator());
 		desc.add(fontSizeD);
 
-		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRDesignStyle.PROPERTY_PATTERN,
+		PatternPropertyDescriptor patternD = new PatternPropertyDescriptor(JRBaseStyle.PROPERTY_PATTERN,
 				Messages.common_pattern);
 		patternD.setDescription(Messages.MStyle_pattern_description);
 		desc.add(patternD);
@@ -347,23 +378,23 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		underlineD.setCategory(Messages.MStyle_text_font_category);
 		strikeThroughD.setCategory(Messages.MStyle_text_font_category);
 
-		defaultsMap.put(JRDesignStyle.PROPERTY_FORECOLOR, null);
-		defaultsMap.put(JRDesignStyle.PROPERTY_BACKCOLOR, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_FORECOLOR, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
 
-		defaultsMap.put(JRDesignStyle.PROPERTY_FILL, null);
-		defaultsMap.put(JRDesignStyle.PROPERTY_SCALE_IMAGE, null);
-		defaultsMap.put(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
-		defaultsMap.put(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
-		defaultsMap.put(JRDesignStyle.PROPERTY_ROTATION, null);
-		defaultsMap.put(JRDesignStyle.PROPERTY_MODE, modeD.getEnumValue(ModeEnum.OPAQUE));
+		defaultsMap.put(JRBaseStyle.PROPERTY_FILL, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_SCALE_IMAGE, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_ROTATION, null);
+		defaultsMap.put(JRBaseStyle.PROPERTY_MODE, modeD.getEnumValue(ModeEnum.OPAQUE));
 
 		defaultsMap.put(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_UNDERLINE, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_ITALIC, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_BOLD, Boolean.FALSE);
-		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
-		defaultsMap.put(JRDesignStyle.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
+		defaultsMap.put(JRBaseStyle.PROPERTY_STRIKE_THROUGH, Boolean.FALSE);
+		defaultsMap.put(JRBaseStyle.PROPERTY_UNDERLINE, Boolean.FALSE);
+		defaultsMap.put(JRBaseStyle.PROPERTY_ITALIC, Boolean.FALSE);
+		defaultsMap.put(JRBaseStyle.PROPERTY_BOLD, Boolean.FALSE);
+		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_NAME, "SansSerif"); //$NON-NLS-1$
+		defaultsMap.put(JRBaseStyle.PROPERTY_FONT_SIZE, "10"); //$NON-NLS-1$
 	}
 
 	private MLinePen linePen;
@@ -433,32 +464,32 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))
 			return Colors.getSWTRGB4AWTGBColor(jrstyle.getOwnBackcolor());
 
-		if (id.equals(JRDesignStyle.PROPERTY_FILL))
+		if (id.equals(JRBaseStyle.PROPERTY_FILL))
 			return fillD.getEnumValue(jrstyle.getOwnFillValue());
-		if (id.equals(JRDesignStyle.PROPERTY_SCALE_IMAGE))
+		if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			return scaleD.getEnumValue(jrstyle.getOwnScaleImageValue());
-		if (id.equals(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
+		if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
 			return halignD.getEnumValue(jrstyle.getOwnHorizontalAlignmentValue());
-		if (id.equals(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT))
+		if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
 			return valignD.getEnumValue(jrstyle.getOwnVerticalAlignmentValue());
-		if (id.equals(JRDesignStyle.PROPERTY_ROTATION))
+		if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			return rotationD.getEnumValue(jrstyle.getOwnRotationValue());
-		if (id.equals(JRDesignStyle.PROPERTY_MODE))
+		if (id.equals(JRBaseStyle.PROPERTY_MODE))
 			return modeD.getEnumValue(jrstyle.getOwnModeValue());
 
-		if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
+		if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
 			return jrstyle.isOwnBlankWhenNull();
-		if (id.equals(JRDesignStyle.PROPERTY_STRIKE_THROUGH))
+		if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH))
 			return jrstyle.isOwnStrikeThrough();
-		if (id.equals(JRDesignStyle.PROPERTY_UNDERLINE))
+		if (id.equals(JRBaseStyle.PROPERTY_UNDERLINE))
 			return jrstyle.isOwnUnderline();
-		if (id.equals(JRDesignStyle.PROPERTY_ITALIC))
+		if (id.equals(JRBaseStyle.PROPERTY_ITALIC))
 			return jrstyle.isOwnItalic();
-		if (id.equals(JRDesignStyle.PROPERTY_BOLD))
+		if (id.equals(JRBaseStyle.PROPERTY_BOLD))
 			return jrstyle.isOwnBold();
-		if (id.equals(JRDesignStyle.PROPERTY_FONT_NAME))
+		if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			return jrstyle.getOwnFontName();
-		if (id.equals(JRDesignStyle.PROPERTY_FONT_SIZE))
+		if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
 			return jrstyle.getOwnFontSize() != null ? jrstyle.getOwnFontSize().toString() : ""; //$NON-NLS-1$
 
 		return null;
@@ -499,37 +530,37 @@ public class MStyle extends APropertyNode implements ICopyable, IPastable, ICont
 			jrstyle.setRadius((Integer) value);
 		else if (id.equals(JRBaseStyle.PROPERTY_MARKUP))
 			jrstyle.setMarkup((String) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_FORECOLOR))
+		else if (id.equals(JRBaseStyle.PROPERTY_FORECOLOR))
 			jrstyle.setForecolor(Colors.getAWT4SWTRGBColor((RGB) value));
-		else if (id.equals(JRDesignStyle.PROPERTY_BACKCOLOR))
+		else if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR))
 			jrstyle.setBackcolor(Colors.getAWT4SWTRGBColor((RGB) value));
 
-		else if (id.equals(JRDesignStyle.PROPERTY_FILL))
+		else if (id.equals(JRBaseStyle.PROPERTY_FILL))
 			jrstyle.setFill((FillEnum) fillD.getEnumValue(value));
-		else if (id.equals(JRDesignStyle.PROPERTY_SCALE_IMAGE))
+		else if (id.equals(JRBaseStyle.PROPERTY_SCALE_IMAGE))
 			jrstyle.setScaleImage((ScaleImageEnum) scaleD.getEnumValue(value));
-		else if (id.equals(JRDesignStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
+		else if (id.equals(JRBaseStyle.PROPERTY_HORIZONTAL_ALIGNMENT))
 			jrstyle.setHorizontalAlignment((HorizontalAlignEnum) halignD.getEnumValue(value));
-		else if (id.equals(JRDesignStyle.PROPERTY_VERTICAL_ALIGNMENT))
+		else if (id.equals(JRBaseStyle.PROPERTY_VERTICAL_ALIGNMENT))
 			jrstyle.setVerticalAlignment((VerticalAlignEnum) valignD.getEnumValue(value));
-		else if (id.equals(JRDesignStyle.PROPERTY_ROTATION))
+		else if (id.equals(JRBaseStyle.PROPERTY_ROTATION))
 			jrstyle.setRotation((RotationEnum) rotationD.getEnumValue(value));
-		else if (id.equals(JRDesignStyle.PROPERTY_MODE))
+		else if (id.equals(JRBaseStyle.PROPERTY_MODE))
 			jrstyle.setMode((ModeEnum) modeD.getEnumValue(value));
 
-		else if (id.equals(JRDesignStyle.PROPERTY_BLANK_WHEN_NULL))
+		else if (id.equals(JRBaseStyle.PROPERTY_BLANK_WHEN_NULL))
 			jrstyle.setBlankWhenNull((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_STRIKE_THROUGH))
+		else if (id.equals(JRBaseStyle.PROPERTY_STRIKE_THROUGH))
 			jrstyle.setStrikeThrough((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_UNDERLINE))
+		else if (id.equals(JRBaseStyle.PROPERTY_UNDERLINE))
 			jrstyle.setUnderline((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_ITALIC))
+		else if (id.equals(JRBaseStyle.PROPERTY_ITALIC))
 			jrstyle.setItalic((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_BOLD))
+		else if (id.equals(JRBaseStyle.PROPERTY_BOLD))
 			jrstyle.setBold((Boolean) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_FONT_NAME))
+		else if (id.equals(JRBaseStyle.PROPERTY_FONT_NAME))
 			jrstyle.setFontName((String) value);
-		else if (id.equals(JRDesignStyle.PROPERTY_FONT_SIZE))
+		else if (id.equals(JRBaseStyle.PROPERTY_FONT_SIZE))
 			jrstyle.setFontSize(new Integer((String) value));
 	}
 

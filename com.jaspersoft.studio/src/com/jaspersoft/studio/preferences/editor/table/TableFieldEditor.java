@@ -539,6 +539,9 @@ public abstract class TableFieldEditor extends FieldEditor {
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			tableItem.setText(newInputObject);
 			selectionChanged();
+			table.showItem(tableItem);
+			table.showSelection();
+			table.showColumn(table.getColumn(1));
 		}
 	}
 
@@ -556,13 +559,20 @@ public abstract class TableFieldEditor extends FieldEditor {
 			for (int i = 0; i < selection.length; i++) {
 				String[] values = new String[columnNames.length];
 				for (int j = 0; j < columnNames.length; j++) {
-					values[j] = selection[i].getText(j);
+					if (j == 0)
+						values[j] = selection[i].getText(j) + "_copy";
+					else
+						values[j] = selection[i].getText(j);
 				}
 				TableItem tableItem = new TableItem(table, SWT.NONE);
 				tableItem.setText(values);
+
 			}
-			table.setSelection(table.getItemCount());
 		}
+		table.setSelection(table.getItemCount());
+		table.showItem(table.getItem(table.getItemCount() - 1));
+		table.showSelection();
+		table.showColumn(table.getColumn(1));
 		selectionChanged();
 	}
 

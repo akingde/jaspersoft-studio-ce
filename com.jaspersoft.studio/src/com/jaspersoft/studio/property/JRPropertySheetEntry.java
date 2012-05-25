@@ -24,6 +24,7 @@ import java.beans.PropertyChangeListener;
 import java.util.EventObject;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -226,6 +227,8 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 		valueChanged((JRPropertySheetEntry) child, new ForwardUndoCompoundCommand());
 	}
 
+	boolean isRefresh = false;
+
 	/**
 	 * Value changed.
 	 * 
@@ -235,37 +238,45 @@ public class JRPropertySheetEntry extends org.eclipse.ui.views.properties.Proper
 	 *          the command
 	 */
 	void valueChanged(JRPropertySheetEntry child, final CompoundCommand command) {
-		for (int i = 0; i < getValues().length; i++) {
-			Object newval = child.getValues()[i];
-			Object propid = child.getDescriptor().getId();
-			IPropertySource propertySource = getPropertySource(getValues()[i]);
-			Object oldval = propertySource.getPropertyValue(propid);
-			if (!(oldval instanceof INode)) {
-				if (oldval != null && newval != null && oldval.equals(newval))
+		if (!isRefresh) {
+			isRefresh = true;
+			for (int i = 0; i < getValues().length; i++) {
+				Object newval = child.getValues()[i];
+				Object propid = child.getDescriptor().getId();
+				IPropertySource propertySource = getPropertySource(getValues()[i]);
+				Object oldval = propertySource.getPropertyValue(propid);
+				if (newval instanceof Command) {
+					command.add((Command) newval);
 					continue;
-				if (oldval == null && newval == null)
-					continue;
+				}
+				if (!(oldval instanceof INode)) {
+					if (oldval != null && newval != null && oldval.equals(newval))
+						continue;
+					if (oldval == null && newval == null)
+						continue;
+				}
+
+				SetValueCommand setCommand = new SetValueCommand(child.getDisplayName());
+				setCommand.setTarget(propertySource);
+				setCommand.setPropertyId(propid);
+				setCommand.setPropertyValue(newval);
+				command.add(setCommand);
 			}
 
-			SetValueCommand setCommand = new SetValueCommand(child.getDisplayName());
-			setCommand.setTarget(propertySource);
-			setCommand.setPropertyId(propid);
-			setCommand.setPropertyValue(newval);
-			command.add(setCommand);
-		}
+			// inform our parent
+			if (getParent() != null) {
+				((JRPropertySheetEntry) getParent()).valueChanged(this, command);
+				isRefresh = false;
+			} else {
+				// I am the root entry
+				Display.getCurrent().asyncExec(new Runnable() {
 
-		// inform our parent
-		if (getParent() != null)
-			((JRPropertySheetEntry) getParent()).valueChanged(this, command);
-		else {
-			// I am the root entry
-			Display.getCurrent().asyncExec(new Runnable() {
-
-				public void run() {
-					stack.execute(command);
-				}
-			});
-
+					public void run() {
+						stack.execute(command);
+						isRefresh = false;
+					}
+				});
+			}
 		}
 	}
 

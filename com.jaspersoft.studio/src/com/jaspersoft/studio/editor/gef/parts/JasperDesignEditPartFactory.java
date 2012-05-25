@@ -77,7 +77,9 @@ public class JasperDesignEditPartFactory implements EditPartFactory {
 	 * @see org.eclipse.gef.EditPartFactory#createEditPart(org.eclipse.gef.EditPart, java.lang.Object)
 	 */
 	public EditPart createEditPart(EditPart context, Object model) {
-		if (context != null) {
+		if (model != null && model instanceof ANode)
+			jrContext = ((ANode) model).getJasperConfiguration();
+		if (jrContext == null && context != null) {
 			EditPartViewer gv = context.getViewer();
 			Object prop = gv.getProperty("JRCONTEXT");
 			if (prop != null && prop instanceof JasperReportsContext) {

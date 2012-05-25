@@ -31,9 +31,11 @@ import net.sf.jasperreports.engine.type.SortFieldTypeEnum;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
@@ -45,7 +47,10 @@ import com.jaspersoft.studio.model.util.NodeIconDescriptor;
 import com.jaspersoft.studio.model.variable.MVariable;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RComboBoxPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.section.AbstractSection;
+import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
+import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
 
 /*
  * The Class MField.
@@ -127,7 +132,7 @@ public class MSortField extends APropertyNode implements ICopyable {
 
 	private IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
-	private RComboBoxPropertyDescriptor nameD;
+	private static RComboBoxPropertyDescriptor nameD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -172,6 +177,8 @@ public class MSortField extends APropertyNode implements ICopyable {
 	}
 
 	private JRDesignDataset dataset;
+	private static JSSEnumPropertyDescriptor typeD;
+	private static JSSEnumPropertyDescriptor orderD;
 
 	protected JRDesignDataset getDataSet() {
 		if (dataset != null)
@@ -199,23 +206,34 @@ public class MSortField extends APropertyNode implements ICopyable {
 	 */
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-
 		nameD = new RComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_NAME, Messages.common_name, new String[] { "" }); //$NON-NLS-1$
 		nameD.setDescription(Messages.MSortField_name_description);
 		desc.add(nameD);
 
-		ComboBoxPropertyDescriptor typeD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, "Type",
-				EnumHelper.getEnumNames(SortFieldTypeEnum.values(), NullEnum.NOTNULL));
+		typeD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_TYPE, "Type", SortFieldTypeEnum.class,
+				NullEnum.NOTNULL) {
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/fields-sort-16.png"),
+						JaspersoftStudioPlugin.getImage("icons/resources/variables-sort-16.png") };
+				return new SPToolBarEnum(parent, section, this, images, false);
+			}
+		};
 		typeD.setDescription("Sort field type");
 		desc.add(typeD);
 
-		ComboBoxPropertyDescriptor orderD = new ComboBoxPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER,
-				Messages.common_order, EnumHelper.getEnumNames(SortOrderEnum.values(), NullEnum.NOTNULL));
+		orderD = new JSSEnumPropertyDescriptor(JRDesignSortField.PROPERTY_ORDER, Messages.common_order,
+				SortOrderEnum.class, NullEnum.NOTNULL) {
+			public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
+				Image[] images = new Image[] { JaspersoftStudioPlugin.getImage("icons/resources/sort-number-column.png"),
+						JaspersoftStudioPlugin.getImage("icons/resources/sort-number-descending.png") };
+				return new SPToolBarEnum(parent, section, this, images, false);
+			}
+		};
 		orderD.setDescription(Messages.MSortField_order_description);
 		desc.add(orderD);
 
-		defaultsMap.put(JRDesignSortField.PROPERTY_ORDER, EnumHelper.getValue(SortOrderEnum.ASCENDING, 1, false));
-		defaultsMap.put(JRDesignSortField.PROPERTY_TYPE, EnumHelper.getValue(SortFieldTypeEnum.FIELD, 0, false));
+		defaultsMap.put(JRDesignSortField.PROPERTY_ORDER, typeD.getEnumValue(SortOrderEnum.ASCENDING));
+		defaultsMap.put(JRDesignSortField.PROPERTY_TYPE, orderD.getEnumValue(SortFieldTypeEnum.FIELD));
 	}
 
 	/*
@@ -228,9 +246,9 @@ public class MSortField extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignSortField.PROPERTY_NAME))
 			return jrField.getName();
 		if (id.equals(JRDesignSortField.PROPERTY_ORDER))
-			return EnumHelper.getValue(jrField.getOrderValue(), 1, false);
+			return orderD.getEnumValue(jrField.getOrderValue());
 		if (id.equals(JRDesignSortField.PROPERTY_TYPE))
-			return EnumHelper.getValue(jrField.getType(), 0, false);
+			return typeD.getEnumValue(jrField.getType());
 		return null;
 	}
 
@@ -246,9 +264,9 @@ public class MSortField extends APropertyNode implements ICopyable {
 				jrField.setName((String) value);
 			}
 		} else if (id.equals(JRDesignSortField.PROPERTY_ORDER))
-			jrField.setOrder((SortOrderEnum) EnumHelper.getSetValue(SortOrderEnum.values(), value, 1, false));
+			jrField.setOrder((SortOrderEnum) orderD.getEnumValue(value));
 		else if (id.equals(JRDesignSortField.PROPERTY_TYPE)) {
-			SortFieldTypeEnum type = (SortFieldTypeEnum) EnumHelper.getSetValue(SortFieldTypeEnum.values(), value, 0, false);
+			SortFieldTypeEnum type = (SortFieldTypeEnum) typeD.getEnumValue(value);
 			if (!type.equals(jrField.getType())) {
 				jrField.setType(type);
 				JRDesignDataset ds = getDataSet();

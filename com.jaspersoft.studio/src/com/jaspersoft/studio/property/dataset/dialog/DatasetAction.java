@@ -95,7 +95,6 @@ public class DatasetAction extends SelectionAction {
 						part.getEditDomain().getCommandStack().execute(dlg.getCommand());
 					}
 				});
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -54,10 +54,10 @@ public class FontSection extends AbstractSection {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		toolBar.setLayoutData(gd);
-		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_BOLD);
-		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_ITALIC);
-		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_UNDERLINE);
-		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH);
+		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_BOLD, false);
+		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_ITALIC, false);
+		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_UNDERLINE, false);
+		createWidget4Property(toolBar, JRBaseStyle.PROPERTY_STRIKE_THROUGH, false);
 	}
 
 }

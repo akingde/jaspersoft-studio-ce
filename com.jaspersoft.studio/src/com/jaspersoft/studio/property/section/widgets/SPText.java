@@ -52,11 +52,11 @@ public class SPText extends ASPropertyWidget {
 		ftext = section.getWidgetFactory().createText(parent, "", SWT.LEFT);
 		ftext.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				handleTextChanged(section, pDescriptor.getId());
+				handleTextChanged(section, pDescriptor.getId(), ftext.getText());
 			}
 		});
 		ftext.setToolTipText(pDescriptor.getDescription());
-		setWidth(parent, 20);
+		setWidth(parent, 15);
 	}
 
 	protected void setWidth(Composite parent, int chars) {
@@ -76,8 +76,8 @@ public class SPText extends ASPropertyWidget {
 		}
 	}
 
-	protected void handleTextChanged(final AbstractSection section, final Object property) {
-		section.changeProperty(property, ftext.getText());
+	protected void handleTextChanged(final AbstractSection section, final Object property, String text) {
+		section.changeProperty(property, text);
 	}
 
 	public void setData(APropertyNode pnode, Object b) {

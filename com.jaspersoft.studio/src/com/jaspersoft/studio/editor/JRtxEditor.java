@@ -47,7 +47,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -119,6 +118,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
 		MStylesTemplate ms = new MStylesTemplate(m, file);
 		ms.setValue(jd);
+		ms.setJasperConfiguration(jrContext);
 		StyleTemplateFactory.createTemplate(ms, new HashSet<String>(), true, file, file.getLocation().toFile(),
 				(JRSimpleTemplate) jd);
 		setModel(m);
@@ -238,12 +238,14 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 			JRSimpleTemplate jd = null;
 			jd = (JRSimpleTemplate) JRXmlTemplateLoader.load(in);
 			JasperDesign jasperDesign = new JasperDesign();
-			ANode m = new MRoot(null, jasperDesign);
-			MStylesTemplate ms = new MStylesTemplate(m, file);
-			ms.setValue(jd);
-			StyleTemplateFactory.createTemplate(ms, new HashSet<String>(), true, file, file.getLocation().toFile(), jd);
 
 			getJrContext(file);
+
+			ANode m = new MRoot(null, jasperDesign);
+			MStylesTemplate ms = new MStylesTemplate(m, file);
+			ms.setJasperConfiguration(jrContext);
+			ms.setValue(jd);
+			StyleTemplateFactory.createTemplate(ms, new HashSet<String>(), true, file, file.getLocation().toFile(), jd);
 
 			setModel(m);
 		} catch (CoreException e) {
@@ -356,10 +358,8 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 			int index = addPage(styleEditor, getEditorInput());
 			setPageText(index, "Preview");
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_visual_editor,
-					null, e.getStatus());
+			UIUtils.showError(e);
 		}
-		styleEditor.setModel(model);
 	}
 
 	private class StateListener implements IElementStateListener {
@@ -410,8 +410,7 @@ public class JRtxEditor extends MultiPageEditorPart implements IResourceChangeLi
 					});
 			xmlEditor.getDocumentProvider().addElementStateListener(new StateListener());
 		} catch (PartInitException e) {
-			ErrorDialog.openError(Display.getDefault().getActiveShell(), Messages.common_error_creating_nested_text_editor,
-					null, e.getStatus());
+			UIUtils.showError(e);
 		}
 	}
 }

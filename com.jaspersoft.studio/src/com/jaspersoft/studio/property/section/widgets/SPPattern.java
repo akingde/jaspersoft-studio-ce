@@ -22,36 +22,21 @@ package com.jaspersoft.studio.property.section.widgets;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.descriptor.pattern.dialog.PatternEditor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class SPPattern extends ASPropertyWidget {
-	protected Text ftext;
+public class SPPattern extends SPText {
 
 	public SPPattern(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
-	}
-
-	@Override
-	public Control getControl() {
-		return ftext;
 	}
 
 	protected void createComponent(Composite parent) {
@@ -64,14 +49,7 @@ public class SPPattern extends ASPropertyWidget {
 		parent.setLayout(layout);
 		parent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		ftext = section.getWidgetFactory().createText(parent, "", SWT.LEFT);
-		ftext.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				handleTextChanged(section, pDescriptor.getId(), ftext.getText());
-			}
-		});
-		ftext.setToolTipText(pDescriptor.getDescription());
-		setWidth(parent, 20);
+		super.createComponent(parent);
 
 		Button btn = section.getWidgetFactory().createButton(parent, "...", SWT.PUSH);
 		btn.setToolTipText(pDescriptor.getDescription());
@@ -87,36 +65,6 @@ public class SPPattern extends ASPropertyWidget {
 				}
 			}
 		});
-	}
-
-	protected void setWidth(Composite parent, int chars) {
-		GC gc = new GC(ftext);
-		FontMetrics fontMetrics = gc.getFontMetrics();
-		int w = fontMetrics.getAverageCharWidth() * chars;
-		gc.dispose();
-		if (parent.getLayout() instanceof RowLayout) {
-			RowData rd = new RowData();
-			rd.width = w;
-			ftext.setLayoutData(rd);
-		} else if (parent.getLayout() instanceof GridLayout) {
-			GridData rd = new GridData(GridData.FILL_HORIZONTAL);
-			rd.minimumWidth = w;
-			ftext.setLayoutData(rd);
-		}
-	}
-
-	protected void handleTextChanged(final AbstractSection section, final Object property, String text) {
-		section.changeProperty(property, text);
-	}
-
-	public void setData(APropertyNode pnode, Object b) {
-		if (b != null) {
-			int oldpos = ftext.getCaretPosition();
-			ftext.setText(b.toString());
-			if (b.toString().length() >= oldpos)
-				ftext.setSelection(oldpos, oldpos);
-		} else
-			ftext.setText("");
 	}
 
 }

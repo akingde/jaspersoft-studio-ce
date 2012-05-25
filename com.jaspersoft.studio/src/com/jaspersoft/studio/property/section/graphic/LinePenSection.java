@@ -21,6 +21,7 @@ package com.jaspersoft.studio.property.section.graphic;
 
 import net.sf.jasperreports.engine.base.JRBasePen;
 
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.jaspersoft.studio.model.APropertyNode;
@@ -50,6 +51,8 @@ public class LinePenSection extends AbstractSection {
 	 */
 	public void createControls(Composite parent, TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
+
+		parent.setLayout(new GridLayout(2, false));
 
 		createWidget4Property(parent, JRBasePen.PROPERTY_LINE_COLOR);
 		createWidget4Property(parent, JRBasePen.PROPERTY_LINE_STYLE);

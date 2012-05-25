@@ -56,12 +56,12 @@ public class JRQueryPage extends WizardPage {
 		String text = queryText.getText();
 
 		if (lang.equals("") && (text == null || text.equals("")))
-			value = new MQuery(null);
+			value = new MQuery(null, null);
 		else {
 			JRDesignQuery jrQuery = new JRDesignQuery();
 			jrQuery.setLanguage(lang);
 			jrQuery.setText(text);
-			value = new MQuery(jrQuery);
+			value = new MQuery(jrQuery, null);
 		}
 		super.dispose();
 	}

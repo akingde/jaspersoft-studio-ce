@@ -20,20 +20,22 @@
 
 package com.jaspersoft.studio.preferences.editor.properties;
 
+import java.io.IOException;
+import java.text.Collator;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.preferences.editor.table.TableFieldEditor;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.utils.FileUtils;
 
 public class PropertyListFieldEditor extends TableFieldEditor {
 
@@ -63,10 +65,13 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 
 	protected void doStore() {
 		TableItem[] items = getTable().getItems();
+		Properties props = new Properties();
 		for (int i = 0; i < items.length; i++) {
 			TableItem item = items[i];
-			getPreferenceStore().setValue(item.getText(0), item.getText(1));
+			// getPreferenceStore().setValue(item.getText(0), item.getText(1));
+			props.setProperty(item.getText(0), item.getText(1));
 		}
+		getPreferenceStore().setValue("net.sf.jasperreports.JRPROPERTIES", FileUtils.getPropertyAsString(props));
 	}
 
 	/*
@@ -76,11 +81,41 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 		if (getTable() != null) {
 			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties("");
 			Collections.sort(lst, new PropertyComparator());
-			for (PropertySuffix ps : lst) {
-				String s = getPreferenceStore().getString(ps.getKey());
+			Properties props = null;
+			try {
+				props = FileUtils.load(getPreferenceStore().getString("net.sf.jasperreports.JRPROPERTIES"));
+				for (Object key : props.keySet()) {
+					String value = props.getProperty((String) key);
+					TableItem tableItem = new TableItem(getTable(), SWT.NONE);
+					tableItem.setText(new String[] { (String) key, value });
+				}
 
-				TableItem tableItem = new TableItem(getTable(), SWT.NONE);
-				tableItem.setText(new String[] { ps.getKey(), s });
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (props != null)
+				for (PropertySuffix ps : lst) {
+					if (props.getProperty(ps.getKey()) == null) {
+						TableItem tableItem = new TableItem(getTable(), SWT.NONE);
+						tableItem.setText(new String[] { ps.getKey(), ps.getValue() });
+					}
+				}
+
+			TableItem[] items = table.getItems();
+			Collator collator = Collator.getInstance(Locale.getDefault());
+			for (int i = 1; i < items.length; i++) {
+				String value1 = items[i].getText(0);
+				for (int j = 0; j < i; j++) {
+					String value2 = items[j].getText(0);
+					if (collator.compare(value1, value2) < 0) {
+						String[] values = { items[i].getText(0), items[i].getText(1) };
+						items[i].dispose();
+						TableItem item = new TableItem(table, SWT.NONE, j);
+						item.setText(values);
+						items = table.getItems();
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -95,50 +130,19 @@ public class PropertyListFieldEditor extends TableFieldEditor {
 			List<PropertySuffix> lst = PropertiesHelper.DPROP.getProperties("");
 			Collections.sort(lst, new PropertyComparator());
 			for (PropertySuffix ps : lst) {
-				String s = getPreferenceStore().getDefaultString(ps.getKey());
 
 				TableItem tableItem = new TableItem(getTable(), SWT.NONE);
-				tableItem.setText(new String[] { ps.getKey(), s });
+				tableItem.setText(new String[] { ps.getKey(), ps.getValue() });
 			}
 		}
 	}
 
 	@Override
-	protected void doFillIntoGrid(Composite parent, int numColumns) {
-		Control control = getLabelControl(parent);
-		GridData gd = new GridData();
-		gd.horizontalSpan = numColumns;
-		control.setLayoutData(gd);
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		// gridData.horizontalSpan = 2;
-		gridData.widthHint = 600;
-		gridData.heightHint = 500;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
-
-		table = getTableControl(composite);
-		gd = new GridData(GridData.FILL_BOTH);
-		// gd.horizontalSpan = numColumns - 1;
-		// gd.grabExcessHorizontalSpace = true;
-		table.setLayoutData(gd);
-
-		// buttonBox = getButtonBoxControl(composite);
-		// gd = new GridData();
-		// gd.verticalAlignment = GridData.BEGINNING;
-		// buttonBox.setLayoutData(gd);
-	}
-
-	@Override
-	public int getNumberOfControls() {
-		return 1;
-	}
-
-	@Override
 	protected boolean isFieldEditable(int col, int row) {
-		if (col == 0)
-			return false;
+		if (col == 0) {
+			TableItem ti = table.getItem(row);
+			return PropertiesHelper.DPROP.getProperty(ti.getText(0)) == null;
+		}
 		return super.isFieldEditable(col, row);
 	}
 }

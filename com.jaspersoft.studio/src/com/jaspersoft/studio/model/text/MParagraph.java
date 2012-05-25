@@ -30,7 +30,6 @@ import net.sf.jasperreports.engine.base.JRBaseParagraph;
 import net.sf.jasperreports.engine.type.LineSpacingEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.messages.Messages;
@@ -39,7 +38,7 @@ import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.tabstops.TabStopsPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.FloatPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MParagraph extends APropertyNode {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
@@ -51,9 +50,8 @@ public class MParagraph extends APropertyNode {
 
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc, Map<String, Object> defaultsMap) {
-
-		ComboBoxPropertyDescriptor lineSpacingD = new ComboBoxPropertyDescriptor(JRBaseParagraph.PROPERTY_LINE_SPACING,
-				Messages.common_line_spacing, EnumHelper.getEnumNames(LineSpacingEnum.values(), NullEnum.INHERITED));
+		lineSpacingD = new JSSEnumPropertyDescriptor(JRBaseParagraph.PROPERTY_LINE_SPACING, Messages.common_line_spacing,
+				LineSpacingEnum.class, NullEnum.INHERITED);
 		lineSpacingD.setDescription(Messages.MTextElement_line_spacing_description);
 		desc.add(lineSpacingD);
 
@@ -110,6 +108,7 @@ public class MParagraph extends APropertyNode {
 
 	private static IPropertyDescriptor[] descriptors;
 	private static Map<String, Object> defaultsMap;
+	private static JSSEnumPropertyDescriptor lineSpacingD;
 
 	@Override
 	public Map<String, Object> getDefaultsMap() {
@@ -136,7 +135,7 @@ public class MParagraph extends APropertyNode {
 		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING))
-				return EnumHelper.getValue(jrElement.getOwnLineSpacing(), 0, true);
+				return lineSpacingD.getEnumValue(jrElement.getOwnLineSpacing());
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE))
 				return jrElement.getOwnLineSpacingSize();
 
@@ -173,7 +172,7 @@ public class MParagraph extends APropertyNode {
 		JRBaseParagraph jrElement = (JRBaseParagraph) getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING))
-				jrElement.setLineSpacing((LineSpacingEnum) EnumHelper.getSetValue(LineSpacingEnum.values(), value, 0, true));
+				jrElement.setLineSpacing((LineSpacingEnum) lineSpacingD.getEnumValue(value));
 			if (id.equals(JRBaseParagraph.PROPERTY_LINE_SPACING_SIZE))
 				jrElement.setLineSpacingSize((Float) value);
 			if (id.equals(JRBaseParagraph.PROPERTY_FIRST_LINE_INDENT))

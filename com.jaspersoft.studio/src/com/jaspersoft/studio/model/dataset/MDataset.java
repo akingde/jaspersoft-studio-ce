@@ -37,6 +37,7 @@ import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.model.ICopyable;
+import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MQuery;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
@@ -82,8 +83,11 @@ public class MDataset extends APropertyNode implements ICopyable {
 		super();
 	}
 
-	public MDataset(JRDesignDataset jrDataset) {
+	private MReport mreport;
+
+	public MDataset(MReport mreport, JRDesignDataset jrDataset) {
 		super();
+		this.mreport = mreport;
 		setValue(jrDataset);
 	}
 
@@ -100,6 +104,13 @@ public class MDataset extends APropertyNode implements ICopyable {
 	public MDataset(ANode parent, JRDesignDataset jrDataset, int newIndex) {
 		super(parent, newIndex);
 		setValue(jrDataset);
+		INode root = getRoot();
+		if (root != null && root instanceof MReport)
+			mreport = (MReport) root;
+	}
+
+	public MReport getMreport() {
+		return mreport;
 	}
 
 	@Override
@@ -217,7 +228,8 @@ public class MDataset extends APropertyNode implements ICopyable {
 		if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
 			if (mQuery == null) {
 				JRQuery jdq = jrDataset.getQuery();
-				mQuery = new MQuery(jdq);
+				mQuery = new MQuery(jdq, this);
+				mQuery.setJasperConfiguration(getJasperConfiguration());
 				setChildListener(mQuery);
 			}
 			return mQuery;
@@ -269,6 +281,7 @@ public class MDataset extends APropertyNode implements ICopyable {
 			jrDataset.setWhenResourceMissingType((WhenResourceMissingTypeEnum) whenResMissTypeD.getEnumValue(value));
 		else if (id.equals(JRDesignDataset.PROPERTY_QUERY)) {
 			if (value instanceof MQuery) {
+				unsetChildListener(mQuery);
 				mQuery = (MQuery) value;
 				setChildListener(mQuery);
 				JRDesignQuery jrQuery = (JRDesignQuery) mQuery.getValue();

@@ -44,7 +44,7 @@ public class SPClassType extends SPText {
 			public void widgetSelected(SelectionEvent e) {
 				String classname = ClassTypeCellEditor.getJavaClassDialog(ftext.getShell(), null);
 				if (classname != null)
-					handleTextChanged(section, classname);
+					handleTextChanged(section, pDescriptor.getId(), classname);
 			}
 		});
 	}

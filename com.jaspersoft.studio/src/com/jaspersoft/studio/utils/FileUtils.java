@@ -46,7 +46,11 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.channels.FileChannel;
+import java.util.Properties;
 import java.util.UUID;
 
 public class FileUtils {
@@ -246,4 +250,15 @@ public class FileUtils {
 		}
 	}
 
+	public static String getPropertyAsString(Properties prop) {
+		StringWriter writer = new StringWriter();
+		prop.list(new PrintWriter(writer));
+		return writer.getBuffer().toString();
+	}
+
+	public static Properties load(String propertiesString) throws IOException {
+		Properties properties = new Properties();
+		properties.load(new StringReader(propertiesString));
+		return properties;
+	}
 }

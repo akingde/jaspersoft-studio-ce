@@ -444,6 +444,7 @@
          <propertyTab
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Element"
+               image="icons/resources/field-16.png"
                label="Object">
          </propertyTab>
          <propertyTab
@@ -483,8 +484,15 @@
                afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Appearance"
                category="element"
                id="com.jaspersoft.studio.editor.JrxmlEditor.Text"
-               image="icons/resources/eclipse/left_align.gif"
+               image="icons/resources/genericelement-16.png"
                label="%element">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.propertyTab.report"
+               category="element"
+               id="com.jaspersoft.studio.editor.section.DATASET"
+               image="icons/resources/dataset-16.png"
+               label="Dataset">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -700,9 +708,12 @@
          <propertySection
                class="com.jaspersoft.studio.property.section.obj.DatasetSection"
                id="com.jaspersoft.studio.property.section.obj.DatasetSection"
-               tab="com.jaspersoft.studio.editor.JrxmlEditor.Element">
+               tab="com.jaspersoft.studio.editor.section.DATASET">
             <input
                   type="com.jaspersoft.studio.model.dataset.MDataset">
+            </input>
+            <input
+                  type="com.jaspersoft.studio.model.MReport">
             </input>
          </propertySection>
          <propertySection
@@ -762,9 +773,6 @@
             <input
                   type="com.jaspersoft.studio.model.MRectangle">
             </input>
-            <input
-                  type="com.jaspersoft.studio.model.style.MStyle">
-            </input>
          </propertySection>
          <propertySection
                afterSection="com.jaspersoft.studio.property.section.text.FontSection"
@@ -773,9 +781,6 @@
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
             <input
                   type="com.jaspersoft.studio.model.MLine">
-            </input>
-            <input
-                  type="com.jaspersoft.studio.model.style.MStyle">
             </input>
          </propertySection>
          <propertySection
@@ -794,6 +799,47 @@
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
             <input
                   type="com.jaspersoft.studio.model.subreport.MSubreport">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.StyleSection"
+               id="com.jaspersoft.studio.property.section.obj.StyleSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.style.MStyle">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.StyleConditionalSection"
+               id="com.jaspersoft.studio.property.section.obj.StyleConditionalSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.style.MConditionalStyle">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.GroupSection"
+               id="com.jaspersoft.studio.property.section.obj.GroupSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.group.MGroup">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.property.section.obj.SortFieldSection"
+               id="com.jaspersoft.studio.property.section.obj.SortFieldSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Element">
+            <input
+                  type="com.jaspersoft.studio.model.sortfield.MSortField">
+            </input>
+         </propertySection>
+         <propertySection
+               afterSection="com.jaspersoft.studio.property.section.text.TextSection"
+               class="com.jaspersoft.studio.property.section.text.ParagraphSection"
+               id="com.jaspersoft.studio.property.section.text.ParagraphSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.model.text.MTextElement">
             </input>
          </propertySection>
       </propertySections>

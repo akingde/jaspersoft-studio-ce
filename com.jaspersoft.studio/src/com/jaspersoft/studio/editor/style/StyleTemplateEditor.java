@@ -38,6 +38,8 @@
  */
 package com.jaspersoft.studio.editor.style;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.gef.ContextMenuProvider;
@@ -264,39 +266,39 @@ public class StyleTemplateEditor extends J2DGraphicalEditor implements ITabbedPr
 
 		action = new CutAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
+		List<String> selectionActions = getSelectionActions();
+		selectionActions.add(action.getId());
 
 		action = new CopyAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
+		selectionActions.add(action.getId());
 
 		action = new PasteAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
+		selectionActions.add(action.getId());
 
 		action = new CreateStyleAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateStyleAction.ID);
+		selectionActions.add(CreateStyleAction.ID);
 
 		action = new CreateStyleTemplateReferenceAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(CreateStyleTemplateReferenceAction.ID);
+		selectionActions.add(CreateStyleTemplateReferenceAction.ID);
 
 		// ------------
 		action = new DirectEditAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
+		selectionActions.add(action.getId());
 
 		// ------------------
 
 		action = new ShowPropertyViewAction(this);
 		registry.registerAction(action);
-		getSelectionActions().add(action.getId());
+		selectionActions.add(action.getId());
 	}
 
 	@Override
 	protected void initializeGraphicalViewer() {
-		// TODO Auto-generated method stub
 
 	}
 

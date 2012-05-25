@@ -72,6 +72,7 @@ import com.jaspersoft.studio.property.descriptors.JSSTextPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.property.section.widgets.ASPropertyWidget;
 import com.jaspersoft.studio.property.section.widgets.SPToolBarEnum;
+import com.jaspersoft.studio.utils.ModelUtils;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
 /*
@@ -247,7 +248,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 		desc.add(columnSpaceD);
 
 		RWComboBoxPropertyDescriptor languageD = new RWComboBoxPropertyDescriptor(JasperDesign.PROPERTY_LANGUAGE,
-				Messages.common_language, new String[] { "", "Java", "Groovy", "JavaScript", "bsh" }, NullEnum.NOTNULL, false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				Messages.common_language, ModelUtils.getExpressionLanguages(getJasperConfiguration()), NullEnum.NOTNULL, false);
 		languageD.setDescription(Messages.MReport_language_description);
 		languageD.setCategory(Messages.common_report);
 		desc.add(languageD);
@@ -356,7 +357,7 @@ public class MReport extends APropertyNode implements IGraphicElement, IContaine
 
 		if (id.equals(JasperDesign.PROPERTY_MAIN_DATASET)) {
 			if (mDataset == null) {
-				mDataset = new MDataset((JRDesignDataset) jrDesign.getMainDataset());
+				mDataset = new MDataset(this, (JRDesignDataset) jrDesign.getMainDataset());
 				setChildListener(mDataset);
 			}
 			return mDataset;

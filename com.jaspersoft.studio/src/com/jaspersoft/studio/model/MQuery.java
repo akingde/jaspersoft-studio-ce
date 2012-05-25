@@ -31,6 +31,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.jaspersoft.studio.messages.Messages;
+import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.text.NTextPropertyDescriptor;
@@ -40,9 +41,21 @@ import com.jaspersoft.studio.utils.ModelUtils;
 public class MQuery extends APropertyNode implements IPropertySource {
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-	public MQuery(JRQuery jrQuery) {
+	private MDataset mdataset;
+
+	public MQuery(JRQuery jrQuery, MDataset mdataset) {
 		super();
+		this.mdataset = mdataset;
 		setValue(jrQuery);
+	}
+
+	public MDataset getMdataset() {
+		return mdataset;
+	}
+
+	@Override
+	public JRDesignQuery getValue() {
+		return (JRDesignQuery) super.getValue();
 	}
 
 	@Override

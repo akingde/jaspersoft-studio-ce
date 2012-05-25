@@ -88,6 +88,8 @@ public class FloatPropertyDescriptor extends TextPropertyDescriptor implements I
 	}
 
 	public ASPropertyWidget createWidget(Composite parent, AbstractSection section) {
-		return new SPNumber(parent, section, this);
+		SPNumber spNumber = new SPNumber(parent, section, this);
+		spNumber.setNumType(Float.class);
+		return spNumber;
 	}
 }

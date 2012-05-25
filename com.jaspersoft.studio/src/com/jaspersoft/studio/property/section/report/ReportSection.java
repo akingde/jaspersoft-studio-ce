@@ -80,7 +80,6 @@ public class ReportSection extends AbstractSection {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		createWidget4Property(parent, JasperDesign.PROPERTY_IGNORE_PAGINATION, false).getControl().setLayoutData(gd);
-
 	}
 
 }
