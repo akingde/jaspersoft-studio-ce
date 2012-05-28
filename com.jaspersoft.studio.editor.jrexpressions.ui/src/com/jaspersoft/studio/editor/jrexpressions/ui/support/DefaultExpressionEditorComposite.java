@@ -11,6 +11,9 @@ import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.expressions.functions.CategoryKeys;
 import net.sf.jasperreports.expressions.functions.util.FunctionsLibraryUtil;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -32,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.progress.WorkbenchJob;
 import org.eclipse.xtext.validation.Issue;
 
 import com.google.inject.Injector;
@@ -71,12 +75,12 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 	private List<IExpressionStatusChangeListener> statusChangeListeners;
 
 	// Support data structures and classes
+	private static final int UPDATE_DELAY=300;
+	private UpdatePanelJob updatePanelJob;
 	private EditingAreaHelper editingAreaInfo;
 	private String currentWidgetText;
-	private Map<String, ObjectCategoryDetailsPanel> detailPanels; // Cache map
-																	// of the
-																	// detail
-																	// panels
+	// Cache map of the detail panels
+	private Map<String, ObjectCategoryDetailsPanel> detailPanels;
 	private ObjectCategoryItem builtinFunctionsItem;
 	private ObjectCategoryItem parametersCategoryItem;
 	private ObjectCategoryItem fieldsCategoryItem;
@@ -113,6 +117,8 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 
 		subSashForm.setWeights(new int[] { 25, 75 });
 		mainSashForm.setWeights(new int[] { 20, 80 });
+		
+		this.updatePanelJob=new UpdatePanelJob();
 	}
 
 	/*
@@ -135,16 +141,13 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 		editorArea.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				currentWidgetText = editorArea.getText();
-				synchCurrentFunctionDetails();
-				updateExpressionStatus();
+				performUpdate();
 			}
 		});
 		editorArea.addCaretListener(new CaretListener() {
 
 			public void caretMoved(CaretEvent event) {
-				currentWidgetText = editorArea.getText();
-				synchCurrentFunctionDetails();
+				performUpdate();
 			}
 		});
 		xtextAdapter = new StyledTextXtextAdapter2(getInjector());
@@ -338,6 +341,29 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 		}
 	}
 
+	/*
+	 * Job to update the panel UI when expression text changes or
+	 * when caret is moved. 
+	 * This job is supposed to be delayed in order not to call
+	 * UI-update events too often (avoiding flickering effects).
+	 */
+	private class UpdatePanelJob extends WorkbenchJob {
+		
+		public UpdatePanelJob(){
+			super("Refresh panel job");
+			setSystem(true);
+		}
+		
+		@Override
+		public IStatus runInUIThread(IProgressMonitor monitor) {
+			monitor.beginTask("Refreshing...", IProgressMonitor.UNKNOWN);
+			synchCurrentFunctionDetails();
+			updateExpressionStatus();
+			monitor.done();
+			return Status.OK_STATUS;
+		}
+	}
+	
 	/* Listeners utility methods */
 
 	/*
@@ -456,6 +482,21 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 			exprStatus
 					.setShortDescription("The current expression has no validation issues.");
 			notifyExpressionStatusChanged(exprStatus);
+		}
+	}
+
+	/*
+	 * Update UI when editing area is modified (text modification/caret movement).
+	 */
+	private void performUpdate() {
+		currentWidgetText = editorArea.getText();
+		if(editorArea.isFocusControl()){
+			updatePanelJob.cancel();
+			updatePanelJob.schedule(UPDATE_DELAY);
+		}
+		else{
+			synchCurrentFunctionDetails();
+			updateExpressionStatus();
 		}
 	}
 
