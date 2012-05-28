@@ -1,5 +1,8 @@
 package com.jaspersoft.studio.editor.jrexpressions.ui.support;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionBean;
 import net.sf.jasperreports.expressions.annotations.JRExprFunctionParameterBean;
 
@@ -172,9 +175,9 @@ public class FunctionDetailsComposite extends Composite {
 					}
 
 					public void focusGained(FocusEvent e) {
-						cleanEmptyParameters((Text) e.widget);
-						editingAreaInfo.selectMethodArgument((Integer) e.widget
-								.getData("PARAM_INDEX"));
+						editingAreaInfo.setUpdate(true);
+						selectFunctionArgument((Text)e.widget);
+						editingAreaInfo.setUpdate(false);
 					}
 				});
 				paramValue.addModifyListener(new ModifyListener() {
@@ -262,27 +265,33 @@ public class FunctionDetailsComposite extends Composite {
 	}
 
 	/*
-	 * Forces the cleaning of (useless) empty parameters in the editing area.
+	 * Forces the cleaning of (useless) empty parameters in the editing area, 
+	 * and select the right parameter in the argument list of current function.
+	 * 
+	 * Returns the last useful position, that is the maximum between the current
+	 * selected parameter index and the last non-empty parameter index.
 	 */
-	private void cleanEmptyParameters(Text widget) {
-		editingAreaInfo.setUpdate(true);
-		Integer currentParamIndex = (Integer) widget.getData("PARAM_INDEX");
-		Integer lastNonEmptyParam = 0;
+	private void selectFunctionArgument(Text widget) {
+		// the position of the parameter we want to select
+		Integer positionToSelect = (Integer) widget.getData("PARAM_INDEX");
+		// the position of the last non-empty parameter
+		Integer lastNonEmptyPosition = 0;
+		// the list of texts contained in widgets representing the function parameters 
+		List<String> parametersTexts=new ArrayList<String>();
 		Control[] children = widget.getParent().getChildren();
 		for (int i = 0; i < children.length; i++) {
 			// Consider only the text widgets and find
 			// the last parameter with a (non-empty) text value
 			if (i % 3 == 2) {
-				if (!((Text) children[i]).getText().trim().isEmpty()) {
-					lastNonEmptyParam = (Integer) children[i]
-							.getData("PARAM_INDEX");
+				String currParamText = ((Text) children[i]).getText().trim();
+				parametersTexts.add(currParamText);
+				if (!currParamText.isEmpty()) {
+					lastNonEmptyPosition = (Integer) children[i].getData("PARAM_INDEX");
 				}
 			}
 		}
-
-		editingAreaInfo.removeUselessParameters(Math.max(currentParamIndex,
-				lastNonEmptyParam));
-		editingAreaInfo.setUpdate(false);
+		editingAreaInfo.selectMethodArgument(
+				positionToSelect,Math.max(positionToSelect,lastNonEmptyPosition),parametersTexts);
 	}
  
 	public void setVisible(boolean visible) {

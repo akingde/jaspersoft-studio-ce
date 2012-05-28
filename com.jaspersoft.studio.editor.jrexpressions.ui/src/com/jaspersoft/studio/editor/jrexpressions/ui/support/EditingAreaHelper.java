@@ -16,7 +16,9 @@ import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.Arguments;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.ExpressionList;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodName;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JasperReportsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
+import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
 
 /**
  * Utility object that exposes some methods to work with the current editing area.
@@ -62,11 +64,15 @@ public class EditingAreaHelper {
 		Arguments args = getMethodArguments();
 		if(args!=null && args.eContainer() instanceof MethodInvocation){
 			MethodInvocation methodInv=(MethodInvocation)args.eContainer();
-			FullMethodName fullyQualifiedMethodName = methodInv.getFullyQualifiedMethodName();
-			if(fullyQualifiedMethodName!=null){
-				String methodName = fullyQualifiedMethodName.getMethodName();
-				if(FunctionsLibraryUtil.existsFunction(methodName)){
-					return methodName;
+			ICompositeNode methodInvNode = NodeModelUtils.findActualNodeFor(methodInv);
+			// Avoid malformed method invocation
+			if(methodInvNode!=null && methodInvNode.getText().endsWith(")")){
+				FullMethodName fullyQualifiedMethodName = methodInv.getFullyQualifiedMethodName();
+				if(fullyQualifiedMethodName!=null){
+					String methodName = fullyQualifiedMethodName.getMethodName();
+					if(FunctionsLibraryUtil.existsFunction(methodName)){
+						return methodName;
+					}
 				}
 			}
 		}
@@ -204,132 +210,69 @@ public class EditingAreaHelper {
 	 * NOTE: a valid function can be located only when the cursor is inside a method
 	 * invocation element.
 	 * 
-	 * @param position the argument position
+	 * @param position position of the argument to be selected
+	 * @param lastPosition the last valid argument position
+	 * @param parametersTexts texts contained in the parameter widgets
 	 */
-	public void selectMethodArgument(int position) {
-		Arguments args=getMethodArguments();
+	public void selectMethodArgument(int position, int lastPosition, List<String> parametersTexts) {
+		Arguments args=getMethodArguments(); 
 		if(args!=null){
-			final ExpressionList exprLst=args.getExprLst();
-			ICompositeNode argsNode = NodeModelUtils.getNode(args);
+			ICompositeNode argsNode = NodeModelUtils.findActualNodeFor(args);
 			int argsStart = argsNode.getOffset();	// left parenthesis position
 			int argsEnd = argsNode.getTotalEndOffset();	// right parenthesis position
 
-			int selectionStart=-1;
-			int selectionEnd=-1;
-			int newPlaceHoldersNum=0;
-			
-			if(exprLst!=null){
-				int commasNum = exprLst.getCommas().size();
-				
-				if(commasNum==0){	// No commas ==> only one location available i.e FUNCTION() or FUNCTION(arg1)
-					if(position==1){
-						// Select all parentheses content
-						selectionStart=argsStart+1;
-						selectionEnd=argsEnd-1;										
-					}
-					else{
-						// Must add commas and spaces as much as needed
-						newPlaceHoldersNum=position-1;
+			// Handle potential broken expression text (and tree too)
+			// Example: DAY(DATE(,12,5))
+			// We could get an Arguments object that has the following text: (DATE(,12,5)
+			// First expressions is considered the broken MethodsExpression DATE(
+			if (args.getExprLst()!=null && args.getExprLst().getExpressions()!=null && 
+					args.getExprLst().getExpressions().size()>0){
+				JasperReportsExpression firstExpr = args.getExprLst().getExpressions().get(0);
+				if(firstExpr instanceof MethodsExpression){
+					ICompositeNode methodsExprNode = NodeModelUtils.findActualNodeFor(firstExpr);
+					if(!methodsExprNode.getText().endsWith(")")){
+						// error found: so let's set the 
+						argsStart=methodsExprNode.getTotalEndOffset()-1;
 					}
 				}
-				else{
-					if(position>commasNum+1){
-						// A location for the specified parameter index is not available
-						// We need to add the remaining locations 
-						newPlaceHoldersNum=position-(commasNum+1);
-					}
-					else{
-						// The parameter index is comprised in the available locations
-						// Comma separated expressions (or even blank chars) => get all comma positions
-						List<Integer> commasOffsets=new ArrayList<Integer>();									
-						for(INode c : NodeModelUtils.findActualNodeFor(exprLst).getChildren()){
-							if(c.getGrammarElement() instanceof Keyword && 
-									",".equals(((Keyword)c.getGrammarElement()).getValue())){
-								commasOffsets.add(c.getOffset());
-							}
-						}
-						
-						if(position==1){
-							selectionStart=argsStart+1;
-							selectionEnd=commasOffsets.get(0);
-						}
-						else if (position == commasNum+1){
-							selectionStart=commasOffsets.get(commasNum-1)+1;
-							selectionEnd=argsEnd-1;
-						}
-						else {
-							selectionStart=commasOffsets.get(position-2)+1;
-							selectionEnd=commasOffsets.get(position-1);
-						}
-					}
+			}
+			
+			// Manually re-construct it using the parameters text as information
+			// This solution has been preferred to the one that uses the model nodes.
+			// Main reason is that in case of broken expressions we would eventually end-up
+			// to adopt this strategy.
+			int positionStart=-1;
+			int positionEnd=-1;
+			textArea.setSelection(argsStart+1,argsEnd-1);
+			StringBuffer sb=new StringBuffer("");
+			for (int i=0;i<lastPosition-1;i++){
+				String paramTxt = parametersTexts.get(i);
+				int paramTxtLength = paramTxt.length();
+				if(i==position-1){
+					positionStart=argsStart+sb.length()+1;
+					// need to consider a comma, and a white space
+					// for nice formatting when empty param text
+					positionEnd=positionStart+Math.max(paramTxtLength,1);  
 				}
-				
-			}
-			else{
-				newPlaceHoldersNum=position-1;
-				selectionStart=argsStart+1;
-				selectionEnd=argsEnd-1;
-			}
-			
-			if(newPlaceHoldersNum>0){
-				String newParams="";
-				for(int i=0;i<newPlaceHoldersNum;i++){
-					newParams+=", ";
+				sb.append(paramTxt);
+				if(paramTxtLength==0){
+					sb.append(" ");
 				}
-				int newPosition=argsEnd-1;
-				textArea.setSelection(newPosition);
-				textArea.insert(newParams);
-				selectionStart=newPosition+newParams.length()-1;
-				selectionEnd=newPosition+newParams.length();
+				sb.append(",");
 			}
-			
-			if(selectionStart!=-1 && selectionEnd!=-1){
-				textArea.setSelection(selectionStart,selectionEnd);
+			String lastParamTxt=parametersTexts.get(lastPosition-1);
+			int lastParamTextLength=lastParamTxt.length();
+			if(position==lastPosition){
+				positionStart=argsStart+sb.length()+1;
+				positionEnd=positionStart+Math.max(lastParamTextLength,1); 
 			}
-		}
-	}
-
-	/**
-	 * Remove all the useless arguments/commas after a specified
-	 * valid position.
-	 * 
-	 * <p>
-	 * NOTE: a valid function can be located only when the cursor is inside a method
-	 * invocation element.
-	 * 
-	 * @param lastPosition the last valid argument position
-	 */
-	public void removeUselessParameters(int lastPosition) {
-		Arguments args=getMethodArguments();
-		if(args!=null){
-			final ExpressionList exprLst=args.getExprLst();
-			ICompositeNode argsNode = NodeModelUtils.getNode(args);
-			int argsEnd = argsNode.getTotalEndOffset();	// right parenthesis position
-			int selectionStart=-1;
-			int selectionEnd=-1;
-			
-			if(exprLst!=null){
-				int commasNum = exprLst.getCommas().size();
-				if(commasNum>0 && commasNum>=lastPosition){
-					// Comma separated expressions (or even blank chars) => get all comma positions
-					List<Integer> commasOffsets=new ArrayList<Integer>();									
-					for(INode c : NodeModelUtils.findActualNodeFor(exprLst).getChildren()){
-						if(c.getGrammarElement() instanceof Keyword && 
-								",".equals(((Keyword)c.getGrammarElement()).getValue())){
-							commasOffsets.add(c.getOffset());
-						}
-					}
-
-					// Get the first non useful comma
-					selectionStart=commasOffsets.get(lastPosition-1);
-					selectionEnd=argsEnd-1;
-				}
+			if(lastParamTextLength==0){
+				sb.append(" ");
 			}
-			
-			if(selectionStart!=-1 && selectionEnd!=-1){
-				textArea.setSelection(selectionStart,selectionEnd);
-				textArea.insert("");
-			}
+			sb.append(lastParamTxt);
+			textArea.insert(sb.toString());
+			textArea.setSelection(positionStart,positionEnd);
+			return;
 		}
 	}
 	
@@ -341,26 +284,26 @@ public class EditingAreaHelper {
 		if(xtextAdapter.getXtextParseResult()!=null){
 			ICompositeNode actualNode=getActualNode();
 			if(actualNode!=null){
-					INode tmpParentNode=actualNode;
-					boolean foundParentNode=false;
-					while(!foundParentNode && tmpParentNode!=null){
-						if(tmpParentNode.getSemanticElement() instanceof Arguments || tmpParentNode.getSemanticElement() instanceof MethodInvocation){
-							foundParentNode=true;
-						}
-						else{
-							tmpParentNode=tmpParentNode.getParent();
-						}
+				INode tmpParentNode=actualNode;
+				boolean foundParentNode=false;
+				while(!foundParentNode && tmpParentNode!=null){
+					if(tmpParentNode.getSemanticElement() instanceof Arguments || tmpParentNode.getSemanticElement() instanceof MethodInvocation){
+						foundParentNode=true;
 					}
-					if(foundParentNode){
-						Arguments args=null;
-						if(tmpParentNode.getSemanticElement() instanceof MethodInvocation){
-							args=((MethodInvocation)tmpParentNode.getSemanticElement()).getArgs();
-						}
-						else{
-							args=(Arguments)tmpParentNode.getSemanticElement();
-						}
-						return args;
+					else{
+						tmpParentNode=tmpParentNode.getParent();
 					}
+				}
+				if(foundParentNode){
+					Arguments args=null;
+					if(tmpParentNode.getSemanticElement() instanceof MethodInvocation){
+						args=((MethodInvocation)tmpParentNode.getSemanticElement()).getArgs();
+					}
+					else{
+						args=(Arguments)tmpParentNode.getSemanticElement();
+					}
+					return args;
+				}
 			}
 		}
 		

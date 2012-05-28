@@ -22,6 +22,8 @@ import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
@@ -156,6 +158,16 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 						performCategorySelection(event.selectedCategory);
 					}
 				});
+		editorArea.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				editingAreaInfo.ignoreAutoEditStrategies(true);
+			}
+			@Override
+			public void focusGained(FocusEvent e) {
+				editingAreaInfo.ignoreAutoEditStrategies(false);
+			}
+		});
 	}
 
 	/*
