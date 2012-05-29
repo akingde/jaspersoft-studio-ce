@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
@@ -157,6 +158,36 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 	 */
 	public CCombo createCCombo(Composite parent) {
 		return createCCombo(parent, SWT.FLAT | SWT.READ_ONLY);
+	}
+
+	/**
+	 * Creates a combo box as a part of the form.
+	 * 
+	 * @param parent
+	 *            the combo box parent.
+	 * @param comboStyle
+	 *            the combo box style.
+	 * @return the combo box.
+	 */
+	public Combo createCombo(Composite parent, int comboStyle) {
+		Combo combo = new Combo(parent, comboStyle);
+		adapt(combo, true, false);
+		// Bugzilla 145837 - workaround for no borders on Windows XP
+		if (getBorderStyle() == SWT.BORDER) {
+			combo.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+		}
+		return combo;
+	}
+
+	/**
+	 * Creates a combo box as a part of the form.
+	 * 
+	 * @param parent
+	 *            the combo box parent.
+	 * @return the combo box.
+	 */
+	public Combo createCombo(Composite parent) {
+		return createCombo(parent, SWT.FLAT | SWT.READ_ONLY);
 	}
 
 	/**
