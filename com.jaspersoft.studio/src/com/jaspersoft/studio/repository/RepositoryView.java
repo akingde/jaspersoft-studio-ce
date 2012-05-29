@@ -108,7 +108,10 @@ public class RepositoryView extends ViewPart implements ITabbedPropertySheetPage
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(1, false));
+		GridLayout layout = new GridLayout(1, false);
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		composite.setLayout(layout);
 
 		treeViewer = new TreeViewer(composite);
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
