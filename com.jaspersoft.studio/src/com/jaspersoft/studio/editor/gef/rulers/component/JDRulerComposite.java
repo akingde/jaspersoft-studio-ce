@@ -53,7 +53,6 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -94,7 +93,7 @@ public class JDRulerComposite extends Composite {
 	 */
 	public JDRulerComposite(Composite parent, int style) {
 		super(parent, style);
-		lbl = new Label(this, SWT.BORDER | SWT.CENTER);
+		lbl = new Label(this, SWT.BORDER   | SWT.BORDER_SOLID);
 		lbl.setText("px");
 
 		addDisposeListener(new DisposeListener() {
@@ -250,7 +249,7 @@ public class JDRulerComposite extends Composite {
 
 		if (left != null || top != null) {
 			// Point p = lbl.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			lbl.setSize(leftWidth + 2, topHeight + 2);
+			lbl.setSize(leftWidth + 4, topHeight + 3);
 			// int w = leftWidth < p.x ? p.x : leftWidth;
 			// int h = topHeight < p.y ? p.y : topHeight;
 			// lbl.setBounds(0, 0, w - 1, h - 1);
