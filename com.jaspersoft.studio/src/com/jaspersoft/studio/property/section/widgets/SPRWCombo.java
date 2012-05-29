@@ -20,12 +20,12 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -36,7 +36,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.Misc;
 
 public class SPRWCombo extends ASPropertyWidget {
-	private CCombo combo;
+	private Combo combo;
 
 	public SPRWCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -48,7 +48,7 @@ public class SPRWCombo extends ASPropertyWidget {
 	}
 
 	protected void createComponent(Composite parent) {
-		combo = section.getWidgetFactory().createCCombo(parent, SWT.FLAT);
+		combo = section.getWidgetFactory().createCombo(parent, SWT.FLAT);
 		combo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

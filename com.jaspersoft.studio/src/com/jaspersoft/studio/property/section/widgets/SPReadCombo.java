@@ -20,9 +20,9 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -32,7 +32,7 @@ import com.jaspersoft.studio.property.descriptors.JSSComboPropertyDescriptor;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPReadCombo extends ASPropertyWidget {
-	private CCombo combo;
+	private Combo combo;
 
 	public SPReadCombo(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -46,7 +46,7 @@ public class SPReadCombo extends ASPropertyWidget {
 	protected void createComponent(Composite parent) {
 		final JSSComboPropertyDescriptor pd = (JSSComboPropertyDescriptor) pDescriptor;
 
-		combo = section.getWidgetFactory().createCCombo(parent, SWT.READ_ONLY);
+		combo = section.getWidgetFactory().createCombo(parent, SWT.READ_ONLY);
 		combo.setItems(pd.getLabels());
 		combo.addSelectionListener(new SelectionAdapter() {
 

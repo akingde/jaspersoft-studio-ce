@@ -24,12 +24,12 @@ import net.sf.jasperreports.engine.base.JRBaseStyle;
 import net.sf.jasperreports.engine.design.JRDesignFont;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
@@ -44,8 +44,8 @@ import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescrip
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SPFont extends ASPropertyWidget {
-	private CCombo fontName;
-	private CCombo fontSize;
+	private Combo fontName;
+	private Combo fontSize;
 	private ToolItem boldButton;
 	private ToolItem italicButton;
 	private ToolItem underlineButton;
@@ -67,7 +67,7 @@ public class SPFont extends ASPropertyWidget {
 
 		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
-		fontName = section.getWidgetFactory().createCCombo(group, SWT.FLAT);
+		fontName = section.getWidgetFactory().createCombo(group, SWT.FLAT);
 		fontName.setItems(pd.getItems());
 		fontName.addModifyListener(new ModifyListener() {
 			private int time = 0;
@@ -86,7 +86,7 @@ public class SPFont extends ASPropertyWidget {
 		final RWComboBoxPropertyDescriptor pd1 = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE);
 
-		fontSize = section.getWidgetFactory().createCCombo(group, SWT.FLAT);
+		fontSize = section.getWidgetFactory().createCombo(group, SWT.FLAT);
 		fontSize.setItems(pd1.getItems());
 		fontSize.addModifyListener(new ModifyListener() {
 			private int time = 0;

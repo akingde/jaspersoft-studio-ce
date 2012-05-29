@@ -20,9 +20,9 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -33,7 +33,7 @@ import com.jaspersoft.studio.property.section.AbstractSection;
 import com.jaspersoft.studio.utils.EnumHelper;
 
 public class SPReadComboEnum extends ASPropertyWidget {
-	private CCombo combo;
+	private Combo combo;
 
 	public SPReadComboEnum(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -47,7 +47,7 @@ public class SPReadComboEnum extends ASPropertyWidget {
 	protected void createComponent(Composite parent) {
 		final JSSEnumPropertyDescriptor pd = (JSSEnumPropertyDescriptor) pDescriptor;
 
-		combo = section.getWidgetFactory().createCCombo(parent, SWT.READ_ONLY);
+		combo = section.getWidgetFactory().createCombo(parent, SWT.READ_ONLY);
 		combo.setItems(EnumHelper.getEnumNames(pd.getJrEnums(), pd.getType()));
 		combo.addSelectionListener(new SelectionAdapter() {
 

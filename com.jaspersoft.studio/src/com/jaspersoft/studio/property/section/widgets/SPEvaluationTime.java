@@ -30,9 +30,9 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -44,7 +44,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
 import com.jaspersoft.studio.utils.Misc;
 
 public class SPEvaluationTime extends ASPropertyWidget {
-	private CCombo evalTime;
+	private Combo evalTime;
 	private IPropertyDescriptor gDescriptor;
 
 	public SPEvaluationTime(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor,
@@ -59,7 +59,7 @@ public class SPEvaluationTime extends ASPropertyWidget {
 	}
 
 	public void createComponent(Composite parent) {
-		evalTime = section.getWidgetFactory().createCCombo(parent, SWT.FLAT | SWT.READ_ONLY);
+		evalTime = section.getWidgetFactory().createCombo(parent, SWT.FLAT | SWT.READ_ONLY);
 		evalTime.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

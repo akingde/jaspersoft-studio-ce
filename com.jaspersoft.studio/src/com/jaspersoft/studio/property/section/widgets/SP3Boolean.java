@@ -20,9 +20,9 @@
 package com.jaspersoft.studio.property.section.widgets;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -31,7 +31,7 @@ import com.jaspersoft.studio.model.APropertyNode;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
 public class SP3Boolean extends ASPropertyWidget {
-	private CCombo cmb3Bool;
+	private Combo cmb3Bool;
 
 	public SP3Boolean(Composite parent, AbstractSection section, IPropertyDescriptor pDescriptor) {
 		super(parent, section, pDescriptor);
@@ -43,7 +43,7 @@ public class SP3Boolean extends ASPropertyWidget {
 	}
 
 	public void createComponent(Composite parent) {
-		cmb3Bool = section.getWidgetFactory().createCCombo(parent, SWT.FLAT | SWT.READ_ONLY);
+		cmb3Bool = section.getWidgetFactory().createCombo(parent, SWT.FLAT | SWT.READ_ONLY);
 		cmb3Bool.setItems(new String[] { "NULL", "TRUE", "FALSE" });
 		cmb3Bool.addSelectionListener(new SelectionAdapter() {
 			@Override
