@@ -140,7 +140,8 @@ public class CrosstabCellEditPart extends FigureEditPart implements
 				request.getSizeDelta().height);
 	}
 
-	protected void updateRulers() {
+	@Override
+	public void updateRulers() {
 		MCell mcell = (MCell) getModel();
 
 		// get mtable

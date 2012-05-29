@@ -148,7 +148,8 @@ public class TableCellEditPart extends FigureEditPart implements IContainerPart 
 				request.getSizeDelta().height);
 	}
 
-	protected void updateRulers() {
+	@Override
+	public void updateRulers() {
 		MCell mcell = (MCell) getModel();
 
 		// get mtable

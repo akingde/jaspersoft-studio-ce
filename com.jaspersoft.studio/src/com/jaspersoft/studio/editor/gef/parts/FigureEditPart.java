@@ -96,7 +96,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 */
 	@Override
 	protected IFigure createFigure() {
-		ANode model = (ANode) getModel();
+		ANode model = getModel();
 		IFigure rect = FigureFactory.createFigure(model);
 		setPrefsBorder(rect);
 		setupFigure(rect);
@@ -115,19 +115,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SelectionEditPolicy() {
 			@Override
 			protected void showSelection() {
-				ANode model = (ANode) ((ANode) getModel()).getParent();
-				if (model instanceof IGraphicElement && model.getValue() != null) {
-					Rectangle bounds = ((IGraphicElement) model).getBounds();
-					int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
-					int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
-
-					getViewer().setProperty(ReportRuler.PROPERTY_HOFFSET, x);
-					getViewer().setProperty(ReportRuler.PROPERTY_VOFFSET, y);
-					getViewer().setProperty(ReportRuler.PROPERTY_HEND, bounds.width); //$NON-NLS-1$
-					getViewer().setProperty(ReportRuler.PROPERTY_VEND, bounds.height);//$NON-NLS-1$
-
-					getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(x, y));
-				}
+				updateRulers();
 			}
 
 			@Override
@@ -166,7 +154,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 *          the new up figure
 	 */
 	protected void setupFigure(IFigure rect) {
-		ANode model = (ANode) getModel();
+		ANode model = getModel();
 		rect.setToolTip(new Label(model.getToolTip()));
 		if (model instanceof IGraphicElement && model.getValue() != null) {
 			Rectangle bounds = ((IGraphicElement) model).getBounds();
@@ -187,6 +175,11 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 		}
 	}
 
+	@Override
+	public ANode getModel() {
+		return (ANode) super.getModel();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -194,7 +187,7 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		refresh();
-		refreshC((ANode) getModel());
+		refreshC(getModel());
 		refreshVisuals();
 	}
 
@@ -212,6 +205,22 @@ public class FigureEditPart extends AJDEditPart implements PropertyChangeListene
 					((FigureEditPart) ep).refreshVisuals();
 				refreshC((ANode) node);
 			}
+	}
+
+	public void updateRulers() {
+		ANode model = getModel().getParent();
+		if (model instanceof IGraphicElement && model.getValue() != null) {
+			Rectangle bounds = ((IGraphicElement) model).getBounds();
+			int x = bounds.x + ReportPageFigure.PAGE_BORDER.left;
+			int y = bounds.y + ReportPageFigure.PAGE_BORDER.top;
+
+			getViewer().setProperty(ReportRuler.PROPERTY_HOFFSET, x);
+			getViewer().setProperty(ReportRuler.PROPERTY_VOFFSET, y);
+			getViewer().setProperty(ReportRuler.PROPERTY_HEND, bounds.width); //$NON-NLS-1$
+			getViewer().setProperty(ReportRuler.PROPERTY_VEND, bounds.height);//$NON-NLS-1$
+
+			getViewer().setProperty(SnapToGrid.PROPERTY_GRID_ORIGIN, new Point(x, y));
+		}
 	}
 
 }

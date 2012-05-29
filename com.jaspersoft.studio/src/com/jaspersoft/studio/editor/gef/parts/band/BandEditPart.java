@@ -21,6 +21,7 @@ package com.jaspersoft.studio.editor.gef.parts.band;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -159,7 +160,7 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new BandMoveEditPolicy() {
 			@Override
 			protected void showSelection() {
-				updateRullers();
+				updateRulers();
 			}
 		});
 		// installEditPolicy(EditPolicy.CONTAINER_ROLE, new BandContainerEditPolicy());
@@ -234,10 +235,25 @@ public class BandEditPart extends FigureEditPart implements PropertyChangeListen
 		bfig.setToolTip(new Label(bandNode.getToolTip()));
 		bfig.setBandText(bandNode.getSimpleDisplayName());
 
-		updateRullers();
+		if (getSelected() == 1)
+			updateRulers();
+		else {
+			List<?> selected = getViewer().getSelectedEditParts();
+			if (selected.isEmpty())
+				updateRulers();
+			else
+				for (Object obj : selected) {
+					if (obj instanceof FigureEditPart) {
+						FigureEditPart figEditPart = (FigureEditPart) obj;
+						if (figEditPart.getModel().getParent() == bandNode)
+							figEditPart.updateRulers();
+					}
+				}
+		}
 	}
 
-	protected void updateRullers() {
+	@Override
+	public void updateRulers() {
 		EditPart ep = getParent();
 		if (ep instanceof ReportPageEditPart)
 			((ReportPageEditPart) ep).updateRullers(null);
