@@ -189,9 +189,14 @@ public class SelectionHelper {
 	}
 
 	public static FileResolver getFileResolver(IFile file) {
-		SimpleFileResolver fileResolver = new SimpleFileResolver(Arrays.asList(new File[] {
-				new File(file.getParent().getLocationURI()), new File("."), //$NON-NLS-1$
-				new File(file.getProject().getLocationURI()) }));
+		SimpleFileResolver fileResolver = null;
+		if (file == null)
+			fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File("."), //$NON-NLS-1$
+			}));
+		else
+			fileResolver = new SimpleFileResolver(Arrays.asList(new File[] { new File(file.getParent().getLocationURI()),
+					new File("."), //$NON-NLS-1$
+					new File(file.getProject().getLocationURI()) }));
 		fileResolver.setResolveAbsolutePath(true);
 		return fileResolver;
 	}
