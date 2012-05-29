@@ -58,7 +58,6 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
@@ -80,7 +79,6 @@ public class JDRulerComposite extends Composite {
 			layout(false);
 		}
 	};
-	private Label lbl;
 
 	/**
 	 * Constructor
@@ -93,8 +91,6 @@ public class JDRulerComposite extends Composite {
 	 */
 	public JDRulerComposite(Composite parent, int style) {
 		super(parent, style);
-		lbl = new Label(this, SWT.BORDER   | SWT.BORDER_SOLID);
-		lbl.setText("px");
 
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -239,7 +235,7 @@ public class JDRulerComposite extends Composite {
 		Rectangle trim = calculateEditorTrim(editor);
 		if (left != null) {
 			// The - 1 and + 1 are to compensate for the RulerBorder
-			left.getControl().setBounds(1, topHeight - trim.x + leftTrim.x - 1, leftWidth,
+			left.getControl().setBounds(0, topHeight - trim.x + leftTrim.x - 1, leftWidth,
 					editorSize.height - trim.height + leftTrim.height + 1);
 		}
 		if (top != null) {
@@ -247,15 +243,6 @@ public class JDRulerComposite extends Composite {
 					editorSize.width - trim.width + topTrim.width + 1, topHeight);
 		}
 
-		if (left != null || top != null) {
-			// Point p = lbl.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			lbl.setSize(leftWidth + 4, topHeight + 3);
-			// int w = leftWidth < p.x ? p.x : leftWidth;
-			// int h = topHeight < p.y ? p.y : topHeight;
-			// lbl.setBounds(0, 0, w - 1, h - 1);
-		} else {
-			lbl.setBounds(0, 0, 0, 0);
-		}
 	}
 
 	private GraphicalViewer getRulerContainer(int orientation) {
@@ -314,7 +301,7 @@ public class JDRulerComposite extends Composite {
 				// @TODO:Pratik If you use Display.asyncExec(runnable) here, some flashing
 				// occurs. You can see it when the palette is in the editor, and you hit
 				// the button to show/hide it.
-				layout(true);
+						layout(true);		
 			}
 		};
 		addListener(SWT.Resize, layoutListener);
@@ -322,6 +309,8 @@ public class JDRulerComposite extends Composite {
 		editor.getHorizontalBar().addListener(SWT.Hide, layoutListener);
 		editor.getVerticalBar().addListener(SWT.Show, layoutListener);
 		editor.getVerticalBar().addListener(SWT.Hide, layoutListener);
+//		editor.addListener(SWT.Show, layoutListener);
+//		editor.addListener(SWT.Hide, layoutListener);
 
 		propertyListener = new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -412,18 +401,14 @@ public class JDRulerComposite extends Composite {
 		if (isRulerVisible != isVisible) {
 			isRulerVisible = isVisible;
 			if (diagramViewer != null) {
-				RulerProvider rph = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER);
-				((ReportRuler) rph.getRuler()).setHoffset((Integer) diagramViewer.getProperty(ReportRuler.PROPERTY_HOFFSET));
-				((ReportRuler) rph.getRuler()).setHend((Integer) diagramViewer.getProperty(ReportRuler.PROPERTY_HEND));
-				setRuler(rph, PositionConstants.NORTH);
 
-				RulerProvider rpv = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_VERTICAL_RULER);
-
-				((ReportRuler) rpv.getRuler()).setVoffset((Integer) diagramViewer.getProperty(ReportRuler.PROPERTY_VOFFSET));
-				((ReportRuler) rpv.getRuler()).setVend((Integer) diagramViewer.getProperty(ReportRuler.PROPERTY_VEND));
-				setRuler(rpv, PositionConstants.WEST);
+				setRuler((RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER),
+						PositionConstants.NORTH);
+				setRuler((RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_VERTICAL_RULER),
+						PositionConstants.WEST);
 			}
 		}
+
 	}
 
 	private static class RulerBorder extends AbstractBorder {
@@ -456,10 +441,10 @@ public class JDRulerComposite extends Composite {
 			graphics.setForegroundColor(ColorConstants.buttonDarker);
 			if (horizontal) {
 				graphics.drawLine(figure.getBounds().getTopLeft(),
-						figure.getBounds().getBottomLeft().translate(new org.eclipse.draw2d.geometry.Point(0, -2)));
+						figure.getBounds().getBottomLeft().translate(new org.eclipse.draw2d.geometry.Point(0, -4)));
 			} else {
 				graphics.drawLine(figure.getBounds().getTopLeft(),
-						figure.getBounds().getTopRight().translate(new org.eclipse.draw2d.geometry.Point(-2, 0)));
+						figure.getBounds().getTopRight().translate(new org.eclipse.draw2d.geometry.Point(-4, 0)));
 			}
 		}
 	}
