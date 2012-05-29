@@ -47,7 +47,7 @@ public class SPReadComboEnum extends ASPropertyWidget {
 	protected void createComponent(Composite parent) {
 		final JSSEnumPropertyDescriptor pd = (JSSEnumPropertyDescriptor) pDescriptor;
 
-		combo = section.getWidgetFactory().createCombo(parent, SWT.READ_ONLY);
+		combo = section.getWidgetFactory().createCombo(parent, SWT.FLAT | SWT.READ_ONLY);
 		combo.setItems(EnumHelper.getEnumNames(pd.getJrEnums(), pd.getType()));
 		combo.addSelectionListener(new SelectionAdapter() {
 

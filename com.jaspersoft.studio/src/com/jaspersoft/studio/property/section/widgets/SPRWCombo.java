@@ -48,7 +48,7 @@ public class SPRWCombo extends ASPropertyWidget {
 	}
 
 	protected void createComponent(Composite parent) {
-		combo = section.getWidgetFactory().createCombo(parent, SWT.NONE);
+		combo = section.getWidgetFactory().createCombo(parent);
 		combo.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

@@ -171,11 +171,11 @@ public class TabbedPropertySheetWidgetFactory extends FormToolkit {
 	 */
 	public Combo createCombo(Composite parent, int comboStyle) {
 		Combo combo = new Combo(parent, comboStyle);
-		adapt(combo, true, false);
+//		adapt(combo, true, false);
 		// Bugzilla 145837 - workaround for no borders on Windows XP
-		if (getBorderStyle() == SWT.BORDER) {
-			combo.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-		}
+//		if (getBorderStyle() == SWT.BORDER) {
+//			combo.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+//		}
 		return combo;
 	}
 
