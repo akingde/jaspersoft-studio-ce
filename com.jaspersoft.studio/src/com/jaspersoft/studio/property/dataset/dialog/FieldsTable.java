@@ -52,6 +52,7 @@ import com.jaspersoft.studio.swt.widgets.table.ListOrderButtons;
 import com.jaspersoft.studio.swt.widgets.table.NewButton;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ModelUtils;
+import com.jaspersoft.studio.utils.UIUtils;
 
 public class FieldsTable {
 	private TableViewer tviewer;
@@ -105,7 +106,8 @@ public class FieldsTable {
 		tviewer.setContentProvider(new ListContentProvider());
 		tviewer.setLabelProvider(new TLabelProvider());
 		attachCellEditors(tviewer, wtable);
-
+		UIUtils.setViewerCellEditingOnDblClick(tviewer);
+		
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
 		bGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
