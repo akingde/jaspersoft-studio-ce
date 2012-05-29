@@ -227,7 +227,7 @@ public class JDRulerRootEditPart extends SimpleRootEditPart {
 				}
 				graphics.setForegroundColor(ColorConstants.black);
 				graphics.setBackgroundColor(ColorConstants.white);
-				graphics.drawFocus(focusBounds);
+//				graphics.drawFocus(focusBounds);
 			}
 		}
 
