@@ -94,7 +94,7 @@ public class JDRulerComposite extends Composite {
 	 */
 	public JDRulerComposite(Composite parent, int style) {
 		super(parent, style);
-		lbl = new Label(this, SWT.CENTER);
+		lbl = new Label(this, SWT.BORDER | SWT.CENTER);
 		lbl.setText("px");
 
 		addDisposeListener(new DisposeListener() {
@@ -240,7 +240,7 @@ public class JDRulerComposite extends Composite {
 		Rectangle trim = calculateEditorTrim(editor);
 		if (left != null) {
 			// The - 1 and + 1 are to compensate for the RulerBorder
-			left.getControl().setBounds(0, topHeight - trim.x + leftTrim.x - 1, leftWidth,
+			left.getControl().setBounds(1, topHeight - trim.x + leftTrim.x - 1, leftWidth,
 					editorSize.height - trim.height + leftTrim.height + 1);
 		}
 		if (top != null) {
@@ -249,10 +249,11 @@ public class JDRulerComposite extends Composite {
 		}
 
 		if (left != null || top != null) {
-			Point p = lbl.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-			int w = leftWidth < p.x ? p.x : leftWidth;
-			int h = topHeight < p.y ? p.y : topHeight;
-			lbl.setBounds(0, 0, w - 1, h - 1);
+			// Point p = lbl.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+			lbl.setSize(leftWidth + 2, topHeight + 2);
+			// int w = leftWidth < p.x ? p.x : leftWidth;
+			// int h = topHeight < p.y ? p.y : topHeight;
+			// lbl.setBounds(0, 0, w - 1, h - 1);
 		} else {
 			lbl.setBounds(0, 0, 0, 0);
 		}
