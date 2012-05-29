@@ -29,6 +29,12 @@ import net.sf.jasperreports.eclipse.ui.util.ExceptionDetailsErrorDialog;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.graphics.FontData;
@@ -260,5 +266,21 @@ public class UIUtils {
 		text.addListener(SWT.FocusOut, listener);
 		text.addListener(SWT.MouseDown, listener);
 		text.addListener(SWT.MouseUp, listener);
+	}
+	
+	/**
+	 * Setups the start of cell editing on a {@link TableViewer} when 
+	 * a {@link DoubleClickEvent} occurs. 
+	 * 
+	 * @param tviewer the table viewer
+	 */
+	public static void setViewerCellEditingOnDblClick(TableViewer tviewer){
+		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tviewer) {
+			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
+				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION;
+			}
+		};
+
+		TableViewerEditor.create(tviewer, actSupport, ColumnViewerEditor.DEFAULT);
 	}
 }
