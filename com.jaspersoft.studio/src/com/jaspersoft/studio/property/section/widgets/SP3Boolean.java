@@ -43,7 +43,7 @@ public class SP3Boolean extends ASPropertyWidget {
 	}
 
 	public void createComponent(Composite parent) {
-		cmb3Bool = section.getWidgetFactory().createCombo(parent, SWT.FLAT | SWT.READ_ONLY);
+		cmb3Bool = section.getWidgetFactory().createCombo(parent, SWT.READ_ONLY);
 		cmb3Bool.setItems(new String[] { "NULL", "TRUE", "FALSE" });
 		cmb3Bool.addSelectionListener(new SelectionAdapter() {
 			@Override

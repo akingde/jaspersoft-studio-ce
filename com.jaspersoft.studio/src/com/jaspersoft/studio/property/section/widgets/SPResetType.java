@@ -59,7 +59,7 @@ public class SPResetType extends ASPropertyWidget {
 	}
 
 	public void createComponent(Composite parent) {
-		evalTime = section.getWidgetFactory().createCombo(parent, SWT.FLAT | SWT.READ_ONLY);
+		evalTime = section.getWidgetFactory().createCombo(parent, SWT.READ_ONLY);
 		evalTime.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {

@@ -67,7 +67,7 @@ public class SPFont extends ASPropertyWidget {
 
 		final RWComboBoxPropertyDescriptor pd = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_NAME);
-		fontName = section.getWidgetFactory().createCombo(group, SWT.FLAT);
+		fontName = section.getWidgetFactory().createCombo(group, SWT.NONE);
 		fontName.setItems(pd.getItems());
 		fontName.addModifyListener(new ModifyListener() {
 			private int time = 0;
@@ -86,7 +86,7 @@ public class SPFont extends ASPropertyWidget {
 		final RWComboBoxPropertyDescriptor pd1 = (RWComboBoxPropertyDescriptor) mfont
 				.getPropertyDescriptor(JRBaseStyle.PROPERTY_FONT_SIZE);
 
-		fontSize = section.getWidgetFactory().createCombo(group, SWT.FLAT);
+		fontSize = section.getWidgetFactory().createCombo(group, SWT.NONE);
 		fontSize.setItems(pd1.getItems());
 		fontSize.addModifyListener(new ModifyListener() {
 			private int time = 0;
