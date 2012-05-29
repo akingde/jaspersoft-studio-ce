@@ -101,6 +101,11 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 		JDRulerFigure ruler = new JDRulerFigure(isHorizontal(), getRulerProvider().getUnit());
 		if (ruler.getUnit() == RulerProvider.UNIT_PIXELS)
 			ruler.setInterval(100, 10);
+
+		ruler.setHend(((ReportRuler) getRulerProvider().getRuler()).getHend());
+		ruler.setHoffset(((ReportRuler) getRulerProvider().getRuler()).getHoffset());
+		ruler.setVend(((ReportRuler) getRulerProvider().getRuler()).getVend());
+		ruler.setVoffset(((ReportRuler) getRulerProvider().getRuler()).getVoffset());
 		return ruler;
 	}
 
@@ -206,7 +211,7 @@ public class JDRulerEditPart extends AbstractGraphicalEditPart {
 		if (newUnit == RulerProvider.UNIT_PIXELS)
 			getRulerFigure().setInterval(100, 10);
 		else
-			getRulerFigure().setInterval(0, 0);
+			getRulerFigure().setInterval(1, 10);
 	}
 
 	public boolean isHorizontal() {

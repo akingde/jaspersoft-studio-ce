@@ -53,11 +53,13 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
 import com.jaspersoft.studio.editor.gef.rulers.ReportRuler;
@@ -79,6 +81,7 @@ public class JDRulerComposite extends Composite {
 			layout(false);
 		}
 	};
+	private Label lbl;
 
 	/**
 	 * Constructor
@@ -91,6 +94,9 @@ public class JDRulerComposite extends Composite {
 	 */
 	public JDRulerComposite(Composite parent, int style) {
 		super(parent, style);
+		lbl = new Label(this, SWT.CENTER);
+		lbl.setText("px");
+
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
 				disposeResources();
@@ -240,6 +246,15 @@ public class JDRulerComposite extends Composite {
 		if (top != null) {
 			top.getControl().setBounds(leftWidth - trim.y + topTrim.y - 1, 0,
 					editorSize.width - trim.width + topTrim.width + 1, topHeight);
+		}
+
+		if (left != null && top != null) {
+			Point p = lbl.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+			int w = leftWidth < p.x ? p.x : leftWidth;
+			int h = topHeight < p.y ? p.y : topHeight;
+			lbl.setBounds(0, 0, w - 1, h - 1);
+		} else {
+			lbl.setBounds(0, 0, 0, 0);
 		}
 	}
 
@@ -397,10 +412,16 @@ public class JDRulerComposite extends Composite {
 		if (isRulerVisible != isVisible) {
 			isRulerVisible = isVisible;
 			if (diagramViewer != null) {
-				setRuler((RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER),
-						PositionConstants.NORTH);
-				setRuler((RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_VERTICAL_RULER),
-						PositionConstants.WEST);
+				RulerProvider rph = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_HORIZONTAL_RULER);
+				((ReportRuler) rph.getRuler()).setHoffset((Integer) diagramViewer.getProperty(ReportRuler.PROPERTY_HOFFSET));
+				((ReportRuler) rph.getRuler()).setHend((Integer) diagramViewer.getProperty(ReportRuler.PROPERTY_HEND));
+				setRuler(rph, PositionConstants.NORTH);
+
+				RulerProvider rpv = (RulerProvider) diagramViewer.getProperty(RulerProvider.PROPERTY_VERTICAL_RULER);
+
+				((ReportRuler) rpv.getRuler()).setVoffset((Integer) diagramViewer.getProperty(ReportRuler.PROPERTY_VOFFSET));
+				((ReportRuler) rpv.getRuler()).setVend((Integer) diagramViewer.getProperty(ReportRuler.PROPERTY_VEND));
+				setRuler(rpv, PositionConstants.WEST);
 			}
 		}
 	}

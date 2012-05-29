@@ -59,7 +59,7 @@ public class JDRulerFigure extends Figure {
 	 * These fields allow the client to customize the look of the ruler.
 	 */
 	public int smallMarkWidth = 1;
-	public int mediumMarkWidth = 3;
+	public int mediumMarkWidth = 5;
 	public int textMargin = 3;
 	public int minPixelsBetweenMarks = 7;
 	public int minPixelsBetweenMajorMarks = 47;
