@@ -46,8 +46,8 @@ public class Pie3dPlot extends APlot {
 		section.createWidget4Property(parent,
 				JRDesignPie3DPlot.PROPERTY_DEPTH_FACTOR);
 
-		parent = section.getWidgetFactory().createSectionTitle(parent,
-				"Item Label", true, 2, 2);
+		parent = section.getWidgetFactory().createSection(parent, "Item Label",
+				true, 4, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignPie3DPlot.PROPERTY_ITEM_LABEL, false);

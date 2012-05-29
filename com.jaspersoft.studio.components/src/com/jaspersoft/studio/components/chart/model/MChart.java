@@ -178,7 +178,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		titlePositionD = new EdgePropertyDescriptor(
 				JRBaseChart.PROPERTY_TITLE_POSITION,
 				Messages.MChart_title_position, EdgeEnum.class,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		titlePositionD
 				.setDescription(Messages.MChart_title_position_description);
 		desc.add(titlePositionD);
@@ -186,7 +186,7 @@ public class MChart extends MGraphicElementLineBox implements IContainer,
 		legendPositionD = new EdgePropertyDescriptor(
 				JRBaseChart.PROPERTY_LEGEND_POSITION,
 				Messages.MChart_legend_position, EdgeEnum.class,
-				NullEnum.NOTNULL);
+				NullEnum.NULL);
 		legendPositionD
 				.setDescription(Messages.MChart_legend_position_description);
 		desc.add(legendPositionD);

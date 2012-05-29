@@ -42,8 +42,8 @@ public class PiePlot extends APlot {
 		section.createWidget4Property(parent,
 				JRDesignPiePlot.PROPERTY_LEGEND_LABEL_FORMAT);
 
-		parent = section.getWidgetFactory().createSectionTitle(parent,
-				"Item Label", true, 2, 2);
+		parent = section.getWidgetFactory().createSection(parent, "Item Label",
+				true, 4, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignPiePlot.PROPERTY_ITEM_LABEL, false);

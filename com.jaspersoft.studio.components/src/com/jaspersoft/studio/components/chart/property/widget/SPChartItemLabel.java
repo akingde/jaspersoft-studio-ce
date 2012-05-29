@@ -62,7 +62,7 @@ public class SPChartItemLabel extends ASPropertyWidget {
 
 		pd = ml.getPropertyDescriptor(JRDesignItemLabel.PROPERTY_FONT);
 
-		GridData gd = new GridData();
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 4;
 		ilFont = new SPFont(parent, section, pd);
 		ilFont.getControl().setLayoutData(gd);

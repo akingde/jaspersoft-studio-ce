@@ -157,8 +157,8 @@ public class Bar3dPlot extends APlot {
 
 	private void createItemLabel(AbstractSection section, Composite parent,
 			TabbedPropertySheetPage tabbedPropertySheetPage) {
-		parent = section.getWidgetFactory().createSectionTitle(parent,
-				"Item Label", true, 2, 2);
+		parent = section.getWidgetFactory().createSection(parent, "Item Label",
+				true, 4, 2);
 
 		section.createWidget4Property(parent,
 				JRDesignBar3DPlot.PROPERTY_ITEM_LABEL, false);
