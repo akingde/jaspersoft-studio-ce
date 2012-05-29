@@ -248,7 +248,7 @@ public class JDRulerComposite extends Composite {
 					editorSize.width - trim.width + topTrim.width + 1, topHeight);
 		}
 
-		if (left != null && top != null) {
+		if (left != null || top != null) {
 			Point p = lbl.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 			int w = leftWidth < p.x ? p.x : leftWidth;
 			int h = topHeight < p.y ? p.y : topHeight;
@@ -456,10 +456,10 @@ public class JDRulerComposite extends Composite {
 			graphics.setForegroundColor(ColorConstants.buttonDarker);
 			if (horizontal) {
 				graphics.drawLine(figure.getBounds().getTopLeft(),
-						figure.getBounds().getBottomLeft().translate(new org.eclipse.draw2d.geometry.Point(0, -4)));
+						figure.getBounds().getBottomLeft().translate(new org.eclipse.draw2d.geometry.Point(0, -2)));
 			} else {
 				graphics.drawLine(figure.getBounds().getTopLeft(),
-						figure.getBounds().getTopRight().translate(new org.eclipse.draw2d.geometry.Point(-4, 0)));
+						figure.getBounds().getTopRight().translate(new org.eclipse.draw2d.geometry.Point(-2, 0)));
 			}
 		}
 	}

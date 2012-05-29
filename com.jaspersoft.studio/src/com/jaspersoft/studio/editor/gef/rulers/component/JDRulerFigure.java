@@ -72,7 +72,7 @@ public class JDRulerFigure extends Figure {
 	 * This is an artificial border. When asked for the preferred size, the figure adds this width to its preferred width.
 	 * The border is painted in the paintFigure(Graphics) method.
 	 */
-	private static final int BORDER_WIDTH = 3;
+	private static final int BORDER_WIDTH = 1;
 
 	private boolean horizontal;
 	private int unit, interval, divisions;
