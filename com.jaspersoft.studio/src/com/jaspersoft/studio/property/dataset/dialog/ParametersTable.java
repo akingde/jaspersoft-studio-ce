@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -49,7 +50,6 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxLabelProvider;
-import com.jaspersoft.studio.property.descriptor.checkbox.CheckboxCellEditor;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
