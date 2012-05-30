@@ -38,9 +38,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.IEditableDataset;
 import com.jaspersoft.studio.model.dataset.IEditableDatasetRun;
+import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 import com.jaspersoft.studio.utils.EnumHelper;
@@ -56,7 +59,7 @@ import com.jaspersoft.studio.utils.EnumHelper;
  * @see DatasetRunBaseComposite
  *
  */
-public abstract class EditableDatasetBaseComposite extends Composite {
+public abstract class EditableDatasetBaseComposite extends Composite implements IExpressionContextSetter {
 	
 	private IEditableDataset datasetInstance;
 	private Combo comboResetType;
@@ -64,9 +67,11 @@ public abstract class EditableDatasetBaseComposite extends Composite {
 	private Combo comboIncrementType;
 	private Combo comboIncrementGroup;
 	private WTextExpression filterExpression;
+	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
 
 	public EditableDatasetBaseComposite(IEditableDataset datasetInst, Composite parent, int style) {
 		super(parent, SWT.NONE);
+		this.dsRunSelectionListeners=new ArrayList<DatasetRunSelectionListener>();
 		this.datasetInstance=datasetInst;
 		this.setLayout(new GridLayout(2, true));
 		
@@ -161,7 +166,12 @@ public abstract class EditableDatasetBaseComposite extends Composite {
 		grpDatasetRun.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 		
 		
-		DatasetRunBaseComposite datasetRunContent=new DatasetRunBaseComposite(getEditableDatesetRun(),grpDatasetRun, SWT.NONE);	
+		DatasetRunBaseComposite datasetRunContent=new DatasetRunBaseComposite(getEditableDatesetRun(),grpDatasetRun, SWT.NONE);
+		datasetRunContent.addDatasetRunSelectionListener(new DatasetRunSelectionListener() {
+			public void selectionChanged() {
+				notifyDatasetRunSelectionChanged();
+			}
+		});
 		
 		initWidgets();
 	}
@@ -307,4 +317,25 @@ public abstract class EditableDatasetBaseComposite extends Composite {
 		datasetInstance.setIncrementType(selectedIncrType);
 	}
 
+	public void addDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+		dsRunSelectionListeners.add(listener);
+	}
+	
+	public void removeDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+		dsRunSelectionListeners.remove(listener);
+	}
+	
+	private void notifyDatasetRunSelectionChanged(){
+		for(DatasetRunSelectionListener l : dsRunSelectionListeners){
+			l.selectionChanged();
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.jaspersoft.studio.editor.expression.IExpressionContextSetter#setExpressionContext(com.jaspersoft.studio.editor.expression.ExpressionContext)
+	 */
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.filterExpression.setExpressionContext(expContext);
+	}
 }

@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.Table;
 
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.IEditableDatasetRun;
+import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
 /** 
@@ -77,9 +78,11 @@ public class DatasetRunBaseComposite extends Composite {
 	private WTextExpression connDSExpression;
 	private WTextExpression paramsMapExpression;
 	private TableViewer tableViewerDatasetRunParams;
+	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
 
 	public DatasetRunBaseComposite(IEditableDatasetRun datasetRun, Composite parent, int style) {
 		super(parent, style);
+		this.dsRunSelectionListeners=new ArrayList<DatasetRunSelectionListener>();
 		this.setLayout(new GridLayout(2,false));
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 		this.datasetRunInstance=datasetRun;
@@ -103,6 +106,7 @@ public class DatasetRunBaseComposite extends Composite {
 				connDSExpression.setEnabled(false);
 				connDSExpression.setVisible(false);
 				connDSExpression.setExpression(null);
+				notifyDatasetRunSelectionChanged();
 			}
 			
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -463,5 +467,18 @@ public class DatasetRunBaseComposite extends Composite {
 			return null;
 		}
 	}
+
+	public void addDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+		dsRunSelectionListeners.add(listener);
+	}
 	
+	public void removeDatasetRunSelectionListener(DatasetRunSelectionListener listener){
+		dsRunSelectionListeners.remove(listener);
+	}
+	
+	private void notifyDatasetRunSelectionChanged(){
+		for(DatasetRunSelectionListener l : dsRunSelectionListeners){
+			l.selectionChanged();
+		}
+	}
 }
