@@ -64,6 +64,7 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.query.JRQueryExecuterFactoryBundle;
+import net.sf.jasperreports.engine.query.QueryExecuterFactoryBundle;
 import net.sf.jasperreports.engine.type.BandTypeEnum;
 import net.sf.jasperreports.engine.util.JRFontUtil;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -817,6 +818,24 @@ public class ModelUtils {
 		List<?> bundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(JRQueryExecuterFactoryBundle.class);
 		for (Iterator<?> it = bundles.iterator(); it.hasNext();) {
 			JRQueryExecuterFactoryBundle bundle = (JRQueryExecuterFactoryBundle) it.next();
+			String[] languages = bundle.getLanguages();
+			for (String l : languages) {
+				if (!langs.contains(l)) {
+					boolean exists = false;
+					for (String item : langs) {
+						if (item.equalsIgnoreCase(l.trim())) {
+							exists = true;
+							break;
+						}
+					}
+					if (!exists)
+						langs.add(l);
+				}
+			}
+		}
+		bundles = ExtensionsEnvironment.getExtensionsRegistry().getExtensions(QueryExecuterFactoryBundle.class);
+		for (Iterator<?> it = bundles.iterator(); it.hasNext();) {
+			QueryExecuterFactoryBundle bundle = (QueryExecuterFactoryBundle) it.next();
 			String[] languages = bundle.getLanguages();
 			for (String l : languages) {
 				if (!langs.contains(l)) {

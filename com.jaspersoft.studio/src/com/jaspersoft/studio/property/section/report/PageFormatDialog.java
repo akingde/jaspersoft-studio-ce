@@ -35,7 +35,6 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -43,6 +42,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
@@ -50,7 +50,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.jaspersoft.studio.editor.gef.figures.borders.ShadowBorder;
 import com.jaspersoft.studio.editor.java2d.J2DLightweightSystem;
@@ -59,6 +58,7 @@ import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.model.MReport;
 import com.jaspersoft.studio.preferences.DesignerPreferencePage;
 import com.jaspersoft.studio.preferences.util.PropertiesHelper;
+import com.jaspersoft.studio.properties.view.TabbedPropertySheetWidgetFactory;
 import com.jaspersoft.studio.property.SetValueCommand;
 import com.jaspersoft.studio.property.section.report.util.PageSize;
 import com.jaspersoft.studio.property.section.report.util.UnitsWidget;
@@ -85,19 +85,21 @@ final class PageFormatDialog extends FormDialog {
 	protected void createFormContent(IManagedForm mform) {
 		mform.getForm().setText(Messages.PageFormatDialog_1);
 
-		FormToolkit toolkit = mform.getToolkit();
+		toolkit = new TabbedPropertySheetWidgetFactory();
 
-		mform.getForm().getBody().setLayout(new GridLayout(2, false));
+		Composite composite = mform.getForm().getBody();
+		composite.setLayout(new GridLayout(2, false));
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 
-		createPageSize(mform, toolkit);
+		createPageSize(composite);
 
-		createThumbnail(mform);
+		createThumbnail(composite);
 
-		createOrientation(mform, toolkit);
+		createOrientation(composite);
 
-		createMargins(mform, toolkit);
+		createMargins(composite);
 
-		createColumns(mform, toolkit);
+		createColumns(composite);
 
 		setJasperDesign(jd);
 
@@ -106,10 +108,8 @@ final class PageFormatDialog extends FormDialog {
 		setAllUnits();
 	}
 
-	private void createColumns(IManagedForm mform, FormToolkit toolkit) {
-		Group bright = new Group(mform.getForm().getBody(), SWT.NONE);
-		bright.setText(Messages.PageFormatDialog_2);
-		bright.setBackground(mform.getForm().getBody().getBackground());
+	private void createColumns(Composite composite) {
+		Group bright = toolkit.createGroup(composite, Messages.PageFormatDialog_2);
 		bright.setLayoutData(new GridData(GridData.FILL_BOTH));
 		bright.setLayout(new GridLayout(3, false));
 
@@ -145,10 +145,8 @@ final class PageFormatDialog extends FormDialog {
 		space.addSelectionListener(listener);
 	}
 
-	private void createMargins(IManagedForm mform, FormToolkit toolkit) {
-		Group bleft = new Group(mform.getForm().getBody(), SWT.NONE);
-		bleft.setText(Messages.PageFormatDialog_9);
-		bleft.setBackground(mform.getForm().getBody().getBackground());
+	private void createMargins(Composite composite) {
+		Group bleft = toolkit.createGroup(composite, Messages.PageFormatDialog_9);
 		bleft.setLayoutData(new GridData(GridData.FILL_BOTH));
 		bleft.setLayout(new GridLayout(3, false));
 
@@ -185,10 +183,8 @@ final class PageFormatDialog extends FormDialog {
 		rmargin.addSelectionListener(mlistner);
 	}
 
-	private void createOrientation(IManagedForm mform, FormToolkit toolkit) {
-		Group mleft = new Group(mform.getForm().getBody(), SWT.NONE);
-		mleft.setText(Messages.PageFormatDialog_18);
-		mleft.setBackground(mform.getForm().getBody().getBackground());
+	private void createOrientation(Composite composite) {
+		Group mleft = toolkit.createGroup(composite, Messages.PageFormatDialog_18);
 		mleft.setLayoutData(new GridData(GridData.FILL_BOTH));
 		mleft.setLayout(new GridLayout(2, false));
 		portrait = toolkit.createButton(mleft, Messages.PageFormatDialog_19, SWT.RADIO);
@@ -214,9 +210,8 @@ final class PageFormatDialog extends FormDialog {
 		portrait.addSelectionListener(orientationlistner);
 	}
 
-	private void createThumbnail(IManagedForm mform) {
-		square = new Canvas(mform.getForm().getBody(), SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
-		square.setBackground(mform.getForm().getBody().getBackground());
+	private void createThumbnail(Composite composite) {
+		square = new Canvas(composite, SWT.NO_REDRAW_RESIZE | SWT.NO_BACKGROUND);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.verticalSpan = 2;
 		square.setLayoutData(gd);
@@ -287,14 +282,13 @@ final class PageFormatDialog extends FormDialog {
 		lws.getUpdateManager().performUpdate();
 	}
 
-	private void createPageSize(IManagedForm mform, FormToolkit toolkit) {
-		Composite tleft = new Composite(mform.getForm().getBody(), SWT.NONE);
+	private void createPageSize(Composite composite) {
+		Composite tleft = toolkit.createComposite(composite);
 		tleft.setLayout(new GridLayout(3, false));
-		tleft.setBackground(mform.getForm().getBody().getBackground());
 		tleft.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		toolkit.createLabel(tleft, Messages.PageFormatDialog_21);
-		pformat = new CCombo(tleft, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
+		pformat = toolkit.createCombo(tleft, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
 		pformat.setItems(PageSize.getFormats());
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -369,13 +363,14 @@ final class PageFormatDialog extends FormDialog {
 	private Button portrait;
 	private Button landscape;
 	private Spinner cols;
-	private CCombo pformat;
+	private Combo pformat;
 	private CompoundCommand command;
 	private Figure parent;
 	private RectangleFigure borderPreview;
 	private Canvas square;
 	private LightweightSystem lws;
 	private UnitsWidget uw;
+	private TabbedPropertySheetWidgetFactory toolkit;
 
 	private void setJasperDesign(JasperDesign jd) {
 		pheigh.setValue(jd.getPageHeight());

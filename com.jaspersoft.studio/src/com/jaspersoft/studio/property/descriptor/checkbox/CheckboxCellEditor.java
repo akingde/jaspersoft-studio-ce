@@ -88,7 +88,8 @@ public class CheckboxCellEditor extends CellEditor {
 
 	@Override
 	protected void doSetValue(Object value) {
-		this.value = (Boolean) value;
+		if (value instanceof Boolean)
+			this.value = (Boolean) value;
 	}
 
 	/**
