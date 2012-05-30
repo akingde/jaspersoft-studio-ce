@@ -33,6 +33,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.widgets.Display;
@@ -127,6 +128,14 @@ public abstract class ABasicEditor extends EditorPart {
 		}
 
 		public void partClosed(IWorkbenchPart part) {
+			IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+			if (!file.exists()) {
+				try {
+					file.delete(true, new NullProgressMonitor());
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		public void partDeactivated(IWorkbenchPart part) {

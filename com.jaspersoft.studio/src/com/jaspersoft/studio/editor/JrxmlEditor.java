@@ -46,6 +46,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -453,6 +454,8 @@ public class JrxmlEditor extends MultiPageEditorPart implements IResourceChangeL
 		try {
 			if (editorInput instanceof IFileEditorInput) {
 				file = ((IFileEditorInput) editorInput).getFile();
+				file.refreshLocal(0, new NullProgressMonitor());
+
 				in = file.getContents();
 			} else
 				throw new PartInitException("Invalid Input: Must be IFileEditorInput or FileStoreEditorInput"); //$NON-NLS-1$
