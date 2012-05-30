@@ -38,20 +38,23 @@ public class JRDSProviderFieldsProvider implements IFieldsProvider {
 	private JRDataSourceProvider jrdsp;
 
 	public boolean supportsGetFieldsOperation() {
-		return jrdsp.supportsGetFieldsOperation();
+		if (jrdsp != null)
+			return jrdsp.supportsGetFieldsOperation();
+		return false;
 	}
 
 	public List<JRDesignField> getFields(DataAdapterService con,
 			JasperReportsConfiguration jConfig, JRDataset reportDataset)
 			throws JRException, UnsupportedOperationException {
 		jrdsp = ((DataSourceProviderDataAdapterService) con).getProvider();
-
-		JRField[] aray = jrdsp.getFields(null);
-		if (aray != null) {
-			List<JRDesignField> fields = new ArrayList<JRDesignField>();
-			for (JRField f : aray)
-				fields.add((JRDesignField) f);
-			return fields;
+		if (jrdsp != null) {
+			JRField[] aray = jrdsp.getFields(null);
+			if (aray != null) {
+				List<JRDesignField> fields = new ArrayList<JRDesignField>();
+				for (JRField f : aray)
+					fields.add((JRDesignField) f);
+				return fields;
+			}
 		}
 		return new ArrayList<JRDesignField>();
 	}

@@ -413,6 +413,14 @@
                   type="com.jaspersoft.studio.components.chart.model.series.xyzseries.MXYZSeries">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.map.property.MapSection"
+               id="com.jaspersoft.studio.components.map.property.MapSection"
+               tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
+            <input
+                  type="com.jaspersoft.studio.components.map.model.MMap">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension

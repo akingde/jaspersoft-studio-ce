@@ -97,7 +97,7 @@ public class SPEvaluationTime extends ASPropertyWidget {
 				dataset = jasperDesign.getDatasetMap().get(dsname);
 			}
 		}
-		if (dataset == null)
+		if (dataset == null && jasperDesign != null)
 			dataset = jasperDesign.getMainDataset();
 
 		setData((Integer) pnode.getPropertyValue(pDescriptor.getId()),
