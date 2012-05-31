@@ -55,6 +55,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.IEditableDatasetRun;
 import com.jaspersoft.studio.property.dataset.DatasetRunSelectionListener;
@@ -69,7 +71,7 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
  * @see IEditableDatasetRun
  * 
  */
-public class DatasetRunBaseComposite extends Composite {
+public class DatasetRunBaseComposite extends Composite implements IExpressionContextSetter{
 	
 	private IEditableDatasetRun datasetRunInstance;
 	private Combo comboSubDataset;
@@ -79,6 +81,7 @@ public class DatasetRunBaseComposite extends Composite {
 	private WTextExpression paramsMapExpression;
 	private TableViewer tableViewerDatasetRunParams;
 	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
+	private ExpressionContext expContext;
 
 	public DatasetRunBaseComposite(IEditableDatasetRun datasetRun, Composite parent, int style) {
 		super(parent, style);
@@ -226,6 +229,7 @@ public class DatasetRunBaseComposite extends Composite {
 									datasetRunInstance.getJRDatasetRun().getDatasetName());
 					JRDesignDatasetParameter originalParameter=(JRDesignDatasetParameter)selElement;
 					DatasetRunPameterDialog dialog=new DatasetRunPameterDialog((JRDesignDatasetParameter)originalParameter.clone(), designDS, getShell());
+					dialog.setExpressionContext(expContext);
 					if(dialog.open()==Window.OK){
 						JRDesignDatasetParameter modifiedParameter = dialog.getModifiedDatasetParameter();
 						datasetRunInstance.removeParameter(originalParameter);
@@ -246,6 +250,7 @@ public class DatasetRunBaseComposite extends Composite {
 						(JRDesignDataset)datasetRunInstance.getEditableDataset().getJasperDesign().getDatasetMap().get(
 								datasetRunInstance.getJRDatasetRun().getDatasetName());
 				DatasetRunPameterDialog dialog=new DatasetRunPameterDialog(null, designDS, getShell());
+				dialog.setExpressionContext(expContext);
 				if(dialog.open()==Window.OK){
 					JRDesignDatasetParameter newParameter = dialog.getModifiedDatasetParameter();
 					datasetRunInstance.addParameter(newParameter);
@@ -267,6 +272,7 @@ public class DatasetRunBaseComposite extends Composite {
 									datasetRunInstance.getJRDatasetRun().getDatasetName());
 					JRDesignDatasetParameter originalParameter=(JRDesignDatasetParameter)selElement;
 					DatasetRunPameterDialog dialog=new DatasetRunPameterDialog((JRDesignDatasetParameter)originalParameter.clone(), designDS, getShell());
+					dialog.setExpressionContext(expContext);
 					if(dialog.open()==Window.OK){
 						JRDesignDatasetParameter modifiedParameter = dialog.getModifiedDatasetParameter();
 						datasetRunInstance.removeParameter(originalParameter);
@@ -480,5 +486,15 @@ public class DatasetRunBaseComposite extends Composite {
 		for(DatasetRunSelectionListener l : dsRunSelectionListeners){
 			l.selectionChanged();
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.jaspersoft.studio.editor.expression.IExpressionContextSetter#setExpressionContext(com.jaspersoft.studio.editor.expression.ExpressionContext)
+	 */
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
+		this.connDSExpression.setExpressionContext(expContext);
+		this.paramsMapExpression.setExpressionContext(expContext);
 	}
 }

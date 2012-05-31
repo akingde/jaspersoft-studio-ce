@@ -68,6 +68,7 @@ public abstract class EditableDatasetBaseComposite extends Composite implements 
 	private Combo comboIncrementGroup;
 	private WTextExpression filterExpression;
 	private List<DatasetRunSelectionListener> dsRunSelectionListeners;
+	private DatasetRunBaseComposite datasetRunContent;
 
 	public EditableDatasetBaseComposite(IEditableDataset datasetInst, Composite parent, int style) {
 		super(parent, SWT.NONE);
@@ -166,7 +167,7 @@ public abstract class EditableDatasetBaseComposite extends Composite implements 
 		grpDatasetRun.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2));
 		
 		
-		DatasetRunBaseComposite datasetRunContent=new DatasetRunBaseComposite(getEditableDatesetRun(),grpDatasetRun, SWT.NONE);
+		datasetRunContent = new DatasetRunBaseComposite(getEditableDatesetRun(),grpDatasetRun, SWT.NONE);
 		datasetRunContent.addDatasetRunSelectionListener(new DatasetRunSelectionListener() {
 			public void selectionChanged() {
 				notifyDatasetRunSelectionChanged();
@@ -336,6 +337,17 @@ public abstract class EditableDatasetBaseComposite extends Composite implements 
 	 * @see com.jaspersoft.studio.editor.expression.IExpressionContextSetter#setExpressionContext(com.jaspersoft.studio.editor.expression.ExpressionContext)
 	 */
 	public void setExpressionContext(ExpressionContext expContext) {
+		// Expression context from dataset run information
 		this.filterExpression.setExpressionContext(expContext);
+	}
+
+	/**
+	 * Sets the default expression context needed for the dataset run
+	 * composite content.
+	 * 
+	 * @param expContext the expression context to set
+	 */ 
+	public void setDefaultExpressionContext(ExpressionContext expContext){
+		this.datasetRunContent.setExpressionContext(expContext);
 	}
 }

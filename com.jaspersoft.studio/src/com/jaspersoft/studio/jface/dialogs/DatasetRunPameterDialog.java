@@ -40,6 +40,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 
+import com.jaspersoft.studio.editor.expression.ExpressionContext;
+import com.jaspersoft.studio.editor.expression.IExpressionContextSetter;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.swt.widgets.WTextExpression;
 
@@ -49,12 +51,13 @@ import com.jaspersoft.studio.swt.widgets.WTextExpression;
  * @author mrabbi
  *
  */
-public class DatasetRunPameterDialog extends FormDialog {
+public class DatasetRunPameterDialog extends FormDialog implements IExpressionContextSetter {
 
 	private JRDesignDatasetParameter datasetParameter;
 	private JRDesignDataset dataset;
 	private Combo comboParameterName;
 	private WTextExpression parameterExpression;
+	private ExpressionContext expContext;
 
 	/**
 	 * Create the dialog.
@@ -113,6 +116,7 @@ public class DatasetRunPameterDialog extends FormDialog {
 			}
 		};
 		parameterExpression.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+		parameterExpression.setExpressionContext(expContext);
 		
 		// Initialize the widget values
 		if (datasetParameter!=null){
@@ -179,6 +183,14 @@ public class DatasetRunPameterDialog extends FormDialog {
 	@Override
 	public boolean isHelpAvailable() {
 		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.jaspersoft.studio.editor.expression.IExpressionContextSetter#setExpressionContext(com.jaspersoft.studio.editor.expression.ExpressionContext)
+	 */
+	public void setExpressionContext(ExpressionContext expContext) {
+		this.expContext=expContext;
 	}
 	
 }
