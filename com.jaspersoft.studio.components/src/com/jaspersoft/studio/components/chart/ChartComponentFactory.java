@@ -366,7 +366,8 @@ public class ChartComponentFactory implements IComponentFactory {
 	}
 
 	public ExpressionContext getElementExpressionContext(Object jrObject) {
-		// FIXME - Implement this method.
+		// MChart.getValue() does not returns a valid instance of JRDesignComponentElement.
+		// No design component element associated -> no need to look for a dataset information associated.
 		return null;
 	}
 }
