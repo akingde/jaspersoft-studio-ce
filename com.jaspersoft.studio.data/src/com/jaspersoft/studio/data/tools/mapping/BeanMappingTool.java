@@ -116,7 +116,7 @@ public class BeanMappingTool implements IMappingTool {
 						Class<?> propertyType = methodsarray[items[i]]
 								.getPropertyType();
 						if (propertyType != null)
-							f.setValueClass(propertyType);
+							f.setValueClassName(propertyType.getCanonicalName());
 						else
 							f.setValueClass(Object.class);
 						String description = methodsarray[items[i]]
