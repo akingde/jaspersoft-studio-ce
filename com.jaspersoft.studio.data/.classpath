@@ -15,5 +15,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/javacup-0.10k.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/olap4j-0.9.7.145.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/slf4j-log4j12-1.5.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.6.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
