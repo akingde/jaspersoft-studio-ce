@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,7 +33,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.fields.IFieldsProvider;
@@ -51,7 +51,7 @@ public class QueryDesigner extends AQueryDesigner {
 		}
 	}
 
-	protected Text control;
+	protected StyledText control;
 	private Composite tbCompo;
 	private Button btn;
 
@@ -72,7 +72,7 @@ public class QueryDesigner extends AQueryDesigner {
 	}
 
 	public Control createControl(Composite parent) {
-		control = new Text(parent, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		control = new StyledText(parent, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		control.addModifyListener(new QueryListener());
 		return control;
 	}
