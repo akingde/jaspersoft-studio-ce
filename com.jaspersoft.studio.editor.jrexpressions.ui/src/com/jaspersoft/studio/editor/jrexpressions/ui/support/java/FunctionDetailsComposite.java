@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.editor.jrexpressions.ui.support;
+package com.jaspersoft.studio.editor.jrexpressions.ui.support.java;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.UIUtils;

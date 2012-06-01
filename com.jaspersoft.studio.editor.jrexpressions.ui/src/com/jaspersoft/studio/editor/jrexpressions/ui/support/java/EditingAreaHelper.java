@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.editor.jrexpressions.ui.support;
+package com.jaspersoft.studio.editor.jrexpressions.ui.support.java;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,9 @@ import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.FullMethodNam
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JasperReportsExpression;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodInvocation;
 import com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionListener;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.StyledTextXtextAdapter2;
 
 /**
  * Utility object that exposes some methods to work with the current editing area.

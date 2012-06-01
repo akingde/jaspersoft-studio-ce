@@ -2,6 +2,7 @@
 <?eclipse version="3.0"?>
 
 <plugin>
+   <extension-point id="jrexpressionLanguage" name="JRExpression Language Support" schema="schema/jrexpressionLanguage.exsd"/>
 	<!--
     <extension
             point="org.eclipse.ui.editors">
@@ -248,5 +249,23 @@
             id="com.jaspersoft.studio.editor.jrexpressions.ui.preferences.ExpressionEditorPreferencePage"
             name="Expression Editor">
       </page>
+   </extension>
+   
+   <!-- 
+   	List of languages providing a custom support for the Expression Editor 
+   	As for now, only Java language has a custom editor with grammar implemented in Xtext.
+   -->
+   <extension
+         id="supportedLanguages"
+         point="com.jaspersoft.studio.editor.jrexpressions.ui.jrexpressionLanguage"
+         name="Jaspersoft Studio languages with custom editor support">
+      <languageSupport
+            class="com.jaspersoft.studio.editor.jrexpressions.ui.support.java.JavaExpressionEditorSupport"
+            languageName="java">
+      </languageSupport>
+      <languageSupport
+            class="com.jaspersoft.studio.editor.jrexpressions.ui.support.java.JavaExpressionEditorSupport"
+            languageName="groovy">
+      </languageSupport>
    </extension>
 </plugin>

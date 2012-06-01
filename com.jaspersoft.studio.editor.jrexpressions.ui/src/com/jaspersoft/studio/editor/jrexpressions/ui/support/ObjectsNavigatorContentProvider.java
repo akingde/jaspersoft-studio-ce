@@ -3,13 +3,16 @@ package com.jaspersoft.studio.editor.jrexpressions.ui.support;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.java.JavaExpressionEditorComposite;
+
+
 /**
  * Content provider for the navigator tree containing the categories of object
  * items.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
- * @see DefaultExpressionEditorComposite Example of usage of the content
+ * @see JavaExpressionEditorComposite Example of usage of the content
  *      provider
  * 
  */

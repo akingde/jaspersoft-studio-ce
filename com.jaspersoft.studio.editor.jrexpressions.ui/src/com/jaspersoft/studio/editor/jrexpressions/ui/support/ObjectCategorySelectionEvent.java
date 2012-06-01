@@ -4,6 +4,7 @@ import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.widgets.Widget;
 
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.java.EditingAreaHelper;
 
 /**
  * Instances of this class are sent as a result of

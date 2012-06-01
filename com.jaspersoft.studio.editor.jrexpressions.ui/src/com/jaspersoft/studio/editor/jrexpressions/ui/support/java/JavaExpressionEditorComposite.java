@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.editor.jrexpressions.ui.support;
+package com.jaspersoft.studio.editor.jrexpressions.ui.support.java;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,11 +45,17 @@ import com.jaspersoft.studio.editor.expression.ExpressionEditorComposite;
 import com.jaspersoft.studio.editor.expression.ExpressionStatus;
 import com.jaspersoft.studio.editor.expression.IExpressionStatusChangeListener;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionListener;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectsNavigatorContentProvider;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectsNavigatorLabelProvider;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.StyledTextXtextAdapter2;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
 
 /**
  * Standard implementation of the main editing area for JasperReports
- * expressions provided by Jaspersoft Studio.
+ * expressions provided by Jaspersoft Studio for Java language expressions.
  * 
  * <p>
  * The composite is made of a {@link StyledText} widget that contains the
@@ -60,7 +66,7 @@ import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  * 
  */
-public class DefaultExpressionEditorComposite extends ExpressionEditorComposite {
+public class JavaExpressionEditorComposite extends ExpressionEditorComposite {
 
 	// Expression stuff
 	private JRDesignExpression expression;
@@ -94,7 +100,7 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 	 * @param style
 	 *            style information of the newly created composite
 	 */
-	public DefaultExpressionEditorComposite(Composite parent, int style) {
+	public JavaExpressionEditorComposite(Composite parent, int style) {
 		super(parent, style);
 		detailPanels = new HashMap<String, ObjectCategoryDetailsPanel>();
 		statusChangeListeners = new ArrayList<IExpressionStatusChangeListener>();
@@ -238,11 +244,7 @@ public class DefaultExpressionEditorComposite extends ExpressionEditorComposite 
 	}
 
 	/*
-	 * Get the right injector from the Activator plugin class. The injector
-	 * should be language specific.
-	 * 
-	 * FIXME - Implement the injector selection based on the current report
-	 * language
+	 * Get the injector for the JavaJRE language.
 	 */
 	private Injector getInjector() {
 		JRExpressionsActivator activator = JRExpressionsActivator.getInstance();

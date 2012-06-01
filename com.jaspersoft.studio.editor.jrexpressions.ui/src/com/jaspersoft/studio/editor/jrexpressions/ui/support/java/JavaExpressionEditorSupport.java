@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.editor.jrexpressions.ui.support;
+package com.jaspersoft.studio.editor.jrexpressions.ui.support.java;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -9,16 +9,15 @@ import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorComposite;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupport;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.StyledTextXtextAdapter2;
 
 /**
- * Default implementation for the expression editor support class provided by Jaspersoft Studio.
- * 
- * NOTE: This support class should be used only when the report language is Java.
+ * Expression editor support class provided by Jaspersoft Studio for the Java language.
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
  */
-public class DefaultJavaExpressionEditorSupport extends ExpressionEditorSupport {
+public class JavaExpressionEditorSupport extends ExpressionEditorSupport {
 	
 	@Override
 	public void configureExpressionWidget(StyledText widget, ExpressionContext exprContext) {
@@ -31,7 +30,7 @@ public class DefaultJavaExpressionEditorSupport extends ExpressionEditorSupport 
 	@Override
 	public ExpressionEditorComposite createExpressionEditorComposite(
 			Composite parent) {
-		ExpressionEditorComposite content = new DefaultExpressionEditorComposite(parent,SWT.NONE);
+		ExpressionEditorComposite content = new JavaExpressionEditorComposite(parent,SWT.NONE);
 		content.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 		return content;
 	}

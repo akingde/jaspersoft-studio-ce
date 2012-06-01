@@ -1,5 +1,8 @@
 package com.jaspersoft.studio.editor.jrexpressions.ui.support;
 
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.java.JavaExpressionEditorComposite;
+
+
 /**
  * Classes which implement this interface provide a method
  * that deals with the events that are generated when an
@@ -10,7 +13,7 @@ package com.jaspersoft.studio.editor.jrexpressions.ui.support;
  * category item inside a tree. 
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
- * @see DefaultExpressionEditorComposite Listener usage example
+ * @see JavaExpressionEditorComposite Listener usage example
  *
  */
 public interface ObjectCategorySelectionListener {

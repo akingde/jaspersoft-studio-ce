@@ -3,6 +3,7 @@ package com.jaspersoft.studio.editor.jrexpressions.ui.support;
 import org.eclipse.swt.graphics.Image;
 
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.java.JavaExpressionEditorComposite;
 import com.jaspersoft.studio.utils.ResourceManager;
 
 /**
@@ -10,7 +11,7 @@ import com.jaspersoft.studio.utils.ResourceManager;
  * that can be used to compose a JR expression.
  * 
  * <p>
- * Example of usage: the navigator tree used inside the {@link DefaultExpressionEditorComposite}. 
+ * Example of usage: the navigator tree used inside the {@link JavaExpressionEditorComposite}. 
  * 
  * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
  *
@@ -104,7 +105,7 @@ public class ObjectCategoryItem {
 	 * Enumeration to represent the different kinds of allowed categories
 	 * in a navigator tree.
 	 * 
-	 * @see DefaultExpressionEditorComposite Example of usage
+	 * @see JavaExpressionEditorComposite Example of usage
 	 */
 	public enum Category {
 		PARAMETERS("Parameters",ICON_FOLDER_PARAMETERS),
