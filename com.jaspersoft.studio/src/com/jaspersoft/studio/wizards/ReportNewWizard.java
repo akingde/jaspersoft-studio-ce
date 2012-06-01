@@ -126,7 +126,7 @@ public class ReportNewWizard extends JSSWizard implements IWorkbenchWizard, INew
 		setupNewFileName();
 		addPage(step1);
 
-		step2 = new WizardDataSourcePage(null, jConfig);
+		step2 = new WizardDataSourcePage(jConfig);
 		addPage(step2);
 
 		step3 = new WizardFieldsPage();

@@ -34,15 +34,12 @@ import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IFileEditorInput;
 
-import com.jaspersoft.studio.JaspersoftStudioPlugin;
 import com.jaspersoft.studio.messages.Messages;
 import com.jaspersoft.studio.model.dataset.MDataset;
 import com.jaspersoft.studio.model.dataset.command.CreateDatasetCommand;
@@ -80,9 +77,7 @@ public class DatasetWizard extends JSSWizard {
 		addPage(step1);
 		step1.setDataSet(dataset);
 
-		IFile file = getCurrentFile();
-
-		step2 = new WizardDataSourcePage(file, getConfig());
+		step2 = new WizardDataSourcePage(getConfig());
 		addPage(step2);
 
 		step3 = new WizardFieldsPage();
@@ -90,12 +85,6 @@ public class DatasetWizard extends JSSWizard {
 
 		step4 = new WizardFieldsGroupByPage();
 		addPage(step4);
-	}
-
-	private IFile getCurrentFile() {
-		IFile file = ((IFileEditorInput) JaspersoftStudioPlugin.getInstance().getWorkbench().getActiveWorkbenchWindow()
-				.getActivePage().getActiveEditor().getEditorInput()).getFile();
-		return file;
 	}
 
 	public static final String DATASET = "datasetnamewizard";

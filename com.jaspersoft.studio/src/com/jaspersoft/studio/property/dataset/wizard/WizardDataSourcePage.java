@@ -46,7 +46,6 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -71,14 +70,14 @@ public class WizardDataSourcePage extends JSSWizardPage implements IFieldSetter 
 			dataset = new JRDesignDataset(true);
 			JRDesignQuery query = new JRDesignQuery();
 			query.setLanguage("SQL");
-			dataset.setQuery(query); 
+			dataset.setQuery(query);
 		}
 		return dataset;
 	}
 
 	private DataQueryAdapters dataquery;
 
-	public WizardDataSourcePage(IFile file, JasperReportsConfiguration jConfig) {
+	public WizardDataSourcePage(JasperReportsConfiguration jConfig) {
 		super("datasourcepage"); //$NON-NLS-1$
 		setTitle(Messages.WizardDataSourcePage_datasource);
 		setImageDescriptor(MDatasources.getIconDescriptor().getIcon32());
