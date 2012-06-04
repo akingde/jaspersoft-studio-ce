@@ -37,7 +37,6 @@ import net.sf.jasperreports.engine.type.ModeEnum;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabManager;
@@ -62,8 +61,9 @@ import com.jaspersoft.studio.property.descriptor.box.BoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.color.ColorPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.combo.RWComboBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
+import com.jaspersoft.studio.property.descriptors.OpaqueModePropertyDescriptor;
 import com.jaspersoft.studio.utils.Colors;
-import com.jaspersoft.studio.utils.EnumHelper;
 
 public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		IPastableGraphic, IContainer, IContainerEditPart, ILineBox,
@@ -190,7 +190,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		}
 	}
 
-	private RWComboBoxPropertyDescriptor styleD;
+	private static RWComboBoxPropertyDescriptor styleD;
 
 	/**
 	 * Creates the property descriptors.
@@ -201,9 +201,8 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 	@Override
 	public void createPropertyDescriptors(List<IPropertyDescriptor> desc,
 			Map<String, Object> defaultsMap) {
-		ComboBoxPropertyDescriptor opaqueD = new ComboBoxPropertyDescriptor(
-				JRBaseStyle.PROPERTY_MODE, Messages.MCell_opaque,
-				EnumHelper.getEnumNames(ModeEnum.values(), NullEnum.NOTNULL));
+		opaqueD = new OpaqueModePropertyDescriptor(JRBaseStyle.PROPERTY_MODE,
+				Messages.MCell_opaque, ModeEnum.class, NullEnum.NOTNULL);
 		opaqueD.setDescription(Messages.MCell_opaque_description);
 		desc.add(opaqueD);
 
@@ -234,13 +233,14 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		desc.add(lineBoxD);
 
 		defaultsMap.put(JRBaseStyle.PROPERTY_MODE,
-				EnumHelper.getValue(ModeEnum.OPAQUE, 1, false));
+				opaqueD.getEnumValue(ModeEnum.OPAQUE));
 		defaultsMap.put(JRBaseStyle.PROPERTY_BACKCOLOR, null);
 		defaultsMap.put(JRDesignCellContents.PROPERTY_STYLE, null);
 	}
 
 	public static final String LINE_BOX = "LineBox"; //$NON-NLS-1$
 	private MLineBox lineBox;
+	private static JSSEnumPropertyDescriptor opaqueD;
 
 	/*
 	 * (non-Javadoc)
@@ -253,7 +253,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		JRDesignCellContents jrElement = (JRDesignCellContents) getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseStyle.PROPERTY_MODE))
-				return EnumHelper.getValue(jrElement.getModeValue(), 1, false);
+				return opaqueD.getEnumValue(jrElement.getModeValue());
 			if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR))
 				return Colors.getSWTRGB4AWTGBColor(jrElement.getBackcolor());
 			if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {
@@ -291,8 +291,7 @@ public class MCell extends APropertyNode implements IGraphicElement, IPastable,
 		JRDesignCellContents jrElement = (JRDesignCellContents) getValue();
 		if (jrElement != null) {
 			if (id.equals(JRBaseStyle.PROPERTY_MODE))
-				jrElement.setMode((ModeEnum) EnumHelper.getSetValue(
-						ModeEnum.values(), value, 1, false));
+				jrElement.setMode((ModeEnum) opaqueD.getEnumValue(value));
 			else if (id.equals(JRBaseStyle.PROPERTY_BACKCOLOR)) {
 				jrElement.setBackcolor(Colors.getAWT4SWTRGBColor((RGB) value));
 			} else if (id.equals(JRDesignCellContents.PROPERTY_STYLE)) {

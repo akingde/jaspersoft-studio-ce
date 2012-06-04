@@ -1,16 +1,15 @@
-package com.jaspersoft.studio.components.list.property;
+package com.jaspersoft.studio.components.crosstab.property;
 
-import net.sf.jasperreports.components.list.DesignListContents;
-import net.sf.jasperreports.components.list.StandardListComponent;
+import net.sf.jasperreports.crosstabs.base.JRBaseCrosstab;
+import net.sf.jasperreports.crosstabs.design.JRDesignCrosstab;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.jaspersoft.studio.components.list.model.MList;
 import com.jaspersoft.studio.properties.view.TabbedPropertySheetPage;
 import com.jaspersoft.studio.property.section.AbstractSection;
 
-public class ListSection extends AbstractSection {
+public class CrosstabSection extends AbstractSection {
 
 	/**
 	 * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySection#createControls(org.eclipse.swt.widgets.Composite,
@@ -22,13 +21,16 @@ public class ListSection extends AbstractSection {
 
 		parent.setLayout(new GridLayout(2, false));
 
+		createWidget4Property(parent, JRBaseCrosstab.PROPERTY_RUN_DIRECTION);
+
 		createWidget4Property(parent,
-				StandardListComponent.PROPERTY_IGNORE_WIDTH);
-		createWidget4Property(parent, MList.PREFIX
-				+ DesignListContents.PROPERTY_HEIGHT);
-		createWidget4Property(parent, MList.PREFIX
-				+ DesignListContents.PROPERTY_WIDTH);
+				JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION);
 		createWidget4Property(parent,
-				StandardListComponent.PROPERTY_PRINT_ORDER);
+				JRDesignCrosstab.PROPERTY_REPEAT_COLUMN_HEADERS);
+		createWidget4Property(parent,
+				JRDesignCrosstab.PROPERTY_REPEAT_ROW_HEADERS);
+		createWidget4Property(parent, JRDesignCrosstab.PROPERTY_IGNORE_WIDTH);
+		createWidget4Property(parent,
+				JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET);
 	}
 }

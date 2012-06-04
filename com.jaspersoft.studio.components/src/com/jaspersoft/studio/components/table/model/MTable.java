@@ -35,7 +35,6 @@ import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.table.TableManager;
@@ -47,10 +46,10 @@ import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.MGraphicElement;
 import com.jaspersoft.studio.model.dataset.MDatasetRun;
+import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MTable extends MGraphicElement implements IContainer,
 		IContainerEditPart, IGroupElement {
@@ -135,25 +134,26 @@ public class MTable extends MGraphicElement implements IContainer,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		JRPropertyDescriptor datasetRunD = new JRPropertyDescriptor(
+		DatasetRunPropertyDescriptor datasetRunD = new DatasetRunPropertyDescriptor(
 				StandardTable.PROPERTY_DATASET_RUN, Messages.MTable_dataset_run);
 		datasetRunD.setDescription(Messages.MTable_dataset_run_description);
 		datasetRunD.setCategory(Messages.MTable_table_properties_category);
 		desc.add(datasetRunD);
 
-		ComboBoxPropertyDescriptor whennodataD = new ComboBoxPropertyDescriptor(
+		whennodataD = new JSSEnumPropertyDescriptor(
 				StandardTable.PROPERTY_WHEN_NO_DATA_TYPE,
-				Messages.MTable_whennodatalabel, EnumHelper.getEnumNames(
-						WhenNoDataTypeTableEnum.values(), NullEnum.NULL));
+				Messages.MTable_whennodatalabel, WhenNoDataTypeTableEnum.class,
+				NullEnum.NULL);
 		whennodataD.setDescription(Messages.MTable_whennodatadescription);
 		desc.add(whennodataD);
 		whennodataD.setCategory(Messages.MTable_table_properties_category);
 
 		defaultsMap.put(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE,
-				EnumHelper.getValue(WhenNoDataTypeTableEnum.BLANK, 1, true));
+				whennodataD.getEnumValue(WhenNoDataTypeTableEnum.BLANK));
 	}
 
 	private MDatasetRun mDatasetRun;
+	private static JSSEnumPropertyDescriptor whennodataD;
 
 	@Override
 	public void setGroupItems(String[] items) {
@@ -178,7 +178,7 @@ public class MTable extends MGraphicElement implements IContainer,
 
 		}
 		if (id.equals(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE))
-			return EnumHelper.getValue(jrTable.getWhenNoDataType(), 1, true);
+			return whennodataD.getEnumValue(jrTable.getWhenNoDataType());
 
 		return super.getPropertyValue(id);
 	}
@@ -189,9 +189,8 @@ public class MTable extends MGraphicElement implements IContainer,
 		StandardTable jrTable = (StandardTable) jrElement.getComponent();
 
 		if (id.equals(StandardTable.PROPERTY_WHEN_NO_DATA_TYPE))
-			jrTable.setWhenNoDataType((WhenNoDataTypeTableEnum) EnumHelper
-					.getSetValue(WhenNoDataTypeTableEnum.values(), value, 1,
-							true));
+			jrTable.setWhenNoDataType((WhenNoDataTypeTableEnum) whennodataD
+					.getEnumValue(value));
 		else if (id.equals(StandardTable.PROPERTY_DATASET_RUN)) {
 			MDatasetRun mdr = (MDatasetRun) value;
 			JRDesignDatasetRun dr = (JRDesignDatasetRun) mdr.getValue();

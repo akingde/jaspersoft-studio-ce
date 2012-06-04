@@ -376,6 +376,14 @@
             </input>
          </propertySection>
          <propertySection
+               class="com.jaspersoft.studio.components.list.property.ListDatasetSection"
+               id="com.jaspersoft.studio.components.list.property.ListDatasetSection"
+               tab="com.jaspersoft.studio.editor.section.DATASET">
+            <input
+                  type="com.jaspersoft.studio.components.list.model.MList">
+            </input>
+         </propertySection>
+         <propertySection
                class="com.jaspersoft.studio.components.chart.property.section.ChartHyperlinkSection"
                id="com.jaspersoft.studio.property.section.obj.HyperlinkSection"
                tab="com.jaspersoft.studio.editor.section.HYPERLINK">
@@ -419,6 +427,38 @@
                tab="com.jaspersoft.studio.editor.JrxmlEditor.Text">
             <input
                   type="com.jaspersoft.studio.components.map.model.MMap">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.table.properties.TableDatasetSection"
+               id="com.jaspersoft.studio.components.table.properties.TableDatasetSection"
+               tab="com.jaspersoft.studio.editor.section.DATASET">
+            <input
+                  type="com.jaspersoft.studio.components.table.model.MTable">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.table.properties.TableCellSection"
+               id="com.jaspersoft.studio.components.table.properties.TableCellSection"
+               tab="com.jaspersoft.studio.components.cell">
+            <input
+                  type="com.jaspersoft.studio.components.table.model.column.MCell">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.crosstab.property.CrosstabDatasetSection"
+               id="com.jaspersoft.studio.components.crosstab.property.CrosstabDatasetSection"
+               tab="com.jaspersoft.studio.editor.section.DATASET">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.MCrosstab">
+            </input>
+         </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.crosstab.property.CrosstabSection"
+               id="com.jaspersoft.studio.components.crosstab.property.CrosstabSection"
+               tab="com.jaspersoft.studio.components.crosstab">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.MCrosstab">
             </input>
          </propertySection>
       </propertySections>
@@ -487,6 +527,20 @@
                id="com.jaspersoft.studio.components.list"
                image="icons/list-16.png"
                label="List">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               category="element"
+               id="com.jaspersoft.studio.components.crosstab"
+               image="icons/crosstab-16.png"
+               label="Crosstab">
+         </propertyTab>
+         <propertyTab
+               afterTab="com.jaspersoft.studio.editor.JrxmlEditor.Borders"
+               category="element"
+               id="com.jaspersoft.studio.components.cell"
+               image="icons/cell-16.png"
+               label="Cell">
          </propertyTab>
       </propertyTabs>
    </extension>

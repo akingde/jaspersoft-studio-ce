@@ -38,7 +38,6 @@ import net.sf.jasperreports.engine.type.RunDirectionEnum;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.jaspersoft.studio.components.crosstab.CrosstabComponentFactory;
@@ -55,14 +54,14 @@ import com.jaspersoft.studio.model.IContainerEditPart;
 import com.jaspersoft.studio.model.IGroupElement;
 import com.jaspersoft.studio.model.INode;
 import com.jaspersoft.studio.model.MGraphicElementLineBox;
+import com.jaspersoft.studio.model.dataset.descriptor.DatasetRunPropertyDescriptor;
 import com.jaspersoft.studio.model.util.IIconDescriptor;
-import com.jaspersoft.studio.property.descriptor.JRPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.NullEnum;
 import com.jaspersoft.studio.property.descriptor.checkbox.CheckBoxPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptor.expression.ExprUtil;
 import com.jaspersoft.studio.property.descriptor.expression.JRExpressionPropertyDescriptor;
 import com.jaspersoft.studio.property.descriptors.IntegerPropertyDescriptor;
-import com.jaspersoft.studio.utils.EnumHelper;
+import com.jaspersoft.studio.property.descriptors.JSSEnumPropertyDescriptor;
 
 public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		IContainerEditPart, IGroupElement {
@@ -147,10 +146,10 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 			Map<String, Object> defaultsMap) {
 		super.createPropertyDescriptors(desc, defaultsMap);
 
-		ComboBoxPropertyDescriptor runDirectionD = new ComboBoxPropertyDescriptor(
+		runDirectionD = new JSSEnumPropertyDescriptor(
 				JRBaseCrosstab.PROPERTY_RUN_DIRECTION,
-				Messages.MCrosstab_run_direction, EnumHelper.getEnumNames(
-						RunDirectionEnum.values(), NullEnum.NOTNULL));
+				Messages.MCrosstab_run_direction, RunDirectionEnum.class,
+				NullEnum.NOTNULL);
 		runDirectionD
 				.setDescription(Messages.MCrosstab_run_direction_description);
 		desc.add(runDirectionD);
@@ -190,7 +189,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 				.setDescription(Messages.MCrosstab_column_break_offset_description);
 		desc.add(columnBreakOffsetD);
 
-		JRPropertyDescriptor datasetD = new JRPropertyDescriptor(
+		DatasetRunPropertyDescriptor datasetD = new DatasetRunPropertyDescriptor(
 				JRDesignCrosstab.PROPERTY_DATASET, Messages.MCrosstab_dataset);
 		datasetD.setDescription(Messages.MCrosstab_dataset_description);
 		desc.add(datasetD);
@@ -232,8 +231,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		if (id.equals(JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET))
 			return jrElement.getColumnBreakOffset();
 		if (id.equals(JRBaseCrosstab.PROPERTY_RUN_DIRECTION))
-			return EnumHelper.getValue(jrElement.getRunDirectionValue(), 0,
-					false);
+			return runDirectionD.getEnumValue(jrElement.getRunDirectionValue());
 		if (id.equals(JRDesignCrosstab.PROPERTY_PARAMETERS_MAP_EXPRESSION))
 			return ExprUtil.getExpression(jrElement
 					.getParametersMapExpression());
@@ -263,8 +261,8 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 		else if (id.equals(JRDesignCrosstab.PROPERTY_COLUMN_BREAK_OFFSET))
 			jrElement.setColumnBreakOffset((Integer) value);
 		if (id.equals(JRBaseCrosstab.PROPERTY_RUN_DIRECTION)) {
-			jrElement.setRunDirection((RunDirectionEnum) EnumHelper
-					.getSetValue(RunDirectionEnum.values(), value, 0, false));
+			jrElement.setRunDirection((RunDirectionEnum) runDirectionD
+					.getEnumValue(value));
 
 			getCrosstabManager().refresh();
 			getPropertyChangeSupport()
@@ -446,6 +444,7 @@ public class MCrosstab extends MGraphicElementLineBox implements IContainer,
 	}
 
 	private boolean flagRefreshCells = false;
+	private static JSSEnumPropertyDescriptor runDirectionD;
 
 	public JRElementGroup getJRElementGroup() {
 		// TODO Auto-generated method stub
