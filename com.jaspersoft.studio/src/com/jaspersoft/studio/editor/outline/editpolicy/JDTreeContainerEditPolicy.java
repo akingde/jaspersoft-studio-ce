@@ -63,7 +63,6 @@ public class JDTreeContainerEditPolicy extends TreeContainerEditPolicy {
 		CompoundCommand command = new CompoundCommand();
 		List<?> editparts = request.getEditParts();
 		int index = findIndexOfTreeItemAt(request.getLocation());
-
 		for (int i = 0; i < editparts.size(); i++) {
 			EditPart child = (EditPart) editparts.get(i);
 			if (isAncestor(child, getHost())) {

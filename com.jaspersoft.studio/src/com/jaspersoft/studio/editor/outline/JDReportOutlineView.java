@@ -201,8 +201,7 @@ public class JDReportOutlineView extends ContentOutlinePage implements IAdaptabl
 					List<?> selection = getViewer().getSelectedEditParts();
 					for (Object it : selection) {
 						if (it instanceof EditPart) {
-							EditPart editpart = (EditPart) getViewer().getSelectedEditParts().get(0);
-							Object model = editpart.getModel();
+							Object model = ((EditPart) it).getModel();
 							if (model instanceof IDragable) {
 								models.add(model);
 							}

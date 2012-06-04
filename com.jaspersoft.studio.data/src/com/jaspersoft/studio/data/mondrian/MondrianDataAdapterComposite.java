@@ -72,7 +72,7 @@ public class MondrianDataAdapterComposite extends JDBCDataAdapterComposite {
 				fd.setFilterExtensions(new String[] { "*.xml", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
 				String selection = fd.open();
 				if (selection != null)
-					textCatalogURI.setText(selection);
+					textCatalogURI.setText("file:" + selection);
 			}
 		});
 	}

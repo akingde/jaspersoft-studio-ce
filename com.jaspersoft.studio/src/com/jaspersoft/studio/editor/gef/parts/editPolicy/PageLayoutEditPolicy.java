@@ -227,7 +227,7 @@ public class PageLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
 		// if (child instanceof IContainerPart) {
 		// return ((IContainerPart) child).createChangeConstraintCommand(child, constraint);
-		// } 
+		// }
 
 		SetConstraintCommand cmd = new SetConstraintCommand();
 		cmd.setContext((ANode) getHost().getModel(), (ANode) child.getModel(), adaptConstraint(constraint));
