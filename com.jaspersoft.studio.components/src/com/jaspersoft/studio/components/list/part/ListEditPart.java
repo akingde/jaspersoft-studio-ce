@@ -28,6 +28,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 
@@ -105,6 +106,17 @@ public class ListEditPart extends EditableFigureEditPart {
 			}
 
 		});
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE,
+				new SelectionEditPolicy() {
+					@Override
+					protected void showSelection() {
+						updateRulers();
+					}
+
+					@Override
+					protected void hideSelection() {
+					}
+				});
 	}
 
 }
