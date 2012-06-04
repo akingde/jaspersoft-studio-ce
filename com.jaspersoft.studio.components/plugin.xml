@@ -461,6 +461,14 @@
                   type="com.jaspersoft.studio.components.crosstab.model.MCrosstab">
             </input>
          </propertySection>
+         <propertySection
+               class="com.jaspersoft.studio.components.crosstab.property.CrosstabCellSection"
+               id="com.jaspersoft.studio.components.crosstab.property.CrosstabCellSection"
+               tab="com.jaspersoft.studio.components.cell">
+            <input
+                  type="com.jaspersoft.studio.components.crosstab.model.cell.MCell">
+            </input>
+         </propertySection>
       </propertySections>
    </extension>
    <extension
