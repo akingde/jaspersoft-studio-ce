@@ -134,7 +134,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 * @param control
 	 *          the control, or <code>null</code>
 	 * @return the index of the new page
-	 *  
+	 * 
 	 */
 	public int addPage(Control control) {
 		int index = getPageCount();
@@ -150,7 +150,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 *          the index at which to add the page (0-based)
 	 * @param control
 	 *          the control, or <code>null</code>
-	 *  
+	 * 
 	 */
 	public void addPage(int index, Control control) {
 		createItem(index, control);
@@ -167,7 +167,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 * @return the index of the new page
 	 * @exception PartInitException
 	 *              if a new page could not be created
-	 *  
+	 * 
 	 */
 	public int addPage(IEditorPart editor, IEditorInput input) throws PartInitException {
 		int index = getPageCount();
@@ -187,7 +187,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 *          the input for the nested editor
 	 * @exception PartInitException
 	 *              if a new page could not be created
-	 *  
+	 * 
 	 */
 	public void addPage(int index, IEditorPart editor, IEditorInput input) throws PartInitException {
 		IEditorSite site = createSite(editor);
@@ -321,7 +321,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		initializePageSwitching();
 		initializeSubTabSwitching();
 	}
- 
+
 	protected void initializePageSwitching() {
 		new PageSwitcher(this) {
 			public Object[] getPages() {
@@ -354,7 +354,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 			}
 		};
 	}
- 
+
 	private void initializeSubTabSwitching() {
 		IHandlerService service = (IHandlerService) getSite().getService(IHandlerService.class);
 		service.activateHandler(COMMAND_NEXT_SUB_TAB, new AbstractHandler() {
@@ -415,11 +415,10 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		return parent;
 	}
 
-	 
 	protected IEditorSite createSite(IEditorPart editor) {
 		return new MultiPageToolbarEditorSite(this, editor);
 	}
- 
+
 	public void dispose() {
 		pageChangeListeners.clear();
 		for (IEditorPart editor : nestedEditors) {
@@ -667,13 +666,13 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	protected void handlePropertyChange(int propertyId) {
 		firePropertyChange(propertyId);
 	}
- 
+
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
 		site.setSelectionProvider(new MultiPageToolbarSelectionProvider(this));
 	}
- 
+
 	public boolean isDirty() {
 		// use nestedEditors to avoid SWT requests; see bug 12996
 		for (IEditorPart editor : nestedEditors) {
@@ -683,7 +682,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		}
 		return false;
 	}
- 
+
 	protected void pageChange(final int newPageIndex) {
 		deactivateSite(false, false);
 
@@ -869,7 +868,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	 * the page has an editor, it is disposed of too. The page index must be valid.
 	 * 
 	 * @param pageIndex
-	 *          the index of the page 
+	 *          the index of the page
 	 */
 	public void removePage(int pageIndex) {
 		Assert.isTrue(pageIndex >= 0 && pageIndex < getPageCount());
@@ -915,6 +914,10 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 		Assert.isTrue(pageIndex >= 0 && pageIndex < getPageCount());
 		getTabFolder().setSelection(pageIndex);
 		pageChange(pageIndex);
+		Composite prnt = getContainer().getParent();
+		Point size = prnt.getSize();
+		prnt.getParent().setSize(size.x - 1, size.y - 1);
+		prnt.getParent().setSize(size.x, size.y);
 	}
 
 	/**
@@ -990,7 +993,7 @@ public abstract class MultiPageToolbarEditorPart extends EditorPart implements I
 	protected void setPageText(int pageIndex, String text) {
 		getItem(pageIndex).setText(text);
 	}
- 
+
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		Object result = super.getAdapter(adapter);
 		// restrict delegating to the UI thread for bug 144851
