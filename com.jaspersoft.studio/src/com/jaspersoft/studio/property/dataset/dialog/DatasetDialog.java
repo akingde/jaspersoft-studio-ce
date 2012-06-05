@@ -116,6 +116,11 @@ public class DatasetDialog extends FormDialog implements IFieldSetter {
 			public void setFields(List<JRDesignField> fields) {
 				DatasetDialog.this.setFields(fields);
 			}
+			
+			@Override
+			public List<JRDesignField> getCurrentFields() {
+				return DatasetDialog.this.getCurrentFields();
+			}
 
 			@Override
 			public void setParameters(List<JRDesignParameter> params) {
@@ -152,6 +157,10 @@ public class DatasetDialog extends FormDialog implements IFieldSetter {
 
 	public void setFields(List<JRDesignField> fields) {
 		ftable.setFields(fields);
+	}
+	
+	public List<JRDesignField> getCurrentFields(){
+		return ftable.getFields();
 	}
 
 	private void createBottom(Composite parent, FormToolkit toolkit) {

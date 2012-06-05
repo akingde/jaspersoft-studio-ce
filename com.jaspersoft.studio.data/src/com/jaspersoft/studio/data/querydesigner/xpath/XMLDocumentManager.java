@@ -1,0 +1,169 @@
+package com.jaspersoft.studio.data.querydesigner.xpath;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuter;
+import net.sf.jasperreports.engine.util.xml.JRXPathExecuterUtils;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.jaspersoft.studio.model.ANode;
+import com.jaspersoft.studio.model.MRoot;
+import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
+import com.jaspersoft.studio.model.datasource.xml.XMLNode;
+import com.jaspersoft.studio.utils.UIUtils;
+
+/**
+ * This class works on the specified xml document or its nodes.
+ * 
+ * @author Massimo Rabbi (mrabbi@users.sourceforge.net)
+ *
+ */
+public class XMLDocumentManager {
+
+	private Document xmlDocument;
+	
+	/**
+	 * Sets the {@link Document} object that will 
+	 * be handled by the manager.
+	 * 
+	 * @param doc the xml document
+	 */
+	public void setDocument(Document doc){
+		this.xmlDocument=doc;
+	}
+	
+	/**
+	 * Creates a tree of {@link ANode} elements representing
+	 * the input document.
+	 * 
+	 * @param docNode root node
+	 * @return the model representing the XML document
+	 */
+	public MRoot getXMLDocumentModel(){
+		if(xmlDocument!=null){
+			MRoot docRoot=new MRoot(null, null);
+			List<XMLNode> childrenXMLNodes = getChildrenXMLNodes(xmlDocument);
+			for(XMLNode childNode : childrenXMLNodes){
+				childNode.setParent(docRoot, -1);
+			}
+			return docRoot;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/*
+	 * Get the list of XMLNodes for the specified document node.
+	 */
+	private List<XMLNode> getChildrenXMLNodes(Node node){
+		List<XMLNode> children=new ArrayList<XMLNode>();
+		
+		// Attributes 
+		NamedNodeMap attrs = node.getAttributes();
+		if (attrs != null) {
+			for (int i = 0; i < attrs.getLength(); i++){
+				XMLAttributeNode attrNode=new XMLAttributeNode();
+				attrNode.setValue(attrs.item(i));
+				attrNode.setName(attrs.item(i).getNodeName());
+				children.add(attrNode);
+			}
+		}
+		// Standard nodes
+		NodeList nl=node.getChildNodes();
+		for (int i = 0; i < nl.getLength(); i++){
+			if (nl.item(i).getNodeType() == Node.ELEMENT_NODE){
+				XMLNode n=new XMLNode();
+				n.setValue(nl.item(i));
+				n.setName(nl.item(i).getNodeName());
+				List<XMLNode> childrenXMLNodes = getChildrenXMLNodes(nl.item(i));
+				for(XMLNode childNode : childrenXMLNodes){
+					childNode.setParent(n, -1);
+				}
+				children.add(n);
+			}
+		}
+		return children;
+	}
+
+	/**
+	 * Returns the XPath expression (absolute or relative) that locates the
+	 * node in XML document.
+	 * 
+	 * @param query	an existing XPath expression that can be used in order to
+	 * 				return a relative expression. It can be <code>null</code>.
+	 * @param xmlNode	the node for which to extract the XPath expression
+	 * @return
+	 */
+	public String getXPathExpression(String query, XMLNode xmlNode){
+		Node selectedNode=(Node)xmlNode.getValue();
+		boolean isAttribute=(selectedNode instanceof Attr);
+		String attributePostfix="";
+		if(isAttribute){
+			attributePostfix="/@"+selectedNode.getNodeName();
+		}
+		String selectedPath = getAbsoluteXPathExpression(selectedNode);
+		if(query==null || query.equals("")){
+			// Absolute expression
+			return getAbsoluteXPathExpression(selectedNode);
+		}
+		else {
+			// Try to get a relative one, using the existing query
+			try {
+				JRXPathExecuter xPathExecuter = JRXPathExecuterUtils.getXPathExecuter(DefaultJasperReportsContext.getInstance());
+				NodeList selectNodeList=xPathExecuter.selectNodeList(this.xmlDocument, query);
+				for(int i=0;i<selectNodeList.getLength();i++){
+					Node currnode = selectNodeList.item(i);
+					String currentPath = getAbsoluteXPathExpression(currnode);
+					if(selectedPath.equals(currentPath)){
+						return "child::text()";
+					}
+					else if(selectedPath.startsWith(currentPath)){
+						// selected node is child of the current one
+						return selectedPath.replace(currentPath+"/", "");
+					}
+					else if(currentPath.startsWith(selectedPath)){
+						// selected node is parent of the current one
+						return "anchestor::"+selectedNode.getNodeName();
+					}
+					else if(isAttribute && 
+							currentPath.startsWith(selectedPath.replace(attributePostfix, ""))){
+						// special case of the selected attribute and located on anchestor node
+						return "anchestor::"+((Attr)selectedNode).getOwnerElement().getNodeName()+attributePostfix;
+					}
+				}
+			} catch (JRException e) {
+				UIUtils.showError(e);
+			}
+		}
+		return selectedPath;
+	}
+	
+	/*
+	 * Simple way to retrieve the absolute XPath expression that would
+	 * permit to locate the node similar to the node specified.
+	 */
+	private String getAbsoluteXPathExpression(Node node){
+		StringBuffer sb=new StringBuffer();
+		while(!(node instanceof Document)){
+			if(node instanceof Attr){
+				sb.insert(0,"/@"+node.getNodeName());
+				node=((Attr)node).getOwnerElement();
+			}
+			else{
+				sb.insert(0,"/"+node.getNodeName());
+				node=node.getParentNode();					
+			}
+		}
+		return sb.toString();
+	}
+	
+}

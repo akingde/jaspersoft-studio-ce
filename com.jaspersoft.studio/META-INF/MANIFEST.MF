@@ -403,6 +403,7 @@ Export-Package: bsh;uses:="bsh.org.objectweb.asm",
    com.jaspersoft.studio.properties.view,
    com.jaspersoft.studio.property.section.widgets,
    org.eclipse.swt.widgets",
+ com.jaspersoft.studio.model.datasource.xml,
  com.jaspersoft.studio.model.field;
   uses:="com.jaspersoft.studio.model.util,
    net.sf.jasperreports.engine.design,

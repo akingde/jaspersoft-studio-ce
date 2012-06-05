@@ -35,6 +35,8 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -43,7 +45,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.part.PluginTransfer;
 
+import com.jaspersoft.studio.dnd.NodeDragListener;
+import com.jaspersoft.studio.dnd.NodeTableDropAdapter;
+import com.jaspersoft.studio.dnd.NodeTransfer;
+import com.jaspersoft.studio.model.ANode;
 import com.jaspersoft.studio.property.descriptor.classname.ClassTypeCellEditor;
 import com.jaspersoft.studio.swt.widgets.table.DeleteButton;
 import com.jaspersoft.studio.swt.widgets.table.INewElement;
@@ -107,6 +114,7 @@ public class FieldsTable {
 		tviewer.setLabelProvider(new TLabelProvider());
 		attachCellEditors(tviewer, wtable);
 		UIUtils.setViewerCellEditingOnDblClick(tviewer);
+		addDropSupport();
 		
 		Composite bGroup = new Composite(composite, SWT.NONE);
 		bGroup.setLayout(new GridLayout(1, false));
@@ -148,6 +156,38 @@ public class FieldsTable {
 		if (fields == null)
 			fields = new ArrayList<JRField>();
 		setFields(fields);
+	}
+
+	private void addDropSupport() {
+		int ops = DND.DROP_COPY | DND.DROP_MOVE;
+		Transfer[] transfers = new Transfer[] { NodeTransfer.getInstance(),
+				PluginTransfer.getInstance() };
+		tviewer.addDragSupport(ops, transfers, new NodeDragListener(
+				tviewer));
+
+		transfers = new Transfer[] { NodeTransfer.getInstance() };
+		NodeTableDropAdapter dropAdapter = new NodeTableDropAdapter(tviewer) {
+			@Override
+			public boolean performDrop(Object data) {
+				if (data instanceof ANode[]){
+					ANode[] nodes = (ANode[]) data;
+					List<JRField> fields=(List<JRField>) tviewer.getInput();
+					for(ANode n : nodes){
+						JRDesignField f = (JRDesignField) n.getAdapter(JRDesignField.class);
+						if(f!=null){
+							// be sure that the name is ok
+							f.setName(
+									ModelUtils.getNameForField((List<JRDesignField>) tviewer.getInput(), f.getName()));
+							fields.add(f);
+						}
+					}
+					tviewer.setInput(fields);
+					return true;
+				}
+				return false;
+			}
+		};
+		tviewer.addDropSupport(ops, transfers, dropAdapter);		
 	}
 
 	public <T extends JRField> void setFields(List<T> fields) {

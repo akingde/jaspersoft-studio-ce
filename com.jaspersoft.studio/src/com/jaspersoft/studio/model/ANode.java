@@ -35,6 +35,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.CollectionElementAddedEvent;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -50,7 +51,7 @@ import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
  * 
  * @author Chicu Veaceslav
  */
-public abstract class ANode implements INode, Serializable {
+public abstract class ANode implements INode, Serializable, IAdaptable {
 
 	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
@@ -467,5 +468,14 @@ public abstract class ANode implements INode, Serializable {
 		} catch (CloneNotSupportedException e) {
 			throw new JRRuntimeException(e);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
+	 */
+	public Object getAdapter(Class adapter){
+		if(adapter==ANode.class || adapter==INode.class) return this;
+		return null;
 	}
 }

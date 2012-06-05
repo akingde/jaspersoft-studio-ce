@@ -50,6 +50,10 @@
             QueryDesignerClass="com.jaspersoft.studio.data.designer.QueryDesigner"
             language="hql">
       </queryDesigner>
+      <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.xpath.XPathQueryDesigner"
+            language="xPath">      	
+      </queryDesigner>
      
      
    </extension>

@@ -60,6 +60,7 @@ import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignComponentElement;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignElement;
+import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -1157,5 +1158,32 @@ public class ModelUtils {
 		}
 
 		return null;
+	}
+	
+	/**
+	 * Creates a valid name for a JRField element. 
+	 * <p>
+	 * It searches the existing fields in order to check 
+	 * for field name validity. If no other field is found
+	 * with the same name, then the <code>namePrefix</code> itself is used.
+	 *  
+	 * @param fields list of already existing fields
+	 * @param namePrefix name prefix for new field name
+	 * @return a valid name for the JRField
+	 */
+	public static String getNameForField(List<JRDesignField> fields, String namePrefix){
+			boolean match = false;
+			String tmp = namePrefix;
+			for (int i = 0; i < 100000; i++) {
+				if(i!=0) tmp=ModelUtils.getNameFormat(namePrefix, i);
+				for (JRField f : fields) {
+					match = f.getName().equals(tmp);
+					if (match)
+						break;
+				}
+				if (!match)
+					break;
+			}
+			return tmp;
 	}
 }

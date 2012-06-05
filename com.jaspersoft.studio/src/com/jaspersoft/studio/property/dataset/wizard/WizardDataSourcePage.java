@@ -38,9 +38,11 @@
  */
 package com.jaspersoft.studio.property.dataset.wizard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignParameter;
@@ -113,6 +115,15 @@ public class WizardDataSourcePage extends JSSWizardPage implements IFieldSetter 
 			@Override
 			public void setFields(List<JRDesignField> fields) {
 				WizardDataSourcePage.this.setFields(fields);
+			}
+
+			@Override
+			public List<JRDesignField> getCurrentFields() {
+				List<JRDesignField> fields=new ArrayList<JRDesignField>();
+				for(JRField f : dataset.getFieldsList()){
+					fields.add((JRDesignField)f);
+				}
+				return fields;
 			}
 
 			@Override

@@ -335,6 +335,8 @@ public abstract class DataQueryAdapters {
 	}
 
 	public abstract void setFields(List<JRDesignField> fields);
+	
+	public abstract List<JRDesignField> getCurrentFields();
 
 	public abstract void setParameters(List<JRDesignParameter> params);
 
