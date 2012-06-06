@@ -54,7 +54,10 @@
             QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.xpath.XPathQueryDesigner"
             language="xPath">      	
       </queryDesigner>
-     
+      <queryDesigner
+            QueryDesignerClass="com.jaspersoft.studio.data.querydesigner.xpath.XPathQueryDesigner"
+            language="xpath2">      	
+      </queryDesigner>     
      
    </extension>
    <extension

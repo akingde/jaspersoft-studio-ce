@@ -5,9 +5,14 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.sf.jasperreports.data.xml.RemoteXmlDataAdapter;
 import net.sf.jasperreports.data.xml.XmlDataAdapter;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -30,6 +35,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -62,9 +68,11 @@ public class XPathQueryDesigner extends AQueryDesigner {
 	private StyledText queryTextArea;
 	private TreeViewer xmlTreeViewer;
 	private XMLDocumentManager documentManager;
+	private boolean reloadXMLData;
 
 	public XPathQueryDesigner(){
 		this.documentManager=new XMLDocumentManager();
+		this.reloadXMLData=true;
 	}
 	
 	public Control getControl() {
@@ -287,6 +295,7 @@ public class XPathQueryDesigner extends AQueryDesigner {
 		resetRefreshDocItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				reloadXMLData=true;
 				refreshTreeViewerContent(container.getDataAdapter());
 			}
 		});
@@ -340,6 +349,7 @@ public class XPathQueryDesigner extends AQueryDesigner {
 
 	@Override
 	public void setDataAdapter(DataAdapterDescriptor da) {
+		reloadXMLData=true;
 		refreshTreeViewerContent(da);
 	}
 
@@ -358,27 +368,59 @@ public class XPathQueryDesigner extends AQueryDesigner {
 	 * Refresh the tree data using the dataadapter file as
 	 * input source.
 	 */
-	private void refreshTreeViewerContent(DataAdapterDescriptor da){
-		if(da!=null && da.getDataAdapter() instanceof XmlDataAdapter) {
-			String fileName = ((XmlDataAdapter)da.getDataAdapter()).getFileName();
-			File in = new File(fileName);
-			try {
-				Document doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
-				documentManager.setDocument(doc);
-				xmlTreeViewer.setInput(documentManager.getXMLDocumentModel());
-				xmlTreeViewer.expandToLevel(2);
-			} catch (Exception e) {
-				xmlTreeViewer.getTree().removeAll();
-				xmlTreeViewer.setInput(BrokenTreeStatus.ERROR_LOADING_XML);
+	private void refreshTreeViewerContent(final DataAdapterDescriptor da){
+		if(reloadXMLData){
+			if(da!=null && da.getDataAdapter() instanceof XmlDataAdapter) {
+				xmlTreeViewer.setInput(BrokenTreeStatus.LOADING_XML);
+				
+				Job loadXMLJob=new Job("Load xml resource...") {
+					
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						String fileName = ((XmlDataAdapter)da.getDataAdapter()).getFileName();
+						try {
+							Document doc=null;
+							if(da.getDataAdapter() instanceof RemoteXmlDataAdapter){
+								doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileName);
+							}
+							else {
+								File in = new File(fileName);
+								doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+							}
+							documentManager.setDocument(doc);
+							Display.getDefault().asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									xmlTreeViewer.setInput(documentManager.getXMLDocumentModel());
+									xmlTreeViewer.expandToLevel(2);
+									reloadXMLData=false;
+								}
+							});
+						} catch (Exception e) {
+							Display.getDefault().asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									xmlTreeViewer.getTree().removeAll();
+									xmlTreeViewer.setInput(BrokenTreeStatus.ERROR_LOADING_XML);
+									reloadXMLData=false;
+								}
+							});
+						}
+						return Status.OK_STATUS;
+					}
+				}; 
+				loadXMLJob.schedule();
 			}
-		}
-		else{
-			xmlTreeViewer.getTree().removeAll();
-			xmlTreeViewer.setInput(BrokenTreeStatus.FILE_NOT_FOUND);
+			else{
+				xmlTreeViewer.getTree().removeAll();
+				xmlTreeViewer.setInput(BrokenTreeStatus.FILE_NOT_FOUND);
+				reloadXMLData=false;
+			}
 		}
 	}
 	
 	private enum BrokenTreeStatus {
+		LOADING_XML("Loading XML data...","icons/waiting.gif"),
 		ERROR_LOADING_XML("Error loading the XML file.", "icons/error.gif"),
 		FILE_NOT_FOUND("No file found.", "icons/warning.gif");
 		
