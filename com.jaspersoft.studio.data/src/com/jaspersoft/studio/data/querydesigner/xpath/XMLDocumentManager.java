@@ -29,6 +29,7 @@ import com.jaspersoft.studio.utils.UIUtils;
 public class XMLDocumentManager {
 
 	private Document xmlDocument;
+	private JRXPathExecuter xPathExecuter;
 	
 	/**
 	 * Sets the {@link Document} object that will 
@@ -38,6 +39,14 @@ public class XMLDocumentManager {
 	 */
 	public void setDocument(Document doc){
 		this.xmlDocument=doc;
+	}
+	
+	/**
+	 * @return <code>true</code> if an xml document is set,
+	 * 			<code>false</code> otherwise
+	 */
+	public boolean isDocumentSet(){
+		return this.xmlDocument!=null;
 	}
 	
 	/**
@@ -116,32 +125,25 @@ public class XMLDocumentManager {
 			return getAbsoluteXPathExpression(selectedNode);
 		}
 		else {
-			// Try to get a relative one, using the existing query
-			try {
-				JRXPathExecuter xPathExecuter = JRXPathExecuterUtils.getXPathExecuter(DefaultJasperReportsContext.getInstance());
-				NodeList selectNodeList=xPathExecuter.selectNodeList(this.xmlDocument, query);
-				for(int i=0;i<selectNodeList.getLength();i++){
-					Node currnode = selectNodeList.item(i);
-					String currentPath = getAbsoluteXPathExpression(currnode);
-					if(selectedPath.equals(currentPath)){
-						return "child::text()";
-					}
-					else if(selectedPath.startsWith(currentPath)){
-						// selected node is child of the current one
-						return selectedPath.replace(currentPath+"/", "");
-					}
-					else if(currentPath.startsWith(selectedPath)){
-						// selected node is parent of the current one
-						return "anchestor::"+selectedNode.getNodeName();
-					}
-					else if(isAttribute && 
-							currentPath.startsWith(selectedPath.replace(attributePostfix, ""))){
-						// special case of the selected attribute and located on anchestor node
-						return "anchestor::"+((Attr)selectedNode).getOwnerElement().getNodeName()+attributePostfix;
-					}
+			List<Node> selectedNodeList = selectNodeList(query);
+			for(Node currnode : selectedNodeList){
+				String currentPath = getAbsoluteXPathExpression(currnode);
+				if(selectedPath.equals(currentPath)){
+					return "child::text()";
 				}
-			} catch (JRException e) {
-				UIUtils.showError(e);
+				else if(selectedPath.startsWith(currentPath)){
+					// selected node is child of the current one
+					return selectedPath.replace(currentPath+"/", "");
+				}
+				else if(currentPath.startsWith(selectedPath)){
+					// selected node is parent of the current one
+					return "anchestor::"+selectedNode.getNodeName();
+				}
+				else if(isAttribute && 
+						currentPath.startsWith(selectedPath.replace(attributePostfix, ""))){
+					// special case of the selected attribute and located on anchestor node
+					return "anchestor::"+((Attr)selectedNode).getOwnerElement().getNodeName()+attributePostfix;
+				}
 			}
 		}
 		return selectedPath;
@@ -164,6 +166,37 @@ public class XMLDocumentManager {
 			}
 		}
 		return sb.toString();
+	}
+	
+	private JRXPathExecuter getXPathQueryExecuter(){
+		if(xPathExecuter==null){
+			try {
+				xPathExecuter = JRXPathExecuterUtils.getXPathExecuter(DefaultJasperReportsContext.getInstance());
+			} catch (JRException e) {
+				UIUtils.showError(e);
+			}
+		}
+		return xPathExecuter;
+	}
+
+	/**
+	 * Selects the {@link Node} elements found by executing
+	 * the input XPath query. 
+	 *  
+	 * @param query the query to execute
+	 * @return list of selected nodes
+	 */
+	public List<Node> selectNodeList(String query) {
+		List<Node> nodes=new ArrayList<Node>();
+		try {
+			NodeList selectNodeList = getXPathQueryExecuter().selectNodeList(this.xmlDocument, query);
+			for(int i=0;i<selectNodeList.getLength();i++){
+				nodes.add(selectNodeList.item(i));
+			}
+		} catch (JRException e) {
+			// Do not care about error in node selection
+		}
+		return nodes;
 	}
 	
 }

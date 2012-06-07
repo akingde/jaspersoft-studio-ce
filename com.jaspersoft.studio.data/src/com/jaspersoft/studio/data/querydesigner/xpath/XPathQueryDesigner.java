@@ -15,7 +15,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -27,10 +26,10 @@ import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,10 +39,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.part.PluginTransfer;
+import org.eclipse.ui.progress.WorkbenchJob;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.data.DataAdapterDescriptor;
 import com.jaspersoft.studio.data.designer.AQueryDesigner;
 import com.jaspersoft.studio.dnd.NodeDragListener;
@@ -53,7 +52,6 @@ import com.jaspersoft.studio.model.MRoot;
 import com.jaspersoft.studio.model.datasource.xml.XMLAttributeNode;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
 import com.jaspersoft.studio.utils.ModelUtils;
-import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.UIUtils;
 
 /**
@@ -64,14 +62,18 @@ import com.jaspersoft.studio.utils.UIUtils;
  */
 public class XPathQueryDesigner extends AQueryDesigner {
 	
+	private static final int JOB_DELAY=300;
 	private Composite control;
 	private StyledText queryTextArea;
 	private TreeViewer xmlTreeViewer;
 	private XMLDocumentManager documentManager;
 	private boolean reloadXMLData;
+	private DecorateTreeViewerJob decorateJob;
+	private BoldStyledLabelProvider treeLabelProvider;
 
 	public XPathQueryDesigner(){
 		this.documentManager=new XMLDocumentManager();
+		this.decorateJob=new DecorateTreeViewerJob();
 		this.reloadXMLData=true;
 	}
 	
@@ -90,30 +92,37 @@ public class XPathQueryDesigner extends AQueryDesigner {
 				super.setVisible(visible);
 			}
 		};
-		control.setLayout(new FillLayout(SWT.HORIZONTAL));
+		GridLayout controlGl=new GridLayout(1,true);
+		controlGl.marginWidth=0;
+		controlGl.marginHeight=0;
+		control.setLayout(controlGl);
+		
+		Label titleLabel=new Label(control,SWT.WRAP);
+		titleLabel.setText("Drag a node into the fields table to map a new field");
+		titleLabel.setLayoutData(new GridData(SWT.FILL,SWT.TOP,true,false));
 		
 		SashForm sashForm = new SashForm(control, SWT.NONE);
+		sashForm.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 		
 		createXMLTreeViewer(sashForm);
 		
 		queryTextArea = new StyledText(sashForm, SWT.BORDER);
+		queryTextArea.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if(documentManager.isDocumentSet()){
+					decorateJob.cancel();
+					decorateJob.schedule(JOB_DELAY);
+				}
+			}
+		});
 		
 		sashForm.setWeights(new int[] {30, 70});
 		return control;
 	}
 
 	private void createXMLTreeViewer(SashForm parent) {
-		Composite container=new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(1,true);
-		layout.marginWidth=0;
-		layout.marginHeight=0;
-		container.setLayout(layout);
-		
-		Label titleLabel=new Label(container,SWT.WRAP);
-		titleLabel.setText("Drag a node into the fields table to map a new field");
-		titleLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, false));
-		
-		xmlTreeViewer = new TreeViewer(container, SWT.BORDER);
+		xmlTreeViewer = new TreeViewer(parent, SWT.BORDER);
 		xmlTreeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		xmlTreeViewer.setContentProvider(new ITreeContentProvider() {
 			public Object[] getChildren(Object element) {
@@ -131,7 +140,7 @@ public class XPathQueryDesigner extends AQueryDesigner {
 			}
 
 			public Object[] getElements(Object element) {
-				if (element instanceof BrokenTreeStatus){
+				if (element instanceof XMLTreeCustomStatus){
 					return new Object[]{element};
 				}
 				if(element instanceof MRoot){
@@ -151,29 +160,8 @@ public class XPathQueryDesigner extends AQueryDesigner {
 					Object new_input) {
 			}
 		});
-		xmlTreeViewer.setLabelProvider(new LabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if(element instanceof XMLNode){
-					return ((XMLNode)element).getDisplayText();
-				}
-				else if(element instanceof BrokenTreeStatus){
-					return ((BrokenTreeStatus) element).getMessage();
-				}
-				return super.getText(element);
-			}
-			@Override
-			public Image getImage(Object element) {
-				if(element instanceof XMLNode){
-					return ((XMLNode) element).getImage();
-				}
-				else if(element instanceof BrokenTreeStatus){
-					return ResourceManager.getPluginImage(
-							Activator.PLUGIN_ID,((BrokenTreeStatus) element).getImagePath());
-				}
-				return super.getImage(element);
-			}
-		});
+		treeLabelProvider = new BoldStyledLabelProvider();
+		xmlTreeViewer.setLabelProvider(treeLabelProvider);
 		
 		addDragSupport();
 		
@@ -371,7 +359,7 @@ public class XPathQueryDesigner extends AQueryDesigner {
 	private void refreshTreeViewerContent(final DataAdapterDescriptor da){
 		if(reloadXMLData){
 			if(da!=null && da.getDataAdapter() instanceof XmlDataAdapter) {
-				xmlTreeViewer.setInput(BrokenTreeStatus.LOADING_XML);
+				xmlTreeViewer.setInput(XMLTreeCustomStatus.LOADING_XML);
 				
 				Job loadXMLJob=new Job("Load xml resource...") {
 					
@@ -401,7 +389,7 @@ public class XPathQueryDesigner extends AQueryDesigner {
 								@Override
 								public void run() {
 									xmlTreeViewer.getTree().removeAll();
-									xmlTreeViewer.setInput(BrokenTreeStatus.ERROR_LOADING_XML);
+									xmlTreeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
 									reloadXMLData=false;
 								}
 							});
@@ -413,31 +401,34 @@ public class XPathQueryDesigner extends AQueryDesigner {
 			}
 			else{
 				xmlTreeViewer.getTree().removeAll();
-				xmlTreeViewer.setInput(BrokenTreeStatus.FILE_NOT_FOUND);
+				xmlTreeViewer.setInput(XMLTreeCustomStatus.FILE_NOT_FOUND);
 				reloadXMLData=false;
 			}
 		}
 	}
 	
-	private enum BrokenTreeStatus {
-		LOADING_XML("Loading XML data...","icons/waiting.gif"),
-		ERROR_LOADING_XML("Error loading the XML file.", "icons/error.gif"),
-		FILE_NOT_FOUND("No file found.", "icons/warning.gif");
-		
-		private String message;
-		private String imagePath;
-		
-		private BrokenTreeStatus(String message, String imagePath) {
-			this.message=message;
-			this.imagePath=imagePath;
-		}				
-		
-		public String getMessage(){
-			return this.message;
+	/*
+	 * Job that is responsible to update the treeviewer presentation 
+	 * depending on the nodes selected by the XPath query.
+	 */
+	private class DecorateTreeViewerJob extends WorkbenchJob{
+
+		public DecorateTreeViewerJob(){
+			super("Refresh panel job");
+			setSystem(true);
 		}
 		
-		public String getImagePath(){
-			return this.imagePath;
+		@Override
+		public IStatus runInUIThread(IProgressMonitor monitor) {
+			monitor.beginTask("Decorating...", IProgressMonitor.UNKNOWN);
+			String query=queryTextArea.getText();
+			List<Node> nodes=documentManager.selectNodeList(query);
+			treeLabelProvider.setSelectedNodes(nodes);
+			xmlTreeViewer.refresh();
+			monitor.done();
+			return Status.OK_STATUS;
 		}
+		
 	}
+
 }
