@@ -1,5 +1,6 @@
 package com.jaspersoft.studio.model.datasource.xml;
 
+import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
@@ -18,7 +19,7 @@ import com.jaspersoft.studio.utils.ResourceManager;
  */
 public class XMLNode extends ANode {
 
-	private static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 	private String nodeName;
 	private String xpathExpression;
 

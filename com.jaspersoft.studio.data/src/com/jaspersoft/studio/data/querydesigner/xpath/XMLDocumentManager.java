@@ -1,7 +1,9 @@
 package com.jaspersoft.studio.data.querydesigner.xpath;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
@@ -30,6 +32,7 @@ public class XMLDocumentManager {
 
 	private Document xmlDocument;
 	private JRXPathExecuter xPathExecuter;
+	private Map<XMLNode,Node> documentNodesMap;
 	
 	/**
 	 * Sets the {@link Document} object that will 
@@ -39,6 +42,7 @@ public class XMLDocumentManager {
 	 */
 	public void setDocument(Document doc){
 		this.xmlDocument=doc;
+		getDocumentNodesMap().clear();
 	}
 	
 	/**
@@ -81,7 +85,7 @@ public class XMLDocumentManager {
 		if (attrs != null) {
 			for (int i = 0; i < attrs.getLength(); i++){
 				XMLAttributeNode attrNode=new XMLAttributeNode();
-				attrNode.setValue(attrs.item(i));
+				getDocumentNodesMap().put(attrNode,attrs.item(i));
 				attrNode.setName(attrs.item(i).getNodeName());
 				children.add(attrNode);
 			}
@@ -91,7 +95,7 @@ public class XMLDocumentManager {
 		for (int i = 0; i < nl.getLength(); i++){
 			if (nl.item(i).getNodeType() == Node.ELEMENT_NODE){
 				XMLNode n=new XMLNode();
-				n.setValue(nl.item(i));
+				getDocumentNodesMap().put(n,nl.item(i));
 				n.setName(nl.item(i).getNodeName());
 				List<XMLNode> childrenXMLNodes = getChildrenXMLNodes(nl.item(i));
 				for(XMLNode childNode : childrenXMLNodes){
@@ -113,7 +117,7 @@ public class XMLDocumentManager {
 	 * @return
 	 */
 	public String getXPathExpression(String query, XMLNode xmlNode){
-		Node selectedNode=(Node)xmlNode.getValue();
+		Node selectedNode=getDocumentNodesMap().get(xmlNode);
 		boolean isAttribute=(selectedNode instanceof Attr);
 		String attributePostfix="";
 		if(isAttribute){
@@ -177,6 +181,13 @@ public class XMLDocumentManager {
 			}
 		}
 		return xPathExecuter;
+	}
+	
+	public Map<XMLNode, Node> getDocumentNodesMap(){
+		if(this.documentNodesMap==null){
+			this.documentNodesMap=new HashMap<XMLNode, Node>();
+		}
+		return this.documentNodesMap;
 	}
 
 	/**

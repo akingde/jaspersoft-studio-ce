@@ -1,6 +1,7 @@
 package com.jaspersoft.studio.data.querydesigner.xpath;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,7 +13,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -224,7 +225,7 @@ public class XPathQueryDesigner extends AQueryDesigner {
 				Object sel = ((IStructuredSelection)xmlTreeViewer.getSelection()).getFirstElement();
 				try {
 					Document newDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-					Node originalNode = (Node) ((XMLNode)sel).getValue();
+					Node originalNode = documentManager.getDocumentNodesMap().get(sel);
 					Node importedNode = newDocument.importNode(originalNode, true);
 					newDocument.appendChild(importedNode);
 					documentManager.setDocument(newDocument);
@@ -358,46 +359,64 @@ public class XPathQueryDesigner extends AQueryDesigner {
 	 */
 	private void refreshTreeViewerContent(final DataAdapterDescriptor da){
 		if(reloadXMLData){
+			this.container.getQueryStatus().showInfo("");
 			if(da!=null && da.getDataAdapter() instanceof XmlDataAdapter) {
 				xmlTreeViewer.setInput(XMLTreeCustomStatus.LOADING_XML);
-				
-				Job loadXMLJob=new Job("Load xml resource...") {
-					
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						String fileName = ((XmlDataAdapter)da.getDataAdapter()).getFileName();
-						try {
-							Document doc=null;
-							if(da.getDataAdapter() instanceof RemoteXmlDataAdapter){
-								doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileName);
-							}
-							else {
-								File in = new File(fileName);
-								doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
-							}
-							documentManager.setDocument(doc);
-							Display.getDefault().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									xmlTreeViewer.setInput(documentManager.getXMLDocumentModel());
-									xmlTreeViewer.expandToLevel(2);
-									reloadXMLData=false;
+			
+				try {
+					run(true, true, new IRunnableWithProgress() {
+						
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException,
+								InterruptedException {
+							
+							monitor.beginTask("Loading XML resource...", -1);
+							
+							String fileName = ((XmlDataAdapter)da.getDataAdapter()).getFileName();
+							try {
+								Document doc=null;
+								if(da.getDataAdapter() instanceof RemoteXmlDataAdapter){
+									doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileName);
 								}
-							});
-						} catch (Exception e) {
-							Display.getDefault().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									xmlTreeViewer.getTree().removeAll();
-									xmlTreeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
-									reloadXMLData=false;
+								else {
+									File in = new File(fileName);
+									doc=DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
 								}
-							});
+								documentManager.setDocument(doc);
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										xmlTreeViewer.setInput(documentManager.getXMLDocumentModel());
+										xmlTreeViewer.expandToLevel(2);
+										reloadXMLData=false;
+									}
+								});
+							} catch (Exception e) {
+								XPathQueryDesigner.this.container.getQueryStatus().showError(e);
+								Display.getDefault().asyncExec(new Runnable() {
+									@Override
+									public void run() {
+										xmlTreeViewer.getTree().removeAll();
+										xmlTreeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+										reloadXMLData=false;
+									}
+								});
+							} finally {
+								monitor.done();
+							}
 						}
-						return Status.OK_STATUS;
-					}
-				}; 
-				loadXMLJob.schedule();
+					});
+				} catch (Exception ex) {
+					this.container.getQueryStatus().showError(ex);
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							xmlTreeViewer.getTree().removeAll();
+							xmlTreeViewer.setInput(XMLTreeCustomStatus.ERROR_LOADING_XML);
+							reloadXMLData=false;
+						}
+					});
+				}
 			}
 			else{
 				xmlTreeViewer.getTree().removeAll();
