@@ -50,6 +50,7 @@ import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JRGroup;
 import net.sf.jasperreports.engine.JROrigin;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRPropertiesMap;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRPropertiesUtil.PropertySuffix;
 import net.sf.jasperreports.engine.JRReport;
@@ -1185,5 +1186,33 @@ public class ModelUtils {
 					break;
 			}
 			return tmp;
+	}
+	
+	
+	/**
+	 * Copies all the properties contained in the source map to the destination one.
+	 * <br>
+	 * It also removes the properties that do not exist in the source map.
+	 * 
+	 * @param sourceMap the source map containing the properties to be copied
+	 * @param destMap the destination properties map
+	 */
+	public static void replacePropertiesMap(JRPropertiesMap sourceMap, JRPropertiesMap destMap){
+		// Copy/Replace properties
+		String[] propertyNames = sourceMap.getPropertyNames();
+		if (propertyNames != null && propertyNames.length > 0) {
+			for (int i = 0; i < propertyNames.length; i++) {
+				destMap.setProperty(propertyNames[i], sourceMap.getProperty(propertyNames[i]));
+			}
+		}
+
+		// Remove unset ones
+		propertyNames = destMap.getPropertyNames();
+		if (propertyNames != null && propertyNames.length > 0) {
+			for (int i = 0; i < propertyNames.length; i++) {
+				if (!sourceMap.containsProperty(propertyNames[i]))
+					destMap.removeProperty(propertyNames[i]);
+			}
+		}
 	}
 }

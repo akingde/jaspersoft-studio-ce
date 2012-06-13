@@ -21,6 +21,7 @@ package com.jaspersoft.studio.property.dataset.dialog;
 
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSortField;
@@ -55,6 +56,8 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.jaspersoft.studio.data.DataAdapterDescriptor;
+import com.jaspersoft.studio.data.IDataPreviewInfoProvider;
 import com.jaspersoft.studio.data.IFieldSetter;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupportUtil;
@@ -75,7 +78,7 @@ import com.jaspersoft.studio.swt.widgets.CSashForm;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
 
-public class DatasetDialog extends FormDialog implements IFieldSetter {
+public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPreviewInfoProvider {
 	private MDataset mdataset;
 	private MReport mreport;
 	private JasperReportsConfiguration jConfig;
@@ -157,6 +160,15 @@ public class DatasetDialog extends FormDialog implements IFieldSetter {
 
 	public void setFields(List<JRDesignField> fields) {
 		ftable.setFields(fields);
+		newdataset.getFieldsList().clear();
+		newdataset.getFieldsMap().clear();
+		for(JRDesignField f : fields){
+			try {
+				newdataset.addField(f);
+			} catch (JRException e) {
+				// No duplication possible.. do not care
+			}
+		}
 	}
 	
 	public List<JRDesignField> getCurrentFields(){
@@ -173,15 +185,23 @@ public class DatasetDialog extends FormDialog implements IFieldSetter {
 		createParameters(toolkit, tabFolder);
 		createSortFields(toolkit, tabFolder);
 		createFilterExpression(toolkit, tabFolder);
-
-		// createDataPreview(toolkit, tabFolder);
+		createDataPreview(toolkit, tabFolder);
 
 		tabFolder.setSelection(0);
 	}
 
+	private void createDataPreview(FormToolkit toolkit, CTabFolder tabFolder) {
+		CTabItem dataPreviewtab = new CTabItem(tabFolder, SWT.NONE);
+		dataPreviewtab.setText(Messages.DatasetDialog_DataPreviewTab);
+		
+		dataPreviewTable = new DataPreviewTable(tabFolder,this);
+		
+		dataPreviewtab.setControl(dataPreviewTable.getControl());
+	}
+
 	private void createParameters(FormToolkit toolkit, CTabFolder tabFolder) {
 		CTabItem bptab = new CTabItem(tabFolder, SWT.NONE);
-		bptab.setText("Parameters");
+		bptab.setText(Messages.DatasetDialog_ParametersTab);
 
 		ptable = new ParametersTable(tabFolder, newdataset, background);
 
@@ -267,6 +287,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter {
 	private SortFieldsTable sftable;
 	private DataQueryAdapters dataquery;
 	private Text filterExpression;
+	private DataPreviewTable dataPreviewTable;
 
 	public void setDataset(JasperDesign jDesign, JRDesignDataset ds) {
 		dataquery.setDataset(jDesign, ds);
@@ -292,7 +313,7 @@ public class DatasetDialog extends FormDialog implements IFieldSetter {
 				command.add(setValueCommand(JRDesignQuery.PROPERTY_TEXT, qtext, mquery));
 		}
 		String fexprtext = filterExpression.getText();
-		if (fexprtext.trim().equals(""))
+		if (fexprtext.trim().equals("")) //$NON-NLS-1$
 			fexprtext = null;
 		command.add(setValueCommand(JRDesignDataset.PROPERTY_FILTER_EXPRESSION, fexprtext, mdataset));
 		command.add(setValueCommand(MDataset.PROPERTY_MAP, newdataset.getPropertiesMap(), mdataset));
@@ -325,5 +346,37 @@ public class DatasetDialog extends FormDialog implements IFieldSetter {
 		cmd.setPropertyId(property);
 		cmd.setPropertyValue(value);
 		return cmd;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.IDataPreviewInfoProvider#getJasperReportsConfig()
+	 */
+	public JasperReportsConfiguration getJasperReportsConfig() {
+		return this.jConfig;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.IDataPreviewInfoProvider#getDataAdapterDescriptor()
+	 */
+	public DataAdapterDescriptor getDataAdapterDescriptor() {
+		return this.dataquery.getDataAdapter();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.IDataPreviewInfoProvider#getDesignDataset()
+	 */
+	public JRDesignDataset getDesignDataset() {
+		return this.newdataset;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.jaspersoft.studio.data.IDataPreviewInfoProvider#getFieldsForPreview()
+	 */
+	public List<JRDesignField> getFieldsForPreview() {
+		return this.getCurrentFields();
 	}
 }

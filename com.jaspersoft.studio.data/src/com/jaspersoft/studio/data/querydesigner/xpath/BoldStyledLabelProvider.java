@@ -10,7 +10,6 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.TextStyle;
-import org.w3c.dom.Node;
 
 import com.jaspersoft.studio.data.Activator;
 import com.jaspersoft.studio.model.datasource.xml.XMLNode;
@@ -25,7 +24,7 @@ import com.jaspersoft.studio.utils.ResourceManager;
  */
 class BoldStyledLabelProvider extends StyledCellLabelProvider{
 
-	private List<Node> selectedNodes=new ArrayList<Node>();
+	private List<XMLNode> selectedNodes=new ArrayList<XMLNode>();
 	
 	@Override
 	public void update(ViewerCell cell) {
@@ -34,7 +33,7 @@ class BoldStyledLabelProvider extends StyledCellLabelProvider{
 		
 		if(element instanceof XMLNode){
 			XMLNode node=(XMLNode)element;
-			if(selectedNodes.contains(node.getValue())){
+			if(selectedNodes.contains(node)){
 				// bold text
 				final Font boldFont = ResourceManager.getBoldFont(getViewer().getControl().getFont());
 				text.append(((XMLNode)element).getDisplayText(), new Styler() {
@@ -71,7 +70,7 @@ class BoldStyledLabelProvider extends StyledCellLabelProvider{
 		return null;
 	}
 	
-	void setSelectedNodes(List<Node> selectedNodes){
+	void setSelectedNodes(List<XMLNode> selectedNodes){
 		this.selectedNodes.clear();
 		this.selectedNodes.addAll(selectedNodes);
 	}

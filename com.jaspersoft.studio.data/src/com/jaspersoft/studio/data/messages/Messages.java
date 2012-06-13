@@ -180,6 +180,18 @@ public class Messages extends NLS {
 	public static String XMLDataAdapterComposite_7;
 	public static String XMLDataAdapterComposite_8;
 	public static String XMLDataAdapterComposite_9;
+	public static String XPathQueryDesigner_AddAsFieldAbsoluteItem;
+	public static String XPathQueryDesigner_AddAsFieldItem;
+	public static String XPathQueryDesigner_CollapseAllItem;
+	public static String XPathQueryDesigner_ExpandAllItem;
+	public static String XPathQueryDesigner_InfoTitle;
+	public static String XPathQueryDesigner_JobTitle;
+	public static String XPathQueryDesigner_RefreshItem;
+	public static String XPathQueryDesigner_RefreshJobTitle;
+	public static String XPathQueryDesigner_RefreshTaskTitle;
+	public static String XPathQueryDesigner_SetDocRootItem;
+	public static String XPathQueryDesigner_SetRecordItem;
+	public static String XPathQueryDesigner_TaskTitle;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

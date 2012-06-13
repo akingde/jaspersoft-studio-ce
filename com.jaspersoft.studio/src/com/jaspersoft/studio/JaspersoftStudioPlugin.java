@@ -19,6 +19,10 @@
  */
 package com.jaspersoft.studio;
 
+import java.io.IOException;
+
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
@@ -150,4 +154,16 @@ public class JaspersoftStudioPlugin extends AbstractUIPlugin {
 		return extensionManager;
 	}
 
+	/**
+	 * Get the full path name for a resource located inside the plug-in.
+	 * 
+	 * @param path the path of the internal resource 
+	 * @return the string corresponding to the full path
+	 * @throws IOException if a problem occurs during conversion
+	 */
+	public String getFileLocation(String path) throws IOException{
+		Assert.isNotNull(path);
+		return FileLocator.toFileURL(getBundle().getEntry(path)).getPath();
+	}
+	
 }
