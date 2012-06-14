@@ -21,7 +21,6 @@ package com.jaspersoft.studio.property.dataset.dialog;
 
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRSortField;
@@ -160,15 +159,6 @@ public class DatasetDialog extends FormDialog implements IFieldSetter, IDataPrev
 
 	public void setFields(List<JRDesignField> fields) {
 		ftable.setFields(fields);
-		newdataset.getFieldsList().clear();
-		newdataset.getFieldsMap().clear();
-		for(JRDesignField f : fields){
-			try {
-				newdataset.addField(f);
-			} catch (JRException e) {
-				// No duplication possible.. do not care
-			}
-		}
 	}
 	
 	public List<JRDesignField> getCurrentFields(){
