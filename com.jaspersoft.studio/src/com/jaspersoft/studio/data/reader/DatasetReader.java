@@ -156,7 +156,7 @@ public class DatasetReader {
 			// 9. Fill the report
 			JasperFillManager.fillReport(jrobj, hm);
 			
-		} catch (JRScriptletException e){
+		} catch (DataPreviewInterruptedException e){
 			// DO NOTHING
 			// This exception should occur only when
 			// a stop on the reading has been invoked.

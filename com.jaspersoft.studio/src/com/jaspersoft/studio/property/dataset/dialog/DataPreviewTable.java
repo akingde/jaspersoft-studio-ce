@@ -4,6 +4,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.design.JRDesignDataset;
 import net.sf.jasperreports.engine.design.JRDesignField;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -166,7 +168,22 @@ public class DataPreviewTable implements DatasetReaderListener{
 				dataReader = new DatasetReader();
 				dataReader.setColumns(getColumns());
 				dataReader.setDataAdapterDescriptor(previewInfoProvider.getDataAdapterDescriptor());
-				dataReader.setDesignDataset(previewInfoProvider.getDesignDataset());
+				// FIXME - TEMPORARY FIX THAT SHOULD BE REMOVED!
+				// Using JFace Databinding for fields list of the dataset 
+				// makes the internal fields map to be out of synch.
+				// Modifications should occur using the JRDesignDataset#add and #remove methods.
+				JRDesignDataset clonedDS=(JRDesignDataset) previewInfoProvider.getDesignDataset().clone();
+				clonedDS.getFieldsList().clear();
+				clonedDS.getFieldsMap().clear();
+				for(JRDesignField f : previewInfoProvider.getFieldsForPreview()){
+					try {
+						clonedDS.addField(f);
+					} catch (JRException e) {
+						// Do not care, duplication
+						// should never happen.
+					}
+				}
+				dataReader.setDesignDataset(clonedDS);
 				dataReader.setMaxRecords(recordsCountSelected);
 				dataReader.addDatasetReaderListener(DataPreviewTable.this);
 				dataReader.start(previewInfoProvider.getJasperReportsConfig());

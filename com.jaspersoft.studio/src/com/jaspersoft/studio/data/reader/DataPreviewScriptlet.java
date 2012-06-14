@@ -2,10 +2,10 @@ package com.jaspersoft.studio.data.reader;
 
 import java.util.List;
 
-import com.jaspersoft.studio.messages.Messages;
-
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
 import net.sf.jasperreports.engine.JRScriptletException;
+
+import com.jaspersoft.studio.messages.Messages;
 
 /**
  * Custom scriptlet used for data preview.
@@ -43,7 +43,7 @@ public class DataPreviewScriptlet extends JRDefaultScriptlet {
 		for(DatasetReaderListener l : listeners){
 			if(!l.isValidStatus()){
 				// This "dirty" solution will stop report running
-				throw new JRScriptletException(Messages.DataPreviewScriptlet_InterruptErrorMsg);
+				throw new DataPreviewInterruptedException(Messages.DataPreviewScriptlet_InterruptErrorMsg);
 			}
 			l.newRecord(record);
 		}
