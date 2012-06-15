@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getMethodInvocations <em>Method Invocations</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getObjectExpression <em>Object Expression</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getArrayIndexes <em>Array Indexes</em>}</li>
  * </ul>
  * </p>
  *
@@ -67,5 +68,21 @@ public interface MethodsExpression extends JasperReportsExpression
    * @generated
    */
   void setObjectExpression(JasperReportsExpression value);
+
+  /**
+   * Returns the value of the '<em><b>Array Indexes</b></em>' containment reference list.
+   * The list contents are of type {@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JasperReportsExpression}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Array Indexes</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Array Indexes</em>' containment reference list.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.JavaJRExpressionPackage#getMethodsExpression_ArrayIndexes()
+   * @model containment="true"
+   * @generated
+   */
+  EList<JasperReportsExpression> getArrayIndexes();
 
 } // MethodsExpression

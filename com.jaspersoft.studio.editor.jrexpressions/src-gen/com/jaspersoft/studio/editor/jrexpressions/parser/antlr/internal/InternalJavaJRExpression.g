@@ -1378,7 +1378,33 @@ ruleMethodsExpression returns [EObject current=null]
 	    }
 
 )
-))+)))
+))+))(	otherlv_7='[' 
+    {
+    	newLeafNode(otherlv_7, grammarAccess.getMethodsExpressionAccess().getLeftSquareBracketKeyword_2_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getMethodsExpressionAccess().getArrayIndexesIntLiteralParserRuleCall_2_1_0()); 
+	    }
+		lv_arrayIndexes_8_0=ruleIntLiteral		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getMethodsExpressionRule());
+	        }
+       		add(
+       			$current, 
+       			"arrayIndexes",
+        		lv_arrayIndexes_8_0, 
+        		"IntLiteral");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)	otherlv_9=']' 
+    {
+    	newLeafNode(otherlv_9, grammarAccess.getMethodsExpressionAccess().getRightSquareBracketKeyword_2_2());
+    }
+)*)
 ;
 
 

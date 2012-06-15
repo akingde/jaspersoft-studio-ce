@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.Status;
 import com.jaspersoft.studio.editor.expression.ExpressionEditorSupport;
 import com.jaspersoft.studio.editor.expression.IExpressionEditorSupportFactory;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 
 /**
  * This is the default support factory for the {@link JRExpression} editor,
@@ -33,7 +34,7 @@ public class DefaultExpressionEditorSupportFactory implements IExpressionEditorS
 		Assert.isNotNull(language);
 		// Let's look for contributed editor support
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				JRExpressionsActivator.PLUGIN_ID, "jrexpressionLanguage"); //$NON-NLS-1$
+				JRExpressionsUIPlugin.PLUGIN_ID, "jrexpressionLanguage"); //$NON-NLS-1$
 		for(IConfigurationElement el : config){
 			if(language.equals(el.getAttribute("languageName"))){
 				Object supportClazz=null;
@@ -45,7 +46,7 @@ public class DefaultExpressionEditorSupportFactory implements IExpressionEditorS
 				}
 				catch(CoreException ex){
 					JRExpressionsActivator.getInstance().getLog().log(
-							new Status(IStatus.ERROR, JRExpressionsActivator.PLUGIN_ID, "An error occurred while trying to create the new class.", ex));
+							new Status(IStatus.ERROR, JRExpressionsUIPlugin.PLUGIN_ID, "An error occurred while trying to create the new class.", ex));
 				}
 			}
 		}

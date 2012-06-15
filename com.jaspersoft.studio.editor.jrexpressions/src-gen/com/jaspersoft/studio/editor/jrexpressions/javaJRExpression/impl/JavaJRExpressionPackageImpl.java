@@ -834,6 +834,16 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getMethodsExpression_ArrayIndexes()
+  {
+    return (EReference)methodsExpressionEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getIntLiteral()
   {
     return intLiteralEClass;
@@ -1186,6 +1196,7 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     methodsExpressionEClass = createEClass(METHODS_EXPRESSION);
     createEReference(methodsExpressionEClass, METHODS_EXPRESSION__METHOD_INVOCATIONS);
     createEReference(methodsExpressionEClass, METHODS_EXPRESSION__OBJECT_EXPRESSION);
+    createEReference(methodsExpressionEClass, METHODS_EXPRESSION__ARRAY_INDEXES);
 
     intLiteralEClass = createEClass(INT_LITERAL);
     createEAttribute(intLiteralEClass, INT_LITERAL__VALUE);
@@ -1348,6 +1359,7 @@ public class JavaJRExpressionPackageImpl extends EPackageImpl implements JavaJRE
     initEClass(methodsExpressionEClass, MethodsExpression.class, "MethodsExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getMethodsExpression_MethodInvocations(), this.getMethodInvocation(), null, "methodInvocations", null, 0, -1, MethodsExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMethodsExpression_ObjectExpression(), this.getJasperReportsExpression(), null, "objectExpression", null, 0, 1, MethodsExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMethodsExpression_ArrayIndexes(), this.getJasperReportsExpression(), null, "arrayIndexes", null, 0, -1, MethodsExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(intLiteralEClass, IntLiteral.class, "IntLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getIntLiteral_Value(), ecorePackage.getEInt(), "value", null, 0, 1, IntLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

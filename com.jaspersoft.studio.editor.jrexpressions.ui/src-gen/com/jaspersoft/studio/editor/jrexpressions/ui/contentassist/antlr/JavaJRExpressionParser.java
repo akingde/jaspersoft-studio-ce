@@ -99,6 +99,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getMethodsExpressionAccess().getGroup_1_0_1(), "rule__MethodsExpression__Group_1_0_1__0");
 					put(grammarAccess.getMethodsExpressionAccess().getGroup_1_1(), "rule__MethodsExpression__Group_1_1__0");
 					put(grammarAccess.getMethodsExpressionAccess().getGroup_1_1_1(), "rule__MethodsExpression__Group_1_1_1__0");
+					put(grammarAccess.getMethodsExpressionAccess().getGroup_2(), "rule__MethodsExpression__Group_2__0");
 					put(grammarAccess.getIntLiteralAccess().getGroup(), "rule__IntLiteral__Group__0");
 					put(grammarAccess.getLongLiteralAccess().getGroup(), "rule__LongLiteral__Group__0");
 					put(grammarAccess.getFloatLiteralAccess().getGroup(), "rule__FloatLiteral__Group__0");
@@ -159,6 +160,7 @@ public class JavaJRExpressionParser extends AbstractContentAssistParser {
 					put(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsAssignment_1_0_1_1(), "rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1");
 					put(grammarAccess.getMethodsExpressionAccess().getObjectExpressionAssignment_1_1_0(), "rule__MethodsExpression__ObjectExpressionAssignment_1_1_0");
 					put(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsAssignment_1_1_1_1(), "rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1");
+					put(grammarAccess.getMethodsExpressionAccess().getArrayIndexesAssignment_2_1(), "rule__MethodsExpression__ArrayIndexesAssignment_2_1");
 					put(grammarAccess.getIntLiteralAccess().getValueAssignment_1(), "rule__IntLiteral__ValueAssignment_1");
 					put(grammarAccess.getLongLiteralAccess().getValueAssignment_1(), "rule__LongLiteral__ValueAssignment_1");
 					put(grammarAccess.getFloatLiteralAccess().getValueAssignment_1(), "rule__FloatLiteral__ValueAssignment_1");

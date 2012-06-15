@@ -46,12 +46,12 @@ import org.eclipse.swt.widgets.TreeItem;
 import com.jaspersoft.studio.editor.expression.CrosstabTotalVariable;
 import com.jaspersoft.studio.editor.expression.ExpObject;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
-import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
-import com.jaspersoft.studio.editor.jrexpressions.ui.preferences.ExpressionEditorPreferencePage;
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem;
+import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectItemStyledLabelProvider;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.TreeArrayContentProvider;
-import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategoryItem.Category;
+import com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage;
 import com.jaspersoft.studio.utils.RecentExpressions;
 import com.jaspersoft.studio.utils.ResourceManager;
 import com.jaspersoft.studio.utils.jasper.JasperReportsConfiguration;
@@ -161,7 +161,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		buttonsToolbar.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, false));
 		hideBuiltinParams = new ToolItem(buttonsToolbar, SWT.CHECK);
 		hideBuiltinParams.setImage(
-				ResourceManager.getPluginImage(JRExpressionsActivator.PLUGIN_ID, "/resources/icons/filter-parameters.png"));
+				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/filter-parameters.png"));
 		hideBuiltinParams.setEnabled(false);
 		hideBuiltinParams.addSelectionListener(new SelectionAdapter() {
 			 
@@ -174,7 +174,7 @@ public class ObjectCategoryDetailsPanel extends Composite {
 		hideBuiltinParams.setToolTipText("Hide built-in parameters");
 		hideBuiltinVariables = new ToolItem(buttonsToolbar, SWT.CHECK);
 		hideBuiltinVariables.setImage(
-				ResourceManager.getPluginImage(JRExpressionsActivator.PLUGIN_ID, "/resources/icons/filter-variables.png"));
+				ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/filter-variables.png"));
 		hideBuiltinVariables.setEnabled(false);
 		hideBuiltinVariables.addSelectionListener(new SelectionAdapter() {
 			 

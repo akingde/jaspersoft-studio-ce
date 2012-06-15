@@ -9,6 +9,7 @@ import org.eclipse.jface.text.TextViewer;
 import com.google.inject.Injector;
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 
 import de.itemis.xtext.utils.jface.viewers.StyledTextXtextAdapter;
 
@@ -64,7 +65,7 @@ public class StyledTextXtextAdapter2 extends StyledTextXtextAdapter {
 			declaredMethod.invoke(getXtextSourceviewer(), ignore);
 		} catch (Exception e) {
 			JRExpressionsActivator.getInstance().getLog().log(
-					new Status(IStatus.ERROR, JRExpressionsActivator.PLUGIN_ID, 
+					new Status(IStatus.ERROR, JRExpressionsUIPlugin.PLUGIN_ID, 
 							"Unable to enable/disable auto edit strategies for Xtext source viewer.", e));
 		}
 	}

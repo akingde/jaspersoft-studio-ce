@@ -85,9 +85,10 @@ JRVariableObj returns JasperReportsExpression:
 ;
 
 MethodsExpression returns JasperReportsExpression:
+	// arrayIndexes feature allows MethodExpression to support arrays
 	{MethodsExpression} 
 	(methodInvocations+=MethodInvocation	('.' methodInvocations+=MethodInvocation)* |
-	objectExpression=BaseJRExpression ('.' methodInvocations+=MethodInvocation)+)
+	objectExpression=BaseJRExpression ('.' methodInvocations+=MethodInvocation)+) ('[' arrayIndexes+=IntLiteral ']')*
 ;
 
 LiteralExpression returns JasperReportsExpression:

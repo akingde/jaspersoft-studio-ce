@@ -4061,14 +4061,15 @@ protected class JRVariableObj_BracedIdentifierAssignment_2 extends AssignmentTok
 
 /************ begin Rule MethodsExpression ****************
  *
- * MethodsExpression returns JasperReportsExpression:
+ * MethodsExpression returns JasperReportsExpression: // arrayIndexes feature allows MethodExpression to support arrays
  * 	{MethodsExpression} (methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)* |
- * 	objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+);
+ * 	objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+) ("[" arrayIndexes+=IntLiteral "]")*;
  *
  **/
 
+// // arrayIndexes feature allows MethodExpression to support arrays
 // {MethodsExpression} (methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)* |
-// objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+)
+// objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+) ("[" arrayIndexes+=IntLiteral "]")*
 protected class MethodsExpression_Group extends GroupToken {
 	
 	public MethodsExpression_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -4083,7 +4084,8 @@ protected class MethodsExpression_Group extends GroupToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new MethodsExpression_Alternatives_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new MethodsExpression_Group_2(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new MethodsExpression_Alternatives_1(lastRuleCallOrigin, this, 1, inst);
 			default: return null;
 		}	
 	}
@@ -4097,6 +4099,7 @@ protected class MethodsExpression_Group extends GroupToken {
 
 }
 
+// // arrayIndexes feature allows MethodExpression to support arrays
 // {MethodsExpression}
 protected class MethodsExpression_MethodsExpressionAction_0 extends ActionToken  {
 
@@ -4469,6 +4472,120 @@ protected class MethodsExpression_MethodInvocationsAssignment_1_1_1_1 extends As
 }
 
 
+
+
+// ("[" arrayIndexes+=IntLiteral "]")*
+protected class MethodsExpression_Group_2 extends GroupToken {
+	
+	public MethodsExpression_Group_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getMethodsExpressionAccess().getGroup_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new MethodsExpression_RightSquareBracketKeyword_2_2(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// "["
+protected class MethodsExpression_LeftSquareBracketKeyword_2_0 extends KeywordToken  {
+	
+	public MethodsExpression_LeftSquareBracketKeyword_2_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getMethodsExpressionAccess().getLeftSquareBracketKeyword_2_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new MethodsExpression_Group_2(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new MethodsExpression_Alternatives_1(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// arrayIndexes+=IntLiteral
+protected class MethodsExpression_ArrayIndexesAssignment_2_1 extends AssignmentToken  {
+	
+	public MethodsExpression_ArrayIndexesAssignment_2_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getMethodsExpressionAccess().getArrayIndexesAssignment_2_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new IntLiteral_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("arrayIndexes",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("arrayIndexes");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getIntLiteralRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getMethodsExpressionAccess().getArrayIndexesIntLiteralParserRuleCall_2_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new MethodsExpression_LeftSquareBracketKeyword_2_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+// "]"
+protected class MethodsExpression_RightSquareBracketKeyword_2_2 extends KeywordToken  {
+	
+	public MethodsExpression_RightSquareBracketKeyword_2_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getMethodsExpressionAccess().getRightSquareBracketKeyword_2_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new MethodsExpression_ArrayIndexesAssignment_2_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
 
 
 

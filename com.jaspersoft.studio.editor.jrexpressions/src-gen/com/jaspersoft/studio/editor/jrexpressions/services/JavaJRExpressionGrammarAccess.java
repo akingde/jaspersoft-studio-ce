@@ -762,16 +762,23 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		private final Keyword cFullStopKeyword_1_1_1_0 = (Keyword)cGroup_1_1_1.eContents().get(0);
 		private final Assignment cMethodInvocationsAssignment_1_1_1_1 = (Assignment)cGroup_1_1_1.eContents().get(1);
 		private final RuleCall cMethodInvocationsMethodInvocationParserRuleCall_1_1_1_1_0 = (RuleCall)cMethodInvocationsAssignment_1_1_1_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cLeftSquareBracketKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cArrayIndexesAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cArrayIndexesIntLiteralParserRuleCall_2_1_0 = (RuleCall)cArrayIndexesAssignment_2_1.eContents().get(0);
+		private final Keyword cRightSquareBracketKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
 		
-		//MethodsExpression returns JasperReportsExpression:
+		//MethodsExpression returns JasperReportsExpression: // arrayIndexes feature allows MethodExpression to support arrays
 		//	{MethodsExpression} (methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)* |
-		//	objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+);
+		//	objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+) ("[" arrayIndexes+=IntLiteral "]")*;
 		public ParserRule getRule() { return rule; }
 
+		//// arrayIndexes feature allows MethodExpression to support arrays
 		//{MethodsExpression} (methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)* |
-		//objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+)
+		//objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+) ("[" arrayIndexes+=IntLiteral "]")*
 		public Group getGroup() { return cGroup; }
 
+		//// arrayIndexes feature allows MethodExpression to support arrays
 		//{MethodsExpression}
 		public Action getMethodsExpressionAction_0() { return cMethodsExpressionAction_0; }
 
@@ -820,6 +827,21 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 
 		//MethodInvocation
 		public RuleCall getMethodInvocationsMethodInvocationParserRuleCall_1_1_1_1_0() { return cMethodInvocationsMethodInvocationParserRuleCall_1_1_1_1_0; }
+
+		//("[" arrayIndexes+=IntLiteral "]")*
+		public Group getGroup_2() { return cGroup_2; }
+
+		//"["
+		public Keyword getLeftSquareBracketKeyword_2_0() { return cLeftSquareBracketKeyword_2_0; }
+
+		//arrayIndexes+=IntLiteral
+		public Assignment getArrayIndexesAssignment_2_1() { return cArrayIndexesAssignment_2_1; }
+
+		//IntLiteral
+		public RuleCall getArrayIndexesIntLiteralParserRuleCall_2_1_0() { return cArrayIndexesIntLiteralParserRuleCall_2_1_0; }
+
+		//"]"
+		public Keyword getRightSquareBracketKeyword_2_2() { return cRightSquareBracketKeyword_2_2; }
 	}
 
 	public class LiteralExpressionElements extends AbstractParserRuleElementFinder {
@@ -2026,9 +2048,9 @@ public class JavaJRExpressionGrammarAccess extends AbstractGrammarElementFinder 
 		return getJRVariableObjAccess().getRule();
 	}
 
-	//MethodsExpression returns JasperReportsExpression:
+	//MethodsExpression returns JasperReportsExpression: // arrayIndexes feature allows MethodExpression to support arrays
 	//	{MethodsExpression} (methodInvocations+=MethodInvocation ("." methodInvocations+=MethodInvocation)* |
-	//	objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+);
+	//	objectExpression=BaseJRExpression ("." methodInvocations+=MethodInvocation)+) ("[" arrayIndexes+=IntLiteral "]")*;
 	public MethodsExpressionElements getMethodsExpressionAccess() {
 		return (pMethodsExpression != null) ? pMethodsExpression : (pMethodsExpression = new MethodsExpressionElements());
 	}

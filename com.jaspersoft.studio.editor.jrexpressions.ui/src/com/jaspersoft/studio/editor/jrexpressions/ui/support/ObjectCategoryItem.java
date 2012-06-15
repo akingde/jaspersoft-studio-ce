@@ -2,7 +2,7 @@ package com.jaspersoft.studio.editor.jrexpressions.ui.support;
 
 import org.eclipse.swt.graphics.Image;
 
-import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.java.JavaExpressionEditorComposite;
 import com.jaspersoft.studio.utils.ResourceManager;
 
@@ -65,7 +65,7 @@ public class ObjectCategoryItem {
 			customIconPath=category.getIconPath();
 		}
 		this.icon=ResourceManager.getPluginImage(
-				JRExpressionsActivator.PLUGIN_ID, customIconPath);
+				JRExpressionsUIPlugin.PLUGIN_ID, customIconPath);
 	}
 	
 	public Category getCategory(){

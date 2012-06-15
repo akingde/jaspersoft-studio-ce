@@ -21,7 +21,7 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
 import com.jaspersoft.studio.editor.expression.ExpressionContext;
 import com.jaspersoft.studio.editor.expression.ExpressionContextUtils;
-import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.utils.ResourceManager;
 /**
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
@@ -79,28 +79,28 @@ public class JavaJRExpressionProposalProvider extends AbstractJavaJRExpressionPr
 	 * Get JRParameter icon image.
 	 */
 	private Image getParameterIconImg(){
-		return ResourceManager.getPluginImage(JRExpressionsActivator.PLUGIN_ID, "/resources/icons/parameters-16.png");
+		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/parameters-16.png");
 	}
 	
 	/*
 	 * Get JRVariable icon image.
 	 */
 	private Image getVariableIconImg(){
-		return ResourceManager.getPluginImage(JRExpressionsActivator.PLUGIN_ID, "/resources/icons/variables-16.png");
+		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/variables-16.png");
 	}
 
 	/*
 	 * Get JRField icon image.
 	 */
 	private Image getFieldIconImg(){
-		return ResourceManager.getPluginImage(JRExpressionsActivator.PLUGIN_ID, "/resources/icons/fields-16.png");
+		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/fields-16.png");
 	}
 	
 	/*
 	 * Get the icon image for a proposed function.
 	 */
 	private Image getMethodNameIconImg(){
-		return ResourceManager.getPluginImage(JRExpressionsActivator.PLUGIN_ID, "/resources/icons/methodName.gif");
+		return ResourceManager.getPluginImage(JRExpressionsUIPlugin.PLUGIN_ID, "/resources/icons/methodName.gif");
 	}
 	
 }

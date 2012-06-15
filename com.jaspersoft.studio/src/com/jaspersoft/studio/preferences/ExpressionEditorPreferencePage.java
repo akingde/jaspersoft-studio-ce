@@ -1,10 +1,12 @@
-package com.jaspersoft.studio.editor.jrexpressions.ui.preferences;
+package com.jaspersoft.studio.preferences;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.osgi.service.prefs.Preferences;
@@ -19,8 +21,9 @@ import com.jaspersoft.studio.preferences.util.PropertiesHelper;
  *
  */
 public class ExpressionEditorPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-
+	
 	public static final String P_USER_DEFINED_EXPRESSIONS="userDefinedExpressions";//$NON-NLS-1$
+	public static final String P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS="includeFunctionsLibraryImports";//$NON-NLS-1$
 	
 	public ExpressionEditorPreferencePage() {
 		super(GRID);
@@ -32,6 +35,8 @@ public class ExpressionEditorPreferencePage extends FieldEditorPreferencePage im
 	protected void createFieldEditors() {
 		addField(new ExpressionListFieldEditor(
 				P_USER_DEFINED_EXPRESSIONS, "User defined expressions", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(
+				P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS, "Include static imports used for functions library", getFieldEditorParent()));
 	}
 
 	/*
@@ -57,5 +62,8 @@ public class ExpressionEditorPreferencePage extends FieldEditorPreferencePage im
 		}
         return v;
 	}
-
+	
+	public static void getDefaults(IPreferenceStore store){
+		store.setDefault(ExpressionEditorPreferencePage.P_INCLUDE_FUCTIONS_LIBRARY_IMPORTS, false); //$//$NON-NLS-1$
+	}
 }

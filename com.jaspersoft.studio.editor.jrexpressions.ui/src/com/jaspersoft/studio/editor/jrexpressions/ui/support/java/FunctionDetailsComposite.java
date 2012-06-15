@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsActivator;
+import com.jaspersoft.studio.editor.jrexpressions.ui.JRExpressionsUIPlugin;
 import com.jaspersoft.studio.editor.jrexpressions.ui.support.ObjectCategorySelectionEvent;
 import com.jaspersoft.studio.utils.Misc;
 import com.jaspersoft.studio.utils.ResourceManager;
@@ -151,7 +151,7 @@ public class FunctionDetailsComposite extends Composite {
 
 				CLabel enterFunctionLbl = new CLabel(childCmp, SWT.NONE);
 				enterFunctionLbl.setImage(ResourceManager.getPluginImage(
-						JRExpressionsActivator.PLUGIN_ID,
+						JRExpressionsUIPlugin.PLUGIN_ID,
 						"/resources/icons/enterfunction.gif"));
 				GridData enterFunctGD = new GridData(SWT.LEFT, SWT.CENTER,
 						false, false);

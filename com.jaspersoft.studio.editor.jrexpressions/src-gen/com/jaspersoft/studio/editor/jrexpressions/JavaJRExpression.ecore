@@ -92,6 +92,8 @@
         eType="#//MethodInvocation" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="objectExpression" eType="#//JasperReportsExpression"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arrayIndexes" upperBound="-1"
+        eType="#//JasperReportsExpression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IntLiteral" eSuperTypes="#//JasperReportsExpression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>

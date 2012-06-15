@@ -1,4 +1,4 @@
-package com.jaspersoft.studio.editor.jrexpressions.ui.preferences;
+package com.jaspersoft.studio.preferences;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;

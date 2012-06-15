@@ -23,7 +23,7 @@ import java.util.HashMap;
 @SuppressWarnings("all")
 public class InternalJavaJRExpressionParser extends AbstractInternalContentAssistParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_BRACED_IDENTIFIER", "RULE_INT", "RULE_LONG", "RULE_FLOAT", "RULE_DOUBLE", "RULE_CHAR", "RULE_STRING", "RULE_INTEGERNUMBER", "RULE_LONGSUFFIX", "RULE_NONINTEGERNUMBER", "RULE_FLOATSUFFIX", "RULE_DOUBLESUFFIX", "RULE_ESCAPESEQUENCE", "RULE_HEXPREFIX", "RULE_HEXDIGIT", "RULE_EXPONENT", "RULE_EXPOBJIDENTIFIER", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'=='", "'!='", "'+'", "'-'", "'*'", "'/'", "'%'", "'false'", "'boolean'", "'char'", "'byte'", "'short'", "'int'", "'long'", "'float'", "'double'", "'<='", "'<'", "'>='", "'>'", "':'", "'?'", "'~'", "'!'", "'.'", "'class'", "'$F'", "'$P'", "'$V'", "'null'", "'('", "')'", "'new'", "'['", "']'", "'{'", "'}'", "','", "'extends'", "'super'", "'||'", "'&&'", "'instanceof'", "'void'", "'true'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_BRACED_IDENTIFIER", "RULE_INT", "RULE_LONG", "RULE_FLOAT", "RULE_DOUBLE", "RULE_CHAR", "RULE_STRING", "RULE_INTEGERNUMBER", "RULE_LONGSUFFIX", "RULE_NONINTEGERNUMBER", "RULE_FLOATSUFFIX", "RULE_DOUBLESUFFIX", "RULE_ESCAPESEQUENCE", "RULE_HEXPREFIX", "RULE_HEXDIGIT", "RULE_EXPONENT", "RULE_EXPOBJIDENTIFIER", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'=='", "'!='", "'+'", "'-'", "'*'", "'/'", "'%'", "'false'", "'boolean'", "'char'", "'byte'", "'short'", "'int'", "'long'", "'float'", "'double'", "'<='", "'<'", "'>='", "'>'", "':'", "'?'", "'~'", "'!'", "'.'", "'class'", "'$F'", "'$P'", "'$V'", "'['", "']'", "'null'", "'('", "')'", "'new'", "'{'", "'}'", "','", "'extends'", "'super'", "'||'", "'&&'", "'instanceof'", "'void'", "'true'"
     };
     public static final int T__68=68;
     public static final int T__69=69;
@@ -185,7 +185,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             int alt1=2;
             int LA1_0 = input.LA(1);
 
-            if ( (LA1_0==RULE_ID||(LA1_0>=RULE_INT && LA1_0<=RULE_STRING)||(LA1_0>=28 && LA1_0<=29)||(LA1_0>=33 && LA1_0<=41)||(LA1_0>=48 && LA1_0<=49)||(LA1_0>=52 && LA1_0<=56)||LA1_0==58||(LA1_0>=69 && LA1_0<=70)) ) {
+            if ( (LA1_0==RULE_ID||(LA1_0>=RULE_INT && LA1_0<=RULE_STRING)||(LA1_0>=28 && LA1_0<=29)||(LA1_0>=33 && LA1_0<=41)||(LA1_0>=48 && LA1_0<=49)||(LA1_0>=52 && LA1_0<=54)||(LA1_0>=57 && LA1_0<=58)||LA1_0==60||(LA1_0>=69 && LA1_0<=70)) ) {
                 alt1=1;
             }
             switch (alt1) {
@@ -4430,9 +4430,9 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             case 52:
             case 53:
             case 54:
-            case 55:
-            case 56:
+            case 57:
             case 58:
+            case 60:
             case 69:
             case 70:
                 {
@@ -5251,7 +5251,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
                 alt11=7;
                 }
                 break;
-            case 55:
+            case 57:
                 {
                 alt11=8;
                 }
@@ -5667,13 +5667,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             int alt15=2;
             int LA15_0 = input.LA(1);
 
-            if ( (LA15_0==59) ) {
+            if ( (LA15_0==55) ) {
                 int LA15_1 = input.LA(2);
 
                 if ( (LA15_1==RULE_INT) ) {
                     alt15=1;
                 }
-                else if ( (LA15_1==60) ) {
+                else if ( (LA15_1==56) ) {
                     alt15=2;
                 }
                 else {
@@ -5733,7 +5733,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
                         int alt14=2;
                         int LA14_0 = input.LA(1);
 
-                        if ( (LA14_0==59) ) {
+                        if ( (LA14_0==55) ) {
                             alt14=1;
                         }
 
@@ -13222,17 +13222,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4430:1: rule__MethodsExpression__Group__1 : rule__MethodsExpression__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4430:1: rule__MethodsExpression__Group__1 : rule__MethodsExpression__Group__1__Impl rule__MethodsExpression__Group__2 ;
     public final void rule__MethodsExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4434:1: ( rule__MethodsExpression__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4435:2: rule__MethodsExpression__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4434:1: ( rule__MethodsExpression__Group__1__Impl rule__MethodsExpression__Group__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4435:2: rule__MethodsExpression__Group__1__Impl rule__MethodsExpression__Group__2
             {
             pushFollow(FOLLOW_rule__MethodsExpression__Group__1__Impl_in_rule__MethodsExpression__Group__19100);
             rule__MethodsExpression__Group__1__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+            pushFollow(FOLLOW_rule__MethodsExpression__Group__2_in_rule__MethodsExpression__Group__19103);
+            rule__MethodsExpression__Group__2();
 
             state._fsp--;
             if (state.failed) return ;
@@ -13255,25 +13260,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4441:1: rule__MethodsExpression__Group__1__Impl : ( ( rule__MethodsExpression__Alternatives_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4442:1: rule__MethodsExpression__Group__1__Impl : ( ( rule__MethodsExpression__Alternatives_1 ) ) ;
     public final void rule__MethodsExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4445:1: ( ( ( rule__MethodsExpression__Alternatives_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4446:1: ( ( rule__MethodsExpression__Alternatives_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4446:1: ( ( ( rule__MethodsExpression__Alternatives_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4447:1: ( ( rule__MethodsExpression__Alternatives_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4446:1: ( ( rule__MethodsExpression__Alternatives_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4447:1: ( rule__MethodsExpression__Alternatives_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4447:1: ( ( rule__MethodsExpression__Alternatives_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4448:1: ( rule__MethodsExpression__Alternatives_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getAlternatives_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4448:1: ( rule__MethodsExpression__Alternatives_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4448:2: rule__MethodsExpression__Alternatives_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4449:1: ( rule__MethodsExpression__Alternatives_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4449:2: rule__MethodsExpression__Alternatives_1
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Alternatives_1_in_rule__MethodsExpression__Group__1__Impl9127);
+            pushFollow(FOLLOW_rule__MethodsExpression__Alternatives_1_in_rule__MethodsExpression__Group__1__Impl9130);
             rule__MethodsExpression__Alternatives_1();
 
             state._fsp--;
@@ -13305,22 +13310,124 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     // $ANTLR end "rule__MethodsExpression__Group__1__Impl"
 
 
+    // $ANTLR start "rule__MethodsExpression__Group__2"
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4459:1: rule__MethodsExpression__Group__2 : rule__MethodsExpression__Group__2__Impl ;
+    public final void rule__MethodsExpression__Group__2() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4463:1: ( rule__MethodsExpression__Group__2__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4464:2: rule__MethodsExpression__Group__2__Impl
+            {
+            pushFollow(FOLLOW_rule__MethodsExpression__Group__2__Impl_in_rule__MethodsExpression__Group__29160);
+            rule__MethodsExpression__Group__2__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__MethodsExpression__Group__2"
+
+
+    // $ANTLR start "rule__MethodsExpression__Group__2__Impl"
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4470:1: rule__MethodsExpression__Group__2__Impl : ( ( rule__MethodsExpression__Group_2__0 )* ) ;
+    public final void rule__MethodsExpression__Group__2__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4474:1: ( ( ( rule__MethodsExpression__Group_2__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4475:1: ( ( rule__MethodsExpression__Group_2__0 )* )
+            {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4475:1: ( ( rule__MethodsExpression__Group_2__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4476:1: ( rule__MethodsExpression__Group_2__0 )*
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getMethodsExpressionAccess().getGroup_2()); 
+            }
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4477:1: ( rule__MethodsExpression__Group_2__0 )*
+            loop28:
+            do {
+                int alt28=2;
+                int LA28_0 = input.LA(1);
+
+                if ( (LA28_0==55) ) {
+                    alt28=1;
+                }
+
+
+                switch (alt28) {
+            	case 1 :
+            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4477:2: rule__MethodsExpression__Group_2__0
+            	    {
+            	    pushFollow(FOLLOW_rule__MethodsExpression__Group_2__0_in_rule__MethodsExpression__Group__2__Impl9187);
+            	    rule__MethodsExpression__Group_2__0();
+
+            	    state._fsp--;
+            	    if (state.failed) return ;
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop28;
+                }
+            } while (true);
+
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getMethodsExpressionAccess().getGroup_2()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__MethodsExpression__Group__2__Impl"
+
+
     // $ANTLR start "rule__MethodsExpression__Group_1_0__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4462:1: rule__MethodsExpression__Group_1_0__0 : rule__MethodsExpression__Group_1_0__0__Impl rule__MethodsExpression__Group_1_0__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4493:1: rule__MethodsExpression__Group_1_0__0 : rule__MethodsExpression__Group_1_0__0__Impl rule__MethodsExpression__Group_1_0__1 ;
     public final void rule__MethodsExpression__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4466:1: ( rule__MethodsExpression__Group_1_0__0__Impl rule__MethodsExpression__Group_1_0__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4467:2: rule__MethodsExpression__Group_1_0__0__Impl rule__MethodsExpression__Group_1_0__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4497:1: ( rule__MethodsExpression__Group_1_0__0__Impl rule__MethodsExpression__Group_1_0__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4498:2: rule__MethodsExpression__Group_1_0__0__Impl rule__MethodsExpression__Group_1_0__1
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0__0__Impl_in_rule__MethodsExpression__Group_1_0__09161);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0__0__Impl_in_rule__MethodsExpression__Group_1_0__09224);
             rule__MethodsExpression__Group_1_0__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0__1_in_rule__MethodsExpression__Group_1_0__09164);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0__1_in_rule__MethodsExpression__Group_1_0__09227);
             rule__MethodsExpression__Group_1_0__1();
 
             state._fsp--;
@@ -13344,25 +13451,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_0__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4474:1: rule__MethodsExpression__Group_1_0__0__Impl : ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4505:1: rule__MethodsExpression__Group_1_0__0__Impl : ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 ) ) ;
     public final void rule__MethodsExpression__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4478:1: ( ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4479:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4509:1: ( ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4510:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4479:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4480:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4510:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4511:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsAssignment_1_0_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4481:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4481:2: rule__MethodsExpression__MethodInvocationsAssignment_1_0_0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4512:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4512:2: rule__MethodsExpression__MethodInvocationsAssignment_1_0_0
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_0_0_in_rule__MethodsExpression__Group_1_0__0__Impl9191);
+            pushFollow(FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_0_0_in_rule__MethodsExpression__Group_1_0__0__Impl9254);
             rule__MethodsExpression__MethodInvocationsAssignment_1_0_0();
 
             state._fsp--;
@@ -13395,16 +13502,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_0__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4491:1: rule__MethodsExpression__Group_1_0__1 : rule__MethodsExpression__Group_1_0__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4522:1: rule__MethodsExpression__Group_1_0__1 : rule__MethodsExpression__Group_1_0__1__Impl ;
     public final void rule__MethodsExpression__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4495:1: ( rule__MethodsExpression__Group_1_0__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4496:2: rule__MethodsExpression__Group_1_0__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4526:1: ( rule__MethodsExpression__Group_1_0__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4527:2: rule__MethodsExpression__Group_1_0__1__Impl
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0__1__Impl_in_rule__MethodsExpression__Group_1_0__19221);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0__1__Impl_in_rule__MethodsExpression__Group_1_0__19284);
             rule__MethodsExpression__Group_1_0__1__Impl();
 
             state._fsp--;
@@ -13428,37 +13535,37 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_0__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4502:1: rule__MethodsExpression__Group_1_0__1__Impl : ( ( rule__MethodsExpression__Group_1_0_1__0 )* ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4533:1: rule__MethodsExpression__Group_1_0__1__Impl : ( ( rule__MethodsExpression__Group_1_0_1__0 )* ) ;
     public final void rule__MethodsExpression__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4506:1: ( ( ( rule__MethodsExpression__Group_1_0_1__0 )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4507:1: ( ( rule__MethodsExpression__Group_1_0_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4537:1: ( ( ( rule__MethodsExpression__Group_1_0_1__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4538:1: ( ( rule__MethodsExpression__Group_1_0_1__0 )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4507:1: ( ( rule__MethodsExpression__Group_1_0_1__0 )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4508:1: ( rule__MethodsExpression__Group_1_0_1__0 )*
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4538:1: ( ( rule__MethodsExpression__Group_1_0_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4539:1: ( rule__MethodsExpression__Group_1_0_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getGroup_1_0_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4509:1: ( rule__MethodsExpression__Group_1_0_1__0 )*
-            loop28:
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4540:1: ( rule__MethodsExpression__Group_1_0_1__0 )*
+            loop29:
             do {
-                int alt28=2;
-                int LA28_0 = input.LA(1);
+                int alt29=2;
+                int LA29_0 = input.LA(1);
 
-                if ( (LA28_0==50) ) {
-                    alt28=1;
+                if ( (LA29_0==50) ) {
+                    alt29=1;
                 }
 
 
-                switch (alt28) {
+                switch (alt29) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4509:2: rule__MethodsExpression__Group_1_0_1__0
+            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4540:2: rule__MethodsExpression__Group_1_0_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0_1__0_in_rule__MethodsExpression__Group_1_0__1__Impl9248);
+            	    pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0_1__0_in_rule__MethodsExpression__Group_1_0__1__Impl9311);
             	    rule__MethodsExpression__Group_1_0_1__0();
 
             	    state._fsp--;
@@ -13468,7 +13575,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             	    break;
 
             	default :
-            	    break loop28;
+            	    break loop29;
                 }
             } while (true);
 
@@ -13497,21 +13604,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_0_1__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4523:1: rule__MethodsExpression__Group_1_0_1__0 : rule__MethodsExpression__Group_1_0_1__0__Impl rule__MethodsExpression__Group_1_0_1__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4554:1: rule__MethodsExpression__Group_1_0_1__0 : rule__MethodsExpression__Group_1_0_1__0__Impl rule__MethodsExpression__Group_1_0_1__1 ;
     public final void rule__MethodsExpression__Group_1_0_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4527:1: ( rule__MethodsExpression__Group_1_0_1__0__Impl rule__MethodsExpression__Group_1_0_1__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4528:2: rule__MethodsExpression__Group_1_0_1__0__Impl rule__MethodsExpression__Group_1_0_1__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4558:1: ( rule__MethodsExpression__Group_1_0_1__0__Impl rule__MethodsExpression__Group_1_0_1__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4559:2: rule__MethodsExpression__Group_1_0_1__0__Impl rule__MethodsExpression__Group_1_0_1__1
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0_1__0__Impl_in_rule__MethodsExpression__Group_1_0_1__09283);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0_1__0__Impl_in_rule__MethodsExpression__Group_1_0_1__09346);
             rule__MethodsExpression__Group_1_0_1__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0_1__1_in_rule__MethodsExpression__Group_1_0_1__09286);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0_1__1_in_rule__MethodsExpression__Group_1_0_1__09349);
             rule__MethodsExpression__Group_1_0_1__1();
 
             state._fsp--;
@@ -13535,22 +13642,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_0_1__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4535:1: rule__MethodsExpression__Group_1_0_1__0__Impl : ( '.' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4566:1: rule__MethodsExpression__Group_1_0_1__0__Impl : ( '.' ) ;
     public final void rule__MethodsExpression__Group_1_0_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4539:1: ( ( '.' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4540:1: ( '.' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4570:1: ( ( '.' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4571:1: ( '.' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4540:1: ( '.' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4541:1: '.'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4571:1: ( '.' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4572:1: '.'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getFullStopKeyword_1_0_1_0()); 
             }
-            match(input,50,FOLLOW_50_in_rule__MethodsExpression__Group_1_0_1__0__Impl9314); if (state.failed) return ;
+            match(input,50,FOLLOW_50_in_rule__MethodsExpression__Group_1_0_1__0__Impl9377); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getMethodsExpressionAccess().getFullStopKeyword_1_0_1_0()); 
             }
@@ -13576,16 +13683,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_0_1__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4554:1: rule__MethodsExpression__Group_1_0_1__1 : rule__MethodsExpression__Group_1_0_1__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4585:1: rule__MethodsExpression__Group_1_0_1__1 : rule__MethodsExpression__Group_1_0_1__1__Impl ;
     public final void rule__MethodsExpression__Group_1_0_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4558:1: ( rule__MethodsExpression__Group_1_0_1__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4559:2: rule__MethodsExpression__Group_1_0_1__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4589:1: ( rule__MethodsExpression__Group_1_0_1__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4590:2: rule__MethodsExpression__Group_1_0_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0_1__1__Impl_in_rule__MethodsExpression__Group_1_0_1__19345);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_0_1__1__Impl_in_rule__MethodsExpression__Group_1_0_1__19408);
             rule__MethodsExpression__Group_1_0_1__1__Impl();
 
             state._fsp--;
@@ -13609,25 +13716,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_0_1__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4565:1: rule__MethodsExpression__Group_1_0_1__1__Impl : ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4596:1: rule__MethodsExpression__Group_1_0_1__1__Impl : ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 ) ) ;
     public final void rule__MethodsExpression__Group_1_0_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4569:1: ( ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4570:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4600:1: ( ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4601:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4570:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4571:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4601:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4602:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsAssignment_1_0_1_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4572:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4572:2: rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4603:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4603:2: rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1_in_rule__MethodsExpression__Group_1_0_1__1__Impl9372);
+            pushFollow(FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1_in_rule__MethodsExpression__Group_1_0_1__1__Impl9435);
             rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1();
 
             state._fsp--;
@@ -13660,21 +13767,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_1__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4586:1: rule__MethodsExpression__Group_1_1__0 : rule__MethodsExpression__Group_1_1__0__Impl rule__MethodsExpression__Group_1_1__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4617:1: rule__MethodsExpression__Group_1_1__0 : rule__MethodsExpression__Group_1_1__0__Impl rule__MethodsExpression__Group_1_1__1 ;
     public final void rule__MethodsExpression__Group_1_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4590:1: ( rule__MethodsExpression__Group_1_1__0__Impl rule__MethodsExpression__Group_1_1__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4591:2: rule__MethodsExpression__Group_1_1__0__Impl rule__MethodsExpression__Group_1_1__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4621:1: ( rule__MethodsExpression__Group_1_1__0__Impl rule__MethodsExpression__Group_1_1__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4622:2: rule__MethodsExpression__Group_1_1__0__Impl rule__MethodsExpression__Group_1_1__1
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1__0__Impl_in_rule__MethodsExpression__Group_1_1__09406);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1__0__Impl_in_rule__MethodsExpression__Group_1_1__09469);
             rule__MethodsExpression__Group_1_1__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1__1_in_rule__MethodsExpression__Group_1_1__09409);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1__1_in_rule__MethodsExpression__Group_1_1__09472);
             rule__MethodsExpression__Group_1_1__1();
 
             state._fsp--;
@@ -13698,25 +13805,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_1__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4598:1: rule__MethodsExpression__Group_1_1__0__Impl : ( ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4629:1: rule__MethodsExpression__Group_1_1__0__Impl : ( ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 ) ) ;
     public final void rule__MethodsExpression__Group_1_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4602:1: ( ( ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4603:1: ( ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4633:1: ( ( ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4634:1: ( ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4603:1: ( ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4604:1: ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4634:1: ( ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4635:1: ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getObjectExpressionAssignment_1_1_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4605:1: ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4605:2: rule__MethodsExpression__ObjectExpressionAssignment_1_1_0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4636:1: ( rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4636:2: rule__MethodsExpression__ObjectExpressionAssignment_1_1_0
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__ObjectExpressionAssignment_1_1_0_in_rule__MethodsExpression__Group_1_1__0__Impl9436);
+            pushFollow(FOLLOW_rule__MethodsExpression__ObjectExpressionAssignment_1_1_0_in_rule__MethodsExpression__Group_1_1__0__Impl9499);
             rule__MethodsExpression__ObjectExpressionAssignment_1_1_0();
 
             state._fsp--;
@@ -13749,16 +13856,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_1__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4615:1: rule__MethodsExpression__Group_1_1__1 : rule__MethodsExpression__Group_1_1__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4646:1: rule__MethodsExpression__Group_1_1__1 : rule__MethodsExpression__Group_1_1__1__Impl ;
     public final void rule__MethodsExpression__Group_1_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4619:1: ( rule__MethodsExpression__Group_1_1__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4620:2: rule__MethodsExpression__Group_1_1__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4650:1: ( rule__MethodsExpression__Group_1_1__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4651:2: rule__MethodsExpression__Group_1_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1__1__Impl_in_rule__MethodsExpression__Group_1_1__19466);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1__1__Impl_in_rule__MethodsExpression__Group_1_1__19529);
             rule__MethodsExpression__Group_1_1__1__Impl();
 
             state._fsp--;
@@ -13782,28 +13889,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_1__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4626:1: rule__MethodsExpression__Group_1_1__1__Impl : ( ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4657:1: rule__MethodsExpression__Group_1_1__1__Impl : ( ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* ) ) ;
     public final void rule__MethodsExpression__Group_1_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4630:1: ( ( ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4631:1: ( ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4661:1: ( ( ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4662:1: ( ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4631:1: ( ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4632:1: ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4662:1: ( ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4663:1: ( ( rule__MethodsExpression__Group_1_1_1__0 ) ) ( ( rule__MethodsExpression__Group_1_1_1__0 )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4632:1: ( ( rule__MethodsExpression__Group_1_1_1__0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4633:1: ( rule__MethodsExpression__Group_1_1_1__0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4663:1: ( ( rule__MethodsExpression__Group_1_1_1__0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4664:1: ( rule__MethodsExpression__Group_1_1_1__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getGroup_1_1_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4634:1: ( rule__MethodsExpression__Group_1_1_1__0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4634:2: rule__MethodsExpression__Group_1_1_1__0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4665:1: ( rule__MethodsExpression__Group_1_1_1__0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4665:2: rule__MethodsExpression__Group_1_1_1__0
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__0_in_rule__MethodsExpression__Group_1_1__1__Impl9495);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__0_in_rule__MethodsExpression__Group_1_1__1__Impl9558);
             rule__MethodsExpression__Group_1_1_1__0();
 
             state._fsp--;
@@ -13817,28 +13924,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4637:1: ( ( rule__MethodsExpression__Group_1_1_1__0 )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4638:1: ( rule__MethodsExpression__Group_1_1_1__0 )*
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4668:1: ( ( rule__MethodsExpression__Group_1_1_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4669:1: ( rule__MethodsExpression__Group_1_1_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getGroup_1_1_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4639:1: ( rule__MethodsExpression__Group_1_1_1__0 )*
-            loop29:
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4670:1: ( rule__MethodsExpression__Group_1_1_1__0 )*
+            loop30:
             do {
-                int alt29=2;
-                int LA29_0 = input.LA(1);
+                int alt30=2;
+                int LA30_0 = input.LA(1);
 
-                if ( (LA29_0==50) ) {
-                    alt29=1;
+                if ( (LA30_0==50) ) {
+                    alt30=1;
                 }
 
 
-                switch (alt29) {
+                switch (alt30) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4639:2: rule__MethodsExpression__Group_1_1_1__0
+            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4670:2: rule__MethodsExpression__Group_1_1_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__0_in_rule__MethodsExpression__Group_1_1__1__Impl9507);
+            	    pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__0_in_rule__MethodsExpression__Group_1_1__1__Impl9570);
             	    rule__MethodsExpression__Group_1_1_1__0();
 
             	    state._fsp--;
@@ -13848,7 +13955,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             	    break;
 
             	default :
-            	    break loop29;
+            	    break loop30;
                 }
             } while (true);
 
@@ -13880,21 +13987,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_1_1__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4654:1: rule__MethodsExpression__Group_1_1_1__0 : rule__MethodsExpression__Group_1_1_1__0__Impl rule__MethodsExpression__Group_1_1_1__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4685:1: rule__MethodsExpression__Group_1_1_1__0 : rule__MethodsExpression__Group_1_1_1__0__Impl rule__MethodsExpression__Group_1_1_1__1 ;
     public final void rule__MethodsExpression__Group_1_1_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4658:1: ( rule__MethodsExpression__Group_1_1_1__0__Impl rule__MethodsExpression__Group_1_1_1__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4659:2: rule__MethodsExpression__Group_1_1_1__0__Impl rule__MethodsExpression__Group_1_1_1__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4689:1: ( rule__MethodsExpression__Group_1_1_1__0__Impl rule__MethodsExpression__Group_1_1_1__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4690:2: rule__MethodsExpression__Group_1_1_1__0__Impl rule__MethodsExpression__Group_1_1_1__1
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__0__Impl_in_rule__MethodsExpression__Group_1_1_1__09544);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__0__Impl_in_rule__MethodsExpression__Group_1_1_1__09607);
             rule__MethodsExpression__Group_1_1_1__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__1_in_rule__MethodsExpression__Group_1_1_1__09547);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__1_in_rule__MethodsExpression__Group_1_1_1__09610);
             rule__MethodsExpression__Group_1_1_1__1();
 
             state._fsp--;
@@ -13918,22 +14025,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_1_1__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4666:1: rule__MethodsExpression__Group_1_1_1__0__Impl : ( '.' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4697:1: rule__MethodsExpression__Group_1_1_1__0__Impl : ( '.' ) ;
     public final void rule__MethodsExpression__Group_1_1_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4670:1: ( ( '.' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4671:1: ( '.' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4701:1: ( ( '.' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4702:1: ( '.' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4671:1: ( '.' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4672:1: '.'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4702:1: ( '.' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4703:1: '.'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getFullStopKeyword_1_1_1_0()); 
             }
-            match(input,50,FOLLOW_50_in_rule__MethodsExpression__Group_1_1_1__0__Impl9575); if (state.failed) return ;
+            match(input,50,FOLLOW_50_in_rule__MethodsExpression__Group_1_1_1__0__Impl9638); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getMethodsExpressionAccess().getFullStopKeyword_1_1_1_0()); 
             }
@@ -13959,16 +14066,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_1_1__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4685:1: rule__MethodsExpression__Group_1_1_1__1 : rule__MethodsExpression__Group_1_1_1__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4716:1: rule__MethodsExpression__Group_1_1_1__1 : rule__MethodsExpression__Group_1_1_1__1__Impl ;
     public final void rule__MethodsExpression__Group_1_1_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4689:1: ( rule__MethodsExpression__Group_1_1_1__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4690:2: rule__MethodsExpression__Group_1_1_1__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4720:1: ( rule__MethodsExpression__Group_1_1_1__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4721:2: rule__MethodsExpression__Group_1_1_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__1__Impl_in_rule__MethodsExpression__Group_1_1_1__19606);
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_1_1_1__1__Impl_in_rule__MethodsExpression__Group_1_1_1__19669);
             rule__MethodsExpression__Group_1_1_1__1__Impl();
 
             state._fsp--;
@@ -13992,25 +14099,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__Group_1_1_1__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4696:1: rule__MethodsExpression__Group_1_1_1__1__Impl : ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4727:1: rule__MethodsExpression__Group_1_1_1__1__Impl : ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 ) ) ;
     public final void rule__MethodsExpression__Group_1_1_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4700:1: ( ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4701:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4731:1: ( ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4732:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4701:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4702:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4732:1: ( ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4733:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsAssignment_1_1_1_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4703:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4703:2: rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4734:1: ( rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4734:2: rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1
             {
-            pushFollow(FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1_in_rule__MethodsExpression__Group_1_1_1__1__Impl9633);
+            pushFollow(FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1_in_rule__MethodsExpression__Group_1_1_1__1__Impl9696);
             rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1();
 
             state._fsp--;
@@ -14042,22 +14149,264 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     // $ANTLR end "rule__MethodsExpression__Group_1_1_1__1__Impl"
 
 
+    // $ANTLR start "rule__MethodsExpression__Group_2__0"
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4748:1: rule__MethodsExpression__Group_2__0 : rule__MethodsExpression__Group_2__0__Impl rule__MethodsExpression__Group_2__1 ;
+    public final void rule__MethodsExpression__Group_2__0() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4752:1: ( rule__MethodsExpression__Group_2__0__Impl rule__MethodsExpression__Group_2__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4753:2: rule__MethodsExpression__Group_2__0__Impl rule__MethodsExpression__Group_2__1
+            {
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_2__0__Impl_in_rule__MethodsExpression__Group_2__09730);
+            rule__MethodsExpression__Group_2__0__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_2__1_in_rule__MethodsExpression__Group_2__09733);
+            rule__MethodsExpression__Group_2__1();
+
+            state._fsp--;
+            if (state.failed) return ;
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__MethodsExpression__Group_2__0"
+
+
+    // $ANTLR start "rule__MethodsExpression__Group_2__0__Impl"
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4760:1: rule__MethodsExpression__Group_2__0__Impl : ( '[' ) ;
+    public final void rule__MethodsExpression__Group_2__0__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4764:1: ( ( '[' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4765:1: ( '[' )
+            {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4765:1: ( '[' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4766:1: '['
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getMethodsExpressionAccess().getLeftSquareBracketKeyword_2_0()); 
+            }
+            match(input,55,FOLLOW_55_in_rule__MethodsExpression__Group_2__0__Impl9761); if (state.failed) return ;
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getMethodsExpressionAccess().getLeftSquareBracketKeyword_2_0()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__MethodsExpression__Group_2__0__Impl"
+
+
+    // $ANTLR start "rule__MethodsExpression__Group_2__1"
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4779:1: rule__MethodsExpression__Group_2__1 : rule__MethodsExpression__Group_2__1__Impl rule__MethodsExpression__Group_2__2 ;
+    public final void rule__MethodsExpression__Group_2__1() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4783:1: ( rule__MethodsExpression__Group_2__1__Impl rule__MethodsExpression__Group_2__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4784:2: rule__MethodsExpression__Group_2__1__Impl rule__MethodsExpression__Group_2__2
+            {
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_2__1__Impl_in_rule__MethodsExpression__Group_2__19792);
+            rule__MethodsExpression__Group_2__1__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_2__2_in_rule__MethodsExpression__Group_2__19795);
+            rule__MethodsExpression__Group_2__2();
+
+            state._fsp--;
+            if (state.failed) return ;
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__MethodsExpression__Group_2__1"
+
+
+    // $ANTLR start "rule__MethodsExpression__Group_2__1__Impl"
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4791:1: rule__MethodsExpression__Group_2__1__Impl : ( ( rule__MethodsExpression__ArrayIndexesAssignment_2_1 ) ) ;
+    public final void rule__MethodsExpression__Group_2__1__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4795:1: ( ( ( rule__MethodsExpression__ArrayIndexesAssignment_2_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4796:1: ( ( rule__MethodsExpression__ArrayIndexesAssignment_2_1 ) )
+            {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4796:1: ( ( rule__MethodsExpression__ArrayIndexesAssignment_2_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4797:1: ( rule__MethodsExpression__ArrayIndexesAssignment_2_1 )
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getMethodsExpressionAccess().getArrayIndexesAssignment_2_1()); 
+            }
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4798:1: ( rule__MethodsExpression__ArrayIndexesAssignment_2_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4798:2: rule__MethodsExpression__ArrayIndexesAssignment_2_1
+            {
+            pushFollow(FOLLOW_rule__MethodsExpression__ArrayIndexesAssignment_2_1_in_rule__MethodsExpression__Group_2__1__Impl9822);
+            rule__MethodsExpression__ArrayIndexesAssignment_2_1();
+
+            state._fsp--;
+            if (state.failed) return ;
+
+            }
+
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getMethodsExpressionAccess().getArrayIndexesAssignment_2_1()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__MethodsExpression__Group_2__1__Impl"
+
+
+    // $ANTLR start "rule__MethodsExpression__Group_2__2"
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4808:1: rule__MethodsExpression__Group_2__2 : rule__MethodsExpression__Group_2__2__Impl ;
+    public final void rule__MethodsExpression__Group_2__2() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4812:1: ( rule__MethodsExpression__Group_2__2__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4813:2: rule__MethodsExpression__Group_2__2__Impl
+            {
+            pushFollow(FOLLOW_rule__MethodsExpression__Group_2__2__Impl_in_rule__MethodsExpression__Group_2__29852);
+            rule__MethodsExpression__Group_2__2__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__MethodsExpression__Group_2__2"
+
+
+    // $ANTLR start "rule__MethodsExpression__Group_2__2__Impl"
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4819:1: rule__MethodsExpression__Group_2__2__Impl : ( ']' ) ;
+    public final void rule__MethodsExpression__Group_2__2__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4823:1: ( ( ']' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4824:1: ( ']' )
+            {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4824:1: ( ']' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4825:1: ']'
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getMethodsExpressionAccess().getRightSquareBracketKeyword_2_2()); 
+            }
+            match(input,56,FOLLOW_56_in_rule__MethodsExpression__Group_2__2__Impl9880); if (state.failed) return ;
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getMethodsExpressionAccess().getRightSquareBracketKeyword_2_2()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__MethodsExpression__Group_2__2__Impl"
+
+
     // $ANTLR start "rule__IntLiteral__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4717:1: rule__IntLiteral__Group__0 : rule__IntLiteral__Group__0__Impl rule__IntLiteral__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4844:1: rule__IntLiteral__Group__0 : rule__IntLiteral__Group__0__Impl rule__IntLiteral__Group__1 ;
     public final void rule__IntLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4721:1: ( rule__IntLiteral__Group__0__Impl rule__IntLiteral__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4722:2: rule__IntLiteral__Group__0__Impl rule__IntLiteral__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4848:1: ( rule__IntLiteral__Group__0__Impl rule__IntLiteral__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4849:2: rule__IntLiteral__Group__0__Impl rule__IntLiteral__Group__1
             {
-            pushFollow(FOLLOW_rule__IntLiteral__Group__0__Impl_in_rule__IntLiteral__Group__09667);
+            pushFollow(FOLLOW_rule__IntLiteral__Group__0__Impl_in_rule__IntLiteral__Group__09917);
             rule__IntLiteral__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__IntLiteral__Group__1_in_rule__IntLiteral__Group__09670);
+            pushFollow(FOLLOW_rule__IntLiteral__Group__1_in_rule__IntLiteral__Group__09920);
             rule__IntLiteral__Group__1();
 
             state._fsp--;
@@ -14081,23 +14430,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__IntLiteral__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4729:1: rule__IntLiteral__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4856:1: rule__IntLiteral__Group__0__Impl : ( () ) ;
     public final void rule__IntLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4733:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4734:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4860:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4861:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4734:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4735:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4861:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4862:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getIntLiteralAccess().getIntLiteralAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4736:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4738:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4863:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4865:1: 
             {
             }
 
@@ -14122,16 +14471,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__IntLiteral__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4748:1: rule__IntLiteral__Group__1 : rule__IntLiteral__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4875:1: rule__IntLiteral__Group__1 : rule__IntLiteral__Group__1__Impl ;
     public final void rule__IntLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4752:1: ( rule__IntLiteral__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4753:2: rule__IntLiteral__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4879:1: ( rule__IntLiteral__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4880:2: rule__IntLiteral__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__IntLiteral__Group__1__Impl_in_rule__IntLiteral__Group__19728);
+            pushFollow(FOLLOW_rule__IntLiteral__Group__1__Impl_in_rule__IntLiteral__Group__19978);
             rule__IntLiteral__Group__1__Impl();
 
             state._fsp--;
@@ -14155,25 +14504,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__IntLiteral__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4759:1: rule__IntLiteral__Group__1__Impl : ( ( rule__IntLiteral__ValueAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4886:1: rule__IntLiteral__Group__1__Impl : ( ( rule__IntLiteral__ValueAssignment_1 ) ) ;
     public final void rule__IntLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4763:1: ( ( ( rule__IntLiteral__ValueAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4764:1: ( ( rule__IntLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4890:1: ( ( ( rule__IntLiteral__ValueAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4891:1: ( ( rule__IntLiteral__ValueAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4764:1: ( ( rule__IntLiteral__ValueAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4765:1: ( rule__IntLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4891:1: ( ( rule__IntLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4892:1: ( rule__IntLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getIntLiteralAccess().getValueAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4766:1: ( rule__IntLiteral__ValueAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4766:2: rule__IntLiteral__ValueAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4893:1: ( rule__IntLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4893:2: rule__IntLiteral__ValueAssignment_1
             {
-            pushFollow(FOLLOW_rule__IntLiteral__ValueAssignment_1_in_rule__IntLiteral__Group__1__Impl9755);
+            pushFollow(FOLLOW_rule__IntLiteral__ValueAssignment_1_in_rule__IntLiteral__Group__1__Impl10005);
             rule__IntLiteral__ValueAssignment_1();
 
             state._fsp--;
@@ -14206,21 +14555,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__LongLiteral__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4780:1: rule__LongLiteral__Group__0 : rule__LongLiteral__Group__0__Impl rule__LongLiteral__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4907:1: rule__LongLiteral__Group__0 : rule__LongLiteral__Group__0__Impl rule__LongLiteral__Group__1 ;
     public final void rule__LongLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4784:1: ( rule__LongLiteral__Group__0__Impl rule__LongLiteral__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4785:2: rule__LongLiteral__Group__0__Impl rule__LongLiteral__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4911:1: ( rule__LongLiteral__Group__0__Impl rule__LongLiteral__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4912:2: rule__LongLiteral__Group__0__Impl rule__LongLiteral__Group__1
             {
-            pushFollow(FOLLOW_rule__LongLiteral__Group__0__Impl_in_rule__LongLiteral__Group__09789);
+            pushFollow(FOLLOW_rule__LongLiteral__Group__0__Impl_in_rule__LongLiteral__Group__010039);
             rule__LongLiteral__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__LongLiteral__Group__1_in_rule__LongLiteral__Group__09792);
+            pushFollow(FOLLOW_rule__LongLiteral__Group__1_in_rule__LongLiteral__Group__010042);
             rule__LongLiteral__Group__1();
 
             state._fsp--;
@@ -14244,23 +14593,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__LongLiteral__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4792:1: rule__LongLiteral__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4919:1: rule__LongLiteral__Group__0__Impl : ( () ) ;
     public final void rule__LongLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4796:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4797:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4923:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4924:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4797:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4798:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4924:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4925:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getLongLiteralAccess().getLongLiteralAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4799:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4801:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4926:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4928:1: 
             {
             }
 
@@ -14285,16 +14634,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__LongLiteral__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4811:1: rule__LongLiteral__Group__1 : rule__LongLiteral__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4938:1: rule__LongLiteral__Group__1 : rule__LongLiteral__Group__1__Impl ;
     public final void rule__LongLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4815:1: ( rule__LongLiteral__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4816:2: rule__LongLiteral__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4942:1: ( rule__LongLiteral__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4943:2: rule__LongLiteral__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__LongLiteral__Group__1__Impl_in_rule__LongLiteral__Group__19850);
+            pushFollow(FOLLOW_rule__LongLiteral__Group__1__Impl_in_rule__LongLiteral__Group__110100);
             rule__LongLiteral__Group__1__Impl();
 
             state._fsp--;
@@ -14318,25 +14667,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__LongLiteral__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4822:1: rule__LongLiteral__Group__1__Impl : ( ( rule__LongLiteral__ValueAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4949:1: rule__LongLiteral__Group__1__Impl : ( ( rule__LongLiteral__ValueAssignment_1 ) ) ;
     public final void rule__LongLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4826:1: ( ( ( rule__LongLiteral__ValueAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4827:1: ( ( rule__LongLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4953:1: ( ( ( rule__LongLiteral__ValueAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4954:1: ( ( rule__LongLiteral__ValueAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4827:1: ( ( rule__LongLiteral__ValueAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4828:1: ( rule__LongLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4954:1: ( ( rule__LongLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4955:1: ( rule__LongLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getLongLiteralAccess().getValueAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4829:1: ( rule__LongLiteral__ValueAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4829:2: rule__LongLiteral__ValueAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4956:1: ( rule__LongLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4956:2: rule__LongLiteral__ValueAssignment_1
             {
-            pushFollow(FOLLOW_rule__LongLiteral__ValueAssignment_1_in_rule__LongLiteral__Group__1__Impl9877);
+            pushFollow(FOLLOW_rule__LongLiteral__ValueAssignment_1_in_rule__LongLiteral__Group__1__Impl10127);
             rule__LongLiteral__ValueAssignment_1();
 
             state._fsp--;
@@ -14369,21 +14718,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FloatLiteral__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4843:1: rule__FloatLiteral__Group__0 : rule__FloatLiteral__Group__0__Impl rule__FloatLiteral__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4970:1: rule__FloatLiteral__Group__0 : rule__FloatLiteral__Group__0__Impl rule__FloatLiteral__Group__1 ;
     public final void rule__FloatLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4847:1: ( rule__FloatLiteral__Group__0__Impl rule__FloatLiteral__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4848:2: rule__FloatLiteral__Group__0__Impl rule__FloatLiteral__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4974:1: ( rule__FloatLiteral__Group__0__Impl rule__FloatLiteral__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4975:2: rule__FloatLiteral__Group__0__Impl rule__FloatLiteral__Group__1
             {
-            pushFollow(FOLLOW_rule__FloatLiteral__Group__0__Impl_in_rule__FloatLiteral__Group__09911);
+            pushFollow(FOLLOW_rule__FloatLiteral__Group__0__Impl_in_rule__FloatLiteral__Group__010161);
             rule__FloatLiteral__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__FloatLiteral__Group__1_in_rule__FloatLiteral__Group__09914);
+            pushFollow(FOLLOW_rule__FloatLiteral__Group__1_in_rule__FloatLiteral__Group__010164);
             rule__FloatLiteral__Group__1();
 
             state._fsp--;
@@ -14407,23 +14756,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FloatLiteral__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4855:1: rule__FloatLiteral__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4982:1: rule__FloatLiteral__Group__0__Impl : ( () ) ;
     public final void rule__FloatLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4859:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4860:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4986:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4987:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4860:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4861:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4987:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4988:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFloatLiteralAccess().getFloatLiteralAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4862:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4864:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4989:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4991:1: 
             {
             }
 
@@ -14448,16 +14797,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FloatLiteral__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4874:1: rule__FloatLiteral__Group__1 : rule__FloatLiteral__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5001:1: rule__FloatLiteral__Group__1 : rule__FloatLiteral__Group__1__Impl ;
     public final void rule__FloatLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4878:1: ( rule__FloatLiteral__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4879:2: rule__FloatLiteral__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5005:1: ( rule__FloatLiteral__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5006:2: rule__FloatLiteral__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__FloatLiteral__Group__1__Impl_in_rule__FloatLiteral__Group__19972);
+            pushFollow(FOLLOW_rule__FloatLiteral__Group__1__Impl_in_rule__FloatLiteral__Group__110222);
             rule__FloatLiteral__Group__1__Impl();
 
             state._fsp--;
@@ -14481,25 +14830,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FloatLiteral__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4885:1: rule__FloatLiteral__Group__1__Impl : ( ( rule__FloatLiteral__ValueAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5012:1: rule__FloatLiteral__Group__1__Impl : ( ( rule__FloatLiteral__ValueAssignment_1 ) ) ;
     public final void rule__FloatLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4889:1: ( ( ( rule__FloatLiteral__ValueAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4890:1: ( ( rule__FloatLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5016:1: ( ( ( rule__FloatLiteral__ValueAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5017:1: ( ( rule__FloatLiteral__ValueAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4890:1: ( ( rule__FloatLiteral__ValueAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4891:1: ( rule__FloatLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5017:1: ( ( rule__FloatLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5018:1: ( rule__FloatLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFloatLiteralAccess().getValueAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4892:1: ( rule__FloatLiteral__ValueAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4892:2: rule__FloatLiteral__ValueAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5019:1: ( rule__FloatLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5019:2: rule__FloatLiteral__ValueAssignment_1
             {
-            pushFollow(FOLLOW_rule__FloatLiteral__ValueAssignment_1_in_rule__FloatLiteral__Group__1__Impl9999);
+            pushFollow(FOLLOW_rule__FloatLiteral__ValueAssignment_1_in_rule__FloatLiteral__Group__1__Impl10249);
             rule__FloatLiteral__ValueAssignment_1();
 
             state._fsp--;
@@ -14532,21 +14881,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__DoubleLiteral__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4906:1: rule__DoubleLiteral__Group__0 : rule__DoubleLiteral__Group__0__Impl rule__DoubleLiteral__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5033:1: rule__DoubleLiteral__Group__0 : rule__DoubleLiteral__Group__0__Impl rule__DoubleLiteral__Group__1 ;
     public final void rule__DoubleLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4910:1: ( rule__DoubleLiteral__Group__0__Impl rule__DoubleLiteral__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4911:2: rule__DoubleLiteral__Group__0__Impl rule__DoubleLiteral__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5037:1: ( rule__DoubleLiteral__Group__0__Impl rule__DoubleLiteral__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5038:2: rule__DoubleLiteral__Group__0__Impl rule__DoubleLiteral__Group__1
             {
-            pushFollow(FOLLOW_rule__DoubleLiteral__Group__0__Impl_in_rule__DoubleLiteral__Group__010033);
+            pushFollow(FOLLOW_rule__DoubleLiteral__Group__0__Impl_in_rule__DoubleLiteral__Group__010283);
             rule__DoubleLiteral__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__DoubleLiteral__Group__1_in_rule__DoubleLiteral__Group__010036);
+            pushFollow(FOLLOW_rule__DoubleLiteral__Group__1_in_rule__DoubleLiteral__Group__010286);
             rule__DoubleLiteral__Group__1();
 
             state._fsp--;
@@ -14570,23 +14919,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__DoubleLiteral__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4918:1: rule__DoubleLiteral__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5045:1: rule__DoubleLiteral__Group__0__Impl : ( () ) ;
     public final void rule__DoubleLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4922:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4923:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5049:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5050:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4923:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4924:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5050:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5051:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getDoubleLiteralAccess().getDoubleLiteralAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4925:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4927:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5052:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5054:1: 
             {
             }
 
@@ -14611,16 +14960,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__DoubleLiteral__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4937:1: rule__DoubleLiteral__Group__1 : rule__DoubleLiteral__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5064:1: rule__DoubleLiteral__Group__1 : rule__DoubleLiteral__Group__1__Impl ;
     public final void rule__DoubleLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4941:1: ( rule__DoubleLiteral__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4942:2: rule__DoubleLiteral__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5068:1: ( rule__DoubleLiteral__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5069:2: rule__DoubleLiteral__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__DoubleLiteral__Group__1__Impl_in_rule__DoubleLiteral__Group__110094);
+            pushFollow(FOLLOW_rule__DoubleLiteral__Group__1__Impl_in_rule__DoubleLiteral__Group__110344);
             rule__DoubleLiteral__Group__1__Impl();
 
             state._fsp--;
@@ -14644,25 +14993,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__DoubleLiteral__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4948:1: rule__DoubleLiteral__Group__1__Impl : ( ( rule__DoubleLiteral__ValueAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5075:1: rule__DoubleLiteral__Group__1__Impl : ( ( rule__DoubleLiteral__ValueAssignment_1 ) ) ;
     public final void rule__DoubleLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4952:1: ( ( ( rule__DoubleLiteral__ValueAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4953:1: ( ( rule__DoubleLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5079:1: ( ( ( rule__DoubleLiteral__ValueAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5080:1: ( ( rule__DoubleLiteral__ValueAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4953:1: ( ( rule__DoubleLiteral__ValueAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4954:1: ( rule__DoubleLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5080:1: ( ( rule__DoubleLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5081:1: ( rule__DoubleLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getDoubleLiteralAccess().getValueAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4955:1: ( rule__DoubleLiteral__ValueAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4955:2: rule__DoubleLiteral__ValueAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5082:1: ( rule__DoubleLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5082:2: rule__DoubleLiteral__ValueAssignment_1
             {
-            pushFollow(FOLLOW_rule__DoubleLiteral__ValueAssignment_1_in_rule__DoubleLiteral__Group__1__Impl10121);
+            pushFollow(FOLLOW_rule__DoubleLiteral__ValueAssignment_1_in_rule__DoubleLiteral__Group__1__Impl10371);
             rule__DoubleLiteral__ValueAssignment_1();
 
             state._fsp--;
@@ -14695,21 +15044,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CharLiteral__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4969:1: rule__CharLiteral__Group__0 : rule__CharLiteral__Group__0__Impl rule__CharLiteral__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5096:1: rule__CharLiteral__Group__0 : rule__CharLiteral__Group__0__Impl rule__CharLiteral__Group__1 ;
     public final void rule__CharLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4973:1: ( rule__CharLiteral__Group__0__Impl rule__CharLiteral__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4974:2: rule__CharLiteral__Group__0__Impl rule__CharLiteral__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5100:1: ( rule__CharLiteral__Group__0__Impl rule__CharLiteral__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5101:2: rule__CharLiteral__Group__0__Impl rule__CharLiteral__Group__1
             {
-            pushFollow(FOLLOW_rule__CharLiteral__Group__0__Impl_in_rule__CharLiteral__Group__010155);
+            pushFollow(FOLLOW_rule__CharLiteral__Group__0__Impl_in_rule__CharLiteral__Group__010405);
             rule__CharLiteral__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__CharLiteral__Group__1_in_rule__CharLiteral__Group__010158);
+            pushFollow(FOLLOW_rule__CharLiteral__Group__1_in_rule__CharLiteral__Group__010408);
             rule__CharLiteral__Group__1();
 
             state._fsp--;
@@ -14733,23 +15082,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CharLiteral__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4981:1: rule__CharLiteral__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5108:1: rule__CharLiteral__Group__0__Impl : ( () ) ;
     public final void rule__CharLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4985:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4986:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5112:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5113:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4986:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4987:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5113:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5114:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCharLiteralAccess().getCharLiteralAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4988:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:4990:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5115:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5117:1: 
             {
             }
 
@@ -14774,16 +15123,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CharLiteral__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5000:1: rule__CharLiteral__Group__1 : rule__CharLiteral__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5127:1: rule__CharLiteral__Group__1 : rule__CharLiteral__Group__1__Impl ;
     public final void rule__CharLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5004:1: ( rule__CharLiteral__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5005:2: rule__CharLiteral__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5131:1: ( rule__CharLiteral__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5132:2: rule__CharLiteral__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__CharLiteral__Group__1__Impl_in_rule__CharLiteral__Group__110216);
+            pushFollow(FOLLOW_rule__CharLiteral__Group__1__Impl_in_rule__CharLiteral__Group__110466);
             rule__CharLiteral__Group__1__Impl();
 
             state._fsp--;
@@ -14807,25 +15156,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CharLiteral__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5011:1: rule__CharLiteral__Group__1__Impl : ( ( rule__CharLiteral__ValueAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5138:1: rule__CharLiteral__Group__1__Impl : ( ( rule__CharLiteral__ValueAssignment_1 ) ) ;
     public final void rule__CharLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5015:1: ( ( ( rule__CharLiteral__ValueAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5016:1: ( ( rule__CharLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5142:1: ( ( ( rule__CharLiteral__ValueAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5143:1: ( ( rule__CharLiteral__ValueAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5016:1: ( ( rule__CharLiteral__ValueAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5017:1: ( rule__CharLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5143:1: ( ( rule__CharLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5144:1: ( rule__CharLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCharLiteralAccess().getValueAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5018:1: ( rule__CharLiteral__ValueAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5018:2: rule__CharLiteral__ValueAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5145:1: ( rule__CharLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5145:2: rule__CharLiteral__ValueAssignment_1
             {
-            pushFollow(FOLLOW_rule__CharLiteral__ValueAssignment_1_in_rule__CharLiteral__Group__1__Impl10243);
+            pushFollow(FOLLOW_rule__CharLiteral__ValueAssignment_1_in_rule__CharLiteral__Group__1__Impl10493);
             rule__CharLiteral__ValueAssignment_1();
 
             state._fsp--;
@@ -14858,21 +15207,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__StringLiteral__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5032:1: rule__StringLiteral__Group__0 : rule__StringLiteral__Group__0__Impl rule__StringLiteral__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5159:1: rule__StringLiteral__Group__0 : rule__StringLiteral__Group__0__Impl rule__StringLiteral__Group__1 ;
     public final void rule__StringLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5036:1: ( rule__StringLiteral__Group__0__Impl rule__StringLiteral__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5037:2: rule__StringLiteral__Group__0__Impl rule__StringLiteral__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5163:1: ( rule__StringLiteral__Group__0__Impl rule__StringLiteral__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5164:2: rule__StringLiteral__Group__0__Impl rule__StringLiteral__Group__1
             {
-            pushFollow(FOLLOW_rule__StringLiteral__Group__0__Impl_in_rule__StringLiteral__Group__010277);
+            pushFollow(FOLLOW_rule__StringLiteral__Group__0__Impl_in_rule__StringLiteral__Group__010527);
             rule__StringLiteral__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__StringLiteral__Group__1_in_rule__StringLiteral__Group__010280);
+            pushFollow(FOLLOW_rule__StringLiteral__Group__1_in_rule__StringLiteral__Group__010530);
             rule__StringLiteral__Group__1();
 
             state._fsp--;
@@ -14896,23 +15245,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__StringLiteral__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5044:1: rule__StringLiteral__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5171:1: rule__StringLiteral__Group__0__Impl : ( () ) ;
     public final void rule__StringLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5048:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5049:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5175:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5176:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5049:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5050:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5176:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5177:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getStringLiteralAccess().getStringLiteralAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5051:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5053:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5178:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5180:1: 
             {
             }
 
@@ -14937,16 +15286,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__StringLiteral__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5063:1: rule__StringLiteral__Group__1 : rule__StringLiteral__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5190:1: rule__StringLiteral__Group__1 : rule__StringLiteral__Group__1__Impl ;
     public final void rule__StringLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5067:1: ( rule__StringLiteral__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5068:2: rule__StringLiteral__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5194:1: ( rule__StringLiteral__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5195:2: rule__StringLiteral__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__StringLiteral__Group__1__Impl_in_rule__StringLiteral__Group__110338);
+            pushFollow(FOLLOW_rule__StringLiteral__Group__1__Impl_in_rule__StringLiteral__Group__110588);
             rule__StringLiteral__Group__1__Impl();
 
             state._fsp--;
@@ -14970,25 +15319,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__StringLiteral__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5074:1: rule__StringLiteral__Group__1__Impl : ( ( rule__StringLiteral__ValueAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5201:1: rule__StringLiteral__Group__1__Impl : ( ( rule__StringLiteral__ValueAssignment_1 ) ) ;
     public final void rule__StringLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5078:1: ( ( ( rule__StringLiteral__ValueAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5079:1: ( ( rule__StringLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5205:1: ( ( ( rule__StringLiteral__ValueAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5206:1: ( ( rule__StringLiteral__ValueAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5079:1: ( ( rule__StringLiteral__ValueAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5080:1: ( rule__StringLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5206:1: ( ( rule__StringLiteral__ValueAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5207:1: ( rule__StringLiteral__ValueAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getStringLiteralAccess().getValueAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5081:1: ( rule__StringLiteral__ValueAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5081:2: rule__StringLiteral__ValueAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5208:1: ( rule__StringLiteral__ValueAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5208:2: rule__StringLiteral__ValueAssignment_1
             {
-            pushFollow(FOLLOW_rule__StringLiteral__ValueAssignment_1_in_rule__StringLiteral__Group__1__Impl10365);
+            pushFollow(FOLLOW_rule__StringLiteral__ValueAssignment_1_in_rule__StringLiteral__Group__1__Impl10615);
             rule__StringLiteral__ValueAssignment_1();
 
             state._fsp--;
@@ -15021,21 +15370,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__BooleanLiteral__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5095:1: rule__BooleanLiteral__Group__0 : rule__BooleanLiteral__Group__0__Impl rule__BooleanLiteral__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5222:1: rule__BooleanLiteral__Group__0 : rule__BooleanLiteral__Group__0__Impl rule__BooleanLiteral__Group__1 ;
     public final void rule__BooleanLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5099:1: ( rule__BooleanLiteral__Group__0__Impl rule__BooleanLiteral__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5100:2: rule__BooleanLiteral__Group__0__Impl rule__BooleanLiteral__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5226:1: ( rule__BooleanLiteral__Group__0__Impl rule__BooleanLiteral__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5227:2: rule__BooleanLiteral__Group__0__Impl rule__BooleanLiteral__Group__1
             {
-            pushFollow(FOLLOW_rule__BooleanLiteral__Group__0__Impl_in_rule__BooleanLiteral__Group__010399);
+            pushFollow(FOLLOW_rule__BooleanLiteral__Group__0__Impl_in_rule__BooleanLiteral__Group__010649);
             rule__BooleanLiteral__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__BooleanLiteral__Group__1_in_rule__BooleanLiteral__Group__010402);
+            pushFollow(FOLLOW_rule__BooleanLiteral__Group__1_in_rule__BooleanLiteral__Group__010652);
             rule__BooleanLiteral__Group__1();
 
             state._fsp--;
@@ -15059,23 +15408,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__BooleanLiteral__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5107:1: rule__BooleanLiteral__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5234:1: rule__BooleanLiteral__Group__0__Impl : ( () ) ;
     public final void rule__BooleanLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5111:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5112:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5238:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5239:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5112:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5113:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5239:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5240:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getBooleanLiteralAccess().getBooleanLiteralAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5114:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5116:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5241:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5243:1: 
             {
             }
 
@@ -15100,16 +15449,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__BooleanLiteral__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5126:1: rule__BooleanLiteral__Group__1 : rule__BooleanLiteral__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5253:1: rule__BooleanLiteral__Group__1 : rule__BooleanLiteral__Group__1__Impl ;
     public final void rule__BooleanLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5130:1: ( rule__BooleanLiteral__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5131:2: rule__BooleanLiteral__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5257:1: ( rule__BooleanLiteral__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5258:2: rule__BooleanLiteral__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__BooleanLiteral__Group__1__Impl_in_rule__BooleanLiteral__Group__110460);
+            pushFollow(FOLLOW_rule__BooleanLiteral__Group__1__Impl_in_rule__BooleanLiteral__Group__110710);
             rule__BooleanLiteral__Group__1__Impl();
 
             state._fsp--;
@@ -15133,25 +15482,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__BooleanLiteral__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5137:1: rule__BooleanLiteral__Group__1__Impl : ( ( rule__BooleanLiteral__Alternatives_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5264:1: rule__BooleanLiteral__Group__1__Impl : ( ( rule__BooleanLiteral__Alternatives_1 ) ) ;
     public final void rule__BooleanLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5141:1: ( ( ( rule__BooleanLiteral__Alternatives_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5142:1: ( ( rule__BooleanLiteral__Alternatives_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5268:1: ( ( ( rule__BooleanLiteral__Alternatives_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5269:1: ( ( rule__BooleanLiteral__Alternatives_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5142:1: ( ( rule__BooleanLiteral__Alternatives_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5143:1: ( rule__BooleanLiteral__Alternatives_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5269:1: ( ( rule__BooleanLiteral__Alternatives_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5270:1: ( rule__BooleanLiteral__Alternatives_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getBooleanLiteralAccess().getAlternatives_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5144:1: ( rule__BooleanLiteral__Alternatives_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5144:2: rule__BooleanLiteral__Alternatives_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5271:1: ( rule__BooleanLiteral__Alternatives_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5271:2: rule__BooleanLiteral__Alternatives_1
             {
-            pushFollow(FOLLOW_rule__BooleanLiteral__Alternatives_1_in_rule__BooleanLiteral__Group__1__Impl10487);
+            pushFollow(FOLLOW_rule__BooleanLiteral__Alternatives_1_in_rule__BooleanLiteral__Group__1__Impl10737);
             rule__BooleanLiteral__Alternatives_1();
 
             state._fsp--;
@@ -15184,21 +15533,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__NullLiteral__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5158:1: rule__NullLiteral__Group__0 : rule__NullLiteral__Group__0__Impl rule__NullLiteral__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5285:1: rule__NullLiteral__Group__0 : rule__NullLiteral__Group__0__Impl rule__NullLiteral__Group__1 ;
     public final void rule__NullLiteral__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5162:1: ( rule__NullLiteral__Group__0__Impl rule__NullLiteral__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5163:2: rule__NullLiteral__Group__0__Impl rule__NullLiteral__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5289:1: ( rule__NullLiteral__Group__0__Impl rule__NullLiteral__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5290:2: rule__NullLiteral__Group__0__Impl rule__NullLiteral__Group__1
             {
-            pushFollow(FOLLOW_rule__NullLiteral__Group__0__Impl_in_rule__NullLiteral__Group__010521);
+            pushFollow(FOLLOW_rule__NullLiteral__Group__0__Impl_in_rule__NullLiteral__Group__010771);
             rule__NullLiteral__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__NullLiteral__Group__1_in_rule__NullLiteral__Group__010524);
+            pushFollow(FOLLOW_rule__NullLiteral__Group__1_in_rule__NullLiteral__Group__010774);
             rule__NullLiteral__Group__1();
 
             state._fsp--;
@@ -15222,23 +15571,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__NullLiteral__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5170:1: rule__NullLiteral__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5297:1: rule__NullLiteral__Group__0__Impl : ( () ) ;
     public final void rule__NullLiteral__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5174:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5175:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5301:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5302:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5175:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5176:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5302:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5303:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getNullLiteralAccess().getNullLiteralAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5177:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5179:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5304:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5306:1: 
             {
             }
 
@@ -15263,16 +15612,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__NullLiteral__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5189:1: rule__NullLiteral__Group__1 : rule__NullLiteral__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5316:1: rule__NullLiteral__Group__1 : rule__NullLiteral__Group__1__Impl ;
     public final void rule__NullLiteral__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5193:1: ( rule__NullLiteral__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5194:2: rule__NullLiteral__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5320:1: ( rule__NullLiteral__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5321:2: rule__NullLiteral__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__NullLiteral__Group__1__Impl_in_rule__NullLiteral__Group__110582);
+            pushFollow(FOLLOW_rule__NullLiteral__Group__1__Impl_in_rule__NullLiteral__Group__110832);
             rule__NullLiteral__Group__1__Impl();
 
             state._fsp--;
@@ -15296,22 +15645,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__NullLiteral__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5200:1: rule__NullLiteral__Group__1__Impl : ( 'null' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5327:1: rule__NullLiteral__Group__1__Impl : ( 'null' ) ;
     public final void rule__NullLiteral__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5204:1: ( ( 'null' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5205:1: ( 'null' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5331:1: ( ( 'null' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5332:1: ( 'null' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5205:1: ( 'null' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5206:1: 'null'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5332:1: ( 'null' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5333:1: 'null'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getNullLiteralAccess().getNullKeyword_1()); 
             }
-            match(input,55,FOLLOW_55_in_rule__NullLiteral__Group__1__Impl10610); if (state.failed) return ;
+            match(input,57,FOLLOW_57_in_rule__NullLiteral__Group__1__Impl10860); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getNullLiteralAccess().getNullKeyword_1()); 
             }
@@ -15337,21 +15686,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ParExpression__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5223:1: rule__ParExpression__Group__0 : rule__ParExpression__Group__0__Impl rule__ParExpression__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5350:1: rule__ParExpression__Group__0 : rule__ParExpression__Group__0__Impl rule__ParExpression__Group__1 ;
     public final void rule__ParExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5227:1: ( rule__ParExpression__Group__0__Impl rule__ParExpression__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5228:2: rule__ParExpression__Group__0__Impl rule__ParExpression__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5354:1: ( rule__ParExpression__Group__0__Impl rule__ParExpression__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5355:2: rule__ParExpression__Group__0__Impl rule__ParExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__ParExpression__Group__0__Impl_in_rule__ParExpression__Group__010645);
+            pushFollow(FOLLOW_rule__ParExpression__Group__0__Impl_in_rule__ParExpression__Group__010895);
             rule__ParExpression__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ParExpression__Group__1_in_rule__ParExpression__Group__010648);
+            pushFollow(FOLLOW_rule__ParExpression__Group__1_in_rule__ParExpression__Group__010898);
             rule__ParExpression__Group__1();
 
             state._fsp--;
@@ -15375,22 +15724,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ParExpression__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5235:1: rule__ParExpression__Group__0__Impl : ( '(' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5362:1: rule__ParExpression__Group__0__Impl : ( '(' ) ;
     public final void rule__ParExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5239:1: ( ( '(' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5240:1: ( '(' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5366:1: ( ( '(' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5367:1: ( '(' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5240:1: ( '(' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5241:1: '('
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5367:1: ( '(' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5368:1: '('
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getParExpressionAccess().getLeftParenthesisKeyword_0()); 
             }
-            match(input,56,FOLLOW_56_in_rule__ParExpression__Group__0__Impl10676); if (state.failed) return ;
+            match(input,58,FOLLOW_58_in_rule__ParExpression__Group__0__Impl10926); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getParExpressionAccess().getLeftParenthesisKeyword_0()); 
             }
@@ -15416,21 +15765,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ParExpression__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5254:1: rule__ParExpression__Group__1 : rule__ParExpression__Group__1__Impl rule__ParExpression__Group__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5381:1: rule__ParExpression__Group__1 : rule__ParExpression__Group__1__Impl rule__ParExpression__Group__2 ;
     public final void rule__ParExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5258:1: ( rule__ParExpression__Group__1__Impl rule__ParExpression__Group__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5259:2: rule__ParExpression__Group__1__Impl rule__ParExpression__Group__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5385:1: ( rule__ParExpression__Group__1__Impl rule__ParExpression__Group__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5386:2: rule__ParExpression__Group__1__Impl rule__ParExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__ParExpression__Group__1__Impl_in_rule__ParExpression__Group__110707);
+            pushFollow(FOLLOW_rule__ParExpression__Group__1__Impl_in_rule__ParExpression__Group__110957);
             rule__ParExpression__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ParExpression__Group__2_in_rule__ParExpression__Group__110710);
+            pushFollow(FOLLOW_rule__ParExpression__Group__2_in_rule__ParExpression__Group__110960);
             rule__ParExpression__Group__2();
 
             state._fsp--;
@@ -15454,22 +15803,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ParExpression__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5266:1: rule__ParExpression__Group__1__Impl : ( ruleJasperReportsExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5393:1: rule__ParExpression__Group__1__Impl : ( ruleJasperReportsExpression ) ;
     public final void rule__ParExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5270:1: ( ( ruleJasperReportsExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5271:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5397:1: ( ( ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5398:1: ( ruleJasperReportsExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5271:1: ( ruleJasperReportsExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5272:1: ruleJasperReportsExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5398:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5399:1: ruleJasperReportsExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getParExpressionAccess().getJasperReportsExpressionParserRuleCall_1()); 
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ParExpression__Group__1__Impl10737);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ParExpression__Group__1__Impl10987);
             ruleJasperReportsExpression();
 
             state._fsp--;
@@ -15499,16 +15848,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ParExpression__Group__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5283:1: rule__ParExpression__Group__2 : rule__ParExpression__Group__2__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5410:1: rule__ParExpression__Group__2 : rule__ParExpression__Group__2__Impl ;
     public final void rule__ParExpression__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5287:1: ( rule__ParExpression__Group__2__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5288:2: rule__ParExpression__Group__2__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5414:1: ( rule__ParExpression__Group__2__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5415:2: rule__ParExpression__Group__2__Impl
             {
-            pushFollow(FOLLOW_rule__ParExpression__Group__2__Impl_in_rule__ParExpression__Group__210766);
+            pushFollow(FOLLOW_rule__ParExpression__Group__2__Impl_in_rule__ParExpression__Group__211016);
             rule__ParExpression__Group__2__Impl();
 
             state._fsp--;
@@ -15532,22 +15881,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ParExpression__Group__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5294:1: rule__ParExpression__Group__2__Impl : ( ')' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5421:1: rule__ParExpression__Group__2__Impl : ( ')' ) ;
     public final void rule__ParExpression__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5298:1: ( ( ')' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5299:1: ( ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5425:1: ( ( ')' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5426:1: ( ')' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5299:1: ( ')' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5300:1: ')'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5426:1: ( ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5427:1: ')'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getParExpressionAccess().getRightParenthesisKeyword_2()); 
             }
-            match(input,57,FOLLOW_57_in_rule__ParExpression__Group__2__Impl10794); if (state.failed) return ;
+            match(input,59,FOLLOW_59_in_rule__ParExpression__Group__2__Impl11044); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getParExpressionAccess().getRightParenthesisKeyword_2()); 
             }
@@ -15573,21 +15922,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5319:1: rule__CastedExpression__Group__0 : rule__CastedExpression__Group__0__Impl rule__CastedExpression__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5446:1: rule__CastedExpression__Group__0 : rule__CastedExpression__Group__0__Impl rule__CastedExpression__Group__1 ;
     public final void rule__CastedExpression__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5323:1: ( rule__CastedExpression__Group__0__Impl rule__CastedExpression__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5324:2: rule__CastedExpression__Group__0__Impl rule__CastedExpression__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5450:1: ( rule__CastedExpression__Group__0__Impl rule__CastedExpression__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5451:2: rule__CastedExpression__Group__0__Impl rule__CastedExpression__Group__1
             {
-            pushFollow(FOLLOW_rule__CastedExpression__Group__0__Impl_in_rule__CastedExpression__Group__010831);
+            pushFollow(FOLLOW_rule__CastedExpression__Group__0__Impl_in_rule__CastedExpression__Group__011081);
             rule__CastedExpression__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__CastedExpression__Group__1_in_rule__CastedExpression__Group__010834);
+            pushFollow(FOLLOW_rule__CastedExpression__Group__1_in_rule__CastedExpression__Group__011084);
             rule__CastedExpression__Group__1();
 
             state._fsp--;
@@ -15611,23 +15960,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5331:1: rule__CastedExpression__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5458:1: rule__CastedExpression__Group__0__Impl : ( () ) ;
     public final void rule__CastedExpression__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5335:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5336:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5462:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5463:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5336:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5337:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5463:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5464:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCastedExpressionAccess().getCastedExpressionAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5338:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5340:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5465:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5467:1: 
             {
             }
 
@@ -15652,21 +16001,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5350:1: rule__CastedExpression__Group__1 : rule__CastedExpression__Group__1__Impl rule__CastedExpression__Group__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5477:1: rule__CastedExpression__Group__1 : rule__CastedExpression__Group__1__Impl rule__CastedExpression__Group__2 ;
     public final void rule__CastedExpression__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5354:1: ( rule__CastedExpression__Group__1__Impl rule__CastedExpression__Group__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5355:2: rule__CastedExpression__Group__1__Impl rule__CastedExpression__Group__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5481:1: ( rule__CastedExpression__Group__1__Impl rule__CastedExpression__Group__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5482:2: rule__CastedExpression__Group__1__Impl rule__CastedExpression__Group__2
             {
-            pushFollow(FOLLOW_rule__CastedExpression__Group__1__Impl_in_rule__CastedExpression__Group__110892);
+            pushFollow(FOLLOW_rule__CastedExpression__Group__1__Impl_in_rule__CastedExpression__Group__111142);
             rule__CastedExpression__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__CastedExpression__Group__2_in_rule__CastedExpression__Group__110895);
+            pushFollow(FOLLOW_rule__CastedExpression__Group__2_in_rule__CastedExpression__Group__111145);
             rule__CastedExpression__Group__2();
 
             state._fsp--;
@@ -15690,22 +16039,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5362:1: rule__CastedExpression__Group__1__Impl : ( '(' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5489:1: rule__CastedExpression__Group__1__Impl : ( '(' ) ;
     public final void rule__CastedExpression__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5366:1: ( ( '(' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5367:1: ( '(' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5493:1: ( ( '(' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5494:1: ( '(' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5367:1: ( '(' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5368:1: '('
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5494:1: ( '(' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5495:1: '('
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCastedExpressionAccess().getLeftParenthesisKeyword_1()); 
             }
-            match(input,56,FOLLOW_56_in_rule__CastedExpression__Group__1__Impl10923); if (state.failed) return ;
+            match(input,58,FOLLOW_58_in_rule__CastedExpression__Group__1__Impl11173); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getCastedExpressionAccess().getLeftParenthesisKeyword_1()); 
             }
@@ -15731,21 +16080,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5381:1: rule__CastedExpression__Group__2 : rule__CastedExpression__Group__2__Impl rule__CastedExpression__Group__3 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5508:1: rule__CastedExpression__Group__2 : rule__CastedExpression__Group__2__Impl rule__CastedExpression__Group__3 ;
     public final void rule__CastedExpression__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5385:1: ( rule__CastedExpression__Group__2__Impl rule__CastedExpression__Group__3 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5386:2: rule__CastedExpression__Group__2__Impl rule__CastedExpression__Group__3
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5512:1: ( rule__CastedExpression__Group__2__Impl rule__CastedExpression__Group__3 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5513:2: rule__CastedExpression__Group__2__Impl rule__CastedExpression__Group__3
             {
-            pushFollow(FOLLOW_rule__CastedExpression__Group__2__Impl_in_rule__CastedExpression__Group__210954);
+            pushFollow(FOLLOW_rule__CastedExpression__Group__2__Impl_in_rule__CastedExpression__Group__211204);
             rule__CastedExpression__Group__2__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__CastedExpression__Group__3_in_rule__CastedExpression__Group__210957);
+            pushFollow(FOLLOW_rule__CastedExpression__Group__3_in_rule__CastedExpression__Group__211207);
             rule__CastedExpression__Group__3();
 
             state._fsp--;
@@ -15769,25 +16118,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5393:1: rule__CastedExpression__Group__2__Impl : ( ( rule__CastedExpression__CastTypeAssignment_2 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5520:1: rule__CastedExpression__Group__2__Impl : ( ( rule__CastedExpression__CastTypeAssignment_2 ) ) ;
     public final void rule__CastedExpression__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5397:1: ( ( ( rule__CastedExpression__CastTypeAssignment_2 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5398:1: ( ( rule__CastedExpression__CastTypeAssignment_2 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5524:1: ( ( ( rule__CastedExpression__CastTypeAssignment_2 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5525:1: ( ( rule__CastedExpression__CastTypeAssignment_2 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5398:1: ( ( rule__CastedExpression__CastTypeAssignment_2 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5399:1: ( rule__CastedExpression__CastTypeAssignment_2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5525:1: ( ( rule__CastedExpression__CastTypeAssignment_2 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5526:1: ( rule__CastedExpression__CastTypeAssignment_2 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCastedExpressionAccess().getCastTypeAssignment_2()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5400:1: ( rule__CastedExpression__CastTypeAssignment_2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5400:2: rule__CastedExpression__CastTypeAssignment_2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5527:1: ( rule__CastedExpression__CastTypeAssignment_2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5527:2: rule__CastedExpression__CastTypeAssignment_2
             {
-            pushFollow(FOLLOW_rule__CastedExpression__CastTypeAssignment_2_in_rule__CastedExpression__Group__2__Impl10984);
+            pushFollow(FOLLOW_rule__CastedExpression__CastTypeAssignment_2_in_rule__CastedExpression__Group__2__Impl11234);
             rule__CastedExpression__CastTypeAssignment_2();
 
             state._fsp--;
@@ -15820,21 +16169,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__3"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5410:1: rule__CastedExpression__Group__3 : rule__CastedExpression__Group__3__Impl rule__CastedExpression__Group__4 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5537:1: rule__CastedExpression__Group__3 : rule__CastedExpression__Group__3__Impl rule__CastedExpression__Group__4 ;
     public final void rule__CastedExpression__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5414:1: ( rule__CastedExpression__Group__3__Impl rule__CastedExpression__Group__4 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5415:2: rule__CastedExpression__Group__3__Impl rule__CastedExpression__Group__4
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5541:1: ( rule__CastedExpression__Group__3__Impl rule__CastedExpression__Group__4 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5542:2: rule__CastedExpression__Group__3__Impl rule__CastedExpression__Group__4
             {
-            pushFollow(FOLLOW_rule__CastedExpression__Group__3__Impl_in_rule__CastedExpression__Group__311014);
+            pushFollow(FOLLOW_rule__CastedExpression__Group__3__Impl_in_rule__CastedExpression__Group__311264);
             rule__CastedExpression__Group__3__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__CastedExpression__Group__4_in_rule__CastedExpression__Group__311017);
+            pushFollow(FOLLOW_rule__CastedExpression__Group__4_in_rule__CastedExpression__Group__311267);
             rule__CastedExpression__Group__4();
 
             state._fsp--;
@@ -15858,22 +16207,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__3__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5422:1: rule__CastedExpression__Group__3__Impl : ( ')' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5549:1: rule__CastedExpression__Group__3__Impl : ( ')' ) ;
     public final void rule__CastedExpression__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5426:1: ( ( ')' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5427:1: ( ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5553:1: ( ( ')' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5554:1: ( ')' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5427:1: ( ')' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5428:1: ')'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5554:1: ( ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5555:1: ')'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCastedExpressionAccess().getRightParenthesisKeyword_3()); 
             }
-            match(input,57,FOLLOW_57_in_rule__CastedExpression__Group__3__Impl11045); if (state.failed) return ;
+            match(input,59,FOLLOW_59_in_rule__CastedExpression__Group__3__Impl11295); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getCastedExpressionAccess().getRightParenthesisKeyword_3()); 
             }
@@ -15899,16 +16248,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__4"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5441:1: rule__CastedExpression__Group__4 : rule__CastedExpression__Group__4__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5568:1: rule__CastedExpression__Group__4 : rule__CastedExpression__Group__4__Impl ;
     public final void rule__CastedExpression__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5445:1: ( rule__CastedExpression__Group__4__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5446:2: rule__CastedExpression__Group__4__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5572:1: ( rule__CastedExpression__Group__4__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5573:2: rule__CastedExpression__Group__4__Impl
             {
-            pushFollow(FOLLOW_rule__CastedExpression__Group__4__Impl_in_rule__CastedExpression__Group__411076);
+            pushFollow(FOLLOW_rule__CastedExpression__Group__4__Impl_in_rule__CastedExpression__Group__411326);
             rule__CastedExpression__Group__4__Impl();
 
             state._fsp--;
@@ -15932,25 +16281,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__Group__4__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5452:1: rule__CastedExpression__Group__4__Impl : ( ( rule__CastedExpression__CastedExprAssignment_4 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5579:1: rule__CastedExpression__Group__4__Impl : ( ( rule__CastedExpression__CastedExprAssignment_4 ) ) ;
     public final void rule__CastedExpression__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5456:1: ( ( ( rule__CastedExpression__CastedExprAssignment_4 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5457:1: ( ( rule__CastedExpression__CastedExprAssignment_4 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5583:1: ( ( ( rule__CastedExpression__CastedExprAssignment_4 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5584:1: ( ( rule__CastedExpression__CastedExprAssignment_4 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5457:1: ( ( rule__CastedExpression__CastedExprAssignment_4 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5458:1: ( rule__CastedExpression__CastedExprAssignment_4 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5584:1: ( ( rule__CastedExpression__CastedExprAssignment_4 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5585:1: ( rule__CastedExpression__CastedExprAssignment_4 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCastedExpressionAccess().getCastedExprAssignment_4()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5459:1: ( rule__CastedExpression__CastedExprAssignment_4 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5459:2: rule__CastedExpression__CastedExprAssignment_4
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5586:1: ( rule__CastedExpression__CastedExprAssignment_4 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5586:2: rule__CastedExpression__CastedExprAssignment_4
             {
-            pushFollow(FOLLOW_rule__CastedExpression__CastedExprAssignment_4_in_rule__CastedExpression__Group__4__Impl11103);
+            pushFollow(FOLLOW_rule__CastedExpression__CastedExprAssignment_4_in_rule__CastedExpression__Group__4__Impl11353);
             rule__CastedExpression__CastedExprAssignment_4();
 
             state._fsp--;
@@ -15983,21 +16332,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Type__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5479:1: rule__Type__Group__0 : rule__Type__Group__0__Impl rule__Type__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5606:1: rule__Type__Group__0 : rule__Type__Group__0__Impl rule__Type__Group__1 ;
     public final void rule__Type__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5483:1: ( rule__Type__Group__0__Impl rule__Type__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5484:2: rule__Type__Group__0__Impl rule__Type__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5610:1: ( rule__Type__Group__0__Impl rule__Type__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5611:2: rule__Type__Group__0__Impl rule__Type__Group__1
             {
-            pushFollow(FOLLOW_rule__Type__Group__0__Impl_in_rule__Type__Group__011143);
+            pushFollow(FOLLOW_rule__Type__Group__0__Impl_in_rule__Type__Group__011393);
             rule__Type__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__Type__Group__1_in_rule__Type__Group__011146);
+            pushFollow(FOLLOW_rule__Type__Group__1_in_rule__Type__Group__011396);
             rule__Type__Group__1();
 
             state._fsp--;
@@ -16021,23 +16370,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Type__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5491:1: rule__Type__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5618:1: rule__Type__Group__0__Impl : ( () ) ;
     public final void rule__Type__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5495:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5496:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5622:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5623:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5496:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5497:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5623:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5624:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTypeAccess().getTypeAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5498:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5500:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5625:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5627:1: 
             {
             }
 
@@ -16062,16 +16411,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Type__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5510:1: rule__Type__Group__1 : rule__Type__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5637:1: rule__Type__Group__1 : rule__Type__Group__1__Impl ;
     public final void rule__Type__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5514:1: ( rule__Type__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5515:2: rule__Type__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5641:1: ( rule__Type__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5642:2: rule__Type__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__Type__Group__1__Impl_in_rule__Type__Group__111204);
+            pushFollow(FOLLOW_rule__Type__Group__1__Impl_in_rule__Type__Group__111454);
             rule__Type__Group__1__Impl();
 
             state._fsp--;
@@ -16095,25 +16444,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Type__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5521:1: rule__Type__Group__1__Impl : ( ( rule__Type__Alternatives_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5648:1: rule__Type__Group__1__Impl : ( ( rule__Type__Alternatives_1 ) ) ;
     public final void rule__Type__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5525:1: ( ( ( rule__Type__Alternatives_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5526:1: ( ( rule__Type__Alternatives_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5652:1: ( ( ( rule__Type__Alternatives_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5653:1: ( ( rule__Type__Alternatives_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5526:1: ( ( rule__Type__Alternatives_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5527:1: ( rule__Type__Alternatives_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5653:1: ( ( rule__Type__Alternatives_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5654:1: ( rule__Type__Alternatives_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTypeAccess().getAlternatives_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5528:1: ( rule__Type__Alternatives_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5528:2: rule__Type__Alternatives_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5655:1: ( rule__Type__Alternatives_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5655:2: rule__Type__Alternatives_1
             {
-            pushFollow(FOLLOW_rule__Type__Alternatives_1_in_rule__Type__Group__1__Impl11231);
+            pushFollow(FOLLOW_rule__Type__Alternatives_1_in_rule__Type__Group__1__Impl11481);
             rule__Type__Alternatives_1();
 
             state._fsp--;
@@ -16146,21 +16495,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5542:1: rule__ArrayCreator__Group__0 : rule__ArrayCreator__Group__0__Impl rule__ArrayCreator__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5669:1: rule__ArrayCreator__Group__0 : rule__ArrayCreator__Group__0__Impl rule__ArrayCreator__Group__1 ;
     public final void rule__ArrayCreator__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5546:1: ( rule__ArrayCreator__Group__0__Impl rule__ArrayCreator__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5547:2: rule__ArrayCreator__Group__0__Impl rule__ArrayCreator__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5673:1: ( rule__ArrayCreator__Group__0__Impl rule__ArrayCreator__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5674:2: rule__ArrayCreator__Group__0__Impl rule__ArrayCreator__Group__1
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group__0__Impl_in_rule__ArrayCreator__Group__011265);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group__0__Impl_in_rule__ArrayCreator__Group__011515);
             rule__ArrayCreator__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayCreator__Group__1_in_rule__ArrayCreator__Group__011268);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group__1_in_rule__ArrayCreator__Group__011518);
             rule__ArrayCreator__Group__1();
 
             state._fsp--;
@@ -16184,23 +16533,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5554:1: rule__ArrayCreator__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5681:1: rule__ArrayCreator__Group__0__Impl : ( () ) ;
     public final void rule__ArrayCreator__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5558:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5559:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5685:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5686:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5559:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5560:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5686:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5687:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getArrayCreatorAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5561:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5563:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5688:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5690:1: 
             {
             }
 
@@ -16225,21 +16574,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5573:1: rule__ArrayCreator__Group__1 : rule__ArrayCreator__Group__1__Impl rule__ArrayCreator__Group__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5700:1: rule__ArrayCreator__Group__1 : rule__ArrayCreator__Group__1__Impl rule__ArrayCreator__Group__2 ;
     public final void rule__ArrayCreator__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5577:1: ( rule__ArrayCreator__Group__1__Impl rule__ArrayCreator__Group__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5578:2: rule__ArrayCreator__Group__1__Impl rule__ArrayCreator__Group__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5704:1: ( rule__ArrayCreator__Group__1__Impl rule__ArrayCreator__Group__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5705:2: rule__ArrayCreator__Group__1__Impl rule__ArrayCreator__Group__2
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group__1__Impl_in_rule__ArrayCreator__Group__111326);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group__1__Impl_in_rule__ArrayCreator__Group__111576);
             rule__ArrayCreator__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayCreator__Group__2_in_rule__ArrayCreator__Group__111329);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group__2_in_rule__ArrayCreator__Group__111579);
             rule__ArrayCreator__Group__2();
 
             state._fsp--;
@@ -16263,22 +16612,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5585:1: rule__ArrayCreator__Group__1__Impl : ( 'new' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5712:1: rule__ArrayCreator__Group__1__Impl : ( 'new' ) ;
     public final void rule__ArrayCreator__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5589:1: ( ( 'new' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5590:1: ( 'new' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5716:1: ( ( 'new' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5717:1: ( 'new' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5590:1: ( 'new' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5591:1: 'new'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5717:1: ( 'new' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5718:1: 'new'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getNewKeyword_1()); 
             }
-            match(input,58,FOLLOW_58_in_rule__ArrayCreator__Group__1__Impl11357); if (state.failed) return ;
+            match(input,60,FOLLOW_60_in_rule__ArrayCreator__Group__1__Impl11607); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getArrayCreatorAccess().getNewKeyword_1()); 
             }
@@ -16304,21 +16653,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5604:1: rule__ArrayCreator__Group__2 : rule__ArrayCreator__Group__2__Impl rule__ArrayCreator__Group__3 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5731:1: rule__ArrayCreator__Group__2 : rule__ArrayCreator__Group__2__Impl rule__ArrayCreator__Group__3 ;
     public final void rule__ArrayCreator__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5608:1: ( rule__ArrayCreator__Group__2__Impl rule__ArrayCreator__Group__3 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5609:2: rule__ArrayCreator__Group__2__Impl rule__ArrayCreator__Group__3
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5735:1: ( rule__ArrayCreator__Group__2__Impl rule__ArrayCreator__Group__3 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5736:2: rule__ArrayCreator__Group__2__Impl rule__ArrayCreator__Group__3
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group__2__Impl_in_rule__ArrayCreator__Group__211388);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group__2__Impl_in_rule__ArrayCreator__Group__211638);
             rule__ArrayCreator__Group__2__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayCreator__Group__3_in_rule__ArrayCreator__Group__211391);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group__3_in_rule__ArrayCreator__Group__211641);
             rule__ArrayCreator__Group__3();
 
             state._fsp--;
@@ -16342,25 +16691,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5616:1: rule__ArrayCreator__Group__2__Impl : ( ( rule__ArrayCreator__TypeAssignment_2 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5743:1: rule__ArrayCreator__Group__2__Impl : ( ( rule__ArrayCreator__TypeAssignment_2 ) ) ;
     public final void rule__ArrayCreator__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5620:1: ( ( ( rule__ArrayCreator__TypeAssignment_2 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5621:1: ( ( rule__ArrayCreator__TypeAssignment_2 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5747:1: ( ( ( rule__ArrayCreator__TypeAssignment_2 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5748:1: ( ( rule__ArrayCreator__TypeAssignment_2 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5621:1: ( ( rule__ArrayCreator__TypeAssignment_2 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5622:1: ( rule__ArrayCreator__TypeAssignment_2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5748:1: ( ( rule__ArrayCreator__TypeAssignment_2 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5749:1: ( rule__ArrayCreator__TypeAssignment_2 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getTypeAssignment_2()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5623:1: ( rule__ArrayCreator__TypeAssignment_2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5623:2: rule__ArrayCreator__TypeAssignment_2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5750:1: ( rule__ArrayCreator__TypeAssignment_2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5750:2: rule__ArrayCreator__TypeAssignment_2
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__TypeAssignment_2_in_rule__ArrayCreator__Group__2__Impl11418);
+            pushFollow(FOLLOW_rule__ArrayCreator__TypeAssignment_2_in_rule__ArrayCreator__Group__2__Impl11668);
             rule__ArrayCreator__TypeAssignment_2();
 
             state._fsp--;
@@ -16393,16 +16742,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group__3"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5633:1: rule__ArrayCreator__Group__3 : rule__ArrayCreator__Group__3__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5760:1: rule__ArrayCreator__Group__3 : rule__ArrayCreator__Group__3__Impl ;
     public final void rule__ArrayCreator__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5637:1: ( rule__ArrayCreator__Group__3__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5638:2: rule__ArrayCreator__Group__3__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5764:1: ( rule__ArrayCreator__Group__3__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5765:2: rule__ArrayCreator__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group__3__Impl_in_rule__ArrayCreator__Group__311448);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group__3__Impl_in_rule__ArrayCreator__Group__311698);
             rule__ArrayCreator__Group__3__Impl();
 
             state._fsp--;
@@ -16426,25 +16775,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group__3__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5644:1: rule__ArrayCreator__Group__3__Impl : ( ( rule__ArrayCreator__Alternatives_3 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5771:1: rule__ArrayCreator__Group__3__Impl : ( ( rule__ArrayCreator__Alternatives_3 ) ) ;
     public final void rule__ArrayCreator__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5648:1: ( ( ( rule__ArrayCreator__Alternatives_3 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5649:1: ( ( rule__ArrayCreator__Alternatives_3 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5775:1: ( ( ( rule__ArrayCreator__Alternatives_3 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5776:1: ( ( rule__ArrayCreator__Alternatives_3 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5649:1: ( ( rule__ArrayCreator__Alternatives_3 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5650:1: ( rule__ArrayCreator__Alternatives_3 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5776:1: ( ( rule__ArrayCreator__Alternatives_3 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5777:1: ( rule__ArrayCreator__Alternatives_3 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getAlternatives_3()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5651:1: ( rule__ArrayCreator__Alternatives_3 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5651:2: rule__ArrayCreator__Alternatives_3
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5778:1: ( rule__ArrayCreator__Alternatives_3 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5778:2: rule__ArrayCreator__Alternatives_3
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Alternatives_3_in_rule__ArrayCreator__Group__3__Impl11475);
+            pushFollow(FOLLOW_rule__ArrayCreator__Alternatives_3_in_rule__ArrayCreator__Group__3__Impl11725);
             rule__ArrayCreator__Alternatives_3();
 
             state._fsp--;
@@ -16477,21 +16826,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_0__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5669:1: rule__ArrayCreator__Group_3_0__0 : rule__ArrayCreator__Group_3_0__0__Impl rule__ArrayCreator__Group_3_0__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5796:1: rule__ArrayCreator__Group_3_0__0 : rule__ArrayCreator__Group_3_0__0__Impl rule__ArrayCreator__Group_3_0__1 ;
     public final void rule__ArrayCreator__Group_3_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5673:1: ( rule__ArrayCreator__Group_3_0__0__Impl rule__ArrayCreator__Group_3_0__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5674:2: rule__ArrayCreator__Group_3_0__0__Impl rule__ArrayCreator__Group_3_0__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5800:1: ( rule__ArrayCreator__Group_3_0__0__Impl rule__ArrayCreator__Group_3_0__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5801:2: rule__ArrayCreator__Group_3_0__0__Impl rule__ArrayCreator__Group_3_0__1
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__0__Impl_in_rule__ArrayCreator__Group_3_0__011513);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__0__Impl_in_rule__ArrayCreator__Group_3_0__011763);
             rule__ArrayCreator__Group_3_0__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__1_in_rule__ArrayCreator__Group_3_0__011516);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__1_in_rule__ArrayCreator__Group_3_0__011766);
             rule__ArrayCreator__Group_3_0__1();
 
             state._fsp--;
@@ -16515,22 +16864,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_0__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5681:1: rule__ArrayCreator__Group_3_0__0__Impl : ( '[' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5808:1: rule__ArrayCreator__Group_3_0__0__Impl : ( '[' ) ;
     public final void rule__ArrayCreator__Group_3_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5685:1: ( ( '[' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5686:1: ( '[' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5812:1: ( ( '[' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5813:1: ( '[' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5686:1: ( '[' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5687:1: '['
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5813:1: ( '[' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5814:1: '['
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getLeftSquareBracketKeyword_3_0_0()); 
             }
-            match(input,59,FOLLOW_59_in_rule__ArrayCreator__Group_3_0__0__Impl11544); if (state.failed) return ;
+            match(input,55,FOLLOW_55_in_rule__ArrayCreator__Group_3_0__0__Impl11794); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getArrayCreatorAccess().getLeftSquareBracketKeyword_3_0_0()); 
             }
@@ -16556,21 +16905,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_0__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5700:1: rule__ArrayCreator__Group_3_0__1 : rule__ArrayCreator__Group_3_0__1__Impl rule__ArrayCreator__Group_3_0__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5827:1: rule__ArrayCreator__Group_3_0__1 : rule__ArrayCreator__Group_3_0__1__Impl rule__ArrayCreator__Group_3_0__2 ;
     public final void rule__ArrayCreator__Group_3_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5704:1: ( rule__ArrayCreator__Group_3_0__1__Impl rule__ArrayCreator__Group_3_0__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5705:2: rule__ArrayCreator__Group_3_0__1__Impl rule__ArrayCreator__Group_3_0__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5831:1: ( rule__ArrayCreator__Group_3_0__1__Impl rule__ArrayCreator__Group_3_0__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5832:2: rule__ArrayCreator__Group_3_0__1__Impl rule__ArrayCreator__Group_3_0__2
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__1__Impl_in_rule__ArrayCreator__Group_3_0__111575);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__1__Impl_in_rule__ArrayCreator__Group_3_0__111825);
             rule__ArrayCreator__Group_3_0__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__2_in_rule__ArrayCreator__Group_3_0__111578);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__2_in_rule__ArrayCreator__Group_3_0__111828);
             rule__ArrayCreator__Group_3_0__2();
 
             state._fsp--;
@@ -16594,25 +16943,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_0__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5712:1: rule__ArrayCreator__Group_3_0__1__Impl : ( ( rule__ArrayCreator__SizeAssignment_3_0_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5839:1: rule__ArrayCreator__Group_3_0__1__Impl : ( ( rule__ArrayCreator__SizeAssignment_3_0_1 ) ) ;
     public final void rule__ArrayCreator__Group_3_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5716:1: ( ( ( rule__ArrayCreator__SizeAssignment_3_0_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5717:1: ( ( rule__ArrayCreator__SizeAssignment_3_0_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5843:1: ( ( ( rule__ArrayCreator__SizeAssignment_3_0_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5844:1: ( ( rule__ArrayCreator__SizeAssignment_3_0_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5717:1: ( ( rule__ArrayCreator__SizeAssignment_3_0_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5718:1: ( rule__ArrayCreator__SizeAssignment_3_0_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5844:1: ( ( rule__ArrayCreator__SizeAssignment_3_0_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5845:1: ( rule__ArrayCreator__SizeAssignment_3_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getSizeAssignment_3_0_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5719:1: ( rule__ArrayCreator__SizeAssignment_3_0_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5719:2: rule__ArrayCreator__SizeAssignment_3_0_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5846:1: ( rule__ArrayCreator__SizeAssignment_3_0_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5846:2: rule__ArrayCreator__SizeAssignment_3_0_1
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__SizeAssignment_3_0_1_in_rule__ArrayCreator__Group_3_0__1__Impl11605);
+            pushFollow(FOLLOW_rule__ArrayCreator__SizeAssignment_3_0_1_in_rule__ArrayCreator__Group_3_0__1__Impl11855);
             rule__ArrayCreator__SizeAssignment_3_0_1();
 
             state._fsp--;
@@ -16645,16 +16994,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_0__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5729:1: rule__ArrayCreator__Group_3_0__2 : rule__ArrayCreator__Group_3_0__2__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5856:1: rule__ArrayCreator__Group_3_0__2 : rule__ArrayCreator__Group_3_0__2__Impl ;
     public final void rule__ArrayCreator__Group_3_0__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5733:1: ( rule__ArrayCreator__Group_3_0__2__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5734:2: rule__ArrayCreator__Group_3_0__2__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5860:1: ( rule__ArrayCreator__Group_3_0__2__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5861:2: rule__ArrayCreator__Group_3_0__2__Impl
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__2__Impl_in_rule__ArrayCreator__Group_3_0__211635);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_0__2__Impl_in_rule__ArrayCreator__Group_3_0__211885);
             rule__ArrayCreator__Group_3_0__2__Impl();
 
             state._fsp--;
@@ -16678,22 +17027,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_0__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5740:1: rule__ArrayCreator__Group_3_0__2__Impl : ( ']' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5867:1: rule__ArrayCreator__Group_3_0__2__Impl : ( ']' ) ;
     public final void rule__ArrayCreator__Group_3_0__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5744:1: ( ( ']' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5745:1: ( ']' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5871:1: ( ( ']' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5872:1: ( ']' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5745:1: ( ']' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5746:1: ']'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5872:1: ( ']' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5873:1: ']'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getRightSquareBracketKeyword_3_0_2()); 
             }
-            match(input,60,FOLLOW_60_in_rule__ArrayCreator__Group_3_0__2__Impl11663); if (state.failed) return ;
+            match(input,56,FOLLOW_56_in_rule__ArrayCreator__Group_3_0__2__Impl11913); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getArrayCreatorAccess().getRightSquareBracketKeyword_3_0_2()); 
             }
@@ -16719,21 +17068,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_1__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5765:1: rule__ArrayCreator__Group_3_1__0 : rule__ArrayCreator__Group_3_1__0__Impl rule__ArrayCreator__Group_3_1__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5892:1: rule__ArrayCreator__Group_3_1__0 : rule__ArrayCreator__Group_3_1__0__Impl rule__ArrayCreator__Group_3_1__1 ;
     public final void rule__ArrayCreator__Group_3_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5769:1: ( rule__ArrayCreator__Group_3_1__0__Impl rule__ArrayCreator__Group_3_1__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5770:2: rule__ArrayCreator__Group_3_1__0__Impl rule__ArrayCreator__Group_3_1__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5896:1: ( rule__ArrayCreator__Group_3_1__0__Impl rule__ArrayCreator__Group_3_1__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5897:2: rule__ArrayCreator__Group_3_1__0__Impl rule__ArrayCreator__Group_3_1__1
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1__0__Impl_in_rule__ArrayCreator__Group_3_1__011700);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1__0__Impl_in_rule__ArrayCreator__Group_3_1__011950);
             rule__ArrayCreator__Group_3_1__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1__1_in_rule__ArrayCreator__Group_3_1__011703);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1__1_in_rule__ArrayCreator__Group_3_1__011953);
             rule__ArrayCreator__Group_3_1__1();
 
             state._fsp--;
@@ -16757,28 +17106,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_1__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5777:1: rule__ArrayCreator__Group_3_1__0__Impl : ( ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5904:1: rule__ArrayCreator__Group_3_1__0__Impl : ( ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* ) ) ;
     public final void rule__ArrayCreator__Group_3_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5781:1: ( ( ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5782:1: ( ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5908:1: ( ( ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5909:1: ( ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5782:1: ( ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5783:1: ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5909:1: ( ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5910:1: ( ( rule__ArrayCreator__Group_3_1_0__0 ) ) ( ( rule__ArrayCreator__Group_3_1_0__0 )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5783:1: ( ( rule__ArrayCreator__Group_3_1_0__0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5784:1: ( rule__ArrayCreator__Group_3_1_0__0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5910:1: ( ( rule__ArrayCreator__Group_3_1_0__0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5911:1: ( rule__ArrayCreator__Group_3_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getGroup_3_1_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5785:1: ( rule__ArrayCreator__Group_3_1_0__0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5785:2: rule__ArrayCreator__Group_3_1_0__0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5912:1: ( rule__ArrayCreator__Group_3_1_0__0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5912:2: rule__ArrayCreator__Group_3_1_0__0
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__0_in_rule__ArrayCreator__Group_3_1__0__Impl11732);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__0_in_rule__ArrayCreator__Group_3_1__0__Impl11982);
             rule__ArrayCreator__Group_3_1_0__0();
 
             state._fsp--;
@@ -16792,28 +17141,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
             }
 
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5788:1: ( ( rule__ArrayCreator__Group_3_1_0__0 )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5789:1: ( rule__ArrayCreator__Group_3_1_0__0 )*
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5915:1: ( ( rule__ArrayCreator__Group_3_1_0__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5916:1: ( rule__ArrayCreator__Group_3_1_0__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getGroup_3_1_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5790:1: ( rule__ArrayCreator__Group_3_1_0__0 )*
-            loop30:
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5917:1: ( rule__ArrayCreator__Group_3_1_0__0 )*
+            loop31:
             do {
-                int alt30=2;
-                int LA30_0 = input.LA(1);
+                int alt31=2;
+                int LA31_0 = input.LA(1);
 
-                if ( (LA30_0==59) ) {
-                    alt30=1;
+                if ( (LA31_0==55) ) {
+                    alt31=1;
                 }
 
 
-                switch (alt30) {
+                switch (alt31) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5790:2: rule__ArrayCreator__Group_3_1_0__0
+            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5917:2: rule__ArrayCreator__Group_3_1_0__0
             	    {
-            	    pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__0_in_rule__ArrayCreator__Group_3_1__0__Impl11744);
+            	    pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__0_in_rule__ArrayCreator__Group_3_1__0__Impl11994);
             	    rule__ArrayCreator__Group_3_1_0__0();
 
             	    state._fsp--;
@@ -16823,7 +17172,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             	    break;
 
             	default :
-            	    break loop30;
+            	    break loop31;
                 }
             } while (true);
 
@@ -16855,16 +17204,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_1__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5801:1: rule__ArrayCreator__Group_3_1__1 : rule__ArrayCreator__Group_3_1__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5928:1: rule__ArrayCreator__Group_3_1__1 : rule__ArrayCreator__Group_3_1__1__Impl ;
     public final void rule__ArrayCreator__Group_3_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5805:1: ( rule__ArrayCreator__Group_3_1__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5806:2: rule__ArrayCreator__Group_3_1__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5932:1: ( rule__ArrayCreator__Group_3_1__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5933:2: rule__ArrayCreator__Group_3_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1__1__Impl_in_rule__ArrayCreator__Group_3_1__111777);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1__1__Impl_in_rule__ArrayCreator__Group_3_1__112027);
             rule__ArrayCreator__Group_3_1__1__Impl();
 
             state._fsp--;
@@ -16888,25 +17237,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_1__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5812:1: rule__ArrayCreator__Group_3_1__1__Impl : ( ( rule__ArrayCreator__InitializationAssignment_3_1_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5939:1: rule__ArrayCreator__Group_3_1__1__Impl : ( ( rule__ArrayCreator__InitializationAssignment_3_1_1 ) ) ;
     public final void rule__ArrayCreator__Group_3_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5816:1: ( ( ( rule__ArrayCreator__InitializationAssignment_3_1_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5817:1: ( ( rule__ArrayCreator__InitializationAssignment_3_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5943:1: ( ( ( rule__ArrayCreator__InitializationAssignment_3_1_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5944:1: ( ( rule__ArrayCreator__InitializationAssignment_3_1_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5817:1: ( ( rule__ArrayCreator__InitializationAssignment_3_1_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5818:1: ( rule__ArrayCreator__InitializationAssignment_3_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5944:1: ( ( rule__ArrayCreator__InitializationAssignment_3_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5945:1: ( rule__ArrayCreator__InitializationAssignment_3_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getInitializationAssignment_3_1_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5819:1: ( rule__ArrayCreator__InitializationAssignment_3_1_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5819:2: rule__ArrayCreator__InitializationAssignment_3_1_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5946:1: ( rule__ArrayCreator__InitializationAssignment_3_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5946:2: rule__ArrayCreator__InitializationAssignment_3_1_1
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__InitializationAssignment_3_1_1_in_rule__ArrayCreator__Group_3_1__1__Impl11804);
+            pushFollow(FOLLOW_rule__ArrayCreator__InitializationAssignment_3_1_1_in_rule__ArrayCreator__Group_3_1__1__Impl12054);
             rule__ArrayCreator__InitializationAssignment_3_1_1();
 
             state._fsp--;
@@ -16939,21 +17288,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_1_0__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5833:1: rule__ArrayCreator__Group_3_1_0__0 : rule__ArrayCreator__Group_3_1_0__0__Impl rule__ArrayCreator__Group_3_1_0__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5960:1: rule__ArrayCreator__Group_3_1_0__0 : rule__ArrayCreator__Group_3_1_0__0__Impl rule__ArrayCreator__Group_3_1_0__1 ;
     public final void rule__ArrayCreator__Group_3_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5837:1: ( rule__ArrayCreator__Group_3_1_0__0__Impl rule__ArrayCreator__Group_3_1_0__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5838:2: rule__ArrayCreator__Group_3_1_0__0__Impl rule__ArrayCreator__Group_3_1_0__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5964:1: ( rule__ArrayCreator__Group_3_1_0__0__Impl rule__ArrayCreator__Group_3_1_0__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5965:2: rule__ArrayCreator__Group_3_1_0__0__Impl rule__ArrayCreator__Group_3_1_0__1
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__0__Impl_in_rule__ArrayCreator__Group_3_1_0__011838);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__0__Impl_in_rule__ArrayCreator__Group_3_1_0__012088);
             rule__ArrayCreator__Group_3_1_0__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__1_in_rule__ArrayCreator__Group_3_1_0__011841);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__1_in_rule__ArrayCreator__Group_3_1_0__012091);
             rule__ArrayCreator__Group_3_1_0__1();
 
             state._fsp--;
@@ -16977,22 +17326,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_1_0__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5845:1: rule__ArrayCreator__Group_3_1_0__0__Impl : ( '[' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5972:1: rule__ArrayCreator__Group_3_1_0__0__Impl : ( '[' ) ;
     public final void rule__ArrayCreator__Group_3_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5849:1: ( ( '[' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5850:1: ( '[' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5976:1: ( ( '[' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5977:1: ( '[' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5850:1: ( '[' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5851:1: '['
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5977:1: ( '[' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5978:1: '['
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getLeftSquareBracketKeyword_3_1_0_0()); 
             }
-            match(input,59,FOLLOW_59_in_rule__ArrayCreator__Group_3_1_0__0__Impl11869); if (state.failed) return ;
+            match(input,55,FOLLOW_55_in_rule__ArrayCreator__Group_3_1_0__0__Impl12119); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getArrayCreatorAccess().getLeftSquareBracketKeyword_3_1_0_0()); 
             }
@@ -17018,16 +17367,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_1_0__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5864:1: rule__ArrayCreator__Group_3_1_0__1 : rule__ArrayCreator__Group_3_1_0__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5991:1: rule__ArrayCreator__Group_3_1_0__1 : rule__ArrayCreator__Group_3_1_0__1__Impl ;
     public final void rule__ArrayCreator__Group_3_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5868:1: ( rule__ArrayCreator__Group_3_1_0__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5869:2: rule__ArrayCreator__Group_3_1_0__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5995:1: ( rule__ArrayCreator__Group_3_1_0__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5996:2: rule__ArrayCreator__Group_3_1_0__1__Impl
             {
-            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__1__Impl_in_rule__ArrayCreator__Group_3_1_0__111900);
+            pushFollow(FOLLOW_rule__ArrayCreator__Group_3_1_0__1__Impl_in_rule__ArrayCreator__Group_3_1_0__112150);
             rule__ArrayCreator__Group_3_1_0__1__Impl();
 
             state._fsp--;
@@ -17051,22 +17400,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__Group_3_1_0__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5875:1: rule__ArrayCreator__Group_3_1_0__1__Impl : ( ']' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6002:1: rule__ArrayCreator__Group_3_1_0__1__Impl : ( ']' ) ;
     public final void rule__ArrayCreator__Group_3_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5879:1: ( ( ']' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5880:1: ( ']' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6006:1: ( ( ']' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6007:1: ( ']' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5880:1: ( ']' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5881:1: ']'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6007:1: ( ']' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6008:1: ']'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getRightSquareBracketKeyword_3_1_0_1()); 
             }
-            match(input,60,FOLLOW_60_in_rule__ArrayCreator__Group_3_1_0__1__Impl11928); if (state.failed) return ;
+            match(input,56,FOLLOW_56_in_rule__ArrayCreator__Group_3_1_0__1__Impl12178); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getArrayCreatorAccess().getRightSquareBracketKeyword_3_1_0_1()); 
             }
@@ -17092,21 +17441,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayInitializer__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5898:1: rule__ArrayInitializer__Group__0 : rule__ArrayInitializer__Group__0__Impl rule__ArrayInitializer__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6025:1: rule__ArrayInitializer__Group__0 : rule__ArrayInitializer__Group__0__Impl rule__ArrayInitializer__Group__1 ;
     public final void rule__ArrayInitializer__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5902:1: ( rule__ArrayInitializer__Group__0__Impl rule__ArrayInitializer__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5903:2: rule__ArrayInitializer__Group__0__Impl rule__ArrayInitializer__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6029:1: ( rule__ArrayInitializer__Group__0__Impl rule__ArrayInitializer__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6030:2: rule__ArrayInitializer__Group__0__Impl rule__ArrayInitializer__Group__1
             {
-            pushFollow(FOLLOW_rule__ArrayInitializer__Group__0__Impl_in_rule__ArrayInitializer__Group__011963);
+            pushFollow(FOLLOW_rule__ArrayInitializer__Group__0__Impl_in_rule__ArrayInitializer__Group__012213);
             rule__ArrayInitializer__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayInitializer__Group__1_in_rule__ArrayInitializer__Group__011966);
+            pushFollow(FOLLOW_rule__ArrayInitializer__Group__1_in_rule__ArrayInitializer__Group__012216);
             rule__ArrayInitializer__Group__1();
 
             state._fsp--;
@@ -17130,23 +17479,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayInitializer__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5910:1: rule__ArrayInitializer__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6037:1: rule__ArrayInitializer__Group__0__Impl : ( () ) ;
     public final void rule__ArrayInitializer__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5914:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5915:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6041:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6042:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5915:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5916:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6042:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6043:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayInitializerAccess().getArrayInitializerAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5917:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5919:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6044:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6046:1: 
             {
             }
 
@@ -17171,21 +17520,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayInitializer__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5929:1: rule__ArrayInitializer__Group__1 : rule__ArrayInitializer__Group__1__Impl rule__ArrayInitializer__Group__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6056:1: rule__ArrayInitializer__Group__1 : rule__ArrayInitializer__Group__1__Impl rule__ArrayInitializer__Group__2 ;
     public final void rule__ArrayInitializer__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5933:1: ( rule__ArrayInitializer__Group__1__Impl rule__ArrayInitializer__Group__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5934:2: rule__ArrayInitializer__Group__1__Impl rule__ArrayInitializer__Group__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6060:1: ( rule__ArrayInitializer__Group__1__Impl rule__ArrayInitializer__Group__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6061:2: rule__ArrayInitializer__Group__1__Impl rule__ArrayInitializer__Group__2
             {
-            pushFollow(FOLLOW_rule__ArrayInitializer__Group__1__Impl_in_rule__ArrayInitializer__Group__112024);
+            pushFollow(FOLLOW_rule__ArrayInitializer__Group__1__Impl_in_rule__ArrayInitializer__Group__112274);
             rule__ArrayInitializer__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayInitializer__Group__2_in_rule__ArrayInitializer__Group__112027);
+            pushFollow(FOLLOW_rule__ArrayInitializer__Group__2_in_rule__ArrayInitializer__Group__112277);
             rule__ArrayInitializer__Group__2();
 
             state._fsp--;
@@ -17209,22 +17558,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayInitializer__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5941:1: rule__ArrayInitializer__Group__1__Impl : ( '{' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6068:1: rule__ArrayInitializer__Group__1__Impl : ( '{' ) ;
     public final void rule__ArrayInitializer__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5945:1: ( ( '{' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5946:1: ( '{' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6072:1: ( ( '{' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6073:1: ( '{' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5946:1: ( '{' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5947:1: '{'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6073:1: ( '{' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6074:1: '{'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayInitializerAccess().getLeftCurlyBracketKeyword_1()); 
             }
-            match(input,61,FOLLOW_61_in_rule__ArrayInitializer__Group__1__Impl12055); if (state.failed) return ;
+            match(input,61,FOLLOW_61_in_rule__ArrayInitializer__Group__1__Impl12305); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getArrayInitializerAccess().getLeftCurlyBracketKeyword_1()); 
             }
@@ -17250,21 +17599,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayInitializer__Group__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5960:1: rule__ArrayInitializer__Group__2 : rule__ArrayInitializer__Group__2__Impl rule__ArrayInitializer__Group__3 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6087:1: rule__ArrayInitializer__Group__2 : rule__ArrayInitializer__Group__2__Impl rule__ArrayInitializer__Group__3 ;
     public final void rule__ArrayInitializer__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5964:1: ( rule__ArrayInitializer__Group__2__Impl rule__ArrayInitializer__Group__3 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5965:2: rule__ArrayInitializer__Group__2__Impl rule__ArrayInitializer__Group__3
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6091:1: ( rule__ArrayInitializer__Group__2__Impl rule__ArrayInitializer__Group__3 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6092:2: rule__ArrayInitializer__Group__2__Impl rule__ArrayInitializer__Group__3
             {
-            pushFollow(FOLLOW_rule__ArrayInitializer__Group__2__Impl_in_rule__ArrayInitializer__Group__212086);
+            pushFollow(FOLLOW_rule__ArrayInitializer__Group__2__Impl_in_rule__ArrayInitializer__Group__212336);
             rule__ArrayInitializer__Group__2__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ArrayInitializer__Group__3_in_rule__ArrayInitializer__Group__212089);
+            pushFollow(FOLLOW_rule__ArrayInitializer__Group__3_in_rule__ArrayInitializer__Group__212339);
             rule__ArrayInitializer__Group__3();
 
             state._fsp--;
@@ -17288,33 +17637,33 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayInitializer__Group__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5972:1: rule__ArrayInitializer__Group__2__Impl : ( ( rule__ArrayInitializer__InitializationAssignment_2 )? ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6099:1: rule__ArrayInitializer__Group__2__Impl : ( ( rule__ArrayInitializer__InitializationAssignment_2 )? ) ;
     public final void rule__ArrayInitializer__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5976:1: ( ( ( rule__ArrayInitializer__InitializationAssignment_2 )? ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5977:1: ( ( rule__ArrayInitializer__InitializationAssignment_2 )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6103:1: ( ( ( rule__ArrayInitializer__InitializationAssignment_2 )? ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6104:1: ( ( rule__ArrayInitializer__InitializationAssignment_2 )? )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5977:1: ( ( rule__ArrayInitializer__InitializationAssignment_2 )? )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5978:1: ( rule__ArrayInitializer__InitializationAssignment_2 )?
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6104:1: ( ( rule__ArrayInitializer__InitializationAssignment_2 )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6105:1: ( rule__ArrayInitializer__InitializationAssignment_2 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayInitializerAccess().getInitializationAssignment_2()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5979:1: ( rule__ArrayInitializer__InitializationAssignment_2 )?
-            int alt31=2;
-            int LA31_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6106:1: ( rule__ArrayInitializer__InitializationAssignment_2 )?
+            int alt32=2;
+            int LA32_0 = input.LA(1);
 
-            if ( (LA31_0==RULE_ID||(LA31_0>=RULE_INT && LA31_0<=RULE_STRING)||(LA31_0>=28 && LA31_0<=29)||(LA31_0>=33 && LA31_0<=41)||(LA31_0>=48 && LA31_0<=49)||(LA31_0>=52 && LA31_0<=56)||LA31_0==58||(LA31_0>=69 && LA31_0<=70)) ) {
-                alt31=1;
+            if ( (LA32_0==RULE_ID||(LA32_0>=RULE_INT && LA32_0<=RULE_STRING)||(LA32_0>=28 && LA32_0<=29)||(LA32_0>=33 && LA32_0<=41)||(LA32_0>=48 && LA32_0<=49)||(LA32_0>=52 && LA32_0<=54)||(LA32_0>=57 && LA32_0<=58)||LA32_0==60||(LA32_0>=69 && LA32_0<=70)) ) {
+                alt32=1;
             }
-            switch (alt31) {
+            switch (alt32) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5979:2: rule__ArrayInitializer__InitializationAssignment_2
+                    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6106:2: rule__ArrayInitializer__InitializationAssignment_2
                     {
-                    pushFollow(FOLLOW_rule__ArrayInitializer__InitializationAssignment_2_in_rule__ArrayInitializer__Group__2__Impl12116);
+                    pushFollow(FOLLOW_rule__ArrayInitializer__InitializationAssignment_2_in_rule__ArrayInitializer__Group__2__Impl12366);
                     rule__ArrayInitializer__InitializationAssignment_2();
 
                     state._fsp--;
@@ -17350,16 +17699,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayInitializer__Group__3"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5989:1: rule__ArrayInitializer__Group__3 : rule__ArrayInitializer__Group__3__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6116:1: rule__ArrayInitializer__Group__3 : rule__ArrayInitializer__Group__3__Impl ;
     public final void rule__ArrayInitializer__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5993:1: ( rule__ArrayInitializer__Group__3__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:5994:2: rule__ArrayInitializer__Group__3__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6120:1: ( rule__ArrayInitializer__Group__3__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6121:2: rule__ArrayInitializer__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__ArrayInitializer__Group__3__Impl_in_rule__ArrayInitializer__Group__312147);
+            pushFollow(FOLLOW_rule__ArrayInitializer__Group__3__Impl_in_rule__ArrayInitializer__Group__312397);
             rule__ArrayInitializer__Group__3__Impl();
 
             state._fsp--;
@@ -17383,22 +17732,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayInitializer__Group__3__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6000:1: rule__ArrayInitializer__Group__3__Impl : ( '}' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6127:1: rule__ArrayInitializer__Group__3__Impl : ( '}' ) ;
     public final void rule__ArrayInitializer__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6004:1: ( ( '}' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6005:1: ( '}' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6131:1: ( ( '}' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6132:1: ( '}' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6005:1: ( '}' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6006:1: '}'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6132:1: ( '}' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6133:1: '}'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayInitializerAccess().getRightCurlyBracketKeyword_3()); 
             }
-            match(input,62,FOLLOW_62_in_rule__ArrayInitializer__Group__3__Impl12175); if (state.failed) return ;
+            match(input,62,FOLLOW_62_in_rule__ArrayInitializer__Group__3__Impl12425); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getArrayInitializerAccess().getRightCurlyBracketKeyword_3()); 
             }
@@ -17424,21 +17773,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ObjectCreation__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6027:1: rule__ObjectCreation__Group__0 : rule__ObjectCreation__Group__0__Impl rule__ObjectCreation__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6154:1: rule__ObjectCreation__Group__0 : rule__ObjectCreation__Group__0__Impl rule__ObjectCreation__Group__1 ;
     public final void rule__ObjectCreation__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6031:1: ( rule__ObjectCreation__Group__0__Impl rule__ObjectCreation__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6032:2: rule__ObjectCreation__Group__0__Impl rule__ObjectCreation__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6158:1: ( rule__ObjectCreation__Group__0__Impl rule__ObjectCreation__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6159:2: rule__ObjectCreation__Group__0__Impl rule__ObjectCreation__Group__1
             {
-            pushFollow(FOLLOW_rule__ObjectCreation__Group__0__Impl_in_rule__ObjectCreation__Group__012214);
+            pushFollow(FOLLOW_rule__ObjectCreation__Group__0__Impl_in_rule__ObjectCreation__Group__012464);
             rule__ObjectCreation__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ObjectCreation__Group__1_in_rule__ObjectCreation__Group__012217);
+            pushFollow(FOLLOW_rule__ObjectCreation__Group__1_in_rule__ObjectCreation__Group__012467);
             rule__ObjectCreation__Group__1();
 
             state._fsp--;
@@ -17462,23 +17811,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ObjectCreation__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6039:1: rule__ObjectCreation__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6166:1: rule__ObjectCreation__Group__0__Impl : ( () ) ;
     public final void rule__ObjectCreation__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6043:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6044:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6170:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6171:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6044:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6045:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6171:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6172:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getObjectCreationAccess().getObjectCreationAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6046:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6048:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6173:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6175:1: 
             {
             }
 
@@ -17503,21 +17852,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ObjectCreation__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6058:1: rule__ObjectCreation__Group__1 : rule__ObjectCreation__Group__1__Impl rule__ObjectCreation__Group__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6185:1: rule__ObjectCreation__Group__1 : rule__ObjectCreation__Group__1__Impl rule__ObjectCreation__Group__2 ;
     public final void rule__ObjectCreation__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6062:1: ( rule__ObjectCreation__Group__1__Impl rule__ObjectCreation__Group__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6063:2: rule__ObjectCreation__Group__1__Impl rule__ObjectCreation__Group__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6189:1: ( rule__ObjectCreation__Group__1__Impl rule__ObjectCreation__Group__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6190:2: rule__ObjectCreation__Group__1__Impl rule__ObjectCreation__Group__2
             {
-            pushFollow(FOLLOW_rule__ObjectCreation__Group__1__Impl_in_rule__ObjectCreation__Group__112275);
+            pushFollow(FOLLOW_rule__ObjectCreation__Group__1__Impl_in_rule__ObjectCreation__Group__112525);
             rule__ObjectCreation__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ObjectCreation__Group__2_in_rule__ObjectCreation__Group__112278);
+            pushFollow(FOLLOW_rule__ObjectCreation__Group__2_in_rule__ObjectCreation__Group__112528);
             rule__ObjectCreation__Group__2();
 
             state._fsp--;
@@ -17541,22 +17890,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ObjectCreation__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6070:1: rule__ObjectCreation__Group__1__Impl : ( 'new' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6197:1: rule__ObjectCreation__Group__1__Impl : ( 'new' ) ;
     public final void rule__ObjectCreation__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6074:1: ( ( 'new' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6075:1: ( 'new' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6201:1: ( ( 'new' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6202:1: ( 'new' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6075:1: ( 'new' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6076:1: 'new'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6202:1: ( 'new' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6203:1: 'new'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getObjectCreationAccess().getNewKeyword_1()); 
             }
-            match(input,58,FOLLOW_58_in_rule__ObjectCreation__Group__1__Impl12306); if (state.failed) return ;
+            match(input,60,FOLLOW_60_in_rule__ObjectCreation__Group__1__Impl12556); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getObjectCreationAccess().getNewKeyword_1()); 
             }
@@ -17582,16 +17931,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ObjectCreation__Group__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6089:1: rule__ObjectCreation__Group__2 : rule__ObjectCreation__Group__2__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6216:1: rule__ObjectCreation__Group__2 : rule__ObjectCreation__Group__2__Impl ;
     public final void rule__ObjectCreation__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6093:1: ( rule__ObjectCreation__Group__2__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6094:2: rule__ObjectCreation__Group__2__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6220:1: ( rule__ObjectCreation__Group__2__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6221:2: rule__ObjectCreation__Group__2__Impl
             {
-            pushFollow(FOLLOW_rule__ObjectCreation__Group__2__Impl_in_rule__ObjectCreation__Group__212337);
+            pushFollow(FOLLOW_rule__ObjectCreation__Group__2__Impl_in_rule__ObjectCreation__Group__212587);
             rule__ObjectCreation__Group__2__Impl();
 
             state._fsp--;
@@ -17615,25 +17964,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ObjectCreation__Group__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6100:1: rule__ObjectCreation__Group__2__Impl : ( ( rule__ObjectCreation__ConstructorInvocationAssignment_2 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6227:1: rule__ObjectCreation__Group__2__Impl : ( ( rule__ObjectCreation__ConstructorInvocationAssignment_2 ) ) ;
     public final void rule__ObjectCreation__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6104:1: ( ( ( rule__ObjectCreation__ConstructorInvocationAssignment_2 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6105:1: ( ( rule__ObjectCreation__ConstructorInvocationAssignment_2 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6231:1: ( ( ( rule__ObjectCreation__ConstructorInvocationAssignment_2 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6232:1: ( ( rule__ObjectCreation__ConstructorInvocationAssignment_2 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6105:1: ( ( rule__ObjectCreation__ConstructorInvocationAssignment_2 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6106:1: ( rule__ObjectCreation__ConstructorInvocationAssignment_2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6232:1: ( ( rule__ObjectCreation__ConstructorInvocationAssignment_2 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6233:1: ( rule__ObjectCreation__ConstructorInvocationAssignment_2 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getObjectCreationAccess().getConstructorInvocationAssignment_2()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6107:1: ( rule__ObjectCreation__ConstructorInvocationAssignment_2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6107:2: rule__ObjectCreation__ConstructorInvocationAssignment_2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6234:1: ( rule__ObjectCreation__ConstructorInvocationAssignment_2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6234:2: rule__ObjectCreation__ConstructorInvocationAssignment_2
             {
-            pushFollow(FOLLOW_rule__ObjectCreation__ConstructorInvocationAssignment_2_in_rule__ObjectCreation__Group__2__Impl12364);
+            pushFollow(FOLLOW_rule__ObjectCreation__ConstructorInvocationAssignment_2_in_rule__ObjectCreation__Group__2__Impl12614);
             rule__ObjectCreation__ConstructorInvocationAssignment_2();
 
             state._fsp--;
@@ -17666,21 +18015,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodInvocation__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6123:1: rule__MethodInvocation__Group__0 : rule__MethodInvocation__Group__0__Impl rule__MethodInvocation__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6250:1: rule__MethodInvocation__Group__0 : rule__MethodInvocation__Group__0__Impl rule__MethodInvocation__Group__1 ;
     public final void rule__MethodInvocation__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6127:1: ( rule__MethodInvocation__Group__0__Impl rule__MethodInvocation__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6128:2: rule__MethodInvocation__Group__0__Impl rule__MethodInvocation__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6254:1: ( rule__MethodInvocation__Group__0__Impl rule__MethodInvocation__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6255:2: rule__MethodInvocation__Group__0__Impl rule__MethodInvocation__Group__1
             {
-            pushFollow(FOLLOW_rule__MethodInvocation__Group__0__Impl_in_rule__MethodInvocation__Group__012400);
+            pushFollow(FOLLOW_rule__MethodInvocation__Group__0__Impl_in_rule__MethodInvocation__Group__012650);
             rule__MethodInvocation__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__MethodInvocation__Group__1_in_rule__MethodInvocation__Group__012403);
+            pushFollow(FOLLOW_rule__MethodInvocation__Group__1_in_rule__MethodInvocation__Group__012653);
             rule__MethodInvocation__Group__1();
 
             state._fsp--;
@@ -17704,23 +18053,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodInvocation__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6135:1: rule__MethodInvocation__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6262:1: rule__MethodInvocation__Group__0__Impl : ( () ) ;
     public final void rule__MethodInvocation__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6139:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6140:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6266:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6267:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6140:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6141:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6267:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6268:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodInvocationAccess().getMethodInvocationAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6142:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6144:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6269:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6271:1: 
             {
             }
 
@@ -17745,21 +18094,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodInvocation__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6154:1: rule__MethodInvocation__Group__1 : rule__MethodInvocation__Group__1__Impl rule__MethodInvocation__Group__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6281:1: rule__MethodInvocation__Group__1 : rule__MethodInvocation__Group__1__Impl rule__MethodInvocation__Group__2 ;
     public final void rule__MethodInvocation__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6158:1: ( rule__MethodInvocation__Group__1__Impl rule__MethodInvocation__Group__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6159:2: rule__MethodInvocation__Group__1__Impl rule__MethodInvocation__Group__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6285:1: ( rule__MethodInvocation__Group__1__Impl rule__MethodInvocation__Group__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6286:2: rule__MethodInvocation__Group__1__Impl rule__MethodInvocation__Group__2
             {
-            pushFollow(FOLLOW_rule__MethodInvocation__Group__1__Impl_in_rule__MethodInvocation__Group__112461);
+            pushFollow(FOLLOW_rule__MethodInvocation__Group__1__Impl_in_rule__MethodInvocation__Group__112711);
             rule__MethodInvocation__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__MethodInvocation__Group__2_in_rule__MethodInvocation__Group__112464);
+            pushFollow(FOLLOW_rule__MethodInvocation__Group__2_in_rule__MethodInvocation__Group__112714);
             rule__MethodInvocation__Group__2();
 
             state._fsp--;
@@ -17783,25 +18132,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodInvocation__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6166:1: rule__MethodInvocation__Group__1__Impl : ( ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6293:1: rule__MethodInvocation__Group__1__Impl : ( ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 ) ) ;
     public final void rule__MethodInvocation__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6170:1: ( ( ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6171:1: ( ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6297:1: ( ( ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6298:1: ( ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6171:1: ( ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6172:1: ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6298:1: ( ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6299:1: ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodInvocationAccess().getFullyQualifiedMethodNameAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6173:1: ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6173:2: rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6300:1: ( rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6300:2: rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1
             {
-            pushFollow(FOLLOW_rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1_in_rule__MethodInvocation__Group__1__Impl12491);
+            pushFollow(FOLLOW_rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1_in_rule__MethodInvocation__Group__1__Impl12741);
             rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1();
 
             state._fsp--;
@@ -17834,16 +18183,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodInvocation__Group__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6183:1: rule__MethodInvocation__Group__2 : rule__MethodInvocation__Group__2__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6310:1: rule__MethodInvocation__Group__2 : rule__MethodInvocation__Group__2__Impl ;
     public final void rule__MethodInvocation__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6187:1: ( rule__MethodInvocation__Group__2__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6188:2: rule__MethodInvocation__Group__2__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6314:1: ( rule__MethodInvocation__Group__2__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6315:2: rule__MethodInvocation__Group__2__Impl
             {
-            pushFollow(FOLLOW_rule__MethodInvocation__Group__2__Impl_in_rule__MethodInvocation__Group__212521);
+            pushFollow(FOLLOW_rule__MethodInvocation__Group__2__Impl_in_rule__MethodInvocation__Group__212771);
             rule__MethodInvocation__Group__2__Impl();
 
             state._fsp--;
@@ -17867,25 +18216,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodInvocation__Group__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6194:1: rule__MethodInvocation__Group__2__Impl : ( ( rule__MethodInvocation__ArgsAssignment_2 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6321:1: rule__MethodInvocation__Group__2__Impl : ( ( rule__MethodInvocation__ArgsAssignment_2 ) ) ;
     public final void rule__MethodInvocation__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6198:1: ( ( ( rule__MethodInvocation__ArgsAssignment_2 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6199:1: ( ( rule__MethodInvocation__ArgsAssignment_2 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6325:1: ( ( ( rule__MethodInvocation__ArgsAssignment_2 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6326:1: ( ( rule__MethodInvocation__ArgsAssignment_2 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6199:1: ( ( rule__MethodInvocation__ArgsAssignment_2 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6200:1: ( rule__MethodInvocation__ArgsAssignment_2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6326:1: ( ( rule__MethodInvocation__ArgsAssignment_2 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6327:1: ( rule__MethodInvocation__ArgsAssignment_2 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodInvocationAccess().getArgsAssignment_2()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6201:1: ( rule__MethodInvocation__ArgsAssignment_2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6201:2: rule__MethodInvocation__ArgsAssignment_2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6328:1: ( rule__MethodInvocation__ArgsAssignment_2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6328:2: rule__MethodInvocation__ArgsAssignment_2
             {
-            pushFollow(FOLLOW_rule__MethodInvocation__ArgsAssignment_2_in_rule__MethodInvocation__Group__2__Impl12548);
+            pushFollow(FOLLOW_rule__MethodInvocation__ArgsAssignment_2_in_rule__MethodInvocation__Group__2__Impl12798);
             rule__MethodInvocation__ArgsAssignment_2();
 
             state._fsp--;
@@ -17918,21 +18267,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6217:1: rule__FullMethodName__Group__0 : rule__FullMethodName__Group__0__Impl rule__FullMethodName__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6344:1: rule__FullMethodName__Group__0 : rule__FullMethodName__Group__0__Impl rule__FullMethodName__Group__1 ;
     public final void rule__FullMethodName__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6221:1: ( rule__FullMethodName__Group__0__Impl rule__FullMethodName__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6222:2: rule__FullMethodName__Group__0__Impl rule__FullMethodName__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6348:1: ( rule__FullMethodName__Group__0__Impl rule__FullMethodName__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6349:2: rule__FullMethodName__Group__0__Impl rule__FullMethodName__Group__1
             {
-            pushFollow(FOLLOW_rule__FullMethodName__Group__0__Impl_in_rule__FullMethodName__Group__012584);
+            pushFollow(FOLLOW_rule__FullMethodName__Group__0__Impl_in_rule__FullMethodName__Group__012834);
             rule__FullMethodName__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__FullMethodName__Group__1_in_rule__FullMethodName__Group__012587);
+            pushFollow(FOLLOW_rule__FullMethodName__Group__1_in_rule__FullMethodName__Group__012837);
             rule__FullMethodName__Group__1();
 
             state._fsp--;
@@ -17956,43 +18305,43 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6229:1: rule__FullMethodName__Group__0__Impl : ( ( rule__FullMethodName__Group_0__0 )* ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6356:1: rule__FullMethodName__Group__0__Impl : ( ( rule__FullMethodName__Group_0__0 )* ) ;
     public final void rule__FullMethodName__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6233:1: ( ( ( rule__FullMethodName__Group_0__0 )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6234:1: ( ( rule__FullMethodName__Group_0__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6360:1: ( ( ( rule__FullMethodName__Group_0__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6361:1: ( ( rule__FullMethodName__Group_0__0 )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6234:1: ( ( rule__FullMethodName__Group_0__0 )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6235:1: ( rule__FullMethodName__Group_0__0 )*
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6361:1: ( ( rule__FullMethodName__Group_0__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6362:1: ( rule__FullMethodName__Group_0__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFullMethodNameAccess().getGroup_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6236:1: ( rule__FullMethodName__Group_0__0 )*
-            loop32:
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6363:1: ( rule__FullMethodName__Group_0__0 )*
+            loop33:
             do {
-                int alt32=2;
-                int LA32_0 = input.LA(1);
+                int alt33=2;
+                int LA33_0 = input.LA(1);
 
-                if ( (LA32_0==RULE_ID) ) {
-                    int LA32_1 = input.LA(2);
+                if ( (LA33_0==RULE_ID) ) {
+                    int LA33_1 = input.LA(2);
 
-                    if ( (LA32_1==50) ) {
-                        alt32=1;
+                    if ( (LA33_1==50) ) {
+                        alt33=1;
                     }
 
 
                 }
 
 
-                switch (alt32) {
+                switch (alt33) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6236:2: rule__FullMethodName__Group_0__0
+            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6363:2: rule__FullMethodName__Group_0__0
             	    {
-            	    pushFollow(FOLLOW_rule__FullMethodName__Group_0__0_in_rule__FullMethodName__Group__0__Impl12614);
+            	    pushFollow(FOLLOW_rule__FullMethodName__Group_0__0_in_rule__FullMethodName__Group__0__Impl12864);
             	    rule__FullMethodName__Group_0__0();
 
             	    state._fsp--;
@@ -18002,7 +18351,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             	    break;
 
             	default :
-            	    break loop32;
+            	    break loop33;
                 }
             } while (true);
 
@@ -18031,16 +18380,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6246:1: rule__FullMethodName__Group__1 : rule__FullMethodName__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6373:1: rule__FullMethodName__Group__1 : rule__FullMethodName__Group__1__Impl ;
     public final void rule__FullMethodName__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6250:1: ( rule__FullMethodName__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6251:2: rule__FullMethodName__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6377:1: ( rule__FullMethodName__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6378:2: rule__FullMethodName__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__FullMethodName__Group__1__Impl_in_rule__FullMethodName__Group__112645);
+            pushFollow(FOLLOW_rule__FullMethodName__Group__1__Impl_in_rule__FullMethodName__Group__112895);
             rule__FullMethodName__Group__1__Impl();
 
             state._fsp--;
@@ -18064,25 +18413,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6257:1: rule__FullMethodName__Group__1__Impl : ( ( rule__FullMethodName__MethodNameAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6384:1: rule__FullMethodName__Group__1__Impl : ( ( rule__FullMethodName__MethodNameAssignment_1 ) ) ;
     public final void rule__FullMethodName__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6261:1: ( ( ( rule__FullMethodName__MethodNameAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6262:1: ( ( rule__FullMethodName__MethodNameAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6388:1: ( ( ( rule__FullMethodName__MethodNameAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6389:1: ( ( rule__FullMethodName__MethodNameAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6262:1: ( ( rule__FullMethodName__MethodNameAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6263:1: ( rule__FullMethodName__MethodNameAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6389:1: ( ( rule__FullMethodName__MethodNameAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6390:1: ( rule__FullMethodName__MethodNameAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFullMethodNameAccess().getMethodNameAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6264:1: ( rule__FullMethodName__MethodNameAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6264:2: rule__FullMethodName__MethodNameAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6391:1: ( rule__FullMethodName__MethodNameAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6391:2: rule__FullMethodName__MethodNameAssignment_1
             {
-            pushFollow(FOLLOW_rule__FullMethodName__MethodNameAssignment_1_in_rule__FullMethodName__Group__1__Impl12672);
+            pushFollow(FOLLOW_rule__FullMethodName__MethodNameAssignment_1_in_rule__FullMethodName__Group__1__Impl12922);
             rule__FullMethodName__MethodNameAssignment_1();
 
             state._fsp--;
@@ -18115,21 +18464,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__Group_0__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6278:1: rule__FullMethodName__Group_0__0 : rule__FullMethodName__Group_0__0__Impl rule__FullMethodName__Group_0__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6405:1: rule__FullMethodName__Group_0__0 : rule__FullMethodName__Group_0__0__Impl rule__FullMethodName__Group_0__1 ;
     public final void rule__FullMethodName__Group_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6282:1: ( rule__FullMethodName__Group_0__0__Impl rule__FullMethodName__Group_0__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6283:2: rule__FullMethodName__Group_0__0__Impl rule__FullMethodName__Group_0__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6409:1: ( rule__FullMethodName__Group_0__0__Impl rule__FullMethodName__Group_0__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6410:2: rule__FullMethodName__Group_0__0__Impl rule__FullMethodName__Group_0__1
             {
-            pushFollow(FOLLOW_rule__FullMethodName__Group_0__0__Impl_in_rule__FullMethodName__Group_0__012706);
+            pushFollow(FOLLOW_rule__FullMethodName__Group_0__0__Impl_in_rule__FullMethodName__Group_0__012956);
             rule__FullMethodName__Group_0__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__FullMethodName__Group_0__1_in_rule__FullMethodName__Group_0__012709);
+            pushFollow(FOLLOW_rule__FullMethodName__Group_0__1_in_rule__FullMethodName__Group_0__012959);
             rule__FullMethodName__Group_0__1();
 
             state._fsp--;
@@ -18153,25 +18502,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__Group_0__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6290:1: rule__FullMethodName__Group_0__0__Impl : ( ( rule__FullMethodName__PrefixQMNAssignment_0_0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6417:1: rule__FullMethodName__Group_0__0__Impl : ( ( rule__FullMethodName__PrefixQMNAssignment_0_0 ) ) ;
     public final void rule__FullMethodName__Group_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6294:1: ( ( ( rule__FullMethodName__PrefixQMNAssignment_0_0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6295:1: ( ( rule__FullMethodName__PrefixQMNAssignment_0_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6421:1: ( ( ( rule__FullMethodName__PrefixQMNAssignment_0_0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6422:1: ( ( rule__FullMethodName__PrefixQMNAssignment_0_0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6295:1: ( ( rule__FullMethodName__PrefixQMNAssignment_0_0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6296:1: ( rule__FullMethodName__PrefixQMNAssignment_0_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6422:1: ( ( rule__FullMethodName__PrefixQMNAssignment_0_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6423:1: ( rule__FullMethodName__PrefixQMNAssignment_0_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFullMethodNameAccess().getPrefixQMNAssignment_0_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6297:1: ( rule__FullMethodName__PrefixQMNAssignment_0_0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6297:2: rule__FullMethodName__PrefixQMNAssignment_0_0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6424:1: ( rule__FullMethodName__PrefixQMNAssignment_0_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6424:2: rule__FullMethodName__PrefixQMNAssignment_0_0
             {
-            pushFollow(FOLLOW_rule__FullMethodName__PrefixQMNAssignment_0_0_in_rule__FullMethodName__Group_0__0__Impl12736);
+            pushFollow(FOLLOW_rule__FullMethodName__PrefixQMNAssignment_0_0_in_rule__FullMethodName__Group_0__0__Impl12986);
             rule__FullMethodName__PrefixQMNAssignment_0_0();
 
             state._fsp--;
@@ -18204,16 +18553,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__Group_0__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6307:1: rule__FullMethodName__Group_0__1 : rule__FullMethodName__Group_0__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6434:1: rule__FullMethodName__Group_0__1 : rule__FullMethodName__Group_0__1__Impl ;
     public final void rule__FullMethodName__Group_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6311:1: ( rule__FullMethodName__Group_0__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6312:2: rule__FullMethodName__Group_0__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6438:1: ( rule__FullMethodName__Group_0__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6439:2: rule__FullMethodName__Group_0__1__Impl
             {
-            pushFollow(FOLLOW_rule__FullMethodName__Group_0__1__Impl_in_rule__FullMethodName__Group_0__112766);
+            pushFollow(FOLLOW_rule__FullMethodName__Group_0__1__Impl_in_rule__FullMethodName__Group_0__113016);
             rule__FullMethodName__Group_0__1__Impl();
 
             state._fsp--;
@@ -18237,25 +18586,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__Group_0__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6318:1: rule__FullMethodName__Group_0__1__Impl : ( ( rule__FullMethodName__DotsAssignment_0_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6445:1: rule__FullMethodName__Group_0__1__Impl : ( ( rule__FullMethodName__DotsAssignment_0_1 ) ) ;
     public final void rule__FullMethodName__Group_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6322:1: ( ( ( rule__FullMethodName__DotsAssignment_0_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6323:1: ( ( rule__FullMethodName__DotsAssignment_0_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6449:1: ( ( ( rule__FullMethodName__DotsAssignment_0_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6450:1: ( ( rule__FullMethodName__DotsAssignment_0_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6323:1: ( ( rule__FullMethodName__DotsAssignment_0_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6324:1: ( rule__FullMethodName__DotsAssignment_0_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6450:1: ( ( rule__FullMethodName__DotsAssignment_0_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6451:1: ( rule__FullMethodName__DotsAssignment_0_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFullMethodNameAccess().getDotsAssignment_0_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6325:1: ( rule__FullMethodName__DotsAssignment_0_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6325:2: rule__FullMethodName__DotsAssignment_0_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6452:1: ( rule__FullMethodName__DotsAssignment_0_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6452:2: rule__FullMethodName__DotsAssignment_0_1
             {
-            pushFollow(FOLLOW_rule__FullMethodName__DotsAssignment_0_1_in_rule__FullMethodName__Group_0__1__Impl12793);
+            pushFollow(FOLLOW_rule__FullMethodName__DotsAssignment_0_1_in_rule__FullMethodName__Group_0__1__Impl13043);
             rule__FullMethodName__DotsAssignment_0_1();
 
             state._fsp--;
@@ -18288,21 +18637,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Arguments__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6339:1: rule__Arguments__Group__0 : rule__Arguments__Group__0__Impl rule__Arguments__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6466:1: rule__Arguments__Group__0 : rule__Arguments__Group__0__Impl rule__Arguments__Group__1 ;
     public final void rule__Arguments__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6343:1: ( rule__Arguments__Group__0__Impl rule__Arguments__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6344:2: rule__Arguments__Group__0__Impl rule__Arguments__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6470:1: ( rule__Arguments__Group__0__Impl rule__Arguments__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6471:2: rule__Arguments__Group__0__Impl rule__Arguments__Group__1
             {
-            pushFollow(FOLLOW_rule__Arguments__Group__0__Impl_in_rule__Arguments__Group__012827);
+            pushFollow(FOLLOW_rule__Arguments__Group__0__Impl_in_rule__Arguments__Group__013077);
             rule__Arguments__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__Arguments__Group__1_in_rule__Arguments__Group__012830);
+            pushFollow(FOLLOW_rule__Arguments__Group__1_in_rule__Arguments__Group__013080);
             rule__Arguments__Group__1();
 
             state._fsp--;
@@ -18326,23 +18675,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Arguments__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6351:1: rule__Arguments__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6478:1: rule__Arguments__Group__0__Impl : ( () ) ;
     public final void rule__Arguments__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6355:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6356:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6482:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6483:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6356:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6357:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6483:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6484:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArgumentsAccess().getArgumentsAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6358:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6360:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6485:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6487:1: 
             {
             }
 
@@ -18367,21 +18716,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Arguments__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6370:1: rule__Arguments__Group__1 : rule__Arguments__Group__1__Impl rule__Arguments__Group__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6497:1: rule__Arguments__Group__1 : rule__Arguments__Group__1__Impl rule__Arguments__Group__2 ;
     public final void rule__Arguments__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6374:1: ( rule__Arguments__Group__1__Impl rule__Arguments__Group__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6375:2: rule__Arguments__Group__1__Impl rule__Arguments__Group__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6501:1: ( rule__Arguments__Group__1__Impl rule__Arguments__Group__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6502:2: rule__Arguments__Group__1__Impl rule__Arguments__Group__2
             {
-            pushFollow(FOLLOW_rule__Arguments__Group__1__Impl_in_rule__Arguments__Group__112888);
+            pushFollow(FOLLOW_rule__Arguments__Group__1__Impl_in_rule__Arguments__Group__113138);
             rule__Arguments__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__Arguments__Group__2_in_rule__Arguments__Group__112891);
+            pushFollow(FOLLOW_rule__Arguments__Group__2_in_rule__Arguments__Group__113141);
             rule__Arguments__Group__2();
 
             state._fsp--;
@@ -18405,22 +18754,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Arguments__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6382:1: rule__Arguments__Group__1__Impl : ( '(' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6509:1: rule__Arguments__Group__1__Impl : ( '(' ) ;
     public final void rule__Arguments__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6386:1: ( ( '(' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6387:1: ( '(' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6513:1: ( ( '(' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6514:1: ( '(' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6387:1: ( '(' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6388:1: '('
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6514:1: ( '(' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6515:1: '('
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArgumentsAccess().getLeftParenthesisKeyword_1()); 
             }
-            match(input,56,FOLLOW_56_in_rule__Arguments__Group__1__Impl12919); if (state.failed) return ;
+            match(input,58,FOLLOW_58_in_rule__Arguments__Group__1__Impl13169); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getArgumentsAccess().getLeftParenthesisKeyword_1()); 
             }
@@ -18446,21 +18795,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Arguments__Group__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6401:1: rule__Arguments__Group__2 : rule__Arguments__Group__2__Impl rule__Arguments__Group__3 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6528:1: rule__Arguments__Group__2 : rule__Arguments__Group__2__Impl rule__Arguments__Group__3 ;
     public final void rule__Arguments__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6405:1: ( rule__Arguments__Group__2__Impl rule__Arguments__Group__3 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6406:2: rule__Arguments__Group__2__Impl rule__Arguments__Group__3
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6532:1: ( rule__Arguments__Group__2__Impl rule__Arguments__Group__3 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6533:2: rule__Arguments__Group__2__Impl rule__Arguments__Group__3
             {
-            pushFollow(FOLLOW_rule__Arguments__Group__2__Impl_in_rule__Arguments__Group__212950);
+            pushFollow(FOLLOW_rule__Arguments__Group__2__Impl_in_rule__Arguments__Group__213200);
             rule__Arguments__Group__2__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__Arguments__Group__3_in_rule__Arguments__Group__212953);
+            pushFollow(FOLLOW_rule__Arguments__Group__3_in_rule__Arguments__Group__213203);
             rule__Arguments__Group__3();
 
             state._fsp--;
@@ -18484,33 +18833,33 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Arguments__Group__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6413:1: rule__Arguments__Group__2__Impl : ( ( rule__Arguments__ExprLstAssignment_2 )? ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6540:1: rule__Arguments__Group__2__Impl : ( ( rule__Arguments__ExprLstAssignment_2 )? ) ;
     public final void rule__Arguments__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6417:1: ( ( ( rule__Arguments__ExprLstAssignment_2 )? ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6418:1: ( ( rule__Arguments__ExprLstAssignment_2 )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6544:1: ( ( ( rule__Arguments__ExprLstAssignment_2 )? ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6545:1: ( ( rule__Arguments__ExprLstAssignment_2 )? )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6418:1: ( ( rule__Arguments__ExprLstAssignment_2 )? )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6419:1: ( rule__Arguments__ExprLstAssignment_2 )?
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6545:1: ( ( rule__Arguments__ExprLstAssignment_2 )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6546:1: ( rule__Arguments__ExprLstAssignment_2 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArgumentsAccess().getExprLstAssignment_2()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6420:1: ( rule__Arguments__ExprLstAssignment_2 )?
-            int alt33=2;
-            int LA33_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6547:1: ( rule__Arguments__ExprLstAssignment_2 )?
+            int alt34=2;
+            int LA34_0 = input.LA(1);
 
-            if ( (LA33_0==RULE_ID||(LA33_0>=RULE_INT && LA33_0<=RULE_STRING)||(LA33_0>=28 && LA33_0<=29)||(LA33_0>=33 && LA33_0<=41)||(LA33_0>=48 && LA33_0<=49)||(LA33_0>=52 && LA33_0<=56)||LA33_0==58||(LA33_0>=69 && LA33_0<=70)) ) {
-                alt33=1;
+            if ( (LA34_0==RULE_ID||(LA34_0>=RULE_INT && LA34_0<=RULE_STRING)||(LA34_0>=28 && LA34_0<=29)||(LA34_0>=33 && LA34_0<=41)||(LA34_0>=48 && LA34_0<=49)||(LA34_0>=52 && LA34_0<=54)||(LA34_0>=57 && LA34_0<=58)||LA34_0==60||(LA34_0>=69 && LA34_0<=70)) ) {
+                alt34=1;
             }
-            switch (alt33) {
+            switch (alt34) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6420:2: rule__Arguments__ExprLstAssignment_2
+                    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6547:2: rule__Arguments__ExprLstAssignment_2
                     {
-                    pushFollow(FOLLOW_rule__Arguments__ExprLstAssignment_2_in_rule__Arguments__Group__2__Impl12980);
+                    pushFollow(FOLLOW_rule__Arguments__ExprLstAssignment_2_in_rule__Arguments__Group__2__Impl13230);
                     rule__Arguments__ExprLstAssignment_2();
 
                     state._fsp--;
@@ -18546,16 +18895,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Arguments__Group__3"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6430:1: rule__Arguments__Group__3 : rule__Arguments__Group__3__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6557:1: rule__Arguments__Group__3 : rule__Arguments__Group__3__Impl ;
     public final void rule__Arguments__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6434:1: ( rule__Arguments__Group__3__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6435:2: rule__Arguments__Group__3__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6561:1: ( rule__Arguments__Group__3__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6562:2: rule__Arguments__Group__3__Impl
             {
-            pushFollow(FOLLOW_rule__Arguments__Group__3__Impl_in_rule__Arguments__Group__313011);
+            pushFollow(FOLLOW_rule__Arguments__Group__3__Impl_in_rule__Arguments__Group__313261);
             rule__Arguments__Group__3__Impl();
 
             state._fsp--;
@@ -18579,22 +18928,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Arguments__Group__3__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6441:1: rule__Arguments__Group__3__Impl : ( ')' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6568:1: rule__Arguments__Group__3__Impl : ( ')' ) ;
     public final void rule__Arguments__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6445:1: ( ( ')' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6446:1: ( ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6572:1: ( ( ')' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6573:1: ( ')' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6446:1: ( ')' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6447:1: ')'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6573:1: ( ')' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6574:1: ')'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArgumentsAccess().getRightParenthesisKeyword_3()); 
             }
-            match(input,57,FOLLOW_57_in_rule__Arguments__Group__3__Impl13039); if (state.failed) return ;
+            match(input,59,FOLLOW_59_in_rule__Arguments__Group__3__Impl13289); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getArgumentsAccess().getRightParenthesisKeyword_3()); 
             }
@@ -18620,21 +18969,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6468:1: rule__ExpressionList__Group__0 : rule__ExpressionList__Group__0__Impl rule__ExpressionList__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6595:1: rule__ExpressionList__Group__0 : rule__ExpressionList__Group__0__Impl rule__ExpressionList__Group__1 ;
     public final void rule__ExpressionList__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6472:1: ( rule__ExpressionList__Group__0__Impl rule__ExpressionList__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6473:2: rule__ExpressionList__Group__0__Impl rule__ExpressionList__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6599:1: ( rule__ExpressionList__Group__0__Impl rule__ExpressionList__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6600:2: rule__ExpressionList__Group__0__Impl rule__ExpressionList__Group__1
             {
-            pushFollow(FOLLOW_rule__ExpressionList__Group__0__Impl_in_rule__ExpressionList__Group__013078);
+            pushFollow(FOLLOW_rule__ExpressionList__Group__0__Impl_in_rule__ExpressionList__Group__013328);
             rule__ExpressionList__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ExpressionList__Group__1_in_rule__ExpressionList__Group__013081);
+            pushFollow(FOLLOW_rule__ExpressionList__Group__1_in_rule__ExpressionList__Group__013331);
             rule__ExpressionList__Group__1();
 
             state._fsp--;
@@ -18658,25 +19007,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6480:1: rule__ExpressionList__Group__0__Impl : ( ( rule__ExpressionList__ExpressionsAssignment_0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6607:1: rule__ExpressionList__Group__0__Impl : ( ( rule__ExpressionList__ExpressionsAssignment_0 ) ) ;
     public final void rule__ExpressionList__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6484:1: ( ( ( rule__ExpressionList__ExpressionsAssignment_0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6485:1: ( ( rule__ExpressionList__ExpressionsAssignment_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6611:1: ( ( ( rule__ExpressionList__ExpressionsAssignment_0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6612:1: ( ( rule__ExpressionList__ExpressionsAssignment_0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6485:1: ( ( rule__ExpressionList__ExpressionsAssignment_0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6486:1: ( rule__ExpressionList__ExpressionsAssignment_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6612:1: ( ( rule__ExpressionList__ExpressionsAssignment_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6613:1: ( rule__ExpressionList__ExpressionsAssignment_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getExpressionListAccess().getExpressionsAssignment_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6487:1: ( rule__ExpressionList__ExpressionsAssignment_0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6487:2: rule__ExpressionList__ExpressionsAssignment_0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6614:1: ( rule__ExpressionList__ExpressionsAssignment_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6614:2: rule__ExpressionList__ExpressionsAssignment_0
             {
-            pushFollow(FOLLOW_rule__ExpressionList__ExpressionsAssignment_0_in_rule__ExpressionList__Group__0__Impl13108);
+            pushFollow(FOLLOW_rule__ExpressionList__ExpressionsAssignment_0_in_rule__ExpressionList__Group__0__Impl13358);
             rule__ExpressionList__ExpressionsAssignment_0();
 
             state._fsp--;
@@ -18709,16 +19058,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6497:1: rule__ExpressionList__Group__1 : rule__ExpressionList__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6624:1: rule__ExpressionList__Group__1 : rule__ExpressionList__Group__1__Impl ;
     public final void rule__ExpressionList__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6501:1: ( rule__ExpressionList__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6502:2: rule__ExpressionList__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6628:1: ( rule__ExpressionList__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6629:2: rule__ExpressionList__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__ExpressionList__Group__1__Impl_in_rule__ExpressionList__Group__113138);
+            pushFollow(FOLLOW_rule__ExpressionList__Group__1__Impl_in_rule__ExpressionList__Group__113388);
             rule__ExpressionList__Group__1__Impl();
 
             state._fsp--;
@@ -18742,37 +19091,37 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6508:1: rule__ExpressionList__Group__1__Impl : ( ( rule__ExpressionList__Group_1__0 )* ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6635:1: rule__ExpressionList__Group__1__Impl : ( ( rule__ExpressionList__Group_1__0 )* ) ;
     public final void rule__ExpressionList__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6512:1: ( ( ( rule__ExpressionList__Group_1__0 )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6513:1: ( ( rule__ExpressionList__Group_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6639:1: ( ( ( rule__ExpressionList__Group_1__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6640:1: ( ( rule__ExpressionList__Group_1__0 )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6513:1: ( ( rule__ExpressionList__Group_1__0 )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6514:1: ( rule__ExpressionList__Group_1__0 )*
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6640:1: ( ( rule__ExpressionList__Group_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6641:1: ( rule__ExpressionList__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getExpressionListAccess().getGroup_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6515:1: ( rule__ExpressionList__Group_1__0 )*
-            loop34:
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6642:1: ( rule__ExpressionList__Group_1__0 )*
+            loop35:
             do {
-                int alt34=2;
-                int LA34_0 = input.LA(1);
+                int alt35=2;
+                int LA35_0 = input.LA(1);
 
-                if ( (LA34_0==63) ) {
-                    alt34=1;
+                if ( (LA35_0==63) ) {
+                    alt35=1;
                 }
 
 
-                switch (alt34) {
+                switch (alt35) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6515:2: rule__ExpressionList__Group_1__0
+            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6642:2: rule__ExpressionList__Group_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__ExpressionList__Group_1__0_in_rule__ExpressionList__Group__1__Impl13165);
+            	    pushFollow(FOLLOW_rule__ExpressionList__Group_1__0_in_rule__ExpressionList__Group__1__Impl13415);
             	    rule__ExpressionList__Group_1__0();
 
             	    state._fsp--;
@@ -18782,7 +19131,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             	    break;
 
             	default :
-            	    break loop34;
+            	    break loop35;
                 }
             } while (true);
 
@@ -18811,21 +19160,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__Group_1__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6529:1: rule__ExpressionList__Group_1__0 : rule__ExpressionList__Group_1__0__Impl rule__ExpressionList__Group_1__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6656:1: rule__ExpressionList__Group_1__0 : rule__ExpressionList__Group_1__0__Impl rule__ExpressionList__Group_1__1 ;
     public final void rule__ExpressionList__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6533:1: ( rule__ExpressionList__Group_1__0__Impl rule__ExpressionList__Group_1__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6534:2: rule__ExpressionList__Group_1__0__Impl rule__ExpressionList__Group_1__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6660:1: ( rule__ExpressionList__Group_1__0__Impl rule__ExpressionList__Group_1__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6661:2: rule__ExpressionList__Group_1__0__Impl rule__ExpressionList__Group_1__1
             {
-            pushFollow(FOLLOW_rule__ExpressionList__Group_1__0__Impl_in_rule__ExpressionList__Group_1__013200);
+            pushFollow(FOLLOW_rule__ExpressionList__Group_1__0__Impl_in_rule__ExpressionList__Group_1__013450);
             rule__ExpressionList__Group_1__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__ExpressionList__Group_1__1_in_rule__ExpressionList__Group_1__013203);
+            pushFollow(FOLLOW_rule__ExpressionList__Group_1__1_in_rule__ExpressionList__Group_1__013453);
             rule__ExpressionList__Group_1__1();
 
             state._fsp--;
@@ -18849,25 +19198,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__Group_1__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6541:1: rule__ExpressionList__Group_1__0__Impl : ( ( rule__ExpressionList__CommasAssignment_1_0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6668:1: rule__ExpressionList__Group_1__0__Impl : ( ( rule__ExpressionList__CommasAssignment_1_0 ) ) ;
     public final void rule__ExpressionList__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6545:1: ( ( ( rule__ExpressionList__CommasAssignment_1_0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6546:1: ( ( rule__ExpressionList__CommasAssignment_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6672:1: ( ( ( rule__ExpressionList__CommasAssignment_1_0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6673:1: ( ( rule__ExpressionList__CommasAssignment_1_0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6546:1: ( ( rule__ExpressionList__CommasAssignment_1_0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6547:1: ( rule__ExpressionList__CommasAssignment_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6673:1: ( ( rule__ExpressionList__CommasAssignment_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6674:1: ( rule__ExpressionList__CommasAssignment_1_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getExpressionListAccess().getCommasAssignment_1_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6548:1: ( rule__ExpressionList__CommasAssignment_1_0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6548:2: rule__ExpressionList__CommasAssignment_1_0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6675:1: ( rule__ExpressionList__CommasAssignment_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6675:2: rule__ExpressionList__CommasAssignment_1_0
             {
-            pushFollow(FOLLOW_rule__ExpressionList__CommasAssignment_1_0_in_rule__ExpressionList__Group_1__0__Impl13230);
+            pushFollow(FOLLOW_rule__ExpressionList__CommasAssignment_1_0_in_rule__ExpressionList__Group_1__0__Impl13480);
             rule__ExpressionList__CommasAssignment_1_0();
 
             state._fsp--;
@@ -18900,16 +19249,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__Group_1__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6558:1: rule__ExpressionList__Group_1__1 : rule__ExpressionList__Group_1__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6685:1: rule__ExpressionList__Group_1__1 : rule__ExpressionList__Group_1__1__Impl ;
     public final void rule__ExpressionList__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6562:1: ( rule__ExpressionList__Group_1__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6563:2: rule__ExpressionList__Group_1__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6689:1: ( rule__ExpressionList__Group_1__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6690:2: rule__ExpressionList__Group_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__ExpressionList__Group_1__1__Impl_in_rule__ExpressionList__Group_1__113260);
+            pushFollow(FOLLOW_rule__ExpressionList__Group_1__1__Impl_in_rule__ExpressionList__Group_1__113510);
             rule__ExpressionList__Group_1__1__Impl();
 
             state._fsp--;
@@ -18933,25 +19282,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__Group_1__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6569:1: rule__ExpressionList__Group_1__1__Impl : ( ( rule__ExpressionList__ExpressionsAssignment_1_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6696:1: rule__ExpressionList__Group_1__1__Impl : ( ( rule__ExpressionList__ExpressionsAssignment_1_1 ) ) ;
     public final void rule__ExpressionList__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6573:1: ( ( ( rule__ExpressionList__ExpressionsAssignment_1_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6574:1: ( ( rule__ExpressionList__ExpressionsAssignment_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6700:1: ( ( ( rule__ExpressionList__ExpressionsAssignment_1_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6701:1: ( ( rule__ExpressionList__ExpressionsAssignment_1_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6574:1: ( ( rule__ExpressionList__ExpressionsAssignment_1_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6575:1: ( rule__ExpressionList__ExpressionsAssignment_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6701:1: ( ( rule__ExpressionList__ExpressionsAssignment_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6702:1: ( rule__ExpressionList__ExpressionsAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getExpressionListAccess().getExpressionsAssignment_1_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6576:1: ( rule__ExpressionList__ExpressionsAssignment_1_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6576:2: rule__ExpressionList__ExpressionsAssignment_1_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6703:1: ( rule__ExpressionList__ExpressionsAssignment_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6703:2: rule__ExpressionList__ExpressionsAssignment_1_1
             {
-            pushFollow(FOLLOW_rule__ExpressionList__ExpressionsAssignment_1_1_in_rule__ExpressionList__Group_1__1__Impl13287);
+            pushFollow(FOLLOW_rule__ExpressionList__ExpressionsAssignment_1_1_in_rule__ExpressionList__Group_1__1__Impl13537);
             rule__ExpressionList__ExpressionsAssignment_1_1();
 
             state._fsp--;
@@ -18984,21 +19333,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6590:1: rule__JvmTypeReference__Group__0 : rule__JvmTypeReference__Group__0__Impl rule__JvmTypeReference__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6717:1: rule__JvmTypeReference__Group__0 : rule__JvmTypeReference__Group__0__Impl rule__JvmTypeReference__Group__1 ;
     public final void rule__JvmTypeReference__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6594:1: ( rule__JvmTypeReference__Group__0__Impl rule__JvmTypeReference__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6595:2: rule__JvmTypeReference__Group__0__Impl rule__JvmTypeReference__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6721:1: ( rule__JvmTypeReference__Group__0__Impl rule__JvmTypeReference__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6722:2: rule__JvmTypeReference__Group__0__Impl rule__JvmTypeReference__Group__1
             {
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group__0__Impl_in_rule__JvmTypeReference__Group__013321);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group__0__Impl_in_rule__JvmTypeReference__Group__013571);
             rule__JvmTypeReference__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group__1_in_rule__JvmTypeReference__Group__013324);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group__1_in_rule__JvmTypeReference__Group__013574);
             rule__JvmTypeReference__Group__1();
 
             state._fsp--;
@@ -19022,22 +19371,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6602:1: rule__JvmTypeReference__Group__0__Impl : ( ruleJvmParameterizedTypeReference ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6729:1: rule__JvmTypeReference__Group__0__Impl : ( ruleJvmParameterizedTypeReference ) ;
     public final void rule__JvmTypeReference__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6606:1: ( ( ruleJvmParameterizedTypeReference ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6607:1: ( ruleJvmParameterizedTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6733:1: ( ( ruleJvmParameterizedTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6734:1: ( ruleJvmParameterizedTypeReference )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6607:1: ( ruleJvmParameterizedTypeReference )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6608:1: ruleJvmParameterizedTypeReference
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6734:1: ( ruleJvmParameterizedTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6735:1: ruleJvmParameterizedTypeReference
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmTypeReferenceAccess().getJvmParameterizedTypeReferenceParserRuleCall_0()); 
             }
-            pushFollow(FOLLOW_ruleJvmParameterizedTypeReference_in_rule__JvmTypeReference__Group__0__Impl13351);
+            pushFollow(FOLLOW_ruleJvmParameterizedTypeReference_in_rule__JvmTypeReference__Group__0__Impl13601);
             ruleJvmParameterizedTypeReference();
 
             state._fsp--;
@@ -19067,16 +19416,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6619:1: rule__JvmTypeReference__Group__1 : rule__JvmTypeReference__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6746:1: rule__JvmTypeReference__Group__1 : rule__JvmTypeReference__Group__1__Impl ;
     public final void rule__JvmTypeReference__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6623:1: ( rule__JvmTypeReference__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6624:2: rule__JvmTypeReference__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6750:1: ( rule__JvmTypeReference__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6751:2: rule__JvmTypeReference__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group__1__Impl_in_rule__JvmTypeReference__Group__113380);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group__1__Impl_in_rule__JvmTypeReference__Group__113630);
             rule__JvmTypeReference__Group__1__Impl();
 
             state._fsp--;
@@ -19100,53 +19449,53 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6630:1: rule__JvmTypeReference__Group__1__Impl : ( ( rule__JvmTypeReference__Group_1__0 )* ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6757:1: rule__JvmTypeReference__Group__1__Impl : ( ( rule__JvmTypeReference__Group_1__0 )* ) ;
     public final void rule__JvmTypeReference__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6634:1: ( ( ( rule__JvmTypeReference__Group_1__0 )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6635:1: ( ( rule__JvmTypeReference__Group_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6761:1: ( ( ( rule__JvmTypeReference__Group_1__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6762:1: ( ( rule__JvmTypeReference__Group_1__0 )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6635:1: ( ( rule__JvmTypeReference__Group_1__0 )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6636:1: ( rule__JvmTypeReference__Group_1__0 )*
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6762:1: ( ( rule__JvmTypeReference__Group_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6763:1: ( rule__JvmTypeReference__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmTypeReferenceAccess().getGroup_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6637:1: ( rule__JvmTypeReference__Group_1__0 )*
-            loop35:
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6764:1: ( rule__JvmTypeReference__Group_1__0 )*
+            loop36:
             do {
-                int alt35=2;
-                int LA35_0 = input.LA(1);
+                int alt36=2;
+                int LA36_0 = input.LA(1);
 
-                if ( (LA35_0==59) ) {
-                    int LA35_2 = input.LA(2);
+                if ( (LA36_0==55) ) {
+                    int LA36_2 = input.LA(2);
 
-                    if ( (LA35_2==60) ) {
-                        int LA35_3 = input.LA(3);
+                    if ( (LA36_2==56) ) {
+                        int LA36_3 = input.LA(3);
 
-                        if ( (LA35_3==EOF||(LA35_3>=26 && LA35_3<=32)||(LA35_3>=42 && LA35_3<=47)||LA35_3==50||LA35_3==57||(LA35_3>=62 && LA35_3<=63)||(LA35_3>=66 && LA35_3<=68)) ) {
-                            alt35=1;
-                        }
-                        else if ( (LA35_3==59) ) {
-                            int LA35_5 = input.LA(4);
+                        if ( (LA36_3==55) ) {
+                            int LA36_4 = input.LA(4);
 
-                            if ( (LA35_5==60) ) {
-                                int LA35_6 = input.LA(5);
+                            if ( (LA36_4==56) ) {
+                                int LA36_6 = input.LA(5);
 
-                                if ( (synpred59_InternalJavaJRExpression()) ) {
-                                    alt35=1;
+                                if ( (synpred60_InternalJavaJRExpression()) ) {
+                                    alt36=1;
                                 }
 
 
                             }
-                            else if ( (LA35_5==RULE_INT) ) {
-                                alt35=1;
+                            else if ( (LA36_4==RULE_INT) ) {
+                                alt36=1;
                             }
 
 
+                        }
+                        else if ( (LA36_3==EOF||(LA36_3>=26 && LA36_3<=32)||(LA36_3>=42 && LA36_3<=47)||LA36_3==50||LA36_3==59||(LA36_3>=62 && LA36_3<=63)||(LA36_3>=66 && LA36_3<=68)) ) {
+                            alt36=1;
                         }
 
 
@@ -19156,11 +19505,11 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
                 }
 
 
-                switch (alt35) {
+                switch (alt36) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6637:2: rule__JvmTypeReference__Group_1__0
+            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6764:2: rule__JvmTypeReference__Group_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__JvmTypeReference__Group_1__0_in_rule__JvmTypeReference__Group__1__Impl13407);
+            	    pushFollow(FOLLOW_rule__JvmTypeReference__Group_1__0_in_rule__JvmTypeReference__Group__1__Impl13657);
             	    rule__JvmTypeReference__Group_1__0();
 
             	    state._fsp--;
@@ -19170,7 +19519,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             	    break;
 
             	default :
-            	    break loop35;
+            	    break loop36;
                 }
             } while (true);
 
@@ -19199,16 +19548,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group_1__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6651:1: rule__JvmTypeReference__Group_1__0 : rule__JvmTypeReference__Group_1__0__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6778:1: rule__JvmTypeReference__Group_1__0 : rule__JvmTypeReference__Group_1__0__Impl ;
     public final void rule__JvmTypeReference__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6655:1: ( rule__JvmTypeReference__Group_1__0__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6656:2: rule__JvmTypeReference__Group_1__0__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6782:1: ( rule__JvmTypeReference__Group_1__0__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6783:2: rule__JvmTypeReference__Group_1__0__Impl
             {
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1__0__Impl_in_rule__JvmTypeReference__Group_1__013442);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1__0__Impl_in_rule__JvmTypeReference__Group_1__013692);
             rule__JvmTypeReference__Group_1__0__Impl();
 
             state._fsp--;
@@ -19232,25 +19581,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group_1__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6662:1: rule__JvmTypeReference__Group_1__0__Impl : ( ( rule__JvmTypeReference__Group_1_0__0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6789:1: rule__JvmTypeReference__Group_1__0__Impl : ( ( rule__JvmTypeReference__Group_1_0__0 ) ) ;
     public final void rule__JvmTypeReference__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6666:1: ( ( ( rule__JvmTypeReference__Group_1_0__0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6667:1: ( ( rule__JvmTypeReference__Group_1_0__0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6793:1: ( ( ( rule__JvmTypeReference__Group_1_0__0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6794:1: ( ( rule__JvmTypeReference__Group_1_0__0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6667:1: ( ( rule__JvmTypeReference__Group_1_0__0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6668:1: ( rule__JvmTypeReference__Group_1_0__0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6794:1: ( ( rule__JvmTypeReference__Group_1_0__0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6795:1: ( rule__JvmTypeReference__Group_1_0__0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmTypeReferenceAccess().getGroup_1_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6669:1: ( rule__JvmTypeReference__Group_1_0__0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6669:2: rule__JvmTypeReference__Group_1_0__0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6796:1: ( rule__JvmTypeReference__Group_1_0__0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6796:2: rule__JvmTypeReference__Group_1_0__0
             {
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__0_in_rule__JvmTypeReference__Group_1__0__Impl13469);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__0_in_rule__JvmTypeReference__Group_1__0__Impl13719);
             rule__JvmTypeReference__Group_1_0__0();
 
             state._fsp--;
@@ -19283,21 +19632,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group_1_0__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6681:1: rule__JvmTypeReference__Group_1_0__0 : rule__JvmTypeReference__Group_1_0__0__Impl rule__JvmTypeReference__Group_1_0__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6808:1: rule__JvmTypeReference__Group_1_0__0 : rule__JvmTypeReference__Group_1_0__0__Impl rule__JvmTypeReference__Group_1_0__1 ;
     public final void rule__JvmTypeReference__Group_1_0__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6685:1: ( rule__JvmTypeReference__Group_1_0__0__Impl rule__JvmTypeReference__Group_1_0__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6686:2: rule__JvmTypeReference__Group_1_0__0__Impl rule__JvmTypeReference__Group_1_0__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6812:1: ( rule__JvmTypeReference__Group_1_0__0__Impl rule__JvmTypeReference__Group_1_0__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6813:2: rule__JvmTypeReference__Group_1_0__0__Impl rule__JvmTypeReference__Group_1_0__1
             {
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__0__Impl_in_rule__JvmTypeReference__Group_1_0__013501);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__0__Impl_in_rule__JvmTypeReference__Group_1_0__013751);
             rule__JvmTypeReference__Group_1_0__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__1_in_rule__JvmTypeReference__Group_1_0__013504);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__1_in_rule__JvmTypeReference__Group_1_0__013754);
             rule__JvmTypeReference__Group_1_0__1();
 
             state._fsp--;
@@ -19321,23 +19670,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group_1_0__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6693:1: rule__JvmTypeReference__Group_1_0__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6820:1: rule__JvmTypeReference__Group_1_0__0__Impl : ( () ) ;
     public final void rule__JvmTypeReference__Group_1_0__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6697:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6698:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6824:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6825:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6698:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6699:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6825:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6826:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmTypeReferenceAccess().getJvmGenericArrayTypeReferenceComponentTypeAction_1_0_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6700:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6702:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6827:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6829:1: 
             {
             }
 
@@ -19362,21 +19711,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group_1_0__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6712:1: rule__JvmTypeReference__Group_1_0__1 : rule__JvmTypeReference__Group_1_0__1__Impl rule__JvmTypeReference__Group_1_0__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6839:1: rule__JvmTypeReference__Group_1_0__1 : rule__JvmTypeReference__Group_1_0__1__Impl rule__JvmTypeReference__Group_1_0__2 ;
     public final void rule__JvmTypeReference__Group_1_0__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6716:1: ( rule__JvmTypeReference__Group_1_0__1__Impl rule__JvmTypeReference__Group_1_0__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6717:2: rule__JvmTypeReference__Group_1_0__1__Impl rule__JvmTypeReference__Group_1_0__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6843:1: ( rule__JvmTypeReference__Group_1_0__1__Impl rule__JvmTypeReference__Group_1_0__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6844:2: rule__JvmTypeReference__Group_1_0__1__Impl rule__JvmTypeReference__Group_1_0__2
             {
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__1__Impl_in_rule__JvmTypeReference__Group_1_0__113562);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__1__Impl_in_rule__JvmTypeReference__Group_1_0__113812);
             rule__JvmTypeReference__Group_1_0__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__2_in_rule__JvmTypeReference__Group_1_0__113565);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__2_in_rule__JvmTypeReference__Group_1_0__113815);
             rule__JvmTypeReference__Group_1_0__2();
 
             state._fsp--;
@@ -19400,22 +19749,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group_1_0__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6724:1: rule__JvmTypeReference__Group_1_0__1__Impl : ( '[' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6851:1: rule__JvmTypeReference__Group_1_0__1__Impl : ( '[' ) ;
     public final void rule__JvmTypeReference__Group_1_0__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6728:1: ( ( '[' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6729:1: ( '[' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6855:1: ( ( '[' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6856:1: ( '[' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6729:1: ( '[' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6730:1: '['
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6856:1: ( '[' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6857:1: '['
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmTypeReferenceAccess().getLeftSquareBracketKeyword_1_0_1()); 
             }
-            match(input,59,FOLLOW_59_in_rule__JvmTypeReference__Group_1_0__1__Impl13593); if (state.failed) return ;
+            match(input,55,FOLLOW_55_in_rule__JvmTypeReference__Group_1_0__1__Impl13843); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJvmTypeReferenceAccess().getLeftSquareBracketKeyword_1_0_1()); 
             }
@@ -19441,16 +19790,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group_1_0__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6743:1: rule__JvmTypeReference__Group_1_0__2 : rule__JvmTypeReference__Group_1_0__2__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6870:1: rule__JvmTypeReference__Group_1_0__2 : rule__JvmTypeReference__Group_1_0__2__Impl ;
     public final void rule__JvmTypeReference__Group_1_0__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6747:1: ( rule__JvmTypeReference__Group_1_0__2__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6748:2: rule__JvmTypeReference__Group_1_0__2__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6874:1: ( rule__JvmTypeReference__Group_1_0__2__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6875:2: rule__JvmTypeReference__Group_1_0__2__Impl
             {
-            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__2__Impl_in_rule__JvmTypeReference__Group_1_0__213624);
+            pushFollow(FOLLOW_rule__JvmTypeReference__Group_1_0__2__Impl_in_rule__JvmTypeReference__Group_1_0__213874);
             rule__JvmTypeReference__Group_1_0__2__Impl();
 
             state._fsp--;
@@ -19474,22 +19823,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmTypeReference__Group_1_0__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6754:1: rule__JvmTypeReference__Group_1_0__2__Impl : ( ']' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6881:1: rule__JvmTypeReference__Group_1_0__2__Impl : ( ']' ) ;
     public final void rule__JvmTypeReference__Group_1_0__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6758:1: ( ( ']' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6759:1: ( ']' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6885:1: ( ( ']' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6886:1: ( ']' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6759:1: ( ']' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6760:1: ']'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6886:1: ( ']' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6887:1: ']'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmTypeReferenceAccess().getRightSquareBracketKeyword_1_0_2()); 
             }
-            match(input,60,FOLLOW_60_in_rule__JvmTypeReference__Group_1_0__2__Impl13652); if (state.failed) return ;
+            match(input,56,FOLLOW_56_in_rule__JvmTypeReference__Group_1_0__2__Impl13902); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJvmTypeReferenceAccess().getRightSquareBracketKeyword_1_0_2()); 
             }
@@ -19515,21 +19864,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6779:1: rule__JvmParameterizedTypeReference__Group__0 : rule__JvmParameterizedTypeReference__Group__0__Impl rule__JvmParameterizedTypeReference__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6906:1: rule__JvmParameterizedTypeReference__Group__0 : rule__JvmParameterizedTypeReference__Group__0__Impl rule__JvmParameterizedTypeReference__Group__1 ;
     public final void rule__JvmParameterizedTypeReference__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6783:1: ( rule__JvmParameterizedTypeReference__Group__0__Impl rule__JvmParameterizedTypeReference__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6784:2: rule__JvmParameterizedTypeReference__Group__0__Impl rule__JvmParameterizedTypeReference__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6910:1: ( rule__JvmParameterizedTypeReference__Group__0__Impl rule__JvmParameterizedTypeReference__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6911:2: rule__JvmParameterizedTypeReference__Group__0__Impl rule__JvmParameterizedTypeReference__Group__1
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group__0__Impl_in_rule__JvmParameterizedTypeReference__Group__013689);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group__0__Impl_in_rule__JvmParameterizedTypeReference__Group__013939);
             rule__JvmParameterizedTypeReference__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group__1_in_rule__JvmParameterizedTypeReference__Group__013692);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group__1_in_rule__JvmParameterizedTypeReference__Group__013942);
             rule__JvmParameterizedTypeReference__Group__1();
 
             state._fsp--;
@@ -19553,25 +19902,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6791:1: rule__JvmParameterizedTypeReference__Group__0__Impl : ( ( rule__JvmParameterizedTypeReference__TypeAssignment_0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6918:1: rule__JvmParameterizedTypeReference__Group__0__Impl : ( ( rule__JvmParameterizedTypeReference__TypeAssignment_0 ) ) ;
     public final void rule__JvmParameterizedTypeReference__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6795:1: ( ( ( rule__JvmParameterizedTypeReference__TypeAssignment_0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6796:1: ( ( rule__JvmParameterizedTypeReference__TypeAssignment_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6922:1: ( ( ( rule__JvmParameterizedTypeReference__TypeAssignment_0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6923:1: ( ( rule__JvmParameterizedTypeReference__TypeAssignment_0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6796:1: ( ( rule__JvmParameterizedTypeReference__TypeAssignment_0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6797:1: ( rule__JvmParameterizedTypeReference__TypeAssignment_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6923:1: ( ( rule__JvmParameterizedTypeReference__TypeAssignment_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6924:1: ( rule__JvmParameterizedTypeReference__TypeAssignment_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getTypeAssignment_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6798:1: ( rule__JvmParameterizedTypeReference__TypeAssignment_0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6798:2: rule__JvmParameterizedTypeReference__TypeAssignment_0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6925:1: ( rule__JvmParameterizedTypeReference__TypeAssignment_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6925:2: rule__JvmParameterizedTypeReference__TypeAssignment_0
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__TypeAssignment_0_in_rule__JvmParameterizedTypeReference__Group__0__Impl13719);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__TypeAssignment_0_in_rule__JvmParameterizedTypeReference__Group__0__Impl13969);
             rule__JvmParameterizedTypeReference__TypeAssignment_0();
 
             state._fsp--;
@@ -19604,16 +19953,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6808:1: rule__JvmParameterizedTypeReference__Group__1 : rule__JvmParameterizedTypeReference__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6935:1: rule__JvmParameterizedTypeReference__Group__1 : rule__JvmParameterizedTypeReference__Group__1__Impl ;
     public final void rule__JvmParameterizedTypeReference__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6812:1: ( rule__JvmParameterizedTypeReference__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6813:2: rule__JvmParameterizedTypeReference__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6939:1: ( rule__JvmParameterizedTypeReference__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6940:2: rule__JvmParameterizedTypeReference__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group__1__Impl_in_rule__JvmParameterizedTypeReference__Group__113749);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group__1__Impl_in_rule__JvmParameterizedTypeReference__Group__113999);
             rule__JvmParameterizedTypeReference__Group__1__Impl();
 
             state._fsp--;
@@ -19637,29 +19986,29 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6819:1: rule__JvmParameterizedTypeReference__Group__1__Impl : ( ( rule__JvmParameterizedTypeReference__Group_1__0 )? ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6946:1: rule__JvmParameterizedTypeReference__Group__1__Impl : ( ( rule__JvmParameterizedTypeReference__Group_1__0 )? ) ;
     public final void rule__JvmParameterizedTypeReference__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6823:1: ( ( ( rule__JvmParameterizedTypeReference__Group_1__0 )? ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6824:1: ( ( rule__JvmParameterizedTypeReference__Group_1__0 )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6950:1: ( ( ( rule__JvmParameterizedTypeReference__Group_1__0 )? ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6951:1: ( ( rule__JvmParameterizedTypeReference__Group_1__0 )? )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6824:1: ( ( rule__JvmParameterizedTypeReference__Group_1__0 )? )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6825:1: ( rule__JvmParameterizedTypeReference__Group_1__0 )?
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6951:1: ( ( rule__JvmParameterizedTypeReference__Group_1__0 )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6952:1: ( rule__JvmParameterizedTypeReference__Group_1__0 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getGroup_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6826:1: ( rule__JvmParameterizedTypeReference__Group_1__0 )?
-            int alt36=2;
-            alt36 = dfa36.predict(input);
-            switch (alt36) {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6953:1: ( rule__JvmParameterizedTypeReference__Group_1__0 )?
+            int alt37=2;
+            alt37 = dfa37.predict(input);
+            switch (alt37) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6826:2: rule__JvmParameterizedTypeReference__Group_1__0
+                    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6953:2: rule__JvmParameterizedTypeReference__Group_1__0
                     {
-                    pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0_in_rule__JvmParameterizedTypeReference__Group__1__Impl13776);
+                    pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0_in_rule__JvmParameterizedTypeReference__Group__1__Impl14026);
                     rule__JvmParameterizedTypeReference__Group_1__0();
 
                     state._fsp--;
@@ -19695,21 +20044,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6840:1: rule__JvmParameterizedTypeReference__Group_1__0 : rule__JvmParameterizedTypeReference__Group_1__0__Impl rule__JvmParameterizedTypeReference__Group_1__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6967:1: rule__JvmParameterizedTypeReference__Group_1__0 : rule__JvmParameterizedTypeReference__Group_1__0__Impl rule__JvmParameterizedTypeReference__Group_1__1 ;
     public final void rule__JvmParameterizedTypeReference__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6844:1: ( rule__JvmParameterizedTypeReference__Group_1__0__Impl rule__JvmParameterizedTypeReference__Group_1__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6845:2: rule__JvmParameterizedTypeReference__Group_1__0__Impl rule__JvmParameterizedTypeReference__Group_1__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6971:1: ( rule__JvmParameterizedTypeReference__Group_1__0__Impl rule__JvmParameterizedTypeReference__Group_1__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6972:2: rule__JvmParameterizedTypeReference__Group_1__0__Impl rule__JvmParameterizedTypeReference__Group_1__1
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0__Impl_in_rule__JvmParameterizedTypeReference__Group_1__013811);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0__Impl_in_rule__JvmParameterizedTypeReference__Group_1__014061);
             rule__JvmParameterizedTypeReference__Group_1__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__1_in_rule__JvmParameterizedTypeReference__Group_1__013814);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__1_in_rule__JvmParameterizedTypeReference__Group_1__014064);
             rule__JvmParameterizedTypeReference__Group_1__1();
 
             state._fsp--;
@@ -19733,25 +20082,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6852:1: rule__JvmParameterizedTypeReference__Group_1__0__Impl : ( ( '<' ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6979:1: rule__JvmParameterizedTypeReference__Group_1__0__Impl : ( ( '<' ) ) ;
     public final void rule__JvmParameterizedTypeReference__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6856:1: ( ( ( '<' ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6857:1: ( ( '<' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6983:1: ( ( ( '<' ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6984:1: ( ( '<' ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6857:1: ( ( '<' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6858:1: ( '<' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6984:1: ( ( '<' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6985:1: ( '<' )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getLessThanSignKeyword_1_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6859:1: ( '<' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6860:2: '<'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6986:1: ( '<' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6987:2: '<'
             {
-            match(input,43,FOLLOW_43_in_rule__JvmParameterizedTypeReference__Group_1__0__Impl13843); if (state.failed) return ;
+            match(input,43,FOLLOW_43_in_rule__JvmParameterizedTypeReference__Group_1__0__Impl14093); if (state.failed) return ;
 
             }
 
@@ -19780,21 +20129,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6871:1: rule__JvmParameterizedTypeReference__Group_1__1 : rule__JvmParameterizedTypeReference__Group_1__1__Impl rule__JvmParameterizedTypeReference__Group_1__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6998:1: rule__JvmParameterizedTypeReference__Group_1__1 : rule__JvmParameterizedTypeReference__Group_1__1__Impl rule__JvmParameterizedTypeReference__Group_1__2 ;
     public final void rule__JvmParameterizedTypeReference__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6875:1: ( rule__JvmParameterizedTypeReference__Group_1__1__Impl rule__JvmParameterizedTypeReference__Group_1__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6876:2: rule__JvmParameterizedTypeReference__Group_1__1__Impl rule__JvmParameterizedTypeReference__Group_1__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7002:1: ( rule__JvmParameterizedTypeReference__Group_1__1__Impl rule__JvmParameterizedTypeReference__Group_1__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7003:2: rule__JvmParameterizedTypeReference__Group_1__1__Impl rule__JvmParameterizedTypeReference__Group_1__2
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__1__Impl_in_rule__JvmParameterizedTypeReference__Group_1__113875);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__1__Impl_in_rule__JvmParameterizedTypeReference__Group_1__114125);
             rule__JvmParameterizedTypeReference__Group_1__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__2_in_rule__JvmParameterizedTypeReference__Group_1__113878);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__2_in_rule__JvmParameterizedTypeReference__Group_1__114128);
             rule__JvmParameterizedTypeReference__Group_1__2();
 
             state._fsp--;
@@ -19818,25 +20167,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6883:1: rule__JvmParameterizedTypeReference__Group_1__1__Impl : ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7010:1: rule__JvmParameterizedTypeReference__Group_1__1__Impl : ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 ) ) ;
     public final void rule__JvmParameterizedTypeReference__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6887:1: ( ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6888:1: ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7014:1: ( ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7015:1: ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6888:1: ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6889:1: ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7015:1: ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7016:1: ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getArgumentsAssignment_1_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6890:1: ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6890:2: rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7017:1: ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7017:2: rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1_in_rule__JvmParameterizedTypeReference__Group_1__1__Impl13905);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1_in_rule__JvmParameterizedTypeReference__Group_1__1__Impl14155);
             rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1();
 
             state._fsp--;
@@ -19869,21 +20218,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6900:1: rule__JvmParameterizedTypeReference__Group_1__2 : rule__JvmParameterizedTypeReference__Group_1__2__Impl rule__JvmParameterizedTypeReference__Group_1__3 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7027:1: rule__JvmParameterizedTypeReference__Group_1__2 : rule__JvmParameterizedTypeReference__Group_1__2__Impl rule__JvmParameterizedTypeReference__Group_1__3 ;
     public final void rule__JvmParameterizedTypeReference__Group_1__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6904:1: ( rule__JvmParameterizedTypeReference__Group_1__2__Impl rule__JvmParameterizedTypeReference__Group_1__3 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6905:2: rule__JvmParameterizedTypeReference__Group_1__2__Impl rule__JvmParameterizedTypeReference__Group_1__3
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7031:1: ( rule__JvmParameterizedTypeReference__Group_1__2__Impl rule__JvmParameterizedTypeReference__Group_1__3 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7032:2: rule__JvmParameterizedTypeReference__Group_1__2__Impl rule__JvmParameterizedTypeReference__Group_1__3
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__2__Impl_in_rule__JvmParameterizedTypeReference__Group_1__213935);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__2__Impl_in_rule__JvmParameterizedTypeReference__Group_1__214185);
             rule__JvmParameterizedTypeReference__Group_1__2__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__3_in_rule__JvmParameterizedTypeReference__Group_1__213938);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__3_in_rule__JvmParameterizedTypeReference__Group_1__214188);
             rule__JvmParameterizedTypeReference__Group_1__3();
 
             state._fsp--;
@@ -19907,37 +20256,37 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6912:1: rule__JvmParameterizedTypeReference__Group_1__2__Impl : ( ( rule__JvmParameterizedTypeReference__Group_1_2__0 )* ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7039:1: rule__JvmParameterizedTypeReference__Group_1__2__Impl : ( ( rule__JvmParameterizedTypeReference__Group_1_2__0 )* ) ;
     public final void rule__JvmParameterizedTypeReference__Group_1__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6916:1: ( ( ( rule__JvmParameterizedTypeReference__Group_1_2__0 )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6917:1: ( ( rule__JvmParameterizedTypeReference__Group_1_2__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7043:1: ( ( ( rule__JvmParameterizedTypeReference__Group_1_2__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7044:1: ( ( rule__JvmParameterizedTypeReference__Group_1_2__0 )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6917:1: ( ( rule__JvmParameterizedTypeReference__Group_1_2__0 )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6918:1: ( rule__JvmParameterizedTypeReference__Group_1_2__0 )*
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7044:1: ( ( rule__JvmParameterizedTypeReference__Group_1_2__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7045:1: ( rule__JvmParameterizedTypeReference__Group_1_2__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getGroup_1_2()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6919:1: ( rule__JvmParameterizedTypeReference__Group_1_2__0 )*
-            loop37:
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7046:1: ( rule__JvmParameterizedTypeReference__Group_1_2__0 )*
+            loop38:
             do {
-                int alt37=2;
-                int LA37_0 = input.LA(1);
+                int alt38=2;
+                int LA38_0 = input.LA(1);
 
-                if ( (LA37_0==63) ) {
-                    alt37=1;
+                if ( (LA38_0==63) ) {
+                    alt38=1;
                 }
 
 
-                switch (alt37) {
+                switch (alt38) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6919:2: rule__JvmParameterizedTypeReference__Group_1_2__0
+            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7046:2: rule__JvmParameterizedTypeReference__Group_1_2__0
             	    {
-            	    pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__0_in_rule__JvmParameterizedTypeReference__Group_1__2__Impl13965);
+            	    pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__0_in_rule__JvmParameterizedTypeReference__Group_1__2__Impl14215);
             	    rule__JvmParameterizedTypeReference__Group_1_2__0();
 
             	    state._fsp--;
@@ -19947,7 +20296,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             	    break;
 
             	default :
-            	    break loop37;
+            	    break loop38;
                 }
             } while (true);
 
@@ -19976,16 +20325,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1__3"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6929:1: rule__JvmParameterizedTypeReference__Group_1__3 : rule__JvmParameterizedTypeReference__Group_1__3__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7056:1: rule__JvmParameterizedTypeReference__Group_1__3 : rule__JvmParameterizedTypeReference__Group_1__3__Impl ;
     public final void rule__JvmParameterizedTypeReference__Group_1__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6933:1: ( rule__JvmParameterizedTypeReference__Group_1__3__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6934:2: rule__JvmParameterizedTypeReference__Group_1__3__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7060:1: ( rule__JvmParameterizedTypeReference__Group_1__3__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7061:2: rule__JvmParameterizedTypeReference__Group_1__3__Impl
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__3__Impl_in_rule__JvmParameterizedTypeReference__Group_1__313996);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__3__Impl_in_rule__JvmParameterizedTypeReference__Group_1__314246);
             rule__JvmParameterizedTypeReference__Group_1__3__Impl();
 
             state._fsp--;
@@ -20009,22 +20358,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1__3__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6940:1: rule__JvmParameterizedTypeReference__Group_1__3__Impl : ( '>' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7067:1: rule__JvmParameterizedTypeReference__Group_1__3__Impl : ( '>' ) ;
     public final void rule__JvmParameterizedTypeReference__Group_1__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6944:1: ( ( '>' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6945:1: ( '>' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7071:1: ( ( '>' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7072:1: ( '>' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6945:1: ( '>' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6946:1: '>'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7072:1: ( '>' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7073:1: '>'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getGreaterThanSignKeyword_1_3()); 
             }
-            match(input,45,FOLLOW_45_in_rule__JvmParameterizedTypeReference__Group_1__3__Impl14024); if (state.failed) return ;
+            match(input,45,FOLLOW_45_in_rule__JvmParameterizedTypeReference__Group_1__3__Impl14274); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJvmParameterizedTypeReferenceAccess().getGreaterThanSignKeyword_1_3()); 
             }
@@ -20050,21 +20399,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1_2__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6967:1: rule__JvmParameterizedTypeReference__Group_1_2__0 : rule__JvmParameterizedTypeReference__Group_1_2__0__Impl rule__JvmParameterizedTypeReference__Group_1_2__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7094:1: rule__JvmParameterizedTypeReference__Group_1_2__0 : rule__JvmParameterizedTypeReference__Group_1_2__0__Impl rule__JvmParameterizedTypeReference__Group_1_2__1 ;
     public final void rule__JvmParameterizedTypeReference__Group_1_2__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6971:1: ( rule__JvmParameterizedTypeReference__Group_1_2__0__Impl rule__JvmParameterizedTypeReference__Group_1_2__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6972:2: rule__JvmParameterizedTypeReference__Group_1_2__0__Impl rule__JvmParameterizedTypeReference__Group_1_2__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7098:1: ( rule__JvmParameterizedTypeReference__Group_1_2__0__Impl rule__JvmParameterizedTypeReference__Group_1_2__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7099:2: rule__JvmParameterizedTypeReference__Group_1_2__0__Impl rule__JvmParameterizedTypeReference__Group_1_2__1
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__0__Impl_in_rule__JvmParameterizedTypeReference__Group_1_2__014063);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__0__Impl_in_rule__JvmParameterizedTypeReference__Group_1_2__014313);
             rule__JvmParameterizedTypeReference__Group_1_2__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__1_in_rule__JvmParameterizedTypeReference__Group_1_2__014066);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__1_in_rule__JvmParameterizedTypeReference__Group_1_2__014316);
             rule__JvmParameterizedTypeReference__Group_1_2__1();
 
             state._fsp--;
@@ -20088,22 +20437,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1_2__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6979:1: rule__JvmParameterizedTypeReference__Group_1_2__0__Impl : ( ',' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7106:1: rule__JvmParameterizedTypeReference__Group_1_2__0__Impl : ( ',' ) ;
     public final void rule__JvmParameterizedTypeReference__Group_1_2__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6983:1: ( ( ',' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6984:1: ( ',' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7110:1: ( ( ',' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7111:1: ( ',' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6984:1: ( ',' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6985:1: ','
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7111:1: ( ',' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7112:1: ','
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getCommaKeyword_1_2_0()); 
             }
-            match(input,63,FOLLOW_63_in_rule__JvmParameterizedTypeReference__Group_1_2__0__Impl14094); if (state.failed) return ;
+            match(input,63,FOLLOW_63_in_rule__JvmParameterizedTypeReference__Group_1_2__0__Impl14344); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJvmParameterizedTypeReferenceAccess().getCommaKeyword_1_2_0()); 
             }
@@ -20129,16 +20478,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1_2__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6998:1: rule__JvmParameterizedTypeReference__Group_1_2__1 : rule__JvmParameterizedTypeReference__Group_1_2__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7125:1: rule__JvmParameterizedTypeReference__Group_1_2__1 : rule__JvmParameterizedTypeReference__Group_1_2__1__Impl ;
     public final void rule__JvmParameterizedTypeReference__Group_1_2__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7002:1: ( rule__JvmParameterizedTypeReference__Group_1_2__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7003:2: rule__JvmParameterizedTypeReference__Group_1_2__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7129:1: ( rule__JvmParameterizedTypeReference__Group_1_2__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7130:2: rule__JvmParameterizedTypeReference__Group_1_2__1__Impl
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__1__Impl_in_rule__JvmParameterizedTypeReference__Group_1_2__114125);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__1__Impl_in_rule__JvmParameterizedTypeReference__Group_1_2__114375);
             rule__JvmParameterizedTypeReference__Group_1_2__1__Impl();
 
             state._fsp--;
@@ -20162,25 +20511,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__Group_1_2__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7009:1: rule__JvmParameterizedTypeReference__Group_1_2__1__Impl : ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7136:1: rule__JvmParameterizedTypeReference__Group_1_2__1__Impl : ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 ) ) ;
     public final void rule__JvmParameterizedTypeReference__Group_1_2__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7013:1: ( ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7014:1: ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7140:1: ( ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7141:1: ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7014:1: ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7015:1: ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7141:1: ( ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7142:1: ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getArgumentsAssignment_1_2_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7016:1: ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7016:2: rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7143:1: ( rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7143:2: rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1
             {
-            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1_in_rule__JvmParameterizedTypeReference__Group_1_2__1__Impl14152);
+            pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1_in_rule__JvmParameterizedTypeReference__Group_1_2__1__Impl14402);
             rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1();
 
             state._fsp--;
@@ -20213,21 +20562,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmWildcardTypeReference__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7030:1: rule__JvmWildcardTypeReference__Group__0 : rule__JvmWildcardTypeReference__Group__0__Impl rule__JvmWildcardTypeReference__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7157:1: rule__JvmWildcardTypeReference__Group__0 : rule__JvmWildcardTypeReference__Group__0__Impl rule__JvmWildcardTypeReference__Group__1 ;
     public final void rule__JvmWildcardTypeReference__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7034:1: ( rule__JvmWildcardTypeReference__Group__0__Impl rule__JvmWildcardTypeReference__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7035:2: rule__JvmWildcardTypeReference__Group__0__Impl rule__JvmWildcardTypeReference__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7161:1: ( rule__JvmWildcardTypeReference__Group__0__Impl rule__JvmWildcardTypeReference__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7162:2: rule__JvmWildcardTypeReference__Group__0__Impl rule__JvmWildcardTypeReference__Group__1
             {
-            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__0__Impl_in_rule__JvmWildcardTypeReference__Group__014186);
+            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__0__Impl_in_rule__JvmWildcardTypeReference__Group__014436);
             rule__JvmWildcardTypeReference__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__1_in_rule__JvmWildcardTypeReference__Group__014189);
+            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__1_in_rule__JvmWildcardTypeReference__Group__014439);
             rule__JvmWildcardTypeReference__Group__1();
 
             state._fsp--;
@@ -20251,23 +20600,23 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmWildcardTypeReference__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7042:1: rule__JvmWildcardTypeReference__Group__0__Impl : ( () ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7169:1: rule__JvmWildcardTypeReference__Group__0__Impl : ( () ) ;
     public final void rule__JvmWildcardTypeReference__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7046:1: ( ( () ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7047:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7173:1: ( ( () ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7174:1: ( () )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7047:1: ( () )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7048:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7174:1: ( () )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7175:1: ()
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmWildcardTypeReferenceAccess().getJvmWildcardTypeReferenceAction_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7049:1: ()
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7051:1: 
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7176:1: ()
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7178:1: 
             {
             }
 
@@ -20292,21 +20641,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmWildcardTypeReference__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7061:1: rule__JvmWildcardTypeReference__Group__1 : rule__JvmWildcardTypeReference__Group__1__Impl rule__JvmWildcardTypeReference__Group__2 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7188:1: rule__JvmWildcardTypeReference__Group__1 : rule__JvmWildcardTypeReference__Group__1__Impl rule__JvmWildcardTypeReference__Group__2 ;
     public final void rule__JvmWildcardTypeReference__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7065:1: ( rule__JvmWildcardTypeReference__Group__1__Impl rule__JvmWildcardTypeReference__Group__2 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7066:2: rule__JvmWildcardTypeReference__Group__1__Impl rule__JvmWildcardTypeReference__Group__2
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7192:1: ( rule__JvmWildcardTypeReference__Group__1__Impl rule__JvmWildcardTypeReference__Group__2 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7193:2: rule__JvmWildcardTypeReference__Group__1__Impl rule__JvmWildcardTypeReference__Group__2
             {
-            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__1__Impl_in_rule__JvmWildcardTypeReference__Group__114247);
+            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__1__Impl_in_rule__JvmWildcardTypeReference__Group__114497);
             rule__JvmWildcardTypeReference__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__2_in_rule__JvmWildcardTypeReference__Group__114250);
+            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__2_in_rule__JvmWildcardTypeReference__Group__114500);
             rule__JvmWildcardTypeReference__Group__2();
 
             state._fsp--;
@@ -20330,22 +20679,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmWildcardTypeReference__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7073:1: rule__JvmWildcardTypeReference__Group__1__Impl : ( '?' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7200:1: rule__JvmWildcardTypeReference__Group__1__Impl : ( '?' ) ;
     public final void rule__JvmWildcardTypeReference__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7077:1: ( ( '?' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7078:1: ( '?' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7204:1: ( ( '?' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7205:1: ( '?' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7078:1: ( '?' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7079:1: '?'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7205:1: ( '?' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7206:1: '?'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmWildcardTypeReferenceAccess().getQuestionMarkKeyword_1()); 
             }
-            match(input,47,FOLLOW_47_in_rule__JvmWildcardTypeReference__Group__1__Impl14278); if (state.failed) return ;
+            match(input,47,FOLLOW_47_in_rule__JvmWildcardTypeReference__Group__1__Impl14528); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJvmWildcardTypeReferenceAccess().getQuestionMarkKeyword_1()); 
             }
@@ -20371,16 +20720,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmWildcardTypeReference__Group__2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7092:1: rule__JvmWildcardTypeReference__Group__2 : rule__JvmWildcardTypeReference__Group__2__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7219:1: rule__JvmWildcardTypeReference__Group__2 : rule__JvmWildcardTypeReference__Group__2__Impl ;
     public final void rule__JvmWildcardTypeReference__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7096:1: ( rule__JvmWildcardTypeReference__Group__2__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7097:2: rule__JvmWildcardTypeReference__Group__2__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7223:1: ( rule__JvmWildcardTypeReference__Group__2__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7224:2: rule__JvmWildcardTypeReference__Group__2__Impl
             {
-            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__2__Impl_in_rule__JvmWildcardTypeReference__Group__214309);
+            pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Group__2__Impl_in_rule__JvmWildcardTypeReference__Group__214559);
             rule__JvmWildcardTypeReference__Group__2__Impl();
 
             state._fsp--;
@@ -20404,33 +20753,33 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmWildcardTypeReference__Group__2__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7103:1: rule__JvmWildcardTypeReference__Group__2__Impl : ( ( rule__JvmWildcardTypeReference__Alternatives_2 )? ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7230:1: rule__JvmWildcardTypeReference__Group__2__Impl : ( ( rule__JvmWildcardTypeReference__Alternatives_2 )? ) ;
     public final void rule__JvmWildcardTypeReference__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7107:1: ( ( ( rule__JvmWildcardTypeReference__Alternatives_2 )? ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7108:1: ( ( rule__JvmWildcardTypeReference__Alternatives_2 )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7234:1: ( ( ( rule__JvmWildcardTypeReference__Alternatives_2 )? ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7235:1: ( ( rule__JvmWildcardTypeReference__Alternatives_2 )? )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7108:1: ( ( rule__JvmWildcardTypeReference__Alternatives_2 )? )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7109:1: ( rule__JvmWildcardTypeReference__Alternatives_2 )?
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7235:1: ( ( rule__JvmWildcardTypeReference__Alternatives_2 )? )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7236:1: ( rule__JvmWildcardTypeReference__Alternatives_2 )?
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmWildcardTypeReferenceAccess().getAlternatives_2()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7110:1: ( rule__JvmWildcardTypeReference__Alternatives_2 )?
-            int alt38=2;
-            int LA38_0 = input.LA(1);
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7237:1: ( rule__JvmWildcardTypeReference__Alternatives_2 )?
+            int alt39=2;
+            int LA39_0 = input.LA(1);
 
-            if ( ((LA38_0>=64 && LA38_0<=65)) ) {
-                alt38=1;
+            if ( ((LA39_0>=64 && LA39_0<=65)) ) {
+                alt39=1;
             }
-            switch (alt38) {
+            switch (alt39) {
                 case 1 :
-                    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7110:2: rule__JvmWildcardTypeReference__Alternatives_2
+                    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7237:2: rule__JvmWildcardTypeReference__Alternatives_2
                     {
-                    pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Alternatives_2_in_rule__JvmWildcardTypeReference__Group__2__Impl14336);
+                    pushFollow(FOLLOW_rule__JvmWildcardTypeReference__Alternatives_2_in_rule__JvmWildcardTypeReference__Group__2__Impl14586);
                     rule__JvmWildcardTypeReference__Alternatives_2();
 
                     state._fsp--;
@@ -20466,21 +20815,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmUpperBound__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7126:1: rule__JvmUpperBound__Group__0 : rule__JvmUpperBound__Group__0__Impl rule__JvmUpperBound__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7253:1: rule__JvmUpperBound__Group__0 : rule__JvmUpperBound__Group__0__Impl rule__JvmUpperBound__Group__1 ;
     public final void rule__JvmUpperBound__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7130:1: ( rule__JvmUpperBound__Group__0__Impl rule__JvmUpperBound__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7131:2: rule__JvmUpperBound__Group__0__Impl rule__JvmUpperBound__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7257:1: ( rule__JvmUpperBound__Group__0__Impl rule__JvmUpperBound__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7258:2: rule__JvmUpperBound__Group__0__Impl rule__JvmUpperBound__Group__1
             {
-            pushFollow(FOLLOW_rule__JvmUpperBound__Group__0__Impl_in_rule__JvmUpperBound__Group__014373);
+            pushFollow(FOLLOW_rule__JvmUpperBound__Group__0__Impl_in_rule__JvmUpperBound__Group__014623);
             rule__JvmUpperBound__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmUpperBound__Group__1_in_rule__JvmUpperBound__Group__014376);
+            pushFollow(FOLLOW_rule__JvmUpperBound__Group__1_in_rule__JvmUpperBound__Group__014626);
             rule__JvmUpperBound__Group__1();
 
             state._fsp--;
@@ -20504,22 +20853,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmUpperBound__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7138:1: rule__JvmUpperBound__Group__0__Impl : ( 'extends' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7265:1: rule__JvmUpperBound__Group__0__Impl : ( 'extends' ) ;
     public final void rule__JvmUpperBound__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7142:1: ( ( 'extends' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7143:1: ( 'extends' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7269:1: ( ( 'extends' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7270:1: ( 'extends' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7143:1: ( 'extends' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7144:1: 'extends'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7270:1: ( 'extends' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7271:1: 'extends'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmUpperBoundAccess().getExtendsKeyword_0()); 
             }
-            match(input,64,FOLLOW_64_in_rule__JvmUpperBound__Group__0__Impl14404); if (state.failed) return ;
+            match(input,64,FOLLOW_64_in_rule__JvmUpperBound__Group__0__Impl14654); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJvmUpperBoundAccess().getExtendsKeyword_0()); 
             }
@@ -20545,16 +20894,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmUpperBound__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7157:1: rule__JvmUpperBound__Group__1 : rule__JvmUpperBound__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7284:1: rule__JvmUpperBound__Group__1 : rule__JvmUpperBound__Group__1__Impl ;
     public final void rule__JvmUpperBound__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7161:1: ( rule__JvmUpperBound__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7162:2: rule__JvmUpperBound__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7288:1: ( rule__JvmUpperBound__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7289:2: rule__JvmUpperBound__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__JvmUpperBound__Group__1__Impl_in_rule__JvmUpperBound__Group__114435);
+            pushFollow(FOLLOW_rule__JvmUpperBound__Group__1__Impl_in_rule__JvmUpperBound__Group__114685);
             rule__JvmUpperBound__Group__1__Impl();
 
             state._fsp--;
@@ -20578,25 +20927,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmUpperBound__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7168:1: rule__JvmUpperBound__Group__1__Impl : ( ( rule__JvmUpperBound__TypeReferenceAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7295:1: rule__JvmUpperBound__Group__1__Impl : ( ( rule__JvmUpperBound__TypeReferenceAssignment_1 ) ) ;
     public final void rule__JvmUpperBound__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7172:1: ( ( ( rule__JvmUpperBound__TypeReferenceAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7173:1: ( ( rule__JvmUpperBound__TypeReferenceAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7299:1: ( ( ( rule__JvmUpperBound__TypeReferenceAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7300:1: ( ( rule__JvmUpperBound__TypeReferenceAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7173:1: ( ( rule__JvmUpperBound__TypeReferenceAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7174:1: ( rule__JvmUpperBound__TypeReferenceAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7300:1: ( ( rule__JvmUpperBound__TypeReferenceAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7301:1: ( rule__JvmUpperBound__TypeReferenceAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmUpperBoundAccess().getTypeReferenceAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7175:1: ( rule__JvmUpperBound__TypeReferenceAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7175:2: rule__JvmUpperBound__TypeReferenceAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7302:1: ( rule__JvmUpperBound__TypeReferenceAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7302:2: rule__JvmUpperBound__TypeReferenceAssignment_1
             {
-            pushFollow(FOLLOW_rule__JvmUpperBound__TypeReferenceAssignment_1_in_rule__JvmUpperBound__Group__1__Impl14462);
+            pushFollow(FOLLOW_rule__JvmUpperBound__TypeReferenceAssignment_1_in_rule__JvmUpperBound__Group__1__Impl14712);
             rule__JvmUpperBound__TypeReferenceAssignment_1();
 
             state._fsp--;
@@ -20629,21 +20978,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmLowerBound__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7189:1: rule__JvmLowerBound__Group__0 : rule__JvmLowerBound__Group__0__Impl rule__JvmLowerBound__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7316:1: rule__JvmLowerBound__Group__0 : rule__JvmLowerBound__Group__0__Impl rule__JvmLowerBound__Group__1 ;
     public final void rule__JvmLowerBound__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7193:1: ( rule__JvmLowerBound__Group__0__Impl rule__JvmLowerBound__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7194:2: rule__JvmLowerBound__Group__0__Impl rule__JvmLowerBound__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7320:1: ( rule__JvmLowerBound__Group__0__Impl rule__JvmLowerBound__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7321:2: rule__JvmLowerBound__Group__0__Impl rule__JvmLowerBound__Group__1
             {
-            pushFollow(FOLLOW_rule__JvmLowerBound__Group__0__Impl_in_rule__JvmLowerBound__Group__014496);
+            pushFollow(FOLLOW_rule__JvmLowerBound__Group__0__Impl_in_rule__JvmLowerBound__Group__014746);
             rule__JvmLowerBound__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__JvmLowerBound__Group__1_in_rule__JvmLowerBound__Group__014499);
+            pushFollow(FOLLOW_rule__JvmLowerBound__Group__1_in_rule__JvmLowerBound__Group__014749);
             rule__JvmLowerBound__Group__1();
 
             state._fsp--;
@@ -20667,22 +21016,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmLowerBound__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7201:1: rule__JvmLowerBound__Group__0__Impl : ( 'super' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7328:1: rule__JvmLowerBound__Group__0__Impl : ( 'super' ) ;
     public final void rule__JvmLowerBound__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7205:1: ( ( 'super' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7206:1: ( 'super' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7332:1: ( ( 'super' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7333:1: ( 'super' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7206:1: ( 'super' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7207:1: 'super'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7333:1: ( 'super' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7334:1: 'super'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmLowerBoundAccess().getSuperKeyword_0()); 
             }
-            match(input,65,FOLLOW_65_in_rule__JvmLowerBound__Group__0__Impl14527); if (state.failed) return ;
+            match(input,65,FOLLOW_65_in_rule__JvmLowerBound__Group__0__Impl14777); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJvmLowerBoundAccess().getSuperKeyword_0()); 
             }
@@ -20708,16 +21057,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmLowerBound__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7220:1: rule__JvmLowerBound__Group__1 : rule__JvmLowerBound__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7347:1: rule__JvmLowerBound__Group__1 : rule__JvmLowerBound__Group__1__Impl ;
     public final void rule__JvmLowerBound__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7224:1: ( rule__JvmLowerBound__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7225:2: rule__JvmLowerBound__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7351:1: ( rule__JvmLowerBound__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7352:2: rule__JvmLowerBound__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__JvmLowerBound__Group__1__Impl_in_rule__JvmLowerBound__Group__114558);
+            pushFollow(FOLLOW_rule__JvmLowerBound__Group__1__Impl_in_rule__JvmLowerBound__Group__114808);
             rule__JvmLowerBound__Group__1__Impl();
 
             state._fsp--;
@@ -20741,25 +21090,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmLowerBound__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7231:1: rule__JvmLowerBound__Group__1__Impl : ( ( rule__JvmLowerBound__TypeReferenceAssignment_1 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7358:1: rule__JvmLowerBound__Group__1__Impl : ( ( rule__JvmLowerBound__TypeReferenceAssignment_1 ) ) ;
     public final void rule__JvmLowerBound__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7235:1: ( ( ( rule__JvmLowerBound__TypeReferenceAssignment_1 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7236:1: ( ( rule__JvmLowerBound__TypeReferenceAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7362:1: ( ( ( rule__JvmLowerBound__TypeReferenceAssignment_1 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7363:1: ( ( rule__JvmLowerBound__TypeReferenceAssignment_1 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7236:1: ( ( rule__JvmLowerBound__TypeReferenceAssignment_1 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7237:1: ( rule__JvmLowerBound__TypeReferenceAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7363:1: ( ( rule__JvmLowerBound__TypeReferenceAssignment_1 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7364:1: ( rule__JvmLowerBound__TypeReferenceAssignment_1 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmLowerBoundAccess().getTypeReferenceAssignment_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7238:1: ( rule__JvmLowerBound__TypeReferenceAssignment_1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7238:2: rule__JvmLowerBound__TypeReferenceAssignment_1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7365:1: ( rule__JvmLowerBound__TypeReferenceAssignment_1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7365:2: rule__JvmLowerBound__TypeReferenceAssignment_1
             {
-            pushFollow(FOLLOW_rule__JvmLowerBound__TypeReferenceAssignment_1_in_rule__JvmLowerBound__Group__1__Impl14585);
+            pushFollow(FOLLOW_rule__JvmLowerBound__TypeReferenceAssignment_1_in_rule__JvmLowerBound__Group__1__Impl14835);
             rule__JvmLowerBound__TypeReferenceAssignment_1();
 
             state._fsp--;
@@ -20792,21 +21141,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__QualifiedName__Group__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7252:1: rule__QualifiedName__Group__0 : rule__QualifiedName__Group__0__Impl rule__QualifiedName__Group__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7379:1: rule__QualifiedName__Group__0 : rule__QualifiedName__Group__0__Impl rule__QualifiedName__Group__1 ;
     public final void rule__QualifiedName__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7256:1: ( rule__QualifiedName__Group__0__Impl rule__QualifiedName__Group__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7257:2: rule__QualifiedName__Group__0__Impl rule__QualifiedName__Group__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7383:1: ( rule__QualifiedName__Group__0__Impl rule__QualifiedName__Group__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7384:2: rule__QualifiedName__Group__0__Impl rule__QualifiedName__Group__1
             {
-            pushFollow(FOLLOW_rule__QualifiedName__Group__0__Impl_in_rule__QualifiedName__Group__014619);
+            pushFollow(FOLLOW_rule__QualifiedName__Group__0__Impl_in_rule__QualifiedName__Group__014869);
             rule__QualifiedName__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__QualifiedName__Group__1_in_rule__QualifiedName__Group__014622);
+            pushFollow(FOLLOW_rule__QualifiedName__Group__1_in_rule__QualifiedName__Group__014872);
             rule__QualifiedName__Group__1();
 
             state._fsp--;
@@ -20830,22 +21179,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__QualifiedName__Group__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7264:1: rule__QualifiedName__Group__0__Impl : ( ruleValidID ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7391:1: rule__QualifiedName__Group__0__Impl : ( ruleValidID ) ;
     public final void rule__QualifiedName__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7268:1: ( ( ruleValidID ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7269:1: ( ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7395:1: ( ( ruleValidID ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7396:1: ( ruleValidID )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7269:1: ( ruleValidID )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7270:1: ruleValidID
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7396:1: ( ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7397:1: ruleValidID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getQualifiedNameAccess().getValidIDParserRuleCall_0()); 
             }
-            pushFollow(FOLLOW_ruleValidID_in_rule__QualifiedName__Group__0__Impl14649);
+            pushFollow(FOLLOW_ruleValidID_in_rule__QualifiedName__Group__0__Impl14899);
             ruleValidID();
 
             state._fsp--;
@@ -20875,16 +21224,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__QualifiedName__Group__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7281:1: rule__QualifiedName__Group__1 : rule__QualifiedName__Group__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7408:1: rule__QualifiedName__Group__1 : rule__QualifiedName__Group__1__Impl ;
     public final void rule__QualifiedName__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7285:1: ( rule__QualifiedName__Group__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7286:2: rule__QualifiedName__Group__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7412:1: ( rule__QualifiedName__Group__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7413:2: rule__QualifiedName__Group__1__Impl
             {
-            pushFollow(FOLLOW_rule__QualifiedName__Group__1__Impl_in_rule__QualifiedName__Group__114678);
+            pushFollow(FOLLOW_rule__QualifiedName__Group__1__Impl_in_rule__QualifiedName__Group__114928);
             rule__QualifiedName__Group__1__Impl();
 
             state._fsp--;
@@ -20908,43 +21257,43 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__QualifiedName__Group__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7292:1: rule__QualifiedName__Group__1__Impl : ( ( rule__QualifiedName__Group_1__0 )* ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7419:1: rule__QualifiedName__Group__1__Impl : ( ( rule__QualifiedName__Group_1__0 )* ) ;
     public final void rule__QualifiedName__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7296:1: ( ( ( rule__QualifiedName__Group_1__0 )* ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7297:1: ( ( rule__QualifiedName__Group_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7423:1: ( ( ( rule__QualifiedName__Group_1__0 )* ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7424:1: ( ( rule__QualifiedName__Group_1__0 )* )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7297:1: ( ( rule__QualifiedName__Group_1__0 )* )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7298:1: ( rule__QualifiedName__Group_1__0 )*
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7424:1: ( ( rule__QualifiedName__Group_1__0 )* )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7425:1: ( rule__QualifiedName__Group_1__0 )*
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getQualifiedNameAccess().getGroup_1()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7299:1: ( rule__QualifiedName__Group_1__0 )*
-            loop39:
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7426:1: ( rule__QualifiedName__Group_1__0 )*
+            loop40:
             do {
-                int alt39=2;
-                int LA39_0 = input.LA(1);
+                int alt40=2;
+                int LA40_0 = input.LA(1);
 
-                if ( (LA39_0==50) ) {
-                    int LA39_2 = input.LA(2);
+                if ( (LA40_0==50) ) {
+                    int LA40_2 = input.LA(2);
 
-                    if ( (LA39_2==RULE_ID) ) {
-                        alt39=1;
+                    if ( (LA40_2==RULE_ID) ) {
+                        alt40=1;
                     }
 
 
                 }
 
 
-                switch (alt39) {
+                switch (alt40) {
             	case 1 :
-            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7299:2: rule__QualifiedName__Group_1__0
+            	    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7426:2: rule__QualifiedName__Group_1__0
             	    {
-            	    pushFollow(FOLLOW_rule__QualifiedName__Group_1__0_in_rule__QualifiedName__Group__1__Impl14705);
+            	    pushFollow(FOLLOW_rule__QualifiedName__Group_1__0_in_rule__QualifiedName__Group__1__Impl14955);
             	    rule__QualifiedName__Group_1__0();
 
             	    state._fsp--;
@@ -20954,7 +21303,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             	    break;
 
             	default :
-            	    break loop39;
+            	    break loop40;
                 }
             } while (true);
 
@@ -20983,21 +21332,21 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__QualifiedName__Group_1__0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7313:1: rule__QualifiedName__Group_1__0 : rule__QualifiedName__Group_1__0__Impl rule__QualifiedName__Group_1__1 ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7440:1: rule__QualifiedName__Group_1__0 : rule__QualifiedName__Group_1__0__Impl rule__QualifiedName__Group_1__1 ;
     public final void rule__QualifiedName__Group_1__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7317:1: ( rule__QualifiedName__Group_1__0__Impl rule__QualifiedName__Group_1__1 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7318:2: rule__QualifiedName__Group_1__0__Impl rule__QualifiedName__Group_1__1
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7444:1: ( rule__QualifiedName__Group_1__0__Impl rule__QualifiedName__Group_1__1 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7445:2: rule__QualifiedName__Group_1__0__Impl rule__QualifiedName__Group_1__1
             {
-            pushFollow(FOLLOW_rule__QualifiedName__Group_1__0__Impl_in_rule__QualifiedName__Group_1__014740);
+            pushFollow(FOLLOW_rule__QualifiedName__Group_1__0__Impl_in_rule__QualifiedName__Group_1__014990);
             rule__QualifiedName__Group_1__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_rule__QualifiedName__Group_1__1_in_rule__QualifiedName__Group_1__014743);
+            pushFollow(FOLLOW_rule__QualifiedName__Group_1__1_in_rule__QualifiedName__Group_1__014993);
             rule__QualifiedName__Group_1__1();
 
             state._fsp--;
@@ -21021,22 +21370,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__QualifiedName__Group_1__0__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7325:1: rule__QualifiedName__Group_1__0__Impl : ( '.' ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7452:1: rule__QualifiedName__Group_1__0__Impl : ( '.' ) ;
     public final void rule__QualifiedName__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7329:1: ( ( '.' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7330:1: ( '.' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7456:1: ( ( '.' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7457:1: ( '.' )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7330:1: ( '.' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7331:1: '.'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7457:1: ( '.' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7458:1: '.'
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getQualifiedNameAccess().getFullStopKeyword_1_0()); 
             }
-            match(input,50,FOLLOW_50_in_rule__QualifiedName__Group_1__0__Impl14771); if (state.failed) return ;
+            match(input,50,FOLLOW_50_in_rule__QualifiedName__Group_1__0__Impl15021); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getQualifiedNameAccess().getFullStopKeyword_1_0()); 
             }
@@ -21062,16 +21411,16 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__QualifiedName__Group_1__1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7344:1: rule__QualifiedName__Group_1__1 : rule__QualifiedName__Group_1__1__Impl ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7471:1: rule__QualifiedName__Group_1__1 : rule__QualifiedName__Group_1__1__Impl ;
     public final void rule__QualifiedName__Group_1__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7348:1: ( rule__QualifiedName__Group_1__1__Impl )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7349:2: rule__QualifiedName__Group_1__1__Impl
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7475:1: ( rule__QualifiedName__Group_1__1__Impl )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7476:2: rule__QualifiedName__Group_1__1__Impl
             {
-            pushFollow(FOLLOW_rule__QualifiedName__Group_1__1__Impl_in_rule__QualifiedName__Group_1__114802);
+            pushFollow(FOLLOW_rule__QualifiedName__Group_1__1__Impl_in_rule__QualifiedName__Group_1__115052);
             rule__QualifiedName__Group_1__1__Impl();
 
             state._fsp--;
@@ -21095,22 +21444,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__QualifiedName__Group_1__1__Impl"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7355:1: rule__QualifiedName__Group_1__1__Impl : ( ruleValidID ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7482:1: rule__QualifiedName__Group_1__1__Impl : ( ruleValidID ) ;
     public final void rule__QualifiedName__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7359:1: ( ( ruleValidID ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7360:1: ( ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7486:1: ( ( ruleValidID ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7487:1: ( ruleValidID )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7360:1: ( ruleValidID )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7361:1: ruleValidID
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7487:1: ( ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7488:1: ruleValidID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getQualifiedNameAccess().getValidIDParserRuleCall_1_1()); 
             }
-            pushFollow(FOLLOW_ruleValidID_in_rule__QualifiedName__Group_1__1__Impl14829);
+            pushFollow(FOLLOW_ruleValidID_in_rule__QualifiedName__Group_1__1__Impl15079);
             ruleValidID();
 
             state._fsp--;
@@ -21140,22 +21489,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JRExpressionModel__ExpressionAssignment"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7377:1: rule__JRExpressionModel__ExpressionAssignment : ( ruleJasperReportsExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7504:1: rule__JRExpressionModel__ExpressionAssignment : ( ruleJasperReportsExpression ) ;
     public final void rule__JRExpressionModel__ExpressionAssignment() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7381:1: ( ( ruleJasperReportsExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7382:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7508:1: ( ( ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7509:1: ( ruleJasperReportsExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7382:1: ( ruleJasperReportsExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7383:1: ruleJasperReportsExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7509:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7510:1: ruleJasperReportsExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJRExpressionModelAccess().getExpressionJasperReportsExpressionParserRuleCall_0()); 
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__JRExpressionModel__ExpressionAssignment14867);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__JRExpressionModel__ExpressionAssignment15117);
             ruleJasperReportsExpression();
 
             state._fsp--;
@@ -21185,22 +21534,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ConditionalExpression__TrueStatementAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7392:1: rule__ConditionalExpression__TrueStatementAssignment_1_1 : ( ruleJasperReportsExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7519:1: rule__ConditionalExpression__TrueStatementAssignment_1_1 : ( ruleJasperReportsExpression ) ;
     public final void rule__ConditionalExpression__TrueStatementAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7396:1: ( ( ruleJasperReportsExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7397:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7523:1: ( ( ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7524:1: ( ruleJasperReportsExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7397:1: ( ruleJasperReportsExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7398:1: ruleJasperReportsExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7524:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7525:1: ruleJasperReportsExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getConditionalExpressionAccess().getTrueStatementJasperReportsExpressionParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ConditionalExpression__TrueStatementAssignment_1_114898);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ConditionalExpression__TrueStatementAssignment_1_115148);
             ruleJasperReportsExpression();
 
             state._fsp--;
@@ -21230,22 +21579,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ConditionalExpression__FalseStatementAssignment_1_3"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7407:1: rule__ConditionalExpression__FalseStatementAssignment_1_3 : ( ruleJasperReportsExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7534:1: rule__ConditionalExpression__FalseStatementAssignment_1_3 : ( ruleJasperReportsExpression ) ;
     public final void rule__ConditionalExpression__FalseStatementAssignment_1_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7411:1: ( ( ruleJasperReportsExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7412:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7538:1: ( ( ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7539:1: ( ruleJasperReportsExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7412:1: ( ruleJasperReportsExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7413:1: ruleJasperReportsExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7539:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7540:1: ruleJasperReportsExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getConditionalExpressionAccess().getFalseStatementJasperReportsExpressionParserRuleCall_1_3_0()); 
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ConditionalExpression__FalseStatementAssignment_1_314929);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ConditionalExpression__FalseStatementAssignment_1_315179);
             ruleJasperReportsExpression();
 
             state._fsp--;
@@ -21275,28 +21624,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ConditionalOrExpression__OpAssignment_1_0_0_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7422:1: rule__ConditionalOrExpression__OpAssignment_1_0_0_1 : ( ( '||' ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7549:1: rule__ConditionalOrExpression__OpAssignment_1_0_0_1 : ( ( '||' ) ) ;
     public final void rule__ConditionalOrExpression__OpAssignment_1_0_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7426:1: ( ( ( '||' ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7427:1: ( ( '||' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7553:1: ( ( ( '||' ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7554:1: ( ( '||' ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7427:1: ( ( '||' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7428:1: ( '||' )
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getConditionalOrExpressionAccess().getOpVerticalLineVerticalLineKeyword_1_0_0_1_0()); 
-            }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7429:1: ( '||' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7430:1: '||'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7554:1: ( ( '||' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7555:1: ( '||' )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getConditionalOrExpressionAccess().getOpVerticalLineVerticalLineKeyword_1_0_0_1_0()); 
             }
-            match(input,66,FOLLOW_66_in_rule__ConditionalOrExpression__OpAssignment_1_0_0_114965); if (state.failed) return ;
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7556:1: ( '||' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7557:1: '||'
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getConditionalOrExpressionAccess().getOpVerticalLineVerticalLineKeyword_1_0_0_1_0()); 
+            }
+            match(input,66,FOLLOW_66_in_rule__ConditionalOrExpression__OpAssignment_1_0_0_115215); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getConditionalOrExpressionAccess().getOpVerticalLineVerticalLineKeyword_1_0_0_1_0()); 
             }
@@ -21328,22 +21677,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ConditionalOrExpression__RightAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7445:1: rule__ConditionalOrExpression__RightAssignment_1_1 : ( ruleConditionalAndExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7572:1: rule__ConditionalOrExpression__RightAssignment_1_1 : ( ruleConditionalAndExpression ) ;
     public final void rule__ConditionalOrExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7449:1: ( ( ruleConditionalAndExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7450:1: ( ruleConditionalAndExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7576:1: ( ( ruleConditionalAndExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7577:1: ( ruleConditionalAndExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7450:1: ( ruleConditionalAndExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7451:1: ruleConditionalAndExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7577:1: ( ruleConditionalAndExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7578:1: ruleConditionalAndExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getConditionalOrExpressionAccess().getRightConditionalAndExpressionParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleConditionalAndExpression_in_rule__ConditionalOrExpression__RightAssignment_1_115004);
+            pushFollow(FOLLOW_ruleConditionalAndExpression_in_rule__ConditionalOrExpression__RightAssignment_1_115254);
             ruleConditionalAndExpression();
 
             state._fsp--;
@@ -21373,28 +21722,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ConditionalAndExpression__OpAssignment_1_0_0_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7460:1: rule__ConditionalAndExpression__OpAssignment_1_0_0_1 : ( ( '&&' ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7587:1: rule__ConditionalAndExpression__OpAssignment_1_0_0_1 : ( ( '&&' ) ) ;
     public final void rule__ConditionalAndExpression__OpAssignment_1_0_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7464:1: ( ( ( '&&' ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7465:1: ( ( '&&' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7591:1: ( ( ( '&&' ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7592:1: ( ( '&&' ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7465:1: ( ( '&&' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7466:1: ( '&&' )
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getConditionalAndExpressionAccess().getOpAmpersandAmpersandKeyword_1_0_0_1_0()); 
-            }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7467:1: ( '&&' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7468:1: '&&'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7592:1: ( ( '&&' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7593:1: ( '&&' )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getConditionalAndExpressionAccess().getOpAmpersandAmpersandKeyword_1_0_0_1_0()); 
             }
-            match(input,67,FOLLOW_67_in_rule__ConditionalAndExpression__OpAssignment_1_0_0_115040); if (state.failed) return ;
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7594:1: ( '&&' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7595:1: '&&'
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getConditionalAndExpressionAccess().getOpAmpersandAmpersandKeyword_1_0_0_1_0()); 
+            }
+            match(input,67,FOLLOW_67_in_rule__ConditionalAndExpression__OpAssignment_1_0_0_115290); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getConditionalAndExpressionAccess().getOpAmpersandAmpersandKeyword_1_0_0_1_0()); 
             }
@@ -21426,22 +21775,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ConditionalAndExpression__RightAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7483:1: rule__ConditionalAndExpression__RightAssignment_1_1 : ( ruleEqualityExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7610:1: rule__ConditionalAndExpression__RightAssignment_1_1 : ( ruleEqualityExpression ) ;
     public final void rule__ConditionalAndExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7487:1: ( ( ruleEqualityExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7488:1: ( ruleEqualityExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7614:1: ( ( ruleEqualityExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7615:1: ( ruleEqualityExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7488:1: ( ruleEqualityExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7489:1: ruleEqualityExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7615:1: ( ruleEqualityExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7616:1: ruleEqualityExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getConditionalAndExpressionAccess().getRightEqualityExpressionParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleEqualityExpression_in_rule__ConditionalAndExpression__RightAssignment_1_115079);
+            pushFollow(FOLLOW_ruleEqualityExpression_in_rule__ConditionalAndExpression__RightAssignment_1_115329);
             ruleEqualityExpression();
 
             state._fsp--;
@@ -21471,25 +21820,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__EqualityExpression__OpAssignment_1_0_0_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7498:1: rule__EqualityExpression__OpAssignment_1_0_0_1 : ( ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7625:1: rule__EqualityExpression__OpAssignment_1_0_0_1 : ( ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 ) ) ;
     public final void rule__EqualityExpression__OpAssignment_1_0_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7502:1: ( ( ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7503:1: ( ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7629:1: ( ( ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7630:1: ( ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7503:1: ( ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7504:1: ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7630:1: ( ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7631:1: ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getEqualityExpressionAccess().getOpAlternatives_1_0_0_1_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7505:1: ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7505:2: rule__EqualityExpression__OpAlternatives_1_0_0_1_0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7632:1: ( rule__EqualityExpression__OpAlternatives_1_0_0_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7632:2: rule__EqualityExpression__OpAlternatives_1_0_0_1_0
             {
-            pushFollow(FOLLOW_rule__EqualityExpression__OpAlternatives_1_0_0_1_0_in_rule__EqualityExpression__OpAssignment_1_0_0_115110);
+            pushFollow(FOLLOW_rule__EqualityExpression__OpAlternatives_1_0_0_1_0_in_rule__EqualityExpression__OpAssignment_1_0_0_115360);
             rule__EqualityExpression__OpAlternatives_1_0_0_1_0();
 
             state._fsp--;
@@ -21522,22 +21871,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__EqualityExpression__RightAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7514:1: rule__EqualityExpression__RightAssignment_1_1 : ( ruleInstanceofExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7641:1: rule__EqualityExpression__RightAssignment_1_1 : ( ruleInstanceofExpression ) ;
     public final void rule__EqualityExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7518:1: ( ( ruleInstanceofExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7519:1: ( ruleInstanceofExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7645:1: ( ( ruleInstanceofExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7646:1: ( ruleInstanceofExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7519:1: ( ruleInstanceofExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7520:1: ruleInstanceofExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7646:1: ( ruleInstanceofExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7647:1: ruleInstanceofExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getEqualityExpressionAccess().getRightInstanceofExpressionParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleInstanceofExpression_in_rule__EqualityExpression__RightAssignment_1_115143);
+            pushFollow(FOLLOW_ruleInstanceofExpression_in_rule__EqualityExpression__RightAssignment_1_115393);
             ruleInstanceofExpression();
 
             state._fsp--;
@@ -21567,28 +21916,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__InstanceofExpression__OpAssignment_1_0_0_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7529:1: rule__InstanceofExpression__OpAssignment_1_0_0_1 : ( ( 'instanceof' ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7656:1: rule__InstanceofExpression__OpAssignment_1_0_0_1 : ( ( 'instanceof' ) ) ;
     public final void rule__InstanceofExpression__OpAssignment_1_0_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7533:1: ( ( ( 'instanceof' ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7534:1: ( ( 'instanceof' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7660:1: ( ( ( 'instanceof' ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7661:1: ( ( 'instanceof' ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7534:1: ( ( 'instanceof' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7535:1: ( 'instanceof' )
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getInstanceofExpressionAccess().getOpInstanceofKeyword_1_0_0_1_0()); 
-            }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7536:1: ( 'instanceof' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7537:1: 'instanceof'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7661:1: ( ( 'instanceof' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7662:1: ( 'instanceof' )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getInstanceofExpressionAccess().getOpInstanceofKeyword_1_0_0_1_0()); 
             }
-            match(input,68,FOLLOW_68_in_rule__InstanceofExpression__OpAssignment_1_0_0_115179); if (state.failed) return ;
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7663:1: ( 'instanceof' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7664:1: 'instanceof'
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getInstanceofExpressionAccess().getOpInstanceofKeyword_1_0_0_1_0()); 
+            }
+            match(input,68,FOLLOW_68_in_rule__InstanceofExpression__OpAssignment_1_0_0_115429); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getInstanceofExpressionAccess().getOpInstanceofKeyword_1_0_0_1_0()); 
             }
@@ -21620,22 +21969,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__InstanceofExpression__RightAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7552:1: rule__InstanceofExpression__RightAssignment_1_1 : ( ruleType ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7679:1: rule__InstanceofExpression__RightAssignment_1_1 : ( ruleType ) ;
     public final void rule__InstanceofExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7556:1: ( ( ruleType ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7557:1: ( ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7683:1: ( ( ruleType ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7684:1: ( ruleType )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7557:1: ( ruleType )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7558:1: ruleType
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7684:1: ( ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7685:1: ruleType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getInstanceofExpressionAccess().getRightTypeParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleType_in_rule__InstanceofExpression__RightAssignment_1_115218);
+            pushFollow(FOLLOW_ruleType_in_rule__InstanceofExpression__RightAssignment_1_115468);
             ruleType();
 
             state._fsp--;
@@ -21665,22 +22014,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__RelationalExpression__OpAssignment_1_0_0_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7567:1: rule__RelationalExpression__OpAssignment_1_0_0_1 : ( ruleRelationalOp ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7694:1: rule__RelationalExpression__OpAssignment_1_0_0_1 : ( ruleRelationalOp ) ;
     public final void rule__RelationalExpression__OpAssignment_1_0_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7571:1: ( ( ruleRelationalOp ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7572:1: ( ruleRelationalOp )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7698:1: ( ( ruleRelationalOp ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7699:1: ( ruleRelationalOp )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7572:1: ( ruleRelationalOp )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7573:1: ruleRelationalOp
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7699:1: ( ruleRelationalOp )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7700:1: ruleRelationalOp
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getRelationalExpressionAccess().getOpRelationalOpParserRuleCall_1_0_0_1_0()); 
             }
-            pushFollow(FOLLOW_ruleRelationalOp_in_rule__RelationalExpression__OpAssignment_1_0_0_115249);
+            pushFollow(FOLLOW_ruleRelationalOp_in_rule__RelationalExpression__OpAssignment_1_0_0_115499);
             ruleRelationalOp();
 
             state._fsp--;
@@ -21710,22 +22059,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__RelationalExpression__RightAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7582:1: rule__RelationalExpression__RightAssignment_1_1 : ( ruleAdditiveExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7709:1: rule__RelationalExpression__RightAssignment_1_1 : ( ruleAdditiveExpression ) ;
     public final void rule__RelationalExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7586:1: ( ( ruleAdditiveExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7587:1: ( ruleAdditiveExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7713:1: ( ( ruleAdditiveExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7714:1: ( ruleAdditiveExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7587:1: ( ruleAdditiveExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7588:1: ruleAdditiveExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7714:1: ( ruleAdditiveExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7715:1: ruleAdditiveExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getRelationalExpressionAccess().getRightAdditiveExpressionParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpression__RightAssignment_1_115280);
+            pushFollow(FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpression__RightAssignment_1_115530);
             ruleAdditiveExpression();
 
             state._fsp--;
@@ -21755,25 +22104,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__AdditiveExpression__OpAssignment_1_0_0_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7597:1: rule__AdditiveExpression__OpAssignment_1_0_0_1 : ( ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7724:1: rule__AdditiveExpression__OpAssignment_1_0_0_1 : ( ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 ) ) ;
     public final void rule__AdditiveExpression__OpAssignment_1_0_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7601:1: ( ( ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7602:1: ( ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7728:1: ( ( ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7729:1: ( ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7602:1: ( ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7603:1: ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7729:1: ( ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7730:1: ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getAdditiveExpressionAccess().getOpAlternatives_1_0_0_1_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7604:1: ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7604:2: rule__AdditiveExpression__OpAlternatives_1_0_0_1_0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7731:1: ( rule__AdditiveExpression__OpAlternatives_1_0_0_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7731:2: rule__AdditiveExpression__OpAlternatives_1_0_0_1_0
             {
-            pushFollow(FOLLOW_rule__AdditiveExpression__OpAlternatives_1_0_0_1_0_in_rule__AdditiveExpression__OpAssignment_1_0_0_115311);
+            pushFollow(FOLLOW_rule__AdditiveExpression__OpAlternatives_1_0_0_1_0_in_rule__AdditiveExpression__OpAssignment_1_0_0_115561);
             rule__AdditiveExpression__OpAlternatives_1_0_0_1_0();
 
             state._fsp--;
@@ -21806,22 +22155,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__AdditiveExpression__RightAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7613:1: rule__AdditiveExpression__RightAssignment_1_1 : ( ruleMultiplicativeExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7740:1: rule__AdditiveExpression__RightAssignment_1_1 : ( ruleMultiplicativeExpression ) ;
     public final void rule__AdditiveExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7617:1: ( ( ruleMultiplicativeExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7618:1: ( ruleMultiplicativeExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7744:1: ( ( ruleMultiplicativeExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7745:1: ( ruleMultiplicativeExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7618:1: ( ruleMultiplicativeExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7619:1: ruleMultiplicativeExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7745:1: ( ruleMultiplicativeExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7746:1: ruleMultiplicativeExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getAdditiveExpressionAccess().getRightMultiplicativeExpressionParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpression__RightAssignment_1_115344);
+            pushFollow(FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpression__RightAssignment_1_115594);
             ruleMultiplicativeExpression();
 
             state._fsp--;
@@ -21851,25 +22200,25 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MultiplicativeExpression__OpAssignment_1_0_0_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7628:1: rule__MultiplicativeExpression__OpAssignment_1_0_0_1 : ( ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7755:1: rule__MultiplicativeExpression__OpAssignment_1_0_0_1 : ( ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 ) ) ;
     public final void rule__MultiplicativeExpression__OpAssignment_1_0_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7632:1: ( ( ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7633:1: ( ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7759:1: ( ( ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7760:1: ( ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7633:1: ( ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7634:1: ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7760:1: ( ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7761:1: ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMultiplicativeExpressionAccess().getOpAlternatives_1_0_0_1_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7635:1: ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7635:2: rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7762:1: ( rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0 )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7762:2: rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0
             {
-            pushFollow(FOLLOW_rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0_in_rule__MultiplicativeExpression__OpAssignment_1_0_0_115375);
+            pushFollow(FOLLOW_rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0_in_rule__MultiplicativeExpression__OpAssignment_1_0_0_115625);
             rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0();
 
             state._fsp--;
@@ -21902,22 +22251,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MultiplicativeExpression__RightAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7644:1: rule__MultiplicativeExpression__RightAssignment_1_1 : ( ruleUnaryExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7771:1: rule__MultiplicativeExpression__RightAssignment_1_1 : ( ruleUnaryExpression ) ;
     public final void rule__MultiplicativeExpression__RightAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7648:1: ( ( ruleUnaryExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7649:1: ( ruleUnaryExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7775:1: ( ( ruleUnaryExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7776:1: ( ruleUnaryExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7649:1: ( ruleUnaryExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7650:1: ruleUnaryExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7776:1: ( ruleUnaryExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7777:1: ruleUnaryExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMultiplicativeExpressionAccess().getRightUnaryExpressionParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpression__RightAssignment_1_115408);
+            pushFollow(FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpression__RightAssignment_1_115658);
             ruleUnaryExpression();
 
             state._fsp--;
@@ -21947,22 +22296,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__PrimaryExpression__TypeAssignment_6_1_0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7659:1: rule__PrimaryExpression__TypeAssignment_6_1_0 : ( ruleType ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7786:1: rule__PrimaryExpression__TypeAssignment_6_1_0 : ( ruleType ) ;
     public final void rule__PrimaryExpression__TypeAssignment_6_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7663:1: ( ( ruleType ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7664:1: ( ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7790:1: ( ( ruleType ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7791:1: ( ruleType )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7664:1: ( ruleType )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7665:1: ruleType
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7791:1: ( ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7792:1: ruleType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getPrimaryExpressionAccess().getTypeTypeParserRuleCall_6_1_0_0()); 
             }
-            pushFollow(FOLLOW_ruleType_in_rule__PrimaryExpression__TypeAssignment_6_1_015439);
+            pushFollow(FOLLOW_ruleType_in_rule__PrimaryExpression__TypeAssignment_6_1_015689);
             ruleType();
 
             state._fsp--;
@@ -21992,28 +22341,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__PrimaryExpression__VoidAssignment_6_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7674:1: rule__PrimaryExpression__VoidAssignment_6_1_1 : ( ( 'void' ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7801:1: rule__PrimaryExpression__VoidAssignment_6_1_1 : ( ( 'void' ) ) ;
     public final void rule__PrimaryExpression__VoidAssignment_6_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7678:1: ( ( ( 'void' ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7679:1: ( ( 'void' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7805:1: ( ( ( 'void' ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7806:1: ( ( 'void' ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7679:1: ( ( 'void' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7680:1: ( 'void' )
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getPrimaryExpressionAccess().getVoidVoidKeyword_6_1_1_0()); 
-            }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7681:1: ( 'void' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7682:1: 'void'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7806:1: ( ( 'void' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7807:1: ( 'void' )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getPrimaryExpressionAccess().getVoidVoidKeyword_6_1_1_0()); 
             }
-            match(input,69,FOLLOW_69_in_rule__PrimaryExpression__VoidAssignment_6_1_115475); if (state.failed) return ;
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7808:1: ( 'void' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7809:1: 'void'
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getPrimaryExpressionAccess().getVoidVoidKeyword_6_1_1_0()); 
+            }
+            match(input,69,FOLLOW_69_in_rule__PrimaryExpression__VoidAssignment_6_1_115725); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getPrimaryExpressionAccess().getVoidVoidKeyword_6_1_1_0()); 
             }
@@ -22045,22 +22394,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JRFieldObj__BracedIdentifierAssignment_2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7697:1: rule__JRFieldObj__BracedIdentifierAssignment_2 : ( RULE_BRACED_IDENTIFIER ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7824:1: rule__JRFieldObj__BracedIdentifierAssignment_2 : ( RULE_BRACED_IDENTIFIER ) ;
     public final void rule__JRFieldObj__BracedIdentifierAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7701:1: ( ( RULE_BRACED_IDENTIFIER ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7702:1: ( RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7828:1: ( ( RULE_BRACED_IDENTIFIER ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7829:1: ( RULE_BRACED_IDENTIFIER )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7702:1: ( RULE_BRACED_IDENTIFIER )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7703:1: RULE_BRACED_IDENTIFIER
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7829:1: ( RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7830:1: RULE_BRACED_IDENTIFIER
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJRFieldObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
             }
-            match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRFieldObj__BracedIdentifierAssignment_215514); if (state.failed) return ;
+            match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRFieldObj__BracedIdentifierAssignment_215764); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJRFieldObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
             }
@@ -22086,22 +22435,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JRParameterObj__BracedIdentifierAssignment_2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7712:1: rule__JRParameterObj__BracedIdentifierAssignment_2 : ( RULE_BRACED_IDENTIFIER ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7839:1: rule__JRParameterObj__BracedIdentifierAssignment_2 : ( RULE_BRACED_IDENTIFIER ) ;
     public final void rule__JRParameterObj__BracedIdentifierAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7716:1: ( ( RULE_BRACED_IDENTIFIER ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7717:1: ( RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7843:1: ( ( RULE_BRACED_IDENTIFIER ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7844:1: ( RULE_BRACED_IDENTIFIER )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7717:1: ( RULE_BRACED_IDENTIFIER )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7718:1: RULE_BRACED_IDENTIFIER
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7844:1: ( RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7845:1: RULE_BRACED_IDENTIFIER
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJRParameterObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
             }
-            match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRParameterObj__BracedIdentifierAssignment_215545); if (state.failed) return ;
+            match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRParameterObj__BracedIdentifierAssignment_215795); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJRParameterObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
             }
@@ -22127,22 +22476,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JRVariableObj__BracedIdentifierAssignment_2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7727:1: rule__JRVariableObj__BracedIdentifierAssignment_2 : ( RULE_BRACED_IDENTIFIER ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7854:1: rule__JRVariableObj__BracedIdentifierAssignment_2 : ( RULE_BRACED_IDENTIFIER ) ;
     public final void rule__JRVariableObj__BracedIdentifierAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7731:1: ( ( RULE_BRACED_IDENTIFIER ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7732:1: ( RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7858:1: ( ( RULE_BRACED_IDENTIFIER ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7859:1: ( RULE_BRACED_IDENTIFIER )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7732:1: ( RULE_BRACED_IDENTIFIER )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7733:1: RULE_BRACED_IDENTIFIER
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7859:1: ( RULE_BRACED_IDENTIFIER )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7860:1: RULE_BRACED_IDENTIFIER
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJRVariableObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
             }
-            match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRVariableObj__BracedIdentifierAssignment_215576); if (state.failed) return ;
+            match(input,RULE_BRACED_IDENTIFIER,FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRVariableObj__BracedIdentifierAssignment_215826); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getJRVariableObjAccess().getBracedIdentifierBRACED_IDENTIFIERTerminalRuleCall_2_0()); 
             }
@@ -22168,22 +22517,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__MethodInvocationsAssignment_1_0_0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7742:1: rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 : ( ruleMethodInvocation ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7869:1: rule__MethodsExpression__MethodInvocationsAssignment_1_0_0 : ( ruleMethodInvocation ) ;
     public final void rule__MethodsExpression__MethodInvocationsAssignment_1_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7746:1: ( ( ruleMethodInvocation ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7747:1: ( ruleMethodInvocation )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7873:1: ( ( ruleMethodInvocation ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7874:1: ( ruleMethodInvocation )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7747:1: ( ruleMethodInvocation )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7748:1: ruleMethodInvocation
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7874:1: ( ruleMethodInvocation )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7875:1: ruleMethodInvocation
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsMethodInvocationParserRuleCall_1_0_0_0()); 
             }
-            pushFollow(FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_0_015607);
+            pushFollow(FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_0_015857);
             ruleMethodInvocation();
 
             state._fsp--;
@@ -22213,22 +22562,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7757:1: rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 : ( ruleMethodInvocation ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7884:1: rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1 : ( ruleMethodInvocation ) ;
     public final void rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7761:1: ( ( ruleMethodInvocation ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7762:1: ( ruleMethodInvocation )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7888:1: ( ( ruleMethodInvocation ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7889:1: ( ruleMethodInvocation )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7762:1: ( ruleMethodInvocation )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7763:1: ruleMethodInvocation
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7889:1: ( ruleMethodInvocation )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7890:1: ruleMethodInvocation
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsMethodInvocationParserRuleCall_1_0_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_115638);
+            pushFollow(FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_115888);
             ruleMethodInvocation();
 
             state._fsp--;
@@ -22258,22 +22607,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__ObjectExpressionAssignment_1_1_0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7772:1: rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 : ( ruleBaseJRExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7899:1: rule__MethodsExpression__ObjectExpressionAssignment_1_1_0 : ( ruleBaseJRExpression ) ;
     public final void rule__MethodsExpression__ObjectExpressionAssignment_1_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7776:1: ( ( ruleBaseJRExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7777:1: ( ruleBaseJRExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7903:1: ( ( ruleBaseJRExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7904:1: ( ruleBaseJRExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7777:1: ( ruleBaseJRExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7778:1: ruleBaseJRExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7904:1: ( ruleBaseJRExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7905:1: ruleBaseJRExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getObjectExpressionBaseJRExpressionParserRuleCall_1_1_0_0()); 
             }
-            pushFollow(FOLLOW_ruleBaseJRExpression_in_rule__MethodsExpression__ObjectExpressionAssignment_1_1_015669);
+            pushFollow(FOLLOW_ruleBaseJRExpression_in_rule__MethodsExpression__ObjectExpressionAssignment_1_1_015919);
             ruleBaseJRExpression();
 
             state._fsp--;
@@ -22303,22 +22652,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7787:1: rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 : ( ruleMethodInvocation ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7914:1: rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1 : ( ruleMethodInvocation ) ;
     public final void rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7791:1: ( ( ruleMethodInvocation ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7792:1: ( ruleMethodInvocation )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7918:1: ( ( ruleMethodInvocation ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7919:1: ( ruleMethodInvocation )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7792:1: ( ruleMethodInvocation )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7793:1: ruleMethodInvocation
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7919:1: ( ruleMethodInvocation )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7920:1: ruleMethodInvocation
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodsExpressionAccess().getMethodInvocationsMethodInvocationParserRuleCall_1_1_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_115700);
+            pushFollow(FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_115950);
             ruleMethodInvocation();
 
             state._fsp--;
@@ -22347,23 +22696,68 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     // $ANTLR end "rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1"
 
 
+    // $ANTLR start "rule__MethodsExpression__ArrayIndexesAssignment_2_1"
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7929:1: rule__MethodsExpression__ArrayIndexesAssignment_2_1 : ( ruleIntLiteral ) ;
+    public final void rule__MethodsExpression__ArrayIndexesAssignment_2_1() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7933:1: ( ( ruleIntLiteral ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7934:1: ( ruleIntLiteral )
+            {
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7934:1: ( ruleIntLiteral )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7935:1: ruleIntLiteral
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getMethodsExpressionAccess().getArrayIndexesIntLiteralParserRuleCall_2_1_0()); 
+            }
+            pushFollow(FOLLOW_ruleIntLiteral_in_rule__MethodsExpression__ArrayIndexesAssignment_2_115981);
+            ruleIntLiteral();
+
+            state._fsp--;
+            if (state.failed) return ;
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getMethodsExpressionAccess().getArrayIndexesIntLiteralParserRuleCall_2_1_0()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__MethodsExpression__ArrayIndexesAssignment_2_1"
+
+
     // $ANTLR start "rule__IntLiteral__ValueAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7802:1: rule__IntLiteral__ValueAssignment_1 : ( RULE_INT ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7944:1: rule__IntLiteral__ValueAssignment_1 : ( RULE_INT ) ;
     public final void rule__IntLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7806:1: ( ( RULE_INT ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7807:1: ( RULE_INT )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7948:1: ( ( RULE_INT ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7949:1: ( RULE_INT )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7807:1: ( RULE_INT )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7808:1: RULE_INT
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7949:1: ( RULE_INT )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7950:1: RULE_INT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getIntLiteralAccess().getValueINTTerminalRuleCall_1_0()); 
             }
-            match(input,RULE_INT,FOLLOW_RULE_INT_in_rule__IntLiteral__ValueAssignment_115731); if (state.failed) return ;
+            match(input,RULE_INT,FOLLOW_RULE_INT_in_rule__IntLiteral__ValueAssignment_116012); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getIntLiteralAccess().getValueINTTerminalRuleCall_1_0()); 
             }
@@ -22389,22 +22783,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__LongLiteral__ValueAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7817:1: rule__LongLiteral__ValueAssignment_1 : ( RULE_LONG ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7959:1: rule__LongLiteral__ValueAssignment_1 : ( RULE_LONG ) ;
     public final void rule__LongLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7821:1: ( ( RULE_LONG ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7822:1: ( RULE_LONG )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7963:1: ( ( RULE_LONG ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7964:1: ( RULE_LONG )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7822:1: ( RULE_LONG )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7823:1: RULE_LONG
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7964:1: ( RULE_LONG )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7965:1: RULE_LONG
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getLongLiteralAccess().getValueLONGTerminalRuleCall_1_0()); 
             }
-            match(input,RULE_LONG,FOLLOW_RULE_LONG_in_rule__LongLiteral__ValueAssignment_115762); if (state.failed) return ;
+            match(input,RULE_LONG,FOLLOW_RULE_LONG_in_rule__LongLiteral__ValueAssignment_116043); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getLongLiteralAccess().getValueLONGTerminalRuleCall_1_0()); 
             }
@@ -22430,22 +22824,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FloatLiteral__ValueAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7832:1: rule__FloatLiteral__ValueAssignment_1 : ( RULE_FLOAT ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7974:1: rule__FloatLiteral__ValueAssignment_1 : ( RULE_FLOAT ) ;
     public final void rule__FloatLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7836:1: ( ( RULE_FLOAT ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7837:1: ( RULE_FLOAT )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7978:1: ( ( RULE_FLOAT ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7979:1: ( RULE_FLOAT )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7837:1: ( RULE_FLOAT )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7838:1: RULE_FLOAT
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7979:1: ( RULE_FLOAT )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7980:1: RULE_FLOAT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFloatLiteralAccess().getValueFLOATTerminalRuleCall_1_0()); 
             }
-            match(input,RULE_FLOAT,FOLLOW_RULE_FLOAT_in_rule__FloatLiteral__ValueAssignment_115793); if (state.failed) return ;
+            match(input,RULE_FLOAT,FOLLOW_RULE_FLOAT_in_rule__FloatLiteral__ValueAssignment_116074); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getFloatLiteralAccess().getValueFLOATTerminalRuleCall_1_0()); 
             }
@@ -22471,22 +22865,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__DoubleLiteral__ValueAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7847:1: rule__DoubleLiteral__ValueAssignment_1 : ( RULE_DOUBLE ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7989:1: rule__DoubleLiteral__ValueAssignment_1 : ( RULE_DOUBLE ) ;
     public final void rule__DoubleLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7851:1: ( ( RULE_DOUBLE ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7852:1: ( RULE_DOUBLE )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7993:1: ( ( RULE_DOUBLE ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7994:1: ( RULE_DOUBLE )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7852:1: ( RULE_DOUBLE )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7853:1: RULE_DOUBLE
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7994:1: ( RULE_DOUBLE )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7995:1: RULE_DOUBLE
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getDoubleLiteralAccess().getValueDOUBLETerminalRuleCall_1_0()); 
             }
-            match(input,RULE_DOUBLE,FOLLOW_RULE_DOUBLE_in_rule__DoubleLiteral__ValueAssignment_115824); if (state.failed) return ;
+            match(input,RULE_DOUBLE,FOLLOW_RULE_DOUBLE_in_rule__DoubleLiteral__ValueAssignment_116105); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getDoubleLiteralAccess().getValueDOUBLETerminalRuleCall_1_0()); 
             }
@@ -22512,22 +22906,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CharLiteral__ValueAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7862:1: rule__CharLiteral__ValueAssignment_1 : ( RULE_CHAR ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8004:1: rule__CharLiteral__ValueAssignment_1 : ( RULE_CHAR ) ;
     public final void rule__CharLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7866:1: ( ( RULE_CHAR ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7867:1: ( RULE_CHAR )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8008:1: ( ( RULE_CHAR ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8009:1: ( RULE_CHAR )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7867:1: ( RULE_CHAR )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7868:1: RULE_CHAR
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8009:1: ( RULE_CHAR )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8010:1: RULE_CHAR
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCharLiteralAccess().getValueCHARTerminalRuleCall_1_0()); 
             }
-            match(input,RULE_CHAR,FOLLOW_RULE_CHAR_in_rule__CharLiteral__ValueAssignment_115855); if (state.failed) return ;
+            match(input,RULE_CHAR,FOLLOW_RULE_CHAR_in_rule__CharLiteral__ValueAssignment_116136); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getCharLiteralAccess().getValueCHARTerminalRuleCall_1_0()); 
             }
@@ -22553,22 +22947,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__StringLiteral__ValueAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7877:1: rule__StringLiteral__ValueAssignment_1 : ( RULE_STRING ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8019:1: rule__StringLiteral__ValueAssignment_1 : ( RULE_STRING ) ;
     public final void rule__StringLiteral__ValueAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7881:1: ( ( RULE_STRING ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7882:1: ( RULE_STRING )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8023:1: ( ( RULE_STRING ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8024:1: ( RULE_STRING )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7882:1: ( RULE_STRING )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7883:1: RULE_STRING
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8024:1: ( RULE_STRING )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8025:1: RULE_STRING
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0()); 
             }
-            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__StringLiteral__ValueAssignment_115886); if (state.failed) return ;
+            match(input,RULE_STRING,FOLLOW_RULE_STRING_in_rule__StringLiteral__ValueAssignment_116167); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getStringLiteralAccess().getValueSTRINGTerminalRuleCall_1_0()); 
             }
@@ -22594,28 +22988,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__BooleanLiteral__IsTrueAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7892:1: rule__BooleanLiteral__IsTrueAssignment_1_1 : ( ( 'true' ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8034:1: rule__BooleanLiteral__IsTrueAssignment_1_1 : ( ( 'true' ) ) ;
     public final void rule__BooleanLiteral__IsTrueAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7896:1: ( ( ( 'true' ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7897:1: ( ( 'true' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8038:1: ( ( ( 'true' ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8039:1: ( ( 'true' ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7897:1: ( ( 'true' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7898:1: ( 'true' )
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0()); 
-            }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7899:1: ( 'true' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7900:1: 'true'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8039:1: ( ( 'true' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8040:1: ( 'true' )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0()); 
             }
-            match(input,70,FOLLOW_70_in_rule__BooleanLiteral__IsTrueAssignment_1_115922); if (state.failed) return ;
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8041:1: ( 'true' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8042:1: 'true'
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0()); 
+            }
+            match(input,70,FOLLOW_70_in_rule__BooleanLiteral__IsTrueAssignment_1_116203); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getBooleanLiteralAccess().getIsTrueTrueKeyword_1_1_0()); 
             }
@@ -22647,22 +23041,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__CastTypeAssignment_2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7915:1: rule__CastedExpression__CastTypeAssignment_2 : ( ruleType ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8057:1: rule__CastedExpression__CastTypeAssignment_2 : ( ruleType ) ;
     public final void rule__CastedExpression__CastTypeAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7919:1: ( ( ruleType ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7920:1: ( ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8061:1: ( ( ruleType ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8062:1: ( ruleType )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7920:1: ( ruleType )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7921:1: ruleType
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8062:1: ( ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8063:1: ruleType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCastedExpressionAccess().getCastTypeTypeParserRuleCall_2_0()); 
             }
-            pushFollow(FOLLOW_ruleType_in_rule__CastedExpression__CastTypeAssignment_215961);
+            pushFollow(FOLLOW_ruleType_in_rule__CastedExpression__CastTypeAssignment_216242);
             ruleType();
 
             state._fsp--;
@@ -22692,22 +23086,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__CastedExpression__CastedExprAssignment_4"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7930:1: rule__CastedExpression__CastedExprAssignment_4 : ( ruleJasperReportsExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8072:1: rule__CastedExpression__CastedExprAssignment_4 : ( ruleJasperReportsExpression ) ;
     public final void rule__CastedExpression__CastedExprAssignment_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7934:1: ( ( ruleJasperReportsExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7935:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8076:1: ( ( ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8077:1: ( ruleJasperReportsExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7935:1: ( ruleJasperReportsExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7936:1: ruleJasperReportsExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8077:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8078:1: ruleJasperReportsExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getCastedExpressionAccess().getCastedExprJasperReportsExpressionParserRuleCall_4_0()); 
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__CastedExpression__CastedExprAssignment_415992);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__CastedExpression__CastedExprAssignment_416273);
             ruleJasperReportsExpression();
 
             state._fsp--;
@@ -22737,22 +23131,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Type__PrimitiveTypeAssignment_1_0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7945:1: rule__Type__PrimitiveTypeAssignment_1_0 : ( rulePrimitiveType ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8087:1: rule__Type__PrimitiveTypeAssignment_1_0 : ( rulePrimitiveType ) ;
     public final void rule__Type__PrimitiveTypeAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7949:1: ( ( rulePrimitiveType ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7950:1: ( rulePrimitiveType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8091:1: ( ( rulePrimitiveType ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8092:1: ( rulePrimitiveType )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7950:1: ( rulePrimitiveType )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7951:1: rulePrimitiveType
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8092:1: ( rulePrimitiveType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8093:1: rulePrimitiveType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTypeAccess().getPrimitiveTypePrimitiveTypeParserRuleCall_1_0_0()); 
             }
-            pushFollow(FOLLOW_rulePrimitiveType_in_rule__Type__PrimitiveTypeAssignment_1_016023);
+            pushFollow(FOLLOW_rulePrimitiveType_in_rule__Type__PrimitiveTypeAssignment_1_016304);
             rulePrimitiveType();
 
             state._fsp--;
@@ -22782,22 +23176,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Type__JvmTypeAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7960:1: rule__Type__JvmTypeAssignment_1_1 : ( ruleJvmTypeReference ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8102:1: rule__Type__JvmTypeAssignment_1_1 : ( ruleJvmTypeReference ) ;
     public final void rule__Type__JvmTypeAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7964:1: ( ( ruleJvmTypeReference ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7965:1: ( ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8106:1: ( ( ruleJvmTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8107:1: ( ruleJvmTypeReference )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7965:1: ( ruleJvmTypeReference )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7966:1: ruleJvmTypeReference
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8107:1: ( ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8108:1: ruleJvmTypeReference
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getTypeAccess().getJvmTypeJvmTypeReferenceParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleJvmTypeReference_in_rule__Type__JvmTypeAssignment_1_116054);
+            pushFollow(FOLLOW_ruleJvmTypeReference_in_rule__Type__JvmTypeAssignment_1_116335);
             ruleJvmTypeReference();
 
             state._fsp--;
@@ -22827,22 +23221,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__TypeAssignment_2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7975:1: rule__ArrayCreator__TypeAssignment_2 : ( ruleType ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8117:1: rule__ArrayCreator__TypeAssignment_2 : ( ruleType ) ;
     public final void rule__ArrayCreator__TypeAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7979:1: ( ( ruleType ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7980:1: ( ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8121:1: ( ( ruleType ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8122:1: ( ruleType )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7980:1: ( ruleType )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7981:1: ruleType
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8122:1: ( ruleType )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8123:1: ruleType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getTypeTypeParserRuleCall_2_0()); 
             }
-            pushFollow(FOLLOW_ruleType_in_rule__ArrayCreator__TypeAssignment_216085);
+            pushFollow(FOLLOW_ruleType_in_rule__ArrayCreator__TypeAssignment_216366);
             ruleType();
 
             state._fsp--;
@@ -22872,22 +23266,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__SizeAssignment_3_0_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7990:1: rule__ArrayCreator__SizeAssignment_3_0_1 : ( ruleIntLiteral ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8132:1: rule__ArrayCreator__SizeAssignment_3_0_1 : ( ruleIntLiteral ) ;
     public final void rule__ArrayCreator__SizeAssignment_3_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7994:1: ( ( ruleIntLiteral ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7995:1: ( ruleIntLiteral )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8136:1: ( ( ruleIntLiteral ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8137:1: ( ruleIntLiteral )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7995:1: ( ruleIntLiteral )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:7996:1: ruleIntLiteral
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8137:1: ( ruleIntLiteral )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8138:1: ruleIntLiteral
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getSizeIntLiteralParserRuleCall_3_0_1_0()); 
             }
-            pushFollow(FOLLOW_ruleIntLiteral_in_rule__ArrayCreator__SizeAssignment_3_0_116116);
+            pushFollow(FOLLOW_ruleIntLiteral_in_rule__ArrayCreator__SizeAssignment_3_0_116397);
             ruleIntLiteral();
 
             state._fsp--;
@@ -22917,22 +23311,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayCreator__InitializationAssignment_3_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8005:1: rule__ArrayCreator__InitializationAssignment_3_1_1 : ( ruleArrayInitializer ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8147:1: rule__ArrayCreator__InitializationAssignment_3_1_1 : ( ruleArrayInitializer ) ;
     public final void rule__ArrayCreator__InitializationAssignment_3_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8009:1: ( ( ruleArrayInitializer ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8010:1: ( ruleArrayInitializer )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8151:1: ( ( ruleArrayInitializer ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8152:1: ( ruleArrayInitializer )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8010:1: ( ruleArrayInitializer )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8011:1: ruleArrayInitializer
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8152:1: ( ruleArrayInitializer )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8153:1: ruleArrayInitializer
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayCreatorAccess().getInitializationArrayInitializerParserRuleCall_3_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleArrayInitializer_in_rule__ArrayCreator__InitializationAssignment_3_1_116147);
+            pushFollow(FOLLOW_ruleArrayInitializer_in_rule__ArrayCreator__InitializationAssignment_3_1_116428);
             ruleArrayInitializer();
 
             state._fsp--;
@@ -22962,22 +23356,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ArrayInitializer__InitializationAssignment_2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8020:1: rule__ArrayInitializer__InitializationAssignment_2 : ( ruleExpressionList ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8162:1: rule__ArrayInitializer__InitializationAssignment_2 : ( ruleExpressionList ) ;
     public final void rule__ArrayInitializer__InitializationAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8024:1: ( ( ruleExpressionList ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8025:1: ( ruleExpressionList )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8166:1: ( ( ruleExpressionList ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8167:1: ( ruleExpressionList )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8025:1: ( ruleExpressionList )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8026:1: ruleExpressionList
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8167:1: ( ruleExpressionList )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8168:1: ruleExpressionList
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArrayInitializerAccess().getInitializationExpressionListParserRuleCall_2_0()); 
             }
-            pushFollow(FOLLOW_ruleExpressionList_in_rule__ArrayInitializer__InitializationAssignment_216178);
+            pushFollow(FOLLOW_ruleExpressionList_in_rule__ArrayInitializer__InitializationAssignment_216459);
             ruleExpressionList();
 
             state._fsp--;
@@ -23007,22 +23401,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ObjectCreation__ConstructorInvocationAssignment_2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8035:1: rule__ObjectCreation__ConstructorInvocationAssignment_2 : ( ruleMethodInvocation ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8177:1: rule__ObjectCreation__ConstructorInvocationAssignment_2 : ( ruleMethodInvocation ) ;
     public final void rule__ObjectCreation__ConstructorInvocationAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8039:1: ( ( ruleMethodInvocation ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8040:1: ( ruleMethodInvocation )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8181:1: ( ( ruleMethodInvocation ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8182:1: ( ruleMethodInvocation )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8040:1: ( ruleMethodInvocation )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8041:1: ruleMethodInvocation
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8182:1: ( ruleMethodInvocation )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8183:1: ruleMethodInvocation
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getObjectCreationAccess().getConstructorInvocationMethodInvocationParserRuleCall_2_0()); 
             }
-            pushFollow(FOLLOW_ruleMethodInvocation_in_rule__ObjectCreation__ConstructorInvocationAssignment_216209);
+            pushFollow(FOLLOW_ruleMethodInvocation_in_rule__ObjectCreation__ConstructorInvocationAssignment_216490);
             ruleMethodInvocation();
 
             state._fsp--;
@@ -23052,22 +23446,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8050:1: rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 : ( ruleFullMethodName ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8192:1: rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1 : ( ruleFullMethodName ) ;
     public final void rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8054:1: ( ( ruleFullMethodName ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8055:1: ( ruleFullMethodName )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8196:1: ( ( ruleFullMethodName ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8197:1: ( ruleFullMethodName )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8055:1: ( ruleFullMethodName )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8056:1: ruleFullMethodName
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8197:1: ( ruleFullMethodName )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8198:1: ruleFullMethodName
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodInvocationAccess().getFullyQualifiedMethodNameFullMethodNameParserRuleCall_1_0()); 
             }
-            pushFollow(FOLLOW_ruleFullMethodName_in_rule__MethodInvocation__FullyQualifiedMethodNameAssignment_116240);
+            pushFollow(FOLLOW_ruleFullMethodName_in_rule__MethodInvocation__FullyQualifiedMethodNameAssignment_116521);
             ruleFullMethodName();
 
             state._fsp--;
@@ -23097,22 +23491,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__MethodInvocation__ArgsAssignment_2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8065:1: rule__MethodInvocation__ArgsAssignment_2 : ( ruleArguments ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8207:1: rule__MethodInvocation__ArgsAssignment_2 : ( ruleArguments ) ;
     public final void rule__MethodInvocation__ArgsAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8069:1: ( ( ruleArguments ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8070:1: ( ruleArguments )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8211:1: ( ( ruleArguments ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8212:1: ( ruleArguments )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8070:1: ( ruleArguments )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8071:1: ruleArguments
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8212:1: ( ruleArguments )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8213:1: ruleArguments
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getMethodInvocationAccess().getArgsArgumentsParserRuleCall_2_0()); 
             }
-            pushFollow(FOLLOW_ruleArguments_in_rule__MethodInvocation__ArgsAssignment_216271);
+            pushFollow(FOLLOW_ruleArguments_in_rule__MethodInvocation__ArgsAssignment_216552);
             ruleArguments();
 
             state._fsp--;
@@ -23142,22 +23536,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__PrefixQMNAssignment_0_0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8080:1: rule__FullMethodName__PrefixQMNAssignment_0_0 : ( ruleValidID ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8222:1: rule__FullMethodName__PrefixQMNAssignment_0_0 : ( ruleValidID ) ;
     public final void rule__FullMethodName__PrefixQMNAssignment_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8084:1: ( ( ruleValidID ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8085:1: ( ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8226:1: ( ( ruleValidID ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8227:1: ( ruleValidID )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8085:1: ( ruleValidID )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8086:1: ruleValidID
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8227:1: ( ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8228:1: ruleValidID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFullMethodNameAccess().getPrefixQMNValidIDParserRuleCall_0_0_0()); 
             }
-            pushFollow(FOLLOW_ruleValidID_in_rule__FullMethodName__PrefixQMNAssignment_0_016302);
+            pushFollow(FOLLOW_ruleValidID_in_rule__FullMethodName__PrefixQMNAssignment_0_016583);
             ruleValidID();
 
             state._fsp--;
@@ -23187,28 +23581,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__DotsAssignment_0_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8095:1: rule__FullMethodName__DotsAssignment_0_1 : ( ( '.' ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8237:1: rule__FullMethodName__DotsAssignment_0_1 : ( ( '.' ) ) ;
     public final void rule__FullMethodName__DotsAssignment_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8099:1: ( ( ( '.' ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8100:1: ( ( '.' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8241:1: ( ( ( '.' ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8242:1: ( ( '.' ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8100:1: ( ( '.' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8101:1: ( '.' )
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getFullMethodNameAccess().getDotsFullStopKeyword_0_1_0()); 
-            }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8102:1: ( '.' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8103:1: '.'
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8242:1: ( ( '.' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8243:1: ( '.' )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFullMethodNameAccess().getDotsFullStopKeyword_0_1_0()); 
             }
-            match(input,50,FOLLOW_50_in_rule__FullMethodName__DotsAssignment_0_116338); if (state.failed) return ;
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8244:1: ( '.' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8245:1: '.'
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getFullMethodNameAccess().getDotsFullStopKeyword_0_1_0()); 
+            }
+            match(input,50,FOLLOW_50_in_rule__FullMethodName__DotsAssignment_0_116619); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getFullMethodNameAccess().getDotsFullStopKeyword_0_1_0()); 
             }
@@ -23240,22 +23634,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__FullMethodName__MethodNameAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8118:1: rule__FullMethodName__MethodNameAssignment_1 : ( ruleValidID ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8260:1: rule__FullMethodName__MethodNameAssignment_1 : ( ruleValidID ) ;
     public final void rule__FullMethodName__MethodNameAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8122:1: ( ( ruleValidID ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8123:1: ( ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8264:1: ( ( ruleValidID ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8265:1: ( ruleValidID )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8123:1: ( ruleValidID )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8124:1: ruleValidID
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8265:1: ( ruleValidID )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8266:1: ruleValidID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getFullMethodNameAccess().getMethodNameValidIDParserRuleCall_1_0()); 
             }
-            pushFollow(FOLLOW_ruleValidID_in_rule__FullMethodName__MethodNameAssignment_116377);
+            pushFollow(FOLLOW_ruleValidID_in_rule__FullMethodName__MethodNameAssignment_116658);
             ruleValidID();
 
             state._fsp--;
@@ -23285,22 +23679,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__Arguments__ExprLstAssignment_2"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8133:1: rule__Arguments__ExprLstAssignment_2 : ( ruleExpressionList ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8275:1: rule__Arguments__ExprLstAssignment_2 : ( ruleExpressionList ) ;
     public final void rule__Arguments__ExprLstAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8137:1: ( ( ruleExpressionList ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8138:1: ( ruleExpressionList )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8279:1: ( ( ruleExpressionList ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8280:1: ( ruleExpressionList )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8138:1: ( ruleExpressionList )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8139:1: ruleExpressionList
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8280:1: ( ruleExpressionList )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8281:1: ruleExpressionList
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getArgumentsAccess().getExprLstExpressionListParserRuleCall_2_0()); 
             }
-            pushFollow(FOLLOW_ruleExpressionList_in_rule__Arguments__ExprLstAssignment_216408);
+            pushFollow(FOLLOW_ruleExpressionList_in_rule__Arguments__ExprLstAssignment_216689);
             ruleExpressionList();
 
             state._fsp--;
@@ -23330,22 +23724,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__ExpressionsAssignment_0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8148:1: rule__ExpressionList__ExpressionsAssignment_0 : ( ruleJasperReportsExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8290:1: rule__ExpressionList__ExpressionsAssignment_0 : ( ruleJasperReportsExpression ) ;
     public final void rule__ExpressionList__ExpressionsAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8152:1: ( ( ruleJasperReportsExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8153:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8294:1: ( ( ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8295:1: ( ruleJasperReportsExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8153:1: ( ruleJasperReportsExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8154:1: ruleJasperReportsExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8295:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8296:1: ruleJasperReportsExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getExpressionListAccess().getExpressionsJasperReportsExpressionParserRuleCall_0_0()); 
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ExpressionList__ExpressionsAssignment_016439);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ExpressionList__ExpressionsAssignment_016720);
             ruleJasperReportsExpression();
 
             state._fsp--;
@@ -23375,28 +23769,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__CommasAssignment_1_0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8163:1: rule__ExpressionList__CommasAssignment_1_0 : ( ( ',' ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8305:1: rule__ExpressionList__CommasAssignment_1_0 : ( ( ',' ) ) ;
     public final void rule__ExpressionList__CommasAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8167:1: ( ( ( ',' ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8168:1: ( ( ',' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8309:1: ( ( ( ',' ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8310:1: ( ( ',' ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8168:1: ( ( ',' ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8169:1: ( ',' )
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getExpressionListAccess().getCommasCommaKeyword_1_0_0()); 
-            }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8170:1: ( ',' )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8171:1: ','
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8310:1: ( ( ',' ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8311:1: ( ',' )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getExpressionListAccess().getCommasCommaKeyword_1_0_0()); 
             }
-            match(input,63,FOLLOW_63_in_rule__ExpressionList__CommasAssignment_1_016475); if (state.failed) return ;
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8312:1: ( ',' )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8313:1: ','
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getExpressionListAccess().getCommasCommaKeyword_1_0_0()); 
+            }
+            match(input,63,FOLLOW_63_in_rule__ExpressionList__CommasAssignment_1_016756); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getExpressionListAccess().getCommasCommaKeyword_1_0_0()); 
             }
@@ -23428,22 +23822,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__ExpressionList__ExpressionsAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8186:1: rule__ExpressionList__ExpressionsAssignment_1_1 : ( ruleJasperReportsExpression ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8328:1: rule__ExpressionList__ExpressionsAssignment_1_1 : ( ruleJasperReportsExpression ) ;
     public final void rule__ExpressionList__ExpressionsAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8190:1: ( ( ruleJasperReportsExpression ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8191:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8332:1: ( ( ruleJasperReportsExpression ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8333:1: ( ruleJasperReportsExpression )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8191:1: ( ruleJasperReportsExpression )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8192:1: ruleJasperReportsExpression
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8333:1: ( ruleJasperReportsExpression )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8334:1: ruleJasperReportsExpression
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getExpressionListAccess().getExpressionsJasperReportsExpressionParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ExpressionList__ExpressionsAssignment_1_116514);
+            pushFollow(FOLLOW_ruleJasperReportsExpression_in_rule__ExpressionList__ExpressionsAssignment_1_116795);
             ruleJasperReportsExpression();
 
             state._fsp--;
@@ -23473,28 +23867,28 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__TypeAssignment_0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8201:1: rule__JvmParameterizedTypeReference__TypeAssignment_0 : ( ( ruleQualifiedName ) ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8343:1: rule__JvmParameterizedTypeReference__TypeAssignment_0 : ( ( ruleQualifiedName ) ) ;
     public final void rule__JvmParameterizedTypeReference__TypeAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8205:1: ( ( ( ruleQualifiedName ) ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8206:1: ( ( ruleQualifiedName ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8347:1: ( ( ( ruleQualifiedName ) ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8348:1: ( ( ruleQualifiedName ) )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8206:1: ( ( ruleQualifiedName ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8207:1: ( ruleQualifiedName )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8348:1: ( ( ruleQualifiedName ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8349:1: ( ruleQualifiedName )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getTypeJvmTypeCrossReference_0_0()); 
             }
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8208:1: ( ruleQualifiedName )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8209:1: ruleQualifiedName
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8350:1: ( ruleQualifiedName )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8351:1: ruleQualifiedName
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getTypeJvmTypeQualifiedNameParserRuleCall_0_0_1()); 
             }
-            pushFollow(FOLLOW_ruleQualifiedName_in_rule__JvmParameterizedTypeReference__TypeAssignment_016549);
+            pushFollow(FOLLOW_ruleQualifiedName_in_rule__JvmParameterizedTypeReference__TypeAssignment_016830);
             ruleQualifiedName();
 
             state._fsp--;
@@ -23530,22 +23924,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8220:1: rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 : ( ruleJvmArgumentTypeReference ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8362:1: rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1 : ( ruleJvmArgumentTypeReference ) ;
     public final void rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8224:1: ( ( ruleJvmArgumentTypeReference ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8225:1: ( ruleJvmArgumentTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8366:1: ( ( ruleJvmArgumentTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8367:1: ( ruleJvmArgumentTypeReference )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8225:1: ( ruleJvmArgumentTypeReference )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8226:1: ruleJvmArgumentTypeReference
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8367:1: ( ruleJvmArgumentTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8368:1: ruleJvmArgumentTypeReference
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getArgumentsJvmArgumentTypeReferenceParserRuleCall_1_1_0()); 
             }
-            pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_116584);
+            pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_116865);
             ruleJvmArgumentTypeReference();
 
             state._fsp--;
@@ -23575,22 +23969,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8235:1: rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 : ( ruleJvmArgumentTypeReference ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8377:1: rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1 : ( ruleJvmArgumentTypeReference ) ;
     public final void rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8239:1: ( ( ruleJvmArgumentTypeReference ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8240:1: ( ruleJvmArgumentTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8381:1: ( ( ruleJvmArgumentTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8382:1: ( ruleJvmArgumentTypeReference )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8240:1: ( ruleJvmArgumentTypeReference )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8241:1: ruleJvmArgumentTypeReference
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8382:1: ( ruleJvmArgumentTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8383:1: ruleJvmArgumentTypeReference
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmParameterizedTypeReferenceAccess().getArgumentsJvmArgumentTypeReferenceParserRuleCall_1_2_1_0()); 
             }
-            pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_116615);
+            pushFollow(FOLLOW_ruleJvmArgumentTypeReference_in_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_116896);
             ruleJvmArgumentTypeReference();
 
             state._fsp--;
@@ -23620,22 +24014,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmWildcardTypeReference__ConstraintsAssignment_2_0"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8250:1: rule__JvmWildcardTypeReference__ConstraintsAssignment_2_0 : ( ruleJvmUpperBound ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8392:1: rule__JvmWildcardTypeReference__ConstraintsAssignment_2_0 : ( ruleJvmUpperBound ) ;
     public final void rule__JvmWildcardTypeReference__ConstraintsAssignment_2_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8254:1: ( ( ruleJvmUpperBound ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8255:1: ( ruleJvmUpperBound )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8396:1: ( ( ruleJvmUpperBound ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8397:1: ( ruleJvmUpperBound )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8255:1: ( ruleJvmUpperBound )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8256:1: ruleJvmUpperBound
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8397:1: ( ruleJvmUpperBound )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8398:1: ruleJvmUpperBound
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmWildcardTypeReferenceAccess().getConstraintsJvmUpperBoundParserRuleCall_2_0_0()); 
             }
-            pushFollow(FOLLOW_ruleJvmUpperBound_in_rule__JvmWildcardTypeReference__ConstraintsAssignment_2_016646);
+            pushFollow(FOLLOW_ruleJvmUpperBound_in_rule__JvmWildcardTypeReference__ConstraintsAssignment_2_016927);
             ruleJvmUpperBound();
 
             state._fsp--;
@@ -23665,22 +24059,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmWildcardTypeReference__ConstraintsAssignment_2_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8265:1: rule__JvmWildcardTypeReference__ConstraintsAssignment_2_1 : ( ruleJvmLowerBound ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8407:1: rule__JvmWildcardTypeReference__ConstraintsAssignment_2_1 : ( ruleJvmLowerBound ) ;
     public final void rule__JvmWildcardTypeReference__ConstraintsAssignment_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8269:1: ( ( ruleJvmLowerBound ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8270:1: ( ruleJvmLowerBound )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8411:1: ( ( ruleJvmLowerBound ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8412:1: ( ruleJvmLowerBound )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8270:1: ( ruleJvmLowerBound )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8271:1: ruleJvmLowerBound
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8412:1: ( ruleJvmLowerBound )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8413:1: ruleJvmLowerBound
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmWildcardTypeReferenceAccess().getConstraintsJvmLowerBoundParserRuleCall_2_1_0()); 
             }
-            pushFollow(FOLLOW_ruleJvmLowerBound_in_rule__JvmWildcardTypeReference__ConstraintsAssignment_2_116677);
+            pushFollow(FOLLOW_ruleJvmLowerBound_in_rule__JvmWildcardTypeReference__ConstraintsAssignment_2_116958);
             ruleJvmLowerBound();
 
             state._fsp--;
@@ -23710,22 +24104,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmUpperBound__TypeReferenceAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8280:1: rule__JvmUpperBound__TypeReferenceAssignment_1 : ( ruleJvmTypeReference ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8422:1: rule__JvmUpperBound__TypeReferenceAssignment_1 : ( ruleJvmTypeReference ) ;
     public final void rule__JvmUpperBound__TypeReferenceAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8284:1: ( ( ruleJvmTypeReference ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8285:1: ( ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8426:1: ( ( ruleJvmTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8427:1: ( ruleJvmTypeReference )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8285:1: ( ruleJvmTypeReference )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8286:1: ruleJvmTypeReference
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8427:1: ( ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8428:1: ruleJvmTypeReference
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmUpperBoundAccess().getTypeReferenceJvmTypeReferenceParserRuleCall_1_0()); 
             }
-            pushFollow(FOLLOW_ruleJvmTypeReference_in_rule__JvmUpperBound__TypeReferenceAssignment_116708);
+            pushFollow(FOLLOW_ruleJvmTypeReference_in_rule__JvmUpperBound__TypeReferenceAssignment_116989);
             ruleJvmTypeReference();
 
             state._fsp--;
@@ -23755,22 +24149,22 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__JvmLowerBound__TypeReferenceAssignment_1"
-    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8295:1: rule__JvmLowerBound__TypeReferenceAssignment_1 : ( ruleJvmTypeReference ) ;
+    // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8437:1: rule__JvmLowerBound__TypeReferenceAssignment_1 : ( ruleJvmTypeReference ) ;
     public final void rule__JvmLowerBound__TypeReferenceAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8299:1: ( ( ruleJvmTypeReference ) )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8300:1: ( ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8441:1: ( ( ruleJvmTypeReference ) )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8442:1: ( ruleJvmTypeReference )
             {
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8300:1: ( ruleJvmTypeReference )
-            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8301:1: ruleJvmTypeReference
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8442:1: ( ruleJvmTypeReference )
+            // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:8443:1: ruleJvmTypeReference
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getJvmLowerBoundAccess().getTypeReferenceJvmTypeReferenceParserRuleCall_1_0()); 
             }
-            pushFollow(FOLLOW_ruleJvmTypeReference_in_rule__JvmLowerBound__TypeReferenceAssignment_116739);
+            pushFollow(FOLLOW_ruleJvmTypeReference_in_rule__JvmLowerBound__TypeReferenceAssignment_117020);
             ruleJvmTypeReference();
 
             state._fsp--;
@@ -23948,12 +24342,12 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     }
     // $ANTLR end synpred51_InternalJavaJRExpression
 
-    // $ANTLR start synpred59_InternalJavaJRExpression
-    public final void synpred59_InternalJavaJRExpression_fragment() throws RecognitionException {   
-        // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6637:2: ( rule__JvmTypeReference__Group_1__0 )
-        // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6637:2: rule__JvmTypeReference__Group_1__0
+    // $ANTLR start synpred60_InternalJavaJRExpression
+    public final void synpred60_InternalJavaJRExpression_fragment() throws RecognitionException {   
+        // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6764:2: ( rule__JvmTypeReference__Group_1__0 )
+        // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6764:2: rule__JvmTypeReference__Group_1__0
         {
-        pushFollow(FOLLOW_rule__JvmTypeReference__Group_1__0_in_synpred59_InternalJavaJRExpression13407);
+        pushFollow(FOLLOW_rule__JvmTypeReference__Group_1__0_in_synpred60_InternalJavaJRExpression13657);
         rule__JvmTypeReference__Group_1__0();
 
         state._fsp--;
@@ -23961,14 +24355,14 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
         }
     }
-    // $ANTLR end synpred59_InternalJavaJRExpression
+    // $ANTLR end synpred60_InternalJavaJRExpression
 
-    // $ANTLR start synpred60_InternalJavaJRExpression
-    public final void synpred60_InternalJavaJRExpression_fragment() throws RecognitionException {   
-        // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6826:2: ( rule__JvmParameterizedTypeReference__Group_1__0 )
-        // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6826:2: rule__JvmParameterizedTypeReference__Group_1__0
+    // $ANTLR start synpred61_InternalJavaJRExpression
+    public final void synpred61_InternalJavaJRExpression_fragment() throws RecognitionException {   
+        // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6953:2: ( rule__JvmParameterizedTypeReference__Group_1__0 )
+        // ../com.jaspersoft.studio.editor.jrexpressions.ui/src-gen/com/jaspersoft/studio/editor/jrexpressions/ui/contentassist/antlr/internal/InternalJavaJRExpression.g:6953:2: rule__JvmParameterizedTypeReference__Group_1__0
         {
-        pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0_in_synpred60_InternalJavaJRExpression13776);
+        pushFollow(FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0_in_synpred61_InternalJavaJRExpression14026);
         rule__JvmParameterizedTypeReference__Group_1__0();
 
         state._fsp--;
@@ -23976,7 +24370,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
         }
     }
-    // $ANTLR end synpred60_InternalJavaJRExpression
+    // $ANTLR end synpred61_InternalJavaJRExpression
 
     // Delegated rules
 
@@ -24013,6 +24407,20 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
         int start = input.mark();
         try {
             synpred48_InternalJavaJRExpression_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
+    public final boolean synpred61_InternalJavaJRExpression() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred61_InternalJavaJRExpression_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -24092,20 +24500,6 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
         state.failed=false;
         return success;
     }
-    public final boolean synpred59_InternalJavaJRExpression() {
-        state.backtracking++;
-        int start = input.mark();
-        try {
-            synpred59_InternalJavaJRExpression_fragment(); // can never throw exception
-        } catch (RecognitionException re) {
-            System.err.println("impossible: "+re);
-        }
-        boolean success = !state.failed;
-        input.rewind(start);
-        state.backtracking--;
-        state.failed=false;
-        return success;
-    }
     public final boolean synpred47_InternalJavaJRExpression() {
         state.backtracking++;
         int start = input.mark();
@@ -24138,7 +24532,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
 
     protected DFA6 dfa6 = new DFA6(this);
     protected DFA7 dfa7 = new DFA7(this);
-    protected DFA36 dfa36 = new DFA36(this);
+    protected DFA37 dfa37 = new DFA37(this);
     static final String DFA6_eotS =
         "\34\uffff";
     static final String DFA6_eofS =
@@ -24152,8 +24546,8 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     static final String DFA6_specialS =
         "\3\uffff\1\0\30\uffff}>";
     static final String[] DFA6_transitionS = {
-            "\1\4\1\uffff\6\4\25\uffff\11\4\6\uffff\1\1\1\2\2\uffff\4\4\1"+
-            "\3\1\uffff\1\4\12\uffff\2\4",
+            "\1\4\1\uffff\6\4\25\uffff\11\4\6\uffff\1\1\1\2\2\uffff\3\4\2"+
+            "\uffff\1\4\1\3\1\uffff\1\4\10\uffff\2\4",
             "",
             "",
             "\1\uffff",
@@ -24247,41 +24641,42 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     static final String DFA7_eofS =
         "\13\uffff\3\22\7\uffff";
     static final String DFA7_minS =
-        "\1\4\2\uffff\1\4\3\5\1\53\2\uffff\1\53\3\32\1\4\1\uffff\1\4\2\uffff"+
-        "\2\53";
+        "\1\4\2\uffff\1\4\3\5\1\53\1\uffff\1\53\1\uffff\3\32\1\uffff\1\4"+
+        "\1\uffff\1\4\1\uffff\2\53";
     static final String DFA7_maxS =
-        "\1\106\2\uffff\1\51\3\5\1\73\2\uffff\1\73\3\104\1\63\1\uffff\1\4"+
-        "\2\uffff\2\73";
+        "\1\106\2\uffff\1\51\3\5\1\72\1\uffff\1\72\1\uffff\3\104\1\uffff"+
+        "\1\63\1\uffff\1\4\1\uffff\2\72";
     static final String DFA7_acceptS =
-        "\1\uffff\1\1\1\2\5\uffff\1\7\1\3\5\uffff\1\6\1\uffff\1\4\1\5\2\uffff";
+        "\1\uffff\1\1\1\2\5\uffff\1\7\1\uffff\1\3\3\uffff\1\6\1\uffff\1\4"+
+        "\1\uffff\1\5\2\uffff";
     static final String DFA7_specialS =
         "\25\uffff}>";
     static final String[] DFA7_transitionS = {
-            "\1\7\1\uffff\6\2\25\uffff\1\2\10\10\12\uffff\1\4\1\5\1\6\1\2"+
-            "\1\1\1\uffff\1\3\12\uffff\1\10\1\2",
+            "\1\7\1\uffff\6\2\25\uffff\1\2\10\10\12\uffff\1\4\1\5\1\6\2\uffff"+
+            "\1\2\1\1\1\uffff\1\3\10\uffff\1\10\1\2",
             "",
             "",
-            "\1\12\35\uffff\10\11",
+            "\1\11\35\uffff\10\12",
             "\1\13",
             "\1\14",
             "\1\15",
-            "\1\10\6\uffff\1\16\5\uffff\1\17\2\uffff\1\10",
+            "\1\10\6\uffff\1\17\4\uffff\1\10\2\uffff\1\16",
             "",
+            "\1\12\6\uffff\1\21\4\uffff\1\12\2\uffff\1\20",
             "",
-            "\1\11\6\uffff\1\20\5\uffff\1\21\2\uffff\1\11",
-            "\7\22\11\uffff\6\22\2\uffff\1\17\6\uffff\1\22\4\uffff\2\22"+
+            "\7\22\11\uffff\6\22\2\uffff\1\16\10\uffff\1\22\2\uffff\2\22"+
             "\2\uffff\3\22",
-            "\7\22\11\uffff\6\22\2\uffff\1\17\6\uffff\1\22\4\uffff\2\22"+
+            "\7\22\11\uffff\6\22\2\uffff\1\16\10\uffff\1\22\2\uffff\2\22"+
             "\2\uffff\3\22",
-            "\7\22\11\uffff\6\22\2\uffff\1\17\6\uffff\1\22\4\uffff\2\22"+
+            "\7\22\11\uffff\6\22\2\uffff\1\16\10\uffff\1\22\2\uffff\2\22"+
             "\2\uffff\3\22",
+            "",
             "\1\23\56\uffff\1\10",
             "",
             "\1\24",
             "",
-            "",
-            "\1\10\6\uffff\1\16\5\uffff\1\17\2\uffff\1\10",
-            "\1\11\6\uffff\1\20\5\uffff\1\21\2\uffff\1\11"
+            "\1\10\6\uffff\1\17\4\uffff\1\10\2\uffff\1\16",
+            "\1\12\6\uffff\1\21\4\uffff\1\12\2\uffff\1\20"
     };
 
     static final short[] DFA7_eot = DFA.unpackEncodedString(DFA7_eotS);
@@ -24317,20 +24712,20 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             return "1525:1: rule__PrimaryExpression__Alternatives : ( ( ruleParExpression ) | ( ruleLiteralExpression ) | ( ruleArrayCreator ) | ( ruleObjectCreation ) | ( ( ruleBaseJRExpression ) ) | ( ruleMethodsExpression ) | ( ( rule__PrimaryExpression__Group_6__0 ) ) );";
         }
     }
-    static final String DFA36_eotS =
+    static final String DFA37_eotS =
         "\30\uffff";
-    static final String DFA36_eofS =
+    static final String DFA37_eofS =
         "\1\2\27\uffff";
-    static final String DFA36_minS =
+    static final String DFA37_minS =
         "\1\32\1\0\26\uffff";
-    static final String DFA36_maxS =
+    static final String DFA37_maxS =
         "\1\104\1\0\26\uffff";
-    static final String DFA36_acceptS =
+    static final String DFA37_acceptS =
         "\2\uffff\1\2\24\uffff\1\1";
-    static final String DFA36_specialS =
+    static final String DFA37_specialS =
         "\1\uffff\1\0\26\uffff}>";
-    static final String[] DFA36_transitionS = {
-            "\7\2\11\uffff\1\2\1\1\4\2\2\uffff\1\2\6\uffff\1\2\1\uffff\1"+
+    static final String[] DFA37_transitionS = {
+            "\7\2\11\uffff\1\2\1\1\4\2\2\uffff\1\2\4\uffff\1\2\3\uffff\1"+
             "\2\2\uffff\2\2\2\uffff\3\2",
             "\1\uffff",
             "",
@@ -24357,61 +24752,61 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
             ""
     };
 
-    static final short[] DFA36_eot = DFA.unpackEncodedString(DFA36_eotS);
-    static final short[] DFA36_eof = DFA.unpackEncodedString(DFA36_eofS);
-    static final char[] DFA36_min = DFA.unpackEncodedStringToUnsignedChars(DFA36_minS);
-    static final char[] DFA36_max = DFA.unpackEncodedStringToUnsignedChars(DFA36_maxS);
-    static final short[] DFA36_accept = DFA.unpackEncodedString(DFA36_acceptS);
-    static final short[] DFA36_special = DFA.unpackEncodedString(DFA36_specialS);
-    static final short[][] DFA36_transition;
+    static final short[] DFA37_eot = DFA.unpackEncodedString(DFA37_eotS);
+    static final short[] DFA37_eof = DFA.unpackEncodedString(DFA37_eofS);
+    static final char[] DFA37_min = DFA.unpackEncodedStringToUnsignedChars(DFA37_minS);
+    static final char[] DFA37_max = DFA.unpackEncodedStringToUnsignedChars(DFA37_maxS);
+    static final short[] DFA37_accept = DFA.unpackEncodedString(DFA37_acceptS);
+    static final short[] DFA37_special = DFA.unpackEncodedString(DFA37_specialS);
+    static final short[][] DFA37_transition;
 
     static {
-        int numStates = DFA36_transitionS.length;
-        DFA36_transition = new short[numStates][];
+        int numStates = DFA37_transitionS.length;
+        DFA37_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA36_transition[i] = DFA.unpackEncodedString(DFA36_transitionS[i]);
+            DFA37_transition[i] = DFA.unpackEncodedString(DFA37_transitionS[i]);
         }
     }
 
-    class DFA36 extends DFA {
+    class DFA37 extends DFA {
 
-        public DFA36(BaseRecognizer recognizer) {
+        public DFA37(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 36;
-            this.eot = DFA36_eot;
-            this.eof = DFA36_eof;
-            this.min = DFA36_min;
-            this.max = DFA36_max;
-            this.accept = DFA36_accept;
-            this.special = DFA36_special;
-            this.transition = DFA36_transition;
+            this.decisionNumber = 37;
+            this.eot = DFA37_eot;
+            this.eof = DFA37_eof;
+            this.min = DFA37_min;
+            this.max = DFA37_max;
+            this.accept = DFA37_accept;
+            this.special = DFA37_special;
+            this.transition = DFA37_transition;
         }
         public String getDescription() {
-            return "6826:1: ( rule__JvmParameterizedTypeReference__Group_1__0 )?";
+            return "6953:1: ( rule__JvmParameterizedTypeReference__Group_1__0 )?";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             TokenStream input = (TokenStream)_input;
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA36_1 = input.LA(1);
+                        int LA37_1 = input.LA(1);
 
                          
-                        int index36_1 = input.index();
+                        int index37_1 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred60_InternalJavaJRExpression()) ) {s = 23;}
+                        if ( (synpred61_InternalJavaJRExpression()) ) {s = 23;}
 
                         else if ( (true) ) {s = 2;}
 
                          
-                        input.seek(index36_1);
+                        input.seek(index37_1);
                         if ( s>=0 ) return s;
                         break;
             }
             if (state.backtracking>0) {state.failed=true; return -1;}
             NoViableAltException nvae =
-                new NoViableAltException(getDescription(), 36, _s, input);
+                new NoViableAltException(getDescription(), 37, _s, input);
             error(nvae);
             throw nvae;
         }
@@ -24599,8 +24994,8 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_rule__BooleanLiteral__IsTrueAssignment_1_1_in_rule__BooleanLiteral__Alternatives_13711 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Type__PrimitiveTypeAssignment_1_0_in_rule__Type__Alternatives_13744 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__Type__JvmTypeAssignment_1_1_in_rule__Type__Alternatives_13762 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__0_in_rule__ArrayCreator__Alternatives_33797 = new BitSet(new long[]{0x0800000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__0_in_rule__ArrayCreator__Alternatives_33809 = new BitSet(new long[]{0x0800000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__0_in_rule__ArrayCreator__Alternatives_33797 = new BitSet(new long[]{0x0080000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__0_in_rule__ArrayCreator__Alternatives_33809 = new BitSet(new long[]{0x0080000000000002L});
     public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1__0_in_rule__ArrayCreator__Alternatives_33830 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleJvmTypeReference_in_rule__JvmArgumentTypeReference__Alternatives3863 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleJvmWildcardTypeReference_in_rule__JvmArgumentTypeReference__Alternatives3880 = new BitSet(new long[]{0x0000000000000002L});
@@ -24623,13 +25018,13 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_ruleConditionalOrExpression_in_rule__ConditionalExpression__Group__0__Impl4261 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__Group__1__Impl_in_rule__ConditionalExpression__Group__14290 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__0_in_rule__ConditionalExpression__Group__1__Impl4317 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__0__Impl_in_rule__ConditionalExpression__Group_1__04352 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__0__Impl_in_rule__ConditionalExpression__Group_1__04352 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__1_in_rule__ConditionalExpression__Group_1__04355 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1_0__0_in_rule__ConditionalExpression__Group_1__0__Impl4382 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__1__Impl_in_rule__ConditionalExpression__Group_1__14412 = new BitSet(new long[]{0x0000400000000000L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__2_in_rule__ConditionalExpression__Group_1__14415 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__TrueStatementAssignment_1_1_in_rule__ConditionalExpression__Group_1__1__Impl4442 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__2__Impl_in_rule__ConditionalExpression__Group_1__24472 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__2__Impl_in_rule__ConditionalExpression__Group_1__24472 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__3_in_rule__ConditionalExpression__Group_1__24475 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_46_in_rule__ConditionalExpression__Group_1__2__Impl4503 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__3__Impl_in_rule__ConditionalExpression__Group_1__34534 = new BitSet(new long[]{0x0000000000000002L});
@@ -24645,7 +25040,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_ruleConditionalAndExpression_in_rule__ConditionalOrExpression__Group__0__Impl4812 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalOrExpression__Group__1__Impl_in_rule__ConditionalOrExpression__Group__14841 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalOrExpression__Group_1__0_in_rule__ConditionalOrExpression__Group__1__Impl4868 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000004L});
-    public static final BitSet FOLLOW_rule__ConditionalOrExpression__Group_1__0__Impl_in_rule__ConditionalOrExpression__Group_1__04903 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__ConditionalOrExpression__Group_1__0__Impl_in_rule__ConditionalOrExpression__Group_1__04903 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__ConditionalOrExpression__Group_1__1_in_rule__ConditionalOrExpression__Group_1__04906 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalOrExpression__Group_1_0__0_in_rule__ConditionalOrExpression__Group_1__0__Impl4933 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalOrExpression__Group_1__1__Impl_in_rule__ConditionalOrExpression__Group_1__14963 = new BitSet(new long[]{0x0000000000000002L});
@@ -24661,7 +25056,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_ruleEqualityExpression_in_rule__ConditionalAndExpression__Group__0__Impl5235 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalAndExpression__Group__1__Impl_in_rule__ConditionalAndExpression__Group__15264 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalAndExpression__Group_1__0_in_rule__ConditionalAndExpression__Group__1__Impl5291 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
-    public static final BitSet FOLLOW_rule__ConditionalAndExpression__Group_1__0__Impl_in_rule__ConditionalAndExpression__Group_1__05326 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__ConditionalAndExpression__Group_1__0__Impl_in_rule__ConditionalAndExpression__Group_1__05326 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__ConditionalAndExpression__Group_1__1_in_rule__ConditionalAndExpression__Group_1__05329 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalAndExpression__Group_1_0__0_in_rule__ConditionalAndExpression__Group_1__0__Impl5356 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalAndExpression__Group_1__1__Impl_in_rule__ConditionalAndExpression__Group_1__15386 = new BitSet(new long[]{0x0000000000000002L});
@@ -24677,7 +25072,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_ruleInstanceofExpression_in_rule__EqualityExpression__Group__0__Impl5658 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__EqualityExpression__Group__1__Impl_in_rule__EqualityExpression__Group__15687 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__EqualityExpression__Group_1__0_in_rule__EqualityExpression__Group__1__Impl5714 = new BitSet(new long[]{0x000000000C000002L});
-    public static final BitSet FOLLOW_rule__EqualityExpression__Group_1__0__Impl_in_rule__EqualityExpression__Group_1__05749 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__EqualityExpression__Group_1__0__Impl_in_rule__EqualityExpression__Group_1__05749 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__EqualityExpression__Group_1__1_in_rule__EqualityExpression__Group_1__05752 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__EqualityExpression__Group_1_0__0_in_rule__EqualityExpression__Group_1__0__Impl5779 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__EqualityExpression__Group_1__1__Impl_in_rule__EqualityExpression__Group_1__15809 = new BitSet(new long[]{0x0000000000000002L});
@@ -24709,7 +25104,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpression__Group__0__Impl6504 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__RelationalExpression__Group__1__Impl_in_rule__RelationalExpression__Group__16533 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__RelationalExpression__Group_1__0_in_rule__RelationalExpression__Group__1__Impl6560 = new BitSet(new long[]{0x00003C0000000002L});
-    public static final BitSet FOLLOW_rule__RelationalExpression__Group_1__0__Impl_in_rule__RelationalExpression__Group_1__06595 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__RelationalExpression__Group_1__0__Impl_in_rule__RelationalExpression__Group_1__06595 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__RelationalExpression__Group_1__1_in_rule__RelationalExpression__Group_1__06598 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__RelationalExpression__Group_1_0__0_in_rule__RelationalExpression__Group_1__0__Impl6625 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__RelationalExpression__Group_1__1__Impl_in_rule__RelationalExpression__Group_1__16655 = new BitSet(new long[]{0x0000000000000002L});
@@ -24725,7 +25120,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpression__Group__0__Impl6927 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AdditiveExpression__Group__1__Impl_in_rule__AdditiveExpression__Group__16956 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AdditiveExpression__Group_1__0_in_rule__AdditiveExpression__Group__1__Impl6983 = new BitSet(new long[]{0x0000000030000002L});
-    public static final BitSet FOLLOW_rule__AdditiveExpression__Group_1__0__Impl_in_rule__AdditiveExpression__Group_1__07018 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__AdditiveExpression__Group_1__0__Impl_in_rule__AdditiveExpression__Group_1__07018 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__AdditiveExpression__Group_1__1_in_rule__AdditiveExpression__Group_1__07021 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AdditiveExpression__Group_1_0__0_in_rule__AdditiveExpression__Group_1__0__Impl7048 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AdditiveExpression__Group_1__1__Impl_in_rule__AdditiveExpression__Group_1__17078 = new BitSet(new long[]{0x0000000000000002L});
@@ -24741,7 +25136,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpression__Group__0__Impl7350 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group__1__Impl_in_rule__MultiplicativeExpression__Group__17379 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group_1__0_in_rule__MultiplicativeExpression__Group__1__Impl7406 = new BitSet(new long[]{0x00000001C0000002L});
-    public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group_1__0__Impl_in_rule__MultiplicativeExpression__Group_1__07441 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group_1__0__Impl_in_rule__MultiplicativeExpression__Group_1__07441 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group_1__1_in_rule__MultiplicativeExpression__Group_1__07444 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group_1_0__0_in_rule__MultiplicativeExpression__Group_1__0__Impl7471 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group_1__1__Impl_in_rule__MultiplicativeExpression__Group_1__17501 = new BitSet(new long[]{0x0000000000000002L});
@@ -24752,27 +25147,27 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group_1_0_0__1_in_rule__MultiplicativeExpression__Group_1_0_0__07624 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group_1_0_0__1__Impl_in_rule__MultiplicativeExpression__Group_1_0_0__17682 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__OpAssignment_1_0_0_1_in_rule__MultiplicativeExpression__Group_1_0_0__1__Impl7709 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__UnaryExpression__Group_0__0__Impl_in_rule__UnaryExpression__Group_0__07743 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__UnaryExpression__Group_0__0__Impl_in_rule__UnaryExpression__Group_0__07743 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__UnaryExpression__Group_0__1_in_rule__UnaryExpression__Group_0__07746 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_28_in_rule__UnaryExpression__Group_0__0__Impl7774 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__UnaryExpression__Group_0__1__Impl_in_rule__UnaryExpression__Group_0__17805 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__UnaryExpression__Group_0__1__Impl7832 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__UnaryExpression__Group_1__0__Impl_in_rule__UnaryExpression__Group_1__07865 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__UnaryExpression__Group_1__0__Impl_in_rule__UnaryExpression__Group_1__07865 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__UnaryExpression__Group_1__1_in_rule__UnaryExpression__Group_1__07868 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_29_in_rule__UnaryExpression__Group_1__0__Impl7896 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__UnaryExpression__Group_1__1__Impl_in_rule__UnaryExpression__Group_1__17927 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__UnaryExpression__Group_1__1__Impl7954 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__UnaryExpressionNotPlusMinus__Group_0__0__Impl_in_rule__UnaryExpressionNotPlusMinus__Group_0__07987 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__UnaryExpressionNotPlusMinus__Group_0__0__Impl_in_rule__UnaryExpressionNotPlusMinus__Group_0__07987 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__UnaryExpressionNotPlusMinus__Group_0__1_in_rule__UnaryExpressionNotPlusMinus__Group_0__07990 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_48_in_rule__UnaryExpressionNotPlusMinus__Group_0__0__Impl8018 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__UnaryExpressionNotPlusMinus__Group_0__1__Impl_in_rule__UnaryExpressionNotPlusMinus__Group_0__18049 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__UnaryExpressionNotPlusMinus__Group_0__1__Impl8076 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__UnaryExpressionNotPlusMinus__Group_1__0__Impl_in_rule__UnaryExpressionNotPlusMinus__Group_1__08109 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__UnaryExpressionNotPlusMinus__Group_1__0__Impl_in_rule__UnaryExpressionNotPlusMinus__Group_1__08109 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__UnaryExpressionNotPlusMinus__Group_1__1_in_rule__UnaryExpressionNotPlusMinus__Group_1__08112 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_49_in_rule__UnaryExpressionNotPlusMinus__Group_1__0__Impl8140 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__UnaryExpressionNotPlusMinus__Group_1__1__Impl_in_rule__UnaryExpressionNotPlusMinus__Group_1__18171 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__UnaryExpressionNotPlusMinus__Group_1__1__Impl8198 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_6__0__Impl_in_rule__PrimaryExpression__Group_6__08231 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__PrimaryExpression__Group_6__0__Impl_in_rule__PrimaryExpression__Group_6__08231 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
     public static final BitSet FOLLOW_rule__PrimaryExpression__Group_6__1_in_rule__PrimaryExpression__Group_6__08234 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__PrimaryExpression__Group_6__1__Impl_in_rule__PrimaryExpression__Group_6__18292 = new BitSet(new long[]{0x0004000000000000L});
     public static final BitSet FOLLOW_rule__PrimaryExpression__Group_6__2_in_rule__PrimaryExpression__Group_6__18295 = new BitSet(new long[]{0x0000000000000002L});
@@ -24805,289 +25200,301 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_rule__JRVariableObj__BracedIdentifierAssignment_2_in_rule__JRVariableObj__Group__2__Impl9003 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MethodsExpression__Group__0__Impl_in_rule__MethodsExpression__Group__09039 = new BitSet(new long[]{0x0070000000000010L});
     public static final BitSet FOLLOW_rule__MethodsExpression__Group__1_in_rule__MethodsExpression__Group__09042 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group__1__Impl_in_rule__MethodsExpression__Group__19100 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Alternatives_1_in_rule__MethodsExpression__Group__1__Impl9127 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0__0__Impl_in_rule__MethodsExpression__Group_1_0__09161 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0__1_in_rule__MethodsExpression__Group_1_0__09164 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_0_0_in_rule__MethodsExpression__Group_1_0__0__Impl9191 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0__1__Impl_in_rule__MethodsExpression__Group_1_0__19221 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0_1__0_in_rule__MethodsExpression__Group_1_0__1__Impl9248 = new BitSet(new long[]{0x0004000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0_1__0__Impl_in_rule__MethodsExpression__Group_1_0_1__09283 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0_1__1_in_rule__MethodsExpression__Group_1_0_1__09286 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_50_in_rule__MethodsExpression__Group_1_0_1__0__Impl9314 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0_1__1__Impl_in_rule__MethodsExpression__Group_1_0_1__19345 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1_in_rule__MethodsExpression__Group_1_0_1__1__Impl9372 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1__0__Impl_in_rule__MethodsExpression__Group_1_1__09406 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1__1_in_rule__MethodsExpression__Group_1_1__09409 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__ObjectExpressionAssignment_1_1_0_in_rule__MethodsExpression__Group_1_1__0__Impl9436 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1__1__Impl_in_rule__MethodsExpression__Group_1_1__19466 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__0_in_rule__MethodsExpression__Group_1_1__1__Impl9495 = new BitSet(new long[]{0x0004000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__0_in_rule__MethodsExpression__Group_1_1__1__Impl9507 = new BitSet(new long[]{0x0004000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__0__Impl_in_rule__MethodsExpression__Group_1_1_1__09544 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__1_in_rule__MethodsExpression__Group_1_1_1__09547 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_50_in_rule__MethodsExpression__Group_1_1_1__0__Impl9575 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__1__Impl_in_rule__MethodsExpression__Group_1_1_1__19606 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1_in_rule__MethodsExpression__Group_1_1_1__1__Impl9633 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IntLiteral__Group__0__Impl_in_rule__IntLiteral__Group__09667 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_rule__IntLiteral__Group__1_in_rule__IntLiteral__Group__09670 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IntLiteral__Group__1__Impl_in_rule__IntLiteral__Group__19728 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__IntLiteral__ValueAssignment_1_in_rule__IntLiteral__Group__1__Impl9755 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongLiteral__Group__0__Impl_in_rule__LongLiteral__Group__09789 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_rule__LongLiteral__Group__1_in_rule__LongLiteral__Group__09792 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongLiteral__Group__1__Impl_in_rule__LongLiteral__Group__19850 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__LongLiteral__ValueAssignment_1_in_rule__LongLiteral__Group__1__Impl9877 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FloatLiteral__Group__0__Impl_in_rule__FloatLiteral__Group__09911 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_rule__FloatLiteral__Group__1_in_rule__FloatLiteral__Group__09914 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FloatLiteral__Group__1__Impl_in_rule__FloatLiteral__Group__19972 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FloatLiteral__ValueAssignment_1_in_rule__FloatLiteral__Group__1__Impl9999 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleLiteral__Group__0__Impl_in_rule__DoubleLiteral__Group__010033 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_rule__DoubleLiteral__Group__1_in_rule__DoubleLiteral__Group__010036 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleLiteral__Group__1__Impl_in_rule__DoubleLiteral__Group__110094 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__DoubleLiteral__ValueAssignment_1_in_rule__DoubleLiteral__Group__1__Impl10121 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CharLiteral__Group__0__Impl_in_rule__CharLiteral__Group__010155 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_rule__CharLiteral__Group__1_in_rule__CharLiteral__Group__010158 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CharLiteral__Group__1__Impl_in_rule__CharLiteral__Group__110216 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CharLiteral__ValueAssignment_1_in_rule__CharLiteral__Group__1__Impl10243 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringLiteral__Group__0__Impl_in_rule__StringLiteral__Group__010277 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_rule__StringLiteral__Group__1_in_rule__StringLiteral__Group__010280 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringLiteral__Group__1__Impl_in_rule__StringLiteral__Group__110338 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__StringLiteral__ValueAssignment_1_in_rule__StringLiteral__Group__1__Impl10365 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanLiteral__Group__0__Impl_in_rule__BooleanLiteral__Group__010399 = new BitSet(new long[]{0x0000000200000000L,0x0000000000000040L});
-    public static final BitSet FOLLOW_rule__BooleanLiteral__Group__1_in_rule__BooleanLiteral__Group__010402 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanLiteral__Group__1__Impl_in_rule__BooleanLiteral__Group__110460 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__BooleanLiteral__Alternatives_1_in_rule__BooleanLiteral__Group__1__Impl10487 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullLiteral__Group__0__Impl_in_rule__NullLiteral__Group__010521 = new BitSet(new long[]{0x0080000200000FC0L,0x0000000000000040L});
-    public static final BitSet FOLLOW_rule__NullLiteral__Group__1_in_rule__NullLiteral__Group__010524 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__NullLiteral__Group__1__Impl_in_rule__NullLiteral__Group__110582 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_55_in_rule__NullLiteral__Group__1__Impl10610 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ParExpression__Group__0__Impl_in_rule__ParExpression__Group__010645 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
-    public static final BitSet FOLLOW_rule__ParExpression__Group__1_in_rule__ParExpression__Group__010648 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_56_in_rule__ParExpression__Group__0__Impl10676 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ParExpression__Group__1__Impl_in_rule__ParExpression__Group__110707 = new BitSet(new long[]{0x0200000000000000L});
-    public static final BitSet FOLLOW_rule__ParExpression__Group__2_in_rule__ParExpression__Group__110710 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ParExpression__Group__1__Impl10737 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ParExpression__Group__2__Impl_in_rule__ParExpression__Group__210766 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_57_in_rule__ParExpression__Group__2__Impl10794 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CastedExpression__Group__0__Impl_in_rule__CastedExpression__Group__010831 = new BitSet(new long[]{0x0100000000000000L});
-    public static final BitSet FOLLOW_rule__CastedExpression__Group__1_in_rule__CastedExpression__Group__010834 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CastedExpression__Group__1__Impl_in_rule__CastedExpression__Group__110892 = new BitSet(new long[]{0x000003FC00000010L});
-    public static final BitSet FOLLOW_rule__CastedExpression__Group__2_in_rule__CastedExpression__Group__110895 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_56_in_rule__CastedExpression__Group__1__Impl10923 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CastedExpression__Group__2__Impl_in_rule__CastedExpression__Group__210954 = new BitSet(new long[]{0x0200000000000000L});
-    public static final BitSet FOLLOW_rule__CastedExpression__Group__3_in_rule__CastedExpression__Group__210957 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CastedExpression__CastTypeAssignment_2_in_rule__CastedExpression__Group__2__Impl10984 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CastedExpression__Group__3__Impl_in_rule__CastedExpression__Group__311014 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
-    public static final BitSet FOLLOW_rule__CastedExpression__Group__4_in_rule__CastedExpression__Group__311017 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_57_in_rule__CastedExpression__Group__3__Impl11045 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CastedExpression__Group__4__Impl_in_rule__CastedExpression__Group__411076 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__CastedExpression__CastedExprAssignment_4_in_rule__CastedExpression__Group__4__Impl11103 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Type__Group__0__Impl_in_rule__Type__Group__011143 = new BitSet(new long[]{0x000003FC00000010L});
-    public static final BitSet FOLLOW_rule__Type__Group__1_in_rule__Type__Group__011146 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Type__Group__1__Impl_in_rule__Type__Group__111204 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Type__Alternatives_1_in_rule__Type__Group__1__Impl11231 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group__0__Impl_in_rule__ArrayCreator__Group__011265 = new BitSet(new long[]{0x0400000000000000L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group__1_in_rule__ArrayCreator__Group__011268 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group__1__Impl_in_rule__ArrayCreator__Group__111326 = new BitSet(new long[]{0x000003FC00000010L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group__2_in_rule__ArrayCreator__Group__111329 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_58_in_rule__ArrayCreator__Group__1__Impl11357 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group__2__Impl_in_rule__ArrayCreator__Group__211388 = new BitSet(new long[]{0x0800000000000000L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group__3_in_rule__ArrayCreator__Group__211391 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__TypeAssignment_2_in_rule__ArrayCreator__Group__2__Impl11418 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group__3__Impl_in_rule__ArrayCreator__Group__311448 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Alternatives_3_in_rule__ArrayCreator__Group__3__Impl11475 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__0__Impl_in_rule__ArrayCreator__Group_3_0__011513 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__1_in_rule__ArrayCreator__Group_3_0__011516 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_59_in_rule__ArrayCreator__Group_3_0__0__Impl11544 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__1__Impl_in_rule__ArrayCreator__Group_3_0__111575 = new BitSet(new long[]{0x1000000000000000L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__2_in_rule__ArrayCreator__Group_3_0__111578 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__SizeAssignment_3_0_1_in_rule__ArrayCreator__Group_3_0__1__Impl11605 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__2__Impl_in_rule__ArrayCreator__Group_3_0__211635 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_60_in_rule__ArrayCreator__Group_3_0__2__Impl11663 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1__0__Impl_in_rule__ArrayCreator__Group_3_1__011700 = new BitSet(new long[]{0x2000000000000000L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1__1_in_rule__ArrayCreator__Group_3_1__011703 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__0_in_rule__ArrayCreator__Group_3_1__0__Impl11732 = new BitSet(new long[]{0x0800000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__0_in_rule__ArrayCreator__Group_3_1__0__Impl11744 = new BitSet(new long[]{0x0800000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1__1__Impl_in_rule__ArrayCreator__Group_3_1__111777 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__InitializationAssignment_3_1_1_in_rule__ArrayCreator__Group_3_1__1__Impl11804 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__0__Impl_in_rule__ArrayCreator__Group_3_1_0__011838 = new BitSet(new long[]{0x1000000000000000L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__1_in_rule__ArrayCreator__Group_3_1_0__011841 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_59_in_rule__ArrayCreator__Group_3_1_0__0__Impl11869 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__1__Impl_in_rule__ArrayCreator__Group_3_1_0__111900 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_60_in_rule__ArrayCreator__Group_3_1_0__1__Impl11928 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__0__Impl_in_rule__ArrayInitializer__Group__011963 = new BitSet(new long[]{0x2000000000000000L});
-    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__1_in_rule__ArrayInitializer__Group__011966 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__1__Impl_in_rule__ArrayInitializer__Group__112024 = new BitSet(new long[]{0x45F303FE30000FD0L,0x0000000000000060L});
-    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__2_in_rule__ArrayInitializer__Group__112027 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_61_in_rule__ArrayInitializer__Group__1__Impl12055 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__2__Impl_in_rule__ArrayInitializer__Group__212086 = new BitSet(new long[]{0x45F303FE30000FD0L,0x0000000000000060L});
-    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__3_in_rule__ArrayInitializer__Group__212089 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayInitializer__InitializationAssignment_2_in_rule__ArrayInitializer__Group__2__Impl12116 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__3__Impl_in_rule__ArrayInitializer__Group__312147 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_62_in_rule__ArrayInitializer__Group__3__Impl12175 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ObjectCreation__Group__0__Impl_in_rule__ObjectCreation__Group__012214 = new BitSet(new long[]{0x0400000000000000L});
-    public static final BitSet FOLLOW_rule__ObjectCreation__Group__1_in_rule__ObjectCreation__Group__012217 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ObjectCreation__Group__1__Impl_in_rule__ObjectCreation__Group__112275 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__ObjectCreation__Group__2_in_rule__ObjectCreation__Group__112278 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_58_in_rule__ObjectCreation__Group__1__Impl12306 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ObjectCreation__Group__2__Impl_in_rule__ObjectCreation__Group__212337 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ObjectCreation__ConstructorInvocationAssignment_2_in_rule__ObjectCreation__Group__2__Impl12364 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodInvocation__Group__0__Impl_in_rule__MethodInvocation__Group__012400 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__MethodInvocation__Group__1_in_rule__MethodInvocation__Group__012403 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodInvocation__Group__1__Impl_in_rule__MethodInvocation__Group__112461 = new BitSet(new long[]{0x0100000000000000L});
-    public static final BitSet FOLLOW_rule__MethodInvocation__Group__2_in_rule__MethodInvocation__Group__112464 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1_in_rule__MethodInvocation__Group__1__Impl12491 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodInvocation__Group__2__Impl_in_rule__MethodInvocation__Group__212521 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MethodInvocation__ArgsAssignment_2_in_rule__MethodInvocation__Group__2__Impl12548 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FullMethodName__Group__0__Impl_in_rule__FullMethodName__Group__012584 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__FullMethodName__Group__1_in_rule__FullMethodName__Group__012587 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FullMethodName__Group_0__0_in_rule__FullMethodName__Group__0__Impl12614 = new BitSet(new long[]{0x0000000000000012L});
-    public static final BitSet FOLLOW_rule__FullMethodName__Group__1__Impl_in_rule__FullMethodName__Group__112645 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FullMethodName__MethodNameAssignment_1_in_rule__FullMethodName__Group__1__Impl12672 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FullMethodName__Group_0__0__Impl_in_rule__FullMethodName__Group_0__012706 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_rule__FullMethodName__Group_0__1_in_rule__FullMethodName__Group_0__012709 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FullMethodName__PrefixQMNAssignment_0_0_in_rule__FullMethodName__Group_0__0__Impl12736 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FullMethodName__Group_0__1__Impl_in_rule__FullMethodName__Group_0__112766 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__FullMethodName__DotsAssignment_0_1_in_rule__FullMethodName__Group_0__1__Impl12793 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Arguments__Group__0__Impl_in_rule__Arguments__Group__012827 = new BitSet(new long[]{0x0100000000000000L});
-    public static final BitSet FOLLOW_rule__Arguments__Group__1_in_rule__Arguments__Group__012830 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Arguments__Group__1__Impl_in_rule__Arguments__Group__112888 = new BitSet(new long[]{0x07F303FE30000FD0L,0x0000000000000060L});
-    public static final BitSet FOLLOW_rule__Arguments__Group__2_in_rule__Arguments__Group__112891 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_56_in_rule__Arguments__Group__1__Impl12919 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Arguments__Group__2__Impl_in_rule__Arguments__Group__212950 = new BitSet(new long[]{0x07F303FE30000FD0L,0x0000000000000060L});
-    public static final BitSet FOLLOW_rule__Arguments__Group__3_in_rule__Arguments__Group__212953 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Arguments__ExprLstAssignment_2_in_rule__Arguments__Group__2__Impl12980 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__Arguments__Group__3__Impl_in_rule__Arguments__Group__313011 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_57_in_rule__Arguments__Group__3__Impl13039 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionList__Group__0__Impl_in_rule__ExpressionList__Group__013078 = new BitSet(new long[]{0x8000000000000000L});
-    public static final BitSet FOLLOW_rule__ExpressionList__Group__1_in_rule__ExpressionList__Group__013081 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionList__ExpressionsAssignment_0_in_rule__ExpressionList__Group__0__Impl13108 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionList__Group__1__Impl_in_rule__ExpressionList__Group__113138 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionList__Group_1__0_in_rule__ExpressionList__Group__1__Impl13165 = new BitSet(new long[]{0x8000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionList__Group_1__0__Impl_in_rule__ExpressionList__Group_1__013200 = new BitSet(new long[]{0x05F303FE30000FD0L,0x0000000000000060L});
-    public static final BitSet FOLLOW_rule__ExpressionList__Group_1__1_in_rule__ExpressionList__Group_1__013203 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionList__CommasAssignment_1_0_in_rule__ExpressionList__Group_1__0__Impl13230 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionList__Group_1__1__Impl_in_rule__ExpressionList__Group_1__113260 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__ExpressionList__ExpressionsAssignment_1_1_in_rule__ExpressionList__Group_1__1__Impl13287 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group__0__Impl_in_rule__JvmTypeReference__Group__013321 = new BitSet(new long[]{0x0800000000000000L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group__1_in_rule__JvmTypeReference__Group__013324 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmParameterizedTypeReference_in_rule__JvmTypeReference__Group__0__Impl13351 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group__1__Impl_in_rule__JvmTypeReference__Group__113380 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1__0_in_rule__JvmTypeReference__Group__1__Impl13407 = new BitSet(new long[]{0x0800000000000002L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1__0__Impl_in_rule__JvmTypeReference__Group_1__013442 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__0_in_rule__JvmTypeReference__Group_1__0__Impl13469 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__0__Impl_in_rule__JvmTypeReference__Group_1_0__013501 = new BitSet(new long[]{0x0800000000000000L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__1_in_rule__JvmTypeReference__Group_1_0__013504 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__1__Impl_in_rule__JvmTypeReference__Group_1_0__113562 = new BitSet(new long[]{0x1000000000000000L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__2_in_rule__JvmTypeReference__Group_1_0__113565 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_59_in_rule__JvmTypeReference__Group_1_0__1__Impl13593 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__2__Impl_in_rule__JvmTypeReference__Group_1_0__213624 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_60_in_rule__JvmTypeReference__Group_1_0__2__Impl13652 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group__0__Impl_in_rule__JvmParameterizedTypeReference__Group__013689 = new BitSet(new long[]{0x0000080000000000L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group__1_in_rule__JvmParameterizedTypeReference__Group__013692 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__TypeAssignment_0_in_rule__JvmParameterizedTypeReference__Group__0__Impl13719 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group__1__Impl_in_rule__JvmParameterizedTypeReference__Group__113749 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0_in_rule__JvmParameterizedTypeReference__Group__1__Impl13776 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0__Impl_in_rule__JvmParameterizedTypeReference__Group_1__013811 = new BitSet(new long[]{0x000083FC00000010L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__1_in_rule__JvmParameterizedTypeReference__Group_1__013814 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_43_in_rule__JvmParameterizedTypeReference__Group_1__0__Impl13843 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__1__Impl_in_rule__JvmParameterizedTypeReference__Group_1__113875 = new BitSet(new long[]{0x8000200000000000L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__2_in_rule__JvmParameterizedTypeReference__Group_1__113878 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1_in_rule__JvmParameterizedTypeReference__Group_1__1__Impl13905 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__2__Impl_in_rule__JvmParameterizedTypeReference__Group_1__213935 = new BitSet(new long[]{0x8000200000000000L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__3_in_rule__JvmParameterizedTypeReference__Group_1__213938 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__0_in_rule__JvmParameterizedTypeReference__Group_1__2__Impl13965 = new BitSet(new long[]{0x8000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__3__Impl_in_rule__JvmParameterizedTypeReference__Group_1__313996 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_45_in_rule__JvmParameterizedTypeReference__Group_1__3__Impl14024 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__0__Impl_in_rule__JvmParameterizedTypeReference__Group_1_2__014063 = new BitSet(new long[]{0x000083FC00000010L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__1_in_rule__JvmParameterizedTypeReference__Group_1_2__014066 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_63_in_rule__JvmParameterizedTypeReference__Group_1_2__0__Impl14094 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__1__Impl_in_rule__JvmParameterizedTypeReference__Group_1_2__114125 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1_in_rule__JvmParameterizedTypeReference__Group_1_2__1__Impl14152 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__0__Impl_in_rule__JvmWildcardTypeReference__Group__014186 = new BitSet(new long[]{0x000083FC00000010L});
-    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__1_in_rule__JvmWildcardTypeReference__Group__014189 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__1__Impl_in_rule__JvmWildcardTypeReference__Group__114247 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000003L});
-    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__2_in_rule__JvmWildcardTypeReference__Group__114250 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_47_in_rule__JvmWildcardTypeReference__Group__1__Impl14278 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__2__Impl_in_rule__JvmWildcardTypeReference__Group__214309 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Alternatives_2_in_rule__JvmWildcardTypeReference__Group__2__Impl14336 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmUpperBound__Group__0__Impl_in_rule__JvmUpperBound__Group__014373 = new BitSet(new long[]{0x000003FC00000010L});
-    public static final BitSet FOLLOW_rule__JvmUpperBound__Group__1_in_rule__JvmUpperBound__Group__014376 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_64_in_rule__JvmUpperBound__Group__0__Impl14404 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmUpperBound__Group__1__Impl_in_rule__JvmUpperBound__Group__114435 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmUpperBound__TypeReferenceAssignment_1_in_rule__JvmUpperBound__Group__1__Impl14462 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmLowerBound__Group__0__Impl_in_rule__JvmLowerBound__Group__014496 = new BitSet(new long[]{0x000003FC00000010L});
-    public static final BitSet FOLLOW_rule__JvmLowerBound__Group__1_in_rule__JvmLowerBound__Group__014499 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_65_in_rule__JvmLowerBound__Group__0__Impl14527 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmLowerBound__Group__1__Impl_in_rule__JvmLowerBound__Group__114558 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmLowerBound__TypeReferenceAssignment_1_in_rule__JvmLowerBound__Group__1__Impl14585 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__QualifiedName__Group__0__Impl_in_rule__QualifiedName__Group__014619 = new BitSet(new long[]{0x0004000000000000L});
-    public static final BitSet FOLLOW_rule__QualifiedName__Group__1_in_rule__QualifiedName__Group__014622 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleValidID_in_rule__QualifiedName__Group__0__Impl14649 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__QualifiedName__Group__1__Impl_in_rule__QualifiedName__Group__114678 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__QualifiedName__Group_1__0_in_rule__QualifiedName__Group__1__Impl14705 = new BitSet(new long[]{0x0004000000000002L});
-    public static final BitSet FOLLOW_rule__QualifiedName__Group_1__0__Impl_in_rule__QualifiedName__Group_1__014740 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_rule__QualifiedName__Group_1__1_in_rule__QualifiedName__Group_1__014743 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_50_in_rule__QualifiedName__Group_1__0__Impl14771 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__QualifiedName__Group_1__1__Impl_in_rule__QualifiedName__Group_1__114802 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleValidID_in_rule__QualifiedName__Group_1__1__Impl14829 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__JRExpressionModel__ExpressionAssignment14867 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ConditionalExpression__TrueStatementAssignment_1_114898 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ConditionalExpression__FalseStatementAssignment_1_314929 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_66_in_rule__ConditionalOrExpression__OpAssignment_1_0_0_114965 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleConditionalAndExpression_in_rule__ConditionalOrExpression__RightAssignment_1_115004 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_67_in_rule__ConditionalAndExpression__OpAssignment_1_0_0_115040 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleEqualityExpression_in_rule__ConditionalAndExpression__RightAssignment_1_115079 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__EqualityExpression__OpAlternatives_1_0_0_1_0_in_rule__EqualityExpression__OpAssignment_1_0_0_115110 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleInstanceofExpression_in_rule__EqualityExpression__RightAssignment_1_115143 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_68_in_rule__InstanceofExpression__OpAssignment_1_0_0_115179 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__InstanceofExpression__RightAssignment_1_115218 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleRelationalOp_in_rule__RelationalExpression__OpAssignment_1_0_0_115249 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpression__RightAssignment_1_115280 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__AdditiveExpression__OpAlternatives_1_0_0_1_0_in_rule__AdditiveExpression__OpAssignment_1_0_0_115311 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpression__RightAssignment_1_115344 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0_in_rule__MultiplicativeExpression__OpAssignment_1_0_0_115375 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpression__RightAssignment_1_115408 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__PrimaryExpression__TypeAssignment_6_1_015439 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_69_in_rule__PrimaryExpression__VoidAssignment_6_1_115475 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRFieldObj__BracedIdentifierAssignment_215514 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRParameterObj__BracedIdentifierAssignment_215545 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRVariableObj__BracedIdentifierAssignment_215576 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_0_015607 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_115638 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleBaseJRExpression_in_rule__MethodsExpression__ObjectExpressionAssignment_1_1_015669 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_115700 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_INT_in_rule__IntLiteral__ValueAssignment_115731 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_LONG_in_rule__LongLiteral__ValueAssignment_115762 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_FLOAT_in_rule__FloatLiteral__ValueAssignment_115793 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_DOUBLE_in_rule__DoubleLiteral__ValueAssignment_115824 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_CHAR_in_rule__CharLiteral__ValueAssignment_115855 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RULE_STRING_in_rule__StringLiteral__ValueAssignment_115886 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_70_in_rule__BooleanLiteral__IsTrueAssignment_1_115922 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__CastedExpression__CastTypeAssignment_215961 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__CastedExpression__CastedExprAssignment_415992 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rulePrimitiveType_in_rule__Type__PrimitiveTypeAssignment_1_016023 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmTypeReference_in_rule__Type__JvmTypeAssignment_1_116054 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleType_in_rule__ArrayCreator__TypeAssignment_216085 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleIntLiteral_in_rule__ArrayCreator__SizeAssignment_3_0_116116 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleArrayInitializer_in_rule__ArrayCreator__InitializationAssignment_3_1_116147 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionList_in_rule__ArrayInitializer__InitializationAssignment_216178 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleMethodInvocation_in_rule__ObjectCreation__ConstructorInvocationAssignment_216209 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleFullMethodName_in_rule__MethodInvocation__FullyQualifiedMethodNameAssignment_116240 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleArguments_in_rule__MethodInvocation__ArgsAssignment_216271 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleValidID_in_rule__FullMethodName__PrefixQMNAssignment_0_016302 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_50_in_rule__FullMethodName__DotsAssignment_0_116338 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleValidID_in_rule__FullMethodName__MethodNameAssignment_116377 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleExpressionList_in_rule__Arguments__ExprLstAssignment_216408 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ExpressionList__ExpressionsAssignment_016439 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_63_in_rule__ExpressionList__CommasAssignment_1_016475 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ExpressionList__ExpressionsAssignment_1_116514 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__JvmParameterizedTypeReference__TypeAssignment_016549 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_116584 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_116615 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmUpperBound_in_rule__JvmWildcardTypeReference__ConstraintsAssignment_2_016646 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmLowerBound_in_rule__JvmWildcardTypeReference__ConstraintsAssignment_2_116677 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmTypeReference_in_rule__JvmUpperBound__TypeReferenceAssignment_116708 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ruleJvmTypeReference_in_rule__JvmLowerBound__TypeReferenceAssignment_116739 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group__1__Impl_in_rule__MethodsExpression__Group__19100 = new BitSet(new long[]{0x0080000000000000L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group__2_in_rule__MethodsExpression__Group__19103 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Alternatives_1_in_rule__MethodsExpression__Group__1__Impl9130 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group__2__Impl_in_rule__MethodsExpression__Group__29160 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_2__0_in_rule__MethodsExpression__Group__2__Impl9187 = new BitSet(new long[]{0x0080000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0__0__Impl_in_rule__MethodsExpression__Group_1_0__09224 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0__1_in_rule__MethodsExpression__Group_1_0__09227 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_0_0_in_rule__MethodsExpression__Group_1_0__0__Impl9254 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0__1__Impl_in_rule__MethodsExpression__Group_1_0__19284 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0_1__0_in_rule__MethodsExpression__Group_1_0__1__Impl9311 = new BitSet(new long[]{0x0004000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0_1__0__Impl_in_rule__MethodsExpression__Group_1_0_1__09346 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0_1__1_in_rule__MethodsExpression__Group_1_0_1__09349 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_50_in_rule__MethodsExpression__Group_1_0_1__0__Impl9377 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_0_1__1__Impl_in_rule__MethodsExpression__Group_1_0_1__19408 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_1_in_rule__MethodsExpression__Group_1_0_1__1__Impl9435 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1__0__Impl_in_rule__MethodsExpression__Group_1_1__09469 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1__1_in_rule__MethodsExpression__Group_1_1__09472 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__ObjectExpressionAssignment_1_1_0_in_rule__MethodsExpression__Group_1_1__0__Impl9499 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1__1__Impl_in_rule__MethodsExpression__Group_1_1__19529 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__0_in_rule__MethodsExpression__Group_1_1__1__Impl9558 = new BitSet(new long[]{0x0004000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__0_in_rule__MethodsExpression__Group_1_1__1__Impl9570 = new BitSet(new long[]{0x0004000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__0__Impl_in_rule__MethodsExpression__Group_1_1_1__09607 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__1_in_rule__MethodsExpression__Group_1_1_1__09610 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_50_in_rule__MethodsExpression__Group_1_1_1__0__Impl9638 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_1_1_1__1__Impl_in_rule__MethodsExpression__Group_1_1_1__19669 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_1_in_rule__MethodsExpression__Group_1_1_1__1__Impl9696 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_2__0__Impl_in_rule__MethodsExpression__Group_2__09730 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_2__1_in_rule__MethodsExpression__Group_2__09733 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_55_in_rule__MethodsExpression__Group_2__0__Impl9761 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_2__1__Impl_in_rule__MethodsExpression__Group_2__19792 = new BitSet(new long[]{0x0100000000000000L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_2__2_in_rule__MethodsExpression__Group_2__19795 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__ArrayIndexesAssignment_2_1_in_rule__MethodsExpression__Group_2__1__Impl9822 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodsExpression__Group_2__2__Impl_in_rule__MethodsExpression__Group_2__29852 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_56_in_rule__MethodsExpression__Group_2__2__Impl9880 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IntLiteral__Group__0__Impl_in_rule__IntLiteral__Group__09917 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__IntLiteral__Group__1_in_rule__IntLiteral__Group__09920 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IntLiteral__Group__1__Impl_in_rule__IntLiteral__Group__19978 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__IntLiteral__ValueAssignment_1_in_rule__IntLiteral__Group__1__Impl10005 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongLiteral__Group__0__Impl_in_rule__LongLiteral__Group__010039 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_rule__LongLiteral__Group__1_in_rule__LongLiteral__Group__010042 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongLiteral__Group__1__Impl_in_rule__LongLiteral__Group__110100 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__LongLiteral__ValueAssignment_1_in_rule__LongLiteral__Group__1__Impl10127 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FloatLiteral__Group__0__Impl_in_rule__FloatLiteral__Group__010161 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_rule__FloatLiteral__Group__1_in_rule__FloatLiteral__Group__010164 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FloatLiteral__Group__1__Impl_in_rule__FloatLiteral__Group__110222 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FloatLiteral__ValueAssignment_1_in_rule__FloatLiteral__Group__1__Impl10249 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleLiteral__Group__0__Impl_in_rule__DoubleLiteral__Group__010283 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_rule__DoubleLiteral__Group__1_in_rule__DoubleLiteral__Group__010286 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleLiteral__Group__1__Impl_in_rule__DoubleLiteral__Group__110344 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__DoubleLiteral__ValueAssignment_1_in_rule__DoubleLiteral__Group__1__Impl10371 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CharLiteral__Group__0__Impl_in_rule__CharLiteral__Group__010405 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_rule__CharLiteral__Group__1_in_rule__CharLiteral__Group__010408 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CharLiteral__Group__1__Impl_in_rule__CharLiteral__Group__110466 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CharLiteral__ValueAssignment_1_in_rule__CharLiteral__Group__1__Impl10493 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringLiteral__Group__0__Impl_in_rule__StringLiteral__Group__010527 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_rule__StringLiteral__Group__1_in_rule__StringLiteral__Group__010530 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringLiteral__Group__1__Impl_in_rule__StringLiteral__Group__110588 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__StringLiteral__ValueAssignment_1_in_rule__StringLiteral__Group__1__Impl10615 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanLiteral__Group__0__Impl_in_rule__BooleanLiteral__Group__010649 = new BitSet(new long[]{0x0000000200000000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__BooleanLiteral__Group__1_in_rule__BooleanLiteral__Group__010652 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanLiteral__Group__1__Impl_in_rule__BooleanLiteral__Group__110710 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__BooleanLiteral__Alternatives_1_in_rule__BooleanLiteral__Group__1__Impl10737 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullLiteral__Group__0__Impl_in_rule__NullLiteral__Group__010771 = new BitSet(new long[]{0x0200000200000FC0L,0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__NullLiteral__Group__1_in_rule__NullLiteral__Group__010774 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__NullLiteral__Group__1__Impl_in_rule__NullLiteral__Group__110832 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_57_in_rule__NullLiteral__Group__1__Impl10860 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ParExpression__Group__0__Impl_in_rule__ParExpression__Group__010895 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__ParExpression__Group__1_in_rule__ParExpression__Group__010898 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_58_in_rule__ParExpression__Group__0__Impl10926 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ParExpression__Group__1__Impl_in_rule__ParExpression__Group__110957 = new BitSet(new long[]{0x0800000000000000L});
+    public static final BitSet FOLLOW_rule__ParExpression__Group__2_in_rule__ParExpression__Group__110960 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ParExpression__Group__1__Impl10987 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ParExpression__Group__2__Impl_in_rule__ParExpression__Group__211016 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_59_in_rule__ParExpression__Group__2__Impl11044 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CastedExpression__Group__0__Impl_in_rule__CastedExpression__Group__011081 = new BitSet(new long[]{0x0400000000000000L});
+    public static final BitSet FOLLOW_rule__CastedExpression__Group__1_in_rule__CastedExpression__Group__011084 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CastedExpression__Group__1__Impl_in_rule__CastedExpression__Group__111142 = new BitSet(new long[]{0x000003FC00000010L});
+    public static final BitSet FOLLOW_rule__CastedExpression__Group__2_in_rule__CastedExpression__Group__111145 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_58_in_rule__CastedExpression__Group__1__Impl11173 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CastedExpression__Group__2__Impl_in_rule__CastedExpression__Group__211204 = new BitSet(new long[]{0x0800000000000000L});
+    public static final BitSet FOLLOW_rule__CastedExpression__Group__3_in_rule__CastedExpression__Group__211207 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CastedExpression__CastTypeAssignment_2_in_rule__CastedExpression__Group__2__Impl11234 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CastedExpression__Group__3__Impl_in_rule__CastedExpression__Group__311264 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__CastedExpression__Group__4_in_rule__CastedExpression__Group__311267 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_59_in_rule__CastedExpression__Group__3__Impl11295 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CastedExpression__Group__4__Impl_in_rule__CastedExpression__Group__411326 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__CastedExpression__CastedExprAssignment_4_in_rule__CastedExpression__Group__4__Impl11353 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Type__Group__0__Impl_in_rule__Type__Group__011393 = new BitSet(new long[]{0x000003FC00000010L});
+    public static final BitSet FOLLOW_rule__Type__Group__1_in_rule__Type__Group__011396 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Type__Group__1__Impl_in_rule__Type__Group__111454 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Type__Alternatives_1_in_rule__Type__Group__1__Impl11481 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group__0__Impl_in_rule__ArrayCreator__Group__011515 = new BitSet(new long[]{0x1000000000000000L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group__1_in_rule__ArrayCreator__Group__011518 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group__1__Impl_in_rule__ArrayCreator__Group__111576 = new BitSet(new long[]{0x000003FC00000010L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group__2_in_rule__ArrayCreator__Group__111579 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_60_in_rule__ArrayCreator__Group__1__Impl11607 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group__2__Impl_in_rule__ArrayCreator__Group__211638 = new BitSet(new long[]{0x0080000000000000L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group__3_in_rule__ArrayCreator__Group__211641 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__TypeAssignment_2_in_rule__ArrayCreator__Group__2__Impl11668 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group__3__Impl_in_rule__ArrayCreator__Group__311698 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Alternatives_3_in_rule__ArrayCreator__Group__3__Impl11725 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__0__Impl_in_rule__ArrayCreator__Group_3_0__011763 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__1_in_rule__ArrayCreator__Group_3_0__011766 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_55_in_rule__ArrayCreator__Group_3_0__0__Impl11794 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__1__Impl_in_rule__ArrayCreator__Group_3_0__111825 = new BitSet(new long[]{0x0100000000000000L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__2_in_rule__ArrayCreator__Group_3_0__111828 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__SizeAssignment_3_0_1_in_rule__ArrayCreator__Group_3_0__1__Impl11855 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_0__2__Impl_in_rule__ArrayCreator__Group_3_0__211885 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_56_in_rule__ArrayCreator__Group_3_0__2__Impl11913 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1__0__Impl_in_rule__ArrayCreator__Group_3_1__011950 = new BitSet(new long[]{0x2000000000000000L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1__1_in_rule__ArrayCreator__Group_3_1__011953 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__0_in_rule__ArrayCreator__Group_3_1__0__Impl11982 = new BitSet(new long[]{0x0080000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__0_in_rule__ArrayCreator__Group_3_1__0__Impl11994 = new BitSet(new long[]{0x0080000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1__1__Impl_in_rule__ArrayCreator__Group_3_1__112027 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__InitializationAssignment_3_1_1_in_rule__ArrayCreator__Group_3_1__1__Impl12054 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__0__Impl_in_rule__ArrayCreator__Group_3_1_0__012088 = new BitSet(new long[]{0x0100000000000000L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__1_in_rule__ArrayCreator__Group_3_1_0__012091 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_55_in_rule__ArrayCreator__Group_3_1_0__0__Impl12119 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayCreator__Group_3_1_0__1__Impl_in_rule__ArrayCreator__Group_3_1_0__112150 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_56_in_rule__ArrayCreator__Group_3_1_0__1__Impl12178 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__0__Impl_in_rule__ArrayInitializer__Group__012213 = new BitSet(new long[]{0x2000000000000000L});
+    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__1_in_rule__ArrayInitializer__Group__012216 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__1__Impl_in_rule__ArrayInitializer__Group__112274 = new BitSet(new long[]{0x567303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__2_in_rule__ArrayInitializer__Group__112277 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_61_in_rule__ArrayInitializer__Group__1__Impl12305 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__2__Impl_in_rule__ArrayInitializer__Group__212336 = new BitSet(new long[]{0x567303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__3_in_rule__ArrayInitializer__Group__212339 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayInitializer__InitializationAssignment_2_in_rule__ArrayInitializer__Group__2__Impl12366 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ArrayInitializer__Group__3__Impl_in_rule__ArrayInitializer__Group__312397 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_62_in_rule__ArrayInitializer__Group__3__Impl12425 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ObjectCreation__Group__0__Impl_in_rule__ObjectCreation__Group__012464 = new BitSet(new long[]{0x1000000000000000L});
+    public static final BitSet FOLLOW_rule__ObjectCreation__Group__1_in_rule__ObjectCreation__Group__012467 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ObjectCreation__Group__1__Impl_in_rule__ObjectCreation__Group__112525 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__ObjectCreation__Group__2_in_rule__ObjectCreation__Group__112528 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_60_in_rule__ObjectCreation__Group__1__Impl12556 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ObjectCreation__Group__2__Impl_in_rule__ObjectCreation__Group__212587 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ObjectCreation__ConstructorInvocationAssignment_2_in_rule__ObjectCreation__Group__2__Impl12614 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodInvocation__Group__0__Impl_in_rule__MethodInvocation__Group__012650 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__MethodInvocation__Group__1_in_rule__MethodInvocation__Group__012653 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodInvocation__Group__1__Impl_in_rule__MethodInvocation__Group__112711 = new BitSet(new long[]{0x0400000000000000L});
+    public static final BitSet FOLLOW_rule__MethodInvocation__Group__2_in_rule__MethodInvocation__Group__112714 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodInvocation__FullyQualifiedMethodNameAssignment_1_in_rule__MethodInvocation__Group__1__Impl12741 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodInvocation__Group__2__Impl_in_rule__MethodInvocation__Group__212771 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MethodInvocation__ArgsAssignment_2_in_rule__MethodInvocation__Group__2__Impl12798 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FullMethodName__Group__0__Impl_in_rule__FullMethodName__Group__012834 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__FullMethodName__Group__1_in_rule__FullMethodName__Group__012837 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FullMethodName__Group_0__0_in_rule__FullMethodName__Group__0__Impl12864 = new BitSet(new long[]{0x0000000000000012L});
+    public static final BitSet FOLLOW_rule__FullMethodName__Group__1__Impl_in_rule__FullMethodName__Group__112895 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FullMethodName__MethodNameAssignment_1_in_rule__FullMethodName__Group__1__Impl12922 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FullMethodName__Group_0__0__Impl_in_rule__FullMethodName__Group_0__012956 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_rule__FullMethodName__Group_0__1_in_rule__FullMethodName__Group_0__012959 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FullMethodName__PrefixQMNAssignment_0_0_in_rule__FullMethodName__Group_0__0__Impl12986 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FullMethodName__Group_0__1__Impl_in_rule__FullMethodName__Group_0__113016 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__FullMethodName__DotsAssignment_0_1_in_rule__FullMethodName__Group_0__1__Impl13043 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Arguments__Group__0__Impl_in_rule__Arguments__Group__013077 = new BitSet(new long[]{0x0400000000000000L});
+    public static final BitSet FOLLOW_rule__Arguments__Group__1_in_rule__Arguments__Group__013080 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Arguments__Group__1__Impl_in_rule__Arguments__Group__113138 = new BitSet(new long[]{0x1E7303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__Arguments__Group__2_in_rule__Arguments__Group__113141 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_58_in_rule__Arguments__Group__1__Impl13169 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Arguments__Group__2__Impl_in_rule__Arguments__Group__213200 = new BitSet(new long[]{0x1E7303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__Arguments__Group__3_in_rule__Arguments__Group__213203 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Arguments__ExprLstAssignment_2_in_rule__Arguments__Group__2__Impl13230 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__Arguments__Group__3__Impl_in_rule__Arguments__Group__313261 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_59_in_rule__Arguments__Group__3__Impl13289 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionList__Group__0__Impl_in_rule__ExpressionList__Group__013328 = new BitSet(new long[]{0x8000000000000000L});
+    public static final BitSet FOLLOW_rule__ExpressionList__Group__1_in_rule__ExpressionList__Group__013331 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionList__ExpressionsAssignment_0_in_rule__ExpressionList__Group__0__Impl13358 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionList__Group__1__Impl_in_rule__ExpressionList__Group__113388 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionList__Group_1__0_in_rule__ExpressionList__Group__1__Impl13415 = new BitSet(new long[]{0x8000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionList__Group_1__0__Impl_in_rule__ExpressionList__Group_1__013450 = new BitSet(new long[]{0x167303FE30000FD0L,0x0000000000000060L});
+    public static final BitSet FOLLOW_rule__ExpressionList__Group_1__1_in_rule__ExpressionList__Group_1__013453 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionList__CommasAssignment_1_0_in_rule__ExpressionList__Group_1__0__Impl13480 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionList__Group_1__1__Impl_in_rule__ExpressionList__Group_1__113510 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__ExpressionList__ExpressionsAssignment_1_1_in_rule__ExpressionList__Group_1__1__Impl13537 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group__0__Impl_in_rule__JvmTypeReference__Group__013571 = new BitSet(new long[]{0x0080000000000000L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group__1_in_rule__JvmTypeReference__Group__013574 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmParameterizedTypeReference_in_rule__JvmTypeReference__Group__0__Impl13601 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group__1__Impl_in_rule__JvmTypeReference__Group__113630 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1__0_in_rule__JvmTypeReference__Group__1__Impl13657 = new BitSet(new long[]{0x0080000000000002L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1__0__Impl_in_rule__JvmTypeReference__Group_1__013692 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__0_in_rule__JvmTypeReference__Group_1__0__Impl13719 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__0__Impl_in_rule__JvmTypeReference__Group_1_0__013751 = new BitSet(new long[]{0x0080000000000000L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__1_in_rule__JvmTypeReference__Group_1_0__013754 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__1__Impl_in_rule__JvmTypeReference__Group_1_0__113812 = new BitSet(new long[]{0x0100000000000000L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__2_in_rule__JvmTypeReference__Group_1_0__113815 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_55_in_rule__JvmTypeReference__Group_1_0__1__Impl13843 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1_0__2__Impl_in_rule__JvmTypeReference__Group_1_0__213874 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_56_in_rule__JvmTypeReference__Group_1_0__2__Impl13902 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group__0__Impl_in_rule__JvmParameterizedTypeReference__Group__013939 = new BitSet(new long[]{0x0000080000000000L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group__1_in_rule__JvmParameterizedTypeReference__Group__013942 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__TypeAssignment_0_in_rule__JvmParameterizedTypeReference__Group__0__Impl13969 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group__1__Impl_in_rule__JvmParameterizedTypeReference__Group__113999 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0_in_rule__JvmParameterizedTypeReference__Group__1__Impl14026 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0__Impl_in_rule__JvmParameterizedTypeReference__Group_1__014061 = new BitSet(new long[]{0x000083FC00000010L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__1_in_rule__JvmParameterizedTypeReference__Group_1__014064 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_43_in_rule__JvmParameterizedTypeReference__Group_1__0__Impl14093 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__1__Impl_in_rule__JvmParameterizedTypeReference__Group_1__114125 = new BitSet(new long[]{0x8000200000000000L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__2_in_rule__JvmParameterizedTypeReference__Group_1__114128 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_1_in_rule__JvmParameterizedTypeReference__Group_1__1__Impl14155 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__2__Impl_in_rule__JvmParameterizedTypeReference__Group_1__214185 = new BitSet(new long[]{0x8000200000000000L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__3_in_rule__JvmParameterizedTypeReference__Group_1__214188 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__0_in_rule__JvmParameterizedTypeReference__Group_1__2__Impl14215 = new BitSet(new long[]{0x8000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__3__Impl_in_rule__JvmParameterizedTypeReference__Group_1__314246 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_45_in_rule__JvmParameterizedTypeReference__Group_1__3__Impl14274 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__0__Impl_in_rule__JvmParameterizedTypeReference__Group_1_2__014313 = new BitSet(new long[]{0x000083FC00000010L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__1_in_rule__JvmParameterizedTypeReference__Group_1_2__014316 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_63_in_rule__JvmParameterizedTypeReference__Group_1_2__0__Impl14344 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1_2__1__Impl_in_rule__JvmParameterizedTypeReference__Group_1_2__114375 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_1_in_rule__JvmParameterizedTypeReference__Group_1_2__1__Impl14402 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__0__Impl_in_rule__JvmWildcardTypeReference__Group__014436 = new BitSet(new long[]{0x000083FC00000010L});
+    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__1_in_rule__JvmWildcardTypeReference__Group__014439 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__1__Impl_in_rule__JvmWildcardTypeReference__Group__114497 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000003L});
+    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__2_in_rule__JvmWildcardTypeReference__Group__114500 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_47_in_rule__JvmWildcardTypeReference__Group__1__Impl14528 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Group__2__Impl_in_rule__JvmWildcardTypeReference__Group__214559 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmWildcardTypeReference__Alternatives_2_in_rule__JvmWildcardTypeReference__Group__2__Impl14586 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmUpperBound__Group__0__Impl_in_rule__JvmUpperBound__Group__014623 = new BitSet(new long[]{0x000003FC00000010L});
+    public static final BitSet FOLLOW_rule__JvmUpperBound__Group__1_in_rule__JvmUpperBound__Group__014626 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_64_in_rule__JvmUpperBound__Group__0__Impl14654 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmUpperBound__Group__1__Impl_in_rule__JvmUpperBound__Group__114685 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmUpperBound__TypeReferenceAssignment_1_in_rule__JvmUpperBound__Group__1__Impl14712 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmLowerBound__Group__0__Impl_in_rule__JvmLowerBound__Group__014746 = new BitSet(new long[]{0x000003FC00000010L});
+    public static final BitSet FOLLOW_rule__JvmLowerBound__Group__1_in_rule__JvmLowerBound__Group__014749 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_65_in_rule__JvmLowerBound__Group__0__Impl14777 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmLowerBound__Group__1__Impl_in_rule__JvmLowerBound__Group__114808 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmLowerBound__TypeReferenceAssignment_1_in_rule__JvmLowerBound__Group__1__Impl14835 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__QualifiedName__Group__0__Impl_in_rule__QualifiedName__Group__014869 = new BitSet(new long[]{0x0004000000000000L});
+    public static final BitSet FOLLOW_rule__QualifiedName__Group__1_in_rule__QualifiedName__Group__014872 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleValidID_in_rule__QualifiedName__Group__0__Impl14899 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__QualifiedName__Group__1__Impl_in_rule__QualifiedName__Group__114928 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__QualifiedName__Group_1__0_in_rule__QualifiedName__Group__1__Impl14955 = new BitSet(new long[]{0x0004000000000002L});
+    public static final BitSet FOLLOW_rule__QualifiedName__Group_1__0__Impl_in_rule__QualifiedName__Group_1__014990 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_rule__QualifiedName__Group_1__1_in_rule__QualifiedName__Group_1__014993 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_50_in_rule__QualifiedName__Group_1__0__Impl15021 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__QualifiedName__Group_1__1__Impl_in_rule__QualifiedName__Group_1__115052 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleValidID_in_rule__QualifiedName__Group_1__1__Impl15079 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__JRExpressionModel__ExpressionAssignment15117 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ConditionalExpression__TrueStatementAssignment_1_115148 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ConditionalExpression__FalseStatementAssignment_1_315179 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_66_in_rule__ConditionalOrExpression__OpAssignment_1_0_0_115215 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleConditionalAndExpression_in_rule__ConditionalOrExpression__RightAssignment_1_115254 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_67_in_rule__ConditionalAndExpression__OpAssignment_1_0_0_115290 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleEqualityExpression_in_rule__ConditionalAndExpression__RightAssignment_1_115329 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__EqualityExpression__OpAlternatives_1_0_0_1_0_in_rule__EqualityExpression__OpAssignment_1_0_0_115360 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleInstanceofExpression_in_rule__EqualityExpression__RightAssignment_1_115393 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_68_in_rule__InstanceofExpression__OpAssignment_1_0_0_115429 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__InstanceofExpression__RightAssignment_1_115468 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleRelationalOp_in_rule__RelationalExpression__OpAssignment_1_0_0_115499 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleAdditiveExpression_in_rule__RelationalExpression__RightAssignment_1_115530 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__AdditiveExpression__OpAlternatives_1_0_0_1_0_in_rule__AdditiveExpression__OpAssignment_1_0_0_115561 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMultiplicativeExpression_in_rule__AdditiveExpression__RightAssignment_1_115594 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__MultiplicativeExpression__OpAlternatives_1_0_0_1_0_in_rule__MultiplicativeExpression__OpAssignment_1_0_0_115625 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleUnaryExpression_in_rule__MultiplicativeExpression__RightAssignment_1_115658 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__PrimaryExpression__TypeAssignment_6_1_015689 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_69_in_rule__PrimaryExpression__VoidAssignment_6_1_115725 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRFieldObj__BracedIdentifierAssignment_215764 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRParameterObj__BracedIdentifierAssignment_215795 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_BRACED_IDENTIFIER_in_rule__JRVariableObj__BracedIdentifierAssignment_215826 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_0_015857 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_0_1_115888 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleBaseJRExpression_in_rule__MethodsExpression__ObjectExpressionAssignment_1_1_015919 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMethodInvocation_in_rule__MethodsExpression__MethodInvocationsAssignment_1_1_1_115950 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIntLiteral_in_rule__MethodsExpression__ArrayIndexesAssignment_2_115981 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_INT_in_rule__IntLiteral__ValueAssignment_116012 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_LONG_in_rule__LongLiteral__ValueAssignment_116043 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_FLOAT_in_rule__FloatLiteral__ValueAssignment_116074 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_DOUBLE_in_rule__DoubleLiteral__ValueAssignment_116105 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_CHAR_in_rule__CharLiteral__ValueAssignment_116136 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RULE_STRING_in_rule__StringLiteral__ValueAssignment_116167 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_70_in_rule__BooleanLiteral__IsTrueAssignment_1_116203 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__CastedExpression__CastTypeAssignment_216242 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__CastedExpression__CastedExprAssignment_416273 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rulePrimitiveType_in_rule__Type__PrimitiveTypeAssignment_1_016304 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmTypeReference_in_rule__Type__JvmTypeAssignment_1_116335 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleType_in_rule__ArrayCreator__TypeAssignment_216366 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleIntLiteral_in_rule__ArrayCreator__SizeAssignment_3_0_116397 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleArrayInitializer_in_rule__ArrayCreator__InitializationAssignment_3_1_116428 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionList_in_rule__ArrayInitializer__InitializationAssignment_216459 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleMethodInvocation_in_rule__ObjectCreation__ConstructorInvocationAssignment_216490 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleFullMethodName_in_rule__MethodInvocation__FullyQualifiedMethodNameAssignment_116521 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleArguments_in_rule__MethodInvocation__ArgsAssignment_216552 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleValidID_in_rule__FullMethodName__PrefixQMNAssignment_0_016583 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_50_in_rule__FullMethodName__DotsAssignment_0_116619 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleValidID_in_rule__FullMethodName__MethodNameAssignment_116658 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleExpressionList_in_rule__Arguments__ExprLstAssignment_216689 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ExpressionList__ExpressionsAssignment_016720 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_63_in_rule__ExpressionList__CommasAssignment_1_016756 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJasperReportsExpression_in_rule__ExpressionList__ExpressionsAssignment_1_116795 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleQualifiedName_in_rule__JvmParameterizedTypeReference__TypeAssignment_016830 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_116865 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmArgumentTypeReference_in_rule__JvmParameterizedTypeReference__ArgumentsAssignment_1_2_116896 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmUpperBound_in_rule__JvmWildcardTypeReference__ConstraintsAssignment_2_016927 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmLowerBound_in_rule__JvmWildcardTypeReference__ConstraintsAssignment_2_116958 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmTypeReference_in_rule__JvmUpperBound__TypeReferenceAssignment_116989 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ruleJvmTypeReference_in_rule__JvmLowerBound__TypeReferenceAssignment_117020 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ruleCastedExpression_in_synpred10_InternalJavaJRExpression3185 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalExpression__Group_1__0_in_synpred44_InternalJavaJRExpression4317 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__ConditionalOrExpression__Group_1__0_in_synpred45_InternalJavaJRExpression4868 = new BitSet(new long[]{0x0000000000000002L});
@@ -25097,7 +25504,7 @@ public class InternalJavaJRExpressionParser extends AbstractInternalContentAssis
     public static final BitSet FOLLOW_rule__RelationalExpression__Group_1__0_in_synpred49_InternalJavaJRExpression6560 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__AdditiveExpression__Group_1__0_in_synpred50_InternalJavaJRExpression6983 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_rule__MultiplicativeExpression__Group_1__0_in_synpred51_InternalJavaJRExpression7406 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1__0_in_synpred59_InternalJavaJRExpression13407 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0_in_synpred60_InternalJavaJRExpression13776 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmTypeReference__Group_1__0_in_synpred60_InternalJavaJRExpression13657 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_rule__JvmParameterizedTypeReference__Group_1__0_in_synpred61_InternalJavaJRExpression14026 = new BitSet(new long[]{0x0000000000000002L});
 
 }

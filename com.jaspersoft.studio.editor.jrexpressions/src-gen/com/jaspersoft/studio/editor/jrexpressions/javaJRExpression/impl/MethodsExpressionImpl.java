@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getMethodInvocations <em>Method Invocations</em>}</li>
  *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getObjectExpression <em>Object Expression</em>}</li>
+ *   <li>{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.MethodsExpressionImpl#getArrayIndexes <em>Array Indexes</em>}</li>
  * </ul>
  * </p>
  *
@@ -60,6 +61,16 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
    * @ordered
    */
   protected JasperReportsExpression objectExpression;
+
+  /**
+   * The cached value of the '{@link #getArrayIndexes() <em>Array Indexes</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getArrayIndexes()
+   * @generated
+   * @ordered
+   */
+  protected EList<JasperReportsExpression> arrayIndexes;
 
   /**
    * <!-- begin-user-doc -->
@@ -149,6 +160,20 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<JasperReportsExpression> getArrayIndexes()
+  {
+    if (arrayIndexes == null)
+    {
+      arrayIndexes = new EObjectContainmentEList<JasperReportsExpression>(JasperReportsExpression.class, this, JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES);
+    }
+    return arrayIndexes;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -158,6 +183,8 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
         return ((InternalEList<?>)getMethodInvocations()).basicRemove(otherEnd, msgs);
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
         return basicSetObjectExpression(null, msgs);
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
+        return ((InternalEList<?>)getArrayIndexes()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -176,6 +203,8 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
         return getMethodInvocations();
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
         return getObjectExpression();
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
+        return getArrayIndexes();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -198,6 +227,10 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
         setObjectExpression((JasperReportsExpression)newValue);
         return;
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
+        getArrayIndexes().clear();
+        getArrayIndexes().addAll((Collection<? extends JasperReportsExpression>)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -218,6 +251,9 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
         setObjectExpression((JasperReportsExpression)null);
         return;
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
+        getArrayIndexes().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -236,6 +272,8 @@ public class MethodsExpressionImpl extends JasperReportsExpressionImpl implement
         return methodInvocations != null && !methodInvocations.isEmpty();
       case JavaJRExpressionPackage.METHODS_EXPRESSION__OBJECT_EXPRESSION:
         return objectExpression != null;
+      case JavaJRExpressionPackage.METHODS_EXPRESSION__ARRAY_INDEXES:
+        return arrayIndexes != null && !arrayIndexes.isEmpty();
     }
     return super.eIsSet(featureID);
   }

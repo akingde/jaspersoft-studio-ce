@@ -684,13 +684,22 @@ public interface JavaJRExpressionPackage extends EPackage
   int METHODS_EXPRESSION__OBJECT_EXPRESSION = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Array Indexes</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int METHODS_EXPRESSION__ARRAY_INDEXES = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 2;
+
+  /**
    * The number of structural features of the '<em>Methods Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int METHODS_EXPRESSION_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 2;
+  int METHODS_EXPRESSION_FEATURE_COUNT = JASPER_REPORTS_EXPRESSION_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.IntLiteralImpl <em>Int Literal</em>}' class.
@@ -1568,6 +1577,17 @@ public interface JavaJRExpressionPackage extends EPackage
   EReference getMethodsExpression_ObjectExpression();
 
   /**
+   * Returns the meta object for the containment reference list '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getArrayIndexes <em>Array Indexes</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Array Indexes</em>'.
+   * @see com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.MethodsExpression#getArrayIndexes()
+   * @see #getMethodsExpression()
+   * @generated
+   */
+  EReference getMethodsExpression_ArrayIndexes();
+
+  /**
    * Returns the meta object for class '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.IntLiteral <em>Int Literal</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2293,6 +2313,14 @@ public interface JavaJRExpressionPackage extends EPackage
      * @generated
      */
     EReference METHODS_EXPRESSION__OBJECT_EXPRESSION = eINSTANCE.getMethodsExpression_ObjectExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Array Indexes</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference METHODS_EXPRESSION__ARRAY_INDEXES = eINSTANCE.getMethodsExpression_ArrayIndexes();
 
     /**
      * The meta object literal for the '{@link com.jaspersoft.studio.editor.jrexpressions.javaJRExpression.impl.IntLiteralImpl <em>Int Literal</em>}' class.

@@ -132,5 +132,22 @@ public class ExpressionEditorSupportUtil {
 			jd.addImport("static " + clazzName + ".*");
 		}
 	}
+
+	/**
+	 * Remove a list of static imports to the specified {@link JasperDesign} instance.
+	 * <p>
+	 * 
+	 * The imports removed are those ones needed by the functions library used in 
+	 * the new expression editor. 
+	 *  
+	 * @param jd the jasper design object to be updated
+	 */
+	public static void removeFunctionsLibraryImports(JasperDesign jd){
+		Assert.isNotNull(jd);
+		List<String> libraryClasses = FunctionsLibraryUtil.getLibraryClasses();
+		for(String clazzName : libraryClasses){
+			jd.removeImport("static " + clazzName + ".*");
+		}
+	}
 	
 }

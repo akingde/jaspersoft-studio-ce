@@ -54,6 +54,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		PropertiesPreferencePage.getDefaults(store);
 
 		DesignerPreferencePage.getDefaults(store);
+		ExpressionEditorPreferencePage.getDefaults(store);
 		RulersGridPreferencePage.getDefaults(store);
 		JRExporterPreferencePage.getDefaults(store);
 		CSVExporterPreferencePage.getDefaults(store);

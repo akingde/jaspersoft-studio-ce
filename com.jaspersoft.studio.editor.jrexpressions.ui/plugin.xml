@@ -245,8 +245,8 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="com.jaspersoft.studio.preferences.StudioPreferencePage"
-            class="com.jaspersoft.studio.editor.jrexpressions.ui.preferences.ExpressionEditorPreferencePage"
-            id="com.jaspersoft.studio.editor.jrexpressions.ui.preferences.ExpressionEditorPreferencePage"
+            class="com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage"
+            id="com.jaspersoft.studio.preferences.ExpressionEditorPreferencePage"
             name="Expression Editor">
       </page>
    </extension>

@@ -75,6 +75,7 @@
     <genClasses ecoreClass="JavaJRExpression.ecore#//MethodsExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/methodInvocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/objectExpression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JavaJRExpression.ecore#//MethodsExpression/arrayIndexes"/>
     </genClasses>
     <genClasses ecoreClass="JavaJRExpression.ecore#//IntLiteral">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JavaJRExpression.ecore#//IntLiteral/value"/>
