@@ -49,23 +49,37 @@ import com.jaspersoft.studio.messages.Messages;
  */
 public class DataPreviewTable implements DatasetReaderListener{
 
+	// Costants
+	private static final int FILLER_THREAD_SLEEPTIME = 5;
+	private static final int RECORDS_NUM_ALL = -1;
+	private static final int RECORDS_NUM_1000 = 1000;
+	private static final int RECORDS_NUM_500 = 500;
+	private static final int RECORDS_NUM_100 = 100;
+	
+	// Widget stuff
 	private TableViewer tviewer;
 	private Table wtable;
 	private Composite composite;
 	private Composite tableContainer;
-	private IDataPreviewInfoProvider previewInfoProvider;
 	private Combo recordsNumCombo;
-	private Job refreshPrevieDataJob;
-	private DatasetReader dataReader;
-	private boolean statusOK;
 	private Button refreshPreviewBtn;
 	private Button cancelPreviewBtn;
 	private ProgressBar progressBar;
 	private Label infoMsg;
 	private Composite infoComposite;
 	
+	// Additional support fields
+	private IDataPreviewInfoProvider previewInfoProvider;
+	private Job refreshPrevieDataJob;
+	private DatasetReader dataReader;
+	private boolean statusOK;
+	private List<DataPreviewBean> previewItems;
+	private TableFillerThread tableFiller;
+	private int readItems=0;
+	
 	public DataPreviewTable(Composite parent, IDataPreviewInfoProvider previewInfoProvider){
 		this.previewInfoProvider=previewInfoProvider;
+		this.previewItems=new ArrayList<DataPreviewTable.DataPreviewBean>(RECORDS_NUM_100);
 		createControl(parent);
 	}
 
@@ -165,6 +179,10 @@ public class DataPreviewTable implements DatasetReaderListener{
 		refreshPrevieDataJob = new Job(Messages.DataPreviewTable_PreviewDataJobTitle) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
+				if(dataReader!=null){
+					dataReader.removeDatasetReaderListener(DataPreviewTable.this);
+					dataReader=null;
+				}
 				dataReader = new DatasetReader();
 				dataReader.setColumns(getColumns());
 				dataReader.setDataAdapterDescriptor(previewInfoProvider.getDataAdapterDescriptor());
@@ -179,8 +197,7 @@ public class DataPreviewTable implements DatasetReaderListener{
 					try {
 						clonedDS.addField(f);
 					} catch (JRException e) {
-						// Do not care, duplication
-						// should never happen.
+						// Do not care, duplication should never happen.
 					}
 				}
 				dataReader.setDesignDataset(clonedDS);
@@ -190,11 +207,15 @@ public class DataPreviewTable implements DatasetReaderListener{
 				return Status.OK_STATUS;
 			}
 		};
+		
+		tableFiller = new TableFillerThread();
+		
 		statusOK=true;
 		infoMsg.setText(Messages.DataPreviewTable_GettingData);
 		((GridData)progressBar.getLayoutData()).exclude=false;
 		progressBar.setVisible(true);
 		refreshPrevieDataJob.schedule();
+		tableFiller.start();
 		infoComposite.layout();
 	}
 	
@@ -209,8 +230,6 @@ public class DataPreviewTable implements DatasetReaderListener{
 				invalidate();
 				dataReader.stop();
 			}
-			// Flush event queue
-			while(Display.getDefault().readAndDispatch());
 			// Remove all table items if any
 			wtable.removeAll();
 			tviewer.setInput(null);
@@ -227,15 +246,15 @@ public class DataPreviewTable implements DatasetReaderListener{
 	private int getRecordsCountSelected() {
 		switch (recordsNumCombo.getSelectionIndex()) {
 		case 0:
-			return 100;
+			return RECORDS_NUM_100;
 		case 1:
-			return 500;
+			return RECORDS_NUM_500;
 		case 2:
-			return 1000;
+			return RECORDS_NUM_1000;
 		case 3:
-			return -1;
+			return RECORDS_NUM_ALL;
 		default:
-			return 100;
+			return RECORDS_NUM_100;
 		}
 	}
 
@@ -300,13 +319,8 @@ public class DataPreviewTable implements DatasetReaderListener{
 	 * @see com.jaspersoft.studio.data.reader.DatasetReaderListener#newRecord(java.lang.Object[])
 	 */
 	public void newRecord(final Object[] values) {
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				if(!wtable.isDisposed() && statusOK){
-					tviewer.add(new DataPreviewBean(values));
-				}
-			}
-		});
+			previewItems.add(new DataPreviewBean(values));
+			readItems++;
 	}
 
 	/*
@@ -314,16 +328,19 @@ public class DataPreviewTable implements DatasetReaderListener{
 	 * @see com.jaspersoft.studio.data.reader.DatasetReaderListener#finished()
 	 */
 	public void finished() {
-		Display.getDefault().asyncExec(new Runnable() {
+		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				dataReader.removeDatasetReaderListener(DataPreviewTable.this);
-				dataReader=null;
-				refreshPreviewBtn.setEnabled(true);
-				cancelPreviewBtn.setEnabled(false);
+				if(tableFiller!=null){
+					tableFiller.done();
+					tableFiller=null;
+				}
 				progressBar.setVisible(false);
+				cancelPreviewBtn.setEnabled(false);
 				((GridData)progressBar.getLayoutData()).exclude=true;
-				infoMsg.setText(MessageFormat.format(Messages.DataPreviewTable_ReadyReadData, new Object[]{wtable.getItemCount()}));
+				infoMsg.setText(MessageFormat.format(Messages.DataPreviewTable_ReadyReadData, new Object[]{readItems}));
+				refreshPreviewBtn.setEnabled(true);
 				infoComposite.layout();
+				readItems=0;
 			}
 		});
 	}
@@ -356,6 +373,44 @@ public class DataPreviewTable implements DatasetReaderListener{
 		
 		public Object getValue(int index){
 			return this.values[index];
+		}
+	}
+
+	/*
+	 * This thread is responsible to update the table with 
+	 * chunks of data read from the dataset. 
+	 */
+	private class TableFillerThread extends Thread {
+		private boolean done = false;
+
+		public void done() {
+			done = true;
+		}
+
+		@Override
+		public void run() {
+			Object[] tmpItems = new Object[0];
+			while (!done) {
+				synchronized (previewItems) {
+					tmpItems = previewItems.toArray();
+					previewItems.clear();
+				}
+				final Object[] items = tmpItems;
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						if (!wtable.isDisposed() && statusOK) {
+							wtable.setRedraw(false);
+							tviewer.add(items);
+							wtable.setRedraw(true);
+						}
+					}
+				});
+				try {
+					sleep(FILLER_THREAD_SLEEPTIME);
+				} catch (InterruptedException e) {
+
+				}
+			}
 		}
 	}
 	
