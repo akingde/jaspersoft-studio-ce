@@ -318,7 +318,12 @@ public class TabbedPropertySheetPage extends Page implements
 		 * of these events since we want to send aboutToBeHidden() and
 		 * aboutToBeShown() when the property sheet is hidden or shown.
 		 */
-		if (!thisActivated
+		if (contributor == null
+				&& part instanceof ITabbedPropertySheetPageContributor) {
+			contributor = (ITabbedPropertySheetPageContributor) part;
+		}
+		if (contributor != null
+				&& !thisActivated
 				&& !part.equals(contributor)
 				&& !part.getSite().getId()
 						.equals(contributor.getContributorId())) {
@@ -390,6 +395,8 @@ public class TabbedPropertySheetPage extends Page implements
 		 * Add a label provider change listener.
 		 */
 		if (hasTitleBar) {
+			if(registry == null)
+				initContributor(currentContributorId);
 			registry.getLabelProvider().addListener(this);
 		}
 	}
